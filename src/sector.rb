@@ -91,15 +91,16 @@ class Sector
       end
     end
     
-    for i in get_value_from_tree(["reset-points"], data, [])
-      type = i[0]
-      x = get_value_from_tree(["x", "_"], i[1..-1], [])
-      y = get_value_from_tree(["y", "_"], i[1..-1], [])
-      object = find($game_objects, "resetpoint")
-      @objects.add_object(ObjMapSpriteObject.new(make_sprite($datadir + object[1]),
-                                                 CL_Point.new(x, y),
-                                                 make_metadata(BadGuy.new(object[0]))).to_object())
-    end
+# FIXME: doesn't work
+#     for i in get_value_from_tree(["reset-points"], data, [])
+#       type = i[0]
+#       x = get_value_from_tree(["x", "_"], i[1..-1], [])
+#       y = get_value_from_tree(["y", "_"], i[1..-1], [])
+#       object = $game_objects.find("resetpoint")
+#       @objects.add_object(ObjMapSpriteObject.new(make_sprite($datadir + object[1]),
+#                                                  CL_Point.new(x, y),
+#                                                  make_metadata(BadGuy.new(object[0]))).to_object())
+#     end
 
     @editormap = EditorMap.new()
     @editormap.add_layer(@background.to_layer())

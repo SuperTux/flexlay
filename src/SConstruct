@@ -19,9 +19,8 @@
 ##  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 
-env = Environment(CXX = 'g++-3.3',
+env = Environment(CXX = 'g++',
                   CXXFLAGS = '-g -O0 -Wall',
-                  SWIGFLAGS='-c++ -python',
                   SHLIBPREFIX='')
 
 Depends('flexlay_python_wrap.cxx', ['flexlay_wrap.i',

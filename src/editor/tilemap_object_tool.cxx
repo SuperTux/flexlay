@@ -27,7 +27,9 @@
 #include "../scm_obj.hxx"
 #include "editor_names.hxx"
 #include "popup_menu.hxx"
+#include "editor.hxx"
 #include "objmap_object.hxx"
+#include "object_move_command.hxx"
 #include "tilemap_object_tool.hxx"
 
 extern CL_ResourceManager* resources;
@@ -37,6 +39,7 @@ TileMapObjectTool::TileMapObjectTool()
   obj = 0;
   state = NONE;
   offset = CL_Point(0, 0);
+  move_command = 0;
 }
 
 TileMapObjectTool::~TileMapObjectTool()
@@ -84,6 +87,11 @@ TileMapObjectTool::on_mouse_up(const CL_InputEvent& event)
       switch(state)
         {
         case DRAG:
+          if (move_command)
+            {
+              Editor::current()->execute(move_command);
+              move_command = 0;
+            }
           state = NONE;
           parent->release_mouse();
           break;
@@ -99,6 +107,7 @@ TileMapObjectTool::on_mouse_up(const CL_InputEvent& event)
           break;
 
         default:
+          // FIXME: Evil single click has to go
           obj = objmap->find_object(pos);
           break;
         }
@@ -128,6 +137,7 @@ TileMapObjectTool::on_mouse_down(const CL_InputEvent& event)
       switch(state)
         {
         default:
+          // FIXME: Evil single object drag has to go
           obj = objmap->find_object(pos);
 
           if (obj)
@@ -142,7 +152,14 @@ TileMapObjectTool::on_mouse_down(const CL_InputEvent& event)
 
               // Clicked object is member of the selection
               if (i != selection.end())
-                obj = 0;
+                {
+                  obj = 0;
+                  move_command = new ObjectMoveCommand(objmap);
+                  for (Selection::iterator i = selection.begin(); i != selection.end(); ++i)
+                    {
+                      move_command->add_obj((*i)->get_handle());
+                    }
+                }
             }
           else
             {

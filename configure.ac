@@ -1,4 +1,4 @@
-AC_INIT(Flexlay, 0.0.3)
+AC_INIT(Flexlay, 0.0.2)
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_SRCDIR([src/editor_main.cxx])
 AM_INIT_AUTOMAKE(dist-bzip2)

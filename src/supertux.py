@@ -724,6 +724,7 @@ gui_show_interactive()
 gui_show_current()
 set_tilemap_paint_tool()
 
+connect(editor_map.sig_on_key("f1"), lambda: gui_toggle_minimap())
 connect(editor_map.sig_on_key("m"), lambda: gui_toggle_minimap())
 connect(editor_map.sig_on_key("g"), lambda: gui_toggle_grid())
 connect(editor_map.sig_on_key("4"), lambda: gui_toggle_display_props())

@@ -25,6 +25,7 @@
 #include "editor_map_component.hxx"
 #include "editor_names.hxx"
 #include "tool.hxx"
+#include "workspace_move_tool.hxx"
 #include "tileset.hxx"
 #include "workspace.hxx"
 
@@ -44,6 +45,7 @@ public:
   EditorMap editor_map;
 
   Tool tool;
+  Tool move_tool;
 };
 
 Workspace::Workspace()
@@ -54,11 +56,9 @@ Workspace::Workspace(int w, int h)
   : impl(new WorkspaceImpl())
 {
   current_ = *this;
-
+  
+  impl->move_tool = WorkspaceMoveTool(*this).to_tool();
   impl->gc_state  = GraphicContextState(w, h);
-  impl->scrolling = false;
-  impl->click_pos = CL_Point(0, 0);
-  impl->old_trans_offset = CL_Pointf(0,0);
 }
 
 void
@@ -89,13 +89,7 @@ Workspace::mouse_up(const CL_InputEvent& event)
       break;
 
     case CL_MOUSE_MIDDLE:
-      impl->scrolling = false;
-      impl->gc_state.set_pos(CL_Pointf(impl->old_trans_offset.x
-                                       + (impl->click_pos.x - event.mouse_pos.x) / impl->gc_state.get_zoom(),
-                                       impl->old_trans_offset.y
-                                       + (impl->click_pos.y - event.mouse_pos.y) / impl->gc_state.get_zoom()));
-      impl->old_trans_offset = impl->gc_state.get_pos();
-      EditorMapComponent::current()->release_mouse();
+      impl->move_tool.on_mouse_up(event);
       break;
     }
 }
@@ -104,14 +98,7 @@ void
 Workspace::mouse_move(const CL_InputEvent& event)
 {
   impl->tool.on_mouse_move(event);
-
-  if (impl->scrolling)
-    {
-      impl->gc_state.set_pos(CL_Pointf(impl->old_trans_offset.x
-                                       + (impl->click_pos.x - event.mouse_pos.x)/impl->gc_state.get_zoom(),
-                                       impl->old_trans_offset.y
-                                       + (impl->click_pos.y - event.mouse_pos.y)/impl->gc_state.get_zoom()));
-    }
+  impl->move_tool.on_mouse_move(event);
 }
 
 void
@@ -125,10 +112,7 @@ Workspace::mouse_down(const CL_InputEvent& event)
       break;
 
     case CL_MOUSE_MIDDLE:
-      impl->scrolling = true;
-      impl->old_trans_offset = impl->gc_state.get_pos();
-      impl->click_pos = event.mouse_pos;
-      EditorMapComponent::current()->capture_mouse();
+      impl->move_tool.on_mouse_down(event);
       break;
       
     case CL_MOUSE_WHEEL_UP:

@@ -113,6 +113,7 @@ env.SharedLibrary(
     'tilemap_select_tool.cxx',
     'tilemap_layer.cxx',
     'tileset.cxx',
+    'workspace_move_tool.cxx',
     'tool.cxx',
     'workspace.cxx',
     'window.cxx',

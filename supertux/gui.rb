@@ -6,7 +6,7 @@ class SuperTuxGUI
   tileselector    = nil
   objectselector  = nil
 
-  attr_reader :tileselector, :editor_map, :workspace, :minimap, :recent_files_menu
+  attr_reader :tileselector, :editor_map, :workspace, :minimap, :recent_files_menu, :gui
 
   def initialize()
     @editor = Editor.new()
@@ -518,13 +518,13 @@ class SuperTuxGUI
   end
 
   def gui_level_save_as()
-    filename = $save_dialog.get_filename()
+    filename = @save_dialog.get_filename()
     if filename[-1] == "/"[0]
-      $save_dialog.set_filename(filename)
+      @save_dialog.set_filename(filename)
     else
-      $save_dialog.set_filename(File.dirname(filename) + "/")
+      @save_dialog.set_filename(File.dirname(filename) + "/")
     end
-    $save_dialog.run(proc{|filename| supertux_save_level(filename) })
+    @save_dialog.run(proc{|filename| supertux_save_level(filename) })
   end
 
   def gui_level_save()

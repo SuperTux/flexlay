@@ -1,4 +1,4 @@
-//  $Id: windstille_main.cxx,v 1.5 2003/08/12 08:24:41 grumbel Exp $
+//  $Id: windstille_main.cxx,v 1.6 2003/08/12 14:37:03 grumbel Exp $
 //
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -48,15 +48,17 @@ WindstilleMain::main(int argc, char** argv)
 int 
 WindstilleMain::inner_main(void* closure, int argc, char** argv)
 {
-  int screen_width =  800;
-  int screen_height = 600;
+  int  screen_width  =  800;
+  int  screen_height = 600;
+  bool fullscreen    = false;
+  bool allow_resize  = false;
 
   CL_SetupCore::init();
   CL_SetupGL::init();
   CL_SetupDisplay::init();
 
   CL_DisplayWindow window (PACKAGE_STRING,
-                           screen_width, screen_height);
+                           screen_width, screen_height, fullscreen, allow_resize);
 
   //CL_OpenGL::begin_2d();
   try {

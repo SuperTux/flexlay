@@ -1,4 +1,4 @@
-//  $Id: player.hxx,v 1.3 2003/08/12 08:24:41 grumbel Exp $
+//  $Id: player.hxx,v 1.4 2003/08/12 14:37:03 grumbel Exp $
 // 
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -21,12 +21,29 @@
 #define PLAYER_HXX
 
 #include <ClanLib/core.h>
+#include <ClanLib/gl.h>
 #include <ClanLib/display.h>
 
 #include "globals.hxx"
 #include "gameobj.hxx"
 
 class Controller;
+
+/** A position in units of subtiles */
+struct SubTilePos {
+  SubTilePos() : x(0), y(0) {}
+
+  SubTilePos(int x_, int y_) 
+    : x(x_), y(y_)
+  {}
+
+  bool operator==(const SubTilePos& pos) {
+    return pos.x == x && pos.y == y;
+  }
+
+  int x;
+  int y;
+};
 
 class Player : public GameObj
 {
@@ -36,6 +53,8 @@ private:
   /** Position as a float */
   CL_Vector pos;
   
+  SubTilePos subtile_pos;
+
   /** X-Position in subtile coordinates */
   int x_pos;
   /** Y-Position in subtile coordinates */
@@ -77,6 +96,7 @@ public:
   void set_direction (Direction dir);
 
   CL_Vector get_pos () const { return pos; }
+  SubTilePos get_subtile_pos();
 
   void activate_shild ();
 

@@ -1,4 +1,4 @@
-//  $Id: windstille_game.cxx,v 1.6 2003/08/12 08:58:49 grumbel Exp $
+//  $Id: windstille_game.cxx,v 1.7 2003/08/12 14:37:03 grumbel Exp $
 //
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -17,6 +17,7 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
+#include <math.h>
 #include <ClanLib/gl.h>
 
 #include "game_world.hxx"
@@ -89,50 +90,42 @@ WindstilleGame::display ()
     }
 
   world.add_player (&player1);
-
+  CL_Sprite logo("logo", resources);
+  CL_Sprite logo_black("logo_black", resources);
+  float blink = 0.0f;
+  
   PlayerView view (&player1);
 
   while (!CL_Keyboard::get_keycode (CL_KEY_ESCAPE))
     {
       float delta = delta_manager.getset ();
       CL_System::sleep (1);
-      //CL_Display::clear();
-      CL_Display::begin_3d(); {
-        if (0) 
-          {
-            int dim[4];
-            glGetIntegerv(GL_VIEWPORT, dim);
-            std::cout << "viewport: " 
-                      << dim[0] << "x" << dim[1] << " "
-                      << dim[2] << "x" << dim[3] << std::endl;
-          }
       
-        glMatrixMode(GL_MODELVIEW);
-        glLoadIdentity();
-        gluOrtho2D (0, 800, 600, 0);
-      
+      Display::begin_gl();
+      {
         glBlendFunc(GL_ONE, GL_ZERO);
 
         glBegin(GL_QUADS);
         // Sky
-        glColor3f(0.0f, 0.0f, 1.0f);
+        glColor3f(0.0f, 0.0f, 0.2f);
 
         glVertex2f(0, 0);
         glVertex2f(800, 0);
       
-        glColor3f(0.5f, 0.5f, 1.0f);
+        glColor3f(0.3f, 0.3f, .5f);
         glVertex2f(800,  300);
         glVertex2f(0, 300);
 
         glVertex2f(0, 300);
         glVertex2f(800,  300);
 
-        glColor3f(1.0f, 1.0f, 1.0f);
+        glColor3f(.5f, .5f, .5f);
         glVertex2f(800,  600);
         glVertex2f(0, 600);
      
         glEnd();
-      } CL_Display::end_3d();
+      }
+      Display::end_gl();
 
       view.draw ();
       view.update (delta);
@@ -189,6 +182,63 @@ WindstilleGame::display ()
           Display::end_gl();
         }
       
+      {
+        float left   = 300;
+        float right  = 500;
+        float top    = 250;
+        float bottom = 350;
+        float alpha  = .2f;
+
+        Display::begin_gl();
+        glEnable (GL_BLEND);
+        glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+        glBegin(GL_QUADS);
+        
+        glColor4f(0.0f, 0.0f, 0.0f, alpha);
+        glVertex2f(0, 0);
+        glVertex2f(800, 0);
+        glColor4f(0.0f, 0.0f, 0.0f, 0.0f);
+        glVertex2f(right, top);
+        glVertex2f(left, top);
+
+        glColor4f(0.0f, 0.0f, 0.0f, 0.0f);
+        glVertex2f(left, bottom);
+        glVertex2f(right, bottom);
+        glColor4f(0.0f, 0.0f, 0.0f, alpha);
+        glVertex2f(800, 600);
+        glVertex2f(  0, 600);
+
+        glColor4f(0.0f, 0.0f, 0.0f, alpha);
+        glVertex2f(0, 0);
+        glColor4f(0.0f, 0.0f, 0.0f, 0.0f);
+        glVertex2f(left, top);
+        glVertex2f(left, bottom);
+        glColor4f(0.0f, 0.0f, 0.0f, alpha);
+        glVertex2f(  0, 600);
+
+        glColor4f(0.0f, 0.0f, 0.0f, 0.0f);
+        glVertex2f(right, top);
+        glColor4f(0.0f, 0.0f, 0.0f, alpha);
+        glVertex2f(800, 0);
+        glVertex2f(800, 600);
+        glColor4f(0.0f, 0.0f, 0.0f, 0.0f);
+        glVertex2f(right, bottom);
+
+        glEnd();
+        Display::end_gl();
+      }
+
+      if (1)
+        {
+          blink += delta * 3.141f;
+      
+          //logo.set_blend_func(blend_src_alpha, blend_one);
+          logo.set_alpha(sin(blink)*0.5f + 0.5f);
+          logo.draw(800 - 302, 600 - 95);
+          logo_black.draw(800 - 302, 600 - 95);
+        }
+
+
       CL_Display::flip ();
 	
       //world.add (new AnimationObj ("shoot/explosion", CL_Vector (rand ()% 800, rand ()%600)));

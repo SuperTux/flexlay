@@ -1,4 +1,4 @@
-//  $Id: player.cxx,v 1.7 2003/08/12 08:58:49 grumbel Exp $
+//  $Id: player.cxx,v 1.8 2003/08/12 14:37:03 grumbel Exp $
 //
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -17,6 +17,7 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
+#include "display.hxx"
 #include "game_world.hxx"
 #include "default_shoot.hxx"
 #include "laser_shoot.hxx"
@@ -29,9 +30,9 @@ Player::Player (Controller* c) :
   pos (320, 500),
   velocity (0, 0),
   
-  walk     ("turrican/walk",     resources),
-  jump     ("turrican/jump",     resources),
-  stand    ("turrican/stand",    resources),
+  walk     ("hero/run",     resources),
+  jump     ("hero/jump",     resources),
+  stand    ("hero/stand",    resources),
   shild    ("turrican/shild",    resources),
   sit      ("turrican/sit",      resources),
   roll     ("turrican/roll",     resources),
@@ -42,9 +43,9 @@ Player::Player (Controller* c) :
   ground_state (IN_AIR),
   shild_time (0)
 {  
-  walk.set_alignment(origin_bottom_center);
-  jump.set_alignment(origin_bottom_center);
-  stand.set_alignment(origin_bottom_center);
+  walk.set_alignment(origin_bottom_center, 0, 3);
+  jump.set_alignment(origin_bottom_center, 0, 3);
+  stand.set_alignment(origin_bottom_center, 0, 3);
   shild.set_alignment(origin_bottom_center);
   roll.set_alignment(origin_bottom_center);
   surround.set_alignment(origin_bottom_center);
@@ -92,9 +93,9 @@ Player::draw ()
   if (sprite)
     {
       if (direction == WEST)
-	sprite->set_scale (-1.0, 1.0);
-      else
 	sprite->set_scale (1.0, 1.0);
+      else
+	sprite->set_scale (-1.0, 1.0);
 
       sprite->draw (int(pos.x), int(pos.y));
 
@@ -104,30 +105,40 @@ Player::draw ()
 	}
     }
 
-  CL_Display::fill_rect(CL_Rect(int(pos.x - 5), int(pos.y - 5),
-                                int(pos.x + 5), int(pos.y + 5)),
-                        CL_Color(255, 255, 255));
+  if (0)
+    {
+      CL_Display::fill_rect(CL_Rect(int(pos.x - 5), int(pos.y - 5),
+                                    int(pos.x + 5), int(pos.y + 5)),
+                            CL_Color(255, 255, 255));
 
-  {
-    int tile_x = int(pos.x/SUBTILE_SIZE);
-    int tile_y = int(pos.y/SUBTILE_SIZE);
+      SubTilePos new_subtile_pos = get_subtile_pos();
  
-    CL_Color color;
+      CL_Color color;
 
-    if (get_world()->get_tilemap()->get_pixel(tile_x, tile_y))
-      color = CL_Color(255, 255, 0, 128);
-    else
-      color = CL_Color(0,  0, 255, 128);
+      if (get_world()->get_tilemap()->get_pixel(new_subtile_pos.x, new_subtile_pos.y))
+        color = CL_Color(255, 255, 0, 128);
+      else
+        color = CL_Color(0,  0, 255, 128);
 
-    CL_Display::fill_rect(CL_Rect(tile_x*SUBTILE_SIZE, tile_y*SUBTILE_SIZE,
-                                  tile_x*SUBTILE_SIZE + SUBTILE_SIZE, tile_y*SUBTILE_SIZE + SUBTILE_SIZE),
-                          color);
-  }
+      CL_Display::fill_rect(CL_Rect(new_subtile_pos.x*SUBTILE_SIZE,
+                                    new_subtile_pos.y*SUBTILE_SIZE,
+                                    new_subtile_pos.x*SUBTILE_SIZE + SUBTILE_SIZE,
+                                    new_subtile_pos.y*SUBTILE_SIZE + SUBTILE_SIZE),
+                            color);
+    }
+}
+
+SubTilePos
+Player::get_subtile_pos()
+{
+  return SubTilePos(int(pos.x/SUBTILE_SIZE), int(pos.y/SUBTILE_SIZE));
 }
 
 void 
 Player::update (float delta)
 {
+  walk.update(delta);
+  
   if (controller->is_left ())
     direction = WEST;
   else if  (controller->is_right ())
@@ -143,6 +154,21 @@ Player::update (float delta)
     case IN_AIR:
       update_air (delta);
       break;
+    }
+
+  SubTilePos new_subtile_pos = get_subtile_pos();
+  if (!(subtile_pos == new_subtile_pos))
+    {
+      if (get_world()->get_tilemap()->get_pixel(new_subtile_pos.x, new_subtile_pos.y))
+        {
+          pos.x = subtile_pos.x * SUBTILE_SIZE;
+          pos.y = subtile_pos.y * SUBTILE_SIZE;
+        }
+      else
+        {
+          //std::cout << "Position changed: " << subtile_pos.x << ", " << subtile_pos.y << std::endl;
+          subtile_pos = new_subtile_pos;
+        }
     }
 }
 
@@ -188,10 +214,16 @@ Player::update_ground (float delta)
       if (controller->is_left ())
         {
           pos.x -= 200 * delta;
+          state = WALKING;
         }
       else if (controller->is_right ())
         {
           pos.x += 200 * delta;
+          state = WALKING;
+        }
+      else
+        {
+          state = STANDING;
         }
 
       if (stuck ()) 

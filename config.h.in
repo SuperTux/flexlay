@@ -1,0 +1,53 @@
+/* config.h.in.  Generated automatically from configure.in by autoheader 2.13.  */
+#ifndef TURRICAN_CONFIG_H
+#define TURRICAN_CONFIG_H
+
+
+#undef MAJOR_VERSION
+#undef MINOR_VERSION
+#undef PATCH_VERSION
+#undef VERSION_STRING
+
+#undef LIBXML_2
+
+/* Define if you have the <sstream> header file.  */
+#undef HAVE_SSTREAM
+
+/* Define if you have the SphriteLibGL library (-lSphriteLibGL).  */
+#undef HAVE_LIBSPHRITELIBGL
+
+/* Define if you have the clanApp library (-lclanApp).  */
+#undef HAVE_LIBCLANAPP
+
+/* Define if you have the clanCore library (-lclanCore).  */
+#undef HAVE_LIBCLANCORE
+
+/* Define if you have the clanDisplay library (-lclanDisplay).  */
+#undef HAVE_LIBCLANDISPLAY
+
+/* Define if you have the clanGL library (-lclanGL).  */
+#undef HAVE_LIBCLANGL
+
+/* Define if you have the clanJPEG library (-lclanJPEG).  */
+#undef HAVE_LIBCLANJPEG
+
+/* Define if you have the clanPNG library (-lclanPNG).  */
+#undef HAVE_LIBCLANPNG
+
+/* Define if you have the guile library (-lguile).  */
+#undef HAVE_LIBGUILE
+
+/* Define if you have the qthreads library (-lqthreads).  */
+#undef HAVE_LIBQTHREADS
+
+/* Define if you have the xml library (-lxml).  */
+#undef HAVE_LIBXML
+
+/* Name of package */
+#undef PACKAGE
+
+/* Version number of package */
+#undef VERSION
+
+
+#endif /* ADVENT_CONFIG_H */

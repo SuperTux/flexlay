@@ -1,0 +1,94 @@
+<turrican-level>
+  <properties>
+    <levelname>Bla</levelname>
+  </properties>
+
+  <tilemap width="7" height="7">
+    <row>
+      <tile>tiles/tile1</tile>
+      <tile>tiles/tile2</tile>
+      <tile>tiles/tile3</tile>
+      <tile>tiles/tile1</tile>
+      <tile>tiles/tile2</tile>
+      <tile>tiles/tile3</tile>
+      <tile>tiles/tile11</tile>
+    </row>
+    <row>
+      <tile>tiles/tile4</tile>
+      <tile>tiles/tile5</tile>
+      <tile>tiles/tile4</tile>
+      <tile>tiles/tile1</tile>
+      <tile>tiles/tile2</tile>
+      <tile>tiles/tile3</tile>
+      <tile>tiles/tile12</tile>
+    </row>
+    <row>
+      <tile>tiles/tile3</tile>
+      <tile>tiles/tile2</tile>
+      <tile>tiles/tile1</tile>
+      <tile>tiles/tile1</tile>
+      <tile>tiles/tile2</tile>
+      <tile>tiles/tile3</tile>
+      <tile>tiles/tile13</tile>
+    </row>
+    <row>
+      <tile>tiles/tile1</tile>
+      <tile>tiles/tile2</tile>
+      <tile>tiles/tile3</tile>
+      <tile>tiles/tile1</tile>
+      <tile>tiles/tile2</tile>
+      <tile>tiles/tile3</tile>
+      <tile>tiles/tile14</tile>
+    </row>
+    <row>
+      <tile>tiles/tile4</tile>
+      <tile>tiles/tile5</tile>
+      <tile>tiles/tile4</tile>
+      <tile>tiles/tile1</tile>
+      <tile>tiles/tile2</tile>
+      <tile>tiles/tile3</tile>
+      <tile>tiles/tile15</tile>
+    </row>
+    <row>
+      <tile>tiles/tile3</tile>
+      <tile>tiles/tile2</tile>
+      <tile>tiles/tile1</tile>
+      <tile>tiles/tile1</tile>
+      <tile>tiles/tile2</tile>
+      <tile>tiles/tile3</tile>
+      <tile>tiles/tile16</tile>
+    </row>
+    <row>
+      <tile>tiles/tile6</tile>
+      <tile>tiles/tile7</tile>
+      <tile>tiles/tile8</tile>
+      <tile>tiles/tile9</tile>
+      <tile>tiles/tile10</tile>
+      <tile>tiles/tile11</tile>
+      <tile>tiles/tile17</tile>
+    </row>
+
+  </tilemap>
+
+  <gameobjects>
+    <foobar-enemy>
+      <position x="10" y="10"/>
+    </foobar-enemy>
+
+    <foobar-special-region>
+      <region>
+	<position x="10" y="10"/>
+	<position x="50" y="50"/>
+      </region>
+    </foobar-special-region>
+    
+    <lua-trigger>
+      <region>
+	<position x="10" y="10"/>
+	<position x="50" y="50"/>
+      </region>
+      <script>data/script.lua</script>
+    </lua-trigger>
+
+  </gameobjects>
+</turrican-level>

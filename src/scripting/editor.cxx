@@ -51,11 +51,12 @@ make_sprite(const std::string& filename)
   return CL_Sprite(desc);
 }
 
+/*
 Tile
 make_tile(const char* filename, 
           unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha)
 {
   return Tile(filename, CL_Color(red, green, blue, alpha));
-}
+}*/
 
 /* EOF */

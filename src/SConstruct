@@ -151,6 +151,10 @@ env.SharedLibrary(
     target = '_flexlay_ruby_wrap.so',
     source = [
     'flexlay_ruby_wrap.cxx',
+    'ruby_functor.cxx',
+    'ruby_meta_data.cxx',
+    'ruby_sexpr_parser.cxx',
+    'ruby_object.cxx'
     ],
     CPPPATH=['/home/ingo/run/ClanLib-0.7-current//include/ClanLib-0.7/',
             '/usr/lib/ruby/1.8/i386-linux/',

@@ -1,3 +1,5 @@
+# translated to ruby
+
 import os
 import sys
 import code

@@ -1,6 +1,6 @@
 //  $Id$
-// 
-//  Flexlay - A Generic 2D Game Editor
+//
+//  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
 //
 //  This program is free software; you can redistribute it and/or
@@ -12,19 +12,38 @@
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
-// 
+//
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-#ifndef HEADER_SEXPR_PARSER_HXX
-#define HEADER_SEXPR_PARSER_HXX
+#include "ruby_functor.hxx"
 
-#include "lispreader.hxx"
-#include "Python.h"
+RubyFunctor::RubyFunctor(const RubyObject& val_)
+  : val(val_)
+{
+}
 
-PyObject* sexpr_read_from_file(const char* filename);
+RubyFunctor::~RubyFunctor()
+{
+}
 
-#endif
+void
+RubyFunctor::operator()()
+{
+  rb_funcall(val.ptr(), rb_intern("call"), 0);
+}
+
+void
+RubyFunctor::operator()(int i)
+{
+  rb_funcall(val.ptr(), rb_intern("call"), 1, INT2FIX(i));
+}
+
+void
+RubyFunctor::operator()(int x, int y)
+{
+  rb_funcall(val.ptr(), rb_intern("call"), 2, INT2FIX(x), INT2FIX(y));
+}
 
 /* EOF */

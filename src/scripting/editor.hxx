@@ -27,15 +27,17 @@
 #include <ClanLib/Signals/signal_v0.h>
 #include "../tile.hxx"
 
+#ifdef SWIGPYTHON
 #include "Python.h"
 
 void connect(CL_Signal_v0& sig, PyObject* obj);
 void connect_v1(CL_Signal_v1<int>& sig, PyObject* obj);
 void connect_v2(CL_Signal_v2<int, int>& sig, PyObject* obj);
+#endif
 
 CL_Sprite make_sprite(const std::string& filename);
-Tile make_tile(const char* filename, 
-               unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha);
+/*Tile make_tile(const char* filename, 
+  unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha);*/
 
 #endif
 

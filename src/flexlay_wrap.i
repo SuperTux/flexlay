@@ -50,12 +50,18 @@
 #include "objmap_path_node.hxx"
 
 #include "netpanzer.hxx" 
+#include "scripting/editor.hxx"
 
 #ifdef SWIGPYTHON
 #include "sexpr_parser.hxx"
-#include "scripting/editor.hxx"
 #include "python_meta_data.hxx"
 #include "python_functor.hxx"
+#endif
+
+#ifdef SWIGRUBY
+#include "ruby_sexpr_parser.hxx"
+#include "ruby_meta_data.hxx"
+#include "ruby_functor.hxx"
 #endif
 %}
 
@@ -105,13 +111,19 @@
 %include "zoom_tool.hxx" 
 %include "graphic_context_state.hxx"
 %include "objmap_path_node.hxx"
+%include "scripting/editor.hxx"
 
 %include "netpanzer.hxx" 
 
 #ifdef SWIGPYTHON
-%include "scripting/editor.hxx"
 %include "python_meta_data.hxx"
 %include "sexpr_parser.hxx"
 #endif
+
+#ifdef SWIGRUBY
+%include "ruby_meta_data.hxx"
+%include "ruby_sexpr_parser.hxx"
+#endif
+
 
 /* EOF */

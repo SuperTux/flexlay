@@ -1,6 +1,6 @@
 //  $Id$
 // 
-//  Flexlay - A Generic 2D Game Editor
+//  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
 //
 //  This program is free software; you can redistribute it and/or
@@ -17,13 +17,14 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-#ifndef HEADER_SEXPR_PARSER_HXX
-#define HEADER_SEXPR_PARSER_HXX
+#ifndef HEADER_RUBY_META_DATA_HXX
+#define HEADER_RUBY_META_DATA_HXX
 
-#include "lispreader.hxx"
-#include "Python.h"
+#include "ruby.h"
+#include "meta_data.hxx"
 
-PyObject* sexpr_read_from_file(const char* filename);
+MetaData  make_metadata(VALUE obj);
+VALUE get_ruby_object(const MetaData& data);
 
 #endif
 

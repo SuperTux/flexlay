@@ -17,13 +17,12 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-#ifndef HEADER_SEXPR_PARSER_HXX
-#define HEADER_SEXPR_PARSER_HXX
+#ifndef HEADER_RUBY_SEXPR_PARSER_HXX
+#define HEADER_RUBY_SEXPR_PARSER_HXX
 
-#include "lispreader.hxx"
-#include "Python.h"
+#include "ruby.h"
 
-PyObject* sexpr_read_from_file(const char* filename);
+VALUE sexpr_read_from_file(const char* filename);
 
 #endif
 

@@ -1,3 +1,5 @@
+# translated to ruby
+
 class Sector:
     parent    = None
     name      = None

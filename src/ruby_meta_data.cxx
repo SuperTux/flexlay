@@ -1,6 +1,6 @@
 //  $Id$
-// 
-//  Flexlay - A Generic 2D Game Editor
+//
+//  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
 //
 //  This program is free software; you can redistribute it and/or
@@ -12,19 +12,35 @@
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
-// 
+//
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-#ifndef HEADER_SEXPR_PARSER_HXX
-#define HEADER_SEXPR_PARSER_HXX
+#include "ruby_object.hxx"
+#include "meta_data_impl.hxx"
+#include "ruby_meta_data.hxx"
 
-#include "lispreader.hxx"
-#include "Python.h"
+typedef MetaDataGeneric<RubyObject> RubyMetaData;
 
-PyObject* sexpr_read_from_file(const char* filename);
+MetaData  make_metadata(VALUE obj)
+{
+  return MetaData(SharedPtr<MetaDataImpl>(new RubyMetaData(RubyObject(obj))));
+}
 
-#endif
+VALUE get_ruby_object(const MetaData& data_obj)
+{
+  MetaDataImpl* data = data_obj.get_impl().get();
+
+  if (data)
+    {
+      RubyMetaData* rbdata = dynamic_cast<RubyMetaData*>(data);
+      if (rbdata)
+        {
+          return rbdata->data.ptr();
+        }
+    }
+  return Qnil;
+}
 
 /* EOF */

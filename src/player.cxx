@@ -1,4 +1,4 @@
-//  $Id: player.cxx,v 1.14 2003/09/13 10:11:33 grumbel Exp $
+//  $Id: player.cxx,v 1.15 2003/09/13 10:19:08 grumbel Exp $
 //
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -91,9 +91,9 @@ Player::draw ()
       if (hit_count > 0)
         {
           if (rand()%2)
-            sprite->set_alpha(1.0f - hit_count);
-          else
             sprite->set_alpha(1.0f);
+          else
+            sprite->set_alpha(1.0f - hit_count);
         }
       else
         sprite->set_alpha(1.0f);

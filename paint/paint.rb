@@ -58,7 +58,7 @@ class PaintGUI
                        $sketch_stroke_tool.set_color(color)
                      })
 
-    @bgcolorpicker = ColorPicker.new(CL_Rect.new(CL_Point.new(3, 250), CL_Size.new(128, 128)),
+    @bgcolorpicker = ColorPicker.new(CL_Rect.new(CL_Point.new(3, 300), CL_Size.new(128, 128)),
                                      @selector_window)
 
     connect_v1_Color(@bgcolorpicker.sig_color_change(), proc{|color|
@@ -82,6 +82,49 @@ class PaintGUI
                        GeneratedBrush.new(drawer.get_brush()).set_hardness(value)
                      })
 
+    @brush_spikes = Slider.new(CL_Rect.new(CL_Point.new(3, 190), CL_Size.new(128, 16)),
+                                 @selector_window)
+    @brush_spikes.set_range(2, 20)
+    @brush_spikes.set_value(2)
+    connect_v1_float(@brush_spikes.sig_on_change, proc{|value|
+                       drawer = SpriteStrokeDrawer.new($sketch_stroke_tool.get_drawer())
+                       GeneratedBrush.new(drawer.get_brush()).set_spikes(value.to_i)
+                     })
+
+    @brush_aspects = Slider.new(CL_Rect.new(CL_Point.new(3, 210), CL_Size.new(128, 16)),
+                                 @selector_window)
+    @brush_aspects.set_range(0.1, 10)
+    @brush_aspects.set_value(1)
+    connect_v1_float(@brush_aspects.sig_on_change, proc{|value|
+                       drawer = SpriteStrokeDrawer.new($sketch_stroke_tool.get_drawer())
+                       GeneratedBrush.new(drawer.get_brush()).set_aspect_ratio(value)
+                     })
+
+    @brush_angles = Slider.new(CL_Rect.new(CL_Point.new(3, 230), CL_Size.new(128, 16)),
+                                 @selector_window)
+    @brush_angles.set_range(0, 360)
+    @brush_angles.set_value(0)
+    connect_v1_float(@brush_angles.sig_on_change, proc{|value|
+                       drawer = SpriteStrokeDrawer.new($sketch_stroke_tool.get_drawer())
+                       GeneratedBrush.new(drawer.get_brush()).set_angle(value)
+                     })
+
+    @brush_shape_circle  = CL_Button.new(CL_Rect.new(CL_Point.new(5, 250), CL_Size.new(40, 25)), "Circ", @selector_window)
+    @brush_shape_rect    = CL_Button.new(CL_Rect.new(CL_Point.new(45, 250), CL_Size.new(40, 25)), "Squa", @selector_window)
+    @brush_shape_diamond = CL_Button.new(CL_Rect.new(CL_Point.new(85, 250), CL_Size.new(40, 25)), "Diam", @selector_window)
+
+    connect(@brush_shape_circle.sig_clicked(), proc{ 
+              drawer = SpriteStrokeDrawer.new($sketch_stroke_tool.get_drawer())
+              GeneratedBrush.new(drawer.get_brush()).set_shape(BRUSH_SHAPE_CIRCLE)
+            })
+    connect(@brush_shape_rect.sig_clicked(), proc{ 
+              drawer = SpriteStrokeDrawer.new($sketch_stroke_tool.get_drawer())
+              GeneratedBrush.new(drawer.get_brush()).set_shape(BRUSH_SHAPE_SQUARE)
+            })
+    connect(@brush_shape_diamond.sig_clicked(), proc{ 
+              drawer = SpriteStrokeDrawer.new($sketch_stroke_tool.get_drawer())
+              GeneratedBrush.new(drawer.get_brush()).set_shape(BRUSH_SHAPE_DIAMOND)
+            })
 
 #    @zoom_slider = Slider.new(CL_Rect.new(CL_Point.new(3, 182), CL_Size.new(128, 16)), @selector_window)
 #    @zoom_slider.set_range(0.25, 10.0) # FIXME: using 0 size brush makes clanlib crashi
@@ -233,7 +276,7 @@ class Image
         tilt     = get_value_from_tree(["tilt", "_"],  data, [0, 0])
 
         # FIXME: No tilt support
-        stroke.add_dab(Dab.new(position[0], position[1], pressure))
+        stroke.add_dab(Dab.new(position[0].to_f, position[1].to_f, pressure.to_f))
       elsif tag == "drawer" then
         if data[0][0] == "sprite-stroke-drawer" then
           data = data[0][1..-1]
@@ -252,7 +295,7 @@ class Image
                                               get_value_from_tree(["radius", "_"], brush, 32),
                                               get_value_from_tree(["spikes", "_"], brush, 2),
                                               get_value_from_tree(["hardness", "_"], brush, 0.75),
-                                              get_value_from_tree(["aspect", "_"], brush, 1.0),
+                                              get_value_from_tree(["aspect-ratio", "_"], brush, 1.0),
                                               get_value_from_tree(["angle", "_"], brush, 0)).to_brush)
           stroke.set_drawer(drawer.to_drawer)
         else

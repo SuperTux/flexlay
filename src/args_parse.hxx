@@ -1,4 +1,4 @@
-//  $Id: args_parse.hxx,v 1.1 2003/09/05 20:41:51 grumbel Exp $
+//  $Id: args_parse.hxx,v 1.2 2003/09/06 11:14:16 grumbel Exp $
 // 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -27,12 +27,18 @@
 class ArgsParse
 {
 private:
+  std::string programm;
+
+  int   argc;
+  char** argv;
+  
   struct Option 
   {
     int key;
     std::string help;
     std::string long_option;
     std::string argument;
+    bool visible;
   };
   
   typedef std::vector<Option> Options;
@@ -46,7 +52,8 @@ public:
   void add_option(int key,
                   const std::string& long_option, 
                   const std::string& argument,
-                  const std::string& help);
+                  const std::string& help,
+                  bool visible = true);
 
   void parse_args(int argc, char** argv);
   void print_help();
@@ -54,6 +61,10 @@ public:
   virtual void read_option(int id, const std::string& argument) =0;
   virtual void parse_error(const std::string& msg);
 private:
+  int parse_arg(int i);
+
+  std::pair<std::string, std::string> split_long_option(const std::string& option);
+
   Option* lookup_short_option(char short_option);
   Option* lookup_long_option(const std::string& long_option);
 

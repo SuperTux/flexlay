@@ -1,4 +1,4 @@
-//  $Id: args_parse_test.cxx,v 1.1 2003/09/05 20:41:51 grumbel Exp $
+//  $Id: args_parse_test.cxx,v 1.2 2003/09/06 11:14:16 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -23,13 +23,15 @@
 class MyArgsParse : public ArgsParse 
 {
 public:
+  static const int ARG_ARG = 301;
+
   MyArgsParse() {
-    add_option('c', "config", "FILE", "Config the app");
-    add_option('f', "file",   "FILE", "Load a file");
-    add_option('z', "zero",   "",     "Zero Args");
-    add_option('a', "",       "",     "short a");
-    add_option('h', "help",   "",     "help");
-    add_option(500, "arg",    "",     "long a");
+    add_option('c',     "config", "FILE", "Config the app");
+    add_option('f',     "file",   "FILE", "Load a file");
+    add_option('z',     "zero",   "",     "Zero Args");
+    add_option('a',     "",       "",     "short a");
+    add_option('h',     "help",   "",     "help");
+    add_option(ARG_ARG, "arg",    "",     "long a");
   }
   
   void read_option(int key, const std::string& argument) {
@@ -39,6 +41,21 @@ public:
       break;
     case 'f':
       std::cout << "file: " << argument << std::endl;
+      break;
+    case 'c':
+      std::cout << "config: " << argument << std::endl;
+      break;
+    case 'a':
+      std::cout << "a" << std::endl;
+      break;
+    case 'z':
+      std::cout << "zero" << std::endl;
+      break;
+    case ARG_ARG:
+      std::cout << "arg" << std::endl;
+      break;
+    case REST_ARG:
+      std::cout << "rest: " << argument << std::endl;
       break;
     default:
       std::cout << "Got " << key << " " << argument << std::endl;

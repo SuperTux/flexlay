@@ -32,7 +32,6 @@
 #include "music_manager.hxx"
 #include "windstille_bonus.hxx"
 #include "input/input_manager.hxx"
-#include "editor/editor.hxx"
 
 WindstilleMenu::WindstilleMenu()
   : background("menu_background", resources),

@@ -1,4 +1,4 @@
-SUBDIRS = editor guile collision scripting guistyle input
+SUBDIRS = guile collision scripting guistyle input
 
 bindir=$(prefix)/games
 

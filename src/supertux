@@ -1,5 +1,0 @@
-#!/bin/sh
-
-exec editor/editor --game supertux.scm "$@"
-
-# EOF #

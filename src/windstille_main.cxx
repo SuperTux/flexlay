@@ -29,7 +29,6 @@
 #include "string_converter.hxx"
 #include "windstille_error.hxx"
 #include "globals.hxx"
-#include "editor/editor.hxx"
 #include "windstille_game.hxx"
 #include "guile_gameobj_factory.hxx"
 #include "windstille_level.hxx"

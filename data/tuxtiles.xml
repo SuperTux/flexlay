@@ -27,6 +27,12 @@
     <sprite name="block1">
       <image file="images/tuxtiles/block1.png" />
     </sprite>
+    <sprite name="block10">
+      <image file="images/tuxtiles/block10.png" />
+    </sprite>
+    <sprite name="block11">
+      <image file="images/tuxtiles/block11.png" />
+    </sprite>
     <sprite name="block2">
       <image file="images/tuxtiles/block2.png" />
     </sprite>

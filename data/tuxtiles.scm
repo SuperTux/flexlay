@@ -187,6 +187,12 @@
  (tile (id 60)
        (image "tiles/pipe8")
        (colmap 255 255 255 255 255 255 255 255))
+ (tile (id 61)
+       (image "tiles/block10")
+       (colmap 255 255 255 255 255 255 255 255))
+ (tile (id 62)
+       (image "tiles/block11")
+       (colmap 255 255 255 255 255 255 255 255))
  )
 
 ;; EOF ;;

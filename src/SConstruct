@@ -19,6 +19,7 @@
 ##  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 import os
+import glob
 
 opts = Options('custom.py')
 opts.Add('CXX', 'The C++ compiler.', 'g++')
@@ -26,6 +27,9 @@ opts.Add('CXXFLAGS', 'The C++ compiler flags.', '-g -O2 -Wall')
 opts.Add('CPPPATH', 'additional header path', '')
 opts.Add('LIBPATH', 'additional library path', '')
 opts.Add('RUBYDIR', 'Ruby directory', os.popen('ruby -e "require \'rbconfig\'; puts Config::CONFIG[\'archdir\']"').read()[:-1])
+
+opts.Add('DESTDIR', 'destination directory which gets appended to PREFIX', '')
+opts.Add('PREFIX',  'PREFIX, ie. /usr/local', '/usr/local')
 
 env = Environment(SHLIBPREFIX='',
                   ENV = os.environ,
@@ -50,7 +54,7 @@ clanLib_env = Environment()
 clanLib_env.ParseConfig("pkg-config --cflags --libs clanCore-0.7 clanDisplay-0.7 clanGL-0.7 clanSignals-0.7 clanGUI-0.7 clanGUIStyleSilver-0.7")
 
 libflexlay_env = env.Copy()
-libflexlay_env.SharedLibrary(
+flexlay_lib = libflexlay_env.SharedLibrary(
     target = 'libflexlay.so',
     source = [
     'blitter.cxx',
@@ -110,12 +114,12 @@ libflexlay_env.SharedLibrary(
     'zoom_tool.cxx'],
     CPPPATH=['..'] + clanLib_env['CPPPATH'],
     CXXFLAGS  = clanLib_env['CCFLAGS'],
-#  LINKFLAGS = ['-Wl,-rpath', '$USER_LIBPATH'] + clanLib_env['LINKFLAGS'],
+    LINKFLAGS = clanLib_env['LINKFLAGS'],
     LIBPATH=['$USER_LIBPATH'] + clanLib_env['LIBPATH'],
     LIBS = clanLib_env['LIBS'])
 
 libflexlay_ruby_env = env.Copy()
-libflexlay_ruby_env.SharedLibrary(
+flexlay_ruby_lib = libflexlay_ruby_env.SharedLibrary(
     target = 'flexlay_wrap.so',
     source = [
     'flexlay_ruby_wrap.cxx',
@@ -125,9 +129,31 @@ libflexlay_ruby_env.SharedLibrary(
     'ruby_object.cxx'
     ],
     CPPPATH=['$USER_CPPPATH','$RUBYDIR','..'] + clanLib_env['CPPPATH'],
-#    LINKFLAGS = ['-Wl,-rpath', '$USER_LIBPATH'] + clanLib_env['LINKFLAGS'],
+    LINKFLAGS = clanLib_env['LINKFLAGS'],
     LIBPATH=['.'] + clanLib_env['LIBPATH'],
     LIBS=['flexlay'] + clanLib_env['LIBS'])
+
+flexlay_data = \
+             glob.glob('../data/images/files/*.png') + \
+             glob.glob('../data/images/fonts/*.png') + \
+             glob.glob('../data/images/icons16/*.png') + \
+             glob.glob('../data/images/icons24/*.png') + \
+             glob.glob('../data/images/netpanzersprites/*.png') + \
+             glob.glob('../data/gui/gui.xml')    + \
+             glob.glob('../data/gui/*/*.tga')    + \
+             glob.glob('../data/gui/*/*.png')    + \
+             glob.glob('../data/*.xml')
+
+flexlay_headers = glob.glob('*.hxx')
+
+flexlay_datadir = env['DESTDIR'] + env['PREFIX'] + '/share/flexlay'
+# install_exec = env.Alias('install_exec', Install(env['DESTDIR'] + env['PREFIX'] + '/bin', flexlay_bin))
+install_lib     = env.Alias('install_lib', Install(env['DESTDIR'] + env['PREFIX'] + '/lib', flexlay_lib))
+install_headers = env.Alias('install_headers', Install(env['DESTDIR'] + env['PREFIX'] + '/include/flexlay', flexlay_headers))
+install_data    = env.Alias('install_data', InstallAs([os.path.join(flexlay_datadir, i[8:]) for i in flexlay_data],
+                                                      flexlay_data))
+# install_ruby    = env.Alias('install_headers', Install(env['DESTDIR'] + env['PREFIX'] + '/include/flexlay', flexlay_headers))
+env.Alias('install', [install_data, install_lib, install_headers])
 
 # env.Command('flexlay_python_wrap.cxx', 'flexlay_wrap.i', "swig -python -o flexlay_python_wrap.cxx -c++ $SOURCE")
 # Depends('flexlay_python_wrap.cxx', ['flexlay_wrap.i',

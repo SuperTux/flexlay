@@ -23,7 +23,7 @@ import glob
 
 opts = Options('custom.py')
 opts.Add('CXX', 'The C++ compiler.', 'g++')
-opts.Add('CXXFLAGS', 'The C++ compiler flags.', ['-g', '-O2', '-Wall'])
+opts.Add('CXXFLAGS', 'The C++ compiler flags.', ['-g3', '-O0', '-Wall'])
 opts.Add('CPPPATH', 'additional header path', '')
 opts.Add('LIBPATH', 'additional library path', '')
 

@@ -39,7 +39,9 @@ public:
   /** The position of the layer */
   CL_Pointf pos;
 
-  LayerImpl() {}
+  LayerImpl() 
+    : pos(0, 0)
+  {}
   virtual ~LayerImpl() {}
 
   virtual void draw(EditorMapComponent* parent, CL_GraphicContext* gc) =0;

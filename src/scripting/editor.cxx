@@ -1,4 +1,4 @@
-//  $Id: editor.cxx,v 1.6 2003/09/26 14:29:36 grumbel Exp $
+//  $Id: editor.cxx,v 1.7 2003/10/11 08:11:59 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -27,6 +27,7 @@
 #include "editor/editor_tilemap.hxx"
 #include "editor/tile_editor.hxx"
 #include "tile_factory.hxx"
+#include "gui_manager.hxx"
 #include "editor.hxx"
 
 void
@@ -39,80 +40,6 @@ int
 editor_get_brush_tile()
 {
   return Editor::current()->get_editor_tilemap()->brush_tile;
-}
-
-CL_Component*
-editor_add_button(int x, int y, int w, int h, const char* text)
-{
-  CL_Component* manager = Editor::current()->get_component();
-  return new CL_Button(CL_Rect(CL_Point(x, y), CL_Size(w, h)),
-                       text, manager);
-}
-
-void
-component_on_click(CL_Component* comp, SCM func)
-{
-  CL_Button* button = dynamic_cast<CL_Button*>(comp);
-  CL_SlotContainer* slot_container = Editor::current()->get_slot_container();
-  
-  slot_container->connect_functor(button->sig_clicked(), SCMFunctor(func));
-}
-
-struct SCMVirtualFunctor
-{
-  SCMFunctor func;
-
-  SCMVirtualFunctor(const SCMFunctor& f)
-    : func(f)
-  {}
-
-  void operator()(CL_SlotParent_v0& parent) {
-    func();
-  }
-};
-
-void
-component_on_close(CL_Component* comp, SCM func)
-{
-  CL_Window* window = dynamic_cast<CL_Window*>(comp);
-  // FIXME: Slot container considered harmfull
-  //CL_SlotContainer* slot_container = Editor::current()->get_slot_container();
-  new CL_Slot(window->sig_close().connect_functor_virtual(SCMVirtualFunctor(SCMFunctor(func))));
-}
-
-CL_Component*
-editor_add_button_func(int x, int y, int w, int h, const char* text, SCM func)
-{
-  CL_Component* comp = editor_add_button(x, y, w, h, text);
-  component_on_click(comp, func);
-  return comp;
-}
-
-CL_Component* 
-editor_add_label(int x, int y, const char* text)
-{
-  CL_Component* manager = Editor::current()->get_component();
-  return new CL_Label(CL_Point(x, y), text, manager);
-}
-
-CL_Component*
-editor_add_window(int x, int y, int w, int h, const char* title)
-{
-  CL_Component* manager = Editor::current()->get_component();
-  return new CL_Window(CL_Rect(CL_Point(x, y), CL_Size(w, h)), title, manager);
-}
-
-CL_Component*
-editor_add_inputbox(int x, int y, int w, int h, const char* text)
-{
-  CL_Component* manager = Editor::current()->get_component();
-  return new CL_InputBox(CL_Rect(CL_Point(x,y), CL_Size(w, h)), text, manager);
-}
-
-void
-editor_quit()
-{
-  Editor::current()->get_component()->quit();
 }
 
 int
@@ -143,56 +70,7 @@ tile_selector_create(int x, int y, int w, int h)
   /*CL_Window* window = new CL_Window(CL_Rect(CL_Point(x, y),
                                             CL_Size(w*(TILE_SIZE/2), h*(TILE_SIZE/2) + 32)),
                                             "TileSelector", Editor::current()->get_component());*/
-  return new TileSelector(w, h, Editor::current()->get_component());
-}
-
-CL_Component*
-push_component(CL_Component* c)
-{
-  Editor::current()->push_component(c);
-  return c;
-}
-
-void
-pop_component()
-{
-  Editor::current()->pop_component();
-}
-
-void window_close(CL_Component* comp)
-{
-  comp->close();
-}
-
-const char* 
-inputbox_get_text(CL_Component* comp)
-{
-  CL_InputBox* box = dynamic_cast<CL_InputBox*>(comp);
-  if (box)
-    {
-      return box->get_text().c_str();
-    }
-  else
-    {
-      return 0;
-    }
-}
-
-void
-component_hide(CL_Component* comp)
-{
-  comp->show(false);
-}
-
-void
-component_show(CL_Component* comp)
-{
-  comp->show(true);
-}
-
-CL_Component* window_get_client_area(CL_Component* comp)
-{
-  return comp->get_client_area();
+  return new TileSelector(w, h, GUIManager::current()->get_component());
 }
 
 SCM diamond_map_get_data()
@@ -271,12 +149,6 @@ editor_new(int w, int h)
 }
 
 void
-file_dialog()
-{
-  new CL_FileDialog("File Dialog", "/", "", Editor::current()->get_component());
-}
-
-void
 game_play(const char* filename)
 {
   std::cout << "WindstilleGame: Starting level " << filename << std::endl;
@@ -287,7 +159,7 @@ game_play(const char* filename)
 CL_Component*
 editor_add_tileeditor(int x, int y)
 {
-  CL_Component* manager = Editor::current()->get_component();
+  CL_Component* manager = GUIManager::current()->get_component();
   return new TileEditor(x, y, manager);
 }
 

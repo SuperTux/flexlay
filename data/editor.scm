@@ -40,170 +40,170 @@
         (pretty-print level)
         (newline)))))
 
-(editor-add-button-func 0 0
-                   50 25 "New" 
-                   (lambda () 
-                     (show-new-level-dialog)))
-(editor-add-button-func 0 25
-                   50 25 "Load" 
-                   (lambda ()
-                     (simple-file-dialog "Load a level..." (get-last-file)
-                                         (lambda (filename)
-                                           (editor-load filename)
-                                           (push-last-file filename)))))
-(editor-add-button-func 0 50
-                   50 25 "Save" 
-                   (lambda () 
-                     (simple-file-dialog "Save a level..." (get-last-file)
-                                         (lambda (filename) 
-                                           (save-map filename)
-                                           (push-last-file filename)))))
+(gui-create-button-func 0 0
+                        50 25 "New" 
+                        (lambda () 
+                          (show-new-level-dialog)))
+(gui-create-button-func 0 25
+                        50 25 "Load" 
+                        (lambda ()
+                          (simple-file-dialog "Load a level..." (get-last-file)
+                                              (lambda (filename)
+                                                (editor-load filename)
+                                                (push-last-file filename)))))
+(gui-create-button-func 0 50
+                        50 25 "Save" 
+                        (lambda () 
+                          (simple-file-dialog "Save a level..." (get-last-file)
+                                              (lambda (filename) 
+                                                (save-map filename)
+                                                (push-last-file filename)))))
 
-(editor-add-button-func 0 75 50 25 "Play" 
-                   (lambda ()
-                     (let ((file (tmpnam)))
-                       (save-map file)
-                       (game-play file)
-                       (delete-file file))))
+(gui-create-button-func 0 75 50 25 "Play" 
+                        (lambda ()
+                          (let ((file (tmpnam)))
+                            (save-map file)
+                            (game-play file)
+                            (delete-file file))))
 
-(editor-add-button-func 0 100 50 25 "Quit" 
-                   (lambda ()
-                     (editor-quit)))
+(gui-create-button-func 0 100 50 25 "Quit" 
+                        (lambda ()
+                          (gui-quit)))
 
-(editor-add-button-func 100 0
+(gui-create-button-func 100 0
                         80 25 "Background" 
                         (lambda () (tilemap-set-active-layer 0)))
 
-(editor-add-button-func 180 0
+(gui-create-button-func 180 0
                         80 25 "Foreground" 
                         (lambda () (tilemap-set-active-layer 1)))
 
-(editor-add-button-func 260 0
+(gui-create-button-func 260 0
                         80 25 "Diamonds" 
                         (lambda ()
                           (tilemap-set-active-layer 1)))
 
 
-(editor-add-button-func (- screen-width 80)
-                   (- screen-height 25)
-                   80 25 "Shell" 
-                   windstille:repl)
+(gui-create-button-func (- screen-width 80)
+                        (- screen-height 25)
+                        80 25 "Shell" 
+                        windstille:repl)
 
-(editor-add-button-func 0
-                   (- screen-height 25)
-                   100 25 "Tile" 
-                   (lambda ()
-                     (editor-set-tool 0)))
-                     
-(editor-add-button-func (+ 100)
-                   (- screen-height 25)
-                   100 25 "Diamond" 
-                   (lambda ()
-                     (editor-set-tool 2)))
+(gui-create-button-func 0
+                        (- screen-height 25)
+                        100 25 "Tile" 
+                        (lambda ()
+                          (editor-set-tool 0)))
 
-(editor-add-button-func (+ 200)
-                   (- screen-height 25)
-                   100 25 "Objects" 
-                   (lambda ()
-                     (editor-set-brush-tile 0)))
+(gui-create-button-func (+ 100)
+                        (- screen-height 25)
+                        100 25 "Diamond" 
+                        (lambda ()
+                          (editor-set-tool 2)))
 
-(editor-add-button-func (+ 300)
-                   (- screen-height 25)
-                   100 25 "Select"
-                   (lambda ()
-                     (editor-set-tool 1)))
+(gui-create-button-func (+ 200)
+                        (- screen-height 25)
+                        100 25 "Objects" 
+                        (lambda ()
+                          (editor-set-brush-tile 0)))
 
-(editor-add-button-func (+ 450)
+(gui-create-button-func (+ 300)
+                        (- screen-height 25)
+                        100 25 "Select"
+                        (lambda ()
+                          (editor-set-tool 1)))
+
+(gui-create-button-func (+ 450)
                         (- screen-height 25)
                         80 25 "Tile Editor"
                         (lambda ()
-                          (component-show *tileeditor-window*)))
+                          (gui-component-toggle-visibility *tileeditor-window*)))
 
-(editor-add-button-func (+ 570)
+(gui-create-button-func (+ 570)
                         (- screen-height 25)
                         80 25 "Tile Selector"
                         (lambda ()
-                          (component-show *tileselector-window*)))
+                          (gui-component-toggle-visibility *tileselector-window*)))
 
 (define (show-new-level-dialog)
-  (let ((window (editor-add-window 200 200 200 160 "Property Window")))
-    (push-component (window-get-client-area window))
+  (let ((window (gui-create-window 200 200 200 160 "Property Window")))
+    (gui-push-component (gui-window-get-client-area window))
 
-    (editor-add-label 10 10 "Width: ")
-    (editor-add-label 10 30 "Height: ")
+    (gui-create-label 10 10 "Width: ")
+    (gui-create-label 10 30 "Height: ")
 
-    (let ((width  (editor-add-inputbox 100 10 50 25 "50"))
-          (height (editor-add-inputbox 100 30 50 25 "50"))
+    (let ((width  (gui-create-inputbox 100 10 50 25 "50"))
+          (height (gui-create-inputbox 100 30 50 25 "50"))
 
-          (ok     (editor-add-button 90 100 50 25 "Ok"))
-          (cancel (editor-add-button 140 100 50 25 "Cancel")))
+          (ok     (gui-create-button 90 100 50 25 "Ok"))
+          (cancel (gui-create-button 140 100 50 25 "Cancel")))
       
-      (component-on-click ok 
-                          (lambda ()   
-                            (editor-new (string->number (inputbox-get-text width))
-                                        (string->number (inputbox-get-text height)))
-                            (component-hide window)))
+      (gui-component-on-click ok 
+                              (lambda ()   
+                                (editor-new (string->number (gui-inputbox-get-text width))
+                                            (string->number (gui-inputbox-get-text height)))
+                                (gui-hide-component window)))
 
-      (component-on-click cancel
-                          (lambda () 
-                            (component-hide window)))
-      (pop-component))))
+      (gui-component-on-click cancel
+                              (lambda () 
+                                (gui-hide-component window)))
+      (gui-pop-component))))
 
 (define (simple-file-dialog title filename func)
-  (let ((window (editor-add-window 200 200 200 160 title)))
-    (push-component (window-get-client-area window))
-    (editor-add-label 10 10 "Filename: ")
-    (let ((ok       (editor-add-button 90 100 50 25 "Ok"))
-          (cancel   (editor-add-button 140 100 50 25 "Cancel"))
-          (filename (editor-add-inputbox 10 30 180 25 filename)))
+  (let ((window (gui-create-window 200 200 200 160 title)))
+    (gui-push-component (gui-window-get-client-area window))
+    (gui-create-label 10 10 "Filename: ")
+    (let ((ok       (gui-create-button 90 100 50 25 "Ok"))
+          (cancel   (gui-create-button 140 100 50 25 "Cancel"))
+          (filename (gui-create-inputbox 10 30 180 25 filename)))
 
-      (component-on-click ok 
-                          (lambda ()   
-                            (func (inputbox-get-text filename))
-                            (component-hide window)))
+      (gui-component-on-click ok 
+                              (lambda ()   
+                                (func (gui-inputbox-get-text filename))
+                                (gui-hide-component window)))
 
-      (component-on-click cancel
-                          (lambda () 
-                            (component-hide window)))
-      (pop-component)
+      (gui-component-on-click cancel
+                              (lambda () 
+                                (gui-hide-component window)))
+      (gui-pop-component)
       )))
 
 (define (dump-tile-definitions filename)
   (with-output-to-file filename
     (lambda ()
-     (pretty-print (get-tile-defs))
-     (newline)
-     (display ";; EOF ;;\n"))))
+      (pretty-print (get-tile-defs))
+      (newline)
+      (display ";; EOF ;;\n"))))
 
 
-(let ((window (editor-add-window 200 200 250 180 "Tile Editor")))
-  (push-component (window-get-client-area window))
+(let ((window (gui-create-window 200 200 250 180 "Tile Editor")))
+  (gui-push-component (gui-window-get-client-area window))
   (set! *tileeditor* (editor-add-tileeditor 10 10))
-  (let ((gettile (editor-add-button 148 10 75 25 "Get Tile"))
-        (dump    (editor-add-button 148 95 75 25 "Dump")))
+  (let ((gettile (gui-create-button 148 10 75 25 "Get Tile"))
+        (dump    (gui-create-button 148 95 75 25 "Dump")))
     
-    (component-on-click gettile
-                        (lambda ()
-                          (tileeditor-set-tile *tileeditor* (editor-get-brush-tile))))
-    (component-on-click dump
-                        (lambda () 
-                          (dump-tile-definitions (string-append datadir "tiles.scm"))))
+    (gui-component-on-click gettile
+                            (lambda ()
+                              (tileeditor-set-tile *tileeditor* (editor-get-brush-tile))))
+    (gui-component-on-click dump
+                            (lambda () 
+                              (dump-tile-definitions (string-append datadir "tiles.scm"))))
 
-  (component-on-close window (lambda ()
-                               (component-hide window)))
+    (gui-component-on-close window (lambda ()
+                                     (gui-hide-component window)))
 
     (set! *tileeditor-window* window))
-  (pop-component))
+  (gui-pop-component))
 
 
-(let ((window (editor-add-window 600 0 200 400 "TileSelector")))
-  (push-component (window-get-client-area window))
+(let ((window (gui-create-window 600 0 200 400 "TileSelector")))
+  (gui-push-component (gui-window-get-client-area window))
   (tile-selector-create (- screen-width (* 3 64)) 0 3 8)
-  (component-on-close window (lambda ()
-                               (component-hide window)))
+  (gui-component-on-close window (lambda ()
+                                   (gui-hide-component window)))
   (set! *tileselector-window* window)
-  (pop-component))
+  (gui-pop-component))
 
-(component-hide *tileeditor-window*)
+(gui-hide-component *tileeditor-window*)
 
 ;; EOF ;;

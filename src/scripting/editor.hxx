@@ -1,4 +1,4 @@
-//  $Id: editor.hxx,v 1.7 2003/10/10 21:06:22 grumbel Exp $
+//  $Id: editor.hxx,v 1.8 2003/10/11 08:11:59 grumbel Exp $
 // 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -24,37 +24,16 @@
 
 class CL_Component;
 
-CL_Component* push_component(CL_Component* c);
-void pop_component();
-
 CL_Component* tile_selector_create(int x, int y, int w, int h);
 void editor_set_brush_tile(int i);
 int  editor_get_brush_tile();
 void editor_set_tool(int i);
 void tilemap_set_active_layer(int i);
 
-// Generic GUI stuff
-CL_Component* editor_add_window(int x, int y, int w, int h, const char* title);
-CL_Component* editor_add_button_func(int x, int y, int w, int h, const char* text, SCM func);
-CL_Component* editor_add_button(int x, int y, int w, int h, const char* text);
-CL_Component* editor_add_label(int x, int y, const char* text);
-CL_Component* editor_add_inputbox(int x, int y, int w, int h, const char* text);
-
-void component_on_click(CL_Component* comp, SCM func);
-void component_on_close(CL_Component* comp, SCM func);
-
 CL_Component* editor_add_tileeditor(int x, int y);
 
 void tileeditor_set_tile(CL_Component* comp, int id);
 
-const char* inputbox_get_text(CL_Component*);
-
-CL_Component* window_get_client_area(CL_Component* comp);
-void window_close(CL_Component* comp);
-void component_hide(CL_Component* comp);
-void component_show(CL_Component* comp);
-
-void editor_quit();
 int  screen_get_width();
 int  screen_get_height();
 
@@ -69,8 +48,6 @@ void map_clear();
 
 void editor_new(int w, int h);
 void editor_load(const char* filename);
-
-void file_dialog();
 
 void game_play(const char* filename);
 

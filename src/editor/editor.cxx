@@ -1,4 +1,4 @@
-//  $Id: editor.cxx,v 1.8 2003/09/22 18:37:05 grumbel Exp $
+//  $Id: editor.cxx,v 1.9 2003/10/11 08:11:59 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -20,8 +20,11 @@
 #include <iostream>
 #include <ClanLib/signals.h>
 #include <ClanLib/display.h>
+#include <ClanLib/gui.h>
 #include <ClanLib/guistylesilver.h>
 #include <guile/gh.h>
+
+#include "gui_manager.hxx"
 #include "globals.hxx"
 #include "editor.hxx"
 #include "editor_tilemap.hxx"
@@ -34,23 +37,22 @@ Editor::Editor()
 {
   current_ = this;
 
-  slot_container = new CL_SlotContainer();
-  resources = new CL_ResourceManager(datadir + "gui/gui.xml", false);
-  style     = new CL_StyleManager_Silver(resources);
-  manager   = new CL_GUIManager(style);
+  manager = new GUIManager();
 
-  push_component(manager);
+  tilemap   = new EditorTileMap(manager->get_component());
+  popupmenu = new CL_PopupMenu(manager->get_component());
+  menu_data = new CL_MenuData(popupmenu);
 
-  tilemap = new EditorTileMap(manager);
-  //tilemap->load(datadir + "levels/level1.scm");
-
-  popupmenu  = new CL_PopupMenu(manager);
-  menu_data  = new CL_MenuData(popupmenu);
   menu_data->insert_item("Hello World");
   menu_data->insert_item("Hello World2");
   menu_data->insert_item("Hello World3");
 
   gh_load ((datadir + "editor.scm").c_str());
+}
+
+Editor::~Editor()
+{
+  delete manager;
 }
 
 void
@@ -63,15 +65,7 @@ void
 Editor::popup_menu()
 {
   std::cout << "PopUP" << std::endl;
-  popupmenu->popup(manager);
-}
-
-Editor::~Editor()
-{
-  delete manager;
-  delete style;
-  delete resources;
-  delete slot_container;
+  popupmenu->popup(manager->get_component());
 }
 
 void

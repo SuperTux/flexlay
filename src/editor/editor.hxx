@@ -1,4 +1,4 @@
-//  $Id: editor.hxx,v 1.7 2003/09/22 18:37:05 grumbel Exp $
+//  $Id: editor.hxx,v 1.8 2003/10/11 08:11:59 grumbel Exp $
 // 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -21,26 +21,23 @@
 #define HEADER_EDITOR_HXX
 
 #include <stack>
-#include <ClanLib/gui.h>
 
+class CL_PopupMenu;
+class CL_MenuData;
 class TileEditor;
 class EditorTileMap;
+class GUIManager;
 
 /** */
 class Editor
 {
 private:
-  CL_GUIManager*   manager;
-  CL_StyleManager* style;
-  CL_ResourceManager* resources;
-  CL_SlotContainer* slot_container;
+  GUIManager* manager;
 
   CL_PopupMenu* popupmenu;
   CL_MenuData*  menu_data;
 
   EditorTileMap* tilemap;
-
-  std::stack<CL_Component*> components;
 
   static Editor* current_;
 public:
@@ -51,18 +48,12 @@ public:
 
   EditorTileMap* get_editor_tilemap() { return tilemap; }
 
-  CL_Component* get_component() { return components.top(); }
-
-  CL_SlotContainer* get_slot_container() { return slot_container; }
-
   void run();
-  
+
   void popup_menu();
 
   void load(const std::string& filename);
 
-  void push_component(CL_Component* c) { components.push(c); }
-  void pop_component() { components.pop(); }
 private:
   Editor (const Editor&);
   Editor& operator= (const Editor&);

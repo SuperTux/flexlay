@@ -1,4 +1,4 @@
-//  $Id: gui.hxx,v 1.1 2003/10/10 21:06:22 grumbel Exp $
+//  $Id: gui.hxx,v 1.2 2003/10/11 08:11:59 grumbel Exp $
 // 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -74,8 +74,17 @@ void gui_show_component(CL_Component* comp);
 /** Hide a component temporary, without removing it */
 void gui_hide_component(CL_Component* comp);
 
+bool gui_component_is_visible(CL_Component* comp);
+
 /** Return the text that is currently in an input box */
 const char* gui_inputbox_get_text(CL_Component* comp);
+
+/** Start a file dialog, call func once ok is pressed.
+    @param filename The directory where to start the file manager in */
+void gui_file_dialog(const char* filename, SCM func);
+
+/** Quit the GUI manager, works only if the GUIManager is in a busy loop */
+void gui_quit();
 
 #endif
 

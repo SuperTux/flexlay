@@ -1,4 +1,4 @@
-//  $Id: gui.cxx,v 1.1 2003/10/10 21:06:22 grumbel Exp $
+//  $Id: gui.cxx,v 1.2 2003/10/11 08:11:59 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -146,12 +146,28 @@ gui_show_component(CL_Component* comp)
   comp->show(true);
 }
 
+bool
+gui_component_is_visible(CL_Component* comp)
+{
+  return comp->is_visible();
+}
+
 CL_Component* 
 gui_window_get_client_area(CL_Component* comp)
 {
   return comp->get_client_area();
 }
 
+void
+gui_file_dialog(const char* filename, SCM func)
+{
+  new CL_FileDialog("File Dialog", "/", "", GUIManager::current()->get_component());
+}
 
+void
+gui_quit()
+{
+  GUIManager::current()->get_component()->quit();
+}
 
 /* EOF */

@@ -1,8 +1,13 @@
-(game-add-water 10 100 180 50)
 
 (game-add-igel 1000 1300)
 (game-add-igel 800 1300)
 (game-add-igel 500 1300)
+
+(game-add-water 2335 2900 4076 3294)
+(game-add-water 300 2781 1378 2895)
+
+(game-add-water 268 2224 888 2299)
+(game-add-water 2950 2222 3565 2295)
 
 (add-region-trigger 10 10 10000 1200
                     (lambda ()

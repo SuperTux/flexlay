@@ -1,4 +1,4 @@
-//  $Id: water_map.cxx,v 1.3 2003/09/26 14:29:35 grumbel Exp $
+//  $Id: water_map.cxx,v 1.4 2003/09/27 08:29:12 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -110,7 +110,6 @@ WaterMap::update(float delta)
           if ((old_pos.y < y && pos.y > y)
               || (old_pos.y > y && pos.y < y))
             {
-              std::cout << "WATER SPLASH" << std::endl;
               GameWorld::current()->add(new WaterSplash(pos.x, y));
             }
         }

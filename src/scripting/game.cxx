@@ -1,4 +1,4 @@
-//  $Id: game.cxx,v 1.10 2003/09/26 14:29:36 grumbel Exp $
+//  $Id: game.cxx,v 1.11 2003/09/27 08:29:12 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -153,6 +153,11 @@ void dialog_clear()
 void remove_trigger()
 {
   GameWorld::current()->remove(Trigger::get_current());
+}
+
+float game_get_time()
+{
+  return GameWorld::current()->get_time();
 }
 
 /* EOF */

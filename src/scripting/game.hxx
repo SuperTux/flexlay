@@ -1,4 +1,4 @@
-//  $Id: game.hxx,v 1.9 2003/09/23 10:48:03 grumbel Exp $
+//  $Id: game.hxx,v 1.10 2003/09/27 08:29:12 grumbel Exp $
 // 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -47,6 +47,10 @@ void dialog_add(const char* portrait, const char* text);
 void dialog_show();
 void dialog_hide();
 void dialog_clear();
+
+/** @return number of seconds since game start, time doesn't progress
+    in pause mode */
+float game_get_time();
 
 #endif
 

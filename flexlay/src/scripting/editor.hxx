@@ -32,9 +32,6 @@ class CL_Component;
 class TileBrush;
 class Tileset;
 
-/** Load a tile definition file into the Tileset */
-void game_load_tiles(const char* resourcefile);
-
 /** Add a ClanLib resource file to the resource manager */
 void game_load_resources(const char* resourcefile);
 
@@ -120,6 +117,7 @@ void            editor_tilemap_set_fgcolor(EditorMapLayer* l, int r, int g, int 
 void            editor_tilemap_save_png(EditorMapLayer* l, const char* filename);
 
 Tileset* tileset_create(int tile_size);
+Tileset* tileset_create_from_file(const char* resourcefile);
 void tileset_add_tile(Tileset* tileset, SCM data);
 void tileset_set_current(Tileset* tileset);
 

@@ -1,0 +1,5 @@
+#!/bin/sh
+
+exec ./flexlay --game supertux.scm "$@"
+
+# EOF #

@@ -909,6 +909,7 @@
    (tile-selector-set-tiles   *tileselector* (seq 1 100))
    (supertux:new-map 20 15))
   ((netpanzer)
+   (tile-selector-set-tileset *tileselector* *tileset*)
    (netpanzer:new-map 20 15))
   (else
    (new-map 20 15)))

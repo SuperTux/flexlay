@@ -86,12 +86,6 @@ SCM vector2scm(const std::vector<int>& vec)
 }
 
 void
-game_load_tiles(const char* resourcefile)
-{
-  Tileset::current()->load_tile_file(datadir + resourcefile);
-}
-
-void
 game_load_resources(const char* resourcefile)
 {
   try {
@@ -975,6 +969,14 @@ Tileset*
 tileset_create(int tile_size)
 {
   return new Tileset(tile_size);
+}
+
+Tileset*
+tileset_create_from_file(const char* resourcefile)
+{
+  Tileset* tileset = new Tileset(32); // FIXME: Hardcoded tilesize
+  tileset->load_tile_file(datadir + resourcefile);
+  return tileset;
 }
 
 void

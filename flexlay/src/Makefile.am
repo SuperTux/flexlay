@@ -75,11 +75,11 @@ $(REST_LIBS2) \
 -Wl,-Bdynamic \
 -lGL
 
-editor.static: $(editor_OBJECTS) $(editor_DEPENDENCIES) Makefile
-	$(CXX) -s $(CXXFLAGS)   @EDITOR_CFLAGS@ -o $@ $(editor_OBJECTS) \
-         $(editor_DEPENDENCIES) $(STATICBIN_LIBS) 
+flexlay.static: $(flexlay_OBJECTS) $(flexlay_DEPENDENCIES) Makefile
+	$(CXX) -s $(CXXFLAGS)   @EDITOR_CFLAGS@ -o $@ $(flexlay_OBJECTS) \
+         $(flexlay_DEPENDENCIES) $(STATICBIN_LIBS) 
 
-editor.static.comp: editor.static
+flexlay.static.comp: flexlay.static
 	cp $< $@
 	strip -s $@
 	upx-ucl -q --best $@

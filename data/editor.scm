@@ -23,6 +23,7 @@
   (cond ((not (string=? filename (get-last-file)))
          (set! *recent-files* (cons filename *recent-files*)))))
 
+
 (define (get-last-file)
   (car *recent-files*))
 
@@ -173,6 +174,24 @@
                        (lambda ()
                          (gui-component-toggle-visibility *tileeditor-window*)))))
 
+(define (set-tool sym)
+  (case sym 
+    ((tile)
+     (editor-set-tool 0)
+     (gui-show-component *tileselector-window*)
+     (gui-hide-component *object-inserter-window*))
+
+    ((select)
+     (editor-set-tool 1))
+    ((diamond)
+     (editor-set-tool 2))
+    ((object)
+     (editor-set-tool 3)
+     (gui-show-component *object-inserter-window*)
+     (gui-hide-component *tileselector-window*))
+    (else
+     (error "Tool unknown"))))
+
 (define (create-toolbar)
   (let ((window (gui-create-window 0 25 50 300 "Toolbar")))
     (gui-push-component (gui-window-get-client-area window))
@@ -181,24 +200,22 @@
     (gui-create-button-func 0 0
                             40 25 "Tile" 
                             (lambda ()
-                              (editor-set-tool 0)))
-
+                              (set-tool 'tile)))
 
     (gui-create-button-func 0  25
                             40 25 "Select"
                             (lambda ()
-                              (editor-set-tool 1)))
+                              (set-tool 'select)))
 
     (gui-create-button-func 0 50
                             40 25 "Diam." 
                             (lambda ()
-                              (editor-set-tool 2)))
+                              (set-tool 'diamond)))
 
     (gui-create-button-func 0 75                              
                             40 25 "Objs" 
                             (lambda ()
-                              (editor-set-tool 3)))
-
+                              (set-tool 'object)))
 
     (gui-create-button-func 0 100
                             40 25 "Brush" 
@@ -206,7 +223,7 @@
                               (set! *clipboard* (editor-get-tile-selection))
                               (cond (*clipboard*
                                      (tilemap-paint-tool-set-brush *clipboard*)
-                                     (editor-set-tool 0)))))
+                                     (set-tool 'tile)))))
 
     (gui-create-button-func 0 150
                             40 25 "BG" 
@@ -302,7 +319,9 @@
     (gui-component-on-close window (lambda ()
                                      (gui-hide-component window)))
     (gui-pop-component)
-    (set! *object-inserter-window* window)))
+    (set! *object-inserter-window* window)
+    (gui-hide-component *object-inserter-window*)
+    ))
 
 (define (create-tile-selector)
   (let ((window (gui-create-window 600 25 200 400 "TileSelector")))
@@ -319,6 +338,7 @@
     (gui-component-on-close window (lambda ()
                                      (gui-hide-component window)))
     (set! *tileselector-window* window)
+    (gui-hide-component *tileselector-window*)
     (gui-pop-component)))
 
 (define (create-minimap)
@@ -412,5 +432,7 @@
 (create-tile-selector)
 (create-object-inserter)
 (create-minimap)
+
+(set-tool 'tile)
 
 ;; EOF ;;

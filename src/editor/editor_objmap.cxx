@@ -17,7 +17,9 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
+#include <iostream>
 #include <ClanLib/Display/display.h>
+#include <ClanLib/Core/Math/origin.h>
 #include "editor_objmap.hxx"
 
 extern CL_ResourceManager* resources;
@@ -59,10 +61,22 @@ EditorObjMap::add_object(const char* name, const CL_Point& pos)
 }
 
 EditorObjMap::Obj*
-EditorObjMap::find_object(const CL_Point& pos)
+EditorObjMap::find_object(const CL_Point& click_pos)
 {
   for(Objs::iterator i = objects.begin(); i != objects.end(); ++i)
     {
+      // FIXME: This is buggy and doesn't work for all kinds of offsets
+      CL_Point  align = CL_Point(0, 0);
+      CL_Origin origin_e;
+      
+      (*i)->sprite.get_alignment(origin_e, align.x, align.y);
+
+      CL_Point origin = calc_origin(origin_e, CL_Size((*i)->sprite.get_width(),
+                                                      (*i)->sprite.get_height()));
+      align.x = -align.x;
+      
+      CL_Point pos = click_pos + origin + align;
+
       if ((*i)->pos.x < pos.x
           && (*i)->pos.x + (*i)->sprite.get_width() >= pos.x
           && (*i)->pos.y < pos.y

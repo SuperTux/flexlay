@@ -32,6 +32,7 @@ private:
   EditorObjMap* objmap;
   EditorObjMap::Obj* obj;
   enum { DRAG, NONE } state;
+
   /** the position on which the object was clicked, relative to the
       object */
   CL_Point offset;

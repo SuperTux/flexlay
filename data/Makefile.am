@@ -28,13 +28,13 @@ EXTRA_DIST = \
   gui/*/*.png \
   $(wildcard music/*.ogg) \
   $(wildcard levels/*.scm) \
+  $(wildcard controller/*.scm) \
   $(wildcard *.scm) \
   $(wildcard images/*.png images/*.jpg) \
   $(wildcard images/tiles/*.png) \
   $(wildcard images/bonus/*.jpg) \
   $(wildcard images/diamond/*.png) \
   $(wildcard images/hero_run/*.png) \
-  $(wildcard images/controller/*.scm) \
   $(wildcard images/hero_dead/*.png)
 
 nobase_pkgdata_DATA = $(EXTRA_DIST)

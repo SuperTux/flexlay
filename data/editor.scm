@@ -204,6 +204,18 @@
   (gui-pop-component))
 
 
+(let ((window (gui-create-window 200 200 300 130 "Disclaimer")))
+  (gui-push-component (gui-window-get-client-area window))
+  (gui-create-label 10 10
+                    (string-append "This editor is buggy and might crash quite a bit,\n"
+                                   "it isn't really end user ready at the moment. \n"
+                                   "It is included here for those who might find it usefull\n"
+                                   "anyway, but don't complain when it locks your system"))
+  (gui-create-button-func 210 70 75 25 "Ok"
+                          (lambda ()
+                            (gui-hide-component window)))
+  (gui-pop-component))
+
 (let ((window (gui-create-window 600 0 200 400 "TileSelector")))
   (gui-push-component (gui-window-get-client-area window))
   (tile-selector-create (- screen-width (* 3 64)) 0 3 8)

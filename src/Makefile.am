@@ -124,6 +124,7 @@ REST_LIBS = \
 REST_LIBS2 = \
 -Wl,-Bdynamic \
 -lGL \
+-lgcc_s \
 -lc
 
 STATICBIN_LIBS = \

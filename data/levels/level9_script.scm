@@ -63,9 +63,9 @@
                              "The final Windstille game might also differ in quite some details. "
                              "Anyway, this techdemo provides one simple playable level. "
                              "Your goal is simply to collect as many diamonds as possible and "
-                             "to kill as many enemies as possible as fast as you can. "
-                             "At the end of the level you will see how many enemies you "
-                             "destroyed and how many diamonds you collected. "
+                             "to kill as many enemies as you like as fast as you can. "
+                             "At the end of the level you will see how many how many diamonds "
+                             "you collected. "
                              "<control>-<down> will lay mines, cursor keys for controlls.\n\n"
                              "Understood everything?"))
   (dialog-add-answer "Yes" (lambda () #f))

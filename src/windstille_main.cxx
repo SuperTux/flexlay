@@ -67,6 +67,8 @@ void
 WindstilleMain::parse_command_line(int argc, char** argv)
 {
   CL_CommandLine argp;
+
+  const int debug_flag = 256;
     
   argp.set_help_indent(22);
   argp.add_usage ("[LEVELFILE]");
@@ -85,7 +87,8 @@ WindstilleMain::parse_command_line(int argc, char** argv)
 
   argp.add_group("Misc Options:");
   argp.add_option('e', "editor",     "", "Launch the level editor");
-  argp.add_option('d', "debug",      "", "Turn on debug output");
+  argp.add_option('d', "datadir",    "DIR", "Fetch game data from DIR");
+  argp.add_option(debug_flag, "debug",      "", "Turn on debug output");
   argp.add_option('h', "help",       "", "Print this help");
 
   argp.add_group("Demo Recording/Playback Options:");
@@ -112,6 +115,10 @@ WindstilleMain::parse_command_line(int argc, char** argv)
           break;
 
         case 'd':
+          datadir = argp.get_argument();
+          break;
+
+        case debug_flag:
           debug = 1;
           break;
 
@@ -164,8 +171,9 @@ WindstilleMain::main(int argc, char** argv)
 
   // Init the path
   bindir  = CL_System::get_exe_path();
-  libdir  = bindir + "../lib/";
-  datadir = bindir + "../data/";
+
+  if (datadir.empty())
+    datadir = bindir + "../data/";
 
 #ifndef WIN32
   char* home_c = getenv("HOME");
@@ -209,14 +217,14 @@ WindstilleMain::main(int argc, char** argv)
     TileFactory::init();
     if (!launch_editor && levelfile.empty())
       {
-        std::cout << "Starting Menu" << std::endl;
+        if (debug) std::cout << "Starting Menu" << std::endl;
         WindstilleMenu menu;
         menu.display();
       }
     else if (!launch_editor) // Launch Level
       {
         WindstilleGame game (levelfile);
-        std::cout << "WindstilleMain: entering main-loop..." << std::endl;
+        if (debug) std::cout << "WindstilleMain: entering main-loop..." << std::endl;
         game.display ();
       }
     else

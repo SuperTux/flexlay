@@ -20,7 +20,6 @@
 #include "globals.hxx"
 
 std::string datadir;
-std::string libdir;
 std::string bindir;
 std::string homedir;
 

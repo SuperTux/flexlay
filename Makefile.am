@@ -19,14 +19,15 @@
 
 SUBDIRS = src data
 
-EXTRA_DIST = INSTALL.configure
+EXTRA_DIST = INSTALL.configure BUGS AUTHORS 
 
 dist-binary: distdir
 	cd src && $(MAKE) windstille.static
-	$(mkinstalldirs) $(distdir)/share/guile/
+	$(mkinstalldirs) $(distdir)/share/guile/ $(distdir)/lib/
 	cp -R /usr/share/guile/1.6/ice-9/ $(distdir)/share/guile/
 	cp -R /usr/share/guile/1.6/oop/   $(distdir)/share/guile/
 	cp -R /usr/share/guile/1.6/srfi/  $(distdir)/share/guile/
+	cp /lib/libgcc_s.so.1 /lib/libc.so.6 /lib/libpthread.so.0 /lib/ld-linux.so.2  $(distdir)/lib/
 	cp src/windstille.static   $(distdir)/src/
 	cp contrib/windstille.sh   $(distdir)/windstille
 	mv $(distdir) $(distdir)-binary-i386

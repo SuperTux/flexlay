@@ -107,8 +107,7 @@ WindstilleMenu::update(float delta)
                   break;
                 }
             }
-          else if (((*i).button.name == JUMP_BUTTON || (*i).button.name == UP_BUTTON)
-                   && (*i).button.down == true)
+          else if ((*i).button.name == UP_BUTTON && (*i).button.down == true)
             {
               current_choice -= 1;
               passed_time = 0;

@@ -32,9 +32,6 @@ typedef enum { WEST, EAST} Direction;
 /** datadir => /usr/local/share/games/windstille/ */
 extern std::string datadir;
 
-/** libdir => /usr/local/lib/windstille/ */
-extern std::string libdir;
-
 /** bindir => /usr/local/games/ */
 extern std::string bindir;
 

@@ -892,7 +892,7 @@
 (case *game*
   ((supertux)
    (tile-selector-set-tileset *tileselector* *level-tileset*)
-   (tile-selector-set-tiles   *tileselector* (seq 1 130))
+   (tile-selector-set-tiles   *tileselector* (seq 1 140))
    (supertux:new-map 20 15))
   ((netpanzer)
    (tile-selector-set-tileset *tileselector* *tileset*)

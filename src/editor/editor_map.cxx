@@ -22,26 +22,12 @@
 #include <ClanLib/Display/keys.h>
 #include "../windstille_level.hxx"
 #include "../globals.hxx"
-#include "../tile_factory.hxx"
-#include "tilemap_paint_tool.hxx"
-#include "tilemap_select_tool.hxx"
-#include "tilemap_object_tool.hxx"
-#include "tilemap_diamond_tool.hxx"
 #include "editor_names.hxx"
 #include "editor_map.hxx"
 #include "editor_map_component.hxx"
 
-EditorMap* EditorMap::current_ = 0; 
-
 EditorMap::EditorMap()
 {
-  current_ = this;
-
-  diamond_map = 0;
-
-  // FIXME: Move this to the scripting level
-  layers.push_back(tilemap = new EditorTileMap());
-  layers.push_back(objmap  = new EditorObjMap());
 }
 
 EditorMap::~EditorMap()
@@ -52,7 +38,13 @@ EditorMap::~EditorMap()
       delete (*i);
     }
 }
-  
+
+void
+EditorMap::add_layer(EditorMapLayer* layer)
+{
+  layers.push_back(layer);
+}
+
 void
 EditorMap::draw (EditorMapComponent* parent)
 {

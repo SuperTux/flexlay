@@ -56,6 +56,7 @@ public:
   ~EditorMapComponent();
  
   EditorMap* get_map() const { return editor_map; }
+  void       set_map(EditorMap* m) { editor_map = m; }
 
   float get_zoom();
   void  zoom_out();

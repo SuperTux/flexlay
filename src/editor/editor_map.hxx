@@ -42,7 +42,6 @@ private:
   EditorTileMap* tilemap;
   EditorObjMap*  objmap;
 
-  Field<int>* diamond_map;
   std::vector<std::string> scripts;
 
 public:
@@ -50,6 +49,8 @@ public:
   ~EditorMap();
 
   void draw(EditorMapComponent* parent);
+
+  void add_layer(EditorMapLayer* layer);
 
   EditorMapLayer* get_layer_by_name(int i);
   EditorMapLayer* get_layer(int i);

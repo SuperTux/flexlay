@@ -35,7 +35,8 @@
 
 EditorTileMap* EditorTileMap::current_ = 0;
 
-EditorTileMap::EditorTileMap()
+EditorTileMap::EditorTileMap(int tile_size_)
+  : tile_size(tile_size_) 
 {
   current_ = this;
 
@@ -91,15 +92,15 @@ EditorTileMap::draw_map(EditorMapComponent* parent, Field<int>* field)
 
   CL_Rect rect = parent->get_clip_rect();
 
-  int start_x = std::max(0, rect.left/TILE_SIZE);
-  int start_y = std::max(0, rect.top/TILE_SIZE);
-  int end_x   = std::min(field->get_width(),  rect.right/TILE_SIZE + 1);
-  int end_y   = std::min(field->get_height(), rect.bottom/TILE_SIZE + 1);
+  int start_x = std::max(0, rect.left/tile_size);
+  int start_y = std::max(0, rect.top/tile_size);
+  int end_x   = std::min(field->get_width(),  rect.right/tile_size + 1);
+  int end_y   = std::min(field->get_height(), rect.bottom/tile_size + 1);
 
   for (int y = start_y; y < end_y; ++y)
     for (int x = start_x; x < end_x; ++x)
       {
-        EditorTile::draw(field->at(x, y), x * TILE_SIZE, y * TILE_SIZE, draw_grid, alpha);
+        EditorTile::draw(field->at(x, y), x * tile_size, y * tile_size, draw_grid, alpha);
       }
 }
 
@@ -107,8 +108,8 @@ void
 EditorTileMap::draw(EditorMapComponent* parent)
 {
   CL_Display::fill_rect(CL_Rect(CL_Point(0,0),
-                                CL_Size(current_field->get_width() * TILE_SIZE,
-                                        current_field->get_height() * TILE_SIZE)),
+                                CL_Size(current_field->get_width() * tile_size,
+                                        current_field->get_height() * tile_size)),
                         CL_Color(0, 0, 150, 255));
   CL_Display::flush();
 

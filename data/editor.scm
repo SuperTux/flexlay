@@ -17,7 +17,7 @@
 (define *statusbar* #f)
 (define *clipboard* #f)
 (define *recent-files* '())
-(define *recent-files-size* 15)
+(define *recent-files-size* 25)
 (define datadir  *windstille-datadir*)
 
 (define (push-last-file filename)
@@ -30,16 +30,21 @@
 
 (define (new-map width height)
   (display "Creating new level...\n")
-  (editor-new width height))
+  (editor-new width height)
+  ;;(push-last-file (string-append (dirname (get-last-file)) "/"))
+  )
+
+(define (editor-error . args)
+  (display "EditorError: ")
+  (for-each display args)
+  (newline))
 
 (define (load-map filename)
   (catch #t
          (lambda ()
            (editor-load filename))
          (lambda args
-           (display "Error: ")
-           (display args)
-           (newline)))
+           (editor-error args)))
   (push-last-file filename))
 
 (define (write-field indent width field)
@@ -126,13 +131,28 @@
                                           (string->number (gui-inputbox-get-text x))
                                           (string->number (gui-inputbox-get-text y))))
                                        (lambda args
-                                         (display "Error: ")
-                                         (display args)
-                                         (newline))))))
+                                         (editor-error args))))))
 
     (gui-component-on-close window (lambda ()
                                      (gui-hide-component window)))
 
+    (gui-pop-component)))
+
+(define (yes-no-dialog title-text text yes-text no-text yes-func no-func)
+  (let ((window (gui-create-window 250 200 300 90 title-text)))
+    (gui-push-component (gui-window-get-client-area window))
+    (gui-create-label 10 10 text)
+
+    (let ((yes (gui-create-button 240 30 50 25 yes-text))
+          (no  (gui-create-button 180 30 50 25 no-text)))
+      (gui-component-on-click yes
+                              (lambda () 
+                                (gui-hide-component window)
+                                (if yes-func (yes-func))))
+      (gui-component-on-click no
+                              (lambda ()
+                                (gui-hide-component window)
+                                (if no-func (no-func)))))
     (gui-pop-component)))
 
 (define (show-new-level-dialog)
@@ -142,11 +162,11 @@
     (gui-create-label 10 10 "Width: ")
     (gui-create-label 10 30 "Height: ")
 
-    (let ((width  (gui-create-inputbox 100 10 50 25 "50"))
-          (height (gui-create-inputbox 100 30 50 25 "50"))
+    (let ((width  (gui-create-inputbox 100 10 50 25 "500"))
+          (height (gui-create-inputbox 100 30 50 25 "15"))
 
-          (ok     (gui-create-button 90 100 50 25 "Ok"))
-          (cancel (gui-create-button 140 100 50 25 "Cancel")))
+          (ok     (gui-create-button 140 100 50 25 "Ok"))
+          (cancel (gui-create-button 90 100 50 25 "Cancel")))
       
       (gui-component-on-click ok 
                               (lambda ()   
@@ -177,12 +197,30 @@
                                      (load-map level))))
               *recent-files*)
 
-    (gui-add-menu-item menu "File/Save..." 
+    (gui-add-menu-item menu "File/Save" 
                        (lambda ()
                          (simple-file-dialog "Save a level..." (get-last-file)
                                              (lambda (filename) 
                                                (save-map filename)
                                                (push-last-file filename)))))
+
+    (gui-add-menu-item menu "File/Save As..." 
+                       (lambda ()
+                         (simple-file-dialog "Save As" (get-last-file)
+                                             (lambda (filename) 
+                                               (cond ((access? filename F_OK)
+                                                      (yes-no-dialog 
+                                                       "File already exist!"
+                                                       (string-append
+                                                        "Replace '" filename "'?")
+                                                       "Replace" "Cancel" 
+                                                       (lambda ()
+                                                         (save-map filename)
+                                                         (push-last-file filename))
+                                                       #f))
+                                                     (else
+                                                      (save-map filename)
+                                                      (push-last-file filename)))))))
 
     (gui-add-menu-item menu "File/Play" 
                        (lambda ()
@@ -226,7 +264,7 @@
      (gui-show-component *object-inserter-window*)
      (gui-hide-component *tileselector-window*))
     (else
-     (error "Tool unknown"))))
+     (editor-error "Tool unknown"))))
 
 (define (create-toolbar)
   (let ((window (gui-create-window 0 25 50 360 "Toolbar")))
@@ -287,8 +325,8 @@
   (let ((window (gui-create-window 200 200 250 160 title)))
     (gui-push-component (gui-window-get-client-area window))
     (gui-create-label 10 10 "Filename: ")
-    (let ((ok       (gui-create-button 90 100 50 25 "Ok"))
-          (cancel   (gui-create-button 140 100 50 25 "Cancel"))
+    (let ((ok       (gui-create-button 190 100 50 25 "Ok"))
+          (cancel   (gui-create-button 130 100 50 25 "Cancel"))
           (filename (gui-create-inputbox 10 30 180 30 filename))
           (browse   (gui-create-button 190 30 50 20 "Browse...")))
 
@@ -440,10 +478,10 @@
                    (cond ((list? vars)
                           (set! *editor-variables* vars))
                          (else
-                          (display "Error: Couldn't read vars from config file\n"))
+                          (editor-error "Couldn't read vars from config file\n"))
                          )))))
            (lambda args
-             (display "Error: ")(display args)(newline)))))
+             (editor-error args)))))
 
 (define (init-recent-files)
   (if (not (string=? "" *windstille-levelfile*))
@@ -456,14 +494,12 @@
                  (truncate-list *recent-files-size*
                                 (remove-doubles (append *recent-files* ent)))))
           (else
-           (display "Error: ")
-           (write *editor-variables*)
-           (newline)))))
+           (editor-error *editor-variables*)))))
 
 (load-variables)
 (init-recent-files)
 
-(set! *editor-map* (editor-create-map 0 25 screen-width (- screen-height 25)))
+(set! *editor-map* (editor-map-component-create 0 25 screen-width (- screen-height 25)))
 (create-menu)
 (gui-push-component *menu*)
 (set! *statusbar* (gui-create-label 400 5 "[XxY]"))
@@ -479,5 +515,26 @@
 
 (object-selector-add-brush *object-selector* "igel" '(Igel))
 (object-selector-add-brush *object-selector* "hero/run" '(Hero))
+
+(define (create-level-map)
+(let* ((m       (editor-map-create))
+       (tilemap (editor-tilemap-create 32))
+       (objmap  (editor-objmap-create)))
+  (editor-map-add-layer m tilemap)
+  (editor-map-add-layer m objmap)
+  m))
+
+(define *level-map* (create-level-map))
+(define *level-map2* (create-level-map))
+
+(gui-add-menu-item *menu* "Maps/First" 
+                   (lambda ()
+                     (editor-map-component-set-map *editor-map* *level-map*)))
+
+(gui-add-menu-item *menu* "Maps/Second" 
+                   (lambda ()
+                     (editor-map-component-set-map *editor-map* *level-map2*)))
+
+(editor-map-component-set-map *editor-map* *level-map*)
 
 ;; EOF ;;

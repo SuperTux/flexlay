@@ -48,7 +48,7 @@ EditorMapComponent::EditorMapComponent(const CL_Rect& rect, CL_Component* parent
   
   zoom_factor = 0;
 
-  editor_map = new EditorMap();
+  editor_map = 0;
 
   scrolling = false;
 }
@@ -122,7 +122,8 @@ EditorMapComponent::draw ()
 {
   CL_Display::push_translate_offset(int(trans_offset.x), int(trans_offset.y));
 
-  editor_map->draw(this);
+  if (editor_map)
+    editor_map->draw(this);
 
   if (has_mouse_over())
     Editor::current()->get_tool_manager()->current_tool()->draw();
@@ -135,6 +136,7 @@ EditorMapComponent::draw ()
 CL_Point
 EditorMapComponent::screen2tile(const CL_Point& pos)
 {
+  // FIXME: Move this to EditorTilMap
   int x = int(pos.x - trans_offset.x)/TILE_SIZE;
   int y = int(pos.y - trans_offset.y)/TILE_SIZE;
 

@@ -22,9 +22,11 @@
 
 #include <guile/gh.h>
 
-class CL_Component;
-class EditorTileMap;
+class EditorMap;
 class EditorObjMap;
+class EditorTileMap;
+class EditorMapLayer;
+class CL_Component;
 
 void editor_redo();
 void editor_undo();
@@ -36,7 +38,8 @@ EditorObjMap*  editor_get_objmap();
 CL_Component* minimap_create(CL_Component* p, int x, int y, int w, int h);
 CL_Component* tile_selector_create(int x, int y, int w, int h, float scale);
 CL_Component* object_selector_create(int x, int y, int w, int h, int obj_w, int obj_h);
-CL_Component* editor_create_map(int x, int y, int w, int h);
+CL_Component* editor_map_component_create(int x, int y, int w, int h);
+void          editor_map_component_set_map(CL_Component* c, EditorMap* m);
 
 void editor_toggle_grid();
 void editor_resize_map(int w, int h, int x, int y);
@@ -77,6 +80,12 @@ void game_play(const char* filename);
 SCM get_tile_def(int id);
 SCM get_tile_defs();
 SCM load_xml(const char* filename);
+
+// Map stuff
+EditorMap*      editor_map_create();
+void            editor_map_add_layer(EditorMap* m, EditorMapLayer* layer);
+EditorMapLayer* editor_objmap_create();
+EditorMapLayer* editor_tilemap_create(int tile_size);
 
 #endif
 

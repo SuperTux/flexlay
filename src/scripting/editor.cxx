@@ -40,6 +40,12 @@
 #include "tile.hxx"
 #include "editor/tool_manager.hxx"
 #include "gui_manager.hxx"
+
+#include "../editor/editor_map.hxx"
+#include "../editor/editor_map_layer.hxx"
+#include "../editor/editor_objmap.hxx"
+#include "../editor/editor_tilemap.hxx"
+
 #include "editor.hxx"
 
 extern CL_ResourceManager* resources;
@@ -227,8 +233,11 @@ int
 editor_get_brush_tile()
 {
   // FIXME: replace this with a tile selector widget in the tile editor
-  //return editor_get_tilemap()->brush_tile;
-  return 0;
+  const TileBrush& brush = TileMapPaintTool::current()->get_brush();
+  if (brush.get_width() > 0 && brush.get_height() > 0)
+    return brush(0, 0);
+  else
+    return 0;
 }
 
 void 
@@ -282,7 +291,7 @@ void editor_set_tool(int i)
 }
 
 CL_Component*
-editor_create_map(int x, int y, int w, int h)
+editor_map_component_create(int x, int y, int w, int h)
 {
   return new EditorMapComponent(CL_Rect(CL_Point(x, y),
                                         CL_Size(w, h)),
@@ -582,6 +591,38 @@ load_xml(const char* filename)
     std::cout << "CL_Error: " << err.message << std::endl;
     return SCM_BOOL_F;
   }
+}
+
+void
+editor_map_component_set_map(CL_Component* c, EditorMap* m)
+{
+  EditorMapComponent* parent_map = dynamic_cast<EditorMapComponent*>(c); 
+  parent_map->set_map(m);
+}
+
+// Map stuff
+EditorMap*
+editor_map_create()
+{
+  return new EditorMap();
+}
+
+void
+editor_map_add_layer(EditorMap* m, EditorMapLayer* layer)
+{
+  m->add_layer(layer);
+}
+
+EditorMapLayer* 
+editor_objmap_create()
+{
+  return new EditorObjMap();
+}
+
+EditorMapLayer* 
+editor_tilemap_create(int tile_size)
+{
+  return new EditorTileMap(tile_size);
 }
 
 /* EOF */

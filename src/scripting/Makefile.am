@@ -40,6 +40,6 @@ windstille_wrap.cxx: windstille.i $(command_source)
 # We override the default compile command to skip all the warnings
 # that compiling the wrappers causes.
 libwindstille_scripting_a-windstille_wrap.o : windstille_wrap.cxx
-	$(CXX) -c -O2 -o $@ $<
+	$(CXX) @WINDSTILLE_CFLAGS@ -c -O2 -o $@ $<
 
 # EOF #

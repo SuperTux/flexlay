@@ -31,6 +31,8 @@ class TileBrush;
 class EditorTileMap : public EditorMapLayer
 {
 private:
+  int tile_size;
+
   typedef std::vector<Field<int>*> Fields;
   typedef Field<int>::iterator FieldIter;
 
@@ -47,7 +49,7 @@ private:
 public:
   static EditorTileMap* current() { return current_; } 
   
-  EditorTileMap();
+  EditorTileMap(int tile_size_);
   ~EditorTileMap();
 
   void draw (EditorMapComponent* parent);

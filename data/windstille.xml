@@ -28,6 +28,17 @@
     </sprite>
   </section>
 
+  <sprite name="energiebar">
+    <image file="images/energiebar.png" name="image1" />
+  </sprite>
+
+  <sprite name="igel">
+    <animation speed="100" />
+    <image file="images/igel.png" name="image1" />
+    <image file="images/igel1.png" name="image2" />
+    <translation origin="bottom_center" />
+  </sprite>
+
   <sprite name="watersplash">
     <image file="images/watersplash.png" name="image1" />
     <translation origin="bottom_center" />

@@ -6,10 +6,14 @@
 (define screen-width  (screen-get-width))
 (define screen-height (screen-get-height))
 (define empty (lambda () #f))
-(define last-file "/tmp/foobar.scm")
+(define last-files (list "/tmp/foobar.scm"))
 
-(define (add-last-file filename)
-  #f)
+(define (push-last-file filename)
+  (cond ((not (string=? filename (get-last-file)))
+         (set! last-files (cons filename last-files)))))
+
+(define (get-last-file)
+  (car last-files))
 
 (define (serialize-level)
   `(windstille-level
@@ -36,15 +40,17 @@
 (editor-add-button-func 0 25
                    50 25 "Load" 
                    (lambda ()
-                     (simple-file-dialog "Load a level..." "/tmp/"
-                                         (lambda (filename) 
-                                           (editor-load filename)))))
-
+                     (simple-file-dialog "Load a level..." (get-last-file)
+                                         (lambda (filename)
+                                           (editor-load filename)
+                                           (push-last-file filename)))))
 (editor-add-button-func 0 50
                    50 25 "Save" 
                    (lambda () 
-                     (simple-file-dialog "Save a level..." "/tmp/foobar.scm"
-                                         (lambda (filename) (save-map "/tmp/foobar.scm")))))
+                     (simple-file-dialog "Save a level..." (get-last-file)
+                                         (lambda (filename) 
+                                           (save-map filename)
+                                           (push-last-file filename)))))
 
 (editor-add-button-func 0 75 50 25 "Play" 
                    (lambda ()

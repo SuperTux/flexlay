@@ -1,5 +1,5 @@
 %module flexlay
-
+ 
 %{
 #include <ClanLib/Display/color.h>
 #include <ClanLib/GUI/component.h>
@@ -33,6 +33,8 @@
 
 %include "std_string.i"
 %include "std_vector.i"
+%template(std_vector_int) std::vector<int>;
+
 %include "clanlib.i"
 %include "scripting/editor.hxx"
 %include "command.hxx"
@@ -56,5 +58,6 @@
 %include "tile_selector.hxx"
 %include "object_brush.hxx"
 %include "object_selector.hxx"
+
 
 /* EOF */

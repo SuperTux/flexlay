@@ -121,6 +121,12 @@ public:
     vec.clear();
   }
 
+  std::vector<T>& get_data() { return vec; }
+  void set_data(const std::vector<T>& d) { 
+    for(typename std::vector<T>::size_type i = 0; i < vec.size() && i < d.size(); ++i)
+      vec[i] = d[i]; 
+  }
+
   iterator begin () { return vec.begin (); }
   iterator end () { return vec.end (); }
 

@@ -72,6 +72,9 @@ public:
 
   Field<int>* get_map() { return &field; }
 
+  std::vector<int> get_data() { return field.get_data(); }
+  void set_data(std::vector<int> d) { field.set_data(d); }
+
   /** Draw the gives brush to the map */
   void draw_tile(const TileBrush& brush, const CL_Point& pos);
 

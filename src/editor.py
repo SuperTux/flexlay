@@ -33,7 +33,7 @@ editor_map.set_workspace(workspace)
 m = EditorMap("Foobar")
 workspace.set_current_map(m)
 tileset = Tileset(32)
-tilemap = EditorTileMap(tileset, 100, 50)
+tilemap = EditorTileMap(tileset, 20, 10)
 m.add_layer(tilemap)
 tile = Tile("/home/ingo/cvs/supertux/supertux/data/images/tilesets/bonus1.png",
             CL_Color(255, 255, 255, 255),
@@ -66,7 +66,7 @@ def draw_something():
     g = _
     print "Draw something done"
 
-window = CL_Window(CL_Rect(50, 50, 350, 250), "My Window", gui.get_component())
+window = CL_Window(CL_Rect(50, 50, 350, 300), "My Window", gui.get_component())
 
 gui.push_component(window)
 button1 = CL_Button(CL_Rect(50, 50, 200, 75), "Quit", gui.get_component())
@@ -74,12 +74,25 @@ connect(button1.sig_clicked(), foo)
 
 button2 = CL_Button(CL_Rect(CL_Point(50, 100), CL_Size(150, 25)), "Draw", gui.get_component())
 connect(button2.sig_clicked(), draw_something)
+
+def get_data():
+    print tilemap.get_data()
+
+def set_data():
+    tilemap.set_data((0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0))
+
+button3 = CL_Button(CL_Rect(CL_Point(50, 150), CL_Size(150, 25)), "Get Data", gui.get_component())
+connect(button3.sig_clicked(), get_data)
+
+button4 = CL_Button(CL_Rect(CL_Point(50, 180), CL_Size(150, 25)), "Get Data", gui.get_component())
+connect(button4.sig_clicked(), set_data)
+
 gui.pop_component()
 
 class Menu(CL_Menu):
     def __init__(self):
         CL_Menu.__init__(self, gui.get_component())
-    
+
     def add_item(self, name, func):
         item = self.create_item(name)
         connect(item.sig_clicked(), func)

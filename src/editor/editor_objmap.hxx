@@ -58,7 +58,7 @@ public:
   std::vector<ObjMapObject*> get_selection(const CL_Rect& rect);
   Objs* get_objects();
   EditorObjMap::Obj* get_object(int id);
-
+  int get_next_object_handle() { return ++handle_count; }
 private:
   EditorObjMap (const EditorObjMap&);
   EditorObjMap& operator= (const EditorObjMap&);

@@ -43,6 +43,7 @@
 #include "tile.hxx"
 #include "editor/tool_manager.hxx"
 #include "editor/object_delete_command.hxx"
+#include "editor/object_add_command.hxx"
 #include "gui_manager.hxx"
 
 #include "../editor/editor_map.hxx"
@@ -114,10 +115,19 @@ int
 objectmap_add_object(EditorMapLayer* obj, const char* name, int x, int y, SCM userdata)
 {
   EditorObjMap* objmap = dynamic_cast<EditorObjMap*>(obj);
+
   if (objmap)
     {
-      return objmap->add_object(CL_Sprite(name, resources), CL_Point(x, y), 
-                                SCMObj(userdata));
+      ObjMapObject* obj 
+        = new ObjMapSpriteObject(objmap->get_next_object_handle(), 
+                                 CL_Point(x, y), 
+                                 SCMObj(userdata), 
+                                 CL_Sprite(name, resources));
+
+      ObjectAddCommand* command = new ObjectAddCommand(objmap, obj);
+      Editor::current()->execute(command);
+      
+      return command->get_handle();
     }
   else
     {

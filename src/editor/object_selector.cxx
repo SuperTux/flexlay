@@ -25,6 +25,9 @@
 #include "editor_map_component.hxx"
 #include "src/scripting/editor.hxx"
 #include "object_selector.hxx"
+#include "editor.hxx"
+#include "object_add_command.hxx"
+#include "objmap_sprite_object.hxx"
 
 ObjectSelector::ObjectSelector(const CL_Point& p,
                                int width, int height, 
@@ -72,9 +75,19 @@ ObjectSelector::mouse_up(const CL_InputEvent& event)
                 CL_Point target(screen.x - EditorMapComponent::current()->get_screen_rect().left,
                                 screen.y - EditorMapComponent::current()->get_screen_rect().top);
       
-                editor_get_objmap()->add_object(drag_obj.sprite,
-                                                EditorMapComponent::current()->screen2world(target),
-                                                drag_obj.data);
+                {
+                  ObjMapObject* obj 
+                    = new ObjMapSpriteObject(editor_get_objmap()->get_next_object_handle(), 
+                                             EditorMapComponent::current()->screen2world(target),
+                                             SCMObj(drag_obj.data), 
+                                             drag_obj.sprite);
+
+                  ObjectAddCommand* command = new ObjectAddCommand(editor_get_objmap(), obj);
+                  Editor::current()->execute(command);
+                }
+                /*editor_get_objmap()->add_object(drag_obj.sprite,
+                  EditorMapComponent::current()->screen2world(target),
+                                                drag_obj.data);*/
               }
             drag_obj.sprite = CL_Sprite();
           }

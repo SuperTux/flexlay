@@ -30,6 +30,7 @@ libwindstille_editor_a_SOURCES = \
   objmap_object.hxx   objmap_object.cxx \
   objmap_sprite_object.hxx   objmap_sprite_object.cxx \
   object_move_command.hxx  object_move_command.cxx \
-  object_delete_command.hxx  object_delete_command.cxx
+  object_delete_command.hxx  object_delete_command.cxx \
+  object_add_command.hxx  object_add_command.cxx
 
 # EOF #

@@ -201,12 +201,12 @@
                (format #t "  (music ~s)~%" (supertux:music level))
 
                (format #t "  (bkgd_red_top    ~a)~%" (supertux:bkgd_red_top level))
-               (format #t "  (bkgd_green_top  ~a)~%" (supertux:bkgd_red_top level))
-               (format #t "  (bkgd_blue_top   ~a)~%" (supertux:bkgd_red_top level))
+               (format #t "  (bkgd_green_top  ~a)~%" (supertux:bkgd_green_top level))
+               (format #t "  (bkgd_blue_top   ~a)~%" (supertux:bkgd_blue_top level))
 
                (format #t "  (bkgd_red_bottom    ~a)~%" (supertux:bkgd_red_bottom level))
-               (format #t "  (bkgd_green_bottom  ~a)~%" (supertux:bkgd_red_bottom level))
-               (format #t "  (bkgd_blue_bottom   ~a)~%" (supertux:bkgd_red_bottom level))
+               (format #t "  (bkgd_green_bottom  ~a)~%" (supertux:bkgd_green_bottom level))
+               (format #t "  (bkgd_blue_bottom   ~a)~%" (supertux:bkgd_blue_bottom level))
 
                (format #t "  (time  ~a)~%" (supertux:time level))
                (format #t "  (gravity  ~a)~%" (supertux:gravity level))

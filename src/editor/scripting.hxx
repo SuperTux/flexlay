@@ -1,7 +1,7 @@
-//  $Id: globals.hxx,v 1.7 2003/09/10 08:25:29 grumbel Exp $
+//  $Id: scripting.hxx,v 1.1 2003/09/10 08:25:29 grumbel Exp $
 // 
-//  Windstille - A Jump'n Shoot Game
-//  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
+//  Pingus - A free Lemmings clone
+//  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -17,28 +17,12 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-#ifndef GLOBALS_HXX
-#define GLOBALS_HXX
+#ifndef HEADER_SCRIPTING_HXX
+#define HEADER_SCRIPTING_HXX
 
-#include <string>
-#include <ClanLib/Core/Resources/resource_manager.h>
+#include <guile/gh.h>
 
-typedef enum { WEST, EAST} Direction;
-
-#define TILE_SIZE    128
-#define SUBTILE_SIZE  16
-#define SUBTILE_NUM  (TILE_SIZE/SUBTILE_SIZE)
-
-/** datadir => /usr/local/share/games/windstille/ */
-extern std::string datadir;
-
-/** libdir => /usr/local/lib/windstille/ */
-extern std::string libdir;
-
-/** bindir => /usr/local/games/ */
-extern std::string bindir;
-
-extern CL_ResourceManager* resources;
+void editor_add_button(int x, int y, int w, int h, const char* text, SCM func);
 
 #endif
 

@@ -23,6 +23,7 @@ windstille_SOURCES = \
   gameobj.cxx \
   gameobj.hxx \
   globals.hxx \
+  globals.cxx \
   guile_gameobj.cxx \
   guile_gameobj.hxx \
   guile_gameobj_factory.cxx \
@@ -37,6 +38,8 @@ windstille_SOURCES = \
   player_view.hxx \
   power_up.cxx \
   power_up.hxx \
+  scm_functor.hxx \
+  scm_functor.cxx \
   scm_helper.cxx \
   scm_helper.hxx \
   scmconverter.hxx \

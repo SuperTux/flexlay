@@ -308,7 +308,7 @@ ac_includes_default="\
 # include <unistd.h>
 #endif"
 
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO AMTAR install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM AWK SET_MAKE am__leading_dot CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE CXX CXXFLAGS ac_ct_CXX CXXDEPMODE am__fastdepCXX_TRUE am__fastdepCXX_FALSE RANLIB ac_ct_RANLIB CXXCPP EGREP PKG_CONFIG WINDSTILLE_CFLAGS WINDSTILLE_LIBS LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO AMTAR install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM AWK SET_MAKE am__leading_dot CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE CXX CXXFLAGS ac_ct_CXX CXXDEPMODE am__fastdepCXX_TRUE am__fastdepCXX_FALSE RANLIB ac_ct_RANLIB CXXCPP EGREP SWIG PKG_CONFIG WINDSTILLE_CFLAGS WINDSTILLE_LIBS LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -4032,6 +4032,52 @@ fi
 
 REQUIRED_CLANLIB_VERSION="0.7.3"
 
+# Extract the first word of "swig", so it can be a program name with args.
+set dummy swig; ac_word=$2
+echo "$as_me:$LINENO: checking for $ac_word" >&5
+echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
+if test "${ac_cv_path_SWIG+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  case $SWIG in
+  [\\/]* | ?:[\\/]*)
+  ac_cv_path_SWIG="$SWIG" # Let the user override the test with a path.
+  ;;
+  *)
+  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+  for ac_exec_ext in '' $ac_executable_extensions; do
+  if $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_path_SWIG="$as_dir/$ac_word$ac_exec_ext"
+    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+done
+
+  test -z "$ac_cv_path_SWIG" && ac_cv_path_SWIG="nothing-found"
+  ;;
+esac
+fi
+SWIG=$ac_cv_path_SWIG
+
+if test -n "$SWIG"; then
+  echo "$as_me:$LINENO: result: $SWIG" >&5
+echo "${ECHO_T}$SWIG" >&6
+else
+  echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+fi
+
+if test "x$SWIG" = "xnothing-found"; then
+   { { echo "$as_me:$LINENO: error: You need Swig - http://www.swig.org to proceed." >&5
+echo "$as_me: error: You need Swig - http://www.swig.org to proceed." >&2;}
+   { (exit 1); exit 1; }; }
+fi
+
 
   succeeded=no
 
@@ -4091,12 +4137,16 @@ fi
   clanApp     >= $REQUIRED_CLANLIB_VERSION
   clanDisplay >= $REQUIRED_CLANLIB_VERSION
   clanGL      >= $REQUIRED_CLANLIB_VERSION
+  clanGUI     >= $REQUIRED_CLANLIB_VERSION
+  clanGUIStyleBoring >= $REQUIRED_CLANLIB_VERSION
   " >&5
 echo $ECHO_N "checking for
   clanCore    >= $REQUIRED_CLANLIB_VERSION
   clanApp     >= $REQUIRED_CLANLIB_VERSION
   clanDisplay >= $REQUIRED_CLANLIB_VERSION
   clanGL      >= $REQUIRED_CLANLIB_VERSION
+  clanGUI     >= $REQUIRED_CLANLIB_VERSION
+  clanGUIStyleBoring >= $REQUIRED_CLANLIB_VERSION
   ... $ECHO_C" >&6
 
         if $PKG_CONFIG --exists "
@@ -4104,6 +4154,8 @@ echo $ECHO_N "checking for
   clanApp     >= $REQUIRED_CLANLIB_VERSION
   clanDisplay >= $REQUIRED_CLANLIB_VERSION
   clanGL      >= $REQUIRED_CLANLIB_VERSION
+  clanGUI     >= $REQUIRED_CLANLIB_VERSION
+  clanGUIStyleBoring >= $REQUIRED_CLANLIB_VERSION
   " ; then
             echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -4116,6 +4168,8 @@ echo $ECHO_N "checking WINDSTILLE_CFLAGS... $ECHO_C" >&6
   clanApp     >= $REQUIRED_CLANLIB_VERSION
   clanDisplay >= $REQUIRED_CLANLIB_VERSION
   clanGL      >= $REQUIRED_CLANLIB_VERSION
+  clanGUI     >= $REQUIRED_CLANLIB_VERSION
+  clanGUIStyleBoring >= $REQUIRED_CLANLIB_VERSION
   "`
             echo "$as_me:$LINENO: result: $WINDSTILLE_CFLAGS" >&5
 echo "${ECHO_T}$WINDSTILLE_CFLAGS" >&6
@@ -4127,6 +4181,8 @@ echo $ECHO_N "checking WINDSTILLE_LIBS... $ECHO_C" >&6
   clanApp     >= $REQUIRED_CLANLIB_VERSION
   clanDisplay >= $REQUIRED_CLANLIB_VERSION
   clanGL      >= $REQUIRED_CLANLIB_VERSION
+  clanGUI     >= $REQUIRED_CLANLIB_VERSION
+  clanGUIStyleBoring >= $REQUIRED_CLANLIB_VERSION
   "`
             echo "$as_me:$LINENO: result: $WINDSTILLE_LIBS" >&5
 echo "${ECHO_T}$WINDSTILLE_LIBS" >&6
@@ -4140,6 +4196,8 @@ echo "${ECHO_T}$WINDSTILLE_LIBS" >&6
   clanApp     >= $REQUIRED_CLANLIB_VERSION
   clanDisplay >= $REQUIRED_CLANLIB_VERSION
   clanGL      >= $REQUIRED_CLANLIB_VERSION
+  clanGUI     >= $REQUIRED_CLANLIB_VERSION
+  clanGUIStyleBoring >= $REQUIRED_CLANLIB_VERSION
   "`
             echo $WINDSTILLE_PKG_ERRORS
         fi
@@ -4160,12 +4218,16 @@ echo "${ECHO_T}$WINDSTILLE_LIBS" >&6
   clanApp     >= $REQUIRED_CLANLIB_VERSION
   clanDisplay >= $REQUIRED_CLANLIB_VERSION
   clanGL      >= $REQUIRED_CLANLIB_VERSION
+  clanGUI     >= $REQUIRED_CLANLIB_VERSION
+  clanGUIStyleBoring >= $REQUIRED_CLANLIB_VERSION
   ) not met; consider adjusting the PKG_CONFIG_PATH environment variable if your libraries are in a nonstandard prefix so pkg-config can find them." >&5
 echo "$as_me: error: Library requirements (
   clanCore    >= $REQUIRED_CLANLIB_VERSION
   clanApp     >= $REQUIRED_CLANLIB_VERSION
   clanDisplay >= $REQUIRED_CLANLIB_VERSION
   clanGL      >= $REQUIRED_CLANLIB_VERSION
+  clanGUI     >= $REQUIRED_CLANLIB_VERSION
+  clanGUIStyleBoring >= $REQUIRED_CLANLIB_VERSION
   ) not met; consider adjusting the PKG_CONFIG_PATH environment variable if your libraries are in a nonstandard prefix so pkg-config can find them." >&2;}
    { (exit 1); exit 1; }; }
   fi
@@ -4869,6 +4931,7 @@ s,@RANLIB@,$RANLIB,;t t
 s,@ac_ct_RANLIB@,$ac_ct_RANLIB,;t t
 s,@CXXCPP@,$CXXCPP,;t t
 s,@EGREP@,$EGREP,;t t
+s,@SWIG@,$SWIG,;t t
 s,@PKG_CONFIG@,$PKG_CONFIG,;t t
 s,@WINDSTILLE_CFLAGS@,$WINDSTILLE_CFLAGS,;t t
 s,@WINDSTILLE_LIBS@,$WINDSTILLE_LIBS,;t t

@@ -1,4 +1,4 @@
-//  $Id: windstille_main.cxx,v 1.10 2003/09/08 19:59:57 grumbel Exp $
+//  $Id: windstille_main.cxx,v 1.11 2003/09/10 08:25:29 grumbel Exp $
 //
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -25,7 +25,7 @@
 #include <guile/gh.h>
 
 #include "globals.hxx"
-#include "editor/windstille_editor.hxx"
+#include "editor/editor.hxx"
 #include "windstille_game.hxx"
 #include "guile_gameobj_factory.hxx"
 #include "windstille_level.hxx"
@@ -51,7 +51,11 @@ WindstilleMain::inner_main(void* closure, int argc, char** argv)
 
   bool launch_editor = false;
   std::string levelfile;
-  std::string datadir = CL_System::get_exe_path() + "../data/";
+  
+  // Init the path
+  bindir  = CL_System::get_exe_path();
+  libdir  = bindir + "../lib/";
+  datadir = bindir + "../data/";
   
   try {
 
@@ -120,10 +124,10 @@ WindstilleMain::inner_main(void* closure, int argc, char** argv)
       }
     else
       {
-        WindstilleEditor editor;
-        if (!levelfile.empty ())
-          editor.load (levelfile);
-        editor.display ();
+        Editor editor;
+        //if (!levelfile.empty ())
+          //editor.load (levelfile);
+        editor.run();
       }
   } catch (CL_Error& error) {
     std::cout << "CL_Error: " << error.message << std::endl;

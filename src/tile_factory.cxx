@@ -1,4 +1,4 @@
-//  $Id: tile_factory.cxx,v 1.8 2003/09/08 19:59:57 grumbel Exp $
+//  $Id: tile_factory.cxx,v 1.9 2003/09/10 08:25:29 grumbel Exp $
 //
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -21,6 +21,7 @@
 #include <ClanLib/Core/System/system.h>
 #include <assert.h>
 #include <iostream>
+#include "globals.hxx"
 #include "string_converter.hxx"
 #include "scm_helper.hxx"
 #include "tile.hxx"
@@ -162,7 +163,7 @@ void
 TileFactory::init()
 {
   assert(current_ == 0);
-  current_ = new TileFactory(CL_System::get_exe_path() + "../data/tiles.scm");
+  current_ = new TileFactory(datadir + "tiles.scm");
 }
 
 /** Destroy the default TileFactor*/

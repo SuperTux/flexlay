@@ -16,12 +16,19 @@ AC_CHECK_HEADER(guile/gh.h)
 
 REQUIRED_CLANLIB_VERSION="0.7.3"
 
+AC_PATH_PROG([SWIG], [swig], [nothing-found])
+if test "x$SWIG" = "xnothing-found"; then
+   AC_MSG_ERROR([You need Swig - http://www.swig.org to proceed.])
+fi
+
 PKG_CHECK_MODULES(WINDSTILLE,
  [
   clanCore    >= $REQUIRED_CLANLIB_VERSION
   clanApp     >= $REQUIRED_CLANLIB_VERSION
   clanDisplay >= $REQUIRED_CLANLIB_VERSION
   clanGL      >= $REQUIRED_CLANLIB_VERSION
+  clanGUI     >= $REQUIRED_CLANLIB_VERSION
+  clanGUIStyleBoring >= $REQUIRED_CLANLIB_VERSION
 dnl clanSound   >= $REQUIRED_CLANLIB_VERSION
 dnl clanMikMod  >= $REQUIRED_CLANLIB_VERSION
 dnl clanVorbis  >= $REQUIRED_CLANLIB_VERSION

@@ -1,4 +1,4 @@
-##  $Id: Makefile.am,v 1.3 2003/08/12 19:38:08 grumbel Exp $
+##  $Id: Makefile.am,v 1.4 2003/09/10 08:25:29 grumbel Exp $
 ## 
 ##  Windstille - A free Lemmings clone
 ##  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -24,5 +24,7 @@ EXTRA_DIST = \
   $(wildcard images/*.png) \
   $(wildcard images/tiles/*.png) \
   $(wildcard images/hero_run/*.png)
+
+nobase_pkgdata_DATA = $(EXTRA_DIST)
 
 # EOF #

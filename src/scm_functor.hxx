@@ -1,7 +1,7 @@
-//  $Id: globals.hxx,v 1.7 2003/09/10 08:25:29 grumbel Exp $
+//  $Id: scm_functor.hxx,v 1.1 2003/09/10 08:25:29 grumbel Exp $
 // 
-//  Windstille - A Jump'n Shoot Game
-//  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
+//  Feuerkraft - A Tank Battle Game
+//  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -17,28 +17,31 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-#ifndef GLOBALS_HXX
-#define GLOBALS_HXX
+#ifndef HEADER_SCM_FUNCTOR_HXX
+#define HEADER_SCM_FUNCTOR_HXX
 
-#include <string>
-#include <ClanLib/Core/Resources/resource_manager.h>
+#include <libguile.h>
 
-typedef enum { WEST, EAST} Direction;
+/** */
+class SCMFunctor
+{
+private:
+  SCM func;
+public:
+  SCMFunctor(SCM func);
+  virtual ~SCMFunctor();
 
-#define TILE_SIZE    128
-#define SUBTILE_SIZE  16
-#define SUBTILE_NUM  (TILE_SIZE/SUBTILE_SIZE)
+  SCMFunctor(const SCMFunctor&);
 
-/** datadir => /usr/local/share/games/windstille/ */
-extern std::string datadir;
+  SCMFunctor& operator= (const SCMFunctor&);
 
-/** libdir => /usr/local/lib/windstille/ */
-extern std::string libdir;
+  void call() { (*this)(); };
 
-/** bindir => /usr/local/games/ */
-extern std::string bindir;
-
-extern CL_ResourceManager* resources;
+  void operator()();
+  void operator()(SCM arg);
+  void operator()(SCM arg1, SCM arg2);
+  void operator()(SCM arg1, SCM arg2, SCM arg3);
+};
 
 #endif
 

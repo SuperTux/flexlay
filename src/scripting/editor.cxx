@@ -69,8 +69,11 @@ editor_get_objmap()
 EditorTileMap*
 editor_get_tilemap()
 {
-  if (EditorTileMap::current())
-    return EditorTileMap::current();
+  EditorTileMap* tilemap 
+    = dynamic_cast<EditorTileMap*>(EditorMapComponent::current()->get_map()->get_layer_by_name(TILEMAP_NAME));
+
+  if (tilemap)
+    return tilemap;
   else
     {
       assert(!"Error: Tilemap not found");
@@ -199,9 +202,12 @@ editor_objectmap_get_object(int id)
 void
 editor_resize_map(int w, int h, int x, int y)
 {
-  if (EditorTileMap::current())
+  EditorTileMap* tilemap 
+    = dynamic_cast<EditorTileMap*>(EditorMapComponent::current()->get_map()->get_layer_by_name(TILEMAP_NAME));
+
+  if (tilemap)
     {
-      EditorTileMap::current()->resize(w, h, x, y);
+      tilemap->resize(w, h, x, y);
     }
   else
     {

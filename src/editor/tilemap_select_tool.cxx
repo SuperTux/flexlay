@@ -25,6 +25,7 @@
 #include "editor_map.hxx"
 #include "editor_map_component.hxx"
 #include "tile_brush.hxx"
+#include "editor_names.hxx"
 #include "tilemap_select_tool.hxx"
 
 TileMapSelectTool::TileMapSelectTool()
@@ -96,7 +97,8 @@ TileMapSelectTool::on_mouse_move(const CL_InputEvent& event)
 TileBrush
 TileMapSelectTool::get_selection() const
 {
-  EditorTileMap* tilemap = EditorTileMap::current();
+  EditorTileMap* tilemap 
+    = dynamic_cast<EditorTileMap*>(EditorMapComponent::current()->get_map()->get_layer_by_name(TILEMAP_NAME));
   return selection.get_brush(*tilemap->get_field());
 }
 

@@ -33,13 +33,9 @@
 #include "editor_tilemap.hxx"
 #include "editor_map_component.hxx"
 
-EditorTileMap* EditorTileMap::current_ = 0;
-
 EditorTileMap::EditorTileMap(int tile_size_)
   : tile_size(tile_size_) 
 {
-  current_ = this;
-
   diamond_map = 0;
 
   new_level(80, 30);

@@ -57,15 +57,7 @@ EditorMap::draw (EditorMapComponent* parent)
 EditorMapLayer*
 EditorMap::get_layer_by_name(int i)
 {
-  switch(i)
-    {
-    case TILEMAP_NAME:
-      return tilemap;
-    case OBJECTMAP_NAME: 
-      return objmap;
-    default:
-      return 0;
-    }
+  return layers[i];
 }
 
 EditorMapLayer*

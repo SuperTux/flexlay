@@ -30,6 +30,7 @@
 #include "../tile.hxx"
 #include "editor.hxx"
 #include "paint_command.hxx"
+#include "editor_names.hxx"
 #include "tilemap_paint_tool.hxx"
 
 TileMapPaintTool* TileMapPaintTool::current_ = 0; 
@@ -106,7 +107,8 @@ TileMapPaintTool::draw()
 void
 TileMapPaintTool::on_mouse_down(const CL_InputEvent& event)
 {
-  EditorTileMap* tilemap = EditorTileMap::current();
+  EditorTileMap* tilemap 
+    = dynamic_cast<EditorTileMap*>(EditorMapComponent::current()->get_map()->get_layer_by_name(TILEMAP_NAME));
   EditorMapComponent* parent = EditorMapComponent::current();
   CL_Point pos = parent->screen2tile(event.mouse_pos);
 
@@ -142,7 +144,8 @@ TileMapPaintTool::on_mouse_down(const CL_InputEvent& event)
 void
 TileMapPaintTool::on_mouse_move(const CL_InputEvent& event)
 {
-  EditorTileMap* tilemap = EditorTileMap::current();
+  EditorTileMap* tilemap 
+    = dynamic_cast<EditorTileMap*>(EditorMapComponent::current()->get_map()->get_layer_by_name(TILEMAP_NAME));
   EditorMapComponent* parent = EditorMapComponent::current();
   current_tile = parent->screen2tile(event.mouse_pos);
 
@@ -169,7 +172,8 @@ TileMapPaintTool::on_mouse_move(const CL_InputEvent& event)
 void
 TileMapPaintTool::on_mouse_up  (const CL_InputEvent& event)
 {
-  EditorTileMap* tilemap = EditorTileMap::current();
+  EditorTileMap* tilemap
+    = dynamic_cast<EditorTileMap*>(EditorMapComponent::current()->get_map()->get_layer_by_name(TILEMAP_NAME));
   EditorMapComponent* parent = EditorMapComponent::current();
   CL_Point pos = parent->screen2tile(event.mouse_pos);
 

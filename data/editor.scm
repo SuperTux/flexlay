@@ -524,8 +524,8 @@
   (editor-map-add-layer m objmap)
   m))
 
-(define *level-map* (create-level-map))
 (define *level-map2* (create-level-map))
+(define *level-map*  (create-level-map))
 
 (gui-add-menu-item *menu* "Maps/First" 
                    (lambda ()

@@ -38,10 +38,6 @@ class EditorMap
 private:
   typedef std::vector<EditorMapLayer*> Layers;
   Layers layers;
-
-  EditorTileMap* tilemap;
-  EditorObjMap*  objmap;
-
   std::vector<std::string> scripts;
 
 public:

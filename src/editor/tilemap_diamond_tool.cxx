@@ -25,6 +25,7 @@
 #include "editor_map.hxx"
 #include "editor_map_component.hxx"
 #include "globals.hxx"
+#include "editor_names.hxx"
 #include "tilemap_diamond_tool.hxx"
 
 TileMapDiamondTool::TileMapDiamondTool()
@@ -87,8 +88,10 @@ TileMapDiamondTool::on_mouse_move(const CL_InputEvent& event)
 void
 TileMapDiamondTool::paint(const CL_Point& mpos)
 {
-  EditorTileMap* tilemap = EditorTileMap::current();
+  EditorTileMap* tilemap
+    = dynamic_cast<EditorTileMap*>(EditorMapComponent::current()->get_map()->get_layer_by_name(TILEMAP_NAME));
   EditorMapComponent* parent = EditorMapComponent::current();
+
   CL_Point pos = parent->screen2world(mpos);
 
   tilemap->get_diamond_map()->at(int(pos.x/64), 

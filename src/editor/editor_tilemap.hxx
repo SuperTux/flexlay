@@ -45,10 +45,7 @@ private:
 
   void cleanup();
 
-  static EditorTileMap* current_;
 public:
-  static EditorTileMap* current() { return current_; } 
-  
   EditorTileMap(int tile_size_);
   ~EditorTileMap();
 

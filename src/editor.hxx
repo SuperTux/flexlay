@@ -32,20 +32,13 @@ class Editor
 private:
   GUIManager* manager;
 
-  static Editor* current_;
 public:
-  static Editor* current() { return current_; }
-
   Editor();
   ~Editor();
 
   GUIManager*  get_gui_manager() const { return manager; }
   
   void run();
-
-private:
-  Editor (const Editor&);
-  Editor& operator= (const Editor&);
 };
 
 #endif

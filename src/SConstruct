@@ -57,12 +57,12 @@ env.Command('flexlay_wrap.cxx', 'flexlay_wrap.i', "swig -python -o flexlay_wrap.
 env.Program('sharedptrtest', 'sharedptrtest.cxx',
             CPPPATH=['/home/ingo/run/ClanLib-0.7-current/include/ClanLib-0.7/'])
 
-env.Program('simpleed',
-            ['simpleed.cxx'],
-            CPPPATH=['.', 
-                     '/home/ingo/run/ClanLib-0.7-current//include/ClanLib-0.7/'],
-            LIBPATH=['.', '/home/ingo/run/ClanLib-0.7-current//lib/'],
-            LIBS=['flexlay'])
+# env.Program('simpleed',
+#             ['simpleed.cxx'],
+#             CPPPATH=['.', 
+#                     '/home/ingo/run/ClanLib-0.7-current//include/ClanLib-0.7/'],
+#            LIBPATH=['.', '/home/ingo/run/ClanLib-0.7-current//lib/'],
+#            LIBS=['flexlay'])
 
 env.SharedLibrary(
     target = 'libflexlay.so',

@@ -30,8 +30,6 @@
 #include "tile_editor.hxx"
 #include "globals.hxx"
 
-Editor* Editor::current_ = 0;
-
 Editor::Editor()
 {
   current_ = this;

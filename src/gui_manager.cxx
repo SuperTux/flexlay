@@ -28,33 +28,45 @@
 
 GUIManager* GUIManager::current_ = 0;
 
-GUIManager::GUIManager()
+class GUIManagerImpl
 {
-  slot_container = new CL_SlotContainer();
-  resources = new CL_ResourceManager(datadir + "gui/gui.xml", false);
-  style     = new CL_StyleManager_Silver(resources);
-  manager   = new CL_GUIManager(style);
+public:
+  std::stack<CL_Component*> components;
+
+  CL_GUIManager*      manager;
+  CL_StyleManager*    style;
+  CL_ResourceManager* resources;
+  CL_SlotContainer*   slot_container;
+};
+
+GUIManager::GUIManager()
+  : impl(new GUIManagerImpl())
+{
+  impl->slot_container = new CL_SlotContainer();
+  impl->resources = new CL_ResourceManager(datadir + "gui/gui.xml", false);
+  impl->style     = new CL_StyleManager_Silver(resources);
+  impl->manager   = new CL_GUIManager(impl->style);
   current_  = this;
 
   // Make the manager the first component on the stack
-  push_component(manager);
+  push_component(impl->manager);
 }
 
 GUIManager::~GUIManager()
 {
-  gui_pop_component();
+  pop_component();
 
-  delete manager;
+  delete impl->manager;
   //delete style; FIXME: Memory hole?!
   //delete resources;  FIXME: Memory hole?!
-  delete slot_container;
+  delete impl->slot_container;
 }
   
 void
 GUIManager::draw()
 {
-  if (manager->is_input_enabled())
-    manager->show();
+  if (impl->manager->is_input_enabled())
+    impl->manager->show();
 }
 
 void
@@ -67,45 +79,57 @@ void
 GUIManager::run()
 {
   std::cout << "Waiting one second for debugger" << std::endl;
-  manager->run();
+  impl->manager->run();
 }
 
 CL_Component* 
 GUIManager::get_component()
 {
-  return components.top();
+  return impl->components.top();
 }
 
 CL_SlotContainer*
 GUIManager::get_slot_container()
 {
-  return slot_container;
+  return impl->slot_container;
 }
 
 void
 GUIManager::hide()
 {
-  if (manager->is_input_enabled())
-    manager->disable_input();
+  if (impl->manager->is_input_enabled())
+    impl->manager->disable_input();
 }
 
 void
 GUIManager::show()
 {
-  if (!manager->is_input_enabled())
-    manager->enable_input();
+  if (!impl->manager->is_input_enabled())
+    impl->manager->enable_input();
 }
 
 bool
 GUIManager::is_visible()
 {
-  return manager->is_input_enabled();
+  return impl->manager->is_input_enabled();
 }
 
 void
 GUIManager::quit()
 {
-  manager->quit(); 
+  impl->manager->quit(); 
 } 
+
+void
+GUIManager::push_component(CL_Component* c)
+{
+  impl->components.push(c); 
+}
+
+void
+GUIManager::pop_component() 
+{ 
+  impl->components.pop(); 
+}
 
 /* EOF */

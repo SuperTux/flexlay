@@ -21,7 +21,6 @@
 #include <ClanLib/Display/display.h>
 #include <ClanLib/Display/pixel_format.h>
 #include <ClanLib/Display/pixel_buffer.h>
-#include "scripting/editor.hxx"
 #include "editor.hxx"
 #include "tile.hxx"
 #include "tileset.hxx"

@@ -23,27 +23,15 @@
 #include <assert.h>
 #include <ClanLib/Display/sprite.h>
 #include <ClanLib/Display/pixel_buffer.h>
+#include "shared_ptr.hxx"
+
+class TileImpl;
 
 /** A Tile is a surface or sprite together with meta information for
     collision (aka colmap), walkability or such. */
 class Tile
 {
-private:
-  CL_Sprite sur;
-  CL_PixelBuffer pixelbuffer;
-
-  /** Color used for the minimap to represent this tile */
-  CL_Color  color;
-
-  /** Color used on 'Show Attributes', ie. to represent walkable areas
-      and such */
-  CL_Color  attribute_color;
-
-  std::string filename;
-
 public:
-  unsigned char colmap[8];
-
   /** @param filename Surface to use 
    *  @param arg_colmap a 8 char long array */
   Tile(std::string filename, 
@@ -62,26 +50,15 @@ public:
   CL_Color   get_color();
   CL_Color   get_attribute_color();
 
-  std::string get_filename() const { return filename; }
+  std::string get_filename() const;
 
-  inline bool get_col(unsigned char x, unsigned char  y)
-  {
-    assert(x < 8);
-    assert(y < 8);
-    return (colmap[y] & (1 << (7-x)));
-  }
-
-  inline void set_col(unsigned char x, unsigned char  y, bool val)
-  {
-    assert(x < 8);
-    assert(y < 8);
-    if (val)
-      colmap[y] |= (1 << (7-x));
-    else
-      colmap[y] &= ~(1 << (7-x));
-  }
+  bool get_col(unsigned char x, unsigned char  y);
+  void set_col(unsigned char x, unsigned char  y, bool val);
 
   CL_Color calc_color();
+
+private:
+  SharedPtr<TileImpl> impl;
 };
 
 #endif

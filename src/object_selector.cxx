@@ -22,7 +22,6 @@
 #include <ClanLib/display.h>
 #include "editor_map.hxx"
 #include "editor_map_component.hxx"
-#include "scripting/editor.hxx"
 #include "object_selector.hxx"
 #include "editor.hxx"
 #include "object_add_command.hxx"

@@ -29,23 +29,43 @@
 
 extern CL_ResourceManager* resources;
 
+class TileImpl
+{
+public:
+  CL_Sprite sur;
+  CL_PixelBuffer pixelbuffer;
+
+  /** Color used for the minimap to represent this tile */
+  CL_Color  color;
+
+  /** Color used on 'Show Attributes', ie. to represent walkable areas
+      and such */
+  CL_Color  attribute_color;
+
+  unsigned char colmap[8];
+
+  std::string filename;
+};
+
 Tile::Tile(std::string filename_, 
            const CL_Color& color_, 
            const CL_Color& attribute_color_, 
            unsigned char* arg_colmap)
-  : color(color_),
-    attribute_color(attribute_color_),
-    filename(filename_)
+  : impl(new TileImpl())
 {
+  impl->color = color_;
+  impl->attribute_color = attribute_color_;
+  impl->filename = filename_;
+
   // FIXME: Kind of evil singular value
-  if (color == CL_Color(254, 254, 254, 254))
+  if (impl->color == CL_Color(254, 254, 254, 254))
     {
-      color = calc_color();
+      impl->color = calc_color();
     }
   
   //sur.set_alignment(origin_center, 0, 0);
   if (arg_colmap)
-    memcpy(colmap, arg_colmap, 8);
+    memcpy(impl->colmap, arg_colmap, 8);
 }
 
 Tile::~Tile()
@@ -55,37 +75,37 @@ Tile::~Tile()
 CL_Color
 Tile::get_color()
 {
-  return color;
+  return impl->color;
 }
 
 CL_Color
 Tile::get_attribute_color()
 {
-  return attribute_color;
+  return impl->attribute_color;
 }
 
 CL_Sprite&
 Tile::get_sprite()
 {
-  if (sur)
+  if (impl->sur)
     {
-      return sur;
+      return impl->sur;
     }
   else
     {
       try {
         //std::cout << "Loading Tile: " << filename << std::endl;
-        if (has_suffix(filename, ".png") || has_suffix(filename, ".jpg"))
+        if (has_suffix(impl->filename, ".png") || has_suffix(impl->filename, ".jpg"))
           {
             CL_SpriteDescription desc;
             desc.add_frame(new CL_PixelBuffer(get_pixelbuffer()), true);
-            sur = CL_Sprite(desc);
+            impl->sur = CL_Sprite(desc);
           }
         else
           {
-            sur = CL_Sprite(filename, resources);
+            impl->sur = CL_Sprite(impl->filename, resources);
           }
-        return sur;
+        return impl->sur;
       } catch (CL_Error& err) {
         std::cout << "Tile: CL_Error: " << err.message << std::endl;
         assert(0);
@@ -96,19 +116,19 @@ Tile::get_sprite()
 CL_PixelBuffer
 Tile::get_pixelbuffer()
 {	
-  if (pixelbuffer)
-    return pixelbuffer;
+  if (impl->pixelbuffer)
+    return impl->pixelbuffer;
   {
-    if (has_suffix(filename, ".png") || has_suffix(filename, ".jpg"))
+    if (has_suffix(impl->filename, ".png") || has_suffix(impl->filename, ".jpg"))
       {
-        pixelbuffer = CL_PixelBuffer(*CL_ProviderFactory::load(filename));
+        impl->pixelbuffer = CL_PixelBuffer(*CL_ProviderFactory::load(impl->filename));
       }
     else
       {
-        CL_SpriteDescription descr(filename, resources);
-        pixelbuffer = CL_PixelBuffer(*(descr.get_frames().begin()->first));
+        CL_SpriteDescription descr(impl->filename, resources);
+        impl->pixelbuffer = CL_PixelBuffer(*(descr.get_frames().begin()->first));
       }
-    return pixelbuffer;
+    return impl->pixelbuffer;
   }
 }
 
@@ -166,6 +186,31 @@ Tile::calc_color()
                   static_cast<int>(green / len),
                   static_cast<int>(blue  / len),
                   static_cast<int>(alpha / len));
+}
+
+bool
+Tile::get_col(unsigned char x, unsigned char  y)
+{
+  assert(x < 8);
+  assert(y < 8);
+  return (impl->colmap[y] & (1 << (7-x)));
+}
+
+void
+Tile::set_col(unsigned char x, unsigned char  y, bool val)
+{
+  assert(x < 8);
+  assert(y < 8);
+  if (val)
+    impl->colmap[y] |= (1 << (7-x));
+  else
+    impl->colmap[y] &= ~(1 << (7-x));
+}
+
+std::string
+Tile::get_filename() const
+{
+  return impl->filename; 
 }
 
 /* EOF */

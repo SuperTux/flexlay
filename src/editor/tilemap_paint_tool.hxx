@@ -21,6 +21,7 @@
 #define HEADER_TILEMAP_PAINT_TOOL_HXX
 
 #include "tile_brush.hxx"
+#include "tile_selection.hxx"
 #include "tilemap_tool.hxx"
 
 class EditorTileMap;
@@ -30,7 +31,11 @@ class TileMapPaintTool : public TileMapTool
 {
 private:
   EditorTileMap* tilemap;
+
   bool painting;
+  bool selecting;
+
+  TileSelection selection;
   TileBrush brush;
   CL_Point last_draw;
   CL_Point current_tile;

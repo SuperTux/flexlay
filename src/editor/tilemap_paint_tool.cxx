@@ -50,25 +50,31 @@ TileMapPaintTool::~TileMapPaintTool()
 void
 TileMapPaintTool::draw()
 {
-  // FIXME: Move ths to editor tile
-  for(int y = 0; y < brush.get_height(); ++y)
-    for(int x = 0; x < brush.get_width(); ++x)
-      {
-        Tile* tile = TileFactory::current()->create(brush(x, y));
-                
-        if (tile)
+  if (selecting)
+    {
+      selection.draw();
+    }
+  else
+    {
+      for(int y = 0; y < brush.get_height(); ++y)
+        for(int x = 0; x < brush.get_width(); ++x)
           {
-            CL_Sprite sprite = tile->sur;
-            sprite.set_alpha(0.5f);
-            sprite.draw((current_tile.x + x) * TILE_SIZE, 
-                        (current_tile.y + y) * TILE_SIZE);
-          }
+            Tile* tile = TileFactory::current()->create(brush(x, y));
                 
-        CL_Display::fill_rect (CL_Rect(CL_Point((current_tile.x + x) * TILE_SIZE, 
-                                                (current_tile.y + y) * TILE_SIZE),
-                                       CL_Size(TILE_SIZE, TILE_SIZE)),
-                               CL_Color(255, 255, 255, 100));
-      }
+            if (tile)
+              {
+                CL_Sprite sprite = tile->sur;
+                sprite.set_alpha(0.5f);
+                sprite.draw((current_tile.x + x) * TILE_SIZE, 
+                            (current_tile.y + y) * TILE_SIZE);
+              }
+                
+            CL_Display::fill_rect (CL_Rect(CL_Point((current_tile.x + x) * TILE_SIZE, 
+                                                    (current_tile.y + y) * TILE_SIZE),
+                                           CL_Size(TILE_SIZE, TILE_SIZE)),
+                                   CL_Color(255, 255, 255, 100));
+          }
+    }
 }
 
 void
@@ -88,9 +94,12 @@ TileMapPaintTool::on_mouse_down(const CL_InputEvent& event)
     
     case CL_MOUSE_RIGHT:
       // FIXME: add support for larger brushes here (selecton like)
-      brush = TileBrush(1, 1);
-      brush.at(0, 0) = tilemap->get_field()->at(pos.x, pos.y);
-      brush.set_opaque();
+      //brush = TileBrush(1, 1);
+      //brush.at(0, 0) = tilemap->get_field()->at(pos.x, pos.y);
+      //brush.set_opaque();
+      selecting = true;
+      selection.start(parent->screen2tile(event.mouse_pos));
+      parent->capture_mouse();
       break;
     }
 }
@@ -108,6 +117,10 @@ TileMapPaintTool::on_mouse_move(const CL_InputEvent& event)
           last_draw = current_tile;
         }
     }
+  else if (selecting)
+    {
+      selection.update(parent->screen2tile(event.mouse_pos));
+    }
 }
 
 void
@@ -116,14 +129,21 @@ TileMapPaintTool::on_mouse_up  (const CL_InputEvent& event)
   switch (event.id)
     {
     case CL_MOUSE_LEFT:
+      parent->release_mouse();
+      painting = false;
+
       tilemap->draw_tile(brush, parent->screen2tile(event.mouse_pos));
       last_draw = CL_Point(-1, -1);
-
-      painting = false;
-      parent->release_mouse();
       break;
     
     case CL_MOUSE_RIGHT:
+      parent->release_mouse();
+      selecting = false;
+
+      selection.update(parent->screen2tile(event.mouse_pos));
+      brush = selection.get_brush(*tilemap->get_field());
+      brush.set_transparent();
+      selection.clear();
       break;
     }
 }

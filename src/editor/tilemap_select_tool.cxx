@@ -41,11 +41,7 @@ TileMapSelectTool::draw()
 {
   if (selection.is_active())
     {
-      CL_Rect rect = selection.get_rect();
-
-      CL_Display::fill_rect (CL_Rect(rect.left  * TILE_SIZE, rect.top    * TILE_SIZE,
-                                     rect.right * TILE_SIZE, rect.bottom * TILE_SIZE),
-                             CL_Color(255, 255, 255, 100));
+      selection.draw();
     }
 }
 

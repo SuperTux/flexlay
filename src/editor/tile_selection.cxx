@@ -17,6 +17,8 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
+#include <ClanLib/Display/display.h>
+#include "../globals.hxx"
 #include "tile_selection.hxx"
 
 TileSelection::TileSelection()
@@ -61,6 +63,9 @@ TileSelection::clear()
 void
 TileSelection::draw()
 {
+  CL_Display::fill_rect(CL_Rect(selection.left  * TILE_SIZE, selection.top    * TILE_SIZE,
+                                selection.right * TILE_SIZE, selection.bottom * TILE_SIZE),
+                         CL_Color(255, 255, 255, 100));
 }
 
 TileBrush

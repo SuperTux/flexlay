@@ -27,7 +27,7 @@
 #include "../scm_obj.hxx"
 #include "editor/editor.hxx"
 #include "editor/tile_selector.hxx"
-#include "editor/tilemap_object_tool.hxx"
+#include "editor/objmap_select_tool.hxx"
 #include "editor/editor_tilemap.hxx"
 #include "editor/object_selector.hxx"
 #include "editor/editor_map.hxx"
@@ -248,9 +248,9 @@ editor_objectmap_delete_objects(SCM lst)
 void
 tilemap_object_tool_set_objects(SCM lst)
 {
-  TileMapObjectTool::Selection selection;
-  TileMapObjectTool* tool 
-    = dynamic_cast<TileMapObjectTool*>
+  ObjMapSelectTool::Selection selection;
+  ObjMapSelectTool* tool 
+    = dynamic_cast<ObjMapSelectTool*>
     (Editor::current()->get_tool_manager()->get_tool_by_name(OBJECT_TOOL_NAME));
 
   while (!gh_null_p(lst))
@@ -293,8 +293,8 @@ editor_objectmap_get_objects()
 void
 tilemap_object_tool_clear_selection()
 {
-  TileMapObjectTool* tool 
-    = dynamic_cast<TileMapObjectTool*>
+  ObjMapSelectTool* tool 
+    = dynamic_cast<ObjMapSelectTool*>
     (Editor::current()->get_tool_manager()->get_tool_by_name(OBJECT_TOOL_NAME));
 
   tool->clear_selection();
@@ -305,11 +305,11 @@ tilemap_object_tool_get_objects()
 {
   SCM lst = SCM_EOL;
 
-  TileMapObjectTool* tool 
-    = dynamic_cast<TileMapObjectTool*>
+  ObjMapSelectTool* tool 
+    = dynamic_cast<ObjMapSelectTool*>
     (Editor::current()->get_tool_manager()->get_tool_by_name(OBJECT_TOOL_NAME));
 
-  TileMapObjectTool::Selection selection = tool->get_selection();
+  ObjMapSelectTool::Selection selection = tool->get_selection();
 
   for(EditorObjMap::Objs::iterator i = selection.begin(); i != selection.end(); ++i)
     {
@@ -811,8 +811,8 @@ struct MenuConverter
 void
 objectmap_tool_set_popupmenu_callback(SCM func)
 {
-  TileMapObjectTool* tool 
-    = dynamic_cast<TileMapObjectTool*>
+  ObjMapSelectTool* tool 
+    = dynamic_cast<ObjMapSelectTool*>
     (Editor::current()->get_tool_manager()->get_tool_by_name(OBJECT_TOOL_NAME));
   
   MenuConverter callback(func);

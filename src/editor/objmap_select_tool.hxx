@@ -17,8 +17,8 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-#ifndef HEADER_TILEMAP_OBJECT_TOOL_HXX
-#define HEADER_TILEMAP_OBJECT_TOOL_HXX
+#ifndef HEADER_OBJMAP_SELECT_TOOL_HXX
+#define HEADER_OBJMAP_SELECT_TOOL_HXX
 
 #include "tilemap_tool.hxx"
 #include "editor_objmap.hxx"
@@ -30,7 +30,7 @@ class ObjectMoveCommand;
 class ObjectDeleteCommand;
 
 /** */
-class TileMapObjectTool : public TileMapTool
+class ObjMapSelectTool : public TileMapTool
 {
 public:
   typedef std::vector<EditorObjMap::Obj*> Selection; 
@@ -50,9 +50,10 @@ private:
   Selection selection;
   ObjectMoveCommand* move_command;
   ObjectDeleteCommand* delete_command;
+
 public:
-  TileMapObjectTool();
-  ~TileMapObjectTool();
+  ObjMapSelectTool();
+  ~ObjMapSelectTool();
 
   void draw();
 
@@ -65,9 +66,10 @@ public:
   void set_selection(const Selection& sel) { selection = sel; }
 
   CL_Signal_v1<CL_Menu*>& sig_on_popup_menu_display() { return on_popup_menu_display; }
+
 private:
-  TileMapObjectTool (const TileMapObjectTool&);
-  TileMapObjectTool& operator= (const TileMapObjectTool&);
+  ObjMapSelectTool (const ObjMapSelectTool&);
+  ObjMapSelectTool& operator= (const ObjMapSelectTool&);
 };
 
 #endif

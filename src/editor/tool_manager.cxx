@@ -20,7 +20,7 @@
 #include <iostream>
 #include "tilemap_paint_tool.hxx"
 #include "tilemap_select_tool.hxx"
-#include "tilemap_object_tool.hxx"
+#include "objmap_select_tool.hxx"
 #include "tilemap_diamond_tool.hxx"
 #include "editor_tilemap.hxx"
 #include "editor_map.hxx"
@@ -33,7 +33,7 @@ ToolManager::ToolManager()
   tools.push_back(new TileMapPaintTool  ());
   tools.push_back(new TileMapSelectTool ());
   tools.push_back(new TileMapDiamondTool());
-  tools.push_back(new TileMapObjectTool ());
+  tools.push_back(new ObjMapSelectTool  ());
 
   tool = tools[0]; 
 }

@@ -14,7 +14,6 @@ libwindstille_editor_a_SOURCES = \
   tile_editor.hxx  tile_editor.cxx \
   tilemap_tool.hxx tilemap_tool.cxx \
   tilemap_paint_tool.hxx tilemap_paint_tool.cxx \
-  tilemap_object_tool.hxx tilemap_object_tool.cxx \
   tilemap_select_tool.hxx tilemap_select_tool.cxx \
   tilemap_diamond_tool.hxx tilemap_diamond_tool.cxx \
   tile_brush.hxx   tile_brush.cxx \
@@ -32,6 +31,7 @@ libwindstille_editor_a_SOURCES = \
   object_move_command.hxx  object_move_command.cxx \
   object_delete_command.hxx  object_delete_command.cxx \
   object_add_command.hxx  object_add_command.cxx \
-  command_group.hxx command_group.cxx
+  command_group.hxx command_group.cxx \
+  objmap_select_tool.hxx objmap_select_tool.cxx
 
 # EOF #

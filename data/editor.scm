@@ -399,13 +399,14 @@
                             (lambda ()
                               (set-tool 'object)))
 
-    (gui-create-button-func 0 100
-                            40 25 "Brush" 
-                            (lambda () 
-                              (set! *clipboard* (editor-get-tile-selection))
-                              (cond (*clipboard*
-                                     (tilemap-paint-tool-set-brush *clipboard*)
-                                     (set-tool 'tile)))))
+;; FIXME: Brush stuff is now rather useless
+;;   (gui-create-button-func 0 100
+;;                            40 25 "Brush" 
+;;                            (lambda () 
+;;                              (set! *clipboard* (editor-get-tile-selection))
+;;                              (cond (*clipboard*
+;;                                     (tilemap-paint-tool-set-brush *clipboard*)
+;;                                     (set-tool 'tile)))))
 
     (gui-create-button-func 0 150
                             40 25 "BG" 

@@ -19,6 +19,7 @@
 
 #include <algorithm>
 #include <ClanLib/Display/keys.h>
+#include <ClanLib/Display/keyboard.h>
 #include <ClanLib/Display/display.h>
 #include "editor_map_component.hxx"
 #include "editor_map.hxx"
@@ -30,30 +31,24 @@
 #include "editor.hxx"
 #include "objmap_object.hxx"
 #include "object_move_command.hxx"
-#include "tilemap_object_tool.hxx"
+#include "objmap_select_tool.hxx"
 
 extern CL_ResourceManager* resources;
 
-TileMapObjectTool::TileMapObjectTool()
+ObjMapSelectTool::ObjMapSelectTool()
 {
   state = NONE;
   offset = CL_Point(0, 0);
   move_command = 0;
 }
 
-TileMapObjectTool::~TileMapObjectTool()
+ObjMapSelectTool::~ObjMapSelectTool()
 {
 }
  
 void
-TileMapObjectTool::draw()
+ObjMapSelectTool::draw()
 {
-  /*if (obj)
-    {
-      obj->draw();
-      CL_Display::draw_rect(obj->get_bound_rect(), CL_Color(255, 255, 0));
-    }*/
-
   for (Selection::iterator i = selection.begin(); i != selection.end(); ++i)
     {
       (*i)->draw();
@@ -73,7 +68,7 @@ TileMapObjectTool::draw()
 }
 
 void
-TileMapObjectTool::on_mouse_up(const CL_InputEvent& event)
+ObjMapSelectTool::on_mouse_up(const CL_InputEvent& event)
 {
   EditorObjMap* objmap = dynamic_cast<EditorObjMap*>(EditorMapComponent::current()->get_map()->get_layer_by_name(OBJECTMAP_NAME));
   EditorMapComponent* parent = EditorMapComponent::current();
@@ -122,7 +117,7 @@ TileMapObjectTool::on_mouse_up(const CL_InputEvent& event)
 }
 
 void
-TileMapObjectTool::on_mouse_down(const CL_InputEvent& event)
+ObjMapSelectTool::on_mouse_down(const CL_InputEvent& event)
 {
   EditorObjMap* objmap = dynamic_cast<EditorObjMap*>(EditorMapComponent::current()->get_map()->get_layer_by_name(OBJECTMAP_NAME));
   EditorMapComponent* parent = EditorMapComponent::current();
@@ -135,24 +130,35 @@ TileMapObjectTool::on_mouse_down(const CL_InputEvent& event)
         {
         default:
           EditorObjMap::Obj* obj = objmap->find_object(pos);
-
+          
           if (obj)
             {
-              state = DRAG;
-              parent->capture_mouse();
-              offset = pos - obj->get_pos();
-              drag_start = pos;
-
-              if (std::find(selection.begin(), selection.end(), obj) == selection.end())
-                { // Clicked object is not in the selection, so we add it
-                  selection.clear();
-                  selection.push_back(obj);
-                }
-
-              move_command = new ObjectMoveCommand(objmap);
-              for (Selection::iterator i = selection.begin(); i != selection.end(); ++i)
+              if (CL_Keyboard::get_keycode(CL_KEY_LSHIFT))
                 {
-                  move_command->add_obj((*i)->get_handle());
+                  Selection::iterator i = std::find(selection.begin(), selection.end(), obj);
+                  if (i == selection.end())
+                    selection.push_back(obj);
+                  else
+                    selection.erase(i);
+                }
+              else
+                {
+                  state = DRAG;
+                  parent->capture_mouse();
+                  offset = pos - obj->get_pos();
+                  drag_start = pos;
+
+                  if (std::find(selection.begin(), selection.end(), obj) == selection.end())
+                    { // Clicked object is not in the selection, so we add it
+                      selection.clear();
+                      selection.push_back(obj);
+                    }
+
+                  move_command = new ObjectMoveCommand(objmap);
+                  for (Selection::iterator i = selection.begin(); i != selection.end(); ++i)
+                    {
+                      move_command->add_obj((*i)->get_handle());
+                    }
                 }
             }
           else
@@ -171,7 +177,7 @@ TileMapObjectTool::on_mouse_down(const CL_InputEvent& event)
 }
 
 void
-TileMapObjectTool::on_mouse_move(const CL_InputEvent& event)
+ObjMapSelectTool::on_mouse_move(const CL_InputEvent& event)
 {
   //EditorObjMap* objmap = dynamic_cast<EditorObjMap*>(EditorMapComponent::current()->get_map()->get_layer_by_name(OBJECTMAP_NAME));
   EditorMapComponent* parent = EditorMapComponent::current();

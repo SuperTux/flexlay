@@ -36,14 +36,14 @@ TileMapPaintTool::TileMapPaintTool(EditorMap* p, EditorTileMap* t)
     tilemap(t)
 {
   last_draw = CL_Point(-1, -1);
-  painting  = false;
-  selecting = false;
 
   current_  = this;
   brush = TileBrush(1, 1);
   brush.at(0, 0) = 0;
   brush.set_opaque();
   current_tile = CL_Point(0,0);
+
+  mode = NONE;
 }
 
 TileMapPaintTool::~TileMapPaintTool()
@@ -53,15 +53,17 @@ TileMapPaintTool::~TileMapPaintTool()
 void
 TileMapPaintTool::draw()
 {
-  if (selecting)
+  switch(mode)
     {
+    case SELECTING:
       if (CL_Keyboard::get_keycode(CL_KEY_LSHIFT))
         selection.draw(CL_Color(255,  128, 128, 100));
       else 
         selection.draw();
-    }
-  else
-    {
+      break;
+      
+    default:
+      // Draw the brush:
       for(int y = 0; y < brush.get_height(); ++y)
         for(int x = 0; x < brush.get_width(); ++x)
           {
@@ -93,6 +95,7 @@ TileMapPaintTool::draw()
                                       CL_Color(255, 255, 255, 50));
               }
           }
+      break;
     }
 }
 
@@ -101,24 +104,29 @@ TileMapPaintTool::on_mouse_down(const CL_InputEvent& event)
 {
   CL_Point pos = parent->screen2tile(event.mouse_pos);
 
-  switch (event.id)
+  switch (mode)
     {
-    case CL_MOUSE_LEFT:
-      tilemap->draw_tile(brush, parent->screen2tile(event.mouse_pos));
-      last_draw = pos;
+    case NONE:
+      switch (event.id)
+        {
+        case CL_MOUSE_LEFT:
+          mode = PAINTING;
+          parent->capture_mouse();
 
-      painting = true;
-      parent->capture_mouse();
-      break;
+          tilemap->draw_tile(brush, parent->screen2tile(event.mouse_pos));
+          last_draw = pos;
+          break;
     
-    case CL_MOUSE_RIGHT:
-      // FIXME: add support for larger brushes here (selecton like)
-      //brush = TileBrush(1, 1);
-      //brush.at(0, 0) = tilemap->get_field()->at(pos.x, pos.y);
-      //brush.set_opaque();
-      selecting = true;
-      selection.start(parent->screen2tile(event.mouse_pos));
-      parent->capture_mouse();
+        case CL_MOUSE_RIGHT:
+          mode = SELECTING;
+          parent->capture_mouse();
+
+          selection.start(parent->screen2tile(event.mouse_pos));
+          break;
+        }
+      break;
+
+    default:
       break;
     }
 }
@@ -128,48 +136,61 @@ TileMapPaintTool::on_mouse_move(const CL_InputEvent& event)
 {
   current_tile = parent->screen2tile(event.mouse_pos);
 
-  if (painting)
+  switch (mode)
     {
+    case PAINTING:
       if (current_tile != last_draw)
         {
           tilemap->draw_tile(brush, current_tile);
           last_draw = current_tile;
         }
-    }
-  else if (selecting)
-    {
+      break;
+    
+    case SELECTING:
       selection.update(parent->screen2tile(event.mouse_pos));
+      break;
+      
+    default:
+      break;
     }
 }
 
 void
 TileMapPaintTool::on_mouse_up  (const CL_InputEvent& event)
 {
-  switch (event.id)
+  if (mode == PAINTING || mode == SELECTING)
     {
-    case CL_MOUSE_LEFT:
-      parent->release_mouse();
-      painting = false;
+      switch (event.id)
+        {
+        case CL_MOUSE_LEFT:
+          parent->release_mouse();
+          mode = NONE;
 
-      tilemap->draw_tile(brush, parent->screen2tile(event.mouse_pos));
-      last_draw = CL_Point(-1, -1);
-      break;
+          tilemap->draw_tile(brush, parent->screen2tile(event.mouse_pos));
+          last_draw = CL_Point(-1, -1);
+          break;
     
-    case CL_MOUSE_RIGHT:
-      parent->release_mouse();
-      selecting = false;
+        case CL_MOUSE_RIGHT:
+          parent->release_mouse();
+          mode = NONE;
 
-      selection.update(parent->screen2tile(event.mouse_pos));
-      brush = selection.get_brush(*tilemap->get_field());
+          selection.update(parent->screen2tile(event.mouse_pos));
+          brush = selection.get_brush(*tilemap->get_field());
 
-      if ((brush.get_width() > 1 || brush.get_height() > 1)
-          && !CL_Keyboard::get_keycode(CL_KEY_LSHIFT))
-        brush.set_transparent();
-      else
-        brush.set_opaque();
+          if ((brush.get_width() > 1 || brush.get_height() > 1)
+              && !CL_Keyboard::get_keycode(CL_KEY_LSHIFT))
+            {
+              brush.set_transparent();
+              brush.auto_crop();
+            }
+          else
+            {
+              brush.set_opaque();
+            }
 
-      selection.clear();
-      break;
+          selection.clear();
+          break;
+        }
     }
 }
 

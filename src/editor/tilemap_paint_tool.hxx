@@ -32,8 +32,7 @@ class TileMapPaintTool : public TileMapTool
 private:
   EditorTileMap* tilemap;
 
-  bool painting;
-  bool selecting;
+  enum { PAINTING, SELECTING, NONE } mode;
 
   TileSelection selection;
   TileBrush brush;

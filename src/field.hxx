@@ -72,6 +72,10 @@ public:
     return (*this) (x, y);
   }
 
+  /** Resize a field to a new size
+   *  @param pos_x The position of the old field in the new resized one
+   *  @param pos_y The position of the old field in the new resized one
+   **/
   void resize(int w, int h, int pos_x = 0, int pos_y = 0) 
   {
     // FIXME: Slow?

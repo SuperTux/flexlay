@@ -40,6 +40,9 @@ public:
   void set_transparent() { opaque = false; }
 
   bool is_opaque() const { return opaque; }
+  
+  /** Removes unneeded transparent bordering */
+  void auto_crop();
 };
 
 #endif

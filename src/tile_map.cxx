@@ -1,4 +1,4 @@
-//  $Id: tile_map.cxx,v 1.8 2003/08/12 08:24:41 grumbel Exp $
+//  $Id: tile_map.cxx,v 1.9 2003/08/12 08:58:49 grumbel Exp $
 //
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -78,6 +78,32 @@ TileMap::draw ()
               }
 	  }
       }
+}
+
+bool
+TileMap::get_pixel(int x, int y)
+{
+  if (x < 0 || y < 0 
+      || x >= field.get_width()*SUBTILE_NUM
+      || y >= field.get_height()*SUBTILE_NUM)
+    {
+      std::cout << "Out of bounce: " << x << ", " << y << std::endl;
+      return 1;
+    }
+  else
+    {
+      Tile* tile = field(x / SUBTILE_NUM,
+                         y / SUBTILE_NUM);
+      if (0)
+        std::cout << "GetPixel: " << x / SUBTILE_NUM << "," << x % SUBTILE_NUM << " x "
+                << y / SUBTILE_NUM << "," << y % SUBTILE_NUM << std::endl;
+
+      if (tile)
+        return tile->get_col(x % SUBTILE_NUM,
+                             y % SUBTILE_NUM);
+      else
+        return 0;     
+    }
 }
 
 bool

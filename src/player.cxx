@@ -1,4 +1,4 @@
-//  $Id: player.cxx,v 1.6 2003/08/12 08:24:41 grumbel Exp $
+//  $Id: player.cxx,v 1.7 2003/08/12 08:58:49 grumbel Exp $
 //
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -107,6 +107,22 @@ Player::draw ()
   CL_Display::fill_rect(CL_Rect(int(pos.x - 5), int(pos.y - 5),
                                 int(pos.x + 5), int(pos.y + 5)),
                         CL_Color(255, 255, 255));
+
+  {
+    int tile_x = int(pos.x/SUBTILE_SIZE);
+    int tile_y = int(pos.y/SUBTILE_SIZE);
+ 
+    CL_Color color;
+
+    if (get_world()->get_tilemap()->get_pixel(tile_x, tile_y))
+      color = CL_Color(255, 255, 0, 128);
+    else
+      color = CL_Color(0,  0, 255, 128);
+
+    CL_Display::fill_rect(CL_Rect(tile_x*SUBTILE_SIZE, tile_y*SUBTILE_SIZE,
+                                  tile_x*SUBTILE_SIZE + SUBTILE_SIZE, tile_y*SUBTILE_SIZE + SUBTILE_SIZE),
+                          color);
+  }
 }
 
 void 

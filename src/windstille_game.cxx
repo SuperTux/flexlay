@@ -1,4 +1,4 @@
-//  $Id: windstille_game.cxx,v 1.5 2003/08/12 08:24:41 grumbel Exp $
+//  $Id: windstille_game.cxx,v 1.6 2003/08/12 08:58:49 grumbel Exp $
 //
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -89,48 +89,6 @@ WindstilleGame::display ()
     }
 
   world.add_player (&player1);
-
-  if (0)
-    {
-      world.add (GuileGameObjFactory::create ("scmdog"));
-      world.add (GuileGameObjFactory::create ("scmdog"));
-      world.add (GuileGameObjFactory::create ("scmdog"));
-      world.add (GuileGameObjFactory::create ("scmdog"));
-      world.add (GuileGameObjFactory::create ("scmdog"));
-      world.add (GuileGameObjFactory::create ("scmdog"));
-      world.add (GuileGameObjFactory::create ("scmdog"));
-      world.add (GuileGameObjFactory::create ("scmdog"));
-      world.add (GuileGameObjFactory::create ("scmdog"));
-      world.add (GuileGameObjFactory::create ("scmdog"));
-
-      world.add (GuileGameObjFactory::create ("scmdog"));
-      world.add (GuileGameObjFactory::create ("scmdog"));
-      world.add (GuileGameObjFactory::create ("scmdog"));
-      world.add (GuileGameObjFactory::create ("scmdog"));
-      world.add (GuileGameObjFactory::create ("scmdog"));
-      world.add (GuileGameObjFactory::create ("scmdog"));
-      world.add (GuileGameObjFactory::create ("scmdog"));
-      world.add (GuileGameObjFactory::create ("scmdog"));
-      world.add (GuileGameObjFactory::create ("scmdog"));
-      world.add (GuileGameObjFactory::create ("scmdog"));
-      world.add (GuileGameObjFactory::create ("scmdog"));
-      world.add (GuileGameObjFactory::create ("scmdog"));
-      world.add (GuileGameObjFactory::create ("scmdog"));
-
-      world.add (GuileGameObjFactory::create ("nebular"));
-      world.add (GuileGameObjFactory::create ("nebular"));
-      world.add (GuileGameObjFactory::create ("nebular"));
-      world.add (GuileGameObjFactory::create ("nebular"));
-      world.add (GuileGameObjFactory::create ("nebular"));
-
-      world.add (GuileGameObjFactory::create ("bounce"));
-      world.add (GuileGameObjFactory::create ("bounce"));
-      world.add (GuileGameObjFactory::create ("bounce"));
-      world.add (GuileGameObjFactory::create ("bounce"));
-      world.add (GuileGameObjFactory::create ("bounce"));
-      world.add (GuileGameObjFactory::create ("bounce"));
-      world.add (GuileGameObjFactory::create ("bounce"));
-    }
 
   PlayerView view (&player1);
 

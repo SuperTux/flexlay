@@ -1,4 +1,4 @@
-//  $Id: globals.hxx,v 1.5 2003/08/12 08:24:41 grumbel Exp $
+//  $Id: globals.hxx,v 1.6 2003/08/12 08:58:49 grumbel Exp $
 // 
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -27,6 +27,7 @@ typedef enum { WEST, EAST} Direction;
 
 #define TILE_SIZE    128
 #define SUBTILE_SIZE  16
+#define SUBTILE_NUM  (TILE_SIZE/SUBTILE_SIZE)
 
 extern CL_ResourceManager* resources;
 

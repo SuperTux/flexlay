@@ -1,4 +1,4 @@
-//  $Id: tile_map.hxx,v 1.4 2003/08/12 08:24:41 grumbel Exp $
+//  $Id: tile_map.hxx,v 1.5 2003/08/12 08:58:49 grumbel Exp $
 // 
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -40,7 +40,11 @@ public:
   void update (float delta);
   void draw ();
   
-  bool is_ground (float x, float y);
+  /** @return the type of ground at the given world coordinates */
+  bool is_ground(float x, float y);
+
+  /** @return the type of ground at the given subtile coordinates */
+  bool get_pixel(int x, int y);
   
   int get_width () const { return field.get_width(); }
   int get_height () const { return field.get_height (); }

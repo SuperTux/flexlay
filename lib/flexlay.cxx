@@ -34,7 +34,7 @@ Flexlay::Flexlay()
   screen_width  = 800;
   screen_height = 600;
   fullscreen    = false;
-  allow_resize  = true;
+  allow_resize  = false;
   use_opengl    = true;
   
   current_ = this;

@@ -1,0 +1,6 @@
+Program("xinput", "xinput.c", CCFLAGS=['-Wall', '-std=c99'], LIBS=['-lX11', '-lXext', '-lXi'], LIBPATH=['/usr/X11R6/lib/'])
+
+Program("brushmask", "brushmask.cxx", LIBS=['glib-2.0'], CPPPATH=['/usr/include/glib-2.0', '/usr/lib/glib-2.0/include'])
+
+# EOF #
+

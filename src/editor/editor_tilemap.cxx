@@ -222,20 +222,26 @@ EditorTileMap::draw_tile(int id, const CL_Point& pos)
 void
 EditorTileMap::draw_tile(const TileBrush& brush, const CL_Point& pos)
 {
+  draw_tile(current_field, brush, pos);
+}
+
+void
+EditorTileMap::draw_tile(Field<int>* field, const TileBrush& brush, const CL_Point& pos)
+{
   int start_x = std::max(0, -pos.x);
   int start_y = std::max(0, -pos.y);
 
-  int end_x = std::min(brush.get_width(),  current_field->get_width()  - pos.x);
-  int end_y = std::min(brush.get_height(), current_field->get_height() - pos.y);
+  int end_x = std::min(brush.get_width(),  field->get_width()  - pos.x);
+  int end_y = std::min(brush.get_height(), field->get_height() - pos.y);
 
   for (int y = start_y; y < end_y; ++y)
     for (int x = start_x; x < end_x; ++x)
       {
         if (brush.is_opaque() || brush.at(x, y) != 0)
           {
-            current_field->at(pos.x + x, pos.y + y) = brush.at(x, y);
+            field->at(pos.x + x, pos.y + y) = brush.at(x, y);
           }
-      }
+      }  
 }
 
 void

@@ -27,9 +27,16 @@ TileBrush::TileBrush()
   opaque = false;
 }
 
+TileBrush::TileBrush(const Field<int>& f, int w, int h, int pos_x, int pos_y)
+  : Field<int>(f, w, h, pos_x, pos_y)
+{
+  opaque = false;
+}
+
 TileBrush::TileBrush(int w, int h)
   : Field<int>(w, h)
 {
+  opaque = false;
 }
 
 void
@@ -73,8 +80,15 @@ TileBrush::auto_crop()
         }
 
  end:
-  resize(rect.get_width(), rect.get_height(), 
-         -rect.left, -rect.top);
+  if (rect.get_width() != 0)
+    resize(rect.get_width(), rect.get_height(), 
+           -rect.left, -rect.top);
+  else
+    {
+      (*this) = TileBrush(1, 1);
+      at(0, 0) = 0;
+      set_opaque();
+    }
 }
 
 /* EOF */

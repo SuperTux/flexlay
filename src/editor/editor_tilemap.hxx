@@ -57,7 +57,7 @@ public:
 
   /** Return the current active field */
   Field<int>* get_field() { return current_field; }
-  Field<int>*         get_diamond_map() { return diamond_map; }
+  Field<int>* get_diamond_map() { return diamond_map; }
 
   int  get_tile (int, int);
   void set_active_layer(int i);
@@ -84,6 +84,8 @@ public:
 
   void set_draw_grid(bool t);
   bool get_draw_grid() const;
+
+  static void draw_tile(Field<int>* field, const TileBrush& brush, const CL_Point& pos);
 };
 
 #endif

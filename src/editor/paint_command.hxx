@@ -17,33 +17,39 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-#ifndef HEADER_EDITOR_TILE_BRUSH_HXX
-#define HEADER_EDITOR_TILE_BRUSH_HXX
+#ifndef HEADER_PAINT_COMMAND_HXX
+#define HEADER_PAINT_COMMAND_HXX
 
+#include <vector>
+#include <ClanLib/Core/Math/point.h>
 #include "../field.hxx"
+#include "tile_brush.hxx"
+#include "command.hxx"
 
 /** */
-class TileBrush : public Field<int>
+class PaintCommand : public Command
 {
-private:
-  /** if true transparent tiles are drawn the same as opaque tiles, ie
-      erasing tiles formaly on the map and replacing them. If false
-      transparent tiles are not drawn at all, thus letting the old
-      tiles stay in place */
-  bool opaque;
-
-public:
-  TileBrush();
-  TileBrush(int w, int h);
-  TileBrush(const Field<int>& f, int w, int h, int pos_x, int pos_y);
-
-  void set_opaque() { opaque = true; }
-  void set_transparent() { opaque = false; }
-
-  bool is_opaque() const { return opaque; }
+private: 
+  typedef std::vector<CL_Point> Points;
+  Points points;
   
-  /** Removes unneeded transparent bordering */
-  void auto_crop();
+  Field<int>* field;
+  Field<int>  undo_field;
+
+  CL_Point    pos;
+  TileBrush*  redo_brush;
+  TileBrush*  undo_brush;
+  
+public:
+  PaintCommand(Field<int>* f, const TileBrush& b);
+  virtual ~PaintCommand();
+  
+  void add_point(const CL_Point& pos);
+  
+  void execute();
+  
+  void redo();
+  void undo();
 };
 
 #endif

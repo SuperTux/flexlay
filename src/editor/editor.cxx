@@ -26,6 +26,7 @@
 
 #include "gui_manager.hxx"
 #include "globals.hxx"
+#include "command.hxx"
 #include "editor.hxx"
 #include "editor_map.hxx"
 #include "tile_selector.hxx"
@@ -55,6 +56,42 @@ Editor::run()
   std::cout << "Starting GUI manager busy loop..." << std::endl;
   manager->run();
   std::cout << "Starting GUI manager busy loop... done" << std::endl;
+}
+
+void
+Editor::execute(Command* command)
+{
+  for(std::vector<Command*>::iterator i = redo_stack.begin(); 
+      i != redo_stack.end(); ++i)
+    delete (*i);
+  redo_stack.clear();
+
+  command->execute();
+  undo_stack.push_back(command);
+}
+
+void
+Editor::undo()
+{
+  if (!undo_stack.empty())
+    {
+      Command* command = undo_stack.back();
+      undo_stack.pop_back();
+      command->undo();
+      redo_stack.push_back(command);
+    }
+}
+
+void
+Editor::redo()
+{
+  if (!redo_stack.empty())
+    {
+      Command* command = redo_stack.back();
+      redo_stack.pop_back();
+      command->redo();
+      undo_stack.push_back(command);
+    }
 }
 
 /* EOF */

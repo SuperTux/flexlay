@@ -17,33 +17,23 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-#ifndef HEADER_EDITOR_TILE_BRUSH_HXX
-#define HEADER_EDITOR_TILE_BRUSH_HXX
-
-#include "../field.hxx"
+#ifndef HEADER_COMMAND_HXX
+#define HEADER_COMMAND_HXX
 
 /** */
-class TileBrush : public Field<int>
+class Command
 {
 private:
-  /** if true transparent tiles are drawn the same as opaque tiles, ie
-      erasing tiles formaly on the map and replacing them. If false
-      transparent tiles are not drawn at all, thus letting the old
-      tiles stay in place */
-  bool opaque;
-
 public:
-  TileBrush();
-  TileBrush(int w, int h);
-  TileBrush(const Field<int>& f, int w, int h, int pos_x, int pos_y);
+  /** Execute the command */
+  virtual void execute() =0;
 
-  void set_opaque() { opaque = true; }
-  void set_transparent() { opaque = false; }
+  /** Execute the command a second time after the command got
+      undo'ed */
+  virtual void redo() =0;
 
-  bool is_opaque() const { return opaque; }
-  
-  /** Removes unneeded transparent bordering */
-  void auto_crop();
+  /** Undo the effects caused by execute() */
+  virtual void undo() =0;
 };
 
 #endif

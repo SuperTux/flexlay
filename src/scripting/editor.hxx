@@ -26,6 +26,9 @@ class CL_Component;
 class EditorTileMap;
 class EditorObjMap;
 
+void editor_redo();
+void editor_undo();
+
 // FIXME: Hack
 EditorTileMap* editor_get_tilemap();
 EditorObjMap*  editor_get_objmap();

@@ -42,6 +42,16 @@
 
 extern CL_ResourceManager* resources;
 
+void editor_redo()
+{
+  Editor::current()->redo();
+}
+
+void editor_undo()
+{
+  Editor::current()->undo();
+}
+
 EditorObjMap*
 editor_get_objmap()
 {

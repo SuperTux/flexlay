@@ -24,6 +24,7 @@
 #include "tile_selection.hxx"
 #include "tilemap_tool.hxx"
 
+class PaintCommand;
 class EditorTileMap;
 
 /** */
@@ -38,6 +39,9 @@ private:
   TileBrush brush;
   CL_Point last_draw;
   CL_Point current_tile;
+
+  PaintCommand* command;
+
   static TileMapPaintTool* current_; 
 public:
   static TileMapPaintTool* current() { return current_; } 

@@ -27,8 +27,8 @@ template<class T>
 class Field
 {
 private:
-  unsigned int width;
-  unsigned int height;
+  int width;
+  int height;
   std::vector<T> vec;
 
 public:
@@ -39,9 +39,26 @@ public:
   {
   }
 
-  Field (unsigned int w, unsigned int h) 
+  Field (int w, int h) 
     : width (w), height (h), vec (width * height)
   {
+  }
+
+  /** Creates a new field out of a subsection from an already excisting one 
+   *  @param pos_x The position of the old field in the new resized one
+   *  @param pos_y The position of the old field in the new resized one */
+  Field(const Field<T>& arg_field, int w, int h, int pos_x, int pos_y)
+    : width (w), height (h), vec (width * height)
+  {
+    int start_x = std::max(0, -pos_x);
+    int start_y = std::max(0, -pos_y);
+
+    int end_x = std::min(arg_field.get_width(),  get_width()  - pos_x);
+    int end_y = std::min(arg_field.get_height(), get_height() - pos_y);
+
+    for(int y = start_y; y < end_y; ++y)
+      for(int x = start_x; x < end_x; ++x)
+        at(pos_x + x, pos_y + y) = arg_field.at(x, y);
   }
 
   const T& operator[] (int i) const {
@@ -78,20 +95,14 @@ public:
    **/
   void resize(int w, int h, int pos_x = 0, int pos_y = 0) 
   {
-    // FIXME: Slow?
-    Field<T> field(w, h);
+    *this = Field<T>(*this, w, h, pos_x, pos_y);
+  }
 
-    int start_x = std::max(0, -pos_x);
-    int start_y = std::max(0, -pos_y);
-
-    int end_x = std::min(get_width(),  field.get_width()  - pos_x);
-    int end_y = std::min(get_height(), field.get_height() - pos_y);
-
-    for(int y = start_y; y < end_y; ++y)
-      for(int x = start_x; x < end_x; ++x)
-        field.at(pos_x + x, pos_y + y) = at(x, y);
-
-    (*this) = field;
+  void clear()
+  {
+    width  = 0;
+    height = 0;
+    vec.clear();
   }
 
   iterator begin () { return vec.begin (); }

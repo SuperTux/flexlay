@@ -27,6 +27,8 @@
 #include "tile_factory.hxx"
 #include "editor_map.hxx"
 #include "../tile.hxx"
+#include "editor.hxx"
+#include "paint_command.hxx"
 #include "tilemap_paint_tool.hxx"
 
 TileMapPaintTool* TileMapPaintTool::current_ = 0; 
@@ -42,6 +44,8 @@ TileMapPaintTool::TileMapPaintTool(EditorMap* p, EditorTileMap* t)
   brush.at(0, 0) = 0;
   brush.set_opaque();
   current_tile = CL_Point(0,0);
+
+  command = 0;
 
   mode = NONE;
 }
@@ -75,6 +79,7 @@ TileMapPaintTool::draw()
                 sprite.set_alpha(0.5f);
                 sprite.draw((current_tile.x + x) * TILE_SIZE, 
                             (current_tile.y + y) * TILE_SIZE);
+
                 CL_Display::fill_rect(CL_Rect(CL_Point((current_tile.x + x) * TILE_SIZE, 
                                                        (current_tile.y + y) * TILE_SIZE),
                                               CL_Size(TILE_SIZE, TILE_SIZE)),
@@ -112,6 +117,8 @@ TileMapPaintTool::on_mouse_down(const CL_InputEvent& event)
         case CL_MOUSE_LEFT:
           mode = PAINTING;
           parent->capture_mouse();
+          command = new PaintCommand(tilemap->get_field(), brush);
+          command->add_point(parent->screen2tile(event.mouse_pos));
 
           tilemap->draw_tile(brush, parent->screen2tile(event.mouse_pos));
           last_draw = pos;
@@ -141,6 +148,7 @@ TileMapPaintTool::on_mouse_move(const CL_InputEvent& event)
     case PAINTING:
       if (current_tile != last_draw)
         {
+          command->add_point(current_tile);
           tilemap->draw_tile(brush, current_tile);
           last_draw = current_tile;
         }
@@ -165,6 +173,10 @@ TileMapPaintTool::on_mouse_up  (const CL_InputEvent& event)
         case CL_MOUSE_LEFT:
           parent->release_mouse();
           mode = NONE;
+
+          command->add_point(parent->screen2tile(event.mouse_pos));
+          Editor::current()->execute(command);
+          command = 0;
 
           tilemap->draw_tile(brush, parent->screen2tile(event.mouse_pos));
           last_draw = CL_Point(-1, -1);

@@ -25,12 +25,16 @@
 class TileEditor;
 class EditorMap;
 class GUIManager;
+class Command;
 
 /** */
 class Editor
 {
 private:
   GUIManager* manager;
+
+  std::vector<Command*> undo_stack;
+  std::vector<Command*> redo_stack;
 
   static Editor* current_;
 public:
@@ -41,6 +45,16 @@ public:
 
   void run();
 
+  /** Execute a command and place it on the undo stack, commands given
+      to this function will be deleted by the Editor class, so they
+      have to be new'ed */
+  void execute(Command* command);
+
+  /** Move backward in the undo stack */
+  void undo();
+
+  /** Move forward in the undo stack */
+  void redo();
 private:
   Editor (const Editor&);
   Editor& operator= (const Editor&);

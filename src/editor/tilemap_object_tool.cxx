@@ -36,7 +36,6 @@ extern CL_ResourceManager* resources;
 
 TileMapObjectTool::TileMapObjectTool()
 {
-  obj = 0;
   state = NONE;
   offset = CL_Point(0, 0);
   move_command = 0;
@@ -107,8 +106,6 @@ TileMapObjectTool::on_mouse_up(const CL_InputEvent& event)
           break;
 
         default:
-          // FIXME: Evil single click has to go
-          obj = objmap->find_object(pos);
           break;
         }
       break;
@@ -137,8 +134,7 @@ TileMapObjectTool::on_mouse_down(const CL_InputEvent& event)
       switch(state)
         {
         default:
-          // FIXME: Evil single object drag has to go
-          obj = objmap->find_object(pos);
+          EditorObjMap::Obj* obj = objmap->find_object(pos);
 
           if (obj)
             {
@@ -146,19 +142,17 @@ TileMapObjectTool::on_mouse_down(const CL_InputEvent& event)
               parent->capture_mouse();
               offset = pos - obj->get_pos();
               drag_start = pos;
-              Selection::iterator i = std::find(selection.begin(),
-                                                selection.end(), 
-                                                obj);
 
-              // Clicked object is member of the selection
-              if (i != selection.end())
+              if (std::find(selection.begin(), selection.end(), obj) == selection.end())
+                { // Clicked object is not in the selection, so we add it
+                  selection.clear();
+                  selection.push_back(obj);
+                }
+
+              move_command = new ObjectMoveCommand(objmap);
+              for (Selection::iterator i = selection.begin(); i != selection.end(); ++i)
                 {
-                  obj = 0;
-                  move_command = new ObjectMoveCommand(objmap);
-                  for (Selection::iterator i = selection.begin(); i != selection.end(); ++i)
-                    {
-                      move_command->add_obj((*i)->get_handle());
-                    }
+                  move_command->add_obj((*i)->get_handle());
                 }
             }
           else
@@ -179,23 +173,18 @@ TileMapObjectTool::on_mouse_down(const CL_InputEvent& event)
 void
 TileMapObjectTool::on_mouse_move(const CL_InputEvent& event)
 {
-  EditorObjMap* objmap = dynamic_cast<EditorObjMap*>(EditorMapComponent::current()->get_map()->get_layer_by_name(OBJECTMAP_NAME));
+  //EditorObjMap* objmap = dynamic_cast<EditorObjMap*>(EditorMapComponent::current()->get_map()->get_layer_by_name(OBJECTMAP_NAME));
   EditorMapComponent* parent = EditorMapComponent::current();
   CL_Point pos = parent->screen2world(event.mouse_pos);
 
   switch(state)
     {
     case DRAG:
-      if (obj)
-        obj->set_pos(parent->screen2world(event.mouse_pos) - offset);
-      else
+      for (Selection::iterator i = selection.begin(); i != selection.end(); ++i)
         {
-          for (Selection::iterator i = selection.begin(); i != selection.end(); ++i)
-            {
-              (*i)->set_pos((*i)->get_pos() + (pos - drag_start));
-            }
-          drag_start = pos;
+          (*i)->set_pos((*i)->get_pos() + (pos - drag_start));
         }
+      drag_start = pos;
       break;
 
     case SELECT:
@@ -204,8 +193,7 @@ TileMapObjectTool::on_mouse_move(const CL_InputEvent& event)
       break;
 
     default:
-      CL_Point pos = parent->screen2world(event.mouse_pos);
-      obj = objmap->find_object(pos);
+      // FIXME: Add some kind of highlighting here if mouse is over an object
       break;
     }
 }

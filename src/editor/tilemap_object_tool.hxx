@@ -38,7 +38,6 @@ public:
 private:
   CL_Signal_v1<CL_Menu*> on_popup_menu_display;
 
-  EditorObjMap::Obj* obj;
   enum { DRAG, SELECT, NONE } state;
 
   /** the position on which the object was clicked, relative to the

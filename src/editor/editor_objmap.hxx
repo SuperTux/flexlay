@@ -54,8 +54,6 @@ public:
   void delete_object(int id);
   int  duplicate_object(int id);
 
-  CL_Rect get_bounding_rect(const CL_Sprite& sprite);
-
   ObjMapObject* find_object(const CL_Point& pos);
   std::vector<ObjMapObject*> get_selection(const CL_Rect& rect);
   Objs* get_objects();

@@ -67,24 +67,6 @@ EditorObjMap::add_object(const CL_Sprite& sprite, const CL_Point& pos, const SCM
   return obj->get_handle();
 }
 
-CL_Rect
-EditorObjMap::get_bounding_rect(const CL_Sprite& sprite)
-{
-  // FIXME: TEST ME
-  CL_Point  align = CL_Point(0, 0);
-  CL_Origin origin_e;
-      
-  sprite.get_alignment(origin_e, align.x, align.y);
-
-  CL_Point origin = calc_origin(origin_e, CL_Size(sprite.get_width(),
-                                                  sprite.get_height()));
-  align.x = -align.x;
-      
-  return CL_Rect(origin + align, 
-                 CL_Size(sprite.get_width(), 
-                         sprite.get_height()));
-}
-
 ObjMapObject*
 EditorObjMap::find_object(const CL_Point& click_pos)
 {

@@ -73,7 +73,7 @@
   (display (inexact->exact y))
   (newline))
 
-(player-set-pos 800 600)
+(player-set-pos 400 300)
 (player-set-direction "west")
 
 (define (toggle-pause)

@@ -1,4 +1,4 @@
-//  $Id: game_world.hxx,v 1.6 2003/09/13 18:01:17 grumbel Exp $
+//  $Id: game_world.hxx,v 1.7 2003/09/23 19:33:43 grumbel Exp $
 // 
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -60,7 +60,10 @@ public:
 
   float get_time () { return passed_time; } 
 
+  /** return width in pixels */
   int get_width () const;
+
+  /** return height in pixels */
   int get_height () const;
 
   std::list<Player*>* get_players () { return &player_objects; }

@@ -64,7 +64,8 @@ EditorMap::EditorMap()
   impl->foreground_color = CL_Color(255, 80, 255);
   impl->modified = false;
   impl->serial = 0;
-  impl->has_bounding_rect = 0;
+  impl->has_bounding_rect = false;
+  impl->bounding_rect = CL_Rect(0,0,0,0);
 }
 
 void

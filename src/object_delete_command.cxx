@@ -25,7 +25,7 @@
 class ObjectDeleteCommandImpl : public CommandImpl
 {
 public:
-  typedef std::vector<ObjMapObject*> Objects;
+  typedef std::vector<ObjMapObject> Objects;
 
   ObjectLayer object_layer;
   Objects objects;
@@ -44,9 +44,9 @@ ObjectDeleteCommand::ObjectDeleteCommand(const ObjectLayer& o)
 }
 
 void
-ObjectDeleteCommand::add_object(int id)
+ObjectDeleteCommand::add_object(const ObjMapObject& obj)
 {
-  impl->objects.push_back(impl->object_layer.get_object(id));
+  impl->objects.push_back(obj);
 }
 
 void
@@ -54,7 +54,7 @@ ObjectDeleteCommandImpl::execute()
 {
   for(Objects::iterator i = objects.begin(); i != objects.end(); ++i)
     {
-      object_layer.delete_object((*i)->get_handle());
+      object_layer.delete_object(*i);
     }
 }
 

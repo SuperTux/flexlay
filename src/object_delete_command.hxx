@@ -21,6 +21,7 @@
 #define HEADER_OBJECT_DELETE_COMMAND_HXX
 
 #include <vector>
+#include "objmap_object.hxx"
 #include "command.hxx"
 
 class ObjectDeleteCommandImpl;
@@ -33,7 +34,7 @@ class ObjectDeleteCommand
 public:
   ObjectDeleteCommand(const ObjectLayer& o);
 
-  void add_object(int id);
+  void add_object(const ObjMapObject& obj);
 
   Command to_command();
 private:

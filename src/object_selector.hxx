@@ -47,7 +47,7 @@ private:
   float scale;
 
   std::vector<ObjectBrush> brushes;
-  ObjectBrush drag_obj;
+  int drag_obj;
   
 public:
   ObjectSelector(const CL_Rect& rect, int obj_w, int obj_h, CL_Component* parent);

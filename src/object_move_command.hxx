@@ -22,6 +22,7 @@
 
 #include "command.hxx"
 
+class ObjMapObject;
 class ObjectLayer;
 
 class ObjectMoveCommandImpl;
@@ -33,7 +34,7 @@ public:
   ObjectMoveCommand(const ObjectLayer& o);
   virtual ~ObjectMoveCommand();
 
-  void add_obj(int id);
+  void add_obj(const ObjMapObject& obj);
 
   Command to_command();
 private:

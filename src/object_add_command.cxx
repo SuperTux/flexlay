@@ -25,7 +25,7 @@ class ObjectAddCommandImpl : public CommandImpl
 {
 public:
   ObjectLayer objmap;
-  ObjMapObject* obj;
+  std::vector<ObjMapObject> objs;
 
   ObjectAddCommandImpl() {}
   virtual ~ObjectAddCommandImpl() {}
@@ -37,33 +37,40 @@ public:
   std::string serialize();
 };
 
-ObjectAddCommand::ObjectAddCommand(const ObjectLayer& objmap_, ObjMapObject* obj_)
+ObjectAddCommand::ObjectAddCommand(const ObjectLayer& objmap_)
   : impl(new ObjectAddCommandImpl())
 {
   impl->objmap = objmap_;
-  impl->obj    = obj_;
 }
 
 ObjectAddCommand::~ObjectAddCommand()
 {
 }
 
-int
+/*int
 ObjectAddCommand::get_handle() const
 { 
   return impl->obj->get_handle(); 
+}*/
+
+void
+ObjectAddCommand::add_object(const ObjMapObject& obj)
+{
+  impl->objs.push_back(obj);
 }
 
 void
 ObjectAddCommandImpl::execute()
 {
-  objmap.add_object(obj);
+  for(std::vector<ObjMapObject>::iterator i = objs.begin(); i != objs.end(); ++i)
+    objmap.add_object(*i);
 }
 
 void
 ObjectAddCommandImpl::undo()
 {
-  objmap.delete_object(obj->get_handle());
+  for(std::vector<ObjMapObject>::iterator i = objs.begin(); i != objs.end(); ++i)
+    objmap.delete_object(*i);
 }
 
 void

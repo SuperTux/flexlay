@@ -17,17 +17,76 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
+#include "objmap_object_impl.hxx"
 #include "objmap_object.hxx"
 
-ObjMapObject::ObjMapObject(int handle_, const CL_Point& pos_,
-                           const MetaData& data_)
-  : handle(handle_), pos(pos_), data(data_)
-{  
+ObjMapObject::ObjMapObject()
+{
 }
 
-ObjMapObject::ObjMapObject(int handle_, const ObjMapObject& obj)
-  : handle(handle_), pos(obj.pos), data(obj.data)
+ObjMapObject::ObjMapObject(const SharedPtr<ObjMapObjectImpl>& impl_)
+  : impl(impl_)
+{
+}
+
+ObjMapObject::ObjMapObject(const CL_Point& pos_,
+                           const MetaData& data_)
 {  
+  impl->pos  = pos_;
+  impl->data = data_;
+}
+
+CL_Point
+ObjMapObject::get_pos() const 
+{
+  if (impl.get())
+    return impl->pos; 
+  else
+    return CL_Point();
+}
+
+void
+ObjMapObject::set_pos(const CL_Point& p) 
+{
+  if (impl.get())
+    impl->pos = p; 
+}
+
+MetaData
+ObjMapObject::get_data() const
+{
+  if (impl.get())
+    return impl->data; 
+  else
+    return MetaData();
+}
+
+void
+ObjMapObject::draw()
+{
+  if (impl.get())
+    impl->draw();
+}
+
+CL_Rect
+ObjMapObject::get_bound_rect() const
+{
+  if (impl.get())
+    return impl->get_bound_rect();
+  else
+    return CL_Rect();
+}
+
+bool
+ObjMapObject::is_null() const
+{
+  return !impl.get();
+}
+
+bool
+ObjMapObject::operator==(const ObjMapObject& obj) const
+{
+  return impl.get() == obj.impl.get();
 }
 
 /* EOF */

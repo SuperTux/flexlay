@@ -21,28 +21,25 @@
 #define HEADER_OBJMAP_SPRITE_OBJECT_HXX
 
 #include <ClanLib/Display/sprite.h>
+#include "shared_ptr.hxx"
 #include "objmap_object.hxx"
 
-/** */
-class ObjMapSpriteObject : public ObjMapObject
-{
-private:
-  CL_Sprite sprite;
+class ObjMapSpriteObjectImpl;
 
+/** */
+class ObjMapSpriteObject
+{
 public:
-  ObjMapSpriteObject(int handle_, 
-                     const CL_Point& pos_, 
+  ObjMapSpriteObject(const CL_Point& pos_, 
                      const MetaData& data_, 
                      const CL_Sprite& s);
-  ObjMapSpriteObject(int handle_, const ObjMapSpriteObject& obj);
 
   void flip_horizontal();
   void flip_vertical();
-
-  void draw();
-  CL_Rect get_bound_rect() const;
-
-  ObjMapObject*  duplicate(int handle_);
+  
+  ObjMapObject to_object();
+private:
+  SharedPtr<ObjMapSpriteObjectImpl> impl;
 };
 
 #endif

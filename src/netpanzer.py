@@ -72,8 +72,30 @@ class Level:
         # FIXME: Data might not get freed since its 'recursively' refcounted
         self.editormap.set_metadata(make_metadata(self))
 
+    def save_optfile(self, filename):
+        outpots = [] # FIXME
+        
+        f = open(filename, "w")
+        f.write("ObjectiveCount: %d\n\n" % len(outposts))
+        for (name, x , y) in outpots:
+            f.write("Name: %s\n" % "Foobar")
+            f.write("Location: %d %d\n\n" % (int(x)/32, int(y)/32))
+
+    def save_spnfile(self, filename):
+        spawnpoints = []
+        f = open(filename, "w")
+
+        f.write("SpawnCount: %d\n\n" % len(spawnpoints))
+        for (x, y) in spawnpoints:
+            f.write("Location: %d %d\n" % (int(x)/32, int(y)/32))
+
     def save(self, filename):
-        data.save(filename)
+        if filename[-4:] == ".npm":
+            data.save(filename)
+            save_optfile(filename[:-4] + ".opt")
+            save_optfile(filename[:-4] + ".spn")
+        else:
+            raise "Fileextension not valid, must be .npm!"
 
     def activate(self, workspace):
         workspace.set_map(self.editormap)
@@ -122,8 +144,20 @@ objmap_select_tool  = ObjMapSelectTool()
 
 workspace.set_tool(tilemap_paint_tool.to_tool());
 
+def on_map_change():
+    if (workspace.get_map().undo_stack_size() > 0):
+        undo_icon.enable()
+    else:
+        undo_icon.disable()
+
+    if (workspace.get_map().redo_stack_size() > 0):
+        redo_icon.enable()
+    else:
+        redo_icon.disable()        
+
 startlevel = Level(256, 256)
 startlevel.activate(workspace)
+connect(startlevel.editormap.sig_change(), on_map_change)
 
 button_panel = Panel(CL_Rect(CL_Point(0, 23), CL_Size(800, 33)), gui.get_component())
 
@@ -193,8 +227,8 @@ undo_icon = Icon(CL_Rect(CL_Point(p.inc(48), 2), CL_Size(32, 32)),
 redo_icon = Icon(CL_Rect(CL_Point(p.inc(32), 2), CL_Size(32, 32)),
                  make_sprite("../data/images/icons24/stock_redo.png"), "Some tooltip", button_panel);
 
-undo_icon.set_callback(editor.undo)
-redo_icon.set_callback(editor.redo)
+undo_icon.set_callback(lambda: workspace.get_map().undo())
+redo_icon.set_callback(lambda: workspace.get_map().redo())
 
 undo_icon.disable()
 redo_icon.disable()
@@ -204,17 +238,6 @@ redo_icon.disable()
 #minimap_icon.set_callback(gui_toggle_minimap)
 
 layer_menu = Menu(CL_Point(32*11+2, 54), gui.get_component())
-
-def on_map_change():
-    if (workspace.get_map().undo_stack_size() > 0):
-        undo_icon.enable()
-    else:
-        undo_icon.disable()
-
-    if (workspace.get_map().redo_stack_size() > 0):
-        redo_icon.enable()
-    else:
-        redo_icon.disable()        
 
 def set_tilemap_paint_tool():
     workspace.set_tool(tilemap_paint_tool.to_tool())

@@ -18,30 +18,38 @@
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include <ClanLib/Display/display.h>
+#include "objmap_object_impl.hxx"
 #include "objmap_sprite_object.hxx"
 
-ObjMapSpriteObject::ObjMapSpriteObject(int handle_, const CL_Point& pos_, 
+class ObjMapSpriteObjectImpl : public ObjMapObjectImpl
+{
+public:
+  CL_Sprite sprite;
+
+  void draw();
+  CL_Rect get_bound_rect() const;
+
+  ObjMapObject*  duplicate(int handle_);
+};
+
+ObjMapSpriteObject::ObjMapSpriteObject(const CL_Point& pos_, 
                                        const MetaData& data_, 
                                        const CL_Sprite& sprite_)
-  : ObjMapObject(handle_, pos_,data_), 
-    sprite(sprite_)
+  : impl(new ObjMapSpriteObjectImpl())
 {
-  
-}
-
-ObjMapSpriteObject::ObjMapSpriteObject(int handle_, const ObjMapSpriteObject& obj)
-  : ObjMapObject(handle_, obj), sprite(obj.sprite)
-{
+  impl->pos    = pos_;
+  impl->data   = data_;
+  impl->sprite = sprite_;
 }
 
 void
-ObjMapSpriteObject::draw()
+ObjMapSpriteObjectImpl::draw()
 {
   sprite.draw(pos.x, pos.y);
 }
 
 CL_Rect
-ObjMapSpriteObject::get_bound_rect() const
+ObjMapSpriteObjectImpl::get_bound_rect() const
 {
   CL_Point  align = CL_Point(0, 0);
   CL_Origin origin_e;
@@ -60,22 +68,23 @@ void
 ObjMapSpriteObject::flip_vertical()
 {
   float scale_x, scale_y;
-  sprite.get_scale(scale_x, scale_y);
-  sprite.set_scale(scale_x, -scale_y);
+
+  impl->sprite.get_scale(scale_x, scale_y);
+  impl->sprite.set_scale(scale_x, -scale_y);
 }
 
 void
 ObjMapSpriteObject::flip_horizontal()
 {
   float scale_x, scale_y;
-  sprite.get_scale(scale_x, scale_y);
-  sprite.set_scale(-scale_x, scale_y);
+  impl->sprite.get_scale(scale_x, scale_y);
+  impl->sprite.set_scale(-scale_x, scale_y);
 }
 
-ObjMapObject*
-ObjMapSpriteObject::duplicate(int handle_)
+ObjMapObject
+ObjMapSpriteObject::to_object()
 {
-  return new ObjMapSpriteObject(handle_, *this);
+  return ObjMapObject(SharedPtr<ObjMapObjectImpl>(impl));
 }
 
 /* EOF */

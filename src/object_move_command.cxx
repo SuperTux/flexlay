@@ -32,7 +32,7 @@ public:
   struct Obj {
     CL_Point old_pos;
     CL_Point new_pos;
-    int id;
+    ObjMapObject obj;
   };
   
   typedef std::vector<Obj> Objects;
@@ -62,26 +62,17 @@ ObjectMoveCommandImpl::execute()
       i != objects.end();
       ++i)
     {
-      ObjMapObject* obj = objmap.get_object(i->id);
-      if (obj) 
-        {
-          i->new_pos = obj->get_pos();
-        }
+      i->new_pos = i->obj.get_pos();
     }
 }
 
 void
-ObjectMoveCommand::add_obj(int id)
+ObjectMoveCommand::add_obj(const ObjMapObject& obj)
 {
-  ObjMapObject* obj = impl->objmap.get_object(id);
-
-  if (obj)
-    {
-      ObjectMoveCommandImpl::Obj o;
-      o.id      = id;
-      o.old_pos = obj->get_pos();
-      impl->objects.push_back(o);
-    }
+  ObjectMoveCommandImpl::Obj o;
+  o.obj     = obj;
+  o.old_pos = obj.get_pos();
+  impl->objects.push_back(o);
 }
 
 void
@@ -91,11 +82,7 @@ ObjectMoveCommandImpl::redo()
       i != objects.end();
       ++i)
     {
-      ObjMapObject* obj = objmap.get_object(i->id);
-      if (obj)
-        {
-          obj->set_pos(i->new_pos);
-        }
+      i->obj.set_pos(i->new_pos);
     }  
 }
 
@@ -106,11 +93,7 @@ ObjectMoveCommandImpl::undo()
       i != objects.end();
       ++i)
     {
-      ObjMapObject* obj = objmap.get_object(i->id);
-      if (obj)
-        {
-          obj->set_pos(i->old_pos);
-        }
+      i->obj.set_pos(i->old_pos);
     }
 }
 

@@ -20,10 +20,10 @@
 #ifndef HEADER_OBJECT_ADD_COMMAND_HXX
 #define HEADER_OBJECT_ADD_COMMAND_HXX
 
+#include "objmap_object.hxx"
 #include "command.hxx"
 
 class ObjectLayer;
-class ObjMapObject;
 class ObjectAddCommandImpl;
 
 /** ObjectAddCommand adds on object to an ObjectLayer, the user needs
@@ -33,10 +33,12 @@ class ObjectAddCommandImpl;
 class ObjectAddCommand
 {
 public:
-  ObjectAddCommand(const ObjectLayer& o, ObjMapObject* ob);
+  ObjectAddCommand(const ObjectLayer& layer);
   virtual ~ObjectAddCommand();
 
-  int get_handle() const;
+  void add_object(const ObjMapObject& obj);
+
+  //int get_handle() const;
 
   Command to_command();
 

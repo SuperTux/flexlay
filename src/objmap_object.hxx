@@ -24,31 +24,32 @@
 #include <ClanLib/Core/Math/rect.h>
 #include "meta_data.hxx"
 
+class ObjMapObjectImpl;
+
 /** */
 class ObjMapObject
 {
-private:
-  int       handle;
-
-protected:
-  CL_Point  pos;
-  MetaData  data;
-
 public:
-  ObjMapObject(int handle_, const CL_Point& pos, const MetaData& data);
-  ObjMapObject(int handle_, const ObjMapObject& obj);
+  ObjMapObject();
+  ObjMapObject(const SharedPtr<ObjMapObjectImpl>& impl_);
+  ObjMapObject(const CL_Point& pos, const MetaData& data);
   virtual ~ObjMapObject() {}
 
-  CL_Point get_pos() const { return pos; }
-  void     set_pos(const CL_Point& p) { pos = p; }
+  CL_Point get_pos() const;
+  void     set_pos(const CL_Point& p);
 
-  MetaData get_data() const { return data; }
+  MetaData get_data() const;
 
-  virtual void draw() =0;
-  virtual CL_Rect get_bound_rect() const  =0;
-  virtual ObjMapObject*  duplicate(int handle_) =0;
+  int get_handle() const;
 
-  int get_handle() const { return handle; }
+  void draw();
+  CL_Rect get_bound_rect() const;
+
+  bool is_null() const;
+
+  bool operator==(const ObjMapObject& obj) const;
+private:
+  SharedPtr<ObjMapObjectImpl> impl;
 };
 
 #endif

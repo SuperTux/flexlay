@@ -22,6 +22,18 @@ from sexpr   import *
 import ConfigParser
 import os
 
+game_objects = [["money", "images/shared/jumpy-left-middle-0.png"],
+                ["snowball", "images/shared/snowball-left-0.png"],
+                ["mriceblock", "images/shared/mriceblock-left-0.png"],
+                ["mrbomb", "images/shared/mrbomb-left-0.png"],
+                ["flame", "images/shared/flame-0.png"], 
+                ["stalactite", "images/shared/stalactite.png"],
+                ["fish", "images/shared/fish-left-0.png"],
+                ["flyingsnowball", "images/shared/flyingsnowball-left-0.png"],
+                ["bouncingsnowball", "images/shared/bouncingsnowball-left-0.png"],
+                ["spiky", "images/shared/spiky-left-0.png"],
+                ["resetpoint", "images/shared/resetpoint.png"]]
+
 class Config:
     config = None
     datadir = None
@@ -125,8 +137,22 @@ class SuperTuxLevel:
             self.background  = TilemapLayer(supertux_tileset, self.width, self.height)
             self.background.set_data(get_value_from_tree(["background-tm"], data, []))
 
-            self.objects = ObjectLayer()
+            def find(lst, obj):
+                for i in lst:
+                    if i[0] == obj:
+                        return i
+                return None
             
+            self.objects = ObjectLayer()
+            for i in get_value_from_tree(["objects"], data, []):
+                type = i[0]
+                x = get_value_from_tree(["x", "_"], i[1:], [])
+                y = get_value_from_tree(["y", "_"], i[1:], [])
+                print "Got: ", type, x, y
+                object = find(game_objects, type)
+                ObjectBrush(make_sprite(config.datadir + object[1]),
+                            make_metadata(object[0])).add_to_layer(self.objects, CL_Point(x, y))
+           
         else:
             raise "Wrong arguments for SuperTux::___init__"
 
@@ -169,6 +195,13 @@ class SuperTuxLevel:
         for i in self.foreground.get_data():
             f.write("%d " % i)
         f.write("  )\n\n")
+
+        f.write("  (objects\n")
+        for (obj, data) in []:
+            pos = obj.get_pos()
+            f.write("     (%s (x %d) (y %d))" % (data, pos.x, pos.y))
+        f.write("  )\n\n")
+        
         f.write(" )\n\n;; EOF ;;\n")
 
         # objects = None
@@ -240,16 +273,9 @@ class SuperTuxGUI:
 
         self.objectselector = ObjectSelector(CL_Rect(0, 0, 128, 256), 42, 42, self.selector_window)
         self.objectselector.show(True)
-        self.objectselector.add_brush(ObjectBrush(make_sprite("../data/images/tools/stock-tool-pencil-22.png"),
-                                                  make_metadata(None)))
-        self.objectselector.add_brush(ObjectBrush(make_sprite("../data/images/tools/stock-tool-pencil-22.png"),
-                                                  make_metadata(None)))
-        self.objectselector.add_brush(ObjectBrush(make_sprite("../data/images/tools/stock-tool-pencil-22.png"),
-                                                  make_metadata(None)))        
-        self.objectselector.add_brush(ObjectBrush(make_sprite("../data/images/tools/stock-tool-pencil-22.png"),
-                                                  make_metadata(None)))
-        self.objectselector.add_brush(ObjectBrush(make_sprite("../data/images/tools/stock-tool-pencil-22.png"),
-                                                  make_metadata(None)))
+        for object in game_objects:
+            self.objectselector.add_brush(ObjectBrush(make_sprite(config.datadir + object[1]),
+                                                      make_metadata(object[0])))
 
     def show_objects(self):
         self.tileselector.show(False)        
@@ -295,9 +321,21 @@ objmap_select_tool  = ObjMapSelectTool()
 
 workspace.set_tool(tilemap_paint_tool.to_tool());
 
+def on_map_change():
+    if (workspace.get_map().undo_stack_size() > 0):
+        undo_icon.enable()
+    else:
+        undo_icon.disable()
+
+    if (workspace.get_map().redo_stack_size() > 0):
+        redo_icon.enable()
+    else:
+        redo_icon.disable()        
+
 startlevel = SuperTuxLevel(100, 50)
 # startlevel = netpanzer.Level(256, 256)
 startlevel.activate(workspace)
+connect(startlevel.editormap.sig_change(), on_map_change)
 
 button_panel = Panel(CL_Rect(CL_Point(0, 23), CL_Size(800, 33)), gui.get_component())
 
@@ -360,8 +398,8 @@ undo_icon = Icon(CL_Rect(CL_Point(p.inc(48), 2), CL_Size(32, 32)),
 redo_icon = Icon(CL_Rect(CL_Point(p.inc(32), 2), CL_Size(32, 32)),
                  make_sprite("../data/images/icons24/stock_redo.png"), "Some tooltip", button_panel);
 
-undo_icon.set_callback(editor.undo)
-redo_icon.set_callback(editor.redo)
+undo_icon.set_callback(lambda: workspace.get_map().undo())
+redo_icon.set_callback(lambda: workspace.get_map().redo())
 
 undo_icon.disable()
 redo_icon.disable()
@@ -380,17 +418,6 @@ eye_icon         = Icon(CL_Rect(CL_Point(p.inc(32), 2), CL_Size(32, 32)),
                         make_sprite("../data/images/icons24/eye.png"), "Some tooltip", button_panel);
 
 layer_menu = Menu(CL_Point(32*11+2, 54), gui.get_component())
-
-def on_map_change():
-    if (workspace.get_map().undo_stack_size() > 0):
-        undo_icon.enable()
-    else:
-        undo_icon.disable()
-
-    if (workspace.get_map().redo_stack_size() > 0):
-        redo_icon.enable()
-    else:
-        redo_icon.disable()        
 
 def set_tilemap_paint_tool():
     workspace.set_tool(tilemap_paint_tool.to_tool())

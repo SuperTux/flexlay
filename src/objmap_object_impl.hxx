@@ -1,6 +1,6 @@
 //  $Id$
 // 
-//  Flexlay - A Generic 2D Game Editor
+//  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
 //
 //  This program is free software; you can redistribute it and/or
@@ -17,28 +17,24 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-#ifndef HEADER_OBJECT_BRUSH_HXX
-#define HEADER_OBJECT_BRUSH_HXX
+#ifndef HEADER_OBJMAP_OBJECT_IMPL_HXX
+#define HEADER_OBJMAP_OBJECT_IMPL_HXX
 
-#include <ClanLib/Display/sprite.h>
-#include "object_layer.hxx"
-#include "objmap_object.hxx"
+#include <ClanLib/Core/Math/point.h>
+#include <ClanLib/Core/Math/rect.h>
 #include "meta_data.hxx"
 
-class ObjectBrushImpl;
-
-class ObjectBrush
+class ObjMapObjectImpl 
 {
 public:
-  ObjectBrush();
-  ObjectBrush(const CL_Sprite& sprite_,
-              const MetaData& data_);
+  CL_Point  pos;
+  MetaData  data;
 
-  CL_Sprite get_sprite();
+  ObjMapObjectImpl();
+  virtual ~ObjMapObjectImpl();
 
-  ObjMapObject add_to_layer(ObjectLayer layer, const CL_Point& pos);
-private:
-  SharedPtr<ObjectBrushImpl> impl;
+  virtual void draw() =0;
+  virtual CL_Rect get_bound_rect() const  =0;
 };
 
 #endif

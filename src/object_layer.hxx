@@ -26,9 +26,9 @@
 #include <ClanLib/Core/Math/point.h>
 #include "meta_data.hxx"
 #include "layer.hxx"
+#include "objmap_object.hxx"
 #include "shared_ptr.hxx"
 
-class ObjMapObject;
 class ObjectLayerImpl;
 
 /** The ObjectLayer provides a simple Layer for holding positioned
@@ -38,7 +38,7 @@ class ObjectLayer
 {
 public:
   typedef ObjMapObject Obj;
-  typedef std::vector<ObjMapObject*> Objs;
+  typedef std::vector<ObjMapObject> Objs;
 
   static ObjectLayer current_;
 
@@ -48,18 +48,12 @@ public:
   ObjectLayer();
   ~ObjectLayer();
 
-  /** Add an object to the map and return a handle to it */
-  int  add_object(const CL_Sprite& sprite, const CL_Point& pos, const MetaData& data);
+  void add_object(const ObjMapObject& obj);
+  void delete_object(const ObjMapObject& obj);
 
-  void add_object(ObjMapObject* obj);
-  void delete_object(int id);
-  int  duplicate_object(int id);
-
-  ObjMapObject* find_object(const CL_Point& pos);
-  std::vector<ObjMapObject*> get_selection(const CL_Rect& rect);
-  Objs* get_objects();
-  ObjectLayer::Obj* get_object(int id);
-  int get_next_object_handle();
+  ObjMapObject find_object(const CL_Point& pos);
+  std::vector<ObjMapObject> get_selection(const CL_Rect& rect);
+  Objs get_objects();
 
   Layer to_layer();
 

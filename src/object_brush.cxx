@@ -17,7 +17,19 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
+#include "objmap_sprite_object.hxx"
+#include "object_add_command.hxx"
+#include "objmap_sprite_object.hxx"
 #include "object_brush.hxx"
+#include "editor_map.hxx"
+#include "workspace.hxx"
+
+class ObjectBrushImpl
+{
+public:
+  CL_Sprite sprite;
+  MetaData  data;
+};
 
 ObjectBrush::ObjectBrush()
 {
@@ -26,8 +38,26 @@ ObjectBrush::ObjectBrush()
 
 ObjectBrush::ObjectBrush(const CL_Sprite& sprite_,
                          const MetaData& data_)
-  : sprite(sprite_), data(data_)
+  : impl(new ObjectBrushImpl())
 {
+  impl->sprite = sprite_;
+  impl->data   = data_;
+}
+
+CL_Sprite
+ObjectBrush::get_sprite()
+{
+  return impl->sprite;
+}
+
+ObjMapObject
+ObjectBrush::add_to_layer(ObjectLayer layer, const CL_Point& pos)
+{
+  ObjMapSpriteObject obj(pos, impl->data, impl->sprite);
+  ObjectAddCommand command(layer);
+  command.add_object(obj.to_object());
+  Workspace::current().get_map().execute(command.to_command());
+  return obj.to_object();
 }
 
 /* EOF */

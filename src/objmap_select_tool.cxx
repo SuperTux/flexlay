@@ -102,8 +102,8 @@ ObjMapSelectToolImpl::draw()
 {
   for (ObjMapSelectTool::Selection::iterator i = selection.begin(); i != selection.end(); ++i)
     {
-      (*i)->draw();
-      CL_Display::draw_rect((*i)->get_bound_rect(), CL_Color(255, 0, 0));
+      (*i).draw();
+      CL_Display::draw_rect((*i).get_bound_rect(), CL_Color(255, 0, 0));
     }
 
   switch(state)
@@ -182,9 +182,9 @@ ObjMapSelectToolImpl::on_mouse_down(const CL_InputEvent& event)
       switch(state)
         {
         default:
-          ObjectLayer::Obj* obj = objmap.find_object(pos);
+          ObjectLayer::Obj obj = objmap.find_object(pos);
           
-          if (obj)
+          if (!obj.is_null())
             {
               if (CL_Keyboard::get_keycode(CL_KEY_LSHIFT))
                 {
@@ -199,7 +199,7 @@ ObjMapSelectToolImpl::on_mouse_down(const CL_InputEvent& event)
                 {
                   state = DRAG;
                   parent->capture_mouse();
-                  offset = pos - obj->get_pos();
+                  offset = pos - obj.get_pos();
                   drag_start = pos;
 
                   if (std::find(selection.begin(), selection.end(), obj) == selection.end())
@@ -212,7 +212,7 @@ ObjMapSelectToolImpl::on_mouse_down(const CL_InputEvent& event)
                   for (ObjMapSelectTool::Selection::iterator i = selection.begin();
                        i != selection.end(); ++i)
                     {
-                      move_command->add_obj((*i)->get_handle());
+                      move_command->add_obj(*i);
                     }
                 }
             }
@@ -243,7 +243,7 @@ ObjMapSelectToolImpl::on_mouse_move(const CL_InputEvent& event)
       for (ObjMapSelectTool::Selection::iterator i = selection.begin(); 
            i != selection.end(); ++i)
         {
-          (*i)->set_pos((*i)->get_pos() + (pos - drag_start));
+          (*i).set_pos((*i).get_pos() + (pos - drag_start));
         }
       drag_start = pos;
       break;

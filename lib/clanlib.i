@@ -21,6 +21,16 @@ public:
 	int height;
 };
 
+class CL_Pointf
+{
+public:
+	CL_Pointf(float x, float y)
+		: x(x), y(y) { }
+	float x;
+	float y;
+};
+
+
 class CL_Point
 {
 public:

@@ -17,26 +17,42 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-#ifndef HEADER_RUBY_META_DATA_HXX
-#define HEADER_RUBY_META_DATA_HXX
+#ifndef HEADER_COLORPICKER_HXX
+#define HEADER_COLORPICKER_HXX
 
-#include <ClanLib/signals.h>
+#include <ClanLib/Display/display.h>
 #include <ClanLib/Display/color.h>
-#include "ruby.h"
-#include "meta_data.hxx"
-#include "objmap_object.hxx"
-#include "object_brush.hxx"
+#include <ClanLib/Display/gradient.h>
 
-MetaData  make_metadata(VALUE obj);
-VALUE get_ruby_object(const MetaData& data);
+class ColorPickerColors;
+class ColorPickerAlpha;
+class ColorPickerBrightness;
 
-void connect(CL_Signal_v0& sig, VALUE obj);
-void connect_v1(CL_Signal_v1<int>& sig, VALUE obj);
-void connect_v2(CL_Signal_v2<int, int>& sig, VALUE obj);
+/** */
+class ColorPicker : public CL_Component
+{
+protected:
+  ~ColorPicker() {}
+private:
+  CL_Signal_v1<CL_Color> on_color_change;
+  std::vector<CL_Slot> slots;
+  CL_Color color;
 
-void connect_v1_Color(CL_Signal_v1<CL_Color>& sig, VALUE func);
-void connect_v1_ObjMapObject(CL_Signal_v1<ObjMapObject>& sig, VALUE func);
-void connect_v2_ObjectBrush_Point(CL_Signal_v2<ObjectBrush, CL_Point>& sig, VALUE func);
+  ColorPickerColors*     colors;
+  ColorPickerBrightness* brightness;
+  ColorPickerAlpha*      alpha;
+
+  void update_brightness_color(CL_Color color);
+public:
+  ColorPicker(const CL_Rect& rect, CL_Component* parent);
+  
+  void draw();
+
+  CL_Signal_v1<CL_Color>& sig_color_change();
+
+  CL_Color get_color();
+  void set_color(const CL_Color& color);
+};
 
 #endif
 

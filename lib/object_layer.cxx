@@ -75,8 +75,7 @@ ObjectLayer::find_control_point(const CL_Pointf& click_pos)
     {
       CL_Rect rect = (*i).get_bound_rect();
      
-      if (rect.is_inside(CL_Point(static_cast<int>(click_pos.x),
-                                  static_cast<int>(click_pos.y))))
+      if (rect.is_inside(CL_Point(click_pos)))
         return *i;
     }
   return ObjMapControlPoint(); 
@@ -89,8 +88,7 @@ ObjectLayer::find_object(const CL_Pointf& click_pos)
     {
       CL_Rect rect = (*i).get_bound_rect();
      
-      if (rect.is_inside(CL_Point(static_cast<int>(click_pos.x),
-                                  static_cast<int>(click_pos.y))))
+      if (rect.is_inside(CL_Point(click_pos)))
         return *i;
     }
   return ObjMapObject();

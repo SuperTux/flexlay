@@ -57,6 +57,7 @@ flexlay_lib = libflexlay_env.SharedLibrary(
     'command_group.cxx',
     'command.cxx',
     'console.cxx',
+    'colorpicker.cxx',
     'editor.cxx',
     'editor_map.cxx',
     'editor_map_component.cxx',

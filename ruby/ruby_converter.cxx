@@ -27,6 +27,7 @@ VALUE ObjMapObject2Value(const ObjMapObject& arg);
 VALUE ObjectBrush2Value(const ObjectBrush& arg);
 VALUE CL_Point2Value(const CL_Point& arg);
 VALUE CL_Pointf2Value(const CL_Pointf& arg);
+VALUE CL_Color2Value(const CL_Color& arg);
 
 template<>
 VALUE convert_to_ruby_value<ObjMapObject>(const ObjMapObject& arg)
@@ -38,6 +39,12 @@ template<>
 VALUE convert_to_ruby_value<ObjectBrush>(const ObjectBrush& arg)
 {
   return ObjectBrush2Value(arg);
+}
+
+template<>
+VALUE convert_to_ruby_value<CL_Color>(const CL_Color& arg)
+{
+  return CL_Color2Value(arg);
 }
 
 template<>

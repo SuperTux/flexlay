@@ -63,6 +63,12 @@ void connect_v2(CL_Signal_v2<int, int>& sig, VALUE obj)
   new CL_Slot(sig.connect_functor(RubyFunctor(obj)));
 }
 
+void connect_v1_Color(CL_Signal_v1<CL_Color>& sig, VALUE func)
+{
+  sig = CL_Signal_v1<CL_Color>();
+  new CL_Slot(sig.connect_functor(RubyFunctor(func)));
+}
+
 void connect_v1_ObjMapObject(CL_Signal_v1<ObjMapObject>& sig, VALUE func)
 {
   sig = CL_Signal_v1<ObjMapObject>();

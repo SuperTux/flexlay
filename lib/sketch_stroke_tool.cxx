@@ -47,11 +47,7 @@ public:
         Stroke::Points::iterator last = stroke.points.begin();
         for(Stroke::Points::iterator j = stroke.points.begin()+1; j != stroke.points.end(); ++j)
           {
-            CL_Display::draw_line(static_cast<int>(last->x),
-                                  static_cast<int>(last->y), 
-                                  static_cast<int>(j->x),
-                                  static_cast<int>(j->y),
-                                  stroke.color);
+            CL_Display::draw_line(*last, *j, stroke.color);
             last = j;
           }
         glLineWidth(1.0);
@@ -63,12 +59,12 @@ public:
     if (event.id == CL_MOUSE_LEFT && drawing)
       {
         drawing = false;
-
         EditorMapComponent* parent = EditorMapComponent::current();
+        parent->release_mouse();
+        
         CL_Pointf p = parent->screen2world(event.mouse_pos);
         stroke.add_point(p.x, p.y);
         // add to map
-        stroke.set_color(color);
         SketchLayer::current()->add_stroke(stroke);
         stroke = Stroke();
       }    
@@ -78,9 +74,10 @@ public:
     if (event.id == CL_MOUSE_LEFT)
       {
         drawing = true;
-        
-        stroke = Stroke();
         EditorMapComponent* parent = EditorMapComponent::current();
+        parent->capture_mouse();
+        stroke = Stroke();
+        stroke.set_color(color);
         CL_Pointf p = parent->screen2world(event.mouse_pos);
         stroke.add_point(p.x, p.y);
       }
@@ -100,6 +97,12 @@ public:
 SketchStrokeTool::SketchStrokeTool()
   : impl(new SketchStrokeToolImpl()) 
 {
+}
+
+void 
+SketchStrokeTool::set_color(CL_Color color)
+{
+  impl->color = color;
 }
 
 Tool

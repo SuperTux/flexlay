@@ -43,11 +43,7 @@ public:
             for(Stroke::Points::iterator j = i->points.begin()+1; j != i->points.end(); ++j)
               {
                 //std::cout << *last << " -> " << *j << std::endl;
-                CL_Display::draw_line(static_cast<int>(last->x),
-                                      static_cast<int>(last->y), 
-                                      static_cast<int>(j->x),
-                                      static_cast<int>(j->y),
-                                      i->color);
+                CL_Display::draw_line(*last, *j, i->color);
                 last = j;
               }
           }

@@ -222,8 +222,7 @@ ObjMapRectObjectImpl::draw()
 CL_Rect
 ObjMapRectObjectImpl::get_bound_rect() const
 {
-  return CL_Rect(CL_Point(static_cast<int>(pos.x),
-                          static_cast<int>(pos.y)), 
+  return CL_Rect(CL_Point(pos),
                  CL_Size(static_cast<int>(size.width),
                          static_cast<int>(size.height)));
 }

@@ -64,8 +64,7 @@ ObjMapSpriteObjectImpl::get_bound_rect() const
                                                   sprite.get_height()));
   align.x = -align.x;
       
-  return CL_Rect(CL_Point(static_cast<int>(pos.x),
-                          static_cast<int>(pos.y)) - origin - align,
+  return CL_Rect(CL_Point(pos) - origin - align,
                  CL_Size(sprite.get_width(), sprite.get_height()));
 }
 

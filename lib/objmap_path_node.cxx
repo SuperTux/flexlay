@@ -42,8 +42,7 @@ ObjMapPathNodeImpl::ObjMapPathNodeImpl()
 void
 ObjMapPathNodeImpl::draw()
 {
-  CL_Display::fill_rect(CL_Rect(CL_Point(static_cast<int>(pos.x),
-                                         static_cast<int>(pos.y)) - CL_Point(16,16), CL_Size(32, 32)), 
+  CL_Display::fill_rect(CL_Rect(CL_Point(pos) - CL_Point(16,16), CL_Size(32, 32)), 
                         CL_Color(200, 255, 200));
   if (next)
     {
@@ -63,9 +62,7 @@ ObjMapPathNodeImpl::draw()
 CL_Rect
 ObjMapPathNodeImpl::get_bound_rect() const
 {
-  return CL_Rect(CL_Point(static_cast<int>(pos.x),
-                          static_cast<int>(pos.y))
-                 - CL_Point(16,16), CL_Size(32, 32));
+  return CL_Rect(CL_Point(pos) - CL_Point(16,16), CL_Size(32, 32));
 }
 
 ObjMapPathNode::ObjMapPathNode(const CL_Pointf& pos_, 

@@ -59,7 +59,7 @@ def create_gameobject(objmap, data, pos, sexpr = [])
     obj.to_object.set_metadata(make_metadata(data[3].call(obj)))
     
   when "rect"
-    obj = ObjMapRectObject.new(CL_Rect.new(pos, CL_Size.new(64, 64)),
+    obj = ObjMapRectObject.new(CL_Rect.new(CL_Point.new(pos.x.to_i, pos.y.to_i), CL_Size.new(64, 64)),
                                CL_Color.new(0, 0, 255, 128), make_metadata(nil))
     obj.to_object.set_metadata(make_metadata(data[3].call(obj, sexpr)))
 

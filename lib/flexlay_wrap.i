@@ -41,10 +41,11 @@
 #include "menubar.hxx"
 #include "scrollbar.hxx"
 #include "graphic_context_state.hxx"
-
+ 
 #include "sketch_stroke_tool.hxx"
 #include "sketch_layer.hxx"
 
+#include "colorpicker.hxx"
 #include "tilemap_paint_tool.hxx"
 #include "tilemap_select_tool.hxx"
 #include "objmap_select_tool.hxx"
@@ -79,6 +80,13 @@ VALUE ObjectBrush2Value(const ObjectBrush& arg)
  ObjectBrush* resultptr = new ObjectBrush(arg);
  return SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_ObjectBrush, 1);
 }
+
+VALUE CL_Color2Value(const CL_Color& arg)
+{
+ CL_Color* resultptr = new CL_Color(arg);
+ return SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_CL_Color, 1);
+}
+
 
 VALUE CL_Pointf2Value(const CL_Pointf& arg)
 {
@@ -138,6 +146,7 @@ VALUE CL_Point2Value(const CL_Point& arg)
 %include "sketch_stroke_tool.hxx"
 %include "sketch_layer.hxx"
 
+%include "colorpicker.hxx"
 %include "tilemap_paint_tool.hxx"
 %include "tilemap_select_tool.hxx"
 %include "objmap_select_tool.hxx"
@@ -161,5 +170,5 @@ VALUE CL_Point2Value(const CL_Point& arg)
 %include "../ruby/ruby_meta_data.hxx"
 %include "../ruby/ruby_sexpr_parser.hxx"
 #endif
-
+ 
 /* EOF */

@@ -20,6 +20,7 @@
 #ifndef HEADER_FLEXLAY_WRAP_HXX
 #define HEADER_FLEXLAY_WRAP_HXX
 
+#include <ClanLib/Display/color.h>
 #include <iostream>
 #include <typeinfo>
 #include "ruby.h"
@@ -38,6 +39,7 @@ VALUE convert_to_ruby_value(const C& c)
 
 template<> VALUE convert_to_ruby_value<ObjMapObject>(const ObjMapObject& arg);
 template<> VALUE convert_to_ruby_value<ObjectBrush>(const ObjectBrush& arg);
+template<> VALUE convert_to_ruby_value<CL_Color>(const CL_Color& arg);
 template<> VALUE convert_to_ruby_value<int>(const int& arg);
 
 #endif

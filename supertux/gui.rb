@@ -5,8 +5,9 @@ class SuperTuxGUI
   selector_window = nil
   tileselector    = nil
   objectselector  = nil
+  colorpicker     = nil
 
-  attr_reader :tileselector, :editor_map, :workspace, :minimap, :recent_files_menu, :gui
+  attr_reader :colorpicker, :tileselector, :editor_map, :workspace, :minimap, :recent_files_menu, :gui
 
   def get_component()
     return @gui.get_component()
@@ -41,10 +42,16 @@ class SuperTuxGUI
     # connect_v1_ObjMapObject
     connect_v2_ObjectBrush_Point(@objectselector.sig_drop(), method(:on_object_drop))
 
-    $game_objects.each do |object|
+    $game_objects.each { |object|
       @objectselector.add_brush(ObjectBrush.new(make_sprite($datadir + object[1]),
                                                 make_metadata(object)))
-    end
+    }
+
+    @colorpicker = ColorPicker.new(CL_Rect.new(CL_Point.new(3, 3), CL_Size.new(128, 128)),
+                                   @selector_window)
+    connect_v1_Color(@colorpicker.sig_color_change(), proc{|color|
+                       $sketch_stroke_tool.set_color(color)
+                     })
 
     create_button_panel()
 
@@ -223,19 +230,28 @@ class SuperTuxGUI
     @gui.run()
   end
 
+  def show_colorpicker()
+    @tileselector.show(false)        
+    @objectselector.show(false)
+    @colorpicker.show(true)
+  end
+
   def show_objects()
     @tileselector.show(false)        
     @objectselector.show(true)
+    @colorpicker.show(false)
   end
 
   def show_tiles()
     @tileselector.show(true)        
     @objectselector.show(false)
+    @colorpicker.show(false)
   end
 
   def show_none()
     @tileselector.show(false)        
     @objectselector.show(false)
+    @colorpicker.show(false)
   end
 
   def set_tilemap_paint_tool()
@@ -271,7 +287,7 @@ class SuperTuxGUI
     @select.set_up()
     @zoom.set_up()
     @object.set_down()
-    show_none()
+    show_colorpicker()
   end
 
   def set_objmap_select_tool()

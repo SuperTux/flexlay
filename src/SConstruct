@@ -93,6 +93,7 @@ env.SharedLibrary(
     'paint_command.cxx',
     'panel.cxx',
     'menu.cxx',
+    'menubar.cxx',
     'popup_menu.cxx',
     'lispreader.cxx',
     'tile.cxx',

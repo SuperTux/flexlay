@@ -135,6 +135,12 @@ mymenu.add_item("Foobar")
 mymenu.add_item("blub")
 mymenu.add_item("bla")
 
+def show_menu():
+    mymenu.run()
+    
+_button = CL_Button(CL_Rect(100, 100, 200, 125), "Hello World", gui.get_component())
+connect(_button.sig_clicked(), show_menu)
+
 minimap_panel = Panel(CL_Rect(CL_Point(0, 600-56), CL_Size(800-134, 56)), gui.get_component())
 minimap = Minimap(editor_map, CL_Rect(CL_Point(3, 3), CL_Size(794-134, 50)), minimap_panel)
 

@@ -45,7 +45,7 @@ public:
   }
 
   int get_width()  { return 10; }
-  int get_height() { return 4; }
+  int get_height() { return 2; }
 };
 
 class TextMenuItem : public MenuItem
@@ -103,6 +103,8 @@ Menu::Menu(const CL_Point& pos, CL_Component* parent)
   impl->slots.push_back(sig_paint().connect(impl.get(), &MenuImpl::draw));
   impl->slots.push_back(sig_mouse_move().connect(impl.get(), &MenuImpl::on_mouse_move));
   impl->slots.push_back(sig_mouse_down().connect(impl.get(), &MenuImpl::on_mouse_down));
+
+  show(false);
 }
 
 MenuItemHandle
@@ -178,6 +180,9 @@ void
 MenuImpl::on_mouse_down(const CL_InputEvent& event)
 {
   std::cout << "Click on item: " << current_item << std::endl;
+
+  parent->release_mouse();
+  parent->show(false);
 }
 
 void
@@ -195,6 +200,14 @@ MenuImpl::on_mouse_move(const CL_InputEvent& event)
         }
     }
   current_item = -1;
+}
+
+void
+Menu::run()
+{
+  show(true);
+  capture_mouse();
+  raise();
 }
 
 /* EOF */

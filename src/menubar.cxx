@@ -1,5 +1,5 @@
 //  $Id$
-// 
+//
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
 //
@@ -12,38 +12,42 @@
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
-// 
+//
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-#ifndef HEADER_MENU_HXX
-#define HEADER_MENU_HXX
+#include "menu.hxx"
+#include "menubar.hxx"
 
-#include <string>
-#include <ClanLib/GUI/component.h>
-#include <ClanLib/Core/Math/rect.h>
-#include "shared_ptr.hxx"
-
-class MenuImpl;
-
-typedef int MenuItemHandle;
-
-/** */
-class Menu : public CL_Component
+class MenubarItem
 {
 public:
-  Menu(const CL_Point& pos, CL_Component* parent);
+  MenubarItem(const std::string& name_, const Menu& menu_)
+    : name(name_), menu(menu_){}
 
-  MenuItemHandle add_item(const std::string& name);
-  MenuItemHandle add_submenu(const std::string& name, const Menu& submenu);
-  MenuItemHandle add_seperator();
-
-  void run();
-private:
-  SharedPtr<MenuImpl> impl;
+  std::string name;
+  Menu menu;
 };
 
-#endif
+class MenubarImpl
+{
+public:
+  typedef std::vector<MenubarItem> Items;
+  Items items;
+};
+
+Menubar::Menubar(const CL_Point& pos, CL_Component* parent)
+  : CL_Component(CL_Rect(pos, CL_Size(1, 1)), parent),
+    impl(new MenubarImpl())
+{
+  
+}
+
+void
+Menubar::add_submenu(const std::string& name, const Menu& menu)
+{
+  impl->items.push_back(MenubarItem(name, menu));
+}
 
 /* EOF */

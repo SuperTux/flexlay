@@ -17,31 +17,25 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-#ifndef HEADER_MENU_HXX
-#define HEADER_MENU_HXX
+#ifndef HEADER_MENUBAR_HXX
+#define HEADER_MENUBAR_HXX
 
-#include <string>
 #include <ClanLib/GUI/component.h>
 #include <ClanLib/Core/Math/rect.h>
 #include "shared_ptr.hxx"
 
-class MenuImpl;
-
-typedef int MenuItemHandle;
+class Menu;
+class MenubarImpl;
 
 /** */
-class Menu : public CL_Component
+class Menubar : public CL_Component
 {
 public:
-  Menu(const CL_Point& pos, CL_Component* parent);
+  Menubar(const CL_Point& pos, CL_Component* parent);
 
-  MenuItemHandle add_item(const std::string& name);
-  MenuItemHandle add_submenu(const std::string& name, const Menu& submenu);
-  MenuItemHandle add_seperator();
-
-  void run();
+  void add_submenu(const std::string& name, const Menu& menu);
 private:
-  SharedPtr<MenuImpl> impl;
+  SharedPtr<MenubarImpl> impl;
 };
 
 #endif

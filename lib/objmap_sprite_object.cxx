@@ -108,6 +108,12 @@ ObjMapSpriteObject::flip_horizontal()
 }
 
 void
+ObjMapSpriteObject::set_sprite(const CL_Sprite& sprite)
+{
+  impl->sprite = sprite;
+}
+
+void
 ObjMapSpriteObject::set_rotate(float angle)
 {
   impl->sprite.set_angle(angle);

@@ -241,10 +241,6 @@ class Sector
     end
     f.write("    (gravity %f)\n" % @gravity)
     
-    # FIXME: Make me configurable
-    f.write("    (background (image \"arctis.jpg\")\n" +
-            "                (speed 0.5))\n")
-   
     save_tilemap(f, @background,  "background")
     save_tilemap(f, @interactive, "interactive", :solid)
     save_tilemap(f, @foreground,  "foreground")

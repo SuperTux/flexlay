@@ -40,6 +40,7 @@ public:
   void set_rotate(float angle);
   void flip_horizontal();
   void flip_vertical();
+  void set_sprite(const CL_Sprite& s);
   
   ObjMapObject to_object();
 private:

@@ -10,23 +10,15 @@ class Level:
     
     name   = "no name"
     author = "no author"
-    width  = 200
-    height = 100
-    gravity = 10
     theme = "antarctica"
     time = 999
     music = "Mortimers_chipdisko.mod"
-
-    foreground  = None
-    interactive = None
-    background  = None
     
     objects = None
     camera  = None
 
-    sectiors = None
-
-    editormap = None
+    sectors = None
+    current_sector = None
 
     def __init__(self, *params):
         if len(params) == 2:
@@ -39,19 +31,10 @@ class Level:
             self.width  = width
             self.height = height
 
-            self.foreground  = TilemapLayer(tileset, self.width, self.height)
-            self.interactive = TilemapLayer(tileset, self.width, self.height)
-            self.background  = TilemapLayer(tileset, self.width, self.height)
-            self.objects = ObjectLayer()
-
-            self.editormap = EditorMap()
-            self.editormap.add_layer(self.background.to_layer())
-            self.editormap.add_layer(self.interactive.to_layer())
-            self.editormap.add_layer(self.objects.to_layer())
-            self.editormap.add_layer(self.foreground.to_layer())
-            
-            # FIXME: Data might not get freed since its 'recursively' refcounted
-            self.editormap.set_metadata(make_metadata(self))
+            self.current_sector = Sector(self)
+            self.current_sector.new(width, height)
+            self.sectors = []
+            self.sectors.append(self.current_sector)
             
         elif len(params) == 1:
             # Load Level from file
@@ -79,67 +62,26 @@ class Level:
         
         self.sectors = []
         for sec in sexpr_filter("sector", data):
-            sector = Sector(self, sec)
+            sector = Sector(self)
+            sector.load_v2(sec)
             self.sectors.append(sector)
-            self.interactive = sector.tilemap
-            self.background  = sector.tilemap
-            self.foreground  = sector.tilemap
-            self.objects     = sector.objects
-
-        self.editormap = EditorMap()
-        self.editormap.add_layer(self.interactive.to_layer())
-        self.editormap.add_layer(self.objects.to_layer())
-        # FIXME: Data might not get freed since its 'recursively' refcounted
-        self.editormap.set_metadata(make_metadata(self))
+            if sector.name == "main":
+                self.current_sector = sector
+                
+        if self.current_sector == None:
+            print "Error: No main sector defined: ", sectors
 
     def parse_v1(self, data):
+        sector = Sector(self)
+        sector.load_v1(data)
+        
+        self.sectors = []
+        self.sectors.append(sector)
+        self.current_sector = sector
+        
         self.name    = get_value_from_tree(["name", "_"], data, "no name")
         self.author  = get_value_from_tree(["author", "_"], data, "no author")
-        self.time    = int(get_value_from_tree(["time", "_"], data, "999"))
-        
-        self.width  = get_value_from_tree(["width", "_"], data, 20)
-        self.height = get_value_from_tree(["height""_"], data, 15)
-        
-        self.foreground  = TilemapLayer(tileset, self.width, self.height)
-        self.foreground.set_data(get_value_from_tree(["foreground-tm"], data, []))
-        
-        self.interactive = TilemapLayer(tileset, self.width, self.height)
-        self.interactive.set_data(get_value_from_tree(["interactive-tm"], data, []))
-        
-        self.background  = TilemapLayer(tileset, self.width, self.height)
-        self.background.set_data(get_value_from_tree(["background-tm"], data, []))
-
-        def find(lst, obj):
-            for i in lst:
-                if i[0] == obj:
-                    return i
-            return None
-            
-        self.objects = ObjectLayer()
-        for i in get_value_from_tree(["objects"], data, []):
-            type = i[0]
-            x = get_value_from_tree(["x", "_"], i[1:], [])
-            y = get_value_from_tree(["y", "_"], i[1:], [])
-            object = find(game_objects, type)
-            self.objects.add_object(ObjMapSpriteObject(make_sprite(config.datadir + object[1]),
-                                                       CL_Point(x, y),
-                                                       make_metadata(BadGuy(object[0]))).to_object())
-                
-        for i in get_value_from_tree(["reset-points"], data, []):
-            type = i[0]
-            x = get_value_from_tree(["x", "_"], i[1:], [])
-            y = get_value_from_tree(["y", "_"], i[1:], [])
-            object = find(game_objects, "resetpoint")
-            self.objects.add_object(ObjMapSpriteObject(make_sprite(config.datadir + object[1]),
-                                                       CL_Point(x, y),
-                                                       make_metadata(BadGuy(object[0]))).to_object())
-        self.editormap = EditorMap()
-        self.editormap.add_layer(self.background.to_layer())
-        self.editormap.add_layer(self.interactive.to_layer())
-        self.editormap.add_layer(self.objects.to_layer())
-        self.editormap.add_layer(self.foreground.to_layer())
-        # FIXME: Data might not get freed since its 'recursively' refcounted
-        self.editormap.set_metadata(make_metadata(self))
+        self.time    = int(get_value_from_tree(["time", "_"], data, "999"))       
             
           
     def resize(self, size, pos):
@@ -277,22 +219,14 @@ class Level:
     def activate_sector(self, sector, workspace):
         for sec in self.sectors:
             if sec.name == sector:
-                workspace.set_map(sec.editormap)
-                TilemapLayer.set_current(sec.tilemap)
-                ObjectLayer.set_current(sec.objects)
+                sec.activate(workspace)
                 break
 
+    def get_sectors(self):
+        return map(lambda sec: sec.name, self.sectors)
+
     def activate(self, workspace):
-        workspace.set_map(self.editormap)
-        TilemapLayer.set_current(self.interactive)
-        ObjectLayer.set_current(self.objects)
-        #(tilemap-paint-tool-set-tilemap (supertux:interactive-tm stlv))
-        #(editor-tilemap-set-current     (supertux:interactive-tm stlv))
-        #(editor-objectmap-set-current   (supertux:objmap stlv))
-        #(set! *tilemap* (supertux:interactive-tm stlv))
-        #(set! *objmap* (supertux:objmap stlv))
-        #(tileset-set-current *level-tileset*)
-        #(tile-selector-set-tileset *tileselector* *level-tileset*))
+        self.current_sector.activate(workspace)
 
 Level.BACKGROUND  = 0
 Level.INTERACTIVE = 1

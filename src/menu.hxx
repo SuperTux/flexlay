@@ -35,6 +35,9 @@ class Menu : public CL_Component
 {
 public:
   Menu(const CL_Point& pos, CL_Component* parent);
+  virtual ~Menu();
+
+  void clear();
 
   MenuItemHandle add_item(const CL_Sprite& sprite, const std::string& name);
   MenuItemHandle add_submenu(const std::string& name, const Menu& submenu);

@@ -31,6 +31,10 @@ game_objects = [["money", "images/shared/jumpy-left-middle-0.png"],
                 ["flyingsnowball", "images/shared/flyingsnowball-left-0.png"],
                 ["bouncingsnowball", "images/shared/bouncingsnowball-left-0.png"],
                 ["spiky", "images/shared/spiky-left-0.png"],
-                ["resetpoint", "images/shared/resetpoint.png"]]
+                ["resetpoint", "images/shared/resetpoint.png"],
+                ["playerspawn", "images/shared/resetpoint.png"],
+                ["door", "images/shared/door.png"],
+                ["trampoline", "images/shared/trampoline-1.png"]
+                ]
 
 # EOF #

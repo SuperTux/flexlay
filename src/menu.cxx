@@ -136,6 +136,19 @@ Menu::Menu(const CL_Point& pos, CL_Component* parent)
   show(false);
 }
 
+Menu::~Menu()
+{
+  clear();
+}
+
+void
+Menu::clear()
+{
+  for(MenuImpl::Items::iterator i = impl->items.begin(); i != impl->items.end(); ++i)
+    delete *i;
+  impl->items.clear();
+}
+
 MenuItemHandle
 Menu::add_seperator()
 {

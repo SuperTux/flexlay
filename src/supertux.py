@@ -57,7 +57,7 @@ mysprite = make_sprite("../data/images/icons16/stock_paste-16.png")
 recent_files_menu = Menu(CL_Point(32*2, 54), gui.get_component())
 for filename in config.recent_files:
     print filename
-    fun = lambda: sys.stdout.write("bla bla: %s\n" % filename)
+    fun = lambda filename=filename: sys.stdout.write("bla bla: %s\n" % filename)
     fun()
     recent_files_menu.add_item(mysprite, filename, fun)
     #supertux_load_level(filename))
@@ -68,7 +68,6 @@ if args == []:
     startlevel = Level(100, 50)
     # startlevel = netpanzer.Level(256, 256)
     startlevel.activate(workspace)
-    connect(startlevel.editormap.sig_change(), on_map_change)
 else:
     supertux_load_level(args[0])
 
@@ -135,6 +134,11 @@ foreground_icon  = Icon(CL_Rect(CL_Point(p.inc(32), 2), CL_Size(32, 32)),
 eye_icon         = Icon(CL_Rect(CL_Point(p.inc(32), 2), CL_Size(32, 32)),
                         make_sprite("../data/images/icons24/eye.png"), "Some tooltip", button_panel);
 
+sector_icon         = Icon(CL_Rect(CL_Point(p.inc(48), 2), CL_Size(32, 32)),
+                        make_sprite("../data/images/icons24/sector.png"), "Some tooltip", button_panel);
+
+sector_icon.set_callback(lambda: gui_switch_sector_menu())
+
 layer_menu = Menu(CL_Point(32*15+2, 54), gui.get_component())
 
 toolbar = Panel(CL_Rect(CL_Point(0, 23+33), CL_Size(33, 32*4+2)), gui.get_component())
@@ -190,14 +194,6 @@ display_properties = DisplayProperties()
 
 mysprite = make_sprite("../data/images/icons16/stock_paste-16.png")
 
-mymenu = Menu(CL_Point(134, 54), gui.get_component())
-mymenu.add_item(mysprite, "Foobar aeuaeu", None)
-mymenu.add_item(mysprite, "bla", None)
-mymenu.add_seperator()
-mymenu.add_item(mysprite, "Foobar", None)
-mymenu.add_item(mysprite, "blubaoeuau aueau aeu", None)
-mymenu.add_item(mysprite, "bla", None)
-
 load_dialog = SimpleFileDialog("Load SuperTux Level", "Load", "Cancel", gui.get_component())
 load_dialog.set_filename(config.datadir + "levels/")
 save_dialog = SimpleFileDialog("Save SuperTux Level as...", "Save", "Cancel", gui.get_component())
@@ -252,8 +248,8 @@ connect_v2(editor_map.sig_on_key("6"),  lambda x, y: editor_map.zoom_out(CL_Poin
 connect_v2(editor_map.sig_on_key("i"),  lambda x, y: insert_path_node(x,y))
 connect_v2(editor_map.sig_on_key("c"),  lambda x, y: connect_path_nodes())
 
-connect_v2(editor_map.sig_on_key("7"),  lambda x, y: workspace.get_map().get_metadata().activate_sector("main", workspace))
-connect_v2(editor_map.sig_on_key("8"),  lambda x, y: workspace.get_map().get_metadata().activate_sector("another_world", workspace))
+connect_v2(editor_map.sig_on_key("7"),  lambda x, y: workspace.get_map().get_metadata().parent.activate_sector("main", workspace))
+connect_v2(editor_map.sig_on_key("8"),  lambda x, y: workspace.get_map().get_metadata().parent.activate_sector("another_world", workspace))
 
 gui.run()
 

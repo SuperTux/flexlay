@@ -51,6 +51,19 @@ build_py_sexpr(lisp_object_t* cur)
     {
       return PyFloat_FromDouble(lisp_real(cur));
     }
+  else if (lisp_boolean_p(cur))
+    {
+      if (lisp_boolean(cur))
+        {
+          Py_INCREF(Py_True);
+          return Py_True;
+        }
+      else
+        {
+          Py_INCREF(Py_False);
+          return Py_False;
+        }
+    }
   else
     {
       return Py_None;

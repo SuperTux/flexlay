@@ -186,11 +186,10 @@ def supertux_load_level(filename):
     print "Loading: ", filename
     level = Level(filename)
     level.activate(workspace)
-    connect(level.editormap.sig_change(), on_map_change)
     
     if not(has_element(config.recent_files, filename)):
         config.recent_files.append(filename)
-        recent_files_menu.add_item(mysprite, filename, lambda: supertux_load_level(filename))
+        recent_files_menu.add_item(mysprite, filename, lambda filename=filename: supertux_load_level(filename))
 
     minimap.update_minimap()
 
@@ -210,5 +209,12 @@ def menu_file_open():
 
 def supertux_save_level(filename):
     workspace.get_map().get_metadata().save(filename)
+
+def gui_switch_sector_menu():
+    mymenu = Menu(CL_Point(530, 54), gui.get_component())
+    for i in workspace.get_map().get_metadata().parent.get_sectors():
+        mymenu.add_item(mysprite, "Sector (%s)" % i,
+                        lambda i=i: workspace.get_map().get_metadata().parent.activate_sector(i, workspace))
+    mymenu.run()
 
 # EOF #

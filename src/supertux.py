@@ -97,9 +97,7 @@ class SuperTuxLevel:
     def activate(self, workspace):
         workspace.set_map(self.editormap)
         TilemapLayer.set_current(self.interactive)
-        print "ObjectLayerCurrent: ", ObjectLayer.current()
         ObjectLayer.set_current(self.objects)
-        print "ObjectLayerCurrent: ", ObjectLayer.current()
         #(tilemap-paint-tool-set-tilemap (supertux:interactive-tm stlv))
         #(editor-tilemap-set-current     (supertux:interactive-tm stlv))
         #(editor-objectmap-set-current   (supertux:objmap stlv))

@@ -18,7 +18,6 @@
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include <math.h>
-#include <iostream>
 #include <ClanLib/Display/display.h>
 #include <ClanLib/Display/pixel_buffer.h>
 #include <ClanLib/Display/pixel_format.h>
@@ -41,12 +40,8 @@ TilemapLayer TilemapLayer::current_;
 class TilemapLayerImpl : public LayerImpl
 {
 public:
-  TilemapLayerImpl() {
-    std::cout << "TilemapLayerImpl(" << this << ")" << std::endl;
-  }
-  virtual ~TilemapLayerImpl() {
-    std::cout << "~TilemapLayerImpl(" << this << ")" << std::endl;
-  }
+  TilemapLayerImpl() {}
+  virtual ~TilemapLayerImpl() {}
 
   Tileset tileset;
   CL_Color background_color;

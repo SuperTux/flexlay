@@ -55,7 +55,7 @@ public:
       @param size height of the new map */
  void resize(const CL_Size& size, const CL_Point& point);
 
-  std::vector<int> get_data();
+  const std::vector<int>& get_data();
   void set_data(std::vector<int> d);
 
   /** Draw the gives brush to the map */

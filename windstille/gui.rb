@@ -30,9 +30,7 @@ class GUI
   end
 
   def initialize()
-    ## Init the GUI manager
-    @editor = Editor.new()
-    @gui = @editor.get_gui_manager()
+    @gui = GUIManager.new()
 
     myrect      = CL_Rect.new(CL_Point.new(0, 56), CL_Size.new(665, 488+56))
     @editor_map = EditorMapComponent.new(myrect, @gui.get_component())

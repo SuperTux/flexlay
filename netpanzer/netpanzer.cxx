@@ -421,10 +421,15 @@ NetPanzerFileStruct::save(const std::string& filename)
 
   std::vector<unsigned short> vec(x_size * y_size);
 
+  int tile_count = impl->tilemap.get_tileset().get_tiles().size();
   Field<int>* field = impl->tilemap.get_field();
   for(int i = 0; i < x_size * y_size; ++i)
     {
-      vec[i] = (*field)[i];
+      // Fill everything that isn't a valid tile with grass
+      if ((*field)[i] >= 0 && (*field)[i] < tile_count)
+        vec[i] = (*field)[i];
+      else
+        vec[i] = 8097 + rand()%16;
     }
   out.write(reinterpret_cast<char*>(&(*vec.begin())), 
             sizeof(unsigned short)*vec.size());

@@ -27,7 +27,6 @@
 #include "gui_manager.hxx"
 #include "editor_names.hxx"
 #include "popup_menu.hxx"
-#include "editor.hxx"
 #include "objmap_object.hxx"
 #include "objmap_control_point.hxx"
 #include "object_move_command.hxx"

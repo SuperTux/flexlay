@@ -24,7 +24,6 @@
 #include "editor_map_component.hxx"
 #include "object_selector.hxx"
 #include "object_add_command.hxx"
-#include "editor.hxx"
 
 ObjectSelector::ObjectSelector(const CL_Rect& rect, 
                                int obj_w, int obj_h,

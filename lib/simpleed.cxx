@@ -21,7 +21,6 @@
 #include <string>
 #include <ClanLib/core.h>
 #include <ClanLib/gui.h>
-#include "editor.hxx"
 #include "workspace.hxx"
 #include "tileset.hxx"
 #include "editor_map_component.hxx"

@@ -128,6 +128,7 @@ module GameObjects
     def draw_to_tilemap(tilemap)
       (start, width, height, @name) = $brushes[@brushindex]
       
+      # FIXME: Make this undoable
       brush = TileBrush.new(width, height)
       brush.set_data(Range.new(start, start + (width*height)-1).to_a)
 

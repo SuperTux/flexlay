@@ -69,7 +69,6 @@ $tilemap_select_tool = TileMapSelectTool.new()
 $zoom_tool           = ZoomTool.new()
 $objmap_select_tool  = ObjMapSelectTool.new()
 
-$gui = GUI.new()
 
 def generate_sprites()
   $brushes.each_with_index{|(start, width, height, name), index|
@@ -86,6 +85,10 @@ def generate_sprites()
     CL_ProviderFactory.save(buffer, "sprites/#{index}.png")
   }
 end
+
+# generate_sprites()
+
+$gui = GUI.new()
 
 $gui.set_tilemap_paint_tool()
 

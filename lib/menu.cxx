@@ -41,6 +41,10 @@ public:
   int width;
   int height;
 
+  MenuImpl() {
+    current_item = -1;
+  }
+
   void draw();
   void recalc_size();
   int  get_width();
@@ -101,7 +105,8 @@ public:
       sprite(sprite_),
       text(text_) 
   {
-    sprite.set_alignment(origin_center);
+    if (sprite)
+      sprite.set_alignment(origin_center);
   }
 
   virtual ~TextMenuItem() {}
@@ -153,6 +158,14 @@ MenuItemHandle
 Menu::add_separator()
 {
   impl->items.push_back(new SeparatorMenuItem(impl.get()));
+  impl->recalc_size();
+  return impl->items.size()-1;
+}
+
+MenuItemHandle
+Menu::add_item(const std::string& name)
+{
+  impl->items.push_back(new TextMenuItem(CL_Sprite(), name, impl.get()));
   impl->recalc_size();
   return impl->items.size()-1;
 }

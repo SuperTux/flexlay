@@ -20,13 +20,14 @@
 require "gameobjects.rb"
 
 class Level
-  attr_accessor :filename, :data, :editormap, :objects
+  attr_accessor :filename, :data, :editormap, :objects, :tilemap
 
   def initialize(*params)
     if params.length == 2 then
       (width, height) = params
       @data = NetPanzerFileStruct.new($tileset, width, height)
       @filename = nil
+      generate_random_grass()
     elsif params.length == 1 then
       (@filename,) = params
       @data = NetPanzerFileStruct.new($tileset, @filename)
@@ -45,6 +46,18 @@ class Level
 
     # FIXME: Data might not get freed since its 'recursively' refcounted
     @editormap.set_data(self)
+  end
+
+  def width()
+    return @data.get_tilemap().get_width()
+  end
+
+  def height()
+    return @data.get_tilemap().get_height()
+  end
+
+  def generate_random_grass()
+    @data.get_tilemap().set_data(Array.new(width()*height()) {|i| 8097 + rand(16) })
   end
 
   def name()

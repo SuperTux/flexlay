@@ -13,8 +13,7 @@ class SuperTuxGUI
   end
 
   def initialize()
-    @editor = Editor.new()
-    @gui    = @editor.get_gui_manager()
+    @gui    = GUIManager.new()
 
     @display_properties = DisplayProperties.new()
 

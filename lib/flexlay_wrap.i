@@ -29,7 +29,6 @@ std::cout << "CL_Error: " << err.message << std::endl;
 #include "object_delete_command.hxx"
 #include "tile.hxx"
 #include "tile_brush.hxx"
-#include "editor.hxx"
 #include "meta_data.hxx"
 #include "console.hxx"
 #include "blitter.hxx"
@@ -143,7 +142,6 @@ VALUE CL_Point2Value(const CL_Point& arg)
 %include "object_delete_command.hxx"
 %include "tile.hxx"
 %include "tile_brush.hxx"
-%include "editor.hxx"
 %include "meta_data.hxx"
 %include "console.hxx"
 %include "blitter.hxx"
@@ -206,5 +204,6 @@ VALUE CL_Point2Value(const CL_Point& arg)
 %include "../ruby/ruby_meta_data.hxx"
 %include "../ruby/ruby_sexpr_parser.hxx"
 #endif
+
 
 /* EOF */

@@ -2,8 +2,7 @@ class PaintGUI
   attr_reader :workspace, :selector_window
 
   def initialize()
-    @editor = Editor.new()
-    @gui    = @editor.get_gui_manager()
+    @gui    = GUIManager.new()
     
     @editor_map = EditorMapComponent.new($screen_rect, @gui.get_component())
     @workspace  = Workspace.new($screen_rect.get_width(), $screen_rect.get_height())

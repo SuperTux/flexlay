@@ -41,6 +41,7 @@ public:
 
   void clear();
 
+  MenuItemHandle add_item(const std::string& name);
   MenuItemHandle add_item(const CL_Sprite& sprite, const std::string& name);
   MenuItemHandle add_submenu(const std::string& name, const Menu& submenu);
   MenuItemHandle add_separator();

@@ -27,7 +27,6 @@
 #include "tileset.hxx"
 #include "editor_names.hxx"
 #include "editor_map.hxx"
-#include "editor.hxx"
 #include "workspace.hxx"
 #include "scrollbar.hxx"
 #include "editor_map_component.hxx"

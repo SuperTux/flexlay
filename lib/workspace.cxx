@@ -21,7 +21,6 @@
 #include <ClanLib/Display/display.h>
 #include <ClanLib/Display/display_window.h>
 #include <ClanLib/Display/keys.h>
-#include "editor.hxx"
 #include "editor_map.hxx"
 #include "editor_map_component.hxx"
 #include "editor_names.hxx"

@@ -25,7 +25,6 @@
 #include <ClanLib/gl.h>
 #include "tile.hxx"
 #include "tileset.hxx"
-#include "editor.hxx"
 #include "editor_map.hxx"
 #include "tile_brush.hxx"
 #include "editor_map_component.hxx"
@@ -361,7 +360,7 @@ TilemapLayer::get_tileset()
   return impl->tileset;
 }
 
-std::vector<int>
+const std::vector<int>&
 TilemapLayer::get_data()
 {
   return impl->field.get_data();

@@ -139,6 +139,41 @@ class GUI
                    @workspace.get_map().get_data().objects.lower(obj)
                  }
                })
+
+    connect_v2($objmap_select_tool.sig_on_right_click(), proc{|x,y|
+                 puts "Launching Menu at #{x}, #{y}"
+                 menu = Menu.new(CL_Point.new(x-16, y-16), @gui.get_component())
+                 menu.add_item("Delete Selection", proc{ 
+                                 cmd = ObjectDeleteCommand.new(@workspace.get_map().get_metadata().objects)
+                                 $objmap_select_tool.get_selection().each { |i| cmd.add_object(i) }
+                                 @workspace.get_map().execute(cmd.to_command())
+                                 $objmap_select_tool.clear_selection()
+                               })
+                 menu.add_item("Flatten Selection", proc{
+                                 @workspace.get_map().get_data().objects.get_objects().each{|obj|
+                                   obj.get_data().draw_to_tilemap(@workspace.get_map().get_data().tilemap)
+                                 }
+                                 cmd = ObjectDeleteCommand.new(@workspace.get_map().get_metadata().objects)
+                                 @workspace.get_map().execute(cmd.to_command())
+                                 $objmap_select_tool.get_selection().each { |i| cmd.add_object(i) }
+                                 @workspace.get_map().execute(cmd.to_command())
+                                 $objmap_select_tool.clear_selection()
+                               })
+                 menu.add_separator()
+                 menu.add_item(make_sprite("../data/images/icons16/object_raise.png"), 
+                               "Raise Selection", proc{
+                                 $objmap_select_tool.get_selection().each {|obj|
+                                   @workspace.get_map().get_data().objects.raise(obj)
+                                 }
+                               })
+                 menu.add_item(make_sprite("../data/images/icons16/object_lower.png"), 
+                               "Lower Selection", proc{
+                                 $objmap_select_tool.get_selection().each {|obj|
+                                   @workspace.get_map().get_data().objects.lower(obj)
+                                 }
+                               })
+                 menu.run()
+               })
   end
 
   def brushbox_change(index)
@@ -291,7 +326,6 @@ class GUI
   # for filename in $config.recent_files
   #    recent_files_menu.add_item(mysprite, filename, proc{ netpanzer_load_level(filename) })
   #end
-
 
   def on_map_change()
     if (@workspace.get_map().undo_stack_size() > 0)

@@ -1,4 +1,18 @@
 %module flexlay_wrap
+
+%exception {
+  try {
+    $action
+  }
+  catch (const CL_Error& err) {
+//    static VALUE cpperror = rb_define_class("CPPError", rb_eStandardError);
+//    rb_raise(cpperror, "Range error.");
+std::cout << "CL_Error: " << err.message << std::endl;
+  }
+  catch (...) {
+    std::cout << "Catched some C++ exception" << std::endl;
+  }
+}
  
 %{
 #include <ClanLib/Display/color.h>
@@ -175,6 +189,7 @@ VALUE CL_Point2Value(const CL_Point& arg)
 #ifdef SWIGRUBY
 %include "../ruby/ruby_meta_data.hxx"
 %include "../ruby/ruby_sexpr_parser.hxx"
+
 #endif
 
 

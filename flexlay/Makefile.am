@@ -19,8 +19,6 @@
 
 SUBDIRS = src data
 
-EXTRA_DIST = INSTALL.configure BUGS AUTHORS 
-
 dist-binary: distdir
 	cd src && $(MAKE) windstille.static
 	$(mkinstalldirs) $(distdir)/share/guile/ $(distdir)/lib/

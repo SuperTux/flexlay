@@ -9,46 +9,94 @@ averagecolor_LDADD    = @EDITOR_LIBS@
 flexlay_CPPFLAGS = -I.. @EDITOR_CFLAGS@
 flexlay_LDADD    = scripting/libeditor_scripting.a @EDITOR_LIBS@
 flexlay_SOURCES  = \
-  editor_main.hxx editor_main.cxx \
-  tile.hxx tile.cxx \
-  scm_functor.hxx scm_functor.cxx \
-  scm_helper.hxx  scm_helper.cxx \
-  globals.hxx  globals.cxx \
-  tileset.hxx  tileset.cxx \
-  editor_tilemap.hxx editor_tilemap.cxx \
-  tile_selector.hxx tile_selector.cxx \
-  editor.hxx editor.cxx \
-  editor_objmap.hxx   editor_objmap.cxx \
-  editor_map.hxx editor_map.cxx \
-  editor_mapsize_layer.hxx editor_mapsize_layer.cxx \
-  editor_grid_layer.hxx editor_grid_layer.cxx \
-  editor_map_component.hxx editor_map_component.cxx \
-  tile_editor.hxx  tile_editor.cxx \
-  tilemap_tool.hxx tilemap_tool.cxx \
-  tilemap_paint_tool.hxx tilemap_paint_tool.cxx \
-  tilemap_select_tool.hxx tilemap_select_tool.cxx \
-  tile_brush.hxx   tile_brush.cxx \
-  minimap.hxx   minimap.cxx \
-  editor_names.hxx \
-  object_brush.hxx object_brush.cxx \
-  object_selector.hxx object_selector.cxx \
-  tile_selection.hxx tile_selection.cxx \
-  command.hxx \
-  gui_manager.hxx gui_manager.cxx \
-  paint_command.hxx   paint_command.cxx \
-  tool_manager.hxx tool_manager.cxx \
-  popup_menu.hxx popup_menu.cxx \
-  objmap_object.hxx   objmap_object.cxx \
-  objmap_sprite_object.hxx   objmap_sprite_object.cxx \
-  object_move_command.hxx  object_move_command.cxx \
-  object_delete_command.hxx  object_delete_command.cxx \
-  object_add_command.hxx  object_add_command.cxx \
-  command_group.hxx command_group.cxx \
-  objmap_select_tool.hxx objmap_select_tool.cxx \
-  object_transform_command.hxx  object_transform_command.cxx \
-  graphic_context_state.cxx graphic_context_state.hxx \
-  workspace.hxx workspace.cxx \
-  zoom_tool.hxx  zoom_tool.cxx
+  averagecolor.cxx  \
+  command.hxx  \
+  command_group.cxx  \
+  command_group.hxx  \
+  editor.cxx  \
+  editor.hxx  \
+  editor_grid_layer.cxx  \
+  editor_grid_layer.hxx  \
+  editor_main.cxx  \
+  editor_main.hxx  \
+  editor_map.cxx  \
+  editor_map.hxx  \
+  editor_map_component.cxx  \
+  editor_map_component.hxx  \
+  editor_map_layer.hxx  \
+  editor_mapsize_layer.cxx  \
+  editor_mapsize_layer.hxx  \
+  editor_names.hxx  \
+  editor_objmap.cxx  \
+  editor_objmap.hxx  \
+  editor_tilemap.cxx  \
+  editor_tilemap.hxx  \
+  field.hxx  \
+  globals.cxx  \
+  globals.hxx  \
+  graphic_context_state.cxx  \
+  graphic_context_state.hxx  \
+  gui_manager.cxx  \
+  gui_manager.hxx  \
+  math.hxx  \
+  minimap.cxx  \
+  minimap.hxx  \
+  netpanzer  \
+  object_add_command.cxx  \
+  object_add_command.hxx  \
+  object_brush.cxx  \
+  object_brush.hxx  \
+  object_delete_command.cxx  \
+  object_delete_command.hxx  \
+  object_move_command.cxx  \
+  object_move_command.hxx  \
+  object_selector.cxx  \
+  object_selector.hxx  \
+  object_transform_command.cxx  \
+  object_transform_command.hxx  \
+  objmap_object.cxx  \
+  objmap_object.hxx  \
+  objmap_select_tool.cxx  \
+  objmap_select_tool.hxx  \
+  objmap_sprite_object.cxx  \
+  objmap_sprite_object.hxx  \
+  paint_command.cxx  \
+  paint_command.hxx  \
+  popup_menu.cxx  \
+  popup_menu.hxx  \
+  scm_functor.cxx  \
+  scm_functor.hxx  \
+  scm_helper.cxx  \
+  scm_helper.hxx  \
+  scm_obj.hxx  \
+  string_converter.hxx  \
+  supertux  \
+  tile.cxx  \
+  tile.hxx  \
+  tile_brush.cxx  \
+  tile_brush.hxx  \
+  tile_editor.cxx  \
+  tile_editor.hxx  \
+  tile_selection.cxx  \
+  tile_selection.hxx  \
+  tile_selector.cxx  \
+  tile_selector.hxx  \
+  tilemap_diamond_tool.cxx  \
+  tilemap_diamond_tool.hxx  \
+  tilemap_paint_tool.cxx  \
+  tilemap_paint_tool.hxx  \
+  tilemap_select_tool.cxx  \
+  tilemap_select_tool.hxx  \
+  tilemap_tool.cxx  \
+  tilemap_tool.hxx  \
+  tileset.cxx  \
+  tileset.hxx  \
+  tool_manager.cxx  \
+  tool_manager.hxx  \
+  workspace.cxx  \
+  workspace.hxx  \
+  zoom_tool.cxx  \
+  zoom_tool.hxx
 
 #  tilemap_diamond_tool.hxx tilemap_diamond_tool.cxx 
 STATICBIN_LIBS = \

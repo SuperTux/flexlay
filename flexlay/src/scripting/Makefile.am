@@ -32,7 +32,7 @@ libeditor_scripting_a_SOURCES = \
   $(command_source)
 
 # Include editor_wrap.cxx in case the user doesn't have swig installed
-EXTRA_DIST = editor_wrap.cxx editor.i
+EXTRA_DIST = editor_wrap.cxx editor.i $(command_source)
 
 editor_wrap.cxx: editor.i $(command_source) Makefile
 	$(SWIG) -guile -c++  -o $@ $<

@@ -69,7 +69,6 @@ Workspace::draw()
   gc_state.push();
 
   CL_Display::clear(CL_Color(100, 0, 100));
-
   for(Items::iterator i = items.begin(); i != items.end(); ++i)
     {
       if ((*i)->editor_map)

@@ -135,6 +135,19 @@ EditorMain::main(int argc, char** argv)
 
     parse_command_line(argc, argv);
 
+    if (game_definition_file.empty())
+      {
+        std::cout 
+          << "Error:\n"
+          "Flexlay cannot be run of its own, you need to specify the game\n"
+          "mode to startup with via the '--game' option.\n"
+          "Valid games are:\n"
+          "  supertux\n"
+          "  netpanzer\n"
+          << std::endl;
+        exit(EXIT_SUCCESS);
+      }
+
     // Init the path
     bindir  = CL_System::get_exe_path();
 

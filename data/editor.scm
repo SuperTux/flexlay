@@ -79,12 +79,12 @@
   (let ((data (with-input-from-file filename
                 (lambda () (cdr (read))))))
 
-    (let ((width      (get-value-from-tree '(properties width _)  data 20))
-          (height     (get-value-from-tree '(properties height _) data 15))
-          (foreground (get-value-from-tree '(tilemap data) data '()))
+    (let ((width      (get-value-from-tree '(properties width _)      data 20))
+          (height     (get-value-from-tree '(properties height _)     data 15))
+          (foreground (get-value-from-tree '(tilemap data)            data '()))
           (background (get-value-from-tree '(background-tilemap data) data '()))
-          (diamonds   (get-value-from-tree '(diamond-map) data '()))
-          (objects    (get-value-from-tree '(objects) data '())))
+          (diamonds   (get-value-from-tree '(diamond-map)             data '()))
+          (objects    (get-value-from-tree '(objects)                 data '())))
       
       ;; load level file and extract tiledata and w/h
       (let* ((m       (editor-map-create))
@@ -94,12 +94,11 @@
         (for-each (lambda (el)
                     (let ((x (car  (get-value-from-tree '(pos) (cdr el) 0)))
                           (y (cadr (get-value-from-tree '(pos) (cdr el) 0))))
-                      (format #t "Bla: ~a ~a~%" x y)
                       (case (car el)
                         ((mriceblock)
-                         (editor-objectmap-add-object "sprites/mriceblock" x y '(mriceblock)))
+                         (objectmap-add-object objmap "sprites/mriceblock" x y '(mriceblock)))
                         ((mrbomb)
-                         (editor-objectmap-add-object "sprites/mrbomb" x y '(mrbomb))))))
+                         (objectmap-add-object objmap "sprites/mrbomb" x y '(mrbomb))))))
                   objects)
 
         (editor-map-add-layer m tilemap)

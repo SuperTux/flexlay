@@ -84,6 +84,21 @@ editor_get_tilemap()
     }
 }
 
+int
+objectmap_add_object(EditorMapLayer* obj, const char* name, int x, int y, SCM userdata)
+{
+  EditorObjMap* objmap = dynamic_cast<EditorObjMap*>(obj);
+  if (objmap)
+    {
+      return objmap->add_object(CL_Sprite(name, resources), CL_Point(x, y), 
+                                SCMObj(userdata));
+    }
+  else
+    {
+      return 0;
+    }
+}
+
 int editor_objectmap_add_object(const char* name, int x, int y, SCM userdata)
 {
   int handle = editor_get_objmap()->add_object(CL_Sprite(name, resources), CL_Point(x, y), 

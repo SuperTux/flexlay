@@ -20,23 +20,17 @@
 #ifndef HEADER_OBJECT_BRUSH_HXX
 #define HEADER_OBJECT_BRUSH_HXX
 
+#include "../scm_obj.hxx"
 #include <ClanLib/Display/sprite.h>
 
-/** */
 class ObjectBrush
 {
-private:
-  CL_Sprite sprite;
-
 public:
-  ObjectBrush();
-  
-  CL_Sprite get_sprite() const { return sprite; }
+  CL_Sprite sprite;
+  SCMObj    data;
 
-  void set_sprite(const CL_Sprite& s) { sprite = s; }
-private:
-  ObjectBrush (const ObjectBrush&);
-  ObjectBrush& operator= (const ObjectBrush&);
+  ObjectBrush();
+  ObjectBrush(const CL_Sprite& sprite_,  const SCMObj& data_);
 };
 
 #endif

@@ -11,6 +11,7 @@
 (define *tileeditor-window* #f)
 (define *tileselector-window* #f)
 (define *object-inserter-window* #f)
+(define *object-selector* #f)
 (define *minimap* #f)
 (define *menu*    #f)
 (define *statusbar* #f)
@@ -311,8 +312,8 @@
   (let ((window (gui-create-window 600 25 200 400 "ObjectInserter")))
     (gui-push-component (gui-window-get-client-area window))
     
-    (object-selector-create 0 0 3 4 64 64)
     (gui-create-label 5 5 "[Drag objects from here to the map]")
+    (set! *object-selector* (object-selector-create 0 24 3 4 64 64))
 
     (gui-component-on-close window (lambda ()
                                      (gui-hide-component window)))
@@ -432,5 +433,8 @@
 (create-minimap)
 
 (set-tool 'tile)
+
+(object-selector-add-brush *object-selector* "igel" '(Igel))
+(object-selector-add-brush *object-selector* "hero/run" '(Hero))
 
 ;; EOF ;;

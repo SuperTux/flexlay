@@ -32,8 +32,6 @@ TileMapObjectTool::TileMapObjectTool(EditorMap* p, EditorObjMap* t)
   obj = 0;
   state = NONE;
   offset = CL_Point(0, 0);
-
-  brush.set_sprite(CL_Sprite("igel", resources));
 }
 
 TileMapObjectTool::~TileMapObjectTool()
@@ -56,12 +54,6 @@ TileMapObjectTool::draw()
       sprite.set_color(CL_Color(255, 0, 0));
       sprite.draw((*i)->pos.x, (*i)->pos.y);      
     }
-
-  { // Draw Brush    
-    CL_Sprite b(brush.get_sprite());
-    b.set_alpha(0.25f);
-    b.draw(brush_pos.x, brush_pos.y);
-  }
 
   switch(state)
     {
@@ -149,7 +141,6 @@ TileMapObjectTool::on_mouse_down(const CL_InputEvent& event)
       break;
 
     case CL_MOUSE_RIGHT:
-      objmap->add_object(brush.get_sprite(), pos, SCMObj(SCM_BOOL_F));
       break;
     }
 }
@@ -158,7 +149,6 @@ void
 TileMapObjectTool::on_mouse_move(const CL_InputEvent& event)
 {
   CL_Point pos = parent->screen2world(event.mouse_pos);
-  brush_pos = pos;
 
   switch(state)
     {
@@ -185,12 +175,6 @@ TileMapObjectTool::on_mouse_move(const CL_InputEvent& event)
       obj = objmap->find_object(pos);
       break;
     }
-}
-
-void
-TileMapObjectTool::set_brush(const std::string& name)
-{
-  brush.set_sprite(CL_Sprite(name, resources));
 }
 
 /* EOF */

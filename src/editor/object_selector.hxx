@@ -22,6 +22,7 @@
 
 #include <ClanLib/GUI/component.h>
 #include <ClanLib/GUI/component.h>
+#include "object_brush.hxx"
 
 /** */
 class ObjectSelector : public CL_Component
@@ -44,13 +45,16 @@ private:
   CL_Point mouse_pos;
   float scale;
 
-  CL_Sprite drag_sprite;
+  std::vector<ObjectBrush> brushes;
+  ObjectBrush drag_obj;
   
 public:
-  ObjectSelector(int w, int h, int obj_w, int obj_h, CL_Component* parent);
+  ObjectSelector(const CL_Point& p, int w, int h, int obj_w, int obj_h, CL_Component* parent);
   ~ObjectSelector();
 
   void draw();
+
+  void add_brush(const ObjectBrush& brush);
 
   void mouse_move(const CL_InputEvent& event);
   void mouse_down(const CL_InputEvent& event);

@@ -24,4 +24,11 @@ ObjectBrush::ObjectBrush()
   
 }
 
+ObjectBrush::ObjectBrush(const CL_Sprite& sprite_,  const SCMObj& data_)
+  : sprite(sprite_),
+    data(data_)
+{
+
+}
+
 /* EOF */

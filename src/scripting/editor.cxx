@@ -97,6 +97,13 @@ obj2scm(const EditorObjMap::Obj& obj)
   return lst;
 }
 
+void
+object_selector_add_brush(CL_Component* comp, const char* name, SCM data)
+{
+  ObjectSelector* selector = dynamic_cast<ObjectSelector*>(comp);
+  selector->add_brush(ObjectBrush(CL_Sprite(name, resources), SCMObj(data)));
+}
+
 SCM
 brush2scm(const TileBrush& brush)
 {
@@ -281,7 +288,8 @@ minimap_create(CL_Component* p, int x, int y, int w, int h)
 CL_Component*
 object_selector_create(int x, int y, int w, int h, int obj_w, int obj_h)
 {
-  ObjectSelector* ret = new ObjectSelector(w, h, obj_w, obj_h,
+  ObjectSelector* ret = new ObjectSelector(CL_Point(x, y),
+                                           w, h, obj_w, obj_h,
                                            GUIManager::current()->get_component());
   return ret;
 }

@@ -21,16 +21,15 @@
 #include <ClanLib/Core/core_iostream.h>
 #include <ClanLib/display.h>
 #include "../globals.hxx"
-#include "../tile_factory.hxx"
-#include "../tile.hxx"
 #include "editor_map.hxx"
 #include "src/scripting/editor.hxx"
 #include "object_selector.hxx"
 
-ObjectSelector::ObjectSelector(int width, int height, 
+ObjectSelector::ObjectSelector(const CL_Point& p,
+                               int width, int height, 
                                int obj_w, int obj_h,
                                CL_Component* parent)
-  : CL_Component(CL_Rect(CL_Point(0,0), CL_Size(width * obj_w, height * obj_h)),
+  : CL_Component(CL_Rect(p, CL_Size(width * obj_w, height * obj_h)),
                  parent),
     width(width), height(height),
     obj_width(obj_w), obj_height(obj_h)
@@ -58,23 +57,26 @@ ObjectSelector::mouse_up(const CL_InputEvent& event)
     {
     case CL_MOUSE_LEFT:
       {
-      release_mouse();
-      drag_sprite.set_alpha(1.0f);
-      std::cout << "Drag stop: "
-                << event.mouse_pos.x + get_screen_rect().left << ", "
-                << event.mouse_pos.y + get_screen_rect().top
-                << std::endl;
-
-      CL_Point screen(event.mouse_pos.x + get_screen_rect().left,
-                      event.mouse_pos.y + get_screen_rect().top);
-
-      CL_Point target(screen.x - EditorMap::current()->get_screen_rect().left,
-                      screen.y - EditorMap::current()->get_screen_rect().top);
+        if (drag_obj.sprite)
+          {
+            release_mouse();
       
-      editor_get_objmap()->add_object(drag_sprite,
-                                      EditorMap::current()->screen2world(target),
-                                      SCMObj(SCM_BOOL_F));
-      drag_sprite = CL_Sprite();
+            if (!has_mouse_over())
+              {
+                drag_obj.sprite.set_alpha(1.0f);
+
+                CL_Point screen(event.mouse_pos.x + get_screen_rect().left,
+                                event.mouse_pos.y + get_screen_rect().top);
+
+                CL_Point target(screen.x - EditorMap::current()->get_screen_rect().left,
+                                screen.y - EditorMap::current()->get_screen_rect().top);
+      
+                editor_get_objmap()->add_object(drag_obj.sprite,
+                                                EditorMap::current()->screen2world(target),
+                                                drag_obj.data);
+              }
+            drag_obj.sprite = CL_Sprite();
+          }
       }
       break;
 
@@ -95,13 +97,11 @@ ObjectSelector::mouse_down(const CL_InputEvent& event)
     {
     case CL_MOUSE_LEFT:
       {
-        Tile* tile = TileFactory::current()->create(mouse_over_tile);
-        if (tile)
+        if (mouse_over_tile != -1)
           {
-            drag_sprite = tile->sur;
-            drag_sprite.set_alpha(.5f);
+            drag_obj = brushes[mouse_over_tile];
+            drag_obj.sprite.set_alpha(0.5);
             capture_mouse();
-            std::cout << "Drag Start" << std::endl;
           }
       }
       break;
@@ -130,10 +130,13 @@ ObjectSelector::mouse_move(const CL_InputEvent& event)
 {
   mouse_pos = event.mouse_pos;
 
-  int x = event.mouse_pos.x/static_cast<int>(obj_width);
+  int x = (event.mouse_pos.x)/static_cast<int>(obj_width);
   int y = (event.mouse_pos.y+offset)/static_cast<int>(obj_height);
 
   mouse_over_tile = y * width + x;
+
+  if (mouse_over_tile < 0 || mouse_over_tile >= (int)brushes.size())
+    mouse_over_tile = -1;
 
   if (scrolling)
     {
@@ -147,30 +150,27 @@ void
 ObjectSelector::draw()
 {
   CL_Display::push_translate_offset(0, -offset);
-  for(int y = 0; y < /*height FIXME*/ 40; ++y)
-    for(int x = 0; x < width; ++x)
+  
+  for(int i = 0; i < (int)brushes.size(); ++i)
       {
-        int i = width * y + x;
-        Tile* tile = TileFactory::current()->create(i);
+        int x = i%width;
+        int y = i/width;
 
         CL_Rect rect(CL_Point(static_cast<int>(x * obj_width),
                               static_cast<int>(y * obj_height)),
                      CL_Size(static_cast<int>(obj_width),
                              static_cast<int>(obj_height)));
 
-        if (tile)
-          {
-            CL_Sprite sprite = tile->sur;
-
-            sprite.set_scale((float)obj_width/sprite.get_width(),
-                             (float)obj_height/sprite.get_height());
-
-            sprite.draw(static_cast<int>(x * obj_width), 
-                        static_cast<int>(y * obj_height));
-
-            CL_Display::draw_rect(rect, CL_Color(0,0,0,128));
-          }
-
+        CL_Sprite sprite = brushes[i].sprite;
+        sprite.set_alignment(origin_center, 0, 0);
+        sprite.set_scale(std::min(1.0f, (float)obj_width/(float)sprite.get_width()),
+                         std::min(1.0f, (float)obj_height/(float)sprite.get_height()));
+        
+        sprite.draw(static_cast<int>(x * obj_width + obj_width/2), 
+                    static_cast<int>(y * obj_height + obj_height/2));
+        
+        //CL_Display::draw_rect(rect, CL_Color(0,0,0,128));
+        
         if (mouse_over_tile == i && has_mouse_over())
           {
             CL_Display::fill_rect(rect, CL_Color(0,0,255, 20));
@@ -178,11 +178,18 @@ ObjectSelector::draw()
       }
   CL_Display::pop_translate_offset();
 
-  if (drag_sprite)
+  if (drag_obj.sprite)
     {
       CL_Display::set_cliprect(CL_Rect(0, 0, 800, 600));
-      drag_sprite.draw(mouse_pos.x, mouse_pos.y);
+
+      drag_obj.sprite.draw(mouse_pos.x, mouse_pos.y);
     }
+}
+
+void
+ObjectSelector::add_brush(const ObjectBrush& brush)
+{
+  brushes.push_back(brush);
 }
 
 /* EOF */

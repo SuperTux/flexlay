@@ -38,8 +38,6 @@ private:
       object */
   CL_Point offset;
 
-  ObjectBrush brush;
-  CL_Point brush_pos;
   CL_Point drag_start;
   CL_Rect selection_rect;
 
@@ -55,7 +53,6 @@ public:
   void on_mouse_down(const CL_InputEvent& event);
   void on_mouse_move(const CL_InputEvent& event);
 
-  void set_brush(const std::string& name);
 private:
   TileMapObjectTool (const TileMapObjectTool&);
   TileMapObjectTool& operator= (const TileMapObjectTool&);

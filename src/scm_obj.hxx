@@ -31,33 +31,41 @@ private:
   SCM obj;
 
 public:
-  explicit SCMObj () {
+  explicit SCMObj () 
+  {
     obj = SCM_BOOL_F;
     scm_gc_protect_object (obj);
   }
 
-  explicit SCMObj (SCM new_obj) {
+  explicit SCMObj (SCM new_obj) 
+  {
     obj = new_obj;
     scm_gc_protect_object (obj);
   }
-
-  explicit SCMObj (const SCMObj& new_obj) {
+  
+  explicit SCMObj (const SCMObj& new_obj) 
+  {
     obj = new_obj.obj;
     scm_gc_protect_object (obj);
   }
 
-  ~SCMObj () {
+  ~SCMObj () 
+  {
     scm_gc_unprotect_object (obj);
   }
   
-  SCMObj& operator=(const SCMObj& new_obj) {
-    scm_gc_unprotect_object (obj);
-    obj = new_obj.obj;
-    scm_gc_protect_object (obj);
+  inline SCMObj& operator=(const SCMObj& new_obj) 
+  {
+    if (&new_obj != this)
+      {
+        scm_gc_unprotect_object (obj);
+        obj = new_obj.obj;
+        scm_gc_protect_object (obj);
+      }
     return *this;
   }
-
-  SCM get_scm () const {
+  
+  inline SCM get_scm () const {
     return obj;
   }
 };

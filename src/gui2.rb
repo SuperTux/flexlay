@@ -148,18 +148,18 @@ set_tilemap_paint_tool()
 def insert_path_node(x,y)
   print "Insert path Node"
   m = $workspace.get_map().get_metadata()
-  pathnode = ObjMapPathNode($editor_map.screen2world(CL_Point.new(x, y)),
-                            make_metadata("PathNode"))
-  pathnode.to_object().set_metadata(make_metadata(PathNode(pathnode)))
+  pathnode = ObjMapPathNode.new($editor_map.screen2world(CL_Point.new(x, y)),
+                                make_metadata("PathNode"))
+  pathnode.to_object().set_metadata(make_metadata(PathNode.new(pathnode)))
   m.objects.add_object(pathnode.to_object())
 end
 
 def connect_path_nodes()
   print "Connecting path nodes"
   pathnodes = []
-  for i in objmap_select_tool.get_selection()
+  for i in $objmap_select_tool.get_selection()
     obj = get_ruby_object(i.get_metadata())
-    if obj.class == PathNode
+    if obj.is_a?(PathNode)
       pathnodes.push(obj.node)
     end
   end

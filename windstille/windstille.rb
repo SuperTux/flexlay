@@ -97,9 +97,9 @@ $mysprite = make_sprite("../data/images/icons16/stock_paste-16.png")
 $resources = CL_ResourceManager.new("../data/flexlay.xml")
 
 $tileset = Tileset.new(64)
-(0...7).each {|y|
-  (0...9).each {|x|
-    $tileset.add_tile(y*9+x+1, Tile.new(make_region_pixelbuffer("groundset.png", 64*x, 64*y, 64, 64)))
+(0...16).each {|y|
+  (0...8).each {|x|
+    $tileset.add_tile(y*8+x+1, Tile.new(make_region_pixelbuffer("industrialset.png", 64*x, 64*y, 64, 64)))
   }
 }
 

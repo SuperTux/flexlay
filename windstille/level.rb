@@ -37,7 +37,7 @@ class Level
     # New Level
     (@width, @height) = [width, height]
     
-    @current_layer = 0
+    @current_layer = 1
     
     @background  = TilemapLayer.new($tileset, @width, @height)
     @interactive = TilemapLayer.new($tileset, @width, @height)
@@ -73,6 +73,7 @@ class Level
 
     load_tilemap = proc {|name|
       mydata   = get_value_from_tree(["#{name}-tilemap"],  data, 0)
+      puts mydata
       width  = get_value_from_tree(["width", "_"],  mydata, 0)
       height = get_value_from_tree(["height", "_"],  mydata, 0)
 
@@ -93,7 +94,7 @@ class Level
     # FIXME: Data might not get freed since its 'recursively' refcounted
     @editormap.set_metadata(make_metadata(self))
 
-    @current_layer = 0
+    @current_layer = 1
 
     puts @editormap
     puts @layers

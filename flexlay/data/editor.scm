@@ -632,7 +632,7 @@
             ((windstille)
              (tile-selector-create (- screen-width (* 3 64)) 0 3 8 .5))
             ((supertux)
-             (tile-selector-create (- screen-width (* 3 64)) 0 6 12 1.0))
+             (tile-selector-create (- screen-width (* 3 64)) 0 6 15 1.0))
             ((netpanzer)
              (display "Netpanzer\n")
              (tile-selector-create (- screen-width (* 20 32)) 0 20 15 1.0))
@@ -821,7 +821,7 @@
   
   ((supertux)
    (object-selector-add-brush *object-selector* 
-                              "sprites/jumpy"
+                              (string-append *supertux:datadir* "images/shared/jumpy-left-middle-0.png")
                               '(money))
    (object-selector-add-brush *object-selector*
                               (string-append *supertux:datadir* "images/shared/snowball-left-0.png")
@@ -892,7 +892,7 @@
 (case *game*
   ((supertux)
    (tile-selector-set-tileset *tileselector* *level-tileset*)
-   (tile-selector-set-tiles   *tileselector* (seq 1 140))
+   (tile-selector-set-tiles   *tileselector* (seq 1 150))
    (supertux:new-map 20 15))
   ((netpanzer)
    (tile-selector-set-tileset *tileselector* *tileset*)
@@ -904,7 +904,7 @@
    (pingus:new-map 800 600))
   ((windstille)
    (tile-selector-set-tileset *tileselector* *tileset*)
-   (tile-selector-set-tiles   *tileselector* (seq 1 130))
+   (tile-selector-set-tiles   *tileselector* (seq 1 150))
    (windstille:new-map 20 15)))
 
 ;; EOF ;;

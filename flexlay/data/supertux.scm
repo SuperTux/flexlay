@@ -439,7 +439,7 @@
                                                               x y '(mriceblock)))
                                        ((= el 50) ;; 2
                                         (objectmap-add-object objmap
-                                                              "sprites/jumpy" 
+                                                              (string-append *supertux:datadir* "images/shared/jumpy-left-middle-0.png")
                                                               x y '(money)))))
                                (set! i (+ i 1)))
                              tilemap))
@@ -462,7 +462,7 @@
                       (case (car el)
                         ((money jumpy)
                          (objectmap-add-object objmap
-                                               "sprites/jumpy" 
+                                               (string-append *supertux:datadir* "images/shared/jumpy-left-middle-0.png")
                                                x y '(money)))
                         ((mriceblock laptop)
                          (objectmap-add-object objmap

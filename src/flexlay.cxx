@@ -60,7 +60,8 @@ Flexlay::init()
                                   screen_width, screen_height, fullscreen, allow_resize);
 
     resources = CL_ResourceManager(datadir + "flexlay.xml");
-    Fonts::verdana11 = CL_Font("verdana11_black", &resources);
+    Fonts::verdana11        = CL_Font("verdana11_black", &resources);
+    Fonts::verdana11_yellow = CL_Font("verdana11_yellow", &resources);
   } catch (CL_Error& err) {
     std::cout << "CL_Error: " << err.message << std::endl;
   }

@@ -66,11 +66,16 @@ $recent_files.each do |filename|
   $recent_files_menu.add_item($mysprite, filename, proc{ supertux_load_level(filename) })
 end
 
-
 $minimap = Minimap.new($editor_map, CL_Rect.new(CL_Point.new(3 + myrect.left, 
                                                              488+3-14  + myrect.top), 
                                                 CL_Size.new(794-134-16, 50)), 
                        $gui.get_component())
+
+# $console = Console.new(CL_Rect.new(CL_Point.new(50, 100), CL_Size.new(400, 200)),
+#                        $gui.get_component())
+# $console.write("Hello World\n");
+# $console.write("blabl\n");
+# $console.write("blabl\naoeuau\naeouau");
 
 require "gui.rb"
 

@@ -1,3 +1,5 @@
+import code
+
 def get_completions(text):
     import rlcompleter
     comp = rlcompleter.Completer()

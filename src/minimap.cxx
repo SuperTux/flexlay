@@ -82,10 +82,11 @@ Minimap::draw()
 
   // FIXME: This doesn't work all that well
   TilemapLayer tilemap = TilemapLayer::current();
-  int tile_size = tilemap.get_tileset().get_tile_size();
 
   if (!tilemap.is_null() && tilemap.get_height() != 0 && tilemap.get_width() != 0)
     {
+      int tile_size = tilemap.get_tileset().get_tile_size();
+
       int map_width  = tilemap.get_width()  * tile_size;
       int map_height = tilemap.get_height() * tile_size;
 

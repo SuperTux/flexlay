@@ -44,78 +44,38 @@ class GUI
                                                     CL_Size.new(794-134-16, 50)), 
                            @gui.get_component())
 
-    @button_panel = Panel.new(CL_Rect.new(CL_Point.new(0, 23), CL_Size.new(800, 33)), @gui.get_component())
+    @button_panel = ButtonPanel.new(0, 23, 800, 33, true, @gui.get_component)
 
-
-    p = Counter.new(2)
-
-    @new_icon = Icon.new(CL_Rect.new(CL_Point.new(p.inc(0),  2), CL_Size.new(32, 32)),
-                         make_sprite("../data/images/icons24/stock_new.png"), "Some tooltip", @button_panel);
-    @load_icon = Icon.new(CL_Rect.new(CL_Point.new(p.inc(32), 2), CL_Size.new(32, 32)),
-                          make_sprite("../data/images/icons24/stock_open.png"), "Some tooltip", @button_panel);
-    @load_recent_icon = Icon.new(CL_Rect.new(CL_Point.new(p.inc(32), 2), CL_Size.new(16, 32)),
-                                 make_sprite("../data/images/icons24/downarrow.png"), "Some tooltip", @button_panel);
-    @save_icon        = Icon.new(CL_Rect.new(CL_Point.new(p.inc(16), 2), CL_Size.new(32, 32)),
-                                 make_sprite("../data/images/icons24/stock_save.png"), "Some tooltip", @button_panel);
-    @save_as_icon     = Icon.new(CL_Rect.new(CL_Point.new(p.inc(32), 2), CL_Size.new(32, 32)),
-                                 make_sprite("../data/images/icons24/stock_save_as.png"), "Some tooltip", @button_panel);
-
-    @load_icon.set_callback(proc{ level_load() })
-    @load_recent_icon.set_callback(proc{ $recent_files_menu.run() })
-    @save_icon.set_callback(proc{ level_save() })
-    @save_as_icon.set_callback(proc{ level_save_as() })
-
-    @copy_icon    = Icon.new(CL_Rect.new(CL_Point.new(p.inc(48), 2), CL_Size.new(32, 32)),
-                             make_sprite("../data/images/icons24/stock_copy.png"), "Some tooltip", @button_panel);
-    @paste_icon   = Icon.new(CL_Rect.new(CL_Point.new(p.inc(32), 2), CL_Size.new(32, 32)),
-                             make_sprite("../data/images/icons24/stock_paste.png"), "Some tooltip", @button_panel);
-
-    @undo_icon = Icon.new(CL_Rect.new(CL_Point.new(p.inc(48), 2), CL_Size.new(32, 32)),
-                          make_sprite("../data/images/icons24/stock_undo.png"), "Some tooltip", @button_panel);
-    @redo_icon = Icon.new(CL_Rect.new(CL_Point.new(p.inc(32), 2), CL_Size.new(32, 32)),
-                          make_sprite("../data/images/icons24/stock_redo.png"), "Some tooltip", @button_panel);
-
-    @undo_icon.set_callback(proc{ @workspace.get_map().undo() })
-    @redo_icon.set_callback(proc{ @workspace.get_map().redo() })
-
+    @button_panel.add_icon("../data/images/icons24/stock_new.png")
+    @button_panel.add_icon("../data/images/icons24/stock_open.png", proc{ level_load() })
+    @button_panel.add_small_icon("../data/images/icons24/downarrow.png", proc{ $controller.recent_files_menu.run() })
+    @button_panel.add_icon("../data/images/icons24/stock_save.png", proc{ level_save() })
+    @button_panel.add_icon("../data/images/icons24/stock_save_as.png", proc{ level_save_as() })
+    @button_panel.add_seperator()
+    @button_panel.add_icon("../data/images/icons24/stock_copy.png")
+    @button_panel.add_icon("../data/images/icons24/stock_paste.png")
+    @button_panel.add_seperator()
+    @undo_icon = @button_panel.add_icon("../data/images/icons24/stock_undo.png", proc{ @workspace.get_map().undo() })
+    @redo_icon = @button_panel.add_icon("../data/images/icons24/stock_redo.png", proc{ @workspace.get_map().redo() })
     @undo_icon.disable()
     @redo_icon.disable()
+    @button_panel.add_seperator()
+    @minimap_icon = @button_panel.add_icon("../data/images/icons24/minimap.png", proc{ toggle_minimap() })
+    @grid_icon = @button_panel.add_icon("../data/images/icons24/grid.png", proc{ toggle_grid() })
+    @button_panel.add_seperator()
 
-    @minimap_icon = Icon.new(CL_Rect.new(CL_Point.new(p.inc(48), 2), CL_Size.new(32, 32)),
-                             make_sprite("../data/images/icons24/minimap.png"), "Some tooltip", @button_panel);
-    @minimap_icon.set_callback(proc{ toggle_minimap() })
-
-    @grid_icon = Icon.new(CL_Rect.new(CL_Point.new(p.inc(32), 2), CL_Size.new(32, 32)),
-                          make_sprite("../data/images/icons24/grid.png"), "Some tooltip", @button_panel);
-    @grid_icon.set_callback(proc{ toggle_grid() })
-
-    @background_icon  = Icon.new(CL_Rect.new(CL_Point.new(p.inc(48), 2), CL_Size.new(32, 32)),
-                                 make_sprite("../data/images/icons24/background.png"), "Some tooltip", @button_panel);
-    @interactive_icon = Icon.new(CL_Rect.new(CL_Point.new(p.inc(32), 2), CL_Size.new(32, 32)),
-                                 make_sprite("../data/images/icons24/interactive.png"), "Some tooltip", @button_panel);
-    @foreground_icon  = Icon.new(CL_Rect.new(CL_Point.new(p.inc(32), 2), CL_Size.new(32, 32)),
-                                 make_sprite("../data/images/icons24/foreground.png"), "Some tooltip", @button_panel);
-    @eye_icon         = Icon.new(CL_Rect.new(CL_Point.new(p.inc(32), 2), CL_Size.new(32, 32)),
-                                 make_sprite("../data/images/icons24/eye.png"), "Some tooltip", @button_panel);
+    @button_panel.add_icon("../data/images/icons24/background.png")
+    @button_panel.add_icon("../data/images/icons24/interactive.png")
+    @button_panel.add_icon("../data/images/icons24/foreground.png")
+    @button_panel.add_icon("../data/images/icons24/eye.png")
 
     @layer_menu = Menu.new(CL_Point.new(32*15+2, 54), @gui.get_component())
-
-    @toolbar = Panel.new(CL_Rect.new(CL_Point.new(0, 23+33), CL_Size.new(33, 32*4+2)), @gui.get_component())
-
-    @paint = Icon.new(CL_Rect.new(CL_Point.new(2, 32*0+2), CL_Size.new(32, 32)), make_sprite("../data/images/tools/stock-tool-pencil-22.png"), "Some tooltip", @toolbar);
-    @paint.set_callback(proc{ $controller.set_tilemap_paint_tool() })
-
-    @select = Icon.new(CL_Rect.new(CL_Point.new(2, 32*1+2), CL_Size.new(32,32)), make_sprite("../data/images/tools/stock-tool-rect-select-22.png"), "Some tooltip", @toolbar);
-    @select.set_callback(proc{ $controller.set_tilemap_select_tool() })
-
-    @zoom = Icon.new(CL_Rect.new(CL_Point.new(2, 32*2+2), CL_Size.new(32,32)), make_sprite("../data/images/tools/stock-tool-zoom-22.png"), "Some tooltip", @toolbar);
-    @zoom.set_callback(proc{ $controller.set_zoom_tool() })
-
-    @object = Icon.new(CL_Rect.new(CL_Point.new(2, 32*3+2), CL_Size.new(32,32)), make_sprite("../data/images/tools/stock-tool-clone-22.png"), "Some tooltip", @toolbar);
-    @object.set_callback(proc{ $controller.set_objmap_select_tool() })
-
-    # erase  = Icon.new(CL_Point.new(2, 32+1+2), make_sprite("../data/images/tools/stock-tool-eraser-22.png"), "Some tooltip", $toolbar);
-    # move   = Icon.new(CL_Point.new(2, 32*2+2), make_sprite("../data/images/tools/stock-tool-move-22.png"), "Some tooltip", $toolbar);
+    
+    @toolbar = ButtonPanel.new(0, 23+33, 33, 32*4+2, false, @gui.get_component)
+    @paint  = @toolbar.add_icon("../data/images/tools/stock-tool-pencil-22.png", proc{ $controller.set_tilemap_paint_tool() })
+    @select = @toolbar.add_icon("../data/images/tools/stock-tool-rect-select-22.png", proc{ $controller.set_tilemap_select_tool() })
+    @zoom   = @toolbar.add_icon("../data/images/tools/stock-tool-zoom-22.png", proc{ $controller.set_zoom_tool() })
+    @object = @toolbar.add_icon("../data/images/tools/stock-tool-clone-22.png", proc{ $controller.set_objmap_select_tool() })
 
     # $foreground_icon.set_callback(proc{ show_foreground() })
     # $interactive_icon.set_callback(proc{ show_interactive() })
@@ -204,7 +164,7 @@ class GUI
   end
 
   def toggle_grid()
-    tilemap = @workspace.get_map().get_metadata().foreground;
+    tilemap = @workspace.get_map().get_metadata().layers[0];
     tilemap.set_draw_grid(!tilemap.get_draw_grid())
 
     if tilemap.get_draw_grid()

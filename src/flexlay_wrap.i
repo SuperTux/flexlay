@@ -16,6 +16,7 @@
 #include "tile_brush.hxx"
 #include "editor.hxx"
 #include "meta_data.hxx"
+#include "console.hxx"
 
 #include "layer.hxx"
 #include "tilemap_layer.hxx"
@@ -87,6 +88,7 @@ VALUE ObjMapObject2Value(const ObjMapObject& arg)
 %include "tile_brush.hxx"
 %include "editor.hxx"
 %include "meta_data.hxx"
+%include "console.hxx"
  
 %include "layer.hxx"
 %include "tilemap_layer.hxx"

@@ -19,7 +19,9 @@
 
 class Level
   ## Level Properties
-  attr_reader :name, :foreground, :background, :interactive, :editormap, :objects
+  attr_reader :layers, :editormap
+  
+  attr_reader :name
   attr_writer :name
 
   def initialize(*params)
@@ -30,16 +32,16 @@ class Level
       @width  = width
       @height = height
 
-      @foreground  = TilemapLayer.new($tileset, @width, @height)
-      @interactive = TilemapLayer.new($tileset, @width, @height)
-      @background  = TilemapLayer.new($tileset, @width, @height)
-      @objects = ObjectLayer.new()
+      @current_layer = 0
+
+      @layers = []
+      @layers += [TilemapLayer.new($tileset, @width, @height)]
+      @layers += [TilemapLayer.new($tileset, @width, @height)]
+      @layers += [TilemapLayer.new($tileset, @width, @height)]
+      @layers += [@objects = ObjectLayer.new()]
 
       @editormap = EditorMap.new()
-      @editormap.add_layer(@background.to_layer())
-      @editormap.add_layer(@interactive.to_layer())
-      @editormap.add_layer(@objects.to_layer())
-      @editormap.add_layer(@foreground.to_layer())
+      @layers.each {|layer| @editormap.add_layer(layer.to_layer()) }
       
       # FIXME: Data might not get freed since its 'recursively' refcounted
       @editormap.set_metadata(make_metadata(self))
@@ -49,7 +51,7 @@ class Level
   def activate(workspace)
     $gui.workspace.set_map(@editormap)
 
-    TilemapLayer.set_current(@interactive)
+    TilemapLayer.set_current(@layers[@current_layer])
     ObjectLayer.set_current(@objects)
   end
 

@@ -20,5 +20,6 @@
 #include "fonts.hxx"
 
 CL_Font Fonts::verdana11;
+CL_Font Fonts::verdana11_yellow;
 
 /* EOF */

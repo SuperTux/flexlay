@@ -30,6 +30,52 @@ class CL_Menu
   end
 end
 
+class ButtonPanel
+  attr_reader :panel
+
+  def initialize(x, y, width, height, horizontal, parent)
+    @panel = Panel.new(CL_Rect.new(CL_Point.new(x, y), CL_Size.new(width, height)), parent)
+    @pos   = 2
+    @horizontal = horizontal
+  end
+
+  def add_small_icon(filename, callback = nil, tooltip = "")
+    if (@horizontal)
+      icon = Icon.new(CL_Rect.new(CL_Point.new(@pos,  2), CL_Size.new(16, 32)),
+                      make_sprite(filename), tooltip, @panel);
+    else
+      icon = Icon.new(CL_Rect.new(CL_Point.new(2, @pos), CL_Size.new(16, 32)),
+                      make_sprite(filename), tooltip, @panel);
+    end
+    
+    @pos += 16
+    if (callback)
+      icon.set_callback(callback)
+    end
+    return icon
+  end
+
+  def add_icon(filename, callback = nil, tooltip = "")
+    if (@horizontal)
+      icon = Icon.new(CL_Rect.new(CL_Point.new(@pos,  2), CL_Size.new(32, 32)),
+                      make_sprite(filename), tooltip, @panel);
+    else
+      icon = Icon.new(CL_Rect.new(CL_Point.new(2, @pos), CL_Size.new(32, 32)),
+                      make_sprite(filename), tooltip, @panel);
+    end
+    
+    @pos += 32
+    if (callback)
+      icon.set_callback(callback)
+    end
+    return icon
+  end
+  
+  def add_seperator()
+    @pos += 16
+  end
+end
+
 # Very simple FileDialog, mainly a placeholder until the real thing gets ready.
 class SimpleFileDialog
   @window   = nil

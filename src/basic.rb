@@ -46,28 +46,16 @@ require "basic_level.rb"
 flexlay = Flexlay.new()
 flexlay.init()
 
-class Counter
-  counter = 0;
-  
-  def initialize(i)
-    @counter = i
-  end
-  
-  def inc(i)
-    @counter += i
-    return @counter
-  end
-end
-
 ## Initialize Tools
 class Controller
-  attr_reader :tilemap_paint_tool, :tilemap_select_tool, :zoom_tool, :objmap_select_tool
+  attr_reader :tilemap_paint_tool, :tilemap_select_tool, :zoom_tool, :objmap_select_tool, :recent_files
 
   def initialize()
     @tilemap_paint_tool  = TileMapPaintTool.new()
     @tilemap_select_tool = TileMapSelectTool.new()
     @zoom_tool           = ZoomTool.new()
     @objmap_select_tool  = ObjMapSelectTool.new()
+    @recent_files        = []
   end
     
   def set_tilemap_paint_tool()

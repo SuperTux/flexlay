@@ -12,11 +12,13 @@ class SecretArea<GameObj
 
     @message = get_value_from_tree(["message", "_"], sexpr, "")
 
-    x  = get_value_from_tree(["x", "_"],  sexpr, 0)
-    y  = get_value_from_tree(["y", "_"],  sexpr, 0)
+    x  = get_value_from_tree(["x", "_"],  sexpr, nil)
+    y  = get_value_from_tree(["y", "_"],  sexpr, nil)
     width  = get_value_from_tree(["width", "_"],  sexpr, 64)
     height = get_value_from_tree(["height", "_"], sexpr, 64)
-    @data.set_rect(CL_Rect.new(CL_Point.new(x, y), CL_Size.new(width, height)))
+    if x != nil and y != nil then
+      @data.set_rect(CL_Rect.new(CL_Point.new(x, y), CL_Size.new(width, height)))
+    end
   end
 
   def save(f, obj)
@@ -46,11 +48,13 @@ class SequenceTrigger<GameObj
     @sequence = get_value_from_tree(["sequence", "_"], sexpr, "")
     @data.set_color(CL_Color.new(255, 0, 0, 128))
 
-    x  = get_value_from_tree(["x", "_"],  sexpr, 0)
-    y  = get_value_from_tree(["y", "_"],  sexpr, 0)
+    x  = get_value_from_tree(["x", "_"],  sexpr, nil)
+    y  = get_value_from_tree(["y", "_"],  sexpr, nil)
     width  = get_value_from_tree(["width", "_"],  sexpr, 64)
     height = get_value_from_tree(["height", "_"], sexpr, 64)
-    @data.set_rect(CL_Rect.new(CL_Point.new(x, y), CL_Size.new(width, height)))
+    if x != nil and y != nil then
+      @data.set_rect(CL_Rect.new(CL_Point.new(x, y), CL_Size.new(width, height)))
+    end
   end
 
   def save(f, obj)

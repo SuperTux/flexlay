@@ -92,6 +92,7 @@ env.SharedLibrary(
     'object_selector.cxx',
     'object_transform_command.cxx',
     'objmap_object.cxx',
+    'objmap_path_node.cxx',
     'objmap_object_impl.cxx',
     'objmap_select_tool.cxx',
     'objmap_sprite_object.cxx',

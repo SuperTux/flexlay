@@ -52,6 +52,7 @@
 #include "objmap_sprite_object.hxx"
 #include "objmap_object.hxx"
 #include "zoom_tool.hxx"
+#include "objmap_path_node.hxx"
 
 #include "netpanzer.hxx" 
 %}
@@ -105,8 +106,8 @@
 %include "objmap_object.hxx"
 %include "zoom_tool.hxx" 
 %include "graphic_context_state.hxx"
+%include "objmap_path_node.hxx"
 
 %include "netpanzer.hxx" 
-
 
 /* EOF */

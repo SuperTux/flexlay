@@ -62,6 +62,13 @@ ObjMapObject::get_metadata() const
 }
 
 void
+ObjMapObject::set_metadata(MetaData data_)
+{
+  if (impl.get())
+    impl->data = data_;
+}
+
+void
 ObjMapObject::draw()
 {
   if (impl.get())

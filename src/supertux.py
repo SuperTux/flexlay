@@ -245,20 +245,31 @@ class SuperTuxLevel:
             f.write("%d " % i)
         f.write("  )\n\n")
 
+        f.write("  (camera\n")
+        f.write("    (mode \"autoscroll\")\n")
+        f.write("    (path\n")
+        for obj in self.objects.get_objects():
+            pathnode = get_python_object(obj.get_metadata())
+            if (pathnode.__class__ == PathNode):
+                f.write("     (point (x %d) (y %d) (speed 1))\n" % (obj.get_pos().x, obj.get_pos().y))
+        f.write("  ))\n\n")
+
         f.write("  (objects\n")
         for obj in self.objects.get_objects():
             badguy = get_python_object(obj.get_metadata())
-            pos    = obj.get_pos()
-            if (badguy.type != "resetpoint"):
-                f.write("     (%s (x %d) (y %d))\n" % (badguy.type, int(pos.x), int(pos.y)))
+            if (badguy.__class__ == BadGuy):
+                pos    = obj.get_pos()
+                if (badguy.type != "resetpoint"):
+                    f.write("     (%s (x %d) (y %d))\n" % (badguy.type, int(pos.x), int(pos.y)))
         f.write("  )\n\n")
 
         f.write("  (reset-points\n")
         for obj in self.objects.get_objects():
             badguy = get_python_object(obj.get_metadata())
-            pos    = obj.get_pos()
-            if (badguy.type == "resetpoint"):
-                f.write("     (point (x %d) (y %d))\n" % (int(pos.x), int(pos.y)))
+            if (badguy.__class__ == BadGuy):
+                pos    = obj.get_pos()
+                if (badguy.type == "resetpoint"):
+                    f.write("     (point (x %d) (y %d))\n" % (int(pos.x), int(pos.y)))
         f.write("  )\n\n")
         
         f.write(" )\n\n;; EOF ;;\n")
@@ -728,6 +739,34 @@ gui_show_interactive()
 gui_show_current()
 set_tilemap_paint_tool()
 
+class PathNode:
+    node = None
+    
+    def __init__(self, node):
+        self.node = node
+
+def insert_path_node(x,y):
+    print "Insert path Node"
+    m = workspace.get_map().get_metadata()
+    pathnode = ObjMapPathNode(editor_map.screen2world(CL_Point(x, y)),
+                              make_metadata("PathNode"))
+    pathnode.to_object().set_metadata(make_metadata(PathNode(pathnode)))
+    m.objects.add_object(pathnode.to_object())
+
+def connect_path_nodes():
+    print "Connecting path nodes"
+    pathnodes = []
+    for i in objmap_select_tool.get_selection():
+        obj = get_python_object(i.get_metadata())
+        if obj.__class__ == PathNode:
+            pathnodes.append(obj.node)
+
+    last = None
+    for i in pathnodes:
+        if last != None:
+            last.connect(i)
+        last = i
+            
 connect_v2(editor_map.sig_on_key("f1"), lambda x, y: gui_toggle_minimap())
 connect_v2(editor_map.sig_on_key("m"), lambda x, y: gui_toggle_minimap())
 connect_v2(editor_map.sig_on_key("g"), lambda x, y: gui_toggle_grid())
@@ -738,6 +777,9 @@ connect_v2(editor_map.sig_on_key("1"), lambda x, y: gui_show_background())
 
 connect_v2(editor_map.sig_on_key("5"), lambda x, y: editor_map.zoom_in(CL_Point(x, y)))
 connect_v2(editor_map.sig_on_key("6"), lambda x, y: editor_map.zoom_out(CL_Point(x, y)))
+
+connect_v2(editor_map.sig_on_key("i"), lambda x, y: insert_path_node(x,y))
+connect_v2(editor_map.sig_on_key("c"), lambda x, y: connect_path_nodes())
 
 gui.run()
 

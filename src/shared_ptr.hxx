@@ -40,8 +40,8 @@ public:
   T& operator*() { assert(ptr); return *ptr; }
   T const& operator*() const { assert(ptr); return *ptr; }
 
-  T* operator->() { return ptr; }
-  T const* operator->() const { return ptr; }
+  T* operator->() { assert(ptr); return ptr; }
+  T const* operator->() const { assert(ptr); return ptr; }
 
   T* get() const { return ptr; }
 };

@@ -1,21 +1,21 @@
 class Sector
-  parent    = nil
-  name      = nil
-  music     = nil
-  gravity   = 10.0
+  @parent    = nil
+  @name      = nil
+  @music     = nil
+  @gravity   = 10.0
   
-  width  = nil
-  height = nil
+  @width  = nil
+  @height = nil
   
-  background  = nil
-  interactive = nil
-  foreground  = nil
+  @background  = nil
+  @interactive = nil
+  @foreground  = nil
   
-  objects	  = nil
+  @objects	  = nil
 #  sketch    = nil
-  editormap = nil
+  @editormap = nil
 
-  cameramode = "normal"
+  @cameramode = "normal"
 
   attr_reader   :objects, :background, :interactive, :foreground, :parent, :width, :height
   attr_accessor :name, :music, :gravity
@@ -127,6 +127,7 @@ class Sector
     @name = "<No Name>"
     @music = ""
     @gravity = 10.0
+	@cameramode = "normal"
     
     @width  = 0
     @height = 0

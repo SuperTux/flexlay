@@ -22,7 +22,7 @@ $game_objects = [
   ["spawnpoint", "images/editor/spawnpoint.png", "sprite",
     proc{|data, sexpr| SpawnPoint.new(data)}],
   ["door", "images/shared/door-1.png", "sprite",
-    proc{|data, sexpr| Door.new(data)}],
+    proc{|data, sexpr| Door.new(data, sexpr)}],
   ["trampoline", "images/shared/trampoline-1.png", "sprite",
     proc{|data, sexpr| BadGuy.new("trampoline")}],
   ["bell", "images/shared/bell/bell-m.png", "sprite",

@@ -257,7 +257,7 @@ class Door<GameObj
   def initialize(data, sexpr = [])
     @data = data
     @sector     = get_value_from_tree(["sector", "_"], sexpr, "main")
-    @spawnpoint = get_value_from_tree(["spawnpoint", "_"], sexpr, "start")
+    @spawnpoint = get_value_from_tree(["spawnpoint", "_"], sexpr, "main")
 
     connect_v1_ObjMapObject(@data.to_object.sig_move(), method(:on_move))
     on_move(data)
@@ -274,9 +274,6 @@ class Door<GameObj
     pos = obj.get_pos()
     f.write("       (door\n")
     f.write("         (x %d) (y %d)" % [pos.x, pos.y])
-    # FIXME: not so sure if width/height make sense
-    f.write("         (width  32)\n")
-    f.write("         (height 64)\n")
     f.write("         (sector \"%s\")\n" % @sector)
     f.write("         (spawnpoint \"%s\")\n" % @spawnpoint)
     f.write("         )\n")

@@ -119,6 +119,7 @@ class GUI
                                  @gui.get_component())
     @tileselector = TileSelector.new(CL_Rect.new(CL_Point.new(3, 3), CL_Size.new(128, 552)), @selector_window)
     @tileselector.set_tileset($tileset)
+    @tileselector.set_scale(0.5)
     @tileselector.set_tiles($tileset.get_tiles())
     @tileselector.show(true)
     

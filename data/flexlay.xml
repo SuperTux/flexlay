@@ -1,4 +1,12 @@
 <resources>
+  <sprite name="tile1">
+    <image file="images/icons24/stock_right.png"/>
+  </sprite>
+
+  <sprite name="tile2">
+    <image file="images/icons24/stock_left.png"/>
+  </sprite>
+
   <sprite name="verdana11_black_glyphs">
     <image file="images/fonts/verdana11_black.png">
       <alpha />
@@ -10,4 +18,17 @@
       spacelen="4" 
       letters="!&quot;#$%&amp;'()*+,-./0123456789:;&lt;=&gt;?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~¡¢£¤¥¦§¨©ª«¬­®¯°±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüý" />
   </font>
+
+  <sprite name="verdana11_yellow_glyphs">
+    <image file="images/fonts/verdana11_yellow.png">
+      <alpha />
+    </image>
+  </sprite>
+  <font name="verdana11_yellow">
+    <bitmap
+      glyphs="verdana11_yellow_glyphs" 
+      spacelen="4" 
+      letters="!&quot;#$%&amp;'()*+,-./0123456789:;&lt;=&gt;?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~¡¢£¤¥¦§¨©ª«¬­®¯°±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüý" />
+  </font>
+
 </resources>

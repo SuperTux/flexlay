@@ -23,45 +23,17 @@ import os
 opts = Options('custom.py')
 opts.Add('CXX', 'The C++ compiler.', 'g++')
 opts.Add('CXXFLAGS', 'The C++ compiler flags.', '-g -O2 -Wall')
-opts.Add('USER_CPPPATH', 'additional header path', '')
-opts.Add('USER_LIBPATH', 'additional library path', '')
+opts.Add('CPPPATH', 'additional header path', '')
+opts.Add('LIBPATH', 'additional library path', '')
 opts.Add('RUBYDIR', 'Ruby directory', os.popen('ruby -e "require \'rbconfig\'; puts Config::CONFIG[\'archdir\']"').read()[:-1])
 
 env = Environment(SHLIBPREFIX='',
+                  ENV = os.environ,
                   options=opts)
-
 Help(opts.GenerateHelpText(env))
 
-Depends('flexlay_python_wrap.cxx', ['flexlay_wrap.i',
-                             'clanlib.i',
-                             'scripting/editor.hxx',
-                             'command.hxx',
-                             'paint_command.hxx',
-                             'object_move_command.hxx',
-                             'object_add_command.hxx',
-                             'scripting/editor.hxx',
-                             'tile.hxx',
-                             'tile_brush.hxx',
-                             'editor.hxx',
-                             'editor_map.hxx',
-                             'workspace.hxx',
-                             'tileset.hxx',
-                             'objmap_object.hxx',
-                             'objmap_sprite_object.hxx',
-                             'object_layer.hxx',
-                             'layer.hxx', 
-                             'editor_map.hxx',
-                             'editor_map_component.hxx',
-                             'flexlay.hxx',
-                             'globals.hxx',
-                             'python_functor.hxx',
-                             'gui_manager.hxx',
-                             'tile_selector.hxx',
-                             'object_brush.hxx',
-                             'object_selector.hxx'])
 
 Depends('flexlay_wrap.i', ['clanlib.i'])
-env.Command('flexlay_python_wrap.cxx', 'flexlay_wrap.i', "swig -python -o flexlay_python_wrap.cxx -c++ $SOURCE")
 env.Command('flexlay_ruby_wrap.cxx',   'flexlay_wrap.i', "swig -ruby   -o flexlay_ruby_wrap.cxx -c++ $SOURCE")
 
 #env.Program('sharedptrtest', 'sharedptrtest.cxx',
@@ -74,7 +46,11 @@ env.Command('flexlay_ruby_wrap.cxx',   'flexlay_wrap.i', "swig -ruby   -o flexla
 #            LIBPATH=['.', '/home/ingo/run/ClanLib-0.7-current//lib/'],
 #            LIBS=['flexlay'])
 
-env.SharedLibrary(
+clanLib_env = Environment()
+clanLib_env.ParseConfig("pkg-config --cflags --libs clanCore-0.7 clanDisplay-0.7 clanGL-0.7 clanSignals-0.7 clanGUI-0.7 clanGUIStyleSilver-0.7")
+
+libflexlay_env = env.Copy()
+libflexlay_env.SharedLibrary(
     target = 'libflexlay.so',
     source = [
     'blitter.cxx',
@@ -132,16 +108,55 @@ env.SharedLibrary(
     'window.cxx',
     'viewport.cxx',
     'zoom_tool.cxx'],
-    CPPPATH=['$USER_CPPPATH',
-             '..'],
-    LINKFLAGS = ['-Wl,-rpath', '$USER_LIBPATH'],
-    LIBPATH=['$USER_LIBPATH'], 
-    LIBS=['clanCore',
-          'clanDisplay',
-          'clanGL',
-          'clanSignals',
-          'clanGUI',
-          'clanGUIStyleSilver'])
+    CPPPATH=['..'] + clanLib_env['CPPPATH'],
+    CXXFLAGS  = clanLib_env['CCFLAGS'],
+    LINKFLAGS = ['-Wl,-rpath', '$USER_LIBPATH'] + clanLib_env['LINKFLAGS'],
+    LIBPATH=['$USER_LIBPATH'] + clanLib_env['LIBPATH'],
+    LIBS = clanLib_env['LIBS'])
+
+libflexlay_ruby_env = env.Copy()
+libflexlay_ruby_env.SharedLibrary(
+    target = 'flexlay_wrap.so',
+    source = [
+    'flexlay_ruby_wrap.cxx',
+    'ruby_functor.cxx',
+    'ruby_meta_data.cxx',
+    'ruby_sexpr_parser.cxx',
+    'ruby_object.cxx'
+    ],
+    CPPPATH=['$USER_CPPPATH','$RUBYDIR','..'] + clanLib_env['CPPPATH'],
+    LINKFLAGS = ['-Wl,-rpath', '$USER_LIBPATH'] + clanLib_env['LINKFLAGS'],
+    LIBPATH=['.'] + clanLib_env['LIBPATH'],
+    LIBS=['flexlay'] + clanLib_env['LIBS'])
+
+# env.Command('flexlay_python_wrap.cxx', 'flexlay_wrap.i', "swig -python -o flexlay_python_wrap.cxx -c++ $SOURCE")
+# Depends('flexlay_python_wrap.cxx', ['flexlay_wrap.i',
+#                              'clanlib.i',
+#                              'scripting/editor.hxx',
+#                              'command.hxx',
+#                              'paint_command.hxx',
+#                              'object_move_command.hxx',
+#                              'object_add_command.hxx',
+#                              'scripting/editor.hxx',
+#                              'tile.hxx',
+#                              'tile_brush.hxx',
+#                              'editor.hxx',
+#                              'editor_map.hxx',
+#                              'workspace.hxx',
+#                              'tileset.hxx',
+#                              'objmap_object.hxx',
+#                              'objmap_sprite_object.hxx',
+#                              'object_layer.hxx',
+#                              'layer.hxx', 
+#                              'editor_map.hxx',
+#                              'editor_map_component.hxx',
+#                              'flexlay.hxx',
+#                              'globals.hxx',
+#                              'python_functor.hxx',
+#                              'gui_manager.hxx',
+#                              'tile_selector.hxx',
+#                              'object_brush.hxx',
+#                              'object_selector.hxx'])
 
 # env.SharedLibrary(
 #     target = '_flexlay_wrap.so',
@@ -157,20 +172,5 @@ env.SharedLibrary(
 #              '..'],
 #     LIBPATH=['.', '/home/ingo/run/ClanLib-0.7-current//lib/'],
 #     LIBS=['flexlay'])
-
-env.SharedLibrary(
-    target = 'flexlay_wrap.so',
-    source = [
-    'flexlay_ruby_wrap.cxx',
-    'ruby_functor.cxx',
-    'ruby_meta_data.cxx',
-    'ruby_sexpr_parser.cxx',
-    'ruby_object.cxx'
-    ],
-    CPPPATH=['$USER_CPPPATH',
-             '$RUBYDIR',
-            '..'],
-    LIBPATH=['.', '/home/ingo/run/ClanLib-0.7-current//lib/'],
-    LIBS=['flexlay'])
 
 # EOF #

@@ -1,4 +1,4 @@
-//  $Id: windstille_bonus.cxx,v 1.2 2003/11/06 09:24:17 grumbel Exp $
+//  $Id: windstille_bonus.cxx,v 1.3 2003/11/06 09:53:43 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -78,18 +78,27 @@ WindstilleBonus::update(float delta)
 
   passed_time += delta;
 
-  if (passed_time > 2.9f)
+  if (passed_time > 1.85f)
     {
-      passed_time = 0;
-      sprite = CL_Sprite(lst[++index], resources);
-      sprite.set_alignment(origin_center);
-      pos.x = rand()%400 + 200;
-      pos.y = rand()%300 + 150;
+      index += 1;
+
+      if (index < int(lst.size()))
+        {
+          passed_time = 0;
+          sprite = CL_Sprite(lst[index], resources);
+          sprite.set_alignment(origin_center);
+          pos.x = rand()%400 + 200;
+          pos.y = rand()%300 + 150;
+        }
+      else
+        {
+          quit();
+        }
     }
 
   sprite.set_scale(1.0f + passed_time/3.0f,
                    1.0f + passed_time/3.0f);
-  sprite.set_alpha(std::max(0.0f, std::min(1.0f, 1.5f - passed_time/2.0f)));
+  sprite.set_alpha(std::max(0.0f, std::min(1.0f, 1.0f - passed_time/1.85f)));
 }
 
 void

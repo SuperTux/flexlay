@@ -1,4 +1,4 @@
-//  $Id: music_manager.cxx,v 1.1 2003/11/06 09:24:17 grumbel Exp $
+//  $Id: music_manager.cxx,v 1.2 2003/11/06 09:53:43 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -45,7 +45,6 @@ MusicManager::MusicManager()
 void
 MusicManager::play(const std::string& filename, bool loop)
 {
-  std::cout << "Play: " << filename << std::endl;
   if (state == STOPPED)
     {
       state = PLAYING;

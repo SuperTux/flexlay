@@ -1,4 +1,4 @@
-//  $Id: windstille_game.cxx,v 1.31 2003/11/06 09:24:17 grumbel Exp $
+//  $Id: windstille_game.cxx,v 1.32 2003/11/06 09:53:43 grumbel Exp $
 //
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -236,6 +236,7 @@ WindstilleGame::quit()
 {
   fadeout_value = 0;
   state = FADEOUT;
+  MusicManager::current()->stop();
 }
 
 /* EOF */

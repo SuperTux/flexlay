@@ -685,14 +685,17 @@
     <sprite name="bla"><image file="images/bonus/bla.jpg" /></sprite>
     <sprite name="brokencapsule"><image file="images/bonus/brokencapsule.jpg" /></sprite>
     <sprite name="buoy"><image file="images/bonus/buoy.jpg" /></sprite>
+    <sprite name="butterfly"><image file="images/bonus/butterfly.jpg" /></sprite>
     <sprite name="canon"><image file="images/bonus/canon.jpg" /></sprite>
     <sprite name="crab"><image file="images/bonus/crab.jpg" /></sprite>
     <sprite name="dingo"><image file="images/bonus/dingo.jpg" /></sprite>
     <sprite name="dog"><image file="images/bonus/dog.jpg" /></sprite>
+    <sprite name="dogs"><image file="images/bonus/dogs.jpg" /></sprite>
     <sprite name="droid"><image file="images/bonus/droid.jpg" /></sprite>
     <sprite name="droid2"><image file="images/bonus/droid2.jpg" /></sprite>
     <sprite name="endo"><image file="images/bonus/endo.jpg" /></sprite>
     <sprite name="enemy1"><image file="images/bonus/enemy1.jpg" /></sprite>
+    <sprite name="enemy2"><image file="images/bonus/enemy2.jpg" /></sprite>
     <sprite name="enemy3"><image file="images/bonus/enemy3.jpg" /></sprite>
     <sprite name="enemy4"><image file="images/bonus/enemy4.jpg" /></sprite>
     <sprite name="enemy5"><image file="images/bonus/enemy5.jpg" /></sprite>
@@ -703,7 +706,12 @@
     <sprite name="gun"><image file="images/bonus/gun.jpg" /></sprite>
     <sprite name="gun2"><image file="images/bonus/gun2.jpg" /></sprite>
     <sprite name="jolly"><image file="images/bonus/jolly.jpg" /></sprite>
+    <sprite name="lava"><image file="images/bonus/lava.jpg" /></sprite>
+    <sprite name="mech"><image file="images/bonus/mech.jpg" /></sprite>
+    <sprite name="mech2"><image file="images/bonus/mech2.jpg" /></sprite>
+    <sprite name="mech3"><image file="images/bonus/mech3.jpg" /></sprite>
     <sprite name="morph"><image file="images/bonus/morph.jpg" /></sprite>
+    <sprite name="morph2"><image file="images/bonus/morph2.jpg" /></sprite>
     <sprite name="plant"><image file="images/bonus/plant.jpg" /></sprite>
     <sprite name="plant2"><image file="images/bonus/plant2.jpg" /></sprite>
     <sprite name="plant3"><image file="images/bonus/plant3.jpg" /></sprite>
@@ -717,6 +725,7 @@
     <sprite name="roto"><image file="images/bonus/roto.jpg" /></sprite>
     <sprite name="runner"><image file="images/bonus/runner.jpg" /></sprite>
     <sprite name="skeleton"><image file="images/bonus/skeleton.jpg" /></sprite>
+    <sprite name="spike"><image file="images/bonus/spike.jpg" /></sprite>
     <sprite name="starter"><image file="images/bonus/starter.jpg" /></sprite>
     <sprite name="steam"><image file="images/bonus/steam.jpg" /></sprite>
     <sprite name="steam2"><image file="images/bonus/steam2.jpg" /></sprite>
@@ -728,6 +737,5 @@
     <sprite name="wallgen"><image file="images/bonus/wallgen.jpg" /></sprite>
     <sprite name="waterrunner"><image file="images/bonus/waterrunner.jpg" /></sprite>
     <sprite name="worm"><image file="images/bonus/worm.jpg" /></sprite>
-  </section>
-  
+  </section>  
 </resources>

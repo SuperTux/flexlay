@@ -109,7 +109,7 @@ Minimap::update_minimap_surface()
 {
   Field<int>* tilemap = editor_get_tilemap()->get_map(1);
   CL_PixelBuffer buffer(map_get_width(), map_get_height(), 
-                        map_get_width()*3, CL_PixelFormat::rgb888);
+                        map_get_width()*4, CL_PixelFormat::rgba8888);
   
   unsigned char* buf = static_cast<unsigned char*>(buffer.get_data());
   for(int y = 0; y < map_get_height(); ++y)
@@ -118,15 +118,17 @@ Minimap::update_minimap_surface()
         Tile* tile = TileFactory::current()->create(tilemap->at(x, y));
         if (tile)
           {
-            buf[3*(x + y * map_get_width()) + 0] = tile->get_attribute_color().get_blue();
-            buf[3*(x + y * map_get_width()) + 1] = tile->get_attribute_color().get_green();
-            buf[3*(x + y * map_get_width()) + 2] = tile->get_attribute_color().get_red();
+            buf[4*(x + y * map_get_width()) + 3] = tile->get_color().get_red();
+            buf[4*(x + y * map_get_width()) + 2] = tile->get_color().get_green();
+            buf[4*(x + y * map_get_width()) + 1] = tile->get_color().get_blue();
+            buf[4*(x + y * map_get_width()) + 0] = tile->get_color().get_alpha();
           } 
         else
           {
-            buf[3*(x + y * map_get_width()) + 0] = 0;
-            buf[3*(x + y * map_get_width()) + 1] = 0;
-            buf[3*(x + y * map_get_width()) + 2] = 0;
+            buf[4*(x + y * map_get_width()) + 0] = 0;
+            buf[4*(x + y * map_get_width()) + 1] = 0;
+            buf[4*(x + y * map_get_width()) + 2] = 0;
+            buf[4*(x + y * map_get_width()) + 3] = 0;
           }
       }
 

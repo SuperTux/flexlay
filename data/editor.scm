@@ -106,6 +106,33 @@
                          (objectmap-add-object objmap "sprites/mrbomb" x y '(mrbomb))))))
                   objects)
 
+        (catch #t
+               (lambda ()
+                 (cond ((equal? *game* 'netpanzer)
+                        (let* ((rawname (substring filename 0 (- (string-length filename) 4)))
+                               (optname (string-append rawname ".opt"))
+                               (spnname (string-append rawname ".spn")))
+                          
+                          ;; Generate outposts
+                          (for-each 
+                           (lambda (el)
+                             (objectmap-add-object objmap "sprites/outpost"
+                                                   (+ (* (string->number (cadr el))  32) 16)
+                                                   (+ (* (string->number (caddr el)) 32) 16)
+                                                   (list 'outpost (car el))))
+                           (parse-netpanzer-opt-file optname))
+                          
+                          ;; Generate spawnpoints
+                          (for-each
+                           (lambda (el)
+                             (objectmap-add-object objmap "sprites/spawnpoint"
+                                                   (+ (* (string->number (car el)) 32) 16)
+                                                   (+ (* (string->number (cadr el)) 32) 16)
+                                                   '(spawnpoint)))
+                           (parse-netpanzer-spn-file spnname))))))
+               (lambda args
+                 (display "Error: ")(display args)(newline)))
+        
         (editor-map-add-layer m tilemap)
         (editor-map-add-layer m objmap)
         
@@ -549,10 +576,10 @@
   ;;                                   (- screen-height 110)
   ;;                                   230 110 "Minimap")))
   ;;    (gui-push-component (gui-window-get-client-area window))
-    (set! *minimap* (minimap-create *editor-map*
-                                    (- screen-width width) 
-                                    (- screen-height height)
-                                    width height)))
+  (set! *minimap* (minimap-create *editor-map*
+                                  (- screen-width width) 
+                                  (- screen-height height)
+                                  width height)))
 ;;    (gui-pop-component)
 ;;  (gui-component-on-close window (lambda ()
 ;;                                  (gui-hide-component window)))
@@ -583,13 +610,13 @@
            (reverse ret)))))
 
 (define (create-netpanzer-brushbox)
-  (let ((window (gui-create-window 300 100 200 400 "netPanzer Brushbox")))
+  (let ((window (gui-create-window (- screen-width 200) 25 200 400 "netPanzer Brushbox")))
     (gui-push-component (gui-window-get-client-area window))
 
     (let* ((listbox (gui-listbox-create 10 5 175 360))
            (objects (with-input-from-file "netpanzer-tile-objects.txt"
-                     (lambda ()
-                       (read)))))
+                      (lambda ()
+                        (read)))))
       (for-each (lambda (el)
                   (gui-listbox-add listbox (format #f "~a - ~ax~a"
                                                    (cadddr el)
@@ -598,7 +625,7 @@
                 objects)
       (gui-listbox-on-click listbox
                             (lambda (index)
-                        
+                              
                               (let* ((obj (list-ref objects index))
                                      (start  (car obj))
                                      (width  (cadr obj))
@@ -607,9 +634,9 @@
                                 (tilemap-paint-tool-set-brush
                                  (list width height opaque
                                        (list->vector (seq start (+ start (* width height)))))))))
-                              )
-      (gui-component-on-close window (lambda ()
-                                       (gui-hide-component window)))
+      )
+    (gui-component-on-close window (lambda ()
+                                     (gui-hide-component window)))
     (gui-pop-component)))
 
 (define (create-netpanzer-tiler)
@@ -891,14 +918,15 @@
 
 (case *game*
   ((netpanzer)
-   (create-minimap 100 100))
+   (create-minimap 150 150))
   (else
    (create-minimap screen-width 50)))
 
 ;;(create-brush-selector)
 ;;(create-netpanzer-tiler)
-(if (equal? *game* 'netpanzer)
-    (create-netpanzer-brushbox))
+(cond ((equal? *game* 'netpanzer)
+       (create-netpanzer-brushbox)
+       (gui-hide-component *tileselector-window*)))
 
 (set-tool 'tile)
 

@@ -165,7 +165,7 @@ def connect_path_nodes()
   print "Connecting path nodes"
   pathnodes = []
   for i in objmap_select_tool.get_selection()
-    obj = get_python_object(i.get_metadata())
+    obj = get_ruby_object(i.get_metadata())
     if obj.__class__ == PathNode
       pathnodes.push(obj.node)
     end

@@ -30,8 +30,8 @@ class CL_Menu
   end
 end
 
+# Very simple FileDialog, mainly a placeholder until the real thing gets ready.
 class SimpleFileDialog
-  """Very simple FileDialog, mainly a placeholder until the real thing gets ready."""
   @window   = nil
   @inputbox = nil
   @ok_button     = nil
@@ -145,7 +145,7 @@ class GenericDialog
 
   def update()
     y = 10
-    for (type, label, comp) in @items
+    @items.each do |(type, label, comp)| 
       if type == "int" or type == "string"
         label.set_position(10, y)
         comp.set_position(110, y)

@@ -1,35 +1,24 @@
 class Level
-  version = 2
-  filename = nil
-  
-  name   = "no name"
-  author = "no author"
-  theme = "antarctica"
-  time = 999
-  music = "Mortimers_chipdisko.mod"
-  
-  objects = nil
-  camera  = nil
-  
-  sectors = nil
-  current_sector = nil
-
-  attr_reader :version, :filename, :name, :author, :theme, :time, :music, :objects, :camera, :sectors, :current_sector
-  attr_writer :version, :filename, :name, :author, :theme, :time, :music, :objects, :camera, :sectors, :current_sector
+  attr_reader :version, :filename, :name, :author, :theme, :time, :objects, :sectors, :current_sector
+  attr_writer :version, :filename, :name, :author, :theme, :time, :objects, :sectors, :current_sector
   
   def initialize(*params)
+    @name     = "No Name"
+    @author   = "No Author"
+    @theme    = "antarctica"
+    @time     = 999 
+    @filename = nil
+    @version  = 2
+
     if params.length() == 2 then
       # New Level
       (width, height) = params
       
-      @name   = "No Name"
-      @author = "No Author"
-      
       @width  = width
       @height = height
-      
+
       @current_sector = Sector.new(self)
-      @current_sector.new_from_size(width, height)
+      @current_sector.new_from_size("main", width, height)
       @sectors = []
       @sectors.push(@current_sector)
       
@@ -39,14 +28,14 @@ class Level
       
       tree = sexpr_read_from_file(@filename)
       if tree == nil
-        raise("Couldn't load level: ", filename)
+        raise("Couldn't load level: %s" % filename)
       end
       
       data = tree[1..-1]
       
       @version = get_value_from_tree(["version", "_"], data, 0)
       
-      print "VERSION: ", @version, "\n"
+      print "VERSION: ", @filename, " ",  @version, "\n"
       
       if (@version == 1) then
         parse_v1(data)
@@ -67,7 +56,6 @@ class Level
     @sectors = []
     for sec in sexpr_filter("sector", data)
       sector = Sector.new(self)
-      print("DATA: ", sec, "\n")
       sector.load_v2(sec)
       @sectors.push(sector)
       if sector.name == "main"
@@ -105,7 +93,7 @@ class Level
     f.write("  (version 2)\n")
     f.write("  (name   \"%s\")\n" % @name)
     f.write("  (author \"%s\")\n" % @author)
-    f.write("  (time   \"%s\")\n" % @time)   
+    f.write("  (time   %d)\n" % @time)   
     
     for sector in @sectors
       f.write("  (sector\n")
@@ -114,6 +102,7 @@ class Level
     end
 
     f.write(" )\n\n;; EOF ;;\n")
+    f.close()
   end
   
   def save_v1(filename)
@@ -123,13 +112,13 @@ class Level
     f.write("  (version 1)\n")
     f.write("  (name   \"%s\")\n" % @name)
     f.write("  (author \"%s\")\n" % @author)
-    f.write("  (width  %s)\n"  % @width)
-    f.write("  (height  %s)\n" % @height)
+    f.write("  (width  %d)\n"  % @width)
+    f.write("  (height  %d)\n" % @height)
     
     f.write("  (music  \"%s\")\n" % @music)
-    f.write("  (time   \"%s\")\n" % @time)
+    f.write("  (time   %d)\n" % @time)
     
-    f.write("  (gravity %d)\n" % @gravity)
+    f.write("  (gravity %f)\n" % @gravity)
     
     f.write("  (theme \"%s\")\n" % @theme)
     
@@ -155,7 +144,7 @@ class Level
     f.write("    (mode \"autoscroll\")\n")
     f.write("    (path\n")
     for obj in @objects.get_objects()
-      pathnode = get_python_object(obj.get_metadata())
+      pathnode = get_ruby_object(obj.get_metadata())
       if (pathnode.__class__ == PathNode)
         f.write("     (point (x %d) (y %d) (speed 1))\n" % obj.get_pos().x, obj.get_pos().y)
       end
@@ -164,7 +153,7 @@ class Level
     
     f.write("  (objects\n")
     for obj in @objects.get_objects()
-      badguy = get_python_object(obj.get_metadata())
+      badguy = get_ruby_object(obj.get_metadata())
       if (badguy.__class__ == BadGuy)
         pos    = obj.get_pos()
         if (badguy.type != "resetpoint")
@@ -176,7 +165,7 @@ class Level
     
     f.write("  (reset-points\n")
     for obj in @objects.get_objects()
-      badguy = get_python_object(obj.get_metadata())
+      badguy = get_ruby_object(obj.get_metadata())
       if (badguy.__class__ == BadGuy)
         pos    = obj.get_pos()
         if (badguy.type == "resetpoint")
@@ -187,6 +176,7 @@ class Level
     f.write("  )\n\n")
     
     f.write(" )\n\n;; EOF ;;\n")
+    f.close()
   end
 
   def activate_sector(sector, workspace)

@@ -24,7 +24,7 @@ flexlay.init()
 $editor = Editor.new()
 $gui = $editor.get_gui_manager()
 
-myrect     = CL_Rect.new(CL_Point.new(0, 56), CL_Size.new(665, 488+56))
+myrect      = CL_Rect.new(CL_Point.new(0, 56), CL_Size.new(665, 488+56))
 $editor_map = EditorMapComponent.new(myrect, $gui.get_component())
 $workspace  = Workspace.new(myrect.get_width(), myrect.get_height())
 $editor_map.set_workspace($workspace)
@@ -63,11 +63,14 @@ class DisplayProperties
   attr_reader :layer, :show_all, :current_only
   attr_writer :layer, :show_all, :current_only
 
-  layer    = INTERACTIVE_LAYER
-  show_all = false
-  current_only = false
+  def initialize()
+    @layer        = INTERACTIVE_LAYER
+    @show_all     = false
+    @current_only = false
+  end
     
   def set(map)
+
     if @current_only
       active   = CL_Color.new(255, 255, 255)
       deactive = CL_Color.new(0, 0, 0, 10)
@@ -102,8 +105,8 @@ class DisplayProperties
   end
 end
 
+# Load game tiles from filename into tileset
 def Tileset_load(tileset, filename)
-  "Load game tiles from filename into tileset"
   tree = sexpr_read_from_file(filename)
   tree = tree[1..-1]
   for i in tree

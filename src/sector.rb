@@ -33,8 +33,8 @@ class Sector
     @foreground.resize(size, pos)
   end
 
-  def new_from_size(width, height)
-    @name = "<No Name>"
+  def new_from_size(name, width, height)
+    @name = name
     @song = "<No Song>"
     @gravity = 10.0
     
@@ -123,9 +123,8 @@ class Sector
     @foreground  = nil
     
     @objects = ObjectLayer.new()
-    print "Data: ", data, "\n"
+
     for i in data
-      print "I: ", i, "\n"
       (name,data) = i[0], i[1..-1]
       if name == "name"
         @name = data[0]
@@ -141,7 +140,6 @@ class Sector
         tilemap = TilemapLayer.new($tileset, width, height)
         tilemap.set_data(get_value_from_tree(["tiles"], data, []))
         
-        print "Solid: ", solid
         if solid
           @interactive = tilemap
           @width       = width
@@ -201,36 +199,43 @@ class Sector
     connect(@editormap.sig_change(), proc{on_map_change()})
   end
 
+  def save_tilemap(f, tilemap, name, solid = nil)
+    f.write("    (tilemap\n")
+    f.write("      (layer  \"%s\")\n" % name)
+    f.write("      (solid %s)\n" % if solid == :solid then "#t" else "#f" end)
+    f.write("      (speed  %f)\n" % 1.0)
+    f.write("      (width  %d)\n" % tilemap.get_width())
+    f.write("      (height %d)\n" % tilemap.get_height())
+    f.write("      (tiles\n")
+    f.write("        ")
+    x = 0
+    for i in tilemap.get_data()
+      f.write("%d " % i)
+      x += 1
+      if x == width then
+        f.write("\n        ")
+        x = 0
+      end
+    end
+    f.write("))\n")    
+  end
+
   def save(f)   
     f.write("    (name  \"%s\")\n"  % @name)
-    f.write("    (width  %s)\n"  % @width)
-    f.write("    (height  %s)\n" % @height)   
+    f.write("    (width  %d)\n"  % @width)
+    f.write("    (height  %d)\n" % @height)   
     f.write("    (music  \"%s\")\n" % @song)
-    f.write("    (gravity %d)\n" % @gravity)
-
-    f.write("     (interactive-tm\n")
-    for i in interactive.get_data()
-      f.write("%d " % i)
-    end
-    f.write("    )\n\n")
+    f.write("    (gravity %f)\n" % @gravity)
     
-    f.write("    (background-tm\n")
-    for i in background.get_data()
-      f.write("%d " % i)
-    end
-    f.write("    )\n\n")
-
-    f.write("    (foreground-tm\n")
-    for i in foreground.get_data()
-      f.write("%d " % i)
-    end
-    f.write("    )\n\n")
+    save_tilemap(f, @background,  "background")
+    save_tilemap(f, @interactive, "main", :solid)
+    save_tilemap(f, @foreground,  "foreground")
 
     f.write("    (camera\n")
     f.write("      (mode \"autoscroll\")\n")
     f.write("      (path\n")
     for obj in @objects.get_objects()
-      pathnode = get_python_object(obj.get_metadata())
+      pathnode = get_ruby_object(obj.get_metadata())
       if (pathnode.__class__ == PathNode)
         f.write("       (point (x %d) (y %d) (speed 1))\n" % obj.get_pos().x, obj.get_pos().y)
       end
@@ -239,7 +244,7 @@ class Sector
 
     f.write("    (objects\n")
     for obj in @objects.get_objects()
-      badguy = get_python_object(obj.get_metadata())
+      badguy = get_ruby_object(obj.get_metadata())
       if (badguy.__class__ == BadGuy)
         pos    = obj.get_pos()
         if (badguy.type != "resetpoint")
@@ -251,7 +256,7 @@ class Sector
 
     f.write("    (reset-points\n")
     for obj in @objects.get_objects()
-      badguy = get_python_object(obj.get_metadata())
+      badguy = get_ruby_object(obj.get_metadata())
       if (badguy.__class__ == BadGuy)
         pos    = obj.get_pos()
         if (badguy.type == "resetpoint")

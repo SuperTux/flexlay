@@ -23,7 +23,7 @@ class SuperTuxGUI
     @objectselector = ObjectSelector.new(CL_Rect.new(0, 0, 128, 256), 42, 42, @selector_window)
     @objectselector.show(true)
 
-    for object in $game_objects
+    $game_objects.each do |object|
       @objectselector.add_brush(ObjectBrush.new(make_sprite($datadir + object[1]),
                                                 make_metadata(BadGuy.new(object[0]))))
     end
@@ -46,7 +46,12 @@ class SuperTuxGUI
 end
 
 def gui_level_save_as()
-  $save_dialog.set_filename(File.dirname($save_dialog.get_filename()) + "/")
+  filename = $save_dialog.get_filename()
+  if filename[-1] == "/"[0]
+    $save_dialog.set_filename(filename)
+  else
+    $save_dialog.set_filename(File.dirname(filename) + "/")
+  end
   $save_dialog.run(proc{|filename| supertux_save_level(filename) })
 end
 
@@ -54,8 +59,13 @@ def gui_level_save()
   filename = $workspace.get_map().get_metadata().parent.filename
   if filename
     $save_dialog.set_filename(filename)
-  else # FIXME
-    $save_dialog.set_filename(File.dirname($save_dialog.get_filename())  + "/")
+  else
+    filename = $save_dialog.get_filename()
+    if filename[-1] == "/"[0]
+      $save_dialog.set_filename(filename)
+    else
+      $save_dialog.set_filename(File.dirname(filename) + "/")
+    end
   end
   
   $save_dialog.run(proc{|filename| supertux_save_level(filename) })
@@ -252,10 +262,17 @@ end
 
 def gui_switch_sector_menu()
   mymenu = Menu.new(CL_Point.new(530, 54), $gui.get_component())
-  for i in $workspace.get_map().get_metadata().parent.get_sectors()
-    print "Sectors: ", i, "\n"
-    mymenu.add_item($mysprite, "Sector (%s)" % i,
-                    proc { $workspace.get_map().get_metadata().parent.activate_sector(i, $workspace) })
+  sector = $workspace.get_map().get_metadata()
+  sector.parent.get_sectors().each do |i|
+    if sector.name == i then
+      current = " [current]"
+    else
+      current = ""
+    end
+    mymenu.add_item($mysprite, ("Sector (%s)%s" % [i, current]), proc { 
+                      print "Switching to %s\n" % i
+                      $workspace.get_map().get_metadata().parent.activate_sector(i, $workspace) 
+                    })
   end
   mymenu.run()
 end
@@ -273,8 +290,15 @@ def gui_add_sector()
   dialog.add_int("Height: ",  height)
   
   dialog.set_callback(proc { |name, w, h|
-                        sector = Sector().new(w, h)
-                        sector.name = name
+                        uniq_name = name
+                        i = 1
+                        while level.get_sectors().index(uniq_name)
+                          uniq_name = name + "<%d>" % i
+                          i += 1
+                        end
+
+                        sector = Sector.new(level)
+                        sector.new_from_size(uniq_name, width, height)
                         level.add_sector(sector) })
 end  
 

@@ -1,4 +1,4 @@
-//  $Id: dialog_manager.hxx,v 1.1 2003/09/21 17:34:54 grumbel Exp $
+//  $Id: dialog_manager.hxx,v 1.2 2003/09/29 19:29:17 grumbel Exp $
 // 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -23,12 +23,14 @@
 #include <vector>
 #include <string>
 #include <ClanLib/Display/sprite.h>
+#include "scm_functor.hxx"
 #include "globals.hxx"
 
 class Dialog {
 public:
   CL_Sprite portrait;
   std::string text;
+  std::vector<std::pair<std::string, SCMFunctor> > answers;
 
   Dialog(const std::string& portrait, const std::string& text);
 };
@@ -37,9 +39,11 @@ public:
 class DialogManager
 {
 private:
-  std::vector<Dialog> dialogs;
+  typedef std::vector<Dialog> Dialogs;
+  Dialogs dialogs;
   int current_dialog;
-  
+  int current_choice;
+
   static DialogManager* current_;
 public:
   static DialogManager* current() { return current_; }
@@ -50,6 +54,7 @@ public:
   void update(float delta);
 
   void add_dialog(const std::string& portrait, const std::string& text);
+  void add_answer(const std::string& text, SCMFunctor func);
   void clear();
 private:
   DialogManager (const DialogManager&);

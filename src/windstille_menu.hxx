@@ -1,4 +1,4 @@
-//  $Id: fonts.hxx,v 1.2 2003/09/29 19:29:17 grumbel Exp $
+//  $Id: windstille_menu.hxx,v 1.1 2003/09/29 19:29:17 grumbel Exp $
 // 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -17,25 +17,29 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-#ifndef HEADER_FONTS_HXX
-#define HEADER_FONTS_HXX
+#ifndef HEADER_WINDESTILLE_MENU_HXX
+#define HEADER_WINDESTILLE_MENU_HXX
 
-#include <ClanLib/Display/font.h>
+#include <ClanLib/Display/sprite.h>
+#include "screen.hxx"
 
-namespace Fonts {
+/** */
+class WindstilleMenu : public Screen
+{
+private:
+  CL_Sprite background;
+  CL_Sprite windstille;
 
-extern CL_Font dialog;
-extern CL_Font dialog_h;
-
-extern CL_Font menu;
-extern CL_Font menu_h;
-
-extern CL_Font copyright;
-
-void init();
-void deinit();
-
-} // namespace Fonts
+public:
+  WindstilleMenu();
+  ~WindstilleMenu();
+  
+  void update(float delta);
+  void draw();
+private:
+  WindstilleMenu (const WindstilleMenu&);
+  WindstilleMenu& operator= (const WindstilleMenu&);
+};
 
 #endif
 

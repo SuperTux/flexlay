@@ -54,5 +54,15 @@
              "cursors keys allow you to control the suit, "
              " <down>+<control> drops a bomb, "
              "You can hide this dialog with <control>"))
+(dialog-add-answer "Yes"   (lambda () (display "YES! :)\n")))
+(dialog-add-answer "No"    (lambda () 
+                             (dialog-clear)
+                             (dialog-add "hero/portrait"
+                                         (string-append 
+                                          "You can hide this dialog with <control>"))
+                             (dialog-show)
+                             (display "NO! :(\n")))
+(dialog-add-answer "Maybe" (lambda () (display "Maybe! :/\n")))
 (dialog-show)
             
+;; EOF ;;

@@ -1,4 +1,4 @@
-//  $Id: windstille_main.cxx,v 1.19 2003/09/23 10:48:03 grumbel Exp $
+//  $Id: windstille_main.cxx,v 1.20 2003/09/29 19:29:17 grumbel Exp $
 //
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -30,6 +30,7 @@
 #include "guile_gameobj_factory.hxx"
 #include "windstille_level.hxx"
 #include "windstille_main.hxx"
+#include "windstille_menu.hxx"
 #include "fonts.hxx"
 #include "tile_factory.hxx"
 
@@ -130,15 +131,16 @@ WindstilleMain::inner_main(void* closure, int argc, char** argv)
 
     std::cout << "Loading Guile Code... done" << std::endl;
 
-    if (!launch_editor)
+    if (!launch_editor && levelfile.empty())
       {
-        if (levelfile.empty ())
-          levelfile = datadir + "levels/level2.scm";
-
+        std::cout << "Starting Menu" << std::endl;
+        WindstilleMenu menu;
+        menu.display();
+      }
+    else if (!launch_editor) // Launch Level
+      {
         TileFactory::init();
-
-        //gh_load ((datadir + "game.scm").c_str());
-
+        
         WindstilleGame game (levelfile);
         std::cout << "WindstilleMain: entering main-loop..." << std::endl;
         game.display ();

@@ -1,4 +1,4 @@
-//  $Id: dialog_manager.cxx,v 1.1 2003/09/21 17:34:54 grumbel Exp $
+//  $Id: dialog_manager.cxx,v 1.2 2003/09/29 19:29:17 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -35,6 +35,7 @@ DialogManager::DialogManager()
 {
   current_ = this;
   current_dialog = -1;
+  current_choice = 0;
 }
 
 void
@@ -45,14 +46,21 @@ DialogManager::add_dialog(const std::string& portrait, const std::string& text)
 }
 
 void
+DialogManager::add_answer(const std::string& text, SCMFunctor func)
+{
+  Dialog& dialog = dialogs[current_dialog];
+  dialog.answers.push_back(std::pair<std::string, SCMFunctor>(text, func));
+}
+
+void
 DialogManager::draw()
 {
   if (current_dialog != -1)
     {
       Dialog& dialog = dialogs[current_dialog];
       
-      CL_Display::fill_rect(CL_Rect(CL_Point(100, 100), CL_Size(600, 200)), CL_Color(0,0,0,128));
-      CL_Display::draw_rect(CL_Rect(CL_Point(100, 100), CL_Size(600, 200)), CL_Color(255,255,255, 80));
+      CL_Display::fill_rect(CL_Rect(CL_Point(100, 100), CL_Size(600, 250)), CL_Color(0,0,0,128));
+      CL_Display::draw_rect(CL_Rect(CL_Point(100, 100), CL_Size(600, 250)), CL_Color(255,255,255, 80));
       CL_Display::flush();
       
       CL_Display::fill_rect(CL_Rect(CL_Point(120, 120), CL_Size(120, 120)),
@@ -62,10 +70,27 @@ DialogManager::draw()
       dialog.portrait.draw(120, 120);
 
       Fonts::dialog.set_alignment(origin_top_left);
+      Fonts::dialog_h.set_alignment(origin_top_left);
+
       Fonts::dialog.draw(CL_Rect(CL_Point(260, 120), CL_Size(420, 0)),
                          dialog.text);
-      Fonts::dialog.set_alignment(origin_bottom_right);
-      Fonts::dialog.draw(680, 290, ">>>");
+      //Fonts::dialog.set_alignment(origin_bottom_right);    
+      //Fonts::dialog.draw(680, 290, ">>>");
+
+      Fonts::dialog.set_alignment(origin_top_center);
+      Fonts::dialog_h.set_alignment(origin_top_center);
+
+      if (dialog.answers.size() > 0)
+        {
+          int w = (500/dialog.answers.size());
+          for(Dialogs::size_type i = 0; i < dialog.answers.size(); ++i)
+            {
+              if (int(i) == current_choice)
+                Fonts::dialog_h.draw(150 + i*w + w/2, 280, "[" + dialog.answers[i].first + "]");
+              else
+                Fonts::dialog.draw(150 + i*w + w/2, 280, dialog.answers[i].first);
+            }
+        }
     }
 }
 
@@ -78,13 +103,32 @@ DialogManager::update(float delta)
        i != events.end(); ++i)
     {
       if ((*i).type == InputEvent::FIRE && (*i).state == true)
-        WindstilleGame::current()->set_game_state();
+        {
+          WindstilleGame::current()->set_game_state();
+          if (dialogs[current_dialog].answers.size() > 0)
+            dialogs[current_dialog].answers[current_choice].second();
+        }
+      else if ((*i).type == InputEvent::LEFT && (*i).state == true)
+        {
+          current_choice -= 1;
+        }
+      else if ((*i).type == InputEvent::RIGHT && (*i).state == true)
+        {
+          current_choice += 1;
+        }
     }
+
+  if (current_choice < 0)
+    current_choice = 0;
+  else if (current_choice >= int(dialogs[current_dialog].answers.size()))
+    current_choice = int(dialogs[current_dialog].answers.size()) - 1;
 }
 
 void
 DialogManager::clear()
 {
+  current_dialog = 0;
+  current_choice = 0;
   dialogs.clear();
 }
 

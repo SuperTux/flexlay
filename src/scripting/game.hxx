@@ -1,4 +1,4 @@
-//  $Id: game.hxx,v 1.12 2003/09/28 16:58:04 grumbel Exp $
+//  $Id: game.hxx,v 1.13 2003/09/29 19:29:17 grumbel Exp $
 // 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -44,6 +44,7 @@ bool game_get_pause();
 void game_quit();
 
 void dialog_add(const char* portrait, const char* text);
+void dialog_add_answer(const char* text, SCM func);
 void dialog_show();
 void dialog_hide();
 void dialog_clear();

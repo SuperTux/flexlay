@@ -1,4 +1,4 @@
-//  $Id: fonts.cxx,v 1.1 2003/09/21 15:22:59 grumbel Exp $
+//  $Id: fonts.cxx,v 1.2 2003/09/29 19:29:17 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -21,17 +21,35 @@
 #include "fonts.hxx"
 
 CL_Font Fonts::dialog;
+CL_Font Fonts::dialog_h;
+
+CL_Font Fonts::menu;
+CL_Font Fonts::menu_h;
+
+CL_Font Fonts::copyright;
 
 void
 Fonts::init()
 {
-  dialog = CL_Font("font", resources);
+  dialog   = CL_Font("font", resources);
+  dialog_h = CL_Font("font_h", resources);
+
+  menu   = CL_Font("menu", resources);
+  menu_h = CL_Font("menu_h", resources);
+
+  copyright = CL_Font("copyright", resources);
 }
 
 void
 Fonts::deinit()
 {
-  dialog = CL_Font();
+  dialog   = CL_Font();
+  dialog_h = CL_Font();
+
+  menu   = CL_Font();
+  menu_h = CL_Font();
+
+  copyright = CL_Font();
 }
 
 /* EOF */

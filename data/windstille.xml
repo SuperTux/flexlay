@@ -3,8 +3,41 @@
     <image name="image1" file="images/verdana32_blue.png"><alpha /></image>
   </sprite>
 
+  <sprite name="font_glyphsh">
+    <image name="image1" file="images/verdana32_blueh.png"><alpha /></image>
+  </sprite>
+
   <font name="font">
     <bitmap glyphs="font_glyphs" letters="!_#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~" />
+  </font>
+
+  <font name="font_h">
+    <bitmap glyphs="font_glyphsh" letters="!_#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~" />
+  </font>
+
+  <sprite name="menu_glyphs">
+    <image file="images/verdana48_blue.png"><alpha /></image>
+  </sprite>
+
+  <sprite name="menu_glyphsh">
+    <image file="images/verdana48_blueh.png"><alpha /></image>
+  </sprite>
+
+  <font name="menu">
+    <bitmap glyphs="menu_glyphs" letters="!_#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~" />
+  </font>
+
+  <font name="menu_h">
+    <bitmap glyphs="menu_glyphsh" letters="!_#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~" />
+  </font>
+
+
+  <sprite name="copyright_glyphs">
+    <image file="images/verdana11_blue.png"><alpha /></image>
+  </sprite>
+
+  <font name="copyright">
+    <bitmap glyphs="copyright_glyphs" letters="!_#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~" />
   </font>
 
   <section name="powerup">
@@ -570,6 +603,14 @@
     <image file="images/dog/frame2.png" name="image2" />
     <image file="images/dog/frame3.png" name="image3" />
     <image file="images/dog/frame4.png" name="image4" />
+  </sprite>
+
+  <sprite name="logo_large">
+    <image file="images/logo_large.png" />
+  </sprite>
+
+  <sprite name="menu_background">
+    <image file="images/menu_background.jpg" />
   </sprite>
 
   <sprite name="logo">

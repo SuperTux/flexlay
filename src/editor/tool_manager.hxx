@@ -33,10 +33,7 @@ private:
 
   TileMapTool* tool;
 
-  static ToolManager* current_; 
 public:
-  static ToolManager* current() { return current_; }
-
   ToolManager();
   ~ToolManager();
 

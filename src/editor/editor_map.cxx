@@ -46,7 +46,11 @@ EditorMap::EditorMap()
 
 EditorMap::~EditorMap()
 {
-  cleanup();
+  scripts.clear();
+  for(Layers::iterator i = layers.begin(); i != layers.end(); ++i)
+    {
+      delete (*i);
+    }
 }
   
 void
@@ -57,17 +61,6 @@ EditorMap::draw (EditorMapComponent* parent)
     (*i)->draw(parent);  
   CL_Display::flush();
 }
-
-void
-EditorMap::cleanup()
-{
-  scripts.clear();
-  for(Layers::iterator i = layers.begin(); i != layers.end(); ++i)
-    {
-      delete (*i);
-    }
-}
-
 
 EditorMapLayer*
 EditorMap::get_layer_by_name(int i)

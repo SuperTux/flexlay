@@ -22,7 +22,6 @@
 #include "../globals.hxx"
 #include "../tile_factory.hxx"
 #include "../tile.hxx"
-#include "src/scripting/editor.hxx"
 #include "tile_selector.hxx"
 #include "tilemap_paint_tool.hxx"
 
@@ -58,7 +57,12 @@ TileSelector::mouse_down(const CL_InputEvent& event)
 {
   if (event.id == CL_MOUSE_LEFT)
     {
-      editor_set_brush_tile(mouse_over_tile);
+      TileBrush brush(1, 1);
+
+      brush.set_opaque();
+      brush(0, 0) = mouse_over_tile;
+
+      TileMapPaintTool::current()->set_brush(brush);
     }
   else if (event.id == CL_MOUSE_MIDDLE)
     {

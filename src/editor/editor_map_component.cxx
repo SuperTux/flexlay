@@ -27,6 +27,7 @@
 #include "editor_map.hxx"
 #include "tool_manager.hxx"
 #include "tilemap_tool.hxx"
+#include "editor.hxx"
 #include "editor_map_component.hxx"
 
 EditorMapComponent* EditorMapComponent::current_ = 0; 
@@ -40,8 +41,6 @@ EditorMapComponent::EditorMapComponent(const CL_Rect& rect, CL_Component* parent
   slots.connect(sig_mouse_up(),   this, &EditorMapComponent::mouse_up);
   slots.connect(sig_mouse_down(), this, &EditorMapComponent::mouse_down);
   slots.connect(sig_mouse_move(), this, &EditorMapComponent::mouse_move);
-
-  diamond_map = 0;
 
   trans_offset     = CL_Pointf(0,0);
   old_trans_offset = CL_Pointf(0,0);
@@ -65,7 +64,7 @@ EditorMapComponent::mouse_up(const CL_InputEvent& event)
     {
     case CL_MOUSE_LEFT:
     case CL_MOUSE_RIGHT:
-      ToolManager::current()->current_tool()->on_mouse_up(event);
+      Editor::current()->get_tool_manager()->current_tool()->on_mouse_up(event);
       break;
 
     case CL_MOUSE_MIDDLE:
@@ -82,7 +81,7 @@ EditorMapComponent::mouse_up(const CL_InputEvent& event)
 void
 EditorMapComponent::mouse_move(const CL_InputEvent& event)
 {
-  ToolManager::current()->current_tool()->on_mouse_move(event);
+  Editor::current()->get_tool_manager()->current_tool()->on_mouse_move(event);
 
   if (scrolling)
     {
@@ -98,7 +97,7 @@ EditorMapComponent::mouse_down(const CL_InputEvent& event)
     {
     case CL_MOUSE_LEFT:
     case CL_MOUSE_RIGHT:
-      ToolManager::current()->current_tool()->on_mouse_down(event);
+      Editor::current()->get_tool_manager()->current_tool()->on_mouse_down(event);
       break;
 
     case CL_MOUSE_MIDDLE:
@@ -126,7 +125,7 @@ EditorMapComponent::draw ()
   editor_map->draw(this);
 
   if (has_mouse_over())
-    ToolManager::current()->current_tool()->draw();
+    Editor::current()->get_tool_manager()->current_tool()->draw();
     
   CL_Display::flush();
 

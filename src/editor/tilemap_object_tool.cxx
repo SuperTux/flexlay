@@ -72,7 +72,7 @@ TileMapObjectTool::draw()
 void
 TileMapObjectTool::on_mouse_up(const CL_InputEvent& event)
 {
-  EditorObjMap* objmap = dynamic_cast<EditorObjMap*>(EditorMap::current()->get_layer_by_name(OBJECTMAP_NAME));
+  EditorObjMap* objmap = dynamic_cast<EditorObjMap*>(EditorMapComponent::current()->get_map()->get_layer_by_name(OBJECTMAP_NAME));
   EditorMapComponent* parent = EditorMapComponent::current();
 
   CL_Point pos = parent->screen2world(event.mouse_pos);
@@ -111,7 +111,7 @@ TileMapObjectTool::on_mouse_up(const CL_InputEvent& event)
 void
 TileMapObjectTool::on_mouse_down(const CL_InputEvent& event)
 {
-  EditorObjMap* objmap = dynamic_cast<EditorObjMap*>(EditorMap::current()->get_layer_by_name(OBJECTMAP_NAME));
+  EditorObjMap* objmap = dynamic_cast<EditorObjMap*>(EditorMapComponent::current()->get_map()->get_layer_by_name(OBJECTMAP_NAME));
   EditorMapComponent* parent = EditorMapComponent::current();
   CL_Point pos = parent->screen2world(event.mouse_pos);
       
@@ -155,7 +155,7 @@ TileMapObjectTool::on_mouse_down(const CL_InputEvent& event)
 void
 TileMapObjectTool::on_mouse_move(const CL_InputEvent& event)
 {
-  EditorObjMap* objmap = dynamic_cast<EditorObjMap*>(EditorMap::current()->get_layer_by_name(OBJECTMAP_NAME));
+  EditorObjMap* objmap = dynamic_cast<EditorObjMap*>(EditorMapComponent::current()->get_map()->get_layer_by_name(OBJECTMAP_NAME));
   EditorMapComponent* parent = EditorMapComponent::current();
   CL_Point pos = parent->screen2world(event.mouse_pos);
 

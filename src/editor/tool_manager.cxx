@@ -27,12 +27,8 @@
 #include "editor_names.hxx"
 #include "tool_manager.hxx"
 
-ToolManager* ToolManager::current_ = 0; 
-
 ToolManager::ToolManager()
 {
-  current_ = this;
-
   // FIXME: move this to scripting too
   tools.push_back(new TileMapPaintTool  ());
   tools.push_back(new TileMapSelectTool ());

@@ -48,8 +48,6 @@ private:
 
   bool scrolling;
 
-  Field<int>* diamond_map;
-
   static EditorMapComponent* current_; 
 public:
   static EditorMapComponent* current() { return current_; } 
@@ -57,6 +55,8 @@ public:
   EditorMapComponent(const CL_Rect& rect, CL_Component* parent);
   ~EditorMapComponent();
  
+  EditorMap* get_map() const { return editor_map; }
+
   float get_zoom();
   void  zoom_out();
   void  zoom_in();

@@ -46,6 +46,8 @@ public:
   Editor();
   ~Editor();
 
+  ToolManager* get_tool_manager() const { return tool_manager; }
+
   void run();
 
   /** Execute a command and place it on the undo stack, commands given

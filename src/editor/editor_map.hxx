@@ -45,12 +45,7 @@ private:
   Field<int>* diamond_map;
   std::vector<std::string> scripts;
 
-  void cleanup();
-
-  static EditorMap* current_; 
 public:
-  static EditorMap* current() { return current_; } 
-
   EditorMap();
   ~EditorMap();
 

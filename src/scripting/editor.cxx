@@ -57,7 +57,7 @@ void editor_undo()
 EditorObjMap*
 editor_get_objmap()
 {
-  return dynamic_cast<EditorObjMap*>(EditorMap::current()->get_layer_by_name(OBJECTMAP_NAME));
+  return dynamic_cast<EditorObjMap*>(EditorMapComponent::current()->get_map()->get_layer_by_name(OBJECTMAP_NAME));
 }
 
 EditorTileMap*
@@ -213,7 +213,7 @@ SCM
 editor_get_tile_selection()
 {
   TileMapSelectTool* tool 
-    = dynamic_cast<TileMapSelectTool*>(ToolManager::current()->get_tool_by_name(1));
+    = dynamic_cast<TileMapSelectTool*>(Editor::current()->get_tool_manager()->get_tool_by_name(1));
 
   if (tool)
     {
@@ -278,7 +278,7 @@ void tilemap_set_active_layer(int i)
 
 void editor_set_tool(int i)
 {
-  ToolManager::current()->set_tool(i);
+  Editor::current()->get_tool_manager()->set_tool(i);
 }
 
 CL_Component*
@@ -463,7 +463,7 @@ SCM map_get_scripts()
 {
   SCM lst = SCM_EOL;
 
-  std::vector<std::string> scripts = EditorMap::current()->get_scripts();
+  std::vector<std::string> scripts = EditorMapComponent::current()->get_map()->get_scripts();
   for (std::vector<std::string>::iterator i = scripts.begin(); 
        i != scripts.end(); ++i)
     {

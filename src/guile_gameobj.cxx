@@ -1,4 +1,4 @@
-//  $Id: guile_gameobj.cxx,v 1.1 2003/08/10 19:56:40 grumbel Exp $
+//  $Id: guile_gameobj.cxx,v 1.2 2003/08/11 10:03:55 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -25,12 +25,12 @@
 GuileGameObj::GuileGameObj (SCM arg_obj, SCM arg_update, SCM arg_draw)
   : obj (arg_obj), scm_update (arg_update), scm_draw (arg_draw)
 {
-  scm_protect_object (scm_update);
-  scm_protect_object (scm_draw);
-  scm_protect_object (obj);
+  scm_gc_protect_object (scm_update);
+  scm_gc_protect_object (scm_draw);
+  scm_gc_protect_object (obj);
   
   smob = create_smob<GameObj> (this);
-  scm_protect_object (smob);
+  scm_gc_protect_object (smob);
 }
 
 GuileGameObj::~GuileGameObj ()

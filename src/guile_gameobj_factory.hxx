@@ -1,4 +1,4 @@
-//  $Id: guile_gameobj_factory.hxx,v 1.1 2003/08/10 19:56:40 grumbel Exp $
+//  $Id: guile_gameobj_factory.hxx,v 1.2 2003/08/11 10:03:55 grumbel Exp $
 // 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -39,9 +39,9 @@ public:
   GuileGameObjDesc (SCM arg_create, SCM arg_update, SCM arg_draw) 
     : scm_create (arg_create), scm_update (arg_update), scm_draw (arg_draw)
   {
-    scm_protect_object (scm_create);
-    scm_protect_object (scm_update);
-    scm_protect_object (scm_draw);
+    scm_gc_protect_object (scm_create);
+    scm_gc_protect_object (scm_update);
+    scm_gc_protect_object (scm_draw);
   }
 };
 

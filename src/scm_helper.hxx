@@ -1,7 +1,7 @@
-//  $Id: background.cxx,v 1.1 2003/08/10 19:56:40 grumbel Exp $
-//
+//  $Id: scm_helper.hxx,v 1.1 2003/08/11 10:04:38 grumbel Exp $
+// 
 //  Pingus - A free Lemmings clone
-//  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
+//  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -12,21 +12,19 @@
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
-//
+// 
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-#include "background.cxx"
+#ifndef HEADER_SCM_HELPER_HXX
+#define HEADER_SCM_HELPER_HXX
 
-void
-Background::draw ()
-{
-}
+#include <guile/gh.h>
+#include <string>
 
-void
-Background::update (float delta)
-{
-}
+std::string scm2string(SCM str);
+
+#endif
 
 /* EOF */

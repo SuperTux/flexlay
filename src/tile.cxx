@@ -1,7 +1,7 @@
-//  $Id: tile_factory.hxx,v 1.2 2003/08/11 10:03:55 grumbel Exp $
-// 
+//  $Id: tile.cxx,v 1.1 2003/08/11 10:04:38 grumbel Exp $
+//
 //  Pingus - A free Lemmings clone
-//  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
+//  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -12,36 +12,17 @@
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
-// 
+//
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-#ifndef TILEFACTORY_HXX
-#define TILEFACTORY_HXX
+#include "tile.hxx"
 
-#include <map>
-#include <string>
-
-class Tile;
-
-/** */
-class TileFactory
+Tile::Tile(CL_Sprite arg_sur, unsigned char arg_colmap[])
+  : sur(arg_sur)
 {
-private:
-  std::map<std::string, Tile*> tiles;
-
-  TileFactory ();
-
-  static TileFactory* current_;
-public:
-  Tile* create (const std::string& name);
-
-  static void init();
-  static void deinit();
-  static TileFactory* current() { return current_; }
-};
-
-#endif
+  memcpy(colmap, arg_colmap, 8);
+}
 
 /* EOF */

@@ -1,4 +1,4 @@
-//  $Id: gamepad_controller.cxx,v 1.1 2003/08/10 19:56:40 grumbel Exp $
+//  $Id: gamepad_controller.cxx,v 1.2 2003/08/11 10:03:55 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -17,7 +17,7 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-#include "Gamepadcontroller.hxx"
+#include "gamepad_controller.hxx"
 
 GamepadController::GamepadController (unsigned int joy_num)
 {

@@ -1,4 +1,4 @@
-//  $Id: tile_map.hxx,v 1.2 2003/08/11 08:03:23 grumbel Exp $
+//  $Id: tile_map.hxx,v 1.3 2003/08/11 10:03:55 grumbel Exp $
 // 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -27,17 +27,7 @@
 #include "field.hxx"
 
 class WindstilleLevel;
-
-/** A Sprite along with collision information, the position
-    information is handled in the TileMap class and not here */
-class Tile
-{
-public:
-  CL_Sprite sur;
-  int collision;
-
-  Tile (CL_Sprite arg_sur, int col);
-};
+class Tile;
 
 class TileMap
 {

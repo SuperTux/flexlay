@@ -1,4 +1,4 @@
-//  $Id: tile_map.cxx,v 1.2 2003/08/11 08:03:23 grumbel Exp $
+//  $Id: tile_map.cxx,v 1.3 2003/08/11 10:03:55 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -21,15 +21,10 @@
 #include <sstream>
 #include "tile_map.hxx"
 #include "windstille_level.hxx"
+#include "tile.hxx"
 #include "globals.hxx"
 
 extern CL_ResourceManager* resources;
-
-Tile::Tile (CL_Sprite arg_sur, int col)
-: sur (arg_sur),
-  collision (col)
-{
-}
 
 TileMap::TileMap (WindstilleLevel* data)
   : field (data->get_field()->get_width (),
@@ -41,7 +36,10 @@ TileMap::TileMap (WindstilleLevel* data)
   for (unsigned int y = 0; y < field.get_height (); ++y) {
     for (unsigned int x = 0; x < field.get_width (); ++x)
       {
-	int col = 1;
+        unsigned char cole[8] = { 0, 0, 0, 0, 0, 0, 0, 0 };
+        unsigned char colf[8] = { 255, 255, 255, 255, 255, 255, 255, 255 };
+        unsigned char* col = colf;
+
 	std::string name = (*data->get_field()) (x, y);
 	if (name == "tiles/green1" ||
             name == "tiles/tile3"  ||
@@ -67,10 +65,10 @@ TileMap::TileMap (WindstilleLevel* data)
 	    name == "tiles/tile75" ||
 	    name == "tiles/tile76" ||
 	    name == "tiles/tile77" ||
-            name == "none"
-	    )
-	  col = 0;
-	std::cout << col;
+            name == "none")
+          {
+            col = cole;
+          }
 
 	if (name != "none")
 	  field (x, y) = new Tile (CL_Sprite(name, resources), col);
@@ -114,6 +112,9 @@ TileMap::is_ground (float x, float y)
   unsigned int x_pos = int(x) / TILE_SIZE;
   unsigned int y_pos = int(y) / TILE_SIZE;
 
+  unsigned int sub_tile_x = int(x) / (TILE_SIZE/8) - x_pos*8;
+  unsigned int sub_tile_y = int(y) / (TILE_SIZE/8) - y_pos*8;
+
   if (x_pos < 0 || x_pos >= field.get_width () || y_pos < 0 || y_pos >= field.get_height ())
     {
       std::cout << "TileMap::is_ground (): Out of range: " << x_pos << " " << y_pos << std::endl;
@@ -121,7 +122,7 @@ TileMap::is_ground (float x, float y)
     }
 
   if (field (x_pos, y_pos))
-    return field (x_pos, y_pos)->collision;
+    return field (x_pos, y_pos)->get_col(sub_tile_x, sub_tile_y);
   else
     return 0;
 }

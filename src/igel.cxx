@@ -1,4 +1,4 @@
-//  $Id: igel.cxx,v 1.3 2003/09/28 10:55:34 grumbel Exp $
+//  $Id: igel.cxx,v 1.4 2003/11/05 12:41:37 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -96,7 +96,7 @@ Igel::update(float delta)
           && pos.x + 20 > player_pos.x
           && pos.y - 20 < player_pos.y
           && pos.y + 5  > player_pos.y)
-        Player::current()->hit(3);
+        Player::current()->hit(5);
     }
 }
 

@@ -1,4 +1,4 @@
-//  $Id: player.hxx,v 1.9 2003/09/20 21:53:38 grumbel Exp $
+//  $Id: player.hxx,v 1.10 2003/11/05 12:41:37 grumbel Exp $
 // 
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -66,6 +66,7 @@ private:
   CL_Sprite sit;
   CL_Sprite jump;
   CL_Sprite stand;
+  CL_Sprite killed;
 
   CL_Sprite roll;
   CL_Sprite surround;
@@ -75,7 +76,7 @@ private:
   float hit_count;
   int energie;
 public:
-  typedef enum { WALKING, SITTING, STANDING } MovementState;
+  typedef enum { WALKING, SITTING, STANDING, KILLED } MovementState;
   typedef enum { GUN_READY, GUN_RELOADING } GunState;
   typedef enum { ON_GROUND, IN_AIR } GroundState;
 

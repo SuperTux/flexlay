@@ -1,4 +1,4 @@
-//  $Id: gui_manager.cxx,v 1.2 2003/10/12 11:58:09 grumbel Exp $
+//  $Id: gui_manager.cxx,v 1.3 2003/11/05 12:41:37 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -44,8 +44,8 @@ GUIManager::~GUIManager()
   gui_pop_component();
 
   delete manager;
-  delete style;
-  delete resources;
+  //delete style; FIXME: Memory hole?!
+  //delete resources;  FIXME: Memory hole?!
   delete slot_container;
 }
   

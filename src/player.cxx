@@ -1,4 +1,4 @@
-//  $Id: player.cxx,v 1.17 2003/09/20 21:53:38 grumbel Exp $
+//  $Id: player.cxx,v 1.18 2003/11/05 12:41:37 grumbel Exp $
 //
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -27,6 +27,8 @@
 #include "bomb.hxx"
 #include "globals.hxx"
 
+#define MAX_ENERGIE 16
+
 Player* Player::current_ = 0;
 
 Player::Player (Controller* c) :
@@ -38,13 +40,14 @@ Player::Player (Controller* c) :
   sit      ("hero/sit",   resources),
   jump     ("hero/jump",  resources),
   stand    ("hero/stand", resources),
+  killed   ("hero/kill", resources),
 
   state (WALKING),
   gun_state (GUN_READY),
   ground_state (IN_AIR)
-{  
+{
   jumping = false;
-  energie = 20;
+  energie = 1; //MAX_ENERGIE;
   current_ = this;
 
   walk.set_alignment(origin_bottom_center, 0, 3);
@@ -77,6 +80,9 @@ Player::draw ()
 	case SITTING:
 	  sprite = &sit;
 	  break;
+        case KILLED:
+          sprite = &killed;
+          break;
 	}
       break;
     default:
@@ -136,39 +142,46 @@ Player::get_subtile_pos()
 void 
 Player::update (float delta)
 {
-  if (hit_count > 0)
-    hit_count -= delta;
-
-  walk.update(delta);
-  
-  if (controller->get_state(InputEvent::LEFT))
-    direction = WEST;
-  else if  (controller->get_state(InputEvent::RIGHT))
-    direction = EAST;
-
-  switch(ground_state)
+  if (state == KILLED)
     {
-    case ON_GROUND:
-      update_ground (delta);
-      if (!on_ground ())
-        ground_state = IN_AIR;
-      break;
-    case IN_AIR:
-      update_air (delta);
-      break;
+      killed.update(delta);
     }
-
-  SubTilePos new_subtile_pos = get_subtile_pos();
-  if (!(subtile_pos == new_subtile_pos))
+  else
     {
-      if (get_world()->get_tilemap()->get_pixel(new_subtile_pos.x, new_subtile_pos.y))
+      if (hit_count > 0)
+        hit_count -= delta;
+
+      walk.update(delta);
+  
+      if (controller->get_state(InputEvent::LEFT))
+        direction = WEST;
+      else if  (controller->get_state(InputEvent::RIGHT))
+        direction = EAST;
+
+      switch(ground_state)
         {
-          pos.x = subtile_pos.x * SUBTILE_SIZE;
-          pos.y = subtile_pos.y * SUBTILE_SIZE;
+        case ON_GROUND:
+          update_ground (delta);
+          if (!on_ground ())
+            ground_state = IN_AIR;
+          break;
+        case IN_AIR:
+          update_air (delta);
+          break;
         }
-      else
+
+      SubTilePos new_subtile_pos = get_subtile_pos();
+      if (!(subtile_pos == new_subtile_pos))
         {
-          subtile_pos = new_subtile_pos;
+          if (get_world()->get_tilemap()->get_pixel(new_subtile_pos.x, new_subtile_pos.y))
+            {
+              pos.x = subtile_pos.x * SUBTILE_SIZE;
+              pos.y = subtile_pos.y * SUBTILE_SIZE;
+            }
+          else
+            {
+              subtile_pos = new_subtile_pos;
+            }
         }
     }
 }
@@ -310,15 +323,23 @@ Player::get_energie()
 int
 Player::get_max_energie()
 {
-  return 20;
+  return MAX_ENERGIE;
 }
 
 void
 Player::hit(int points)
 {
   if (energie > 0 && hit_count <= 0)
-    energie -= points;
-  hit_count = 1.0f;
+    {
+      energie -= points;
+      hit_count = 1.0f;
+    }
+
+  if (energie <= 0)
+    {
+      state = KILLED;
+      hit_count = 0;
+    }
 }
 
 /* EOF */

@@ -142,6 +142,44 @@
       <image file="images/hero_run/hero-0.png" name="image10" />
     </description>
 
+    <sprite name="kill">
+      <animation speed="30" loop="no" />
+      <translation origin="top_left" x="-200" y="120"/>
+      <image file="images/hero_dead/0001.png" />
+      <image file="images/hero_dead/0001.png" />
+      <image file="images/hero_dead/0002.png" />
+      <image file="images/hero_dead/0003.png" />
+      <image file="images/hero_dead/0004.png" />
+      <image file="images/hero_dead/0005.png" />
+      <image file="images/hero_dead/0006.png" />
+      <image file="images/hero_dead/0007.png" />
+      <image file="images/hero_dead/0008.png" />
+      <image file="images/hero_dead/0009.png" />
+      <image file="images/hero_dead/0010.png" />
+      <image file="images/hero_dead/0011.png" />
+      <image file="images/hero_dead/0012.png" />
+      <image file="images/hero_dead/0013.png" />
+      <image file="images/hero_dead/0014.png" />
+      <image file="images/hero_dead/0015.png" />
+      <image file="images/hero_dead/0016.png" />
+      <image file="images/hero_dead/0017.png" />
+      <image file="images/hero_dead/0018.png" />
+      <image file="images/hero_dead/0019.png" />
+      <image file="images/hero_dead/0020.png" />
+      <image file="images/hero_dead/0021.png" />
+      <image file="images/hero_dead/0022.png" />
+      <image file="images/hero_dead/0023.png" />
+      <image file="images/hero_dead/0024.png" />
+      <image file="images/hero_dead/0025.png" />
+      <image file="images/hero_dead/0026.png" />
+      <image file="images/hero_dead/0027.png" />
+      <image file="images/hero_dead/0028.png" />
+      <image file="images/hero_dead/0029.png" />
+      <image file="images/hero_dead/0030.png" />
+      <image file="images/hero_dead/0031.png" />
+      <image file="images/hero_dead/0032.png" />
+    </sprite>
+
     <sprite name="run" play_speed="30">
       <image file="images/hero_run/hero-9.png" name="image1" />
       <image file="images/hero_run/hero-8.png" name="image2" />

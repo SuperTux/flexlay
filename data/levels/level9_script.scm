@@ -85,13 +85,14 @@
                "/"
                (number->string (game-get-max-diamonds))
                ))
+  (dialog-add-answer "Ok" (lambda () (game-quit)))
   (dialog-show)
   (remove-trigger))
 
-(add-region-trigger 7221 3744  7493 3837
+(add-region-trigger 6000 3968  9000 5000
                     end-dialog)
 
-(add-region-trigger 357 389 660 776
-                    startup-dialog)
+;;(add-region-trigger 357 389 660 776
+;;                    startup-dialog)
 
 ;; EOF ;;

@@ -58,6 +58,9 @@ int  editor_objectmap_add_object(const char* name, int x, int y, SCM userdata);
 SCM  editor_objectmap_get_objects();
 SCM  editor_objectmap_get_object(int id);
 
+void objectmap_tool_set_popupmenu_callback(SCM callback);
+CL_Component*  current_popup_menu();
+
 CL_Component* editor_add_tileeditor(int x, int y);
 
 void tileeditor_set_tile(CL_Component* comp, int id);

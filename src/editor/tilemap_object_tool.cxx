@@ -107,9 +107,10 @@ TileMapObjectTool::on_mouse_up(const CL_InputEvent& event)
 
     case CL_MOUSE_RIGHT:
       {
-        new PopupMenu(CL_Point(event.mouse_pos.x + parent->get_screen_rect().left,
-                               event.mouse_pos.y + parent->get_screen_rect().top), 
-                      GUIManager::current()->get_component());
+        PopupMenu* menu = new PopupMenu(CL_Point(event.mouse_pos.x + parent->get_screen_rect().left,
+                                                 event.mouse_pos.y + parent->get_screen_rect().top), 
+                                        GUIManager::current()->get_component());
+        on_popup_menu_display(menu->get_menu());
       }
       break;
     }

@@ -586,6 +586,15 @@
                                  (access? file F_OK))
                                *recent-files*)))
 
+(objectmap-tool-set-popupmenu-callback 
+ (lambda ()
+   (display "Callback ")
+   (display (current-popup-menu))
+   (let ((menu (current-popup-menu)))
+     (gui-add-menu-item menu "Testomat/Foobar" (lambda () (display "Foobar\n")))
+     (gui-add-menu-item menu "Foobar" (lambda () (display "Foobar2\n"))))
+   (newline)))
+
 (load-variables)
 (init-recent-files)
 

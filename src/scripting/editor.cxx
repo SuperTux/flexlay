@@ -27,6 +27,7 @@
 #include "../scm_obj.hxx"
 #include "editor/editor.hxx"
 #include "editor/tile_selector.hxx"
+#include "editor/tilemap_object_tool.hxx"
 #include "editor/editor_tilemap.hxx"
 #include "editor/object_selector.hxx"
 #include "editor/editor_map.hxx"
@@ -653,6 +654,43 @@ std::string scm2string(SCM s)
 SCM string2scm(const std::string& str)
 {
   return gh_str02scm(str.c_str());
+}
+
+
+CL_Menu* current_menu;
+
+CL_Component*
+current_popup_menu()
+{
+  return current_menu;
+}
+
+// FIXME: Hack
+struct MenuConverter
+{
+  SCMFunctor func;
+
+  MenuConverter(SCM f)
+    : func(f)
+  {
+  }
+
+  void operator()(CL_Menu* menu) {
+    current_menu = menu;
+    func();
+  }
+};
+
+void
+objectmap_tool_set_popupmenu_callback(SCM func)
+{
+  TileMapObjectTool* tool 
+    = dynamic_cast<TileMapObjectTool*>
+    (Editor::current()->get_tool_manager()->get_tool_by_name(OBJECT_TOOL_NAME));
+  
+  MenuConverter callback(func);
+
+  new CL_Slot(tool->sig_on_popup_menu_display().connect_functor(callback));
 }
 
 /* EOF */

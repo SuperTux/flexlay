@@ -24,12 +24,15 @@
 #include "editor_objmap.hxx"
 #include "object_brush.hxx"
 
+class CL_Menu;
 class EditorMap;
 
 /** */
 class TileMapObjectTool : public TileMapTool
 {
 private:
+  CL_Signal_v1<CL_Menu*> on_popup_menu_display;
+
   EditorObjMap::Obj* obj;
   enum { DRAG, SELECT, NONE } state;
 
@@ -52,6 +55,7 @@ public:
   void on_mouse_down(const CL_InputEvent& event);
   void on_mouse_move(const CL_InputEvent& event);
 
+  CL_Signal_v1<CL_Menu*>& sig_on_popup_menu_display() { return on_popup_menu_display; }
 private:
   TileMapObjectTool (const TileMapObjectTool&);
   TileMapObjectTool& operator= (const TileMapObjectTool&);

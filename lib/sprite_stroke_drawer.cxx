@@ -20,12 +20,15 @@
 #include <iostream>
 #include <assert.h>
 #include <ClanLib/Display/blend_func.h>
+#include <ClanLib/Display/canvas.h>
 #include <ClanLib/gl.h>
 #include <ClanLib/GL/opengl_wrap.h>
 #include "stroke.hxx"
 #include "flexlay.hxx"
 #include "stroke_drawer_impl.hxx"
 #include "sprite_stroke_drawer.hxx"
+#include "drawer_properties.hxx"
+#include "bitmap_layer.hxx"
 #include "sketch_layer.hxx"
 
 CL_ProgramObject* program = 0;
@@ -34,10 +37,6 @@ class SpriteStrokeDrawerImpl : public StrokeDrawerImpl
 {
 public:
   SpriteStrokeDrawer::DrawMode mode;
-  CL_Color  color;
-  float     base_size;
-  float     spacing;
-  Brush     brush;
   
   SpriteStrokeDrawerImpl() {}
 
@@ -57,20 +56,19 @@ SpriteStrokeDrawer::SpriteStrokeDrawer(StrokeDrawer drawer)
 SpriteStrokeDrawer::SpriteStrokeDrawer()
   : impl(new SpriteStrokeDrawerImpl())
 {
-  impl->base_size = 1.0f;
-  impl->spacing   = 15.0f;
   impl->mode      = SpriteStrokeDrawer::DM_NORMAL;
 }
 
 void
 SpriteStrokeDrawerImpl::draw_dab(const Dab& dab, CL_GraphicContext* gc)
 {
-  CL_Sprite sprite = brush.get_sprite();
+  CL_Sprite sprite = DrawerProperties::current()->get_brush().get_sprite();
 
+  CL_Color color = DrawerProperties::current()->get_color();
   sprite.set_color(color);
   sprite.set_alpha((color.get_alpha()/255.0f) * dab.pressure);
-  sprite.set_scale(base_size * dab.pressure,
-                   base_size * dab.pressure);
+  sprite.set_scale(DrawerProperties::current()->get_size() * dab.pressure,
+                   DrawerProperties::current()->get_size() * dab.pressure);
 
   if (gc != 0)
     {
@@ -126,6 +124,32 @@ SpriteStrokeDrawerImpl::draw_dab(const Dab& dab, CL_GraphicContext* gc)
           sprite.set_blend_func(blend_zero, blend_one_minus_src_alpha);
           sprite.draw(dab.pos.x, dab.pos.y, gc);
           break;
+          
+        case SpriteStrokeDrawer::DM_SMUDGE:
+          {
+            // FIXME: These need to get reset on a new stroke
+            static int last_pos_x = 0;
+            static int last_pos_y = 0;
+
+            if (last_pos_y != 0 || last_pos_x != 0)
+              {
+                CL_Canvas* canvas = BitmapLayer::current()->get_canvas();
+                CL_PixelBuffer buffer = canvas->get_pixeldata(CL_Rect(CL_Point(last_pos_x - sprite.get_width()/2,
+                                                                               last_pos_y - sprite.get_height()/2),
+                                                                      CL_Size(sprite.get_width(), sprite.get_height())));
+                CL_Surface surface(buffer);
+                //surface.set_blend_func_separate(blend_src_alpha, blend_one_minus_src_alpha,
+                //                                blend_one, blend_zero);
+                //surface.set_blend_func(blend_one, blend_one_minus_src_alpha);
+                surface.set_alignment(origin_center);
+                surface.set_alpha(0.8);
+                surface.draw(dab.pos.x, dab.pos.y, gc);
+              }
+
+            last_pos_x = static_cast<int>(dab.pos.x);
+            last_pos_y = static_cast<int>(dab.pos.y);
+          }
+          break;
 
         case SpriteStrokeDrawer::DM_SHADER:
           {
@@ -162,9 +186,9 @@ SpriteStrokeDrawerImpl::draw_dab(const Dab& dab, CL_GraphicContext* gc)
             glEnable(GL_TEXTURE_2D);
 
             /*CL_OpenGLSurface glsurface2(SketchLayer::current()->get_background_surface());
-            glActiveTexture(GL_TEXTURE1);
-            glsurface2.bind();
-            glEnable(GL_TEXTURE_2D);*/
+              glActiveTexture(GL_TEXTURE1);
+              glsurface2.bind();
+              glEnable(GL_TEXTURE_2D);*/
             
             clUniform1i(program->get_attribute_location("mytex"), 0);
             //clUniform1i(program->get_attribute_location("background"), 1);
@@ -202,7 +226,7 @@ SpriteStrokeDrawerImpl::draw_dab(const Dab& dab, CL_GraphicContext* gc)
         {
         case SpriteStrokeDrawer::DM_NORMAL:  
           sprite.set_blend_func(blend_src_alpha, blend_one_minus_src_alpha);
-          sprite.draw(dab.pos.x, dab.pos.y, gc);  
+          sprite.draw(dab.pos.x, dab.pos.y, gc);
           break;
               
         case SpriteStrokeDrawer::DM_ADDITION:
@@ -214,6 +238,11 @@ SpriteStrokeDrawerImpl::draw_dab(const Dab& dab, CL_GraphicContext* gc)
           sprite.set_blend_func(blend_zero, blend_one_minus_src_alpha);
           sprite.draw(dab.pos.x, dab.pos.y, gc);
           break; 
+          
+        case SpriteStrokeDrawer::DM_SMUDGE:
+          sprite.set_blend_func(blend_src_alpha, blend_one_minus_src_alpha);
+          sprite.draw(dab.pos.x, dab.pos.y, gc);          
+          break;
 
         default:
           std::cout << "Error: SpriteStrokeDrawer: Unknown draw mode: " << mode << std::endl;
@@ -225,89 +254,18 @@ SpriteStrokeDrawerImpl::draw_dab(const Dab& dab, CL_GraphicContext* gc)
 void
 SpriteStrokeDrawerImpl::draw(const Stroke& stroke, CL_GraphicContext* gc)
 {
-  if (brush.is_null() || stroke.get_dab_count() == 0)
+  if (DrawerProperties::current()->get_brush().is_null() || stroke.get_dab_count() == 0)
     return;
-    
-  draw_dab(stroke.get_dabs().front(), gc);
   
-  float overspace = 0.0f;
-  Stroke::Dabs dabs = stroke.get_dabs();
-  for(unsigned int j = 0; j < dabs.size()-1; ++j)
+  Stroke::Dabs dabs = stroke.get_interpolated_dabs(DrawerProperties::current()->get_spacing()
+                                                   * DrawerProperties::current()->get_size(),
+                                                   DrawerProperties::current()->get_spacing()
+                                                   * DrawerProperties::current()->get_size());
+
+  for(Stroke::Dabs::iterator i = dabs.begin(); i != dabs.end(); ++i)
     {
-      CL_Pointf dist = dabs[j+1].pos - dabs[j].pos;
-      float length = sqrt(dist.x * dist.x + dist.y * dist.y);
-      int n = 1;
-    
-      // Spacing is keep relative to the brush size
-      float local_spacing = spacing * base_size * dabs[j].pressure;
-
-      while (length + overspace > (local_spacing * n))
-        {
-          float factor = (local_spacing/length) * n - (overspace/length);
-          
-          // FIXME: Interpolate tilting, pressure, etc. along the line
-          draw_dab(Dab(dabs[j].pos.x + dist.x * factor,
-                       dabs[j].pos.y + dist.y * factor,
-                       dabs[j].pressure),
-                   gc);
-              
-          n += 1;
-        }
-
-      // calculate the space that wasn't used in the last iteration
-      overspace = (length + overspace) - (local_spacing * (n-1));
+      draw_dab(*i, gc);
     }
-}
-
-void
-SpriteStrokeDrawer::set_spacing(float spacing_)
-{
-  impl->spacing = spacing_;
-}
-
-float
-SpriteStrokeDrawer::get_spacing() const
-{
-  return impl->spacing;
-}
-
-void
-SpriteStrokeDrawer::set_size(float s)
-{
-  impl->base_size = s;
-}
-
-float
-SpriteStrokeDrawer::get_size() const
-{
-  return impl->base_size;
-}
-
-void
-SpriteStrokeDrawer::set_color(const CL_Color& color_)
-{
-  impl->color = color_;
-}
-
-CL_Color
-SpriteStrokeDrawer::get_color() const
-{
-  return impl->color;
-}
-
-void
-SpriteStrokeDrawer::set_sprite(const CL_Sprite& sprite_)
-{
-  assert(!"No longer supported");
-  //impl->brush = sprite_;
-  //impl->brush.set_alignment(origin_center);
-}
-
-CL_Sprite
-SpriteStrokeDrawer::get_sprite() const
-{
-  assert(!"No longer supported");
-  return CL_Sprite();//impl->brush;
 }
 
 void
@@ -328,8 +286,7 @@ SpriteStrokeDrawerImpl::clone() const
   SpriteStrokeDrawerImpl* drawer = new SpriteStrokeDrawerImpl();
   
   *drawer = *this;
-  drawer->brush = brush.clone();
-  
+    
   return drawer;
 }
 
@@ -337,18 +294,6 @@ StrokeDrawer
 SpriteStrokeDrawer::to_drawer()
 {
   return StrokeDrawer(impl);
-}
-
-void
-SpriteStrokeDrawer::set_brush(const Brush& brush)
-{
-  impl->brush = brush;
-}
-
-Brush
-SpriteStrokeDrawer::get_brush() const
-{
-  return impl->brush;
 }
 
 /* EOF */

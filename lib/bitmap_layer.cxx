@@ -130,6 +130,8 @@ BitmapLayer::add_stroke(const Stroke& stroke)
     {
       impl->strokes.push_back(stroke);
       stroke.draw(impl->canvas->get_gc());
+      // FIXME: doesn't sync when manually manipulating the canvas
+      impl->canvas->get_gc()->flush();
       impl->canvas->sync_surface();
     }
 }
@@ -150,6 +152,12 @@ CL_Surface
 BitmapLayer::get_background_surface()
 {
   return impl->surface;
+}
+
+CL_Canvas*
+BitmapLayer::get_canvas() const
+{
+  return impl->canvas;
 }
 
 CL_PixelBuffer

@@ -33,8 +33,9 @@
 class ObjectLayerImpl;
 
 /** The ObjectLayer provides a simple Layer for holding positioned
-    objects. Objects consist of a CL_Sprite and some properties
-    accessible from scripting languages */
+    objects. Objects can consist of a CL_Sprite and some properties
+    accessible from scripting languages or any other thing that is a
+    ObjMapObject. */
 class ObjectLayer
 {
 public:
@@ -51,6 +52,12 @@ public:
 
   void add_object(const ObjMapObject& obj);
   void delete_object(const ObjMapObject& obj);
+
+  /** Moved the given object one position up in the object stack */
+  void raise(const ObjMapObject& obj);
+
+  /** Moved the given object one position down in the object stack */
+  void lower(const ObjMapObject& obj);
 
   void add_control_point(const ObjMapControlPoint& obj);
   void delete_control_points();

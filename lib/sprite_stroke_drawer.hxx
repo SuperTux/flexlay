@@ -32,36 +32,10 @@ class SpriteStrokeDrawerImpl;
 class SpriteStrokeDrawer
 {
 public:
-  enum DrawMode { DM_NORMAL, DM_ERASE, DM_ADDITION, DM_SHADER };
+  enum DrawMode { DM_NORMAL, DM_ERASE, DM_ADDITION, DM_SHADER, DM_SMUDGE  };
 
   SpriteStrokeDrawer(StrokeDrawer drawer);
   SpriteStrokeDrawer();
-
-  /** Set the spacing that will be between the sprites that are drawn
-      along the dabs */
-  void  set_spacing(float spacing);
-  float get_spacing() const;
-
-  /** Set the base size of the Sprite, the real size itself can be
-      affected by pressure and is than calculated by combining
-      basesize and pressure or tilting */
-  void  set_size(float s);
-  float get_size() const;
-
-  /** Set the base color, the real color itself is calculated from
-      combining the base color with the current pressure or tilting */
-  void     set_color(const CL_Color& color);
-  CL_Color get_color() const;
-
-  /** Set the sprite to be used, its color and size settings are
-      ignored */
-  void      set_sprite(const CL_Sprite& sprite);
-  CL_Sprite get_sprite() const;
-
-  /** Set the brush to be used, its color and size settings are
-      ignored */
-  void  set_brush(const Brush& brush);
-  Brush get_brush() const;
 
   /** The modus in which the drawing affects the image (normal, erase, addition, color, etc.) */
   void set_mode(DrawMode mode);

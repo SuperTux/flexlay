@@ -38,7 +38,7 @@ $sketch_stroke_tool  = SketchStrokeTool.new()
 $layer_move_tool     = LayerMoveTool.new()
 $zoom_tool           = ZoomTool.new()
 
-$sketch_stroke_tool.set_color(CL_Color.new(0, 0, 0, 50))
+DrawerProperties.current().set_color(CL_Color.new(0, 0, 0, 50))
 
 $gui   = PaintGUI.new()
 
@@ -48,15 +48,15 @@ $image = $animation.get_current_image()
 $image.activate($gui.workspace)
 
 drawer = SpriteStrokeDrawer.new($sketch_stroke_tool.get_drawer())
-if false then
-  drawer.set_brush(GeneratedBrush.new(BRUSH_SHAPE_CIRCLE, 
+if true then
+  DrawerProperties.current().set_brush(GeneratedBrush.new(BRUSH_SHAPE_CIRCLE, 
                                       32,  # radius
                                       2,   # spikes
                                       0.75, # hardness
                                       1.0, # aspect
                                       0).to_brush()) # angle
 else
-  drawer.set_brush(SpriteBrush.new(make_sprite("../data/images/brush/brush8.png")).to_brush)
+  DrawerProperties.current().set_brush(SpriteBrush.new(make_sprite("../data/images/brush/brush8.png")).to_brush)
 end
 
 $image.layers_count.times {|i|

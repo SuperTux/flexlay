@@ -28,6 +28,8 @@
 #include "layer_impl.hxx"
 #include "onion_skin_layer.hxx"
 
+#define SCALE 4
+
 class OnionSkinLayerImpl : public LayerImpl
 {
 public:
@@ -38,12 +40,13 @@ public:
   CL_Canvas*  canvas2;
 
   std::vector<EditorMap> editormaps;
-  std::vector<float> transparency;
+  std::vector<CL_Color>  color;
 
   void draw(EditorMapComponent* parent, CL_GraphicContext* gc) 
   {
     // FIXME: We need to stop onion layer to draw onto itself
     surface.set_blend_func(blend_one, blend_one_minus_src_alpha);
+    surface.set_scale(SCALE, SCALE);
     surface.draw(0, 0);
   }
 
@@ -61,8 +64,8 @@ OnionSkinLayer::OnionSkinLayer(Layer layer)
 OnionSkinLayer::OnionSkinLayer(int width, int height)
   : impl(new OnionSkinLayerImpl())
 {
-  impl->surface  = CL_Surface(CL_PixelBuffer(width, height, width*4, CL_PixelFormat::rgba8888));
-  impl->surface2 = CL_Surface(CL_PixelBuffer(width, height, width*4, CL_PixelFormat::rgba8888));
+  impl->surface  = CL_Surface(CL_PixelBuffer(width/SCALE, height/SCALE, width*4/SCALE, CL_PixelFormat::rgba8888));
+  impl->surface2 = CL_Surface(CL_PixelBuffer(width/SCALE, height/SCALE, width*4/SCALE, CL_PixelFormat::rgba8888));
 
   try
     {
@@ -91,31 +94,29 @@ OnionSkinLayer::clear()
 }
 
 void
-OnionSkinLayer::add_map(EditorMap editor_map, float transparency)
+OnionSkinLayer::add_map(EditorMap editor_map, const CL_Color& color)
 {
   impl->editormaps.push_back(editor_map);
-
-  // FIXME: EditorMap does draw stuff that isn't usefull for onionskin (bounding rects, etc)
-
-  // FIXME: Parameter are a bit unclear here
-  impl->canvas2->get_gc()->clear(CL_Color(0, 0, 0, 0));
-  editor_map.draw(EditorMapComponent::current(), impl->canvas2->get_gc());
-  impl->canvas2->sync_surface();
-  impl->surface2.set_alpha(transparency);
-  impl->surface2.draw(0, 0, impl->canvas->get_gc());
-  impl->canvas->sync_surface();
+  impl->color.push_back(color);
 }
 
 void
 OnionSkinLayer::update()
 {
   impl->canvas->get_gc()->clear(CL_Color(0, 0, 0, 0));
-  for (std::vector<EditorMap>::iterator i = impl->editormaps.begin(); i != impl->editormaps.end(); ++i)
+  for (std::vector<EditorMap>::size_type i = 0; i < impl->editormaps.size(); ++i)
     {
       impl->canvas2->get_gc()->clear(CL_Color(0, 0, 0, 0));
-      i->draw(EditorMapComponent::current(), impl->canvas2->get_gc());
+      impl->canvas2->get_gc()->push_modelview();
+      impl->canvas2->get_gc()->add_scale(1.0f/SCALE, 1.0f/SCALE);
+
+      impl->editormaps[i].draw(EditorMapComponent::current(), impl->canvas2->get_gc());
+
+      impl->canvas2->get_gc()->pop_modelview();
+
       impl->canvas2->sync_surface();
-      impl->surface2.set_alpha(0.5f);
+
+      impl->surface2.set_color(impl->color[i]);
       impl->surface2.draw(0, 0, impl->canvas->get_gc());
       impl->canvas->sync_surface();
     }

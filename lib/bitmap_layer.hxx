@@ -51,12 +51,13 @@ public:
   CL_Surface get_background_surface();
 
   CL_PixelBuffer get_pixeldata() const;
+  CL_Canvas*     get_canvas() const;
   
   bool is_null() const { return !impl.get(); }
   Layer to_layer();
 
 private:
-  SharedPtr<BitmapLayerImpl> impl;  
+  SharedPtr<BitmapLayerImpl> impl;
 };
 
 #endif

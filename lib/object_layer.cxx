@@ -154,4 +154,14 @@ ObjectLayer::to_layer()
   return Layer(impl);
 }
 
+void
+ObjectLayer::raise(const ObjMapObject& obj)
+{
+}
+
+void
+ObjectLayer::lower(const ObjMapObject& obj)
+{
+}
+
 /* EOF */

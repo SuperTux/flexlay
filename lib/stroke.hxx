@@ -70,12 +70,22 @@ public:
   
   Stroke();
 
+  /** Return true if the Stroke doesn't contain any dabs */
+  bool empty() const;
+
   void draw(CL_GraphicContext* gc) const;
 
   void  set_drawer(const StrokeDrawer& drawer_);
   StrokeDrawer get_drawer();
   void  add_dab(const Dab& dab);
+  
+  /** Returns the real dabs as recieved by the InputDevice */
   Dabs  get_dabs()  const;
+
+  /** Returns interpolated dabs, meaning the holes in get_dabs() are
+      closed with interpolated dabs so that all dabs are equally
+      spread (ie. every dab is 'spacing' away from the next) */
+  Dabs  get_interpolated_dabs(float x_spacing, float y_spacing) const;
 
   int get_dab_count() const;
 

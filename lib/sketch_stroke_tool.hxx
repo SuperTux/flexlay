@@ -32,8 +32,6 @@ private:
 public:
   SketchStrokeTool();
 
-  void set_size(float size);
-  void set_color(const CL_Color& color);
   StrokeDrawer get_drawer();
 
   Tool to_tool();

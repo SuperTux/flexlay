@@ -82,6 +82,55 @@ Stroke::get_drawer()
 }
 
 Stroke::Dabs
+Stroke::get_interpolated_dabs(float x_spacing, float y_spacing) const
+{
+  if (impl->dabs.size() > 0)
+    {
+      Dabs interpolated_dabs;
+
+      interpolated_dabs.push_back(impl->dabs.front());
+
+      // The following code basically takes all the event dabs as recieved
+      // by from the InputDevice and interpolates new dabs inbetween to
+      // give them an equal spacing (ie. every dab is only 'spacing' away
+      // from the next)
+      float overspace = 0.0f;
+      const Stroke::Dabs& dabs = impl->dabs;
+      for(unsigned int j = 0; j < dabs.size()-1; ++j)
+        {
+          CL_Pointf dist = dabs[j+1].pos - dabs[j].pos;
+          float length = sqrt(dist.x * dist.x + dist.y * dist.y);
+          int n = 1;
+    
+          // Spacing is keep relative to the brush size
+          // FIXME: This is specific to a Sprite based drawer, might not work for others
+          // FIXME: y_spacing isn't taken into account either
+          float local_spacing = x_spacing * dabs[j].pressure;
+
+          while (length + overspace > (local_spacing * n))
+            {
+              float factor = (local_spacing/length) * n - (overspace/length);
+          
+              // FIXME: Interpolate tilting, pressure, etc. along the line
+              interpolated_dabs.push_back(Dab(dabs[j].pos.x + dist.x * factor,
+                                              dabs[j].pos.y + dist.y * factor,
+                                              dabs[j].pressure));
+              n += 1;
+            }
+
+          // calculate the space that wasn't used in the last iteration
+          overspace = (length + overspace) - (local_spacing * (n-1));
+        }
+      return interpolated_dabs;
+    }
+  else
+    {
+      // No dabs available, so nothing to interpolate
+      return impl->dabs;
+    }
+}
+
+Stroke::Dabs
 Stroke::get_dabs() const
 {
   return impl->dabs; 
@@ -176,6 +225,12 @@ Stroke::get_bounding_rect() const
     }
   
   return impl->bounding_rect;
+}
+
+bool
+Stroke::empty() const
+{
+  return (impl->dabs.size() == 0);
 }
 
 /* EOF */

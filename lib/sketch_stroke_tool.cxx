@@ -32,6 +32,7 @@
 #include "sprite_stroke_drawer.hxx"
 #include "stroke.hxx"
 #include "stroke_drawer.hxx"
+#include "drawer_properties.hxx"
 #include "flexlay.hxx"
 
 class SketchStrokeToolImpl : public ToolImpl
@@ -46,8 +47,6 @@ public:
   {
     sprite_drawer.set_mode(SpriteStrokeDrawer::DM_NORMAL);
     //sprite_drawer.set_sprite(CL_Sprite("brush", &(Flexlay::current()->resources)));
-    sprite_drawer.set_color(CL_Color(255, 255, 255, 255));
-    sprite_drawer.set_size(1.0f);  
   }
 
   void draw() 
@@ -66,10 +65,10 @@ public:
         EditorMapComponent* parent = EditorMapComponent::current();
         CL_Pointf p = parent->screen2world(CL_Point(CL_Mouse::get_x() - parent->get_screen_x(), 
                                                     CL_Mouse::get_y() - parent->get_screen_y()));
-        CL_Sprite s = sprite_drawer.get_brush().get_sprite();
-        s.set_color(sprite_drawer.get_color());
+        CL_Sprite s = DrawerProperties::current()->get_brush().get_sprite();
+        s.set_color(DrawerProperties::current()->get_color());
         // FIXME: when using mouse 1.0, when tablet .5f
-        s.set_scale(sprite_drawer.get_size()*0.5f, sprite_drawer.get_size()*0.5f);
+        s.set_scale(DrawerProperties::current()->get_size()*0.5f, DrawerProperties::current()->get_size()*0.5f);
         s.set_alpha(0.5);
         s.draw(p.x, p.y);
       }
@@ -149,18 +148,6 @@ public:
 SketchStrokeTool::SketchStrokeTool()
   : impl(new SketchStrokeToolImpl()) 
 {
-}
-
-void 
-SketchStrokeTool::set_color(const CL_Color& color_)
-{
-  impl->sprite_drawer.set_color(color_);
-}
-
-void
-SketchStrokeTool::set_size(float size_)
-{
-  impl->sprite_drawer.set_size(size_);
 }
 
 Tool

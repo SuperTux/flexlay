@@ -4257,8 +4257,6 @@ echo "$as_me: error: Library requirements (
 
 
 
-CXXFLAGS="$CXXFLAGS $WINDSTILLE_CFLAGS"
-
                                                                       ac_config_files="$ac_config_files Makefile data/Makefile src/Makefile src/collision/Makefile src/scripting/Makefile src/guile/Makefile src/editor/Makefile"
 
 cat >confcache <<\_ACEOF

@@ -1,4 +1,4 @@
-//  $Id: trigger.hxx,v 1.1 2003/09/17 18:48:45 grumbel Exp $
+//  $Id: trigger.hxx,v 1.2 2003/09/21 17:34:00 grumbel Exp $
 // 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -51,7 +51,11 @@ private:
   TriggerCondition* condition;
   SCMFunctor func;
   bool triggered;
+  
+  static Trigger* current_;
 public:
+  static Trigger* get_current() { return current_; }
+
   Trigger(TriggerCondition*, SCMFunctor func);
   virtual ~Trigger();
 

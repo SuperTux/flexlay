@@ -1,5 +1,5 @@
-//  $Id: screen.cxx,v 1.2 2003/09/21 17:34:00 grumbel Exp $
-//
+//  $Id: dialog_manager.hxx,v 1.1 2003/09/21 17:34:54 grumbel Exp $
+// 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
 //
@@ -12,50 +12,50 @@
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
-//
+// 
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-#include "delta_manager.hxx"
-#include "screen.hxx"
+#ifndef HEADER_DIALOG_MANAGER_HXX
+#define HEADER_DIALOG_MANAGER_HXX
 
-Screen::Screen()
+#include <vector>
+#include <string>
+#include <ClanLib/Display/sprite.h>
+#include "globals.hxx"
+
+class Dialog {
+public:
+  CL_Sprite portrait;
+  std::string text;
+
+  Dialog(const std::string& portrait, const std::string& text);
+};
+
+/** */
+class DialogManager
 {
-}
-
-void 
-Screen::display()
-{
-  do_pause = false;
-  do_quit  = false;
-
-  on_startup();
-
-  DeltaManager delta_manager;
+private:
+  std::vector<Dialog> dialogs;
+  int current_dialog;
   
-  while (!do_quit)
-    {
-      draw();
-      
-      float delta = delta_manager.getset ();
-      if (!do_pause)
-        {
-          float step = 10/1000.0f;
-          
-          while (delta > step)
-            {
-              update(step);
-              delta -= step;
-            }
-          update(delta);
-        }
+  static DialogManager* current_;
+public:
+  static DialogManager* current() { return current_; }
 
-      CL_System::keep_alive ();
-      CL_System::sleep (1);
-    }
+  DialogManager();
 
-  on_shutdown();
-}
+  void draw();
+  void update(float delta);
+
+  void add_dialog(const std::string& portrait, const std::string& text);
+  void clear();
+private:
+  DialogManager (const DialogManager&);
+  DialogManager& operator= (const DialogManager&);
+};
+
+#endif
 
 /* EOF */

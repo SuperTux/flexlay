@@ -1,4 +1,12 @@
 <resources>
+  <sprite name="font_glyphs">
+    <image name="image1" file="images/verdana32_blue.png"><alpha /></image>
+  </sprite>
+
+  <font name="font">
+    <bitmap glyphs="font_glyphs" letters="!_#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~" />
+  </font>
+
   <section name="powerup">
     <sprite name="flash">
       <image file="images/powerup/flash.png" name="image1" />
@@ -88,6 +96,10 @@
       <image file="images/hero_run/hero-2.png" name="image8" />
       <image file="images/hero_run/hero-1.png" name="image9" />
       <image file="images/hero_run/hero-0.png" name="image10" />
+    </sprite>
+
+    <sprite name="portrait">
+      <image file="images/portrait.png" name="image1" /> 
     </sprite>
 
     <sprite name="sit">

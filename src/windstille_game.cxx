@@ -1,4 +1,4 @@
-//  $Id: windstille_game.cxx,v 1.18 2003/09/21 15:22:59 grumbel Exp $
+//  $Id: windstille_game.cxx,v 1.19 2003/09/21 17:34:00 grumbel Exp $
 //
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -117,16 +117,18 @@ WindstilleGame::draw()
 void
 WindstilleGame::update(float delta)
 {
+  view->update (delta);
+
   if (state == DIALOG)
     {
       dialog_manager->update(delta);
     }
   else if (state == GAME)
     {
-      view->update (delta);
       world->update (delta);
       energiebar->update(delta);
     }
+  Controller::current()->clear();
 
   blink += delta * 3.141f;
 }    

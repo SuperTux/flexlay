@@ -1,4 +1,4 @@
-//  $Id: game.hxx,v 1.7 2003/09/21 15:22:59 grumbel Exp $
+//  $Id: game.hxx,v 1.8 2003/09/21 17:34:00 grumbel Exp $
 // 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -38,6 +38,7 @@ GameWorld* make_game_world(int w, int h);
 void start_game(GameWorld*);
 
 void add_region_trigger(int x, int y, int w, int h, SCM func);
+void remove_trigger();
 
 void game_set_pause(bool p);
 bool game_get_pause();

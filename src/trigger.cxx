@@ -1,4 +1,4 @@
-//  $Id: trigger.cxx,v 1.2 2003/09/20 21:53:38 grumbel Exp $
+//  $Id: trigger.cxx,v 1.3 2003/09/21 17:34:00 grumbel Exp $
 // 
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -21,6 +21,8 @@
 #include "game_world.hxx"
 #include "trigger.hxx"
 #include "player.hxx"
+
+Trigger* Trigger::current_ = 0;
 
 RegionTriggerCondition::RegionTriggerCondition(CL_Rectf rect)
   : rect(rect)
@@ -64,6 +66,7 @@ Trigger::update (float delta)
   if (!triggered && condition->check())
     {
       triggered = true;
+      current_ = this;
       func();
     }
   else if (!condition->check())

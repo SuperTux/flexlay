@@ -1,8 +1,7 @@
 (use-modules (ice-9 readline))
-(catch #t
-       'activate-readline
-       (lambda args
-         (display "Guile Error: ")(display args)(newline)))
+(activate-readline)
+
+(load "helper.scm")
 
 (define screen-width  (screen-get-width))
 (define screen-height (screen-get-height))
@@ -71,20 +70,6 @@
 (editor-add-button-func 200 0
                    100 25 "Foreground" 
                    (lambda () (tilemap-set-active-layer 1)))
-
-(define (windstille:repl)
-  (display "### Windstille repl, exit with (quit)\n")
-  (let ((old-prompt scm-repl-prompt))
-    (set-repl-prompt! "windstille> ")
-    (catch #t
-           (lambda ()
-             (top-repl)
-             (display "Windstille Readline exited nicly.\n"))
-           (lambda args
-             (display "Error: ")
-             (display args)(newline)))
-    (set-repl-prompt! old-prompt)))
-
 
 (editor-add-button-func (- screen-width 80)
                    (- screen-height 25)

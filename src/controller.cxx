@@ -1,4 +1,4 @@
-//  $Id: controller.cxx,v 1.1 2003/09/20 21:55:57 grumbel Exp $
+//  $Id: controller.cxx,v 1.2 2003/09/21 17:34:00 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -20,8 +20,11 @@
 #include <iostream>
 #include "controller.hxx"
 
+Controller* Controller::current_ = 0;
+
 Controller::Controller()
 {
+  current_ = this;
   states.resize(InputEvent::LAST_TYPE);
 }
 
@@ -45,6 +48,12 @@ bool
 Controller::get_state(int type)
 {
   return states[type];
+}
+
+void
+Controller::clear()
+{
+  events.clear();
 }
 
 /* EOF */

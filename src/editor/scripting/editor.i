@@ -1,4 +1,9 @@
 %module windstille
+
+%include "std_vector.i"
+%include "std_string.i"
+%template (vector_int) std::vector<int>;
+
 %{
 #include <string>
 #include "editor.hxx"
@@ -8,8 +13,8 @@
 
 TileBrush scm2brush(SCM s_brush);
 SCM       brush2scm(const TileBrush& brush);
-std::string scm2string(SCM s);
-SCM string2scm(const std::string& str);
+//std::string scm2string(SCM s);
+//SCM string2scm(const std::string& str);
 
 SCM
 component2scm(CL_Component* comp) {
@@ -34,13 +39,14 @@ component2scm(CL_Component* comp) {
     $result = brush2scm($1);
 }
 
+/*
 %typemap(in) std::string {
     $1 = scm2string($input);
 }
 
 %typemap(out) std::string {
     $result = string2scm($1);
-}
+}*/
 
 %newobject tileset_create();
 

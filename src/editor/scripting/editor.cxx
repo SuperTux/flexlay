@@ -19,8 +19,11 @@
 
 #include <ClanLib/gui.h>
 #include <ClanLib/core.h>
+#include <ClanLib/display.h>
 #include <ClanLib/Display/display.h>
+#include <ClanLib/Display/sprite_description.h>
 #include <ClanLib/Display/pixel_buffer.h>
+#include <ClanLib/Display/Providers/provider_factory.h>
 #include <ClanLib/Display/display_window.h>
 #include <iostream>
 #include <fstream>
@@ -28,6 +31,7 @@
 #include "../globals.hxx"
 #include "../windstille_game.hxx"
 #include "../scm_obj.hxx"
+#include "../string_converter.hxx"
 #include "editor/editor.hxx"
 #include "editor/tile_selector.hxx"
 #include "editor/objmap_select_tool.hxx"
@@ -122,18 +126,32 @@ void editor_undo()
 }
 
 int
-objectmap_add_object(EditorMapLayer* obj, const char* name, int x, int y, SCM userdata)
+objectmap_add_object(EditorMapLayer* obj, const char* filename, int x, int y, SCM userdata)
 {
   EditorObjMap* objmap = dynamic_cast<EditorObjMap*>(obj);
 
   if (objmap)
     {
       try {
+        CL_Sprite sprite;
+
+        if (has_suffix(filename, ".png") || has_suffix(filename, ".jpg"))
+          {
+            CL_SpriteDescription desc;
+            desc.add_frame(CL_ProviderFactory::load(filename), true);
+            sprite = CL_Sprite(desc);
+            //sprite.set_alignment(origin_bottom_center, -16, -32);
+          }
+        else
+          {
+            sprite = CL_Sprite(filename, resources);
+          }        
+
         ObjMapObject* obj 
           = new ObjMapSpriteObject(objmap->get_next_object_handle(), 
                                    CL_Point(x, y), 
                                    SCMObj(userdata), 
-                                   CL_Sprite(name, resources));
+                                   sprite);
 
         ObjectAddCommand* command = new ObjectAddCommand(objmap, obj);
         Editor::current()->execute(command);
@@ -151,15 +169,35 @@ objectmap_add_object(EditorMapLayer* obj, const char* name, int x, int y, SCM us
     }
 }
 
-int editor_objectmap_add_object(EditorMapLayer* layer, const char* name, int x, int y, SCM userdata)
+int editor_objectmap_add_object(EditorMapLayer* layer, const char* filename, int x, int y, SCM userdata)
 {
   EditorObjMap* objmap = dynamic_cast<EditorObjMap*>(layer);
-  if (objmap)
-    {
-      int handle = objmap->add_object(CL_Sprite(name, resources), CL_Point(x, y), 
-                                      SCMObj(userdata));
-      return handle;
-    }
+  try {
+    if (objmap)
+      {
+        CL_Sprite sprite;
+
+        if (has_suffix(filename, ".png") || has_suffix(filename, ".jpg"))
+          {
+            CL_SpriteDescription desc;
+            desc.add_frame(CL_ProviderFactory::load(filename), true);
+            sprite = CL_Sprite(desc);
+            //sprite.set_alignment(origin_bottom_center, -16, -32);
+          }
+        else
+          {
+            sprite = CL_Sprite(filename, resources);
+          }
+
+        int handle = objmap->add_object(sprite, CL_Point(x, y), 
+                                        SCMObj(userdata));
+        return handle;
+      }
+  } catch(CL_Error& err) {
+    std::cout << "Error: " << err.message << std::endl;
+    return -1;
+  }
+
   return -1;
 }
 
@@ -212,10 +250,28 @@ obj2scm(const EditorObjMap::Obj& obj)
 
 
 void
-object_selector_add_brush(CL_Component* comp, const char* name, SCM data)
+object_selector_add_brush(CL_Component* comp, const char* filename, SCM data)
 {
   ObjectSelector* selector = dynamic_cast<ObjectSelector*>(comp);
-  selector->add_brush(ObjectBrush(CL_Sprite(name, resources), SCMObj(data)));
+  try {
+    CL_Sprite sprite;
+
+    if (has_suffix(filename, ".png") || has_suffix(filename, ".jpg"))
+      {
+        CL_SpriteDescription desc;
+        desc.add_frame(CL_ProviderFactory::load(filename), true);
+        sprite = CL_Sprite(desc);
+        //sprite.set_alignment(origin_bottom_center, -16, -32);
+      }
+    else
+      {
+        sprite = CL_Sprite(filename, resources);
+      }        
+
+    selector->add_brush(ObjectBrush(sprite, SCMObj(data)));
+  } catch(CL_Error& err) {
+    std::cout << "Error: " << err.message << std::endl;
+  }
 }
 
 SCM
@@ -515,6 +571,13 @@ tile_selector_create(int x, int y, int w, int h, float scale)
   TileSelector* ret = new TileSelector(w, h, GUIManager::current()->get_component());
   ret->set_scale(scale);
   return ret;
+}
+
+void
+tile_selector_set_tiles(CL_Component* comp, const std::vector<int>& tiles)
+{
+  TileSelector* tile_selector = dynamic_cast<TileSelector*>(comp);
+  tile_selector->set_tiles(tiles);
 }
 
 CL_Component*

@@ -22,6 +22,8 @@
 
 #include <ClanLib/gui.h>
 
+class Tileset;
+
 class TileSelector : public CL_Component
 {
 private:
@@ -36,10 +38,21 @@ private:
   bool scrolling;
   CL_Point mouse_pos;
   float scale;
+  
+  /** set of tiles that should be available in the TileSelector */
+  typedef std::vector<int> Tiles;
+  Tiles tiles;
+
+  Tileset* tileset;
 public:
   /** width and height in number of tiles */
   TileSelector(int width, int height, CL_Component* parent);
 
+  void set_tileset(Tileset* t);
+  void set_tiles(const Tiles& t);
+  
+  /** Set the factor by which tiles are scaled down in the selector
+      widged (ie. for better overview) */
   void set_scale(float s);
 
   void draw();

@@ -411,11 +411,17 @@
                                (let ((x (* 32 (remainder i width)))
                                      (y (* 32 (quotient  i width))))
                                  (cond ((= el 48) ;; 0
-                                        (objectmap-add-object objmap "sprites/mrbomb" x y '(bsod)))
+                                        (objectmap-add-object objmap 
+                                                              (string-append *supertux:datadir* "images/shared/snowball-left-0.png")
+                                                              x y '(bsod)))
                                        ((= el 49) ;; 1
-                                        (objectmap-add-object objmap "sprites/mriceblock" x y '(laptop)))
+                                        (objectmap-add-object objmap 
+                                                              (string-append *supertux:datadir* "images/shared/mriceblock-left-0.png")
+                                                              x y '(laptop)))
                                        ((= el 50) ;; 2
-                                        (objectmap-add-object objmap "sprites/jumpy" x y '(money)))))
+                                        (objectmap-add-object objmap
+                                                              "sprites/jumpy" 
+                                                              x y '(money)))))
                                (set! i (+ i 1)))
                              tilemap))
                  (editor-tilemap-set-data (supertux:interactive-tm level)
@@ -428,15 +434,45 @@
                           (y (get-value-from-tree '(y _) (cdr el) 0)))
                       (case (car el)
                         ((money jumpy)
-                         (objectmap-add-object objmap "sprites/jumpy" x y '(money)))
-                        ((mriceblock bsod)
-                         (objectmap-add-object objmap "sprites/mriceblock" x y '(mriceblock)))
-                        ((mrbomb laptop)
-                         (objectmap-add-object objmap "sprites/mrbomb" x y '(mrbomb)))
+                         (objectmap-add-object objmap
+                                               "sprites/jumpy" 
+                                               x y '(money)))
+                        ((mriceblock laptop)
+                         (objectmap-add-object objmap
+                                               (string-append *supertux:datadir* "images/shared/mriceblock-left-0.png")
+                                               x y '(laptop)))
+                        ((snowball bsod)
+                         (objectmap-add-object objmap
+                                               (string-append *supertux:datadir* "images/shared/snowball-left-0.png")
+                                               x y '(bsod)))
+                        ((mrbomb)
+                         (objectmap-add-object objmap
+                                               (string-append *supertux:datadir* "images/shared/mrbomb-left-0.png")
+                                               x y '(mrbomb)))
                         ((stalactite)
-                         (objectmap-add-object objmap "sprites/stalactite" x y '(stalactite)))
+                         (objectmap-add-object objmap
+                                               (string-append *supertux:datadir* "images/shared/stalactite.png")
+                                               x y '(stalactite)))
                         ((flame)
-                         (objectmap-add-object objmap "sprites/flame" x y '(flame)))
+                         (objectmap-add-object objmap
+                                               (string-append *supertux:datadir* "images/shared/flame-0.png")
+                                               x y '(flame)))
+                        ((fish)
+                         (objectmap-add-object objmap
+                                               (string-append *supertux:datadir* "images/shared/fish-left-0.png")
+                                               x y '(fish)))
+                        ((flyingsnowball)
+                         (objectmap-add-object objmap
+                                               (string-append *supertux:datadir* "images/shared/flyingsnowball-left-0.png")
+                                               x y '(flyingsnowball)))
+                        ((bouncingsnowball)
+                         (objectmap-add-object objmap
+                                               (string-append *supertux:datadir* "images/shared/bouncingsnowball-left-0.png")
+                                               x y '(bouncingsnowball)))
+                        ((spiky)
+                         (objectmap-add-object objmap
+                                               (string-append *supertux:datadir* "images/shared/spiky-left-0.png")
+                                               x y '(spiky)))
                         )))
                   objects)
         

@@ -40,6 +40,7 @@ TileSelector::TileSelector(int width, int height, CL_Component* parent)
   mouse_over_tile = -1;
   scrolling = false;
   offset = 0;
+  tileset = 0;
 }
 
 void
@@ -103,11 +104,12 @@ void
 TileSelector::draw()
 {
   CL_Display::push_translate_offset(0, -offset);
-  int start_y = std::max(0, offset / TILE_SIZE);
-  for(int y = start_y; y < start_y + height; ++y)
-    for(int x = 0; x < width; ++x)
+
+  for(int i = 0; i < int(tiles.size()); ++i)
       {
-        int i = width * y + x;
+        int x = i % width;
+        int y = i / width;
+
         Tile* tile = Tileset::current()->create(i);
 
         CL_Rect rect(CL_Point(static_cast<int>(x * TILE_SIZE*scale),
@@ -127,17 +129,18 @@ TileSelector::draw()
             CL_Display::draw_rect(rect, CL_Color(0,0,0,128));
           }
 
-        if (TileMapPaintTool::current()->get_brush().size() == 1
+        if (int(TileMapPaintTool::current()->get_brush().size()) == 1
             && TileMapPaintTool::current()->get_brush().at(0, 0) == i)
           {
             CL_Display::fill_rect(rect,
                                   CL_Color(0,0,255, 100));
           }
-        else if (mouse_over_tile == i && has_mouse_over())
+        else if (mouse_over_tile == int(i) && has_mouse_over())
           {
             CL_Display::fill_rect(rect, CL_Color(0,0,255, 20));
           }
       }
+  
   CL_Display::pop_translate_offset();
 }
 
@@ -145,6 +148,18 @@ void
 TileSelector::set_scale(float s)
 {
   scale = s;
+}
+
+void
+TileSelector::set_tileset(Tileset* t)
+{
+  tileset = t;
+}
+
+void
+TileSelector::set_tiles(const Tiles& t)
+{
+  tiles = t;
 }
 
 /* EOF */

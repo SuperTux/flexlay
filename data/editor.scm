@@ -2,6 +2,9 @@
              (srfi srfi-1)
              (ice-9 pretty-print))
 
+(use-modules (ice-9 readline))
+(activate-readline)
+
 (load "helper.scm")
 (debug-enable 'backtrace)
 (define screen-width  (screen-get-width))
@@ -15,6 +18,7 @@
 (define *tileeditor-window* #f)
 (define *brush-selector* #f)
 (define *tileselector-window* #f)
+(define *tileselector* #f)
 (define *object-inserter-window* #f)
 (define *object-selector* #f)
 (define *minimap* #f)
@@ -655,16 +659,19 @@
   (let ((window (gui-create-window 600 25 200 400 "TileSelector")))
     (gui-push-component (gui-window-get-client-area window))
     
-    (case *game*
-      ((windstille)
-       (tile-selector-create (- screen-width (* 3 64)) 0 3 8 .5))
-      ((supertux)
-       (tile-selector-create (- screen-width (* 3 64)) 0 6 12 1.0))
-      ((netpanzer)
-       (display "Netpanzer\n")
-       (tile-selector-create (- screen-width (* 20 32)) 0 20 15 1.0))
-      (else
-       (tile-selector-create (- screen-width (* 3 64)) 0 3 8 .5)))
+    (set! *tileselector*
+          (case *game*
+            ((windstille)
+             (tile-selector-create (- screen-width (* 3 64)) 0 3 8 .5))
+            ((supertux)
+             (tile-selector-create (- screen-width (* 3 64)) 0 6 12 1.0))
+            ((netpanzer)
+             (display "Netpanzer\n")
+             (tile-selector-create (- screen-width (* 20 32)) 0 20 15 1.0))
+            (else
+             (tile-selector-create (- screen-width (* 3 64)) 0 3 8 .5))))
+
+    (tile-selector-set-tiles *tileselector* (seq 1 100))
 
     (gui-component-on-close window (lambda ()
                                      (gui-hide-component window)))
@@ -844,11 +851,40 @@
                         (string-append (filename:wo/ext filename) ".npm"))))
    )
   ((supertux)
-   (object-selector-add-brush *object-selector* "sprites/jumpy" '(money))
-   (object-selector-add-brush *object-selector* "sprites/mriceblock" '(mriceblock))
-   (object-selector-add-brush *object-selector* "sprites/mrbomb"     '(mrbomb))
-   (object-selector-add-brush *object-selector* "sprites/flame"     '(flame))
-   (object-selector-add-brush *object-selector* "sprites/stalactite"     '(stalactite))
+   (object-selector-add-brush *object-selector* 
+                              "sprites/jumpy"
+                              '(money))
+   (object-selector-add-brush *object-selector*
+                              (string-append *supertux:datadir* "images/shared/snowball-left-0.png")
+                              '(bsod))
+   (object-selector-add-brush *object-selector*
+                              (string-append *supertux:datadir* "images/shared/mriceblock-left-0.png")
+                              '(mriceblock))
+   (object-selector-add-brush *object-selector*
+                              (string-append *supertux:datadir* "images/shared/mrbomb-left-0.png")
+                              '(mrbomb))
+   (object-selector-add-brush *object-selector* 
+                              (string-append *supertux:datadir* "images/shared/flame-0.png")
+                              '(flame))
+   (object-selector-add-brush *object-selector* 
+                              (string-append *supertux:datadir* "images/shared/stalactite.png")
+                              '(stalactite))
+   (object-selector-add-brush *object-selector*
+                              (string-append *supertux:datadir* "images/shared/fish-left-0.png")
+                              '(fish))
+
+   (object-selector-add-brush *object-selector*   
+                              (string-append *supertux:datadir* "images/shared/flyingsnowball-left-0.png")
+                              '(flyingsnowball))
+
+   (object-selector-add-brush *object-selector*
+                              (string-append *supertux:datadir* "images/shared/bouncingsnowball-left-0.png")
+                              '(bouncingsnowball))
+
+   (object-selector-add-brush *object-selector*
+                              (string-append *supertux:datadir* "images/shared/spiky-left-0.png")
+                              '(spiky))
+
    (create-minimap screen-width 50)
    (editor:add-file-plugin
     (lambda (filename) (or (string=? (filename:ext filename) ".stl")

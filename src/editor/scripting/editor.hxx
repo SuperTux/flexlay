@@ -47,7 +47,10 @@ void editor_undo();
 void set_window_title(const char* name);
 
 CL_Component* minimap_create(CL_Component* p, int x, int y, int w, int h);
+
 CL_Component* tile_selector_create(int x, int y, int w, int h, float scale);
+void tile_selector_set_tiles(CL_Component*, const std::vector<int>& tiles);
+
 CL_Component* object_selector_create(int x, int y, int w, int h, int obj_w, int obj_h);
 CL_Component* editor_map_component_create(int x, int y, int w, int h);
 void          editor_map_component_set_map(CL_Component* c, EditorMap* m);

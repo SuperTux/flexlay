@@ -27,11 +27,35 @@
       <image file="images/light3.png" name="image1" />
     </sprite>
   </section>
+  
+  <section name="hero">
+    <sprite name="run" play_speed="30">
+      <image file="images/hero_run/hero-9.png" name="image1" />
+      <image file="images/hero_run/hero-8.png" name="image2" />
+      <image file="images/hero_run/hero-7.png" name="image3" />
+      <image file="images/hero_run/hero-6.png" name="image4" />
+      <image file="images/hero_run/hero-5.png" name="image5" />
+      <image file="images/hero_run/hero-4.png" name="image6" />
+      <image file="images/hero_run/hero-3.png" name="image7" />
+      <image file="images/hero_run/hero-2.png" name="image8" />
+      <image file="images/hero_run/hero-1.png" name="image9" />
+      <image file="images/hero_run/hero-0.png" name="image10" />
+    </sprite>
+
+    <sprite name="jump">
+      <image file="images/hero_jump.png" name="image1" />
+    </sprite>
+
+    <sprite name="stand">
+      <image file="images/hero_stand.png" name="image1" />
+    </sprite>
+  </section>
+
   <section name="turrican">
     <sprite name="jump">
       <image file="images/sprite_jump_east.png" name="image1" translation_hotspot="top_left,29,82" />
     </sprite>
-    <sprite name="walk" translation_hotspot="top_left,29,85">
+    <sprite name="walk">
       <image file="images/turrican_jump_east.png" name="image1" />
     </sprite>
     <sprite name="shild" play_speed="50">
@@ -202,7 +226,7 @@
     </sprite>
 
     <sprite name="tile10">
-      <image file="images/tiles/level1/tile10.png" name="image1" />
+      <image file="images/tiles/tile10.png" name="image1" />
     </sprite>
     <sprite name="tile11">
       <image file="images/tiles/level1/tile11.png" name="image1" />
@@ -415,7 +439,7 @@
       <image file="images/tiles/tile8.png" name="image1" />
     </sprite>
     <sprite name="tile9">
-      <image file="images/tiles/level1/tile9.png" name="image1" />
+      <image file="images/tiles/tile9.png" name="image1" />
     </sprite>
     <sprite name="water1">
       <image file="images/tiles/level1/water1.png" name="image1" />
@@ -454,5 +478,12 @@
     <image file="images/dog/frame2.png" name="image2" />
     <image file="images/dog/frame3.png" name="image3" />
     <image file="images/dog/frame4.png" name="image4" />
+  </sprite>
+
+  <sprite name="logo">
+    <image file="images/logo.png" name="image1" />
+  </sprite>
+  <sprite name="logo_black">
+    <image file="images/logo_black.png" name="image1" />
   </sprite>
 </resources>

@@ -10,6 +10,7 @@ public:
        	bool is_visible(bool check_parents = true);
 	void set_size(int new_width, int new_height);
 	void set_position(int new_x, int new_y);
+	const CL_Rect& get_position();
 };
 
 class CL_Size

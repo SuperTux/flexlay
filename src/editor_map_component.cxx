@@ -60,15 +60,15 @@ EditorMapComponent::EditorMapComponent(const CL_Rect& rect, CL_Component* parent
 
   current_ = this;
 
-  impl->scrollbar_v = new Scrollbar(CL_Rect(CL_Point(rect.get_width() - 14, 2), 
+  impl->scrollbar_v = new Scrollbar(CL_Rect(CL_Point(rect.get_width() - 14, 2) + CL_Point(rect.left, rect.top), 
                                             CL_Size(12, rect.get_height() - 4 - 14)),
                                     Scrollbar::VERTICAL,
-                                    this);
+                                    parent);
 
-  impl->scrollbar_h = new Scrollbar(CL_Rect(CL_Point(2, rect.get_height() - 14), 
+  impl->scrollbar_h = new Scrollbar(CL_Rect(CL_Point(2, rect.get_height() - 14) + CL_Point(rect.left, rect.top), 
                                             CL_Size(rect.get_width() - 4 - 14, 12)),
                                     Scrollbar::HORIZONTAL,
-                                    this);
+                                    parent);
 
   impl->slots.connect(impl->scrollbar_h->sig_scrollbar_move(), this, &EditorMapComponent::move_to_x);
   impl->slots.connect(impl->scrollbar_v->sig_scrollbar_move(), this, &EditorMapComponent::move_to_y);

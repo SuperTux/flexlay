@@ -92,4 +92,16 @@ Tileset::get_tile_size() const
   return impl->tile_size; 
 }
 
+std::vector<int> 
+Tileset::get_tiles() const
+{
+  std::vector<int> ret;
+  for(Tiles::size_type i = 0; i < impl->tiles.size(); ++i) 
+    {
+      if (impl->tiles[i] != 0)
+        ret.push_back(i);
+    }
+  return ret;
+}
+
 /* EOF */

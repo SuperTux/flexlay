@@ -55,6 +55,7 @@ public:
 
   void set_tileset(Tileset t);
   void set_tiles(const Tiles& t);
+  Tiles get_tiles() const;
   
   /** Set the factor by which tiles are scaled down in the selector
       widged (ie. for better overview) */

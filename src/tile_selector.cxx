@@ -155,6 +155,12 @@ TileSelector::set_scale(float s)
   scale = s;
 }
 
+TileSelector::Tiles
+TileSelector::get_tiles() const
+{
+  return tiles;
+}
+
 void
 TileSelector::set_tileset(Tileset t)
 {

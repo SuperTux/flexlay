@@ -297,13 +297,10 @@ require "sector.rb"
 $supertux = SuperTuxGUI.new($tileset, $gui)
 
 if ARGV == []
-  startlevel = Level.new(100, 50)
-  startlevel.activate($supertux.workspace)
+  Level.new(100, 50).activate($supertux.workspace)
 else
   supertux_load_level(ARGV[0])
 end
-
-level = nil
 
 # Init the GUI, so that button state is in sync with internal state
 $supertux.gui_toggle_minimap()

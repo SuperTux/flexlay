@@ -151,6 +151,8 @@ class GenericDialog
         (type, label, comp) = item
         if type == "int"
           comp.get_text().to_i
+        elsif type == "float"
+          comp.get_text().to_f
         elsif type == "string"
           comp.get_text()
         else
@@ -161,8 +163,22 @@ class GenericDialog
     end
   end
 
+  def set_block()
+    @callback = proc{ |*args| yield(*args) }
+  end
+
   def set_callback(c)
     @callback = c
+  end
+
+  def add_float(name, value = 0)
+    @items.push(["float",
+                 CL_Label.new(CL_Point.new(10, 10), name,
+                              @window.get_client_area()),
+                 CL_InputBox.new(CL_Rect.new(CL_Point.new(110, 10), CL_Size.new(200, 25)),
+                                 @window.get_client_area())])
+    @items[-1][2].set_text(value.to_s)
+    update()
   end
     
   def add_int(name, value = 0)
@@ -188,7 +204,7 @@ class GenericDialog
   def update()
     y = 10
     @items.each do |(type, label, comp)| 
-      if type == "int" or type == "string"
+      if type == "int" or type == "string" or type == "float"
         label.set_position(10, y)
         comp.set_position(110, y)
         y += 25

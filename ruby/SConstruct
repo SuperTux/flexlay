@@ -37,14 +37,14 @@ env = Environment(SHLIBPREFIX='',
 Help(opts.GenerateHelpText(env))
 
 env.Command('swigrun_wrap.cxx', 'swigrun.i',
-            "swig -runtime -ruby   -o $TARGET -c++ $SOURCE")
+            "swig -runtime -ruby -o $TARGET -c++ $SOURCE")
 
 env.SharedLibrary(target='libswigrun.so', source='swigrun_wrap.cxx',
               CPPPATH=['$USER_CPPPATH','$RUBYDIR'])
 
 Depends('../lib/flexlay_wrap.i', ['../lib/clanlib.i'])
 env.Command('flexlay_ruby_wrap.cxx', '../lib/flexlay_wrap.i',
-            "swig -noruntime -ruby   -o flexlay_ruby_wrap.cxx -c++ $SOURCE")
+            "swig -noruntime -ruby -o $TARGET -c++ $SOURCE")
 
 clanLib_env = Environment()
 clanLib_env.ParseConfig("pkg-config --cflags --libs clanCore-0.7 clanDisplay-0.7 clanGL-0.7 clanSignals-0.7 clanGUI-0.7 clanGUIStyleSilver-0.7")

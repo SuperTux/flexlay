@@ -33,6 +33,7 @@ class Tool
 protected:
 
 public:
+  Tool();
   Tool(SharedPtr<ToolImpl> impl_);
   ~Tool();
 

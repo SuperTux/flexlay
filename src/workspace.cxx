@@ -26,7 +26,6 @@
 #include "editor_names.hxx"
 #include "tool.hxx"
 #include "tileset.hxx"
-#include "tool_manager.hxx"
 #include "workspace.hxx"
 
 Workspace Workspace::current_;
@@ -43,6 +42,8 @@ public:
   CL_Pointf old_trans_offset;
 
   EditorMap editor_map;
+
+  Tool tool;
 };
 
 Workspace::Workspace()
@@ -70,7 +71,7 @@ Workspace::draw()
   impl->editor_map.draw(EditorMapComponent::current());
   
   if (1) // has_mouse_over()) FIXME: Seperate cursor and state here
-    Editor::current()->get_tool_manager()->current_tool().draw();
+    impl->tool.draw();
     
   CL_Display::flush();
 
@@ -84,7 +85,7 @@ Workspace::mouse_up(const CL_InputEvent& event)
     {
     case CL_MOUSE_LEFT:
     case CL_MOUSE_RIGHT:
-      Editor::current()->get_tool_manager()->current_tool().on_mouse_up(event);
+      impl->tool.on_mouse_up(event);
       break;
 
     case CL_MOUSE_MIDDLE:
@@ -102,7 +103,7 @@ Workspace::mouse_up(const CL_InputEvent& event)
 void
 Workspace::mouse_move(const CL_InputEvent& event)
 {
-  Editor::current()->get_tool_manager()->current_tool().on_mouse_move(event);
+  impl->tool.on_mouse_move(event);
 
   if (impl->scrolling)
     {
@@ -120,7 +121,7 @@ Workspace::mouse_down(const CL_InputEvent& event)
     {
     case CL_MOUSE_LEFT:
     case CL_MOUSE_RIGHT:
-      Editor::current()->get_tool_manager()->current_tool().on_mouse_down(event);
+      impl->tool.on_mouse_down(event);
       break;
 
     case CL_MOUSE_MIDDLE:
@@ -156,6 +157,12 @@ GraphicContextState&
 Workspace::get_gc_state()
 {
   return impl->gc_state;
+}
+
+void
+Workspace::set_tool(const Tool& tool)
+{
+  impl->tool = tool;
 }
 
 /* EOF */

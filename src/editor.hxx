@@ -23,7 +23,6 @@
 #include <vector>
 
 class TileEditor;
-class ToolManager;
 class EditorMap;
 class GUIManager;
 
@@ -32,7 +31,6 @@ class Editor
 {
 private:
   GUIManager* manager;
-  ToolManager* tool_manager;
 
   static Editor* current_;
 public:
@@ -41,7 +39,6 @@ public:
   Editor();
   ~Editor();
 
-  ToolManager* get_tool_manager() const { return tool_manager; }
   GUIManager*  get_gui_manager() const { return manager; }
   
   void run();

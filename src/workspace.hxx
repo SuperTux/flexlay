@@ -26,6 +26,7 @@
 
 class WorkspaceImpl;
 class EditorMap;
+class Tool;
 
 /** */
 class Workspace
@@ -50,6 +51,7 @@ public:
 
   GraphicContextState& get_gc_state();
 
+  void set_tool(const Tool& tool);
 private:
   CL_SharedPtr<WorkspaceImpl> impl;
 };

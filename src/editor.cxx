@@ -28,7 +28,6 @@
 #include "editor_map.hxx"
 #include "tile_selector.hxx"
 #include "tile_editor.hxx"
-#include "tool_manager.hxx"
 #include "globals.hxx"
 
 Editor* Editor::current_ = 0;
@@ -38,12 +37,10 @@ Editor::Editor()
   current_ = this;
 
   manager      = new GUIManager();
-  tool_manager = new ToolManager();
 }
 
 Editor::~Editor()
 {
-  delete tool_manager;
   delete manager;
 }
 

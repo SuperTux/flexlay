@@ -20,6 +20,10 @@
 #include "tool_impl.hxx"
 #include "tool.hxx"
 
+Tool::Tool()
+{
+}
+
 Tool::Tool(SharedPtr<ToolImpl> impl_)
   : impl(impl_)
 {

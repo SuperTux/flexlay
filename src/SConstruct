@@ -109,7 +109,6 @@ env.SharedLibrary(
     'tilemap_layer.cxx',
     'tileset.cxx',
     'tool.cxx',
-    'tool_manager.cxx',
     'workspace.cxx',
     'window.cxx',
     'viewport.cxx',

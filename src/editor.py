@@ -45,6 +45,14 @@ editor_map.set_workspace(workspace)
 m = EditorMap()
 workspace.set_map(m)
 
+# Tools
+tilemap_paint_tool  = TileMapPaintTool()
+tilemap_select_tool = TileMapSelectTool()
+zoom_tool           = ZoomTool()
+objmap_select_tool  = ObjMapSelectTool()
+
+workspace.set_tool(tilemap_paint_tool.to_tool());
+
 tileset = load_supertux_tiles()
 tilemap = TilemapLayer(tileset, 200, 15)
 m.add_layer(tilemap.to_layer())
@@ -129,12 +137,50 @@ def on_map_change():
 
 connect(m.sig_change(), on_map_change)
 
+def set_tilemap_paint_tool():
+    workspace.set_tool(tilemap_paint_tool.to_tool())
+    paint.disable()
+    select.enable()
+    zoom.enable()
+    object.enable()
+
+def set_tilemap_select_tool():
+    workspace.set_tool(tilemap_select_tool.to_tool())
+    paint.enable()
+    select.disable()
+    zoom.enable()
+    object.enable()
+    
+def set_zoom_tool():
+    workspace.set_tool(zoom_tool.to_tool())
+    paint.enable()
+    select.enable()
+    zoom.disable()
+    object.enable()
+    
+def set_objmap_select_tool():
+    workspace.set_tool(objmap_select_tool.to_tool())
+    paint.enable()
+    select.enable()
+    zoom.enable()
+    object.disable()
+
 toolbar = Panel(CL_Rect(CL_Point(0, 23+33), CL_Size(33, 256)), gui.get_component())
 
-select = Icon(CL_Point(2, 32*0+2), make_sprite("../data/images/tools/stock-tool-rect-select-22.png"), "Some tooltip", toolbar);
-erase  = Icon(CL_Point(2, 32+1+2), make_sprite("../data/images/tools/stock-tool-eraser-22.png"), "Some tooltip", toolbar);
-move   = Icon(CL_Point(2, 32*2+2), make_sprite("../data/images/tools/stock-tool-move-22.png"), "Some tooltip", toolbar);
-paint  = Icon(CL_Point(2, 32*3+2), make_sprite("../data/images/tools/stock-tool-pencil-22.png"), "Some tooltip", toolbar);
+paint  = Icon(CL_Point(2, 32*0+2), make_sprite("../data/images/tools/stock-tool-pencil-22.png"), "Some tooltip", toolbar);
+paint.set_callback(set_tilemap_paint_tool)
+
+select = Icon(CL_Point(2, 32*1+2), make_sprite("../data/images/tools/stock-tool-rect-select-22.png"), "Some tooltip", toolbar);
+select.set_callback(set_tilemap_select_tool)
+
+zoom   = Icon(CL_Point(2, 32*2+2), make_sprite("../data/images/tools/stock-tool-zoom-22.png"), "Some tooltip", toolbar);
+zoom.set_callback(set_zoom_tool)
+
+object = Icon(CL_Point(2, 32*3+2), make_sprite("../data/images/tools/stock-tool-clone-22.png"), "Some tooltip", toolbar);
+object.set_callback(set_objmap_select_tool)
+
+# erase  = Icon(CL_Point(2, 32+1+2), make_sprite("../data/images/tools/stock-tool-eraser-22.png"), "Some tooltip", toolbar);
+# move   = Icon(CL_Point(2, 32*2+2), make_sprite("../data/images/tools/stock-tool-move-22.png"), "Some tooltip", toolbar);
 
 supertux = SuperTuxGUI(tileset, gui)
 

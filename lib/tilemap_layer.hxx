@@ -87,7 +87,7 @@ public:
 
   /** Convert a coordinate given in world position into a tile
       coordinate */
-  CL_Point world2tile(const CL_Point& pos) const;
+  CL_Point world2tile(const CL_Pointf& pos) const;
 
   bool is_null() const { return !impl.get(); }
 

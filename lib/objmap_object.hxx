@@ -33,11 +33,11 @@ class ObjMapObject
 public:
   ObjMapObject();
   ObjMapObject(const SharedPtr<ObjMapObjectImpl>& impl_);
-  ObjMapObject(const CL_Point& pos, const MetaData& data);
+  ObjMapObject(const CL_Pointf& pos, const MetaData& data);
   virtual ~ObjMapObject() {}
 
-  CL_Point get_pos() const;
-  void     set_pos(const CL_Point& p);
+  CL_Pointf get_pos() const;
+  void     set_pos(const CL_Pointf& p);
 
   MetaData get_metadata() const;
   void     set_metadata(MetaData data_);
@@ -47,6 +47,7 @@ public:
   CL_Signal_v1<ObjMapObject>& sig_deselect();
 
   void draw();
+  // FIXME: should be CL_Rectf
   CL_Rect get_bound_rect() const;
 
   void add_control_points();

@@ -42,16 +42,20 @@ ObjMapPathNodeImpl::ObjMapPathNodeImpl()
 void
 ObjMapPathNodeImpl::draw()
 {
-  CL_Display::fill_rect(CL_Rect(pos-CL_Point(16,16), CL_Size(32, 32)), 
+  CL_Display::fill_rect(CL_Rect(CL_Point(static_cast<int>(pos.x),
+                                         static_cast<int>(pos.y)) - CL_Point(16,16), CL_Size(32, 32)), 
                         CL_Color(200, 255, 200));
   if (next)
     {
-      CL_Display::draw_line(pos.x, pos.y,
-                            (pos.x + next->pos.x)/2, (pos.y+next->pos.y)/2,
+      CL_Display::draw_line(static_cast<int>(pos.x), static_cast<int>(pos.y),
+                            static_cast<int>((pos.x + next->pos.x)/2),
+                            static_cast<int>((pos.y+next->pos.y)/2),
                             CL_Color(255, 255, 0));
 
-      CL_Display::draw_line((pos.x + next->pos.x)/2, (pos.y+next->pos.y)/2,
-                            next->pos.x, next->pos.y, 
+      CL_Display::draw_line(static_cast<int>((pos.x + next->pos.x)/2), 
+                            static_cast<int>((pos.y+next->pos.y)/2),
+                            static_cast<int>(next->pos.x),
+                            static_cast<int>(next->pos.y), 
                             CL_Color(255, 0, 0));
     }
 }
@@ -59,10 +63,12 @@ ObjMapPathNodeImpl::draw()
 CL_Rect
 ObjMapPathNodeImpl::get_bound_rect() const
 {
-  return CL_Rect(pos-CL_Point(16,16), CL_Size(32, 32));
+  return CL_Rect(CL_Point(static_cast<int>(pos.x),
+                          static_cast<int>(pos.y))
+                 - CL_Point(16,16), CL_Size(32, 32));
 }
 
-ObjMapPathNode::ObjMapPathNode(const CL_Point& pos_, 
+ObjMapPathNode::ObjMapPathNode(const CL_Pointf& pos_, 
                                const MetaData& data_)
   : impl(new ObjMapPathNodeImpl())
 {  

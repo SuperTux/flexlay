@@ -34,7 +34,7 @@ class ObjMapSpriteObject
 public:
   ObjMapSpriteObject();
   ObjMapSpriteObject(const CL_Sprite& s,
-                     const CL_Point& pos_, 
+                     const CL_Pointf& pos_, 
                      const MetaData& data_);
 
   void flip_horizontal();

@@ -36,16 +36,16 @@ class ObjMapControlPoint
 private:
 public:
   ObjMapControlPoint() : impl(0) {}
-  ObjMapControlPoint(CL_Sprite sprite_, CL_Point pos_, MetaData data_);
+  ObjMapControlPoint(CL_Sprite sprite_, CL_Pointf pos_, MetaData data_);
 
-  CL_Point get_pos() const;
-  void     set_pos(const CL_Point& p);
-  void     set_pos_raw(const CL_Point& p);
+  CL_Pointf get_pos() const;
+  void     set_pos(const CL_Pointf& p);
+  void     set_pos_raw(const CL_Pointf& p);
   void     draw();
 
   CL_Rect get_bound_rect() const;
 
-  CL_Signal_v1<CL_Point>& sig_set_pos();
+  CL_Signal_v1<CL_Pointf>& sig_set_pos();
 
   bool is_null() const { return !impl.get(); }
 private:

@@ -25,6 +25,7 @@
 #include "ruby.h"
 
 class CL_Point;
+class CL_Pointf;
 class ObjectBrush;
 class ObjMapObject;
 

@@ -28,7 +28,7 @@ class ZoomToolImpl : public ToolImpl
 public:
   enum { CREATE_ZOOM_RECT, NONE } state;
 
-  CL_Rect zoom_rect;
+  CL_Rectf zoom_rect;
 
   void draw();
   
@@ -54,7 +54,10 @@ ZoomToolImpl::draw()
     {
     case CREATE_ZOOM_RECT:
       {
-        CL_Rect tmp = zoom_rect;
+        CL_Rect tmp(static_cast<int>(zoom_rect.left),
+                    static_cast<int>(zoom_rect.top),
+                    static_cast<int>(zoom_rect.right),
+                    static_cast<int>(zoom_rect.bottom));
         tmp.normalize();
         CL_Display::fill_rect(tmp, CL_Color(255, 255, 0, 50));
         CL_Display::draw_rect(tmp, CL_Color(255, 255, 0, 200));
@@ -79,7 +82,7 @@ ZoomToolImpl::on_mouse_up  (const CL_InputEvent& event)
             state = NONE;
             parent->release_mouse();
 
-            CL_Point pos = parent->screen2world(event.mouse_pos);
+            CL_Pointf pos = parent->screen2world(event.mouse_pos);
             zoom_rect.right  = pos.x;
             zoom_rect.bottom = pos.y;
             zoom_rect.normalize();
@@ -111,7 +114,7 @@ ZoomToolImpl::on_mouse_down(const CL_InputEvent& event)
             state = CREATE_ZOOM_RECT;
             parent->capture_mouse();
 
-            CL_Point pos = parent->screen2world(event.mouse_pos);
+            CL_Pointf pos = parent->screen2world(event.mouse_pos);
             zoom_rect.left   = pos.x;
             zoom_rect.top    = pos.y;
             zoom_rect.right  = pos.x;
@@ -146,7 +149,7 @@ ZoomToolImpl::on_mouse_move(const CL_InputEvent& event)
     {
     case CREATE_ZOOM_RECT:
       {
-        CL_Point pos = parent->screen2world(event.mouse_pos);
+        CL_Pointf pos = parent->screen2world(event.mouse_pos);
         zoom_rect.right  = pos.x;
         zoom_rect.bottom = pos.y;  
       }

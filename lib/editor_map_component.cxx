@@ -145,11 +145,10 @@ EditorMapComponentImpl::draw ()
   CL_Display::pop_modelview();
 }
 
-CL_Point
+CL_Pointf
 EditorMapComponent::screen2world(const CL_Point& pos)
 {
-  CL_Pointf p = impl->workspace.get_gc_state().screen2world(pos);
-  return CL_Point((int)p.x, (int)p.y);
+  return impl->workspace.get_gc_state().screen2world(pos);
 }
 
 void
@@ -173,7 +172,7 @@ EditorMapComponent::zoom_in(CL_Point pos)
 }
 
 void
-EditorMapComponent::zoom_to(CL_Rect rect)
+EditorMapComponent::zoom_to(CL_Rectf rect)
 {
   impl->workspace.get_gc_state().zoom_to(rect);
 }

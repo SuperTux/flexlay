@@ -23,21 +23,21 @@ class ObjMapControlPointImpl
 {
 public:
   CL_Sprite sprite;
-  CL_Point  pos;
+  CL_Pointf  pos;
   MetaData  data;
 
   void draw();
   CL_Rect get_bound_rect() const;
-  CL_Signal_v1<CL_Point> on_set_pos;
+  CL_Signal_v1<CL_Pointf> on_set_pos;
 };
 
-CL_Signal_v1<CL_Point>& 
+CL_Signal_v1<CL_Pointf>& 
 ObjMapControlPoint::sig_set_pos()
 {
   return impl->on_set_pos;
 }
 
-ObjMapControlPoint::ObjMapControlPoint(CL_Sprite sprite_, CL_Point pos_, MetaData data_)
+ObjMapControlPoint::ObjMapControlPoint(CL_Sprite sprite_, CL_Pointf pos_, MetaData data_)
   : impl(new ObjMapControlPointImpl)
 {
   impl->sprite = sprite_;
@@ -54,22 +54,22 @@ ObjMapControlPoint::draw()
 void
 ObjMapControlPointImpl::draw()
 {
-  sprite.draw(pos.x, pos.y);
+  sprite.draw(static_cast<int>(pos.x), static_cast<int>(pos.y));
 }
 
 void
-ObjMapControlPoint::set_pos_raw(const CL_Point& p)
+ObjMapControlPoint::set_pos_raw(const CL_Pointf& p)
 {
   impl->pos = p;
 }
 
 void
-ObjMapControlPoint::set_pos(const CL_Point& p)
+ObjMapControlPoint::set_pos(const CL_Pointf& p)
 {
   impl->on_set_pos(p);
 }
 
-CL_Point
+CL_Pointf
 ObjMapControlPoint::get_pos() const
 {
   return impl->pos;
@@ -93,7 +93,7 @@ ObjMapControlPointImpl::get_bound_rect() const
                                                   sprite.get_height()));
   align.x = -align.x;
       
-  return CL_Rect(pos - origin - align,
+  return CL_Rect(CL_Point(static_cast<int>(pos.x), static_cast<int>(pos.y)) - origin - align,
                  CL_Size(sprite.get_width(), sprite.get_height()));
 }
 

@@ -49,7 +49,7 @@ public:
   void      set_workspace(Workspace m);
 
   void  set_zoom(float z);
-  void  zoom_to(CL_Rect rect);
+  void  zoom_to(CL_Rectf rect);
   void  zoom_out(CL_Point pos);
   void  zoom_in (CL_Point pos);
 
@@ -59,7 +59,7 @@ public:
 
   CL_Signal_v2<int, int>& sig_on_key(const std::string& str);
 
-  CL_Point screen2world(const CL_Point& pos);
+  CL_Pointf screen2world(const CL_Point& pos);
 
   CL_Rect get_clip_rect();
 

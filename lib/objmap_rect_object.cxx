@@ -30,7 +30,7 @@ class ObjMapRectObjectImpl : public ObjMapObjectImpl
 {
 public:
   std::vector<CL_Slot> slots;
-  CL_Size  size;
+  CL_Sizef size;
   CL_Color color;
 
   ObjMapControlPoint cp_top_left;
@@ -43,11 +43,11 @@ public:
   ObjMapControlPoint cp_middle_right;  
 
   void set_rect(CL_Rect rect) {
-    pos  = CL_Point(rect.left, rect.top);
-    size = CL_Size(rect.get_width(), rect.get_height());
+    pos  = CL_Pointf(rect.left, rect.top);
+    size = CL_Sizef(rect.get_width(), rect.get_height());
   }
 
-  void cp_top_left_move(CL_Point pos_) {
+  void cp_top_left_move(CL_Pointf pos_) {
     size.width  += pos.x - pos_.x;
     size.height += pos.y - pos_.y;
     pos = pos_;
@@ -56,7 +56,7 @@ public:
     update_control_points();
   }
 
-  void cp_top_right_move(CL_Point pos_) {
+  void cp_top_right_move(CL_Pointf pos_) {
     size.width  += pos_.x - (pos.x + size.width);
     size.height += pos.y - pos_.y;
     
@@ -66,7 +66,7 @@ public:
     update_control_points();
   }
 
-  void cp_bottom_left_move(CL_Point pos_) {
+  void cp_bottom_left_move(CL_Pointf pos_) {
     size.width  += pos.x - pos_.x;
     size.height += pos_.y - (pos.y + size.height);
     pos.x = pos_.x;
@@ -74,7 +74,7 @@ public:
     normalize_rect();
     update_control_points();
   }
-  void cp_bottom_right_move(CL_Point pos_) {
+  void cp_bottom_right_move(CL_Pointf pos_) {
     size.width  += pos_.x - (pos.x + size.width);
     size.height += pos_.y - (pos.y + size.height);
 
@@ -82,27 +82,27 @@ public:
     update_control_points();
   }
 
-  void cp_top_middle_move(CL_Point pos_) {
+  void cp_top_middle_move(CL_Pointf pos_) {
     size.height += pos.y - pos_.y;  
     pos.y = pos_.y;
 
     normalize_rect();
     update_control_points();
   }
-  void cp_bottom_middle_move(CL_Point pos_) {
+  void cp_bottom_middle_move(CL_Pointf pos_) {
     size.height += pos_.y - (pos.y + size.height);
 
     normalize_rect();
     update_control_points();
   }
-  void cp_middle_left_move(CL_Point pos_) {
+  void cp_middle_left_move(CL_Pointf pos_) {
     size.width  += pos.x - pos_.x;
     pos.x = pos_.x;
 
     normalize_rect();
     update_control_points();
   }
-  void cp_middle_right_move(CL_Point pos_) {
+  void cp_middle_right_move(CL_Pointf pos_) {
     size.width  += pos_.x - (pos.x + size.width);
 
     normalize_rect();
@@ -142,21 +142,21 @@ ObjMapRectObject::set_color(const CL_Color& color)
 void
 ObjMapRectObject::set_rect(const CL_Rect& rect)
 {
-  impl->pos  = CL_Point(rect.left, rect.top);
-  impl->size = CL_Size(rect.get_width(), rect.get_height());
+  impl->pos  = CL_Pointf(rect.left, rect.top);
+  impl->size = CL_Sizef(rect.get_width(), rect.get_height());
 }
 
 void
 ObjMapRectObjectImpl::update_control_points()
 {
   cp_top_left.set_pos_raw(pos);
-  cp_top_right.set_pos_raw(pos + CL_Point(size.width, 0));
-  cp_bottom_left.set_pos_raw(pos + CL_Point(0, size.height));
-  cp_bottom_right.set_pos_raw(pos + CL_Point(size.width, size.height));
-  cp_top_middle.set_pos_raw(pos + CL_Point(size.width/2, 0));
-  cp_bottom_middle.set_pos_raw(pos + CL_Point(size.width/2, size.height));
-  cp_middle_left.set_pos_raw(pos + CL_Point(0, size.height/2));
-  cp_middle_right.set_pos_raw(pos + CL_Point(size.width, size.height/2));
+  cp_top_right.set_pos_raw(pos + CL_Pointf(size.width, 0));
+  cp_bottom_left.set_pos_raw(pos + CL_Pointf(0, size.height));
+  cp_bottom_right.set_pos_raw(pos + CL_Pointf(size.width, size.height));
+  cp_top_middle.set_pos_raw(pos + CL_Pointf(size.width/2, 0));
+  cp_bottom_middle.set_pos_raw(pos + CL_Pointf(size.width/2, size.height));
+  cp_middle_left.set_pos_raw(pos + CL_Pointf(0, size.height/2));
+  cp_middle_right.set_pos_raw(pos + CL_Pointf(size.width, size.height/2));
 }
 
 ObjMapRectObject::ObjMapRectObject(const CL_Rect&  rect_,
@@ -164,39 +164,39 @@ ObjMapRectObject::ObjMapRectObject(const CL_Rect&  rect_,
                                    const MetaData& data_)  
   : impl(new ObjMapRectObjectImpl)
 {
-  impl->pos   = CL_Point(rect_.left, rect_.top);
-  impl->size  = CL_Size(rect_.get_width(), rect_.get_height());
+  impl->pos   = CL_Pointf(rect_.left, rect_.top);
+  impl->size  = CL_Sizef(rect_.get_width(), rect_.get_height());
   impl->color = color_;
   impl->data  = data_;
 
   impl->cp_top_left = ObjMapControlPoint(CL_Sprite("resize1", &(Flexlay::current()->resources)), 
-                                         CL_Point(),
+                                         CL_Pointf(),
                                          MetaData());
   
   impl->cp_bottom_right = ObjMapControlPoint(CL_Sprite("resize1", &(Flexlay::current()->resources)), 
-                                             CL_Point(),
+                                             CL_Pointf(),
                                              MetaData());
  
   impl->cp_top_right = ObjMapControlPoint(CL_Sprite("resize2", &(Flexlay::current()->resources)), 
-                                             CL_Point(),
+                                             CL_Pointf(),
                                           MetaData());
   
   impl->cp_bottom_left = ObjMapControlPoint(CL_Sprite("resize2", &(Flexlay::current()->resources)), 
-                                                   CL_Point(),
+                                                   CL_Pointf(),
                                                    MetaData());
   
   impl->cp_middle_left = ObjMapControlPoint(CL_Sprite("resize_horz", &(Flexlay::current()->resources)), 
-                                            CL_Point(),
+                                            CL_Pointf(),
                                             MetaData());
   impl->cp_middle_right  = ObjMapControlPoint(CL_Sprite("resize_horz", &(Flexlay::current()->resources)), 
-                                              CL_Point(),
+                                              CL_Pointf(),
                                               MetaData());
   impl->cp_top_middle = ObjMapControlPoint(CL_Sprite("resize_vert", &(Flexlay::current()->resources)), 
-                                           CL_Point(),
+                                           CL_Pointf(),
                                            MetaData());
   
   impl->cp_bottom_middle = ObjMapControlPoint(CL_Sprite("resize_vert", &(Flexlay::current()->resources)), 
-                                              CL_Point(),
+                                              CL_Pointf(),
                                               MetaData());
 
 
@@ -222,7 +222,10 @@ ObjMapRectObjectImpl::draw()
 CL_Rect
 ObjMapRectObjectImpl::get_bound_rect() const
 {
-  return CL_Rect(pos, size);
+  return CL_Rect(CL_Point(static_cast<int>(pos.x),
+                          static_cast<int>(pos.y)), 
+                 CL_Size(static_cast<int>(size.width),
+                         static_cast<int>(size.height)));
 }
 
 ObjMapObject

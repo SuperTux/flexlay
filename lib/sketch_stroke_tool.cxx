@@ -65,7 +65,7 @@ public:
         drawing = false;
 
         EditorMapComponent* parent = EditorMapComponent::current();
-        CL_Point p = parent->screen2world(event.mouse_pos);
+        CL_Pointf p = parent->screen2world(event.mouse_pos);
         stroke.add_point(p.x, p.y);
         // add to map
         stroke.set_color(color);
@@ -81,7 +81,7 @@ public:
         
         stroke = Stroke();
         EditorMapComponent* parent = EditorMapComponent::current();
-        CL_Point p = parent->screen2world(event.mouse_pos);
+        CL_Pointf p = parent->screen2world(event.mouse_pos);
         stroke.add_point(p.x, p.y);
       }
   }
@@ -91,7 +91,7 @@ public:
     if (drawing)
       {
         EditorMapComponent* parent = EditorMapComponent::current();
-        CL_Point p = parent->screen2world(event.mouse_pos);
+        CL_Pointf p = parent->screen2world(event.mouse_pos);
         stroke.add_point(p.x, p.y);    
       }
   }

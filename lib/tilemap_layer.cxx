@@ -327,10 +327,10 @@ TilemapLayerImpl::get_bounding_rect()
 }
 
 CL_Point
-TilemapLayer::world2tile(const CL_Point& pos) const
+TilemapLayer::world2tile(const CL_Pointf& pos) const
 {
-  int x = pos.x / impl->tileset.get_tile_size();
-  int y = pos.y / impl->tileset.get_tile_size();
+  int x = static_cast<int>(pos.x / impl->tileset.get_tile_size());
+  int y = static_cast<int>(pos.y / impl->tileset.get_tile_size());
 
   return CL_Point(pos.x < 0 ? x-1 : x,
                   pos.y < 0 ? y-1 : y);

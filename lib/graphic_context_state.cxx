@@ -115,7 +115,7 @@ GraphicContextState::get_zoom()
 }
 
 void
-GraphicContextState::zoom_to (const CL_Rect& rect)
+GraphicContextState::zoom_to (const CL_Rectf& rect)
 {
   float center_x = (rect.left + rect.right) / 2.0f;
   float center_y = (rect.top + rect.bottom) / 2.0f;
@@ -142,8 +142,8 @@ GraphicContextState::zoom_to (const CL_Rect& rect)
 CL_Pointf
 GraphicContextState::screen2world(const CL_Point& pos)
 {
-  return CL_Pointf((pos.x / impl->zoom) - impl->offset.x, 
-                   (pos.y / impl->zoom) - impl->offset.y);
+  return CL_Pointf((float(pos.x) / impl->zoom) - impl->offset.x, 
+                   (float(pos.y) / impl->zoom) - impl->offset.y);
 }
 
 int

@@ -28,7 +28,7 @@
 class ObjMapObjectImpl 
 {
 public:
-  CL_Point  pos;
+  CL_Pointf  pos;
   MetaData  data;
 
   CL_Signal_v1<ObjMapObject> on_move;

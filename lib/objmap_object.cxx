@@ -29,24 +29,24 @@ ObjMapObject::ObjMapObject(const SharedPtr<ObjMapObjectImpl>& impl_)
 {
 }
 
-ObjMapObject::ObjMapObject(const CL_Point& pos_,
+ObjMapObject::ObjMapObject(const CL_Pointf& pos_,
                            const MetaData& data_)
 {  
   impl->pos  = pos_;
   impl->data = data_;
 }
 
-CL_Point
+CL_Pointf
 ObjMapObject::get_pos() const 
 {
   if (impl.get())
     return impl->pos; 
   else
-    return CL_Point();
+    return CL_Pointf();
 }
 
 void
-ObjMapObject::set_pos(const CL_Point& p) 
+ObjMapObject::set_pos(const CL_Pointf& p) 
 {
   if (impl.get())
     {

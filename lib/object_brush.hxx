@@ -39,7 +39,7 @@ public:
   CL_Sprite get_sprite();
   MetaData get_data();
 
-  ObjMapSpriteObject to_sprite_object(const CL_Point& pos);
+  ObjMapSpriteObject to_sprite_object(const CL_Pointf& pos);
 private:
   SharedPtr<ObjectBrushImpl> impl;
 };

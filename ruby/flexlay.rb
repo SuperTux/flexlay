@@ -109,6 +109,10 @@ class ButtonPanel
   def add_seperator()
     @pos += 16
   end
+  
+  def show(b)
+    @panel.show(b)
+  end
 end
 
 # Very simple FileDialog, mainly a placeholder until the real thing gets ready.

@@ -79,9 +79,9 @@ ObjectSelector::mouse_up(const CL_InputEvent& event)
                 //command.add_object(obj);
                 //Workspace::current().get_map().execute(command.to_command());
                 
-                std::cout << "C++: Calling on_drop" << std::endl;
+                //std::cout << "C++: Calling on_drop" << std::endl;
                 on_drop(brushes[drag_obj], target);
-                std::cout << "C++: Calling on_drop: done" << std::endl;
+                //std::cout << "C++: Calling on_drop: done" << std::endl;
               }
             drag_obj = -1;
           }

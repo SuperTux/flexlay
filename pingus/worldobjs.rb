@@ -108,7 +108,7 @@ class WorldObj
 
       $objects[typename].each {|k, v|
         if k == "surface" then
-          @properties[k] = image
+          @properties[k] = [image]
         elsif k != "position" then
           @properties[k] = v[1]
         end

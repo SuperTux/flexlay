@@ -59,6 +59,14 @@ public:
   /** Moved the given object one position down in the object stack */
   void lower(const ObjMapObject& obj);
 
+  /** Moves the object to the given height in the object stack (0 is
+      lowest position, size()-1 is highest */
+  void move_to(const ObjMapObject& obj, int height);
+
+  /** Returns the index at which the given object is in the Objects
+      array or -1 if the object couldn't be found */
+  int get_object_index(const ObjMapObject& obj);
+
   void add_control_point(const ObjMapControlPoint& obj);
   void delete_control_points();
 

@@ -108,7 +108,7 @@ class GUI
     
     worldobj = WorldObj.new(type, sprite)
 
-    puts "String: #{worldobj.get_image()}"
+    puts "String: #{worldobj.get_image().inspect}"
     obj = ObjMapSpriteObject.new(CL_Sprite.new(worldobj.get_image(), $resources), 
                                  pos, 
                                  make_metadata(worldobj))

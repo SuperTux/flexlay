@@ -14,11 +14,13 @@ And you need scons (a make replacement) available at:
 
   * http://www.scons.org
 
-If you want to build the SuperTux Editor module you need in addition
-to that Ruby, available at and a recent SuperTux version (ie. cvs
-version, latest release will most likly not work):
+In addition to that Ruby, available at:
 
   * http://www.ruby-lang.org
+
+And for the games you need a recent copy of them, most often latest
+development version of them is required.
+
 
 Compilation:
 ============
@@ -28,6 +30,21 @@ Just type:
  $ scons
 
 and it should build everything automatically if the prerequirements
-are meet.
+are meet. 
+
+
+Running:
+========
+
+The directories supertux/, netpanzer/, paint/, pingus/ and windstille/
+contain the editors for the games, just run the executable scripts in
+there. You might need to adjust the path to the game data, which is
+currently hardcoded in the scripts.
+
+
+Installing:
+===========
+
+Currently not supported, run directly from the source directory.
 
 # EOF #

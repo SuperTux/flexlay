@@ -206,7 +206,7 @@ EditorMapComponent::sig_on_key(const std::string& str)
 {
   int id = CL_Keyboard::get_device().string_to_keyid(str);
 
-  std::cout << str << " => " << id << std::endl;
+  //std::cout << str << " => " << id << std::endl;
 
   if (id > 0 && id < 256)
     {

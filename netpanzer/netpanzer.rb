@@ -189,6 +189,22 @@ $button_panel.add_icon("../data/images/icons24/stock_paste.png", proc{})
 $button_panel.add_seperator()
 $undo_icon = $button_panel.add_icon("../data/images/icons24/stock_undo.png", proc{$workspace.get_map().undo()})
 $redo_icon = $button_panel.add_icon("../data/images/icons24/stock_redo.png", proc{$workspace.get_map().redo()})
+$button_panel.add_seperator()
+
+
+$tool_button_panel = ButtonPanel.new(320, 23, $screen.width, 33, true, $gui.get_component)
+$tool_button_panel.add_seperator()
+$tool_button_panel.add_icon("../data/images/icons24/object_raise.png", proc{
+                         $objmap_select_tool.get_selection().each {|obj|
+                           $workspace.get_map().get_data().objects.raise(obj)
+                         }
+                       })
+$tool_button_panel.add_icon("../data/images/icons24/object_lower.png", proc{
+                         $objmap_select_tool.get_selection().each {|obj|
+                           $workspace.get_map().get_data().objects.lower(obj)
+                         }
+                       })
+$tool_button_panel.show(false)
 
 def gui_toggle_grid()
   tilemap = $workspace.get_map().get_metadata().data.get_tilemap()
@@ -219,6 +235,8 @@ def set_tilemap_paint_tool()
 
   $brushbox.show(true)
   $objectselector.show(false)
+
+  $tool_button_panel.show(false)
 end
 
 def set_tilemap_select_tool()
@@ -230,6 +248,8 @@ def set_tilemap_select_tool()
 
   $brushbox.show(false)
   $objectselector.show(false)
+
+  $tool_button_panel.show(false)
 end
 
 def set_zoom_tool()
@@ -241,6 +261,8 @@ def set_zoom_tool()
 
   $brushbox.show(false)
   $objectselector.show(false)
+
+  $tool_button_panel.show(false)
 end
 
 def set_objmap_select_tool()
@@ -252,6 +274,8 @@ def set_objmap_select_tool()
 
   $brushbox.show(false)
   $objectselector.show(true)
+
+  $tool_button_panel.show(true)
 end
 
 $toolbar = Panel.new(CL_Rect.new(CL_Point.new(0, 23+33), CL_Size.new(33, 32*4+2)), $gui.get_component())
@@ -336,6 +360,17 @@ $load_dialog = SimpleFileDialog.new("Load netPanzer Level", "Load", "Cancel", $g
 $load_dialog.set_filename($config.datadir + "maps/")
 $save_dialog = SimpleFileDialog.new("Save netPanzer Level as...", "Save", "Cancel", $gui.get_component())
 $save_dialog.set_filename($config.datadir + "maps/")
+
+connect_v2($editor_map.sig_on_key("l"), proc{ |x, y|
+             $objmap_select_tool.get_selection().each {|obj|
+               $workspace.get_map().get_data().objects.raise(obj)
+             }
+           })
+connect_v2($editor_map.sig_on_key("s"), proc{ |x, y| 
+             $objmap_select_tool.get_selection().each {|obj|
+               $workspace.get_map().get_data().objects.lower(obj)
+             }
+           })
 
 set_tilemap_paint_tool()
 

@@ -157,14 +157,44 @@ ObjectLayer::to_layer()
   return Layer(impl);
 }
 
+int
+ObjectLayer::get_object_index(const ObjMapObject& obj)
+{
+  Objects::size_type i;
+  for(i = 0; i < impl->objects.size(); ++i)
+    {
+      if (impl->objects[i] == obj)
+        {
+          return i;
+        }
+    }
+  return -1;
+}
+
+void
+ObjectLayer::move_to(const ObjMapObject& obj, int height)
+{
+  // FIXME: Implement me
+}
+
 void
 ObjectLayer::raise(const ObjMapObject& obj)
 {
+  int i = get_object_index(obj);
+  if (i != -1 && impl->objects.size() > 1 && i < int(impl->objects.size())-1)
+    {
+      std::swap(impl->objects[i], impl->objects[i+1]);
+    }
 }
 
 void
 ObjectLayer::lower(const ObjMapObject& obj)
 {
+  int i = get_object_index(obj);
+  if (i != -1 && i > 0)
+    {
+      std::swap(impl->objects[i], impl->objects[i-1]);
+    }
 }
 
 /* EOF */

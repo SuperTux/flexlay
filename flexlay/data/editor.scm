@@ -240,7 +240,7 @@
           (w (gui-create-inputbox 80 50 50 25 (number->string                      
                                                (editor-tilemap-get-width *tilemap*))))
           (h (gui-create-inputbox 80 70 50 25 (number->string 
-                                               (editor-tilemap-get-width *tilemap*)))))
+                                               (editor-tilemap-get-height *tilemap*)))))
       
       (gui-create-button-func 60 100 75 25 "Ok"
                               (lambda ()
@@ -906,7 +906,7 @@
 (case *game*
   ((supertux)
    (tile-selector-set-tileset *tileselector* *level-tileset*)
-   (tile-selector-set-tiles   *tileselector* (seq 1 100))
+   (tile-selector-set-tiles   *tileselector* (seq 1 130))
    (supertux:new-map 20 15))
   ((netpanzer)
    (tile-selector-set-tileset *tileselector* *tileset*)

@@ -75,6 +75,11 @@ $(REST_LIBS2) \
 -Wl,-Bdynamic \
 -lGL
 
+flexlay.semistatic: $(flexlay_OBJECTS) $(flexlay_DEPENDENCIES) Makefile
+	$(CXX) -s $(CXXFLAGS)   @EDITOR_CFLAGS@ -o $@ $(flexlay_OBJECTS) \
+         $(flexlay_DEPENDENCIES) -Wl,-Bstatic @EDITOR_LIBS@ -Wl,-Bdynamic \
+          -lguile -L/usr/X11R6/lib/ -lX11 -lGL -lpng -ljpeg -lXxf86vm -lGLU
+
 flexlay.static: $(flexlay_OBJECTS) $(flexlay_DEPENDENCIES) Makefile
 	$(CXX) -s $(CXXFLAGS)   @EDITOR_CFLAGS@ -o $@ $(flexlay_OBJECTS) \
          $(flexlay_DEPENDENCIES) $(STATICBIN_LIBS) 

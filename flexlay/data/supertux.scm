@@ -108,7 +108,9 @@
     (tilemap-paint-tool-set-tilemap tilemap)
     (set! *tilemap* tilemap)
     (editor-tilemap-set-current tilemap)
-    (tileset-set-current *worldmap-tileset*)))
+    (tileset-set-current *worldmap-tileset*)
+    (tile-selector-set-tileset *tileselector* *worldmap-tileset*)
+    ))
 
 (define-method (supertux:activate (stlv <supertux-level>))
   (tilemap-paint-tool-set-tilemap (supertux:interactive-tm stlv))
@@ -116,7 +118,8 @@
   (editor-objectmap-set-current   (supertux:objmap stlv))
   (set! *tilemap* (supertux:interactive-tm stlv))
   (set! *objmap* (supertux:objmap stlv))
-  (tileset-set-current *level-tileset*))
+  (tileset-set-current *level-tileset*)
+  (tile-selector-set-tileset *tileselector* *level-tileset*))
 
 (define (supertux:new-map width height)
   (let ((levelmap (supertux:create-levelmap width height)))

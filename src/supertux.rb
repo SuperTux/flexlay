@@ -420,7 +420,7 @@ class Sector
   objects   = nil
   editormap = nil
 
-  attr_reader :name, :background, :interactive, :foreground, :parent
+  attr_reader :name, :background, :interactive, :foreground, :parent, :width, :height
   attr_writer :name, :song, :gravity
  
   def initialize(parent)
@@ -591,7 +591,7 @@ class Sector
     workspace.set_map(@editormap)
     TilemapLayer.set_current(@interactive)
     ObjectLayer.set_current(@objects)
-    #connect(@editormap.sig_change(), on_map_change)
+    connect(@editormap.sig_change(), proc{on_map_change()})
   end
 end
 

@@ -90,58 +90,55 @@ class GenericDialog
     @window = Window.new(CL_Rect.new(CL_Point.new(100, 100), CL_Size.new(400, 100)), title, gui)
     @ok = CL_Button.new(CL_Rect.new(CL_Point.new(290, 35), CL_Size.new(50, 25)), "Ok",
                     @window.get_client_area())
-    @cancel = CL_Button(CL_Rect.new(CL_Point.new(230, 35), CL_Size.new(50, 25)), "Cancel",
-                        @window.get_client_area())
-    connect(@cancel.sig_clicked(), @on_cancel)
-    connect(@ok.sig_clicked(), @on_ok)
+    @cancel = CL_Button.new(CL_Rect.new(CL_Point.new(230, 35), CL_Size.new(50, 25)), "Cancel",
+                            @window.get_client_area())
+    connect(@cancel.sig_clicked(), method(:on_cancel))
+    connect(@ok.sig_clicked(), method(:on_ok))
   end
 
   def on_cancel()
+    print "ON CANCEL\n"
     @window.hide()
   end
   
   def on_ok()
+    print "ON OK\n"
     @window.hide()
-    if @callback != nil
-      @callback.call(*get_values())
+    if @callback
+      vals = @items.map{|item|
+        (type, label, comp) = item
+        if type == "int"
+          comp.get_text().to_i
+        elsif type == "string"
+          comp.get_text()
+        else
+          nil
+        end
+      }
+      @callback.call(*vals)
     end
   end
 
   def set_callback(c)
     @callback = c
   end
-  
-  def get_values()
-    def get_value(item)
-      (type, label, comp) = item
-      if type == "int":
-               return int(comp.get_text())
-      elsif type == "string":
-                  return comp.get_text()
-      else
-        return nil
-      end
-    end
     
-    return map(get_value, @items)
-  end
-  
   def add_int(name, value = 0)
-    @items.append(["int",
-                   CL_Label.new(CL_Point.new(10, 10), name,
-                                @window.get_client_area()),
-                   CL_InputBox.new(CL_Rect.new(CL_Point.new(110, 10), CL_Size.new(200, 25)),
-                                   @window.get_client_area())])
-    @items[-1][2].set_text(str(value))
+    @items.push(["int",
+                 CL_Label.new(CL_Point.new(10, 10), name,
+                              @window.get_client_area()),
+                 CL_InputBox.new(CL_Rect.new(CL_Point.new(110, 10), CL_Size.new(200, 25)),
+                                 @window.get_client_area())])
+    @items[-1][2].set_text(value.to_s)
     update()
   end
   
   def add_string(name, value = "")
-    @items.append(["string",
-                   CL_Label.new(CL_Point.new(10, 10), name,
-                                @window.get_client_area()),
-                   CL_InputBox.new(CL_Rect.new(CL_Point.new(110, 10), CL_Size.new(200, 25)),
-                               @window.get_client_area())])
+    @items.push(["string",
+                 CL_Label.new(CL_Point.new(10, 10), name,
+                              @window.get_client_area()),
+                 CL_InputBox.new(CL_Rect.new(CL_Point.new(110, 10), CL_Size.new(200, 25)),
+                                 @window.get_client_area())])
     @items[-1][2].set_text(value)
     update()    
   end

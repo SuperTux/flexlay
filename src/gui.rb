@@ -242,7 +242,7 @@ def menu_file_open()
   level = Level('/home/ingo/cvs/supertux/supertux/data/levels/world1/level2.stl')
   print "Loading done"
   level.activate(workspace)
-  connect(level.editormap.sig_change(), on_map_change)
+  connect(level.editormap.sig_change(), proc{on_map_change()})
   print "Activation done"
 end
 

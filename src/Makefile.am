@@ -52,6 +52,7 @@ windstille_SOURCES = \
   gui_manager.cxx \
   igel.hxx \
   igel.cxx \
+  math.hxx \
   music_manager.hxx \
   music_manager.cxx \
   laser_shoot.cxx \

@@ -18,7 +18,10 @@
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include <ClanLib/Display/display.h>
+#include <iostream>
+#include <ClanLib/Core/core_iostream.h>
 #include "../globals.hxx"
+#include "../math.hxx"
 #include "tile_selection.hxx"
 
 TileSelection::TileSelection()
@@ -73,24 +76,40 @@ TileSelection::get_brush(const Field<int>& field) const
 {
   CL_Rect sel = selection;
 
-  // Cut the selection to the field size
-  sel.left = std::max(0, sel.left); 
-  sel.top  = std::max(0, sel.top); 
+  sel.normalize();
 
-  sel.right  = std::min(field.get_width(),  sel.right); 
-  sel.bottom = std::min(field.get_height(), sel.bottom); 
+  if (sel.left     > field.get_width() - 1
+      || sel.top   > field.get_height() - 1
+      || sel.right  <= 0
+      || sel.bottom <= 0)
+    { // Selection is empty
+      std::cout << "Error: Invalid selection" << std::endl;
+      TileBrush brush(1, 1);
+      brush.at(0, 0) = 0;
+      brush.set_opaque();
+      return brush;
+    }
+  else
+    { // Selection is valid
+      // Cut the selection to the field size
+      sel.left = Math::max(0, sel.left);
+      sel.top  = Math::max(0, sel.top);
 
-  TileBrush brush(sel.get_width(), 
-                  sel.get_height());
+      sel.right  = Math::min(sel.right,  field.get_width()); 
+      sel.bottom = Math::min(sel.bottom, field.get_height()); 
 
-  for(int y = sel.top; y < sel.bottom; ++y)
-    for(int x = sel.left; x < sel.right; ++x)
-      {
-        brush.at(x - sel.left, 
-                 y - sel.top) = field.at(x, y);
-      }
+      TileBrush brush(sel.get_width(), 
+                      sel.get_height());
 
-  return brush;
+      for(int y = sel.top; y < sel.bottom; ++y)
+        for(int x = sel.left; x < sel.right; ++x)
+          {
+            brush.at(x - sel.left, 
+                     y - sel.top) = field.at(x, y);
+          }
+
+      return brush;
+    }
 }
 
 /* EOF */

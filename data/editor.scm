@@ -609,9 +609,7 @@
                                *recent-files*)))
 
 (objectmap-tool-set-popupmenu-callback 
- (lambda ()
-   (let ((menu (current-popup-menu)))
-
+ (lambda (menu)
      (gui-add-menu-item menu "Testomat/Foobar"
                         (lambda () 
                           (display "Foobar\n")))
@@ -634,8 +632,7 @@
 
      (gui-add-menu-item menu "Delete Selection"
                         (lambda ()
-                          (for-each editor-objectmap-delete-object
-                                    (tilemap-object-tool-get-objects))
+                          (editor-objectmap-delete-objects (tilemap-object-tool-get-objects))
                           (tilemap-object-tool-clear-selection)))
      
      (gui-add-menu-item menu "Duplicate Selection"
@@ -652,12 +649,12 @@
                                     ;;(editor-objectmap-get-objects)
                                     (tilemap-object-tool-get-objects)
                                     )))
-     )))
+     ))
 
 (load-variables)
 (init-recent-files)
 
-(set! *editor-map* (editor-map-component-create 0 25 screen-width (- screen-height 25)))
+(set! *editor-map* (editor-map-component-create 0 22 screen-width (- screen-height 25)))
 (create-menu)
 
 (create-toolbar)

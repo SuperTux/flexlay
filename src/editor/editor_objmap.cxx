@@ -144,4 +144,10 @@ EditorObjMap::get_objects()
   return &objects;
 }
 
+void
+EditorObjMap::add_object(ObjMapObject* obj)
+{
+  objects.push_back(obj);
+}
+
 /* EOF */

@@ -27,6 +27,7 @@
 class CL_Menu;
 class EditorMap;
 class ObjectMoveCommand;
+class ObjectDeleteCommand;
 
 /** */
 class TileMapObjectTool : public TileMapTool
@@ -49,6 +50,7 @@ private:
 
   Selection selection;
   ObjectMoveCommand* move_command;
+  ObjectDeleteCommand* delete_command;
 public:
   TileMapObjectTool();
   ~TileMapObjectTool();

@@ -42,6 +42,7 @@
 #include "tile_factory.hxx"
 #include "tile.hxx"
 #include "editor/tool_manager.hxx"
+#include "editor/object_delete_command.hxx"
 #include "gui_manager.hxx"
 
 #include "../editor/editor_map.hxx"
@@ -51,7 +52,32 @@
 
 #include "editor.hxx"
 
+SCM component2scm(CL_Component* comp);
+
 extern CL_ResourceManager* resources;
+
+
+std::vector<int>
+scm2vector(SCM lst)
+{
+  std::vector<int> ret;
+  while (!gh_null_p(lst)) {
+    ret.push_back(gh_scm2int(gh_car(lst)));
+    lst = gh_cdr(lst);
+  }
+  return ret;
+}
+
+SCM vector2scm(const std::vector<int>& vec)
+{
+  SCM lst = SCM_EOL;
+  for(std::vector<int>::const_iterator i = vec.begin(); i != vec.end(); ++i) {
+    lst = gh_cons(SCM_MAKINUM(*i), lst);
+  }
+  return gh_reverse(lst);
+}
+
+
 
 void editor_redo()
 {
@@ -198,9 +224,15 @@ editor_objectmap_duplicate_object(int id)
 }
 
 void
-editor_objectmap_delete_object(int id)
+editor_objectmap_delete_objects(SCM lst)
 {
-  editor_get_objmap()->delete_object(id); 
+  ObjectDeleteCommand* command = new ObjectDeleteCommand(editor_get_objmap());
+  
+  std::vector<int> selection = scm2vector(lst);
+  for(std::vector<int>::const_iterator i = selection.begin(); i != selection.end(); ++i) {
+    command->add_object(*i);
+  }
+  Editor::current()->execute(command);
 }
 
 void
@@ -752,16 +784,6 @@ SCM string2scm(const std::string& str)
   return gh_str02scm(str.c_str());
 }
 
-
-CL_Menu* current_menu;
-
-CL_Component*
-current_popup_menu()
-{
-  return current_menu;
-}
-
-// FIXME: Hack
 struct MenuConverter
 {
   SCMFunctor func;
@@ -772,8 +794,7 @@ struct MenuConverter
   }
 
   void operator()(CL_Menu* menu) {
-    current_menu = menu;
-    func();
+    func(component2scm(menu));
   }
 };
 

@@ -31,10 +31,17 @@
 #include "editor/tilemap_select_tool.hxx"
 #include "editor/tilemap_paint_tool.hxx"
 #include "editor/minimap.hxx"
+#include "editor/editor_names.hxx"
 #include "tile_factory.hxx"
 #include "tile.hxx"
 #include "gui_manager.hxx"
 #include "editor.hxx"
+
+EditorObjMap*
+editor_get_objmap()
+{
+  return dynamic_cast<EditorObjMap*>(EditorMap::current()->get_layer_by_name(OBJECTMAP_NAME));
+}
 
 EditorTileMap*
 editor_get_tilemap()
@@ -46,6 +53,11 @@ editor_get_tilemap()
       assert(!"Error: Tilemap not found");
       return 0;
     }
+}
+
+void editor_objectmap_add_object(const char* name, int x, int y)
+{
+  editor_get_objmap()->add_object(name, CL_Point(x, y));
 }
 
 void

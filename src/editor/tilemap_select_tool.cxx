@@ -29,6 +29,8 @@
 TileMapSelectTool::TileMapSelectTool(EditorMap* p, EditorTileMap* t)
   : TileMapTool(p), tilemap(t)
 {
+  click_pos = CL_Point(0,0);
+  selection = CL_Rect(0, 0, 0, 0);
   active = false;
 }
 

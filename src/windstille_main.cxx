@@ -38,6 +38,7 @@
 #include "fonts.hxx"
 #include "feuerkraft_error.hxx"
 #include "input/input_manager.hxx"
+#include "scripting/editor.hxx"
 #include "music_manager.hxx"
 #include "tile_factory.hxx"
 
@@ -237,8 +238,10 @@ WindstilleMain::main(int argc, char** argv)
     else
       {
         Editor editor;
+
         if (!levelfile.empty ())
-          editor.load (levelfile);
+          editor_load(levelfile.c_str());
+
         editor.run();
       }
     TileFactory::deinit();

@@ -10,6 +10,7 @@
 (define *tileeditor* #f)
 (define *tileeditor-window* #f)
 (define *tileselector-window* #f)
+(define *object-inserter-window* #f)
 (define *minimap* #f)
 (define *menu*    #f)
 (define *statusbar* #f)
@@ -203,8 +204,9 @@
                             40 25 "Brush" 
                             (lambda () 
                               (set! *clipboard* (editor-get-tile-selection))
-                              (tilemap-paint-tool-set-brush *clipboard*)
-                              (editor-set-tool 0)))
+                              (cond (*clipboard*
+                                     (tilemap-paint-tool-set-brush *clipboard*)
+                                     (editor-set-tool 0)))))
 
     (gui-create-button-func 0 150
                             40 25 "BG" 
@@ -287,6 +289,20 @@
                             (lambda ()
                               (gui-hide-component window)))
     (gui-pop-component)))
+
+(define (create-object-inserter)
+  (let ((window (gui-create-window 600 25 200 400 "ObjectInserter")))
+    (gui-push-component (gui-window-get-client-area window))
+    
+    (gui-create-button-func 10  5 80 25 "Igel" 
+                            (lambda () (editor-objectmap-add-object "igel" 0 0)))
+    (gui-create-button-func 10 35 80 25 "Hero" 
+                            (lambda () (editor-objectmap-add-object "hero/dead" 0 0)))
+
+    (gui-component-on-close window (lambda ()
+                                     (gui-hide-component window)))
+    (gui-pop-component)
+    (set! *object-inserter-window* window)))
 
 (define (create-tile-selector)
   (let ((window (gui-create-window 600 25 200 400 "TileSelector")))
@@ -394,6 +410,7 @@
 (create-toolbar)
 (create-tile-editor)
 (create-tile-selector)
+(create-object-inserter)
 (create-minimap)
 
 ;; EOF ;;

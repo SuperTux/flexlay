@@ -40,7 +40,6 @@ public:
   ~Editor();
 
   void run();
-  void load(const std::string& filename);
 
 private:
   Editor (const Editor&);

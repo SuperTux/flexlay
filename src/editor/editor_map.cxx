@@ -27,6 +27,7 @@
 #include "tilemap_select_tool.hxx"
 #include "tilemap_object_tool.hxx"
 #include "tilemap_diamond_tool.hxx"
+#include "editor_names.hxx"
 #include "editor_map.hxx"
 
 EditorMap* EditorMap::current_ = 0; 
@@ -56,10 +57,10 @@ EditorMap::EditorMap(const CL_Rect& rect, CL_Component* parent)
   layers.push_back(objmap  = new EditorObjMap(this));
 
   // FIXME: move this to scripting too
-  tools.push_back(new TileMapPaintTool(this, tilemap));
-  tools.push_back(new TileMapSelectTool(this, tilemap));
+  tools.push_back(new TileMapPaintTool  (this, tilemap));
+  tools.push_back(new TileMapSelectTool (this, tilemap));
   tools.push_back(new TileMapDiamondTool(this, tilemap));
-  tools.push_back(new TileMapObjectTool(this, objmap));
+  tools.push_back(new TileMapObjectTool (this, objmap));
 
   tool = tools[0];
 }
@@ -231,9 +232,9 @@ EditorMap::get_layer_by_name(int i)
 {
   switch(i)
     {
-    case 0:
+    case TILEMAP_NAME:
       return tilemap;
-    case 1: 
+    case OBJECTMAP_NAME: 
       return objmap;
     default:
       return 0;

@@ -48,19 +48,13 @@ Editor::~Editor()
 }
 
 void
-Editor::load(const std::string& filename)
-{
-  // FIXME: implement me
-  //EditorTileMap* tilemap = dynamic_cast<EditorTileMap*>(Editor::current()->get_map()->get_layer_by_name(0));
-  //if (tilemap)
-  //tilemap->load(filename);
-}
-
-void
 Editor::run()
 {
   CL_Display::get_current_window()->show_cursor();
+
+  std::cout << "Starting GUI manager busy loop..." << std::endl;
   manager->run();
+  std::cout << "Starting GUI manager busy loop... done" << std::endl;
 }
 
 /* EOF */

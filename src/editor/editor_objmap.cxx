@@ -25,10 +25,6 @@ extern CL_ResourceManager* resources;
 EditorObjMap::EditorObjMap(EditorMap* p)
   : EditorMapLayer(p)
 {
-  Obj* obj = new Obj;
-  obj->sprite = CL_Sprite("igel", resources);
-  obj->pos    = CL_Point(100, 100);
-  objects.push_back(obj);
 }
 
 EditorObjMap::~EditorObjMap()
@@ -51,6 +47,15 @@ EditorObjMap::draw()
     {
       (*i)->sprite.draw((*i)->pos.x, (*i)->pos.y);
     }
+}
+
+void
+EditorObjMap::add_object(const char* name, const CL_Point& pos)
+{
+  Obj* obj = new Obj;
+  obj->sprite = CL_Sprite(name, resources);
+  obj->pos    = pos;
+  objects.push_back(obj);  
 }
 
 EditorObjMap::Obj*

@@ -30,7 +30,8 @@
 
 class TileMapTool;
 
-/** */
+/** Object which represents a level, quirled together with the GUI
+    stuff */
 class EditorMap : public CL_Component
 {
 private:

@@ -48,6 +48,8 @@ public:
   void update(float delta);
   void draw();
 
+  void add_object(const char* name, const CL_Point& pos);
+
   EditorObjMap::Obj* find_object(const CL_Point& pos);
 private:
   EditorObjMap (const EditorObjMap&);

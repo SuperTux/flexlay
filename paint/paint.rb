@@ -79,12 +79,7 @@ class PaintGUI
     @brush_hardness.set_value(0.75)
     connect_v1_float(@brush_hardness.sig_on_change, proc{|value|
                        drawer = SpriteStrokeDrawer.new($sketch_stroke_tool.get_drawer())
-                       drawer.set_sprite(pixelbuffer2sprite(generate_brushmask(BRUSH_SHAPE_CIRCLE, 
-                                                                               32,  # radius
-                                                                               2,   # spikes
-                                                                               value, # hardness
-                                                                               1.0, # aspect
-                                                                               0))) # angle
+                       GeneratedBrush.new(drawer.get_brush()).set_hardness(value)
                      })
 
 
@@ -214,7 +209,14 @@ class Image
     stroke = Stroke.new()
 
     sprite_drawer = SpriteStrokeDrawer.new()
-    sprite_drawer.set_sprite(make_sprite("../data/images/brush/brush.png"))
+    # FIXME: insert loader for brush here
+    sprite_drawer.set_brush(GeneratedBrush.new(BRUSH_SHAPE_CIRCLE, 
+                                               32,  # radius
+                                               2,   # spikes
+                                               0.75, # hardness
+                                               1.0, # aspect
+                                               0).to_brush()) # angle
+    
     sprite_drawer.set_color(CL_Color.new(0, 0, 0, 155))
     sprite_drawer.set_size(1.0)
     stroke.set_drawer(sprite_drawer.to_drawer())
@@ -244,7 +246,13 @@ class Image
           drawer.set_mode(mode)
           drawer.set_size(size)
           drawer.set_color(CL_Color.new(color[0], color[1], color[2], color[3]))
-          drawer.set_sprite(make_sprite("../data/images/brush/#{brush}"))
+          # FIXME: Insert brush loader here
+          drawer.set_brush(GeneratedBrush.new(BRUSH_SHAPE_CIRCLE, 
+                                              32,  # radius
+                                              2,   # spikes
+                                              0.75, # hardness
+                                              1.0, # aspect
+                                              0)) # angle
           stroke.set_drawer(drawer.to_drawer)
         else
           puts "Error: Unknown drawer: #{data[0][0]}" 
@@ -271,6 +279,7 @@ class Image
         sprite_stroke_drawer = SpriteStrokeDrawer.new(stroke.get_drawer())
 
         f.puts "      (drawer (sprite-stroke-drawer"
+        f.puts "                 (mode    #{sprite_stroke_drawer.get_mode})"
         f.puts "                 (spacing #{sprite_stroke_drawer.get_spacing})"
         f.puts "                 (size    #{sprite_stroke_drawer.get_size})"
         f.puts "                 (color   "\
@@ -293,8 +302,8 @@ class Image
       }
       f.puts ")"
       f.puts ")"
-      f.close()
     }
+    f.close()
   end
 end
 
@@ -309,12 +318,12 @@ $image = Image.new()
 $image.activate($gui.workspace)
 
 drawer = SpriteStrokeDrawer.new($sketch_stroke_tool.get_drawer())
-drawer.set_sprite(pixelbuffer2sprite(generate_brushmask(BRUSH_SHAPE_CIRCLE, 
-                                                        32,  # radius
-                                                        2,   # spikes
-                                                        0.75, # hardness
-                                                        1.0, # aspect
-                                                        0))) # angle
+drawer.set_brush(GeneratedBrush.new(BRUSH_SHAPE_CIRCLE, 
+                                    32,  # radius
+                                    2,   # spikes
+                                    0.75, # hardness
+                                    1.0, # aspect
+                                    0).to_brush()) # angle
 
 $image.layers_count.times {|i|
   button = CL_Button.new(CL_Rect.new(CL_Point.new(25*i+6, 450), CL_Size.new(25, 25)), "#{i}",

@@ -23,6 +23,7 @@
 #include <ClanLib/Display/color.h>
 #include <ClanLib/Display/sprite.h>
 #include "stroke_drawer.hxx"
+#include "brush.hxx"
 
 class Stroke;
 class SpriteStrokeDrawerImpl;
@@ -56,6 +57,11 @@ public:
       ignored */
   void      set_sprite(const CL_Sprite& sprite);
   CL_Sprite get_sprite() const;
+
+  /** Set the brush to be used, its color and size settings are
+      ignored */
+  void  set_brush(const Brush& brush);
+  Brush get_brush() const;
 
   /** The modus in which the drawing affects the image (normal, erase, addition, color, etc.) */
   void set_mode(DrawMode mode);

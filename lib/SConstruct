@@ -54,6 +54,8 @@ flexlay_lib = libflexlay_env.SharedLibrary(
     source = [
     'blitter.cxx',
     'box.cxx',
+    'brush.cxx',
+    'generated_brush.cxx',
     'brushmask.cxx',
     'command_group.cxx',
     'command.cxx',

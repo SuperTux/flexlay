@@ -18,6 +18,7 @@
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include <iostream>
+#include <assert.h>
 #include <ClanLib/Display/blend_func.h>
 #include <ClanLib/gl.h>
 #include "stroke.hxx"
@@ -31,8 +32,10 @@ public:
   CL_Color  color;
   float     base_size;
   float     spacing;
-  CL_Sprite brush;
+  Brush     brush;
   
+  SpriteStrokeDrawerImpl() {}
+
   void draw(const Stroke& stroke, CL_GraphicContext* gc);
   void draw_dab(const Dab& dab, CL_GraphicContext* gc);
 
@@ -57,10 +60,11 @@ SpriteStrokeDrawer::SpriteStrokeDrawer()
 void
 SpriteStrokeDrawerImpl::draw_dab(const Dab& dab, CL_GraphicContext* gc)
 {
-  brush.set_color(color);
-  brush.set_alpha((color.get_alpha()/255.0f) * dab.pressure);
-  brush.set_scale(base_size * dab.pressure,
-                  base_size * dab.pressure);
+  CL_Surface surface = brush.get_surface();
+  surface.set_color(color);
+  surface.set_alpha((color.get_alpha()/255.0f) * dab.pressure);
+  surface.set_scale(base_size * dab.pressure,
+                    base_size * dab.pressure);
 
   if (gc != 0)
     {
@@ -100,21 +104,21 @@ SpriteStrokeDrawerImpl::draw_dab(const Dab& dab, CL_GraphicContext* gc)
       switch (mode)
         {
         case SpriteStrokeDrawer::DM_NORMAL:
-          brush.set_blend_func_separate(blend_src_alpha, blend_one_minus_src_alpha,
+          surface.set_blend_func_separate(blend_src_alpha, blend_one_minus_src_alpha,
                                         blend_one, blend_one_minus_src_alpha);
-          brush.draw(dab.pos.x, dab.pos.y, gc);
+          surface.draw(dab.pos.x, dab.pos.y, gc);
           break;
 
         case SpriteStrokeDrawer::DM_ADDITION:
-          brush.set_blend_func_separate(blend_src_alpha, blend_one,
+          surface.set_blend_func_separate(blend_src_alpha, blend_one,
                                         blend_zero, blend_one);
                                         //blend_one, blend_one_minus_src_alpha);
-          brush.draw(dab.pos.x, dab.pos.y, gc);
+          surface.draw(dab.pos.x, dab.pos.y, gc);
           break;
               
         case SpriteStrokeDrawer::DM_ERASE:
-          brush.set_blend_func(blend_zero, blend_one_minus_src_alpha);
-          brush.draw(dab.pos.x, dab.pos.y, gc);
+          surface.set_blend_func(blend_zero, blend_one_minus_src_alpha);
+          surface.draw(dab.pos.x, dab.pos.y, gc);
           break;
               
         default:
@@ -127,18 +131,18 @@ SpriteStrokeDrawerImpl::draw_dab(const Dab& dab, CL_GraphicContext* gc)
       switch (mode)
         {
         case SpriteStrokeDrawer::DM_NORMAL:  
-          brush.set_blend_func(blend_src_alpha, blend_one_minus_src_alpha);
-          brush.draw(dab.pos.x, dab.pos.y, gc);  
+          surface.set_blend_func(blend_src_alpha, blend_one_minus_src_alpha);
+          surface.draw(dab.pos.x, dab.pos.y, gc);  
           break;
               
         case SpriteStrokeDrawer::DM_ADDITION:
-          brush.set_blend_func(blend_src_alpha, blend_one);
-          brush.draw(dab.pos.x, dab.pos.y, gc); 
+          surface.set_blend_func(blend_src_alpha, blend_one);
+          surface.draw(dab.pos.x, dab.pos.y, gc); 
           break;
             
         case SpriteStrokeDrawer::DM_ERASE:
-          brush.set_blend_func(blend_zero, blend_one_minus_src_alpha);
-          brush.draw(dab.pos.x, dab.pos.y, gc);
+          surface.set_blend_func(blend_zero, blend_one_minus_src_alpha);
+          surface.draw(dab.pos.x, dab.pos.y, gc);
           break; 
 
         default:
@@ -224,14 +228,16 @@ SpriteStrokeDrawer::get_color() const
 void
 SpriteStrokeDrawer::set_sprite(const CL_Sprite& sprite_)
 {
-  impl->brush = sprite_;
-  impl->brush.set_alignment(origin_center);
+  assert(!"No longer supported");
+  //impl->brush = sprite_;
+  //impl->brush.set_alignment(origin_center);
 }
 
 CL_Sprite
 SpriteStrokeDrawer::get_sprite() const
 {
-  return impl->brush;
+  assert(!"No longer supported");
+  return CL_Sprite();//impl->brush;
 }
 
 void
@@ -252,6 +258,7 @@ SpriteStrokeDrawerImpl::clone() const
   SpriteStrokeDrawerImpl* drawer = new SpriteStrokeDrawerImpl();
   
   *drawer = *this;
+  drawer->brush = brush.clone();
   
   return drawer;
 }
@@ -260,6 +267,18 @@ StrokeDrawer
 SpriteStrokeDrawer::to_drawer()
 {
   return StrokeDrawer(impl);
+}
+
+void
+SpriteStrokeDrawer::set_brush(const Brush& brush)
+{
+  impl->brush = brush;
+}
+
+Brush
+SpriteStrokeDrawer::get_brush() const
+{
+  return impl->brush;
 }
 
 /* EOF */

@@ -1,4 +1,4 @@
-//  $Id: editor_tilemap.hxx,v 1.6 2003/09/12 16:31:21 grumbel Exp $
+//  $Id: editor_tilemap.hxx,v 1.7 2003/09/23 19:10:05 grumbel Exp $
 // 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -24,6 +24,8 @@
 #include "../field.hxx"
 #include "editor_tile.hxx"
 
+class TileMapTool;
+
 /** Holds the tilemap data for the editor and provides functions to
     manipulate them */
 class EditorTileMap : public CL_Component
@@ -41,7 +43,9 @@ private:
 
   CL_Point click_pos;
 
-  enum { NONE, SCROLLING, PAINTING } tool;
+  bool scrolling;
+  TileMapTool* tool;
+
   void cleanup();
 public:
   int brush_tile;
@@ -62,6 +66,9 @@ public:
   void mouse_down(const CL_InputEvent& event);
   void mouse_move(const CL_InputEvent& event);
 
+  /** Return the current active field */
+  Field<EditorTile*>* get_field() { return current_field; }
+
   EditorTile* get_tile (int, int);
   void set_active_layer(int i);
 
@@ -69,6 +76,8 @@ public:
   void save (const std::string& filename);
   void new_level(int w, int h);
 
+  CL_Rect get_clip_rect();
+  
   Field<EditorTile*>* get_map(int i);
   int get_width()  { return current_field->get_width(); }
   int get_height() { return current_field->get_height(); }

@@ -1,4 +1,4 @@
-//  $Id: editor_tilemap.cxx,v 1.10 2003/09/12 16:31:21 grumbel Exp $
+//  $Id: editor_tilemap.cxx,v 1.11 2003/09/23 19:10:05 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -24,6 +24,7 @@
 #include "../windstille_level.hxx"
 #include "../globals.hxx"
 #include "../tile_factory.hxx"
+#include "tilemap_paint_tool.hxx"
 #include "editor_tilemap.hxx"
 
 EditorTileMap::EditorTileMap(CL_Component* parent)
@@ -37,18 +38,21 @@ EditorTileMap::EditorTileMap(CL_Component* parent)
 
   new_level(80, 30);
 
-  trans_offset = CL_Pointf(0,0);
+  trans_offset     = CL_Pointf(0,0);
   old_trans_offset = CL_Pointf(0,0);
-  click_pos = CL_Point(0,0);
+  click_pos        = CL_Point(0,0);
   
-  tool = NONE;
   brush_tile = 0;
   zoom_factor = 0;
+
+  scrolling = false;
+  tool = new TileMapPaintTool(this);
 }
 
 EditorTileMap::~EditorTileMap()
 {
   cleanup();
+  delete tool;
 }
 
 void
@@ -78,24 +82,20 @@ EditorTileMap::new_level(int w, int h)
 void
 EditorTileMap::mouse_up(const CL_InputEvent& event)
 {
-  switch (tool)
+  switch (event.id)
     {
-    case SCROLLING:
-      if (event.id == CL_MOUSE_MIDDLE)
-        {
-          trans_offset.x = old_trans_offset.x - (click_pos.x - event.mouse_pos.x);
-          trans_offset.y = old_trans_offset.y - (click_pos.y - event.mouse_pos.y);
+    case CL_MOUSE_LEFT:
+    case CL_MOUSE_RIGHT:
+      tool->on_mouse_up(event);
+      break;
+
+    case CL_MOUSE_MIDDLE:
+      scrolling = false;
+      trans_offset.x = old_trans_offset.x - (click_pos.x - event.mouse_pos.x);
+      trans_offset.y = old_trans_offset.y - (click_pos.y - event.mouse_pos.y);
           
-          old_trans_offset = trans_offset;
-          tool = NONE;
-          release_mouse();
-        }
-      break;
-    case PAINTING:
-      if (event.id == CL_MOUSE_LEFT)
-        tool = NONE;
-      break;
-    case NONE:
+      old_trans_offset = trans_offset;
+      release_mouse();
       break;
     }
 }
@@ -103,54 +103,39 @@ EditorTileMap::mouse_up(const CL_InputEvent& event)
 void
 EditorTileMap::mouse_move(const CL_InputEvent& event)
 {
-  switch (tool)
+  tool->on_mouse_move(event);
+
+  if (scrolling)
     {
-    case SCROLLING:
       trans_offset.x = old_trans_offset.x - (click_pos.x - event.mouse_pos.x);
       trans_offset.y = old_trans_offset.y - (click_pos.y - event.mouse_pos.y);
-      break;
-
-    case PAINTING:
-      {
-        CL_Point pos = screen2tile(event.mouse_pos);
-        if (pos.x >= 0 && pos.x < current_field->get_width()
-            && pos.y >= 0 && pos.y < current_field->get_height())
-          current_field->at(pos.x, pos.y)->set_tile(brush_tile);
-      }
-      break;
-      
-    default:
-      break;
     }
 }
 
 void
 EditorTileMap::mouse_down(const CL_InputEvent& event)
 {
-  if (event.id == CL_MOUSE_MIDDLE)
+  switch (event.id)
     {
+    case CL_MOUSE_LEFT:
+    case CL_MOUSE_RIGHT:
+      tool->on_mouse_down(event);
+      break;
+
+    case CL_MOUSE_MIDDLE:
+      scrolling = true;
       old_trans_offset = trans_offset;
       click_pos = event.mouse_pos;
-      tool = SCROLLING;
       capture_mouse();
-    }
-  else if (event.id == CL_MOUSE_LEFT)
-    {
-      CL_Point pos = screen2tile(event.mouse_pos);
-
-      if (pos.x >= 0 && pos.x < current_field->get_width()
-          && pos.y >= 0 && pos.y < current_field->get_height())
-        current_field->at(pos.x, pos.y)->set_tile(brush_tile);
-
-      tool = PAINTING;
-    }
-  else if (event.id == CL_MOUSE_WHEEL_UP)
-    {
+      break;
+           
+    case CL_MOUSE_WHEEL_UP:
       zoom_in();
-    }
-  else if (event.id == CL_MOUSE_WHEEL_DOWN)
-    {
+      break;
+
+    case CL_MOUSE_WHEEL_DOWN:
       zoom_out();
+      break;
     }
 }
   
@@ -163,9 +148,16 @@ EditorTileMap::draw_map(Field<EditorTile*>* field)
   else
     alpha = .5f;
 
-  for (int y = 0; y < field->get_height (); ++y)
+  CL_Rect rect = get_clip_rect();
+
+  int start_x = std::max(0, rect.left/TILE_SIZE);
+  int start_y = std::max(0, rect.top/TILE_SIZE);
+  int end_x   = std::min(field->get_width(),  rect.right/TILE_SIZE + 1);
+  int end_y   = std::min(field->get_height(), rect.bottom/TILE_SIZE + 1);
+
+  for (int y = start_y; y < end_y; ++y)
     {
-      for (int x = 0; x < field->get_width (); ++x)
+      for (int x = start_x; x < end_x; ++x)
 	{
 	  field->at(x, y)->draw(x * TILE_SIZE, y * TILE_SIZE, alpha);
 	}
@@ -362,6 +354,14 @@ EditorTileMap::get_map(int i)
     return fields[i];
   else
     return 0;
+}
+
+CL_Rect
+EditorTileMap::get_clip_rect()
+{
+  return CL_Rect(CL_Point(int(0 - trans_offset.x), int(0 - trans_offset.y)),
+                 CL_Size(CL_Display::get_width(), 
+                         CL_Display::get_height()));
 }
 
 /* EOF */

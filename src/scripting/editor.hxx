@@ -1,4 +1,4 @@
-//  $Id: editor.hxx,v 1.3 2003/09/22 18:37:05 grumbel Exp $
+//  $Id: editor.hxx,v 1.4 2003/09/23 19:10:05 grumbel Exp $
 // 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -27,7 +27,7 @@ class CL_Component;
 CL_Component* push_component(CL_Component* c);
 void pop_component();
 
-void tile_selector_create(int x, int y, int w, int h);
+CL_Component* tile_selector_create(int x, int y, int w, int h);
 void editor_set_brush_tile(int i);
 int  editor_get_brush_tile();
 void editor_set_tool(SCM func);
@@ -43,6 +43,7 @@ CL_Component* editor_add_tileeditor(int x, int y);
 void tileeditor_set_tile(CL_Component* comp, int id);
 
 void component_on_click(CL_Component* comp, SCM func);
+void component_on_close(CL_Component* comp, SCM func);
 
 const char* inputbox_get_text(CL_Component*);
 

@@ -1,4 +1,4 @@
-//  $Id: tile_selector.cxx,v 1.6 2003/09/22 09:13:16 grumbel Exp $
+//  $Id: tile_selector.cxx,v 1.7 2003/09/23 19:10:05 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -69,7 +69,7 @@ TileSelector::mouse_down(const CL_InputEvent& event)
     {
       offset -= TILE_SIZE/2;
       if (offset < 0)
-        offset += TILE_SIZE/2;
+        offset = 0;
     }
   else if (event.id == CL_MOUSE_WHEEL_DOWN)
     {

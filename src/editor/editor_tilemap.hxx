@@ -43,10 +43,8 @@ private:
 
   Field<int>* diamond_map;
 
-  void cleanup();
-
 public:
-  EditorTileMap(int tile_size_);
+  EditorTileMap(int w,  int h, int tile_size_);
   ~EditorTileMap();
 
   void draw (EditorMapComponent* parent);
@@ -60,9 +58,6 @@ public:
 
   int  get_tile (int, int);
   void set_active_layer(int i);
-
-  void load (const std::string& filename);
-  void new_level(int w, int h);
 
   /** @param x position of the old map in the new resized one
       @param y position of the old map in the new resized one

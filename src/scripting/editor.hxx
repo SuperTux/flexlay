@@ -27,6 +27,7 @@ class EditorObjMap;
 class EditorTileMap;
 class EditorMapLayer;
 class CL_Component;
+class TileBrush;
 
 void editor_redo();
 void editor_undo();
@@ -43,13 +44,12 @@ void          editor_map_component_set_map(CL_Component* c, EditorMap* m);
 
 void editor_toggle_grid();
 void editor_resize_map(int w, int h, int x, int y);
-void editor_tilemap_draw_brush(int pos_x, int pos_y, SCM brush);
 void editor_set_brush_tile(int i);
 int  editor_get_brush_tile();
 void editor_set_tool(int i);
 SCM  editor_get_tile_selection();
 void tilemap_set_active_layer(int i);
-void tilemap_paint_tool_set_brush(SCM brush);
+void tilemap_paint_tool_set_brush(const TileBrush& brush);
 
 void object_selector_add_brush(CL_Component* comp, const char* name, SCM brush);
 int  editor_objectmap_add_object(const char* name, int x, int y, SCM userdata);
@@ -72,7 +72,6 @@ void map_set_size(int w, int h);
 void map_resize(int w, int h);
 void map_clear();
 
-void editor_new(int w, int h);
 void editor_load(const char* filename);
 
 void game_play(const char* filename);
@@ -85,7 +84,8 @@ SCM load_xml(const char* filename);
 EditorMap*      editor_map_create();
 void            editor_map_add_layer(EditorMap* m, EditorMapLayer* layer);
 EditorMapLayer* editor_objmap_create();
-EditorMapLayer* editor_tilemap_create(int tile_size);
+EditorMapLayer* editor_tilemap_create(int w, int h, int tile_size);
+void            editor_tilemap_set_data(EditorMapLayer* l, int m, SCM data);
 
 #endif
 

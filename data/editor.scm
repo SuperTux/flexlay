@@ -30,7 +30,8 @@
 
 (define (new-map width height)
   (display "Creating new level...\n")
-  (editor-new width height)
+  (editor-map-component-set-map *editor-map*
+                                (create-level-map width height))
   ;;(push-last-file (string-append (dirname (get-last-file)) "/"))
   )
 
@@ -39,10 +40,60 @@
   (for-each display args)
   (newline))
 
+(define (create-level-map width height)
+  (let* ((m       (editor-map-create))
+         (tilemap (editor-tilemap-create width height 32))
+         (objmap  (editor-objmap-create)))
+    (editor-map-add-layer m tilemap)
+    (editor-map-add-layer m objmap)
+    m))
+
+(define (get-value-from-tree pos lst default)
+  (cond ((null? pos)
+         lst)
+        ((null? lst)
+         default)
+        ((equal? pos '(_))
+         (car lst))
+        (else
+         (let ((el (assoc-ref lst (car pos))))
+           (cond (el
+                  (get-value-from-tree (cdr pos) el default))
+                 (else
+                  default
+                  ))))))
+
+(define (create-level-map-from-file filename)
+  (let ((data (with-input-from-file filename
+                (lambda () (cdr (read))))))
+
+    (let ((width      (get-value-from-tree '(properties width _)  data 20))
+          (height     (get-value-from-tree '(properties height _) data 15))
+          (foreground (get-value-from-tree '(tilemap data) data '()))
+          (background (get-value-from-tree '(background-tilemap data) data '()))
+          (diamonds   (get-value-from-tree '(diamond-map) data '())))
+      
+      ;; load level file and extract tiledata and w/h
+      (let* ((m       (editor-map-create))
+             (tilemap (editor-tilemap-create width height 32))
+             (objmap  (editor-objmap-create)))
+        
+        (editor-map-add-layer m tilemap)
+        (editor-map-add-layer m objmap)
+    
+        ;; set data to the tilemap
+        (editor-tilemap-set-data tilemap 1 foreground)
+        (editor-tilemap-set-data tilemap 0 background)
+
+        m))))
+
 (define (load-map filename)
   (catch #t
          (lambda ()
-           (editor-load filename))
+           (editor-map-component-set-map *editor-map*
+                                         (create-level-map-from-file filename))
+           ;;(editor-load filename)
+           )
          (lambda args
            (editor-error args)))
   (push-last-file filename))
@@ -516,16 +567,8 @@
 (object-selector-add-brush *object-selector* "igel" '(Igel))
 (object-selector-add-brush *object-selector* "hero/run" '(Hero))
 
-(define (create-level-map)
-(let* ((m       (editor-map-create))
-       (tilemap (editor-tilemap-create 32))
-       (objmap  (editor-objmap-create)))
-  (editor-map-add-layer m tilemap)
-  (editor-map-add-layer m objmap)
-  m))
-
-(define *level-map2* (create-level-map))
-(define *level-map*  (create-level-map))
+(define *level-map2* (create-level-map 60 15))
+(define *level-map*  (create-level-map 20 15))
 
 (gui-add-menu-item *menu* "Maps/First" 
                    (lambda ()

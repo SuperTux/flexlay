@@ -20,7 +20,7 @@
 #ifndef HEADER_EDITOR_HXX
 #define HEADER_EDITOR_HXX
 
-#include <stack>
+#include <vector>
 
 class TileEditor;
 class ToolManager;
@@ -34,10 +34,10 @@ class Editor
 private:
   GUIManager* manager;
 
+  ToolManager* tool_manager;
+
   std::vector<Command*> undo_stack;
   std::vector<Command*> redo_stack;
-
-  ToolManager* tool_manager;
 
   static Editor* current_;
 public:

@@ -216,9 +216,9 @@ editor_resize_map(int w, int h, int x, int y)
 }
 
 void 
-tilemap_paint_tool_set_brush(SCM brush)
+tilemap_paint_tool_set_brush(const TileBrush& brush)
 {
-  TileMapPaintTool::current()->set_brush(scm2brush(brush));
+  TileMapPaintTool::current()->set_brush(brush);
 }
 
 SCM
@@ -244,34 +244,6 @@ editor_get_brush_tile()
     return brush(0, 0);
   else
     return 0;
-}
-
-void 
-editor_tilemap_draw_brush(int pos_x, int pos_y, SCM brush)
-{
-  // FIXME: Integrate this with tools probally
-  EditorTileMap* tilemap = editor_get_tilemap();
-
-  int brush_width  = gh_scm2int(gh_car(brush));
-  int brush_height = gh_scm2int(gh_cadr(brush));
-  SCM brush_data   = gh_caddr(brush);
-
-  assert(brush_width*brush_height == static_cast<int>(gh_vector_length(brush_data)));
-
-  Field<int>* field = tilemap->get_field();
-
-  int start_x = std::max(0, -pos_x);
-  int start_y = std::max(0, -pos_y);
-
-  int end_x = std::min(brush_width,  field->get_width()  - pos_x);
-  int end_y = std::min(brush_height, field->get_height() - pos_y);
-
-  for (int y = start_y; y < end_y; ++y)
-    for (int x = start_x; x < end_x; ++x)
-      {
-        field->at(pos_x + x, pos_y + y) 
-          = gh_scm2int(scm_vector_ref(brush_data, SCM_MAKINUM(x + (y * brush_width))));
-      }
 }
 
 int
@@ -397,12 +369,6 @@ void
 editor_load(const char* filename)
 {
   editor_get_tilemap()->load(filename);
-}
-
-void
-editor_new(int w, int h)
-{
-  editor_get_tilemap()->new_level(w, h);
 }
 
 void
@@ -626,9 +592,26 @@ editor_objmap_create()
 }
 
 EditorMapLayer* 
-editor_tilemap_create(int tile_size)
+editor_tilemap_create(int w, int h, int tile_size)
 {
-  return new EditorTileMap(tile_size);
+  return new EditorTileMap(w, h, tile_size);
+}
+
+void
+editor_tilemap_set_data(EditorMapLayer* l, int m, SCM lst)
+{
+  EditorTileMap* tilemap = dynamic_cast<EditorTileMap*>(l);
+  if (tilemap)
+    {
+      Field<int>* field = tilemap->get_map(m);
+      for(Field<int>::iterator i = field->begin(); 
+          i != field->end() && gh_pair_p(lst);
+          ++i)
+        {
+          (*i) = gh_scm2int(gh_car(lst));
+          lst = gh_cdr(lst);
+        }
+    }
 }
 
 /* EOF */

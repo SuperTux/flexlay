@@ -33,49 +33,37 @@
 #include "editor_tilemap.hxx"
 #include "editor_map_component.hxx"
 
-EditorTileMap::EditorTileMap(int tile_size_)
+EditorTileMap::EditorTileMap(int w, int h, int tile_size_)
   : tile_size(tile_size_) 
 {
-  diamond_map = 0;
-
-  new_level(80, 30);
-  
+  // FIXME: Move this to the widget
   draw_grid = true;
+
+  diamond_map   = new Field<int>(w*2, h*2);
+  current_field = new Field<int>(w, h);
+
+  for (int y = 0; y < current_field->get_height (); ++y) 
+    for (int x = 0; x < current_field->get_width (); ++x)
+      current_field->at(x, y) = 0;
+  fields.push_back(current_field);
+
+  current_field = new Field<int> (w, h);
+  for (int y = 0; y < current_field->get_height (); ++y)
+    for (int x = 0; x < current_field->get_width (); ++x)
+      current_field->at(x, y) = 0;
+  fields.push_back(current_field);
 }
 
 EditorTileMap::~EditorTileMap()
 {
-  cleanup();
+  for (Fields::iterator i = fields.begin(); i != fields.end(); ++i)
+    delete *i;
+    
+  fields.clear();
+
+  delete diamond_map;
+  diamond_map = 0;
 }
-
-void
-EditorTileMap::new_level(int w, int h)
-{
-  cleanup();
-
-  std::cout << "new level: " << w << " " << h << std::endl;
-
-  diamond_map = new Field<int>(w*2, h*2);
-
-  current_field = new Field<int>(w, h);
-  for (int y = 0; y < current_field->get_height (); ++y) {
-    for (int x = 0; x < current_field->get_width (); ++x)
-      {
-	current_field->at(x, y) = 0;
-      }
-  }
-  fields.push_back(current_field);
-
-  current_field = new Field<int> (w, h);
-  for (int y = 0; y < current_field->get_height (); ++y) {
-    for (int x = 0; x < current_field->get_width (); ++x)
-      {
-	current_field->at(x, y) = 0;
-      }
-  }
-  fields.push_back(current_field);
-}
-
   
 void
 EditorTileMap::draw_map(EditorMapComponent* parent, Field<int>* field)
@@ -127,52 +115,6 @@ EditorTileMap::draw(EditorMapComponent* parent)
               }
           }
     }
-}
-
-void
-EditorTileMap::cleanup()
-{
-  for (Fields::iterator i = fields.begin(); i != fields.end(); ++i)
-    delete *i;
-    
-  fields.clear();
-
-  delete diamond_map;
-  diamond_map = 0;
-}
-
-void
-EditorTileMap::load(const std::string& filename)
-{
-  cleanup();
-
-  WindstilleLevel data (filename);
-
-  current_field = new Field<int>(data.get_background_tilemap()->get_width(),
-                                 data.get_background_tilemap()->get_height());
-
-  fields.push_back(current_field);
-
-  for (int y = 0; y < current_field->get_height (); ++y) 
-    {
-      for (int x = 0; x < current_field->get_width (); ++x)
-        {
-          current_field->at (x, y) = data.get_background_tilemap()->at(x, y);
-        }
-    }
-
-  current_field = new Field<int>(data.get_tilemap()->get_width (),
-                                 data.get_tilemap()->get_height ());
-  fields.push_back(current_field);
-
-  for (int y = 0; y < current_field->get_height (); ++y) {
-    for (int x = 0; x < current_field->get_width (); ++x)
-      {
-	current_field->at (x, y) = data.get_tilemap()->at(x, y);
-      }
-  }
-
-  diamond_map = new Field<int>(*data.get_diamond_map());
 }
 
 int

@@ -1,7 +1,7 @@
-//  $Id: player_view.hxx,v 1.4 2003/09/21 18:05:21 grumbel Exp $
-// 
-//  Windstille - A Jump'n Shoot Game
-//  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
+//  $Id: view.cxx,v 1.1 2003/09/21 18:05:21 grumbel Exp $
+//
+//  Pingus - A free Lemmings clone
+//  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -12,36 +12,13 @@
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
-// 
+//
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-#ifndef PLAYERVIEW_HXX
-#define PLAYERVIEW_HXX
-
 #include "view.hxx"
 
-class Player;
-
-class PlayerView : public View
-{
-private:
-  Player*  player;
-  GameWorld* world;
-  CL_Vector pos;
-public:
-  PlayerView (Player*);
-  
-  void draw ();
-  void update (float delta);
-
-  CL_Rect get_clip_rect();
-
-  CL_Pointf screen2world(CL_Pointf point);
-  CL_Pointf world2screen(CL_Pointf point);
-};
-
-#endif
+View* View::current_ = 0;
 
 /* EOF */

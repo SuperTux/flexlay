@@ -1,4 +1,4 @@
-//  $Id: tile_map.cxx,v 1.15 2003/09/13 18:01:17 grumbel Exp $
+//  $Id: tile_map.cxx,v 1.16 2003/09/21 18:05:21 grumbel Exp $
 //
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -24,6 +24,7 @@
 #include "tile.hxx"
 #include "tile_factory.hxx"
 #include "globals.hxx"
+#include "view.hxx"
 
 extern CL_ResourceManager* resources;
 
@@ -60,15 +61,22 @@ TileMap::update (float delta)
 void
 TileMap::draw ()
 {
-  for (int y = 0; y < field.get_height (); ++y)
-    for (int x = 0; x < field.get_width (); ++x)
+  CL_Rect rect = View::current()->get_clip_rect();
+
+  int start_x = std::max(0, rect.left/TILE_SIZE);
+  int start_y = std::max(0, rect.top/TILE_SIZE);
+  int end_x   = std::min(field.get_width(),  rect.right/TILE_SIZE + 1);
+  int end_y   = std::min(field.get_height(), rect.bottom/TILE_SIZE + 1);
+
+  for (int y = start_y;   y < end_y; ++y)
+    for (int x = start_x; x < end_x; ++x)
       {
 	//field (x,y)->sur->setScale (2.0f, 2.0f);
 	if (field (x,y))
 	  {
 	    field (x,y)->sur.draw (x * TILE_SIZE, 
                                    y * TILE_SIZE);
-            if (0)
+            if (0) // Draw subtiles
               {
                 for(int tile_y = 0; tile_y < 8; ++tile_y)
                   for(int tile_x = 0; tile_x < 8; ++tile_x)

@@ -1,7 +1,7 @@
-//  $Id: player_view.hxx,v 1.4 2003/09/21 18:05:21 grumbel Exp $
+//  $Id: view.hxx,v 1.1 2003/09/21 18:05:21 grumbel Exp $
 // 
-//  Windstille - A Jump'n Shoot Game
-//  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
+//  Pingus - A free Lemmings clone
+//  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -17,29 +17,31 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-#ifndef PLAYERVIEW_HXX
-#define PLAYERVIEW_HXX
+#ifndef HEADER_VIEW_HXX
+#define HEADER_VIEW_HXX
 
-#include "view.hxx"
+#include <ClanLib/Core/Math/rect.h>
 
-class Player;
-
-class PlayerView : public View
+/** */
+class View
 {
 private:
-  Player*  player;
-  GameWorld* world;
-  CL_Vector pos;
 public:
-  PlayerView (Player*);
-  
-  void draw ();
-  void update (float delta);
+  View() {}
+  virtual ~View() {}
 
-  CL_Rect get_clip_rect();
+  /** @return the rectangle which represents the currently visible
+      area, everything outside of it doesn't have to be drawn */
+  virtual CL_Rect get_clip_rect() =0;
 
-  CL_Pointf screen2world(CL_Pointf point);
-  CL_Pointf world2screen(CL_Pointf point);
+  static View* current() { return current_; }
+
+protected:
+  static View* current_;
+private:
+
+  View (const View&);
+  View& operator= (const View&);
 };
 
 #endif

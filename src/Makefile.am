@@ -78,6 +78,8 @@ windstille_SOURCES = \
   windstille_level.cxx \
   windstille_level.hxx \
   windstille_main.cxx \
+  view.hxx \
+  view.cxx \
   water_splash.hxx \
   water_splash.cxx \
   windstille_main.hxx

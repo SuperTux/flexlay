@@ -1,4 +1,4 @@
-//  $Id: player_view.cxx,v 1.6 2003/09/21 15:22:59 grumbel Exp $
+//  $Id: player_view.cxx,v 1.7 2003/09/21 18:05:21 grumbel Exp $
 //
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -26,7 +26,7 @@ PlayerView::PlayerView (Player* t)
   : player (t),
     world (player->get_world ())
 {
-  
+  current_ = this;
 }
 
 void
@@ -57,6 +57,14 @@ PlayerView::update (float delta)
     pos.y = tpos.y - vscroll_threshold;
   else if (dist < -vscroll_threshold)
     pos.y = tpos.y + vscroll_threshold;
+}
+
+CL_Rect
+PlayerView::get_clip_rect()
+{
+  return CL_Rect(CL_Point(int(pos.x - CL_Display::get_width()/2),
+                          int(pos.y - CL_Display::get_height()/2)),
+                 CL_Size(800, 600));
 }
 
 CL_Pointf

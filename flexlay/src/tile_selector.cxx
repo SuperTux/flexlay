@@ -26,8 +26,8 @@
 
 TileSelector::TileSelector(int width, int height, CL_Component* parent)
   : CL_Component(CL_Rect(CL_Point(0,0), 
-                         CL_Size(width * 32,  // FIXME: Dirty hack, replace with a resizeable window
-                                 height * 32)), 
+                         CL_Size(parent->get_width(),  // FIXME: Dirty hack, replace with a resizeable window
+                                 parent->get_height())), 
                  parent),
     width(width), height(height)
 {

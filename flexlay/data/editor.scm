@@ -51,7 +51,7 @@
 ;; Default file plug-in, in case others fail
 (editor:add-file-plugin (lambda (filename) #t)
                         (lambda (filename)
-                          (create-level-map-from-file filename)))
+                          (error "Couldn't load " filename)))
 
 (define (filename:ext filename)
   (let ((i (string-index-right filename #\.)))
@@ -87,71 +87,10 @@
         (else
          (car *recent-files*))))
 
-(define (new-map width height)
-  (display "Creating new level...\n")
-  (let ((levelmap (create-level-map width height)))
-    (editor-map-component-set-map *editor-map* levelmap)
-    (add-buffer levelmap)))
-
 (define (editor-error . args)
   (display "EditorError: ")
   (for-each display args)
   (newline))
-
-(define (create-level-map width height)
-  (let* ((m       (editor-map-create))
-         (tilemap (editor-tilemap-create 0 width height *tile-size*))
-         (objmap  (editor-objmap-create)))
-
-    (set! *tilemap* tilemap)
-
-    (editor-map-add-layer m tilemap)
-    (editor-map-add-layer m objmap)
-    m))
-
-(define (create-level-map-from-file filename)
-  (let ((data (with-input-from-file filename
-                (lambda () (cdr (read))))))
-
-    (let ((width      (get-value-from-tree '(properties width _)      data 20))
-          (height     (get-value-from-tree '(properties height _)     data 15))
-          (foreground (get-value-from-tree '(tilemap data)            data '()))
-          (background (get-value-from-tree '(background-tilemap data) data '()))
-          (objects    (get-value-from-tree '(objects)                 data '())))
-      
-      ;; load level file and extract tiledata and w/h
-      (let* ((m       (editor-map-create))
-             (tilemap (editor-tilemap-create 0 width height *tile-size*))
-             (objmap  (editor-objmap-create)))
-
-        (set! *tilemap* tilemap)
-
-        (for-each (lambda (el)
-                    (let ((x (car  (get-value-from-tree '(pos) (cdr el) 0)))
-                          (y (cadr (get-value-from-tree '(pos) (cdr el) 0))))
-                      (case (car el)
-                        ((mriceblock)
-                         (objectmap-add-object objmap "sprites/mriceblock" x y '(mriceblock)))
-                        ((mrbomb)
-                         (objectmap-add-object objmap "sprites/mrbomb" x y '(mrbomb)))
-                        ((spawnpoint)
-                         (objectmap-add-object objmap "sprites/spawnpoint" x y '(outpost)))
-                        ((outpost)
-                         (objectmap-add-object objmap "sprites/outpost"  x y '(spawnpoint)))
-                        )))
-                  objects)
-        
-        (editor-map-add-layer m tilemap)
-        (editor-map-add-layer m objmap)
-        
-        (editor-map-set-filename m filename)
-
-        ;; set data to the tilemap
-        (if (not (null? foreground))
-            (editor-tilemap-set-data tilemap foreground))
-        ;;        (if (not (null? background))
-        ;;            (editor-tilemap-set-data tilemap 0 background))
-        m))))
 
 (define (load-map filename)
   (catch #t
@@ -304,8 +243,8 @@
                                      (supertux:new-map width height))
                                     ((netpanzer)
                                      (netpanzer:new-map width height))
-                                    (else
-                                     (new-map width height))))
+                                    ((windstille)
+                                     (windstille:new-map width height))))
                                 (gui-hide-component window)))
 
       (gui-component-on-click cancel
@@ -478,6 +417,8 @@
      (editor-set-tool 3)
      (gui-show-component *object-inserter-window*)
      (gui-hide-component *tileselector-window*))
+    ((zoom)
+     (editor-set-tool 4))
     (else
      (editor-error "Tool unknown"))))
 
@@ -531,6 +472,11 @@
     ;;                            40 25 "Diam." 
     ;;                            (lambda ()
     ;;                              (set-tool 'diamond)))
+
+    (gui-create-button-func 0 50
+                            40 25 "Zoom" 
+                            (lambda ()
+                              (set-tool 'zoom)))
 
     (gui-create-button-func 0 75                              
                             40 25 "Objs" 
@@ -892,8 +838,11 @@
     (lambda (filename) (string=? (filename:ext filename) ".stwm"))
     (lambda (filename) (supertux:create-worldmap-from-file filename)))
    )
-  (else
-   (create-minimap screen-width 50)))
+  ((windstille)
+   (editor:add-file-plugin
+    (lambda (filename) (string=? (filename:ext filename) ".scm"))
+    (lambda (filename) (windstille:create-levelmap-from-file filename)))
+   (create-minimap 128 128)))
 
 ;;(create-brush-selector)
 ;;(create-netpanzer-tiler)
@@ -911,7 +860,9 @@
   ((netpanzer)
    (tile-selector-set-tileset *tileselector* *tileset*)
    (netpanzer:new-map 20 15))
-  (else
-   (new-map 20 15)))
+  ((windstille)
+   (tile-selector-set-tileset *tileselector* *tileset*)
+   (tile-selector-set-tiles   *tileselector* (seq 1 130))
+   (windstille:new-map 20 15)))
 
 ;; EOF ;;

@@ -22,6 +22,7 @@
 #include "tilemap_select_tool.hxx"
 #include "objmap_select_tool.hxx"
 #include "tilemap_diamond_tool.hxx"
+#include "zoom_tool.hxx"
 #include "editor_tilemap.hxx"
 #include "editor_map.hxx"
 #include "editor_names.hxx"
@@ -34,6 +35,7 @@ ToolManager::ToolManager()
   tools.push_back(new TileMapSelectTool ());
   tools.push_back(0); //new TileMapDiamondTool());
   tools.push_back(new ObjMapSelectTool  ());
+  tools.push_back(new ZoomTool());
 
   tool = tools[0]; 
 }

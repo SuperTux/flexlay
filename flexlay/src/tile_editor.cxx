@@ -29,9 +29,14 @@
 TileEditor::TileEditor(int x, int y, int w, int h, CL_Component* parent)
   : CL_Component(CL_Rect(CL_Rect(CL_Point(x, y), 
                                  CL_Size(w, h))), // FIXME: make this editable via script
-                 parent),
-    no_tile("tiles/notile", resources)
+                 parent)
 {
+  try {
+    no_tile = CL_Sprite("tiles/notile", resources);
+  } catch (CL_Error& err) {
+    std::cout << "Fatal Error: Couldn't load 'tiles/notile'" << std::endl;
+  }
+
   tile = 0;
   slots.connect(sig_paint(),      this, &TileEditor::draw);
   slots.connect(sig_mouse_move(), this, &TileEditor::mouse_move);

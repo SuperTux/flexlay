@@ -45,7 +45,8 @@ flexlay_SOURCES  = \
   command_group.hxx command_group.cxx \
   objmap_select_tool.hxx objmap_select_tool.cxx \
   object_transform_command.hxx  object_transform_command.cxx \
-  graphic_context_state.cxx graphic_context_state.hxx
+  graphic_context_state.cxx graphic_context_state.hxx \
+  zoom_tool.hxx  zoom_tool.cxx
 
 #  tilemap_diamond_tool.hxx tilemap_diamond_tool.cxx 
 STATICBIN_LIBS = \

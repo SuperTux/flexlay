@@ -153,6 +153,12 @@ EditorMapComponent::zoom_in(CL_Point pos)
   //std::cout << "Zoom: " << get_zoom() << std::endl;
 }
 
+void
+EditorMapComponent::zoom_to(CL_Rect rect)
+{
+  gc_state.zoom_to(rect);
+}
+
 CL_Rect
 EditorMapComponent::get_clip_rect()
 {

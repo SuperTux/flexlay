@@ -24,9 +24,11 @@
 
 class CL_Component;
 class EditorTileMap;
+class EditorObjMap;
 
 // FIXME: Hack
 EditorTileMap* editor_get_tilemap();
+EditorObjMap*  editor_get_objmap();
 
 CL_Component* minimap_create(CL_Component* p, int x, int y, int w, int h);
 CL_Component* tile_selector_create(int x, int y, int w, int h, float scale);

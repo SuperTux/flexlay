@@ -18,10 +18,12 @@
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include <iostream>
+#include <ClanLib/Core/core_iostream.h>
 #include <ClanLib/display.h>
 #include "../globals.hxx"
 #include "../tile_factory.hxx"
 #include "../tile.hxx"
+#include "editor_map.hxx"
 #include "src/scripting/editor.hxx"
 #include "object_selector.hxx"
 
@@ -55,8 +57,25 @@ ObjectSelector::mouse_up(const CL_InputEvent& event)
   switch(event.id)
     {
     case CL_MOUSE_LEFT:
+      {
       release_mouse();
+      drag_sprite.set_alpha(1.0f);
+      std::cout << "Drag stop: "
+                << event.mouse_pos.x + get_screen_rect().left << ", "
+                << event.mouse_pos.y + get_screen_rect().top
+                << std::endl;
+
+      CL_Point screen(event.mouse_pos.x + get_screen_rect().left,
+                      event.mouse_pos.y + get_screen_rect().top);
+
+      CL_Point target(screen.x - EditorMap::current()->get_screen_rect().left,
+                      screen.y - EditorMap::current()->get_screen_rect().top);
+      
+      editor_get_objmap()->add_object(drag_sprite,
+                                      EditorMap::current()->screen2world(target),
+                                      SCMObj(SCM_BOOL_F));
       drag_sprite = CL_Sprite();
+      }
       break;
 
     case CL_MOUSE_MIDDLE:
@@ -80,6 +99,7 @@ ObjectSelector::mouse_down(const CL_InputEvent& event)
         if (tile)
           {
             drag_sprite = tile->sur;
+            drag_sprite.set_alpha(.5f);
             capture_mouse();
             std::cout << "Drag Start" << std::endl;
           }
@@ -161,7 +181,7 @@ ObjectSelector::draw()
   if (drag_sprite)
     {
       CL_Display::set_cliprect(CL_Rect(0, 0, 800, 600));
-    drag_sprite.draw(mouse_pos.x, mouse_pos.y);
+      drag_sprite.draw(mouse_pos.x, mouse_pos.y);
     }
 }
 

@@ -130,13 +130,13 @@ Tile::calc_color()
     {
     case 8:
       {
-        alpha = 255;
         CL_Palette palette = buffer->get_palette();
         for(int i = 0; i < len; ++i)
           {
             red   += palette.colors[buf[i]].get_red();
             green += palette.colors[buf[i]].get_green();
             blue  += palette.colors[buf[i]].get_blue();
+            alpha += 255;
           }
       }
       break;
@@ -146,6 +146,7 @@ Tile::calc_color()
           red   += buf[3*i + 0];
           green += buf[3*i + 1];
           blue  += buf[3*i + 2];
+          alpha += 255;
         }
       break;
     case 32:

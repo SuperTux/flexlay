@@ -58,7 +58,7 @@ EditorMain::parse_command_line(int argc, char** argv)
   const int sdl_flag = 259;
 
   argp.set_help_indent(22);
-  argp.add_usage ("[LEVELFILE]");
+  argp.add_usage ("[OPTION]... [LEVELFILE]...");
   argp.add_doc   ("Windstille Editor - A generic game editor");
 
   argp.add_group("Display Options:");
@@ -116,7 +116,7 @@ EditorMain::parse_command_line(int argc, char** argv)
           break;
 
         case CL_CommandLine::REST_ARG:
-          levelfile = argp.get_argument();
+          levelfiles.push_back(argp.get_argument());
           break;
         }
     }
@@ -164,7 +164,15 @@ EditorMain::main(int argc, char** argv)
                 "(debug-enable 'backtrace)"
                 "(read-enable 'positions)");
 
-    gh_define("*windstille-levelfile*",      gh_str02scm(levelfile.c_str()));
+    SCM levelfiles_scm = SCM_EOL;
+    for(std::vector<std::string>::iterator i = levelfiles.begin();
+        i != levelfiles.end(); ++i)
+      {
+        levelfiles_scm = gh_cons(gh_str02scm(i->c_str()),
+                                 levelfiles_scm);
+      }
+
+    gh_define("*windstille-levelfiles*",      gh_reverse(levelfiles_scm));
     gh_define("*windstille-datadir*",        gh_str02scm(datadir.c_str()));
     gh_define("*windstille-homedir*",        gh_str02scm(homedir.c_str()));
     gh_define("*windstille-package-string*", gh_str02scm(PACKAGE_STRING));
@@ -191,13 +199,12 @@ EditorMain::main(int argc, char** argv)
 
     Editor editor;
 
-    if (!levelfile.empty ())
-      {
-        // FIXME: a bit evil interdependency between scripting and C
-        gh_call1(gh_lookup("load-map"),
-                 gh_str02scm(levelfile.c_str()));
-      }
-
+    // FIXME: a bit evil interdependency between scripting and C
+    for(std::vector<std::string>::iterator i = levelfiles.begin();
+        i != levelfiles.end(); ++i)
+      gh_call1(gh_lookup("load-map"),
+               gh_str02scm(i->c_str()));
+        
     editor.run();
     TileFactory::deinit();
 

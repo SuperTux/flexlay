@@ -39,30 +39,6 @@
     <sprite name="backgroundtile5">
       <image file="images/tuxtiles/backgroundtile5.png" />
     </sprite>
-    <sprite name="bkgd-00">
-      <image file="images/tuxtiles/bkgd-00.png" />
-    </sprite>
-    <sprite name="bkgd-01">
-      <image file="images/tuxtiles/bkgd-01.png" />
-    </sprite>
-    <sprite name="bkgd-02">
-      <image file="images/tuxtiles/bkgd-02.png" />
-    </sprite>
-    <sprite name="bkgd-03">
-      <image file="images/tuxtiles/bkgd-03.png" />
-    </sprite>
-    <sprite name="bkgd-10">
-      <image file="images/tuxtiles/bkgd-10.png" />
-    </sprite>
-    <sprite name="bkgd-11">
-      <image file="images/tuxtiles/bkgd-11.png" />
-    </sprite>
-    <sprite name="bkgd-12">
-      <image file="images/tuxtiles/bkgd-12.png" />
-    </sprite>
-    <sprite name="bkgd-13">
-      <image file="images/tuxtiles/bkgd-13.png" />
-    </sprite>
     <sprite name="block1">
       <image file="images/tuxtiles/block1.png" />
     </sprite>

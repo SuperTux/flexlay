@@ -127,16 +127,22 @@ objectmap_add_object(EditorMapLayer* obj, const char* name, int x, int y, SCM us
 
   if (objmap)
     {
-      ObjMapObject* obj 
-        = new ObjMapSpriteObject(objmap->get_next_object_handle(), 
-                                 CL_Point(x, y), 
-                                 SCMObj(userdata), 
-                                 CL_Sprite(name, resources));
+      try {
+        ObjMapObject* obj 
+          = new ObjMapSpriteObject(objmap->get_next_object_handle(), 
+                                   CL_Point(x, y), 
+                                   SCMObj(userdata), 
+                                   CL_Sprite(name, resources));
 
-      ObjectAddCommand* command = new ObjectAddCommand(objmap, obj);
-      Editor::current()->execute(command);
+        ObjectAddCommand* command = new ObjectAddCommand(objmap, obj);
+        Editor::current()->execute(command);
       
-      return command->get_handle();
+        return command->get_handle();
+      } catch(CL_Error& err) {
+        std::cout << "Error: " << err.message << std::endl;
+        return -1;
+      }
+
     }
   else
     {

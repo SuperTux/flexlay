@@ -32,7 +32,7 @@ private:
   bool fullscreen;
   bool allow_resize;
   bool use_opengl;
-  std::string levelfile;
+  std::vector<std::string> levelfiles;
   std::string game_definition_file;
   CL_DisplayWindow* window;
 

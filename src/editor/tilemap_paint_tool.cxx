@@ -110,7 +110,6 @@ TileMapPaintTool::on_mouse_down(const CL_InputEvent& event)
 {
   if (tilemap)
     {
-      EditorMapComponent::current()->get_map()->modify();
       EditorMapComponent* parent = EditorMapComponent::current();
       CL_Point pos = parent->screen2tile(event.mouse_pos);
 
@@ -178,6 +177,8 @@ TileMapPaintTool::on_mouse_up  (const CL_InputEvent& event)
 {
   if (tilemap)
     {
+      EditorMapComponent::current()->get_map()->modify();
+
       EditorMapComponent* parent = EditorMapComponent::current();
       CL_Point pos = parent->screen2tile(event.mouse_pos);
 

@@ -299,8 +299,13 @@
       
       (gui-component-on-click ok 
                               (lambda ()   
-                                (new-map (string->number (gui-inputbox-get-text width))
-                                         (string->number (gui-inputbox-get-text height)))
+                                (let ((width  (string->number (gui-inputbox-get-text width)))
+                                      (height (string->number (gui-inputbox-get-text height))))
+                                  (case *game*
+                                    ((supertux)
+                                     (supertux:new-map width height))
+                                    (else
+                                     (new-map width height))))
                                 (gui-hide-component window)))
 
       (gui-component-on-click cancel
@@ -430,11 +435,21 @@
     (case *game*
       ((supertux)
        (gui-add-menu-item menu "Layers/Background"
-                                 (lambda () (supertux:set-active-layer 'background)))
+                          (lambda () (supertux:set-background-layer-active)))
        (gui-add-menu-item menu "Layers/Interactive"
-                                 (lambda () (supertux:set-active-layer 'interactive)))
+                          (lambda () (supertux:set-interactive-layer-active)))
        (gui-add-menu-item menu "Layers/Foreground"
-                                 (lambda () (supertux:set-active-layer 'foreground)))))
+                          (lambda () (supertux:set-foreground-layer-active)))
+
+       (gui-add-menu-item menu "Layers/Background only"
+                          (lambda () (supertux:set-background-layer-only)))
+       (gui-add-menu-item menu "Layers/Interactive only"
+                          (lambda () (supertux:set-interactive-layer-only)))
+       (gui-add-menu-item menu "Layers/Foreground only"
+                          (lambda () (supertux:set-foreground-layer-only)))
+
+       (gui-add-menu-item menu "Layers/Show All"
+                          (lambda () (supertux:show-all-layers)))))
     ))
 
 (define (set-tool sym)
@@ -734,8 +749,7 @@
              ))))
 
 (define (init-recent-files)
-  (if (not (string=? "" *windstille-levelfile*))
-      (set! *recent-files* (cons  *windstille-levelfile* *recent-files*)))
+  (set! *recent-files* (append  *windstille-levelfiles* *recent-files*))
 
 
   (let ((ent (assoc-ref *editor-variables* '*recent-files*)))
@@ -766,14 +780,15 @@
 
    (gui-add-menu-item menu "Delete Selection"
                       (lambda ()
-                        (editor-objectmap-delete-objects (tilemap-object-tool-get-objects))
+                        (editor-objectmap-delete-objects *objmap* (tilemap-object-tool-get-objects))
                         (tilemap-object-tool-clear-selection)))
    
    (gui-add-menu-item menu "Duplicate Selection"
                       (lambda ()
-                        (let ((lst (map editor-objectmap-duplicate-object
+                        (let ((lst (map (lambda (el)
+                                          (editor-objectmap-duplicate-object *objmap* el))
                                         (tilemap-object-tool-get-objects))))
-                          (tilemap-object-tool-set-objects lst)
+                          (tilemap-object-tool-set-objects *objmap* lst)
                           (display lst)(newline)
                           )))
 
@@ -822,6 +837,8 @@
    (object-selector-add-brush *object-selector* "sprites/jumpy" '(money))
    (object-selector-add-brush *object-selector* "sprites/mriceblock" '(mriceblock))
    (object-selector-add-brush *object-selector* "sprites/mrbomb"     '(mrbomb))
+   (object-selector-add-brush *object-selector* "sprites/flame"     '(flame))
+   (object-selector-add-brush *object-selector* "sprites/stalactite"     '(stalactite))
    (create-minimap screen-width 50)
    (editor:add-file-plugin
     (lambda (filename) (or (string=? (filename:ext filename) ".stl")
@@ -838,6 +855,10 @@
 
 (set-tool 'tile)
 
-(new-map 60 15)
+(case *game*
+  ((supertux)
+   (supertux:new-map 20 15))
+  (else
+   (new-map 20 15)))
 
 ;; EOF ;;

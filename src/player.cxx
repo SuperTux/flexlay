@@ -1,4 +1,4 @@
-//  $Id: player.cxx,v 1.16 2003/09/15 17:00:38 grumbel Exp $
+//  $Id: player.cxx,v 1.17 2003/09/20 21:53:38 grumbel Exp $
 //
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -43,6 +43,7 @@ Player::Player (Controller* c) :
   gun_state (GUN_READY),
   ground_state (IN_AIR)
 {  
+  jumping = false;
   energie = 20;
   current_ = this;
 
@@ -140,9 +141,9 @@ Player::update (float delta)
 
   walk.update(delta);
   
-  if (controller->is_left ())
+  if (controller->get_state(InputEvent::LEFT))
     direction = WEST;
-  else if  (controller->is_right ())
+  else if  (controller->get_state(InputEvent::RIGHT))
     direction = EAST;
 
   switch(ground_state)
@@ -167,7 +168,6 @@ Player::update (float delta)
         }
       else
         {
-          //std::cout << "Position changed: " << subtile_pos.x << ", " << subtile_pos.y << std::endl;
           subtile_pos = new_subtile_pos;
         }
     }
@@ -179,7 +179,7 @@ Player::update_shooting (float delta)
   switch (gun_state)
     {
     case GUN_READY:
-      if (controller->fire_pressed ()) 
+      if (controller->get_state(InputEvent::FIRE))
         {
           //get_world ()->add (new DefaultShoot (pos, (DefaultShoot::DirectionState) direction));
           get_world ()->add (new LaserShoot (pos, direction, 5));
@@ -200,19 +200,23 @@ Player::update_ground (float delta)
 {
   velocity = CL_Vector();
 
-  if (controller->jump_pressed ()) 
+  if (controller->get_state(InputEvent::JUMP) && !jumping)
     {
+      jumping = true;
       velocity.y = -750;
       ground_state = IN_AIR;
     } 
   else
     {
+      if (!controller->get_state(InputEvent::JUMP))
+        jumping = false;
+
       float tmp_x_pos = pos.x;
 
-      if (controller->is_down())
+      if (controller->get_state(InputEvent::DOWN))
         {
           state = SITTING;
-          if (controller->fire_pressed() && !bomb_placed)
+          if (controller->get_state(InputEvent::FIRE) && !bomb_placed)
             {
               GameWorld::current()->add(new Bomb(int(pos.x), int(pos.y)));
               bomb_placed = true;
@@ -221,12 +225,12 @@ Player::update_ground (float delta)
       else
         {
           bomb_placed = false;
-          if (controller->is_left ())
+          if (controller->get_state(InputEvent::LEFT))
             {
               pos.x -= 300 * delta;
               state = WALKING;
             }
-          else if (controller->is_right ())
+          else if (controller->get_state(InputEvent::RIGHT))
             {
               pos.x += 300 * delta;
               state = WALKING;
@@ -248,15 +252,16 @@ Player::update_ground (float delta)
 void 
 Player::update_air (float delta)
 {
-  if (!controller->jump_pressed () && velocity.y < 0) {
-    velocity.y = velocity.y/2;
-    //ground_state = IN_AIR;
-  }
+  if (!controller->get_state(InputEvent::JUMP) && velocity.y < 0) 
+    {
+      velocity.y = velocity.y/2;
+      //ground_state = IN_AIR;
+    }
 
   float tmp_x_pos = pos.x;
-  if (controller->is_left ())
+  if (controller->get_state(InputEvent::LEFT))
     pos.x -= 300 * delta;
-  else if (controller->is_right ())
+  else if (controller->get_state(InputEvent::RIGHT))
     pos.x += 300 * delta;
   if (stuck ())
     pos.x = tmp_x_pos;

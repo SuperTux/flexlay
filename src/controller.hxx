@@ -1,4 +1,4 @@
-//  $Id: controller.hxx,v 1.2 2003/08/12 08:24:41 grumbel Exp $
+//  $Id: controller.hxx,v 1.3 2003/09/20 21:53:38 grumbel Exp $
 // 
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -20,22 +20,21 @@
 #ifndef CONTROLLER_HXX
 #define CONTROLLER_HXX
 
+#include <vector>
+#include "input_event.hxx"
+
 class Controller
 {
 private:
-
+  std::vector<bool> states;
+  std::vector<InputEvent> events;
+protected:
+  void send_event(int type, bool state);
 public:
-  // Directional Pad
-  virtual bool is_right () =0;
-  virtual bool is_left () =0;
-  virtual bool is_up () =0;
-  virtual bool is_down () =0;
-
-  // Buttons
-  virtual bool fire_pressed () =0;
-  virtual bool jump_pressed () =0;
-  virtual bool surround_pressed () =0;
-  virtual bool smartbomb_pressed () =0;
+  Controller();
+  virtual ~Controller();
+  bool get_state(int type);
+  virtual void update(float delta) =0;
 };
 
 #endif

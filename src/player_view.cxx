@@ -1,4 +1,4 @@
-//  $Id: player_view.cxx,v 1.4 2003/08/18 15:14:43 grumbel Exp $
+//  $Id: player_view.cxx,v 1.5 2003/09/20 21:53:38 grumbel Exp $
 //
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -32,13 +32,10 @@ PlayerView::PlayerView (Player* t)
 void
 PlayerView::draw ()
 {
-  //glPushMatrix ();
-  //glTranslatef (-pos.x + CL_Display::get_width ()/2, -pos.y + CL_Display::get_height ()/2, 0.0);
   CL_Display::push_translate_offset(int(-pos.x + CL_Display::get_width ()/2),
                                     int(-pos.y + CL_Display::get_height ()/2));
   world->draw ();
   CL_Display::pop_translate_offset();
-  //glPopMatrix ();
 }
 
 void
@@ -47,7 +44,7 @@ PlayerView::update (float delta)
   int hscroll_threshold = 100;
   int vscroll_threshold =  50;
 
-  CL_Vector tpos = player->get_pos ();
+  CL_Vector tpos = player->get_pos();
 
   float dist = tpos.x - pos.x;
   if (dist > hscroll_threshold)
@@ -60,7 +57,20 @@ PlayerView::update (float delta)
     pos.y = tpos.y - vscroll_threshold;
   else if (dist < -vscroll_threshold)
     pos.y = tpos.y + vscroll_threshold;
+}
 
+CL_Pointf
+PlayerView::screen2world(CL_Pointf point)
+{
+  return CL_Pointf(point.x + pos.x,
+                   point.y + pos.y);
+}
+
+CL_Pointf
+PlayerView::world2screen(CL_Pointf point)
+{
+  return CL_Pointf(point.x - pos.x,
+                   point.y - pos.y);
 }
 
 /* EOF */

@@ -1,4 +1,4 @@
-//  $Id: player_view.hxx,v 1.2 2003/08/12 08:24:41 grumbel Exp $
+//  $Id: player_view.hxx,v 1.3 2003/09/20 21:53:38 grumbel Exp $
 // 
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -33,6 +33,9 @@ public:
   
   void draw ();
   void update (float delta);
+
+  CL_Pointf screen2world(CL_Pointf point);
+  CL_Pointf world2screen(CL_Pointf point);
 };
 
 #endif

@@ -1448,6 +1448,99 @@ _wrap_game_set_player (SCM s_0, SCM s_1)
 
 
 static SCM
+_wrap_player_set_pos (SCM s_0, SCM s_1)
+{
+    #define FUNC_NAME "player-set-pos"
+    float arg1 ;
+    float arg2 ;
+    SCM gswig_result;
+    int gswig_list_p = 0;
+    
+    {
+        arg1 = gh_scm2double(s_0);
+    }
+    {
+        arg2 = gh_scm2double(s_1);
+    }
+    gh_defer_ints();
+    player_set_pos(arg1,arg2);
+    
+    gh_allow_ints();
+    gswig_result = GH_UNSPECIFIED;
+    
+    return gswig_result;
+    #undef FUNC_NAME
+}
+
+
+static SCM
+_wrap_player_set_direction (SCM s_0)
+{
+    #define FUNC_NAME "player-set-direction"
+    char *arg1 ;
+    int must_free1 = 0 ;
+    SCM gswig_result;
+    int gswig_list_p = 0;
+    
+    {
+        arg1 = SWIG_scm2str(s_0);
+        must_free1 = 1;
+    }
+    gh_defer_ints();
+    player_set_direction((char const *)arg1);
+    
+    gh_allow_ints();
+    gswig_result = GH_UNSPECIFIED;
+    if (must_free1 && arg1) scm_must_free(arg1);
+    
+    return gswig_result;
+    #undef FUNC_NAME
+}
+
+
+static SCM
+_wrap_player_get_x ()
+{
+    #define FUNC_NAME "player-get-x"
+    int result;
+    SCM gswig_result;
+    int gswig_list_p = 0;
+    
+    gh_defer_ints();
+    result = (int)player_get_x();
+    
+    gh_allow_ints();
+    {
+        gswig_result = gh_int2scm(result);
+    }
+    
+    return gswig_result;
+    #undef FUNC_NAME
+}
+
+
+static SCM
+_wrap_player_get_y ()
+{
+    #define FUNC_NAME "player-get-y"
+    int result;
+    SCM gswig_result;
+    int gswig_list_p = 0;
+    
+    gh_defer_ints();
+    result = (int)player_get_y();
+    
+    gh_allow_ints();
+    {
+        gswig_result = gh_int2scm(result);
+    }
+    
+    return gswig_result;
+    #undef FUNC_NAME
+}
+
+
+static SCM
 _wrap_make_game_world (SCM s_0, SCM s_1)
 {
     #define FUNC_NAME "make-game-world"
@@ -1535,6 +1628,67 @@ _wrap_add_region_trigger (SCM s_0, SCM s_1, SCM s_2, SCM s_3, SCM s_4)
 }
 
 
+static SCM
+_wrap_game_set_pause (SCM s_0)
+{
+    #define FUNC_NAME "game-set-pause"
+    bool arg1 ;
+    SCM gswig_result;
+    int gswig_list_p = 0;
+    
+    {
+        arg1 = gh_scm2bool(s_0);
+    }
+    gh_defer_ints();
+    game_set_pause(arg1);
+    
+    gh_allow_ints();
+    gswig_result = GH_UNSPECIFIED;
+    
+    return gswig_result;
+    #undef FUNC_NAME
+}
+
+
+static SCM
+_wrap_game_get_pause ()
+{
+    #define FUNC_NAME "game-get-pause"
+    bool result;
+    SCM gswig_result;
+    int gswig_list_p = 0;
+    
+    gh_defer_ints();
+    result = (bool)game_get_pause();
+    
+    gh_allow_ints();
+    {
+        gswig_result = gh_bool2scm(result);
+    }
+    
+    return gswig_result;
+    #undef FUNC_NAME
+}
+
+
+static SCM
+_wrap_game_quit ()
+{
+    #define FUNC_NAME "game-quit"
+    SCM gswig_result;
+    int gswig_list_p = 0;
+    
+    gh_defer_ints();
+    game_quit();
+    
+    gh_allow_ints();
+    gswig_result = GH_UNSPECIFIED;
+    
+    return gswig_result;
+    #undef FUNC_NAME
+}
+
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -1595,9 +1749,16 @@ SWIG_init (void)
     gh_new_procedure("game-add-bomb", (swig_guile_proc) _wrap_game_add_bomb, 2, 0, 0);
     gh_new_procedure("game-add-igel", (swig_guile_proc) _wrap_game_add_igel, 2, 0, 0);
     gh_new_procedure("game-set-player", (swig_guile_proc) _wrap_game_set_player, 2, 0, 0);
+    gh_new_procedure("player-set-pos", (swig_guile_proc) _wrap_player_set_pos, 2, 0, 0);
+    gh_new_procedure("player-set-direction", (swig_guile_proc) _wrap_player_set_direction, 1, 0, 0);
+    gh_new_procedure("player-get-x", (swig_guile_proc) _wrap_player_get_x, 0, 0, 0);
+    gh_new_procedure("player-get-y", (swig_guile_proc) _wrap_player_get_y, 0, 0, 0);
     gh_new_procedure("make-game-world", (swig_guile_proc) _wrap_make_game_world, 2, 0, 0);
     gh_new_procedure("start-game", (swig_guile_proc) _wrap_start_game, 1, 0, 0);
     gh_new_procedure("add-region-trigger", (swig_guile_proc) _wrap_add_region_trigger, 5, 0, 0);
+    gh_new_procedure("game-set-pause", (swig_guile_proc) _wrap_game_set_pause, 1, 0, 0);
+    gh_new_procedure("game-get-pause", (swig_guile_proc) _wrap_game_get_pause, 0, 0, 0);
+    gh_new_procedure("game-quit", (swig_guile_proc) _wrap_game_quit, 0, 0, 0);
     SWIG_Guile_RegisterTypes(swig_types, swig_types_initial);
 }
 

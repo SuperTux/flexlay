@@ -1,4 +1,4 @@
-//  $Id: laser_shoot.cxx,v 1.4 2003/09/12 16:31:21 grumbel Exp $
+//  $Id: laser_shoot.cxx,v 1.5 2003/09/20 21:53:38 grumbel Exp $
 //
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -18,6 +18,8 @@
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include <assert.h>
+#include <ClanLib/gl.h>
+#include "display.hxx"
 #include "tile_map.hxx"
 #include "globals.hxx"
 #include "string_converter.hxx"
@@ -39,6 +41,27 @@ LaserShoot::draw ()
   if (direction == WEST)
     sprite.set_scale (-1.0, 1.0);
   sprite.draw (int (pos.x), int (pos.y));
+
+  if (0) // Laser
+    {
+      Display::begin_gl();
+          
+      glBlendFunc( GL_SRC_ALPHA, GL_ONE );
+
+      glBegin(GL_QUADS);
+      {
+        glColor4f(1.0f, 1.0f, 0.0f, 0.9f);
+        glVertex2f(150,  400);
+        glVertex2f(300, 400);
+
+        glColor4f(1.0f, 1.0f, 0.0f, 0.1f);
+        glVertex2f(300, 420);
+        glVertex2f(150,  420);
+      }
+      glEnd();
+
+      Display::end_gl();
+    }
 }
 
 void 

@@ -7,11 +7,14 @@ bin_PROGRAMS = windstille
 windstille_SOURCES = \
   animation_obj.cxx \
   animation_obj.hxx \
+  background.hxx \
+  background.cxx \
   bomb.hxx \
   bomb.cxx \
   bonus_flyer.cxx \
   bonus_flyer.hxx \
   controller.hxx \
+  controller.cxx \
   diamond_map.hxx \
   diamond_map.cxx \
   default_shoot.cxx \
@@ -52,6 +55,8 @@ windstille_SOURCES = \
   scm_helper.hxx \
   scmconverter.hxx \
   sprite.hxx \
+  screen.hxx \
+  screen.cxx \
   string_converter.hxx \
   tile.cxx \
   tile.hxx \

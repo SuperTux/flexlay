@@ -1,4 +1,4 @@
-//  $Id: windstille_game.hxx,v 1.3 2003/09/13 18:01:17 grumbel Exp $
+//  $Id: windstille_game.hxx,v 1.4 2003/09/20 21:53:38 grumbel Exp $
 // 
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -21,19 +21,50 @@
 #define WINDSTILLEGAME_HXX
 
 #include <string>
+#include <ClanLib/Display/sprite.h>
+#include <ClanLib/Signals/slot_container.h>
+#include "screen.hxx"
 
+class Energiebar;
+class PlayerView;
+class CL_InputEvent;
 class GameWorld;
-
-class WindstilleGame
+class Background;
+class Player;
+class WindstilleGame : public Screen
 {
 private:
+  Player* player;
+  CL_SlotContainer slots;
+
+  float blink;
+
   std::string filename;
   GameWorld* world;
+  PlayerView* view;
+  Energiebar* energiebar;
+  Background* background;
+
+  CL_Sprite logo;
+  CL_Sprite logo_black;
+
+  void on_mouse_up  (const CL_InputEvent& event);
+  void on_mouse_down(const CL_InputEvent& event);
+  void on_key_down  (const CL_InputEvent& event);
+
+  static WindstilleGame* current_; 
 public:
+  static WindstilleGame* current() { return current_; } 
+
   WindstilleGame (const std::string& arg_filename);
   WindstilleGame (GameWorld* w);
   ~WindstilleGame ();
-  void display ();
+
+  void on_startup();
+  void on_shutdown();
+
+  void draw();
+  void update(float delta);
 };
 
 #endif

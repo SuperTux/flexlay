@@ -1,4 +1,4 @@
-//  $Id: game.cxx,v 1.5 2003/09/17 18:48:45 grumbel Exp $
+//  $Id: game.cxx,v 1.6 2003/09/20 21:53:38 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -65,6 +65,73 @@ void add_region_trigger(int x, int y, int w, int h, SCM func)
 {
   GameWorld::current()->add(new Trigger(new RegionTriggerCondition(CL_Rectf(x, y, w, h)), 
                                         func));
+}
+
+void player_set_pos(float x, float y)
+{
+  Player::current()->set_position(CL_Vector(x, y));
+}
+
+void player_set_direction(const char* direction)
+{
+  if (strcmp(direction, "east") == 0)
+    {
+      Player::current()->set_direction(EAST);
+    }
+  else if (strcmp(direction, "west") == 0)
+    {
+      Player::current()->set_direction(WEST);
+    }
+  else
+    {
+      std::cout << __FUNCTION__ << ": Unknown direction:" << direction << std::endl;
+    }
+}
+
+int mouse_get_x() 
+{
+  return CL_Mouse::get_x();
+}
+
+int mouse_get_y() 
+{
+  return CL_Mouse::get_y();
+}
+
+
+int screen_get_x() 
+{
+  return CL_Mouse::get_x();
+}
+
+int screen_get_y() 
+{
+  return CL_Mouse::get_y();
+}
+
+int player_get_x()
+{
+  return int(Player::current()->get_pos().x);
+}
+
+int player_get_y()
+{
+  return int(Player::current()->get_pos().y);
+}
+
+void game_set_pause(bool p)
+{
+  WindstilleGame::current()->set_pause(p);
+}
+
+bool game_get_pause()
+{
+  return WindstilleGame::current()->get_pause();
+}
+
+void game_quit()
+{
+  WindstilleGame::current()->quit();
 }
 
 /* EOF */

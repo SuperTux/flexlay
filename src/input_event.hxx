@@ -1,4 +1,4 @@
-//  $Id: game.hxx,v 1.6 2003/09/20 21:53:38 grumbel Exp $
+//  $Id: input_event.hxx,v 1.1 2003/09/20 21:53:38 grumbel Exp $
 // 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -17,31 +17,19 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-#ifndef HEADER_WORLD_HXX
-#define HEADER_WORLD_HXX
+#ifndef HEADER_INPUT_EVENT_HXX
+#define HEADER_INPUT_EVENT_HXX
 
-#include <guile/gh.h>
+struct InputEvent
+{
+  enum Type { UP, DOWN, LEFT, RIGHT, FIRE, JUMP, LAST_TYPE } type;
+  bool state;
 
-class GameWorld;
-
-void game_add_water(int x, int y, int w, int h);
-void game_add_bomb(int x, int y);
-void game_add_igel(int x, int y);
-void game_set_player(float x, float y);
-
-void player_set_pos(float x, float y);
-void player_set_direction(const char* direction);
-int  player_get_x();
-int  player_get_y();
-
-GameWorld* make_game_world(int w, int h);
-void start_game(GameWorld*);
-
-void add_region_trigger(int x, int y, int w, int h, SCM func);
-
-void game_set_pause(bool p);
-bool game_get_pause();
-void game_quit();
+  InputEvent(int type, bool state) 
+    : type((Type)type), state(state)
+  {
+  }
+};
 
 #endif
 

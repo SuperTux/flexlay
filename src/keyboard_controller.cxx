@@ -1,4 +1,4 @@
-//  $Id: keyboard_controller.cxx,v 1.5 2003/09/15 17:00:38 grumbel Exp $
+//  $Id: keyboard_controller.cxx,v 1.6 2003/09/20 21:53:38 grumbel Exp $
 //
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -20,54 +20,66 @@
 #include <ClanLib/display.h>
 #include "keyboard_controller.hxx"
 
-// Directional Pad
-bool 
-KeyboardController::is_right ()
+KeyboardController::KeyboardController()
 {
-  return CL_Keyboard::get_keycode (CL_KEY_RIGHT);
+  slots.connect(CL_Keyboard::sig_key_down(), this, &KeyboardController::on_key_down);
+  slots.connect(CL_Keyboard::sig_key_up(),   this, &KeyboardController::on_key_up);
 }
 
-bool
-KeyboardController::is_left ()
+KeyboardController::~KeyboardController()
 {
-  return CL_Keyboard::get_keycode (CL_KEY_LEFT);
 }
 
-bool 
-KeyboardController::is_up ()
+void
+KeyboardController::on_key_down(const CL_InputEvent& event)
 {
-  return CL_Keyboard::get_keycode (CL_KEY_UP);
+  switch (event.id)
+    {
+    case CL_KEY_UP:
+      send_event(InputEvent::JUMP, true);
+      break;
+    case CL_KEY_LEFT:
+      send_event(InputEvent::LEFT, true);
+      break;
+    case CL_KEY_RIGHT:
+      send_event(InputEvent::RIGHT, true);
+      break;
+    case CL_KEY_DOWN:
+      send_event(InputEvent::DOWN, true);
+      break;
+    case CL_KEY_LCONTROL:
+      send_event(InputEvent::FIRE, true);
+      break;
+    }
 }
 
-bool 
-KeyboardController::is_down ()
+void
+KeyboardController::on_key_up(const CL_InputEvent& event)
 {
-  return CL_Keyboard::get_keycode (CL_KEY_DOWN);
+   switch (event.id)
+    {
+    case CL_KEY_UP:
+      send_event(InputEvent::JUMP, false);
+      break;
+    case CL_KEY_LEFT:
+      send_event(InputEvent::LEFT, false);
+      break;
+    case CL_KEY_RIGHT:
+      send_event(InputEvent::RIGHT, false);
+      break;
+    case CL_KEY_DOWN:
+      send_event(InputEvent::DOWN, false);
+      break;
+    case CL_KEY_LCONTROL:
+      send_event(InputEvent::FIRE, false);
+      break;
+    }
 }
+
+void
+KeyboardController::update(float delta)
+{
   
-// Buttons
-bool
-KeyboardController::fire_pressed ()
-{
-  return CL_Keyboard::get_keycode (CL_KEY_LCONTROL);
-}
-
-bool
-KeyboardController::jump_pressed ()
-{
-  return CL_Keyboard::get_keycode (CL_KEY_UP);
-}
-
-bool
-KeyboardController::surround_pressed ()
-{
-  return CL_Keyboard::get_keycode (CL_KEY_LSHIFT);
-}
-
-bool
-KeyboardController::smartbomb_pressed ()
-{
-  return CL_Keyboard::get_keycode (CL_KEY_SPACE);
 }
 
 /* EOF */

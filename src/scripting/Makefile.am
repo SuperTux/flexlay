@@ -1,4 +1,4 @@
-##  $Id: Makefile.am,v 1.2 2003/09/17 18:48:45 grumbel Exp $
+##  $Id: Makefile.am,v 1.3 2003/09/20 21:53:38 grumbel Exp $
 ## 
 ##  Windstille
 ##  Copyright (C) 2003 Ingo Ruhnke <grumbel@gmx.de>
@@ -33,7 +33,7 @@ libwindstille_scripting_a_SOURCES = \
 # Include windstille_wrap.cxx in case the user doesn't have swig installed
 EXTRA_DIST = windstille_wrap.cxx
 
-libwindstille_scripting_a-windstille_wrap.cxx: windstille.i $(command_source)
+windstille_wrap.cxx: windstille.i $(command_source)
 	$(SWIG) -guile -c++  -o $@ $<
 
 # We override the default compile command to skip all the warnings

@@ -1,4 +1,4 @@
-//  $Id: keyboard_controller.hxx,v 1.2 2003/08/12 08:24:41 grumbel Exp $
+//  $Id: keyboard_controller.hxx,v 1.3 2003/09/20 21:53:38 grumbel Exp $
 // 
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -25,19 +25,15 @@
 class KeyboardController : public Controller
 {
 private:
+  CL_SlotContainer slots;
 
+  void on_key_down(const CL_InputEvent&);
+  void on_key_up(const CL_InputEvent&);
 public:
-  // Directional Pad
-  bool is_right ();
-  bool is_left ();
-  bool is_up ();
-  bool is_down ();
-  
-  // Buttons
-  bool fire_pressed ();
-  bool jump_pressed ();
-  bool surround_pressed ();
-  bool smartbomb_pressed ();
+  KeyboardController();
+  virtual ~KeyboardController();
+
+  void update(float delta);
 };
 
 #endif

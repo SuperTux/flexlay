@@ -39,6 +39,9 @@ private:
   int old_offset;
   int mouse_over_tile;
   bool scrolling;
+  bool region_select;
+  CL_Point current_pos;
+  CL_Point region_select_start;
   CL_Point mouse_pos;
   float scale;
   
@@ -62,6 +65,9 @@ public:
   void set_scale(float s);
 
   void draw();
+
+  /** Return the position of the mouse in x/y in tilesize */
+  CL_Point get_mouse_tile_pos(const CL_InputEvent& event);
 
 private:
   void mouse_move(const CL_InputEvent& event);

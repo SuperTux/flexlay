@@ -19,6 +19,8 @@
 
 #include <iostream>
 #include <ClanLib/display.h>
+#include <ClanLib/core.h>
+#include "math.hxx"
 #include "tileset.hxx"
 #include "tile.hxx"
 #include "tile_selector.hxx"
@@ -38,6 +40,7 @@ TileSelector::TileSelector(const CL_Rect& rect, CL_Component* parent)
   scale = 1.0f;
   mouse_over_tile = -1;
   scrolling = false;
+  region_select = false;
   offset = 0;
 }
 
@@ -53,6 +56,38 @@ TileSelector::mouse_up(const CL_InputEvent& event)
     {
       scrolling = false;
       release_mouse();
+    }
+  else if (event.id == CL_MOUSE_RIGHT)
+    {
+      release_mouse();
+
+      CL_Rect selection(current_pos.x, current_pos.y, 
+                        region_select_start.x, region_select_start.y);
+      selection.normalize();
+      selection.right  += 1;
+      selection.bottom += 1;
+
+      selection.left  = Math::mid(0, selection.left, width);
+      selection.right = Math::mid(0, selection.right, width);
+
+      selection.top    = Math::max(0, selection.top);
+      //selection.bottom = Math::mid(0, selection.right, width);
+
+      TileBrush brush(selection.get_width(), selection.get_height());
+      brush.set_transparent();
+
+      for(int y = 0; y < selection.get_height(); ++y)
+        for(int x = 0; x < selection.get_width(); ++x)
+          {
+            int tile = (selection.top + y) * width + (selection.left + x);
+
+            if (tile >= 0 && tile < int(tiles.size()))
+              brush.at(x, y) = tiles[tile];
+            else
+              brush.at(x, y) = 0;
+          }
+
+      TileMapPaintTool::current().set_brush(brush);
     }
 }
 
@@ -70,6 +105,12 @@ TileSelector::mouse_down(const CL_InputEvent& event)
         brush.at(0, 0) = 0;
 
       TileMapPaintTool::current().set_brush(brush);
+    }
+  else if (event.id == CL_MOUSE_RIGHT) 
+    {
+      region_select = true;
+      region_select_start = current_pos;
+      capture_mouse();
     }
   else if (event.id == CL_MOUSE_MIDDLE)
     {
@@ -90,13 +131,19 @@ TileSelector::mouse_down(const CL_InputEvent& event)
     }
 }
 
+CL_Point
+TileSelector::get_mouse_tile_pos(const CL_InputEvent& event)
+{
+  return CL_Point(event.mouse_pos.x/static_cast<int>(tileset.get_tile_size()*scale),
+                  (event.mouse_pos.y+offset)/static_cast<int>(tileset.get_tile_size()*scale));
+}
+
 void
 TileSelector::mouse_move(const CL_InputEvent& event)
 {
-  int x = event.mouse_pos.x/static_cast<int>(tileset.get_tile_size()*scale);
-  int y = (event.mouse_pos.y+offset)/static_cast<int>(tileset.get_tile_size()*scale);
-
-  mouse_over_tile = y * width + x;
+  CL_Point pos = get_mouse_tile_pos(event);
+  current_pos = pos;
+  mouse_over_tile = pos.y * width + pos.x;
 
   if (scrolling)
     {
@@ -109,10 +156,12 @@ TileSelector::mouse_move(const CL_InputEvent& event)
 void 
 TileSelector::draw()
 {
+  CL_Display::push_cliprect(get_screen_rect());
   CL_Display::push_translate(get_screen_x(), get_screen_y());
   CL_Display::push_modelview();
   CL_Display::add_translate(0, -offset);
 
+  // FIXME: add right click support here
   for(int i = 0; i < int(tiles.size()); ++i)
     {
       int x = i % width;
@@ -152,6 +201,8 @@ TileSelector::draw()
   
   CL_Display::pop_modelview();
   CL_Display::pop_modelview();
+
+  CL_Display::pop_cliprect();
 }
 
 void

@@ -155,6 +155,7 @@ ObjectSelector::draw()
   // Handle scrolling in the Component
   CL_Display::push_modelview();
   CL_Display::add_translate(0, -offset);
+  CL_Display::add_translate(get_screen_x(), get_screen_y());
     
   for(int i = 0; i < (int)brushes.size(); ++i)
     {
@@ -181,7 +182,6 @@ ObjectSelector::draw()
           CL_Display::fill_rect(rect, CL_Color(0,0,255, 20));
         }
     }
-  CL_Display::pop_modelview();
 
   // Draw drag sprite
   if (drag_obj != -1)
@@ -194,6 +194,8 @@ ObjectSelector::draw()
       sprite.set_alpha(0.5f);
       sprite.draw(mouse_pos.x, mouse_pos.y);
     }
+
+  CL_Display::pop_modelview();
 }
 
 void

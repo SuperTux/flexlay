@@ -131,8 +131,8 @@ VALUE ObjMapObject2Value(const ObjMapObject& arg)
 #endif
 
 #ifdef SWIGRUBY
-%include "ruby_meta_data.hxx"
-%include "ruby_sexpr_parser.hxx"
+%include "../ruby/ruby_meta_data.hxx"
+%include "../ruby/ruby_sexpr_parser.hxx"
 #endif
 
 /* EOF */

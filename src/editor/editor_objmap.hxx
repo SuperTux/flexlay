@@ -27,6 +27,8 @@
 #include "../scm_obj.hxx"
 #include "editor_map_layer.hxx"
 
+class ObjMapObject;
+
 /** GUI Component that holds positioned objects, ie. objects which
     consist of a CL_Sprite and some properties */
 class EditorObjMap : public EditorMapLayer
@@ -35,14 +37,8 @@ private:
   CL_SlotContainer slots;
 
 public:
-  struct Obj {
-    int       handle;
-    CL_Sprite sprite;
-    CL_Point  pos;
-    SCMObj    data;
-  };
-
-  typedef std::vector<Obj*> Objs;
+  typedef ObjMapObject Obj;
+  typedef std::vector<ObjMapObject*> Objs;
   Objs objects;
 
   int handle_count;
@@ -50,7 +46,6 @@ public:
   EditorObjMap();
   ~EditorObjMap();
 
-  void update(float delta);
   void draw(EditorMapComponent* parent);
 
   /** Add an object to the map and return a handle to it */
@@ -58,8 +53,8 @@ public:
 
   CL_Rect get_bounding_rect(const CL_Sprite& sprite);
 
-  EditorObjMap::Obj* find_object(const CL_Point& pos);
-  std::vector<EditorObjMap::Obj*> get_selection(const CL_Rect& rect);
+  ObjMapObject* find_object(const CL_Point& pos);
+  std::vector<ObjMapObject*> get_selection(const CL_Rect& rect);
   Objs* get_objects();
   EditorObjMap::Obj* get_object(int id);
 

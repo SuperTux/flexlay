@@ -50,8 +50,6 @@ public:
   void draw (EditorMapComponent* parent);
   void draw_map(EditorMapComponent* parent, Field<int>* field);
 
-  void update(float delta) {}
-
   /** Return the current active field */
   Field<int>* get_field() { return current_field; }
   Field<int>* get_diamond_map() { return diamond_map; }

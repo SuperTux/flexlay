@@ -31,7 +31,7 @@ private:
   SCM obj;
 
 public:
-  explicit SCMObj () 
+  SCMObj () 
   {
     obj = SCM_BOOL_F;
     scm_gc_protect_object (obj);
@@ -43,7 +43,7 @@ public:
     scm_gc_protect_object (obj);
   }
   
-  explicit SCMObj (const SCMObj& new_obj) 
+  SCMObj (const SCMObj& new_obj) 
   {
     obj = new_obj.obj;
     scm_gc_protect_object (obj);

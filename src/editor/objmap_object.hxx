@@ -17,23 +17,37 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-#ifndef HEADER_EDITOR_MAP_LAYER_HXX
-#define HEADER_EDITOR_MAP_LAYER_HXX
+#ifndef HEADER_OBJMAP_OBJECT_HXX
+#define HEADER_OBJMAP_OBJECT_HXX
 
-class EditorMapComponent;
+#include <ClanLib/Core/Math/point.h>
+#include <ClanLib/Core/Math/rect.h>
+#include "../scm_obj.hxx"
 
 /** */
-class EditorMapLayer
+class ObjMapObject
 {
-public:
-  EditorMapLayer() {}
-  virtual ~EditorMapLayer() {}
-
-  virtual void draw(EditorMapComponent* parent) =0;
-
 private:
-  EditorMapLayer (const EditorMapLayer&);
-  EditorMapLayer& operator= (const EditorMapLayer&);
+  int       handle;
+
+protected:
+  CL_Point  pos;
+  SCMObj    data;
+
+public:
+  ObjMapObject(int handle_, const CL_Point& pos, const SCMObj& data);
+  virtual ~ObjMapObject() {}
+
+  CL_Point get_pos() const { return pos; }
+  void     set_pos(const CL_Point& p) { pos = p; }
+
+  SCMObj get_data() const { return data; }
+
+  virtual void draw() =0;
+
+  virtual CL_Rect get_bound_rect() const  =0;
+
+  int get_handle() const { return handle; }
 };
 
 #endif

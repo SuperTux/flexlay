@@ -592,7 +592,16 @@
    (display (current-popup-menu))
    (let ((menu (current-popup-menu)))
      (gui-add-menu-item menu "Testomat/Foobar" (lambda () (display "Foobar\n")))
-     (gui-add-menu-item menu "Foobar" (lambda () (display "Foobar2\n"))))
+     (gui-add-menu-item menu "Foobar" (lambda () (display "Foobar2\n")))
+     (gui-add-menu-item menu "Add Object"
+                        (lambda ()
+                          (editor-objectmap-add-object "sprites/mrbomb" 100 100 '())
+                          ))
+     (gui-add-menu-item menu "Print Selection"
+                        (lambda ()
+                          (display (editor-objectmap-get-objects))
+                          (newline)))
+     )
    (newline)))
 
 (load-variables)

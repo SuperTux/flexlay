@@ -26,6 +26,8 @@ libwindstille_editor_a_SOURCES = \
   command.hxx \
   paint_command.hxx   paint_command.cxx \
   tool_manager.hxx tool_manager.cxx \
-  popup_menu.hxx popup_menu.cxx
+  popup_menu.hxx popup_menu.cxx \
+  objmap_object.hxx   objmap_object.cxx \
+  objmap_sprite_object.hxx   objmap_sprite_object.cxx
 
 # EOF #

@@ -17,24 +17,36 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-#ifndef HEADER_EDITOR_MAP_LAYER_HXX
-#define HEADER_EDITOR_MAP_LAYER_HXX
+#ifndef HEADER_MATH_HXX
+#define HEADER_MATH_HXX
 
-class EditorMapComponent;
+namespace Math {
 
-/** */
-class EditorMapLayer
+template<class T> 
+T min (const T& a, const T& b) 
 {
-public:
-  EditorMapLayer() {}
-  virtual ~EditorMapLayer() {}
+  if (a < b)
+    return a;
+  else
+    return b;
+}
 
-  virtual void draw(EditorMapComponent* parent) =0;
+template<class T> 
+T max (const T& a, const T& b) 
+{
+  if (a > b)
+    return a;
+  else
+    return b;
+}
 
-private:
-  EditorMapLayer (const EditorMapLayer&);
-  EditorMapLayer& operator= (const EditorMapLayer&);
-};
+template<class T> 
+T mid (const T& a, const T& b, const T& c) 
+{
+  return max<T>((a), min<T>((b), (c)));
+}
+
+} // namespace Math
 
 #endif
 

@@ -50,6 +50,8 @@ public:
 
   void run();
 
+  // FIXME: Move undo stuff to EditorMap or some other per map class
+
   /** Execute a command and place it on the undo stack, commands given
       to this function will be deleted by the Editor class, so they
       have to be new'ed */

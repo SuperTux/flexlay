@@ -125,7 +125,7 @@ EditorMapComponent::draw ()
   if (editor_map)
     editor_map->draw(this);
 
-  if (has_mouse_over())
+  if (1) // has_mouse_over()) FIXME: Seperate cursor and state here
     Editor::current()->get_tool_manager()->current_tool()->draw();
     
   CL_Display::flush();

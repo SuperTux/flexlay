@@ -34,6 +34,7 @@
 #include "editor/editor_map_component.hxx"
 #include "editor/tile_editor.hxx"
 #include "editor/tilemap_select_tool.hxx"
+#include "editor/objmap_object.hxx"
 #include "editor/tilemap_paint_tool.hxx"
 #include "editor/minimap.hxx"
 #include "editor/editor_names.hxx"
@@ -113,9 +114,9 @@ obj2scm(const EditorObjMap::Obj& obj)
 {
   SCM lst = SCM_EOL;
   
-  return gh_list(gh_long2scm(obj.pos.x),
-                 gh_long2scm(obj.pos.y),
-                 obj.data.get_scm(),
+  return gh_list(gh_long2scm(obj.get_pos().x),
+                 gh_long2scm(obj.get_pos().y),
+                 obj.get_data().get_scm(),
                  SCM_UNDEFINED); 
   return lst;
 }
@@ -183,7 +184,7 @@ editor_objectmap_get_objects()
       i != editor_get_objmap()->get_objects()->end();
       ++i)
     {
-      lst = gh_cons(SCM_MAKINUM((*i)->handle), lst);
+      lst = gh_cons(SCM_MAKINUM((*i)->get_handle()), lst);
     }
 
   return gh_reverse(lst);

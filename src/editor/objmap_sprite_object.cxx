@@ -1,5 +1,5 @@
 //  $Id$
-// 
+//
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
 //
@@ -12,30 +12,41 @@
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
-// 
+//
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-#ifndef HEADER_EDITOR_MAP_LAYER_HXX
-#define HEADER_EDITOR_MAP_LAYER_HXX
+#include <ClanLib/Display/display.h>
+#include "objmap_sprite_object.hxx"
 
-class EditorMapComponent;
-
-/** */
-class EditorMapLayer
+ObjMapSpriteObject::ObjMapSpriteObject(int handle_, const CL_Point& pos_, const SCMObj& data_, 
+                                       const CL_Sprite& sprite_)
+  : ObjMapObject(handle_, pos_, data_), sprite(sprite_)
 {
-public:
-  EditorMapLayer() {}
-  virtual ~EditorMapLayer() {}
+  
+}
 
-  virtual void draw(EditorMapComponent* parent) =0;
+void
+ObjMapSpriteObject::draw()
+{
+  sprite.draw(pos.x, pos.y);
+}
 
-private:
-  EditorMapLayer (const EditorMapLayer&);
-  EditorMapLayer& operator= (const EditorMapLayer&);
-};
+CL_Rect
+ObjMapSpriteObject::get_bound_rect() const
+{
+  CL_Point  align = CL_Point(0, 0);
+  CL_Origin origin_e;
 
-#endif
+  sprite.get_alignment(origin_e, align.x, align.y);
+
+  CL_Point origin = calc_origin(origin_e, CL_Size(sprite.get_width(),
+                                                  sprite.get_height()));
+  align.x = -align.x;
+      
+  return CL_Rect(pos - origin - align,
+                 CL_Size(sprite.get_width(), sprite.get_height()));
+}
 
 /* EOF */

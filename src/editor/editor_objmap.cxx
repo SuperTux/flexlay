@@ -20,6 +20,8 @@
 #include <iostream>
 #include <ClanLib/Display/display.h>
 #include <ClanLib/Core/Math/origin.h>
+#include "objmap_object.hxx"
+#include "objmap_sprite_object.hxx"
 #include "editor_objmap.hxx"
 
 extern CL_ResourceManager* resources;
@@ -34,36 +36,22 @@ EditorObjMap::~EditorObjMap()
 }
 
 void
-EditorObjMap::update(float delta)
-{
-  for(Objs::iterator i = objects.begin(); i != objects.end(); ++i)
-    {
-      (*i)->sprite.update(delta);
-    }
-}
-
-void
 EditorObjMap::draw(EditorMapComponent* parent)
 {
   for(Objs::iterator i = objects.begin(); i != objects.end(); ++i)
     {
-      (*i)->sprite.draw((*i)->pos.x, (*i)->pos.y);
+      (*i)->draw();
     }
 }
 
 int
 EditorObjMap::add_object(const CL_Sprite& sprite, const CL_Point& pos, const SCMObj& data)
 {
-  Obj* obj = new Obj;
-
-  obj->handle = ++handle_count;
-  obj->sprite = sprite;
-  obj->pos    = pos;
-  obj->data   = data;
+  ObjMapObject* obj = new ObjMapSpriteObject(++handle_count, pos, data, sprite);
 
   objects.push_back(obj);  
 
-  return obj->handle;
+  return obj->get_handle();
 }
 
 CL_Rect
@@ -84,29 +72,15 @@ EditorObjMap::get_bounding_rect(const CL_Sprite& sprite)
                          sprite.get_height()));
 }
 
-EditorObjMap::Obj*
+ObjMapObject*
 EditorObjMap::find_object(const CL_Point& click_pos)
 {
   for(Objs::iterator i = objects.begin(); i != objects.end(); ++i)
     {
-      CL_Point  align = CL_Point(0, 0);
-      CL_Origin origin_e;
-      
-      (*i)->sprite.get_alignment(origin_e, align.x, align.y);
-
-      CL_Point origin = calc_origin(origin_e, CL_Size((*i)->sprite.get_width(),
-                                                      (*i)->sprite.get_height()));
-      align.x = -align.x;
-      
-      CL_Point pos = click_pos + origin + align;
-
-      if ((*i)->pos.x < pos.x
-          && (*i)->pos.x + (*i)->sprite.get_width() >= pos.x
-          && (*i)->pos.y < pos.y
-          && (*i)->pos.y + (*i)->sprite.get_height() >= pos.y)
-        {
-          return *i;
-        }
+      CL_Rect rect = (*i)->get_bound_rect();
+     
+      if (rect.is_inside(click_pos))
+        return *i;
     }
   return 0;
 }
@@ -118,12 +92,13 @@ EditorObjMap::get_selection(const CL_Rect& rect)
 
   for(Objs::iterator i = objects.begin(); i != objects.end(); ++i)
     {
-      if (rect.is_inside((*i)->pos))
+      // FIXME:
+      if (rect.is_inside((*i)->get_pos()))
         {
           selection.push_back(*i);
         }
     }
-
+  
   return selection;
 }
 
@@ -131,7 +106,7 @@ EditorObjMap::Obj*
 EditorObjMap::get_object(int id)
 {
   for(Objs::iterator i = objects.begin(); i != objects.end(); ++i)
-    if ((*i)->handle == id)
+    if ((*i)->get_handle() == id)
       return *i;
   return 0;
 }

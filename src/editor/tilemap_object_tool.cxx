@@ -27,6 +27,7 @@
 #include "../scm_obj.hxx"
 #include "editor_names.hxx"
 #include "popup_menu.hxx"
+#include "objmap_object.hxx"
 #include "tilemap_object_tool.hxx"
 
 extern CL_ResourceManager* resources;
@@ -47,16 +48,14 @@ TileMapObjectTool::draw()
 {
   if (obj)
     {
-      CL_Sprite sprite = obj->sprite;
-      sprite.set_color(CL_Color(255, 0, 255));
-      sprite.draw(obj->pos.x, obj->pos.y);
+      obj->draw();
+      CL_Display::draw_rect(obj->get_bound_rect(), CL_Color(0, 2550, 0));
     }
 
   for (Selection::iterator i = selection.begin(); i != selection.end(); ++i)
     {
-      CL_Sprite sprite = (*i)->sprite;
-      sprite.set_color(CL_Color(255, 0, 0));
-      sprite.draw((*i)->pos.x, (*i)->pos.y);      
+      (*i)->draw();
+      CL_Display::draw_rect((*i)->get_bound_rect(), CL_Color(255, 0, 0));
     }
 
   switch(state)
@@ -135,7 +134,7 @@ TileMapObjectTool::on_mouse_down(const CL_InputEvent& event)
             {
               state = DRAG;
               parent->capture_mouse();
-              offset = pos - obj->pos;
+              offset = pos - obj->get_pos();
               drag_start = pos;
               Selection::iterator i = std::find(selection.begin(),
                                                 selection.end(), 
@@ -171,12 +170,12 @@ TileMapObjectTool::on_mouse_move(const CL_InputEvent& event)
     {
     case DRAG:
       if (obj)
-        obj->pos = parent->screen2world(event.mouse_pos) - offset;
+        obj->set_pos(parent->screen2world(event.mouse_pos) - offset);
       else
         {
           for (Selection::iterator i = selection.begin(); i != selection.end(); ++i)
             {
-              (*i)->pos += (pos - drag_start);
+              (*i)->set_pos((*i)->get_pos() + (pos - drag_start));
             }
           drag_start = pos;
         }

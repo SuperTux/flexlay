@@ -17,23 +17,23 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-#ifndef HEADER_EDITOR_MAP_LAYER_HXX
-#define HEADER_EDITOR_MAP_LAYER_HXX
+#ifndef HEADER_OBJMAP_SPRITE_OBJECT_HXX
+#define HEADER_OBJMAP_SPRITE_OBJECT_HXX
 
-class EditorMapComponent;
+#include <ClanLib/Display/sprite.h>
+#include "objmap_object.hxx"
 
 /** */
-class EditorMapLayer
+class ObjMapSpriteObject : public ObjMapObject
 {
-public:
-  EditorMapLayer() {}
-  virtual ~EditorMapLayer() {}
-
-  virtual void draw(EditorMapComponent* parent) =0;
-
 private:
-  EditorMapLayer (const EditorMapLayer&);
-  EditorMapLayer& operator= (const EditorMapLayer&);
+  CL_Sprite sprite;
+
+public:
+  ObjMapSpriteObject(int handle_, const CL_Point& pos_, const SCMObj& data_, const CL_Sprite& s);
+
+  void draw();
+  CL_Rect get_bound_rect() const;
 };
 
 #endif

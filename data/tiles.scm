@@ -208,6 +208,12 @@
         (colmap 255 255 255 255 254 252 248 240))
   (tile (id 70)
         (image "tiles/tree1")
-        (colmap 255 255 255 255 254 252 248 240)))
+        (colmap 255 255 255 255 254 252 248 240))
+  (tile (id 71)
+        (image "tiles/dbrw_air_air_dbrw_1")
+        (colmap 240 240 240 240 240 240 240 240))
+  (tile (id 72)
+        (image "tiles/air_dbrw_dbrw_air_1")
+        (colmap 15 15 15 15 15 15 15 15)))
 
 ;; EOF ;;

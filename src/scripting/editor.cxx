@@ -505,6 +505,7 @@ xml_node2scm(CL_DomNode& root)
     }
   else if (root.is_text())
     {
+      // FIXME: Doesn't seem to work
       CL_DomCDATASection text = root.to_cdata_section();
       return gh_list(gh_symbol2scm("character-data"),
                      gh_str02scm(text.substring_data(0, text.get_length()).c_str()),

@@ -1,4 +1,4 @@
-//  $Id: editor.cxx,v 1.7 2003/09/12 20:17:06 grumbel Exp $
+//  $Id: editor.cxx,v 1.8 2003/09/22 18:37:05 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -26,6 +26,7 @@
 #include "editor.hxx"
 #include "editor_tilemap.hxx"
 #include "tile_selector.hxx"
+#include "tile_editor.hxx"
 
 Editor* Editor::current_ = 0;
 
@@ -43,7 +44,7 @@ Editor::Editor()
   tilemap = new EditorTileMap(manager);
   //tilemap->load(datadir + "levels/level1.scm");
 
-  popupmenu = new CL_PopupMenu(manager);
+  popupmenu  = new CL_PopupMenu(manager);
   menu_data  = new CL_MenuData(popupmenu);
   menu_data->insert_item("Hello World");
   menu_data->insert_item("Hello World2");

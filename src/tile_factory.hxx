@@ -1,4 +1,4 @@
-//  $Id: tile_factory.hxx,v 1.7 2003/09/10 13:53:11 grumbel Exp $
+//  $Id: tile_factory.hxx,v 1.8 2003/09/22 18:37:05 grumbel Exp $
 // 
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -38,7 +38,7 @@ public:
   typedef Tiles::iterator iterator;
   
   iterator begin() { return tiles.begin(); }
-  iterator end()   { return tiles.begin(); }
+  iterator end()   { return tiles.end(); }
 
   /** Create a TileFactory from a given tile definition file */
   TileFactory (const std::string& filename);

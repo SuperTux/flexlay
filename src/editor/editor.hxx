@@ -1,4 +1,4 @@
-//  $Id: editor.hxx,v 1.6 2003/09/12 20:17:06 grumbel Exp $
+//  $Id: editor.hxx,v 1.7 2003/09/22 18:37:05 grumbel Exp $
 // 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -23,6 +23,7 @@
 #include <stack>
 #include <ClanLib/gui.h>
 
+class TileEditor;
 class EditorTileMap;
 
 /** */

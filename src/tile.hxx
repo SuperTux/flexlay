@@ -1,4 +1,4 @@
-//  $Id: tile.hxx,v 1.5 2003/08/19 13:40:48 grumbel Exp $
+//  $Id: tile.hxx,v 1.6 2003/09/22 18:37:05 grumbel Exp $
 // 
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -31,17 +31,29 @@ class Tile
 {
 public:
   CL_Sprite sur;
+  int id; 
   unsigned char colmap[8];
+  std::string filename;
 
-  /** @param arg_sur Surface to use 
+  /** @param filename Surface to use 
    *  @param arg_colmap a 8 char long array */
-  Tile(CL_Sprite arg_sur, unsigned char arg_colmap[]);
+  Tile(const std::string& filename, unsigned char arg_colmap[]);
 
   inline bool get_col(unsigned char x, unsigned char  y)
   {
     assert(x < 8);
     assert(y < 8);
     return (colmap[y] & (1 << (7-x)));
+  }
+
+  inline void set_col(unsigned char x, unsigned char  y, bool val)
+  {
+    assert(x < 8);
+    assert(y < 8);
+    if (val)
+      colmap[y] |= (1 << (7-x));
+    else
+      colmap[y] &= ~(1 << (7-x));
   }
 };
 

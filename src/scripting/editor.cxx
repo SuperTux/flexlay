@@ -1,4 +1,4 @@
-//  $Id: editor.cxx,v 1.2 2003/09/17 18:48:45 grumbel Exp $
+//  $Id: editor.cxx,v 1.3 2003/09/22 18:37:05 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -25,6 +25,8 @@
 #include "editor/editor.hxx"
 #include "editor/tile_selector.hxx"
 #include "editor/editor_tilemap.hxx"
+#include "editor/tile_editor.hxx"
+#include "tile_factory.hxx"
 #include "editor.hxx"
 
 void
@@ -47,14 +49,6 @@ editor_add_button(int x, int y, int w, int h, const char* text)
                        text, manager);
 }
 
-CL_Component*
-editor_add_button_func(int x, int y, int w, int h, const char* text, SCM func)
-{
-  CL_Component* comp = editor_add_button(x, y, w, h, text);
-  component_on_click(comp, func);
-  return comp;
-}
-
 void
 component_on_click(CL_Component* comp, SCM func)
 {
@@ -62,6 +56,14 @@ component_on_click(CL_Component* comp, SCM func)
   CL_SlotContainer* slot_container = Editor::current()->get_slot_container();
   
   slot_container->connect_functor(button->sig_clicked(), SCMFunctor(func));
+}
+
+CL_Component*
+editor_add_button_func(int x, int y, int w, int h, const char* text, SCM func)
+{
+  CL_Component* comp = editor_add_button(x, y, w, h, text);
+  component_on_click(comp, func);
+  return comp;
 }
 
 CL_Component* 
@@ -239,6 +241,67 @@ game_play(const char* filename)
   std::cout << "WindstilleGame: Starting level " << filename << std::endl;
   WindstilleGame game (filename);
   game.display ();
+}
+
+CL_Component*
+editor_add_tileeditor(int x, int y)
+{
+  CL_Component* manager = Editor::current()->get_component();
+  return new TileEditor(x, y, manager);
+}
+
+void tileeditor_set_tile(CL_Component* comp, int id)
+{
+  TileEditor* tileeditor = dynamic_cast<TileEditor*>(comp);
+  if (tileeditor)
+    tileeditor->set_tile(TileFactory::current()->create(id));
+}
+
+SCM get_tile_def(Tile* tile)
+{
+  SCM lst = gh_cons(scm_str2symbol("tile"), SCM_EOL);
+
+  if (tile)
+    {
+      lst = gh_cons(gh_list(scm_str2symbol("id"), SCM_MAKINUM(tile->id), (SCM_UNDEFINED)),
+                    lst);
+
+      lst = gh_cons(gh_list(scm_str2symbol("image"), gh_str02scm(tile->filename.c_str()), (SCM_UNDEFINED)),
+                    lst);
+
+      lst = gh_cons(gh_list(scm_str2symbol("colmap"), 
+                            SCM_MAKINUM(tile->colmap[0]),
+                            SCM_MAKINUM(tile->colmap[1]),
+                            SCM_MAKINUM(tile->colmap[2]),
+                            SCM_MAKINUM(tile->colmap[3]),
+                            SCM_MAKINUM(tile->colmap[4]),
+                            SCM_MAKINUM(tile->colmap[5]),
+                            SCM_MAKINUM(tile->colmap[6]),
+                            SCM_MAKINUM(tile->colmap[7]),
+                            SCM_UNDEFINED),
+                    lst);
+    }
+  
+  return gh_reverse(lst);
+}
+
+SCM get_tile_def(int id)
+{
+  return get_tile_def(TileFactory::current()->create(id));
+}
+
+SCM get_tile_defs()
+{
+  SCM lst = gh_cons(scm_str2symbol("windstille-tiles"), SCM_EOL);
+  
+  for (TileFactory::iterator i = TileFactory::current()->begin();
+       i != TileFactory::current()->end();
+       ++i)
+    {
+      lst = gh_cons(get_tile_def((*i).second), lst);
+    }
+
+  return gh_reverse(lst);
 }
 
 /* EOF */

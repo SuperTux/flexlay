@@ -1,4 +1,4 @@
-//  $Id: tile.cxx,v 1.3 2003/08/12 08:24:41 grumbel Exp $
+//  $Id: tile.cxx,v 1.4 2003/09/22 18:37:05 grumbel Exp $
 //
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -17,10 +17,12 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
+#include "globals.hxx"
 #include "tile.hxx"
 
-Tile::Tile(CL_Sprite arg_sur, unsigned char arg_colmap[])
-  : sur(arg_sur)
+Tile::Tile(const std::string& filename, unsigned char arg_colmap[])
+  : sur(filename, resources),
+    filename(filename)
 {
   //sur.set_alignment(origin_center, 0, 0);
   memcpy(colmap, arg_colmap, 8);

@@ -1,8 +1,12 @@
+(use-modules (ice-9 pretty-print))
+
 (load "helper.scm")
 
 (define screen-width  (screen-get-width))
 (define screen-height (screen-get-height))
 (define empty (lambda () #f))
+(define *tileeditor* #f)
+(define *tileeditor-window* #f)
 (define last-files (list "/tmp/foobar.scm"))
 
 (define (push-last-file filename)
@@ -96,7 +100,13 @@
                    (- screen-height 25)
                    100 25 "Select")
 
-(tile-selector-create (- screen-width (* 3 64)) 0 3 18)
+(editor-add-button-func (+ 400)
+                        (- screen-height 25)
+                        100 25 "Tile Editor"
+                        (lambda ()
+                          (component-show *tileeditor-window*)))
+
+(tile-selector-create (- screen-width (* 3 64)) 0 3 8)
 
 (define (show-new-level-dialog)
   (let ((window (editor-add-window 200 200 200 160 "Property Window")))
@@ -140,5 +150,32 @@
                             (component-hide window)))
       (pop-component)
       )))
+
+(define (dump-tile-definitions filename)
+  (with-output-to-file filename
+    (lambda ()
+     (pretty-print (get-tile-defs))
+     (newline)
+     (display ";; EOF ;;\n"))))
+
+(let ((window (editor-add-window 200 200 250 180 "Tile Editor")))
+  (push-component (window-get-client-area window))
+  (set! *tileeditor* (editor-add-tileeditor 10 10))
+  (let ((gettile (editor-add-button 148 10 75 25 "Get Tile"))
+        (close   (editor-add-button 148 45 75 25 "Close"))
+        (dump    (editor-add-button 148 75 75 25 "Dump")))
+    
+    (component-on-click gettile
+                        (lambda ()
+                          (tileeditor-set-tile *tileeditor* (editor-get-brush-tile))))
+    (component-on-click close
+                        (lambda () 
+                          (component-hide window)))
+    (component-on-click dump
+                        (lambda () 
+                          (dump-tile-definitions "/tmp/tiles.scm")))
+
+    (set! *tileeditor-window* window))
+  (pop-component))
 
 ;; EOF ;;

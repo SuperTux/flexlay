@@ -1,4 +1,4 @@
-//  $Id: tile_factory.cxx,v 1.9 2003/09/10 08:25:29 grumbel Exp $
+//  $Id: tile_factory.cxx,v 1.10 2003/09/22 18:37:05 grumbel Exp $
 //
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -134,7 +134,8 @@ TileFactory::parse_tile(SCM data)
                 << std::endl;
     }
 
-  tiles[id] = new Tile(CL_Sprite(image, resources), colmap);
+  tiles[id] = new Tile(image, colmap);
+  tiles[id]->id = id;
 }
 
 Tile* 

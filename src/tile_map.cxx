@@ -1,4 +1,4 @@
-//  $Id: tile_map.cxx,v 1.14 2003/09/13 10:11:33 grumbel Exp $
+//  $Id: tile_map.cxx,v 1.15 2003/09/13 18:01:17 grumbel Exp $
 //
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -26,6 +26,11 @@
 #include "globals.hxx"
 
 extern CL_ResourceManager* resources;
+
+TileMap::TileMap(int w, int h)
+  : field(w, h)
+{
+}
 
 TileMap::TileMap (Field<int>* data)
   : field(data->get_width(),

@@ -1,4 +1,4 @@
-//  $Id: game_world.hxx,v 1.5 2003/09/12 20:17:06 grumbel Exp $
+//  $Id: game_world.hxx,v 1.6 2003/09/13 18:01:17 grumbel Exp $
 // 
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -43,6 +43,7 @@ private:
 public:
   static GameWorld* current() { return current_; }
 
+  GameWorld (int w, int h);
   GameWorld (const std::string& filename);
   ~GameWorld();
   

@@ -514,7 +514,8 @@ SWIG_Guile_GetArgs (SCM *dest, SCM rest,
 /* -------- TYPES TABLE (BEGIN) -------- */
 
 #define  SWIGTYPE_p_CL_Component swig_types[0] 
-static swig_type_info *swig_types[2];
+#define  SWIGTYPE_p_GameWorld swig_types[1] 
+static swig_type_info *swig_types[3];
 
 /* -------- TYPES TABLE (END) -------- */
 
@@ -1420,6 +1421,58 @@ _wrap_game_set_player (SCM s_0, SCM s_1)
 }
 
 
+static SCM
+_wrap_make_game_world (SCM s_0, SCM s_1)
+{
+    #define FUNC_NAME "make-game-world"
+    int arg1 ;
+    int arg2 ;
+    GameWorld *result;
+    SCM gswig_result;
+    int gswig_list_p = 0;
+    
+    {
+        arg1 = gh_scm2int(s_0);
+    }
+    {
+        arg2 = gh_scm2int(s_1);
+    }
+    gh_defer_ints();
+    result = (GameWorld *)make_game_world(arg1,arg2);
+    
+    gh_allow_ints();
+    {
+        gswig_result = SWIG_Guile_MakePtr (result, SWIGTYPE_p_GameWorld);
+    }
+    
+    return gswig_result;
+    #undef FUNC_NAME
+}
+
+
+static SCM
+_wrap_start_game (SCM s_0)
+{
+    #define FUNC_NAME "start-game"
+    GameWorld *arg1 = (GameWorld *) 0 ;
+    SCM gswig_result;
+    int gswig_list_p = 0;
+    
+    {
+        if (SWIG_Guile_GetPtr(s_0, (void **) &arg1, SWIGTYPE_p_GameWorld))
+        scm_wrong_type_arg(FUNC_NAME, 1, s_0);
+    }
+    gh_defer_ints();
+    start_game(arg1);
+    
+    gh_allow_ints();
+    gswig_result = GH_UNSPECIFIED;
+    
+    return gswig_result;
+    #undef FUNC_NAME
+}
+
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -1427,9 +1480,11 @@ extern "C" {
 /* -------- TYPE CONVERSION AND EQUIVALENCE RULES (BEGIN) -------- */
 
 static swig_type_info _swigt__p_CL_Component[] = {{"_p_CL_Component", 0, "CL_Component *", 0},{"_p_CL_Component"},{0}};
+static swig_type_info _swigt__p_GameWorld[] = {{"_p_GameWorld", 0, "GameWorld *", 0},{"_p_GameWorld"},{0}};
 
 static swig_type_info *swig_types_initial[] = {
 _swigt__p_CL_Component, 
+_swigt__p_GameWorld, 
 0
 };
 
@@ -1477,6 +1532,8 @@ SWIG_init (void)
     gh_new_procedure("game-add-water", (swig_guile_proc) _wrap_game_add_water, 4, 0, 0);
     gh_new_procedure("game-add-igel", (swig_guile_proc) _wrap_game_add_igel, 2, 0, 0);
     gh_new_procedure("game-set-player", (swig_guile_proc) _wrap_game_set_player, 2, 0, 0);
+    gh_new_procedure("make-game-world", (swig_guile_proc) _wrap_make_game_world, 2, 0, 0);
+    gh_new_procedure("start-game", (swig_guile_proc) _wrap_start_game, 1, 0, 0);
     SWIG_Guile_RegisterTypes(swig_types, swig_types_initial);
 }
 

@@ -1,4 +1,4 @@
-//  $Id: game.cxx,v 1.2 2003/09/13 10:11:33 grumbel Exp $
+//  $Id: game.cxx,v 1.3 2003/09/13 18:01:17 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -21,6 +21,7 @@
 #include "water_map.hxx"
 #include "game_world.hxx"
 #include "igel.hxx"
+#include "windstille_game.hxx"
 #include "player.hxx"
 
 void
@@ -39,6 +40,17 @@ void
 game_set_player(float x, float y)
 {
   Player::current()->set_position(CL_Vector(x, y));
+}
+
+GameWorld* make_game_world(int w, int h)
+{
+  return new GameWorld(w, h);
+}
+
+void start_game(GameWorld* world)
+{
+  WindstilleGame game (world);
+  game.display ();
 }
 
 /* EOF */

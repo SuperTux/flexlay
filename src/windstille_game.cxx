@@ -1,4 +1,4 @@
-//  $Id: windstille_game.cxx,v 1.14 2003/09/13 10:19:08 grumbel Exp $
+//  $Id: windstille_game.cxx,v 1.15 2003/09/13 18:01:17 grumbel Exp $
 //
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -38,9 +38,20 @@
 #include "guile_gameobj_factory.hxx"
 #include "windstille_game.hxx"
 
-WindstilleGame::WindstilleGame (const std::string& arg_filename)
+WindstilleGame::WindstilleGame(const std::string& arg_filename)
   : filename (arg_filename)
 {
+  world = new GameWorld(filename);
+}
+
+WindstilleGame::WindstilleGame(GameWorld* w)
+{
+  world = w;
+}
+
+WindstilleGame::~WindstilleGame()
+{
+  delete world;
 }
 
 void
@@ -75,23 +86,22 @@ WindstilleGame::display ()
 
   Energiebar energiebar;
 
-  GameWorld world (filename);
-  GameObj::set_world (&world);
+  GameObj::set_world (world);
 
   if (0)
     {
-      world.add (new Dog (CL_Vector (320, 200), WEST));
-      world.add (new Dog (CL_Vector (320, 200), EAST));
+      world->add (new Dog (CL_Vector (320, 200), WEST));
+      world->add (new Dog (CL_Vector (320, 200), EAST));
 
-      world.add (new ShildPowerUp (CL_Vector (420, 600)));
-      world.add (new ShildPowerUp (CL_Vector (220, 1400)));
-      world.add (new ShildPowerUp (CL_Vector (120, 1200)));
-      world.add (new SpreadPowerUp (CL_Vector (120, 600)));
+      world->add (new ShildPowerUp (CL_Vector (420, 600)));
+      world->add (new ShildPowerUp (CL_Vector (220, 1400)));
+      world->add (new ShildPowerUp (CL_Vector (120, 1200)));
+      world->add (new SpreadPowerUp (CL_Vector (120, 600)));
 
-      world.add (new BonusFlyer (CL_Vector2 (100, 600)));
+      world->add (new BonusFlyer (CL_Vector2 (100, 600)));
     }
 
-  world.add_player (&player1);
+  world->add_player (&player1);
   CL_Sprite logo("logo", resources);
   CL_Sprite logo_black("logo_black", resources);
   float blink = 0.0f;
@@ -139,12 +149,12 @@ WindstilleGame::display ()
           while (d > step)
             {
               view.update (step);
-              world.update (step);
+              world->update (step);
               energiebar.update(step);
               d -= step;
             }
           view.update (d);
-          world.update (d);
+          world->update (d);
           energiebar.update(d);
       }
 
@@ -229,13 +239,12 @@ WindstilleGame::display ()
         }
 
       energiebar.draw();
-      CL_Display::flip ();
+      CL_Display::flip();
 	
-      //world.add (new AnimationObj ("shoot/explosion", CL_Vector (rand ()% 800, rand ()%600)));
+      //world->add (new AnimationObj ("shoot/explosion", CL_Vector (rand ()% 800, rand ()%600)));
 
       CL_System::keep_alive ();
     } 
 }
-
 
 /* EOF */

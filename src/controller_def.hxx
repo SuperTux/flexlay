@@ -1,5 +1,5 @@
-//  $Id: screen.cxx,v 1.3 2003/10/10 21:06:22 grumbel Exp $
-//
+//  $Id$
+// 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
 //
@@ -12,57 +12,34 @@
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
-//
+// 
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-#include "delta_manager.hxx"
-#include "screen.hxx"
+#ifndef HEADER_CONTROLLER_DEF_HXX
+#define HEADER_CONTROLLER_DEF_HXX
 
-namespace Windstille {
+#include <string>
 
-Screen::Screen()
+//enum AxisName       { ORIENTATION_AXIS, ACCELERATE_AXIS, STRAFE_AXIS };
+enum ButtonName     { UP_BUTTON, DOWN_BUTTON, LEFT_BUTTON, RIGHT_BUTTON, FIRE_BUTTON, JUMP_BUTTON };
+
+/** */
+class ControllerDef
 {
-}
+private:
+public:
+  static int         get_button_count();
+  static int         get_axis_count();
 
-void 
-Screen::display()
-{
-  do_pause = false;
-  do_quit  = false;
+  static std::string button_id2name(int id);
+  static int         button_name2id(const std::string& name);
 
-  on_startup();
+  static std::string axis_id2name(int id);
+  static int         axis_name2id(const std::string& name);
+};
 
-  DeltaManager delta_manager;
-  
-  while (!do_quit)
-    {
-      draw();
-      
-#if 0
-      float delta = delta_manager.getset ();
-      if (!do_pause)
-        {
-          float step = 10/1000.0f;
-          
-          while (delta > step)
-            {
-              update(step);
-              delta -= step;
-            }
-          update(delta);
-        }
 #endif
-      update(0.020f);
-
-      CL_System::keep_alive ();
-      CL_System::sleep (1);
-    }
-
-  on_shutdown();
-}
-
-} // namespace Windstille
 
 /* EOF */

@@ -1,10 +1,11 @@
-SUBDIRS = editor guile collision scripting guistyle
+SUBDIRS = editor guile collision scripting guistyle input
 
 bindir=$(prefix)/games
 
 bin_PROGRAMS = windstille
 
 windstille_SOURCES = \
+  assert.hxx \
   animation_obj.cxx \
   animation_obj.hxx \
   background.hxx \
@@ -15,8 +16,8 @@ windstille_SOURCES = \
   brush.cxx \
   bonus_flyer.cxx \
   bonus_flyer.hxx \
-  controller.hxx \
-  controller.cxx \
+  controller_def.hxx \
+  controller_def.cxx \
   diamond_map.hxx \
   diamond_map.cxx \
   default_shoot.cxx \
@@ -33,8 +34,8 @@ windstille_SOURCES = \
   field.hxx \
   fonts.hxx \
   fonts.cxx \
-  gamepad_controller.cxx \
-  gamepad_controller.hxx \
+  guile.hxx \
+  guile.cxx \
   game_delta.hxx \
   game_world.cxx \
   game_world.hxx \
@@ -52,8 +53,6 @@ windstille_SOURCES = \
   igel.cxx \
   music_manager.hxx \
   music_manager.cxx \
-  keyboard_controller.cxx \
-  keyboard_controller.hxx \
   laser_shoot.cxx \
   laser_shoot.hxx \
   player.cxx \
@@ -70,6 +69,8 @@ windstille_SOURCES = \
   sprite.hxx \
   screen.hxx \
   screen.cxx \
+  screenshot.hxx \
+  screenshot.cxx \
   string_converter.hxx \
   tile.cxx \
   tile.hxx \
@@ -105,6 +106,7 @@ windstille_LDADD = \
   editor/libwindstille_editor.a \
   collision/libwindstille_collision.a \
   guistyle/libwindstille_guistyle.a \
+  input/libfeuerkraft_input.a \
   @WINDSTILLE_LIBS@
 
 windstille_CPPFLAGS = \

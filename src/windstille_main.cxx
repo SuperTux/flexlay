@@ -35,14 +35,14 @@
 #include "windstille_level.hxx"
 #include "windstille_main.hxx"
 #include "windstille_menu.hxx"
-#include "keyboard_controller.hxx"
-#include "gamepad_controller.hxx"
 #include "fonts.hxx"
+#include "input/input_manager.hxx"
 #include "music_manager.hxx"
 #include "tile_factory.hxx"
 
 extern "C" void SWIG_init(void);
 
+WindstilleMain main_app;
 CL_ResourceManager* resources;
 
 WindstilleMain::WindstilleMain()
@@ -55,7 +55,6 @@ WindstilleMain::WindstilleMain()
   fullscreen    = false;
 #endif
   allow_resize  = false;
-  joystick_id   = -1;
   launch_editor = false;
 }
 
@@ -81,12 +80,17 @@ WindstilleMain::parse_command_line(int argc, char** argv)
   argp.add_option('S', "enable-sound", "", "Enable sound");
 
   argp.add_group("Controlls Options:");
-  argp.add_option('j', "joystick", "NUM", "Use joystick number NUM instead of keyboard");
+  argp.add_option('c', "controller", "FILE", "Use controller as defined in FILE");
 
   argp.add_group("Misc Options:");
   argp.add_option('e', "editor",     "", "Launch the level editor");
   argp.add_option('d', "debug",      "", "Turn on debug output");
   argp.add_option('h', "help",       "", "Print this help");
+
+  argp.add_group("Demo Recording/Playback Options:");
+  argp.add_option('r', "record",      "FILE", "Record input events to FILE");
+  argp.add_option('a', "record-video","DIR",  "Record a gameplay video to DIR");
+  argp.add_option('p', "play",        "FILE", "Playback input events from FILE");
 
   argp.parse_args(argc, argv);
 
@@ -94,6 +98,18 @@ WindstilleMain::parse_command_line(int argc, char** argv)
     {
       switch (argp.get_key())
         {
+        case 'r':
+          recorder_file = argp.get_argument();
+          break;
+
+        case 'a':
+          screenshot_dir = argp.get_argument();
+          break;
+
+        case 'p':
+          playback_file = argp.get_argument();
+          break;
+
         case 'd':
           debug = 1;
           break;
@@ -121,11 +137,8 @@ WindstilleMain::parse_command_line(int argc, char** argv)
           sound_disabled = false;
           break;  
 
-        case 'j':
-          if (!from_string(argp.get_argument(), joystick_id)) {
-            std::cout << "Error: Couldn't convert '" << argp.get_argument() << "' to joystick_id" 
-                      << std::endl;
-          }
+        case 'c':
+          controller_file = argp.get_argument();
           break;
 
         case 'h':
@@ -176,13 +189,15 @@ WindstilleMain::main(int argc, char** argv)
     init_modules();
     
     std::cout << "Detected " << CL_Joystick::get_device_count() << " joysticks" << std::endl;
-
-    // FIXME:
-    if (joystick_id != -1)
-      new GamepadController(joystick_id);
-    else
-      new KeyboardController();
         
+    if (playback_file.empty())
+      InputManager::init(controller_file);
+    else
+      InputManager::init_playback(playback_file);
+
+    if (!recorder_file.empty())
+      InputManager::setup_recorder(recorder_file);
+
     TileFactory::init();
     if (!launch_editor && levelfile.empty())
       {
@@ -204,6 +219,7 @@ WindstilleMain::main(int argc, char** argv)
         editor.run();
       }
     TileFactory::deinit();
+    InputManager::deinit();
 
     deinit_modules();
 

@@ -21,7 +21,8 @@
 #include <iostream>
 #include "fonts.hxx"
 #include "windstille_game.hxx"
-#include "controller.hxx"
+#include "input/controller.hxx"
+#include "input/input_manager.hxx"
 #include "dialog_manager.hxx"
 
 DialogManager* DialogManager::current_ = 0;
@@ -109,24 +110,26 @@ DialogManager::update(float delta)
 {
   if (current_dialog != -1)
     {
-      Controller::Events& events = Controller::current()->get_events();
+      InputEventLst events = InputManager::get_controller().get_events();
 
-      for (Controller::Events::iterator i = events.begin();
-           i != events.end(); ++i)
+      for (InputEventLst::iterator i = events.begin(); i != events.end(); ++i)
         {
-          if ((*i).type == InputEvent::FIRE && (*i).state == true)
+          if ((*i).type == BUTTON_EVENT)
+            {
+          if ((*i).button.name == FIRE_BUTTON && (*i).button.down == true)
             {
               WindstilleGame::current()->set_game_state();
               if (dialogs[current_dialog].answers.size() > 0)
                 dialogs[current_dialog].answers[current_choice].second();
             }
-          else if ((*i).type == InputEvent::LEFT && (*i).state == true)
+          else if ((*i).button.name == LEFT_BUTTON && (*i).button.down == true)
             {
               current_choice -= 1;
             }
-          else if ((*i).type == InputEvent::RIGHT && (*i).state == true)
+          else if ((*i).button.name == RIGHT_BUTTON && (*i).button.down == true)
             {
               current_choice += 1;
+            }
             }
         }
 

@@ -1,5 +1,5 @@
-//  $Id: screen.cxx,v 1.3 2003/10/10 21:06:22 grumbel Exp $
-//
+//  $Id: assert.hxx,v 1.4 2003/06/20 20:54:23 grumbel Exp $
+// 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
 //
@@ -12,57 +12,38 @@
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
-//
+// 
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-#include "delta_manager.hxx"
-#include "screen.hxx"
+#ifndef HEADER_ASSERT_HXX
+#define HEADER_ASSERT_HXX
 
-namespace Windstille {
+#include <assert.h>
+#include <stdlib.h>
+#include <iostream>
 
-Screen::Screen()
-{
-}
+// A collection of assert helper functions
 
-void 
-Screen::display()
-{
-  do_pause = false;
-  do_quit  = false;
-
-  on_startup();
-
-  DeltaManager delta_manager;
-  
-  while (!do_quit)
-    {
-      draw();
-      
-#if 0
-      float delta = delta_manager.getset ();
-      if (!do_pause)
-        {
-          float step = 10/1000.0f;
-          
-          while (delta > step)
-            {
-              update(step);
-              delta -= step;
-            }
-          update(delta);
-        }
+#ifdef NDEBUG
+#  define AssertMsg(assert, message)
+#  define Bailout(message)
+#else 
+#  define AssertMsg(assert, message) \
+  if (assert) \
+  { \
+  } \
+  else \
+  { \
+    std::cout << "!!!!!!!!!!!!! Assert !!!!!!!!!!!!!!!!!!\n" \
+      << __FILE__ << ":" << __LINE__ << ": assertion '" << #assert << "' failed" << std::endl \
+      << "Func: " << __PRETTY_FUNCTION__ << std::endl << "Msg:  " << message << std::endl; \
+    exit(EXIT_FAILURE); \
+  }
+#  define Bailout(message) assert(!message)
 #endif
-      update(0.020f);
 
-      CL_System::keep_alive ();
-      CL_System::sleep (1);
-    }
-
-  on_shutdown();
-}
-
-} // namespace Windstille
+#endif
 
 /* EOF */

@@ -24,6 +24,7 @@
 #include <ClanLib/gl.h>
 #include <ClanLib/display.h>
 
+#include "input/controller.hxx"
 #include "globals.hxx"
 #include "gameobj.hxx"
 
@@ -48,7 +49,7 @@ struct SubTilePos {
 class Player : public GameObj
 {
 private:
-  Controller* controller;
+  Controller controller;
 
   /** Position as a float */
   CL_Vector pos;
@@ -91,7 +92,7 @@ private:
   double reload_time;
   static Player* current_;
 public:
-  Player (Controller*);
+  Player ();
   virtual ~Player () {}
 
   static Player* current() { return current_; }

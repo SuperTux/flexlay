@@ -22,7 +22,9 @@
 #include "game_world.hxx"
 #include "default_shoot.hxx"
 #include "laser_shoot.hxx"
-#include "controller.hxx"
+#include "input/controller.hxx"
+#include "input/input_manager.hxx"
+#include "controller_def.hxx"
 #include "player.hxx"
 #include "bomb.hxx"
 #include "globals.hxx"
@@ -31,8 +33,7 @@
 
 Player* Player::current_ = 0;
 
-Player::Player (Controller* c) :
-  controller (c),
+Player::Player () :
   pos (320, 500),
   velocity (0, 0),
   
@@ -146,6 +147,8 @@ Player::get_subtile_pos()
 void 
 Player::update (float delta)
 {
+  controller = InputManager::get_controller();
+
   if (state == KILLED)
     {
       switch (ground_state)
@@ -164,7 +167,7 @@ Player::update (float delta)
     }
   else if (state == DEAD)
     {
-      if (controller->get_state(InputEvent::FIRE))
+      if (controller.get_button_state(FIRE_BUTTON))
         {
           set_position(CL_Vector(258, 485));
           set_direction(EAST);
@@ -183,9 +186,9 @@ Player::update (float delta)
 
       walk.update(delta);
   
-      if (controller->get_state(InputEvent::LEFT))
+      if (controller.get_button_state(LEFT_BUTTON))
         direction = WEST;
-      else if  (controller->get_state(InputEvent::RIGHT))
+      else if  (controller.get_button_state(RIGHT_BUTTON))
         direction = EAST;
 
       switch(ground_state)
@@ -222,7 +225,7 @@ Player::update_shooting (float delta)
   switch (gun_state)
     {
     case GUN_READY:
-      if (controller->get_state(InputEvent::FIRE))
+      if (controller.get_button_state(FIRE_BUTTON))
         {
           //get_world ()->add (new DefaultShoot (pos, (DefaultShoot::DirectionState) direction));
           get_world ()->add (new LaserShoot (pos, direction, 5));
@@ -243,7 +246,7 @@ Player::update_ground (float delta)
 {
   velocity = CL_Vector();
 
-  if (controller->get_state(InputEvent::JUMP) && !jumping)
+  if (controller.get_button_state(JUMP_BUTTON) && !jumping)
     {
       jumping = true;
       velocity.y = -750;
@@ -251,15 +254,15 @@ Player::update_ground (float delta)
     } 
   else
     {
-      if (!controller->get_state(InputEvent::JUMP))
+      if (!controller.get_button_state(JUMP_BUTTON))
         jumping = false;
 
       float tmp_x_pos = pos.x;
 
-      if (controller->get_state(InputEvent::DOWN))
+      if (controller.get_button_state(DOWN_BUTTON))
         {
           state = SITTING;
-          if (controller->get_state(InputEvent::FIRE) && !bomb_placed)
+          if (controller.get_button_state(FIRE_BUTTON) && !bomb_placed)
             {
               GameWorld::current()->add(new Bomb(int(pos.x), int(pos.y)));
               bomb_placed = true;
@@ -268,12 +271,12 @@ Player::update_ground (float delta)
       else
         {
           bomb_placed = false;
-          if (controller->get_state(InputEvent::LEFT))
+          if (controller.get_button_state(LEFT_BUTTON))
             {
               pos.x -= 300 * delta;
               state = WALKING;
             }
-          else if (controller->get_state(InputEvent::RIGHT))
+          else if (controller.get_button_state(RIGHT_BUTTON))
             {
               pos.x += 300 * delta;
               state = WALKING;
@@ -295,16 +298,16 @@ Player::update_ground (float delta)
 void 
 Player::update_air (float delta)
 {
-  if (!controller->get_state(InputEvent::JUMP) && velocity.y < 0) 
+  if (!controller.get_button_state(JUMP_BUTTON) && velocity.y < 0) 
     {
       velocity.y = velocity.y/2;
       //ground_state = IN_AIR;
     }
 
   float tmp_x_pos = pos.x;
-  if (controller->get_state(InputEvent::LEFT))
+  if (controller.get_button_state(LEFT_BUTTON))
     pos.x -= 300 * delta;
-  else if (controller->get_state(InputEvent::RIGHT))
+  else if (controller.get_button_state(RIGHT_BUTTON))
     pos.x += 300 * delta;
   if (stuck ())
     pos.x = tmp_x_pos;

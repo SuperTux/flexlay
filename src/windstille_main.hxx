@@ -25,15 +25,18 @@
 
 class WindstilleMain : public CL_ClanApplication
 {
-private:
+public:
   int  screen_width;
   int  screen_height;
   bool fullscreen;
   bool allow_resize;
-  int  joystick_id;
 
   bool launch_editor;
   std::string levelfile;
+  std::string controller_file;
+  std::string recorder_file;
+  std::string playback_file;
+  std::string screenshot_dir;
   
   CL_SoundOutput*   sound;
   CL_DisplayWindow* window;
@@ -48,7 +51,9 @@ private:
   void parse_command_line(int argc, char** argv);
   void init_modules();
   void deinit_modules();
-} main_app;
+};
+
+extern WindstilleMain main_app;
 
 #endif
 

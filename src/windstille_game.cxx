@@ -19,12 +19,11 @@
 
 #include <math.h>
 #include <ClanLib/gl.h>
+#include <sstream>
 
 #include "fonts.hxx"
 #include "game_world.hxx"
 #include "gameobj.hxx"
-#include "gamepad_controller.hxx"
-#include "keyboard_controller.hxx"
 #include "player.hxx"
 #include "animation_obj.hxx"
 #include "tile_map.hxx"
@@ -39,6 +38,9 @@
 #include "gui_manager.hxx"
 #include "view_component.hxx"
 #include "dialog_manager.hxx"
+#include "windstille_main.hxx"
+#include "screenshot.hxx"
+#include "input/input_manager.hxx"
 
 #include "guile_gameobj_factory.hxx"
 #include "windstille_game.hxx"
@@ -48,7 +50,7 @@ using namespace Windstille;
 WindstilleGame* WindstilleGame::current_ = 0; 
 
 WindstilleGame::WindstilleGame(const std::string& arg_filename)
-  : filename (arg_filename)
+  : frames(0), filename (arg_filename)
 {
   current_ = this;
   world = new GameWorld(filename);
@@ -140,11 +142,23 @@ WindstilleGame::draw()
     }
 
   CL_Display::flip();
+
+  if (!main_app.screenshot_dir.empty())
+    {
+      std::stringstream filename;
+      filename << main_app.screenshot_dir;
+      filename.width(8);
+      filename.fill('0');
+      filename << frames;
+      filename << ".ppm";
+      Screenshot::write_screenshot_pnm(filename.str());
+    }
 }
 
 void
 WindstilleGame::update(float delta)
 {
+  InputManager::update(delta);
   delta *= game_speed;
 
   view->update (delta);
@@ -185,7 +199,7 @@ WindstilleGame::update(float delta)
   if (CL_Keyboard::get_keycode(CL_KEY_ESCAPE))
     quit();
   
-  Controller::current()->clear();
+  InputManager::clear();
 
   blink += delta * 3.141f;
   GUIManager::current()->update();
@@ -201,7 +215,7 @@ WindstilleGame::on_startup ()
 
   GameObj::set_world (world);
   
-  player = new Player(Controller::current());
+  player = new Player();
   view   = new PlayerView(player);
   
   // FIXME: Mem leak

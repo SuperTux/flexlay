@@ -1,5 +1,5 @@
-//  $Id: screen.cxx,v 1.3 2003/10/10 21:06:22 grumbel Exp $
-//
+//  $Id$
+// 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
 //
@@ -12,57 +12,30 @@
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
-//
+// 
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-#include "delta_manager.hxx"
-#include "screen.hxx"
+#ifndef HEADER_SCREENSHOT_HXX
+#define HEADER_SCREENSHOT_HXX
 
-namespace Windstille {
+#include <string>
 
-Screen::Screen()
+class CL_PixelBuffer;
+
+/** */
+class Screenshot
 {
-}
+private:
+public:
+  static CL_PixelBuffer* take_screen_shot();
+  static void write_screenshot_pnm(const std::string& filename);
+private:
+  Screenshot (const Screenshot&);
+  Screenshot& operator= (const Screenshot&);
+};
 
-void 
-Screen::display()
-{
-  do_pause = false;
-  do_quit  = false;
-
-  on_startup();
-
-  DeltaManager delta_manager;
-  
-  while (!do_quit)
-    {
-      draw();
-      
-#if 0
-      float delta = delta_manager.getset ();
-      if (!do_pause)
-        {
-          float step = 10/1000.0f;
-          
-          while (delta > step)
-            {
-              update(step);
-              delta -= step;
-            }
-          update(delta);
-        }
 #endif
-      update(0.020f);
-
-      CL_System::keep_alive ();
-      CL_System::sleep (1);
-    }
-
-  on_shutdown();
-}
-
-} // namespace Windstille
 
 /* EOF */

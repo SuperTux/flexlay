@@ -26,11 +26,12 @@
 #include <ClanLib/Display/keyboard.h>
 #include "globals.hxx"
 #include "fonts.hxx"
-#include "controller.hxx"
+#include "input/controller.hxx"
 #include "windstille_menu.hxx"
 #include "windstille_game.hxx"
 #include "music_manager.hxx"
 #include "windstille_bonus.hxx"
+#include "input/input_manager.hxx"
 #include "editor/editor.hxx"
 
 WindstilleMenu::WindstilleMenu()
@@ -50,6 +51,8 @@ WindstilleMenu::~WindstilleMenu()
 void
 WindstilleMenu::update(float delta)
 {
+  InputManager::update(delta);
+
   passed_time += delta;
 
   background.update(delta);
@@ -58,60 +61,63 @@ WindstilleMenu::update(float delta)
   if (CL_Keyboard::get_keycode(CL_KEY_ESCAPE))
     quit();
 
-  Controller::Events& events = Controller::current()->get_events();
+  InputEventLst events = InputManager::get_controller().get_events();
 
-  for (Controller::Events::iterator i = events.begin();
+  for (InputEventLst::iterator i = events.begin();
        i != events.end(); ++i)
     {
-      if ((*i).type == InputEvent::FIRE && (*i).state == true)
+      if ((*i).type == BUTTON_EVENT)
         {
-          if ((current_choice == 2 && !bonus_active)
-              || (current_choice == 3 && bonus_active))// QUIT
+          if ((*i).button.name == FIRE_BUTTON && (*i).button.down == true)
             {
-              fadeout();
-              quit();
-              break;
+              if ((current_choice == 2 && !bonus_active)
+                  || (current_choice == 3 && bonus_active))// QUIT
+                {
+                  fadeout();
+                  quit();
+                  break;
+                }
+              else if (current_choice == 2 && bonus_active)
+                {
+                  MusicManager::current()->stop();
+                  fadeout();
+                  WindstilleBonus bonus;
+                  bonus.display();
+                  on_startup();
+                  break;
+                }
+              else if (current_choice == 0) // start game
+                {
+                  MusicManager::current()->stop();
+                  InputManager::clear();
+                  fadeout();
+                  WindstilleGame game(datadir + "levels/level9.scm");
+                  game.display ();
+                  on_startup();
+                  break;
+                }
+              else if (current_choice == 1) // start editor
+                {
+                  MusicManager::current()->stop();
+                  InputManager::clear();
+                  fadeout();
+                  Editor editor;
+                  editor.run();
+                  on_startup();
+                  break;
+                }
             }
-          else if (current_choice == 2 && bonus_active)
+          else if (((*i).button.name == JUMP_BUTTON || (*i).button.name == UP_BUTTON)
+                   && (*i).button.down == true)
             {
-              MusicManager::current()->stop();
-              fadeout();
-              WindstilleBonus bonus;
-              bonus.display();
-              on_startup();
-              break;
+              current_choice -= 1;
+              passed_time = 0;
             }
-          else if (current_choice == 0) // start game
+          else if ((*i).button.name == DOWN_BUTTON && (*i).button.down == true)
             {
-              MusicManager::current()->stop();
-              Controller::current()->clear();
-              fadeout();
-              WindstilleGame game(datadir + "levels/level9.scm");
-              game.display ();
-              on_startup();
-              break;
+              current_choice += 1;
+              passed_time = 0;
             }
-          else if (current_choice == 1) // start editor
-            {
-              MusicManager::current()->stop();
-              Controller::current()->clear();
-              fadeout();
-              Editor editor;
-              editor.run();
-              on_startup();
-              break;
-            }
-        }
-      else if (((*i).type == InputEvent::JUMP || (*i).type == InputEvent::UP)
-               && (*i).state == true)
-        {
-          current_choice -= 1;
-          passed_time = 0;
-        }
-      else if ((*i).type == InputEvent::DOWN && (*i).state == true)
-        {
-          current_choice += 1;
-          passed_time = 0;
         }
     }
 
@@ -130,7 +136,7 @@ WindstilleMenu::update(float delta)
   else if (current_choice > 3 && bonus_active)
     current_choice = 0;
 
-  Controller::current()->clear();
+  InputManager::clear();
 }
 
 void

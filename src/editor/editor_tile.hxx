@@ -27,6 +27,7 @@
 class EditorTile
 {
 private:
+  // FIXME: Make EditorTile a internal part of EditorTileMap
   Tile* tile;
   int id;
 public:

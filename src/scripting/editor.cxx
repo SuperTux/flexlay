@@ -56,6 +56,34 @@ editor_get_brush_tile()
   return editor_get_tilemap()->brush_tile;
 }
 
+void 
+editor_tilemap_draw_brush(int pos_x, int pos_y, SCM brush)
+{
+  // FIXME: Integrate this with tools probally
+  EditorTileMap* tilemap = editor_get_tilemap();
+
+  int brush_width  = gh_scm2int(gh_car(brush));
+  int brush_height = gh_scm2int(gh_cadr(brush));
+  SCM brush_data   = gh_caddr(brush);
+
+  assert(brush_width*brush_height == static_cast<int>(gh_vector_length(brush_data)));
+
+  Field<EditorTile*>* field = tilemap->get_field();
+
+  int start_x = std::max(0, -pos_x);
+  int start_y = std::max(0, -pos_y);
+
+  int end_x = std::min(brush_width,  field->get_width()  - pos_x);
+  int end_y = std::min(brush_height, field->get_height() - pos_y);
+
+  for (int y = start_y; y < end_y; ++y)
+    for (int x = start_x; x < end_x; ++x)
+      {
+        field->at(pos_x + x, pos_y + y)
+          ->set_tile(gh_scm2int(scm_vector_ref(brush_data, SCM_MAKINUM(x + (y * brush_width)))));
+      }
+}
+
 int
 screen_get_width()
 {

@@ -1,6 +1,3 @@
-(use-modules (ice-9 readline))
-(activate-readline)
-
 (load "helper.scm")
 
 (define screen-width  (screen-get-width))

@@ -1,6 +1,3 @@
-;;(start-game (make-game-world 10 10))
-(use-modules (ice-9 readline))
-(activate-readline)
 
 (load "helper.scm")
 

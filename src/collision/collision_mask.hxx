@@ -1,4 +1,4 @@
-//  $Id: collision_mask.hxx,v 1.2 2003/09/01 20:56:48 grumbel Exp $
+//  $Id: collision_mask.hxx,v 1.3 2003/09/01 23:43:16 grumbel Exp $
 // 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -22,14 +22,16 @@
 
 #include <ClanLib/Core/IOData/datatypes.h>
 
+typedef unsigned int cm_uint32;
+
 /** */
 class CollisionMask
 {
 private:
   static const int int_width;
-  cl_uint32* data;
+  cm_uint32* data;
 
-  /** Width of the collision mask in cl_uint32's */
+  /** Width of the collision mask in cm_uint32's */
   int width;
   int height;
   int pitch;
@@ -38,7 +40,7 @@ public:
   CollisionMask(int width, int height);
 
   /** Generate a collision mask from a given bitmap */
-  CollisionMask(int width, int height, cl_uint32* data);
+  CollisionMask(int width, int height, cm_uint32* data);
   
   /** Creates a collision mask from a file */
   CollisionMask(const std::string filename);
@@ -50,7 +52,7 @@ public:
    *  @param x  X in tile units (pixels/32)
    *  @param y  Y in pixel units
    */
-  inline cl_uint32 get_line(int x, int y) const;
+  inline cm_uint32 get_line(int x, int y) const;
 
   inline void put_pixel(int x, int y, bool pixel);
   inline bool get_pixel(int x, int y) const;
@@ -66,14 +68,14 @@ public:
       masks */
   bool bbox_collides_with (const CollisionMask& mask, int x_of, int y_of) const;
 
-  /** Checks pixel precisly if the two collision masks collide */
-  bool pixel_collides_with(const CollisionMask& mask, int x_of, int y_of) const;
-
   /** Checks pixel precisly if the two collision masks collide, in a
       slow but safe way */
   bool slow_pixel_collides_with(const CollisionMask& mask, int x_of, int y_of) const;
 
 private:
+  /** Checks pixel precisly if the two collision masks collide */
+  bool pixel_collides_with(const CollisionMask& mask, int x_of, int y_of) const;
+
   CollisionMask (const CollisionMask&);
   CollisionMask& operator= (const CollisionMask&);
 };

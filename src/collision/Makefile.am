@@ -1,4 +1,4 @@
-AM_CXXFLAGS = -O0 -g -Wall -Werror
+AM_CXXFLAGS = -O0 -g -Wall
 
 noinst_LIBRARIES = libwindstille_collision.a
 

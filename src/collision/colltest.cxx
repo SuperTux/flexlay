@@ -1,4 +1,4 @@
-//  $Id: colltest.cxx,v 1.1 2003/09/01 20:56:57 grumbel Exp $
+//  $Id: colltest.cxx,v 1.2 2003/09/01 23:43:16 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -38,10 +38,10 @@ public:
         CL_DisplayWindow window("colltest", 640, 480, false, false);
 
         CollisionMask mask1("../../data/images/colltest2.png");
-        CollisionMask mask2("../../data/images/colltest2.png");
+        CollisionMask mask2("../../data/images/colltest.png");
 
         CL_Surface sprite1("../../data/images/colltest2.png");
-        CL_Surface sprite2("../../data/images/colltest2.png");
+        CL_Surface sprite2("../../data/images/colltest.png");
 
         while (!CL_Keyboard::get_keycode(CL_KEY_ESCAPE))
           {
@@ -53,14 +53,14 @@ public:
               {
                 if (!mask1.slow_pixel_collides_with(mask2, 
                                                     mx - 320, my - 240))
-                  std::cout << "Collision error" << std::endl;
+                  std::cout << "False positiv" << std::endl;
                 CL_Display::clear(CL_Color(255, 255, 255));
               }
             else
               {
                 if (mask1.slow_pixel_collides_with(mask2, 
                                                    mx - 320, my - 240))
-                  std::cout << "Collision error X" << std::endl;
+                  std::cout << "Collision not detected" << std::endl;
                 CL_Display::clear(CL_Color(255, 255, 0));
               }
 

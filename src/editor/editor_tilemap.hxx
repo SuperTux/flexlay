@@ -25,7 +25,7 @@
 #include "editor_map_layer.hxx"
 #include "editor_tile.hxx"
 
-typedef Field<int> TileBrush;
+class TileBrush;
 
 /** Holds the tilemap data for the editor and provides functions to
     manipulate them */
@@ -44,8 +44,6 @@ private:
 
   void cleanup();
 public:
-  int brush_tile;
-
   EditorTileMap();
   ~EditorTileMap();
 
@@ -68,12 +66,8 @@ public:
 
   Field<EditorTile*>* get_map(int i);
 
-  /** Draw the gives brush to the map 
-   *  @param opaque if true draw fully transparent tiles the same as
-   *  @param opaque tiles, else don't draw transparent tiles at all to
-   *  @param opaque the map
-   */
-  void draw_tile(const TileBrush& brush, const CL_Point& pos, bool opaque);
+  /** Draw the gives brush to the map */
+  void draw_tile(const TileBrush& brush, const CL_Point& pos);
 
   /** Draw the given single tile to the map */
   void draw_tile(int id, const CL_Point& pos);

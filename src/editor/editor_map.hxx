@@ -58,8 +58,6 @@ private:
 
   void cleanup();
 public:
-  int brush_tile;
-
   EditorMap(CL_Component* parent);
   ~EditorMap();
 

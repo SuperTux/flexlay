@@ -26,6 +26,7 @@
 #include "../tile_factory.hxx"
 #include "editor.hxx"
 #include "editor_map.hxx"
+#include "tile_brush.hxx"
 #include "editor_tilemap.hxx"
 
 EditorTileMap::EditorTileMap()
@@ -33,8 +34,6 @@ EditorTileMap::EditorTileMap()
   diamond_map = 0;
 
   new_level(80, 30);
-
-  brush_tile = 0;
 
   scrolling = false;
 }
@@ -218,7 +217,7 @@ EditorTileMap::draw_tile(int id, const CL_Point& pos)
 }
 
 void
-EditorTileMap::draw_tile(const TileBrush& brush, const CL_Point& pos, bool opaque)
+EditorTileMap::draw_tile(const TileBrush& brush, const CL_Point& pos)
 {
   int start_x = std::max(0, -pos.x);
   int start_y = std::max(0, -pos.y);
@@ -229,7 +228,7 @@ EditorTileMap::draw_tile(const TileBrush& brush, const CL_Point& pos, bool opaqu
   for (int y = start_y; y < end_y; ++y)
     for (int x = start_x; x < end_x; ++x)
       {
-        if (opaque || brush.at(x, y) != 0)
+        if (brush.is_opaque() || brush.at(x, y) != 0)
           current_field->at(pos.x + x, pos.y + y)->set_tile(brush.at(x, y));
       }
 }

@@ -20,8 +20,10 @@
 #ifndef HEADER_TILEMAP_PAINT_TOOL_HXX
 #define HEADER_TILEMAP_PAINT_TOOL_HXX
 
-#include "editor_tilemap.hxx"
+#include "tile_brush.hxx"
 #include "tilemap_tool.hxx"
+
+class EditorTileMap;
 
 /** */
 class TileMapPaintTool : public TileMapTool
@@ -29,7 +31,6 @@ class TileMapPaintTool : public TileMapTool
 private:
   EditorTileMap* tilemap;
   bool painting;
-  bool opaque;
   TileBrush brush;
   CL_Point last_draw;
 
@@ -39,7 +40,8 @@ public:
 
   TileMapPaintTool(EditorMap* p, EditorTileMap* t);
   virtual ~TileMapPaintTool();
-
+  
+  const TileBrush& get_brush() { return brush; }
   void set_brush(const TileBrush& b);
   void draw();
 

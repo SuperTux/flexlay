@@ -44,7 +44,6 @@ EditorMap::EditorMap(CL_Component* parent)
   old_trans_offset = CL_Pointf(0,0);
   click_pos        = CL_Point(0,0);
   
-  brush_tile  = 0;
   zoom_factor = 0;
 
   scrolling = false;

@@ -49,7 +49,14 @@ editor_get_tilemap()
 void
 editor_set_brush_tile(int i)
 {
-  editor_get_tilemap()->brush_tile = i;
+  //editor_get_tilemap()->brush_tile = i;
+
+  TileBrush brush(1, 1);
+
+  brush.set_opaque();
+  brush(0, 0) = i;
+
+  TileMapPaintTool::current()->set_brush(brush);
 }
 
 SCM
@@ -69,6 +76,7 @@ brush2scm(const TileBrush& brush)
   
   return gh_list(gh_long2scm(brush.get_width()),
                  gh_long2scm(brush.get_height()),
+                 gh_bool2scm(brush.is_opaque()),
                  vec,
                  SCM_UNDEFINED);
 }
@@ -78,11 +86,17 @@ scm2brush(SCM s_brush)
 {
   int brush_width  = gh_scm2int(gh_car(s_brush));
   int brush_height = gh_scm2int(gh_cadr(s_brush));
-  SCM brush_data   = gh_caddr(s_brush);
+  bool opaque      = gh_scm2bool(gh_caddr(s_brush));
+  SCM brush_data   = gh_car(gh_cdddr(s_brush));
 
   assert(brush_width*brush_height == static_cast<int>(gh_vector_length(brush_data)));
 
   TileBrush brush(brush_width, brush_height);
+
+  if (opaque) 
+    brush.set_opaque();
+  else
+    brush.set_transparent();
 
   for(int i = 0; i < brush.size(); ++i)
     {

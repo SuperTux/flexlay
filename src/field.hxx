@@ -75,7 +75,7 @@ public:
   iterator begin () { return vec.begin (); }
   iterator end () { return vec.end (); }
 
-  int size() { return vec.size(); }
+  int size() const { return vec.size(); }
   int get_width () const { return width; }
   int get_height () const { return height; }
 };

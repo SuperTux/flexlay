@@ -24,6 +24,7 @@
 #include "../tile.hxx"
 #include "src/scripting/editor.hxx"
 #include "tile_selector.hxx"
+#include "tilemap_paint_tool.hxx"
 
 TileSelector::TileSelector(int width, int height, CL_Component* parent)
   : CL_Component(CL_Rect(CL_Point(0,0), CL_Size(width * TILE_SIZE, height * TILE_SIZE)), parent),
@@ -121,7 +122,8 @@ TileSelector::draw()
             CL_Display::draw_rect(rect, CL_Color(0,0,0,128));
           }
 
-        if (i == editor_get_brush_tile())
+        if (TileMapPaintTool::current()->get_brush().size() == 1
+            && TileMapPaintTool::current()->get_brush().at(0, 0) == i)
           {
             CL_Display::fill_rect(rect,
                                   CL_Color(0,0,255, 100));

@@ -22,6 +22,7 @@
 #include "globals.hxx"
 #include "editor_tilemap.hxx"
 #include "editor_map.hxx"
+#include "tile_brush.hxx"
 #include "tilemap_select_tool.hxx"
 
 TileMapSelectTool::TileMapSelectTool(EditorMap* p, EditorTileMap* t)

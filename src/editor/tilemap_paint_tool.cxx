@@ -31,9 +31,8 @@ TileMapPaintTool::TileMapPaintTool(EditorMap* p, EditorTileMap* t)
     tilemap(t)
 {
   last_draw = CL_Point(-1, -1);
-  painting = false;
-  opaque = false;
-  current_ = this;
+  painting  = false;
+  current_  = this;
 }
 
 TileMapPaintTool::~TileMapPaintTool()
@@ -90,7 +89,7 @@ TileMapPaintTool::on_mouse_down(const CL_InputEvent& event)
 
   if (event.id == CL_MOUSE_LEFT)
     { 
-      tilemap->draw_tile(brush, parent->screen2tile(event.mouse_pos), opaque);
+      tilemap->draw_tile(brush, parent->screen2tile(event.mouse_pos));
       last_draw = pos;
 
       painting = true;
@@ -109,7 +108,7 @@ TileMapPaintTool::on_mouse_move(const CL_InputEvent& event)
       CL_Point pos = parent->screen2tile(event.mouse_pos);
       if (pos != last_draw)
         {
-          tilemap->draw_tile(brush, pos, opaque);
+          tilemap->draw_tile(brush, pos);
           last_draw = pos;
         }
     }
@@ -120,7 +119,7 @@ TileMapPaintTool::on_mouse_up  (const CL_InputEvent& event)
 {
   if (event.id == CL_MOUSE_LEFT)
     {
-      tilemap->draw_tile(brush, parent->screen2tile(event.mouse_pos), opaque);
+      tilemap->draw_tile(brush, parent->screen2tile(event.mouse_pos));
       last_draw = CL_Point(-1, -1);
 
       painting = false;

@@ -1,4 +1,4 @@
-##  $Id: Makefile.am,v 1.4 2003/09/10 08:25:29 grumbel Exp $
+##  $Id: Makefile.am,v 1.5 2003/09/21 21:57:40 grumbel Exp $
 ## 
 ##  Windstille - A free Lemmings clone
 ##  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -20,11 +20,25 @@
 EXTRA_DIST = \
   windstille.xml \
   tiles.scm \
+  tiles.xml \
   $(wildcard levels/*.scm) \
   $(wildcard images/*.png) \
   $(wildcard images/tiles/*.png) \
   $(wildcard images/hero_run/*.png)
 
 nobase_pkgdata_DATA = $(EXTRA_DIST)
+
+tiles.xml:
+	echo "<resources>" >  $@
+	echo "  <section name=\"tiles\">" >> $@
+	for i in images/tiles/*.png; do \
+		echo "    <sprite name=\""`basename $${i%%.png}`"\">"; \
+		echo "      <image file=\"$$i\" />"; \
+		echo "    </sprite>"; \
+	done  >> $@;
+	echo "  </section>" >> $@
+	echo "</resources>" >> $@
+
+.PHONY: tiles.xml
 
 # EOF #

@@ -298,12 +298,6 @@
     </sprite>
   </section>
   <section name="tiles">
-    <sprite name="green1">
-      <image file="images/tiles/level1/green1.png" name="image1" />
-    </sprite>
-    <sprite name="tile1">
-      <image file="images/tiles/tile1.png" name="image1" />
-    </sprite>
 
     <sprite name="tile10">
       <image file="images/tiles/tile10.png" name="image1" />
@@ -392,11 +386,11 @@
     <sprite name="tile36">
       <image file="images/tiles/tile36.png" name="image1" />
     </sprite>
-    <sprite name="tile37">
-      <image file="images/tiles/tile37.png" name="image1" />
+    <sprite name="air_air_brwn_brwn_1">
+      <image file="images/tiles/air_air_brwn_brwn_1.png" name="image1" />
     </sprite>
     <sprite name="tile38">
-      <image file="images/tiles/tile38.png" name="image1" />
+      <image file="images/tiles/tile38.png" />
     </sprite>
     <sprite name="tile39">
       <image file="images/tiles/tile39.png" name="image1" />
@@ -552,6 +546,7 @@
         name="image1" />
     </sprite>
   </section>
+
   <sprite name="bonusflyer">
     <image file="images/bonusflyer.png" name="image1" />
   </sprite>

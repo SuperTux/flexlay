@@ -279,7 +279,7 @@
                #b00000000))
 
  (tile (id 26)
-       (image "tiles/tile26")
+       (image "tiles/tile25")
        (colmap #b11111000
                #b11111000
                #b11111000
@@ -401,7 +401,7 @@
                #b11111111))
 
  (tile (id 37)
-       (image "tiles/tile37")
+       (image "tiles/tile36")
        (colmap #b00000000
                #b00000000
                #b00000000
@@ -421,6 +421,151 @@
                #b11100000
                #b11111111
                #b11111111))
+
+ (tile (id 39)
+       (image "tiles/air_air_brwn_brwn_1")
+       (colmap #b00000000
+               #b00000000
+               #b00000000
+               #b00000000
+               #b11111111
+               #b11111111
+               #b11111111
+               #b11111111))
+
+ (tile (id 40)
+       (image "tiles/air_brwn_brwn_brwn_1")
+       (colmap #b00001111
+               #b00001111
+               #b00001111
+               #b00001111
+               #b11111111
+               #b11111111
+               #b11111111
+               #b11111111))
+
+
+ (tile (id 41)
+       (image "tiles/air_brwn_brwn_air_1")
+       (colmap #b00001111
+               #b00001111
+               #b00001111
+               #b00001111
+               #b00001111
+               #b00001111
+               #b00001111
+               #b00001111))
+
+
+ (tile (id 42)
+       (image "tiles/brwn_brwn_brwn_air_1")
+       (colmap #b11111111
+               #b11111111
+               #b11111111
+               #b11111111
+               #b00001111
+               #b00001111
+               #b00001111
+               #b00001111))
+
+ (tile (id 43)
+       (image "tiles/brwn_brwn_air_air_1")
+       (colmap #b11111111
+               #b11111111
+               #b11111111
+               #b11111111
+               #b00000000
+               #b00000000
+               #b00000000
+               #b00000000))
+
+ (tile (id 44)
+       (image "tiles/brwn_air_brwn_brwn_1")
+       (colmap #b11110000
+               #b11110000
+               #b11110000
+               #b11110000
+               #b11111111
+               #b11111111
+               #b11111111
+               #b11111111))
+
+ (tile (id 45)
+       (image "tiles/brwn_brwn_air_brwn_1")
+       (colmap #b11111111
+               #b11111111
+               #b11111111
+               #b11111111
+               #b11110000
+               #b11110000
+               #b11110000
+               #b11110000))
+
+ (tile (id 46)
+       (image "tiles/air_air_air_brwn_1")
+       (colmap #b00000000 
+               #b00000000
+               #b00000000
+               #b00000000
+               #b11110000
+               #b11110000
+               #b11110000
+               #b11110000))
+
+ (tile (id 47)
+       (image "tiles/brwn_brwn_brwn_air_1")
+       (colmap #b11111111 
+               #b11111111
+               #b11111111
+               #b11111111
+               #b00001111
+               #b00001111
+               #b00001111
+               #b00001111))
+
+ (tile (id 48)
+       (image "tiles/brwn_air_air_brwn_1")
+       (colmap #b11110000 
+               #b11110001
+               #b11110000
+               #b11110000
+               #b11110000
+               #b11110000
+               #b11110000
+               #b11110000))
+
+ (tile (id 49)
+       (image "tiles/brwn_air_air_air_1")
+       (colmap #b11110000 
+               #b11110000
+               #b11110000
+               #b11110000
+               #b00000000
+               #b00000000
+               #b00000000
+               #b00000000))
+
+ (tile (id 50)
+       (image "tiles/air_air_brwn_air_1")
+       (colmap #b00000000 
+               #b00000000
+               #b00000000
+               #b00000000
+               #b00001111
+               #b00001111
+               #b00001111
+               #b00001110))
+
+ (tile (id 51)
+       (image "tiles/air_brwn_air_air_1")
+       (colmap #b00001111 
+               #b00001111
+               #b00001111
+               #b00001111
+               #b00000000
+               #b00000000
+               #b00000000
+               #b00000000))
 
 
  ;; (group (id 11)

@@ -100,6 +100,7 @@ SCM load_xml(const char* filename);
 
 struct NetPanzerFileStruct
 {
+  std::string id_header;
   std::string name;
   std::string description;
   EditorMapLayer* tilemap;
@@ -107,10 +108,12 @@ struct NetPanzerFileStruct
 
 NetPanzerFileStruct* load_netpanzer_map(const char* filename);
 void save_netpanzer_map(const char* filename, EditorMap* m, 
-                        const char* name_, const char* description_);
+                        const char* id_header_, const char* name_, const char* description_);
 
 // Map stuff
 EditorMap*      editor_map_create();
+void            editor_map_set_metadata(EditorMap* m, SCM data); 
+SCM             editor_map_get_metadata(EditorMap* m); 
 void            editor_map_add_layer(EditorMap* m, EditorMapLayer* layer);
 bool            editor_map_is_modified(EditorMap* m);
 void            editor_map_set_unmodified(EditorMap* m);

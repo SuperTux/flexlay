@@ -73,4 +73,16 @@ EditorMap::get_layer(int i)
     return 0;
 }
 
+void
+EditorMap::set_metadata(const SCMObj& obj)
+{
+  metadata = obj; 
+}
+
+SCMObj
+EditorMap::get_metadata() const
+{
+  return metadata; 
+}
+
 /* EOF */

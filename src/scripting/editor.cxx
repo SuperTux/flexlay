@@ -896,14 +896,15 @@ unsigned char find_nearest_color(const CL_Palette& palette, const CL_Color& rgb)
 
 void
 save_netpanzer_map(const char* filename, EditorMap* m, 
-                   const char* name_, const char* description_)
+                   const char* id_header_, const char* name_, const char* description_)
 {
   EditorTileMap* tilemap = dynamic_cast<EditorTileMap*>(m->get_layer_by_name(TILEMAP_NAME));
 
   if (!tilemap)
     return;
     
-  unsigned char   netp_id_header[64] = "Created with Windstille Editor";
+  unsigned char   netp_id_header[64];
+  strcpy(reinterpret_cast<char*>(netp_id_header), id_header_);
   unsigned short  id       = 0; // ?
   char   name[256];
   strcpy(name, name_);
@@ -998,10 +999,23 @@ load_netpanzer_map(const char* filename)
   NetPanzerFileStruct* netpanzer_file = new NetPanzerFileStruct;
 
   netpanzer_file->tilemap     = tilemap;
+  netpanzer_file->id_header   = reinterpret_cast<char*>(netp_id_header);
   netpanzer_file->name        = name;
   netpanzer_file->description = description;
 
   return netpanzer_file;
+}
+
+void
+editor_map_set_metadata(EditorMap* m, SCM data)
+{
+  return m->set_metadata(SCMObj(data));
+}
+
+SCM
+editor_map_get_metadata(EditorMap* m)
+{
+  return m->get_metadata().get_scm();
 }
 
 /* EOF */

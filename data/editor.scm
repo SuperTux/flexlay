@@ -85,6 +85,11 @@
          (m       (editor-map-create))
          (objmap  (editor-objmap-create)))
 
+    (editor-map-set-metadata m (list
+                                (cons 'id-header   (NetPanzerFileStruct-id-header-get file))
+                                (cons 'name        (NetPanzerFileStruct-name-get file))
+                                (cons 'description (NetPanzerFileStruct-description-get file))))
+
     (editor-map-add-layer m (NetPanzerFileStruct-tilemap-get file))
     (editor-map-add-layer m objmap)
 
@@ -200,10 +205,13 @@
 
 (define (netpanzer:save-map filename)
   ;; Save .npm
-  (save-netpanzer-map filename
-                      (editor-map-component-get-map *editor-map*)
-                      "A Name" 
-                      "A Description")
+  (let* ((levelmap (editor-map-component-get-map *editor-map*))
+         (metadata (editor-map-get-metadata levelmap)))
+    (save-netpanzer-map filename
+                        levelmap
+                        (or (assoc-ref metadata 'id-header) "Created with Windstille Editor")
+                        (or (assoc-ref metadata 'name) "<no name>")
+                        (or (assoc-ref metadata 'description) "<no description>")))
   
   ;; Save .opt/.spn
   (let* ((rawname (substring filename 0 (- (string-length filename) 4)))
@@ -214,17 +222,15 @@
     
     (for-each (lambda (ref)
                 (let ((el (editor-objectmap-get-object ref)))
-                      (display "EL: ")
-                      (display el)(newline)
-                      (case (caaddr el)
-                        ((outpost)
-                         (set! outposts    (cons el outposts)))
-                        ((spawnpoint)
-                         (set! spawnpoints (cons el spawnpoints)))
-                        (else
-                         (display "Unknown: ")
-                         (display el)
-                         (newline)))))
+                  (case (caaddr el)
+                    ((outpost)
+                     (set! outposts    (cons el outposts)))
+                    ((spawnpoint)
+                     (set! spawnpoints (cons el spawnpoints)))
+                    (else
+                     (display "Unknown: ")
+                     (display el)
+                     (newline)))))
               (editor-objectmap-get-objects))
 
     (set! spawnpoints (reverse spawnpoints))
@@ -467,6 +473,8 @@
                            )))
 
     ;; Dialog Menu
+    (gui-add-menu-item menu "Dialogs/Edit Metadata" (lambda () (create-metadata-editor)))
+
     (gui-add-menu-item menu "Dialogs/Draw Grid" editor-toggle-grid)
     (gui-add-menu-item menu "Dialogs/Draw Attributes" editor-toggle-attributes)
     (gui-add-menu-item menu "Dialogs/Resize.."  resize-map)
@@ -498,6 +506,33 @@
      (gui-hide-component *tileselector-window*))
     (else
      (editor-error "Tool unknown"))))
+
+(define (create-metadata-editor)
+  (let ((window (gui-create-window 100 100 400 200 "Metadata Editor")))
+    (gui-push-component (gui-window-get-client-area window))
+    
+    (let* ((y 10)
+           (boxes '()))
+      (for-each (lambda (el)
+                  (gui-create-label    10  y         (format #f "~a" (car el)))
+                  (set! boxes 
+                        (cons (cons (car el)
+                                    (gui-create-inputbox 100 y  290 25 (format #f "~a" (cdr el))))
+                              boxes))
+                  (set! y (+ y 25)))
+                (or (editor-map-get-metadata (editor-map-component-get-map *editor-map*))
+                    '()))
+      
+      (gui-create-button-func 300 140 75 25 "Ok"
+                              (lambda ()
+                                (editor-map-set-metadata (editor-map-component-get-map *editor-map*)
+                                                         (map (lambda (el)
+                                                                (cons (car el)
+                                                                      (gui-inputbox-get-text (cdr el))))
+                                                              (reverse boxes)))
+                                (gui-hide-component window))))
+
+    (gui-pop-component)))
 
 (define (create-toolbar)
   (let ((window (gui-create-window 0 25 50 360 "Toolbar")))

@@ -50,7 +50,9 @@ private:
   Layers layers;
 
   std::vector<std::string> scripts;
-
+  
+  /** Metadata attached to this map (ie. mapname, description, scripts, etc.) */
+  SCMObj metadata;
 public:
   EditorMap(const std::string& filename_);
   ~EditorMap();
@@ -71,6 +73,9 @@ public:
   EditorMapLayer* get_layer_by_name(int i);
   EditorMapLayer* get_layer(int i);
   void set_active_layer(int i);
+
+  void   set_metadata(const SCMObj& obj);
+  SCMObj get_metadata() const;
   
   std::vector<std::string> get_scripts() { return scripts; }
 };

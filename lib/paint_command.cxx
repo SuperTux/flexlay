@@ -115,13 +115,13 @@ PaintCommandImpl::execute()
 void
 PaintCommandImpl::redo()
 {
-  TilemapLayer::draw_tile(tilemap.get_field(), *redo_brush, pos);
+  TilemapLayer::draw_tiles(tilemap.get_field(), *redo_brush, pos);
 }
 
 void
 PaintCommandImpl::undo()
 {
-  TilemapLayer::draw_tile(tilemap.get_field(), *undo_brush, pos);
+  TilemapLayer::draw_tiles(tilemap.get_field(), *undo_brush, pos);
 }
 
 std::string

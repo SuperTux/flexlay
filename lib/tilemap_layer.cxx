@@ -218,11 +218,11 @@ TilemapLayer::draw_tile(int id, const CL_Point& pos)
 void
 TilemapLayer::draw_tile(const TileBrush& brush, const CL_Point& pos)
 {
-  draw_tile(&impl->field, brush, pos);
+  draw_tiles(&impl->field, brush, pos);
 }
 
 void
-TilemapLayer::draw_tile(Field<int>* field, const TileBrush& brush, const CL_Point& pos)
+TilemapLayer::draw_tiles(Field<int>* field, const TileBrush& brush, const CL_Point& pos)
 {
   int start_x = std::max(0, -pos.x);
   int start_y = std::max(0, -pos.y);

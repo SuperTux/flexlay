@@ -64,6 +64,7 @@ public:
   /** Draw the given single tile to the map */
   void draw_tile(int id, const CL_Point& pos);
 
+  /** FIXME: Very bad naming */
   void draw_tile(int id, int x, int y, bool attribute, CL_GraphicContext* gc);
 
   int get_width()  const;
@@ -80,7 +81,7 @@ public:
 
   CL_PixelBuffer create_pixelbuffer();
 
-  static void draw_tile(Field<int>* field, const TileBrush& brush, const CL_Point& pos);
+  static void draw_tiles(Field<int>* field, const TileBrush& brush, const CL_Point& pos);
 
   bool has_bounding_rect() const;
   CL_Rect get_bounding_rect();

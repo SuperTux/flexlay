@@ -24,9 +24,9 @@ extern CL_ResourceManager* resources;
 
 EditorObjMap::EditorObjMap()
 {
-  Obj obj;
-  obj.sprite = CL_Sprite("igel", resources);
-  obj.pos    = CL_Point(100, 100);
+  Obj* obj = new Obj;
+  obj->sprite = CL_Sprite("igel", resources);
+  obj->pos    = CL_Point(100, 100);
   objects.push_back(obj);
 }
 
@@ -39,7 +39,7 @@ EditorObjMap::update(float delta)
 {
   for(Objs::iterator i = objects.begin(); i != objects.end(); ++i)
     {
-      (*i).sprite.update(delta);
+      (*i)->sprite.update(delta);
     }
 }
 
@@ -48,8 +48,24 @@ EditorObjMap::draw()
 {
   for(Objs::iterator i = objects.begin(); i != objects.end(); ++i)
     {
-      (*i).sprite.draw((*i).pos.x, (*i).pos.y);
+      (*i)->sprite.draw((*i)->pos.x, (*i)->pos.y);
     }
+}
+
+EditorObjMap::Obj*
+EditorObjMap::find_object(const CL_Point& pos)
+{
+  for(Objs::iterator i = objects.begin(); i != objects.end(); ++i)
+    {
+      if ((*i)->pos.x < pos.x
+          && (*i)->pos.x + (*i)->sprite.get_width() >= pos.x
+          && (*i)->pos.y < pos.y
+          && (*i)->pos.y + (*i)->sprite.get_height() >= pos.y)
+        {
+          return *i;
+        }
+    }
+  return 0;
 }
 
 /* EOF */

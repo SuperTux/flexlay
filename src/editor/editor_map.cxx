@@ -24,6 +24,7 @@
 #include "../tile_factory.hxx"
 #include "tilemap_paint_tool.hxx"
 #include "tilemap_select_tool.hxx"
+#include "tilemap_object_tool.hxx"
 #include "tilemap_diamond_tool.hxx"
 #include "editor_map.hxx"
 
@@ -56,6 +57,7 @@ EditorMap::EditorMap(CL_Component* parent)
   tools.push_back(new TileMapPaintTool(this, tilemap));
   tools.push_back(new TileMapSelectTool(this, tilemap));
   tools.push_back(new TileMapDiamondTool(this, tilemap));
+  tools.push_back(new TileMapObjectTool(this, objmap));
 
   tool = tools[0];
 }

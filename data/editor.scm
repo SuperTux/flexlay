@@ -101,6 +101,17 @@
                    (lambda ()
                      (gui-component-toggle-visibility *tileeditor-window*)))
 
+(gui-create-button-func 720 475
+                        80 25 "brushtest" 
+                        (lambda () 
+                          (editor-tilemap-draw-brush 
+                           (random 15) (random 15)
+                           (list 3 3
+                                 (vector 1 2 3
+                                         4 5 6
+                                         7 8 9)))))
+
+
 (gui-create-button-func 720 500
                         80 25 "Background" 
                         (lambda () (tilemap-set-active-layer 0)))
@@ -136,7 +147,7 @@
                         (- screen-height 25)
                         100 25 "Objects" 
                         (lambda ()
-                          (editor-set-brush-tile 0)))
+                          (editor-set-tool 3)))
 
 (gui-create-button-func (+ 300)
                         (- screen-height 25)

@@ -21,17 +21,22 @@
 #define HEADER_TILEMAP_OBJECT_TOOL_HXX
 
 #include "tilemap_tool.hxx"
+#include "editor_objmap.hxx"
 
-class EditorTileMap;
 class EditorMap;
 
 /** */
 class TileMapObjectTool : public TileMapTool
 {
 private:
-  EditorTileMap* tilemap;
+  EditorObjMap* objmap;
+  EditorObjMap::Obj* obj;
+  enum { DRAG, NONE } state;
+  /** the position on which the object was clicked, relative to the
+      object */
+  CL_Point offset;
 public:
-  TileMapObjectTool(EditorMap* p, EditorTileMap* t);
+  TileMapObjectTool(EditorMap* p, EditorObjMap* t);
   ~TileMapObjectTool();
 
   void draw();

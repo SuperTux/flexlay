@@ -33,12 +33,13 @@ class EditorObjMap : public EditorMapLayer
 private:
   CL_SlotContainer slots;
 
+public:
   struct Obj {
     CL_Sprite sprite;
     CL_Point  pos;
   };
 
-  typedef std::vector<Obj> Objs;
+  typedef std::vector<Obj*> Objs;
   Objs objects;
 public:
   EditorObjMap();
@@ -47,6 +48,7 @@ public:
   void update(float delta);
   void draw();
 
+  EditorObjMap::Obj* find_object(const CL_Point& pos);
 private:
   EditorObjMap (const EditorObjMap&);
   EditorObjMap& operator= (const EditorObjMap&);

@@ -20,9 +20,12 @@
 #include "editor_map.hxx"
 #include "tilemap_object_tool.hxx"
 
-TileMapObjectTool::TileMapObjectTool(EditorMap* p, EditorTileMap* t)
-  : TileMapTool(p), tilemap(t)
+TileMapObjectTool::TileMapObjectTool(EditorMap* p, EditorObjMap* t)
+  : TileMapTool(p), objmap(t)
 {
+  obj = 0;
+  state = NONE;
+  offset = CL_Point(0, 0);
 }
 
 TileMapObjectTool::~TileMapObjectTool()
@@ -32,21 +35,57 @@ TileMapObjectTool::~TileMapObjectTool()
 void
 TileMapObjectTool::draw()
 {
+  if (obj)
+    {
+      CL_Sprite sprite = obj->sprite;
+      sprite.set_color(CL_Color(0, 0, 255));
+      sprite.draw(obj->pos.x, obj->pos.y);
+    }
 }
 
 void
 TileMapObjectTool::on_mouse_up(const CL_InputEvent& event)
 {
+  switch(state)
+    {
+    case DRAG:
+      state = NONE;
+      break;
+    default:
+      CL_Point pos = parent->screen2world(event.mouse_pos);
+      obj = objmap->find_object(pos);
+    }
 }
 
 void
 TileMapObjectTool::on_mouse_down(const CL_InputEvent& event)
 {
+  switch(state)
+    {
+    default:
+      CL_Point pos = parent->screen2world(event.mouse_pos);
+      obj = objmap->find_object(pos);
+      if (obj)
+        {
+          state = DRAG;
+          offset = event.mouse_pos - obj->pos;
+        }
+    }
 }
 
 void
 TileMapObjectTool::on_mouse_move(const CL_InputEvent& event)
 {
+  switch(state)
+    {
+    case DRAG:
+      obj->pos = parent->screen2world(event.mouse_pos - offset);
+      break;
+    default:
+      CL_Point pos = parent->screen2world(event.mouse_pos);
+      obj = objmap->find_object(pos);
+      break;
+    }
 }
 
 /* EOF */

@@ -88,6 +88,7 @@ TileMapDiamondTool::on_mouse_move(const CL_InputEvent& event)
 void
 TileMapDiamondTool::paint(const CL_Point& mpos)
 {
+#if 0
   EditorTileMap* tilemap
     = dynamic_cast<EditorTileMap*>(EditorMapComponent::current()->get_map()->get_layer_by_name(TILEMAP_NAME));
   EditorMapComponent* parent = EditorMapComponent::current();
@@ -96,6 +97,7 @@ TileMapDiamondTool::paint(const CL_Point& mpos)
 
   tilemap->get_diamond_map()->at(int(pos.x/64), 
                                  int(pos.y/64)) = color;
+#endif
 }
 
 /* EOF */

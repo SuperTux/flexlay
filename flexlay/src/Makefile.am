@@ -47,6 +47,7 @@ flexlay_SOURCES  = \
   objmap_select_tool.hxx objmap_select_tool.cxx \
   object_transform_command.hxx  object_transform_command.cxx \
   graphic_context_state.cxx graphic_context_state.hxx \
+  workspace.hxx workspace.cxx \
   zoom_tool.hxx  zoom_tool.cxx
 
 #  tilemap_diamond_tool.hxx tilemap_diamond_tool.cxx 

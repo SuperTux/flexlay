@@ -27,7 +27,8 @@
 
 EditorMap::EditorMap(const std::string& filename_)
   : filename(filename_),
-    background_color(100, 80, 100)
+    background_color(100, 80, 100),
+    foreground_color(255, 80, 255)
 {
   modified = false;
   serial = 0;
@@ -55,6 +56,7 @@ EditorMap::draw (EditorMapComponent* parent)
   CL_Rect rect = get_bounding_rect();
 
   CL_Display::fill_rect(rect, background_color);
+  CL_Display::draw_rect(rect, foreground_color);
   for(Layers::iterator i = layers.begin(); i != layers.end(); ++i)
     (*i)->draw(parent);  
   CL_Display::flush();

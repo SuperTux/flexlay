@@ -17,46 +17,42 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-#ifndef HEADER_EDITOR_MAP_COMPONENT_HXX
-#define HEADER_EDITOR_MAP_COMPONENT_HXX
+#ifndef HEADER_WORKSPACE_HXX
+#define HEADER_WORKSPACE_HXX
 
-#include <vector>
-#include <ClanLib/Display/sprite.h>
-#include <ClanLib/GUI/component.h>
-#include <ClanLib/Core/Math/point.h>
-#include "field.hxx"
-#include "editor_objmap.hxx"
-#include "editor_tilemap.hxx"
+#include <ClanLib/Display/input_event.h>
 #include "graphic_context_state.hxx"
 
-class Workspace;
 class EditorMap;
-class TileMapTool;
 
-/** Object which represents a level, quirled together with the GUI
-    stuff */
-class EditorMapComponent : public CL_Component
+class WorkspaceItem
 {
-private:
-  CL_SlotContainer slots;
-  Workspace* workspace;
-
-  static EditorMapComponent* current_; 
 public:
-  static EditorMapComponent* current() { return current_; } 
+  CL_Point pos;
+  EditorMap* editor_map;
 
-  EditorMapComponent(const CL_Rect& rect, CL_Component* parent);
-  ~EditorMapComponent();
- 
-  EditorMap* get_map() const;
-  void       set_map(EditorMap* m);
+public:
+  WorkspaceItem();
+};
 
-  void  set_zoom(float z);
-  void  zoom_to(CL_Rect rect);
-  void  zoom_out(CL_Point pos);
-  void  zoom_in (CL_Point pos);
+/** */
+class Workspace
+{
+public:
+  GraphicContextState gc_state;
 
-  void move_to(int x, int y);
+  typedef std::vector<WorkspaceItem*> Items;
+  Items items;
+
+  bool scrolling;
+  CL_Point click_pos;
+
+  /** Position of the center */
+  CL_Pointf old_trans_offset;
+
+public:
+  Workspace(int w, int h);
+  ~Workspace();
 
   void draw();
 
@@ -64,9 +60,10 @@ public:
   void mouse_down(const CL_InputEvent& event);
   void mouse_move(const CL_InputEvent& event);
 
-  CL_Point screen2world(const CL_Point& pos);
-
-  CL_Rect get_clip_rect();
+  WorkspaceItem* get_current_item();
+private:
+  Workspace (const Workspace&);
+  Workspace& operator= (const Workspace&);
 };
 
 #endif

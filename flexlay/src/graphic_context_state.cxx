@@ -21,8 +21,8 @@
 #include <ClanLib/GUI/component.h>
 #include "graphic_context_state.hxx"
 
-GraphicContextState::GraphicContextState(CL_Component* c)
-  : comp(c), offset(0,0), zoom(1.0f)
+GraphicContextState::GraphicContextState(int w, int h)
+  : width(w), height(h), offset(0,0), zoom(1.0f)
 {  
 }
 
@@ -45,22 +45,22 @@ GraphicContextState::get_clip_rect()
 {
   return CL_Rect(CL_Point(int(-offset.x),
                           int(-offset.y)),
-                 CL_Size(int(comp->get_width()  / zoom),
-                         int(comp->get_height() / zoom)));
+                 CL_Size(int(get_width()  / zoom),
+                         int(get_height() / zoom)));
 }
 
 void
 GraphicContextState::set_pos(const CL_Pointf& pos)
 {
-  offset.x = -pos.x + (comp->get_width()/2  / zoom);
-  offset.y = -pos.y + (comp->get_height()/2 / zoom);
+  offset.x = -pos.x + (get_width()/2  / zoom);
+  offset.y = -pos.y + (get_height()/2 / zoom);
 }
 
 CL_Pointf
 GraphicContextState::get_pos()
 {
-  return CL_Pointf(-offset.x + (comp->get_width()/2  / zoom),
-                   -offset.y + (comp->get_height()/2  / zoom));
+  return CL_Pointf(-offset.x + (get_width()/2  / zoom),
+                   -offset.y + (get_height()/2  / zoom));
 }
 
 void
@@ -92,21 +92,21 @@ GraphicContextState::zoom_to (const CL_Rect& rect)
 
   float width  = rect.right - rect.left;
   float height = rect.bottom - rect.top;
-  float screen_relation = float(comp->get_height())/float(comp->get_width ());
+  float screen_relation = float(get_height())/float(get_width ());
   float rect_relation   = height/width; 
   
   //std::cout << "Screen: " << screen_relation << " Zoom: " << rect_relation << std::endl;
   if (rect_relation < screen_relation) // take width, ignore height
     {
-      zoom = comp->get_width()/width; 
+      zoom = get_width()/width; 
     }
   else // take height, ignore width
     {
-      zoom = comp->get_height()/height;
+      zoom = get_height()/height;
     }
 
-  offset.x = (comp->get_width()  / (2*zoom)) - center_x;
-  offset.y = (comp->get_height() / (2*zoom)) - center_y;
+  offset.x = (get_width()  / (2*zoom)) - center_x;
+  offset.y = (get_height() / (2*zoom)) - center_y;
 }
 
 CL_Pointf

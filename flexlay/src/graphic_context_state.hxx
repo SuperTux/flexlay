@@ -31,13 +31,14 @@ class CL_Component;
 class GraphicContextState
 {
 private:
-  CL_Component* comp;
+  int width;
+  int height;
   
   CL_Pointf offset;
   float zoom;
 
 public:
-  GraphicContextState(CL_Component* c);
+  GraphicContextState(int w, int h);
 
   void push();
   void pop();
@@ -45,6 +46,9 @@ public:
   /** Return a rectangle in world coordinates that represents the area
       visible on the screen */
   CL_Rect get_clip_rect();
+
+  int get_width()  { return width; }
+  int get_height() { return height; }
 
   void      set_pos(const CL_Pointf& pos);
   CL_Pointf get_pos();

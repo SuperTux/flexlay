@@ -27,6 +27,7 @@
 #include "field.hxx"
 #include "editor_objmap.hxx"
 #include "editor_tilemap.hxx"
+#include "editor_map_layer.hxx"
 
 class EditorMapComponent;
 class TileMapTool;
@@ -52,6 +53,7 @@ private:
   std::vector<std::string> scripts;
   
   CL_Color background_color;
+  CL_Color foreground_color;
 
   /** Metadata attached to this map (ie. mapname, description, scripts, etc.) */
   SCMObj metadata;
@@ -79,6 +81,7 @@ public:
   void   set_metadata(const SCMObj& obj);
   SCMObj get_metadata() const;
 
+  bool has_bounding_rect() const { return true; }
   CL_Rect get_bounding_rect();
 
   void set_background_color(const CL_Color& color);

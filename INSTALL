@@ -1,6 +1,16 @@
 Windstille Installion
 =====================
 
+Binary:
+=======
+
+Simply run the 'windstille.sh' script, if you have OpenGL installed it
+should work out of the box, without any extra library requirements.
+
+
+Source:
+=======
+
 Windstille requires a CVS version of ClanLib-0.7 and a installation of
 Guile 1.6, once you have compiled and installed both a simple:
 

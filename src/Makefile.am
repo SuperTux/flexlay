@@ -63,7 +63,56 @@ windstille_SOURCES = \
   windstille_main.cxx \
   windstille_main.hxx
 
-LDADD = editor/libwindstille_editor.a
+windstille_LDADD = editor/libwindstille_editor.a
+
+STATICBIN_LIBS = \
+-L/usr/X11R6/lib/ \
+-Wl,-Bstatic \
+-lclanApp \
+-lclanVorbis \
+-lclanMikMod \
+-lclanSound \
+-lclanGL \
+-lclanDisplay \
+-lclanCore \
+-lguile \
+-lguile-ltdl \
+$(STATIC_READLINE) \
+-lqthreads \
+-lcrypt \
+-lHermes \
+-lvorbis \
+-logg \
+-lmikmod \
+-ljpeg \
+-lpng12 \
+-lz \
+-lm \
+-lX11 \
+-lXxf86vm \
+-lSM \
+-lXt \
+-lXext \
+-lGLU \
+-ldl \
+-lX11 \
+-lstdc++ \
+-lgcc_eh \
+-lgcc \
+-Wl,-Bdynamic \
+-lGL \
+-lc
+
+static: windstille.static
+
+windstille.static: $(windstille_OBJECTS) $(windstille_DEPENDENCIES) Makefile
+	$(CXX) -nodefaultlibs $(CXXFLAGS)  -o $@ $(windstille_OBJECTS) \
+         $(windstille_DEPENDENCIES) $(STATICBIN_LIBS) 
+
+windstille.static.comp: windstille.static
+	cp $< $@
+	strip -s $@
+	upx-ucl -q --best $@
 
 
 # EOF #

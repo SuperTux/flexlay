@@ -95,7 +95,7 @@ class GUI
 
     @menu.add_item("Edit/Resize", proc{ resize_level() })
     @menu.add_item("Edit/Resize to selection", proc{ resize_level_to_selection()})
-    @menu.add_item("Edit/Debug Shell", proc{ run_python()})
+    # @menu.add_item("Edit/Debug Shell", proc{ run_python()})
 
     @menu.add_item("Zoom/1:4 (25%) ",  proc{ set_zoom(0.25) })
     @menu.add_item("Zoom/1:2 (50%) ",  proc{ set_zoom(0.5) })

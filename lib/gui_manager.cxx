@@ -78,7 +78,6 @@ GUIManager::update()
 void
 GUIManager::run()
 {
-  std::cout << "Waiting one second for debugger" << std::endl;
   impl->manager->run();
 }
 

@@ -167,12 +167,18 @@ void
 TileSelector::draw()
 {
   CL_Display::push_cliprect(get_screen_rect());
-  CL_Display::push_translate(get_screen_x(), get_screen_y());
   CL_Display::push_modelview();
+  CL_Display::add_translate(get_screen_x(), get_screen_y());
   CL_Display::add_translate(0, -offset);
 
+  const TileBrush& brush = TileMapPaintTool::current().get_brush();
+
+  int start_row = offset / tileset.get_tile_size();
+  int end_row   = start_row + (get_screen_rect().get_height() / tileset.get_tile_size());
+  int end_index = std::min(end_row*width, int(tiles.size())); 
+  
   // Draw tiles
-  for(int i = 0; i < int(tiles.size()); ++i)
+  for(int i = (start_row*width); i < end_index; ++i)
     {
       int x = i % width;
       int y = i / width;
@@ -196,9 +202,8 @@ TileSelector::draw()
           CL_Display::draw_rect(rect, CL_Color(0,0,0,128));
         }
 
-      if (TileMapPaintTool::current().get_brush().get_width() == 1
-          && TileMapPaintTool::current().get_brush().get_height() == 1
-          && TileMapPaintTool::current().get_brush().at(0, 0) == tiles[i])
+      if (brush.get_width() == 1 && brush.get_height() == 1
+          && brush.at(0, 0) == tiles[i])
         {
           CL_Display::fill_rect(rect,
                                 CL_Color(0,0,255, 100));
@@ -222,8 +227,6 @@ TileSelector::draw()
     }
   
   CL_Display::pop_modelview();
-  CL_Display::pop_modelview();
-
   CL_Display::pop_cliprect();
 }
 

@@ -41,16 +41,17 @@ public:
   }
 
   void draw() {
+    CL_OpenGLState state(CL_Display::get_current_window()->get_gc());
+    state.set_active();
+    state.setup_2d();
+
     if (stroke.points.size() >= 2)
       {
-        glLineWidth(3.0);
-        Stroke::Points::iterator last = stroke.points.begin();
-        for(Stroke::Points::iterator j = stroke.points.begin()+1; j != stroke.points.end(); ++j)
-          {
-            CL_Display::draw_line(*last, *j, stroke.color);
-            last = j;
-          }
-        glLineWidth(1.0);
+        glColor4ub(stroke.color.get_red(), stroke.color.get_green(), stroke.color.get_blue(), stroke.color.get_alpha());
+        glBegin(GL_LINE_STRIP);
+        for(Stroke::Points::iterator j = stroke.points.begin(); j != stroke.points.end(); ++j)
+          glVertex2f(j->x, j->y);
+        glEnd();
       }
   }
 
@@ -64,6 +65,7 @@ public:
         
         CL_Pointf p = parent->screen2world(event.mouse_pos);
         stroke.add_point(p.x, p.y);
+        stroke.finish();
         // add to map
         SketchLayer::current()->add_stroke(stroke);
         stroke = Stroke();

@@ -43,6 +43,7 @@ private:
   ColorPickerAlpha*      alpha;
 
   void update_brightness_color(CL_Color color);
+  void update_alpha_color(float alpha);
 public:
   ColorPicker(const CL_Rect& rect, CL_Component* parent);
   

@@ -31,7 +31,9 @@ class Stroke
 {
 public:
   typedef std::vector<CL_Pointf> Points;
+  typedef std::vector<CL_Pointf> Normals;
   Points points;
+  Normals normals;
 
   CL_Color color;
   
@@ -39,6 +41,8 @@ public:
   Stroke() {
     color = CL_Color(255, 255, 255, 255);
   }
+
+  void finish();
 
   void set_color(const CL_Color& color_) {
     color = color_;

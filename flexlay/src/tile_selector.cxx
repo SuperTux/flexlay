@@ -112,40 +112,40 @@ TileSelector::draw()
   CL_Display::add_translate(0, -offset);
 
   for(int i = 0; i < int(tiles.size()); ++i)
-      {
-        int x = i % width;
-        int y = i / width;
+    {
+      int x = i % width;
+      int y = i / width;
 
-        Tile* tile = tileset->create(i);
+      Tile* tile = tileset->create(i);
 
-        CL_Rect rect(CL_Point(static_cast<int>(x * tileset->get_tile_size()*scale),
-                              static_cast<int>(y * tileset->get_tile_size()*scale)),
-                     CL_Size(static_cast<int>(tileset->get_tile_size()*scale),
-                             static_cast<int>(tileset->get_tile_size()*scale)));
+      CL_Rect rect(CL_Point(static_cast<int>(x * tileset->get_tile_size()*scale),
+                            static_cast<int>(y * tileset->get_tile_size()*scale)),
+                   CL_Size(static_cast<int>(tileset->get_tile_size()*scale),
+                           static_cast<int>(tileset->get_tile_size()*scale)));
 
-        if (tile)
-          {
-            CL_Sprite sprite = tile->get_sprite();
+      if (tile)
+        {
+          CL_Sprite sprite = tile->get_sprite();
 
-            sprite.set_scale(scale, scale);
+          sprite.set_scale(scale, scale);
 
-            sprite.draw(static_cast<int>(x * tileset->get_tile_size()*scale), 
-                        static_cast<int>(y * tileset->get_tile_size()*scale));
+          sprite.draw(static_cast<int>(x * tileset->get_tile_size()*scale), 
+                      static_cast<int>(y * tileset->get_tile_size()*scale));
 
-            CL_Display::draw_rect(rect, CL_Color(0,0,0,128));
-          }
+          CL_Display::draw_rect(rect, CL_Color(0,0,0,128));
+        }
 
-        if (int(TileMapPaintTool::current()->get_brush().size()) == 1
-            && TileMapPaintTool::current()->get_brush().at(0, 0) == i)
-          {
-            CL_Display::fill_rect(rect,
-                                  CL_Color(0,0,255, 100));
-          }
-        else if (mouse_over_tile == int(i) && has_mouse_over())
-          {
-            CL_Display::fill_rect(rect, CL_Color(0,0,255, 20));
-          }
-      }
+      if (int(TileMapPaintTool::current()->get_brush().size()) == 1
+          && TileMapPaintTool::current()->get_brush().at(0, 0) == i)
+        {
+          CL_Display::fill_rect(rect,
+                                CL_Color(0,0,255, 100));
+        }
+      else if (mouse_over_tile == int(i) && has_mouse_over())
+        {
+          CL_Display::fill_rect(rect, CL_Color(0,0,255, 20));
+        }
+    }
   
   CL_Display::pop_modelview();
 }

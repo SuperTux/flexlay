@@ -83,7 +83,9 @@ void
 EditorMapComponent::draw ()
 {
   if (workspace)
-    workspace->draw();
+    {
+      workspace->draw();
+    }
   else
     {
       for (int y = 0; y < get_height(); y += 32)

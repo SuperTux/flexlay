@@ -111,6 +111,43 @@ void editor_undo()
 {
   Editor::current()->undo();
 }
+#if 0
+int
+editor_objectmap_add_sprite_object (EditorMapLayer* layer, SCM desc, int x, int y, SCM userdata)
+{
+  EditorObjMap* objmap = dynamic_cast<EditorObjMap*>(obj);
+  if (objmap)
+    {
+      try {
+        if (has_suffix(filename, ".png") || has_suffix(filename, ".jpg"))
+          {
+            CL_SpriteDescription desc;
+            desc.add_frame(CL_ProviderFactory::load(filename), true);
+            sprite = CL_Sprite(desc);
+
+        else
+          {
+            sprite = CL_Sprite(filename, resources);
+          }        
+
+        ObjMapObject* obj 
+          = new ObjMapSpriteObject(objmap->get_next_object_handle(), 
+                                   CL_Point(x, y), 
+                                   SCMObj(userdata), 
+                                   sprite);
+
+        ObjectAddCommand* command = new ObjectAddCommand(objmap, obj);
+        Editor::current()->execute(command);
+      
+        return command->get_handle();
+      } catch(CL_Error& err) {
+        std::cout << "Error: " << err.message << std::endl;
+        return -1;
+      }
+    }
+  return -1;
+}
+#endif
 
 int
 objectmap_add_object(EditorMapLayer* obj, const char* filename, int x, int y, SCM userdata)
@@ -152,7 +189,7 @@ objectmap_add_object(EditorMapLayer* obj, const char* filename, int x, int y, SC
     }
   else
     {
-      return 0;
+      return -1;
     }
 }
 

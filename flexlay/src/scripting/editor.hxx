@@ -65,8 +65,8 @@ void tilemap_paint_tool_set_tilemap(EditorMapLayer* layer);
 void object_selector_add_brush(CL_Component* comp, const char* name, SCM brush);
 
 int  objectmap_add_object(EditorMapLayer* obj, const char* name, int x, int y, SCM userdata);
+int  objectmap_add_sprite_object (EditorMapLayer* layer, SCM desc, int x, int y, SCM userdata);
 
-int  editor_objectmap_add_object      (EditorMapLayer* layer, const char* name, int x, int y, SCM userdata);
 void editor_objectmap_delete_objects  (EditorMapLayer* layer,SCM selection);
 int  editor_objectmap_duplicate_object(EditorMapLayer* layer, int id);
 SCM  editor_objectmap_get_objects     (EditorMapLayer* layer);

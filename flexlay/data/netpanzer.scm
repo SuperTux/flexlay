@@ -203,7 +203,7 @@
          (outposts    '()))
     
     (for-each (lambda (ref)
-                (let ((el (editor-objectmap-get-object ref)))
+                (let ((el (editor-objectmap-get-object (npm:objmap npm) ref)))
                   (case (caaddr el)
                     ((outpost)
                      (set! outposts    (cons el outposts)))

@@ -20,6 +20,7 @@
 #ifndef HEADER_SCRIPTING_EDITOR_HXX
 #define HEADER_SCRIPTING_EDITOR_HXX
 
+#include <string>
 #include <guile/gh.h>
 
 class EditorMap;
@@ -72,8 +73,6 @@ void map_set_size(int w, int h);
 void map_resize(int w, int h);
 void map_clear();
 
-void editor_load(const char* filename);
-
 void game_play(const char* filename);
 
 SCM get_tile_def(int id);
@@ -83,7 +82,12 @@ SCM load_xml(const char* filename);
 // Map stuff
 EditorMap*      editor_map_create();
 void            editor_map_add_layer(EditorMap* m, EditorMapLayer* layer);
+bool            editor_map_is_modified(EditorMap* m);
+
 EditorMapLayer* editor_objmap_create();
+
+std::string     editor_map_get_filename(EditorMap* m);
+void            editor_map_set_filename(EditorMap* m, const char* name);
 EditorMapLayer* editor_tilemap_create(int w, int h, int tile_size);
 void            editor_tilemap_set_data(EditorMapLayer* l, int m, SCM data);
 

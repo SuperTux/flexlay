@@ -85,7 +85,8 @@ gui_add_menu_item(CL_Component* c_menu, const char* name, SCM func)
 
   if (menu)
     {
-      CL_MenuNode* node = menu->create_item(name);
+      CL_MenuNode* node = menu->create_item(name); 
+      menu->reposition();
       //node->sig_clicked().connect_functor(SCMFunctor(func)).set_persistent();
       //std::cout << "Connecting menu function" << std::endl;
       new CL_Slot(node->sig_clicked().connect_functor(SCMFunctor(func)));

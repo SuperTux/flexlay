@@ -23,6 +23,13 @@
              (display args)(newline)))
     (set-repl-prompt! old-prompt)))
 
+(define (filter pred? objects)
+  (let loop ((objs objects)
+	     (result '()))
+    (cond ((null? objs) (reverse! result))
+	  ((pred? (car objs)) (loop (cdr objs) (cons (car objs) result)))
+	  (else (loop (cdr objs) result)))))
+
 (load "gui.scm")
 
 ;; EOF ;;

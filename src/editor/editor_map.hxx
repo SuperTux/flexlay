@@ -36,17 +36,27 @@ class TileMapTool;
 class EditorMap
 {
 private:
+  std::string filename;
+  bool modified;
+
   typedef std::vector<EditorMapLayer*> Layers;
   Layers layers;
+
   std::vector<std::string> scripts;
 
 public:
-  EditorMap();
+  EditorMap(const std::string& filename_);
   ~EditorMap();
+
+  std::string get_filename() const { return filename; }
+  void        set_filename(const std::string& f) { filename = f; }
 
   void draw(EditorMapComponent* parent);
 
   void add_layer(EditorMapLayer* layer);
+
+  bool is_modified() const { return modified; }
+  void modify() { modified = true; }
 
   EditorMapLayer* get_layer_by_name(int i);
   EditorMapLayer* get_layer(int i);

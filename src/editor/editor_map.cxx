@@ -26,8 +26,10 @@
 #include "editor_map.hxx"
 #include "editor_map_component.hxx"
 
-EditorMap::EditorMap()
+EditorMap::EditorMap(const std::string& filename_)
+  : filename(filename_)
 {
+  modified = false;
 }
 
 EditorMap::~EditorMap()

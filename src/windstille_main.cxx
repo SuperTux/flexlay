@@ -240,7 +240,11 @@ WindstilleMain::main(int argc, char** argv)
         Editor editor;
 
         if (!levelfile.empty ())
-          editor_load(levelfile.c_str());
+          {
+            // FIXME: a bit evil interdependency between scripting and C
+            gh_call1(gh_lookup("load-map"),
+                     gh_str02scm(levelfile.c_str()));
+          }
 
         editor.run();
       }

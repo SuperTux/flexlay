@@ -107,6 +107,8 @@ TileMapPaintTool::draw()
 void
 TileMapPaintTool::on_mouse_down(const CL_InputEvent& event)
 {
+  EditorMapComponent::current()->get_map()->modify();
+
   EditorTileMap* tilemap 
     = dynamic_cast<EditorTileMap*>(EditorMapComponent::current()->get_map()->get_layer_by_name(TILEMAP_NAME));
   EditorMapComponent* parent = EditorMapComponent::current();

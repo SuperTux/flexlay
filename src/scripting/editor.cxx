@@ -366,12 +366,6 @@ void map_clear()
 }
 
 void
-editor_load(const char* filename)
-{
-  editor_get_tilemap()->load(filename);
-}
-
-void
 game_play(const char* filename)
 {
   std::cout << "WindstilleGame: Starting level " << filename << std::endl;
@@ -576,7 +570,7 @@ editor_map_component_set_map(CL_Component* c, EditorMap* m)
 EditorMap*
 editor_map_create()
 {
-  return new EditorMap();
+  return new EditorMap("");
 }
 
 void
@@ -612,6 +606,39 @@ editor_tilemap_set_data(EditorMapLayer* l, int m, SCM lst)
           lst = gh_cdr(lst);
         }
     }
+}
+
+std::string
+editor_map_get_filename(EditorMap* m)
+{
+  return m->get_filename();
+}
+
+bool
+editor_map_is_modified(EditorMap* m)
+{
+  return m->is_modified();
+}
+
+void
+editor_map_set_filename(EditorMap* m, const char* name)
+{
+  return m->set_filename(name);
+}
+
+
+/*
+std::string scm2string(SCM s)
+{
+  char* tmp = gh_scm2newstr(s, 0);
+  std::string str = tmp;
+  free(tmp);
+  return tmp;
+}*/
+
+SCM string2scm(const std::string& str)
+{
+  return gh_str02scm(str.c_str());
 }
 
 /* EOF */

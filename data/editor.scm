@@ -19,6 +19,19 @@
 (define *recent-files* '())
 (define *recent-files-size* 25)
 (define datadir  *windstille-datadir*)
+(define *buffers* '())
+
+(define (add-buffer m)
+  ;; FIXME: Doesn't work?!
+  (gui-add-menu-item *menu*
+                     (format #f "Buffers/~a. ~a"
+                             (gensym "")
+                             (basename (editor-map-get-filename m))
+                             )
+                     (lambda ()
+                       (editor-map-component-set-map *editor-map* m)))
+
+  (set! *buffers* (cons m *buffers*)))
 
 (define (push-last-file filename)
   (cond ((not (string=? filename (get-last-file)))
@@ -30,10 +43,9 @@
 
 (define (new-map width height)
   (display "Creating new level...\n")
-  (editor-map-component-set-map *editor-map*
-                                (create-level-map width height))
-  ;;(push-last-file (string-append (dirname (get-last-file)) "/"))
-  )
+  (let ((levelmap (create-level-map width height)))
+    (editor-map-component-set-map *editor-map* levelmap)
+    (add-buffer levelmap)))
 
 (define (editor-error . args)
   (display "EditorError: ")
@@ -81,6 +93,8 @@
         (editor-map-add-layer m tilemap)
         (editor-map-add-layer m objmap)
     
+        (editor-map-set-filename m filename)
+
         ;; set data to the tilemap
         (editor-tilemap-set-data tilemap 1 foreground)
         (editor-tilemap-set-data tilemap 0 background)
@@ -90,10 +104,10 @@
 (define (load-map filename)
   (catch #t
          (lambda ()
-           (editor-map-component-set-map *editor-map*
-                                         (create-level-map-from-file filename))
-           ;;(editor-load filename)
-           )
+           (let ((levelmap (create-level-map-from-file filename)))
+             (editor-map-component-set-map *editor-map* levelmap)
+             (add-buffer levelmap)
+             ))
          (lambda args
            (editor-error args)))
   (push-last-file filename))
@@ -282,8 +296,25 @@
 
     (gui-add-menu-item menu "File/Quit" 
                        (lambda ()
-                         (on-gui-quit)
-                         (gui-quit)))
+                         (let ((modified #f))
+                           (for-each (lambda (el)
+                                       (set! modified (or modified
+                                                          (editor-map-is-modified el))))
+                                     *buffers*)
+
+                           (cond (modified
+                                  (yes-no-dialog 
+                                   "Quit"
+                                   "Some files have been modified, do you want to quit?"
+                                   "Quit" "Cancel" 
+                                   (lambda ()
+                                     (on-gui-quit)
+                                     (gui-quit))
+                                   #f))
+                                 (else
+                                  (on-gui-quit)
+                                  (gui-quit)))
+                           )))
 
     ;; Dialog Menu
     (gui-add-menu-item menu "Dialogs/Draw Grid" editor-toggle-grid)
@@ -545,16 +576,17 @@
                  (truncate-list *recent-files-size*
                                 (remove-doubles (append *recent-files* ent)))))
           (else
-           (editor-error *editor-variables*)))))
+           (editor-error *editor-variables*))))
+
+  (set! *recent-files* (filter (lambda (file)
+                                 (access? file F_OK))
+                               *recent-files*)))
 
 (load-variables)
 (init-recent-files)
 
 (set! *editor-map* (editor-map-component-create 0 25 screen-width (- screen-height 25)))
 (create-menu)
-(gui-push-component *menu*)
-(set! *statusbar* (gui-create-label 400 5 "[XxY]"))
-(gui-pop-component)
 
 (create-toolbar)
 (create-tile-editor)
@@ -567,17 +599,6 @@
 (object-selector-add-brush *object-selector* "igel" '(Igel))
 (object-selector-add-brush *object-selector* "hero/run" '(Hero))
 
-(define *level-map2* (create-level-map 60 15))
-(define *level-map*  (create-level-map 20 15))
-
-(gui-add-menu-item *menu* "Maps/First" 
-                   (lambda ()
-                     (editor-map-component-set-map *editor-map* *level-map*)))
-
-(gui-add-menu-item *menu* "Maps/Second" 
-                   (lambda ()
-                     (editor-map-component-set-map *editor-map* *level-map2*)))
-
-(editor-map-component-set-map *editor-map* *level-map*)
+(new-map 60 15)
 
 ;; EOF ;;

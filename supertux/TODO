@@ -15,6 +15,7 @@ ToDo:
  - camera path 
  - automatic backup of files
  - reset points
+ - get rid of make_metadat, get_ruby_object in SuperTux code
 
 New Object Types:
 =================

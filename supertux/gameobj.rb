@@ -4,8 +4,12 @@ class GameObj
   end
 end
 
-class SecretArea
+class SecretArea<GameObj
   attr_accessor :message
+  
+  def initialize(data)
+    @message = ""
+  end
 
   def save(f, obj)
     rect = obj.get_rect()
@@ -14,6 +18,15 @@ class SecretArea
             "                    (width #{rect.get_width()})\n" \
             "                    (height #{rect.get_height()})\n" \
             "                    (message \"#{@message.inspect}\"))")
+  end
+
+  def property_dialog()
+    puts @message.inspect
+    dialog = GenericDialog.new("SecretArea Property Dialog", $gui.get_component())
+    dialog.add_string("Message: ", @message)
+    dialog.set_callback(proc{|message| 
+                          @message = message
+                        })
   end
 end
 
@@ -35,15 +48,15 @@ class SpawnPoint<GameObj
   def initialize(data)
     @data = data
     @name = "start"
-    connect_v1_ObjMapObject(data.sig_move(), method(:on_move))
+    connect_v1_ObjMapObject(data.to_object.sig_move(), method(:on_move))
     on_move(data)
   end
 
   def on_move(data)
-    pos = @data.get_pos()
+    pos = @data.to_object.get_pos()
     pos.x = (((pos.x+16)/32).to_i)*32
     pos.y = (((pos.y+16)/32).to_i)*32
-    @data.set_pos(pos)
+    @data.to_object.set_pos(pos)
   end
 
   def save(f, obj)
@@ -69,15 +82,15 @@ class Door<GameObj
     @sector     = get_value_from_tree(["sector", "_"], sexpr, "main")
     @spawnpoint = get_value_from_tree(["spawnpoint", "_"], sexpr, "start")
 
-    connect_v1_ObjMapObject(data.sig_move(), method(:on_move))
+    connect_v1_ObjMapObject(@data.to_object.sig_move(), method(:on_move))
     on_move(data)
   end
 
   def on_move(data)
-    pos = @data.get_pos()
+    pos = @data.to_object.get_pos()
     pos.x = (((pos.x+16)/32).to_i)*32
     pos.y = (((pos.y+16)/32).to_i)*32
-    @data.set_pos(pos)
+    @data.to_object.set_pos(pos)
   end
 
   def save(f, obj)

@@ -52,7 +52,7 @@ class Sector
     @editormap.add_layer(@objects.to_layer())
     @editormap.add_layer(@foreground.to_layer())
     # FIXME: Data might not get freed since its 'recursively' refcounted
-    @editormap.set_metadata(make_metadata(self))
+    @editormap.set_metadata(self)
     return self
   end
 
@@ -108,7 +108,7 @@ class Sector
     @editormap.add_layer(@objects.to_layer())
     @editormap.add_layer(@foreground.to_layer())
     # FIXME: Data might not get freed since its 'recursively' refcounted
-    @editormap.set_metadata(make_metadata(self))
+    @editormap.set_metadata(self)
   end
   
   def load_v2(data)
@@ -200,7 +200,7 @@ class Sector
     @editormap.add_layer(@foreground.to_layer()) if @foreground
     @editormap.add_layer(@objects.to_layer())
     
-    @editormap.set_metadata(make_metadata(self))
+    @editormap.set_metadata(self)
   end
 
   def activate(workspace)

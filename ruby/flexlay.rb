@@ -1,5 +1,10 @@
 class EditorMap
   alias orig_get_metadata get_metadata
+  alias orig_set_metadata set_metadata
+
+  def set_metadata(data)
+    orig_set_metadata(make_metadata(data))
+  end
 
   def get_metadata()
     return get_ruby_object(orig_get_metadata())

@@ -150,12 +150,13 @@
       (gui-pop-component))))
 
 (define (simple-file-dialog title filename func)
-  (let ((window (gui-create-window 200 200 200 160 title)))
+  (let ((window (gui-create-window 200 200 250 160 title)))
     (gui-push-component (gui-window-get-client-area window))
     (gui-create-label 10 10 "Filename: ")
     (let ((ok       (gui-create-button 90 100 50 25 "Ok"))
           (cancel   (gui-create-button 140 100 50 25 "Cancel"))
-          (filename (gui-create-inputbox 10 30 180 25 filename)))
+          (filename (gui-create-inputbox 10 30 180 30 filename))
+          (browse   (gui-create-button 190 30 50 20 "Browse...")))
 
       (gui-component-on-click ok 
                               (lambda ()   
@@ -165,8 +166,15 @@
       (gui-component-on-click cancel
                               (lambda () 
                                 (gui-hide-component window)))
+
+      (gui-component-on-click browse
+                              (lambda ()
+                                (gui-file-dialog (gui-inputbox-get-text filename)
+                                                 (lambda (filename)
+                                                   (gui-inputbox-set-text filename)))))
+
       (gui-pop-component)
-      )))
+      window)))
 
 (define (dump-tile-definitions filename)
   (with-output-to-file filename

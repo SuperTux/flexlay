@@ -1,4 +1,4 @@
-//  $Id: view_component.hxx,v 1.2 2003/10/12 11:58:09 grumbel Exp $
+//  $Id: button_windstille.hxx,v 1.1 2003/10/12 11:58:09 grumbel Exp $
 // 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -17,30 +17,21 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-#ifndef HEADER_VIEW_COMPONENT_HXX
-#define HEADER_VIEW_COMPONENT_HXX
+#ifndef HEADER_BUTTON_WINDSTILLE_HXX
+#define HEADER_BUTTON_WINDSTILLE_HXX
 
-#include <ClanLib/Signals/slot.h>
-#include <ClanLib/GUI/component.h>
+#include "style_manager_windstille.hxx"
 
-class View;
-          
-/** clanGUI wrapper for View class, used for the debug GUI in the game */
-class ViewComponent : public CL_Component
+/** */
+class Button_Windstille : public CL_ComponentStyle
 {
 private:
-  View* view;
-  std::vector<CL_Slot> slots;
+  CL_Slot slot_paint;
+  void on_paint();
+  
+  CL_Button *button;
 public:
-  ViewComponent(CL_Component* parent, View* view);
-
-  void draw();
-
-  void on_input_down(const CL_InputEvent& event);
-  void on_input_up(const CL_InputEvent& event);
-private:
-  ViewComponent (const ViewComponent&);
-  ViewComponent& operator= (const ViewComponent&);
+  Button_Windstille(CL_Button *button);
 };
 
 #endif

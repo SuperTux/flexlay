@@ -1,4 +1,4 @@
-//  $Id: gui.hxx,v 1.2 2003/10/11 08:11:59 grumbel Exp $
+//  $Id: gui.hxx,v 1.3 2003/10/12 11:58:09 grumbel Exp $
 // 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -55,6 +55,10 @@ CL_Component* gui_create_label(int x, int y, const char* text);
     entered text can be accessed via an accessor function */
 CL_Component* gui_create_inputbox(int x, int y, int w, int h, const char* text);
 
+/** Remove the component \a comp from its parent 
+    FIXME: Who deallocates?! */
+void gui_remove_component(CL_Component* comp);
+
 /** Connect a function to an on_click event */
 void gui_component_on_click(CL_Component* comp, SCM func);
 
@@ -85,6 +89,10 @@ void gui_file_dialog(const char* filename, SCM func);
 
 /** Quit the GUI manager, works only if the GUIManager is in a busy loop */
 void gui_quit();
+
+void gui_hide();
+void gui_show();
+bool gui_is_visible();
 
 #endif
 

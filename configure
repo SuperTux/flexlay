@@ -4293,7 +4293,7 @@ echo "$as_me: error: Library requirements (
 
 
 
-                                                                      ac_config_files="$ac_config_files Makefile data/Makefile src/Makefile src/collision/Makefile src/scripting/Makefile src/guile/Makefile src/editor/Makefile"
+                                                                                ac_config_files="$ac_config_files Makefile data/Makefile src/Makefile src/collision/Makefile src/scripting/Makefile src/guile/Makefile src/guistyle/Makefile src/editor/Makefile"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -4856,6 +4856,7 @@ do
   "src/collision/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/collision/Makefile" ;;
   "src/scripting/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/scripting/Makefile" ;;
   "src/guile/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/guile/Makefile" ;;
+  "src/guistyle/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/guistyle/Makefile" ;;
   "src/editor/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/editor/Makefile" ;;
   "depfiles" ) CONFIG_COMMANDS="$CONFIG_COMMANDS depfiles" ;;
   "config.h" ) CONFIG_HEADERS="$CONFIG_HEADERS config.h" ;;

@@ -1,4 +1,4 @@
-//  $Id: gui_manager.hxx,v 1.1 2003/10/10 21:06:22 grumbel Exp $
+//  $Id: gui_manager.hxx,v 1.2 2003/10/12 11:58:09 grumbel Exp $
 // 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -52,6 +52,10 @@ public:
 
   void push_component(CL_Component* c) { components.push(c); }
   void pop_component() { components.pop(); }
+
+  void hide();
+  void show();
+  bool is_visible();
 
   CL_Component* get_component();  
   CL_SlotContainer* get_slot_container();

@@ -1,4 +1,4 @@
-//  $Id: view_component.cxx,v 1.1 2003/10/11 12:15:59 grumbel Exp $
+//  $Id: view_component.cxx,v 1.2 2003/10/12 11:58:09 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -23,6 +23,7 @@
 #include <ClanLib/Display/display_window.h>
 #include <ClanLib/Display/input_context.h>
 #include "view.hxx"
+#include "fonts.hxx"
 #include "view_component.hxx"
 
 ViewComponent::ViewComponent(CL_Component* parent, View* v)
@@ -34,6 +35,8 @@ ViewComponent::ViewComponent(CL_Component* parent, View* v)
 
   slots.push_back(sig_mouse_down().connect(this, &ViewComponent::on_input_down));
   slots.push_back(sig_mouse_up().connect(this, &ViewComponent::on_input_up));
+
+  slots.push_back(sig_paint().connect(this, &ViewComponent::draw));
 }
 
 void
@@ -63,6 +66,13 @@ ViewComponent::on_input_up(const CL_InputEvent& event)
       gh_call2(gh_lookup("*mouse-up-handler*"), 
                gh_double2scm(pos.x), gh_double2scm(pos.y));
     }
+}
+
+void
+ViewComponent::draw()
+{
+  Fonts::dialog.set_alignment(origin_bottom_left);
+  Fonts::dialog.draw(10, get_height()-10, "..:: Debug ::..");
 }
 
 /* EOF */

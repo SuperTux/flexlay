@@ -1,4 +1,4 @@
-SUBDIRS = editor guile collision scripting
+SUBDIRS = editor guile collision scripting guistyle
 
 bindir=$(prefix)/games
 
@@ -94,6 +94,7 @@ windstille_LDADD = \
   scripting/libwindstille_scripting.a \
   editor/libwindstille_editor.a \
   collision/libwindstille_collision.a \
+  guistyle/libwindstille_guistyle.a \
   @WINDSTILLE_LIBS@
 
 windstille_CPPFLAGS = \

@@ -66,6 +66,7 @@ AC_CONFIG_FILES(
     src/collision/Makefile
     src/scripting/Makefile
     src/guile/Makefile
+    src/guistyle/Makefile
     src/editor/Makefile
 )
 AC_OUTPUT

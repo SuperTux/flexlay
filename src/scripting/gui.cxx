@@ -1,4 +1,4 @@
-//  $Id: gui.cxx,v 1.2 2003/10/11 08:11:59 grumbel Exp $
+//  $Id: gui.cxx,v 1.3 2003/10/12 11:58:09 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -19,6 +19,7 @@
 
 #include <ClanLib/signals.h>
 #include <ClanLib/gui.h>
+#include <ClanLib/GUI/gui_manager.h>
 #include "scm_functor.hxx"
 #include "../gui_manager.hxx"
 #include "gui.hxx"
@@ -99,6 +100,11 @@ gui_create_inputbox(int x, int y, int w, int h, const char* text)
   return new CL_InputBox(CL_Rect(CL_Point(x,y), CL_Size(w, h)), text, manager);
 }
 
+void gui_remove_component(CL_Component* comp)
+{
+  CL_Component* parent = comp->get_parent();
+  parent->remove_child(comp);
+}
 
 CL_Component*
 gui_push_component(CL_Component* c)
@@ -168,6 +174,21 @@ void
 gui_quit()
 {
   GUIManager::current()->get_component()->quit();
+}
+
+void gui_hide()
+{
+  GUIManager::current()->hide();
+}
+
+void gui_show()
+{
+  GUIManager::current()->show();
+}
+
+bool gui_is_visible()
+{
+  return GUIManager::current()->is_visible();
 }
 
 /* EOF */

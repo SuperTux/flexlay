@@ -1,4 +1,4 @@
-//  $Id: game.cxx,v 1.14 2003/09/29 19:29:17 grumbel Exp $
+//  $Id: game.cxx,v 1.15 2003/10/12 11:58:09 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -67,6 +67,16 @@ void add_region_trigger(int x, int y, int w, int h, SCM func)
 void player_set_pos(float x, float y)
 {
   Player::current()->set_position(CL_Vector(x, y));
+}
+
+float player_get_pos_x()
+{
+  return Player::current()->get_pos().x;
+}
+
+float player_get_pos_y()
+{
+  return Player::current()->get_pos().y;
 }
 
 void player_set_direction(const char* direction)

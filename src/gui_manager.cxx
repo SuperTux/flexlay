@@ -1,4 +1,4 @@
-//  $Id: gui_manager.cxx,v 1.1 2003/10/10 21:06:22 grumbel Exp $
+//  $Id: gui_manager.cxx,v 1.2 2003/10/12 11:58:09 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -18,8 +18,8 @@
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include <ClanLib/gui.h>
-#include <ClanLib/guistylesilver.h>
 #include <ClanLib/core.h>
+#include "guistyle/style_manager_windstille.hxx"
 #include "scripting/gui.hxx"
 #include "gui_manager.hxx"
 #include "globals.hxx"
@@ -30,7 +30,7 @@ GUIManager::GUIManager()
 {
   slot_container = new CL_SlotContainer();
   resources = new CL_ResourceManager(datadir + "gui/gui.xml", false);
-  style     = new CL_StyleManager_Silver(resources);
+  style     = new StyleManager_Windstille(resources);
   manager   = new CL_GUIManager(style);
 
   current_ = this;
@@ -52,7 +52,8 @@ GUIManager::~GUIManager()
 void
 GUIManager::draw()
 {
-  manager->show();
+  if (manager->is_input_enabled())
+    manager->show();
 }
 
 void
@@ -77,6 +78,26 @@ CL_SlotContainer*
 GUIManager::get_slot_container()
 {
   return slot_container;
+}
+
+void
+GUIManager::hide()
+{
+  if (manager->is_input_enabled())
+    manager->disable_input();
+}
+
+void
+GUIManager::show()
+{
+  if (!manager->is_input_enabled())
+    manager->enable_input();
+}
+
+bool
+GUIManager::is_visible()
+{
+  return manager->is_input_enabled();
 }
 
 /* EOF */

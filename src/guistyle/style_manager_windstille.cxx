@@ -1,5 +1,5 @@
-//  $Id: view_component.hxx,v 1.2 2003/10/12 11:58:09 grumbel Exp $
-// 
+//  $Id: style_manager_windstille.cxx,v 1.1 2003/10/12 11:58:09 grumbel Exp $
+//
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
 //
@@ -12,37 +12,32 @@
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
-// 
+//
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-#ifndef HEADER_VIEW_COMPONENT_HXX
-#define HEADER_VIEW_COMPONENT_HXX
+#include <iostream>
+#include "button_windstille.hxx"
+#include "style_manager_windstille.hxx"
 
-#include <ClanLib/Signals/slot.h>
-#include <ClanLib/GUI/component.h>
-
-class View;
-          
-/** clanGUI wrapper for View class, used for the debug GUI in the game */
-class ViewComponent : public CL_Component
+StyleManager_Windstille::StyleManager_Windstille(CL_ResourceManager *resources)
+  : CL_StyleManager_Silver(resources)
 {
-private:
-  View* view;
-  std::vector<CL_Slot> slots;
-public:
-  ViewComponent(CL_Component* parent, View* view);
+}
 
-  void draw();
-
-  void on_input_down(const CL_InputEvent& event);
-  void on_input_up(const CL_InputEvent& event);
-private:
-  ViewComponent (const ViewComponent&);
-  ViewComponent& operator= (const ViewComponent&);
-};
-
-#endif
+void StyleManager_Windstille::connect_styles(const std::string &type, CL_Component *component)
+{
+  std::cout << "connect_style: " << type << std::endl;
+  if (type == "button")
+    {
+      CL_Button *button = (CL_Button *)component;
+      button->set_style(new Button_Windstille(button));
+    }
+  else
+    {
+      CL_StyleManager_Silver::connect_styles(type, component);
+    }
+}
 
 /* EOF */

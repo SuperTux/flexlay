@@ -40,6 +40,10 @@
     <bitmap glyphs="copyright_glyphs" letters="!_#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~" />
   </font>
 
+  <sprite name="door">
+    <image file="images/door.png"></image>
+  </sprite>
+
   <section name="powerup">
     <sprite name="flash">
       <image file="images/powerup/flash.png" name="image1" />

@@ -1,4 +1,4 @@
-
+(use-modules (ice-9 format))
 (load "helper.scm")
 
 (define (*key-down-handler* key)
@@ -58,16 +58,72 @@
   (let* ((t (inexact->exact (game-get-time)))
          (minutes (quotient  t 60))
          (seconds (remainder t 60)))
-   (string-append (number->string minutes) 
-                  ":"
-                  (if (< seconds 10)
-                      "0" "")
-                  (number->string seconds))))
+    (string-append (number->string minutes) 
+                   ":"
+                   (if (< seconds 10)
+                       "0" "")
+                   (number->string seconds))))
 
-(let ((window (gui-create-window 20 20 300 200 "Debug GUI")))
+
+(define save-player-position #f)
+(let ((x 10)
+      (y 45)
+      (buttons '())
+      (window (gui-create-window 20 20 300 200 "Position Save GUI")))
+
   (gui-push-component (gui-window-get-client-area window))
-  (gui-create-button-func 20 20 100 25 "Hello World"
-                          (lambda () (display "Do something clever\n")))
-  (gui-pop-component))
+  (gui-create-button-func 10 10 100 25 "Save Position"
+                          (lambda () (save-player-position)))
+  (gui-create-button-func 115 10 100 25 "Clear"
+                          (lambda () 
+                            (for-each gui-remove-component buttons)
+                            (set! buttons '())
+                            (set! x 10)
+                            (set! y 45)))
+  (gui-pop-component)
+
+  (set! save-player-position 
+        (lambda ()
+          (gui-push-component (gui-window-get-client-area window))
+          (let ((player-x (inexact->exact (player-get-pos-x)))
+                (player-y (inexact->exact (player-get-pos-y))))
+            (set! buttons
+                  (cons (gui-create-button-func x y 70 25 (format #f "~d, ~d" player-x player-y)
+                                                (lambda ()
+                                                  (player-set-pos player-x player-y)))
+                        buttons)))
+          (set! x (+ x 75))
+          (cond ((> x 220)
+                 (set! y (+ y 30))
+                 (set! x 10)))
+          (gui-pop-component))))
+
+(let ((window (gui-create-window 20 320 310 100 "Eval Scheme")))
+  (gui-push-component (gui-window-get-client-area window))
+  (let ((input  (gui-create-inputbox 10 10 240 30 ""))
+        (button (gui-create-button 255 10 50 25 "eval")))
+    (gui-component-on-click button
+                            (lambda ()
+                              (catch #t
+                                     (lambda () 
+                                       (eval-string (gui-inputbox-get-text input)))
+                                     (lambda err
+                                       (display "Error: ")(display err)(newline)))))
+    (gui-pop-component)))
+
+(gui-create-button-func 0 0 100 25 "Hide Debug GUI"
+                        (lambda () (gui-hide)))
+
+;; Default to non-debug mode
+(gui-hide)
+
+;; (define array
+;;   (let ((data '(1 2 3 4 5)))
+;;     (make-procedure-with-setter 
+;;      (lambda (i)
+;;        (list-ref data i))
+;;      (lambda (i val)
+;;        (list-set! data i val))
+;;      )))
 
 ;; EOF ;;

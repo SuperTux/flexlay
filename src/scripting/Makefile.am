@@ -20,7 +20,8 @@
 command_source = \
   editor.hxx editor.cxx \
   game.hxx   game.cxx \
-  gui.hxx    gui.cxx
+  gui.hxx    gui.cxx \
+  netpanzer.hxx netpanzer.cxx
 
 noinst_LIBRARIES = libwindstille_scripting.a
 

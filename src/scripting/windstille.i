@@ -4,6 +4,7 @@
 #include "editor.hxx"
 #include "game.hxx"
 #include "gui.hxx"
+#include "netpanzer.hxx"
 #include "../editor/tile_brush.hxx"
 
 TileBrush scm2brush(SCM s_brush);
@@ -45,5 +46,6 @@ component2scm(CL_Component* comp) {
 %include "editor.hxx"
 %include "game.hxx"
 %include "gui.hxx"
+%include "netpanzer.hxx"
 
 /* EOF */

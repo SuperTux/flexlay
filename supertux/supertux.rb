@@ -42,18 +42,11 @@ flexlay.init()
 $editor = Editor.new()
 $gui = $editor.get_gui_manager()
 
-myrect      = CL_Rect.new(CL_Point.new(0, 56), CL_Size.new(665, 488+56))
-$editor_map = EditorMapComponent.new(myrect, $gui.get_component())
-$workspace  = Workspace.new(myrect.get_width(), myrect.get_height())
-$editor_map.set_workspace($workspace)
-
 # Tools
 $tilemap_paint_tool  = TileMapPaintTool.new()
 $tilemap_select_tool = TileMapSelectTool.new()
 $zoom_tool           = ZoomTool.new()
 $objmap_select_tool  = ObjMapSelectTool.new()
-
-$workspace.set_tool($tilemap_paint_tool.to_tool());
 
 $mysprite = make_sprite("../data/images/icons16/stock_paste-16.png")
 
@@ -66,11 +59,6 @@ end
 $recent_files.each do |filename|
   $recent_files_menu.add_item($mysprite, filename, proc{ supertux_load_level(filename) })
 end
-
-$minimap = Minimap.new($editor_map, CL_Rect.new(CL_Point.new(3 + myrect.left, 
-                                                             488+3-14  + myrect.top), 
-                                                CL_Size.new(794-134-16, 50)), 
-                       $gui.get_component())
 
 # $console = Console.new(CL_Rect.new(CL_Point.new(50, 100), CL_Size.new(400, 200)),
 #                        $gui.get_component())
@@ -158,7 +146,15 @@ end
 
 # Load game tiles from filename into tileset
 class Tileset
+  alias old_initialize initialize
+
   attr_accessor :tilegroups
+
+  def initialize(*params)
+    old_initialize(*params)
+
+    @tilegroups = []
+  end
 
   def load(filename)
     puts "Loading Tileset: #{filename}"
@@ -215,10 +211,9 @@ class Tileset
 
   def get_ungrouped_tiles()
     # Searches for tiles which are not yet grouped and creates a group
-    # for them
-    ungrouped_tiles = []
-    
+    # for them   
     # Potentially quite slow
+    ungrouped_tiles = []
     get_tiles().each {|tile|
       catch :tile_is_grouped do
         tilegroups.each {|group|
@@ -298,12 +293,33 @@ $itile_conditions = [
 
 require "level.rb"
 require "sector.rb"
-require "gui2.rb"
+
+$supertux = SuperTuxGUI.new($tileset, $gui)
+
+args = []
+
+if args == []
+  startlevel = Level.new(100, 50)
+  startlevel.activate($supertux.workspace)
+else
+  supertux_load_level(args[0])
+end
+
+level = nil
+
+# Init the GUI, so that button state is in sync with internal state
+$supertux.gui_toggle_minimap()
+$supertux.gui_toggle_minimap()
+$supertux.gui_show_interactive()
+$supertux.gui_show_current()
+$supertux.set_tilemap_paint_tool()
 
 $gui.run()
 
 $config.save($config_file)
 
-flexlay.deinit()
+# FIXME: Can't deinit flexlay, since we would crash then
+# flexlay.deinit()
+# puts "And now we crash"
 
 # EOF #

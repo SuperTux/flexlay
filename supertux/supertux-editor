@@ -1,9 +1,9 @@
 #!/bin/sh
 
-LD_LIBRARY_PATH=$LD_LIBRARY_PATH:../lib:../ruby
+LD_LIBRARY_PATH="$LD_LIBRARY_PATH:`pwd`/../lib:`pwd`/../ruby"
 export LD_LIBRARY_PATH
 
-RUBYLIB=$RUBYLIB:../ruby
+RUBYLIB=$RUBYLIB:`pwd`/../ruby
 export RUBYLIB
 
 exec ruby ./supertux.rb "$@"

@@ -114,7 +114,7 @@ TileSelector::draw()
       int x = i % width;
       int y = i / width;
 
-      Tile* tile = tileset.create(i);
+      Tile* tile = tileset.create(tiles[i]);
 
       CL_Rect rect(CL_Point(static_cast<int>(x * tileset.get_tile_size()*scale),
                             static_cast<int>(y * tileset.get_tile_size()*scale)),

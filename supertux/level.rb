@@ -182,10 +182,11 @@ class Level
     f.close()
   end
 
-  def activate_sector(sector, workspace)
+  def activate_sector(sectorname, workspace)
     for sec in @sectors
-      if sec.name == sector
+      if sec.name == sectorname
         sec.activate(workspace)
+        @current_sector = sec
         break
       end
     end

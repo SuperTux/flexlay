@@ -446,7 +446,7 @@ class SuperTuxGUI
 
   def gui_edit_level()
     level = @workspace.get_map().get_metadata().get_level()
-    dialog = GenericDialog.new("Edit Sector", @gui.get_component())
+    dialog = GenericDialog.new("Edit Level", @gui.get_component())
 
     dialog.add_string("Name:", level.name)
     dialog.add_string("Author:", level.author)
@@ -488,30 +488,20 @@ class SuperTuxGUI
 
   def gui_add_sector()
     level = @workspace.get_map().get_metadata().get_level()
-    dialog = GenericDialog.new("Add Sector", @gui.get_component())
-    
-    dialog.add_string("Name: ", "newsector")
-    dialog.add_string("Music: ",   "")
-    dialog.add_float("Gravity: ", "10.0")
-    dialog.add_int("Width: ",   30)
-    dialog.add_int("Height: ",  20)
-    
-    dialog.set_callback(proc { |name, music, gravity, width, height|
-                          uniq_name = name
-                          i = 1
-                          while level.get_sectors().index(uniq_name)
-                            uniq_name = name + "<%d>" % i
-                            i += 1
-                          end
 
-                          sector = Sector.new(level)
-                          sector.new_from_size(uniq_name, width, height)
+    name = "sector"
+    uniq_name = name
+    i = 2
+    while level.get_sectors().index(uniq_name)
+      uniq_name = name + "<%d>" % i
+      i += 1                                    
+    end
 
-                          sector.song    = ""
-                          sector.gravity = "10.0"
-
-                          level.add_sector(sector) 
-                        })
+    sector = Sector.new(level)
+    sector.new_from_size(uniq_name, 30, 20);
+    level.add_sector(sector)
+    level.activate_sector(uniq_name, @workspace)
+    gui_edit_sector();
   end  
 
   def gui_switch_sector_menu()

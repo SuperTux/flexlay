@@ -213,7 +213,7 @@ class SuperTuxGUI
   def on_object_drop(brush, pos)
     pos = @editor_map.screen2world(pos)
     data = get_ruby_object(brush.get_data())
-    create_gameobject(data, pos)
+    create_gameobject($gui.workspace.get_map().get_metadata().objects, data, pos)
   end
 
   def run()
@@ -651,7 +651,7 @@ def supertux_load_level(filename)
   
   if not($recent_files.find{|el| el == filename}) then
     $recent_files.push(filename)
-    $supertux.recent_files_menu.add_item($mysprite, filename, 
+    $gui.recent_files_menu.add_item($mysprite, filename, 
                                 proc { supertux_load_level(filename) })
   end
   

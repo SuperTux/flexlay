@@ -155,7 +155,8 @@ class Sector
       elsif name == "background"
         print "background unhandled\n"
       else
-        create_gameobject_from_data(name, data)
+        puts "Creating #{name}..."
+        create_gameobject_from_data(@objects, name, data)
       end
     end
     

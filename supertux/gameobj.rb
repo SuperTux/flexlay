@@ -7,17 +7,25 @@ end
 class SecretArea<GameObj
   attr_accessor :message
   
-  def initialize(data)
-    @message = ""
+  def initialize(data, sexpr = [])
+    @data    = data
+
+    @message = get_value_from_tree(["message", "_"], sexpr, "")
+
+    x  = get_value_from_tree(["x", "_"],  sexpr, 0)
+    y  = get_value_from_tree(["y", "_"],  sexpr, 0)
+    width  = get_value_from_tree(["width", "_"],  sexpr, 64)
+    height = get_value_from_tree(["height", "_"], sexpr, 64)
+    @data.set_rect(CL_Rect.new(CL_Point.new(x, y), CL_Size.new(width, height)))
   end
 
   def save(f, obj)
-    rect = obj.get_rect()
+    rect = @data.get_rect()
     f.write("        (secretarea (x #{rect.left})\n" \
             "                    (y #{rect.top})\n"  \
             "                    (width #{rect.get_width()})\n" \
             "                    (height #{rect.get_height()})\n" \
-            "                    (message \"#{@message.inspect}\"))")
+            "                    (message #{@message.inspect}))\n")
   end
 
   def property_dialog()
@@ -33,19 +41,26 @@ end
 class SequenceTrigger<GameObj
   attr_accessor :sequence, :data
   
-  def initialize(data)
-    @sequence = ""
-    @data = data
-    data.set_color(CL_Color.new(255, 0, 0, 128))
+  def initialize(data, sexpr = [])
+    @data     = data
+    @sequence = get_value_from_tree(["sequence", "_"], sexpr, "")
+    @data.set_color(CL_Color.new(255, 0, 0, 128))
+    
+
+    x  = get_value_from_tree(["x", "_"],  sexpr, 0)
+    y  = get_value_from_tree(["y", "_"],  sexpr, 0)
+    width  = get_value_from_tree(["width", "_"],  sexpr, 64)
+    height = get_value_from_tree(["height", "_"], sexpr, 64)
+    @data.set_rect(CL_Rect.new(CL_Point.new(x, y), CL_Size.new(width, height)))
   end
 
   def save(f, obj)
-    rect = obj.get_rect()
-    f.write("        (secretarea (x #{rect.left})\n" \
-            "                    (y #{rect.top})\n"  \
-            "                    (width #{rect.get_width()})\n" \
-            "                    (height #{rect.get_height()})\n" \
-            "                    (sequence \"#{@sequence.inspect}\"))")
+    rect = @data.get_rect()
+    f.write("        (sequencetrigger (x #{rect.left})\n" \
+            "                         (y #{rect.top})\n"  \
+            "                         (width #{rect.get_width()})\n" \
+            "                         (height #{rect.get_height()})\n" \
+            "                         (sequence #{@sequence.inspect}))\n")
   end
 
   def property_dialog()

@@ -69,7 +69,10 @@ class Tileset
       end
 
       counter += 1
-      print "Loading tiles: %3.2f%%\r" % [counter.to_f/tree.length.to_f]
+      if counter % 20 == 0 then
+        print "Loading tiles: %3.0f%%\r" % [counter.to_f/tree.length.to_f*100.0]
+        $stdout.flush()
+      end
     end
     puts ""
   end

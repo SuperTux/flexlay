@@ -19,6 +19,8 @@ ToDo:
  - faster tile-loading (load on demand, pixelbuffer cache)
  - make controlpoints unzoomable
  - fix load/save and write a few testcases for them
+ - load via command line needs to be handled differently, since it
+   needs GUI to work
 
 New Object Types:
 =================

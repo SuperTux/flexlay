@@ -21,36 +21,39 @@ $game_objects = [
     proc{|data| BadGuy.new("spiky")}],
   ["playerspawn", "images/shared/spawnpoint.png", "sprite",
     proc{|data| SpawnPoint.new(data)}],
+  ["spawnpoint", "images/shared/spawnpoint.png", "sprite",
+    proc{|data| SpawnPoint.new(data)}],
   ["door", "images/shared/door-1.png", "sprite",
     proc{|data| Door.new(data)}],
   ["trampoline", "images/shared/trampoline-1.png", "sprite",
     proc{|data| BadGuy.new("trampoline")}],
   ["secretarea", "images/shared/secretarea.png", "rect",
-    proc{|data| SecretArea.new(data)}],
+    proc{|data, sexpr| SecretArea.new(data, sexpr)}],
   ["sequencetrigger", "images/shared/sequencetrigger.png", "rect",
-    proc{|data| SequenceTrigger.new(data)}]
+    proc{|data, sexpr| SequenceTrigger.new(data, sexpr)}]
 ]
 
-def create_gameobject_from_data(name, data)
+def create_gameobject_from_data(objmap, name, sexpr)
   # Creates a gameobject from the given sexpr: "snowball", ((x 5) (y 5))
   
   object = $game_objects.find {|x| x[0] == name}
   if object != nil then
     (name, image, type, func) = object
     
-    x = get_value_from_tree(["x", "_"], data, 0)
-    y = get_value_from_tree(["y", "_"], data, 0)
+    x = get_value_from_tree(["x", "_"], sexpr, 0)
+    y = get_value_from_tree(["y", "_"], sexpr, 0)
     
-    obj = create_gameobject(data, CL_Point.new(x, y), data)
+    obj = create_gameobject(objmap, object, CL_Point.new(x, y), sexpr)
   else
     print "Error: Couldn't resolve object type: ", name, "\n"
     print "Sector: Unhandled tag: ", name, "\n"
   end
 end
 
-def create_gameobject(data, pos, sexpr = [])
+def create_gameobject(objmap, data, pos, sexpr = [])
   # Creates a gameobject the given position, data is the entry in the $game_objects table
   case data[2] 
+    
   when "sprite" 
     obj = ObjMapSpriteObject.new(make_sprite($datadir + data[1]), pos, make_metadata(nil))
     obj.to_object.set_metadata(make_metadata(data[3].call(obj)))
@@ -58,14 +61,16 @@ def create_gameobject(data, pos, sexpr = [])
   when "rect"
     obj = ObjMapRectObject.new(CL_Rect.new(pos, CL_Size.new(64, 64)),
                                CL_Color.new(0, 0, 255, 128), make_metadata(nil))
-    obj.to_object.set_metadata(make_metadata(data[3].call(obj)))
+    obj.to_object.set_metadata(make_metadata(data[3].call(obj, sexpr)))
+
   else
-    raise "Error: Unknown object type droped"
+    raise "Error: Unknown object type droped: '#{data}'"
   end
   
-  cmd = ObjectAddCommand.new(@workspace.get_map().get_metadata().objects)
+  puts "Adding object to workspace: #{obj}"
+  cmd = ObjectAddCommand.new(objmap)
   cmd.add_object(obj.to_object);
-  @workspace.get_map().execute(cmd.to_command());
+  $gui.workspace.get_map().execute(cmd.to_command());
   return obj
 end
 

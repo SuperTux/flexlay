@@ -70,12 +70,12 @@ GeneratedBrushImpl::update()
   if (dirty)
     {
       CL_SpriteDescription desc;
-      desc.add_frame(new CL_PixelBuffer(generate_brushmask(shape,
-                                                           radius, 
-                                                           spikes,
-                                                           hardness, 
-                                                           aspect_ratio, 
-                                                           angle)), true);
+      desc.add_frame(generate_brushmask(shape,
+                                        radius, 
+                                        spikes,
+                                        hardness, 
+                                        aspect_ratio, 
+                                        angle));
       sprite = CL_Sprite(desc);
       sprite.set_alignment(origin_center);
       dirty = false;

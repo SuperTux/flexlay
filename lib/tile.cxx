@@ -108,7 +108,7 @@ Tile::get_sprite()
   else
     {
       CL_SpriteDescription desc;
-      desc.add_frame(new CL_PixelBuffer(get_pixelbuffer()), true);
+      desc.add_frame(CL_PixelBuffer(get_pixelbuffer()));
       impl->sprite = CL_Sprite(desc);
       
       return impl->sprite;
@@ -127,7 +127,7 @@ Tile::get_pixelbuffer()
       {
         if (has_suffix(impl->filename, ".png") || has_suffix(impl->filename, ".jpg"))
           {
-            impl->pixelbuffer = CL_PixelBuffer(*CL_ProviderFactory::load(impl->filename));
+            impl->pixelbuffer = CL_PixelBuffer(CL_ProviderFactory::load(impl->filename));
           }
         else
           {

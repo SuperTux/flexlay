@@ -28,7 +28,7 @@ CL_Sprite
 pixelbuffer2sprite(const CL_PixelBuffer& buffer)
 {
   CL_SpriteDescription desc;
-  desc.add_frame(new CL_PixelBuffer(buffer), true);
+  desc.add_frame(buffer);
   return CL_Sprite(desc);
 }
 
@@ -37,7 +37,7 @@ make_sprite(const std::string& filename)
 {
   try {
     CL_SpriteDescription desc;
-    desc.add_frame(CL_ProviderFactory::load(filename), true);
+    desc.add_frame(CL_ProviderFactory::load(filename));
     return CL_Sprite(desc);
   } catch (CL_Error& err) {
     std::cout << "CL_Error: " << err.message << std::endl;
@@ -49,11 +49,7 @@ CL_PixelBuffer
 make_pixelbuffer(const std::string& filename)
 {
   try {
-    CL_PixelBuffer* ptr = CL_ProviderFactory::load(filename);
-    CL_PixelBuffer buffer(*ptr);
-    delete ptr;
-
-    return buffer;
+    return CL_ProviderFactory::load(filename);
   } catch (CL_Error& err) {
     std::cout << "CL_Error: " << err.message << std::endl;
     return CL_PixelBuffer();
@@ -64,9 +60,7 @@ CL_PixelBuffer
 make_region_pixelbuffer(const std::string& filename, int x, int y, int w, int h)
 {
   try {
-    CL_PixelBuffer* ptr = CL_ProviderFactory::load(filename);
-    CL_PixelBuffer buffer(*ptr);
-    delete ptr;
+    CL_PixelBuffer buffer = CL_ProviderFactory::load(filename);
 
     CL_PixelBuffer target(w, h, w * (buffer.get_format().get_depth()/8), buffer.get_format());
     clear(target);
@@ -97,7 +91,7 @@ make_pixelbuffer_from_resource(const std::string& filename, CL_ResourceManager& 
   try {
     // FIXME: expects a sprite, won't work with 'surface'
     CL_SpriteDescription descr(filename, &resources);
-    return CL_PixelBuffer(*(descr.get_frames().begin()->first));
+    return CL_PixelBuffer(descr.get_frames().begin()->first);
   } catch (CL_Error& err) {
     std::cout << "CL_Error: " << err.message << std::endl;
     return CL_PixelBuffer();

@@ -204,7 +204,7 @@ EditorMapComponent::move_to_y(float y)
 CL_Signal_v2<int, int>&
 EditorMapComponent::sig_on_key(const std::string& str)
 {
-  int id = CL_Keyboard::get_device().keyid_to_string(str);
+  int id = CL_Keyboard::get_device().string_to_keyid(str);
 
   std::cout << str << " => " << id << std::endl;
 

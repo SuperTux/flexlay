@@ -54,7 +54,7 @@ ZoomToolImpl::draw()
     {
     case CREATE_ZOOM_RECT:
       {
-        CL_Rect tmp(zoom_rect);
+        CL_Rectf tmp(zoom_rect);
         tmp.normalize();
         CL_Display::fill_rect(tmp, CL_Color(255, 255, 0, 50));
         CL_Display::draw_rect(tmp, CL_Color(255, 255, 0, 200));

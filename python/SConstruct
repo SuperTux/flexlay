@@ -1,0 +1,202 @@
+## -*- mode: python -*-
+##  $Id$
+##
+##  Flexlay - A Generic 2D Game Editor
+##  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
+##
+##  This program is free software; you can redistribute it and/or
+##  modify it under the terms of the GNU General Public License
+##  as published by the Free Software Foundation; either version 2
+##  of the License, or (at your option) any later version.
+##
+##  This program is distributed in the hope that it will be useful,
+##  but WITHOUT ANY WARRANTY; without even the implied warranty of
+##  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+##  GNU General Public License for more details.
+##
+##  You should have received a copy of the GNU General Public License
+##  along with this program; if not, write to the Free Software
+##  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+
+import os
+import glob
+
+opts = Options('custom.py')
+opts.Add('CXX', 'The C++ compiler.', 'g++')
+opts.Add('CXXFLAGS', 'The C++ compiler flags.', '-g -O2 -Wall')
+opts.Add('CPPPATH', 'additional header path', '')
+opts.Add('LIBPATH', 'additional library path', '')
+opts.Add('RUBYDIR', 'Ruby directory', os.popen('ruby -e "require \'rbconfig\'; puts Config::CONFIG[\'archdir\']"').read()[:-1])
+
+opts.Add('DESTDIR', 'destination directory which gets appended to PREFIX', '')
+opts.Add('PREFIX',  'PREFIX, ie. /usr/local', '/usr/local')
+
+env = Environment(SHLIBPREFIX='',
+                  ENV = os.environ,
+                  options=opts)
+Help(opts.GenerateHelpText(env))
+
+
+Depends('flexlay_wrap.i', ['clanlib.i'])
+env.Command('flexlay_ruby_wrap.cxx',   'flexlay_wrap.i', "swig -ruby   -o flexlay_ruby_wrap.cxx -c++ $SOURCE")
+
+#env.Program('sharedptrtest', 'sharedptrtest.cxx',
+#            CPPPATH=['/home/ingo/run/ClanLib-0.7-current/include/ClanLib-0.7/'])
+
+# env.Program('simpleed',
+#             ['simpleed.cxx'],
+#             CPPPATH=['.', 
+#                     '/home/ingo/run/ClanLib-0.7-current//include/ClanLib-0.7/'],
+#            LIBPATH=['.', '/home/ingo/run/ClanLib-0.7-current//lib/'],
+#            LIBS=['flexlay'])
+
+clanLib_env = Environment()
+clanLib_env.ParseConfig("pkg-config --cflags --libs clanCore-0.7 clanDisplay-0.7 clanGL-0.7 clanSignals-0.7 clanGUI-0.7 clanGUIStyleSilver-0.7")
+
+libflexlay_env = env.Copy()
+flexlay_lib = libflexlay_env.SharedLibrary(
+    target = 'libflexlay.so',
+    source = [
+    'blitter.cxx',
+    'box.cxx',
+    'command_group.cxx',
+    'command.cxx',
+    'console.cxx',
+    'editor.cxx',
+    'editor_map.cxx',
+    'editor_map_component.cxx',
+    'flexlay.cxx',
+    'globals.cxx',
+    'layer.cxx',
+    'helper.cxx', 
+    'graphic_context_state.cxx',
+    'gui_manager.cxx',
+    'icon.cxx',
+    'directory_view.cxx',
+    'fonts.cxx',
+    'minimap.cxx',
+    'meta_data.cxx', 
+    'object_layer.cxx',
+    'object_add_command.cxx',
+    'object_brush.cxx',
+    'object_delete_command.cxx',
+    'object_move_command.cxx',
+    'object_selector.cxx',
+    'object_transform_command.cxx',
+    'objmap_object.cxx',
+    'objmap_path_node.cxx',
+    'objmap_object_impl.cxx',
+    'objmap_select_tool.cxx',
+    'objmap_sprite_object.cxx',
+    'paint_command.cxx',
+    'panel.cxx',
+    'netpanzer.cxx', # fixme: move into seperate library
+    'menu.cxx',
+    'menubar.cxx',
+    'popup_menu.cxx',
+    'lispreader.cxx',
+    'scrollbar.cxx',
+    'tile.cxx',
+    'titlebar.cxx',
+    'tile_brush.cxx',
+    'tile_editor.cxx',
+    'tile_selection.cxx',
+    'tile_selector.cxx',
+    'tilemap_paint_tool.cxx',
+    'tilemap_select_tool.cxx',
+    'tilemap_layer.cxx',
+    'tileset.cxx',
+    'workspace_move_tool.cxx',
+    'tool.cxx',
+    'workspace.cxx',
+    'window.cxx',
+    'viewport.cxx',
+    'zoom_tool.cxx'],
+    CPPPATH=['..'] + clanLib_env['CPPPATH'],
+    CXXFLAGS  = clanLib_env['CCFLAGS'],
+    LINKFLAGS = clanLib_env['LINKFLAGS'],
+    LIBPATH=['$USER_LIBPATH'] + clanLib_env['LIBPATH'],
+    LIBS = clanLib_env['LIBS'])
+
+libflexlay_ruby_env = env.Copy()
+flexlay_ruby_lib = libflexlay_ruby_env.SharedLibrary(
+    target = 'flexlay_wrap.so',
+    source = [
+    'flexlay_ruby_wrap.cxx',
+    'ruby_functor.cxx',
+    'ruby_meta_data.cxx',
+    'ruby_sexpr_parser.cxx',
+    'ruby_object.cxx'
+    ],
+    CPPPATH=['$USER_CPPPATH','$RUBYDIR','..'] + clanLib_env['CPPPATH'],
+    LINKFLAGS = clanLib_env['LINKFLAGS'],
+    LIBPATH=['.'] + clanLib_env['LIBPATH'],
+    LIBS=['flexlay'] + clanLib_env['LIBS'])
+
+flexlay_data = \
+             glob.glob('../data/images/files/*.png') + \
+             glob.glob('../data/images/fonts/*.png') + \
+             glob.glob('../data/images/icons16/*.png') + \
+             glob.glob('../data/images/icons24/*.png') + \
+             glob.glob('../data/images/netpanzersprites/*.png') + \
+             glob.glob('../data/gui/gui.xml')    + \
+             glob.glob('../data/gui/*/*.tga')    + \
+             glob.glob('../data/gui/*/*.png')    + \
+             glob.glob('../data/*.xml')
+
+flexlay_headers = glob.glob('*.hxx')
+
+flexlay_datadir = env['DESTDIR'] + env['PREFIX'] + '/share/flexlay'
+# install_exec = env.Alias('install_exec', Install(env['DESTDIR'] + env['PREFIX'] + '/bin', flexlay_bin))
+install_lib     = env.Alias('install_lib', Install(env['DESTDIR'] + env['PREFIX'] + '/lib', flexlay_lib))
+install_headers = env.Alias('install_headers', Install(env['DESTDIR'] + env['PREFIX'] + '/include/flexlay', flexlay_headers))
+install_data    = env.Alias('install_data', InstallAs([os.path.join(flexlay_datadir, i[8:]) for i in flexlay_data],
+                                                      flexlay_data))
+# install_ruby    = env.Alias('install_headers', Install(env['DESTDIR'] + env['PREFIX'] + '/include/flexlay', flexlay_headers))
+env.Alias('install', [install_data, install_lib, install_headers])
+
+# env.Command('flexlay_python_wrap.cxx', 'flexlay_wrap.i', "swig -python -o flexlay_python_wrap.cxx -c++ $SOURCE")
+# Depends('flexlay_python_wrap.cxx', ['flexlay_wrap.i',
+#                              'clanlib.i',
+#                              'scripting/editor.hxx',
+#                              'command.hxx',
+#                              'paint_command.hxx',
+#                              'object_move_command.hxx',
+#                              'object_add_command.hxx',
+#                              'scripting/editor.hxx',
+#                              'tile.hxx',
+#                              'tile_brush.hxx',
+#                              'editor.hxx',
+#                              'editor_map.hxx',
+#                              'workspace.hxx',
+#                              'tileset.hxx',
+#                              'objmap_object.hxx',
+#                              'objmap_sprite_object.hxx',
+#                              'object_layer.hxx',
+#                              'layer.hxx', 
+#                              'editor_map.hxx',
+#                              'editor_map_component.hxx',
+#                              'flexlay.hxx',
+#                              'globals.hxx',
+#                              'python_functor.hxx',
+#                              'gui_manager.hxx',
+#                              'tile_selector.hxx',
+#                              'object_brush.hxx',
+#                              'object_selector.hxx'])
+
+# env.SharedLibrary(
+#     target = '_flexlay_wrap.so',
+#     source = [
+#     'flexlay_python_wrap.cxx',
+#     'scripting/editor.cxx',
+#     'python_functor.cxx',
+#     'python_object.cxx',
+#     'python_meta_data.cxx',
+#     'sexpr_parser.cxx'],
+#     CPPPATH=['/home/ingo/run/ClanLib-0.7-current//include/ClanLib-0.7/',
+#              '/usr/include/python2.2/',
+#              '..'],
+#     LIBPATH=['.', '/home/ingo/run/ClanLib-0.7-current//lib/'],
+#     LIBS=['flexlay'])
+
+# EOF #

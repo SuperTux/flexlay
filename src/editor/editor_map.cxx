@@ -29,9 +29,13 @@
 #include "tilemap_diamond_tool.hxx"
 #include "editor_map.hxx"
 
+EditorMap* EditorMap::current_ = 0; 
+
 EditorMap::EditorMap(const CL_Rect& rect, CL_Component* parent)
   : CL_Component(rect, parent)
 {
+  current_ = this;
+
   slots.connect(sig_paint(),      this, &EditorMap::draw);
   slots.connect(sig_mouse_up(),   this, &EditorMap::mouse_up);
   slots.connect(sig_mouse_down(), this, &EditorMap::mouse_down);
@@ -47,9 +51,11 @@ EditorMap::EditorMap(const CL_Rect& rect, CL_Component* parent)
 
   scrolling = false;
 
-  layers.push_back(tilemap = new EditorTileMap());
-  layers.push_back(objmap  = new EditorObjMap());
+  // FIXME: Move this to the scripting level
+  layers.push_back(tilemap = new EditorTileMap(this));
+  layers.push_back(objmap  = new EditorObjMap(this));
 
+  // FIXME: move this to scripting too
   tools.push_back(new TileMapPaintTool(this, tilemap));
   tools.push_back(new TileMapSelectTool(this, tilemap));
   tools.push_back(new TileMapDiamondTool(this, tilemap));

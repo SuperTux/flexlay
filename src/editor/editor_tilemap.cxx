@@ -30,8 +30,13 @@
 #include "editor_tile.hxx"
 #include "editor_tilemap.hxx"
 
-EditorTileMap::EditorTileMap()
+EditorTileMap* EditorTileMap::current_ = 0;
+
+EditorTileMap::EditorTileMap(EditorMap* p)
+  : EditorMapLayer(p)
 {
+  current_ = this;
+
   diamond_map = 0;
 
   new_level(80, 30);
@@ -82,7 +87,7 @@ EditorTileMap::draw_map(Field<int>* field)
   else
     alpha = .5f;
 
-  CL_Rect rect = Editor::current()->get_map()->get_clip_rect();
+  CL_Rect rect = parent->get_clip_rect();
 
   int start_x = std::max(0, rect.left/TILE_SIZE);
   int start_y = std::max(0, rect.top/TILE_SIZE);

@@ -5,6 +5,7 @@
 (define screen-width  (screen-get-width))
 (define screen-height (screen-get-height))
 (define empty (lambda () #f))
+(define *editor-map* #f)
 (define *tileeditor* #f)
 (define *tileeditor-window* #f)
 (define *tileselector-window* #f)
@@ -309,9 +310,10 @@
 ;;    (gui-push-component (gui-window-get-client-area window))
   (let ((width screen-width)
         (height 50))
-    (set! *minimap* (minimap-create (- screen-width width) 
-                                    (- screen-height height)
-                                    width height))))
+    (set! *minimap* (minimap-create *editor-map*
+                     (- screen-width width) 
+                     (- screen-height height)
+                     width height))))
 ;;    (gui-pop-component)
  ;;  (gui-component-on-close window (lambda ()
 ;;                                  (gui-hide-component window)))
@@ -331,6 +333,7 @@
        (lambda args
          (display "Error: ")(display args)(newline)))
 
+(set! *editor-map* (editor-create-map 0 25 800 575))
 (create-menu)
 (gui-push-component *menu*)
 (set! *statusbar* (gui-create-label 400 5 "[XxY]"))

@@ -43,8 +43,11 @@ private:
 
   void cleanup();
 
+  static EditorTileMap* current_;
 public:
-  EditorTileMap();
+  static EditorTileMap* current() { return current_; } 
+  
+  EditorTileMap(EditorMap* p);
   ~EditorTileMap();
 
   void draw ();

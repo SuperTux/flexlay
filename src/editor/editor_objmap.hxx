@@ -42,7 +42,7 @@ public:
   typedef std::vector<Obj*> Objs;
   Objs objects;
 public:
-  EditorObjMap();
+  EditorObjMap(EditorMap* p);
   ~EditorObjMap();
 
   void update(float delta);

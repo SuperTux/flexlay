@@ -26,8 +26,9 @@
 #include "editor_tilemap.hxx"
 #include "minimap.hxx"
 
-Minimap::Minimap(const CL_Point& pos, const CL_Size& size, CL_Component* parent)
-  : CL_Component(CL_Rect(pos, size), parent)
+Minimap::Minimap(EditorMap* p, const CL_Point& pos, const CL_Size& size, CL_Component* parent)
+  : CL_Component(CL_Rect(pos, size), parent), 
+    parent_map(p)
 {
   slots.push_back(sig_paint().connect(this, &Minimap::draw));
   slots.push_back(sig_mouse_move().connect(this, &Minimap::mouse_move));
@@ -67,7 +68,7 @@ Minimap::draw()
         CL_Display::flush();
       }
 
-  CL_Rect rect = Editor::current()->get_map()->get_clip_rect();
+  CL_Rect rect = parent_map->get_clip_rect();
 
   CL_Rect screen_rect(CL_Point(rect.left  * get_width()  / map_width,
                                rect.top   * get_height() / map_height),
@@ -87,8 +88,8 @@ Minimap::mouse_move(const CL_InputEvent& event)
   int map_height = map_get_height() * TILE_SIZE;
 
   if (drag_active)
-    Editor::current()->get_map()->move_to(event.mouse_pos.x * map_width / get_width(),
-                                          event.mouse_pos.y * map_height / get_height());
+    parent_map->move_to(event.mouse_pos.x * map_width / get_width(),
+                        event.mouse_pos.y * map_height / get_height());
 }
 
 void
@@ -97,8 +98,8 @@ Minimap::mouse_down(const CL_InputEvent& event)
   int map_width  = map_get_width()  * TILE_SIZE;
   int map_height = map_get_height() * TILE_SIZE;
 
-  Editor::current()->get_map()->move_to(event.mouse_pos.x * map_width / get_width(),
-                                        event.mouse_pos.y * map_height / get_height());
+  parent_map->move_to(event.mouse_pos.x * map_width / get_width(),
+                      event.mouse_pos.y * map_height / get_height());
   drag_active = true;
   capture_mouse();
 }

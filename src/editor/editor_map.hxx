@@ -57,7 +57,11 @@ private:
   std::vector<std::string> scripts;
 
   void cleanup();
+
+  static EditorMap* current_; 
 public:
+  static EditorMap* current() { return current_; } 
+
   EditorMap(const CL_Rect& rect, CL_Component* parent);
   ~EditorMap();
 

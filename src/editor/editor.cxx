@@ -39,12 +39,6 @@ Editor::Editor()
 
   manager = new GUIManager();
 
-  map_comp = new EditorMap(CL_Rect(CL_Point(0, 25),
-                                   CL_Size(800, 575)),
-                           manager->get_component());
-  //tilemap = new EditorTileMap(manager->get_component());
-  //objmap  = new EditorObjMap(manager->get_component());
-
   gh_load ((datadir + "editor.scm").c_str());
 }
 
@@ -57,9 +51,9 @@ void
 Editor::load(const std::string& filename)
 {
   // FIXME: implement me
-  EditorTileMap* tilemap = dynamic_cast<EditorTileMap*>(Editor::current()->get_map()->get_layer_by_name(0));
-  if (tilemap)
-    tilemap->load(filename);
+  //EditorTileMap* tilemap = dynamic_cast<EditorTileMap*>(Editor::current()->get_map()->get_layer_by_name(0));
+  //if (tilemap)
+  //tilemap->load(filename);
 }
 
 void

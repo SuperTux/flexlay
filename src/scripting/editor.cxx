@@ -39,9 +39,8 @@
 EditorTileMap*
 editor_get_tilemap()
 {
-  EditorTileMap* tilemap = dynamic_cast<EditorTileMap*>(Editor::current()->get_map()->get_layer_by_name(0));
-  if (tilemap)
-    return tilemap;
+  if (EditorTileMap::current())
+    return EditorTileMap::current();
   else
     {
       assert(!"Error: Tilemap not found");
@@ -118,10 +117,9 @@ scm2brush(SCM s_brush)
 void
 editor_resize_map(int w, int h, int x, int y)
 {
-  EditorTileMap* tilemap = dynamic_cast<EditorTileMap*>(Editor::current()->get_map()->get_layer_by_name(0));
-  if (tilemap)
+  if (EditorTileMap::current())
     {
-      tilemap->resize(w, h, x, y);
+      EditorTileMap::current()->resize(w, h, x, y);
     }
   else
     {
@@ -139,7 +137,7 @@ SCM
 editor_get_tile_selection()
 {
   TileMapSelectTool* tool 
-    = dynamic_cast<TileMapSelectTool*>(Editor::current()->get_map()->get_tool_by_name(1));
+    = dynamic_cast<TileMapSelectTool*>(EditorMap::current()->get_tool_by_name(1));
 
   if (tool)
     {
@@ -204,13 +202,24 @@ void tilemap_set_active_layer(int i)
 
 void editor_set_tool(int i)
 {
-  Editor::current()->get_map()->set_tool(i);
+  EditorMap::current()->set_tool(i);
 }
 
 CL_Component*
-minimap_create(int x, int y, int w, int h)
+editor_create_map(int x, int y, int w, int h)
 {
-  return new Minimap(CL_Point(x, y), CL_Size(w, h), GUIManager::current()->get_component());
+  return new EditorMap(CL_Rect(CL_Point(x, y),
+                               CL_Size(w, h)),
+                       GUIManager::current()->get_component());
+}
+
+CL_Component*
+minimap_create(CL_Component* p, int x, int y, int w, int h)
+{
+  EditorMap* parent_map = dynamic_cast<EditorMap*>(p);
+  return new Minimap(parent_map, 
+                     CL_Point(x, y), CL_Size(w, h), 
+                     GUIManager::current()->get_component());
 }
 
 CL_Component*
@@ -369,7 +378,7 @@ SCM map_get_scripts()
 {
   SCM lst = SCM_EOL;
 
-  std::vector<std::string> scripts = Editor::current()->get_map()->get_scripts();
+  std::vector<std::string> scripts = EditorMap::current()->get_scripts();
   for (std::vector<std::string>::iterator i = scripts.begin(); 
        i != scripts.end(); ++i)
     {

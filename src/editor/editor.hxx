@@ -31,7 +31,6 @@ class Editor
 {
 private:
   GUIManager* manager;
-  EditorMap*  map_comp;
 
   static Editor* current_;
 public:
@@ -39,8 +38,6 @@ public:
 
   Editor();
   ~Editor();
-
-  EditorMap* get_map() { return map_comp; }
 
   void run();
   void load(const std::string& filename);

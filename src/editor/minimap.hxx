@@ -28,8 +28,9 @@ class Minimap : public CL_Component
 private:
   std::vector<CL_Slot> slots;
   bool drag_active;
+  EditorMap* parent_map;
 public:
-  Minimap(const CL_Point& pos, const CL_Size& size, CL_Component* parent);
+  Minimap(EditorMap* p, const CL_Point& pos, const CL_Size& size, CL_Component* parent);
   
   void draw();
 

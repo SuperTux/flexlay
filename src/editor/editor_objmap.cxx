@@ -22,7 +22,8 @@
 
 extern CL_ResourceManager* resources;
 
-EditorObjMap::EditorObjMap()
+EditorObjMap::EditorObjMap(EditorMap* p)
+  : EditorMapLayer(p)
 {
   Obj* obj = new Obj;
   obj->sprite = CL_Sprite("igel", resources);

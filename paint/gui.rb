@@ -180,7 +180,7 @@ class PaintGUI
                                  true, @gui.get_component)
     anim_panel.add_icon("../data/images/icons24/stock_new.png",
                         proc{ $animation.add_frame() })
-    anim_panel.add_seperator()
+    anim_panel.add_separator()
     #anim_panel.add_icon("../data/images/icons24/anim_skipbackward.png")
     #anim_panel.add_icon("../data/images/icons24/anim_fastbackward.png")
     #anim_panel.add_icon("../data/images/icons24/anim_playbackward.png")

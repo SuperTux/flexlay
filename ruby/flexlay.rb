@@ -106,7 +106,7 @@ class ButtonPanel
     return icon
   end
   
-  def add_seperator()
+  def add_separator()
     @pos += 16
   end
   

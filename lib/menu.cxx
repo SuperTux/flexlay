@@ -69,13 +69,13 @@ public:
   CL_Signal_v0& sig_clicked() { return on_clicked; }
 };
 
-class SeperatorMenuItem : public MenuItem
+class SeparatorMenuItem : public MenuItem
 {
 public:
-  SeperatorMenuItem(MenuImpl* parent_) 
+  SeparatorMenuItem(MenuImpl* parent_) 
     : MenuItem(parent_)
   {}
-  virtual ~SeperatorMenuItem() {}
+  virtual ~SeparatorMenuItem() {}
 
   void draw(int x, int y, bool active) 
   {
@@ -150,9 +150,9 @@ Menu::clear()
 }
 
 MenuItemHandle
-Menu::add_seperator()
+Menu::add_separator()
 {
-  impl->items.push_back(new SeperatorMenuItem(impl.get()));
+  impl->items.push_back(new SeparatorMenuItem(impl.get()));
   impl->recalc_size();
   return impl->items.size()-1;
 }

@@ -59,10 +59,10 @@ class GUI
     @button_panel.add_small_icon("../data/images/icons24/downarrow.png", proc{ $controller.recent_files_menu.run() })
     @button_panel.add_icon("../data/images/icons24/stock_save.png", proc{ level_save() })
     @button_panel.add_icon("../data/images/icons24/stock_save_as.png", proc{ level_save_as() })
-    @button_panel.add_seperator()
+    @button_panel.add_separator()
     @button_panel.add_icon("../data/images/icons24/stock_copy.png")
     @button_panel.add_icon("../data/images/icons24/stock_paste.png")
-    @button_panel.add_seperator()
+    @button_panel.add_separator()
     @undo_icon = @button_panel.add_icon("../data/images/icons24/stock_undo.png", proc{ @workspace.get_map().undo() })
     @redo_icon = @button_panel.add_icon("../data/images/icons24/stock_redo.png", proc{ @workspace.get_map().redo() })
   end

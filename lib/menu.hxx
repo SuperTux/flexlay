@@ -43,7 +43,7 @@ public:
 
   MenuItemHandle add_item(const CL_Sprite& sprite, const std::string& name);
   MenuItemHandle add_submenu(const std::string& name, const Menu& submenu);
-  MenuItemHandle add_seperator();
+  MenuItemHandle add_separator();
 
   CL_Signal_v0& sig_clicked(MenuItemHandle item);
 

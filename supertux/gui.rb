@@ -146,20 +146,16 @@ class SuperTuxGUI
 
   def create_menu()
     @menu = CL_Menu.new(@gui.get_component())
-    @menu.add_item("File/Open...", method(:gui_level_load))
-    @menu.add_item("File/Save...", method(:gui_level_save))
+    @menu.add_item("Level/Open...", method(:gui_level_load))
+    @menu.add_item("Level/Save...", method(:gui_level_save))
     # @menu.add_item("File/Save Commands...", menu_file_save_commands)
-    @menu.add_item("File/Save As...", method(:gui_level_save_as))
-    @menu.add_item("File/Quit",  proc{ @gui.quit })
+    # @menu.add_item("File/Save As...", method(:gui_level_save_as))
+    @menu.add_item("Level/Properties...", method(:gui_edit_level))
+    @menu.add_item("Level/Quit",  proc{ @gui.quit })
     
     @menu.add_item("Edit/Smooth Selection", method(:gui_smooth_level_struct))
     @menu.add_item("Edit/Resize", method(:gui_resize_level))
     @menu.add_item("Edit/Resize to selection", method(:gui_resize_level_to_selection))
-    @menu.add_item("Edit/Debug Shell", proc{ run_python()})
-    @menu.add_item("Edit/Add Sector...", method(:gui_add_sector))
-    @menu.add_item("Edit/Remove Current Sector", method(:gui_remove_sector))
-    @menu.add_item("Edit/Sector Properties", method(:gui_edit_sector))
-    @menu.add_item("Edit/Level Properties", method(:gui_edit_level))
     
     @menu.add_item("Zoom/1:4 (25%) ",  proc{ self.gui_set_zoom(0.25) })
     @menu.add_item("Zoom/1:2 (50%) ",  proc{ self.gui_set_zoom(0.5) })
@@ -180,12 +176,12 @@ class SuperTuxGUI
     button_panel.add_icon("../data/images/icons24/stock_save_as.png", proc{ self.gui_level_save_as() })
 
     # Copy&Paste
-    button_panel.add_seperator()
+    button_panel.add_separator()
     button_panel.add_icon("../data/images/icons24/stock_copy.png")
     button_panel.add_icon("../data/images/icons24/stock_paste.png")
 
     # Undo Redo
-    button_panel.add_seperator()
+    button_panel.add_separator()
     @undo_icon = button_panel.add_icon("../data/images/icons24/stock_undo.png", proc{ @workspace.get_map().undo() })
     @redo_icon = button_panel.add_icon("../data/images/icons24/stock_redo.png", proc{ @workspace.get_map().redo() })
 
@@ -193,21 +189,21 @@ class SuperTuxGUI
     @redo_icon.disable()
 
     # Visibility Toggles
-    button_panel.add_seperator()
+    button_panel.add_separator()
     @minimap_icon = button_panel.add_icon("../data/images/icons24/minimap.png", proc{ gui_toggle_minimap() })
     @grid_icon    = button_panel.add_icon("../data/images/icons24/grid.png", proc{ gui_toggle_grid() })
 
     # Layers
-    button_panel.add_seperator()
+    button_panel.add_separator()
     @background_icon = button_panel.add_icon("../data/images/icons24/background.png", proc{ gui_show_background() })
     @interactive_icon = button_panel.add_icon("../data/images/icons24/interactive.png", proc{ gui_show_interactive() })
     @foreground_icon = button_panel.add_icon("../data/images/icons24/foreground.png", proc{ gui_show_foreground() })
     @eye_icon = button_panel.add_icon("../data/images/icons24/eye.png", proc{ @layer_menu.run() })
 
-    button_panel.add_seperator()
+    button_panel.add_separator()
     @sector_icon = button_panel.add_icon("../data/images/icons24/sector.png", proc{ gui_switch_sector_menu() })
 
-    button_panel.add_seperator()
+    button_panel.add_separator()
     @run_icon = button_panel.add_icon("../data/images/icons24/run.png", proc{ gui_run_level() })
 
     button_panel.add_icon("../data/images/icons24/eye.png", proc{ @tilegroup_menu.run() })
@@ -518,6 +514,16 @@ class SuperTuxGUI
                         @workspace.get_map().get_metadata().parent.activate_sector(i, @workspace) 
                       })
     end
+    mymenu.add_separator()
+    mymenu.add_item($mysprite, "Create New Sector", proc {
+        gui_add_sector()
+        })
+    mymenu.add_item($mysprite, "Remove Current Sector", proc {
+        gui_remove_sector()
+        })
+    mymenu.add_item($mysprite, "Edit Sector Properties", proc {
+        gui_edit_sector()
+        })
     mymenu.run()
   end
 

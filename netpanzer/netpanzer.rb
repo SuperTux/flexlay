@@ -183,10 +183,10 @@ $button_panel.add_icon("../data/images/icons24/stock_save.png",
 $button_panel.add_icon("../data/images/icons24/stock_save_as.png", 
                        proc{ gui_level_save_as() })
 
-$button_panel.add_seperator()
+$button_panel.add_separator()
 $button_panel.add_icon("../data/images/icons24/stock_copy.png", proc{})
 $button_panel.add_icon("../data/images/icons24/stock_paste.png", proc{})
-$button_panel.add_seperator()
+$button_panel.add_separator()
 $undo_icon = $button_panel.add_icon("../data/images/icons24/stock_undo.png", proc{$workspace.get_map().undo()})
 $redo_icon = $button_panel.add_icon("../data/images/icons24/stock_redo.png", proc{$workspace.get_map().redo()})
 $button_panel.add_seperator()

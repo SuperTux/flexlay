@@ -229,16 +229,16 @@
       <image file="images/tiles/tile10.png" name="image1" />
     </sprite>
     <sprite name="tile11">
-      <image file="images/tiles/level1/tile11.png" name="image1" />
+      <image file="images/tiles/tile11.png" name="image1" />
     </sprite>
     <sprite name="tile12">
-      <image file="images/tiles/level1/tile12.png" name="image1" />
+      <image file="images/tiles/tile12.png" name="image1" />
     </sprite>
     <sprite name="tile13">
-      <image file="images/tiles/level1/tile13.png" name="image1" />
+      <image file="images/tiles/tile13.png" name="image1" />
     </sprite>
     <sprite name="tile14">
-      <image file="images/tiles/level1/tile14.png" name="image1" />
+      <image file="images/tiles/tile14.png" name="image1" />
     </sprite>
     <sprite name="tile15">
       <image file="images/tiles/level1/tile15.png" name="image1" />

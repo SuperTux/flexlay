@@ -1,4 +1,4 @@
-//  $Id: tile_map.hxx,v 1.5 2003/08/12 08:58:49 grumbel Exp $
+//  $Id: tile_map.hxx,v 1.6 2003/08/18 08:50:22 grumbel Exp $
 // 
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -35,7 +35,7 @@ private:
   Field<Tile*> field;
   typedef Field<Tile*>::iterator FieldIter;
 public:
-  TileMap (WindstilleLevel* data);
+  TileMap (Field<int>* data);
 
   void update (float delta);
   void draw ();

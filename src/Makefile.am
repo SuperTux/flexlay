@@ -65,6 +65,19 @@ windstille_SOURCES = \
 
 windstille_LDADD = editor/libwindstille_editor.a
 
+REST_LIBS = \
+-lpthread \
+-lc \
+-lgcc \
+-Wl,-dynamic-linker=/lib/ld-linux.so.2 \
+-Wl,-Bdynamic \
+-lGL
+
+REST_LIBS2 = \
+-Wl,-Bdynamic \
+-lGL \
+-lc
+
 STATICBIN_LIBS = \
 -L/usr/X11R6/lib/ \
 -Wl,-Bstatic \
@@ -98,10 +111,7 @@ $(STATIC_READLINE) \
 -lX11 \
 -lstdc++ \
 -lgcc_eh \
--lgcc \
--Wl,-Bdynamic \
--lGL \
--lc
+$(REST_LIBS2)
 
 static: windstille.static
 

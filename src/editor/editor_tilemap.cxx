@@ -1,4 +1,4 @@
-//  $Id: editor_tilemap.cxx,v 1.2 2003/08/11 19:50:12 grumbel Exp $
+//  $Id: editor_tilemap.cxx,v 1.3 2003/08/18 08:50:22 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -37,13 +37,13 @@ EditorTileMap::EditorTileMap (const std::string& filename)
 {
   WindstilleLevel data (filename);
 
-  field = new Field<EditorTile*> (data.get_field ()->get_width (),
-				  data.get_field ()->get_height ());
+  field = new Field<EditorTile*> (data.get_tilemap()->get_width (),
+				  data.get_tilemap()->get_height ());
 
   for (unsigned int y = 0; y < field->get_height (); ++y) {
     for (unsigned int x = 0; x < field->get_width (); ++x)
       {
-	int name = data.get_field()->at(x, y);
+	int name = data.get_tilemap()->at(x, y);
 	field->at (x, y) = new EditorTile (name);
       }
   }

@@ -1,4 +1,4 @@
-//  $Id: player.cxx,v 1.9 2003/08/12 19:24:21 grumbel Exp $
+//  $Id: player.cxx,v 1.10 2003/08/18 08:50:22 grumbel Exp $
 //
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -189,12 +189,12 @@ Player::update_ground (float delta)
 
       if (controller->is_left ())
         {
-          pos.x -= 200 * delta;
+          pos.x -= 300 * delta;
           state = WALKING;
         }
       else if (controller->is_right ())
         {
-          pos.x += 200 * delta;
+          pos.x += 300 * delta;
           state = WALKING;
         }
       else
@@ -220,9 +220,9 @@ Player::update_air (float delta)
 
   float tmp_x_pos = pos.x;
   if (controller->is_left ())
-    pos.x -= 200 * delta;
+    pos.x -= 300 * delta;
   else if (controller->is_right ())
-    pos.x += 200 * delta;
+    pos.x += 300 * delta;
   if (stuck ())
     pos.x = tmp_x_pos;
 

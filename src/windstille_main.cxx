@@ -1,4 +1,4 @@
-//  $Id: windstille_main.cxx,v 1.7 2003/08/12 19:24:21 grumbel Exp $
+//  $Id: windstille_main.cxx,v 1.8 2003/08/18 08:50:22 grumbel Exp $
 //
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -53,6 +53,26 @@ WindstilleMain::inner_main(void* closure, int argc, char** argv)
   bool fullscreen    = false;
   bool allow_resize  = false;
 
+  bool launch_editor = false;
+  std::string filename;
+  for (int i = 1; i < argc; ++i)
+    {
+      if (strcmp (argv[i], "--editor") == 0)
+        {
+          launch_editor = true;
+        }
+      else if (strcmp (argv[i], "--fullscreen") == 0)
+        {
+          fullscreen = true;
+        }
+      else
+        {
+          //std::cout << "Unknown argument: " << argv[i] << std::endl;
+          //exit (EXIT_FAILURE);
+          filename = argv[i];
+        }
+    }
+
   CL_SetupCore::init();
   CL_SetupGL::init();
   CL_SetupDisplay::init();
@@ -66,11 +86,10 @@ WindstilleMain::inner_main(void* closure, int argc, char** argv)
     
     std::cout << "Loading Guile Code..." << std::endl;
 
-    // Debuging on
-    SCM_DEVAL_P = 1;
-    SCM_BACKTRACE_P = 1;
-    SCM_RECORD_POSITIONS_P = 1;
-    SCM_RESET_DEBUG_MODE;
+    gh_eval_str("(display \"Guile: Enabling debugging...\\n\")"
+                "(debug-enable 'debug)"
+                "(debug-enable 'backtrace)"
+                "(read-enable 'positions)");
 
     SpriteSmob::register_guile_bindings ();    
     GameObjSmob::register_guile_bindings ();    
@@ -79,22 +98,6 @@ WindstilleMain::inner_main(void* closure, int argc, char** argv)
     GuileGameObjFactory::register_guile_bindings ();    
     gh_load ("guile/windstille.scm");
     std::cout << "Loading Guile Code... done" << std::endl;
-
-    bool launch_editor = false;
-    std::string filename;
-    for (int i = 1; i < argc; ++i)
-      {
-	if (strcmp (argv[i], "--editor") == 0)
-	  {
-	    launch_editor = true;
-	  }
-	else
-	  {
-	    //std::cout << "Unknown argument: " << argv[i] << std::endl;
-	    //exit (EXIT_FAILURE);
-	    filename = argv[i];
-	  }
-      }
 
     if (!launch_editor)
       {

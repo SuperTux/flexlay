@@ -1,4 +1,4 @@
-//  $Id: windstille_level.cxx,v 1.6 2003/08/12 19:24:21 grumbel Exp $
+//  $Id: windstille_level.cxx,v 1.7 2003/08/18 08:50:22 grumbel Exp $
 //
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -24,7 +24,8 @@
 #include "scm_helper.hxx"
 
 WindstilleLevel::WindstilleLevel (const std::string& filename)
-  : field (0)
+  : tilemap(0),
+    background_tilemap(0)
 {
   parse_file (filename);
 }
@@ -56,7 +57,11 @@ WindstilleLevel::parse_file (const std::string& filename)
       
               if (gh_equal_p(gh_symbol2scm("tilemap"), name)) 
                 {
-                  parse_tilemap(data);
+                  parse_foreground_tilemap(data);
+                }
+              else if (gh_equal_p(gh_symbol2scm("background-tilemap"), name)) 
+                {
+                  parse_background_tilemap(data);
                 }
               else
                 {
@@ -94,8 +99,19 @@ WindstilleLevel::parse_properties (SCM cur)
 #endif
 }
 
+void
+WindstilleLevel::parse_background_tilemap (SCM cur)
+{
+  background_tilemap = parse_tilemap(cur);
+}
 
 void
+WindstilleLevel::parse_foreground_tilemap (SCM cur)
+{
+  tilemap = parse_tilemap(cur);
+}
+
+Field<int>* 
 WindstilleLevel::parse_tilemap (SCM cur)
 {
   int width  = gh_scm2int(gh_cadar(cur));
@@ -103,7 +119,7 @@ WindstilleLevel::parse_tilemap (SCM cur)
   
   std::cout << "WindstilleLevel: Size: " << width << "x" << height << std::endl;
   
-  field = new Field<int>(width, height);
+  Field<int>* field = new Field<int>(width, height);
 
   cur = gh_cddr(cur);
   
@@ -137,6 +153,7 @@ WindstilleLevel::parse_tilemap (SCM cur)
           
       cur = gh_cdr(cur);
     }
+  return field;
 }
 
 void

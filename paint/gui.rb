@@ -71,6 +71,14 @@ class PaintGUI
                        GeneratedBrush.new(DrawerProperties.current().get_brush()).set_angle(value)
                      })
 
+    @spacing_slider = Slider.new(CL_Rect.new(CL_Point.new(3, 600), CL_Size.new(128, 16)),
+                                 @selector_window)
+    @spacing_slider.set_range(1, 250)
+    @spacing_slider.set_value(20)
+    connect_v1_float(@spacing_slider.sig_on_change, proc{|value|
+                       DrawerProperties.current().set_spacing(value)
+                     })
+
     @brush_shape_circle  = CL_Button.new(CL_Rect.new(CL_Point.new(5, 250), CL_Size.new(40, 25)), "Circ", @selector_window)
     @brush_shape_rect    = CL_Button.new(CL_Rect.new(CL_Point.new(45, 250), CL_Size.new(40, 25)), "Squa", @selector_window)
     @brush_shape_diamond = CL_Button.new(CL_Rect.new(CL_Point.new(85, 250), CL_Size.new(40, 25)), "Diam", @selector_window)
@@ -79,7 +87,6 @@ class PaintGUI
               GeneratedBrush.new(DrawerProperties.current().get_brush()).set_shape(BRUSH_SHAPE_CIRCLE)
             })
     connect(@brush_shape_rect.sig_clicked(), proc{ 
-              drawer = SpriteStrokeDrawer.new($sketch_stroke_tool.get_drawer())
               GeneratedBrush.new(DrawerProperties.current().get_brush()).set_shape(BRUSH_SHAPE_SQUARE)
             })
     connect(@brush_shape_diamond.sig_clicked(), proc{ 

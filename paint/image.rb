@@ -88,12 +88,12 @@ class Image
 
     sprite_drawer = SpriteStrokeDrawer.new()
     # FIXME: insert loader for brush here
-    sprite_drawer.set_brush(GeneratedBrush.new(BRUSH_SHAPE_CIRCLE, 
-                                               32,  # radius
-                                               2,   # spikes
-                                               0.75, # hardness
-                                               1.0, # aspect
-                                               0).to_brush()) # angle
+    DrawerProperties.current().set_brush(GeneratedBrush.new(BRUSH_SHAPE_CIRCLE, 
+                                                            32,  # radius
+                                                            2,   # spikes
+                                                            0.75, # hardness
+                                                            1.0, # aspect
+                                                            0).to_brush()) # angle
     
     sprite_drawer.set_color(CL_Color.new(0, 0, 0, 155))
     sprite_drawer.set_size(1.0)

@@ -1,4 +1,4 @@
-//  $Id$
+//  $Id: tilemap_tool.hxx,v 1.1 2003/09/23 19:10:05 grumbel Exp $
 // 
 //  Flexlay - A Generic 2D Game Editor
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -17,37 +17,25 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-#ifndef HEADER_ICON_HXX
-#define HEADER_ICON_HXX
+#ifndef HEADER_TOOL_IMPL_HXX
+#define HEADER_TOOL_IMPL_HXX
 
-#include <ClanLib/GUI/component.h>
-#include <ClanLib/Core/Math/point.h>
-#include <ClanLib/Display/sprite.h>
-#include "shared_ptr.hxx"
-
-class IconImpl;
+class CL_InputEvent;
 
 /** */
-class Icon : public CL_Component
+class ToolImpl
 {
-private:
+protected:
+
 public:
-  Icon(const CL_Point& pos, const CL_Sprite& sprite, const std::string& tooltip, CL_Component* parent);
-  Icon(const CL_Rect& rect, const CL_Sprite& sprite, const std::string& tooltip, CL_Component* parent);
+  ToolImpl() {}
+  virtual ~ToolImpl() {}
 
-  void disable();
-  void enable();
+  virtual void draw() {}
 
-  void set_up();
-  void set_down();
-  
-  CL_Signal_v0& sig_clicked();
-
-private:
-  Icon (const Icon&);
-  Icon& operator= (const Icon&);
-
-  SharedPtr<IconImpl> impl;
+  virtual void on_mouse_up  (const CL_InputEvent& event) {}
+  virtual void on_mouse_down(const CL_InputEvent& event) {}
+  virtual void on_mouse_move(const CL_InputEvent& event) {}
 };
 
 #endif

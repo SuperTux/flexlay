@@ -36,6 +36,11 @@ public:
   std::string tooltip;
   bool draw_tooltip;
   bool down;
+
+  /** Parameter to keep the button down all the time, aka togglebutton
+      like */
+  bool is_down;
+
   bool is_enabled;
   CL_Signal_v0 sig_on_click;
 
@@ -71,6 +76,7 @@ Icon::Icon(const CL_Rect& rect, const CL_Sprite& sprite, const std::string& tool
   impl->tooltip      = tooltip;
   impl->draw_tooltip = true;
   impl->down         = false;
+  impl->is_down      = false;
   impl->is_enabled   = true;
 
   impl->slots.push_back(sig_paint().connect(impl.get(), &IconImpl::draw));
@@ -93,16 +99,22 @@ IconImpl::draw()
 
   if (is_enabled)
     {
-      if (parent->has_mouse_over())
+      if (is_down)
         {
-          if (down)
-            Box::draw_button_down(rect);
-          else
-            Box::draw_button_up(rect);
+          Box::draw_button_down(rect);
         }
       else
-        Box::draw_button_neutral(rect);
-
+        {
+          if (parent->has_mouse_over())
+            {
+              if (down)
+                Box::draw_button_down(rect);
+              else
+                Box::draw_button_up(rect);
+            }
+          else
+            Box::draw_button_neutral(rect);
+        }
       sprite.set_alpha(1.0f);
     }
   else
@@ -154,6 +166,18 @@ void
 Icon::enable()
 {
   impl->is_enabled = true;
+}
+
+void
+Icon::set_up()
+{
+  impl->is_down = false;
+}
+
+void
+Icon::set_down()
+{
+  impl->is_down = true;
 }
 
 /* EOF */

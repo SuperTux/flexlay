@@ -139,33 +139,33 @@ connect(m.sig_change(), on_map_change)
 
 def set_tilemap_paint_tool():
     workspace.set_tool(tilemap_paint_tool.to_tool())
-    paint.disable()
-    select.enable()
-    zoom.enable()
-    object.enable()
+    paint.set_down()
+    select.set_up()
+    zoom.set_up()
+    object.set_up()
 
 def set_tilemap_select_tool():
     workspace.set_tool(tilemap_select_tool.to_tool())
-    paint.enable()
-    select.disable()
-    zoom.enable()
-    object.enable()
+    paint.set_up()
+    select.set_down()
+    zoom.set_up()
+    object.set_up()
     
 def set_zoom_tool():
     workspace.set_tool(zoom_tool.to_tool())
-    paint.enable()
-    select.enable()
-    zoom.disable()
-    object.enable()
+    paint.set_up()
+    select.set_up()
+    zoom.set_down()
+    object.set_up()
     
 def set_objmap_select_tool():
     workspace.set_tool(objmap_select_tool.to_tool())
-    paint.enable()
-    select.enable()
-    zoom.enable()
-    object.disable()
+    paint.set_up()
+    select.set_up()
+    zoom.set_up()
+    object.set_down()
 
-toolbar = Panel(CL_Rect(CL_Point(0, 23+33), CL_Size(33, 256)), gui.get_component())
+toolbar = Panel(CL_Rect(CL_Point(0, 23+33), CL_Size(33, 32*4+2)), gui.get_component())
 
 paint  = Icon(CL_Point(2, 32*0+2), make_sprite("../data/images/tools/stock-tool-pencil-22.png"), "Some tooltip", toolbar);
 paint.set_callback(set_tilemap_paint_tool)

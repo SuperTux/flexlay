@@ -27,6 +27,15 @@ flexlay.init()
 editor = Editor()
 gui = editor.get_gui_manager()
 
+def Editor_undo(self):
+    workspace.get_map().undo()
+def Editor_redo(self):
+    workspace.get_map().redo()
+Editor.undo = Editor_undo
+Editor.redo = Editor_redo
+del Editor_redo
+del Editor_undo
+
 myrect = CL_Rect(CL_Point(0, 56), CL_Size(665, 488))
 editor_map = EditorMapComponent(myrect, gui.get_component())
 workspace  = Workspace(myrect.get_width(), myrect.get_height())
@@ -46,7 +55,6 @@ def do_quit():
     gui.quit()
 
 def draw_something():
-    print "Draw something"
     brush = TileBrush(2, 2)
     brush.set_opaque()
     _ = PaintCommand(tilemap, brush)
@@ -54,8 +62,7 @@ def draw_something():
     _.add_point(CL_Point(2,2))
     _.add_point(CL_Point(3,3))
     _.add_point(CL_Point(4,4))
-    m.execute(_.to_command())
-    print "Draw something done"
+    workspace.get_map().execute(_.to_command())
 
 window = Window(CL_Rect(50, 50, 450, 400), "My Window", gui.get_component())
     
@@ -102,8 +109,8 @@ paste_icon   = Icon(CL_Point(32*4.1+2, 2), make_sprite("../data/images/icons24/s
 undo_icon = Icon(CL_Point(32*5.1+2, 2), make_sprite("../data/images/icons24/stock_undo.png"), "Some tooltip", willow);
 redo_icon = Icon(CL_Point(32*6.1+2, 2), make_sprite("../data/images/icons24/stock_redo.png"), "Some tooltip", willow);
 
-undo_icon.set_callback(workspace.get_map().undo)
-redo_icon.set_callback(workspace.get_map().redo)
+undo_icon.set_callback(editor.undo)
+redo_icon.set_callback(editor.redo)
 
 undo_icon.disable()
 redo_icon.disable()
@@ -143,6 +150,7 @@ def menu_file_open():
     level = SuperTuxLevel('/home/ingo/cvs/supertux/supertux/data/levels/world1/level2.stl')
     print "Loading done"
     level.activate(workspace)
+    connect(level.editormap.sig_change(), on_map_change)
     print "Activation done"
 
 def menu_file_save():
@@ -152,20 +160,53 @@ def menu_file_save_as():
     print "File/Save As"
 
 menu = CL_Menu(gui.get_component())
-a = menu.add_item("File/Open...", menu_file_open)
-a = menu.add_item("File/Save...", menu_file_save)
-a = menu.add_item("File/Save As...", menu_file_save_as)
-a = menu.add_item("File/Quit",  do_quit)
+menu.add_item("File/Open...", menu_file_open)
+menu.add_item("File/Save...", menu_file_save)
+menu.add_item("File/Save As...", menu_file_save_as)
+menu.add_item("File/Quit",  do_quit)
 
-mysprite = make_sprite("../data/images/icons16/stock_paste-16.png")
+display_properties = DisplayProperties()
+
+def menu_show_foreground():
+    display_properties.layer = SuperTuxLevel.FOREGROUND
+    display_properties.set(get_python_object(workspace.get_map().get_metadata()))
+    TilemapLayer_set_current(get_python_object(workspace.get_map().get_metadata()).foreground)
+
+def menu_show_background():
+    display_properties.layer = SuperTuxLevel.BACKGROUND
+    display_properties.set(get_python_object(workspace.get_map().get_metadata()))
+    TilemapLayer_set_current(get_python_object(workspace.get_map().get_metadata()).background)
+
+def menu_show_interactive():
+    display_properties.layer = SuperTuxLevel.INTERACTIVE
+    display_properties.set(get_python_object(workspace.get_map().get_metadata()))
+    TilemapLayer_set_current(get_python_object(workspace.get_map().get_metadata()).interactive)
+
+def menu_show_all():
+    display_properties.show_all = True
+    display_properties.set(get_python_object(workspace.get_map().get_metadata()))
+
+def menu_show_only_current():
+    display_properties.show_all = False
+    display_properties.set(get_python_object(workspace.get_map().get_metadata()))
+
+menu.add_item("Layer/Background",  menu_show_background)
+menu.add_item("Layer/Interactive", menu_show_interactive)
+menu.add_item("Layer/Foreground",  menu_show_foreground)
+
+# Fixme: make me a toggle item
+menu.add_item("Layer/Show all",    menu_show_all)
+menu.add_item("Layer/Show only current", menu_show_only_current)
 
 def Menu_add_item(self, sprite, text, func):
-    i = self.__add_item(mysprite, text)
+    i = self.__add_item(sprite, text)
     if func != None:
         connect(self.sig_clicked(i), func)
 Menu.__add_item = Menu.add_item
 Menu.add_item = Menu_add_item
 del Menu_add_item
+
+mysprite = make_sprite("../data/images/icons16/stock_paste-16.png")
 
 mymenu = Menu(CL_Point(100, 100), gui.get_component())
 mymenu.add_item(mysprite, "Foobar aeuaeu", None)
@@ -180,9 +221,6 @@ def show_menu():
     mymenu.run()
 
 copy_icon.set_callback(show_menu)
-    
-# _button = CL_Button(CL_Rect(100, 100, 200, 125), "Hello World", gui.get_component())
-# connect(_button.sig_clicked(), show_menu)
 
 minimap_panel = Panel(CL_Rect(CL_Point(0, 600-56), CL_Size(800-134, 56)), gui.get_component())
 minimap = Minimap(editor_map, CL_Rect(CL_Point(3, 3), CL_Size(794-134, 50)), minimap_panel)

@@ -35,7 +35,7 @@ public:
 class CL_Color
 {
 public:
-	CL_Color(unsigned int, unsigned int, unsigned int, unsigned int);
+	CL_Color(unsigned int, unsigned int, unsigned int, unsigned int = 255);
 
 	void set_red  (unsigned int);
 	void set_blue (unsigned int);

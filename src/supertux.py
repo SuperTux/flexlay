@@ -79,13 +79,54 @@ class SuperTuxLevel:
         self.objects = ObjectLayer()
 
         self.editormap = EditorMap()
-        self.editormap.add_layer(self.foreground.to_layer())
-        self.editormap.add_layer(self.interactive.to_layer())
         self.editormap.add_layer(self.background.to_layer())
+        self.editormap.add_layer(self.interactive.to_layer())
         self.editormap.add_layer(self.objects.to_layer())
+        self.editormap.add_layer(self.foreground.to_layer())
+        # FIXME: Data might not get freed since its 'recursively' refcounted
+        self.editormap.set_metadata(make_metadata(self))
 
     def activate(self, workspace):
         workspace.set_map(self.editormap)
+        #(tilemap-paint-tool-set-tilemap (supertux:interactive-tm stlv))
+        #(editor-tilemap-set-current     (supertux:interactive-tm stlv))
+        #(editor-objectmap-set-current   (supertux:objmap stlv))
+        #(set! *tilemap* (supertux:interactive-tm stlv))
+        #(set! *objmap* (supertux:objmap stlv))
+        #(tileset-set-current *level-tileset*)
+        #(tile-selector-set-tileset *tileselector* *level-tileset*))
+
+SuperTuxLevel.BACKGROUND  = 0
+SuperTuxLevel.INTERACTIVE = 1
+SuperTuxLevel.FOREGROUND  = 2
+
+class DisplayProperties:
+    layer = SuperTuxLevel.INTERACTIVE
+    show_all = False
+    
+    def set(self, map):
+        active   = CL_Color(255, 255, 255)
+        deactive = CL_Color(150, 150, 250, 150)
+
+        if (self.show_all):
+            map.foreground.set_foreground_color(active)
+            map.interactive.set_foreground_color(active)
+            map.background.set_foreground_color(active)
+        else:
+            if (self.layer == SuperTuxLevel.FOREGROUND):
+                map.foreground.set_foreground_color(active)
+            else:
+                map.foreground.set_foreground_color(deactive)
+
+            if (self.layer == SuperTuxLevel.INTERACTIVE):
+                map.interactive.set_foreground_color(active)
+            else:
+                map.interactive.set_foreground_color(deactive)
+
+            if (self.layer == SuperTuxLevel.BACKGROUND):
+                map.background.set_foreground_color(active)
+            else:
+                map.background.set_foreground_color(deactive)
 
 class SuperTuxGUI:
     quit_button = None

@@ -58,7 +58,8 @@ TileMapPaintTool::~TileMapPaintTool()
 void
 TileMapPaintTool::draw()
 {
-  // FIXME: no tile
+  TilemapLayer tilemap = TilemapLayer::current();
+
   if (tilemap.is_null())
     return;
 
@@ -114,7 +115,7 @@ TileMapPaintTool::draw()
 void
 TileMapPaintTool::on_mouse_down(const CL_InputEvent& event)
 {
-  tilemap = TilemapLayer::current();
+  TilemapLayer tilemap = TilemapLayer::current();
 
   if (!tilemap.is_null())
     {
@@ -152,6 +153,8 @@ TileMapPaintTool::on_mouse_down(const CL_InputEvent& event)
 void
 TileMapPaintTool::on_mouse_move(const CL_InputEvent& event)
 {
+  TilemapLayer tilemap = TilemapLayer::current();
+
   if (!tilemap.is_null())
     {
       EditorMapComponent* parent = EditorMapComponent::current();
@@ -180,6 +183,8 @@ TileMapPaintTool::on_mouse_move(const CL_InputEvent& event)
 void
 TileMapPaintTool::on_mouse_up  (const CL_InputEvent& event)
 {
+  TilemapLayer tilemap = TilemapLayer::current();
+
   if (!tilemap.is_null())
     {
       EditorMapComponent::current()->get_workspace().get_map().modify();

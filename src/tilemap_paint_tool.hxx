@@ -40,8 +40,6 @@ private:
 
   PaintCommand* command;
 
-  TilemapLayer tilemap;
-
   static TileMapPaintTool* current_; 
 public:
   static TileMapPaintTool* current() { return current_; } 

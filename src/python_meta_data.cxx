@@ -36,6 +36,7 @@ PyObject* get_python_object(const MetaData& data_obj)
       PythonMetaData* pyobj = dynamic_cast<PythonMetaData*>(data);
       if (pyobj)
         {
+          Py_XINCREF(pyobj->data.ptr());
           return pyobj->data.ptr();
         }
       else

@@ -1,4 +1,4 @@
-//  $Id: guile_gameobj.cxx,v 1.3 2003/08/12 08:24:41 grumbel Exp $
+//  $Id: guile_gameobj.cxx,v 1.4 2003/08/19 13:49:37 grumbel Exp $
 //
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -19,7 +19,7 @@
 
 #include <iostream>
 #include "scmconverter.hxx"
-#include "gameobj_smob.hxx"
+//#include "gameobj_smob.hxx"
 #include "guile_gameobj.hxx"
 
 GuileGameObj::GuileGameObj (SCM arg_obj, SCM arg_update, SCM arg_draw)
@@ -29,7 +29,7 @@ GuileGameObj::GuileGameObj (SCM arg_obj, SCM arg_update, SCM arg_draw)
   scm_gc_protect_object (scm_draw);
   scm_gc_protect_object (obj);
   
-  smob = create_smob<GameObj> (this);
+  //smob = create_smob<GameObj> (this);
   scm_gc_protect_object (smob);
 }
 

@@ -1,4 +1,4 @@
-//  $Id: windstille_main.cxx,v 1.8 2003/08/18 08:50:22 grumbel Exp $
+//  $Id: windstille_main.cxx,v 1.9 2003/08/19 13:49:37 grumbel Exp $
 //
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -27,10 +27,6 @@
 #include "globals.hxx"
 #include "editor/windstille_editor.hxx"
 #include "windstille_game.hxx"
-#include "sprite_smob.hxx"
-#include "gameobj_smob.hxx"
-#include "tile_mapsmob.hxx"
-#include "game_worldsmob.hxx"
 #include "guile_gameobj_factory.hxx"
 #include "windstille_level.hxx"
 #include "windstille_main.hxx"
@@ -91,11 +87,6 @@ WindstilleMain::inner_main(void* closure, int argc, char** argv)
                 "(debug-enable 'backtrace)"
                 "(read-enable 'positions)");
 
-    SpriteSmob::register_guile_bindings ();    
-    GameObjSmob::register_guile_bindings ();    
-    GameWorldSmob::register_guile_bindings ();    
-    TileMapSmob::register_guile_bindings ();    
-    GuileGameObjFactory::register_guile_bindings ();    
     gh_load ("guile/windstille.scm");
     std::cout << "Loading Guile Code... done" << std::endl;
 

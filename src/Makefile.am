@@ -20,12 +20,8 @@ windstille_SOURCES = \
   field.hxx \
   game_world.cxx \
   game_world.hxx \
-  game_worldsmob.cxx \
-  game_worldsmob.hxx \
   gameobj.cxx \
   gameobj.hxx \
-  gameobj_smob.cxx \
-  gameobj_smob.hxx \
   globals.hxx \
   guile_gameobj.cxx \
   guile_gameobj.hxx \
@@ -45,8 +41,6 @@ windstille_SOURCES = \
   scm_helper.hxx \
   scmconverter.hxx \
   sprite.hxx \
-  sprite_smob.cxx \
-  sprite_smob.hxx \
   string_converter.hxx \
   tile.cxx \
   tile.hxx \
@@ -54,8 +48,6 @@ windstille_SOURCES = \
   tile_factory.hxx \
   tile_map.cxx \
   tile_map.hxx \
-  tile_mapsmob.cxx \
-  tile_mapsmob.hxx \
   windstille_game.cxx \
   windstille_game.hxx \
   windstille_level.cxx \

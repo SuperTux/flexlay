@@ -1,4 +1,4 @@
-//  $Id: igel.hxx,v 1.2 2003/09/27 20:57:39 grumbel Exp $
+//  $Id: igel.hxx,v 1.3 2003/09/28 10:55:34 grumbel Exp $
 // 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -28,15 +28,19 @@ class Igel : public GameObj
 {
 private:
   CL_Sprite sprite;
+  CL_Sprite die_sprite;
+
   CL_Pointf pos;
   bool direction_left;
-  enum { WALKING, FALLING } state;
+  enum { WALKING, FALLING, DIEING } state;
 public:
   Igel(int x, int y);
   virtual ~Igel();
 
   void draw();
   void update(float delta);
+  void die();
+  CL_Pointf get_pos() { return pos; }
 private:
   bool on_ground();
   bool in_wall();

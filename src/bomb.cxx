@@ -1,4 +1,4 @@
-//  $Id: bomb.cxx,v 1.2 2003/09/27 20:57:39 grumbel Exp $
+//  $Id: bomb.cxx,v 1.3 2003/09/28 10:55:34 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -18,6 +18,8 @@
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include "globals.hxx"
+#include "igel.hxx"
+#include "game_world.hxx"
 #include "bomb.hxx"
 
 Bomb::Bomb(int x, int y)
@@ -26,7 +28,8 @@ Bomb::Bomb(int x, int y)
     pos(x,
         (y/SUBTILE_SIZE+1)*SUBTILE_SIZE),
     count(1.5f),
-    state(COUNTDOWN)
+    state(COUNTDOWN),
+    exploded(false)
 {
 }
 
@@ -51,6 +54,12 @@ Bomb::update(float delta)
     {
       state = EXPLODE;
       count = 0;
+      if (!exploded)
+        {
+          exploded = true;
+          explode();
+        }
+
     }
 }
 
@@ -61,6 +70,24 @@ Bomb::draw()
     explo.draw(pos.x, pos.y);
   else
     sprite.draw(pos.x, pos.y);
+}
+
+void 
+Bomb::explode()
+{
+  std::list<GameObj*>* objs = GameWorld::current()->get_objects();
+  for(std::list<GameObj*>::iterator i = objs->begin(); i != objs->end(); ++i)
+    {
+      Igel* igel = dynamic_cast<Igel*>(*i);
+      if (igel)
+        {
+          if (igel->get_pos().x > pos.x - 20 &&
+              igel->get_pos().x < pos.x + 20 &&
+              igel->get_pos().y > pos.y - 20 &&
+              igel->get_pos().y < pos.y + 20)
+          igel->die();
+        }
+    }
 }
 
 /* EOF */

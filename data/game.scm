@@ -31,9 +31,9 @@
   (display " ")
   (display (inexact->exact y))
   (display ")")
-  (player-set-pos x y)
-  ;;(game-add-igel (inexact->exact x)
-   ;;              (inexact->exact y))
+  ;;(player-set-pos x y)
+  (game-add-igel (inexact->exact x)
+                 (inexact->exact y))
   (newline))
 
 (define (toggle-pause)

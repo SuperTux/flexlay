@@ -1,4 +1,4 @@
-//  $Id: bomb.hxx,v 1.1 2003/09/20 21:55:57 grumbel Exp $
+//  $Id: bomb.hxx,v 1.2 2003/09/28 10:55:34 grumbel Exp $
 // 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -33,6 +33,8 @@ private:
   CL_Point pos;
   float count;
   enum { COUNTDOWN, EXPLODE } state;
+  bool exploded;
+
 public:
   Bomb(int x, int y);
   virtual ~Bomb();
@@ -40,6 +42,7 @@ public:
   void update(float delta);
   void draw();
 private:
+  void explode();
   Bomb (const Bomb&);
   Bomb& operator= (const Bomb&);
 };

@@ -1,4 +1,4 @@
-//  $Id: igel.cxx,v 1.2 2003/09/27 20:57:39 grumbel Exp $
+//  $Id: igel.cxx,v 1.3 2003/09/28 10:55:34 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -25,9 +25,11 @@
 
 Igel::Igel(int x, int y)
   : sprite("igel", resources),
+    die_sprite("igel_die", resources),
     pos(x, y)
 {
   direction_left = false;
+  state = WALKING;
 }
 
 Igel::~Igel()
@@ -37,48 +39,65 @@ Igel::~Igel()
 void
 Igel::draw()
 {
-  if (direction_left)
-    sprite.set_scale(1.0f, 1.0f);
+  CL_Sprite* s;
+
+  if (state == DIEING)
+    s = &die_sprite;
   else
-    sprite.set_scale(-1.0f, 1.0f);
-  sprite.draw(int(pos.x), int(pos.y));
+    s = &sprite;
+
+  if (direction_left)
+    s->set_scale(1.0f, 1.0f);
+  else
+    s->set_scale(-1.0f, 1.0f);
+
+  s->draw(int(pos.x), int(pos.y));
 }
 
 void
 Igel::update(float delta)
 {
-  sprite.update(delta);
-  
-  CL_Pointf old_pos = pos;
-
-  if (on_ground())
+  if (state == DIEING)
     {
-      pos.y = int(pos.y)/SUBTILE_SIZE * SUBTILE_SIZE;
-
-      if (direction_left)
-        pos.x -= 32 * delta;
-      else
-        pos.x += 32 * delta;      
-
-      if (!on_ground() || in_wall())
-        {
-          direction_left = !direction_left;
-          pos = old_pos;
-        }
+      if (die_sprite.is_finished())
+        remove();
+      die_sprite.update(delta);
     }
   else
-    { // Fall
-      pos.y += 450 * delta;
-    }
+    {
+      sprite.update(delta);
+      
+      CL_Pointf old_pos = pos;
+      
+      if (on_ground())
+        {
+          pos.y = int(pos.y)/SUBTILE_SIZE * SUBTILE_SIZE;
+          
+          if (direction_left)
+            pos.x -= 32 * delta;
+          else
+            pos.x += 32 * delta;      
+          
+          if (!on_ground() || in_wall())
+            {
+              direction_left = !direction_left;
+              pos = old_pos;
+            }
+        }
+      else
+        { // Fall
+          pos.y += 450 * delta;
+        }
 
-  // Check if the player got hit
-  // FIXME: Insert pixel perfect collision detection here
-  CL_Vector player_pos = Player::current()->get_pos();
-  if (pos.x - 20 < player_pos.x
-      && pos.x + 20 > player_pos.x
-      && pos.y - 20 < player_pos.y
-      && pos.y + 5  > player_pos.y)
-    Player::current()->hit(3);
+      // Check if the player got hit
+      // FIXME: Insert pixel perfect collision detection here
+      CL_Vector player_pos = Player::current()->get_pos();
+      if (pos.x - 20 < player_pos.x
+          && pos.x + 20 > player_pos.x
+          && pos.y - 20 < player_pos.y
+          && pos.y + 5  > player_pos.y)
+        Player::current()->hit(3);
+    }
 }
 
 bool
@@ -109,6 +128,12 @@ Igel::on_ground()
                                                       (int(pos.y)/SUBTILE_SIZE)*SUBTILE_SIZE)
     && GameWorld::current()->get_tilemap()->is_ground((int(pos.x)/SUBTILE_SIZE - 2)*SUBTILE_SIZE,
                                                       (int(pos.y)/SUBTILE_SIZE)*SUBTILE_SIZE);
+}
+
+void
+Igel::die()
+{
+  state = DIEING;
 }
 
 /* EOF */

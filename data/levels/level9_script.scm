@@ -47,16 +47,21 @@
 (game-add-igel 7679 3355)
 
 
+(define (end-dialog)
+  (dialog-clear)
+  (dialog-add "hero/portrait" 
+              (string-append
+               "Mission complete!\n\n"
+               "Time needed: " (game-get-time-str) "\n"
+               "Diamonds collected: " 
+               (number->string (- (game-get-max-diamonds) (game-get-diamonds)))
+               "/"
+               (number->string (game-get-max-diamonds))
+               ))
+  (dialog-show)
+  (remove-trigger))
+
 (add-region-trigger 7221 3744  7493 3837
-                    (lambda ()
-                      (dialog-clear)
-                      (dialog-add "hero/portrait" 
-                                  (string-append
-                                   "Well, done, you completed your first mission with NUM diamonds."
-                                   "All aliens survided, time needed "
-                                   "to complete your mission: " (game-get-time-str)))
-                      (dialog-show)
-                      (remove-trigger)
-                      ))
+                    end-dialog)
 
 ;; EOF ;;

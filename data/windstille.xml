@@ -40,6 +40,17 @@
     <image file="images/energiebar.png" name="image1" />
   </sprite>
 
+  <sprite name="igel_die">
+    <animation speed="100" loop="no" />
+    <translation origin="bottom_center" />
+
+    <image file="images/igel_die1.png" />
+    <image file="images/igel_die2.png" />
+    <image file="images/igel_die3.png" />
+    <image file="images/igel_die4.png" />
+    <image file="images/igel_die5.png" />
+  </sprite>
+
   <sprite name="igel">
     <animation speed="100" />
     <image file="images/igel.png" name="image1" />

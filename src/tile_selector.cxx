@@ -64,7 +64,10 @@ TileSelector::mouse_down(const CL_InputEvent& event)
       TileBrush brush(1, 1);
 
       brush.set_opaque();
-      brush.at(0, 0) = mouse_over_tile;
+      if (mouse_over_tile >= 0 && mouse_over_tile < int(tiles.size()))
+        brush.at(0, 0) = tiles[mouse_over_tile];
+      else
+        brush.at(0, 0) = 0;
 
       TileMapPaintTool::current().set_brush(brush);
     }

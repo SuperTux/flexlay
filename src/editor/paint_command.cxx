@@ -25,7 +25,7 @@
 #include "paint_command.hxx"
 
 PaintCommand::PaintCommand(Field<int>* f, const TileBrush& b)
-  : field(f)
+  : field(f), brush(b)
 {  
   undo_field = *field;
 
@@ -53,15 +53,15 @@ PaintCommand::execute()
   // Calc bounding rect
   CL_Rect rect(points.front().x, 
                points.front().y, 
-               points.front().x + 1,
-               points.front().y + 1);
+               points.front().x + brush.get_width(),
+               points.front().y + brush.get_height());
 
   for(Points::iterator i = points.begin(); i != points.end(); ++i)
     {
       rect.left   = std::min(rect.left,   (*i).x);
       rect.top    = std::min(rect.top,    (*i).y);
-      rect.right  = std::max(rect.right,  (*i).x + 1);
-      rect.bottom = std::max(rect.bottom, (*i).y + 1);
+      rect.right  = std::max(rect.right,  (*i).x + brush.get_width());
+      rect.bottom = std::max(rect.bottom, (*i).y + brush.get_height());
     }
   
   pos.x = rect.left;

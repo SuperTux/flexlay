@@ -229,7 +229,7 @@
      (error "Tool unknown"))))
 
 (define (create-toolbar)
-  (let ((window (gui-create-window 0 25 50 300 "Toolbar")))
+  (let ((window (gui-create-window 0 25 50 310 "Toolbar")))
     (gui-push-component (gui-window-get-client-area window))
     
 
@@ -270,6 +270,14 @@
                             (lambda () (tilemap-set-active-layer 1)))
 
     (gui-create-button-func 0 225
+                            40 25 "Undo" 
+                            (lambda () (editor-undo)))
+
+    (gui-create-button-func 0 250
+                            40 25 "Redo" 
+                            (lambda () (editor-redo)))
+
+    (gui-create-button-func 0 300
                             40 25 "Shell" 
                             windstille:repl)
     )

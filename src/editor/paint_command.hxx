@@ -34,6 +34,7 @@ private:
   Points points;
   
   Field<int>* field;
+  TileBrush   brush;
   Field<int>  undo_field;
 
   CL_Point    pos;

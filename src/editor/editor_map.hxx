@@ -76,11 +76,10 @@ public:
   void mouse_down(const CL_InputEvent& event);
   void mouse_move(const CL_InputEvent& event);
 
+  TileMapTool*    get_tool_by_name(int i);
   EditorMapLayer* get_layer_by_name(int i);
   EditorMapLayer* get_layer(int i);
   void set_active_layer(int i);
-
-  void new_level(int w, int h);
 
   CL_Rect get_clip_rect();
   

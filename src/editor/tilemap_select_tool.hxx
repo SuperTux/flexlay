@@ -22,6 +22,7 @@
 
 #include <ClanLib/Core/Math/rect.h>
 #include <ClanLib/Core/Math/point.h>
+#include "editor_tilemap.hxx"
 #include "tilemap_tool.hxx"
 
 /** */
@@ -30,7 +31,7 @@ class TileMapSelectTool : public TileMapTool
 private:
   EditorTileMap* tilemap;
   CL_Point click_pos;
-  CL_Rect rect;
+  CL_Rect selection;
   bool active;
 
 public:
@@ -43,6 +44,8 @@ public:
   void on_mouse_down(const CL_InputEvent& event);
   void on_mouse_move(const CL_InputEvent& event);
 
+  /** Convert the selection into a TileBrush */
+  TileBrush get_selection() const;
 private:
   void update_selection(int x, int y);
   

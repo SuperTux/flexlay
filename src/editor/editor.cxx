@@ -55,7 +55,9 @@ void
 Editor::load(const std::string& filename)
 {
   // FIXME: implement me
-  //tilemap->load(filename);
+  EditorTileMap* tilemap = dynamic_cast<EditorTileMap*>(Editor::current()->get_map()->get_layer_by_name(0));
+  if (tilemap)
+    tilemap->load(filename);
 }
 
 void

@@ -33,6 +33,14 @@
      ,@(diamond-map-get-data)
      )))
 
+(define (new-map width height)
+  (display "Creating new level...\n")
+  (editor-new width height))
+
+(define (load-map filename)
+  (editor-load filename)
+  (push-last-file filename))
+
 (define (save-map filename)
   (let ((level (serialize-level)))
     (with-output-to-file filename
@@ -56,8 +64,8 @@
       
       (gui-component-on-click ok 
                               (lambda ()   
-                                (editor-new (string->number (gui-inputbox-get-text width))
-                                            (string->number (gui-inputbox-get-text height)))
+                                (new-map (string->number (gui-inputbox-get-text width))
+                                         (string->number (gui-inputbox-get-text height)))
                                 (gui-hide-component window)))
 
       (gui-component-on-click cancel
@@ -72,8 +80,8 @@
                    (lambda ()
                      (simple-file-dialog "Load a level..." (get-last-file)
                                          (lambda (filename)
-                                           (editor-load filename)
-                                           (push-last-file filename)))))
+                                           (load-map filename)))))
+
 (gui-add-menu-item menu "File/Save" 
                    (lambda ()
                      (simple-file-dialog "Save a level..." (get-last-file)
@@ -101,16 +109,17 @@
                    (lambda ()
                      (gui-component-toggle-visibility *tileeditor-window*)))
 
+(define *clipboard* #f)
 (gui-create-button-func 720 475
+                        80 25 "copy" 
+                        (lambda () 
+                          (set! *clipboard* (editor-get-tile-selection))))
+(gui-create-button-func 720 450
                         80 25 "brushtest" 
                         (lambda () 
-                          (editor-tilemap-draw-brush 
-                           (random 15) (random 15)
-                           (list 3 3
-                                 (vector 1 2 3
-                                         4 5 6
-                                         7 8 9)))))
-
+                          (if *clipboard*
+                              (editor-tilemap-draw-brush (random 15) (random 15)
+                                                         *clipboard*))))
 
 (gui-create-button-func 720 500
                         80 25 "Background" 

@@ -44,8 +44,18 @@ public:
     assert (x >= 0 || x < (int) width || y >= 0 || y < (int) height);
     return vec [width*y + x];
   }
+
+  const T& operator() (int x, int y) const
+  {
+    assert (x >= 0 || x < (int) width || y >= 0 || y < (int) height);
+    return vec [width*y + x];
+  }
   
-  T& at (int x, int y) {
+  inline const T& at (int x, int y) const {
+    return (*this) (x, y);
+  }
+
+  inline T& at (int x, int y) {
     return (*this) (x, y);
   }
 

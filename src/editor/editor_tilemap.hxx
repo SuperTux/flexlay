@@ -25,6 +25,8 @@
 #include "editor_map_layer.hxx"
 #include "editor_tile.hxx"
 
+typedef Field<int> TileBrush;
+
 /** Holds the tilemap data for the editor and provides functions to
     manipulate them */
 class EditorTileMap : public EditorMapLayer
@@ -65,6 +67,9 @@ public:
   void resize(int w, int h);
 
   Field<EditorTile*>* get_map(int i);
+
+  /** Draw the gives brush to the map */
+  void draw_tile(const TileBrush& brush, CL_Point& pos);
 
   int get_width()  { return current_field->get_width(); }
   int get_height() { return current_field->get_height(); }

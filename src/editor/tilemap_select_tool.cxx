@@ -37,10 +37,10 @@ TileMapSelectTool::~TileMapSelectTool()
 void
 TileMapSelectTool::draw()
 {
-  if (rect.get_width() > 0 && rect.get_height() > 0)
+  if (selection.get_width() > 0 && selection.get_height() > 0)
     {
-      CL_Display::fill_rect (CL_Rect(rect.left  * TILE_SIZE, rect.top    * TILE_SIZE,
-                                     rect.right * TILE_SIZE, rect.bottom * TILE_SIZE),
+      CL_Display::fill_rect (CL_Rect(selection.left  * TILE_SIZE, selection.top    * TILE_SIZE,
+                                     selection.right * TILE_SIZE, selection.bottom * TILE_SIZE),
                              CL_Color(255, 255, 255, 100));
     }
 }
@@ -66,7 +66,7 @@ TileMapSelectTool::on_mouse_down(const CL_InputEvent& event)
     }
   else if (event.id == CL_MOUSE_RIGHT)
     {
-      rect = CL_Rect();
+      selection = CL_Rect();
     }
 }
 
@@ -83,10 +83,26 @@ TileMapSelectTool::on_mouse_move(const CL_InputEvent& event)
 void
 TileMapSelectTool::update_selection(int x, int y)
 {
-  rect = CL_Rect(std::min(click_pos.x, x),
-                 std::min(click_pos.y, y),
-                 std::max(click_pos.x, x),
-                 std::max(click_pos.y, y));
+  selection = CL_Rect(std::min(click_pos.x, x),
+                      std::min(click_pos.y, y),
+                      std::max(click_pos.x, x),
+                      std::max(click_pos.y, y));
+}
+
+TileBrush
+TileMapSelectTool::get_selection() const
+{
+  TileBrush brush(selection.get_width(), 
+                  selection.get_height());
+
+  for(int y = selection.top; y < selection.bottom; ++y)
+    for(int x = selection.left; x < selection.right; ++x)
+      {
+        brush.at(x - selection.left, 
+                 y - selection.top) = tilemap->get_field()->at(x, y)->get_id();
+      }
+
+  return brush;
 }
 
 /* EOF */

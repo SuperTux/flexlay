@@ -27,6 +27,7 @@
 #include "editor/editor_tilemap.hxx"
 #include "editor/editor_map.hxx"
 #include "editor/tile_editor.hxx"
+#include "editor/tilemap_select_tool.hxx"
 #include "tile_factory.hxx"
 #include "gui_manager.hxx"
 #include "editor.hxx"
@@ -48,6 +49,41 @@ void
 editor_set_brush_tile(int i)
 {
   editor_get_tilemap()->brush_tile = i;
+}
+
+SCM
+brush2scm(const TileBrush& brush)
+{
+  std::cout << "Brush: " << brush.get_width() << "x" << brush.get_height() << std::endl;
+  SCM vec = scm_c_make_vector(brush.get_width() * brush.get_height(),
+                              gh_long2scm(0));
+
+  for(int y = 0; y < brush.get_height(); ++y)
+    for(int x = 0; x < brush.get_width(); ++x)
+      {
+        scm_vector_set_x(vec, 
+                         SCM_MAKINUM(x + y * brush.get_width()),
+                         SCM_MAKINUM(brush.at(x, y)));
+      }
+  
+  return gh_list(gh_long2scm(brush.get_width()),
+                 gh_long2scm(brush.get_height()),
+                 vec,
+                 SCM_UNDEFINED);
+}
+
+SCM
+editor_get_tile_selection()
+{
+  TileMapSelectTool* tool 
+    = dynamic_cast<TileMapSelectTool*>(Editor::current()->get_map()->get_tool_by_name(1));
+
+  if (tool)
+    {
+      return brush2scm(tool->get_selection());
+    }
+  else
+    return SCM_BOOL_F;
 }
 
 int

@@ -40,13 +40,11 @@ EditorMap::EditorMap(CL_Component* parent)
 
   diamond_map = 0;
 
-  new_level(80, 30);
-
   trans_offset     = CL_Pointf(0,0);
   old_trans_offset = CL_Pointf(0,0);
   click_pos        = CL_Point(0,0);
   
-  brush_tile = 0;
+  brush_tile  = 0;
   zoom_factor = 0;
 
   scrolling = false;
@@ -68,15 +66,6 @@ EditorMap::~EditorMap()
 
   for(Tools::iterator i = tools.begin(); i != tools.end(); ++i)
     delete *i;
-}
-
-void
-EditorMap::new_level(int w, int h)
-{
-  cleanup();
-
-  layers.push_back(tilemap = new EditorTileMap());
-  layers.push_back(objmap  = new EditorObjMap());
 }
 
 void
@@ -245,6 +234,15 @@ EditorMap::get_layer_by_name(int i)
     default:
       return 0;
     }
+}
+
+TileMapTool*
+EditorMap::get_tool_by_name(int i)
+{
+  if (i >= 0 && i < static_cast<int>(tools.size()))
+    return tools[i];
+  else
+    return 0;  
 }
 
 EditorMapLayer*

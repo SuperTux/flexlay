@@ -68,7 +68,7 @@ TileMapObjectTool::on_mouse_down(const CL_InputEvent& event)
       if (obj)
         {
           state = DRAG;
-          offset = event.mouse_pos - obj->pos;
+          offset = pos - obj->pos;
         }
     }
 }
@@ -79,7 +79,7 @@ TileMapObjectTool::on_mouse_move(const CL_InputEvent& event)
   switch(state)
     {
     case DRAG:
-      obj->pos = parent->screen2world(event.mouse_pos - offset);
+      obj->pos = parent->screen2world(event.mouse_pos) - offset;
       break;
     default:
       CL_Point pos = parent->screen2world(event.mouse_pos);

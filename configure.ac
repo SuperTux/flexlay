@@ -1,4 +1,4 @@
-AC_INIT(Windstille, 0.1.0)
+AC_INIT(Windstille, 0.1.1)
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_SRCDIR([src/windstille_main.cxx])
 AM_INIT_AUTOMAKE(dist-bzip2)
@@ -16,7 +16,7 @@ AC_CHECK_HEADER(guile/gh.h)
 
 REQUIRED_CLANLIB_VERSION="0.7.3"
 
-PKG_CHECK_MODULES(WINDSTILLE_DEPS,
+PKG_CHECK_MODULES(WINDSTILLE,
  [
   clanCore    >= $REQUIRED_CLANLIB_VERSION
   clanApp     >= $REQUIRED_CLANLIB_VERSION
@@ -26,13 +26,16 @@ dnl clanSound   >= $REQUIRED_CLANLIB_VERSION
 dnl clanMikMod  >= $REQUIRED_CLANLIB_VERSION
 dnl clanVorbis  >= $REQUIRED_CLANLIB_VERSION
   ],
- [CXXFLAGS="$CXXFLAGS $WINDSTILLE_DEPS_CFLAGS"
-  LIBS="$LIBS $WINDSTILLE_DEPS_LIBS"])
+ [])
+
+AC_SUBST(WINDSTILLE_CFLAGS)
+AC_SUBST(WINDSTILLE_LIBS)
 
 AC_CONFIG_FILES( 
     Makefile
     data/Makefile
     src/Makefile
+    src/collision/Makefile
     src/guile/Makefile
     src/editor/Makefile
 )

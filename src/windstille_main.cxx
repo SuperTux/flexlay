@@ -1,4 +1,4 @@
-//  $Id: windstille_main.cxx,v 1.9 2003/08/19 13:49:37 grumbel Exp $
+//  $Id: windstille_main.cxx,v 1.10 2003/09/08 19:59:57 grumbel Exp $
 //
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -50,35 +50,52 @@ WindstilleMain::inner_main(void* closure, int argc, char** argv)
   bool allow_resize  = false;
 
   bool launch_editor = false;
-  std::string filename;
-  for (int i = 1; i < argc; ++i)
-    {
-      if (strcmp (argv[i], "--editor") == 0)
-        {
-          launch_editor = true;
-        }
-      else if (strcmp (argv[i], "--fullscreen") == 0)
-        {
-          fullscreen = true;
-        }
-      else
-        {
-          //std::cout << "Unknown argument: " << argv[i] << std::endl;
-          //exit (EXIT_FAILURE);
-          filename = argv[i];
-        }
-    }
-
-  CL_SetupCore::init();
-  CL_SetupGL::init();
-  CL_SetupDisplay::init();
-
-  CL_DisplayWindow window (PACKAGE_STRING,
-                           screen_width, screen_height, fullscreen, allow_resize);
-
-  //CL_OpenGL::begin_2d();
+  std::string levelfile;
+  std::string datadir = CL_System::get_exe_path() + "../data/";
+  
   try {
-    resources =  new CL_ResourceManager ("../data/windstille.xml", false);
+
+    CL_CommandLine argp;
+
+    argp.add_usage ("[LEVELFILE]");
+    argp.add_doc   ("Windstille is a classic Jump'n Run game.\n");
+    argp.add_option('e', "editor",     "", "Launch the level editor");
+    argp.add_option('f', "fullscreen", "", "Launch the game in fullscreen");
+    argp.add_option('h', "help",       "", "Print this help");
+
+    argp.parse_args(argc, argv);
+
+    while (argp.next())
+      {
+        switch (argp.get_key())
+          {
+          case 'e':
+            launch_editor = true;
+            break;
+		  
+          case 'f':
+            fullscreen = true;
+            break;
+		  
+          case 'h':
+            argp.print_help();
+            return EXIT_SUCCESS;
+            break;
+
+          case CL_CommandLine::REST_ARG:
+            levelfile = argp.get_argument();
+            break;
+          }
+      }
+
+    CL_SetupCore::init();
+    CL_SetupGL::init();
+    CL_SetupDisplay::init();
+
+    CL_DisplayWindow window (PACKAGE_STRING,
+                             screen_width, screen_height, fullscreen, allow_resize);
+
+    resources =  new CL_ResourceManager (datadir + "windstille.xml", false);
     
     std::cout << "Loading Guile Code..." << std::endl;
 
@@ -87,26 +104,26 @@ WindstilleMain::inner_main(void* closure, int argc, char** argv)
                 "(debug-enable 'backtrace)"
                 "(read-enable 'positions)");
 
-    gh_load ("guile/windstille.scm");
+    gh_load ((datadir + "../src/guile/windstille.scm").c_str());
     std::cout << "Loading Guile Code... done" << std::endl;
 
     if (!launch_editor)
       {
-	if (filename.empty ())
-	  filename = "../data/levels/level2.scm";
+        if (levelfile.empty ())
+          levelfile = datadir + "levels/level2.scm";
 
         TileFactory::init();
-	WindstilleGame game (filename);
-	std::cout << "WindstilleMain: entering main-loop..." << std::endl;
-	game.display ();
+        WindstilleGame game (levelfile);
+        std::cout << "WindstilleMain: entering main-loop..." << std::endl;
+        game.display ();
         TileFactory::deinit();
       }
     else
       {
-	WindstilleEditor editor;
-	if (!filename.empty ())
-	  editor.load (filename);
-	editor.display ();
+        WindstilleEditor editor;
+        if (!levelfile.empty ())
+          editor.load (levelfile);
+        editor.display ();
       }
   } catch (CL_Error& error) {
     std::cout << "CL_Error: " << error.message << std::endl;

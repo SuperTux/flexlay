@@ -29,6 +29,19 @@
   </section>
   
   <section name="hero">
+    <description name="run1" play_speed="30">
+      <image file="images/hero_run/hero-9.png" name="image1" />
+      <image file="images/hero_run/hero-8.png" name="image2" />
+      <image file="images/hero_run/hero-7.png" name="image3" />
+      <image file="images/hero_run/hero-6.png" name="image4" />
+      <image file="images/hero_run/hero-5.png" name="image5" />
+      <image file="images/hero_run/hero-4.png" name="image6" />
+      <image file="images/hero_run/hero-3.png" name="image7" />
+      <image file="images/hero_run/hero-2.png" name="image8" />
+      <image file="images/hero_run/hero-1.png" name="image9" />
+      <image file="images/hero_run/hero-0.png" name="image10" />
+    </description>
+
     <sprite name="run" play_speed="30">
       <image file="images/hero_run/hero-9.png" name="image1" />
       <image file="images/hero_run/hero-8.png" name="image2" />
@@ -43,7 +56,7 @@
     </sprite>
 
     <sprite name="jump">
-      <image file="images/hero_jump.png" name="image1" />
+      <image file="images/hero_jump.png" name="image1" /> 
     </sprite>
 
     <sprite name="stand">
@@ -311,6 +324,9 @@
     </sprite>
     <sprite name="tile36">
       <image file="images/tiles/tile36.png" name="image1" />
+    </sprite>
+    <sprite name="tile37">
+      <image file="images/tiles/tile37.png" name="image1" />
     </sprite>
     <sprite name="tile38">
       <image file="images/tiles/tile38.png" name="image1" />

@@ -65,6 +65,7 @@ AC_CONFIG_FILES(
     src/Makefile
     src/collision/Makefile
     src/scripting/Makefile
+    src/input/Makefile
     src/guile/Makefile
     src/guistyle/Makefile
     src/editor/Makefile

@@ -40,6 +40,7 @@ private:
   Field<int>* current_field;
 
   bool draw_grid;
+  bool draw_attribute;
 
   Field<int>* diamond_map;
 
@@ -73,6 +74,9 @@ public:
 
   int get_width()  { return current_field->get_width(); }
   int get_height() { return current_field->get_height(); }
+
+  void set_draw_attribute(bool t);
+  bool get_draw_attribute() const;
 
   void set_draw_grid(bool t);
   bool get_draw_grid() const;

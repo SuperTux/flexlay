@@ -37,7 +37,8 @@ EditorTileMap::EditorTileMap(int w, int h, int tile_size_)
   : tile_size(tile_size_) 
 {
   // FIXME: Move this to the widget
-  draw_grid = true;
+  draw_grid      = true;
+  draw_attribute = false;
 
   diamond_map   = new Field<int>(w*2, h*2);
   current_field = new Field<int>(w, h);
@@ -84,7 +85,7 @@ EditorTileMap::draw_map(EditorMapComponent* parent, Field<int>* field)
   for (int y = start_y; y < end_y; ++y)
     for (int x = start_x; x < end_x; ++x)
       {
-        EditorTile::draw(field->at(x, y), x * tile_size, y * tile_size, draw_grid, alpha);
+        EditorTile::draw(field->at(x, y), x * tile_size, y * tile_size, draw_grid, draw_attribute, alpha);
       }
 }
 
@@ -183,6 +184,18 @@ EditorTileMap::draw_tile(Field<int>* field, const TileBrush& brush, const CL_Poi
             field->at(pos.x + x, pos.y + y) = brush.at(x, y);
           }
       }  
+}
+
+void
+EditorTileMap::set_draw_attribute(bool t)
+{
+  draw_attribute = t;
+}
+
+bool
+EditorTileMap::get_draw_attribute() const
+{
+  return draw_attribute;
 }
 
 void

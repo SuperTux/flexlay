@@ -24,7 +24,7 @@
 #include "editor_tile.hxx"
 
 void
-EditorTile::draw(int id, int x, int y, bool grid, float alpha)
+EditorTile::draw(int id, int x, int y, bool grid, bool attribute, float alpha)
 {
   // FIXME: Slow due to vector vs map
   Tile* tile = TileFactory::current()->create(id);
@@ -33,11 +33,16 @@ EditorTile::draw(int id, int x, int y, bool grid, float alpha)
     {
       CL_Sprite sprite = tile->get_sprite();
       sprite.set_alignment (origin_top_left, 0, 0);
+
       if (alpha != 1.0f)
         sprite.set_color(.8f, .8f, 1.0f, alpha);
+
       sprite.draw (x, y);
-      sprite.set_alpha(1.0f);
       
+      if (attribute)
+        CL_Display::fill_rect(CL_Rect(CL_Point(x, y), CL_Size(TILE_SIZE + 1, TILE_SIZE + 1)),
+                              tile->get_color());
+
       if (grid)
         CL_Display::draw_rect(CL_Rect(CL_Point(x, y), CL_Size(TILE_SIZE + 1, TILE_SIZE + 1)),
                               CL_Color(128, 128, 128, 255));

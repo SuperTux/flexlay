@@ -165,6 +165,12 @@ editor_toggle_grid()
   editor_get_tilemap()->set_draw_grid(!editor_get_tilemap()->get_draw_grid());
 }
 
+void
+editor_toggle_attributes()
+{
+  editor_get_tilemap()->set_draw_attribute(!editor_get_tilemap()->get_draw_attribute());
+}
+
 SCM
 obj2scm(const EditorObjMap::Obj& obj)
 {

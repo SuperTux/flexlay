@@ -48,6 +48,7 @@ void          editor_map_component_set_map(CL_Component* c, EditorMap* m);
 EditorMap*    editor_map_component_get_map(CL_Component* c);
 
 void editor_toggle_grid();
+void editor_toggle_attributes();
 void editor_resize_map(int w, int h, int x, int y);
 void editor_set_brush_tile(int i);
 int  editor_get_brush_tile();

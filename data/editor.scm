@@ -351,6 +351,7 @@
 
     ;; Dialog Menu
     (gui-add-menu-item menu "Dialogs/Draw Grid" editor-toggle-grid)
+    (gui-add-menu-item menu "Dialogs/Draw Attributes" editor-toggle-attributes)
     (gui-add-menu-item menu "Dialogs/Resize.."  resize-map)
     (gui-add-menu-item menu "Dialogs/Minimap"  (lambda ()
                                                  (gui-component-toggle-visibility *minimap*)))

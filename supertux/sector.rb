@@ -141,7 +141,7 @@ class Sector
         tilemap = TilemapLayer.new($tileset, width, height)
         tilemap.set_data(get_value_from_tree(["tiles"], data, []))
         
-        if solid
+        if solid then
           @interactive = tilemap
           @width       = width
           @height      = height
@@ -155,28 +155,7 @@ class Sector
       elsif name == "background"
         print "background unhandled\n"
       else
-        object = $game_objects.find {|x| x[0] == name}
-        if object != nil
-          (name, image) = object
-          x = get_value_from_tree(["x", "_"], data, 0)
-          y = get_value_from_tree(["y", "_"], data, 0)
-
-          spriteobj = ObjMapSpriteObject.new(make_sprite($datadir + image),
-                                             CL_Point.new(x, y), make_metadata(nil)).to_object()
-
-          if name == "door"
-            metadata = Door.new(spriteobj, data)
-          else
-            metadata = BadGuy.new(name)
-          end
-
-          spriteobj.set_metadata(metadata)
-
-          @objects.add_object(spriteobj)
-        else
-          print "Error: Couldn't resolve object type: ", name, "\n"
-          print "Sector: Unhandled tag: ", name, "\n"
-        end
+        create_gameobject_from_data(name, data)
       end
     end
     

@@ -31,6 +31,44 @@ $game_objects = [
     proc{|data| SequenceTrigger.new(data)}]
 ]
 
+def create_gameobject_from_data(name, data)
+  # Creates a gameobject from the given sexpr: "snowball", ((x 5) (y 5))
+  
+  object = $game_objects.find {|x| x[0] == name}
+  if object != nil then
+    (name, image, type, func) = object
+    
+    x = get_value_from_tree(["x", "_"], data, 0)
+    y = get_value_from_tree(["y", "_"], data, 0)
+    
+    obj = create_gameobject(data, CL_Point.new(x, y), data)
+  else
+    print "Error: Couldn't resolve object type: ", name, "\n"
+    print "Sector: Unhandled tag: ", name, "\n"
+  end
+end
+
+def create_gameobject(data, pos, sexpr = [])
+  # Creates a gameobject the given position, data is the entry in the $game_objects table
+  case data[2] 
+  when "sprite" 
+    obj = ObjMapSpriteObject.new(make_sprite($datadir + data[1]), pos, make_metadata(nil))
+    obj.to_object.set_metadata(make_metadata(data[3].call(obj)))
+    
+  when "rect"
+    obj = ObjMapRectObject.new(CL_Rect.new(pos, CL_Size.new(64, 64)),
+                               CL_Color.new(0, 0, 255, 128), make_metadata(nil))
+    obj.to_object.set_metadata(make_metadata(data[3].call(obj)))
+  else
+    raise "Error: Unknown object type droped"
+  end
+  
+  cmd = ObjectAddCommand.new(@workspace.get_map().get_metadata().objects)
+  cmd.add_object(obj.to_object);
+  @workspace.get_map().execute(cmd.to_command());
+  return obj
+end
+
 $solid_itiles = [10, 11, 12, 13, 14, 15, 20, 21, 22, 23, 30, 31, 113, 114]
 $air_itiles   = [7, 8, 9, 16, 17, 18, 0]
 

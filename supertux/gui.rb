@@ -211,35 +211,9 @@ class SuperTuxGUI
   end
 
   def on_object_drop(brush, pos)
-    print "on_object_drop: #{brush} #{pos}"
-    # Get the metadata info and extract the generator call from it, see $game_objects
-    #print "on_object_drop:\n"
-    #metadata = cppobj.get_metadata()
-    #cppobj.set_metadata(metadata[2].call(cppobj))
-
     pos = @editor_map.screen2world(pos)
-
     data = get_ruby_object(brush.get_data())
-
-    puts "\nXXXXXXXXXXXX"
-    puts data
-    puts "XXXXXXXXXXXX"
-
-    case data[2] 
-    when "sprite" 
-      obj = ObjMapSpriteObject.new(make_sprite($datadir + data[1]), pos, make_metadata(nil))
-      obj.to_object.set_metadata(make_metadata(data[3].call(obj)))
-      
-    when "rect"
-      obj = ObjMapRectObject.new(CL_Rect.new(pos, CL_Size.new(64, 64)), CL_Color.new(0, 0, 255, 128), make_metadata(nil))
-      obj.to_object.set_metadata(make_metadata(data[3].call(obj)))
-    else
-      raise "Error: Unknown object type droped"
-    end
-  
-    cmd = ObjectAddCommand.new(@workspace.get_map().get_metadata().objects)
-    cmd.add_object(obj.to_object);
-    @workspace.get_map().execute(cmd.to_command());
+    create_gameobject(data, pos)
   end
 
   def run()

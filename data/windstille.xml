@@ -141,9 +141,14 @@
       <image file="images/hero_run/hero-1.png" name="image9" />
       <image file="images/hero_run/hero-0.png" name="image10" />
     </description>
-
+    
+    <sprite name="dead">
+      <translation origin="top_left" x="-200" y="120"/>
+      <image file="images/hero_dead/0032.png" />
+    </sprite>
+    
     <sprite name="kill">
-      <animation speed="30" loop="no" />
+      <animation speed="35" loop="no" />
       <translation origin="top_left" x="-200" y="120"/>
       <image file="images/hero_dead/0001.png" />
       <image file="images/hero_dead/0001.png" />

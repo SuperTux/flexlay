@@ -1,4 +1,4 @@
-//  $Id: windstille_game.cxx,v 1.29 2003/11/04 22:48:51 grumbel Exp $
+//  $Id: windstille_game.cxx,v 1.30 2003/11/05 13:36:17 grumbel Exp $
 //
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -20,6 +20,7 @@
 #include <math.h>
 #include <ClanLib/gl.h>
 
+#include "fonts.hxx"
 #include "game_world.hxx"
 #include "gameobj.hxx"
 #include "gamepad_controller.hxx"
@@ -127,6 +128,14 @@ WindstilleGame::draw()
 
     default:
       break;
+    }
+
+  if (player->get_movement_state() == Player::DEAD)
+    {
+      CL_Font font = Fonts::dialog;
+      font.set_alignment(origin_bottom_center);
+      font.draw(CL_Display::get_width()/2, 200,
+                "..:: Press Fire to restart ::..");
     }
 
   CL_Display::flip();

@@ -1,4 +1,4 @@
-//  $Id: player.cxx,v 1.18 2003/11/05 12:41:37 grumbel Exp $
+//  $Id: player.cxx,v 1.19 2003/11/05 13:36:17 grumbel Exp $
 //
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -41,13 +41,14 @@ Player::Player (Controller* c) :
   jump     ("hero/jump",  resources),
   stand    ("hero/stand", resources),
   killed   ("hero/kill", resources),
+  dead     ("hero/dead", resources),
 
   state (WALKING),
   gun_state (GUN_READY),
   ground_state (IN_AIR)
 {
   jumping = false;
-  energie = 1; //MAX_ENERGIE;
+  energie = MAX_ENERGIE;
   current_ = this;
 
   walk.set_alignment(origin_bottom_center, 0, 3);
@@ -82,6 +83,9 @@ Player::draw ()
 	  break;
         case KILLED:
           sprite = &killed;
+          break;
+        case DEAD:
+          sprite = &dead;
           break;
 	}
       break;
@@ -144,7 +148,33 @@ Player::update (float delta)
 {
   if (state == KILLED)
     {
-      killed.update(delta);
+      switch (ground_state)
+        {
+        case IN_AIR:
+          update_air(delta);
+          break;
+        case ON_GROUND:
+          killed.update(delta);
+          if (killed.is_finished())
+            {
+              state = DEAD;
+            }
+          break;
+        }
+    }
+  else if (state == DEAD)
+    {
+      if (controller->get_state(InputEvent::FIRE))
+        {
+          set_position(CL_Vector(258, 485));
+          set_direction(EAST);
+          killed.restart();
+          state = WALKING;
+          gun_state = GUN_READY;
+          ground_state = IN_AIR;
+          energie = MAX_ENERGIE;
+          velocity = CL_Vector();
+        }
     }
   else
     {
@@ -333,12 +363,13 @@ Player::hit(int points)
     {
       energie -= points;
       hit_count = 1.0f;
-    }
 
-  if (energie <= 0)
-    {
-      state = KILLED;
-      hit_count = 0;
+      if (energie <= 0)
+        {
+          state = KILLED;
+          hit_count = 0;
+          killed.set_frame(0);
+        }
     }
 }
 

@@ -83,9 +83,11 @@
                "Diamonds collected: " 
                (number->string (- (game-get-max-diamonds) (game-get-diamonds)))
                "/"
-               (number->string (game-get-max-diamonds))
+               (number->string (game-get-max-diamonds)) "\n\n"
+               "Congratulations you finished " *windstille-package-string*
+               ". More levels and other stuff will follow once it is done. "
                ))
-  (dialog-add-answer "Ok" (lambda () (game-quit)))
+  (dialog-add-answer "Exit Game" (lambda () (game-quit)))
   (dialog-show)
   (remove-trigger))
 

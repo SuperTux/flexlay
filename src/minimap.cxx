@@ -63,6 +63,8 @@ Minimap::Minimap(EditorMapComponent* p, const CL_Rect& rect,
 void
 Minimap::draw()
 {
+  CL_Display::push_translate(get_screen_x(), get_screen_y());
+
   // FIXME: Do this only on map changes
   if (impl->last_serial != impl->parent->get_workspace().get_map().get_serial())
     //      || editor_map != parent->get_workspace().get_map())
@@ -124,6 +126,8 @@ Minimap::draw()
       CL_Display::draw_rect(screen_rect,
                             CL_Color(0, 0, 0));
     }
+
+  CL_Display::pop_modelview();
 }
 
 void

@@ -129,6 +129,8 @@ EditorMapComponentImpl::mouse_down(const CL_InputEvent& event)
 void
 EditorMapComponentImpl::draw ()
 {
+  CL_Display::push_translate(parent->get_screen_x(), parent->get_screen_y());
+
   // Update scrollbars (FIXME: move me to function)
   scrollbar_v->set_range(0, workspace.get_map().get_bounding_rect().get_height());
   scrollbar_v->set_pagesize(parent->get_height()/workspace.get_gc_state().get_zoom());
@@ -139,6 +141,8 @@ EditorMapComponentImpl::draw ()
   scrollbar_h->set_pos(workspace.get_gc_state().get_pos().x);
 
   workspace.draw();
+
+  CL_Display::pop_modelview();
 }
 
 CL_Point

@@ -193,6 +193,8 @@ MenuImpl::recalc_size()
 void
 MenuImpl::draw()
 {
+  CL_Display::push_translate(parent->get_screen_x(), parent->get_screen_y());
+
   Box::draw_window(CL_Rect(CL_Point(0, 0), 
                            CL_Size(parent->get_width(),
                                    parent->get_height())));
@@ -204,6 +206,7 @@ MenuImpl::draw()
       items[i]->draw(x_pos, y_pos, i == current_item);
       y_pos += items[i]->get_height() + 6;
     }
+  CL_Display::pop_modelview();
 }
 
 int

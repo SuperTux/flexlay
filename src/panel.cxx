@@ -19,6 +19,7 @@
 
 #include <vector>
 #include <ClanLib/Signals/slot.h>
+#include <ClanLib/Display/display.h>
 #include "box.hxx"
 #include "panel.hxx"
 
@@ -41,8 +42,10 @@ Panel::Panel(const CL_Rect& rect, CL_Component* parent)
 void
 PanelImpl::draw()
 {
+  CL_Display::push_translate(parent->get_screen_x(), parent->get_screen_y());
   CL_Rect rect = parent->get_position();
   Box::draw_panel(CL_Rect(CL_Point(0, 0), CL_Size(rect.get_width()-1, rect.get_height()-1)));
+  CL_Display::pop_modelview();
 }
 
 /* EOF */

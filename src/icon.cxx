@@ -77,6 +77,7 @@ Icon::sig_clicked()
 void
 IconImpl::draw()
 {
+  CL_Display::push_translate(parent->get_screen_x(), parent->get_screen_y());
   CL_Rect rect(CL_Point(0, 0), CL_Size(parent->get_width()-4, parent->get_height()-4));
 
   sprite.set_alignment(origin_center);
@@ -107,6 +108,7 @@ IconImpl::draw()
       sprite.set_alpha(0.3f);
     }
   sprite.draw((rect.get_width()+1)/2, (rect.get_height()+1)/2);
+  CL_Display::pop_modelview();
 }
 
 void

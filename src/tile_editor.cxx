@@ -45,6 +45,8 @@ TileEditor::~TileEditor()
 void
 TileEditor::draw()
 {
+  CL_Display::push_translate(get_screen_x(), get_screen_x());
+
   //no_tile.draw(0, 0);
   CL_Display::fill_rect(CL_Rect(0, 0, 32, 32), CL_Color(155, 0, 155));
 
@@ -74,6 +76,8 @@ TileEditor::draw()
   else
     {
     }
+
+  CL_Display::pop_modelview();
 }
 
 void

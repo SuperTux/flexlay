@@ -105,6 +105,8 @@ WindowImpl::on_resize(int, int)
 void
 WindowImpl::draw()
 {
+  CL_Display::push_translate (parent->get_screen_x(), parent->get_screen_y());
+
   CL_Color highlight(255, 255, 255);
   CL_Color midtone(150, 150, 150);
 
@@ -127,6 +129,8 @@ WindowImpl::draw()
     CL_Display::draw_line(1, 1,
     1, rect.get_height()-2, highlight);
   */
+
+  CL_Display::pop_modelview();
 }
 
 void

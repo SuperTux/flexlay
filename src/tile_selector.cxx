@@ -109,6 +109,7 @@ TileSelector::mouse_move(const CL_InputEvent& event)
 void 
 TileSelector::draw()
 {
+  CL_Display::push_translate(get_screen_x(), get_screen_y());
   CL_Display::push_modelview();
   CL_Display::add_translate(0, -offset);
 
@@ -149,6 +150,7 @@ TileSelector::draw()
         }
     }
   
+  CL_Display::pop_modelview();
   CL_Display::pop_modelview();
 }
 

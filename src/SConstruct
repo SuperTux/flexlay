@@ -23,6 +23,8 @@ import os
 opts = Options('custom.py')
 opts.Add('CXX', 'The C++ compiler.', 'g++')
 opts.Add('CXXFLAGS', 'The C++ compiler flags.', '-g -O2 -Wall')
+opts.Add('USER_CPPPATH', 'additional header path', '')
+opts.Add('USER_LIBPATH', 'additional library path', '')
 opts.Add('RUBYDIR', 'Ruby directory', os.popen('ruby -e "require \'rbconfig\'; puts Config::CONFIG[\'archdir\']"').read()[:-1])
 
 env = Environment(SHLIBPREFIX='',
@@ -78,6 +80,7 @@ env.SharedLibrary(
     'box.cxx',
     'command_group.cxx',
     'command.cxx',
+    'console.cxx',
     'editor.cxx',
     'editor_map.cxx',
     'editor_map_component.cxx',
@@ -128,10 +131,10 @@ env.SharedLibrary(
     'window.cxx',
     'viewport.cxx',
     'zoom_tool.cxx'],
-    CPPPATH=['/home/ingo/run/ClanLib-0.7-current//include/ClanLib-0.7/',
+    CPPPATH=['$USER_CPPPATH',
              '..'],
-    LINKFLAGS = ['-Wl,-rpath', '/home/ingo/run/ClanLib-0.7-current/lib/'],
-    LIBPATH=['/home/ingo/run/ClanLib-0.7-current/lib/'],
+    LINKFLAGS = ['-Wl,-rpath', '$USER_LIBPATH'],
+    LIBPATH=['$USER_LIBPATH'], 
     LIBS=['clanCore',
           'clanDisplay',
           'clanGL',
@@ -163,7 +166,7 @@ env.SharedLibrary(
     'ruby_sexpr_parser.cxx',
     'ruby_object.cxx'
     ],
-    CPPPATH=['/home/ingo/run/ClanLib-0.7-current//include/ClanLib-0.7/',
+    CPPPATH=['$USER_CPPPATH',
              '$RUBYDIR',
             '..'],
     LIBPATH=['.', '/home/ingo/run/ClanLib-0.7-current//lib/'],

@@ -28,6 +28,7 @@
 #include "tilemap_tool.hxx"
 #include "editor.hxx"
 #include "workspace.hxx"
+#include "scrollbar.hxx"
 #include "editor_map_component.hxx"
 
 EditorMapComponent* EditorMapComponent::current_ = 0; 
@@ -37,6 +38,19 @@ EditorMapComponent::EditorMapComponent(const CL_Rect& rect, CL_Component* parent
     workspace(rect.get_width(), rect.get_height())
 {
   current_ = this;
+
+  scrollbar_v = new Scrollbar(CL_Rect(CL_Point(rect.get_width() - 14, 2), 
+                                      CL_Size(12, rect.get_height() - 4 - 14)),
+                              Scrollbar::VERTICAL,
+                              this);
+
+  scrollbar_h = new Scrollbar(CL_Rect(CL_Point(2, rect.get_height() - 14), 
+                                      CL_Size(rect.get_width() - 4 - 14, 12)),
+                              Scrollbar::HORIZONTAL,
+                              this);
+
+  slots.connect(scrollbar_h->sig_scrollbar_move(), this, &EditorMapComponent::move_to_x);
+  slots.connect(scrollbar_v->sig_scrollbar_move(), this, &EditorMapComponent::move_to_y);
 
   slots.connect(sig_paint(),      this, &EditorMapComponent::draw);
   slots.connect(sig_mouse_up(),   this, &EditorMapComponent::mouse_up);
@@ -82,6 +96,15 @@ EditorMapComponent::mouse_down(const CL_InputEvent& event)
 void
 EditorMapComponent::draw ()
 {
+  // Update scrollbars (FIXME: move me to function)
+  scrollbar_v->set_range(0, workspace.get_current_map().get_bounding_rect().get_height());
+  scrollbar_v->set_pagesize(get_height()/workspace.get_gc_state().get_zoom());
+  scrollbar_v->set_pos(workspace.get_gc_state().get_pos().y);
+
+  scrollbar_h->set_range(0, workspace.get_current_map().get_bounding_rect().get_width());
+  scrollbar_h->set_pagesize(get_width()/workspace.get_gc_state().get_zoom());
+  scrollbar_h->set_pos(workspace.get_gc_state().get_pos().x);
+
   workspace.draw();
 }
 
@@ -126,6 +149,18 @@ void
 EditorMapComponent::move_to(int x, int y)
 {
   workspace.get_gc_state().set_pos(CL_Pointf(x, y));
+}
+
+void
+EditorMapComponent::move_to_x(float x)
+{
+  workspace.get_gc_state().set_pos(CL_Pointf(x, workspace.get_gc_state().get_pos().y));
+}
+
+void
+EditorMapComponent::move_to_y(float y)
+{
+  workspace.get_gc_state().set_pos(CL_Pointf(workspace.get_gc_state().get_pos().x, y));
 }
 
 /* EOF */

@@ -26,8 +26,9 @@ flexlay.init()
 editor = Editor()
 gui = editor.get_gui_manager()
 
-editor_map = EditorMapComponent(CL_Rect(0, 0, 799, 599), gui.get_component())
-workspace  = Workspace(799, 599)
+myrect = CL_Rect(128, 128, 600, 400)
+editor_map = EditorMapComponent(myrect, gui.get_component())
+workspace  = Workspace(myrect.get_width(), myrect.get_height())
 editor_map.set_workspace(workspace)
 
 m = EditorMap()
@@ -64,7 +65,7 @@ gui.push_component(window.get_client_area())
 dirview = DirectoryView(CL_Rect(CL_Point(3, 40), CL_Size(300, 200)), gui.get_component())
 dirview.set_directory("/");
 
-scrollbar = Scrollbar(CL_Rect(CL_Point(370, 5), CL_Size(12, 300)), gui.get_component())
+scrollbar = Scrollbar(CL_Rect(CL_Point(370, 5), CL_Size(12, 300)), Scrollbar.VERTICAL, gui.get_component())
 scrollbar.set_range(50, 150)
 scrollbar.set_pagesize(10)
 scrollbar.set_pos(100)
@@ -145,8 +146,8 @@ mymenu.add_item(mysprite, "bla")
 def show_menu():
     mymenu.run()
     
-_button = CL_Button(CL_Rect(100, 100, 200, 125), "Hello World", gui.get_component())
-connect(_button.sig_clicked(), show_menu)
+# _button = CL_Button(CL_Rect(100, 100, 200, 125), "Hello World", gui.get_component())
+# connect(_button.sig_clicked(), show_menu)
 
 minimap_panel = Panel(CL_Rect(CL_Point(0, 600-56), CL_Size(800-134, 56)), gui.get_component())
 minimap = Minimap(editor_map, CL_Rect(CL_Point(3, 3), CL_Size(794-134, 50)), minimap_panel)

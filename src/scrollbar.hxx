@@ -30,11 +30,15 @@ class ScrollbarImpl;
 class Scrollbar : public CL_Component
 {
 public:
-  Scrollbar(const CL_Rect& rect, CL_Component* parent);
+  enum Orientation { HORIZONTAL, VERTICAL };
+
+  Scrollbar(const CL_Rect& rect, Orientation orientation, CL_Component* parent);
   
   void set_range(float min, float max);
   void set_pagesize(float size);
   void set_pos(float pos);
+  
+  CL_Signal_v1<float>& sig_scrollbar_move();
 private:
   SharedPtr<ScrollbarImpl> impl;
 };

@@ -80,5 +80,4 @@
 %include "menubar.hxx"
 %include "scrollbar.hxx"
 
-
 /* EOF */

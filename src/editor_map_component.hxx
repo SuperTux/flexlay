@@ -29,6 +29,7 @@
 #include "graphic_context_state.hxx"
 #include "workspace.hxx"
 
+class Scrollbar;
 class TileMapTool;
 
 /** Object which represents a level, quirled together with the GUI
@@ -36,6 +37,8 @@ class TileMapTool;
 class EditorMapComponent : public CL_Component
 {
 private:
+  Scrollbar* scrollbar_h;
+  Scrollbar* scrollbar_v;
   CL_SlotContainer slots;
   Workspace workspace;
 
@@ -61,6 +64,8 @@ public:
   void  zoom_in (CL_Point pos);
 
   void move_to(int x, int y);
+  void move_to_x(float x);
+  void move_to_y(float y);
 
   void draw();
 

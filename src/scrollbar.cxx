@@ -33,6 +33,9 @@ public:
   float max;
   float pagesize;
   float pos;
+  Scrollbar::Orientation orientation;
+
+  CL_Signal_v1<float> on_scrollbar_move;
 
   float old_pos;
   
@@ -45,7 +48,7 @@ public:
   void on_mouse_move(const CL_InputEvent& event);
 };
 
-Scrollbar::Scrollbar(const CL_Rect& rect, CL_Component* parent)
+Scrollbar::Scrollbar(const CL_Rect& rect, Orientation orientation, CL_Component* parent)
   : CL_Component(rect, parent),
     impl(new ScrollbarImpl(this))
 {
@@ -54,6 +57,7 @@ Scrollbar::Scrollbar(const CL_Rect& rect, CL_Component* parent)
   impl->pagesize = 10;
   impl->pos  = 0;
   impl->pressed = false;
+  impl->orientation = orientation;
 
   impl->slots.push_back(sig_paint().connect(impl.get(), &ScrollbarImpl::draw));
 
@@ -92,12 +96,22 @@ ScrollbarImpl::draw()
   CL_Display::draw_rect(rect,
                         CL_Color(155, 155, 155));
 
-  float scale = parent->get_height()/(max - min);
-
-  CL_Display::fill_rect(CL_Rect(CL_Point(2, int((pos-min-(pagesize/2)) * scale)), 
-                                CL_Size(parent->get_width()-5,
-                                        int(pagesize*scale))),
-                        CL_Color(0, 0, 0));
+  if (orientation == Scrollbar::HORIZONTAL)
+    {
+      float scale = parent->get_width()/(max - min);
+      CL_Display::fill_rect(CL_Rect(CL_Point(int((pos-min-(pagesize/2)) * scale), 2), 
+                                    CL_Size(int(pagesize*scale), 
+                                            parent->get_height()-5)),
+                            CL_Color(0, 0, 0));
+    }
+  else if (orientation == Scrollbar::VERTICAL)
+    {
+      float scale = parent->get_height()/(max - min);
+      CL_Display::fill_rect(CL_Rect(CL_Point(2, int((pos-min-(pagesize/2)) * scale)), 
+                                    CL_Size(parent->get_width()-5,
+                                            int(pagesize*scale))),
+                            CL_Color(0, 0, 0));     
+    }
 }
 
 void
@@ -120,7 +134,8 @@ ScrollbarImpl::on_mouse_down(const CL_InputEvent& event)
       
       parent->capture_mouse();
 
-      float scale = parent->get_height()/(max - min);      
+      float scale = ((orientation == Scrollbar::VERTICAL)
+                     ? parent->get_height() : parent->get_width())/(max - min);
       old_pos = pos * scale;
 
       click_pos.x += parent->get_position().left;
@@ -135,9 +150,25 @@ ScrollbarImpl::on_mouse_move(const CL_InputEvent& event)
     {
       CL_Rect rect = parent->get_position();
       
-      float scale = parent->get_height()/(max - min);
-      pos = (old_pos  - (click_pos.y - (rect.top  + event.mouse_pos.y)))/scale;
+      float scale = ((orientation == Scrollbar::VERTICAL)
+                     ? parent->get_height() : parent->get_width())/(max - min);
+      
+      if (orientation == Scrollbar::VERTICAL)
+        {
+          pos = (old_pos - (click_pos.y - (rect.top + event.mouse_pos.y)))/scale;
+        }
+      else if (orientation == Scrollbar::HORIZONTAL)
+        {
+          pos = (old_pos - (click_pos.x - (rect.left + event.mouse_pos.x)))/scale;
+        }
+      on_scrollbar_move(pos);
     }
+}
+
+CL_Signal_v1<float>&
+Scrollbar::sig_scrollbar_move()
+{
+  return impl->on_scrollbar_move;
 }
 
 /* EOF */

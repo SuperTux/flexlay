@@ -48,7 +48,7 @@ TileEditor::draw()
 
   if (tile)
     {
-      tile->sur.draw(0, 0);
+      tile->get_sprite().draw(0, 0);
       CL_Display::flush();
       for(int tile_y = 0; tile_y < 8; ++tile_y)
         for(int tile_x = 0; tile_x < 8; ++tile_x)

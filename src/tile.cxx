@@ -17,15 +17,34 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
+#include <ClanLib/Core/System/error.h>
+#include <iostream>
 #include "globals.hxx"
 #include "tile.hxx"
 
 Tile::Tile(const std::string& filename, unsigned char arg_colmap[])
-  : sur(filename, resources),
-    filename(filename)
+  : filename(filename)
 {
   //sur.set_alignment(origin_center, 0, 0);
   memcpy(colmap, arg_colmap, 8);
+}
+
+CL_Sprite&
+Tile::get_sprite()
+{
+  if (sur)
+    return sur;
+  else
+    {
+      try {
+        //std::cout << "Loading Tile: " << filename << std::endl;
+        sur = CL_Sprite(filename, resources);
+        return sur;
+      } catch (CL_Error& err) {
+        std::cout << "Tile: CL_Error: " << err.message << std::endl;
+        assert(0);
+      }
+    }
 }
 
 /* EOF */

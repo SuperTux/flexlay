@@ -103,7 +103,8 @@ void
 TileSelector::draw()
 {
   CL_Display::push_translate_offset(0, -offset);
-  for(int y = 0; y < /*height FIXME*/ 2540; ++y)
+  int start_y = std::max(0, offset / TILE_SIZE);
+  for(int y = start_y; y < start_y + height; ++y)
     for(int x = 0; x < width; ++x)
       {
         int i = width * y + x;
@@ -116,7 +117,7 @@ TileSelector::draw()
 
         if (tile)
           {
-            CL_Sprite sprite = tile->sur;
+            CL_Sprite sprite = tile->get_sprite();
 
             sprite.set_scale(scale, scale);
 

@@ -572,6 +572,55 @@
               *brushes*)
     (gui-pop-component)))
 
+(define (seq start end)
+  (let loop ((ret '())
+             (start start)
+             (end   end))
+    (cond ((< start end)
+           (set! ret (cons start ret))
+           (loop ret (+ start 1) end))
+          (else
+           (reverse ret)))))
+
+(define (create-netpanzer-tiler)
+  (let ((window (gui-create-window 100 100 1024 786 "netPanzer Tiler")))
+    (gui-push-component (gui-window-get-client-area window))
+
+    (gui-create-label    10 10 "Width: ")
+    (gui-create-label    10 50 "Height: ")
+    (gui-create-label    10 90 "Start: ")
+
+    (let* ((update-button (gui-create-button   10 150 50 25 "Update"))
+           (start-box     (gui-create-inputbox 10 110 50 25 "0"))
+           (height-box    (gui-create-inputbox 10 70 50 25 "10"))
+           (width-box     (gui-create-inputbox 10 30 50 25 "10"))
+           (map-component (editor-map-component-create 75 10 950 700))
+           (levelmap      (editor-map-create))
+           (tilemap       (editor-tilemap-create 10 10 32)))
+
+      (editor-map-add-layer levelmap tilemap)
+      (editor-map-component-set-map map-component levelmap)
+
+      (gui-component-on-click 
+       update-button
+       (lambda ()
+         (catch #t
+                (lambda ()
+                  (let* ((width  (string->number (gui-inputbox-get-text width-box)))
+                         (height (string->number (gui-inputbox-get-text height-box)))
+                         (start  (string->number (gui-inputbox-get-text start-box))))
+                    (tilemap-resize tilemap 0 0 width height)
+                    (editor-tilemap-set-data tilemap 1 (seq start (+ start (* width height))))
+                    ))
+                (lambda args 
+                  (display "Error: ")
+                  (display args)
+                  (newline))))))
+               
+    (gui-component-on-close window (lambda ()
+                                     (gui-hide-component window)))
+    (gui-pop-component)))
+
 (define (on-gui-quit)
   (with-output-to-file (string-append *windstille-homedir* "editor-variables.scm")
     (lambda ()
@@ -689,7 +738,8 @@
 (if (not (equal? *game* 'netpanzer))
     (create-minimap))
 
-(create-brush-selector)
+;;(create-brush-selector)
+(create-netpanzer-tiler)
 
 (set-tool 'tile)
 

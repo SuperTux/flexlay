@@ -342,6 +342,13 @@ objmap_sprite_object_flip(int id)
     obj->flip_horizontal();
 }
 
+void tilemap_resize(EditorMapLayer* m, int x, int y, int w, int h)
+{
+  EditorTileMap* tilemap = dynamic_cast<EditorTileMap*>(m);
+  if (tilemap)
+    tilemap->resize(w, h, x, y);  
+}
+
 void
 editor_resize_map(int w, int h, int x, int y)
 {

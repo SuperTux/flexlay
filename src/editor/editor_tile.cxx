@@ -31,7 +31,7 @@ EditorTile::draw(int id, int x, int y, bool grid, float alpha)
 
   if (tile)
     {
-      CL_Sprite sprite = tile->sur;
+      CL_Sprite sprite = tile->get_sprite();
       sprite.set_alignment (origin_top_left, 0, 0);
       if (alpha != 1.0f)
         sprite.set_color(.8f, .8f, 1.0f, alpha);

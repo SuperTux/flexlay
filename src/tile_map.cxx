@@ -77,8 +77,8 @@ TileMap::draw ()
 	//field (x,y)->sur->setScale (2.0f, 2.0f);
 	if (field (x,y))
 	  {
-	    field (x,y)->sur.draw (x * TILE_SIZE, 
-                                   y * TILE_SIZE);
+	    field (x,y)->get_sprite().draw (x * TILE_SIZE, 
+                                            y * TILE_SIZE);
             if (1) // Draw subtiles
               {
                 for(int tile_y = 0; tile_y < 8; ++tile_y)

@@ -75,7 +75,7 @@ TileMapPaintTool::draw()
                 
             if (tile)
               {
-                CL_Sprite sprite = tile->sur;
+                CL_Sprite sprite = tile->get_sprite();
                 sprite.set_alpha(0.5f);
                 sprite.draw((current_tile.x + x) * TILE_SIZE, 
                             (current_tile.y + y) * TILE_SIZE);

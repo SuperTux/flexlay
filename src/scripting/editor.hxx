@@ -54,6 +54,7 @@ int  editor_get_brush_tile();
 void editor_set_tool(int i);
 SCM  editor_get_tile_selection();
 void tilemap_set_active_layer(int i);
+void tilemap_resize(EditorMapLayer* , int x, int y, int w, int h);
 void tilemap_paint_tool_set_brush(TileBrush brush);
 
 void object_selector_add_brush(CL_Component* comp, const char* name, SCM brush);

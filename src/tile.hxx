@@ -29,8 +29,10 @@
  *  TileMap and not here. (flyweight pattern). */
 class Tile
 {
-public:
+private:
   CL_Sprite sur;
+
+public:
   int id; 
   unsigned char colmap[8];
   std::string filename;
@@ -38,6 +40,8 @@ public:
   /** @param filename Surface to use 
    *  @param arg_colmap a 8 char long array */
   Tile(const std::string& filename, unsigned char arg_colmap[]);
+
+  CL_Sprite& get_sprite();
 
   inline bool get_col(unsigned char x, unsigned char  y)
   {

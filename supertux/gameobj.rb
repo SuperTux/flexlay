@@ -219,11 +219,11 @@ class Background<GameObj
     @color_bottom = [0, 0, 0]
     @type = "image"
     if(@image == "" || @type == "gradient")
-      if(get_value_from_tree(["top_color", "_"], sexpr, []) != [])
+      if(get_value_from_tree(["top_color"], sexpr, []) != [])
         @color_top = parse_color(
-            get_value_from_tree(["top_color", "_"], sexpr, []))
+            get_value_from_tree(["top_color"], sexpr, []))
         @color_bottom = parse_color(
-            get_value_from_tree(["bottom_color", "_"], sexpr, []))
+            get_value_from_tree(["bottom_color"], sexpr, []))
         @type = "gradient"
       end
     end

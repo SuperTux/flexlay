@@ -80,7 +80,7 @@ class Sector
     @background  = TilemapLayer.new($tileset, @width, @height)
     @background.set_data(get_value_from_tree(["background-tm"], data, []))
 
-	@cameramode = "normal"
+    @cameramode = "normal"
 
     @objects = ObjectLayer.new()
     for i in get_value_from_tree(["objects"], data, [])
@@ -95,31 +95,42 @@ class Sector
       create_gameobject_from_data(@objects, name, odata)
     end
 
-	start_pos_x = get_value_from_tree(["start_pos_x", "_"], data, 0)
-	start_pos_y = get_value_from_tree(["start_pos_y", "_"], data, 0)
-	sexpr = [["name", "main"], ["x", start_pos_x], ["y", start_pos_y]]
-	create_gameobject_from_data(@objects, "spawnpoint", sexpr)
+    start_pos_x = get_value_from_tree(["start_pos_x", "_"], data, 0)
+    start_pos_y = get_value_from_tree(["start_pos_y", "_"], data, 0)
+    sexpr = [["name", "main"], ["x", start_pos_x], ["y", start_pos_y]]
+    create_gameobject_from_data(@objects, "spawnpoint", sexpr)
 
-	background = get_value_from_tree(["background", "_"], data, "")
-	if(background != "")
-	  sexpr = [["image", background], ["speed", 0.5]]
-	  create_gameobject_from_data(@objects, "background", sexpr)
-	end
+    background = get_value_from_tree(["background", "_"], data, "")
+    if(background != "")
+      sexpr = [["image", background], ["speed", 0.5]]
+      create_gameobject_from_data(@objects, "background", sexpr)
+    else
+      sexpr = [["top_color",
+        get_value_from_tree(["bkgd_red_top", "_"], data, 0),
+        get_value_from_tree(["bkgd_green_top", "_"], data, 0),
+        get_value_from_tree(["bkgd_blue_top", "_"], data, 0)],
+                ["bottom_color",
+        get_value_from_tree(["bkgd_red_bottom", "_"], data, 0),
+        get_value_from_tree(["bkgd_green_bottom", "_"], data, 0),
+        get_value_from_tree(["bkgd_blue_bottom", "_"], data, 0)],
+              ["speed", 0.5]]
+      create_gameobject_from_data(@objects, "background", sexpr)
+    end
 
-	partsys = get_value_from_tree(["particle_system", "_"], data, "")
-	if(partsys == "snow")
-	  sexpr = []
-	  create_gameobject_from_data(@objects, "particles-snow", sexpr)
-	elsif(partsys == "rain")
-	  sexpr = []
-	  create_gameobject_from_data(@objects, "particles-rain", sexpr)
-	elsif(partsys == "clouds")
-	  sexpr = []
-	  create_gameobject_from_data(@objects, "particles-clouds", sexpr)
-	elsif(partsys == "")
-	elsif
-	  print "Unknown particle system type '", partsys, "'\n"
-	end
+    partsys = get_value_from_tree(["particle_system", "_"], data, "")
+    if(partsys == "snow")
+      sexpr = []
+      create_gameobject_from_data(@objects, "particles-snow", sexpr)
+    elsif(partsys == "rain")
+      sexpr = []
+      create_gameobject_from_data(@objects, "particles-rain", sexpr)
+    elsif(partsys == "clouds")
+      sexpr = []
+      create_gameobject_from_data(@objects, "particles-clouds", sexpr)
+    elsif(partsys == "")
+    else
+      print "Unknown particle system type '", partsys, "'\n"
+    end
 	    
     @editormap = EditorMap.new()
     @editormap.add_layer(@background.to_layer())

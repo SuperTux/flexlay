@@ -1,4 +1,4 @@
-//  $Id: windstille_level.cxx,v 1.2 2003/08/10 22:55:50 grumbel Exp $
+//  $Id: windstille_level.cxx,v 1.3 2003/08/11 08:03:23 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -110,7 +110,7 @@ WindstilleLevel::parse_tilemap (SCM cur)
   
   int x = 0;
   int y = 0;
-  while (!gh_null_p(cur))
+  while (!gh_null_p(cur) && y < height)
     {
       SCM name = gh_caar(cur);
       SCM data = gh_cdar(cur);
@@ -118,10 +118,10 @@ WindstilleLevel::parse_tilemap (SCM cur)
       if (gh_equal_p(gh_symbol2scm("row"), name))
         {
           x = 0;
-          while (!gh_null_p(data))
+          while (!gh_null_p(data) && x < width)
             {
               std::string str = scm2string(gh_cadar(data));
-              std::cout << "Tile: " << str << std::endl;
+              std::cout << "Tile (" << x << ", " << y << "): " << str << std::endl;
               (*field)(x, y) = str;
               data = gh_cdr(data);
               x += 1;

@@ -1,4 +1,4 @@
-//  $Id: tile_map.cxx,v 1.1 2003/08/10 19:56:40 grumbel Exp $
+//  $Id: tile_map.cxx,v 1.2 2003/08/11 08:03:23 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -31,22 +31,6 @@ Tile::Tile (CL_Sprite arg_sur, int col)
 {
 }
 
-TileMap::TileMap ()
-  : field (5, 5)
-{
-  for (FieldIter i = field.begin (); i != field.end (); ++i)
-    {
-      std::stringstream str;
-      str << "tiles/tile5";
-      //std::cout << "str: '" << str.str ().c_str() << "'"<< std::endl;
-      //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
-      //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
-
-
-      *i = new Tile (CL_Sprite(str.str(), resources), 0);
-    }
-}
-
 TileMap::TileMap (WindstilleLevel* data)
   : field (data->get_field()->get_width (),
 	   data->get_field()->get_height ())
@@ -60,14 +44,15 @@ TileMap::TileMap (WindstilleLevel* data)
 	int col = 1;
 	std::string name = (*data->get_field()) (x, y);
 	if (name == "tiles/green1" ||
-	    name == "tiles/tile1" ||
+            name == "tiles/tile3"  ||
+            name == "tiles/tile2"  ||
+            name == "tiles/tile4"  ||
 	    name == "tiles/tile10" ||
 	    name == "tiles/tile15" ||
 	    name == "tiles/tile16" ||
 	    name == "tiles/tile6" ||
 	    name == "tiles/tile7" ||
 	    name == "tiles/tile8" ||
-	    name == "tiles/tile2" ||
 	    name == "tiles/tile64" ||
 	    name == "tiles/tile65" ||
 	    name == "tiles/tile66" ||
@@ -81,10 +66,12 @@ TileMap::TileMap (WindstilleLevel* data)
 	    name == "tiles/tile74" ||
 	    name == "tiles/tile75" ||
 	    name == "tiles/tile76" ||
-	    name == "tiles/tile77"
+	    name == "tiles/tile77" ||
+            name == "none"
 	    )
 	  col = 0;
 	std::cout << col;
+
 	if (name != "none")
 	  field (x, y) = new Tile (CL_Sprite(name, resources), col);
 	else
@@ -112,10 +99,10 @@ TileMap::draw ()
 	//field (x,y)->sur->setScale (2.0f, 2.0f);
 	if (field (x,y))
 	  {
-	    field (x,y)->sur.draw (x * 64 + 32, y * 64 + 32);
+	    field (x,y)->sur.draw (x * TILE_SIZE + TILE_SIZE/2, y * TILE_SIZE + TILE_SIZE/2);
 	    if (field (x,y)->collision)
 	      {
-		//CL_Display::fill_rect (x * 64, y*64, x*64 + 64, y*64 + 64, 1.0, 1.0, 1.0, .5);
+		//CL_Display::fill_rect (x * TILE_SIZE, y*TILE_SIZE, x*TILE_SIZE + TILE_SIZE, y*TILE_SIZE + TILE_SIZE, 1.0, 1.0, 1.0, .5);
 	      }
 	  }
       }
@@ -124,8 +111,8 @@ TileMap::draw ()
 bool
 TileMap::is_ground (float x, float y)
 {
-  unsigned int x_pos = int(x) / 64;
-  unsigned int y_pos = int(y) / 64;
+  unsigned int x_pos = int(x) / TILE_SIZE;
+  unsigned int y_pos = int(y) / TILE_SIZE;
 
   if (x_pos < 0 || x_pos >= field.get_width () || y_pos < 0 || y_pos >= field.get_height ())
     {

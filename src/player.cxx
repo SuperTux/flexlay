@@ -1,4 +1,4 @@
-//  $Id: player.cxx,v 1.1 2003/08/10 19:56:40 grumbel Exp $
+//  $Id: player.cxx,v 1.2 2003/08/11 08:03:23 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -205,7 +205,7 @@ Player::update_air (float delta)
   if (on_ground () && velocity.y > 0) {
     ground_state = ON_GROUND;
     // Cut the position to the tile
-    pos.y = int(pos.y / 64) * 64 + 32;
+    pos.y = int(pos.y / TILE_SIZE) * TILE_SIZE + TILE_SIZE/2;
   } 
   if (stuck ()) {
     pos.y = tmp_y_pos;
@@ -228,7 +228,7 @@ Player::set_direction (Direction dir)
 bool
 Player::on_ground ()
 {
-  return get_world ()->get_tilemap()->is_ground (pos.x, pos.y+32);
+  return get_world ()->get_tilemap()->is_ground (pos.x, pos.y+TILE_SIZE/2);
 }
 
 bool 

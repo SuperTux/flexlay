@@ -1,4 +1,4 @@
-//  $Id: tile_map.hxx,v 1.1 2003/08/10 19:56:40 grumbel Exp $
+//  $Id: tile_map.hxx,v 1.2 2003/08/11 08:03:23 grumbel Exp $
 // 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -23,6 +23,7 @@
 #include <ClanLib/core.h>
 #include <ClanLib/display.h>
 
+#include "globals.hxx"
 #include "field.hxx"
 
 class WindstilleLevel;
@@ -44,7 +45,6 @@ private:
   Field<Tile*> field;
   typedef Field<Tile*>::iterator FieldIter;
 public:
-  TileMap ();
   TileMap (WindstilleLevel* data);
 
   void update (float delta);
@@ -55,7 +55,7 @@ public:
   int get_width () const { return field.get_width(); }
   int get_height () const { return field.get_height (); }
 
-  int get_tile_size () const { return 64; }
+  int get_tile_size () const { return TILE_SIZE; }
 };
 
 #endif

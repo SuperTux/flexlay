@@ -1,4 +1,4 @@
-//  $Id: windstille_game.cxx,v 1.1 2003/08/10 19:56:40 grumbel Exp $
+//  $Id: windstille_game.cxx,v 1.2 2003/08/11 08:03:23 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -134,8 +134,40 @@ WindstilleGame::display ()
     {
       float delta = delta_manager.getset ();
       CL_System::sleep (1);
+      //CL_Display::clear();
+      CL_Display::begin_3d();      
+      if (0) 
+        {
+          int dim[4];
+          glGetIntegerv(GL_VIEWPORT, dim);
+          std::cout << "viewport: " 
+                    << dim[0] << "x" << dim[1] << " "
+                    << dim[2] << "x" << dim[3] << std::endl;
+        }
+      glMatrixMode(GL_MODELVIEW);
+      glLoadIdentity();
+      gluOrtho2D (0, 800, 600, 0);
+      
+      glBegin(GL_QUADS);
+      glColor3f(0.0f, 0.0f, 0.0f);
 
-      CL_Display::clear (CL_Color(0, 0, 127, 255));
+      glVertex2f(0, 0);
+      glVertex2f(800, 0);
+      
+      glColor3f(0.0f, 0.0f, 1.0f);
+      glVertex2f(800,  300);
+      glVertex2f(0, 300);
+
+      glColor3f(0.0f, 0.0f, 1.0f);
+      glVertex2f(0, 300);
+      glVertex2f(800,  300);
+
+      glColor3f(1.0f, 1.0f, 1.0f);
+      glVertex2f(800,  600);
+      glVertex2f(0, 600);
+
+      glEnd();
+      CL_Display::end_3d();
 
       view.draw ();
       view.update (delta);

@@ -1,4 +1,4 @@
-//  $Id: game_world.cxx,v 1.1 2003/08/10 19:56:40 grumbel Exp $
+//  $Id: game_world.cxx,v 1.2 2003/08/11 08:03:23 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -61,13 +61,13 @@ GameWorld::update (float delta)
 int  
 GameWorld::get_width () const
 {
-  return tilemap->get_width () * 64;
+  return tilemap->get_width () * TILE_SIZE;
 }
 
 int 
 GameWorld::get_height () const
 {
-  return tilemap->get_height () * 64;
+  return tilemap->get_height () * TILE_SIZE;
 }
 
 void

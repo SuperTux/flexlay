@@ -80,7 +80,7 @@ ObjectSelector::mouse_up(const CL_InputEvent& event)
                 CL_Point target(screen.x - EditorMapComponent::current()->get_screen_rect().left,
                                 screen.y - EditorMapComponent::current()->get_screen_rect().top);
       
-                EditorObjMap* objmap = EditorObjMap::current();
+                ObjectLayer* objmap = ObjectLayer::current();
                 if (objmap)
                   {
                     ObjMapObject* obj 

@@ -72,7 +72,7 @@ ObjMapSelectTool::draw()
 void
 ObjMapSelectTool::on_mouse_up(const CL_InputEvent& event)
 {
-  EditorObjMap* objmap = EditorObjMap::current();
+  ObjectLayer* objmap = ObjectLayer::current();
   if (objmap)
     {
       EditorMapComponent* parent = EditorMapComponent::current();
@@ -124,7 +124,7 @@ ObjMapSelectTool::on_mouse_up(const CL_InputEvent& event)
 void
 ObjMapSelectTool::on_mouse_down(const CL_InputEvent& event)
 {
-  EditorObjMap* objmap = EditorObjMap::current();
+  ObjectLayer* objmap = ObjectLayer::current();
   if (objmap)
     {
       EditorMapComponent* parent = EditorMapComponent::current();
@@ -136,7 +136,7 @@ ObjMapSelectTool::on_mouse_down(const CL_InputEvent& event)
           switch(state)
             {
             default:
-              EditorObjMap::Obj* obj = objmap->find_object(pos);
+              ObjectLayer::Obj* obj = objmap->find_object(pos);
           
               if (obj)
                 {

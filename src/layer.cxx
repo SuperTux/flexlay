@@ -20,6 +20,11 @@
 #include "layer_impl.hxx"
 #include "layer.hxx"
 
+Layer::Layer(LayerImpl* i)
+  : impl(i)
+{
+}
+
 Layer::Layer()
   : impl(0)
 {  

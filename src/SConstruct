@@ -1,7 +1,7 @@
 ## -*- mode: python -*-
 
 env = Environment(CXX = 'g++-3.3',
-                  CXXFLAGS = '-g -O2 -Wall',
+                  CXXFLAGS = '-g -Wall',
                   SWIGFLAGS='-c++ -python',
                   SHLIBPREFIX='')
 
@@ -16,7 +16,6 @@ Depends('flexlay_wrap.cxx', ['flexlay.i',
                              'tile.hxx',
                              'tile_brush.hxx',
                              'editor.hxx',
-                             'editor_map_layer.hxx',
                              'editor_map.hxx',
                              'workspace.hxx',
                              'tileset.hxx',
@@ -39,11 +38,8 @@ env.SharedLibrary(
     'command_group.cxx',
     'editor.cxx',
     'scripting/editor.cxx',
-    'editor_grid_layer.cxx',
     'editor_map.cxx',
-    'editor_map_layer.cxx',
     'editor_map_component.cxx',
-    'editor_mapsize_layer.cxx',
     'editor_objmap.cxx',
     'flexlay.cxx',
     'globals.cxx',

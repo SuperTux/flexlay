@@ -38,11 +38,15 @@
 
 TilemapLayer* TilemapLayer::current_ = 0;
 
-class TilemapLayerImpl
+class TilemapLayerImpl : public LayerImpl
 {
 public:
-  TilemapLayerImpl() {}
-  virtual ~TilemapLayerImpl() {}
+  TilemapLayerImpl() {
+    std::cout << "TilemapLayerImpl()" << std::endl;
+  }
+  virtual ~TilemapLayerImpl() {
+    std::cout << "~TilemapLayerImpl()" << std::endl;
+  }
 
   Tileset* tileset;
   CL_Color background_color;
@@ -407,6 +411,12 @@ bool
 TilemapLayerImpl::has_bounding_rect() const
 {
   return true;
+}
+
+Layer
+TilemapLayer::to_layer()
+{
+  return Layer(impl);
 }
 
 /* EOF */

@@ -97,15 +97,15 @@ class SuperTuxLevel:
         self.background.set_data(get_value_from_tree(["background-tm"], data, []))
 
         self.editormap = EditorMap()
-        self.editormap.add_layer(self.foreground)
-        self.editormap.add_layer(self.interactive)
-        self.editormap.add_layer(self.background)
+        self.editormap.add_layer(self.foreground.to_layer())
+        self.editormap.add_layer(self.interactive.to_layer())
+        self.editormap.add_layer(self.background.to_layer())
 
     def __del__(self):
         print "SuperTuxLevel:__del__"
 
     def activate(self, workspace):
-        editor_tilemap_set_current(self.interactive)
+        #editor_tilemap_set_current(self.interactive.to_layer())
         workspace.set_current_map(self.editormap)
 
 
@@ -124,7 +124,7 @@ m = EditorMap()
 workspace.set_current_map(m)
 tileset = Tileset(32)
 tilemap = TilemapLayer(tileset, 20, 10)
-m.add_layer(tilemap)
+m.add_layer(tilemap.to_layer())
 tile = Tile("/home/ingo/cvs/supertux/supertux/data/images/tilesets/bonus1.png",
             CL_Color(255, 255, 255, 255),
             CL_Color(255,   0,   0, 128))
@@ -134,7 +134,7 @@ tileset.add_tile(2, tile)
 
 load_game_tiles(tileset, "/home/ingo/cvs/supertux/supertux/data/images/tilesets/supertux.stgt")
 
-editor_tilemap_set_current(tilemap)
+TilemapLayer_set_current(tilemap)
 tilemap_paint_tool_set_tilemap(tilemap)
 
 editor_set_brush_tile(1)

@@ -26,12 +26,17 @@
 class EditorMapComponent;
 class LayerImpl;
 
-/** */
+/** Each \a EditorMap consists out of one or more \a EditorMapLayer,
+    The \a EditorMapLayer is an abstract base class from which the
+    data holding layers derive. The basic functionality of a layer
+    consists only of data holding and visualization. (FIXME: move
+    visuals off into another class) */
 class Layer
 {
 private:
 public:
   Layer();
+  Layer(LayerImpl* i);
   
   void draw(EditorMapComponent* parent);
   bool has_bounding_rect() const;

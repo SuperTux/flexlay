@@ -25,7 +25,7 @@
 #include <ClanLib/GUI/component.h>
 #include <ClanLib/Core/Math/point.h>
 #include "field.hxx"
-#include "editor_objmap.hxx"
+#include "object_layer.hxx"
 #include "graphic_context_state.hxx"
 
 class Workspace;

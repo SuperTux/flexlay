@@ -22,13 +22,13 @@
 
 #include "command.hxx"
 
-class EditorObjMap;
+class ObjectLayer;
 
 /** */
 class ObjectMoveCommand : public Command
 {
 private:
-  EditorObjMap* objmap;
+  ObjectLayer* objmap;
 
   struct Obj {
     CL_Point old_pos;
@@ -39,7 +39,7 @@ private:
   typedef std::vector<Obj> Objects;
   Objects objects;
 public:
-  ObjectMoveCommand(EditorObjMap* o);
+  ObjectMoveCommand(ObjectLayer* o);
   virtual ~ObjectMoveCommand() {}
 
   void add_obj(int id);

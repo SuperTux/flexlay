@@ -25,9 +25,9 @@
 #include <ClanLib/GUI/component.h>
 #include <ClanLib/Core/Math/point.h>
 #include "field.hxx"
-#include "editor_objmap.hxx"
+#include "object_layer.hxx"
 #include "tilemap_layer.hxx"
-#include "editor_map_layer.hxx"
+#include "layer.hxx"
 
 class EditorMapComponent;
 class TileMapTool;
@@ -45,7 +45,7 @@ private:
       can update if required */
   int serial;
 
-  typedef std::vector<EditorMapLayer*> Layers;
+  typedef std::vector<Layer> Layers;
   Layers layers;
 
   CL_Color background_color;
@@ -61,7 +61,7 @@ public:
 
   void draw(EditorMapComponent* parent);
 
-  void add_layer(EditorMapLayer* layer);
+  void add_layer(Layer layer);
 
   bool is_modified() const { return modified; }
   void set_unmodified() { modified = false; }
@@ -69,7 +69,7 @@ public:
 
   int get_serial() const { return serial; }
 
-  EditorMapLayer* get_layer(int i);
+  Layer get_layer(int i);
 
 #ifdef SWIGGUILE
   void   set_metadata(const SCMObj& obj);

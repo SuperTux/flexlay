@@ -17,24 +17,22 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-#ifndef HEADER_EDITOR_OBJMAP_HXX
-#define HEADER_EDITOR_OBJMAP_HXX
+#ifndef HEADER_OBJECT_LAYER_HXX
+#define HEADER_OBJECT_LAYER_HXX
 
 #include <vector>
 #include <ClanLib/Display/sprite.h>
 #include <ClanLib/GUI/component.h>
 #include <ClanLib/Core/Math/point.h>
-#ifdef SWIGGUILE
-#include "scm_obj.hxx"
-#endif
-#include "editor_map_layer.hxx"
+#include "layer.hxx"
 
 class ObjMapObject;
+class ObjectLayerImpl;
 
-/** The EditorObjMap provides a simple Layer for holding positioned
+/** The ObjectLayer provides a simple Layer for holding positioned
     objects. Objects consist of a CL_Sprite and some properties
     accessible from scripting languages */
-class EditorObjMap : public EditorMapLayer
+class ObjectLayer
 {
 private:
   CL_SlotContainer slots;
@@ -45,13 +43,13 @@ public:
   Objs objects;
 
   int handle_count;
-  static EditorObjMap* current_;
+  static ObjectLayer* current_;
 public:
-  static EditorObjMap* current() { return current_; }
-  static void set_current(EditorObjMap* c) { current_ = c; }
+  static ObjectLayer* current() { return current_; }
+  static void set_current(ObjectLayer* c) { current_ = c; }
 
-  EditorObjMap();
-  ~EditorObjMap();
+  ObjectLayer();
+  ~ObjectLayer();
 
   void draw(EditorMapComponent* parent);
 
@@ -66,11 +64,12 @@ public:
   ObjMapObject* find_object(const CL_Point& pos);
   std::vector<ObjMapObject*> get_selection(const CL_Rect& rect);
   Objs* get_objects();
-  EditorObjMap::Obj* get_object(int id);
+  ObjectLayer::Obj* get_object(int id);
   int get_next_object_handle() { return ++handle_count; }
+
+  Layer to_layer();
 private:
-  EditorObjMap (const EditorObjMap&);
-  EditorObjMap& operator= (const EditorObjMap&);
+  CL_SharedPtr<ObjectLayerImpl> impl;
 };
 
 #endif

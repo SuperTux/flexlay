@@ -24,18 +24,18 @@
 #include "command.hxx"
 
 class ObjMapObject;
-class EditorObjMap;
+class ObjectLayer;
 
 /** */
 class ObjectDeleteCommand : public Command
 {
 private:
-  EditorObjMap* objmap;
+  ObjectLayer* objmap;
   
   typedef std::vector<ObjMapObject*> Objects;
   Objects objects;
 public:
-  ObjectDeleteCommand(EditorObjMap* o);
+  ObjectDeleteCommand(ObjectLayer* o);
   virtual ~ObjectDeleteCommand() {}
 
   void add_object(int id);

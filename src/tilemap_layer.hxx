@@ -23,6 +23,7 @@
 #include <ClanLib/Core/System/sharedptr.h>
 #include <ClanLib/Display/pixel_buffer.h>
 #include "field.hxx"
+#include "layer.hxx"
 
 class Tileset;
 class TileBrush;
@@ -91,6 +92,8 @@ public:
   CL_Point world2tile(const CL_Point& pos) const;
 
   bool is_null() const { return impl.is_null(); }
+
+  Layer to_layer();
 
 private:
   CL_SharedPtr<TilemapLayerImpl> impl;

@@ -21,7 +21,7 @@
 #define HEADER_OBJMAP_SELECT_TOOL_HXX
 
 #include "tilemap_tool.hxx"
-#include "editor_objmap.hxx"
+#include "object_layer.hxx"
 #include "object_brush.hxx"
 
 class CL_Menu;
@@ -33,7 +33,7 @@ class ObjectDeleteCommand;
 class ObjMapSelectTool : public TileMapTool
 {
 public:
-  typedef std::vector<EditorObjMap::Obj*> Selection; 
+  typedef std::vector<ObjectLayer::Obj*> Selection; 
 
 private:
   CL_Signal_v1<CL_Menu*> on_popup_menu_display;

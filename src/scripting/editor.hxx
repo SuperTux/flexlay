@@ -29,13 +29,14 @@
 #  include <guile/gh.h>
 #endif
 
+#include "../tilemap_layer.hxx"
+
 #include "Python.h"
 
 class Workspace;
 class EditorMap;
 class EditorObjMap;
 class EditorTileMap;
-class EditorMapLayer;
 class CL_Component;
 class TileBrush;
 class Tileset;
@@ -67,39 +68,15 @@ int  editor_get_brush_tile();
 void editor_set_tool(int i);
 void tilemap_paint_tool_set_brush(TileBrush brush);
 
-int  editor_objectmap_duplicate_object(EditorMapLayer* layer, int id);
-void editor_objectmap_set_pos         (EditorMapLayer* layer, int id, int x, int y);
-
-void editor_tilemap_set_current(EditorMapLayer* layer);
-void editor_objectmap_set_current(EditorMapLayer* layer);
-
-void objmap_sprite_object_flip(EditorMapLayer* layer, int id);
 void tilemap_object_tool_clear_selection();
 
 CL_Component* editor_add_tileeditor(int x, int y, int w, int h);
 
 void tileeditor_set_tile(CL_Component* comp, int id);
+void tilemap_paint_tool_set_tilemap(TilemapLayer tilemap);
 
 int  screen_get_width();
 int  screen_get_height();
-
-// Map stuff
-EditorMap*      editor_map_create();
-void            editor_map_add_layer(EditorMap* m, EditorMapLayer* layer);
-bool            editor_map_is_modified(EditorMap* m);
-void            editor_map_set_unmodified(EditorMap* m);
-
-EditorMapLayer* editor_grid_layer_create(int w, int h, int tile_size);
-EditorMapLayer* editor_objmap_create();
-
-void            editor_toggle_grid(EditorMapLayer* layer);
-void            editor_toggle_attributes(EditorMapLayer* layer);
-void            editor_tilemap_resize(EditorMapLayer* , int w, int h, int x, int y);
-int             editor_tilemap_get_width(EditorMapLayer* l);
-int             editor_tilemap_get_height(EditorMapLayer* l);
-void            editor_tilemap_set_bgcolor(EditorMapLayer* l, int r, int g, int b, int a);
-void            editor_tilemap_set_fgcolor(EditorMapLayer* l, int r, int g, int b, int a);
-void            editor_tilemap_save_png(EditorMapLayer* l, const char* filename);
 
 void connect(CL_Signal_v0& sig, PyObject* obj);
 
@@ -115,15 +92,11 @@ Tileset* tileset_create_from_file(const char* resourcefile);
 #endif
 void tileset_set_current(Tileset* tileset);
 
-EditorMapLayer* editor_mapsize_layer_create(int w, int h);
-void editor_mapsize_layer_set_size(EditorMapLayer*, int w, int h);
-
 #ifdef SWIGGUILE
 // Guile Specific Stuff
 SCM  editor_get_tile_selection();
 void object_selector_add_brush(CL_Component* comp, const char* name, SCM brush);
-int  objectmap_add_object(EditorMapLayer* obj, const char* name, int x, int y, SCM userdata);
-//int  objectmap_add_sprite_object (EditorMapLayer* layer, SCM desc, int x, int y, SCM userdata);
+
 void editor_objectmap_delete_objects  (EditorMapLayer* layer,SCM selection);
 SCM  editor_objectmap_get_objects     (EditorMapLayer* layer);
 SCM  editor_objectmap_get_object      (EditorMapLayer* layer, int id);

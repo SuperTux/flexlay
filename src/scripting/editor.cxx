@@ -53,10 +53,8 @@
 #include "../workspace.hxx"
 
 #include "../editor_map.hxx"
-#include "../editor_map_layer.hxx"
-#include "../editor_mapsize_layer.hxx"
-#include "../editor_objmap.hxx"
-#include "../editor_grid_layer.hxx"
+#include "../object_layer.hxx"
+#include "../object_layer.hxx"
 
 #include "../python_functor.hxx"
 #include "editor.hxx"
@@ -115,7 +113,7 @@ void editor_undo()
 int
 editor_objectmap_add_sprite_object (EditorMapLayer* layer, SCM desc, int x, int y, SCM userdata)
 {
-  EditorObjMap* objmap = dynamic_cast<EditorObjMap*>(obj);
+  ObjectLayer* objmap = dynamic_cast<ObjectLayer*>(obj);
   if (objmap)
     {
       try {
@@ -153,7 +151,7 @@ editor_objectmap_add_sprite_object (EditorMapLayer* layer, SCM desc, int x, int 
 int
 objectmap_add_object(EditorMapLayer* layer, const char* filename, int x, int y, SCM userdata)
 {
-  EditorObjMap* objmap = dynamic_cast<EditorObjMap*>(layer);
+  ObjectLayer* objmap = dynamic_cast<ObjectLayer*>(layer);
   try {
     if (objmap)
       {
@@ -197,20 +195,7 @@ editor_set_brush_tile(int i)
   TileMapPaintTool::current()->set_brush(brush);
 }
 
-EditorMapLayer*
-editor_grid_layer_create(int w, int h, int tile_size)
-{
-  return new EditorGridLayer(CL_Point(0, 0), w, h, tile_size);
-}
-
-void
-editor_toggle_grid(EditorMapLayer* layer)
-{
-  TilemapLayer* tilemap = dynamic_cast<TilemapLayer*>(layer);
-  if (tilemap)
-    tilemap->set_draw_grid(!tilemap->get_draw_grid());
-}
-
+#if 0
 void
 editor_toggle_attributes(EditorMapLayer* layer)
 {
@@ -218,10 +203,11 @@ editor_toggle_attributes(EditorMapLayer* layer)
   if (tilemap)
     tilemap->set_draw_attribute(!tilemap->get_draw_attribute());
 }
+#endif
 
 #ifdef SWIGGUILE
 SCM
-obj2scm(const EditorObjMap::Obj& obj)
+obj2scm(const ObjectLayer::Obj& obj)
 {
   SCM lst = SCM_EOL;
   
@@ -306,36 +292,24 @@ scm2brush(SCM s_brush)
 }
 #endif
 
-void
-editor_objectmap_set_current(EditorMapLayer* layer)
-{
-  EditorObjMap* objmap = dynamic_cast<EditorObjMap*>(layer);
-  EditorObjMap::set_current(objmap);
-}
-
-void
-editor_tilemap_set_current(EditorMapLayer* layer)
-{
-  TilemapLayer* tilemap = dynamic_cast<TilemapLayer*>(layer);
-  TilemapLayer::set_current(tilemap);
-}
-
+#if 0
 int
 editor_objectmap_duplicate_object(EditorMapLayer* layer, int id)
 {
-  EditorObjMap* objmap = dynamic_cast<EditorObjMap*>(layer);
+  ObjectLayer* objmap = dynamic_cast<ObjectLayer*>(layer);
   if (objmap)
     {
       return objmap->duplicate_object(id);
     }
   return -1;
 }  
+#endif
 
 #ifdef SWIGGUILE
 void
 editor_objectmap_delete_objects(EditorMapLayer* layer, SCM lst)
 {
-  EditorObjMap* objmap = dynamic_cast<EditorObjMap*>(layer);
+  ObjectLayer* objmap = dynamic_cast<ObjectLayer*>(layer);
   if (objmap)
     {
       ObjectDeleteCommand* command = new ObjectDeleteCommand(objmap);
@@ -351,7 +325,7 @@ editor_objectmap_delete_objects(EditorMapLayer* layer, SCM lst)
 void
 tilemap_object_tool_set_objects(EditorMapLayer* layer, SCM lst)
 {
-  EditorObjMap* objmap = dynamic_cast<EditorObjMap*>(layer);
+  ObjectLayer* objmap = dynamic_cast<ObjectLayer*>(layer);
   if (objmap)
     {
       ObjMapSelectTool::Selection selection;
@@ -376,27 +350,29 @@ tilemap_object_tool_set_objects(EditorMapLayer* layer, SCM lst)
 }
 #endif
 
+#if 0
 void
 editor_objectmap_set_pos(EditorMapLayer* layer, int id, int x, int y)
 {
-  EditorObjMap* objmap = dynamic_cast<EditorObjMap*>(layer);
+  ObjectLayer* objmap = dynamic_cast<ObjectLayer*>(layer);
   if (objmap)
     {
       ObjMapObject* obj = objmap->get_object(id);
       obj->set_pos(CL_Point(x, y));
     }
 }
+#endif
 
 #ifdef SWIGGUILE
 SCM
 editor_objectmap_get_objects(EditorMapLayer* layer)
 {
-  EditorObjMap* objmap = dynamic_cast<EditorObjMap*>(layer);
+  ObjectLayer* objmap = dynamic_cast<ObjectLayer*>(layer);
   if (objmap)
     {
       SCM lst = SCM_EOL;
 
-      for(EditorObjMap::Objs::iterator i = objmap->get_objects()->begin();
+      for(ObjectLayer::Objs::iterator i = objmap->get_objects()->begin();
           i != objmap->get_objects()->end();
           ++i)
         {
@@ -431,7 +407,7 @@ tilemap_object_tool_get_objects()
 
   ObjMapSelectTool::Selection selection = tool->get_selection();
 
-  for(EditorObjMap::Objs::iterator i = selection.begin(); i != selection.end(); ++i)
+  for(ObjectLayer::Objs::iterator i = selection.begin(); i != selection.end(); ++i)
     {
       lst = gh_cons(SCM_MAKINUM((*i)->get_handle()), lst);
     }
@@ -441,10 +417,10 @@ tilemap_object_tool_get_objects()
 SCM
 editor_objectmap_get_object(EditorMapLayer* layer, int id)
 {
-  EditorObjMap* objmap = dynamic_cast<EditorObjMap*>(layer);
+  ObjectLayer* objmap = dynamic_cast<ObjectLayer*>(layer);
   if (objmap)
     {
-      EditorObjMap::Obj* obj = objmap->get_object(id);
+      ObjectLayer::Obj* obj = objmap->get_object(id);
 
       if (obj)
         return obj2scm(*obj);
@@ -454,10 +430,11 @@ editor_objectmap_get_object(EditorMapLayer* layer, int id)
 }
 #endif
 
+#if 0
 void
 objmap_sprite_object_flip(EditorMapLayer* layer, int id)
 {
-  EditorObjMap* objmap = dynamic_cast<EditorObjMap*>(layer);
+  ObjectLayer* objmap = dynamic_cast<ObjectLayer*>(layer);
   if (objmap)
     {
       ObjMapSpriteObject* obj = dynamic_cast<ObjMapSpriteObject*>(objmap->get_object(id));
@@ -475,6 +452,7 @@ editor_tilemap_resize(EditorMapLayer* m, int w, int h, int x, int y)
       tilemap->resize(CL_Size(w, h), CL_Point(x, y));
     }
 }
+#endif
 
 void 
 tilemap_paint_tool_set_brush(TileBrush brush)
@@ -788,16 +766,11 @@ editor_map_create()
   return new EditorMap();
 }
 
+#if 0
 void
 editor_map_add_layer(EditorMap* m, EditorMapLayer* layer)
 {
   m->add_layer(layer);
-}
-
-EditorMapLayer* 
-editor_objmap_create()
-{
-  return new EditorObjMap();
 }
 
 void
@@ -862,6 +835,7 @@ editor_tilemap_set_fgcolor(EditorMapLayer* l, int r, int g, int b, int a)
       tilemap->set_foreground_color(CL_Color(r, g, b, a));
     }
 }
+#endif 
 
 #ifdef SWIGGUILE
 SCM
@@ -1009,19 +983,6 @@ tileset_set_current(Tileset* tileset)
   Tileset::set_current(tileset);
 }
 
-EditorMapLayer*
-editor_mapsize_layer_create(int w, int h)
-{
-  return new EditorMapsizeLayer(CL_Rect(CL_Point(0, 0), CL_Size(w, h)));
-}
-
-void
-editor_mapsize_layer_set_size(EditorMapLayer* l, int w, int h)
-{
-  EditorMapsizeLayer* layer = dynamic_cast<EditorMapsizeLayer*>(l);
-  layer->set_bounding_rect(CL_Rect(CL_Point(0, 0), CL_Size(w, h)));
-}
-
 Workspace*
 workspace_current()
 {
@@ -1041,5 +1002,9 @@ workspace_add_map(Workspace* workspace, EditorMap* m, int x, int y)
   workspace->add_map(m, CL_Point(x, y));
 }
 
+void tilemap_paint_tool_set_tilemap(TilemapLayer tilemap)
+{
+  TileMapPaintTool::current()->set_tilemap(tilemap);
+}
 
 /* EOF */

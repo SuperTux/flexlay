@@ -16,8 +16,10 @@
 #include "tile.hxx"
 #include "tile_brush.hxx"
 #include "editor.hxx"
-#include "editor_map_layer.hxx"
+
+#include "layer.hxx"
 #include "tilemap_layer.hxx"
+
 #include "editor_map.hxx"
 #include "workspace.hxx"
 #include "tileset.hxx"
@@ -46,8 +48,10 @@
 %include "tile.hxx"
 %include "tile_brush.hxx"
 %include "editor.hxx"
-%include "editor_map_layer.hxx"
+ 
+%include "layer.hxx"
 %include "tilemap_layer.hxx"
+
 %include "editor_map.hxx"
 %include "workspace.hxx"
 %include "tileset.hxx"

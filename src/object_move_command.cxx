@@ -17,11 +17,11 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-#include "editor_objmap.hxx"
+#include "object_layer.hxx"
 #include "objmap_object.hxx"
 #include "object_move_command.hxx"
 
-ObjectMoveCommand::ObjectMoveCommand(EditorObjMap* o)
+ObjectMoveCommand::ObjectMoveCommand(ObjectLayer* o)
   : objmap(o)
 {
   

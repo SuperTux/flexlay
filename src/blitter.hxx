@@ -1,6 +1,6 @@
 //  $Id$
 // 
-//  Flexlay - A Generic 2D Game Editor
+//  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
 //
 //  This program is free software; you can redistribute it and/or
@@ -17,25 +17,12 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-#ifndef HEADER_EDITOR_GRID_LAYER_HXX
-#define HEADER_EDITOR_GRID_LAYER_HXX
+#ifndef HEADER_BLITTER_HXX
+#define HEADER_BLITTER_HXX
 
-#include <ClanLib/Core/Math/point.h>
-#include "editor_map_layer.hxx"
+#include <ClanLib/Display/pixel_buffer.h>
 
-/** Little helper layer that displays a simple grid
- */
-class EditorGridLayer : public EditorMapLayer
-{
-private:
-  CL_Point pos;
-  int width;
-  int height;
-  int tile_size;
-public:
-  EditorGridLayer(const CL_Point pos_, int w, int h, int tile_size);
-  void draw(EditorMapComponent* parent);
-};
+void blit(CL_PixelBuffer target, CL_PixelBuffer brush, int x_pos, int y_pos);
 
 #endif
 

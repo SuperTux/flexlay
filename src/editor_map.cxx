@@ -44,7 +44,7 @@ EditorMap::~EditorMap()
 }
 
 void
-EditorMap::add_layer(EditorMapLayer* layer)
+EditorMap::add_layer(Layer layer)
 {
   layers.push_back(layer);
   ++serial;
@@ -58,11 +58,11 @@ EditorMap::draw (EditorMapComponent* parent)
   CL_Display::fill_rect(rect, background_color);
   CL_Display::draw_rect(rect, foreground_color);
   for(Layers::iterator i = layers.begin(); i != layers.end(); ++i)
-    (*i)->draw(parent);  
+    (*i).draw(parent);  
   CL_Display::flush();
 }
 
-EditorMapLayer*
+Layer
 EditorMap::get_layer(int i)
 {
   if (i >= 0 && i < static_cast<int>(layers.size()))
@@ -95,16 +95,16 @@ EditorMap::get_bounding_rect()
 
   for(Layers::iterator i = layers.begin(); i != layers.end(); ++i)
     {
-      if ((*i)->has_bounding_rect())
+      if (i->has_bounding_rect())
         {
           if (!init)
             {
-              rect = (*i)->get_bounding_rect();
+              rect = i->get_bounding_rect();
               init = true;
             }
           else
             {
-              CL_Rect other = (*i)->get_bounding_rect();
+              CL_Rect other = i->get_bounding_rect();
               rect.top    = std::min(rect.top,    other.top);
               rect.bottom = std::max(rect.bottom, other.bottom);
               rect.left   = std::min(rect.left,   other.left);

@@ -26,19 +26,19 @@
 #include "editor_objmap.hxx"
 
 extern CL_ResourceManager* resources;
-EditorObjMap* EditorObjMap::current_ = 0;
+ObjectLayer* ObjectLayer::current_ = 0;
 
-EditorObjMap::EditorObjMap()
+ObjectLayer::ObjectLayer()
 {
   handle_count = 0;
 }
 
-EditorObjMap::~EditorObjMap()
+ObjectLayer::~ObjectLayer()
 {
 }
 
 void
-EditorObjMap::draw(EditorMapComponent* parent)
+ObjectLayer::draw(EditorMapComponent* parent)
 {
   for(Objs::iterator i = objects.begin(); i != objects.end(); ++i)
     {
@@ -47,7 +47,7 @@ EditorObjMap::draw(EditorMapComponent* parent)
 }
 
 int
-EditorObjMap::duplicate_object(int id)
+ObjectLayer::duplicate_object(int id)
 {
   ObjMapObject* obj    = get_object(id);
   ObjMapObject* newobj = obj->duplicate(++handle_count);
@@ -61,7 +61,7 @@ EditorObjMap::duplicate_object(int id)
 
 #ifdef SWIGGUILE
 int
-EditorObjMap::add_object(const CL_Sprite& sprite, const CL_Point& pos, const SCMObj& data)
+ObjectLayer::add_object(const CL_Sprite& sprite, const CL_Point& pos, const SCMObj& data)
 {
   ObjMapObject* obj = new ObjMapSpriteObject(++handle_count, pos, data, sprite);
 
@@ -72,7 +72,7 @@ EditorObjMap::add_object(const CL_Sprite& sprite, const CL_Point& pos, const SCM
 #endif
 
 ObjMapObject*
-EditorObjMap::find_object(const CL_Point& click_pos)
+ObjectLayer::find_object(const CL_Point& click_pos)
 {
   for(Objs::reverse_iterator i = objects.rbegin(); i != objects.rend(); ++i)
     {
@@ -85,7 +85,7 @@ EditorObjMap::find_object(const CL_Point& click_pos)
 }
 
 void
-EditorObjMap::delete_object(int id)
+ObjectLayer::delete_object(int id)
 {
   for(Objs::iterator i = objects.begin(); i != objects.end(); ++i)
     {
@@ -98,10 +98,10 @@ EditorObjMap::delete_object(int id)
     }
 }
 
-std::vector<EditorObjMap::Obj*>
-EditorObjMap::get_selection(const CL_Rect& rect)
+std::vector<ObjectLayer::Obj*>
+ObjectLayer::get_selection(const CL_Rect& rect)
 {
-  std::vector<EditorObjMap::Obj*> selection;
+  std::vector<ObjectLayer::Obj*> selection;
 
   for(Objs::iterator i = objects.begin(); i != objects.end(); ++i)
     {
@@ -115,8 +115,8 @@ EditorObjMap::get_selection(const CL_Rect& rect)
   return selection;
 }
 
-EditorObjMap::Obj*
-EditorObjMap::get_object(int id)
+ObjectLayer::Obj*
+ObjectLayer::get_object(int id)
 {
   for(Objs::iterator i = objects.begin(); i != objects.end(); ++i)
     if ((*i)->get_handle() == id)
@@ -124,16 +124,23 @@ EditorObjMap::get_object(int id)
   return 0;
 }
 
-EditorObjMap::Objs*
-EditorObjMap::get_objects()
+ObjectLayer::Objs*
+ObjectLayer::get_objects()
 {
   return &objects;
 }
 
 void
-EditorObjMap::add_object(ObjMapObject* obj)
+ObjectLayer::add_object(ObjMapObject* obj)
 {
   objects.push_back(obj);
+}
+
+Layer
+ObjectLayer::to_layer()
+{
+  //return Layer(impl);
+  return Layer();
 }
 
 /* EOF */

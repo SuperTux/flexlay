@@ -40,6 +40,7 @@ public:
   void on_mouse_up  (const CL_InputEvent& event);
   void on_mouse_down(const CL_InputEvent& event);
   void on_mouse_move(const CL_InputEvent& event);
+  void update(const CL_InputEvent& event);
 };
 
 void
@@ -55,12 +56,7 @@ void
 WorkspaceMoveToolImpl::on_mouse_up(const CL_InputEvent& event)
 {
   scrolling = false;
-  workspace.get_gc_state().set_pos(CL_Pointf(old_trans_offset.x
-                                             + (click_pos.x - event.mouse_pos.x) 
-                                             / workspace.get_gc_state().get_zoom(),
-                                             old_trans_offset.y
-                                             + (click_pos.y - event.mouse_pos.y)
-                                             / workspace.get_gc_state().get_zoom()));
+  update(event);
   old_trans_offset = workspace.get_gc_state().get_pos();
   EditorMapComponent::current()->release_mouse();
 }
@@ -70,13 +66,25 @@ WorkspaceMoveToolImpl::on_mouse_move(const CL_InputEvent& event)
 {
   if (scrolling)
     {
-      workspace.get_gc_state().set_pos(CL_Pointf(old_trans_offset.x
-                                                 + (click_pos.x - event.mouse_pos.x)
-                                                 / workspace.get_gc_state().get_zoom(),
-                                                 old_trans_offset.y
-                                                 + (click_pos.y - event.mouse_pos.y)
-                                                 / workspace.get_gc_state().get_zoom()));
+      update(event);
     } 
+}
+
+void
+WorkspaceMoveToolImpl::update(const CL_InputEvent& event)
+{
+  GraphicContextState& gc_state = workspace.get_gc_state();
+
+  float sa = sin(-gc_state.get_rotation()/180.0f*M_PI);
+  float ca = cos(-gc_state.get_rotation()/180.0f*M_PI);
+
+  float dx = ca * (click_pos.x - event.mouse_pos.x) - sa * (click_pos.y - event.mouse_pos.y);
+  float dy = sa * (click_pos.x - event.mouse_pos.x) + ca * (click_pos.y - event.mouse_pos.y);
+
+  gc_state.set_pos(CL_Pointf(old_trans_offset.x
+                             + dx / workspace.get_gc_state().get_zoom(),
+                             old_trans_offset.y
+                             + dy / workspace.get_gc_state().get_zoom()));
 }
 
 WorkspaceMoveTool::WorkspaceMoveTool(const Workspace& workspace_)

@@ -18,10 +18,13 @@
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include <iostream>
+#include <assert.h>
 #include <ClanLib/gl.h>
 #include <ClanLib/Display/input_event.h>
 #include <ClanLib/Display/keys.h>
+#include <ClanLib/Display/mouse.h>
 #include <ClanLib/Display/display.h>
+#include <ClanLib/Display/input_context.h>
 #include "editor_map_component.hxx"
 #include "tool.hxx"
 #include "sketch_layer.hxx"
@@ -49,7 +52,20 @@ public:
   void draw() 
   {
     if (drawing)
-      stroke.draw();
+      {
+        stroke.draw(0);
+      }
+    else
+      {
+        EditorMapComponent* parent = EditorMapComponent::current();
+        CL_Pointf p = parent->screen2world(CL_Point(CL_Mouse::get_x() - parent->get_screen_x(), 
+                                                    CL_Mouse::get_y() - parent->get_screen_y()));
+        CL_Sprite s = sprite_drawer.get_sprite();
+        s.set_color(sprite_drawer.get_color());
+        s.set_scale(sprite_drawer.get_size(), sprite_drawer.get_size());
+        s.set_alpha(0.5);
+        s.draw(p.x, p.y);
+      }
   }
 
   void on_mouse_up  (const CL_InputEvent& event) 
@@ -60,8 +76,7 @@ public:
         EditorMapComponent* parent = EditorMapComponent::current();
         parent->release_mouse();
         
-        CL_Pointf p = parent->screen2world(event.mouse_pos);
-        stroke.add_dab(Dab(p.x, p.y));
+        add_dab(event);
 
         SketchLayer::current()->add_stroke(stroke);
       }    
@@ -75,18 +90,47 @@ public:
         parent->capture_mouse();
         stroke = Stroke();
         stroke.set_drawer(sprite_drawer.to_drawer().clone());
-        CL_Pointf p = parent->screen2world(event.mouse_pos);
-        stroke.add_dab(Dab(p.x, p.y));
+        add_dab(event);
       }
+  }
+
+  void add_dab(const CL_InputEvent& event)
+  {
+    EditorMapComponent* parent = EditorMapComponent::current();
+    CL_Pointf p = parent->screen2world(event.mouse_pos);    
+
+    CL_InputDevice tablet = CL_Display::get_current_window()->get_ic()->get_mouse(3);
+
+    if (0)
+      {
+        std::cout << "Mouse Count: " << CL_Display::get_current_window()->get_ic()->get_mouse_count() << std::endl;
+        std::cout << tablet.get_name() << ": ";
+        for(int i = 0; i < tablet.get_axis_count(); ++i)
+          std::cout << tablet.get_axis(i) << " ";
+        std::cout << std::endl;
+      }
+
+    assert(tablet.get_axis_count() >= 5);
+
+    Dab dab(p.x, p.y);
+
+    dab.pressure = tablet.get_axis(2);
+    dab.tilt.x   = tablet.get_axis(3);
+    dab.tilt.y   = tablet.get_axis(4);
+
+    //std::cout << dab.pressure << " " << dab.tilt.x << " " << dab.tilt.y << std::endl;
+
+    if (dab.pressure == 0) // most likly we are using the mouse
+      dab.pressure = 1.0f;
+
+    stroke.add_dab(dab);
   }
 
   void on_mouse_move(const CL_InputEvent& event) 
   {
     if (drawing)
       {
-        EditorMapComponent* parent = EditorMapComponent::current();
-        CL_Pointf p = parent->screen2world(event.mouse_pos);
-        stroke.add_dab(Dab(p.x, p.y));
+        add_dab(event);
       }
   }
 };

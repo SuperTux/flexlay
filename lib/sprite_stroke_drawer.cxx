@@ -18,6 +18,8 @@
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include <iostream>
+#include <ClanLib/Display/blend_func.h>
+#include <ClanLib/gl.h>
 #include "stroke.hxx"
 #include "stroke_drawer_impl.hxx"
 #include "sprite_stroke_drawer.hxx"
@@ -31,7 +33,9 @@ public:
   CL_Sprite brush;
 
   
-  void draw(const Stroke& stroke);
+  void draw(const Stroke& stroke, CL_GraphicContext* gc);
+  void draw_pass1(const Stroke& stroke, CL_GraphicContext* gc);
+  void draw_pass2(const Stroke& stroke, CL_GraphicContext* gc);
   StrokeDrawerImpl* clone() const;
 };
 
@@ -43,9 +47,31 @@ SpriteStrokeDrawer::SpriteStrokeDrawer()
 }
 
 void
-SpriteStrokeDrawerImpl::draw(const Stroke& stroke) 
+SpriteStrokeDrawerImpl::draw_pass1(const Stroke& stroke, CL_GraphicContext* gc)
 {
-  if (brush.is_null())
+  glColorMask( 1,1,1,0 );
+  brush.set_blend_func(blend_src_alpha, blend_one_minus_src_alpha);
+  draw(stroke, gc);
+
+  glColorMask( 1,1,1,1 );
+  brush.set_blend_func(blend_src_alpha, blend_one_minus_src_alpha);
+}
+
+void
+SpriteStrokeDrawerImpl::draw_pass2(const Stroke& stroke, CL_GraphicContext* gc)
+{
+  glColorMask( 0,0,0,1 );
+  brush.set_blend_func(blend_dst_alpha, blend_one);
+  draw(stroke, gc);
+
+  glColorMask( 1,1,1,1 );
+  brush.set_blend_func(blend_src_alpha, blend_one_minus_src_alpha);
+}
+
+void
+SpriteStrokeDrawerImpl::draw(const Stroke& stroke, CL_GraphicContext* gc)
+{
+  if (brush.is_null() || stroke.get_dab_count() == 0)
     return;
     
   // Spacing is keep relative to the brush size
@@ -56,11 +82,21 @@ SpriteStrokeDrawerImpl::draw(const Stroke& stroke)
   
   if (stroke.get_dabs().size() == 1 || stroke.get_dabs().size() == 2)
     { // FIXME: More or less a hack
-      brush.draw(stroke.get_dabs().front().pos.x, stroke.get_dabs().front().pos.y);
+      brush.set_color(color);
+      brush.set_alpha((color.get_alpha()/255.0f) * stroke.get_dabs().front().pressure);
+      brush.set_scale(base_size * (1.0f + stroke.get_dabs().front().pressure), 
+                      base_size * (1.0f + stroke.get_dabs().front().pressure));
+
+      brush.draw(stroke.get_dabs().front().pos.x, stroke.get_dabs().front().pos.y, gc);
     }
   else
     {
-      brush.draw(stroke.get_dabs().front().pos.x, stroke.get_dabs().front().pos.y);
+      brush.set_color(color);
+      brush.set_alpha((color.get_alpha()/255.0f) * stroke.get_dabs().front().pressure);
+      brush.set_scale(base_size * (1.0f + stroke.get_dabs().front().pressure), 
+                      base_size * (1.0f + stroke.get_dabs().front().pressure));
+
+      brush.draw(stroke.get_dabs().front().pos.x, stroke.get_dabs().front().pos.y, gc);
 
       float overspace = 0.0f;
       Stroke::Dabs dabs = stroke.get_dabs();
@@ -77,9 +113,12 @@ SpriteStrokeDrawerImpl::draw(const Stroke& stroke)
                           dabs[j].pos.y + dist.y * factor);
 
               brush.set_color(color);
-              brush.set_scale(base_size, base_size);
+              brush.set_alpha((color.get_alpha()/255.0f) * dabs[j].pressure);
+
+              brush.set_scale(base_size * (1.0f + dabs[j].pressure), 
+                              base_size * (1.0f + dabs[j].pressure));
   
-              brush.draw(p.x, p.y);
+              brush.draw(p.x, p.y, gc);
               
               n += 1;
             }
@@ -88,6 +127,8 @@ SpriteStrokeDrawerImpl::draw(const Stroke& stroke)
           overspace = (length + overspace) - (local_spacing * (n-1));
         }
     }
+
+  glColorMask( 1,1,1,1 );
 }
 
 void

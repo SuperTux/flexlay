@@ -111,6 +111,7 @@ VALUE CL_Point2Value(const CL_Point& arg)
 %template(Std_vector_ObjMapObject) std::vector<ObjMapObject>;
 %template(Std_vector_CL_Pointf) std::vector<CL_Pointf>;
 %template(Std_vector_Stroke) std::vector<Stroke>;
+%template(Std_vector_Dab) std::vector<Dab>;
 
 %include "clanlib.i"
 %include "command.hxx"

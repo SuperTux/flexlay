@@ -285,6 +285,8 @@ int main()
 
   for (int i = 0; i < brush.mask->width * brush.mask->height; ++i)
     std::cout << int(brush.mask->data[i]) << " ";
+
+  temp_buf_free(brush.mask);
   
   std::cout << std::endl;
 

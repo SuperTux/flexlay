@@ -50,18 +50,51 @@ Stroke::get_dabs() const
   return impl->dabs; 
 }
 
+int
+Stroke::get_dab_count() const
+{
+  return impl->dabs.size();
+}
+
 void 
-Stroke::draw()
+Stroke::draw(CL_GraphicContext* gc) const
 {
   if (!impl->drawer.is_null())
     {
-      impl->drawer.draw(*this);
+      const_cast<StrokeDrawer&>(impl->drawer).draw(*this, gc);
     }
   else
     {
       std::cout << "No drawer set!" << std::endl;
     }
 }
+
+void 
+Stroke::draw_pass1(CL_GraphicContext* gc) const
+{
+  if (!impl->drawer.is_null())
+    {
+      const_cast<StrokeDrawer&>(impl->drawer).draw_pass1(*this, gc);
+    }
+  else
+    {
+      std::cout << "No drawer set!" << std::endl;
+    }
+}
+
+void 
+Stroke::draw_pass2(CL_GraphicContext* gc) const
+{
+  if (!impl->drawer.is_null())
+    {
+      const_cast<StrokeDrawer&>(impl->drawer).draw_pass2(*this, gc);
+    }
+  else
+    {
+      std::cout << "No drawer set!" << std::endl;
+    }
+}
+
 
 void
 Stroke::add_dab(const Dab& dab) 

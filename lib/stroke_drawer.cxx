@@ -32,10 +32,24 @@ StrokeDrawer::StrokeDrawer(SharedPtr<StrokeDrawerImpl> impl_)
 }
 
 void
-StrokeDrawer::draw(const Stroke& stroke)
+StrokeDrawer::draw(const Stroke& stroke, CL_GraphicContext* gc)
 {
   if (impl.get() != 0)
-    impl->draw(stroke);
+    impl->draw(stroke, gc);
+}
+
+void
+StrokeDrawer::draw_pass1(const Stroke& stroke, CL_GraphicContext* gc)
+{
+  if (impl.get() != 0)
+    impl->draw_pass1(stroke, gc);
+}
+
+void
+StrokeDrawer::draw_pass2(const Stroke& stroke, CL_GraphicContext* gc)
+{
+  if (impl.get() != 0)
+    impl->draw_pass2(stroke, gc);
 }
 
 StrokeDrawer

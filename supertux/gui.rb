@@ -49,6 +49,11 @@ class SuperTuxGUI
 
     @colorpicker = ColorPicker.new(CL_Rect.new(CL_Point.new(3, 3), CL_Size.new(128, 128)),
                                    @selector_window)
+
+    connect_v1_Color(@colorpicker.sig_color_change(), proc{|color|
+                       $sketch_stroke_tool.set_color(color)
+                     })
+
     @size_slider = Slider.new(CL_Rect.new(CL_Point.new(3, 150), CL_Size.new(128, 16)), @selector_window)
     @size_slider.set_range(0.01, 2.0) # FIXME: using 0 size brush makes clanlib crashi
     @size_slider.set_value(1.0)
@@ -57,8 +62,12 @@ class SuperTuxGUI
                        $sketch_stroke_tool.set_size(value)
                      })
 
-    connect_v1_Color(@colorpicker.sig_color_change(), proc{|color|
-                       $sketch_stroke_tool.set_color(color)
+    @zoom_slider = Slider.new(CL_Rect.new(CL_Point.new(3, 182), CL_Size.new(128, 16)), @selector_window)
+    @zoom_slider.set_range(0.25, 10.0) # FIXME: using 0 size brush makes clanlib crashi
+    @zoom_slider.set_value(1.0)
+    connect_v1_float(@zoom_slider.sig_on_change, proc{|value|
+                       # puts "Value: #{value}"
+                       self.gui_set_zoom(value)
                      })
 
     create_button_panel()

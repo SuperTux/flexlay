@@ -20,6 +20,7 @@
 #ifndef HEADER_STROKE_DRAWER_IMPL_HXX
 #define HEADER_STROKE_DRAWER_IMPL_HXX
 
+class CL_GraphicContext;
 class Stroke;
 
 /** Abstract class which handles the drawing of a Stroke
@@ -30,7 +31,9 @@ private:
 public:
   virtual ~StrokeDrawerImpl() {}
 
-  virtual void draw(const Stroke& stroke) =0;
+  virtual void draw(const Stroke& stroke, CL_GraphicContext* gc) =0;
+  virtual void draw_pass1(const Stroke& stroke, CL_GraphicContext* gc) {}
+  virtual void draw_pass2(const Stroke& stroke, CL_GraphicContext* gc) {}
   virtual StrokeDrawerImpl* clone() const =0;
 };
 

@@ -145,7 +145,7 @@ class Sector
             stroke = Stroke.new()
             rest.each {|(el2, *rest2)|
               if el2 == "point" then
-                stroke.add_point(rest2[0], rest2[1])
+                stroke.add_dab(Dab.new(rest2[0], rest2[1]))
               elsif el2 == "color"
                 stroke.set_color(CL_Color.new(rest2[0], rest2[1], rest2[2], rest2[3]))
               elsif el2 == "size"
@@ -246,7 +246,7 @@ class Sector
               "#{stroke.get_color.get_blue()} "\
               "#{stroke.get_color.get_alpha()})\n")
       f.write("        (size  #{stroke.get_size})\n")
-      stroke.get_points.each {|p|
+      stroke.get_dabs.each {|p|
         f.write("        (point #{p.x} #{p.y})\n")
       }
       f.write("  )\n")

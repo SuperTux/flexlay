@@ -24,6 +24,8 @@
 #include <ClanLib/Core/Math/rect.h>
 #include "shared_ptr.hxx"
 
+class CL_GraphicContext;
+
 class GraphicContextStateImpl;
 
 /** Helper class for capturing the state of a GraphicContext, with
@@ -37,8 +39,8 @@ public:
 
   void set_size(int w, int h);
 
-  void push();
-  void pop();
+  void push(CL_GraphicContext* gc = 0);
+  void pop (CL_GraphicContext* gc = 0);
 
   /** Return a rectangle in world coordinates that represents the area
       visible on the screen */

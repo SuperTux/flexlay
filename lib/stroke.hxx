@@ -26,6 +26,7 @@
 
 class StrokeImpl;
 class StrokeDrawer;
+class CL_GraphicContext;
 
 class Dab
 {
@@ -43,6 +44,10 @@ public:
   /** Tilting of the pen while painting the dot */
   CL_Pointf tilt;
 
+  Dab()
+    : time(0), pos(0, 0), pressure(1.0f), tilt(0, 0)
+  {}
+
   Dab(float x, float y) 
     : time(0), pos(x, y), pressure(1.0f), tilt(0.0f, 0.0f)
   {}
@@ -55,12 +60,16 @@ public:
 
   Stroke();
 
-  void draw();
+  void draw(CL_GraphicContext* gc) const;
+
+  void draw_pass1(CL_GraphicContext* gc) const;
+  void draw_pass2(CL_GraphicContext* gc) const;
 
   void  set_drawer(const StrokeDrawer& drawer_);
   void  add_dab(const Dab& dab);
   Dabs  get_dabs()  const;
 
+  int get_dab_count() const;
 private:
   SharedPtr<StrokeImpl> impl;
 };

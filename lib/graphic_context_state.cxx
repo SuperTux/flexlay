@@ -18,6 +18,8 @@
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include <ClanLib/Display/display.h>
+#include <ClanLib/Display/display_window.h>
+#include <ClanLib/Display/graphic_context.h>
 #include <ClanLib/GUI/component.h>
 #include "graphic_context_state.hxx"
 
@@ -57,17 +59,23 @@ GraphicContextState::set_size(int w, int h)
 }
 
 void
-GraphicContextState::push()
+GraphicContextState::push(CL_GraphicContext* gc)
 {
-  CL_Display::push_modelview();
-  CL_Display::add_scale(get_zoom(), get_zoom());
-  CL_Display::add_translate(impl->offset.x, impl->offset.y);
+  if (gc == 0)
+    gc = CL_Display::get_current_window()->get_gc();
+  
+  gc->push_modelview();
+  gc->add_scale(get_zoom(), get_zoom());
+  gc->add_translate(impl->offset.x, impl->offset.y);
 }
 
 void
-GraphicContextState::pop()
+GraphicContextState::pop(CL_GraphicContext* gc)
 {
-  CL_Display::pop_modelview();
+  if (gc == 0)
+    gc = CL_Display::get_current_window()->get_gc();
+  
+  gc->pop_modelview();
 }
 
 CL_Rect

@@ -1,4 +1,4 @@
-//  $Id: args_parse.cxx,v 1.3 2003/09/06 15:05:10 grumbel Exp $
+//  $Id: args_parse.cxx,v 1.4 2003/09/06 15:13:18 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -36,6 +36,7 @@ ArgsParse::parse_args(int argc, char** argv)
   for(int i = 1; i < argc; ++i) {
     if (argv[i][0] == '-') {
       if (argv[i][1] == '-') {
+        // We got a long option
         if (argv[i][2] == '\0') { 
           // Got a '--', so we stop evaluating arguments
           ++i;
@@ -80,9 +81,10 @@ ArgsParse::parse_args(int argc, char** argv)
           }
         }
       } else {
+        // We got a short option
         char* p = argv[i] + 1;
           
-        if (p) {
+        if (*p != '\0') {
           // Handle option chains
           while (*p) {
             // Short option(s)

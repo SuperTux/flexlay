@@ -40,8 +40,6 @@ public:
   Layer(SharedPtr<LayerImpl> i);
   ~Layer();
 
-  Layer& operator=(const Layer& copy);
-
   void draw(EditorMapComponent* parent);
   bool has_bounding_rect() const;
   CL_Rect get_bounding_rect();

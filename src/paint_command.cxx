@@ -43,6 +43,9 @@ public:
   TileBrush*   redo_brush;
   TileBrush*   undo_brush;
 
+  PaintCommandImpl() {}
+  virtual ~PaintCommandImpl() {}
+
   void execute();
   
   void redo();

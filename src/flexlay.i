@@ -20,6 +20,7 @@
 
 #include "layer.hxx"
 #include "tilemap_layer.hxx"
+#include "object_layer.hxx"
 
 #include "minimap.hxx"
 #include "editor_map.hxx"
@@ -61,6 +62,7 @@
  
 %include "layer.hxx"
 %include "tilemap_layer.hxx"
+%include "object_layer.hxx"
 
 %include "editor_map.hxx"
 %include "workspace.hxx"

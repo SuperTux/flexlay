@@ -21,8 +21,6 @@ from flexlay import *
 from sexpr   import *
 import time
 
-supertux_datadir = "/home/ingo/cvs/supertux/supertux/data/"
-
 def load_game_tiles(tileset, filename):
     "Load game tiles from filename into tileset"
     tree = sexpr_read_from_file(filename)
@@ -69,13 +67,13 @@ class SuperTuxLevel:
         self.width  = get_value_from_tree(["width", "_"], data, 20)
         self.height = get_value_from_tree(["height""_"], data, 15)
 
-        self.foreground  = TilemapLayer(tileset, self.width, self.height)
+        self.foreground  = TilemapLayer(supertux_tileset, self.width, self.height)
         self.foreground.set_data(get_value_from_tree(["foreground-tm"], data, []))
 
-        self.interactive = TilemapLayer(tileset, self.width, self.height)
+        self.interactive = TilemapLayer(supertux_tileset, self.width, self.height)
         self.interactive.set_data(get_value_from_tree(["interactive-tm"], data, []))
 
-        self.background  = TilemapLayer(tileset, self.width, self.height)
+        self.background  = TilemapLayer(supertux_tileset, self.width, self.height)
         self.background.set_data(get_value_from_tree(["background-tm"], data, []))
 
         self.objects = ObjectLayer()
@@ -91,7 +89,7 @@ class SuperTuxLevel:
 
     def activate(self, workspace):
         #editor_tilemap_set_current(self.interactive.to_layer())
-        workspace.set_current_map(self.editormap)
+        workspace.set_map(self.editormap)
 
 class SuperTuxGUI:
     quit_button = None
@@ -138,6 +136,9 @@ def main_loop():
     gui.run()
     
     flexlay.deinit()
+
+supertux_datadir = "/home/ingo/cvs/supertux/supertux/data/"
+supertux_tileset = load_supertux_tiles()
     
 ### End: 'Main Loop'
 

@@ -33,7 +33,7 @@ private:
   Tools tools;
 
   TileMapTool* tool;
-
+  CL_Signal_v0 on_tool_change;
 public:
   ToolManager();
   ~ToolManager();
@@ -43,6 +43,7 @@ public:
   TileMapTool* get_tool_by_name(int i);
   TileMapTool* current_tool() { return tool; }
 
+  CL_Signal_v0& sig_tool_change();
 };
 
 #endif

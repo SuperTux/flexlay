@@ -32,17 +32,6 @@ Layer::Layer(const Layer& copy)
   std::cout << "Layer(copy: " << impl.get() << ")" << std::endl;
 }
 
-Layer&
-Layer::operator=(const Layer& copy)
-{
-  if (this != &copy)
-    {
-      std::cout << "Layer:operator=: old: " << impl.get() << " new: " << copy.impl.get() << std::endl;
-      impl = copy.impl;
-    }
-  return *this;
-}
-
 Layer::Layer(SharedPtr<LayerImpl> i)
   : impl(i)
 {
@@ -57,19 +46,26 @@ Layer::~Layer()
 void
 Layer::draw(EditorMapComponent* parent) 
 { 
-  impl->draw(parent); 
+  if (impl.get())
+    impl->draw(parent);    
 }
   
 bool
 Layer::has_bounding_rect() const 
 {
-  return impl->has_bounding_rect(); 
+  if (impl.get())
+    return impl->has_bounding_rect(); 
+  else
+    return false;
 } 
 
 CL_Rect
 Layer::get_bounding_rect() 
 { 
-  return impl->get_bounding_rect();
+  if (impl.get())
+    return impl->get_bounding_rect();
+  else
+    return CL_Rect();
 }
 
 /* EOF */

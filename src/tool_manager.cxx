@@ -48,7 +48,13 @@ void
 ToolManager::set_tool(int i)
 {
   if (i >= 0 && i < int(tools.size()))
-    tool = tools[i];
+    {
+      if (tool != tools[i])
+        {
+          on_tool_change();
+          tool = tools[i];
+        }
+    }
   else
     {
       std::cout << "Only have " << tools.size() << " tools, tool " << i << " can't be selected." << std::endl;
@@ -62,6 +68,12 @@ ToolManager::get_tool_by_name(int i)
     return tools[i];
   else
     return 0;  
+}
+
+CL_Signal_v0&
+ToolManager::sig_tool_change()
+{
+  return on_tool_change;
 }
 
 /* EOF */

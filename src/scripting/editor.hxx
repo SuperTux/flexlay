@@ -57,6 +57,7 @@ void object_selector_add_brush(CL_Component* comp, const char* name, SCM brush);
 int  editor_objectmap_add_object(const char* name, int x, int y, SCM userdata);
 SCM  editor_objectmap_get_objects();
 SCM  editor_objectmap_get_object(int id);
+void objmap_sprite_object_flip(int id);
 
 void objectmap_tool_set_popupmenu_callback(SCM callback);
 CL_Component*  current_popup_menu();

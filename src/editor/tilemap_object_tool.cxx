@@ -49,7 +49,7 @@ TileMapObjectTool::draw()
   if (obj)
     {
       obj->draw();
-      CL_Display::draw_rect(obj->get_bound_rect(), CL_Color(0, 2550, 0));
+      CL_Display::draw_rect(obj->get_bound_rect(), CL_Color(255, 255, 0));
     }
 
   for (Selection::iterator i = selection.begin(); i != selection.end(); ++i)

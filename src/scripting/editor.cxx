@@ -35,6 +35,7 @@
 #include "editor/tile_editor.hxx"
 #include "editor/tilemap_select_tool.hxx"
 #include "editor/objmap_object.hxx"
+#include "editor/objmap_sprite_object.hxx"
 #include "editor/tilemap_paint_tool.hxx"
 #include "editor/minimap.hxx"
 #include "editor/editor_names.hxx"
@@ -199,6 +200,14 @@ editor_objectmap_get_object(int id)
     return obj2scm(*obj);
   else
     return SCM_BOOL_F;
+}
+
+void
+objmap_sprite_object_flip(int id)
+{
+  ObjMapSpriteObject* obj = dynamic_cast<ObjMapSpriteObject*>(editor_get_objmap()->get_object(id));
+  if (obj)
+    obj->flip_horizontal();
 }
 
 void

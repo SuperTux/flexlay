@@ -32,6 +32,8 @@ private:
 public:
   ObjMapSpriteObject(int handle_, const CL_Point& pos_, const SCMObj& data_, const CL_Sprite& s);
 
+  void flip_horizontal();
+
   void draw();
   CL_Rect get_bound_rect() const;
 };

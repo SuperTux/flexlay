@@ -601,6 +601,10 @@
                         (lambda ()
                           (display (editor-objectmap-get-objects))
                           (newline)))
+     (gui-add-menu-item menu "Flip Screen"
+                        (lambda ()
+                          (for-each objmap-sprite-object-flip
+                                    (editor-objectmap-get-objects))))
      )
    (newline)))
 

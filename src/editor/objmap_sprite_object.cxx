@@ -49,4 +49,10 @@ ObjMapSpriteObject::get_bound_rect() const
                  CL_Size(sprite.get_width(), sprite.get_height()));
 }
 
+void
+ObjMapSpriteObject::flip_horizontal()
+{
+  sprite.set_scale(-1, 1);
+}
+
 /* EOF */

@@ -63,6 +63,8 @@ env.SharedLibrary(
     'python_functor.cxx',
     'python_object.cxx',
     'scripting/gui.cxx',
+    'sexpr_parser.cxx',
+    'lispreader.cxx',
     'tile.cxx',
     'tile_brush.cxx',
     'tile_editor.cxx',

@@ -101,7 +101,7 @@ public:
 
     Dab dab(p.x, p.y);
 
-    if (CL_Display::get_current_window()->get_ic()->get_mouse_count() >= 3)
+    if (CL_Display::get_current_window()->get_ic()->get_mouse_count() >= 4)
       {
         CL_InputDevice tablet = CL_Display::get_current_window()->get_ic()->get_mouse(3);
 

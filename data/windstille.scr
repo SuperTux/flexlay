@@ -1,286 +1,234 @@
 section powerup {
-	section flash {
-		frame1 = images/powerup/flash.png (type = surface);
-	}
-
-	section laser {
-		frame1 = images/powerup/laser.png (type = surface);
-	}
-
-	section powerup {
-		frame1 = images/powerup/powerup.png (type = surface);
-	}
-
-	section shild {
-		frame1 = images/powerup/shild.png (type = surface);
-	}
-
-	section spread {
-		frame1 = images/powerup/spread.png (type = surface);
-	}
+	flash   = (type=sprite, image1 = images/powerup/flash.png);
+	laser   = (type=sprite, image1 = images/powerup/laser.png);
+	powerup = (type=sprite,	image1 = images/powerup/powerup.png);
+	shild   = (type=sprite, image1 = images/powerup/shild.png);
+	spread  = (type=sprite, image1 = images/powerup/spread.png);
 }
 
-section bonusflyer {
-	frame1 = images/bonusflyer.png (type = surface);
-}
+bonusflyer = (type=sprite,
+	image1 = images/bonusflyer.png);
 
 section lights {
-	section light1 { frame1 = images/light1.png (type=surface); }
-	section light2 { frame1 = images/light2.png (type=surface); }
-	section light3 { frame1 = images/light3.png (type=surface); }
+	light1 = (type=sprite, image1 = images/light1.png);
+	light2 = (type=sprite, image1 = images/light2.png);
+	light3 = (type=sprite, image1 = images/light3.png);
 }
 
-section nebular { frame1 = images/nebular.png (type=surface); }
+nebular = (type=sprite, image1 = images/nebular.png);
 
-section dog {
-	defaultframedelay = 500 (type = integer);
+dog = (type=sprite,
+	play_speed = 500,
 
-	hotspotx = 24 (type = integer);
-	hotspoty = 42 (type = integer);
+	translation_hotspot = (top_left, 24, 42),
 
-	frame1 = images/dog/frame1.png (type = surface);
-	frame2 = images/dog/frame2.png (type = surface);
-	frame3 = images/dog/frame3.png (type = surface);
-	frame4 = images/dog/frame4.png (type = surface);
-}
+	image1 = images/dog/frame1.png,
+	image2 = images/dog/frame2.png,
+	image3 = images/dog/frame3.png,
+	image4 = images/dog/frame4.png);
 
 section turrican {
-	section jump {
-		hotspotx = 29 (type = integer);
-		hotspoty = 82 (type = integer);
+	jump = (type=sprite,
+		translation_hotspot = (top_left, 29, 82),
+		image1 = images/sprite_jump_east.png);
 
 //		frame1 = images/turrican_jump_east.png (type=surface);
-		frame1 = images/sprite_jump_east.png (type=surface);
-	}
 
-	section walk {
-		hotspotx = 29 (type = integer);
-		hotspoty = 85 (type = integer);
+	walk = (type=sprite,
+		translation_hotspot = (top_left, 29, 85),
+		image1 = images/turrican_jump_east.png);
 
-		frame1 = images/turrican_jump_east.png (type=surface);
-	}
+	shild = (type=sprite, 
+		play_speed = 50,
+		image1 = images/shild/frame1.png,
+		image2 = images/shild/frame2.png);
 
-	section shild {
-		defaultframedelay = 50 (type = integer);
+	sit = (type=sprite,
+		translation_hotspot = (top_left, 29, 90),
+		image1 = images/turrican_sit.png);
 
-		frame1 = images/shild/frame1.png (type=surface);
-		frame2 = images/shild/frame2.png (type=surface);
-	}
+	roll = (type=sprite,
+		translation_hotspot = (top_left, 29, 82),
 
+		image1 = images/turrican_roll/frame1.png,
+		image2 = images/turrican_roll/frame2.png,
+		image3 = images/turrican_roll/frame3.png,
+		image4 = images/turrican_roll/frame4.png);
 
-	section sit {
-		hotspotx = 29 (type = integer);
-		hotspoty = 90 (type = integer);
+	stand = (type=sprite,
+		translation_hotspot = (top_left, 29, 82),
+		image1 = images/turrican_stand_east.png);
+	
+	walk = (type=sprite,
+		translation_hotspot = (top_left, 32, 74),
 
-		frame1 = images/turrican_sit.png (type=surface);
-	}
+		image1 = images/turrican_walk/frame1.png,
+		image2 = images/turrican_walk/frame2.png,
+		image3 = images/turrican_walk/frame3.png,
+		image4 = images/turrican_walk/frame4.png,
+		image5 = images/turrican_walk/frame5.png,
+		image6 = images/turrican_walk/frame6.png,
+		image7 = images/turrican_walk/frame7.png,
+		image8 = images/turrican_walk/frame8.png,
+		image9 = images/turrican_walk/frame9.png,
+		image10 = images/turrican_walk/frame10.png,
+		image11 = images/turrican_walk/frame11.png,
+		image12 = images/turrican_walk/frame12.png,
+		image13 = images/turrican_walk/frame13.png,
+		image14 = images/turrican_walk/frame14.png);
 
-	section roll {
-		hotspotx = 29 (type = integer);
-		hotspoty = 82 (type = integer);
+	surround = (type=sprite,
+		translation_hotspot = (top_left, 39, 86),
 
-		frame1 = images/turrican_roll/frame1.png (type=surface);
-		frame2 = images/turrican_roll/frame2.png (type=surface);
-		frame3 = images/turrican_roll/frame3.png (type=surface);
-		frame4 = images/turrican_roll/frame4.png (type=surface);
-	}
+		image1 = images/turrican_surround/frame1.png,
+		image2 = images/turrican_surround/frame2.png,
+		image3 = images/turrican_surround/frame3.png,
+		image4 = images/turrican_surround/frame4.png,
+		image5 = images/turrican_surround/frame5.png,
+		image6 = images/turrican_surround/frame6.png,
+		image7 = images/turrican_surround/frame7.png,
+		image8 = images/turrican_surround/frame8.png,
+		image9 = images/turrican_surround/frame9.png,
 
-	section stand {
-		hotspotx = 29 (type = integer);
-		hotspoty = 82 (type = integer);
+		image10 = images/turrican_surround/frame10.png,
+		image11 = images/turrican_surround/frame11.png,
+		image12 = images/turrican_surround/frame12.png,
+		image13 = images/turrican_surround/frame13.png,
+		image14 = images/turrican_surround/frame14.png,
+		image15 = images/turrican_surround/frame15.png,
+		image16 = images/turrican_surround/frame16.png,
+		image17 = images/turrican_surround/frame17.png,
+		image18 = images/turrican_surround/frame18.png,
+		image19 = images/turrican_surround/frame19.png,
 
-		frame1 = images/turrican_stand_east.png (type=surface);
-	}
+		image20 = images/turrican_surround/frame20.png,
+		image21 = images/turrican_surround/frame21.png,
+		image22 = images/turrican_surround/frame22.png,
+		image23 = images/turrican_surround/frame23.png,
+		image24 = images/turrican_surround/frame24.png,
+		image25 = images/turrican_surround/frame25.png,
+		image26 = images/turrican_surround/frame26.png,
+		image27 = images/turrican_surround/frame27.png,
+		image28 = images/turrican_surround/frame28.png,
+		image29 = images/turrican_surround/frame29.png,
 
-	section walk {
-		hotspotx = 32 (type = integer);
-		hotspoty = 74 (type = integer);
-
-		frame1 = images/turrican_walk/frame1.png  (type=surface);
-		frame2 = images/turrican_walk/frame2.png  (type=surface);
-		frame3 = images/turrican_walk/frame3.png  (type=surface);
-		frame4 = images/turrican_walk/frame4.png  (type=surface);
-		frame5 = images/turrican_walk/frame5.png  (type=surface);
-		frame6 = images/turrican_walk/frame6.png  (type=surface);
-		frame7 = images/turrican_walk/frame7.png  (type=surface);
-		frame8 = images/turrican_walk/frame8.png  (type=surface);
-		frame9 = images/turrican_walk/frame9.png  (type=surface);
-		frame10 = images/turrican_walk/frame10.png  (type=surface);
-		frame11 = images/turrican_walk/frame11.png  (type=surface);
-		frame12 = images/turrican_walk/frame12.png  (type=surface);
-		frame13 = images/turrican_walk/frame13.png  (type=surface);
-		frame14 = images/turrican_walk/frame14.png  (type=surface);
-	}
-
-	section surround {
-		hotspotx = 39 (type = integer);
-		hotspoty = 86 (type = integer);
-
-		frame1 = images/turrican_surround/frame1.png (type=surface);
-		frame2 = images/turrican_surround/frame2.png (type=surface);
-		frame3 = images/turrican_surround/frame3.png (type=surface);
-		frame4 = images/turrican_surround/frame4.png (type=surface);
-		frame5 = images/turrican_surround/frame5.png (type=surface);
-		frame6 = images/turrican_surround/frame6.png (type=surface);
-		frame7 = images/turrican_surround/frame7.png (type=surface);
-		frame8 = images/turrican_surround/frame8.png (type=surface);
-		frame9 = images/turrican_surround/frame9.png (type=surface);
-
-		frame10 = images/turrican_surround/frame10.png (type=surface);
-		frame11 = images/turrican_surround/frame11.png (type=surface);
-		frame12 = images/turrican_surround/frame12.png (type=surface);
-		frame13 = images/turrican_surround/frame13.png (type=surface);
-		frame14 = images/turrican_surround/frame14.png (type=surface);
-		frame15 = images/turrican_surround/frame15.png (type=surface);
-		frame16 = images/turrican_surround/frame16.png (type=surface);
-		frame17 = images/turrican_surround/frame17.png (type=surface);
-		frame18 = images/turrican_surround/frame18.png (type=surface);
-		frame19 = images/turrican_surround/frame19.png (type=surface);
-
-		frame20 = images/turrican_surround/frame20.png (type=surface);
-		frame21 = images/turrican_surround/frame21.png (type=surface);
-		frame22 = images/turrican_surround/frame22.png (type=surface);
-		frame23 = images/turrican_surround/frame23.png (type=surface);
-		frame24 = images/turrican_surround/frame24.png (type=surface);
-		frame25 = images/turrican_surround/frame25.png (type=surface);
-		frame26 = images/turrican_surround/frame26.png (type=surface);
-		frame27 = images/turrican_surround/frame27.png (type=surface);
-		frame28 = images/turrican_surround/frame28.png (type=surface);
-		frame29 = images/turrican_surround/frame29.png (type=surface);
-
-		frame30 = images/turrican_surround/frame30.png (type=surface);
-	}
+		image30 = images/turrican_surround/frame30.png);
 }
 
 section shoot {
-	section explosion {
-		loop = false (type = boolean);
+	explosion = (
+		type=sprite,
+		image1 = images/shoot/explosion/frame1.png,
+		image2 = images/shoot/explosion/frame2.png,
+		image3 = images/shoot/explosion/frame3.png,
+		image4 = images/shoot/explosion/frame4.png,
+		image5 = images/shoot/explosion/frame5.png,
+		image6 = images/shoot/explosion/frame6.png,
+		image7 = images/shoot/explosion/frame7.png
+	);
 
-		frame1 = images/shoot/explosion/frame1.png (type=surface);
-		frame2 = images/shoot/explosion/frame2.png (type=surface);
-		frame3 = images/shoot/explosion/frame3.png (type=surface);
-		frame4 = images/shoot/explosion/frame4.png (type=surface);
-		frame5 = images/shoot/explosion/frame5.png (type=surface);
-		frame6 = images/shoot/explosion/frame6.png (type=surface);
-		frame7 = images/shoot/explosion/frame7.png (type=surface);
-	}
-
-	section	default {
-		frame1 = images/shoot_default.png (type=surface);
-	}
-
+	default = (type=sprite,
+		   image1 = images/shoot_default.png);
+	
 	section laser {
-		section	stage1 {
-			frame1 = images/shoot/laser/stage1.png (type=surface);
-		}
-		section	stage2 {
-			frame1 = images/shoot/laser/stage2.png (type=surface);
-		}
-		section	stage3 {
-			frame1 = images/shoot/laser/stage3.png (type=surface);
-		}
-		section	stage4 {
-			frame1 = images/shoot/laser/stage4.png (type=surface);
-		}
-		section	stage5 {
-			frame1 = images/shoot/laser/stage5.png (type=surface);
-		}
-	}	
-
-	section bounce {
-		frame1 = images/shoot/bounce/stage2.png (type = surface);
+		stage1 = (type=sprite,image1 = images/shoot/laser/stage1.png);
+		stage2 = (type=sprite, image1 = images/shoot/laser/stage2.png);
+		stage3 = (type=sprite, image1 = images/shoot/laser/stage3.png);
+		stage4 = (type=sprite, image1 = images/shoot/laser/stage4.png);
+		stage5 = (type=sprite, image1 = images/shoot/laser/stage5.png);
 	}
+
+	bounce = (type=sprite, image1=images/shoot/bounce/stage2.png);
 }
 
 
 // for i in images/tiles/level1/*.png;
 // do     j=${i##images/tiles/level1/};
-// echo "section ${j%%.png} { frame1 = $i (type=surface); }"; 
+// echo "section ${j%%.png} { image1 = $i);"; 
 //done > /tmp/tiles
 
 section tiles {
-section green1 { frame1 = images/tiles/level1/green1.png (type=surface); }
-section tile1 { frame1 = images/tiles/level1/tile1.png (type=surface); }
-section tile10 { frame1 = images/tiles/level1/tile10.png (type=surface); }
-section tile11 { frame1 = images/tiles/level1/tile11.png (type=surface); }
-section tile12 { frame1 = images/tiles/level1/tile12.png (type=surface); }
-section tile13 { frame1 = images/tiles/level1/tile13.png (type=surface); }
-section tile14 { frame1 = images/tiles/level1/tile14.png (type=surface); }
-section tile15 { frame1 = images/tiles/level1/tile15.png (type=surface); }
-section tile16 { frame1 = images/tiles/level1/tile16.png (type=surface); }
-section tile17 { frame1 = images/tiles/level1/tile17.png (type=surface); }
-section tile18 { frame1 = images/tiles/level1/tile18.png (type=surface); }
-section tile19 { frame1 = images/tiles/level1/tile19.png (type=surface); }
-section tile2 { frame1 = images/tiles/level1/tile2.png (type=surface); }
-section tile20 { frame1 = images/tiles/level1/tile20.png (type=surface); }
-section tile21 { frame1 = images/tiles/level1/tile21.png (type=surface); }
-section tile22 { frame1 = images/tiles/level1/tile22.png (type=surface); }
-section tile23 { frame1 = images/tiles/level1/tile23.png (type=surface); }
-section tile24 { frame1 = images/tiles/level1/tile24.png (type=surface); }
-section tile25 { frame1 = images/tiles/level1/tile25.png (type=surface); }
-section tile26 { frame1 = images/tiles/level1/tile26.png (type=surface); }
-section tile27 { frame1 = images/tiles/level1/tile27.png (type=surface); }
-section tile29 { frame1 = images/tiles/level1/tile29.png (type=surface); }
-section tile3 { frame1 = images/tiles/level1/tile3.png (type=surface); }
-section tile30 { frame1 = images/tiles/level1/tile30.png (type=surface); }
-section tile31 { frame1 = images/tiles/level1/tile31.png (type=surface); }
-section tile32 { frame1 = images/tiles/level1/tile32.png (type=surface); }
-section tile33 { frame1 = images/tiles/level1/tile33.png (type=surface); }
-section tile34 { frame1 = images/tiles/level1/tile34.png (type=surface); }
-section tile35 { frame1 = images/tiles/level1/tile35.png (type=surface); }
-section tile36 { frame1 = images/tiles/level1/tile36.png (type=surface); }
-section tile38 { frame1 = images/tiles/level1/tile38.png (type=surface); }
-section tile39 { frame1 = images/tiles/level1/tile39.png (type=surface); }
-section tile4 { frame1 = images/tiles/level1/tile4.png (type=surface); }
-section tile40 { frame1 = images/tiles/level1/tile40.png (type=surface); }
-section tile41 { frame1 = images/tiles/level1/tile41.png (type=surface); }
-section tile42 { frame1 = images/tiles/level1/tile42.png (type=surface); }
-section tile43 { frame1 = images/tiles/level1/tile43.png (type=surface); }
-section tile44 { frame1 = images/tiles/level1/tile44.png (type=surface); }
-section tile45 { frame1 = images/tiles/level1/tile45.png (type=surface); }
-section tile46 { frame1 = images/tiles/level1/tile46.png (type=surface); }
-section tile47 { frame1 = images/tiles/level1/tile47.png (type=surface); }
-section tile48 { frame1 = images/tiles/level1/tile48.png (type=surface); }
-section tile49 { frame1 = images/tiles/level1/tile49.png (type=surface); }
-section tile5 { frame1 = images/tiles/level1/tile5.png (type=surface); }
-section tile50 { frame1 = images/tiles/level1/tile50.png (type=surface); }
-section tile51 { frame1 = images/tiles/level1/tile51.png (type=surface); }
-section tile52 { frame1 = images/tiles/level1/tile52.png (type=surface); }
-section tile53 { frame1 = images/tiles/level1/tile53.png (type=surface); }
-section tile54 { frame1 = images/tiles/level1/tile54.png (type=surface); }
-section tile55 { frame1 = images/tiles/level1/tile55.png (type=surface); }
-section tile56 { frame1 = images/tiles/level1/tile56.png (type=surface); }
-section tile57 { frame1 = images/tiles/level1/tile57.png (type=surface); }
-section tile58 { frame1 = images/tiles/level1/tile58.png (type=surface); }
-section tile59 { frame1 = images/tiles/level1/tile59.png (type=surface); }
-section tile6 { frame1 = images/tiles/level1/tile6.png (type=surface); }
-section tile60 { frame1 = images/tiles/level1/tile60.png (type=surface); }
-section tile61 { frame1 = images/tiles/level1/tile61.png (type=surface); }
-section tile62 { frame1 = images/tiles/level1/tile62.png (type=surface); }
-section tile63 { frame1 = images/tiles/level1/tile63.png (type=surface); }
-section tile64 { frame1 = images/tiles/level1/tile64.png (type=surface); }
-section tile65 { frame1 = images/tiles/level1/tile65.png (type=surface); }
-section tile66 { frame1 = images/tiles/level1/tile66.png (type=surface); }
-section tile67 { frame1 = images/tiles/level1/tile67.png (type=surface); }
-section tile68 { frame1 = images/tiles/level1/tile68.png (type=surface); }
-section tile69 { frame1 = images/tiles/level1/tile69.png (type=surface); }
-section tile7 { frame1 = images/tiles/level1/tile7.png (type=surface); }
-section tile71 { frame1 = images/tiles/level1/tile71.png (type=surface); }
-section tile72 { frame1 = images/tiles/level1/tile72.png (type=surface); }
-section tile73 { frame1 = images/tiles/level1/tile73.png (type=surface); }
-section tile75 { frame1 = images/tiles/level1/tile75.png (type=surface); }
-section tile76 { frame1 = images/tiles/level1/tile76.png (type=surface); }
-section tile77 { frame1 = images/tiles/level1/tile77.png (type=surface); }
-section tile8 { frame1 = images/tiles/level1/tile8.png (type=surface); }
-section tile9 { frame1 = images/tiles/level1/tile9.png (type=surface); }
-section water1 { frame1 = images/tiles/level1/water1.png (type=surface); }
-section water2 { frame1 = images/tiles/level1/water2.png (type=surface); }
-section water3 { frame1 = images/tiles/level1/water3.png (type=surface); }
-section water4 { frame1 = images/tiles/level1/water4.png (type=surface); }
-section waterfall { frame1 = images/tiles/level1/waterfall.png (type=surface); }
-section waterfall2 { frame1 = images/tiles/level1/waterfall2.png (type=surface); }
-section waterfall3 { frame1 = images/tiles/level1/waterfall3.png (type=surface); }
-
+green1 = (type=sprite, image1 = images/tiles/level1/green1.png);
+tile1 = (type=sprite, image1 = images/tiles/level1/tile1.png);
+tile10 = (type=sprite, image1 = images/tiles/level1/tile10.png);
+tile11 = (type=sprite, image1 = images/tiles/level1/tile11.png);
+tile12 = (type=sprite, image1 = images/tiles/level1/tile12.png);
+tile13 = (type=sprite, image1 = images/tiles/level1/tile13.png);
+tile14 = (type=sprite, image1 = images/tiles/level1/tile14.png);
+tile15 = (type=sprite, image1 = images/tiles/level1/tile15.png);
+tile16 = (type=sprite, image1 = images/tiles/level1/tile16.png);
+tile17 = (type=sprite, image1 = images/tiles/level1/tile17.png);
+tile18 = (type=sprite, image1 = images/tiles/level1/tile18.png);
+tile19 = (type=sprite, image1 = images/tiles/level1/tile19.png);
+tile2 = (type=sprite, image1 = images/tiles/level1/tile2.png);
+tile20 = (type=sprite, image1 = images/tiles/level1/tile20.png);
+tile21 = (type=sprite, image1 = images/tiles/level1/tile21.png);
+tile22 = (type=sprite, image1 = images/tiles/level1/tile22.png);
+tile23 = (type=sprite, image1 = images/tiles/level1/tile23.png);
+tile24 = (type=sprite, image1 = images/tiles/level1/tile24.png);
+tile25 = (type=sprite, image1 = images/tiles/level1/tile25.png);
+tile26 = (type=sprite, image1 = images/tiles/level1/tile26.png);
+tile27 = (type=sprite, image1 = images/tiles/level1/tile27.png);
+tile29 = (type=sprite, image1 = images/tiles/level1/tile29.png);
+tile3 = (type=sprite, image1 = images/tiles/level1/tile3.png);
+tile30 = (type=sprite, image1 = images/tiles/level1/tile30.png);
+tile31 = (type=sprite, image1 = images/tiles/level1/tile31.png);
+tile32 = (type=sprite, image1 = images/tiles/level1/tile32.png);
+tile33 = (type=sprite, image1 = images/tiles/level1/tile33.png);
+tile34 = (type=sprite, image1 = images/tiles/level1/tile34.png);
+tile35 = (type=sprite, image1 = images/tiles/level1/tile35.png);
+tile36 = (type=sprite, image1 = images/tiles/level1/tile36.png);
+tile38 = (type=sprite, image1 = images/tiles/level1/tile38.png);
+tile39 = (type=sprite, image1 = images/tiles/level1/tile39.png);
+tile4 = (type=sprite, image1 = images/tiles/level1/tile4.png);
+tile40 = (type=sprite, image1 = images/tiles/level1/tile40.png);
+tile41 = (type=sprite, image1 = images/tiles/level1/tile41.png);
+tile42 = (type=sprite, image1 = images/tiles/level1/tile42.png);
+tile43 = (type=sprite, image1 = images/tiles/level1/tile43.png);
+tile44 = (type=sprite, image1 = images/tiles/level1/tile44.png);
+tile45 = (type=sprite, image1 = images/tiles/level1/tile45.png);
+tile46 = (type=sprite, image1 = images/tiles/level1/tile46.png);
+tile47 = (type=sprite, image1 = images/tiles/level1/tile47.png);
+tile48 = (type=sprite, image1 = images/tiles/level1/tile48.png);
+tile49 = (type=sprite, image1 = images/tiles/level1/tile49.png);
+tile5 = (type=sprite, image1 = images/tiles/level1/tile5.png);
+tile50 = (type=sprite, image1 = images/tiles/level1/tile50.png);
+tile51 = (type=sprite, image1 = images/tiles/level1/tile51.png);
+tile52 = (type=sprite, image1 = images/tiles/level1/tile52.png);
+tile53 = (type=sprite, image1 = images/tiles/level1/tile53.png);
+tile54 = (type=sprite, image1 = images/tiles/level1/tile54.png);
+tile55 = (type=sprite, image1 = images/tiles/level1/tile55.png);
+tile56 = (type=sprite, image1 = images/tiles/level1/tile56.png);
+tile57 = (type=sprite, image1 = images/tiles/level1/tile57.png);
+tile58 = (type=sprite, image1 = images/tiles/level1/tile58.png);
+tile59 = (type=sprite, image1 = images/tiles/level1/tile59.png);
+tile6 = (type=sprite, image1 = images/tiles/level1/tile6.png);
+tile60 = (type=sprite, image1 = images/tiles/level1/tile60.png);
+tile61 = (type=sprite, image1 = images/tiles/level1/tile61.png);
+tile62 = (type=sprite, image1 = images/tiles/level1/tile62.png);
+tile63 = (type=sprite, image1 = images/tiles/level1/tile63.png);
+tile64 = (type=sprite, image1 = images/tiles/level1/tile64.png);
+tile65 = (type=sprite, image1 = images/tiles/level1/tile65.png);
+tile66 = (type=sprite, image1 = images/tiles/level1/tile66.png);
+tile67 = (type=sprite, image1 = images/tiles/level1/tile67.png);
+tile68 = (type=sprite, image1 = images/tiles/level1/tile68.png);
+tile69 = (type=sprite, image1 = images/tiles/level1/tile69.png);
+tile7 = (type=sprite, image1 = images/tiles/level1/tile7.png);
+tile71 = (type=sprite, image1 = images/tiles/level1/tile71.png);
+tile72 = (type=sprite, image1 = images/tiles/level1/tile72.png);
+tile73 = (type=sprite, image1 = images/tiles/level1/tile73.png);
+tile75 = (type=sprite, image1 = images/tiles/level1/tile75.png);
+tile76 = (type=sprite, image1 = images/tiles/level1/tile76.png);
+tile77 = (type=sprite, image1 = images/tiles/level1/tile77.png);
+tile8 = (type=sprite, image1 = images/tiles/level1/tile8.png);
+tile9 = (type=sprite, image1 = images/tiles/level1/tile9.png);
+water1 = (type=sprite, image1 = images/tiles/level1/water1.png);
+water2 = (type=sprite, image1 = images/tiles/level1/water2.png);
+water3 = (type=sprite, image1 = images/tiles/level1/water3.png);
+water4 = (type=sprite, image1 = images/tiles/level1/water4.png);
+waterfall = (type=sprite, image1 = images/tiles/level1/waterfall.png);
+waterfall2 = (type=sprite, image1 = images/tiles/level1/waterfall2.png);
+waterfall3 = (type=sprite, image1 = images/tiles/level1/waterfall3.png);
 }
 
 // EOF //

@@ -26,17 +26,8 @@
 
 class EditorTile
 {
-private:
-  // FIXME: Make EditorTile a internal part of EditorTileMap
-  Tile* tile;
-  int id;
 public:
-  EditorTile (int id);
-  EditorTile ();
-
-  void set_tile (int id);
-  void draw (int x, int y, float alpha);
-  int  get_id () const { return id; } 
+  static void draw (int id, int x, int y, float alpha);
 };
 
 #endif

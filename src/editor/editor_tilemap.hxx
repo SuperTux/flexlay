@@ -23,7 +23,6 @@
 #include <ClanLib/gui.h>
 #include "../field.hxx"
 #include "editor_map_layer.hxx"
-#include "editor_tile.hxx"
 
 class TileBrush;
 
@@ -32,39 +31,44 @@ class TileBrush;
 class EditorTileMap : public EditorMapLayer
 {
 private:
-  typedef std::vector<Field<EditorTile*>*> Fields;
-  typedef Field<EditorTile*>::iterator FieldIter;
+  typedef std::vector<Field<int>*> Fields;
+  typedef Field<int>::iterator FieldIter;
 
   Fields fields;
-  Field<EditorTile*>* current_field;
+  Field<int>* current_field;
 
   bool scrolling;
 
   Field<int>* diamond_map;
 
   void cleanup();
+
 public:
   EditorTileMap();
   ~EditorTileMap();
 
   void draw ();
-  void draw_map(Field<EditorTile*>* field);
+  void draw_map(Field<int>* field);
 
   void update(float delta) {}
 
   /** Return the current active field */
-  Field<EditorTile*>* get_field() { return current_field; }
+  Field<int>* get_field() { return current_field; }
   Field<int>*         get_diamond_map() { return diamond_map; }
 
-  EditorTile* get_tile (int, int);
+  int  get_tile (int, int);
   void set_active_layer(int i);
 
   void load (const std::string& filename);
   void new_level(int w, int h);
 
-  void resize(int w, int h);
+  /** @param x position of the old map in the new resized one
+      @param y position of the old map in the new resized one
+      @param w height of the new map
+      @param h height of the new map */
+  void resize(int x, int y, int w, int h);
 
-  Field<EditorTile*>* get_map(int i);
+  Field<int>* get_map(int i);
 
   /** Draw the gives brush to the map */
   void draw_tile(const TileBrush& brush, const CL_Point& pos);

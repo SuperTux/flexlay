@@ -18,10 +18,14 @@
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include <iostream>
+#include <ClanLib/Display/mouse.h>
+#include <ClanLib/Display/keys.h>
+#include <ClanLib/Display/display.h>
 #include "globals.hxx"
 #include "editor_tilemap.hxx"
 #include "tile_factory.hxx"
 #include "editor_map.hxx"
+#include "../tile.hxx"
 #include "tilemap_paint_tool.hxx"
 
 TileMapPaintTool* TileMapPaintTool::current_ = 0; 
@@ -44,42 +48,25 @@ TileMapPaintTool::draw()
 {
   CL_Point pos = parent->screen2tile(CL_Point(CL_Mouse::get_x(), CL_Mouse::get_y()));
 
-  if (0)
-    {
-      Tile* tile = TileFactory::current()->create(tilemap->brush_tile);
-
-      if (tile)
-        {
-          CL_Sprite sprite = tile->sur;
-          sprite.set_alpha(0.5f);
-          sprite.draw(pos.x * TILE_SIZE, pos.y * TILE_SIZE);
-        }
-
-      CL_Display::fill_rect (CL_Rect(CL_Point(pos.x * TILE_SIZE, pos.y * TILE_SIZE),
-                                     CL_Size(TILE_SIZE, TILE_SIZE)),
-                             CL_Color(255, 255, 255, 100));
-    }
-  else 
-    {
-      for(int y = 0; y < brush.get_height(); ++y)
-        for(int x = 0; x < brush.get_width(); ++x)
+  // FIXME: Move ths to editor tile
+  for(int y = 0; y < brush.get_height(); ++y)
+    for(int x = 0; x < brush.get_width(); ++x)
+      {
+        Tile* tile = TileFactory::current()->create(brush(x, y));
+                
+        if (tile)
           {
-            Tile* tile = TileFactory::current()->create(brush(x, y));
-                
-            if (tile)
-              {
-                CL_Sprite sprite = tile->sur;
-                sprite.set_alpha(0.5f);
-                sprite.draw((pos.x + x) * TILE_SIZE, 
-                            (pos.y + y) * TILE_SIZE);
-              }
-                
-            CL_Display::fill_rect (CL_Rect(CL_Point((pos.x + x) * TILE_SIZE, 
-                                                    (pos.y + y) * TILE_SIZE),
-                                           CL_Size(TILE_SIZE, TILE_SIZE)),
-                                   CL_Color(255, 255, 255, 100));
+            CL_Sprite sprite = tile->sur;
+            sprite.set_alpha(0.5f);
+            sprite.draw((pos.x + x) * TILE_SIZE, 
+                        (pos.y + y) * TILE_SIZE);
           }
-    }
+                
+        CL_Display::fill_rect (CL_Rect(CL_Point((pos.x + x) * TILE_SIZE, 
+                                                (pos.y + y) * TILE_SIZE),
+                                       CL_Size(TILE_SIZE, TILE_SIZE)),
+                               CL_Color(255, 255, 255, 100));
+      }
 }
 
 void
@@ -96,7 +83,8 @@ TileMapPaintTool::on_mouse_down(const CL_InputEvent& event)
     }
   else if (event.id == CL_MOUSE_RIGHT)
     {
-      tilemap->brush_tile = tilemap->get_field()->at(pos.x, pos.y)->get_id();
+      // FIXME: insert selection code here
+      //tilemap->brush_tile = tilemap->get_field()->at(pos.x, pos.y)->get_id();
     }
 }
  

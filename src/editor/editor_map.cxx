@@ -19,6 +19,7 @@
 
 #include <iostream>
 #include <ClanLib/Display/display.h>
+#include <ClanLib/Display/keys.h>
 #include "../windstille_level.hxx"
 #include "../globals.hxx"
 #include "../tile_factory.hxx"

@@ -27,6 +27,7 @@
 #include "editor.hxx"
 #include "editor_map.hxx"
 #include "tile_brush.hxx"
+#include "editor_tile.hxx"
 #include "editor_tilemap.hxx"
 
 EditorTileMap::EditorTileMap()
@@ -52,20 +53,20 @@ EditorTileMap::new_level(int w, int h)
 
   diamond_map = new Field<int>(w*2, h*2);
 
-  current_field = new Field<EditorTile*> (w, h);
+  current_field = new Field<int>(w, h);
   for (int y = 0; y < current_field->get_height (); ++y) {
     for (int x = 0; x < current_field->get_width (); ++x)
       {
-	current_field->at(x, y) = new EditorTile (0);
+	current_field->at(x, y) = 0;
       }
   }
   fields.push_back(current_field);
 
-  current_field = new Field<EditorTile*> (w, h);
+  current_field = new Field<int> (w, h);
   for (int y = 0; y < current_field->get_height (); ++y) {
     for (int x = 0; x < current_field->get_width (); ++x)
       {
-	current_field->at(x, y) = new EditorTile (0);
+	current_field->at(x, y) = 0;
       }
   }
   fields.push_back(current_field);
@@ -73,7 +74,7 @@ EditorTileMap::new_level(int w, int h)
 
   
 void
-EditorTileMap::draw_map(Field<EditorTile*>* field)
+EditorTileMap::draw_map(Field<int>* field)
 {
   float alpha;
   if (field == current_field)
@@ -89,12 +90,10 @@ EditorTileMap::draw_map(Field<EditorTile*>* field)
   int end_y   = std::min(field->get_height(), rect.bottom/TILE_SIZE + 1);
 
   for (int y = start_y; y < end_y; ++y)
-    {
-      for (int x = start_x; x < end_x; ++x)
-	{
-	  field->at(x, y)->draw(x * TILE_SIZE, y * TILE_SIZE, alpha);
-	}
-    }
+    for (int x = start_x; x < end_x; ++x)
+      {
+        EditorTile::draw(field->at(x, y), x * TILE_SIZE, y * TILE_SIZE, alpha);
+      }
 }
 
 void
@@ -145,8 +144,8 @@ EditorTileMap::load(const std::string& filename)
 
   WindstilleLevel data (filename);
 
-  current_field = new Field<EditorTile*>(data.get_background_tilemap()->get_width(),
-                                         data.get_background_tilemap()->get_height());
+  current_field = new Field<int>(data.get_background_tilemap()->get_width(),
+                                 data.get_background_tilemap()->get_height());
 
   fields.push_back(current_field);
 
@@ -154,32 +153,30 @@ EditorTileMap::load(const std::string& filename)
     {
       for (int x = 0; x < current_field->get_width (); ++x)
         {
-          int name = data.get_background_tilemap()->at(x, y);
-          current_field->at (x, y) = new EditorTile (name);
+          current_field->at (x, y) = data.get_background_tilemap()->at(x, y);
         }
     }
 
-  current_field = new Field<EditorTile*>(data.get_tilemap()->get_width (),
-                                         data.get_tilemap()->get_height ());
+  current_field = new Field<int>(data.get_tilemap()->get_width (),
+                                 data.get_tilemap()->get_height ());
   fields.push_back(current_field);
 
   for (int y = 0; y < current_field->get_height (); ++y) {
     for (int x = 0; x < current_field->get_width (); ++x)
       {
-	int name = data.get_tilemap()->at(x, y);
-	current_field->at (x, y) = new EditorTile (name);
+	current_field->at (x, y) = data.get_tilemap()->at(x, y);
       }
   }
 
   diamond_map = new Field<int>(*data.get_diamond_map());
 }
 
-EditorTile*
+int
 EditorTileMap::get_tile (int x, int y)
 {
   if (x >= 0 && x < (int)current_field->get_width () &&
       y >= 0 && y < (int)current_field->get_height ())
-    return current_field->at (x, y);
+    return current_field->at(x, y);
   else
     return 0;
 }
@@ -191,7 +188,7 @@ EditorTileMap::set_active_layer(int i)
     current_field = fields[i];
 }
 
-Field<EditorTile*>* 
+Field<int>* 
 EditorTileMap::get_map(int i)
 {
   if (i >= 0 && i < int(fields.size()))
@@ -201,7 +198,7 @@ EditorTileMap::get_map(int i)
 }
 
 void
-EditorTileMap::resize(int w, int h)
+EditorTileMap::resize(int x, int y, int w, int h)
 {
   
 }
@@ -212,7 +209,7 @@ EditorTileMap::draw_tile(int id, const CL_Point& pos)
   if (pos.x >= 0 && pos.x < current_field->get_width()
       && pos.y >= 0 && pos.y < current_field->get_height())
     {
-      current_field->at(pos.x, pos.y)->set_tile(id);
+      current_field->at(pos.x, pos.y) = id;
     }
 }
 
@@ -229,7 +226,9 @@ EditorTileMap::draw_tile(const TileBrush& brush, const CL_Point& pos)
     for (int x = start_x; x < end_x; ++x)
       {
         if (brush.is_opaque() || brush.at(x, y) != 0)
-          current_field->at(pos.x + x, pos.y + y)->set_tile(brush.at(x, y));
+          {
+            current_field->at(pos.x + x, pos.y + y) = brush.at(x, y);
+          }
       }
 }
 

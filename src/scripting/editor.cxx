@@ -18,6 +18,7 @@
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include <ClanLib/gui.h>
+#include <ClanLib/Display/display.h>
 #include <iostream>
 #include "../scm_functor.hxx"
 #include "../globals.hxx"
@@ -30,6 +31,7 @@
 #include "editor/tilemap_select_tool.hxx"
 #include "editor/tilemap_paint_tool.hxx"
 #include "tile_factory.hxx"
+#include "tile.hxx"
 #include "gui_manager.hxx"
 #include "editor.hxx"
 
@@ -129,7 +131,9 @@ editor_get_tile_selection()
 int
 editor_get_brush_tile()
 {
-  return editor_get_tilemap()->brush_tile;
+  // FIXME: replace this with a tile selector widget in the tile editor
+  //return editor_get_tilemap()->brush_tile;
+  return 0;
 }
 
 void 
@@ -144,7 +148,7 @@ editor_tilemap_draw_brush(int pos_x, int pos_y, SCM brush)
 
   assert(brush_width*brush_height == static_cast<int>(gh_vector_length(brush_data)));
 
-  Field<EditorTile*>* field = tilemap->get_field();
+  Field<int>* field = tilemap->get_field();
 
   int start_x = std::max(0, -pos_x);
   int start_y = std::max(0, -pos_y);
@@ -155,8 +159,8 @@ editor_tilemap_draw_brush(int pos_x, int pos_y, SCM brush)
   for (int y = start_y; y < end_y; ++y)
     for (int x = start_x; x < end_x; ++x)
       {
-        field->at(pos_x + x, pos_y + y)
-          ->set_tile(gh_scm2int(scm_vector_ref(brush_data, SCM_MAKINUM(x + (y * brush_width)))));
+        field->at(pos_x + x, pos_y + y) 
+          = gh_scm2int(scm_vector_ref(brush_data, SCM_MAKINUM(x + (y * brush_width))));
       }
 }
 
@@ -210,16 +214,16 @@ SCM diamond_map_get_data()
 
 SCM map_get_data(int i)
 {
-  Field<EditorTile*>* field = editor_get_tilemap()->get_map(i);
+  Field<int>* field = editor_get_tilemap()->get_map(i);
   if (field)
     {
       std::cout << ": " << field->get_width() << "x" << field->get_height() 
                 << " " << field->size() << std::endl;
 
       SCM vec = SCM_EOL;
-      for (Field<EditorTile*>::iterator i = field->begin(); i != field->end(); ++i)
+      for (Field<int>::iterator i = field->begin(); i != field->end(); ++i)
         {
-          vec = gh_cons(gh_int2scm((*i)->get_id()), vec);
+          vec = gh_cons(gh_int2scm(*i), vec);
         }
       return gh_reverse(vec);
     }

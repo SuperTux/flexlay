@@ -18,6 +18,7 @@
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include <ClanLib/Display/display.h>
+#include <ClanLib/Display/keys.h>
 #include <ClanLib/Display/input_event.h>
 #include "globals.hxx"
 #include "editor_tilemap.hxx"
@@ -100,7 +101,7 @@ TileMapSelectTool::get_selection() const
     for(int x = selection.left; x < selection.right; ++x)
       {
         brush.at(x - selection.left, 
-                 y - selection.top) = tilemap->get_field()->at(x, y)->get_id();
+                 y - selection.top) = tilemap->get_field()->at(x, y);
       }
 
   return brush;

@@ -119,6 +119,12 @@ EditorMap::get_serial() const
   return impl->serial; 
 }
 
+int
+EditorMap::get_layer_count() const
+{
+  return static_cast<int>(impl->layers.size());
+}
+
 Layer
 EditorMap::get_layer(int i)
 {

@@ -18,10 +18,12 @@
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include <iostream>
+#include <ClanLib/Display/display.h>
 #include "layer_impl.hxx"
 #include "layer.hxx"
 
 Layer::Layer()
+  : impl(0)
 {
 }
 
@@ -38,7 +40,19 @@ void
 Layer::draw(EditorMapComponent* parent) 
 { 
   if (impl.get())
-    impl->draw(parent);    
+    {
+      if (impl->pos.x != 0 || impl->pos.y != 0)
+        {
+          CL_Display::push_modelview();
+          CL_Display::add_translate(impl->pos.x, impl->pos.y);
+          impl->draw(parent);    
+          CL_Display::pop_modelview();
+        }
+      else
+        {
+          impl->draw(parent);
+        }
+    }
 }
   
 bool
@@ -53,10 +67,18 @@ Layer::has_bounding_rect() const
 CL_Rect
 Layer::get_bounding_rect() 
 { 
+  CL_Rect rect;
+  
   if (impl.get())
-    return impl->get_bounding_rect();
-  else
-    return CL_Rect();
+    {
+      rect = impl->get_bounding_rect();
+      rect.left   += static_cast<int>(impl->pos.x);
+      rect.top    += static_cast<int>(impl->pos.y);
+      rect.right  += static_cast<int>(impl->pos.x);
+      rect.bottom += static_cast<int>(impl->pos.y);
+    }
+  
+  return rect;
 }
 
 MetaData
@@ -73,6 +95,24 @@ Layer::set_metadata(MetaData data_)
 {
   if (impl.get())
     impl->data = data_;
+}
+
+void
+Layer::set_pos(const CL_Pointf& pos)
+{
+  impl->pos = pos;
+}
+
+CL_Pointf
+Layer::get_pos() const
+{
+  return impl->pos;
+}
+
+bool
+Layer::is_null() const
+{
+  return impl.get() == 0;
 }
 
 /* EOF */

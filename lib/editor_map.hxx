@@ -51,6 +51,7 @@ public:
 
   int get_serial() const;
 
+  int get_layer_count() const;
   Layer get_layer(int i);
 
   void   set_metadata(const MetaData& obj);

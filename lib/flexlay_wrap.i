@@ -56,8 +56,10 @@ std::cout << "CL_Error: " << err.message << std::endl;
 #include "scrollbar.hxx"
 #include "graphic_context_state.hxx"
  
+#include "layer_move_tool.hxx"
 #include "sketch_stroke_tool.hxx"
 #include "sketch_layer.hxx"
+#include "bitmap_layer.hxx"
 #include "stroke.hxx"
 #include "stroke_drawer.hxx"
 #include "sprite_stroke_drawer.hxx"
@@ -169,8 +171,10 @@ VALUE CL_Point2Value(const CL_Point& arg)
 %include "menubar.hxx"
 %include "scrollbar.hxx"
 
+%include "layer_move_tool.hxx"
 %include "sketch_stroke_tool.hxx"
 %include "sketch_layer.hxx"
+%include "bitmap_layer.hxx"
 %include "stroke.hxx"
 %include "stroke_drawer.hxx"
 %include "sprite_stroke_drawer.hxx"
@@ -204,6 +208,5 @@ VALUE CL_Point2Value(const CL_Point& arg)
 %include "../ruby/ruby_sexpr_parser.hxx"
 
 #endif
-
 
 /* EOF */

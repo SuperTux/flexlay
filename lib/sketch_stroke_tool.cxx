@@ -27,7 +27,7 @@
 #include <ClanLib/Display/input_context.h>
 #include "editor_map_component.hxx"
 #include "tool.hxx"
-#include "sketch_layer.hxx"
+#include "bitmap_layer.hxx"
 #include "sketch_stroke_tool.hxx"
 #include "sprite_stroke_drawer.hxx"
 #include "stroke.hxx"
@@ -54,7 +54,12 @@ public:
   {
     if (drawing)
       {
+        // FIXME: This translation is a bit ugly, layer position should be handled somewhat different
+        CL_Display::push_modelview();
+        CL_Display::add_translate(BitmapLayer::current()->to_layer().get_pos().x,
+                                  BitmapLayer::current()->to_layer().get_pos().y);
         stroke.draw(0);
+        CL_Display::pop_modelview();
       }
     else
       {
@@ -80,7 +85,7 @@ public:
         
         add_dab(event);
 
-        SketchLayer::current()->add_stroke(stroke);
+        BitmapLayer::current()->add_stroke(stroke);
       }    
   }
 
@@ -100,9 +105,12 @@ public:
   {
     EditorMapComponent* parent = EditorMapComponent::current();
     CL_Pointf p = parent->screen2world(event.mouse_pos);    
+    
+    // FIXME: This is ugly, events relative to the layer should be handled somewhat differently
+    Dab dab(p.x - BitmapLayer::current()->to_layer().get_pos().x,
+            p.y - BitmapLayer::current()->to_layer().get_pos().y);
 
-    Dab dab(p.x, p.y);
-
+    // FIXME: Make tablet configurable
     if (CL_Display::get_current_window()->get_ic()->get_mouse_count() >= 4)
       {
         CL_InputDevice tablet = CL_Display::get_current_window()->get_ic()->get_mouse(5);

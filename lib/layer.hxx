@@ -27,8 +27,8 @@
 class EditorMapComponent;
 class LayerImpl;
 
-/** Each \a EditorMap consists out of one or more \a EditorMapLayer,
-    The \a EditorMapLayer is an abstract base class from which the
+/** Each \a EditorMap consists out of one or more \a Layer,
+    The \a Layer is an abstract base class from which the
     data holding layers derive. The basic functionality of a layer
     consists only of data holding and visualization. (FIXME: move
     visuals off into another class) */
@@ -41,12 +41,23 @@ public:
   ~Layer();
 
   MetaData get_metadata() const;
+  
+  /** Attaches a piece of MetaData to the layer, metadata is some user
+      supplied piece of data that is associated with a layer (ie. the
+      name of the layer or similar properties which aren't handled by
+      the layer itself) */
   void     set_metadata(MetaData data_);
 
   void draw(EditorMapComponent* parent);
   bool has_bounding_rect() const;
   CL_Rect get_bounding_rect();
 
+  /** Moves the layer to the given position */
+  void set_pos(const CL_Pointf& pos);
+
+  /** Returns the current position of the layer */
+  CL_Pointf get_pos() const;
+  bool is_null() const;
 private:
   SharedPtr<LayerImpl> impl;
 };

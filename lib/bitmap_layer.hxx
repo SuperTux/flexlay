@@ -17,8 +17,8 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-#ifndef HEADER_SKETCH_LAYER_HXX
-#define HEADER_SKETCH_LAYER_HXX
+#ifndef HEADER_BITMAP_LAYER_HXX
+#define HEADER_BITMAP_LAYER_HXX
 
 #include <vector>
 #include <ClanLib/Core/Math/point.h>
@@ -26,20 +26,23 @@
 #include "layer.hxx"
 #include "stroke.hxx"
 
-class SketchLayerImpl;
+class BitmapLayerImpl;
 
-/** A drawing layer that holds strokes and renders them more or less
-    efficently to the screen, for larger number of strokes this has
-    serious performance impact, use BitmapLayer instead */
-class SketchLayer
+/** This layer holds a simple bitmap, size and color format are
+    configurable, it works similar to the SketchLayer, however it
+    doesn't rerender the image all the time, but simply holds it in a
+    CL_Canvas */
+class BitmapLayer
 {
+  friend class BitmapLayerImpl;
 private:
-  static SketchLayer* current_;
+  static BitmapLayer* current_;
 public:
-  static SketchLayer* current() { return current_; }
-  static void set_current(SketchLayer* c) { current_ = c; }
+  static BitmapLayer* current() { return current_; }
+  static void set_current(BitmapLayer* c) { current_ = c; }
 
-  SketchLayer();
+  BitmapLayer(CL_Surface surface);
+  BitmapLayer(int width, int height);
   
   void add_stroke(const Stroke&);
 
@@ -47,11 +50,13 @@ public:
 
   CL_Surface get_background_surface();
 
+  CL_PixelBuffer get_pixeldata() const;
+  
   bool is_null() const { return !impl.get(); }
   Layer to_layer();
 
 private:
-  SharedPtr<SketchLayerImpl> impl;  
+  SharedPtr<BitmapLayerImpl> impl;  
 };
 
 #endif

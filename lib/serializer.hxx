@@ -1,6 +1,6 @@
 //  $Id$
 // 
-//  Flexlay - A Generic 2D Game Editor
+//  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
 //
 //  This program is free software; you can redistribute it and/or
@@ -17,35 +17,26 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-#ifndef HEADER_LAYER_IMPL_HXX
-#define HEADER_LAYER_IMPL_HXX
+#ifndef HEADER_SERIALIZER_HXX
+#define HEADER_SERIALIZER_HXX
 
-#include <ClanLib/Core/Math/rect.h>
-#include "meta_data.hxx"
-
-class EditorMapComponent;
-
-class LayerImpl
+/** */
+class Serializer
 {
+private:
 public:
-  /** MetaData attached to the layer, MetaData can be any data
-      supplied by the user, but most commonly it is used to associate
-      the given layer with a scripting language object (PyObj, SCM,
-      etc.), so that the user can attach additional data to a layer
-      from the scripting side. */
-  MetaData  data;
+  Serializer() {}
   
-  /** The position of the layer */
-  CL_Pointf pos;
+  voi  register_group_start (const char* name) =0;
+  voi  register_group_end   () =0;
 
-  LayerImpl() {}
-  virtual ~LayerImpl() {}
+  void register_float (const char* name, float& value) =0;
+  void register_int   (const char* name, int& value)   =0;
+  void register_string(const char* name, std::string& value) =0;
 
-  virtual void draw(EditorMapComponent* parent) =0;
-  virtual bool has_bounding_rect() const =0;
-
-  // FIXME: Should use CL_Rectf
-  virtual CL_Rect get_bounding_rect() { return CL_Rect(); }
+private:
+  Serializer (const Serializer&);
+  Serializer& operator= (const Serializer&);
 };
 
 #endif

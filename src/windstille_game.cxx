@@ -99,7 +99,7 @@ WindstilleGame::draw_game()
     }
   
   // Draw Logo
-  if (1)
+  if (0)
     {     
       //logo.set_blend_func(blend_src_alpha, blend_one);
       logo.set_alpha(cos(blink)*0.5f + 0.5f);

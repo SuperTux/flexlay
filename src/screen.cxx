@@ -40,21 +40,17 @@ Screen::display()
     {
       draw();
       
-#if 0
       float delta = delta_manager.getset ();
-      if (!do_pause)
+      float step = 10/1000.0f;
+      
+      while (delta > step)
         {
-          float step = 10/1000.0f;
-          
-          while (delta > step)
-            {
-              update(step);
-              delta -= step;
-            }
-          update(delta);
+          update(step);
+          delta -= step;
         }
-#endif
-      update(0.020f);
+      update(delta);
+      
+      // update(0.020f);
 
       CL_System::keep_alive ();
       CL_System::sleep (1);

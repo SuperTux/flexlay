@@ -1,12 +1,15 @@
 Flexlay 0.0.2
 =============
  - switched build system from autohell to SCons
- - switching scripting language to Python
  - restructured the scripting bindings
  - C++ object hierachy now completly available in scripting
  - major GUI cleanup
- - a toolbar
- - splitted flexlay into a C++ library and a python module
+ - a icon-toolbar
+ - splitted flexlay into a C++ library and a scripting modules, Ruby
+   and Python support are available
+ - configurable keyboard shortcut support
+ - support for constrained object movement
+ - SuperTux: support for multiple sublevels
 
 Flexlay 0.0.1
 ==============

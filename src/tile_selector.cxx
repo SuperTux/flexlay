@@ -138,7 +138,7 @@ TileSelector::draw()
 
       if (TileMapPaintTool::current().get_brush().get_width() == 1
           && TileMapPaintTool::current().get_brush().get_height() == 1
-          && TileMapPaintTool::current().get_brush().at(0, 0) == i)
+          && TileMapPaintTool::current().get_brush().at(0, 0) == tiles[i])
         {
           CL_Display::fill_rect(rect,
                                 CL_Color(0,0,255, 100));

@@ -30,6 +30,7 @@
 extern CL_ResourceManager* resources;
 
 typedef std::vector<Tile*> Tiles;
+typedef std::vector<int> TileIds;
 typedef Tiles::iterator iterator;
   
 class TilesetImpl 
@@ -47,6 +48,7 @@ public:
       }
   }
 
+  TileIds tile_ids;
   Tiles tiles;
   int tile_size;
 };
@@ -69,12 +71,18 @@ Tileset::~Tileset()
 }
 
 void
-Tileset::add_tile(int id, const Tile& tile)
+Tileset::add_tile(int id, Tile* tile)
 {
+  // FIXME: Check for tile-id dups
   if (id >= int(impl->tiles.size()))
     impl->tiles.resize(id+1, 0);
 
-  impl->tiles[id] = new Tile(tile);
+  if (tile)
+    impl->tiles[id] = new Tile(*tile);
+  else
+    impl->tiles[id] = 0;
+
+  impl->tile_ids.push_back(id);
 }
 
 Tile* 
@@ -95,13 +103,7 @@ Tileset::get_tile_size() const
 std::vector<int> 
 Tileset::get_tiles() const
 {
-  std::vector<int> ret;
-  for(Tiles::size_type i = 0; i < impl->tiles.size(); ++i) 
-    {
-      if (impl->tiles[i] != 0)
-        ret.push_back(i);
-    }
-  return ret;
+  return impl->tile_ids;
 }
 
 /* EOF */

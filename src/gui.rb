@@ -338,7 +338,7 @@ def gui_add_sector()
   level = $workspace.get_map().get_metadata().get_level()
   dialog = GenericDialog.new("Add Sector", $gui.get_component())
  
-  dialog.add_string("Name: ", newsector)
+  dialog.add_string("Name: ", "newsector")
   dialog.add_int("Width: ",   30)
   dialog.add_int("Height: ",  20)
   

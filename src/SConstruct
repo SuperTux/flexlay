@@ -22,7 +22,7 @@ import os
 
 opts = Options('custom.py')
 opts.Add('CXX', 'The C++ compiler.', 'g++')
-opts.Add('CXXFLAGS', 'The C++ compiler flags.', '-g -O0 -Wall')
+opts.Add('CXXFLAGS', 'The C++ compiler flags.', '-g -O2 -Wall')
 opts.Add('RUBYDIR', 'Ruby directory', os.popen('ruby -e "require \'rbconfig\'; puts Config::CONFIG[\'archdir\']"').read()[:-1])
 
 env = Environment(SHLIBPREFIX='',

@@ -51,7 +51,7 @@ public:
 
   int get_tile_size() const;
   
-  void add_tile(int id, const Tile& tile);
+  void add_tile(int id, Tile* tile);
 
   /** Return the tiles which are available in this tileset */
   std::vector<int> get_tiles() const;

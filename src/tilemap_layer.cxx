@@ -236,7 +236,7 @@ TilemapLayer::draw_tile(Field<int>* field, const TileBrush& brush, const CL_Poin
           {
             field->at(pos.x + x, pos.y + y) = brush.at(x, y);
           }
-      }  
+      }
 }
 
 void

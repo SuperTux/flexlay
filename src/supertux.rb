@@ -161,16 +161,18 @@ class Tileset
           image = get_value_from_tree(['images', '_'], data, "notile.png")
         end
         
-        if id != 0 # leave tile 0 transparent
-          if image.is_a?(String) then
-            pixelbuffer = make_pixelbuffer($datadir + 'images/tilesets/' + image)
-          elsif image.is_a?(Array) then
-            if image[0] == "region" then
-              pixelbuffer = make_region_pixelbuffer($datadir + 'images/tilesets/' + image[1],
-                                                    image[2], image[3], image[4], image[5])
-            end
+        if image.is_a?(String) then
+          pixelbuffer = make_pixelbuffer($datadir + 'images/tilesets/' + image)
+        elsif image.is_a?(Array) then
+          if image[0] == "region" then
+            pixelbuffer = make_region_pixelbuffer($datadir + 'images/tilesets/' + image[1],
+                                                  image[2], image[3], image[4], image[5])
           end
-          
+        end
+        
+        if id == 0 then
+          add_tile(id, nil)
+        else
           add_tile(id, Tile.new(pixelbuffer))
         end
       end

@@ -33,6 +33,7 @@ public:
   CL_Sprite sur;
   CL_PixelBuffer pixelbuffer;
 
+  bool transparent;
   bool has_color;
 
   /** Color used for the minimap to represent this tile */

@@ -1,4 +1,4 @@
-//  $Id: water_splash.cxx,v 1.1 2003/09/12 20:17:06 grumbel Exp $
+//  $Id: water_splash.cxx,v 1.2 2003/09/12 21:43:21 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -36,11 +36,12 @@ WaterSplash::draw ()
 {
   float factor = time * 3.0f;
   
-  if(factor < .5f)
-    sprite.set_scale(1.0f, 3*factor);
-  else
-    sprite.set_scale(1.0f, 3*(.5f - (factor - 0.5f)));
+  factor -= 0.5f;
+  factor *= 2.0f;
+  factor = (1.0f-(factor*factor*factor*factor));
 
+  sprite.set_scale(1.0f, factor);
+    
   sprite.draw((int)pos.x, (int)pos.y);
 }
 

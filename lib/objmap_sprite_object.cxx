@@ -57,12 +57,22 @@ ObjMapSpriteObjectImpl::get_bound_rect() const
 {
   CL_Point  align = CL_Point(0, 0);
   CL_Origin origin_e;
-
+  
   sprite.get_alignment(origin_e, align.x, align.y);
 
   CL_Point origin = calc_origin(origin_e, CL_Size(sprite.get_width(),
                                                   sprite.get_height()));
   align.x = -align.x;
+
+  // FIXME: This looks a bit hacky
+  float scale_x, scale_y;
+  sprite.get_scale(scale_x, scale_y);
+
+  if (scale_x < 0)
+    align.x += sprite.get_width();
+  
+  if (scale_y < 0)
+    align.y += sprite.get_height();
       
   return CL_Rectf(pos - origin - align,
                   CL_Sizef(sprite.get_width(), sprite.get_height()));
@@ -75,6 +85,10 @@ ObjMapSpriteObject::flip_vertical()
 
   impl->sprite.get_scale(scale_x, scale_y);
   impl->sprite.set_scale(scale_x, -scale_y);
+  if (scale_y < 0)
+    impl->pos.y -= impl->sprite.get_height();
+  else
+    impl->pos.y += impl->sprite.get_height();
 }
 
 void
@@ -83,6 +97,16 @@ ObjMapSpriteObject::flip_horizontal()
   float scale_x, scale_y;
   impl->sprite.get_scale(scale_x, scale_y);
   impl->sprite.set_scale(-scale_x, scale_y);
+  if (scale_x < 0)
+    impl->pos.x -= impl->sprite.get_width();
+  else
+    impl->pos.x += impl->sprite.get_width();
+}
+
+void
+ObjMapSpriteObject::set_rotate(float angle)
+{
+  impl->sprite.set_angle(angle);
 }
 
 ObjMapObject

@@ -37,6 +37,7 @@ public:
                      const CL_Pointf& pos_, 
                      const MetaData& data_);
 
+  void set_rotate(float angle);
   void flip_horizontal();
   void flip_vertical();
   

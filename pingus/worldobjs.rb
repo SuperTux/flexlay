@@ -126,7 +126,11 @@ class WorldObj
   end
 
   def get_image()
-    return @properties['surface'] || "core/misc/404sprite"
+    if @properties['surface'] then
+      return @properties['surface'][0]
+    else
+      return "core/misc/404sprite"
+    end
   end
 
   def get_pos()
@@ -137,7 +141,29 @@ class WorldObj
     @data = data
     if @properties.has_key?('position') then
       @data.to_object().set_pos(get_pos())
-      @properties.delete('position')
+      @properties.delete('position')   
+    end
+    set_modifier()
+  end
+
+  def set_modifier()
+    if @properties['surface'] then
+      modifier = @properties['surface'][1]
+      case modifier
+      when "ROT0"
+        
+      when "ROT90"
+      when "ROT180"
+      when "ROT270"
+      when "ROT0FLIP"
+        @data.flip_horizontal()
+      when "ROT90FLIP"
+      when "ROT180FLIP"
+        @data.flip_vertical()
+      when "ROT270FLIP"
+      else
+        puts "Error: Unknown modifier: #{modifier}"
+      end
     end
   end
 
@@ -162,7 +188,7 @@ class WorldObj
       else
         puts "Warning: Ignoring '#{k}' property, type '#{$objects[@typename][k][0]}' is unknown"
       end
-     }
+    }
     dialog.set_callback(proc{|message| 
                           @message = message
                         })

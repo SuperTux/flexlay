@@ -34,8 +34,7 @@ class XMLReader
 
       when :image
         # FIXME: handle modifier somewhere
-        return ret.elements['image'].text      
-
+        return [ret.elements['image'].text, ret.elements['modifier'].text]
       end
     else
       return default

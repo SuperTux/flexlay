@@ -48,7 +48,7 @@ $image = $animation.get_current_image()
 $image.activate($gui.workspace)
 
 drawer = SpriteStrokeDrawer.new($sketch_stroke_tool.get_drawer())
-if true then
+if false then
   drawer.set_brush(GeneratedBrush.new(BRUSH_SHAPE_CIRCLE, 
                                       32,  # radius
                                       2,   # spikes

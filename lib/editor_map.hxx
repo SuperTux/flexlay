@@ -43,6 +43,9 @@ public:
 
   /** FIXME: EditorMapComponent parameter shouldn't really be here */
   void draw(EditorMapComponent* parent, CL_GraphicContext* gc);
+  
+  /** Draw stuff that is only relevant on the GUI (bounding rects and such) */
+  void draw_gui(CL_GraphicContext* gc);
 
   void add_layer(const Layer& layer, int pos = -1);
 

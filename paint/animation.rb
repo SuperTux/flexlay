@@ -35,9 +35,13 @@ class Animation
       # onion_skin.to_layer().set_pos(CL_Pointf.new(-100, -100))
       img.editormap.add_layer(onion_skin.to_layer(), 0)
       
-      if (@current_frame > 0) then
-        onion_skin.add_map(@frames[@current_frame - 1].editormap, 0.5)
+      if (@frames.length > 1) then
+        onion_skin.add_map(@frames[(@current_frame - 1)%@frames.length].editormap, 0.5)
       end
+
+      if (@frames.length > 2) then
+        onion_skin.add_map(@frames[(@current_frame - 2)%@frames.length].editormap, 0.25)
+      end      
     end
   end
 end

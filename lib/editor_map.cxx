@@ -80,8 +80,8 @@ EditorMap::add_layer(const Layer& layer, int pos)
   impl->serial += 1;
 }
 
-void
-EditorMap::draw (EditorMapComponent* parent, CL_GraphicContext* gc)
+void 
+EditorMap::draw_gui(CL_GraphicContext* gc)
 {
   CL_Rect rect = get_bounding_rect();
 
@@ -94,7 +94,11 @@ EditorMap::draw (EditorMapComponent* parent, CL_GraphicContext* gc)
     {
       gc->clear(impl->background_color);
     }
+}
 
+void
+EditorMap::draw (EditorMapComponent* parent, CL_GraphicContext* gc)
+{
   for(EditorMapImpl::Layers::iterator i = impl->layers.begin(); i != impl->layers.end(); ++i)
     (*i).draw(parent, gc);
   

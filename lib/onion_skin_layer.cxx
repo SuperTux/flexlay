@@ -39,6 +39,7 @@ public:
   void draw(EditorMapComponent* parent, CL_GraphicContext* gc) 
   {
     // FIXME: We need to stop onion layer to draw onto itself
+    surface.set_blend_func(blend_one, blend_one_minus_src_alpha);
     surface.draw(0, 0);
   }
 
@@ -76,15 +77,17 @@ OnionSkinLayer::OnionSkinLayer(int width, int height)
 void
 OnionSkinLayer::clear()
 {
-  impl->canvas->get_gc()->clear();
+  impl->canvas->get_gc()->clear(CL_Color(0, 0, 0, 0));
   impl->canvas->sync_surface();
 }
 
 void
 OnionSkinLayer::add_map(EditorMap editor_map, float transparency)
 {
+  // FIXME: EditorMap does draw stuff that isn't usefull for onionskin (bounding rects, etc)
+
   // FIXME: Parameter are a bit unclear here
-  impl->canvas2->get_gc()->clear();
+  impl->canvas2->get_gc()->clear(CL_Color(0, 0, 0, 0));
   editor_map.draw(EditorMapComponent::current(), impl->canvas2->get_gc());
   impl->canvas2->sync_surface();
   impl->surface2.set_alpha(transparency);

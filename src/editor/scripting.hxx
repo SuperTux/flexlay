@@ -1,4 +1,4 @@
-//  $Id: scripting.hxx,v 1.5 2003/09/11 18:58:19 grumbel Exp $
+//  $Id: scripting.hxx,v 1.6 2003/09/11 20:11:01 grumbel Exp $
 // 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -34,9 +34,12 @@ void editor_set_tool(SCM func);
 void tilemap_set_active_layer(int i);
 
 CL_Component* editor_add_window(int x, int y, int w, int h, const char* title);
-CL_Component* editor_add_button(int x, int y, int w, int h, const char* text, SCM func);
+CL_Component* editor_add_button_func(int x, int y, int w, int h, const char* text, SCM func);
+CL_Component* editor_add_button(int x, int y, int w, int h, const char* text);
 CL_Component* editor_add_label(int x, int y, const char* text);
 CL_Component* editor_add_inputbox(int x, int y, int w, int h, const char* text);
+
+void component_on_click(CL_Component* comp, SCM func);
 
 const char* inputbox_get_text(CL_Component*);
 
@@ -49,11 +52,17 @@ void editor_quit();
 int  screen_get_width();
 int  screen_get_height();
 
-SCM map_get_data(int i);
-int map_get_width();
-int map_get_height();
+SCM  map_get_data(int i);
+int  map_get_width();
+int  map_get_height();
 void map_set_size(int w, int h);
+void map_resize(int w, int h);
+void map_clear();
+
+void editor_new(int w, int h);
 void editor_load(const char* filename);
+
+void file_dialog();
 
 #endif
 

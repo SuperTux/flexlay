@@ -1,4 +1,4 @@
-//  $Id: scripting.cxx,v 1.5 2003/09/11 18:58:19 grumbel Exp $
+//  $Id: scripting.cxx,v 1.6 2003/09/11 20:11:01 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -39,17 +39,28 @@ editor_get_brush_tile()
 }
 
 CL_Component*
-editor_add_button(int x, int y, int w, int h, const char* text, SCM func)
+editor_add_button(int x, int y, int w, int h, const char* text)
 {
   CL_Component* manager = Editor::current()->get_component();
-  CL_SlotContainer* slot_container = Editor::current()->get_slot_container();
- 
-  CL_Button* button = new CL_Button(CL_Rect(CL_Point(x, y), CL_Size(w, h)),
-                                    text, manager);
-  SCMFunctor* functor = new SCMFunctor(func);
-  slot_container->connect(button->sig_clicked(), functor, &SCMFunctor::call);
+  return new CL_Button(CL_Rect(CL_Point(x, y), CL_Size(w, h)),
+                       text, manager);
+}
 
-  return button;
+CL_Component*
+editor_add_button_func(int x, int y, int w, int h, const char* text, SCM func)
+{
+  CL_Component* comp = editor_add_button(x, y, w, h, text);
+  component_on_click(comp, func);
+  return comp;
+}
+
+void
+component_on_click(CL_Component* comp, SCM func)
+{
+  CL_Button* button = dynamic_cast<CL_Button*>(comp);
+  SCMFunctor* functor = new SCMFunctor(func);
+  CL_SlotContainer* slot_container = Editor::current()->get_slot_container();
+  slot_container->connect(button->sig_clicked(), functor, &SCMFunctor::call);
 }
 
 CL_Component* 
@@ -195,10 +206,30 @@ void map_set_size(int w, int h)
   //return Editor::current()->get_editor_tilemap()->get_height();
 }
 
+void map_resize(int w, int h)
+{
+}
+
+void map_clear()
+{
+}
+
 void
 editor_load(const char* filename)
 {
   Editor::current()->get_editor_tilemap()->load(filename);
+}
+
+void
+editor_new(int w, int h)
+{
+  Editor::current()->get_editor_tilemap()->new_level(w, h);
+}
+
+void
+file_dialog()
+{
+  new CL_FileDialog("File Dialog", "/", "", Editor::current()->get_component());
 }
 
 /* EOF */

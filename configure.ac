@@ -16,6 +16,15 @@ AC_CHECK_HEADER(guile/gh.h)
 
 REQUIRED_CLANLIB_VERSION="0.7.3"
 
+AC_MSG_CHECKING(for debug mode)
+AC_ARG_ENABLE(debug, AC_HELP_STRING([--enable-debug], [Enable debugging support (default: yes)]),, enable_debug="yes")
+if test "$enable_debug" != "no"; then
+    CXXFLAGS="$CXXFLAGS -Wall -Werror -O0 -g"
+    AC_MSG_RESULT([enabled])
+else
+    AC_MSG_RESULT([disabled])
+fi
+
 AC_PATH_PROG([SWIG], [swig], [nothing-found])
 if test "x$SWIG" = "xnothing-found"; then
    AC_MSG_ERROR([You need Swig - http://www.swig.org to proceed.])
@@ -47,5 +56,9 @@ AC_CONFIG_FILES(
     src/editor/Makefile
 )
 AC_OUTPUT
+
+dnl Local Variables:
+dnl compile-command: "./autogen.sh && ./configure"
+dnl End:
 
 dnl EOF dnl

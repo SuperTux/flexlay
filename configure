@@ -856,6 +856,7 @@ Optional Features:
   --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
   --disable-dependency-tracking Speeds up one-time builds
   --enable-dependency-tracking  Do not reject slow dependency extractors
+  --enable-debug          Enable debugging support (default: yes)
 
 Some influential environment variables:
   CC          C compiler command
@@ -4032,6 +4033,24 @@ fi
 
 REQUIRED_CLANLIB_VERSION="0.7.3"
 
+echo "$as_me:$LINENO: checking for debug mode" >&5
+echo $ECHO_N "checking for debug mode... $ECHO_C" >&6
+# Check whether --enable-debug or --disable-debug was given.
+if test "${enable_debug+set}" = set; then
+  enableval="$enable_debug"
+
+else
+  enable_debug="yes"
+fi;
+if test "$enable_debug" != "no"; then
+    CXXFLAGS="$CXXFLAGS -Wall -Werror -O0 -g"
+    echo "$as_me:$LINENO: result: enabled" >&5
+echo "${ECHO_T}enabled" >&6
+else
+    echo "$as_me:$LINENO: result: disabled" >&5
+echo "${ECHO_T}disabled" >&6
+fi
+
 # Extract the first word of "swig", so it can be a program name with args.
 set dummy swig; ac_word=$2
 echo "$as_me:$LINENO: checking for $ac_word" >&5
@@ -5565,5 +5584,6 @@ if test "$no_create" != yes; then
   # would make configure fail if this is the last instruction.
   $ac_cs_success || { (exit 1); exit 1; }
 fi
+
 
 

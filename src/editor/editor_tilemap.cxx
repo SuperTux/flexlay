@@ -1,4 +1,4 @@
-//  $Id: editor_tilemap.cxx,v 1.7 2003/09/11 18:58:19 grumbel Exp $
+//  $Id: editor_tilemap.cxx,v 1.8 2003/09/11 20:11:01 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -197,7 +197,7 @@ EditorTileMap::draw ()
   CL_Display::fill_rect(CL_Rect(CL_Point(0,0),
                                 CL_Size(current_field->get_width() * TILE_SIZE,
                                         current_field->get_height() * TILE_SIZE)),
-                        CL_Color::black);
+                        CL_Color(0, 0, 150, 255));
   for(Fields::iterator i = fields.begin(); i != fields.end();++i) 
     {
       draw_map(*i);

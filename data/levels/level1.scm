@@ -3,7 +3,7 @@
   (name "Hello World"))
 
  (tilemap
-  (width 10) (height 21)
+  (width 10) (height 20)
   (data 
    0  0  0  0  0  0  0  0  0  0
    0  0  0  0  0  0  0  0  0  0
@@ -27,7 +27,7 @@
    8  8  8  8  8  8  8  8  8  8))
 
  (background-tilemap
-  (width 10) (height 21)
+  (width 10) (height 20)
   (data 
    12 12 12 12 12 12 12 12 12 12
    12 12 12 12 12 12 12 12 12 12

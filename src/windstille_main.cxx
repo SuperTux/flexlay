@@ -1,4 +1,4 @@
-//  $Id: windstille_main.cxx,v 1.18 2003/09/21 21:57:40 grumbel Exp $
+//  $Id: windstille_main.cxx,v 1.19 2003/09/23 10:48:03 grumbel Exp $
 //
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -125,7 +125,9 @@ WindstilleMain::inner_main(void* closure, int argc, char** argv)
                 "(debug-enable 'backtrace)"
                 "(read-enable 'positions)");
 
-    gh_load ((datadir + "../src/guile/windstille.scm").c_str());
+    gh_define("*windstille-levelfile*", gh_str02scm(levelfile.c_str()));
+    gh_define("*windstille-datadir*", gh_str02scm(datadir.c_str()));
+
     std::cout << "Loading Guile Code... done" << std::endl;
 
     if (!launch_editor)

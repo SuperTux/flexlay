@@ -1,4 +1,4 @@
-//  $Id: game.cxx,v 1.8 2003/09/21 17:34:00 grumbel Exp $
+//  $Id: game.cxx,v 1.9 2003/09/23 10:48:03 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -43,12 +43,6 @@ void
 game_add_igel(int x, int y)
 {
   GameWorld::current()->add(new Igel(x, y));
-}
-
-void
-game_set_player(float x, float y)
-{
-  Player::current()->set_position(CL_Vector(x, y));
 }
 
 GameWorld* make_game_world(int w, int h)

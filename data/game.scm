@@ -2,7 +2,6 @@
 (load "helper.scm")
 
 (game-add-water 10 100 180 50)
-(game-set-player 1500 1300)
 
 (game-add-igel 1000 1300)
 (game-add-igel 800 1300)
@@ -74,7 +73,7 @@
   (display (inexact->exact y))
   (newline))
 
-(player-set-pos 100 400)
+(player-set-pos 800 600)
 (player-set-direction "west")
 
 (define (toggle-pause)

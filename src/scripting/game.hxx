@@ -1,4 +1,4 @@
-//  $Id: game.hxx,v 1.8 2003/09/21 17:34:00 grumbel Exp $
+//  $Id: game.hxx,v 1.9 2003/09/23 10:48:03 grumbel Exp $
 // 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -27,7 +27,6 @@ class GameWorld;
 void game_add_water(int x, int y, int w, int h);
 void game_add_bomb(int x, int y);
 void game_add_igel(int x, int y);
-void game_set_player(float x, float y);
 
 void player_set_pos(float x, float y);
 void player_set_direction(const char* direction);

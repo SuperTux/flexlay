@@ -7,7 +7,8 @@
 (define empty (lambda () #f))
 (define *tileeditor* #f)
 (define *tileeditor-window* #f)
-(define last-files (list "/tmp/foobar.scm"))
+(define last-files (list *windstille-levelfile*))
+(define datadir  *windstille-datadir*)
 
 (define (push-last-file filename)
   (cond ((not (string=? filename (get-last-file)))
@@ -173,7 +174,7 @@
                           (component-hide window)))
     (component-on-click dump
                         (lambda () 
-                          (dump-tile-definitions "/tmp/tiles.scm")))
+                          (dump-tile-definitions (string-append datadir "tiles.scm"))))
 
     (set! *tileeditor-window* window))
   (pop-component))

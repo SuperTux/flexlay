@@ -42,6 +42,7 @@ CL_Component* tile_selector_create(int x, int y, int w, int h, float scale);
 CL_Component* object_selector_create(int x, int y, int w, int h, int obj_w, int obj_h);
 CL_Component* editor_map_component_create(int x, int y, int w, int h);
 void          editor_map_component_set_map(CL_Component* c, EditorMap* m);
+EditorMap*    editor_map_component_get_map(CL_Component* c);
 
 void editor_toggle_grid();
 void editor_resize_map(int w, int h, int x, int y);
@@ -83,6 +84,7 @@ SCM load_xml(const char* filename);
 EditorMap*      editor_map_create();
 void            editor_map_add_layer(EditorMap* m, EditorMapLayer* layer);
 bool            editor_map_is_modified(EditorMap* m);
+void            editor_map_set_unmodified(EditorMap* m);
 
 EditorMapLayer* editor_objmap_create();
 

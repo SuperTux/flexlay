@@ -179,11 +179,11 @@ TileMapPaintTool::on_mouse_up  (const CL_InputEvent& event)
   EditorMapComponent* parent = EditorMapComponent::current();
   CL_Point pos = parent->screen2tile(event.mouse_pos);
 
-  if (mode == PAINTING || mode == SELECTING)
+  switch (event.id)
     {
-      switch (event.id)
+    case CL_MOUSE_LEFT:
+      if (mode == PAINTING)
         {
-        case CL_MOUSE_LEFT:
           parent->release_mouse();
           mode = NONE;
 
@@ -193,9 +193,12 @@ TileMapPaintTool::on_mouse_up  (const CL_InputEvent& event)
 
           tilemap->draw_tile(brush, pos);
           last_draw = CL_Point(-1, -1);
-          break;
+        }
+      break;
     
-        case CL_MOUSE_RIGHT:
+    case CL_MOUSE_RIGHT:
+      if (mode == SELECTING)
+        {
           parent->release_mouse();
           mode = NONE;
 
@@ -214,8 +217,8 @@ TileMapPaintTool::on_mouse_up  (const CL_InputEvent& event)
             }
 
           selection.clear();
-          break;
         }
+      break;
     }
 }
 

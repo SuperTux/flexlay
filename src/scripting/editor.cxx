@@ -560,6 +560,13 @@ load_xml(const char* filename)
   }
 }
 
+EditorMap*
+editor_map_component_get_map(CL_Component* c)
+{
+  EditorMapComponent* parent_map = dynamic_cast<EditorMapComponent*>(c); 
+  return parent_map->get_map();
+}
+
 void
 editor_map_component_set_map(CL_Component* c, EditorMap* m)
 {
@@ -619,6 +626,12 @@ bool
 editor_map_is_modified(EditorMap* m)
 {
   return m->is_modified();
+}
+
+void
+editor_map_set_unmodified(EditorMap* m)
+{
+  m->set_unmodified();
 }
 
 void

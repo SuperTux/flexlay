@@ -132,6 +132,7 @@
               field)))
 
 (define (save-map filename)
+  ;; FIXME: This is old style singleton code
   (if (access? filename F_OK)
       (rename-file filename (string-append filename "~")))
 
@@ -168,7 +169,10 @@
 
       (display   " )\n")
       (newline)
-      (display ";; EOF ;;\n"))))
+      (display ";; EOF ;;\n")
+
+      (editor-map-set-unmodified (editor-map-component-get-map *editor-map*))
+      )))
 
 (define (resize-map)
   (let ((window (gui-create-window 200 200 150 160 "Resize Map")))

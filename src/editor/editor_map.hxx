@@ -56,7 +56,8 @@ public:
   void add_layer(EditorMapLayer* layer);
 
   bool is_modified() const { return modified; }
-  void modify() { modified = true; }
+  void set_unmodified() { modified = false; }
+  void modify()       { modified = true; }
 
   EditorMapLayer* get_layer_by_name(int i);
   EditorMapLayer* get_layer(int i);

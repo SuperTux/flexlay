@@ -7,11 +7,13 @@ class Animation
   def next_frame()
     @current_frame = (@current_frame + 1) % @frames.length
     get_current_image().activate($gui.workspace)
+    # OnionSkinLayer.new(get_current_image().editormap.get_layer(0)).update()
   end
 
   def previous_frame()
     @current_frame = (@current_frame - 1) % @frames.length
     get_current_image().activate($gui.workspace)
+    # OnionSkinLayer.new(get_current_image().editormap.get_layer(0)).update()
   end
 
   def get_current_image()

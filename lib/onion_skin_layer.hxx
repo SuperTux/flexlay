@@ -36,12 +36,16 @@ public:
   /** FIXME: Should probally be CL_Rect instead of just
       width/height */
   OnionSkinLayer(int width, int height);
+  OnionSkinLayer(Layer layer);
   
   /** Adds an EditorMap to the OnionSkin */
   void add_map(EditorMap editor_map, float transparency);
 
   void clear();
 
+  /** Refreshes the content of the OnionSkin */
+  void update();
+  
   bool is_null() const { return !impl.get(); }
   Layer to_layer();
 private:

@@ -59,7 +59,7 @@ public:
   /** Returns the current position of the layer */
   CL_Pointf get_pos() const;
   bool is_null() const;
-private:
+public:
   SharedPtr<LayerImpl> impl;
 };
 

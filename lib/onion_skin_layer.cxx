@@ -18,6 +18,7 @@
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include <iostream>
+#include <vector>
 #include <ClanLib/Core/System/error.h>
 #include <ClanLib/Display/pixel_buffer.h>
 #include <ClanLib/Display/pixel_format.h>
@@ -36,6 +37,9 @@ public:
   CL_Surface  surface2;
   CL_Canvas*  canvas2;
 
+  std::vector<EditorMap> editormaps;
+  std::vector<float> transparency;
+
   void draw(EditorMapComponent* parent, CL_GraphicContext* gc) 
   {
     // FIXME: We need to stop onion layer to draw onto itself
@@ -48,6 +52,11 @@ public:
     return false;
   }
 };
+
+OnionSkinLayer::OnionSkinLayer(Layer layer)
+  : impl(dynamic_cast<OnionSkinLayerImpl*>(layer.impl.get())) // FIXME: WONT WORK WITH REAL SMARTPTR!!!
+{
+}
 
 OnionSkinLayer::OnionSkinLayer(int width, int height)
   : impl(new OnionSkinLayerImpl())
@@ -84,6 +93,8 @@ OnionSkinLayer::clear()
 void
 OnionSkinLayer::add_map(EditorMap editor_map, float transparency)
 {
+  impl->editormaps.push_back(editor_map);
+
   // FIXME: EditorMap does draw stuff that isn't usefull for onionskin (bounding rects, etc)
 
   // FIXME: Parameter are a bit unclear here
@@ -93,6 +104,21 @@ OnionSkinLayer::add_map(EditorMap editor_map, float transparency)
   impl->surface2.set_alpha(transparency);
   impl->surface2.draw(0, 0, impl->canvas->get_gc());
   impl->canvas->sync_surface();
+}
+
+void
+OnionSkinLayer::update()
+{
+  impl->canvas->get_gc()->clear(CL_Color(0, 0, 0, 0));
+  for (std::vector<EditorMap>::iterator i = impl->editormaps.begin(); i != impl->editormaps.end(); ++i)
+    {
+      impl->canvas2->get_gc()->clear(CL_Color(0, 0, 0, 0));
+      i->draw(EditorMapComponent::current(), impl->canvas2->get_gc());
+      impl->canvas2->sync_surface();
+      impl->surface2.set_alpha(0.5f);
+      impl->surface2.draw(0, 0, impl->canvas->get_gc());
+      impl->canvas->sync_surface();
+    }
 }
 
 Layer

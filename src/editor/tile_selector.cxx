@@ -103,7 +103,7 @@ void
 TileSelector::draw()
 {
   CL_Display::push_translate_offset(0, -offset);
-  for(int y = 0; y < /*height FIXME*/ 40; ++y)
+  for(int y = 0; y < /*height FIXME*/ 2540; ++y)
     for(int x = 0; x < width; ++x)
       {
         int i = width * y + x;

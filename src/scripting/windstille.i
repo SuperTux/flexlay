@@ -4,6 +4,7 @@
 #include "editor.hxx"
 #include "game.hxx"
 #include "gui.hxx"
+#include "../editor/tile_brush.hxx"
 
 TileBrush scm2brush(SCM s_brush);
 SCM       brush2scm(const TileBrush& brush);

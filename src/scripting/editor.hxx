@@ -34,6 +34,8 @@ class TileBrush;
 void editor_redo();
 void editor_undo();
 
+void set_window_title(const char* name);
+
 // FIXME: Hack
 EditorTileMap* editor_get_tilemap();
 EditorObjMap*  editor_get_objmap();
@@ -52,7 +54,7 @@ int  editor_get_brush_tile();
 void editor_set_tool(int i);
 SCM  editor_get_tile_selection();
 void tilemap_set_active_layer(int i);
-void tilemap_paint_tool_set_brush(const TileBrush& brush);
+void tilemap_paint_tool_set_brush(TileBrush brush);
 
 void object_selector_add_brush(CL_Component* comp, const char* name, SCM brush);
 

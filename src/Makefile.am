@@ -4,6 +4,8 @@ bindir=$(prefix)/games
 
 bin_PROGRAMS = windstille
 
+EXTRA_DIST = supertux
+
 windstille_SOURCES = \
   assert.hxx \
   animation_obj.cxx \

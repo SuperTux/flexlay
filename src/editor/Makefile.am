@@ -32,6 +32,7 @@ libwindstille_editor_a_SOURCES = \
   object_delete_command.hxx  object_delete_command.cxx \
   object_add_command.hxx  object_add_command.cxx \
   command_group.hxx command_group.cxx \
-  objmap_select_tool.hxx objmap_select_tool.cxx
+  objmap_select_tool.hxx objmap_select_tool.cxx \
+  object_transform_command.hxx  object_transform_command.cxx
 
 # EOF #

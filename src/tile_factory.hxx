@@ -31,7 +31,8 @@ class TileFactory
 {
 private:
   // FIXME: Replace ths with a vector, map is potentially slow
-  typedef std::map<int, Tile*> Tiles;
+  //typedef std::map<int, Tile*> Tiles;
+  typedef std::vector<Tile*> Tiles;
   Tiles tiles;
 
   static TileFactory* current_;

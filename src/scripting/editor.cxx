@@ -20,6 +20,7 @@
 #include <ClanLib/gui.h>
 #include <ClanLib/core.h>
 #include <ClanLib/Display/display.h>
+#include <ClanLib/Display/display_window.h>
 #include <iostream>
 #include "../scm_functor.hxx"
 #include "../globals.hxx"
@@ -78,7 +79,10 @@ SCM vector2scm(const std::vector<int>& vec)
   return gh_reverse(lst);
 }
 
-
+void set_window_title(const char* name)
+{
+  CL_Display::get_current_window()->set_title(name);
+}
 
 void editor_redo()
 {
@@ -355,7 +359,7 @@ editor_resize_map(int w, int h, int x, int y)
 }
 
 void 
-tilemap_paint_tool_set_brush(const TileBrush& brush)
+tilemap_paint_tool_set_brush(TileBrush brush)
 {
   TileMapPaintTool::current()->set_brush(brush);
 }
@@ -567,7 +571,7 @@ SCM get_tile_defs()
        i != TileFactory::current()->end();
        ++i)
     {
-      lst = gh_cons(get_tile_def((*i).second), lst);
+      lst = gh_cons(get_tile_def(i - TileFactory::current()->begin()), lst);
     }
 
   return gh_reverse(lst);

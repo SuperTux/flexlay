@@ -111,6 +111,8 @@ public:
   int get_energie();
   int get_max_energie();
   void hit(int points);
+
+  CL_Rect get_bounding_rect() const; 
 private:
   // true if the tile under Player is ground
   bool on_ground ();

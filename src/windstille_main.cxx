@@ -293,7 +293,10 @@ WindstilleMain::init_modules()
   
 // Init ClanLib
   CL_SetupCore::init();
+  
   CL_SetupGL::init();
+  //CL_SetupSDL::init();
+
   CL_SetupDisplay::init();
 
   if (!sound_disabled)
@@ -340,7 +343,10 @@ WindstilleMain::deinit_modules()
     }
 
   CL_SetupDisplay::init();
+
   CL_SetupGL::init();
+  //CL_SetupSDL::init();
+
   CL_SetupCore::init(); 
 }
 

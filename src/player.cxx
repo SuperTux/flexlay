@@ -136,6 +136,18 @@ Player::draw ()
                                     new_subtile_pos.y*SUBTILE_SIZE + SUBTILE_SIZE),
                             color);
     }
+
+  CL_Display::fill_rect(get_bounding_rect(),
+                        CL_Color(255, 0, 255, 155));
+}
+
+CL_Rect
+Player::get_bounding_rect() const
+{
+  return CL_Rect(int(pos.x - 20), 
+                 int(pos.y - 112),
+                 int(pos.x + 20), 
+                 int(pos.y));
 }
 
 SubTilePos

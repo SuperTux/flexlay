@@ -1,4 +1,4 @@
-//  $Id: tile_map.cxx,v 1.5 2003/08/11 19:50:12 grumbel Exp $
+//  $Id: tile_map.cxx,v 1.6 2003/08/11 19:54:22 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -86,7 +86,9 @@ TileMap::is_ground (float x, float y)
   unsigned int sub_tile_x = int(x) / (TILE_SIZE/8) - x_pos*8;
   unsigned int sub_tile_y = int(y) / (TILE_SIZE/8) - y_pos*8;
 
-  if (x_pos < 0 || x_pos >= field.get_width () || y_pos < 0 || y_pos >= field.get_height ())
+  if (x < 0 || x_pos >= field.get_width() 
+      || 
+      y < 0 || y_pos >= field.get_height())
     {
       std::cout << "TileMap::is_ground (): Out of range: " << x_pos << " " << y_pos << std::endl;
       return 1;

@@ -675,4 +675,59 @@
   <sprite name="logo_black">
     <image file="images/logo_black.png" name="image1" />
   </sprite>
+
+  <section name="bonus">
+    <sprite name="atspider"><image file="images/bonus/atspider.jpg" /></sprite>
+    <sprite name="attack"><image file="images/bonus/attack.jpg" /></sprite>
+    <sprite name="ball"><image file="images/bonus/ball.jpg" /></sprite>
+    <sprite name="beamtrap"><image file="images/bonus/beamtrap.jpg" /></sprite>
+    <sprite name="bike"><image file="images/bonus/bike.jpg" /></sprite>
+    <sprite name="bla"><image file="images/bonus/bla.jpg" /></sprite>
+    <sprite name="brokencapsule"><image file="images/bonus/brokencapsule.jpg" /></sprite>
+    <sprite name="buoy"><image file="images/bonus/buoy.jpg" /></sprite>
+    <sprite name="canon"><image file="images/bonus/canon.jpg" /></sprite>
+    <sprite name="crab"><image file="images/bonus/crab.jpg" /></sprite>
+    <sprite name="dingo"><image file="images/bonus/dingo.jpg" /></sprite>
+    <sprite name="dog"><image file="images/bonus/dog.jpg" /></sprite>
+    <sprite name="droid"><image file="images/bonus/droid.jpg" /></sprite>
+    <sprite name="droid2"><image file="images/bonus/droid2.jpg" /></sprite>
+    <sprite name="endo"><image file="images/bonus/endo.jpg" /></sprite>
+    <sprite name="enemy1"><image file="images/bonus/enemy1.jpg" /></sprite>
+    <sprite name="enemy3"><image file="images/bonus/enemy3.jpg" /></sprite>
+    <sprite name="enemy4"><image file="images/bonus/enemy4.jpg" /></sprite>
+    <sprite name="enemy5"><image file="images/bonus/enemy5.jpg" /></sprite>
+    <sprite name="enemy6"><image file="images/bonus/enemy6.jpg" /></sprite>
+    <sprite name="enemy7"><image file="images/bonus/enemy7.jpg" /></sprite>
+    <sprite name="fish"><image file="images/bonus/fish.jpg" /></sprite>
+    <sprite name="flyby"><image file="images/bonus/flyby.jpg" /></sprite>
+    <sprite name="gun"><image file="images/bonus/gun.jpg" /></sprite>
+    <sprite name="gun2"><image file="images/bonus/gun2.jpg" /></sprite>
+    <sprite name="jolly"><image file="images/bonus/jolly.jpg" /></sprite>
+    <sprite name="morph"><image file="images/bonus/morph.jpg" /></sprite>
+    <sprite name="plant"><image file="images/bonus/plant.jpg" /></sprite>
+    <sprite name="plant2"><image file="images/bonus/plant2.jpg" /></sprite>
+    <sprite name="plant3"><image file="images/bonus/plant3.jpg" /></sprite>
+    <sprite name="plant4"><image file="images/bonus/plant4.jpg" /></sprite>
+    <sprite name="plant5"><image file="images/bonus/plant5.jpg" /></sprite>
+    <sprite name="pod"><image file="images/bonus/pod.jpg" /></sprite>
+    <sprite name="qual"><image file="images/bonus/qual.jpg" /></sprite>
+    <sprite name="robo"><image file="images/bonus/robo.jpg" /></sprite>
+    <sprite name="rollbot"><image file="images/bonus/rollbot.jpg" /></sprite>
+    <sprite name="room"><image file="images/bonus/room.jpg" /></sprite>
+    <sprite name="roto"><image file="images/bonus/roto.jpg" /></sprite>
+    <sprite name="runner"><image file="images/bonus/runner.jpg" /></sprite>
+    <sprite name="skeleton"><image file="images/bonus/skeleton.jpg" /></sprite>
+    <sprite name="starter"><image file="images/bonus/starter.jpg" /></sprite>
+    <sprite name="steam"><image file="images/bonus/steam.jpg" /></sprite>
+    <sprite name="steam2"><image file="images/bonus/steam2.jpg" /></sprite>
+    <sprite name="stone"><image file="images/bonus/stone.jpg" /></sprite>
+    <sprite name="turtle"><image file="images/bonus/turtle.jpg" /></sprite>
+    <sprite name="turtle1"><image file="images/bonus/turtle1.jpg" /></sprite>
+    <sprite name="walker"><image file="images/bonus/walker.jpg" /></sprite>
+    <sprite name="walkinggun"><image file="images/bonus/walkinggun.jpg" /></sprite>
+    <sprite name="wallgen"><image file="images/bonus/wallgen.jpg" /></sprite>
+    <sprite name="waterrunner"><image file="images/bonus/waterrunner.jpg" /></sprite>
+    <sprite name="worm"><image file="images/bonus/worm.jpg" /></sprite>
+  </section>
+  
 </resources>

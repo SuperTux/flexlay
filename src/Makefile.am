@@ -79,6 +79,8 @@ windstille_SOURCES = \
   trigger.cxx \
   water_map.cxx \
   water_map.hxx \
+  windstille_bonus.cxx \
+  windstille_bonus.hxx \
   windstille_game.cxx \
   windstille_game.hxx \
   windstille_level.cxx \

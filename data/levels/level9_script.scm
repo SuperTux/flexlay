@@ -94,6 +94,7 @@
 (add-region-trigger 6000 3968  9000 5000
                     end-dialog)
 
+(startup-dialog)
 ;;(add-region-trigger 357 389 660 776
 ;;                    startup-dialog)
 

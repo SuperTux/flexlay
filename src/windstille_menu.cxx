@@ -1,4 +1,4 @@
-//  $Id: windstille_menu.cxx,v 1.7 2003/11/04 22:48:51 grumbel Exp $
+//  $Id: windstille_menu.cxx,v 1.8 2003/11/05 22:44:49 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -28,6 +28,7 @@
 #include "controller.hxx"
 #include "windstille_menu.hxx"
 #include "windstille_game.hxx"
+#include "windstille_bonus.hxx"
 #include "editor/editor.hxx"
 
 WindstilleMenu::WindstilleMenu()
@@ -63,10 +64,17 @@ WindstilleMenu::update(float delta)
     {
       if ((*i).type == InputEvent::FIRE && (*i).state == true)
         {
-          if (current_choice == 2) // QUIT
+          if ((current_choice == 2 && !bonus_active)
+              || (current_choice == 3 && bonus_active))// QUIT
             {
               fadeout();
               quit();
+            }
+          else if (current_choice == 2 && bonus_active)
+            {
+              fadeout();
+              WindstilleBonus bonus;
+              bonus.display();
             }
           else if (current_choice == 0) // start game
             {
@@ -102,8 +110,15 @@ WindstilleMenu::update(float delta)
     CL_System::keep_alive();
 
   if (current_choice < 0)
-    current_choice = 2;
-  else if (current_choice > 2)
+    {
+      if (bonus_active)
+        current_choice = 3;
+      else
+        current_choice = 2;
+    }
+  else if (current_choice > 2 && !bonus_active)
+    current_choice = 0;
+  else if (current_choice > 3 && bonus_active)
     current_choice = 0;
 
   Controller::current()->clear();
@@ -141,6 +156,7 @@ WindstilleMenu::draw()
   else
     Fonts::menu.draw(580, 330, "Start Game");
 
+
   if (current_choice == 1)
     {
       Fonts::menu.draw(580, 385, "[Start Editor]");
@@ -149,14 +165,35 @@ WindstilleMenu::draw()
   else
     Fonts::menu.draw(580, 385, "Start Editor");
 
-  if (current_choice == 2)
+  if (bonus_active)
     {
-      Fonts::menu.draw(580, 440, "[Quit]");
-      Fonts::menu_h.draw(580, 440, "[Quit]");
+      if (current_choice == 2)
+        {
+          Fonts::menu.draw(580, 440, "[Extras]");
+          Fonts::menu_h.draw(580, 440, "[Extras]");
+        }
+      else
+        Fonts::menu.draw(580, 440, "Extras");
+
+      if (current_choice == 3)
+        {
+          Fonts::menu.draw(580, 495, "[Quit]");
+          Fonts::menu_h.draw(580, 495, "[Quit]");
+        }
+      else
+        Fonts::menu.draw(580, 495, "Quit");
     }
   else
-    Fonts::menu.draw(580, 440, "Quit");
-  
+    {
+      if (current_choice == 2 || (bonus_active && current_choice == 3))
+        {
+          Fonts::menu.draw(580, 440, "[Quit]");
+          Fonts::menu_h.draw(580, 440, "[Quit]");
+        }
+      else
+        Fonts::menu.draw(580, 440, "Quit");
+    }
+
   Fonts::copyright.set_alignment(origin_bottom_left);
   Fonts::copyright.draw(15, CL_Display::get_height() - 10,
                         PACKAGE_STRING "\n"

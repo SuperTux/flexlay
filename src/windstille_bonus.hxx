@@ -1,5 +1,5 @@
-//  $Id: globals.cxx,v 1.4 2003/11/05 22:44:49 grumbel Exp $
-//
+//  $Id: windstille_bonus.hxx,v 1.1 2003/11/05 22:44:49 grumbel Exp $
+// 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
 //
@@ -12,20 +12,40 @@
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
-//
+// 
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-#include "globals.hxx"
+#ifndef HEADER_WINDSTILLE_BONUS_HXX
+#define HEADER_WINDSTILLE_BONUS_HXX
 
-std::string datadir;
-std::string libdir;
-std::string bindir;
-std::string homedir;
+#include <vector>
+#include <ClanLib/Display/sprite.h>
+#include "screen.hxx"
 
-bool bonus_active = true;
-float game_speed = 1.0f;
-int debug = 0;
+/** */
+class WindstilleBonus : public Windstille::Screen
+{
+private:
+  float passed_time;
+  int index;
+  CL_Sprite sprite;
+  CL_Point pos;
+
+  typedef std::vector<std::string> Names;
+  Names lst;
+public:
+  WindstilleBonus();
+  ~WindstilleBonus();
+  
+  void draw();
+  void update(float delta);
+
+  void on_startup();
+  void on_shutdown();
+};
+
+#endif
 
 /* EOF */

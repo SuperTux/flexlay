@@ -1,4 +1,4 @@
-//  $Id: globals.hxx,v 1.9 2003/11/04 22:48:51 grumbel Exp $
+//  $Id: globals.hxx,v 1.10 2003/11/05 22:44:49 grumbel Exp $
 // 
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -43,6 +43,7 @@ extern std::string homedir;
 
 extern CL_ResourceManager* resources;
 
+extern bool bonus_active;
 extern float game_speed;
 
 extern int debug;

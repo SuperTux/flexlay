@@ -8,7 +8,7 @@ ToDo:
  - get rid of 'mysprite'
  - scrollbar in tileselector
  - gui and some magic to set the supertux datadir
- - paralax layers
+ - support additional layers (paralax and normal)
  - doors/sector support needs improvement
  - moving platforms + path
  - camera path 

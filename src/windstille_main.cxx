@@ -1,4 +1,4 @@
-//  $Id: windstille_main.cxx,v 1.20 2003/09/29 19:29:17 grumbel Exp $
+//  $Id: windstille_main.cxx,v 1.21 2003/09/29 19:56:42 grumbel Exp $
 //
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -31,6 +31,7 @@
 #include "windstille_level.hxx"
 #include "windstille_main.hxx"
 #include "windstille_menu.hxx"
+#include "keyboard_controller.hxx"
 #include "fonts.hxx"
 #include "tile_factory.hxx"
 
@@ -131,6 +132,10 @@ WindstilleMain::inner_main(void* closure, int argc, char** argv)
 
     std::cout << "Loading Guile Code... done" << std::endl;
 
+    // FIXME:
+    new KeyboardController();
+    TileFactory::init();
+
     if (!launch_editor && levelfile.empty())
       {
         std::cout << "Starting Menu" << std::endl;
@@ -139,27 +144,22 @@ WindstilleMain::inner_main(void* closure, int argc, char** argv)
       }
     else if (!launch_editor) // Launch Level
       {
-        TileFactory::init();
-        
         WindstilleGame game (levelfile);
         std::cout << "WindstilleMain: entering main-loop..." << std::endl;
         game.display ();
-
-        TileFactory::deinit();
       }
     else
       {
-        TileFactory::init();
         Editor editor;
         if (!levelfile.empty ())
           editor.load (levelfile);
         editor.run();
-        TileFactory::deinit();
       }
   } catch (CL_Error& error) {
     std::cout << "CL_Error: " << error.message << std::endl;
   }
-
+  
+  TileFactory::deinit();
   Fonts::deinit();
 
   CL_SetupDisplay::init();

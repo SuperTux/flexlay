@@ -1,4 +1,4 @@
-//  $Id: windstille_menu.hxx,v 1.1 2003/09/29 19:29:17 grumbel Exp $
+//  $Id: windstille_menu.hxx,v 1.2 2003/09/29 19:56:42 grumbel Exp $
 // 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -29,7 +29,8 @@ class WindstilleMenu : public Screen
 private:
   CL_Sprite background;
   CL_Sprite windstille;
-
+  int current_choice;
+  float passed_time;
 public:
   WindstilleMenu();
   ~WindstilleMenu();

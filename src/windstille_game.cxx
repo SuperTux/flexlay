@@ -1,4 +1,4 @@
-//  $Id: windstille_game.cxx,v 1.21 2003/09/28 16:58:03 grumbel Exp $
+//  $Id: windstille_game.cxx,v 1.22 2003/09/29 19:56:42 grumbel Exp $
 //
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -142,7 +142,7 @@ WindstilleGame::on_startup ()
 
   GameObj::set_world (world);
   
-  player = new Player(new KeyboardController());
+  player = new Player(Controller::current());
   view   = new PlayerView(player);
   
   energiebar = new Energiebar();

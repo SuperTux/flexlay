@@ -1,4 +1,4 @@
-//  $Id: collision_mask.cxx,v 1.1 2003/09/01 15:36:02 grumbel Exp $
+//  $Id: collision_mask.cxx,v 1.2 2003/09/01 20:56:48 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -28,6 +28,13 @@
 #include "collision_mask.hxx"
 
 const int CollisionMask::int_width = 32;
+
+void put_int(cl_uint32 val)
+{
+  for (int i = 0; i < 32; ++i)
+    std::cout << ((val & (1 << (31-i))) ? 'X' : '.');
+  std::cout << std::endl;
+}
 
 CollisionMask::CollisionMask(int arg_width, int arg_height)
   : width(arg_width),
@@ -72,6 +79,8 @@ CollisionMask::CollisionMask(const std::string filename)
           put_pixel(x, y, true);
       }
 
+  std::cout << width << "x" << height << std::endl;
+
   provider->unlock();
 
   delete provider;
@@ -90,7 +99,7 @@ CollisionMask::put_pixel(int x, int y, bool pixel)
   if (pixel)
     data[y * pitch + x/32] |= (1 << (32 - (x % 32)));
   else
-    data[y * pitch + x/32] &= (~0 ^ (1 << (x % 32)));
+    data[y * pitch + x/32] &= (~(1 << (x % 32)));
 }
 
 bool
@@ -112,17 +121,8 @@ CollisionMask::get_line(int x, int y) const
 bool
 CollisionMask::collides_with(const CollisionMask& mask, int pixel_x_of, int pixel_y_of) const
 {
-  if (0)
-    {
-      return bbox_collides_with(mask, pixel_x_of, pixel_y_of);
-    }
-  else
-    {
-      if (bbox_collides_with(mask, pixel_x_of, pixel_y_of))
-        return slow_pixel_collides_with(mask, pixel_x_of, pixel_y_of);
-      else
-        return false;
-    }
+  return bbox_collides_with(mask, pixel_x_of, pixel_y_of)
+    && pixel_collides_with(mask, pixel_x_of, pixel_y_of);
 }
 
 bool
@@ -135,13 +135,12 @@ CollisionMask::slow_pixel_collides_with(const CollisionMask& mask, int pixel_x_o
   int end_x   = std::min(width, mask.width + pixel_x_of);
 
   for (int x = start_x; x < end_x; ++x)
-    {
-      for (int y = start_y; y < end_y; ++y)
-        {
-          if (get_pixel(x, y) && mask.get_pixel(x - pixel_x_of, y - pixel_y_of))
-            return true;
-        }
-    }
+    for (int y = start_y; y < end_y; ++y)
+      {
+        if (get_pixel(x, y) && mask.get_pixel(x - pixel_x_of, y - pixel_y_of))
+          return true;
+      }
+
   return false;
 }
 
@@ -154,15 +153,11 @@ CollisionMask::pixel_collides_with(const CollisionMask& mask, int pixel_x_of, in
   int start_y = std::max(0, pixel_y_of); 
   int end_y   = std::min(height, mask.height + pixel_y_of);
 
-  int start_x = std::max(0, pixel_x_of);
-  int end_x   = std::min(width, mask.width + pixel_x_of);
-
   // We can directly compare ints vs ints, no shifting required
   if (pixel_x_of % int_width == 0)
     {
-      // Convert start/end to tile units
-      start_x /= 32;
-      end_x   /= 32;
+      int start_x = std::max(0, tile_x_of);
+      int end_x   = std::min(pitch, mask.pitch + tile_x_of);
 
       for (int x = start_x; x < end_x; ++x)
         {
@@ -178,29 +173,32 @@ CollisionMask::pixel_collides_with(const CollisionMask& mask, int pixel_x_of, in
     }
   else
     {
-      // Convert start/end to tile units
-      start_x /= 32;
-      end_x   /= 32;
+      int start_x = std::max(0, tile_x_of);
+      int end_x   = std::min(pitch, mask.pitch + tile_x_of + 1);
 
-      for (int x = start_x; x < end_x; ++x)
+      int left_shift  = ((32 * 1000) + pixel_x_of) % 32;
+      int right_shift = 32 - left_shift;
+
+      if (0)
+      std::cout << "start: " << start_x << " end: " << end_x
+                << " pitch: " << pitch << " height: " << height 
+                << " mpitch: " << mask.pitch << " mheight: " << mask.height 
+                << std::endl;
+
+      for (int y = start_y; y < end_y; ++y)
         {
-          for (int y = start_y; y < end_y; ++y)
-            {
-              cl_int32 source  = get_line(x, y);
-              cl_int32 target1 = mask.get_line(x - tile_x_of,
-                                               y - pixel_y_of);
-              cl_int32 target2 = mask.get_line(x - tile_x_of + 1,
-                                               y - pixel_y_of);
+          cl_int32 source = get_line(start_x, y);
+          cl_int32 target = mask.get_line(start_x - tile_x_of,
+                                          y - pixel_y_of);
+          if (pixel_x_of < 0)
+            target = target << right_shift;
+          else
+            target = target >> left_shift;
+              
+          if (source & target)
+            return true;
+        }
 
-              target1 = target1 << pixel_x_of % 32;
-              target2 = target2 << pixel_x_of % 32;
-
-              cl_int32 target = target1 | target2;
-
-              if (source & target)
-                return true;
-            }
-        }     
     }
 
   return false;
@@ -209,11 +207,10 @@ CollisionMask::pixel_collides_with(const CollisionMask& mask, int pixel_x_of, in
 bool
 CollisionMask::bbox_collides_with(const CollisionMask& mask, int x_of, int y_of) const
 {
-  if (x_of > width || y_of > height
-      || x_of + mask.width < 0 || y_of + mask.height < 0)
-    return false;
-  else
-    return true;
+  return !(x_of > width 
+           ||   y_of > height
+           ||   x_of + mask.width  < 0 
+           ||   y_of + mask.height < 0);
 }
 
 /* EOF */

@@ -1,4 +1,4 @@
-//  $Id: collision_mask.hxx,v 1.1 2003/09/01 15:36:02 grumbel Exp $
+//  $Id: collision_mask.hxx,v 1.2 2003/09/01 20:56:48 grumbel Exp $
 // 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -55,13 +55,24 @@ public:
   inline void put_pixel(int x, int y, bool pixel);
   inline bool get_pixel(int x, int y) const;
 
-  bool collides_with      (const CollisionMask& mask2, int x_of, int y_of) const;
-  bool pixel_collides_with(const CollisionMask& mask2, int x_of, int y_of) const;
-  bool slow_pixel_collides_with(const CollisionMask& mask2, int x_of, int y_of) const;
-  bool bbox_collides_with (const CollisionMask& mask2, int x_of, int y_of) const;
-
   inline int  get_width()  const { return width; }
   inline int  get_height() const { return height; }
+
+  /** Checks pixel precisly if the two collision masks collide, does
+      optimizations where possible */
+  bool collides_with      (const CollisionMask& mask, int x_of, int y_of) const;
+
+  /** Checks for collision of the bounding boxes of the two collision
+      masks */
+  bool bbox_collides_with (const CollisionMask& mask, int x_of, int y_of) const;
+
+  /** Checks pixel precisly if the two collision masks collide */
+  bool pixel_collides_with(const CollisionMask& mask, int x_of, int y_of) const;
+
+  /** Checks pixel precisly if the two collision masks collide, in a
+      slow but safe way */
+  bool slow_pixel_collides_with(const CollisionMask& mask, int x_of, int y_of) const;
+
 private:
   CollisionMask (const CollisionMask&);
   CollisionMask& operator= (const CollisionMask&);

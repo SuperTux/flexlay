@@ -2,16 +2,15 @@
 (load "helper.scm")
 
 (define (*key-down-handler* key)
-  ;;(display "Keydown: ")
-  ;;(display key)
-  ;;(newline)
+  (display "Keydown: ")
+  (display key)
+  (newline)
   (cond ((string=? key "i")
          (game-add-igel (+ (player-get-x) 0)
                         (- (player-get-y) 300)))
         ((string=? key "s")
          (windstille:repl))
-        ((string=? key "escape")
-         (game-quit))
+
         ((string=? key "p")
          (toggle-pause))
         
@@ -41,15 +40,23 @@
   #f)
 
 (define (*mouse-down-handler* x y)
-  (display "(game-add-igel ")
   (display (inexact->exact x))
   (display " ")
   (display (inexact->exact y))
-  (display ")")
-  ;;(player-set-pos x y)
-  (game-add-igel (inexact->exact x)
-                 (inexact->exact y))
-  (newline))
+  (newline)
+
+  (cond (#t
+         (player-set-pos x y))
+        (else
+         (display "(game-add-igel ")
+         (display (inexact->exact x))
+         (display " ")
+         (display (inexact->exact y))
+         (display ")")
+         
+         (game-add-igel (inexact->exact x)
+                        (inexact->exact y))
+         (newline))))
 
 (define (toggle-pause)
   (game-set-pause (not (game-get-pause))))
@@ -73,7 +80,8 @@
 
   (gui-push-component (gui-window-get-client-area window))
   (gui-create-button-func 10 10 100 25 "Save Position"
-                          (lambda () (save-player-position)))
+                          (lambda () (save-player-position (inexact->exact (player-get-pos-x))
+                                                           (inexact->exact (player-get-pos-y)))))
   (gui-create-button-func 115 10 100 25 "Clear"
                           (lambda () 
                             (for-each gui-remove-component buttons)
@@ -82,21 +90,24 @@
                             (set! y 45)))
   (gui-pop-component)
 
-  (set! save-player-position 
-        (lambda ()
+  (set! save-player-position
+        (lambda (player-x player-y)
           (gui-push-component (gui-window-get-client-area window))
-          (let ((player-x (inexact->exact (player-get-pos-x)))
-                (player-y (inexact->exact (player-get-pos-y))))
-            (set! buttons
-                  (cons (gui-create-button-func x y 70 25 (format #f "~d, ~d" player-x player-y)
-                                                (lambda ()
-                                                  (player-set-pos player-x player-y)))
-                        buttons)))
+          (set! buttons
+                (cons (gui-create-button-func x y 70 25 (format #f "~d, ~d" player-x player-y)
+                                              (lambda ()
+                                                (player-set-pos player-x player-y)))
+                      buttons))
           (set! x (+ x 75))
           (cond ((> x 220)
                  (set! y (+ y 30))
                  (set! x 10)))
           (gui-pop-component))))
+
+(save-player-position 258 607)
+(save-player-position 3989 703)
+(save-player-position 7635 3391)
+(save-player-position 969 3263)
 
 (let ((window (gui-create-window 20 320 310 100 "Eval Scheme")))
   (gui-push-component (gui-window-get-client-area window))

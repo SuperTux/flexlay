@@ -1,7 +1,7 @@
-//  $Id: igel.hxx,v 1.3 2003/09/28 10:55:34 grumbel Exp $
+//  $Id: igel.hxx,v 1.4 2003/11/05 11:08:31 grumbel Exp $
 // 
-//  Pingus - A free Lemmings clone
-//  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
+//  Windstille - A Jump'n Shoot Game
+//  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License

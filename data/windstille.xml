@@ -31,6 +31,15 @@
     <bitmap glyphs="menu_glyphsh" letters="!_#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~" />
   </font>
 
+  <section name="brush">
+    <sprite name="light">
+      <image file="images/light.png" />
+      <translation origin="bottom_center" />
+    </sprite>
+    <sprite name="exit">
+      <image file="images/exit.png" />
+    </sprite>
+  </section>
 
   <sprite name="copyright_glyphs">
     <image file="images/verdana11_blue.png"><alpha /></image>

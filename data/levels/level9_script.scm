@@ -45,6 +45,9 @@
 (game-add-igel 8374 2454)
 (game-add-igel 7679 3355)
 
+(game-add-brush-light 7360 3840)
+(game-add-brush-exit  7360 3648)
+
 (define (startup-dialog2)
   (dialog-clear)
   (dialog-add "hero/portrait"
@@ -61,8 +64,9 @@
                              "Anyway, this techdemo provides one simple playable level. "
                              "Your goal is simply to collect as many diamonds as possible and "
                              "to kill as many enemies as possible as fast as you can. "
-                             "Add the end of the level you will see how many enemies you "
-                             "destroyed and how many diamonds you collected.\n\n"
+                             "At the end of the level you will see how many enemies you "
+                             "destroyed and how many diamonds you collected. "
+                             "<control>-<down> will lay mines, cursor keys for controlls.\n\n"
                              "Understood everything?"))
   (dialog-add-answer "Yes" (lambda () #f))
   (dialog-add-answer "No"  (lambda () (startup-dialog2)))

@@ -11,6 +11,8 @@ windstille_SOURCES = \
   background.cxx \
   bomb.hxx \
   bomb.cxx \
+  brush.hxx \
+  brush.cxx \
   bonus_flyer.cxx \
   bonus_flyer.hxx \
   controller.hxx \

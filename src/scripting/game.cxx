@@ -1,4 +1,4 @@
-//  $Id: game.cxx,v 1.15 2003/10/12 11:58:09 grumbel Exp $
+//  $Id: game.cxx,v 1.16 2003/11/05 11:08:31 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -21,6 +21,7 @@
 #include "water_map.hxx"
 #include "game_world.hxx"
 #include "igel.hxx"
+#include "brush.hxx"
 #include "bomb.hxx"
 #include "windstille_game.hxx"
 #include "trigger.hxx"
@@ -39,6 +40,18 @@ void
 game_add_bomb(int x, int y)
 {
   GameWorld::current()->add(new Bomb(x, y));
+}
+
+void
+game_add_brush_light(int x, int y)
+{
+  GameWorld::current()->add(new Brush("brush/light", CL_Point(x, y), true));
+}
+
+void
+game_add_brush_exit(int x, int y)
+{
+  GameWorld::current()->add(new Brush("brush/exit", CL_Point(x, y), false));
 }
 
 void

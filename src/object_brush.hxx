@@ -26,6 +26,7 @@
 class ObjectBrush
 {
 public:
+  CL_Point  pos;
   CL_Sprite sprite;
   MetaData  data;
 

@@ -46,19 +46,16 @@ class SuperTuxLevel:
     author = "no author"
     width  = 200
     height = 100
-
+    gravity = 10
+    theme = "antarctica"
     time = 999
     music = "Mortimers_chipdisko.mod"
 
     foreground  = None
     interactive = None
     background  = None
-
-    gravity = 10
-
     objects = None
-
-    theme = "antarctica"
+    camera  = None
 
     editormap = None
 

@@ -208,7 +208,8 @@ MenuImpl::get_height()
 void
 MenuImpl::on_mouse_down(const CL_InputEvent& event)
 {
-  items[current_item]->sig_clicked()();
+  if (current_item != -1)
+    items[current_item]->sig_clicked()();
   parent->release_mouse();
   parent->show(false);
 }
@@ -239,9 +240,13 @@ Menu::sig_clicked(MenuItemHandle item)
 void
 Menu::run()
 {
-  show(true);
-  capture_mouse();
-  raise();
+  // FIXME: Make menu act sane on == 0 items
+  if (impl->items.size() > 0)
+    {
+      show(true);
+      capture_mouse();
+      raise();
+    }
 }
 
 /* EOF */

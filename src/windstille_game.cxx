@@ -153,6 +153,7 @@ WindstilleGame::draw()
       filename << ".ppm";
       Screenshot::write_screenshot_pnm(filename.str());
     }
+  ++frames;
 }
 
 void

@@ -114,14 +114,19 @@ EditorTileMap::draw(EditorMapComponent* parent)
                               y * tile_size,
                               end_x   * tile_size,
                               y * tile_size, 
-                              CL_Color(150, 150, 150));
+                              y % 5 ?
+                              CL_Color(150, 150, 150) :
+                              CL_Color(255, 255, 255)
+                              );
   
       for (int x = start_x; x <= end_x; ++x)
         CL_Display::draw_line(x * tile_size,
                               start_y * tile_size,
                               x   * tile_size,
                               end_y * tile_size, 
-                              CL_Color(150, 150, 150));
+                              x % 5 ?
+                              CL_Color(150, 150, 150) :
+                              CL_Color(255, 255, 255));
     }
 
   CL_Display::flush();

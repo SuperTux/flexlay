@@ -61,8 +61,8 @@ public:
   void set_tool(int i);
 
   float get_zoom();
-  void zoom_out();
-  void zoom_in();
+  void  zoom_out();
+  void  zoom_in();
 
   void draw ();
   void draw_map(Field<EditorTile*>* field);

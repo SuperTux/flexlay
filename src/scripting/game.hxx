@@ -24,6 +24,10 @@
 
 class GameWorld;
 
+
+void game_set_tilesize(int size, int subsize);
+void game_load_tiles(const char* resourcefile);
+
 void game_add_water(int x, int y, int w, int h);
 void game_add_bomb(int x, int y);
 void game_add_igel(int x, int y);

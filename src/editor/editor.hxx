@@ -23,6 +23,7 @@
 #include <stack>
 
 class TileEditor;
+class EditorObjMap;
 class EditorTileMap;
 class GUIManager;
 
@@ -32,6 +33,7 @@ class Editor
 private:
   GUIManager* manager;
   EditorTileMap* tilemap;
+  EditorObjMap*  objmap;
 
   static Editor* current_;
 public:

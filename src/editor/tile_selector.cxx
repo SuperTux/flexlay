@@ -36,6 +36,7 @@ TileSelector::TileSelector(int width, int height, CL_Component* parent)
   slots.connect(sig_mouse_down(), this, &TileSelector::mouse_down);
   slots.connect(sig_mouse_up  (), this, &TileSelector::mouse_up);
  
+  scale = 1.0f;
   mouse_over_tile = -1;
   scrolling = false;
   offset = 0;
@@ -67,21 +68,21 @@ TileSelector::mouse_down(const CL_InputEvent& event)
     }
   else if (event.id == CL_MOUSE_WHEEL_UP)
     {
-      offset -= TILE_SIZE/2;
+      offset -= static_cast<int>(TILE_SIZE*scale);
       if (offset < 0)
         offset = 0;
     }
   else if (event.id == CL_MOUSE_WHEEL_DOWN)
     {
-      offset += TILE_SIZE/2;
+      offset += static_cast<int>(TILE_SIZE*scale);
     }
 }
 
 void
 TileSelector::mouse_move(const CL_InputEvent& event)
 {
-  int x = event.mouse_pos.x/(TILE_SIZE/2);
-  int y = (event.mouse_pos.y+offset)/(TILE_SIZE/2);
+  int x = event.mouse_pos.x/static_cast<int>(TILE_SIZE*scale);
+  int y = (event.mouse_pos.y+offset)/static_cast<int>(TILE_SIZE*scale);
 
   mouse_over_tile = y * width + x;
 
@@ -102,30 +103,41 @@ TileSelector::draw()
       {
         int i = width * y + x;
         Tile* tile = TileFactory::current()->create(i);
+
+        CL_Rect rect(CL_Point(static_cast<int>(x * TILE_SIZE*scale),
+                              static_cast<int>(y * TILE_SIZE*scale)),
+                     CL_Size(static_cast<int>(TILE_SIZE*scale),
+                             static_cast<int>(TILE_SIZE*scale)));
+
         if (tile)
           {
             CL_Sprite sprite = tile->sur;
-            sprite.set_scale(0.5f, 0.5f);
-            sprite.draw(x * TILE_SIZE/2, y * TILE_SIZE/2);
-            CL_Display::draw_rect(CL_Rect(CL_Point(x * TILE_SIZE/2, y * TILE_SIZE/2),
-                                          CL_Size(TILE_SIZE/2, TILE_SIZE/2)),
-                                  CL_Color(0,0,0,128));
+
+            sprite.set_scale(scale, scale);
+
+            sprite.draw(static_cast<int>(x * TILE_SIZE*scale), 
+                        static_cast<int>(y * TILE_SIZE*scale));
+
+            CL_Display::draw_rect(rect, CL_Color(0,0,0,128));
           }
 
         if (i == editor_get_brush_tile())
           {
-            CL_Display::fill_rect(CL_Rect(CL_Point(x * TILE_SIZE/2, y * TILE_SIZE/2),
-                                          CL_Size(TILE_SIZE/2, TILE_SIZE/2)),
+            CL_Display::fill_rect(rect,
                                   CL_Color(0,0,255, 100));
           }
         else if (mouse_over_tile == i && has_mouse_over())
           {
-            CL_Display::fill_rect(CL_Rect(CL_Point(x * TILE_SIZE/2, y * TILE_SIZE/2),
-                                          CL_Size(TILE_SIZE/2, TILE_SIZE/2)),
-                                  CL_Color(0,0,255, 20));
+            CL_Display::fill_rect(rect, CL_Color(0,0,255, 20));
           }
       }
   CL_Display::pop_translate_offset();
+}
+
+void
+TileSelector::set_scale(float s)
+{
+  scale = s;
 }
 
 /* EOF */

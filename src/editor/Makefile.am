@@ -8,6 +8,8 @@ libwindstille_editor_a_SOURCES = \
   editor_tile.hxx editor_tile.cxx \
   tile_selector.hxx tile_selector.cxx \
   editor.hxx editor.cxx \
+  editor_objmap.hxx   editor_objmap.cxx \
+  editor_map.hxx editor_map.cxx \
   tile_editor.hxx  tile_editor.cxx \
   tilemap_tool.hxx tilemap_tool.cxx \
   tilemap_paint_tool.hxx tilemap_paint_tool.cxx \

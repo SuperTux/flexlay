@@ -37,6 +37,7 @@ WindstilleEditor::display ()
   //tilemap = new EditorTileMap ("../data/levels/level1.xml");
   if (!tilemap)
     {
+      // FIXME: Move this to the scripting level
       tilemap = new EditorTileMap (50, 25);
     }
 

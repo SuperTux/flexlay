@@ -28,6 +28,7 @@
 #include "globals.hxx"
 #include "editor.hxx"
 #include "editor_tilemap.hxx"
+#include "editor_objmap.hxx"
 #include "tile_selector.hxx"
 #include "tile_editor.hxx"
 
@@ -39,7 +40,8 @@ Editor::Editor()
 
   manager = new GUIManager();
 
-  tilemap   = new EditorTileMap(manager->get_component());
+  tilemap = new EditorTileMap(manager->get_component());
+  objmap  = new EditorObjMap(manager->get_component());
 
   gh_load ((datadir + "editor.scm").c_str());
 }

@@ -37,44 +37,75 @@
   (let ((level (serialize-level)))
     (with-output-to-file filename
       (lambda ()
-        (pretty-print level)
+        ;;(pretty-print level)
+        (display level)
         (newline)))))
 
-(gui-create-button-func 0 0
-                        50 25 "New" 
-                        (lambda () 
-                          (show-new-level-dialog)))
-(gui-create-button-func 0 25
-                        50 25 "Load" 
-                        (lambda ()
-                          (simple-file-dialog "Load a level..." (get-last-file)
-                                              (lambda (filename)
-                                                (editor-load filename)
-                                                (push-last-file filename)))))
-(gui-create-button-func 0 50
-                        50 25 "Save" 
-                        (lambda () 
-                          (simple-file-dialog "Save a level..." (get-last-file)
-                                              (lambda (filename) 
-                                                (save-map filename)
-                                                (push-last-file filename)))))
+(define (show-new-level-dialog)
+  (let ((window (gui-create-window 200 200 200 160 "Property Window")))
+    (gui-push-component (gui-window-get-client-area window))
 
-(gui-create-button-func 0 75 50 25 "Play" 
-                        (lambda ()
-                          (let ((file (tmpnam)))
-                            (save-map file)
-                            (game-play file)
-                            (delete-file file))))
+    (gui-create-label 10 10 "Width: ")
+    (gui-create-label 10 30 "Height: ")
 
-(gui-create-button-func 0 100 50 25 "Quit" 
-                        (lambda ()
-                          (gui-quit)))
+    (let ((width  (gui-create-inputbox 100 10 50 25 "50"))
+          (height (gui-create-inputbox 100 30 50 25 "50"))
 
-(gui-create-button-func 100 0
+          (ok     (gui-create-button 90 100 50 25 "Ok"))
+          (cancel (gui-create-button 140 100 50 25 "Cancel")))
+      
+      (gui-component-on-click ok 
+                              (lambda ()   
+                                (editor-new (string->number (gui-inputbox-get-text width))
+                                            (string->number (gui-inputbox-get-text height)))
+                                (gui-hide-component window)))
+
+      (gui-component-on-click cancel
+                              (lambda () 
+                                (gui-hide-component window)))
+      (gui-pop-component))))
+
+(define menu (gui-create-menu))
+;; File Menu
+(gui-add-menu-item menu "File/New"  show-new-level-dialog)
+(gui-add-menu-item menu "File/Load" 
+                   (lambda ()
+                     (simple-file-dialog "Load a level..." (get-last-file)
+                                         (lambda (filename)
+                                           (editor-load filename)
+                                           (push-last-file filename)))))
+(gui-add-menu-item menu "File/Save" 
+                   (lambda ()
+                     (simple-file-dialog "Save a level..." (get-last-file)
+                                         (lambda (filename) 
+                                           (save-map filename)
+                                           (push-last-file filename)))))
+
+(gui-add-menu-item menu "File/Play" 
+                   (lambda ()
+                     (let ((file (tmpnam)))
+                       (save-map file)
+                       (game-play file)
+                       (delete-file file))))
+
+(gui-add-menu-item menu "File/Quit" 
+                   (lambda ()
+                     (gui-quit)))
+
+;; Dialog Menu
+(gui-add-menu-item menu "Dialogs/TileSelector" 
+                   (lambda ()
+                     (gui-component-toggle-visibility *tileselector-window*)))
+
+(gui-add-menu-item menu "Dialogs/Tile Editor"
+                   (lambda ()
+                     (gui-component-toggle-visibility *tileeditor-window*)))
+
+(gui-create-button-func 720 500
                         80 25 "Background" 
                         (lambda () (tilemap-set-active-layer 0)))
 
-(gui-create-button-func 180 0
+(gui-create-button-func 720 525
                         80 25 "Foreground" 
                         (lambda () (tilemap-set-active-layer 1)))
 
@@ -112,42 +143,6 @@
                         100 25 "Select"
                         (lambda ()
                           (editor-set-tool 1)))
-
-(gui-create-button-func (+ 450)
-                        (- screen-height 25)
-                        80 25 "Tile Editor"
-                        (lambda ()
-                          (gui-component-toggle-visibility *tileeditor-window*)))
-
-(gui-create-button-func (+ 570)
-                        (- screen-height 25)
-                        80 25 "Tile Selector"
-                        (lambda ()
-                          (gui-component-toggle-visibility *tileselector-window*)))
-
-(define (show-new-level-dialog)
-  (let ((window (gui-create-window 200 200 200 160 "Property Window")))
-    (gui-push-component (gui-window-get-client-area window))
-
-    (gui-create-label 10 10 "Width: ")
-    (gui-create-label 10 30 "Height: ")
-
-    (let ((width  (gui-create-inputbox 100 10 50 25 "50"))
-          (height (gui-create-inputbox 100 30 50 25 "50"))
-
-          (ok     (gui-create-button 90 100 50 25 "Ok"))
-          (cancel (gui-create-button 140 100 50 25 "Cancel")))
-      
-      (gui-component-on-click ok 
-                              (lambda ()   
-                                (editor-new (string->number (gui-inputbox-get-text width))
-                                            (string->number (gui-inputbox-get-text height)))
-                                (gui-hide-component window)))
-
-      (gui-component-on-click cancel
-                              (lambda () 
-                                (gui-hide-component window)))
-      (gui-pop-component))))
 
 (define (simple-file-dialog title filename func)
   (let ((window (gui-create-window 200 200 250 160 title)))
@@ -203,22 +198,24 @@
     (set! *tileeditor-window* window))
   (gui-pop-component))
 
+(define (create-disclaimer)
+  (let ((window (gui-create-window 200 200 300 130 "Disclaimer")))
+    (gui-push-component (gui-window-get-client-area window))
+    (gui-create-label 10 10
+                      (string-append "This editor is buggy and might crash quite a bit,\n"
+                                     "it isn't really end user ready at the moment. \n"
+                                     "It is included here for those who might find it usefull\n"
+                                     "anyway, but don't complain when it locks your system"))
+    (gui-create-button-func 210 70 75 25 "Ok"
+                            (lambda ()
+                              (gui-hide-component window)))
+    (gui-pop-component)))
 
-(let ((window (gui-create-window 200 200 300 130 "Disclaimer")))
+(let ((window (gui-create-window 600 25 200 400 "TileSelector")))
   (gui-push-component (gui-window-get-client-area window))
-  (gui-create-label 10 10
-                    (string-append "This editor is buggy and might crash quite a bit,\n"
-                                   "it isn't really end user ready at the moment. \n"
-                                   "It is included here for those who might find it usefull\n"
-                                   "anyway, but don't complain when it locks your system"))
-  (gui-create-button-func 210 70 75 25 "Ok"
-                          (lambda ()
-                            (gui-hide-component window)))
-  (gui-pop-component))
-
-(let ((window (gui-create-window 600 0 200 400 "TileSelector")))
-  (gui-push-component (gui-window-get-client-area window))
-  (tile-selector-create (- screen-width (* 3 64)) 0 3 8)
+  
+  ;;(tile-selector-create (- screen-width (* 3 64)) 0 3 8 .5)
+  (tile-selector-create (- screen-width (* 3 64)) 0 6 8 1.0)
   (gui-component-on-close window (lambda ()
                                    (gui-hide-component window)))
   (set! *tileselector-window* window)

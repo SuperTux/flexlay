@@ -35,10 +35,15 @@ private:
   int mouse_over_tile;
   bool scrolling;
   CL_Point mouse_pos;
+  float scale;
 public:
   /** width and height in number of tiles */
   TileSelector(int width, int height, CL_Component* parent);
+
+  void set_scale(float s);
+
   void draw();
+
   void mouse_move(const CL_InputEvent& event);
   void mouse_down(const CL_InputEvent& event);
   void mouse_up  (const CL_InputEvent& event);

@@ -65,12 +65,11 @@ void editor_set_tool(int i)
 }
 
 CL_Component*
-tile_selector_create(int x, int y, int w, int h)
+tile_selector_create(int x, int y, int w, int h, float scale)
 {
-  /*CL_Window* window = new CL_Window(CL_Rect(CL_Point(x, y),
-                                            CL_Size(w*(TILE_SIZE/2), h*(TILE_SIZE/2) + 32)),
-                                            "TileSelector", Editor::current()->get_component());*/
-  return new TileSelector(w, h, GUIManager::current()->get_component());
+  TileSelector* ret = new TileSelector(w, h, GUIManager::current()->get_component());
+  ret->set_scale(scale);
+  return ret;
 }
 
 SCM diamond_map_get_data()

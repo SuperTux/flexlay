@@ -55,6 +55,12 @@ CL_Component* gui_create_label(int x, int y, const char* text);
     entered text can be accessed via an accessor function */
 CL_Component* gui_create_inputbox(int x, int y, int w, int h, const char* text);
 
+/** Create a menu */
+CL_Component* gui_create_menu();
+
+/** Add an item to a menu */
+void gui_add_menu_item(CL_Component* menu, const char* name, SCM func);
+
 /** Remove the component \a comp from its parent 
     FIXME: Who deallocates?! */
 void gui_remove_component(CL_Component* comp);
@@ -77,6 +83,8 @@ void gui_show_component(CL_Component* comp);
 
 /** Hide a component temporary, without removing it */
 void gui_hide_component(CL_Component* comp);
+
+void gui_component_set_position(CL_Component* comp, int x, int y);
 
 bool gui_component_is_visible(CL_Component* comp);
 

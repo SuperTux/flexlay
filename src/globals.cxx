@@ -23,6 +23,10 @@ std::string datadir;
 std::string bindir;
 std::string homedir;
 
+int TILE_SIZE    = 128;
+int SUBTILE_SIZE = 16;
+int SUBTILE_NUM  = (TILE_SIZE/SUBTILE_SIZE);
+
 bool bonus_active = true;
 float game_speed = 1.0f;
 int debug = 0;

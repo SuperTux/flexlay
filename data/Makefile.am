@@ -21,6 +21,7 @@ EXTRA_DIST = \
   windstille.xml \
   tiles.scm \
   tiles.xml \
+  tuxtiles.xml \
   game.scm \
   editor.scm \
   gui/gui.xml \
@@ -50,6 +51,15 @@ tiles.xml:
 	echo "  </section>" >> $@
 	echo "</resources>" >> $@
 
-.PHONY: tiles.xml
+tuxtiles.xml: images/tuxtiles/
+	echo "<resources>" >  $@
+	echo "  <section name=\"tiles\">" >> $@
+	for i in images/tuxtiles/*.png; do \
+		echo "    <sprite name=\""`basename $${i%%.png}`"\">"; \
+		echo "      <image file=\"$$i\" />"; \
+		echo "    </sprite>"; \
+	done  >> $@;
+	echo "  </section>" >> $@
+	echo "</resources>" >> $@
 
 # EOF #

@@ -25,9 +25,9 @@
 
 typedef enum { WEST, EAST} Direction;
 
-#define TILE_SIZE    128
-#define SUBTILE_SIZE  16
-#define SUBTILE_NUM  (TILE_SIZE/SUBTILE_SIZE)
+extern int TILE_SIZE;
+extern int SUBTILE_SIZE;
+extern int SUBTILE_NUM;
 
 /** datadir => /usr/local/share/games/windstille/ */
 extern std::string datadir;

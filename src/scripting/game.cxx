@@ -30,6 +30,24 @@
 #include "player.hxx"
 
 void
+game_set_tilesize(int size, int subsize)
+{
+  TILE_SIZE = size;
+  SUBTILE_SIZE = subsize;
+  SUBTILE_NUM = (TILE_SIZE/SUBTILE_SIZE);
+}
+
+void
+game_load_tiles(const char* resourcefile)
+{
+  try {
+  resources->add_resources(CL_ResourceManager(datadir + std::string(resourcefile), false));
+  } catch (CL_Error& err) {
+    std::cout << "CL_Error: " << err.message << std::endl;
+  }
+}
+
+void
 game_add_water(int x1, int y1, int x2, int y2)
 {
   GameWorld::current()->get_watermap()->add_water(x1, y1,

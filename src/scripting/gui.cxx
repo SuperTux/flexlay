@@ -46,6 +46,11 @@ gui_add_button(int x, int y, int w, int h, const char* text)
                        text, manager);
 }
 
+void gui_component_set_position(CL_Component* comp, int x, int y)
+{
+  comp->set_position(x, y);
+}
+
 void
 gui_component_on_click(CL_Component* comp, SCM func)
 {
@@ -62,6 +67,31 @@ gui_component_on_close(CL_Component* comp, SCM func)
   // FIXME: Slot container considered harmfull
   //CL_SlotContainer* slot_container = GUIManager::current()->get_slot_container();
   new CL_Slot(window->sig_close().connect_functor_virtual(SCMVirtualFunctor(SCMFunctor(func))));
+}
+
+CL_Component*
+gui_create_menu()
+{
+  CL_Component* manager = GUIManager::current()->get_component();
+  return new CL_Menu(manager);
+}
+
+void
+gui_add_menu_item(CL_Component* c_menu, const char* name, SCM func)
+{
+  CL_Menu* menu = dynamic_cast<CL_Menu*>(c_menu);
+
+  if (menu)
+    {
+      CL_MenuNode* node = menu->create_item(name);
+      //node->sig_clicked().connect_functor(SCMFunctor(func)).set_persistent();
+      //std::cout << "Connecting menu function" << std::endl;
+      new CL_Slot(node->sig_clicked().connect_functor(SCMFunctor(func)));
+    }
+  else
+    {
+      std::cout << "Error: " << c_menu << " not a menu item" << std::endl;
+    }
 }
 
 CL_Component*

@@ -30,10 +30,11 @@
 #include "editor_tilemap.hxx"
 
 EditorTileMap::EditorTileMap(CL_Component* parent)
-  : CL_Component(CL_Rect(CL_Point(0, 0), CL_Size(CL_Display::get_width(), CL_Display::get_height())),
+  : CL_Component(CL_Rect(CL_Point(0, 0),
+                         CL_Size(CL_Display::get_width(), CL_Display::get_height())),
                  parent)
 {
-  slots.connect(sig_paint(), this, &EditorTileMap::draw);
+  slots.connect(sig_paint(),      this, &EditorTileMap::draw);
   slots.connect(sig_mouse_up(),   this, &EditorTileMap::mouse_up);
   slots.connect(sig_mouse_down(), this, &EditorTileMap::mouse_down);
   slots.connect(sig_mouse_move(), this, &EditorTileMap::mouse_move);

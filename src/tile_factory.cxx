@@ -164,7 +164,7 @@ void
 TileFactory::init()
 {
   assert(current_ == 0);
-  current_ = new TileFactory(datadir + "tiles.scm");
+  current_ = new TileFactory(datadir + "tuxtiles.scm");
 }
 
 /** Destroy the default TileFactor*/

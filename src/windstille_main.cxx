@@ -274,10 +274,9 @@ WindstilleMain::init_modules()
   gh_define("*windstille-levelfile*",      gh_str02scm(levelfile.c_str()));
   gh_define("*windstille-datadir*",        gh_str02scm(datadir.c_str()));
   gh_define("*windstille-package-string*", gh_str02scm(PACKAGE_STRING));
-
   std::cout << "done" << std::endl;
-
-  // Init ClanLib
+  
+// Init ClanLib
   CL_SetupCore::init();
   CL_SetupGL::init();
   CL_SetupDisplay::init();
@@ -297,8 +296,12 @@ WindstilleMain::init_modules()
     sound = new CL_SoundOutput(44100);
 
   resources =  new CL_ResourceManager();
-  resources->add_resources(CL_ResourceManager(datadir + "tiles.xml", false));
+  //resources->add_resources(CL_ResourceManager(datadir + "tiles.xml", false));
   resources->add_resources(CL_ResourceManager(datadir + "windstille.xml", false));
+
+  std::cout << "Loading Windstille startup script... " << std::flush;
+  gh_load((datadir + "windstille.scm").c_str());
+  std::cout << "done" << std::endl;
 
   Fonts::init(); 
   MusicManager::init();

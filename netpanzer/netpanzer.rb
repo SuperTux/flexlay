@@ -325,7 +325,7 @@ set_tilemap_paint_tool()
 
 $gui.run()
 
-flexlay.deinit()
-print "deinit done"
+# flexlay.deinit()
+# print "deinit done"
 
 # EOF #

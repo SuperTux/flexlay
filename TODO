@@ -1,12 +1,19 @@
-- opengl support
-- worldmap loading
 - collision detection
-- multilpe tile levels
 - a background
 - virtual tiles in the editor
 - animated tiles
 
 26.76
 14
+
+- multiplayer (2 Player should be enough) Turrican clone
+- maybe including some metroid influence
+- opengl support (maybe keeping 2d backward compatible)
+- large level support (metroid doors?)
+- map generation?!
+- easy and fast gameplay
+- scriptable final bosses
+- lots of upgradeable weapons
+ 
 
 # EOF #

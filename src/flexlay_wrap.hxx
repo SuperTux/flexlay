@@ -17,31 +17,14 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-#ifndef HEADER_RUBY_FUNCTOR_HXX
-#define HEADER_RUBY_FUNCTOR_HXX
+#ifndef HEADER_FLEXLAY_WRAP_HXX
+#define HEADER_FLEXLAY_WRAP_HXX
 
 #include "ruby.h"
-#include "objmap_object.hxx"
-#include "ruby_object.hxx"
 
-/** */
-class RubyFunctor
-{
-private:
-  RubyObject val;
+class ObjMapObject;
 
-public:
-  RubyFunctor(const RubyObject& val_);  
-  ~RubyFunctor();
-
-  void operator()();
-  void operator()(int i);
-  void operator()(int x, int y);
-
-  void operator()(ObjMapObject obj);
-
-  static VALUE call_protected(VALUE self);
-};
+VALUE ObjMapObject2Value(const ObjMapObject& arg);
 
 #endif
 

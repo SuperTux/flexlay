@@ -37,6 +37,7 @@ public:
               const MetaData& data_);
 
   CL_Sprite get_sprite();
+  MetaData get_data();
 
   ObjMapSpriteObject to_sprite_object(const CL_Point& pos);
 private:

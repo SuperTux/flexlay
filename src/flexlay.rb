@@ -65,7 +65,6 @@ class SimpleFileDialog
   end
   
   def on_ok()
-    print "OK: ", @callback
     @window.hide();
     if @callback
       @callback.call(@inputbox.get_text())
@@ -73,7 +72,6 @@ class SimpleFileDialog
   end
   
   def on_cancel()
-    print "CANCEL"
     @window.hide();
   end
 end
@@ -97,12 +95,10 @@ class GenericDialog
   end
 
   def on_cancel()
-    print "ON CANCEL\n"
     @window.hide()
   end
   
   def on_ok()
-    print "ON OK\n"
     @window.hide()
     if @callback
       vals = @items.map{|item|

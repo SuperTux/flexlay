@@ -48,7 +48,9 @@ private:
 
   std::vector<ObjectBrush> brushes;
   int drag_obj;
-  
+
+  CL_Signal_v1<ObjMapObject> on_drop;
+
 public:
   ObjectSelector(const CL_Rect& rect, int obj_w, int obj_h, CL_Component* parent);
   ~ObjectSelector();
@@ -56,6 +58,7 @@ public:
   void draw();
   void add_brush(const ObjectBrush& brush);
 
+  CL_Signal_v1<ObjMapObject>& sig_drop();
 private:
   void mouse_move(const CL_InputEvent& event);
   void mouse_down(const CL_InputEvent& event);

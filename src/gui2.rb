@@ -123,6 +123,7 @@ $menu.add_item("Edit/Resize", proc{ gui_resize_level() })
 $menu.add_item("Edit/Resize to selection", proc{ gui_resize_level_to_selection()})
 $menu.add_item("Edit/Debug Shell", proc{ run_python()})
 $menu.add_item("Edit/Add Sector...", proc{ gui_add_sector()})
+$menu.add_item("Edit/Remove Current Sector", proc{ gui_remove_sector()})
 
 $menu.add_item("Zoom/1:4 (25%) ",  proc{ gui_set_zoom(0.25) })
 $menu.add_item("Zoom/1:2 (50%) ",  proc{ gui_set_zoom(0.5) })
@@ -144,14 +145,6 @@ gui_show_interactive()
 gui_show_current()
 set_tilemap_paint_tool()
 
-class PathNode
-  node = nil
-  
-  def initialize(node)
-    @node = node
-  end
-end
-
 def insert_path_node(x,y)
   print "Insert path Node"
   m = $workspace.get_map().get_metadata()
@@ -166,7 +159,7 @@ def connect_path_nodes()
   pathnodes = []
   for i in objmap_select_tool.get_selection()
     obj = get_ruby_object(i.get_metadata())
-    if obj.__class__ == PathNode
+    if obj.class == PathNode
       pathnodes.push(obj.node)
     end
   end
@@ -180,6 +173,20 @@ def connect_path_nodes()
   end
 end
             
+def gui_show_object_properties()
+  filename = $workspace.get_map().get_metadata().objects
+  $objmap_select_tool.get_selection()
+  selection = $objmap_select_tool.get_selection()
+  if selection.length() > 1 then
+    print "Warning: Selection to large"
+  elsif selection.length() == 1 then
+    obj = get_ruby_object(selection[0].get_metadata())
+    obj.property_dialog()
+  else
+    print "Warning: Selection is empty\n"
+  end
+end
+
 connect_v2($editor_map.sig_on_key("f1"), proc{ |x, y| gui_toggle_minimap()})
 connect_v2($editor_map.sig_on_key("m"),  proc{ |x, y| gui_toggle_minimap()})
 connect_v2($editor_map.sig_on_key("g"),  proc{ |x, y| gui_toggle_grid()})
@@ -196,5 +203,7 @@ connect_v2($editor_map.sig_on_key("c"),  proc{ |x, y| connect_path_nodes()})
 
 connect_v2($editor_map.sig_on_key("7"),  proc{ |x, y| $workspace.get_map().get_metadata().parent.activate_sector("main", $workspace)})
 connect_v2($editor_map.sig_on_key("8"),  proc{ |x, y| $workspace.get_map().get_metadata().parent.activate_sector("another_world", $workspace)})
+
+connect_v2($editor_map.sig_on_key("e"),  proc{ |x, y| gui_show_object_properties()})
 
 # EOF #

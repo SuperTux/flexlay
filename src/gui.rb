@@ -1,9 +1,3 @@
-class BadGuy
-  def initialize(type)
-    @type = type
-  end
-end
-
 class SuperTuxGUI
   quit_button = nil
   menu        = nil
@@ -23,10 +17,19 @@ class SuperTuxGUI
     @objectselector = ObjectSelector.new(CL_Rect.new(0, 0, 128, 256), 42, 42, @selector_window)
     @objectselector.show(true)
 
+    connect_v1_ObjMapObject(@objectselector.sig_drop(), method(:on_object_drop))
+
     $game_objects.each do |object|
       @objectselector.add_brush(ObjectBrush.new(make_sprite($datadir + object[1]),
-                                                make_metadata(BadGuy.new(object[0]))))
+                                                make_metadata(object)))
     end
+  end
+
+  def on_object_drop(cppobj)
+    # Get the metadata info and extract the generator call from it, see $game_objects
+    print "on_object_drop:\n"
+    metadata = get_ruby_object(cppobj.get_metadata())
+    cppobj.set_metadata(make_metadata(metadata[2].call()))
   end
 
   def show_objects()
@@ -57,6 +60,7 @@ end
 
 def gui_level_save()
   filename = $workspace.get_map().get_metadata().parent.filename
+  print "Filename: ", filename, "\n"
   if filename
     $save_dialog.set_filename(filename)
   else
@@ -257,7 +261,13 @@ def menu_file_open()
 end
 
 def supertux_save_level(filename)
-  $workspace.get_map().get_metadata().parent.save(filename)
+  level = $workspace.get_map().get_metadata().parent
+  # Do backup save
+  if File.exists?(filename) then
+    File.rename(filename, filename + "~")
+  end
+  level.save(filename)
+  level.filename = filename
 end
 
 def gui_switch_sector_menu()
@@ -277,19 +287,20 @@ def gui_switch_sector_menu()
   mymenu.run()
 end
 
+def gui_remove_sector()
+  sector = $workspace.get_map().get_metadata()
+  sector.get_level().remove_sector(sector.name)
+end
+
 def gui_add_sector()
   level = $workspace.get_map().get_metadata().get_level()
   dialog = GenericDialog.new("Add Sector", $gui.get_component())
-
-  name = "newsector"
-  width  = 50
-  height = 20
+ 
+  dialog.add_string("Name: ", newsector)
+  dialog.add_int("Width: ",   30)
+  dialog.add_int("Height: ",  20)
   
-  dialog.add_string("Name: ", name)
-  dialog.add_int("Width: ",   width)
-  dialog.add_int("Height: ",  height)
-  
-  dialog.set_callback(proc { |name, w, h|
+  dialog.set_callback(proc { |name, width, height|
                         uniq_name = name
                         i = 1
                         while level.get_sectors().index(uniq_name)
@@ -299,7 +310,8 @@ def gui_add_sector()
 
                         sector = Sector.new(level)
                         sector.new_from_size(uniq_name, width, height)
-                        level.add_sector(sector) })
+                        level.add_sector(sector) 
+                      })
 end  
 
 # EOF #

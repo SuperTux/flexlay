@@ -71,9 +71,14 @@ ObjectSelector::mouse_up(const CL_InputEvent& event)
                                 screen.y - EditorMapComponent::current()->get_screen_rect().top);
       
                 ObjectAddCommand command(ObjectLayer::current());
-                command.add_object(brushes[drag_obj].to_sprite_object
-                                   (EditorMapComponent::current()->screen2world(target)).to_object());
+
+                ObjMapObject obj = brushes[drag_obj].to_sprite_object
+                  (EditorMapComponent::current()->screen2world(target)).to_object();
+
+                command.add_object(obj);
                 Workspace::current().get_map().execute(command.to_command());
+                
+                on_drop(obj);
               }
             drag_obj = -1;
           }
@@ -195,6 +200,12 @@ void
 ObjectSelector::add_brush(const ObjectBrush& brush)
 {
   brushes.push_back(brush);
+}
+
+CL_Signal_v1<ObjMapObject>&
+ObjectSelector::sig_drop()
+{
+  return on_drop;
 }
 
 /* EOF */

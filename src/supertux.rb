@@ -9,7 +9,7 @@ require "flexlay_wrap"
 include Flexlay_wrap
 
 require "flexlay.rb"
-
+require "gameobj.rb"
 require "sexpr.rb"
 
 #import os
@@ -40,7 +40,8 @@ $workspace.set_tool($tilemap_paint_tool.to_tool());
 $mysprite = make_sprite("../data/images/icons16/stock_paste-16.png")
 
 $recent_files_menu = Menu.new(CL_Point.new(32*2, 54), $gui.get_component())
-for filename in $recent_files
+
+$recent_files.each do |filename|
   $recent_files_menu.add_item($mysprite, filename, proc{ supertux_load_level(filename) })
 end
 
@@ -131,20 +132,21 @@ end
 $tileset = Tileset.new(32)
 Tileset_load($tileset, $datadir + "images/tilesets/supertux.stgt")
 
-$game_objects = [["money", "images/shared/jumpy-left-middle-0.png"],
-                 ["snowball", "images/shared/snowball-left-0.png"],
-                 ["mriceblock", "images/shared/mriceblock-left-0.png"],
-                 ["mrbomb", "images/shared/mrbomb-left-0.png"],
-                 ["flame", "images/shared/flame-0.png"], 
-                 ["stalactite", "images/shared/stalactite.png"],
-                 ["fish", "images/shared/fish-left-0.png"],
-                 ["flyingsnowball", "images/shared/flyingsnowball-left-0.png"],
-                 ["bouncingsnowball", "images/shared/bouncingsnowball-left-0.png"],
-                 ["spiky", "images/shared/spiky-left-0.png"],
-                 ["resetpoint", "images/shared/resetpoint.png"],
-                 ["playerspawn", "images/shared/resetpoint.png"],
-                 ["door", "images/shared/door.png"],
-                 ["trampoline", "images/shared/trampoline-1.png"]]
+$game_objects = [
+  ["money", "images/shared/jumpy-left-middle-0.png", proc{BadGuy.new("money")}],
+  ["snowball", "images/shared/snowball-left-0.png", proc{BadGuy.new("snowball")}],
+  ["mriceblock", "images/shared/mriceblock-left-0.png", proc{BadGuy.new("mriceblock")}],
+  ["mrbomb", "images/shared/mrbomb-left-0.png", proc{BadGuy.new("mrbomb")}],
+  ["flame", "images/shared/flame-0.png", proc{BadGuy.new("flame")}], 
+  ["stalactite", "images/shared/stalactite.png", proc{BadGuy.new("stalactite")}],
+  ["fish", "images/shared/fish-left-0.png", proc{BadGuy.new("fish")}],
+  ["flyingsnowball", "images/shared/flyingsnowball-left-0.png", proc{BadGuy.new("flyingsnowball")}],
+  ["bouncingsnowball", "images/shared/bouncingsnowball-left-0.png", proc{BadGuy.new("bouncingsnowball")}],
+  ["spiky", "images/shared/spiky-left-0.png", proc{BadGuy.new("spiky")}],
+  ["playerspawn", "images/shared/resetpoint.png", proc{SpawnPoint.new()}],
+  ["door", "images/shared/door.png", proc{Door.new()}],
+  ["trampoline", "images/shared/trampoline-1.png", proc{BadGuy.new("trampoline")}]
+]
 
 require "level.rb"
 require "sector.rb"

@@ -14,7 +14,7 @@ class Sector
   objects   = nil
   editormap = nil
 
-  attr_reader :name, :background, :interactive, :foreground, :parent, :width, :height
+  attr_reader :name, :objects, :background, :interactive, :foreground, :parent, :width, :height
   attr_writer :name, :song, :gravity
   
   def initialize(parent)
@@ -58,7 +58,7 @@ class Sector
 
   def load_v1(data)
     @name = "<No Name>"
-    @song = "<No Song>"
+    @song = "supertux-1.ogg"
     @gravity = 10.0
     
     @width  = get_value_from_tree(["width", "_"], data, 20)
@@ -112,7 +112,7 @@ class Sector
   
   def load_v2(data)
     @name = "<No Name>"
-    @song = "<No Song>"
+    @song = "supertux-1.ogg"
     @gravity = 10.0
     
     @width  = 20
@@ -159,9 +159,16 @@ class Sector
           (name, image) = object
           x = get_value_from_tree(["x", "_"], data, 0)
           y = get_value_from_tree(["y", "_"], data, 0)
+
+          if name == "door"
+            metadata = make_metadata(Door.new(data))
+          else
+            metadata = make_metadata(BadGuy.new(name))
+          end
+
           @objects.add_object(ObjMapSpriteObject.new(make_sprite($datadir + image),
                                                      CL_Point.new(x, y),
-                                                     make_metadata(BadGuy.new(name))).to_object())
+                                                     metadata).to_object())
         else
           print "Error: Couldn't resolve object type: ", name, "\n"
           print "Sector: Unhandled tag: ", name, "\n"
@@ -227,44 +234,31 @@ class Sector
     f.write("    (music  \"%s\")\n" % @song)
     f.write("    (gravity %f)\n" % @gravity)
     
+    # FIXME: Make me configurable
+    f.write("    (background (image \"arctis.jpg\")\n" +
+            "                (speed 0.5))\n")
+   
     save_tilemap(f, @background,  "background")
     save_tilemap(f, @interactive, "main", :solid)
     save_tilemap(f, @foreground,  "foreground")
 
     f.write("    (camera\n")
-    f.write("      (mode \"autoscroll\")\n")
+    f.write("      (mode \"normal\")\n")
     f.write("      (path\n")
     for obj in @objects.get_objects()
       pathnode = get_ruby_object(obj.get_metadata())
-      if (pathnode.__class__ == PathNode)
+      if (pathnode.is_a?(PathNode))
         f.write("       (point (x %d) (y %d) (speed 1))\n" % obj.get_pos().x, obj.get_pos().y)
       end
     end
     f.write("    ))\n\n")
 
-    f.write("    (objects\n")
     for obj in @objects.get_objects()
       badguy = get_ruby_object(obj.get_metadata())
-      if (badguy.__class__ == BadGuy)
-        pos    = obj.get_pos()
-        if (badguy.type != "resetpoint")
-          f.write("       (%s (x %d) (y %d))\n" % badguy.type, int(pos.x), int(pos.y))
-        end
+      if (badguy.is_a?(GameObj))
+        badguy.save(f, obj)
       end
     end
-    f.write("    )\n\n")
-
-    f.write("    (reset-points\n")
-    for obj in @objects.get_objects()
-      badguy = get_ruby_object(obj.get_metadata())
-      if (badguy.__class__ == BadGuy)
-        pos    = obj.get_pos()
-        if (badguy.type == "resetpoint")
-          f.write("       (point (x %d) (y %d))\n" % int(pos.x), int(pos.y))
-        end
-      end
-    end
-    f.write("    )\n\n")
   end
 end
 

@@ -62,6 +62,13 @@
 #include "ruby_sexpr_parser.hxx"
 #include "ruby_meta_data.hxx"
 #include "ruby_functor.hxx"
+
+VALUE ObjMapObject2Value(const ObjMapObject& arg)
+{
+ ObjMapObject* resultptr = new ObjMapObject(arg);
+ return SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_ObjMapObject, 1);
+}
+
 #endif
 %}
 
@@ -124,5 +131,6 @@
 %include "ruby_meta_data.hxx"
 %include "ruby_sexpr_parser.hxx"
 #endif
+
 
 /* EOF */

@@ -145,7 +145,7 @@ class Level
     f.write("    (path\n")
     for obj in @objects.get_objects()
       pathnode = get_ruby_object(obj.get_metadata())
-      if (pathnode.__class__ == PathNode)
+      if (pathnode.class() == PathNode)
         f.write("     (point (x %d) (y %d) (speed 1))\n" % obj.get_pos().x, obj.get_pos().y)
       end
     end
@@ -154,7 +154,7 @@ class Level
     f.write("  (objects\n")
     for obj in @objects.get_objects()
       badguy = get_ruby_object(obj.get_metadata())
-      if (badguy.__class__ == BadGuy)
+      if (badguy.class == BadGuy)
         pos    = obj.get_pos()
         if (badguy.type != "resetpoint")
           f.write("     (%s (x %d) (y %d))\n" % badguy.type, int(pos.x), int(pos.y))
@@ -166,7 +166,7 @@ class Level
     f.write("  (reset-points\n")
     for obj in @objects.get_objects()
       badguy = get_ruby_object(obj.get_metadata())
-      if (badguy.__class__ == BadGuy)
+      if (badguy.class == BadGuy)
         pos    = obj.get_pos()
         if (badguy.type == "resetpoint")
           f.write("     (point (x %d) (y %d))\n" % (pos.x.to_i), pos.y.to_i)
@@ -190,6 +190,14 @@ class Level
 
   def add_sector(sector)
     @sectors.push(sector)
+  end
+
+  def remove_sector(name)
+    if @sectors.length() > 1
+      @sectors.delete_if{|sec| sec.name == name}
+    else
+      print "Only one sector left, can't delete it\n"
+    end
   end
 
   def get_sectors()

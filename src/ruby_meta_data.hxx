@@ -31,6 +31,8 @@ void connect(CL_Signal_v0& sig, VALUE obj);
 void connect_v1(CL_Signal_v1<int>& sig, VALUE obj);
 void connect_v2(CL_Signal_v2<int, int>& sig, VALUE obj);
 
+void connect_v1_ObjMapObject(CL_Signal_v1<ObjMapObject>& sig, VALUE func);
+
 #endif
 
 /* EOF */

@@ -50,6 +50,12 @@ ObjectBrush::get_sprite()
   return impl->sprite;
 }
 
+MetaData
+ObjectBrush::get_data()
+{
+  return impl->data;
+}
+
 ObjMapSpriteObject
 ObjectBrush::to_sprite_object(const CL_Point& pos)
 {

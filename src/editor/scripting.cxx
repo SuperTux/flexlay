@@ -1,4 +1,4 @@
-//  $Id: scripting.cxx,v 1.1 2003/09/10 08:25:29 grumbel Exp $
+//  $Id: scripting.cxx,v 1.2 2003/09/10 10:58:29 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -25,15 +25,44 @@
 void
 editor_add_button(int x, int y, int w, int h, const char* text, SCM func)
 {
-  CL_GUIManager* manager = Editor::current()->get_gui_manager();
+  CL_Component* manager = Editor::current()->get_component();
   CL_SlotContainer* slot_container = Editor::current()->get_slot_container();
  
   CL_Button* button = new CL_Button(CL_Rect(CL_Point(x, y), CL_Size(w, h)),
                                     text, manager);
-  manager->add_child(button);
-
   SCMFunctor* functor = new SCMFunctor(func);
   slot_container->connect(button->sig_clicked(), functor, &SCMFunctor::call);
+}
+
+void
+editor_add_label(int x, int y, const char* text)
+{
+  CL_Component* manager = Editor::current()->get_component();
+  CL_SlotContainer* slot_container = Editor::current()->get_slot_container();
+
+  new CL_Label(CL_Point(x, y), text, manager);
+}
+
+void
+editor_add_window(int x, int y, int w, int h, const char* title)
+{
+  CL_Component* manager = Editor::current()->get_component();
+  CL_SlotContainer* slot_container = Editor::current()->get_slot_container();
+
+  Editor::current()->set_component((new CL_Window(CL_Rect(CL_Point(x, y), CL_Size(w, h)), title, manager))->get_client_area());
+}
+
+void
+editor_add_inputbox(int x, int y, int w, int h, const char* text)
+{
+  CL_Component* manager = Editor::current()->get_component();
+  new CL_InputBox(CL_Rect(CL_Point(x,y), CL_Size(w, h)), text, manager);
+}
+
+void
+editor_quit()
+{
+  Editor::current()->get_component()->quit();
 }
 
 /* EOF */

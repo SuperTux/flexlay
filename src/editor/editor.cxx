@@ -1,4 +1,4 @@
-//  $Id: editor.cxx,v 1.1 2003/09/10 08:25:29 grumbel Exp $
+//  $Id: editor.cxx,v 1.2 2003/09/10 10:58:29 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -20,10 +20,11 @@
 #include <iostream>
 #include <ClanLib/signals.h>
 #include <ClanLib/display.h>
-#include <ClanLib/guistyleboring.h>
+#include <ClanLib/guistylesilver.h>
 #include <guile/gh.h>
 #include "../globals.hxx"
 #include "editor.hxx"
+#include "editor_tilemap.hxx"
 
 extern "C" void SWIG_init(void);
 
@@ -38,6 +39,18 @@ public:
     : CL_Component(pos, parent)
   {
     slots.connect(sig_paint(), this, &MyComponent::paint);
+    slots.connect(sig_mouse_up(), this, &MyComponent::up);
+    slots.connect(sig_mouse_down(), this, &MyComponent::down);
+  }
+
+  void up(const CL_InputEvent &key)
+  {
+    std::cout << "Up: " << key.id << std::endl;
+  }
+
+  void down(const CL_InputEvent &key)
+  {
+    std::cout << "Down: " << key.id <<  std::endl;
   }
 
   void paint() 
@@ -59,18 +72,12 @@ Editor::Editor()
 
   slot_container = new CL_SlotContainer();
   resources = new CL_ResourceManager(datadir + "gui/gui.xml", false);
-  style     = new CL_StyleManager_Boring(resources);
+  style     = new CL_StyleManager_Silver(resources);
   manager   = new CL_GUIManager(style);
+  component = manager;
 
-  manager->add_child(new CL_Button(CL_Rect(CL_Point(100, 100), CL_Size(150, 20)),
-                                   "Hello World", manager));
-
-  manager->add_child(new MyComponent(CL_Rect(CL_Point(100, 200), CL_Size(150, 20)), manager));
-
-  CL_Button* button = new CL_Button(CL_Rect(CL_Point(100, 130), CL_Size(150, 20)),
-                                    "Quit", manager);
-  manager->add_child(button);
-  slot_container->connect(button->sig_clicked(), this, &Editor::popup_menu);
+  EditorTileMap* tilemap = new EditorTileMap(manager);
+  tilemap->load(datadir + "levels/level1.scm");
 
   popupmenu = new CL_PopupMenu(manager);
   menu_data  = new CL_MenuData(popupmenu);

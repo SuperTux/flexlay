@@ -1,9 +1,13 @@
 noinst_LIBRARIES = libwindstille_editor.a
 
+command_source = scripting.hxx   scripting.cxx
+
 libwindstille_editor_a_SOURCES = \
   windstille_wrap.cxx \
+  editor_tilemap.hxx editor_tilemap.cxx \
+  editor_tile.hxx editor_tile.cxx \
   editor.hxx editor.cxx \
-  scripting.hxx   scripting.cxx
+  $(command_source)
 
 #  editor_tile.cxx     editor_tilemapview.cxx  windstille_editor.cxx \
 #  editor_tile.hxx     editor_tilemapview.hxx  windstille_editor.hxx \

@@ -1,4 +1,4 @@
-//  $Id: editor_tilemap.cxx,v 1.3 2003/08/18 08:50:22 grumbel Exp $
+//  $Id: editor_tilemap.cxx,v 1.4 2003/09/10 10:58:29 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -18,23 +18,90 @@
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include <iostream>
+#include <ClanLib/Display/display.h>
 #include "../windstille_level.hxx"
 #include "../globals.hxx"
 #include "editor_tilemap.hxx"
 
-EditorTileMap::EditorTileMap (int width, int height)
-  : field (new Field<EditorTile*> (width, height))
+EditorTileMap::EditorTileMap(CL_Component* parent)
+  : CL_Component(CL_Rect(CL_Point(0, 0), CL_Size(CL_Display::get_width(), CL_Display::get_height())), parent),
+    field (new Field<EditorTile*> (50, 50))
 {
   for (unsigned int y = 0; y < field->get_height (); ++y) {
     for (unsigned int x = 0; x < field->get_width (); ++x)
       {
 	field->at(x, y) = new EditorTile (0);
       }
-  }  
+  }
+
+  slots.connect(sig_paint(), this, &EditorTileMap::draw);
+  slots.connect(sig_mouse_up(),   this, &EditorTileMap::mouse_up);
+  slots.connect(sig_mouse_down(), this, &EditorTileMap::mouse_down);
+  slots.connect(sig_mouse_move(), this, &EditorTileMap::mouse_move);
+
+  trans_offset = CL_Pointf(0,0);
+  old_trans_offset = CL_Pointf(0,0);
+  click_pos = CL_Point(0,0);
+  scrolling = false;
 }
 
-EditorTileMap::EditorTileMap (const std::string& filename)
+void
+EditorTileMap::mouse_up(const CL_InputEvent& event)
 {
+  if (event.id == CL_MOUSE_MIDDLE && scrolling)
+    {
+      trans_offset.x = old_trans_offset.x - (click_pos.x - event.mouse_pos.x);
+      trans_offset.y = old_trans_offset.y - (click_pos.y - event.mouse_pos.y);
+
+      old_trans_offset = trans_offset;
+      scrolling = false;
+      release_mouse();
+    }
+}
+
+void
+EditorTileMap::mouse_move(const CL_InputEvent& event)
+{
+  if (scrolling)
+    {
+      trans_offset.x = old_trans_offset.x - (click_pos.x - event.mouse_pos.x);
+      trans_offset.y = old_trans_offset.y - (click_pos.y - event.mouse_pos.y);
+    }
+}
+
+void
+EditorTileMap::mouse_down(const CL_InputEvent& event)
+{
+  if (event.id == CL_MOUSE_MIDDLE)
+    {
+      old_trans_offset = trans_offset;
+      click_pos = event.mouse_pos;
+      scrolling = true;
+      capture_mouse();
+    }
+}
+  
+void
+EditorTileMap::draw ()
+{
+  CL_Display::clear(CL_Color::black);
+  CL_Display::push_translate_offset(int(trans_offset.x), int(trans_offset.y));
+  for (unsigned int y = 0; y < field->get_height (); ++y)
+    {
+      for (unsigned int x = 0; x < field->get_width (); ++x)
+	{
+	  field->at(x, y)->draw(x * TILE_SIZE, y * TILE_SIZE);
+	}
+    }
+  CL_Display::pop_translate_offset();
+}
+
+void
+EditorTileMap::load(const std::string& filename)
+{
+  if (field)
+    delete field;
+
   WindstilleLevel data (filename);
 
   field = new Field<EditorTile*> (data.get_tilemap()->get_width (),
@@ -47,18 +114,6 @@ EditorTileMap::EditorTileMap (const std::string& filename)
 	field->at (x, y) = new EditorTile (name);
       }
   }
-}
-  
-void
-EditorTileMap::draw ()
-{
-  for (unsigned int y = 0; y < field->get_height (); ++y)
-    {
-      for (unsigned int x = 0; x < field->get_width (); ++x)
-	{
-	  field->at (x, y)->draw (x * 64, y * 64);
-	}
-    }
 }
 
 EditorTile*

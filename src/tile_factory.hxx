@@ -1,4 +1,4 @@
-//  $Id: tile_factory.hxx,v 1.5 2003/08/12 08:24:41 grumbel Exp $
+//  $Id: tile_factory.hxx,v 1.6 2003/09/10 10:58:29 grumbel Exp $
 // 
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -20,6 +20,7 @@
 #ifndef TILEFACTORY_HXX
 #define TILEFACTORY_HXX
 
+#include <libguile.h>
 #include <map>
 #include <string>
 

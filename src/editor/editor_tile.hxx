@@ -1,4 +1,4 @@
-//  $Id: editor_tile.hxx,v 1.2 2003/08/11 19:50:12 grumbel Exp $
+//  $Id: editor_tile.hxx,v 1.3 2003/09/10 10:58:29 grumbel Exp $
 // 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -22,11 +22,12 @@
 
 #include <string>
 #include <ClanLib/display.h>
+#include "../tile.hxx"
 
 class EditorTile
 {
 private:
-  CL_Sprite* sprite;
+  Tile* tile;
   int id;
 public:
   EditorTile (int id);

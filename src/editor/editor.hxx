@@ -1,4 +1,4 @@
-//  $Id: editor.hxx,v 1.1 2003/09/10 08:25:29 grumbel Exp $
+//  $Id: editor.hxx,v 1.2 2003/09/10 10:58:29 grumbel Exp $
 // 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -27,6 +27,7 @@ class Editor
 {
 private:
   CL_GUIManager*   manager;
+  CL_Component*    component;
   CL_StyleManager* style;
   CL_ResourceManager* resources;
   CL_SlotContainer* slot_container;
@@ -41,7 +42,9 @@ public:
   Editor();
   ~Editor();
 
-  CL_GUIManager* get_gui_manager() { return manager; }
+  CL_Component* get_component() { return component; }
+  void set_component(CL_Component* m) { component = m; }
+
   CL_SlotContainer* get_slot_container() { return slot_container; }
 
   void run();

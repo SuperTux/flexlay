@@ -1,4 +1,4 @@
-//  $Id: editor_tile.cxx,v 1.3 2003/09/05 20:41:52 grumbel Exp $
+//  $Id: editor_tile.cxx,v 1.4 2003/09/10 10:58:29 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -20,6 +20,7 @@
 #include <assert.h>
 #include <string>
 #include "../globals.hxx"
+#include "../tile_factory.hxx"
 #include "editor_tile.hxx"
 
 EditorTile::EditorTile ()
@@ -29,25 +30,25 @@ EditorTile::EditorTile ()
 
 EditorTile::EditorTile (int id)
 {
-  set_tile (0);
+  tile = TileFactory::current()->create(id);
 }
 
 void
 EditorTile::draw (int x, int y)
 {
-  //std::cout << "drawing: " << x << "x" << y << std::endl;
-  if (sprite)
+  if (tile)
     {
-      sprite->set_alignment (origin_top_left, 0, 0);
-      sprite->draw (x, y);
-      //CL_Display::draw_rect (x, y, x + 64, y + 64, 1.0, 1.0, 1.0, 1.0);
+      tile->sur.set_alignment (origin_top_left, 0, 0);
+      tile->sur.draw (x, y);
+      CL_Display::draw_rect(CL_Rect(x, y, x + TILE_SIZE, y + TILE_SIZE),
+                            CL_Color(255, 255, 255, 128));
     }
   else
     {
-      CL_Display::fill_rect (CL_Rect(x, y, x + 64, y + 64),
+      CL_Display::fill_rect (CL_Rect(x, y, x + TILE_SIZE, y + TILE_SIZE),
 			     CL_Color(77, 77, 77, 255));
-      CL_Display::draw_rect (CL_Rect(x, y, x + 64, y + 64),
-			     CL_Color(255, 255, 255, 255));
+      CL_Display::draw_rect (CL_Rect(x, y, x + TILE_SIZE, y + TILE_SIZE),
+			     CL_Color(255, 255, 255, 128));
     }
 }
 
@@ -56,12 +57,12 @@ EditorTile::set_tile (int arg_id)
 {
   if (arg_id == 0)
     {
-      sprite = 0;
-      id     = 0;
+      tile = 0;
+      id   = 0;
     }
   else
     {
-      assert (false);
+      tile = TileFactory::current()->create(id);
       id = arg_id;
     }
 }

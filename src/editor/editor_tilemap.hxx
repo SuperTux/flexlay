@@ -1,4 +1,4 @@
-//  $Id: editor_tilemap.hxx,v 1.1 2003/08/10 19:56:40 grumbel Exp $
+//  $Id: editor_tilemap.hxx,v 1.2 2003/09/10 10:58:29 grumbel Exp $
 // 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -20,23 +20,37 @@
 #ifndef EDITORTILEMAP_HXX
 #define EDITORTILEMAP_HXX
 
+#include <ClanLib/gui.h>
 #include "../field.hxx"
 #include "editor_tile.hxx"
 
 /** Holds the tilemap data for the editor and provides functions to
     manipulate them */
-class EditorTileMap
+class EditorTileMap : public CL_Component
 {
 private:
+  CL_SlotContainer slots;
   Field<EditorTile*>* field;
   typedef Field<EditorTile*>::iterator FieldIter;
+  
+  CL_Pointf trans_offset;
+  CL_Pointf old_trans_offset;
+
+  CL_Point click_pos;
+
+  bool scrolling;
 public:
-  EditorTileMap (int arg_width, int arg_height);
-  EditorTileMap (const std::string& filename);
+  EditorTileMap (CL_Component* parent);
   
   void draw ();
+
+  void mouse_up(const CL_InputEvent& event);
+  void mouse_down(const CL_InputEvent& event);
+  void mouse_move(const CL_InputEvent& event);
+
   EditorTile* get_tile (int, int);
 
+  void load (const std::string& filename);
   void save (const std::string& filename); 
 };
 

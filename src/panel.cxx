@@ -1,6 +1,6 @@
-//  $Id: scm_helper.hxx,v 1.2 2003/08/12 08:24:41 grumbel Exp $
-// 
-//  Windstille - A Jump'n Shoot Game
+//  $Id$
+//
+//  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
 //
 //  This program is free software; you can redistribute it and/or
@@ -12,19 +12,37 @@
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
-// 
+//
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-#ifndef HEADER_SCM_HELPER_HXX
-#define HEADER_SCM_HELPER_HXX
+#include <vector>
+#include <ClanLib/Signals/slot.h>
+#include "box.hxx"
+#include "panel.hxx"
 
-#include <guile/gh.h>
-#include <string>
+class PanelImpl
+{
+public:
+  std::vector<CL_Slot> slots;
+  CL_Component* parent;
 
-std::string scm2string(SCM str);
+  void draw();
+};
 
-#endif
+Panel::Panel(const CL_Rect& rect, CL_Component* parent)
+  : CL_Component(rect, parent), impl(new PanelImpl())
+{
+  impl->parent = this;
+  impl->slots.push_back(sig_paint().connect(impl.get(), &PanelImpl::draw));
+}
+
+void
+PanelImpl::draw()
+{
+  CL_Rect rect = parent->get_position();
+  Box::draw_panel(CL_Rect(CL_Point(0, 0), CL_Size(rect.get_width()-1, rect.get_height()-1)));
+}
 
 /* EOF */

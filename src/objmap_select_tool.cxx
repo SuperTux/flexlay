@@ -25,9 +25,6 @@
 #include "editor_map.hxx"
 #include "editor_map_component.hxx"
 #include "gui_manager.hxx"
-#ifdef SWIGGUILE
-#include "scm_obj.hxx"
-#endif
 #include "editor_names.hxx"
 #include "popup_menu.hxx"
 #include "editor.hxx"

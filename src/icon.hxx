@@ -1,6 +1,6 @@
 //  $Id$
 // 
-//  Pingus - A free Lemmings clone
+//  Flexlay - A Generic 2D Game Editor
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
 //
 //  This program is free software; you can redistribute it and/or
@@ -33,6 +33,7 @@ class Icon : public CL_Component
 private:
 public:
   Icon(const CL_Point& pos, const CL_Sprite& sprite, const std::string& tooltip, CL_Component* parent);
+  Icon(const CL_Rect& rect, const CL_Sprite& sprite, const std::string& tooltip, CL_Component* parent);
   
   CL_Signal_v0& sig_clicked();
 

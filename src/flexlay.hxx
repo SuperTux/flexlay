@@ -1,6 +1,6 @@
 //  $Id$
 // 
-//  Pingus - A free Lemmings clone
+//  Flexlay - A Generic 2D Game Editor
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
 //
 //  This program is free software; you can redistribute it and/or
@@ -21,6 +21,7 @@
 #define HEADER_FLEXLAY_HXX
 
 #include <ClanLib/Display/display_window.h>
+#include <ClanLib/Core/Resources/resource_manager.h>
 
 /*! \mainpage Flexlay - A Flexible Layered 2D Editor
   
@@ -86,6 +87,7 @@ public:
   bool allow_resize;
   bool use_opengl;
 
+  CL_ResourceManager resources;
 public:
   Flexlay();
 

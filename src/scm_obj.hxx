@@ -20,9 +20,7 @@
 #ifndef SCMOBJ_HXX
 #define SCMOBJ_HXX
 
-#ifdef SWIGGUILE
 #include <guile/gh.h>
-#endif
 
 /** SCM Wrapper class which handles protect/unprotect operations. Use
     this for SCM which are on the heap and not for SCM's on the

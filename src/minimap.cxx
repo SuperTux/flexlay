@@ -30,32 +30,49 @@
 #include "workspace.hxx"
 #include "minimap.hxx"
 
-Minimap::Minimap(EditorMapComponent* p, const CL_Point& pos, const CL_Size& size, CL_Component* parent)
-  : CL_Component(CL_Rect(pos, size), parent), 
-    parent(p)
+class MinimapImpl
 {
-  slots.push_back(sig_paint().connect(this, &Minimap::draw));
-  slots.push_back(sig_mouse_move().connect(this, &Minimap::mouse_move));
-  slots.push_back(sig_mouse_down().connect(this, &Minimap::mouse_down));
-  slots.push_back(sig_mouse_up().connect(this, &Minimap::mouse_up));
+public:
+  std::vector<CL_Slot> slots;
+  bool drag_active;
+  
+  int last_serial;
+  EditorMap editor_map;
 
-  drag_active = false;
-  last_serial = -1;
+  EditorMapComponent* parent;
+  CL_Surface minimap_surface;
+
+  void update_minimap_surface();
+};
+
+Minimap::Minimap(EditorMapComponent* p, const CL_Rect& rect,
+                 CL_Component* parent)
+  : CL_Component(rect, parent), 
+    impl(new MinimapImpl())
+{
+  impl->slots.push_back(sig_paint().connect(this, &Minimap::draw));
+  impl->slots.push_back(sig_mouse_move().connect(this, &Minimap::mouse_move));
+  impl->slots.push_back(sig_mouse_down().connect(this, &Minimap::mouse_down));
+  impl->slots.push_back(sig_mouse_up().connect(this, &Minimap::mouse_up));
+
+  impl->parent = p;
+  impl->drag_active = false;
+  impl->last_serial = -1;
 }
 
 void
 Minimap::draw()
 {
   // FIXME: Do this only on map changes
-  if (last_serial != EditorMapComponent::current()->get_workspace().get_current_map().get_serial())
-    //      || editor_map != EditorMapComponent::current()->get_workspace().get_current_map())
+  if (impl->last_serial != impl->parent->get_workspace().get_current_map().get_serial())
+    //      || editor_map != parent->get_workspace().get_current_map())
     {
-      update_minimap_surface();
-      last_serial = EditorMapComponent::current()->get_workspace().get_current_map().get_serial();
-      editor_map  = EditorMapComponent::current()->get_workspace().get_current_map();
+      impl->update_minimap_surface();
+      impl->last_serial = impl->parent->get_workspace().get_current_map().get_serial();
+      impl->editor_map  = impl->parent->get_workspace().get_current_map();
     }
 
-  if (1)
+  if (0)
     { // Draw background color
       CL_Display::fill_rect(CL_Rect(CL_Point(0, 0),
                                     CL_Size(get_width(),
@@ -63,7 +80,6 @@ Minimap::draw()
                             CL_Color(200, 200, 200, 225));
     }
 
-#if 0
   // FIXME: This doesn't work all that well
   TilemapLayer tilemap = TilemapLayer::current();
   int tile_size = tilemap.get_tileset().get_tile_size();
@@ -84,7 +100,7 @@ Minimap::draw()
           for(int y = 0; y < field->get_height(); ++y)
             for(int x = 0; x < field->get_width(); ++x)
               {
-                Tile* tile = Tileset::current().create(field->at(x, y));
+                Tile* tile = tilemap.get_tileset().create(field->at(x, y));
                 if (tile)
                   CL_Display::fill_rect(CL_Rect(CL_Point((x * tile_size) * get_width() / map_width,
                                                          (y * tile_size) * get_height() / map_height),
@@ -93,11 +109,11 @@ Minimap::draw()
                 CL_Display::flush();
               }
         }
-      minimap_surface.draw(CL_Rect(CL_Point(0, 0),
+      impl->minimap_surface.draw(CL_Rect(CL_Point(0, 0),
                                    CL_Size(get_width(), get_height())));
 
       // Draw cursor
-      CL_Rect rect = parent->get_clip_rect();
+      CL_Rect rect = impl->parent->get_clip_rect();
       CL_Rect screen_rect(CL_Point(rect.left  * get_width()  / map_width,
                                    rect.top   * get_height() / map_height),
                           CL_Size(rect.get_width() * get_width() /map_width,
@@ -107,13 +123,11 @@ Minimap::draw()
       CL_Display::draw_rect(screen_rect,
                             CL_Color(0, 0, 0));
     }
-#endif
 }
 
 void
-Minimap::update_minimap_surface()
+MinimapImpl::update_minimap_surface()
 {
-#if 0
   // FIXME: This doesn't work all that well
   TilemapLayer tilemap = TilemapLayer::current();
   
@@ -132,7 +146,7 @@ Minimap::update_minimap_surface()
       for(int y = 0; y < map_height; ++y)
         for(int x = 0; x < map_width; ++x)
           {
-            Tile* tile = Tileset::current().create(field->at(x, y));
+            Tile* tile = tilemap.get_tileset().create(field->at(x, y));
             if (tile)
               {
                 buf[4*(x + y * map_width) + 3] = tile->get_color().get_red();
@@ -151,7 +165,6 @@ Minimap::update_minimap_surface()
 
       minimap_surface = CL_Surface(&buffer);
     }
-#endif
 }
 
 void
@@ -163,9 +176,9 @@ Minimap::mouse_move(const CL_InputEvent& event)
   int map_width  = tilemap.get_width()  * tile_size;
   int map_height = tilemap.get_height() * tile_size;
 
-  if (drag_active)
-    parent->move_to(event.mouse_pos.x * map_width / get_width(),
-                    event.mouse_pos.y * map_height / get_height());
+  if (impl->drag_active)
+    impl->parent->move_to(event.mouse_pos.x * map_width / get_width(),
+                          event.mouse_pos.y * map_height / get_height());
 }
 
 void
@@ -177,23 +190,23 @@ Minimap::mouse_down(const CL_InputEvent& event)
   int map_width  = tilemap.get_width()  * tile_size;
   int map_height = tilemap.get_height() * tile_size;
 
-  parent->move_to(event.mouse_pos.x * map_width / get_width(),
-                  event.mouse_pos.y * map_height / get_height());
-  drag_active = true;
+  impl->parent->move_to(event.mouse_pos.x * map_width / get_width(),
+                        event.mouse_pos.y * map_height / get_height());
+  impl->drag_active = true;
   capture_mouse();
 }
 
 void
 Minimap::mouse_up  (const CL_InputEvent& event)
 {
-  drag_active = false;
+  impl->drag_active = false;
   release_mouse();
 }
 
 void
 Minimap::update_minimap()
 {
-  update_minimap_surface();
+  impl->update_minimap_surface();
 }
 
 /* EOF */

@@ -1,6 +1,6 @@
 //  $Id$
 //
-//  Pingus - A free Lemmings clone
+//  Flexlay - A Generic 2D Game Editor
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
 //
 //  This program is free software; you can redistribute it and/or
@@ -24,6 +24,7 @@
 #include <ClanLib/guistylesilver.h>
 #include <ClanLib/gl.h>
 #include "globals.hxx"
+#include "fonts.hxx"
 #include "flexlay.hxx"
 
 Flexlay::Flexlay()
@@ -39,23 +40,30 @@ void
 Flexlay::init()
 {
   std::cout << "Flexlay::init()" << std::endl;
+  try {
 
-  CL_SetupCore::init();
+    CL_SetupCore::init();
 #ifdef HAVE_LIBSDL
-  if (use_opengl)
-    CL_SetupGL::init();
-  else
-    CL_SetupSDL::init();
+    if (use_opengl)
+      CL_SetupGL::init();
+    else
+      CL_SetupSDL::init();
 #else
-  CL_SetupGL::init();
+    CL_SetupGL::init();
 #endif
-  CL_SetupDisplay::init();
-  CL_SetupGUI::init();
+    CL_SetupDisplay::init();
+    CL_SetupGUI::init();
   
-  datadir = "../data/";
+    datadir = "../data/";
 
-  window = new CL_DisplayWindow(PACKAGE_STRING,
-                                screen_width, screen_height, fullscreen, allow_resize);
+    window = new CL_DisplayWindow(PACKAGE_STRING,
+                                  screen_width, screen_height, fullscreen, allow_resize);
+
+    resources = CL_ResourceManager(datadir + "flexlay.xml");
+    Fonts::verdana11 = CL_Font("verdana11_black", &resources);
+  } catch (CL_Error& err) {
+    std::cout << "CL_Error: " << err.message << std::endl;
+  }
 }
 
 void

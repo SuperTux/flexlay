@@ -52,6 +52,8 @@ class SuperTuxLevel:
     interactive = None
     background  = None
 
+    objects = None
+
     editormap = None
 
     def __init__(self, filename):
@@ -76,10 +78,13 @@ class SuperTuxLevel:
         self.background  = TilemapLayer(tileset, self.width, self.height)
         self.background.set_data(get_value_from_tree(["background-tm"], data, []))
 
+        self.objects = ObjectLayer()
+
         self.editormap = EditorMap()
         self.editormap.add_layer(self.foreground.to_layer())
         self.editormap.add_layer(self.interactive.to_layer())
         self.editormap.add_layer(self.background.to_layer())
+        self.editormap.add_layer(self.objects.to_layer())
 
     def __del__(self):
         print "SuperTuxLevel:__del__"
@@ -90,14 +95,15 @@ class SuperTuxLevel:
 
 class SuperTuxGUI:
     quit_button = None
-    menu = None
+    menu        = None
     tileselector_window = None
     tileselector = None
 
     def __init__(self, tileset, gui):
-        self.tileselector_window = CL_Window(CL_Rect(CL_Point(580, 30), CL_Size(210, 560)),
-                                             "Tile Selector", gui.get_component())
-        self.tileselector = TileSelector(6, 3, self.tileselector_window.get_client_area())
+        self.tileselector_window = Panel(CL_Rect(CL_Point(800-134, 23+33), CL_Size(128 + 6, 558)),
+                                         gui.get_component())
+        self.tileselector = TileSelector(CL_Rect(CL_Point(3, 3), CL_Size(128, 552)),
+                                         6, 3, self.tileselector_window)
         self.tileselector.set_tileset(tileset)
         self.tileselector.set_tiles(range(1,100))
 

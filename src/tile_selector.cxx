@@ -24,11 +24,8 @@
 #include "tile_selector.hxx"
 #include "tilemap_paint_tool.hxx"
 
-TileSelector::TileSelector(int width, int height, CL_Component* parent)
-  : CL_Component(CL_Rect(CL_Point(0,0), 
-                         // FIXME: Dirty hack, replace with a resizeable window
-                         CL_Size(parent->get_width(),  
-                                 parent->get_height())), 
+TileSelector::TileSelector(const CL_Rect& rect, int width, int height, CL_Component* parent)
+  : CL_Component(rect,
                  parent),
     width(width), height(height)
 {

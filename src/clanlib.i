@@ -115,5 +115,28 @@ public:
 	CL_Signal_v0 &sig_clicked();
 };
 
+class CL_InputBox : public CL_Component
+{
+public:
+	CL_InputBox(
+		const CL_Rect &pos,
+		CL_Component *parent,
+		CL_StyleManager *style = NULL);
+
+	void set_text(const std::string &text);
+	const std::string &get_text() const;        
+};
+
+class CL_Label : public CL_Component
+{
+public:
+		//: Label Constructor
+	CL_Label(
+		const CL_Point &pos,
+		const std::string &text,
+		CL_Component *parent,
+		CL_StyleManager *style = NULL);
+};
+
 /* EOF */
 

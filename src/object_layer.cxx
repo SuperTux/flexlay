@@ -28,9 +28,18 @@
 extern CL_ResourceManager* resources;
 ObjectLayer* ObjectLayer::current_ = 0;
 
-ObjectLayer::ObjectLayer()
+class ObjectLayerImpl
 {
-  handle_count = 0;
+public:
+  ObjectLayer::Objs objects;
+  int handle_count;
+  CL_SlotContainer slots;
+};
+
+ObjectLayer::ObjectLayer()
+  : impl(new ObjectLayerImpl())
+{
+  impl->handle_count = 0;
 }
 
 ObjectLayer::~ObjectLayer()
@@ -40,7 +49,7 @@ ObjectLayer::~ObjectLayer()
 void
 ObjectLayer::draw(EditorMapComponent* parent)
 {
-  for(Objs::iterator i = objects.begin(); i != objects.end(); ++i)
+  for(Objs::iterator i = impl->objects.begin(); i != impl->objects.end(); ++i)
     {
       (*i)->draw();
     }
@@ -50,8 +59,8 @@ int
 ObjectLayer::duplicate_object(int id)
 {
   ObjMapObject* obj    = get_object(id);
-  ObjMapObject* newobj = obj->duplicate(++handle_count);
-  objects.push_back(newobj);  
+  ObjMapObject* newobj = obj->duplicate(++impl->handle_count);
+  impl->objects.push_back(newobj);  
 
   // FIXME: Move to scripting level
   newobj->set_pos(newobj->get_pos() + CL_Point(16, 16));
@@ -59,22 +68,20 @@ ObjectLayer::duplicate_object(int id)
   return newobj->get_handle();
 }
 
-#ifdef SWIGGUILE
 int
-ObjectLayer::add_object(const CL_Sprite& sprite, const CL_Point& pos, const SCMObj& data)
+ObjectLayer::add_object(const CL_Sprite& sprite, const CL_Point& pos, const MetaData& data)
 {
-  ObjMapObject* obj = new ObjMapSpriteObject(++handle_count, pos, data, sprite);
+  ObjMapObject* obj = new ObjMapSpriteObject(++impl->handle_count, pos, data, sprite);
 
-  objects.push_back(obj);  
+  impl->objects.push_back(obj);  
 
   return obj->get_handle();
 }
-#endif
 
 ObjMapObject*
 ObjectLayer::find_object(const CL_Point& click_pos)
 {
-  for(Objs::reverse_iterator i = objects.rbegin(); i != objects.rend(); ++i)
+  for(Objs::reverse_iterator i = impl->objects.rbegin(); i != impl->objects.rend(); ++i)
     {
       CL_Rect rect = (*i)->get_bound_rect();
      
@@ -87,12 +94,12 @@ ObjectLayer::find_object(const CL_Point& click_pos)
 void
 ObjectLayer::delete_object(int id)
 {
-  for(Objs::iterator i = objects.begin(); i != objects.end(); ++i)
+  for(Objs::iterator i = impl->objects.begin(); i != impl->objects.end(); ++i)
     {
       if ((*i)->get_handle() == id)
         {
           //delete *i;
-          objects.erase(i);
+          impl->objects.erase(i);
           break;
         }
     }
@@ -103,7 +110,7 @@ ObjectLayer::get_selection(const CL_Rect& rect)
 {
   std::vector<ObjectLayer::Obj*> selection;
 
-  for(Objs::iterator i = objects.begin(); i != objects.end(); ++i)
+  for(Objs::iterator i = impl->objects.begin(); i != impl->objects.end(); ++i)
     {
       // FIXME:
       if (rect.is_inside((*i)->get_pos()))
@@ -118,7 +125,7 @@ ObjectLayer::get_selection(const CL_Rect& rect)
 ObjectLayer::Obj*
 ObjectLayer::get_object(int id)
 {
-  for(Objs::iterator i = objects.begin(); i != objects.end(); ++i)
+  for(Objs::iterator i = impl->objects.begin(); i != impl->objects.end(); ++i)
     if ((*i)->get_handle() == id)
       return *i;
   return 0;
@@ -127,13 +134,19 @@ ObjectLayer::get_object(int id)
 ObjectLayer::Objs*
 ObjectLayer::get_objects()
 {
-  return &objects;
+  return &impl->objects;
 }
 
 void
 ObjectLayer::add_object(ObjMapObject* obj)
 {
-  objects.push_back(obj);
+  impl->objects.push_back(obj);
+}
+
+int
+ObjectLayer::get_next_object_handle()
+{
+  return ++impl->handle_count; 
 }
 
 Layer

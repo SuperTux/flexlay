@@ -1,6 +1,6 @@
-//  $Id: scm_helper.hxx,v 1.2 2003/08/12 08:24:41 grumbel Exp $
+//  $Id$
 // 
-//  Windstille - A Jump'n Shoot Game
+//  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
 //
 //  This program is free software; you can redistribute it and/or
@@ -17,13 +17,17 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-#ifndef HEADER_SCM_HELPER_HXX
-#define HEADER_SCM_HELPER_HXX
+#ifndef HEADER_FONTS_HXX
+#define HEADER_FONTS_HXX
 
-#include <guile/gh.h>
-#include <string>
+#include <ClanLib/Display/font.h>
 
-std::string scm2string(SCM str);
+/** */
+class Fonts
+{
+public:
+  static CL_Font verdana11;
+};
 
 #endif
 

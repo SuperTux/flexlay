@@ -20,6 +20,7 @@
 #include "layer.hxx"
 #include "tilemap_layer.hxx"
 
+#include "minimap.hxx"
 #include "editor_map.hxx"
 #include "workspace.hxx"
 #include "tileset.hxx"
@@ -33,6 +34,9 @@
 #include "object_selector.hxx"
 #include "sexpr_parser.hxx"
 #include "icon.hxx"
+#include "window.hxx"
+#include "panel.hxx"
+#include "directory_view.hxx"
 %}
 
 %include "std_string.i"
@@ -65,6 +69,9 @@
 %include "object_selector.hxx"
 %include "sexpr_parser.hxx"
 %include "icon.hxx"
-
+%include "window.hxx"
+%include "panel.hxx"
+%include "minimap.hxx"
+%include "directory_view.hxx"
 
 /* EOF */

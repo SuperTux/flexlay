@@ -24,17 +24,10 @@ ObjectBrush::ObjectBrush()
   
 }
 
-ObjectBrush::ObjectBrush(const CL_Sprite& sprite_
-#ifdef SWIGGUILE
-                         ,  const SCMObj& data_
-#endif
-)
-  : sprite(sprite_)
-#ifdef SWIGGUILE
-  ,data(data_)
-#endif
+ObjectBrush::ObjectBrush(const CL_Sprite& sprite_,
+                         const MetaData& data_)
+  : sprite(sprite_), data(data_)
 {
-
 }
 
 /* EOF */

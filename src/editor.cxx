@@ -22,9 +22,6 @@
 #include <ClanLib/display.h>
 #include <ClanLib/gui.h>
 #include <ClanLib/guistylesilver.h>
-#ifdef SWIGGUILE
-#include <guile/gh.h>
-#endif
 
 #include "gui_manager.hxx"
 #include "command.hxx"

@@ -43,9 +43,7 @@ public:
   CL_Color foreground_color;
 
   /** Metadata attached to this map (ie. mapname, description, scripts, etc.) */
-#ifdef SWIGGUILE
-  SCMObj metadata;
-#endif
+  MetaData metadata;
 };
 
 EditorMap::EditorMap()
@@ -112,19 +110,17 @@ EditorMap::get_layer(int i)
     return Layer();
 }
 
-#ifdef SWIGGUILE
 void
-EditorMap::set_metadata(const SCMObj& obj)
+EditorMap::set_metadata(const MetaData& obj)
 {
   impl->metadata = obj; 
 }
 
-SCMObj
+MetaData
 EditorMap::get_metadata() const
 {
   return impl->metadata; 
 }
-#endif
 
 CL_Rect
 EditorMap::get_bounding_rect()

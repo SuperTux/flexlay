@@ -24,6 +24,7 @@
 #include <ClanLib/Display/sprite.h>
 #include <ClanLib/GUI/component.h>
 #include <ClanLib/Core/Math/point.h>
+#include "meta_data.hxx"
 #include "layer.hxx"
 
 class ObjMapObject;
@@ -34,17 +35,12 @@ class ObjectLayerImpl;
     accessible from scripting languages */
 class ObjectLayer
 {
-private:
-  CL_SlotContainer slots;
-
 public:
   typedef ObjMapObject Obj;
   typedef std::vector<ObjMapObject*> Objs;
-  Objs objects;
 
-  int handle_count;
   static ObjectLayer* current_;
-public:
+
   static ObjectLayer* current() { return current_; }
   static void set_current(ObjectLayer* c) { current_ = c; }
 
@@ -54,9 +50,8 @@ public:
   void draw(EditorMapComponent* parent);
 
   /** Add an object to the map and return a handle to it */
-#ifdef SWIGGUILE
-  int  add_object(const CL_Sprite& sprite, const CL_Point& pos, const SCMObj& data);
-#endif
+  int  add_object(const CL_Sprite& sprite, const CL_Point& pos, const MetaData& data);
+
   void add_object(ObjMapObject* obj);
   void delete_object(int id);
   int  duplicate_object(int id);
@@ -65,9 +60,10 @@ public:
   std::vector<ObjMapObject*> get_selection(const CL_Rect& rect);
   Objs* get_objects();
   ObjectLayer::Obj* get_object(int id);
-  int get_next_object_handle() { return ++handle_count; }
+  int get_next_object_handle();
 
   Layer to_layer();
+
 private:
   CL_SharedPtr<ObjectLayerImpl> impl;
 };

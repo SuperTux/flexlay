@@ -1,6 +1,6 @@
 //  $Id$
 //
-//  Pingus - A free Lemmings clone
+//  Flexlay - A Generic 2D Game Editor
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
 //
 //  This program is free software; you can redistribute it and/or
@@ -17,7 +17,11 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
+#include <iostream>
 #include <ClanLib/Display/display.h>
+#include <ClanLib/Display/display_iostream.h>
+#include "box.hxx"
+#include "fonts.hxx"
 #include "icon.hxx"
 
 class IconImpl
@@ -43,7 +47,22 @@ public:
 
 Icon::Icon(const CL_Point& pos, const CL_Sprite& sprite, const std::string& tooltip, 
            CL_Component* parent)
-  : CL_Component(CL_Rect(pos, CL_Size(34, 34)), parent),
+  : CL_Component(CL_Rect(pos, CL_Size(32, 32)), parent),
+    impl(new IconImpl(this))
+{
+  impl->sprite       = sprite;
+  impl->tooltip      = tooltip;
+  impl->draw_tooltip = true;
+  impl->down         = false;
+
+  impl->slots.push_back(sig_paint().connect(impl.get(), &IconImpl::draw));
+  impl->slots.push_back(sig_mouse_down().connect(impl.get(), &IconImpl::mouse_down));
+  impl->slots.push_back(sig_mouse_up().connect(impl.get(),   &IconImpl::mouse_up));
+}
+
+Icon::Icon(const CL_Rect& rect, const CL_Sprite& sprite, const std::string& tooltip, 
+           CL_Component* parent)
+  : CL_Component(rect, parent),
     impl(new IconImpl(this))
 {
   impl->sprite       = sprite;
@@ -65,34 +84,20 @@ Icon::sig_clicked()
 void
 IconImpl::draw()
 {
-  CL_Color background(220, 220, 220);
-  CL_Color background_hl(235, 235, 235);
-  CL_Color background_sw(200, 200, 200);
-  CL_Color highlight(255, 255, 255);
-  CL_Color shadow(0, 0, 0);
+  CL_Rect rect(CL_Point(0, 0), CL_Size(parent->get_width()-4, parent->get_height()-4));
 
   if (parent->has_mouse_over())
-    if (!down)
-      CL_Display::fill_rect(CL_Rect(CL_Point(0, 0), CL_Size(34, 34)), background_hl);
-    else
-      CL_Display::fill_rect(CL_Rect(CL_Point(0, 0), CL_Size(34, 34)), background_sw);
-  else
-    CL_Display::fill_rect(CL_Rect(CL_Point(0, 0), CL_Size(34, 34)), background);
-
-  if (parent->has_mouse_over() && down)
-    std::swap(highlight, shadow);
-
-  if (parent->has_mouse_over())
-    { 
-      CL_Display::draw_line(0, 0,  0, 33, highlight);
-      CL_Display::draw_line(0, 0, 33,  0, highlight);
-      
-      CL_Display::draw_line(33,  0, 33, 33, shadow);
-      CL_Display::draw_line( 0, 33, 33, 33, shadow);
+    {
+      if (down)
+        Box::draw_button_down(rect);
+      else
+        Box::draw_button_up(rect);
     }
+  else
+    Box::draw_button_neutral(rect);
 
   sprite.set_alignment(origin_center);
-  sprite.draw(17, 17);
+  sprite.draw((rect.get_width()+1)/2, (rect.get_height()+1)/2);
 }
 
 void
@@ -117,7 +122,7 @@ IconImpl::mouse_down(const CL_InputEvent& event)
 void 
 IconImpl::mouse_move(const CL_InputEvent& event)
 {
-  
+  std::cout << "icon: mouse_move: " << event << std::endl;
 }
 
 /* EOF */

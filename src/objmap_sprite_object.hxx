@@ -32,9 +32,7 @@ private:
 public:
   ObjMapSpriteObject(int handle_, 
                      const CL_Point& pos_, 
-#ifdef SWIGGUILE
-                     const SCMObj& data_, 
-#endif
+                     const MetaData& data_, 
                      const CL_Sprite& s);
   ObjMapSpriteObject(int handle_, const ObjMapSpriteObject& obj);
 

@@ -34,12 +34,12 @@ m = EditorMap()
 workspace.set_current_map(m)
 
 tileset = load_supertux_tiles()
-tilemap = TilemapLayer(tileset, 20, 10)
+tilemap = TilemapLayer(tileset, 200, 15)
 m.add_layer(tilemap.to_layer())
     
 TilemapLayer_set_current(tilemap)
 
-def foo():
+def do_quit():
     print "---My Callback---"
     gui.quit()
 
@@ -58,30 +58,43 @@ def draw_something():
     g = _
     print "Draw something done"
 
-window = CL_Window(CL_Rect(50, 50, 350, 300), "My Window", gui.get_component())
+window = Window(CL_Rect(50, 50, 450, 400), "My Window", gui.get_component())
     
 gui.push_component(window.get_client_area())
-button1 = CL_Button(CL_Rect(50, 50, 200, 75), "Quit", gui.get_component())
-connect(button1.sig_clicked(), foo)
+dirview = DirectoryView(CL_Rect(CL_Point(3, 40), CL_Size(300, 200)), gui.get_component())
+dirview.set_directory("/");
 
-button2 = CL_Button(CL_Rect(CL_Point(50, 100), CL_Size(150, 25)), "Draw", gui.get_component())
-connect(button2.sig_clicked(), draw_something)
+load_icon    = Icon(CL_Point(34*0+2, 2), make_sprite("../data/images/icons/stock_open.png"), "Some tooltip", gui.get_component());
+save_icon    = Icon(CL_Point(34*1+2, 2), make_sprite("../data/images/icons/stock_save.png"), "Some tooltip", gui.get_component());
+save_as_icon = Icon(CL_Point(34*2+2, 2), make_sprite("../data/images/icons/stock_save_as.png"), "Some tooltip", gui.get_component());
 
-load_icon    = Icon(CL_Point(34*0, 0), make_sprite("../data/images/icons/stock_open.png"), "Some tooltip", gui.get_component());
-save_icon    = Icon(CL_Point(34*1, 0), make_sprite("../data/images/icons/stock_save.png"), "Some tooltip", gui.get_component());
-save_as_icon = Icon(CL_Point(34*2, 0), make_sprite("../data/images/icons/stock_save_as.png"), "Some tooltip", gui.get_component());
+copy_icon    = Icon(CL_Point(34*3.1+2, 2), make_sprite("../data/images/icons/stock_copy.png"), "Some tooltip", gui.get_component());
+paste_icon   = Icon(CL_Point(34*4.1+2, 2), make_sprite("../data/images/icons/stock_paste.png"), "Some tooltip", gui.get_component());
 
-copy_icon    = Icon(CL_Point(34*3.1, 0), make_sprite("../data/images/icons/stock_copy.png"), "Some tooltip", gui.get_component());
-paste_icon   = Icon(CL_Point(34*4.1, 0), make_sprite("../data/images/icons/stock_paste.png"), "Some tooltip", gui.get_component());
 
 def foo():
     print "Button pressed"
 
 connect(load_icon.sig_clicked(), foo)
 
-gui.get_component()
-
 gui.pop_component()
+
+willow = Panel(CL_Rect(CL_Point(0, 23), CL_Size(800, 33)), gui.get_component())
+
+load_icon    = Icon(CL_Point(32*0+2, 2), make_sprite("../data/images/icons/stock_open.png"), "Some tooltip", willow);
+save_icon    = Icon(CL_Point(32*1+2, 2), make_sprite("../data/images/icons/stock_save.png"), "Some tooltip", willow);
+save_as_icon = Icon(CL_Point(32*2+2, 2), make_sprite("../data/images/icons/stock_save_as.png"), "Some tooltip", willow);
+
+copy_icon    = Icon(CL_Point(32*3.1+2, 2), make_sprite("../data/images/icons/stock_copy.png"), "Some tooltip", willow);
+paste_icon   = Icon(CL_Point(32*4.1+2, 2), make_sprite("../data/images/icons/stock_paste.png"), "Some tooltip", willow);
+
+
+toolbar = Panel(CL_Rect(CL_Point(0, 23+33), CL_Size(33, 256)), gui.get_component())
+
+select = Icon(CL_Point(2, 32*0+2), make_sprite("../data/images/tools/stock-tool-rect-select-22.png"), "Some tooltip", toolbar);
+erase  = Icon(CL_Point(2, 32+1+2), make_sprite("../data/images/tools/stock-tool-eraser-22.png"), "Some tooltip", toolbar);
+move   = Icon(CL_Point(2, 32*2+2), make_sprite("../data/images/tools/stock-tool-move-22.png"), "Some tooltip", toolbar);
+paint  = Icon(CL_Point(2, 32*3+2), make_sprite("../data/images/tools/stock-tool-pencil-22.png"), "Some tooltip", toolbar);
 
 supertux = SuperTuxGUI(tileset, gui)
 
@@ -111,6 +124,10 @@ menu = Menu()
 a = menu.add_item("File/Open...", menu_file_open)
 a = menu.add_item("File/Save...", menu_file_save)
 a = menu.add_item("File/Save As...", menu_file_save_as)
+a = menu.add_item("File/Quit",  do_quit)
+
+minimap_panel = Panel(CL_Rect(CL_Point(0, 600-56), CL_Size(800-134, 56)), gui.get_component())
+minimap = Minimap(editor_map, CL_Rect(CL_Point(3, 3), CL_Size(794-134, 50)), minimap_panel)
 
 gui.run()
 

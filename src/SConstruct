@@ -1,4 +1,23 @@
 ## -*- mode: python -*-
+##  $Id$
+##
+##  Flexlay - A Generic 2D Game Editor
+##  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
+##
+##  This program is free software; you can redistribute it and/or
+##  modify it under the terms of the GNU General Public License
+##  as published by the Free Software Foundation; either version 2
+##  of the License, or (at your option) any later version.
+##
+##  This program is distributed in the hope that it will be useful,
+##  but WITHOUT ANY WARRANTY; without even the implied warranty of
+##  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+##  GNU General Public License for more details.
+##
+##  You should have received a copy of the GNU General Public License
+##  along with this program; if not, write to the Free Software
+##  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+
 
 env = Environment(CXX = 'g++-3.3',
                   CXXFLAGS = '-g -O0 -Wall',
@@ -33,7 +52,7 @@ Depends('flexlay_wrap.cxx', ['flexlay.i',
 env.Command('flexlay_wrap.cxx', 'flexlay.i', "swig -python -c++ $SOURCE")
 
 env.Program('sharedptrtest', 'sharedptrtest.cxx',
-            CPPPATH=['/home/ingo/run/ClanLib-0.7-current//include/ClanLib-0.7/'])
+            CPPPATH=['/home/ingo/run/ClanLib-0.7-current/include/ClanLib-0.7/'])
 
 env.Program('simpleed',
             ['simpleed.cxx'],
@@ -46,6 +65,7 @@ env.SharedLibrary(
     target = 'libflexlay.so',
     source = [
     'blitter.cxx',
+    'box.cxx',
     'command_group.cxx',
     'editor.cxx',
     'editor_map.cxx',
@@ -56,7 +76,10 @@ env.SharedLibrary(
     'graphic_context_state.cxx',
     'gui_manager.cxx',
     'icon.cxx',
+    'directory_view.cxx',
+    'fonts.cxx',
     'minimap.cxx',
+    'meta_data.cxx', 
     'object_layer.cxx',
     'object_add_command.cxx',
     'object_brush.cxx',
@@ -68,6 +91,7 @@ env.SharedLibrary(
     'objmap_select_tool.cxx',
     'objmap_sprite_object.cxx',
     'paint_command.cxx',
+    'panel.cxx', 
     'popup_menu.cxx',
     'lispreader.cxx',
     'tile.cxx',
@@ -82,6 +106,7 @@ env.SharedLibrary(
     'tileset.cxx',
     'tool_manager.cxx',
     'workspace.cxx',
+    'window.cxx',
     'zoom_tool.cxx'],
     CPPPATH=['/home/ingo/run/ClanLib-0.7-current//include/ClanLib-0.7/',
              '..'],
@@ -101,6 +126,7 @@ env.SharedLibrary(
     'scripting/editor.cxx',
     'python_functor.cxx',
     'python_object.cxx',
+    'python_meta_data.cxx',
     'sexpr_parser.cxx'],
     CPPPATH=['/home/ingo/run/ClanLib-0.7-current//include/ClanLib-0.7/',
              '/usr/include/python2.2/',

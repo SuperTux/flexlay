@@ -50,7 +50,7 @@ private:
 
 public:
   /** width and height in number of tiles */
-  TileSelector(int width, int height, CL_Component* parent);
+  TileSelector(const CL_Rect& rect, int width, int height, CL_Component* parent);
   
   ~TileSelector();
 

@@ -19,23 +19,14 @@
 
 #include "objmap_object.hxx"
 
-ObjMapObject::ObjMapObject(int handle_, const CL_Point& pos_
-#ifdef SWIGGUILE
-                           , const SCMObj& data_
-#endif
-                           )
-  : handle(handle_), pos(pos_)
-#ifdef SWIGGUILE
-  , data(data_)
-#endif
+ObjMapObject::ObjMapObject(int handle_, const CL_Point& pos_,
+                           const MetaData& data_)
+  : handle(handle_), pos(pos_), data(data_)
 {  
 }
 
 ObjMapObject::ObjMapObject(int handle_, const ObjMapObject& obj)
-  : handle(handle_), pos(obj.pos)
-#ifdef SWIGGUILE
-, data(obj.data)
-#endif
+  : handle(handle_), pos(obj.pos), data(obj.data)
 {  
 }
 

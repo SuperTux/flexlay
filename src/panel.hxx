@@ -1,6 +1,6 @@
-//  $Id: scm_helper.hxx,v 1.2 2003/08/12 08:24:41 grumbel Exp $
+//  $Id$
 // 
-//  Windstille - A Jump'n Shoot Game
+//  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
 //
 //  This program is free software; you can redistribute it and/or
@@ -17,13 +17,23 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-#ifndef HEADER_SCM_HELPER_HXX
-#define HEADER_SCM_HELPER_HXX
+#ifndef HEADER_PANEL_HXX
+#define HEADER_PANEL_HXX
 
-#include <guile/gh.h>
-#include <string>
+#include <ClanLib/GUI/component.h>
+#include <ClanLib/Core/Math/rect.h>
+#include "shared_ptr.hxx"
 
-std::string scm2string(SCM str);
+class PanelImpl;
+
+/** */
+class Panel : public CL_Component
+{
+public:
+  Panel(const CL_Rect& rect, CL_Component* parent);
+private:
+  SharedPtr<PanelImpl> impl;
+};
 
 #endif
 

@@ -22,9 +22,7 @@
 
 #include <ClanLib/Core/Math/point.h>
 #include <ClanLib/Core/Math/rect.h>
-#ifdef SWIGGUILE
-#include "scm_obj.hxx"
-#endif
+#include "meta_data.hxx"
 
 /** */
 class ObjMapObject
@@ -34,24 +32,16 @@ private:
 
 protected:
   CL_Point  pos;
-#ifdef SWIGGUILE
-  SCMObj    data;
-#endif
+  MetaData  data;
 public:
-  ObjMapObject(int handle_, const CL_Point& pos
-#ifdef SWIGGUILE
-               , const SCMObj& data
-#endif
-               );
+  ObjMapObject(int handle_, const CL_Point& pos, const MetaData& data);
   ObjMapObject(int handle_, const ObjMapObject& obj);
   virtual ~ObjMapObject() {}
 
   CL_Point get_pos() const { return pos; }
   void     set_pos(const CL_Point& p) { pos = p; }
 
-#ifdef SWIGGUILE
-  SCMObj get_data() const { return data; }
-#endif
+  MetaData get_data() const { return data; }
 
   virtual void draw() =0;
   virtual CL_Rect get_bound_rect() const  =0;

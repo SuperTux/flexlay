@@ -52,10 +52,8 @@ public:
 
   Layer get_layer(int i);
 
-#ifdef SWIGGUILE
-  void   set_metadata(const SCMObj& obj);
-  SCMObj get_metadata() const;
-#endif
+  void   set_metadata(const MetaData& obj);
+  MetaData get_metadata() const;
 
   bool has_bounding_rect() const { return true; }
   CL_Rect get_bounding_rect();

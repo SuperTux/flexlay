@@ -1,6 +1,6 @@
-//  $Id: scm_helper.hxx,v 1.2 2003/08/12 08:24:41 grumbel Exp $
+//  $Id$
 // 
-//  Windstille - A Jump'n Shoot Game
+//  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
 //
 //  This program is free software; you can redistribute it and/or
@@ -17,13 +17,21 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-#ifndef HEADER_SCM_HELPER_HXX
-#define HEADER_SCM_HELPER_HXX
+#ifndef HEADER_BOX_HXX
+#define HEADER_BOX_HXX
 
-#include <guile/gh.h>
-#include <string>
+#include <ClanLib/Core/Math/rect.h>
 
-std::string scm2string(SCM str);
+/** Little helper class to draw boxes and stuff in the GUI */
+class Box
+{
+public:
+  static void draw_button_up(const CL_Rect& rect);
+  static void draw_button_down(const CL_Rect& rect);
+  static void draw_button_neutral(const CL_Rect& rect);
+  static void draw_panel(const CL_Rect& rect);
+  static void draw_panel_down(const CL_Rect& rect);
+};
 
 #endif
 

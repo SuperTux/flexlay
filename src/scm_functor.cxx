@@ -18,9 +18,7 @@
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include <iostream>
-#ifdef SWIGGUILE
 #include <libguile.h>
-#endif
 #include "scm_functor.hxx"
 
 SCMFunctor::SCMFunctor(SCM arg_func)

@@ -1,6 +1,6 @@
-//  $Id: scm_helper.hxx,v 1.2 2003/08/12 08:24:41 grumbel Exp $
+//  $Id$
 // 
-//  Windstille - A Jump'n Shoot Game
+//  Flexlay - A Generic 2D Game Editor
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
 //
 //  This program is free software; you can redistribute it and/or
@@ -17,13 +17,27 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-#ifndef HEADER_SCM_HELPER_HXX
-#define HEADER_SCM_HELPER_HXX
+#ifndef HEADER_META_DATA_IMPL_HXX
+#define HEADER_META_DATA_IMPL_HXX
 
-#include <guile/gh.h>
-#include <string>
+/** */
+class MetaDataImpl
+{
+private:
+public:
+  MetaDataImpl() {}
+  virtual ~MetaDataImpl() {}
+};
 
-std::string scm2string(SCM str);
+template<class T> 
+class MetaDataGeneric : public MetaDataImpl
+{
+public:
+  T data;
+
+  MetaDataGeneric(const T& d)
+    : data(d) {}
+};
 
 #endif
 

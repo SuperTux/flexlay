@@ -20,6 +20,32 @@
 from flexlay import *
 from sexpr   import *
 import time
+import ConfigParser
+import os
+
+class Config:
+    config = None
+    datadir = None
+    recent_files = []
+    
+    def __init__(self):
+        self.config = ConfigParser.ConfigParser()
+
+        # Setting defaults
+        self.config.add_section("SuperTux")
+        self.config.set("SuperTux", "datadir", "/home/ingo/cvs/supertux/supertux/data/")
+        self.config.set("SuperTux", "recent_files", [])
+
+        self.config.read(['supertux.cfg', os.path.expanduser('~/.flexlay/supertux.cfg')])
+
+        self.datadir      = self.config.get("SuperTux", "datadir")
+        self.recent_files = eval(self.config.get("SuperTux", "recent_files"))
+        
+    def __del__(self):
+        self.config.set("SuperTux", "datadir", self.datadir)
+        self.config.set("SuperTux", "recent_files", self.recent_files)
+        
+        self.config.write(open(os.path.expanduser('~/.flexlay/supertux.cfg'), 'w'))
 
 def load_game_tiles(tileset, filename):
     "Load game tiles from filename into tileset"
@@ -35,7 +61,7 @@ def load_game_tiles(tileset, filename):
                 image = get_value_from_tree(['images', '_'], data, "notile.png")
 
             tileset.add_tile(id,
-                             Tile(supertux_datadir + 'images/tilesets/' + image,
+                             Tile(config.datadir + 'images/tilesets/' + image,
                                   CL_Color(254, 254, 254, 254),
                                   CL_Color(255,   0,   0, 128)))
 
@@ -78,6 +104,9 @@ class SuperTuxLevel:
             (self.filename,) = params
             
             tree = sexpr_read_from_file(self.filename)
+            if tree == None:
+                raise "Couldn't load level"
+            
             data = tree[1:]
 
             self.name   = get_value_from_tree(["name", "_"], data, "no name")
@@ -238,7 +267,7 @@ def load_supertux_tiles():
     load_game_tiles(tileset, "/home/ingo/cvs/supertux/supertux/data/images/tilesets/supertux.stgt")
     return tileset 
 
-supertux_datadir = "/home/ingo/cvs/supertux/supertux/data/"
+config = Config()
 supertux_tileset = load_supertux_tiles()
     
 ### End: 'Main Loop'

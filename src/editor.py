@@ -21,8 +21,6 @@ import os
 import sys
 from flexlay import *
 
-recent_files = []
-
 flexlay = Flexlay()
 flexlay.init()
 
@@ -49,7 +47,7 @@ def EditorMap_get_metadata(self):
 EditorMap.get_metadata = EditorMap_get_metadata
 del EditorMap_get_metadata
 
-myrect = CL_Rect(CL_Point(0, 56), CL_Size(665, 488))
+myrect = CL_Rect(CL_Point(0, 56), CL_Size(665, 488+56))
 editor_map = EditorMapComponent(myrect, gui.get_component())
 workspace  = Workspace(myrect.get_width(), myrect.get_height())
 editor_map.set_workspace(workspace)
@@ -118,6 +116,12 @@ def gui_level_save():
 def gui_level_load():
     load_dialog.run(supertux_load_level)
 
+def gui_toggle_minimap():
+    if minimap.is_visible():
+        minimap.show(False)
+    else:
+        minimap.show(True)        
+
 class Counter:
     counter = 0;
     
@@ -161,6 +165,10 @@ redo_icon.set_callback(editor.redo)
 
 undo_icon.disable()
 redo_icon.disable()
+
+minimap_icon = Icon(CL_Rect(CL_Point(p.inc(48), 2), CL_Size(32, 32)),
+                    make_sprite("../data/images/icons24/minimap.png"), "Some tooltip", willow);
+minimap_icon.set_callback(gui_toggle_minimap)
 
 foreground_icon  = Icon(CL_Rect(CL_Point(p.inc(48), 2), CL_Size(32, 32)),
                         make_sprite("../data/images/icons24/foreground.png"), "Some tooltip", willow);
@@ -316,6 +324,8 @@ def supertux_save_level(filename):
     workspace.get_map().get_metadata().save(filename)
 
 recent_files_menu = Menu(CL_Point(32*2, 54), gui.get_component())
+for filename in config.recent_files:
+    recent_files_menu.add_item(mysprite, filename, lambda: supertux_load_level(filename))
 
 def has_element(lst, el):
     for i in lst:
@@ -329,9 +339,11 @@ def supertux_load_level(filename):
     level.activate(workspace)
     connect(level.editormap.sig_change(), on_map_change)
     
-    if not(has_element(recent_files, filename)):
-        recent_files.append(filename)
+    if not(has_element(config.recent_files, filename)):
+        config.recent_files.append(filename)
         recent_files_menu.add_item(mysprite, filename, lambda: supertux_load_level(filename))
+
+    minimap.update_minimap()
 
 menu = CL_Menu(gui.get_component())
 menu.add_item("File/Open...", gui_level_load)
@@ -358,8 +370,8 @@ def show_menu():
 
 paste_icon.set_callback(show_menu)
 
-minimap_panel = Panel(CL_Rect(CL_Point(0, 600-56), CL_Size(800-134, 56)), gui.get_component())
-minimap = Minimap(editor_map, CL_Rect(CL_Point(3, 3), CL_Size(794-134, 50)), minimap_panel)
+# minimap_panel = Panel(CL_Rect(CL_Point(0, 600-56), CL_Size(800-134, 56)), gui.get_component())
+minimap = Minimap(editor_map, CL_Rect(CL_Point(3, 488+3-14), CL_Size(794-134-16, 50)), editor_map)
 
 class FileDialog:
     window   = None
@@ -401,9 +413,9 @@ def do_something_with_file(filename):
     print "DoSomething: ", filename
 
 load_dialog = FileDialog("Load SuperTux Level", "Load", "Cancel", gui.get_component())
-load_dialog.set_filename(supertux_datadir + "levels/")
+load_dialog.set_filename(config.datadir + "levels/")
 save_dialog = FileDialog("Save SuperTux Level as...", "Save", "Cancel", gui.get_component())
-save_dialog.set_filename(supertux_datadir + "levels/")
+save_dialog.set_filename(config.datadir + "levels/")
 
 gui.run()
 

@@ -72,7 +72,7 @@ Minimap::draw()
       impl->editor_map  = impl->parent->get_workspace().get_map();
     }
 
-  if (0)
+  if (1)
     { // Draw background color
       CL_Display::fill_rect(CL_Rect(CL_Point(0, 0),
                                     CL_Size(get_width(),

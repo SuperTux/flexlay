@@ -17,8 +17,8 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-#ifndef TILEFACTORY_HXX
-#define TILEFACTORY_HXX
+#ifndef TILESET_HXX
+#define TILESET_HXX
 
 #include <libguile.h>
 #include <map>
@@ -27,7 +27,7 @@
 class Tile;
 
 /** */
-class TileFactory
+class Tileset
 {
 private:
   // FIXME: Replace ths with a vector, map is potentially slow
@@ -35,7 +35,7 @@ private:
   typedef std::vector<Tile*> Tiles;
   Tiles tiles;
 
-  static TileFactory* current_;
+  static Tileset* current_;
 public:
   static std::string tile_def_file;
 
@@ -44,11 +44,11 @@ public:
   iterator begin() { return tiles.begin(); }
   iterator end()   { return tiles.end(); }
 
-  /** Create an empty TileFactory, so that the user can add stuff via
+  /** Create an empty Tileset, so that the user can add stuff via
       scripting to it */
-  TileFactory();
+  Tileset();
 
-  ~TileFactory();
+  ~Tileset();
 
   /** Check if the tile is already loaded and return it. If it is not
    *  already loaded, load it 
@@ -65,8 +65,8 @@ public:
   static void deinit();
 
   /** Access the default TileFactor*/
-  static TileFactory* current() { return current_; }
-  static void set_current(TileFactory* c) { current_ = c; }
+  static Tileset* current() { return current_; }
+  static void set_current(Tileset* c) { current_ = c; }
 
   void load_tile_file(const std::string& filename);
   void add_tile(SCM data);

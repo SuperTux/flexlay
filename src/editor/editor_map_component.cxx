@@ -22,7 +22,7 @@
 #include <ClanLib/Display/keys.h>
 #include "../windstille_level.hxx"
 #include "../globals.hxx"
-#include "../tile_factory.hxx"
+#include "tileset.hxx"
 #include "editor_names.hxx"
 #include "editor_map.hxx"
 #include "tool_manager.hxx"

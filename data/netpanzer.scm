@@ -94,7 +94,7 @@
 (define (netpanzer:create-levelmap width height)
   (let* ((levelmap (editor-map-create))
          (objmap   (editor-objmap-create))
-         (tilemap  (editor-tilemap-create width height *tile-size*))
+         (tilemap  (editor-tilemap-create 0 width height *tile-size*))
          (npm    (make <netpanzer-map> 
                    #:tilemap     tilemap
                    #:objmap      objmap)))
@@ -298,7 +298,7 @@
            (index-box     (gui-create-inputbox 10 330 50 25 (number->string index)))
            (map-component (editor-map-component-create 75 10 730 550))
            (levelmap      (editor-map-create))
-           (tilemap       (editor-tilemap-create 10 10 32)))
+           (tilemap       (editor-tilemap-create 0 0 10 10 32)))
       
       (set! *tilemap* tilemap)
 

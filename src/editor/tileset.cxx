@@ -25,24 +25,24 @@
 #include "string_converter.hxx"
 #include "scm_helper.hxx"
 #include "tile.hxx"
-#include "tile_factory.hxx"
+#include "tileset.hxx"
 
 extern CL_ResourceManager* resources;
 
-TileFactory* TileFactory::current_ = 0;
+Tileset* Tileset::current_ = 0;
 
-TileFactory::TileFactory()
+Tileset::Tileset()
 {
   current_ = this;
 }
 
-TileFactory::~TileFactory()
+Tileset::~Tileset()
 {
-  std::cout << "TileFactory: destroy" << std::endl;
+  std::cout << "Tileset: destroy" << std::endl;
 }
 
 void
-TileFactory::load_tile_file(const std::string& filename)
+Tileset::load_tile_file(const std::string& filename)
 {
   SCM input_stream = scm_open_file(gh_str02scm(filename.c_str()), 
                                    gh_str02scm("r"));
@@ -84,9 +84,9 @@ TileFactory::load_tile_file(const std::string& filename)
 }
 
 void
-TileFactory::add_tile(SCM data)
+Tileset::add_tile(SCM data)
 {
-  // FIXME: Move this to scripting and add a TileFactory::add()
+  // FIXME: Move this to scripting and add a Tileset::add()
   int id;
   std::string image;
   CL_Color color(254, 254, 254, 254);
@@ -176,7 +176,7 @@ TileFactory::add_tile(SCM data)
 }
 
 Tile* 
-TileFactory::create (int id)
+Tileset::create (int id)
 {
   // FIXME: this might cause throuble for some games
   // id 0 is always the empty tile
@@ -194,14 +194,14 @@ TileFactory::create (int id)
 }
 
 void
-TileFactory::init()
+Tileset::init()
 {
   assert(current_ == 0);
 }
 
 /** Destroy the default TileFactor*/
 void
-TileFactory::deinit()
+Tileset::deinit()
 {
   delete current_;
 }

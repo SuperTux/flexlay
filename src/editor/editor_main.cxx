@@ -26,7 +26,7 @@
 #include <guile/gh.h>
 #include "../globals.hxx"
 #include "editor.hxx"
-#include "tile_factory.hxx"
+#include "tileset.hxx"
 #include "editor_main.hxx"
 
 extern "C" void SWIG_init(void);

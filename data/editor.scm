@@ -96,7 +96,7 @@
 
 (define (create-level-map width height)
   (let* ((m       (editor-map-create))
-         (tilemap (editor-tilemap-create width height *tile-size*))
+         (tilemap (editor-tilemap-create 0 width height *tile-size*))
          (objmap  (editor-objmap-create)))
 
     (set! *tilemap* tilemap)
@@ -117,7 +117,7 @@
       
       ;; load level file and extract tiledata and w/h
       (let* ((m       (editor-map-create))
-             (tilemap (editor-tilemap-create width height *tile-size*))
+             (tilemap (editor-tilemap-create 0 width height *tile-size*))
              (objmap  (editor-objmap-create)))
 
         (set! *tilemap* tilemap)

@@ -24,7 +24,7 @@
 #include <ClanLib/Display/display.h>
 #include "globals.hxx"
 #include "editor_tilemap.hxx"
-#include "tile_factory.hxx"
+#include "tileset.hxx"
 #include "editor_map.hxx"
 #include "editor_map_component.hxx"
 #include "../tile.hxx"
@@ -72,7 +72,7 @@ TileMapPaintTool::draw()
       for(int y = 0; y < brush.get_height(); ++y)
         for(int x = 0; x < brush.get_width(); ++x)
           {
-            Tile* tile = TileFactory::current()->create(brush(x, y));
+            Tile* tile = Tileset::current()->create(brush(x, y));
                 
             if (tile)
               {

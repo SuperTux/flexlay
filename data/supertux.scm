@@ -9,8 +9,10 @@
 (game-load-resources "tuxtiles.xml")
 (game-load-resources "tuxsprites.xml")
 ;;(game-load-tiles     "tuxtiles.scm")
-(define *tileset* (tileset-create))
-(tileset-create)
+
+(define *worldmap-tileset* (tileset-create))
+(define *level-tileset* (tileset-create))
+
 (define (supertux:load-tiles filename)
   (with-input-from-file filename
     (lambda ()
@@ -20,7 +22,7 @@
                (for-each (lambda (el)
                            (cond ((equal? (car el) 'tile)
                                   ;;(display (cdr el))(newline)
-                                  (tileset-add-tile *tileset*
+                                  (tileset-add-tile *level-tileset*
                                    (list (list 'id   
                                                (get-value-from-tree '(id _) (cdr el) -1))
                                          (list 'image 
@@ -40,7 +42,7 @@
         (cond ((equal? ident 'supertux-worldmap-tiles)
                (for-each (lambda (el)
                            (cond ((equal? (car el) 'tile)
-                                  (tileset-add-tile *tileset*
+                                  (tileset-add-tile *worldmap-tileset*
                                    (list (list 'id   
                                                (get-value-from-tree '(id _) (cdr el) -1))
                                          (list 'image 
@@ -51,8 +53,8 @@
               (else
                (error "Not a supertux worldmap tileset")))))))
 
+(supertux:load-worldmap-tiles (string-append *supertux:datadir* "images/worldmap/antarctica.stwt"))
 (supertux:load-tiles (string-append *supertux:datadir* "images/tilesets/supertux.stgt"))
-;;(supertux:load-worldmap-tiles (string-append *supertux:datadir* "images/worldmap/antarctica.stwt"))
 
 ;;(tileset-add-tile '((id 6)
 ;;                    (image "/home/ingo/projects/windstille/trunk/data/images/tuxsprites/mrbomb.png")
@@ -109,9 +111,12 @@
   (let ((level    (make <supertux-level>))
         (levelmap (editor-map-create)))
     
-    (set! (supertux:foreground-tm  level) (editor-tilemap-create width height *tile-size*))
-    (set! (supertux:interactive-tm level) (editor-tilemap-create width height *tile-size*))
-    (set! (supertux:background-tm  level) (editor-tilemap-create width height *tile-size*))
+    (set! (supertux:foreground-tm  level) (editor-tilemap-create *level-tileset*
+                                                                 width height *tile-size*))
+    (set! (supertux:interactive-tm level) (editor-tilemap-create *level-tileset*
+                                                                 width height *tile-size*))
+    (set! (supertux:background-tm  level) (editor-tilemap-create *level-tileset*
+                                                                 width height *tile-size*))
     (set! (supertux:objmap         level) (editor-objmap-create))
     
     (editor-map-add-layer levelmap (supertux:background-tm  level))
@@ -303,7 +308,8 @@
                     (lambda () (cdr (read)))))
          (width   (get-value-from-tree '(tilemap width  _) data 19))
          (height  (get-value-from-tree '(tilemap height _) data 14))
-         (tilemap (editor-tilemap-create width height 32))
+         (tilemap (editor-tilemap-create *worldmap-tileset*
+                                         width height 32))
          (stwm    (make <supertux-worldmap> #:tilemap tilemap)))
     (format #t "Size: ~ax~a~%" width height)
     (editor-tilemap-set-data tilemap (get-value-from-tree '(tilemap data) data '()))
@@ -373,9 +379,12 @@
              (objmap  (editor-objmap-create)))
 
         (set! (supertux:objmap          level) objmap)
-        (set! (supertux:interactive-tm  level) (editor-tilemap-create width height *tile-size*))
-        (set! (supertux:background-tm   level) (editor-tilemap-create width height *tile-size*))
-        (set! (supertux:foreground-tm   level) (editor-tilemap-create width height *tile-size*))
+        (set! (supertux:interactive-tm  level) (editor-tilemap-create *level-tileset*
+                                                                      width height *tile-size*))
+        (set! (supertux:background-tm   level) (editor-tilemap-create *level-tileset*
+                                                                      width height *tile-size*))
+        (set! (supertux:foreground-tm   level) (editor-tilemap-create *level-tileset*
+                                                                      width height *tile-size*))
         (set! *tilemap* (supertux:interactive-tm  level))
         (set! *objmap*  (supertux:objmap level))
 

@@ -30,12 +30,12 @@ class EditorTileMap;
 class EditorMapLayer;
 class CL_Component;
 class TileBrush;
-class TileFactory;
+class Tileset;
 
 /** Set the size of the tiles and there subsize */
 void game_set_tilesize(int size, int subsize);
 
-/** Load a tile definition file into the TileFactory */
+/** Load a tile definition file into the Tileset */
 void game_load_tiles(const char* resourcefile);
 
 /** Add a ClanLib resource file to the resource manager */
@@ -108,7 +108,7 @@ void            editor_map_set_filename(EditorMap* m, const char* name);
 
 void            editor_toggle_grid(EditorMapLayer* layer);
 void            editor_toggle_attributes(EditorMapLayer* layer);
-EditorMapLayer* editor_tilemap_create(int w, int h, int tile_size);
+EditorMapLayer* editor_tilemap_create(Tileset* tileset, int w, int h, int tile_size);
 void            editor_tilemap_resize(EditorMapLayer* , int w, int h, int x, int y);
 void            editor_tilemap_set_data(EditorMapLayer* l, SCM data);
 SCM             editor_tilemap_get_data(EditorMapLayer* l);
@@ -118,9 +118,9 @@ void            editor_tilemap_set_bgcolor(EditorMapLayer* l, int r, int g, int 
 void            editor_tilemap_set_fgcolor(EditorMapLayer* l, int r, int g, int b, int a);
 void            editor_tilemap_save_png(EditorMapLayer* l, const char* filename);
 
-TileFactory* tileset_create();
+Tileset* tileset_create();
 
-void tileset_add_tile(TileFactory* tileset, SCM data);
+void tileset_add_tile(Tileset* tileset, SCM data);
 
 #endif
 

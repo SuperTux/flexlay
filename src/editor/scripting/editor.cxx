@@ -42,7 +42,7 @@
 #include "editor/tilemap_paint_tool.hxx"
 #include "editor/minimap.hxx"
 #include "editor/editor_names.hxx"
-#include "tile_factory.hxx"
+#include "tileset.hxx"
 #include "tile.hxx"
 #include "editor/tool_manager.hxx"
 #include "editor/object_delete_command.hxx"
@@ -93,7 +93,7 @@ game_set_tilesize(int size, int subsize)
 void
 game_load_tiles(const char* resourcefile)
 {
-  TileFactory::current()->load_tile_file(datadir + resourcefile);
+  Tileset::current()->load_tile_file(datadir + resourcefile);
 }
 
 void
@@ -528,7 +528,7 @@ void tileeditor_set_tile(CL_Component* comp, int id)
 {
   TileEditor* tileeditor = dynamic_cast<TileEditor*>(comp);
   if (tileeditor)
-    tileeditor->set_tile(TileFactory::current()->create(id));
+    tileeditor->set_tile(Tileset::current()->create(id));
 }
 
 SCM get_tile_def(Tile* tile)
@@ -562,18 +562,18 @@ SCM get_tile_def(Tile* tile)
 
 SCM get_tile_def(int id)
 {
-  return get_tile_def(TileFactory::current()->create(id));
+  return get_tile_def(Tileset::current()->create(id));
 }
 
 SCM get_tile_defs()
 {
   SCM lst = gh_cons(scm_str2symbol("windstille-tiles"), SCM_EOL);
   
-  for (TileFactory::iterator i = TileFactory::current()->begin();
-       i != TileFactory::current()->end();
+  for (Tileset::iterator i = Tileset::current()->begin();
+       i != Tileset::current()->end();
        ++i)
     {
-      lst = gh_cons(get_tile_def(i - TileFactory::current()->begin()), lst);
+      lst = gh_cons(get_tile_def(i - Tileset::current()->begin()), lst);
     }
 
   return gh_reverse(lst);
@@ -725,9 +725,9 @@ editor_objmap_create()
 }
 
 EditorMapLayer* 
-editor_tilemap_create(int w, int h, int tile_size)
+editor_tilemap_create(Tileset* tileset, int w, int h, int tile_size)
 {
-  return new EditorTileMap(w, h, tile_size);
+  return new EditorTileMap(tileset, w, h, tile_size);
 }
 
 void
@@ -910,20 +910,17 @@ editor_map_get_metadata(EditorMap* m)
 }
 
 
-TileFactory*
+Tileset*
 tileset_create()
 {
-  return new TileFactory();
+  return new Tileset();
 }
 
 void
-tileset_add_tile(TileFactory* tileset, SCM data)
+tileset_add_tile(Tileset* tileset, SCM data)
 {
   try {
-    if (TileFactory::current())
-      TileFactory::current()->add_tile(data);
-    else
-      std::cout << "No TileFactory present" << std::endl;
+    tileset->add_tile(data);
   } catch (CL_Error& err) {
     std::cout << "Error: " << err.message << std::endl;
   }

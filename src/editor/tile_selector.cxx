@@ -20,7 +20,7 @@
 #include <iostream>
 #include <ClanLib/display.h>
 #include "../globals.hxx"
-#include "../tile_factory.hxx"
+#include "tileset.hxx"
 #include "../tile.hxx"
 #include "tile_selector.hxx"
 #include "tilemap_paint_tool.hxx"
@@ -108,7 +108,7 @@ TileSelector::draw()
     for(int x = 0; x < width; ++x)
       {
         int i = width * y + x;
-        Tile* tile = TileFactory::current()->create(i);
+        Tile* tile = Tileset::current()->create(i);
 
         CL_Rect rect(CL_Point(static_cast<int>(x * TILE_SIZE*scale),
                               static_cast<int>(y * TILE_SIZE*scale)),

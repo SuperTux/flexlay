@@ -25,6 +25,7 @@
 #include "../field.hxx"
 #include "editor_map_layer.hxx"
 
+class Tileset;
 class CL_PixelBuffer;
 class TileBrush;
 
@@ -33,6 +34,7 @@ class TileBrush;
 class EditorTileMap : public EditorMapLayer
 {
 private:
+  Tileset* tileset;
   CL_Color background_color;
   CL_Color foreground_color;
   int tile_size;
@@ -48,7 +50,7 @@ public:
   static EditorTileMap* current() { return current_; }
   static void set_current(EditorTileMap* c) { current_ = c; }
   
-  EditorTileMap(int w,  int h, int tile_size_);
+  EditorTileMap(Tileset* tileset, int w,  int h, int tile_size_);
   ~EditorTileMap();
 
   void draw (EditorMapComponent* parent);

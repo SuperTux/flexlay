@@ -25,7 +25,7 @@
 #include "scripting/editor.hxx"
 #include "editor.hxx"
 #include "tile.hxx"
-#include "tile_factory.hxx"
+#include "tileset.hxx"
 #include "editor_map.hxx"
 #include "editor_map_component.hxx"
 #include "editor_tilemap.hxx"
@@ -83,7 +83,7 @@ Minimap::draw()
           for(int y = 0; y < field->get_height(); ++y)
             for(int x = 0; x < field->get_width(); ++x)
               {
-                Tile* tile = TileFactory::current()->create(field->at(x, y));
+                Tile* tile = Tileset::current()->create(field->at(x, y));
                 if (tile)
                   CL_Display::fill_rect(CL_Rect(CL_Point((x * TILE_SIZE) * get_width() / map_width,
                                                          (y * TILE_SIZE) * get_height() / map_height),
@@ -129,7 +129,7 @@ Minimap::update_minimap_surface()
       for(int y = 0; y < map_height; ++y)
         for(int x = 0; x < map_width; ++x)
           {
-            Tile* tile = TileFactory::current()->create(field->at(x, y));
+            Tile* tile = Tileset::current()->create(field->at(x, y));
             if (tile)
               {
                 buf[4*(x + y * map_width) + 3] = tile->get_color().get_red();

@@ -14,7 +14,7 @@ editor_SOURCES = \
   ../scm_functor.hxx  ../scm_functor.cxx \
   ../scm_helper.hxx  ../scm_helper.cxx \
   ../globals.hxx  ../globals.cxx \
-  tile_factory.hxx   tile_factory.cxx \
+  tileset.hxx   tileset.cxx \
   editor_tilemap.hxx editor_tilemap.cxx \
   tile_selector.hxx tile_selector.cxx \
   editor.hxx editor.cxx \

@@ -27,7 +27,7 @@
 #include "../windstille_level.hxx"
 #include "../globals.hxx"
 #include "tile.hxx"
-#include "tile_factory.hxx"
+#include "tileset.hxx"
 #include "editor.hxx"
 #include "editor_map.hxx"
 #include "tile_brush.hxx"
@@ -38,7 +38,7 @@
 
 EditorTileMap* EditorTileMap::current_ = 0;
 
-EditorTileMap::EditorTileMap(int w, int h, int tile_size_)
+EditorTileMap::EditorTileMap(Tileset* tileset_, int w, int h, int tile_size_)
   : tile_size(tile_size_), field(w, h)
 {
   // FIXME: Move this to the widget or to some more generic
@@ -53,6 +53,11 @@ EditorTileMap::EditorTileMap(int w, int h, int tile_size_)
 
   background_color = CL_Color(0, 0, 0, 0);
   foreground_color = CL_Color(255, 255, 255, 255);
+  
+  if (!tileset_)
+    tileset = Tileset::current();
+  else
+    tileset = tileset_;
 }
 
 EditorTileMap::~EditorTileMap()
@@ -62,7 +67,7 @@ EditorTileMap::~EditorTileMap()
 void
 EditorTileMap::draw_tile(int id, int x, int y, bool attribute)
 {
-  Tile* tile = TileFactory::current()->create(id);
+  Tile* tile = tileset->create(id);
 
   if (tile)
     {
@@ -322,7 +327,7 @@ EditorTileMap::create_pixelbuffer()
   for (int y = 0; y < get_height(); ++y)
     for (int x = 0; x < get_width(); ++x)
       {
-        Tile* tile = TileFactory::current()->create(field.at(x, y));
+        Tile* tile = tileset->create(field.at(x, y));
 
         if (tile)
           {

@@ -20,13 +20,13 @@
 #include <assert.h>
 #include <string>
 #include "../globals.hxx"
-#include "../tile_factory.hxx"
+#include "../tileset.hxx"
 #include "editor_tile.hxx"
 
 void
-EditorTile::draw(int id, int x, int y, bool grid, bool attribute, float alpha)
+EditorTile::draw(Tileset* tileset, int id, int x, int y, bool grid, bool attribute, float alpha)
 {
-  Tile* tile = TileFactory::current()->create(id);
+  Tile* tile = tileset->create(id);
 
   if (tile)
     {

@@ -17,6 +17,7 @@
 ##  along with this program; if not, write to the Free Software
 ##  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
+import os
 import sys
 from flexlay import *
 
@@ -37,15 +38,11 @@ Editor.redo = Editor_redo
 del Editor_redo
 del Editor_undo
 
-# class FileDialog:
-#     window = None
-
-#     def __init__(self):
-        
-
-#     def show(self, filename, func):
-#         window = Window(CL_Rect(50, 50, 450, 400), "My Window", gui.get_component())
-        
+EditorMap.__get_metadata = EditorMap.get_metadata
+def EditorMap_get_metadata(self):
+    return get_python_object(self.__get_metadata())
+EditorMap.get_metadata = EditorMap_get_metadata
+del EditorMap_get_metadata
 
 # (define (simple-file-dialog title filename func)
 #   (let ((window (gui-create-window 200 100 460 125 title)))
@@ -142,9 +139,28 @@ del Icon_set_callback
 def do_something():
     print "do_something"
 
+def gui_level_save_as():
+    save_dialog.set_filename(os.path.dirname(save_dialog.get_filename()) + "/")
+    save_dialog.run(supertux_save_level)
+
+def gui_level_save():
+    if workspace.get_map().get_metadata().filename:
+        save_dialog.set_filename(workspace.get_map().get_metadata().filename)
+    else:
+        save_dialog.set_filename(os.path.dirname(save_dialog.get_filename())  + "/")
+        
+    save_dialog.run(supertux_save_level)
+   
+def gui_level_load():
+    load_dialog.run(supertux_load_level)
+
 load_icon    = Icon(CL_Point(32*0+2, 2), make_sprite("../data/images/icons24/stock_open.png"), "Some tooltip", willow);
 save_icon    = Icon(CL_Point(32*1+2, 2), make_sprite("../data/images/icons24/stock_save.png"), "Some tooltip", willow);
 save_as_icon = Icon(CL_Point(32*2+2, 2), make_sprite("../data/images/icons24/stock_save_as.png"), "Some tooltip", willow);
+
+load_icon.set_callback(gui_level_load)
+save_icon.set_callback(gui_level_save)
+save_as_icon.set_callback(gui_level_save_as)
 
 copy_icon    = Icon(CL_Point(32*3.1+2, 2), make_sprite("../data/images/icons24/stock_copy.png"), "Some tooltip", willow);
 paste_icon   = Icon(CL_Point(32*4.1+2, 2), make_sprite("../data/images/icons24/stock_paste.png"), "Some tooltip", willow);
@@ -157,6 +173,13 @@ redo_icon.set_callback(editor.redo)
 
 undo_icon.disable()
 redo_icon.disable()
+
+foreground_icon  = Icon(CL_Point(32*8+2, 2), make_sprite("../data/images/icons24/foreground.png"), "Some tooltip", willow);
+interactive_icon = Icon(CL_Point(32*9+2, 2), make_sprite("../data/images/icons24/interactive.png"), "Some tooltip", willow);
+background_icon  = Icon(CL_Point(32*10+2, 2), make_sprite("../data/images/icons24/background.png"), "Some tooltip", willow);
+eye_icon = Icon(CL_Point(32*11+2, 2), make_sprite("../data/images/icons24/eye.png"), "Some tooltip", willow);
+
+layer_menu = Menu(CL_Point(32*11+2, 54), gui.get_component())
 
 def on_map_change():
     if (workspace.get_map().undo_stack_size() > 0):
@@ -218,7 +241,47 @@ object.set_callback(set_objmap_select_tool)
 # erase  = Icon(CL_Point(2, 32+1+2), make_sprite("../data/images/tools/stock-tool-eraser-22.png"), "Some tooltip", toolbar);
 # move   = Icon(CL_Point(2, 32*2+2), make_sprite("../data/images/tools/stock-tool-move-22.png"), "Some tooltip", toolbar);
 
-supertux = SuperTuxGUI(load_supertux_tiles(), gui)
+def menu_show_foreground():
+    display_properties.layer = SuperTuxLevel.FOREGROUND
+    display_properties.set(workspace.get_map().get_metadata())
+    TilemapLayer_set_current(workspace.get_map().get_metadata().foreground)
+    foreground_icon.set_down()
+    interactive_icon.set_up()
+    background_icon.set_up()
+    minimap.update_minimap()
+
+def menu_show_background():
+    display_properties.layer = SuperTuxLevel.BACKGROUND
+    display_properties.set(workspace.get_map().get_metadata())
+    TilemapLayer_set_current(workspace.get_map().get_metadata().background)
+    foreground_icon.set_up()
+    interactive_icon.set_up()
+    background_icon.set_down()
+    minimap.update_minimap()
+
+def menu_show_interactive():
+    display_properties.layer = SuperTuxLevel.INTERACTIVE
+    display_properties.set(workspace.get_map().get_metadata())
+    TilemapLayer_set_current(workspace.get_map().get_metadata().interactive)
+    foreground_icon.set_up()
+    interactive_icon.set_down()
+    background_icon.set_up()
+    minimap.update_minimap()
+
+def menu_show_all():
+    display_properties.show_all = True
+    display_properties.set(workspace.get_map().get_metadata())
+
+def menu_show_only_current():
+    display_properties.show_all = False
+    display_properties.set(workspace.get_map().get_metadata())
+
+foreground_icon.set_callback(menu_show_foreground)
+interactive_icon.set_callback(menu_show_interactive)
+background_icon.set_callback(menu_show_background)
+eye_icon.set_callback(layer_menu.run)
+
+mysprite = make_sprite("../data/images/icons16/stock_paste-16.png")
 
 def block():
     def CL_Menu_add_item(self, name, func):
@@ -226,6 +289,19 @@ def block():
         connect(item.sig_clicked(), func)
     CL_Menu.add_item = CL_Menu_add_item
 block()
+
+def Menu_add_item(self, sprite, text, func):
+    i = self.__add_item(sprite, text)
+    if func != None:
+        connect(self.sig_clicked(i), func)
+Menu.__add_item = Menu.add_item
+Menu.add_item = Menu_add_item
+del Menu_add_item
+
+layer_menu.add_item(mysprite, "Show all", menu_show_all)
+layer_menu.add_item(mysprite, "Show only current", menu_show_only_current)
+
+supertux = SuperTuxGUI(load_supertux_tiles(), gui)
 
 level = None
 def menu_file_open():
@@ -236,62 +312,23 @@ def menu_file_open():
     connect(level.editormap.sig_change(), on_map_change)
     print "Activation done"
 
-def menu_file_save():
-    print "File/Save"
-
-def menu_file_save_commands():
-    print "File/Save As"
+def supertux_save_level(filename):
+    workspace.get_map().get_metadata().save(filename)
     
-def menu_file_save_as():
-    print "File/Save As"
+def supertux_load_level(filename):
+    print "Loading: ", filename
+    level = SuperTuxLevel(filename)
+    level.activate(workspace)
+    connect(level.editormap.sig_change(), on_map_change)
 
 menu = CL_Menu(gui.get_component())
-menu.add_item("File/Open...", menu_file_open)
-menu.add_item("File/Save...", menu_file_save)
-menu.add_item("File/Save Commands...", menu_file_save_commands)
-menu.add_item("File/Save As...", menu_file_save_as)
+menu.add_item("File/Open...", gui_level_load)
+menu.add_item("File/Save...", gui_level_save)
+# menu.add_item("File/Save Commands...", menu_file_save_commands)
+menu.add_item("File/Save As...", gui_level_save_as)
 menu.add_item("File/Quit",  do_quit)
 
 display_properties = DisplayProperties()
-
-def menu_show_foreground():
-    display_properties.layer = SuperTuxLevel.FOREGROUND
-    display_properties.set(get_python_object(workspace.get_map().get_metadata()))
-    TilemapLayer_set_current(get_python_object(workspace.get_map().get_metadata()).foreground)
-
-def menu_show_background():
-    display_properties.layer = SuperTuxLevel.BACKGROUND
-    display_properties.set(get_python_object(workspace.get_map().get_metadata()))
-    TilemapLayer_set_current(get_python_object(workspace.get_map().get_metadata()).background)
-
-def menu_show_interactive():
-    display_properties.layer = SuperTuxLevel.INTERACTIVE
-    display_properties.set(get_python_object(workspace.get_map().get_metadata()))
-    TilemapLayer_set_current(get_python_object(workspace.get_map().get_metadata()).interactive)
-
-def menu_show_all():
-    display_properties.show_all = True
-    display_properties.set(get_python_object(workspace.get_map().get_metadata()))
-
-def menu_show_only_current():
-    display_properties.show_all = False
-    display_properties.set(get_python_object(workspace.get_map().get_metadata()))
-
-menu.add_item("Layer/Background",  menu_show_background)
-menu.add_item("Layer/Interactive", menu_show_interactive)
-menu.add_item("Layer/Foreground",  menu_show_foreground)
-
-# Fixme: make me a toggle item
-menu.add_item("Layer/Show all",    menu_show_all)
-menu.add_item("Layer/Show only current", menu_show_only_current)
-
-def Menu_add_item(self, sprite, text, func):
-    i = self.__add_item(sprite, text)
-    if func != None:
-        connect(self.sig_clicked(i), func)
-Menu.__add_item = Menu.add_item
-Menu.add_item = Menu_add_item
-del Menu_add_item
 
 mysprite = make_sprite("../data/images/icons16/stock_paste-16.png")
 
@@ -311,6 +348,50 @@ paste_icon.set_callback(show_menu)
 
 minimap_panel = Panel(CL_Rect(CL_Point(0, 600-56), CL_Size(800-134, 56)), gui.get_component())
 minimap = Minimap(editor_map, CL_Rect(CL_Point(3, 3), CL_Size(794-134, 50)), minimap_panel)
+
+class FileDialog:
+    window   = None
+    inputbox = None
+    ok_button     = None
+    cancel_button = None
+    callback = None
+
+    def __init__(self, title, g):
+        self.window   = Window(CL_Rect(CL_Point(120, 200), CL_Size(560, 100)), title, g)
+        self.inputbox = CL_InputBox(CL_Rect(CL_Point(10, 10), CL_Size(530, 25)),
+                                    self.window.get_client_area())
+        self.ok_button     = CL_Button(CL_Rect(CL_Point(490, 35), CL_Size(50, 25)), "Ok",
+                                       self.window.get_client_area())
+        self.cancel_button = CL_Button(CL_Rect(CL_Point(430, 35), CL_Size(50, 25)), "Cancel",
+                                       self.window.get_client_area())
+        self.window.hide()
+
+    def set_filename(self, filename):
+        self.inputbox.set_text(filename)
+
+    def get_filename(self):
+        return self.inputbox.get_text()
+        
+    def run(self, func):
+        connect(self.ok_button.sig_clicked(), self.on_ok)
+        connect(self.cancel_button.sig_clicked(), self.on_cancel)
+        self.callback = func
+        self.window.show()
+        
+    def on_ok(self):
+        self.window.hide();
+        self.callback(self.inputbox.get_text())
+
+    def on_cancel(self):
+        self.window.hide();
+        
+def do_something_with_file(filename):
+    print "DoSomething: ", filename
+
+load_dialog = FileDialog("Load SuperTux Level", gui.get_component())
+load_dialog.set_filename(supertux_datadir + "levels/")
+save_dialog = FileDialog("Save SuperTux Level as...", gui.get_component())
+save_dialog.set_filename(supertux_datadir + "levels/")
 
 gui.run()
 

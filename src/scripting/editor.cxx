@@ -25,6 +25,8 @@
 
 void connect(CL_Signal_v0& sig, PyObject* obj)
 {
+  sig = CL_Signal_v0();
+
   //std::cout << "Connecting functor: " << std::endl;
   new CL_Slot(sig.connect_functor(PythonFunctor(obj)));
 }

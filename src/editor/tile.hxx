@@ -54,6 +54,8 @@ public:
 
   CL_Sprite& get_sprite();
 
+  /** Return a pixelbuffer associated with this tile, caller must not
+      delete the pixelbuffer, the Tile will take care of that */
   CL_PixelBuffer* get_pixelbuffer();
 
   CL_Color   get_color();
@@ -77,6 +79,8 @@ public:
     else
       colmap[y] &= ~(1 << (7-x));
   }
+
+  CL_Color calc_color();
 };
 
 #endif

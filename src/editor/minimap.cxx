@@ -111,8 +111,7 @@ void
 Minimap::update_minimap_surface()
 {
   // FIXME: This doesn't work all that well
-  EditorTileMap* tilemap = dynamic_cast<EditorTileMap*>
-    (EditorMapComponent::current()->get_map()->get_layer(0));
+  EditorTileMap* tilemap = EditorTileMap::current();
 
   Field<int>* field = tilemap->get_map();
 
@@ -150,8 +149,7 @@ void
 Minimap::mouse_move(const CL_InputEvent& event)
 {
   // FIXME: This doesn't work all that well
-  EditorTileMap* tilemap = dynamic_cast<EditorTileMap*>
-    (EditorMapComponent::current()->get_map()->get_layer(0));
+  EditorTileMap* tilemap = EditorTileMap::current();
 
   int map_width  = tilemap->get_width()  * TILE_SIZE;
   int map_height = tilemap->get_height() * TILE_SIZE;
@@ -165,8 +163,7 @@ void
 Minimap::mouse_down(const CL_InputEvent& event)
 {
   // FIXME: This doesn't work all that well
-  EditorTileMap* tilemap = dynamic_cast<EditorTileMap*>
-    (EditorMapComponent::current()->get_map()->get_layer(0));
+  EditorTileMap* tilemap = EditorTileMap::current();
 
   int map_width  = tilemap->get_width()  * TILE_SIZE;
   int map_height = tilemap->get_height() * TILE_SIZE;

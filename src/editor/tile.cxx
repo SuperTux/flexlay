@@ -20,6 +20,8 @@
 #include <ClanLib/Core/System/error.h>
 #include <ClanLib/Display/sprite_description.h>
 #include <ClanLib/Display/pixel_buffer.h>
+#include <ClanLib/Display/pixel_format.h>
+#include <ClanLib/Display/palette.h>
 #include <ClanLib/Display/Providers/provider_factory.h>
 #include <iostream>
 #include "globals.hxx"
@@ -34,6 +36,8 @@ Tile::Tile(const std::string& filename_,
     attribute_color(attribute_color_),
     filename(filename_)
 {
+  color = calc_color();
+  
   //sur.set_alignment(origin_center, 0, 0);
   memcpy(colmap, arg_colmap, 8);
 }
@@ -107,6 +111,61 @@ Tile::get_pixelbuffer()
       }
     return pixelbuffer;
   }
+}
+
+CL_Color
+Tile::calc_color()
+{
+  CL_PixelBuffer* buffer = get_pixelbuffer();
+  buffer->lock();
+  unsigned char* buf = static_cast<unsigned char*>(buffer->get_data());
+  int len = buffer->get_height() * buffer->get_width();
+
+  int red   = 0;
+  int green = 0;
+  int blue  = 0;
+  int alpha = 0;
+  
+  switch (buffer->get_format().get_depth())
+    {
+    case 8:
+      {
+        alpha = 255;
+        CL_Palette palette = buffer->get_palette();
+        for(int i = 0; i < len; ++i)
+          {
+            red   += palette.colors[buf[i]].get_red();
+            green += palette.colors[buf[i]].get_green();
+            blue  += palette.colors[buf[i]].get_blue();
+          }
+      }
+      break;
+    case 24:
+      for(int i = 0; i < len; ++i)
+        {
+          red   += buf[3*i + 0];
+          green += buf[3*i + 1];
+          blue  += buf[3*i + 2];
+        }
+      break;
+    case 32:
+      for(int i = 0; i < len; ++i)
+        {
+          int a = buf[4*i + 0];
+          alpha += a;
+          red   += buf[4*i + 3]*a/255;;
+          green += buf[4*i + 2]*a/255;;
+          blue  += buf[4*i + 1]*a/255;;
+        }
+      break;
+    }
+
+  buffer->unlock();
+
+  return CL_Color(static_cast<int>(red   / len),
+                  static_cast<int>(green / len),
+                  static_cast<int>(blue  / len),
+                  static_cast<int>(alpha / len));
 }
 
 /* EOF */

@@ -55,6 +55,7 @@ EditorMain::parse_command_line(int argc, char** argv)
   const int debug_flag  = 256;
   const int game_flag   = 257;
   const int opengl_flag = 258;
+  const int sdl_flag = 259;
 
   argp.set_help_indent(22);
   argp.add_usage ("[LEVELFILE]");
@@ -64,6 +65,7 @@ EditorMain::parse_command_line(int argc, char** argv)
   argp.add_option('g', "geometry",   "WxH", "Change window size to WIDTH and HEIGHT");
   argp.add_option('f', "fullscreen", "", "Launch the game in fullscreen");
   argp.add_option(opengl_flag, "opengl", "", "Use OpenGL mode");
+  argp.add_option(sdl_flag, "sdl", "", "Use SDL mode");
 
   argp.add_group("Misc Options:");
   argp.add_option(game_flag, "game", "GAME", "Load the game definition file at startup");
@@ -87,6 +89,10 @@ EditorMain::parse_command_line(int argc, char** argv)
 
         case game_flag:
           game_definition_file = argp.get_argument();
+          break;
+
+        case sdl_flag:
+          use_opengl = true;
           break;
 
         case opengl_flag:

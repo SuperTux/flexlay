@@ -96,6 +96,10 @@ void        gui_inputbox_set_text(CL_Component* comp, const char*);
     @param filename The directory where to start the file manager in */
 void gui_file_dialog(const char* filename, SCM func);
 
+CL_Component* gui_listbox_create(int x, int y, int w, int h);
+int           gui_listbox_add(CL_Component* box, const char* str);
+void          gui_listbox_on_click(CL_Component* box, SCM func);
+
 /** Quit the GUI manager, works only if the GUIManager is in a busy loop */
 void gui_quit();
 

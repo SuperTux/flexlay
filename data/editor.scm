@@ -414,6 +414,7 @@
                                      (set! *brushes*
                                            (assoc-set! *brushes* "Fooname" *clipboard*))))
                               (display *brushes*)(newline)))
+
     ;;(tilemap-paint-tool-set-brush *clipboard*)
     ;;(set-tool 'tile)
 
@@ -542,17 +543,15 @@
     (gui-hide-component *tileselector-window*)
     (gui-pop-component)))
 
-(define (create-minimap)
+(define (create-minimap width height)
   ;;  (let ((window (gui-create-window (- screen-width 230) 
   ;;                                   (- screen-height 110)
   ;;                                   230 110 "Minimap")))
   ;;    (gui-push-component (gui-window-get-client-area window))
-  (let ((width screen-width)
-        (height 50))
     (set! *minimap* (minimap-create *editor-map*
                                     (- screen-width width) 
                                     (- screen-height height)
-                                    width height))))
+                                    width height)))
 ;;    (gui-pop-component)
 ;;  (gui-component-on-close window (lambda ()
 ;;                                  (gui-hide-component window)))
@@ -582,8 +581,37 @@
           (else
            (reverse ret)))))
 
+(define (create-netpanzer-brushbox)
+  (let ((window (gui-create-window 300 100 200 400 "netPanzer Brushbox")))
+    (gui-push-component (gui-window-get-client-area window))
+
+    (let* ((listbox (gui-listbox-create 10 5 175 360))
+           (objects (with-input-from-file "netpanzer-tile-objects.txt"
+                     (lambda ()
+                       (read)))))
+      (for-each (lambda (el)
+                  (gui-listbox-add listbox (format #f "~a - ~ax~a"
+                                                   (cadddr el)
+                                                   (cadr el)
+                                                   (caddr el))))
+                objects)
+      (gui-listbox-on-click listbox
+                            (lambda (index)
+                        
+                              (let* ((obj (list-ref objects index))
+                                     (start  (car obj))
+                                     (width  (cadr obj))
+                                     (height (caddr obj))
+                                     (opaque #t))
+                                (tilemap-paint-tool-set-brush
+                                 (list width height opaque
+                                       (list->vector (seq start (+ start (* width height)))))))))
+                              )
+
+    (gui-pop-component)))
+
 (define (create-netpanzer-tiler)
-  (let ((window (gui-create-window 100 100 1024 786 "netPanzer Tiler")))
+  (let ((window (gui-create-window 100 100 800 600 "netPanzer Tiler")))
     (gui-push-component (gui-window-get-client-area window))
 
     (gui-create-label    10 10 "Width: ")
@@ -593,7 +621,10 @@
     (let* ((width         8)
            (height        6)
            (start         0)
-           (objects       '())
+           (index         0)
+           (objects       (with-input-from-file "netpanzer-tile-objects.txt"
+                            (lambda ()
+                              (read))))
            
            (width+-button   (gui-create-button   10 270 20 25 "W+"))
            (width--button   (gui-create-button   40 270 20 25 "W-"))
@@ -602,20 +633,26 @@
            (height--button   (gui-create-button   40 300 20 25 "H-"))
 
            (update-button (gui-create-button   10 150 50 25 "Update"))
+           (update2-button (gui-create-button   10 420 50 25 "Update2"))
+           (bug-button (gui-create-button   10 360 50 25 "Bug"))
            (dump-button   (gui-create-button   10 240 50 25 "Dump"))
-           (next-button   (gui-create-button   10 180 50 25 "Next"))
-           (previous-button   (gui-create-button   10 210 50 25 "Previous"))
+           
+           (save-button   (gui-create-button   10 390 50 25 "Save"))
+
+           (next-button   (gui-create-button       10 210 50 25 "Next"))
+           (previous-button   (gui-create-button   10 180 50 25 "Previous"))
            (start-box     (gui-create-inputbox 10 110 50 25 (number->string start)))
            (height-box    (gui-create-inputbox 10 70 50 25 (number->string height)))
            (width-box     (gui-create-inputbox 10 30 50 25 (number->string width)))
-           (map-component (editor-map-component-create 75 10 950 700))
+           (index-box     (gui-create-inputbox 10 330 50 25 (number->string index)))
+           (map-component (editor-map-component-create 75 10 730 550))
            (levelmap      (editor-map-create))
            (tilemap       (editor-tilemap-create 10 10 32)))
-           
-
+      
       (define (update-from-boxes)
         (catch #t
                (lambda ()
+                 (set! index  (string->number (gui-inputbox-get-text index-box)))
                  (set! width  (string->number (gui-inputbox-get-text width-box)))
                  (set! height (string->number (gui-inputbox-get-text height-box)))
                  (set! start  (string->number (gui-inputbox-get-text start-box))))
@@ -624,7 +661,38 @@
                  (display args)
                  (newline))))
 
+      (define (goto-bug)
+        (let ((next  0)
+              (count 0)
+              (muindex #f)
+              (lst objects)
+              (done #f))
+
+          (while (and (pair? lst) (not done))
+                 (set! count (+ count 1))
+                 (let* ((el (car lst))
+                        (start  (car el))
+                        (width  (cadr el))
+                        (height (caddr el)))
+
+                   (cond ((not (= next start))
+                          (if (not muindex)
+                              (set! muindex count))
+                          (format #t "Error at: ~a: got: ~a wanted: ~a - ~a~%" count next start el)
+                          (set! done #t)
+                          ))
+
+                   (set! next (+ start (* width height))))
+                 (set! lst (cdr lst)))
+
+          (if muindex
+              (set! index muindex))
+          (display "Goto index: ")(display index)(newline)
+          (update-index)
+          (update)))
+
       (define (update-to-boxes)
+        (gui-inputbox-set-text index-box  (number->string index))
         (gui-inputbox-set-text width-box  (number->string width))
         (gui-inputbox-set-text height-box (number->string height))
         (gui-inputbox-set-text start-box  (number->string start)))
@@ -633,24 +701,41 @@
         (update-from-boxes)
         (update))
 
+      (define (do-update2)
+        (update-from-boxes)
+        (update-index)
+        (update))
+
       (define (update)
         (update-to-boxes)
         (tilemap-resize tilemap 0 0 width height)
         (editor-tilemap-set-data tilemap 1 (seq start (+ start (* width height)))))
 
+      (define (update-index)
+        (set! width  (cadr  (list-ref objects index)))
+        (set! height (caddr (list-ref objects index)))
+        (set! start  (car   (list-ref objects index))))
+
       (define (do-next)
-        (set! start (+ start (* width height)))
-        (editor-tilemap-set-data tilemap 1 (seq start (+ start (* width height))))
-        (update-to-boxes))
+        (set! index (+ index 1))
+        ;;(set! start (+ start (* width height)))
+        ;;(editor-tilemap-set-data tilemap 1 (seq start (+ start (* width height))))
+        (update-index)
+        (update))
 
       (define (do-previous)
-        (set! start (- start (* width height)))
-        (editor-tilemap-set-data tilemap 1 (seq start (+ start (* width height))))
-        (update-to-boxes))
+        (set! index (- index 1))
+        ;;(set! start (- start (* width height)))
+        ;;(editor-tilemap-set-data tilemap 1 (seq start (+ start (* width height))))
+        (update-index)
+        (update))
+
+      (define (do-save)
+        (list-set! objects index (list start width height)))
 
       (define (do-dump)
-        (set! objects (cons (list start width height) 
-                            objects))
+        ;;(set! objects (cons (list start width height) 
+        ;;                    objects))
         (format #t "Object: ~a ~ax~a~%" start width height)
         (with-output-to-file "netpanzer-tile-objects.txt"
           (lambda ()
@@ -662,16 +747,19 @@
       (editor-map-component-set-map map-component levelmap)
 
       (gui-component-on-click update-button   do-update)
+      (gui-component-on-click update2-button   do-update2)
       (gui-component-on-click next-button     do-next)
       (gui-component-on-click previous-button do-previous)
       (gui-component-on-click dump-button     do-dump)
+      (gui-component-on-click save-button     do-save)
+      (gui-component-on-click bug-button     goto-bug)
 
       (gui-component-on-click width+-button  (lambda ()
-                                                (set! width (+ width 1))
-                                                (update)))
+                                               (set! width (+ width 1))
+                                               (update)))
       (gui-component-on-click width--button  (lambda ()
-                                                (set! width (- width 1))
-                                                (update)))
+                                               (set! width (- width 1))
+                                               (update)))
 
       (gui-component-on-click height+-button  (lambda ()
                                                 (set! height (+ height 1))
@@ -680,10 +768,10 @@
                                                 (set! height (- height 1))
                                                 (update)))
       )
-  
-  (gui-component-on-close window (lambda ()
-                                   (gui-hide-component window)))
-  (gui-pop-component)))
+    
+    (gui-component-on-close window (lambda ()
+                                     (gui-hide-component window)))
+    (gui-pop-component)))
 
 (define (on-gui-quit)
   (with-output-to-file (string-append *windstille-homedir* "editor-variables.scm")
@@ -799,11 +887,15 @@
 (create-tile-selector)
 (create-object-inserter)
 
-(if (not (equal? *game* 'netpanzer))
-    (create-minimap))
+(case *game*
+  ((netpanzer)
+   (create-minimap 100 100))
+  (else
+   (create-minimap screen-width 50)))
 
 ;;(create-brush-selector)
-(create-netpanzer-tiler)
+;;(create-netpanzer-tiler)
+(create-netpanzer-brushbox)
 
 (set-tool 'tile)
 

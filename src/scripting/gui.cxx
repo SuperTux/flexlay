@@ -237,4 +237,47 @@ bool gui_is_visible()
   return GUIManager::current()->is_visible();
 }
 
+CL_Component*
+gui_listbox_create(int x, int y, int w, int h)
+{
+  return new CL_ListBox(CL_Rect(CL_Point(x, y),
+                                CL_Size(w, h)),
+                                GUIManager::current()->get_component());
+}
+
+int
+gui_listbox_add(CL_Component* box, const char* str)
+{
+  CL_ListBox* listbox = dynamic_cast<CL_ListBox*>(box);
+
+  if (listbox)
+    return listbox->insert_item(str);
+  else
+    return -1;
+}
+
+struct SCMIntFunctor
+{
+  SCMFunctor func;
+
+  SCMIntFunctor(SCM f)
+    : func(f)
+  {
+  }
+
+  void operator()(int i) {
+    func(SCM_MAKINUM(i));
+  }
+};
+
+void
+gui_listbox_on_click(CL_Component* box, SCM func)
+{
+  CL_ListBox* listbox = dynamic_cast<CL_ListBox*>(box);
+  if (listbox)
+    {
+      new CL_Slot(listbox->sig_highlighted().connect_functor(SCMIntFunctor(func)));
+    }
+}
+
 /* EOF */

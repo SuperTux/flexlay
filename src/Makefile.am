@@ -106,7 +106,7 @@ $(STATIC_READLINE) \
 static: windstille.static
 
 windstille.static: $(windstille_OBJECTS) $(windstille_DEPENDENCIES) Makefile
-	$(CXX) -nodefaultlibs $(CXXFLAGS)  -o $@ $(windstille_OBJECTS) \
+	$(CXX) -s -nodefaultlibs $(CXXFLAGS)  -o $@ $(windstille_OBJECTS) \
          $(windstille_DEPENDENCIES) $(STATICBIN_LIBS) 
 
 windstille.static.comp: windstille.static

@@ -4,8 +4,10 @@ Windstille Installion
 Binary:
 =======
 
-Simply run the 'windstille.sh' script, if you have OpenGL installed it
-should work out of the box, without any extra library requirements.
+Simply run the 'windstille' script in the top-level directory, if you
+have OpenGL installed it should work out of the box without any extra
+library requirements. Its important that you run the script, not the
+'windstille.static' binary itself, since it might not work that way.
 
 
 Source:
@@ -23,5 +25,6 @@ compiles Windstille, you way than run it by:
  % ./windstille
 
 Installation is currently not supported.
+
 
 # EOF #

@@ -1,4 +1,4 @@
-##  $Id: Makefile.am,v 1.4 2003/08/12 23:41:48 grumbel Exp $
+##  $Id: Makefile.am,v 1.5 2003/08/13 13:49:32 grumbel Exp $
 ## 
 ##  Windstille - A free Lemmings clone
 ##  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -22,12 +22,13 @@ SUBDIRS = src data
 EXTRA_DIST = INSTALL.configure
 
 dist-binary: distdir
+	cd src && $(MAKE) windstille.static
 	$(mkinstalldirs) $(distdir)/share/guile/
 	cp -R /usr/share/guile/1.6/ice-9/ $(distdir)/share/guile/
 	cp -R /usr/share/guile/1.6/oop/   $(distdir)/share/guile/
 	cp -R /usr/share/guile/1.6/srfi/  $(distdir)/share/guile/
-	cp src/windstille.static    $(distdir)/src/
-	cp windstille.sh            $(distdir)/
+	cp src/windstille.static   $(distdir)/src/
+	cp contrib/windstille.sh   $(distdir)/windstille
 	$(AMTAR) chof - $(distdir) | bzip2 -9 -c >$(distdir)-binary-i386.tar.bz2
 	$(am__remove_distdir)
 

@@ -19,6 +19,14 @@ $game_objects = [
     proc{|data, sexpr| BadGuy.new("bouncingsnowball")}],
   ["spiky", "images/shared/spiky-left-0.png", "sprite",
     proc{|data, sexpr| BadGuy.new("spiky")}],
+  ["mrtree", "images/shared/mrtree-walk-left-0.png", "sprite",
+    proc{|data, sexpr| BadGuy.new("mrtree")}],
+  ["poisonivy", "images/shared/poisonivy-left-0.png", "sprite",
+    proc{|data, sexpr| BadGuy.new("poisonivy")}],
+  ["dispenser", "images/shared/dispenser-working.png", "sprite",
+    proc{|data, sexpr| Dispenser.new(data, sexpr)}],
+  ["yeti", "images/shared/yeti/yeti.png", "sprite",
+    proc{|data, sexpr| BadGuy.new("yeti")}],
   ["spawnpoint", "images/editor/spawnpoint.png", "sprite",
     proc{|data, sexpr| SpawnPoint.new(data)}],
   ["door", "images/shared/door-1.png", "sprite",
@@ -47,6 +55,7 @@ $game_objects = [
     proc{|data, sexpr| ParticleSystem.new("clouds", sexpr)}],
   ["particles-rain", "images/editor/rain.png", "sprite",
     proc{|data, sexpr| ParticleSystem.new("rain", sexpr)}],
+	
 ]
 
 def create_gameobject_from_data(objmap, name, sexpr)

@@ -87,6 +87,29 @@ class BadGuy<GameObj
   end  
 end
 
+class Dispenser<GameObj
+  def initialize(data, sexpr = [])
+    @data = data
+    @badguy = get_value_from_tree(["badguy", "_"], sexpr, "snowball")
+    @cycle = get_value_from_tree(["cycle", "_"], sexpr, 2)
+  end
+
+  def save(f, obj)
+    pos = obj.get_pos()
+    f.write("       (dispenser (x %d) (y %d) (badguy \"%s\") (cycle %d))\n" % [pos.x, pos.y, @badguy, @cycle])
+  end
+  
+  def property_dialog()
+    dialog = GenericDialog.new("Dispenser Property Dialog", $gui.get_component())
+    dialog.add_string("Badguy Type: ", @badguy)
+    dialog.add_int("Cycle Type: ", @cycle)
+    dialog.set_callback(proc{|badguy, cycle| 
+                          @badguy = badguy
+                          @cycle = cycle
+                        })
+  end  
+end
+
 class SpawnPoint<GameObj
   attr_accessor :name
   attr_reader   :data
@@ -187,16 +210,16 @@ end
 
 class ParticleSystem<GameObj
   def initialize(type, sexpr = [])
-	@type = type
-	@layer = get_value_from_tree(["layer", "_"], sexpr, -1)
+    @type = type
+    @layer = get_value_from_tree(["layer", "_"], sexpr, -1)
   end
 
   def save(f, obj)
-	f.write("       (particles-%s\n" % [@type])
-	if(@layer != -1)
+    f.write("       (particles-%s\n" % [@type])
+    if(@layer != -1)
       f.write("         (layer %d)\n" % [@layer])
-	end
-	f.write("       )\n")
+    end
+    f.write("       )\n")
   end
 
   def property_dialog()
@@ -327,7 +350,7 @@ class Door<GameObj
     f.write("         (x %d) (y %d)" % [pos.x, pos.y])
     f.write("         (sector \"%s\")\n" % @sector)
     f.write("         (spawnpoint \"%s\")\n" % @spawnpoint)
-    f.write("         )\n")
+    f.write("       )\n")
   end  
 
   def property_dialog()
@@ -351,6 +374,5 @@ class PathNode<GameObj
   def save(f, obj)
   end
 end
-
 
 # EOF #

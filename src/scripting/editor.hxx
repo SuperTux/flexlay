@@ -59,6 +59,7 @@ void editor_objectmap_delete_object(int id);
 int  editor_objectmap_duplicate_object(int id);
 SCM  editor_objectmap_get_objects();
 SCM  editor_objectmap_get_object(int id);
+void editor_objectmap_set_pos(int id, int x, int y);
 void objmap_sprite_object_flip(int id);
 SCM  tilemap_object_tool_get_objects();
 void tilemap_object_tool_set_objects(SCM lst);

@@ -211,6 +211,13 @@ tilemap_object_tool_set_objects(SCM lst)
   tool->set_selection(selection);
 }
 
+void
+editor_objectmap_set_pos(int id, int x, int y)
+{
+  ObjMapObject* obj = editor_get_objmap()->get_object(id);
+  obj->set_pos(CL_Point(x, y));
+}
+
 SCM
 editor_objectmap_get_objects()
 {

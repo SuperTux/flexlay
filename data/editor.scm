@@ -83,22 +83,33 @@
           (height     (get-value-from-tree '(properties height _) data 15))
           (foreground (get-value-from-tree '(tilemap data) data '()))
           (background (get-value-from-tree '(background-tilemap data) data '()))
-          (diamonds   (get-value-from-tree '(diamond-map) data '())))
+          (diamonds   (get-value-from-tree '(diamond-map) data '()))
+          (objects    (get-value-from-tree '(objects) data '())))
       
       ;; load level file and extract tiledata and w/h
       (let* ((m       (editor-map-create))
              (tilemap (editor-tilemap-create width height 32))
              (objmap  (editor-objmap-create)))
-        
+
+        (for-each (lambda (el)
+                    (let ((x (car  (get-value-from-tree '(pos) (cdr el) 0)))
+                          (y (cadr (get-value-from-tree '(pos) (cdr el) 0))))
+                      (format #t "Bla: ~a ~a~%" x y)
+                      (case (car el)
+                        ((mriceblock)
+                         (editor-objectmap-add-object "sprites/mriceblock" x y '(mriceblock)))
+                        ((mrbomb)
+                         (editor-objectmap-add-object "sprites/mrbomb" x y '(mrbomb))))))
+                  objects)
+
         (editor-map-add-layer m tilemap)
         (editor-map-add-layer m objmap)
-    
+        
         (editor-map-set-filename m filename)
 
         ;; set data to the tilemap
         (editor-tilemap-set-data tilemap 1 foreground)
         (editor-tilemap-set-data tilemap 0 background)
-
         m))))
 
 (define (load-map filename)
@@ -165,9 +176,21 @@
       (write-field "   " 
                    (map-get-width)
                    (diamond-map-get-data))
+      (display   " )\n")
+
+      (format #t "  (objects\n")
+      (for-each (lambda (el)
+                  (let* ((obj (editor-objectmap-get-object el)))
+                    (format #t "    (~a  (pos ~a ~a))~%" 
+                            (caaddr obj)
+                            (car obj)
+                            (cadr obj)
+                            )))
+                (editor-objectmap-get-objects))
+      (format #t "  )\n")
+
       (format #t "   )\n\n")
 
-      (display   " )\n")
       (newline)
       (display ";; EOF ;;\n")
 
@@ -594,9 +617,12 @@
                         (lambda () 
                           (display "Foobar\n")))
 
-     (gui-add-menu-item menu "Foobar" 
+     (gui-add-menu-item menu "Print Objects" 
                         (lambda () 
-                          (display "Foobar2\n")))
+                          (for-each (lambda (el)
+                                      (display (editor-objectmap-get-object el))
+                                      (newline))
+                                    (tilemap-object-tool-get-objects))))
 
      (gui-add-menu-item menu "Add Object"
                         (lambda ()
@@ -612,14 +638,14 @@
                           (for-each editor-objectmap-delete-object
                                     (tilemap-object-tool-get-objects))
                           (tilemap-object-tool-clear-selection)))
-                          
+     
      (gui-add-menu-item menu "Duplicate Selection"
                         (lambda ()
                           (let ((lst (map editor-objectmap-duplicate-object
                                           (tilemap-object-tool-get-objects))))
                             (tilemap-object-tool-set-objects lst)
                             (display lst)(newline)
-                          )))
+                            )))
 
      (gui-add-menu-item menu "Flip Screen"
                         (lambda ()
@@ -643,10 +669,10 @@
 
 (set-tool 'tile)
 
-(object-selector-add-brush *object-selector* "sprites/mriceblock" '(iceblock))
-(object-selector-add-brush *object-selector* "sprites/mrbomb"     '(bomb))
+(object-selector-add-brush *object-selector* "sprites/mriceblock" '(mriceblock))
+(object-selector-add-brush *object-selector* "sprites/mrbomb"     '(mrbomb))
 
-(object-selector-add-brush *object-selector* "igel" '(Igel))
+(object-selector-add-brush *object-selector* "igel" '(Iel))
 (object-selector-add-brush *object-selector* "hero/run" '(Hero))
 
 (new-map 60 15)

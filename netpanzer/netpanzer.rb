@@ -59,6 +59,11 @@ $objectselector.add_brush(ObjectBrush.new(GameObjects::Outpost.get_sprite(),
 $objectselector.add_brush(ObjectBrush.new(GameObjects::SpawnPoint.get_sprite(),
                                           make_metadata(proc{GameObjects::SpawnPoint.new()})))
 
+$brushes.size.times {|i|
+  $objectselector.add_brush(ObjectBrush.new(GameObjects::TileObject.get_sprite(),
+                                            make_metadata(proc{GameObjects::TileObject.new(i)})))
+}
+
 $objectselector.show(true)
 
 def on_object_drop(brush, pos)

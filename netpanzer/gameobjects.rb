@@ -17,6 +17,9 @@
 ##  along with this program; if not, write to the Free Software
 ##  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
+require "flexlay_wrap"
+include Flexlay_wrap
+
 module GameObjects
   class GameObject
     attr_reader :data
@@ -31,6 +34,10 @@ module GameObjects
       pos.x = (((pos.x+16)/32).to_i)*32
       pos.y = (((pos.y+16)/32).to_i)*32
       @data.to_object.set_pos(pos)
+    end
+
+    def draw_to_tilemap(tilemap)
+      # Draws the GameObject to the given TilemapLayer
     end
   end
 
@@ -63,6 +70,16 @@ module GameObjects
       
       return obj
     end
+
+    def draw_to_tilemap(tilemap)
+      start  = 9541
+      width  = 32
+      height = 18
+
+      brush = TileBrush.new(width, height)
+      brush.set_data(Range.new(start, start + (width*height)-1).to_a)
+      tilemap.draw_tile(brush, CL_Point.new(x(), y()))
+    end
   end
   
   class SpawnPoint < GameObject
@@ -85,6 +102,43 @@ module GameObjects
     end
 
     def SpawnPoint.get_sprite()
+      return make_sprite_from_resource("sprites/spawnpoint", $resources)
+    end
+  end
+
+  # TileObject is used to hold tilebrushes
+  class TileObject < GameObject
+    def initialize(brushindex)
+      (start, width, height, @name) = $brushes[brushindex]
+      
+      # FIXME: Could be shared among all TileObjects
+      @brush = TileBrush.new(width, height)
+      @brush.set_data(Range.new(start, start + (width*height)-1).to_a)
+    end
+
+    def x()
+      return (@data.to_object.get_pos.x()/32).to_i
+    end
+
+    def y()
+      return (@data.to_object.get_pos.y()/32).to_i
+    end
+
+    def draw_to_tilemap(tilemap)
+      tilemap.draw_tile(@brush, CL_Point.new(x(), y()))
+    end
+
+    def TileObject.create(objmap, brushindex, x, y)
+      obj = TileObject.new(brushindex)
+      sprite_obj = ObjMapSpriteObject.new(get_sprite(), CL_Pointf.new(x*32, y*32),
+                                          make_metadata(obj))
+      obj.data = sprite_obj
+      objmap.add_object(sprite_obj.to_object)
+      
+      return obj
+    end
+    
+    def TileObject.get_sprite()
       return make_sprite_from_resource("sprites/spawnpoint", $resources)
     end
   end

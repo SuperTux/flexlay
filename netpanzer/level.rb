@@ -26,7 +26,7 @@ class Level
     if params.length == 2 then
       (width, height) = params
       @data = NetPanzerFileStruct.new($tileset, width, height)
-
+      @filename = nil
     elsif params.length == 1 then
       (@filename,) = params
       @data = NetPanzerFileStruct.new($tileset, @filename)
@@ -36,6 +36,7 @@ class Level
     @editormap = EditorMap.new()
     @editormap.add_layer(@data.get_tilemap().to_layer())
     @editormap.add_layer(@objects.to_layer())
+    @tilemap = @data.get_tilemap()
 
     if @filename then
       load_optfile(@filename[0..-5] + ".opt")
@@ -102,6 +103,8 @@ class Level
   end
 
   def save(filename)
+    flatten()
+
     if filename[-4..-1] == ".npm"
       data.save(filename)
       save_optfile(filename[0..-5] + ".opt")
@@ -109,6 +112,12 @@ class Level
     else
       raise "Fileextension not valid, must be .npm!"
     end
+  end
+
+  def flatten()
+    @objects.get_objects().each { |obj|
+      obj.get_data().draw_to_tilemap(@tilemap)
+    }
   end
 
   def activate(workspace)

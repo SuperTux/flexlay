@@ -39,7 +39,7 @@
       <image file="images/shild/frame2.png" name="image2" />
     </sprite>
     <sprite name="sit" translation_hotspot="top_left,29,90">
-      <image file="images/turrican_sit.png" name="image1" />
+      <image file="images/hero_sit.png" name="image1" />
     </sprite>
     <sprite name="roll" translation_hotspot="top_left,29,82">
       <image file="images/turrican_roll/frame1.png"
@@ -198,7 +198,7 @@
       <image file="images/tiles/level1/green1.png" name="image1" />
     </sprite>
     <sprite name="tile1">
-      <image file="images/tiles/level1/tile1.png" name="image1" />
+      <image file="images/tiles/tile1.png" name="image1" />
     </sprite>
     <sprite name="tile10">
       <image file="images/tiles/level1/tile10.png" name="image1" />
@@ -231,7 +231,7 @@
       <image file="images/tiles/level1/tile19.png" name="image1" />
     </sprite>
     <sprite name="tile2">
-      <image file="images/tiles/level1/tile2.png" name="image1" />
+      <image file="images/tiles/tile2.png" name="image1" />
     </sprite>
     <sprite name="tile20">
       <image file="images/tiles/level1/tile20.png" name="image1" />
@@ -261,7 +261,7 @@
       <image file="images/tiles/level1/tile29.png" name="image1" />
     </sprite>
     <sprite name="tile3">
-      <image file="images/tiles/level1/tile3.png" name="image1" />
+      <image file="images/tiles/tile3.png" name="image1" />
     </sprite>
     <sprite name="tile30">
       <image file="images/tiles/level1/tile30.png" name="image1" />
@@ -291,7 +291,7 @@
       <image file="images/tiles/level1/tile39.png" name="image1" />
     </sprite>
     <sprite name="tile4">
-      <image file="images/tiles/level1/tile4.png" name="image1" />
+      <image file="images/tiles/tile4.png" name="image1" />
     </sprite>
     <sprite name="tile40">
       <image file="images/tiles/level1/tile40.png" name="image1" />

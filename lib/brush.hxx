@@ -30,7 +30,7 @@ public:
   Brush();
   Brush(SharedPtr<BrushImpl> impl);
 
-  CL_Surface get_surface();
+  CL_Sprite get_sprite();
   Brush clone() const;
   bool is_null() const { return !impl.get(); }
 public:

@@ -35,10 +35,10 @@ Brush::clone() const
   return Brush(impl->clone());
 }
 
-CL_Surface
-Brush::get_surface()
+CL_Sprite
+Brush::get_sprite()
 {
-  return impl->get_surface();
+  return impl->get_sprite();
 }
 
 /* EOF */

@@ -17,6 +17,7 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
+#include <ClanLib/Display/sprite_description.h>
 #include "brush_impl.hxx"
 #include "generated_brush.hxx"
 
@@ -33,10 +34,10 @@ public:
   /** When set surface is out of date and needs updating */
   bool dirty;
 
-  CL_Surface surface;
+  CL_Sprite sprite;
 
   virtual ~GeneratedBrushImpl() {}
-  CL_Surface get_surface();
+  CL_Sprite get_sprite();
   void update();
   BrushImpl* clone() const;
 };
@@ -68,14 +69,15 @@ GeneratedBrushImpl::update()
 {
   if (dirty)
     {
-      surface = CL_Surface(new CL_PixelBuffer(generate_brushmask(shape,
-                                                                 radius, 
-                                                                 spikes,
-                                                                 hardness, 
-                                                                 aspect_ratio, 
-                                                                 angle)), 
-                           true);
-      surface.set_alignment(origin_center);
+      CL_SpriteDescription desc;
+      desc.add_frame(new CL_PixelBuffer(generate_brushmask(shape,
+                                                           radius, 
+                                                           spikes,
+                                                           hardness, 
+                                                           aspect_ratio, 
+                                                           angle)), true);
+      sprite = CL_Sprite(desc);
+      sprite.set_alignment(origin_center);
       dirty = false;
     }
 }
@@ -158,18 +160,18 @@ GeneratedBrush::get_angle()
   return impl->angle;
 }
 
-CL_Surface
-GeneratedBrushImpl::get_surface() 
+CL_Sprite
+GeneratedBrushImpl::get_sprite() 
 {
   update();
-  return surface;
+  return sprite;
 }
 
 BrushImpl*
 GeneratedBrushImpl::clone() const
 {
   // FIXME: Make this Copy-On-Write cloning, else it might get a
-  // little bit expensive with all the CL_Surface's per stroke
+  // little bit expensive with all the CL_Sprite's per stroke
   GeneratedBrushImpl* c = new GeneratedBrushImpl();
   *c = *this;
   return c;

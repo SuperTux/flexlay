@@ -60,10 +60,10 @@ SpriteStrokeDrawer::SpriteStrokeDrawer()
 void
 SpriteStrokeDrawerImpl::draw_dab(const Dab& dab, CL_GraphicContext* gc)
 {
-  CL_Surface surface = brush.get_surface();
-  surface.set_color(color);
-  surface.set_alpha((color.get_alpha()/255.0f) * dab.pressure);
-  surface.set_scale(base_size * dab.pressure,
+  CL_Sprite sprite = brush.get_sprite();
+  sprite.set_color(color);
+  sprite.set_alpha((color.get_alpha()/255.0f) * dab.pressure);
+  sprite.set_scale(base_size * dab.pressure,
                     base_size * dab.pressure);
 
   if (gc != 0)
@@ -104,21 +104,21 @@ SpriteStrokeDrawerImpl::draw_dab(const Dab& dab, CL_GraphicContext* gc)
       switch (mode)
         {
         case SpriteStrokeDrawer::DM_NORMAL:
-          surface.set_blend_func_separate(blend_src_alpha, blend_one_minus_src_alpha,
+          sprite.set_blend_func_separate(blend_src_alpha, blend_one_minus_src_alpha,
                                         blend_one, blend_one_minus_src_alpha);
-          surface.draw(dab.pos.x, dab.pos.y, gc);
+          sprite.draw(dab.pos.x, dab.pos.y, gc);
           break;
 
         case SpriteStrokeDrawer::DM_ADDITION:
-          surface.set_blend_func_separate(blend_src_alpha, blend_one,
+          sprite.set_blend_func_separate(blend_src_alpha, blend_one,
                                         blend_zero, blend_one);
                                         //blend_one, blend_one_minus_src_alpha);
-          surface.draw(dab.pos.x, dab.pos.y, gc);
+          sprite.draw(dab.pos.x, dab.pos.y, gc);
           break;
               
         case SpriteStrokeDrawer::DM_ERASE:
-          surface.set_blend_func(blend_zero, blend_one_minus_src_alpha);
-          surface.draw(dab.pos.x, dab.pos.y, gc);
+          sprite.set_blend_func(blend_zero, blend_one_minus_src_alpha);
+          sprite.draw(dab.pos.x, dab.pos.y, gc);
           break;
               
         default:
@@ -131,18 +131,18 @@ SpriteStrokeDrawerImpl::draw_dab(const Dab& dab, CL_GraphicContext* gc)
       switch (mode)
         {
         case SpriteStrokeDrawer::DM_NORMAL:  
-          surface.set_blend_func(blend_src_alpha, blend_one_minus_src_alpha);
-          surface.draw(dab.pos.x, dab.pos.y, gc);  
+          sprite.set_blend_func(blend_src_alpha, blend_one_minus_src_alpha);
+          sprite.draw(dab.pos.x, dab.pos.y, gc);  
           break;
               
         case SpriteStrokeDrawer::DM_ADDITION:
-          surface.set_blend_func(blend_src_alpha, blend_one);
-          surface.draw(dab.pos.x, dab.pos.y, gc); 
+          sprite.set_blend_func(blend_src_alpha, blend_one);
+          sprite.draw(dab.pos.x, dab.pos.y, gc); 
           break;
             
         case SpriteStrokeDrawer::DM_ERASE:
-          surface.set_blend_func(blend_zero, blend_one_minus_src_alpha);
-          surface.draw(dab.pos.x, dab.pos.y, gc);
+          sprite.set_blend_func(blend_zero, blend_one_minus_src_alpha);
+          sprite.draw(dab.pos.x, dab.pos.y, gc);
           break; 
 
         default:

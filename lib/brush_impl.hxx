@@ -20,13 +20,13 @@
 #ifndef HEADER_BRUSH_IMPL_HXX
 #define HEADER_BRUSH_IMPL_HXX
 
-#include <ClanLib/Display/surface.h>
+#include <ClanLib/Display/sprite.h>
 
 /** */
 class BrushImpl
 {
 public:
-  virtual CL_Surface get_surface() =0;
+  virtual CL_Sprite get_sprite() =0;
   virtual BrushImpl* clone() const =0;
 };
 

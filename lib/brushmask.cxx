@@ -64,6 +64,7 @@ temp_buf_new (gint    width,
   TempBuf* buf = new TempBuf;
 
   buf->data   = new guchar[width*height];
+  memset(buf->data, 0, width*height*sizeof(guchar));
  
   buf->width  = width;
   buf->height = height;
@@ -175,8 +176,8 @@ gimp_brush_generated_dirty (GimpBrushGenerated *brush)
     }
 
   brush->mask = temp_buf_new (width  * 2 + 1,
-                               height * 2 + 1,
-                               1, width, height, NULL);
+                              height * 2 + 1,
+                              1, width, height, NULL);
 
   centerp = temp_buf_data (brush->mask) + height * brush->mask->width + width;
 
@@ -304,7 +305,10 @@ CL_PixelBuffer generate_brushmask(BrushShape shape,
   
   buffer.lock();
   unsigned char* buf = static_cast<unsigned char*>(buffer.get_data());
-  for (int i = 0; i < brush.mask->width * brush.mask->height; ++i)
+
+  // FIXME: Leaving out the right/bottom border, since thats full of
+  // random spots... more a workaround than a fix really
+  for (int i = 0; i < brush.mask->height * brush.mask->width; ++i)
     {
       buf[i*4+0] = brush.mask->data[i];
       buf[i*4+1] = 255;

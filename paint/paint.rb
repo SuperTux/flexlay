@@ -188,6 +188,8 @@ class Image
 
       tree = tree[1..-1]
     end
+
+    set_active_layer(0)
   end
 
   def parse_layer(tree)
@@ -239,20 +241,19 @@ class Image
           spacing = get_value_from_tree(["spacing", "_"], data, 15.0)
           size    = get_value_from_tree(["size", "_"],    data,  1.0)
           color   = get_value_from_tree(["color"],    data, [0, 255, 0, 255])
-          brush   = get_value_from_tree(["brush", "_"],    data, "brush.png")
+          brush   = get_value_from_tree(["brush", "generated-brush"],    data, [])
 
           drawer = SpriteStrokeDrawer.new()
           drawer.set_spacing(spacing)
           drawer.set_mode(mode)
           drawer.set_size(size)
           drawer.set_color(CL_Color.new(color[0], color[1], color[2], color[3]))
-          # FIXME: Insert brush loader here
-          drawer.set_brush(GeneratedBrush.new(BRUSH_SHAPE_CIRCLE, 
-                                              32,  # radius
-                                              2,   # spikes
-                                              0.75, # hardness
-                                              1.0, # aspect
-                                              0)) # angle
+          drawer.set_brush(GeneratedBrush.new(get_value_from_tree(["shape", "_"], brush, 0),
+                                              get_value_from_tree(["radius", "_"], brush, 32),
+                                              get_value_from_tree(["spikes", "_"], brush, 2),
+                                              get_value_from_tree(["hardness", "_"], brush, 0.75),
+                                              get_value_from_tree(["aspect", "_"], brush, 1.0),
+                                              get_value_from_tree(["angle", "_"], brush, 0)).to_brush)
           stroke.set_drawer(drawer.to_drawer)
         else
           puts "Error: Unknown drawer: #{data[0][0]}" 
@@ -287,7 +288,16 @@ class Image
         "#{sprite_stroke_drawer.get_color.get_green} " \
         "#{sprite_stroke_drawer.get_color.get_blue} " \
         "#{sprite_stroke_drawer.get_color.get_alpha})"
-        f.puts "                 (brush   \"brush.png\")"
+        # FIXME: This won't work with multilpe brush types
+        brush = GeneratedBrush.new(sprite_stroke_drawer.get_brush())
+        f.puts "                 (brush   (generated-brush"
+        f.puts "                            (shape  #{brush.get_shape})"
+        f.puts "                            (radius #{brush.get_radius})"
+        f.puts "                            (spikes #{brush.get_spikes})"
+        f.puts "                            (hardness #{brush.get_hardness})"
+        f.puts "                            (aspect-ratio #{brush.get_aspect_ratio})"
+        f.puts "                            (angle #{brush.get_angle})"
+        f.puts "                  ))"
         f.puts "       ))"
 
         stroke.get_dabs().each{|dab|

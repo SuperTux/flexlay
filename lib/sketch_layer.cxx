@@ -82,6 +82,10 @@ public:
   
   void draw(EditorMapComponent* parent) 
   {
+    // Nothing to draw, so we go byebye
+    if (strokes.empty()) 
+      return;
+
     if (canvas)
       {
         // Draw to canvas

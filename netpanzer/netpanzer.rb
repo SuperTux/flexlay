@@ -67,7 +67,7 @@ def on_object_drop(brush, pos)
   sprite_obj = ObjMapSpriteObject.new(obj.class.get_sprite(), pos, make_metadata(obj))
   obj.data = sprite_obj
   
-  cmd = ObjectAddCommand.new(get_ruby_object($workspace.get_map().get_metadata()).objects)
+  cmd = ObjectAddCommand.new($workspace.get_map().get_data().objects)
   cmd.add_object(sprite_obj.to_object)
   $workspace.get_map().execute(cmd.to_command())
 end
@@ -247,7 +247,7 @@ def netpanzer_load_level(filename)
 end
 
 def netpanzer_save_level(filename)
-  get_ruby_object($workspace.get_map().get_metadata()).save(filename)
+  $workspace.get_map().get_data().save(filename)
 end
 
 recent_files_menu = Menu.new(CL_Point.new(32*2, 54), $gui.get_component())

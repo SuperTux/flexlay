@@ -52,6 +52,17 @@ module GameObjects
     def Outpost.get_sprite()
       return make_sprite_from_resource("sprites/outpost", $resources)
     end
+
+    def Outpost.create(objmap, name, x, y)
+      obj = Outpost.new()
+      obj.name = name
+      sprite_obj = ObjMapSpriteObject.new(get_sprite(), CL_Pointf.new(x*32, y*32),
+                                          make_metadata(obj))
+      obj.data = sprite_obj
+      objmap.add_object(sprite_obj.to_object)
+      
+      return obj
+    end
   end
   
   class SpawnPoint < GameObject
@@ -61,6 +72,16 @@ module GameObjects
 
     def y()
       return (@data.to_object.get_pos.y()/32).to_i
+    end
+
+    def SpawnPoint.create(objmap, x, y)
+      obj = SpawnPoint.new()
+      sprite_obj = ObjMapSpriteObject.new(get_sprite(), CL_Pointf.new(x*32, y*32),
+                                          make_metadata(obj))
+      obj.data = sprite_obj
+      objmap.add_object(sprite_obj.to_object)
+      
+      return obj
     end
 
     def SpawnPoint.get_sprite()

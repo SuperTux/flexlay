@@ -30,9 +30,6 @@ class Level
     elsif params.length == 1 then
       (@filename,) = params
       @data = NetPanzerFileStruct.new($tileset, @filename)
-
-      load_optfile(@filename[0..-5] + ".opt")
-      load_spnfile(@filename[0..-5] + ".spn")
     end      
 
     @objects   = ObjectLayer.new()
@@ -40,29 +37,38 @@ class Level
     @editormap.add_layer(@data.get_tilemap().to_layer())
     @editormap.add_layer(@objects.to_layer())
 
+    if @filename then
+      load_optfile(@filename[0..-5] + ".opt")
+      load_spnfile(@filename[0..-5] + ".spn")
+    end
+
     # FIXME: Data might not get freed since its 'recursively' refcounted
-    @editormap.set_metadata(make_metadata(self))
+    @editormap.set_data(self)
   end
 
   def load_optfile(filename)
     f = File.new(filename)
-    count = /ObjectiveCount: ([0-9]+)/.match(f.readline())[1].to_i
+    count = /ObjectiveCount: ([0-9]+)/.match(f.readline().chop)[1].to_i
     f.readline() # Skip empty line
     count.times{|i|
-      name = /Name: (.+)/.match(f.readline())
-      loc  = /Location: ([0-9]+) ([0-9]+)/.match(f.readline())
+      name = /Name: (.+)/.match(f.readline().chop)
+      loc  = /Location: ([0-9]+) ([0-9]+)/.match(f.readline().chop)
       f.readline() # Skip empty line
+      GameObjects::Outpost.create(@objects,
+                                  name,
+                                  loc[1].to_i, loc[2].to_i)
     }
     f.close()
   end
 
   def load_spnfile(filename)
     f = File.new(filename)
-    count = /SpawnCount: ([0-9]+)/.match(f.readline())[1].to_i
+    count = /SpawnCount: ([0-9]+)/.match(f.readline().chop)[1].to_i
     f.readline() # Skip empty line
     count.times{|i|
-      loc  = /Location: ([0-9]+) ([0-9]+)/.match(f.readline())
-      puts "Location: #{loc[1].to_i} #{loc[2].to_i}"
+      loc  = /Location: ([0-9]+) ([0-9]+)/.match(f.readline().chop)
+      GameObjects::SpawnPoint.create(@objects,
+                                     loc[1].to_i, loc[2].to_i)
     }
     f.close()
   end

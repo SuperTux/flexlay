@@ -1,4 +1,4 @@
-//  $Id: background.cxx,v 1.3 2003/09/20 21:55:57 grumbel Exp $
+//  $Id: background.cxx,v 1.4 2003/10/10 21:06:22 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -26,7 +26,7 @@ Background::draw()
 {
   if (1) // draw background
     {
-      Display::begin_gl();
+      Windstille::Display::begin_gl();
       {
         glBlendFunc(GL_ONE, GL_ZERO);
 
@@ -50,7 +50,7 @@ Background::draw()
      
         glEnd();
       }
-      Display::end_gl();
+      Windstille::Display::end_gl();
     }
 }
 

@@ -1,4 +1,4 @@
-//  $Id: display.hxx,v 1.1 2003/08/12 08:24:41 grumbel Exp $
+//  $Id: display.hxx,v 1.2 2003/10/10 21:06:22 grumbel Exp $
 // 
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -20,6 +20,8 @@
 #ifndef HEADER_DISPLAY_HXX
 #define HEADER_DISPLAY_HXX
 
+namespace Windstille {
+
 /** */
 class Display
 {
@@ -31,6 +33,8 @@ public:
   /** Leave 2d OpenGL mode and give controll back to ClanLib */
   static void end_gl();
 };
+
+} // namespace Windstille
 
 #endif
 

@@ -1,4 +1,4 @@
-//  $Id: screen.cxx,v 1.2 2003/09/21 17:34:00 grumbel Exp $
+//  $Id: screen.cxx,v 1.3 2003/10/10 21:06:22 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -19,6 +19,8 @@
 
 #include "delta_manager.hxx"
 #include "screen.hxx"
+
+namespace Windstille {
 
 Screen::Screen()
 {
@@ -57,5 +59,7 @@ Screen::display()
 
   on_shutdown();
 }
+
+} // namespace Windstille
 
 /* EOF */

@@ -1,4 +1,4 @@
-//  $Id: windstille_game.hxx,v 1.6 2003/09/29 21:26:46 grumbel Exp $
+//  $Id: windstille_game.hxx,v 1.7 2003/10/10 21:06:22 grumbel Exp $
 // 
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -34,7 +34,7 @@ class Background;
 class Player;
 class DialogManager;
 
-class WindstilleGame : public Screen
+class WindstilleGame : public Windstille::Screen
 {
 private:
   Player* player;

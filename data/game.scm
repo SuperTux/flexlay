@@ -64,4 +64,10 @@
                       "0" "")
                   (number->string seconds))))
 
+(let ((window (gui-create-window 20 20 300 200 "Debug GUI")))
+  (gui-push-component (gui-window-get-client-area window))
+  (gui-create-button-func 20 20 100 25 "Hello World"
+                          (lambda () (display "Do something clever\n")))
+  (gui-pop-component))
+
 ;; EOF ;;

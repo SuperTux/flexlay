@@ -1,4 +1,4 @@
-//  $Id: display.cxx,v 1.1 2003/08/12 08:24:41 grumbel Exp $
+//  $Id: display.cxx,v 1.2 2003/10/10 21:06:22 grumbel Exp $
 //
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -21,6 +21,8 @@
 #include <ClanLib/Display/display.h>
 #include "display.hxx"
 
+namespace Windstille {
+
 void
 Display::begin_gl()
 {
@@ -38,5 +40,7 @@ Display::end_gl()
 {
   CL_Display::end_3d();
 }
+
+} // namespace Windstille
 
 /* EOF */

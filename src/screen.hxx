@@ -1,4 +1,4 @@
-//  $Id: screen.hxx,v 1.2 2003/09/29 21:26:46 grumbel Exp $
+//  $Id: screen.hxx,v 1.3 2003/10/10 21:06:22 grumbel Exp $
 // 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -19,6 +19,8 @@
 
 #ifndef HEADER_SCREEN_HXX
 #define HEADER_SCREEN_HXX
+
+namespace Windstille {
 
 /** */
 class Screen
@@ -45,6 +47,8 @@ private:
   Screen (const Screen&);
   Screen& operator= (const Screen&);
 };
+
+} // namespace Windstille
 
 #endif
 

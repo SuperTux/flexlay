@@ -1,4 +1,4 @@
-//  $Id: windstille_menu.cxx,v 1.5 2003/09/30 16:42:26 grumbel Exp $
+//  $Id: windstille_menu.cxx,v 1.6 2003/10/10 21:06:22 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -182,8 +182,10 @@ WindstilleMenu::fadeout()
 void
 WindstilleMenu::on_startup()
 {
-  background_music.play(true);
-  background_music.set_volume(1.0f);
+  background_music_session = background_music.prepare();
+  background_music_session.play();
+  background_music_session.set_looping(true);
+  background_music_session.set_volume(1.0f);
 }
 
 void

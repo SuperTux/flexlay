@@ -1,4 +1,4 @@
-##  $Id: Makefile.am,v 1.3 2003/09/20 21:53:38 grumbel Exp $
+##  $Id: Makefile.am,v 1.4 2003/10/10 21:06:22 grumbel Exp $
 ## 
 ##  Windstille
 ##  Copyright (C) 2003 Ingo Ruhnke <grumbel@gmx.de>
@@ -19,7 +19,8 @@
 
 command_source = \
   editor.hxx editor.cxx \
-  game.hxx   game.cxx
+  game.hxx   game.cxx \
+  gui.hxx    gui.cxx
 
 noinst_LIBRARIES = libwindstille_scripting.a
 

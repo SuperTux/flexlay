@@ -42,6 +42,8 @@ windstille_SOURCES = \
   guile_gameobj.hxx \
   guile_gameobj_factory.cxx \
   guile_gameobj_factory.hxx \
+  gui_manager.hxx \
+  gui_manager.cxx \
   igel.hxx \
   igel.cxx \
   keyboard_controller.cxx \
@@ -96,12 +98,12 @@ windstille_CPPFLAGS = \
   @WINDSTILLE_CFLAGS@
 
 REST_LIBS = \
--lpthread \
--lc \
--lgcc \
--Wl,-dynamic-linker=/lib/ld-linux.so.2 \
--Wl,-Bdynamic \
--lGL
+ -lpthread \
+ -lc \
+ -lgcc \
+ -Wl,-dynamic-linker=/lib/ld-linux.so.2 \
+ -Wl,-Bdynamic \
+ -lGL
 
 REST_LIBS2 = \
 -Wl,-Bdynamic \

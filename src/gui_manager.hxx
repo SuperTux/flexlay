@@ -1,4 +1,4 @@
-//  $Id: windstille_menu.hxx,v 1.5 2003/10/10 21:06:22 grumbel Exp $
+//  $Id: gui_manager.hxx,v 1.1 2003/10/10 21:06:22 grumbel Exp $
 // 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -17,36 +17,44 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-#ifndef HEADER_WINDESTILLE_MENU_HXX
-#define HEADER_WINDESTILLE_MENU_HXX
+#ifndef HEADER_GUI_MANAGER_HXX
+#define HEADER_GUI_MANAGER_HXX
 
-#include <ClanLib/Display/sprite.h>
-#include <ClanLib/Sound/soundbuffer.h>
-#include "screen.hxx"
+#include <stack>
+
+class CL_GUIManager;
+class CL_StyleManager;
+class CL_ResourceManager;
+class CL_SlotContainer;
 
 /** */
-class WindstilleMenu : public Windstille::Screen
+class GUIManager
 {
 private:
-  CL_SoundBuffer background_music;
-  CL_SoundBuffer_Session background_music_session;
-  CL_Sprite background;
-  CL_Sprite windstille;
-  int current_choice;
-  float passed_time;
+  std::stack<CL_Component*> components;
+
+  CL_GUIManager*      manager;
+  CL_StyleManager*    style;
+  CL_ResourceManager* resources;
+  CL_SlotContainer*   slot_container;
+
+  static GUIManager* current_;
 public:
-  WindstilleMenu();
-  ~WindstilleMenu();
+  static GUIManager* current() { return current_; }
+
+  GUIManager();
+  ~GUIManager();
   
-  void update(float delta);
   void draw();
-  
-  void on_startup();
-  void on_shutdown();
-private:
-  void fadeout();
-  WindstilleMenu (const WindstilleMenu&);
-  WindstilleMenu& operator= (const WindstilleMenu&);
+  void update();
+
+  void run();
+
+  void push_component(CL_Component* c) { components.push(c); }
+  void pop_component() { components.pop(); }
+
+  CL_Component* get_component();  
+  CL_SlotContainer* get_slot_container();
 };
 
 #endif

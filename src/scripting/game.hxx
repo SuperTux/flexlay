@@ -1,4 +1,4 @@
-//  $Id: game.hxx,v 1.13 2003/09/29 19:29:17 grumbel Exp $
+//  $Id: game.hxx,v 1.14 2003/10/10 21:06:22 grumbel Exp $
 // 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -17,8 +17,8 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-#ifndef HEADER_WORLD_HXX
-#define HEADER_WORLD_HXX
+#ifndef HEADER_SCRIPTING_GAME_HXX
+#define HEADER_SCRIPTING_GAME_HXX
 
 #include <guile/gh.h>
 

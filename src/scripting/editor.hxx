@@ -1,4 +1,4 @@
-//  $Id: editor.hxx,v 1.6 2003/09/26 14:29:36 grumbel Exp $
+//  $Id: editor.hxx,v 1.7 2003/10/10 21:06:22 grumbel Exp $
 // 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -17,8 +17,8 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-#ifndef HEADER_SCRIPTING_HXX
-#define HEADER_SCRIPTING_HXX
+#ifndef HEADER_SCRIPTING_EDITOR_HXX
+#define HEADER_SCRIPTING_EDITOR_HXX
 
 #include <guile/gh.h>
 
@@ -33,17 +33,19 @@ int  editor_get_brush_tile();
 void editor_set_tool(int i);
 void tilemap_set_active_layer(int i);
 
+// Generic GUI stuff
 CL_Component* editor_add_window(int x, int y, int w, int h, const char* title);
 CL_Component* editor_add_button_func(int x, int y, int w, int h, const char* text, SCM func);
 CL_Component* editor_add_button(int x, int y, int w, int h, const char* text);
 CL_Component* editor_add_label(int x, int y, const char* text);
 CL_Component* editor_add_inputbox(int x, int y, int w, int h, const char* text);
-CL_Component* editor_add_tileeditor(int x, int y);
-
-void tileeditor_set_tile(CL_Component* comp, int id);
 
 void component_on_click(CL_Component* comp, SCM func);
 void component_on_close(CL_Component* comp, SCM func);
+
+CL_Component* editor_add_tileeditor(int x, int y);
+
+void tileeditor_set_tile(CL_Component* comp, int id);
 
 const char* inputbox_get_text(CL_Component*);
 

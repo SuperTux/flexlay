@@ -1,4 +1,4 @@
-//  $Id: windstille_game.cxx,v 1.24 2003/09/29 21:51:40 grumbel Exp $
+//  $Id: windstille_game.cxx,v 1.25 2003/10/10 21:06:22 grumbel Exp $
 //
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -34,10 +34,13 @@
 #include "player_view.hxx"
 #include "energiebar.hxx"
 #include "background.hxx"
+#include "gui_manager.hxx"
 #include "dialog_manager.hxx"
 
 #include "guile_gameobj_factory.hxx"
 #include "windstille_game.hxx"
+
+using namespace Windstille;
 
 WindstilleGame* WindstilleGame::current_ = 0; 
 
@@ -47,6 +50,8 @@ WindstilleGame::WindstilleGame(const std::string& arg_filename)
   current_ = this;
   world = new GameWorld(filename);
   state = GAME;
+
+  new GUIManager();
 }
 
 WindstilleGame::WindstilleGame(GameWorld* w)
@@ -54,10 +59,13 @@ WindstilleGame::WindstilleGame(GameWorld* w)
   current_ = this;
   world = w;
   state = GAME;
+
+  new GUIManager();
 }
 
 WindstilleGame::~WindstilleGame()
 {
+  delete GUIManager::current();
   delete world;
 }
 
@@ -116,6 +124,7 @@ void
 WindstilleGame::draw()
 {
   draw_game();
+  GUIManager::current()->draw();
   CL_Display::flip();
 }
 
@@ -138,7 +147,8 @@ WindstilleGame::update(float delta)
   Controller::current()->clear();
 
   blink += delta * 3.141f;
-}    
+  GUIManager::current()->update();
+}
 
 void
 WindstilleGame::on_startup ()

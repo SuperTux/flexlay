@@ -1,4 +1,4 @@
-//  $Id: laser_shoot.cxx,v 1.5 2003/09/20 21:53:38 grumbel Exp $
+//  $Id: laser_shoot.cxx,v 1.6 2003/10/10 21:06:22 grumbel Exp $
 //
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -44,7 +44,7 @@ LaserShoot::draw ()
 
   if (0) // Laser
     {
-      Display::begin_gl();
+      Windstille::Display::begin_gl();
           
       glBlendFunc( GL_SRC_ALPHA, GL_ONE );
 
@@ -60,7 +60,7 @@ LaserShoot::draw ()
       }
       glEnd();
 
-      Display::end_gl();
+      Windstille::Display::end_gl();
     }
 }
 

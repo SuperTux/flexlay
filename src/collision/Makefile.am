@@ -4,6 +4,8 @@ libwindstille_collision_a_SOURCES = \
   collision_mask.hxx collision_mask.cxx \
   collision_sprite.hxx collision_sprite.cxx
 
+libwindstille_collision_a_CXXFLAGS = @WINDSTILLE_CFLAGS@
+
 bin_PROGRAMS = colltest collision_benchmark collision_sprite_test
 
 colltest_SOURCES = colltest.cxx
@@ -16,6 +18,6 @@ collision_benchmark_CXXFLAGS= @WINDSTILLE_CFLAGS@
 
 collision_sprite_test_SOURCES = collision_sprite_test.cxx
 collision_sprite_test_LDADD = libwindstille_collision.a @WINDSTILLE_LIBS@
-collision_sprite_CXXFLAGS= @WINDSTILLE_CFLAGS@
+collision_sprite_test_CXXFLAGS= @WINDSTILLE_CFLAGS@
 
 # EOF #

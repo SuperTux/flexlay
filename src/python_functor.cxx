@@ -87,4 +87,21 @@ PythonFunctor::operator()(int i)
     }  
 }
 
+void
+PythonFunctor::operator()(int x, int y)
+{
+  if (obj)
+    {
+      PyObject* arglist = Py_BuildValue("(i, i)", x, y);
+      if (PyEval_CallObject(obj,  arglist) == 0)
+        {
+          if (PyErr_Occurred())
+            {
+              PyErr_Print();
+            }
+        }
+      //Py_DECREF(arglist);
+    }  
+}
+
 /* EOF */

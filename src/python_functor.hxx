@@ -38,6 +38,7 @@ public:
 
   void operator()();
   void operator()(int i);
+  void operator()(int x, int y);
 };
 
 #endif

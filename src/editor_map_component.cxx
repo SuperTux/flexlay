@@ -20,6 +20,7 @@
 #include <iostream>
 #include <ClanLib/Core/core_iostream.h>
 #include <ClanLib/Display/keyboard.h>
+#include <ClanLib/Display/mouse.h>
 #include <ClanLib/Display/display.h>
 #include <ClanLib/Display/display_iostream.h>
 #include <ClanLib/Display/keys.h>
@@ -41,7 +42,7 @@ public:
   Scrollbar* scrollbar_v;
   CL_SlotContainer slots;
   Workspace workspace;
-  CL_Signal_v0 key_bindings[256];
+  CL_Signal_v2<int, int> key_bindings[256];
 
   void draw();
   void mouse_up  (const CL_InputEvent& event);
@@ -100,7 +101,11 @@ void
 EditorMapComponentImpl::on_key_down(const CL_InputEvent& event)
 {
   if (event.id >= 0 && event.id < 256)
-    key_bindings[event.id]();
+    { 
+      CL_Rect rect = parent->get_position();
+      key_bindings[event.id](CL_Mouse::get_x() - rect.left,
+                             CL_Mouse::get_y() - rect.top);
+    }
 }
 
 void
@@ -193,7 +198,7 @@ EditorMapComponent::move_to_y(float y)
   impl->workspace.get_gc_state().set_pos(CL_Pointf(impl->workspace.get_gc_state().get_pos().x, y));
 }
 
-CL_Signal_v0&
+CL_Signal_v2<int, int>&
 EditorMapComponent::sig_on_key(const std::string& str)
 {
   int id = CL_Keyboard::get_device().keyid_to_string(str);

@@ -62,7 +62,7 @@ public:
   void move_to_x(float x);
   void move_to_y(float y);
 
-  CL_Signal_v0& sig_on_key(const std::string& str);
+  CL_Signal_v2<int, int>& sig_on_key(const std::string& str);
 
   CL_Point screen2world(const CL_Point& pos);
 

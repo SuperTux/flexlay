@@ -209,7 +209,10 @@ void
 MenuImpl::on_mouse_down(const CL_InputEvent& event)
 {
   if (current_item != -1)
-    items[current_item]->sig_clicked()();
+    {
+      std::cout << "Current_Item: " << current_item << std::endl;
+      items[current_item]->sig_clicked()();
+    }
   parent->release_mouse();
   parent->show(false);
 }

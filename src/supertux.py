@@ -422,7 +422,11 @@ mysprite = make_sprite("../data/images/icons16/stock_paste-16.png")
 
 recent_files_menu = Menu(CL_Point(32*2, 54), gui.get_component())
 for filename in config.recent_files:
-    recent_files_menu.add_item(mysprite, filename, lambda: supertux_load_level(filename))
+    print filename
+    fun = lambda: sys.stdout.write("bla bla: %s\n" % filename)
+    fun()
+    recent_files_menu.add_item(mysprite, filename, fun)
+    #supertux_load_level(filename))
 
 minimap = Minimap(editor_map, CL_Rect(CL_Point(3, 488+3-14), CL_Size(794-134-16, 50)), editor_map)
 
@@ -693,7 +697,7 @@ def gui_set_zoom(zoom):
     pos = gc.get_pos()
     gc.set_zoom(zoom)
     gc.set_pos(pos)
-
+    
 menu.add_item("Zoom/1:4 (25%) ",  lambda: gui_set_zoom(0.25))
 menu.add_item("Zoom/1:2 (50%) ",  lambda: gui_set_zoom(0.5))
 menu.add_item("Zoom/1:1 (100%) ", lambda: gui_set_zoom(1.0)) 
@@ -724,13 +728,16 @@ gui_show_interactive()
 gui_show_current()
 set_tilemap_paint_tool()
 
-connect(editor_map.sig_on_key("f1"), lambda: gui_toggle_minimap())
-connect(editor_map.sig_on_key("m"), lambda: gui_toggle_minimap())
-connect(editor_map.sig_on_key("g"), lambda: gui_toggle_grid())
-connect(editor_map.sig_on_key("4"), lambda: gui_toggle_display_props())
-connect(editor_map.sig_on_key("3"), lambda: gui_show_foreground())
-connect(editor_map.sig_on_key("2"), lambda: gui_show_interactive())
-connect(editor_map.sig_on_key("1"), lambda: gui_show_background())
+connect_v2(editor_map.sig_on_key("f1"), lambda x, y: gui_toggle_minimap())
+connect_v2(editor_map.sig_on_key("m"), lambda x, y: gui_toggle_minimap())
+connect_v2(editor_map.sig_on_key("g"), lambda x, y: gui_toggle_grid())
+connect_v2(editor_map.sig_on_key("4"), lambda x, y: gui_toggle_display_props())
+connect_v2(editor_map.sig_on_key("3"), lambda x, y: gui_show_foreground())
+connect_v2(editor_map.sig_on_key("2"), lambda x, y: gui_show_interactive())
+connect_v2(editor_map.sig_on_key("1"), lambda x, y: gui_show_background())
+
+connect_v2(editor_map.sig_on_key("5"), lambda x, y: editor_map.zoom_in(CL_Point(x, y)))
+connect_v2(editor_map.sig_on_key("6"), lambda x, y: editor_map.zoom_out(CL_Point(x, y)))
 
 gui.run()
 

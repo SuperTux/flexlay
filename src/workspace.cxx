@@ -35,13 +35,6 @@ class WorkspaceImpl
 {
 public:
   GraphicContextState gc_state;
-
-  bool scrolling;
-  CL_Point click_pos;
-
-  /** Position of the center */
-  CL_Pointf old_trans_offset;
-
   EditorMap editor_map;
 
   Tool tool;

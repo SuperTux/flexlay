@@ -37,6 +37,12 @@ void connect_v1(CL_Signal_v1<int>& sig, PyObject* obj)
   new CL_Slot(sig.connect_functor(PythonFunctor(obj)));
 }
 
+void connect_v2(CL_Signal_v2<int, int>& sig, PyObject* obj)
+{
+  sig = CL_Signal_v2<int, int>();
+  new CL_Slot(sig.connect_functor(PythonFunctor(obj)));
+}
+
 CL_Sprite
 make_sprite(const std::string& filename)
 {

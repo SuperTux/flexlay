@@ -196,7 +196,7 @@ DirectoryViewImpl::update_items()
 
   CL_Font font = Fonts::verdana11; 
 
-  column_width = 0;
+  column_width = 60; // min_colum_width
   for(Items::iterator i = items.begin(); i != items.end(); ++i)
     {
       CL_Rect rect = font.bounding_rect(0, 0, i->name + "[]");

@@ -78,5 +78,4 @@
 %include "menu.hxx"
 %include "menubar.hxx"
 
-
 /* EOF */

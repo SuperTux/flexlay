@@ -27,6 +27,7 @@
 #include "box.hxx"
 #include "fonts.hxx"
 #include "icon.hxx"
+#include "titlebar.hxx"
 #include "window.hxx"
 
 CL_Sprite
@@ -43,25 +44,24 @@ public:
   CL_Component* client_area;
   CL_Component* parent;
 
+  Titlebar* titlebar;
   CL_Component* close;
   CL_Component* minimize;
   CL_Component* maximize;
 
   std::vector<CL_Slot> slots;
-  CL_Point click_pos;
-  CL_Rect  old_pos;
-  bool pressed;
-  std::string title;
 
   void draw();
-  void mouse_down(const CL_InputEvent& event);
-  void mouse_up(const CL_InputEvent& event);
-  void mouse_move(const CL_InputEvent& event);
 };
 
 Window::Window(const CL_Rect& rect, const std::string& title, CL_Component* parent)
   : CL_Component(rect, parent), impl(new WindowImpl())
 {
+  impl->titlebar = new Titlebar(CL_Rect(CL_Point(3+16,3), 
+                                        CL_Size(get_width()-6-18-18-18, 12+3)), title,
+                                this);
+  //Fonts::verdana11.draw(8+15, 3, title);
+
   impl->close = new Icon(CL_Rect(CL_Point(3, 3), CL_Size(18,18)), 
                         make_sprite("../data/images/window/close.png"),
                         "", this);
@@ -75,14 +75,9 @@ Window::Window(const CL_Rect& rect, const std::string& title, CL_Component* pare
   impl->client_area = new CL_Component(CL_Rect(CL_Point(4, 3+12+7), 
                                                CL_Size(rect.get_width()-10,
                                                        rect.get_height()-28)), this);
-  impl->parent = this;
-  impl->pressed = false;
-  impl->title = title;
+  impl->parent  = this;
  
   impl->slots.push_back(sig_paint().connect(impl.get(),      &WindowImpl::draw));
-  impl->slots.push_back(sig_mouse_down().connect(impl.get(), &WindowImpl::mouse_down));
-  impl->slots.push_back(sig_mouse_up().connect(impl.get(),   &WindowImpl::mouse_up));
-  impl->slots.push_back(sig_mouse_move().connect(impl.get(),   &WindowImpl::mouse_move));
 }
 
 Window::~Window()
@@ -99,10 +94,6 @@ WindowImpl::draw()
   CL_Rect rect = parent->get_position() ;
 
   Box::draw_window(CL_Rect(CL_Point(0, 0), CL_Size(rect.get_width()-1, rect.get_height()-1)));
-
-  CL_Display::fill_rect(CL_Rect(CL_Point(3+16,3), CL_Size(parent->get_width()-6-18-18-18, 12+3)), CL_Color(250, 250, 250));
-  Fonts::verdana11.draw(8+15, 3, title);
-
   Box::draw_panel_down(client_area->get_position());
 
   /*
@@ -119,47 +110,6 @@ WindowImpl::draw()
     CL_Display::draw_line(1, 1,
     1, rect.get_height()-2, highlight);
   */
-}
-
-void
-WindowImpl::mouse_down(const CL_InputEvent& event)
-{
-  if (event.id == CL_MOUSE_MIDDLE)
-    {
-      pressed = true;
-      click_pos = event.mouse_pos;
-      parent->capture_mouse();
-
-      old_pos = parent->get_position();
-      click_pos.x += old_pos.left;
-      click_pos.y += old_pos.top;
-    }
-}
-
-void
-WindowImpl::mouse_up(const CL_InputEvent& event)
-{
-  if (event.id == CL_MOUSE_MIDDLE)
-    {
-      pressed = false;
-      parent->release_mouse();
-
-      parent->raise();
-    }
-}
-
-void
-WindowImpl::mouse_move(const CL_InputEvent& event)
-{
-  if(pressed)
-    {
-      CL_Rect rect = parent->get_position();
-
-      CL_Point move(old_pos.left - (click_pos.x - (rect.left + event.mouse_pos.x)), 
-                    old_pos.top  - (click_pos.y - (rect.top  + event.mouse_pos.y)));
-
-      parent->set_position(move.x, move.y);
-    }
 }
 
 CL_Component*

@@ -20,53 +20,12 @@
 #include <iostream>
 #include <string>
 #include <ClanLib/Display/display.h>
+#include <ClanLib/Display/sprite.h>
 #include "fonts.hxx"
 #include "box.hxx"
 #include "menu.hxx"
 
-class MenuItem
-{
-public:
-  virtual void draw(int x, int y, bool active) =0;
-  virtual int get_width() =0;
-  virtual int get_height() =0;
-};
-
-class SeperatorMenuItem : public MenuItem
-{
-public:
-  SeperatorMenuItem() {}
-  virtual ~SeperatorMenuItem() {}
-
-  void draw(int x, int y, bool active) 
-  {
-    CL_Display::fill_rect(CL_Rect(CL_Point(x, y), CL_Size(80-4, 2)), CL_Color(150, 150, 150));
-    CL_Display::fill_rect(CL_Rect(CL_Point(x, y+1), CL_Size(80-4, 1)), CL_Color(255, 255, 255));
-  }
-
-  int get_width()  { return 10; }
-  int get_height() { return 2; }
-};
-
-class TextMenuItem : public MenuItem
-{
-private:
-  std::string text;
-public:
-  TextMenuItem(const std::string& text_)
-    : text(text_) {}
-
-  virtual ~TextMenuItem() {}
-
-  void draw(int x, int y, bool active) {
-    if (active)
-      CL_Display::fill_rect(CL_Rect(CL_Point(x, y-2), CL_Size(70, 18)), 
-                            CL_Color(255, 255, 255));
-    Fonts::verdana11.draw(x+24, y, text);
-  }
-  int get_width()  { return Fonts::verdana11.bounding_rect(0, 0, text).get_width() + 16; }
-  int get_height() { return Fonts::verdana11.get_height(); }
-};
+class MenuItem;
 
 class MenuImpl
 {
@@ -91,6 +50,68 @@ public:
   void on_mouse_down(const CL_InputEvent& event);
 };
 
+class MenuItem
+{
+protected:
+  MenuImpl* parent;
+public:
+  MenuItem(MenuImpl* parent_) 
+    : parent(parent_) {}
+  virtual void draw(int x, int y, bool active) =0;
+  virtual int get_width() =0;
+  virtual int get_height() =0;
+};
+
+class SeperatorMenuItem : public MenuItem
+{
+public:
+  SeperatorMenuItem(MenuImpl* parent_) 
+    : MenuItem(parent_)
+  {}
+  virtual ~SeperatorMenuItem() {}
+
+  void draw(int x, int y, bool active) 
+  {
+    CL_Display::fill_rect(CL_Rect(CL_Point(x, y), CL_Size(parent->get_width()-7, 2)), 
+                          CL_Color(150, 150, 150));
+    CL_Display::fill_rect(CL_Rect(CL_Point(x, y+1), CL_Size(parent->get_width()-7, 1)),
+                          CL_Color(255, 255, 255));
+  }
+
+  int get_width()  { return 10; }
+  int get_height() { return 2; }
+};
+
+class TextMenuItem : public MenuItem
+{
+private:
+  CL_Sprite sprite;
+  std::string text;
+public:
+  TextMenuItem(const CL_Sprite& sprite_, const std::string& text_, MenuImpl* parent_)
+    : MenuItem(parent_),
+      sprite(sprite_),
+      text(text_) 
+  {
+    sprite.set_alignment(origin_center);
+  }
+
+  virtual ~TextMenuItem() {}
+
+  void draw(int x, int y, bool active) {
+    if (active)
+      CL_Display::fill_rect(CL_Rect(CL_Point(x, y-2), CL_Size(parent->get_width() - 7, 18)), 
+                            CL_Color(255, 255, 255));
+    if (sprite)
+      {
+        sprite.draw(x+10, y+7);
+      }
+    Fonts::verdana11.draw(x+24, y, text);
+  }
+  int get_width()  { return Fonts::verdana11.bounding_rect(0, 0, text).get_width() + 16; }
+  int get_height() { return Fonts::verdana11.get_height(); }
+};
+
 Menu::Menu(const CL_Point& pos, CL_Component* parent)
   : CL_Component(CL_Rect(pos, CL_Size(1,1)), parent),
     impl(new MenuImpl())
@@ -110,15 +131,15 @@ Menu::Menu(const CL_Point& pos, CL_Component* parent)
 MenuItemHandle
 Menu::add_seperator()
 {
-  impl->items.push_back(new SeperatorMenuItem());
+  impl->items.push_back(new SeperatorMenuItem(impl.get()));
   impl->recalc_size();
   return impl->items.size();
 }
 
 MenuItemHandle
-Menu::add_item(const std::string& name)
+Menu::add_item(const CL_Sprite& sprite, const std::string& name)
 {
-  impl->items.push_back(new TextMenuItem(name));
+  impl->items.push_back(new TextMenuItem(sprite, name, impl.get()));
   impl->recalc_size();
   return impl->items.size();
 }
@@ -133,8 +154,8 @@ Menu::add_submenu(const std::string& name, const Menu& submenu)
 void
 MenuImpl::recalc_size()
 {
-  int height = 0;
-  int width = 0;
+  height = 0;
+  width = 0;
 
   for(Items::iterator i = items.begin(); i != items.end(); ++i)
     width = std::max(width, (*i)->get_width());

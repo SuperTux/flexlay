@@ -97,6 +97,7 @@ env.SharedLibrary(
     'popup_menu.cxx',
     'lispreader.cxx',
     'tile.cxx',
+    'titlebar.cxx',
     'tile_brush.cxx',
     'tile_editor.cxx',
     'tile_selection.cxx',

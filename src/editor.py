@@ -126,14 +126,16 @@ a = menu.add_item("File/Save...", menu_file_save)
 a = menu.add_item("File/Save As...", menu_file_save_as)
 a = menu.add_item("File/Quit",  do_quit)
 
+mysprite = make_sprite("../data/images/icons16/stock_paste-16.png")
+
 mymenu = Menu(CL_Point(100, 100), gui.get_component())
-mymenu.add_item("Foobar")
-mymenu.add_item("blub")
-mymenu.add_item("bla")
+mymenu.add_item(mysprite, "Foobar aeuaeu")
+mymenu.add_item(mysprite, "blub")
+mymenu.add_item(mysprite, "bla")
 mymenu.add_seperator()
-mymenu.add_item("Foobar")
-mymenu.add_item("blub")
-mymenu.add_item("bla")
+mymenu.add_item(mysprite, "Foobar")
+mymenu.add_item(mysprite, "blubaoeuau aueau aeu")
+mymenu.add_item(mysprite, "bla")
 
 def show_menu():
     mymenu.run()

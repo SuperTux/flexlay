@@ -18,10 +18,14 @@
 ##  along with this program; if not, write to the Free Software
 ##  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
+opts = Options('custom.py')
+opts.Add('CXX', 'The C++ compiler.', 'g++')
+opts.Add('CXXFLAGS', 'The C++ compiler flags.', '-g -O0 -Wall')
 
-env = Environment(CXX = 'g++',
-                  CXXFLAGS = '-g -O0 -Wall',
-                  SHLIBPREFIX='')
+env = Environment(SHLIBPREFIX='',
+                  options=opts)
+
+Help(opts.GenerateHelpText(env))
 
 Depends('flexlay_python_wrap.cxx', ['flexlay_wrap.i',
                              'clanlib.i',

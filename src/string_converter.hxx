@@ -20,9 +20,9 @@
 #ifndef STRINGCONVERTER_HXX
 #define STRINGCONVERTER_HXX
 
-#include <config.h>
 #include <stdexcept>
 #include <sstream>
+#include "config.h"
 
 template <class T>
 std::string to_string(const T& any)

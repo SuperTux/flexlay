@@ -1,4 +1,4 @@
-//  $Id: collision_mask.cxx,v 1.3 2003/09/01 23:43:16 grumbel Exp $
+//  $Id: collision_mask.cxx,v 1.4 2003/09/02 10:33:01 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -113,7 +113,7 @@ CollisionMask::get_pixel(int x, int y) const
 cm_uint32
 CollisionMask::get_line(int x, int y) const
 {
-  assert(x < pitch && y < height);
+  assert(x >= 0 && y >= 0 && x < pitch && y < height);
 
   return data[y * pitch + x];
 }
@@ -182,13 +182,14 @@ CollisionMask::pixel_collides_with(const CollisionMask& mask, int pixel_x_of, in
   else
     {
       int start_x = std::max(0, tile_x_of);
-      int end_x   = std::min(pitch, mask.pitch + tile_x_of + 1);
+      int end_x   = std::min(pitch, mask.pitch + tile_x_of);
 
       unsigned int right_shift  = ((pixel_x_of % 32) + 32) % 32;
       unsigned int left_shift   = 32 - right_shift;
 
       assert(left_shift >= 0 && left_shift < 32);
-
+      
+      // pixel_x_of is always larger 0, so we can do a right-shift
       for (int y = start_y; y < end_y; ++y)
         {
           cm_uint32 source = get_line(start_x, y);
@@ -198,22 +199,23 @@ CollisionMask::pixel_collides_with(const CollisionMask& mask, int pixel_x_of, in
             return true;
         }
 
-      for (int x = start_x + 1; x < end_x - 1; ++x)
+      for (int x = start_x + 1; x < end_x; ++x)
         for (int y = start_y; y < end_y; ++y)
           {
-            cm_uint32 source = get_line(start_x, y);
-            cm_uint32 target1 = mask.get_line(start_x - tile_x_of,
+            cm_uint32 source = get_line(x, y);
+            cm_uint32 target1 = mask.get_line(x - tile_x_of - 1,
                                               y - pixel_y_of);
-            cm_uint32 target2 = mask.get_line(start_x - tile_x_of + 1,
+            cm_uint32 target2 = mask.get_line(x - tile_x_of,
                                               y - pixel_y_of);
 
-            put_int(source | ((target1 >> right_shift) |  (target2 << left_shift)));
+            //put_int(source | ((target1 >> right_shift) |  (target2 << left_shift)));
 
-            if (source & ((target1 >> right_shift) |  (target2 << left_shift)))
+            if (source & ((target1 << left_shift) |  (target2 >> right_shift)))
               return true;
           }
 
-      if (!(end_x - 1 - tile_x_of >= mask.pitch))
+     
+      if (0)
         for (int y = start_y; y < end_y; ++y)
           {
             cm_uint32 source  = get_line(end_x-1, y);

@@ -34,9 +34,22 @@ private:
 public:
   typedef typename std::vector<T>::iterator iterator;
 
+  Field()
+    : width(0), height(0)
+  {
+  }
+
   Field (unsigned int w, unsigned int h) 
     : width (w), height (h), vec (width * height)
   {
+  }
+
+  const T& operator[] (int i) const {
+    return vec[i];
+  }
+
+  T& operator[] (int i) {
+    return vec[i];
   }
 
   T& operator() (int x, int y) 

@@ -208,7 +208,17 @@ EditorTileMap::resize(int w, int h)
 }
 
 void
-EditorTileMap::draw_tile(const TileBrush& brush, CL_Point& pos)
+EditorTileMap::draw_tile(int id, const CL_Point& pos)
+{
+  if (pos.x >= 0 && pos.x < current_field->get_width()
+      && pos.y >= 0 && pos.y < current_field->get_height())
+    {
+      current_field->at(pos.x, pos.y)->set_tile(id);
+    }
+}
+
+void
+EditorTileMap::draw_tile(const TileBrush& brush, const CL_Point& pos, bool opaque)
 {
   int start_x = std::max(0, -pos.x);
   int start_y = std::max(0, -pos.y);
@@ -219,7 +229,8 @@ EditorTileMap::draw_tile(const TileBrush& brush, CL_Point& pos)
   for (int y = start_y; y < end_y; ++y)
     for (int x = start_x; x < end_x; ++x)
       {
-        current_field->at(pos.x + x, pos.y + y)->set_tile(brush.at(x, y));
+        if (opaque || brush.at(x, y) != 0)
+          current_field->at(pos.x + x, pos.y + y)->set_tile(brush.at(x, y));
       }
 }
 

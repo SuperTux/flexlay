@@ -28,6 +28,7 @@
 #include "editor/editor_map.hxx"
 #include "editor/tile_editor.hxx"
 #include "editor/tilemap_select_tool.hxx"
+#include "editor/tilemap_paint_tool.hxx"
 #include "tile_factory.hxx"
 #include "gui_manager.hxx"
 #include "editor.hxx"
@@ -70,6 +71,31 @@ brush2scm(const TileBrush& brush)
                  gh_long2scm(brush.get_height()),
                  vec,
                  SCM_UNDEFINED);
+}
+
+TileBrush
+scm2brush(SCM s_brush)
+{
+  int brush_width  = gh_scm2int(gh_car(s_brush));
+  int brush_height = gh_scm2int(gh_cadr(s_brush));
+  SCM brush_data   = gh_caddr(s_brush);
+
+  assert(brush_width*brush_height == static_cast<int>(gh_vector_length(brush_data)));
+
+  TileBrush brush(brush_width, brush_height);
+
+  for(int i = 0; i < brush.size(); ++i)
+    {
+      brush[i] = gh_scm2int(scm_vector_ref(brush_data, SCM_MAKINUM(i)));
+    }
+
+  return brush;
+}
+
+void 
+tilemap_paint_tool_set_brush(SCM brush)
+{
+  TileMapPaintTool::current()->set_brush(scm2brush(brush));
 }
 
 SCM

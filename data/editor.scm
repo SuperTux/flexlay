@@ -75,14 +75,24 @@
 
 (define menu (gui-create-menu))
 ;; File Menu
-(gui-add-menu-item menu "File/New"  show-new-level-dialog)
-(gui-add-menu-item menu "File/Load" 
+(gui-add-menu-item menu "File/New.."  show-new-level-dialog)
+(gui-add-menu-item menu "File/Open.." 
                    (lambda ()
                      (simple-file-dialog "Load a level..." (get-last-file)
                                          (lambda (filename)
                                            (load-map filename)))))
 
-(gui-add-menu-item menu "File/Save" 
+(define *open-history* (list "../data/levels/tuxlevel3.scm"
+                             "../data/levels/tuxlevel2.scm"
+                             "../data/levels/tuxlevel4.scm"))
+
+(for-each (lambda (level)
+            (gui-add-menu-item menu (string-append "File/Open Recent >/" (basename level))
+                               (lambda ()
+                                 (load-map level))))
+          *open-history*)
+
+(gui-add-menu-item menu "File/Save..." 
                    (lambda ()
                      (simple-file-dialog "Save a level..." (get-last-file)
                                          (lambda (filename) 
@@ -111,15 +121,11 @@
 
 (define *clipboard* #f)
 (gui-create-button-func 720 475
-                        80 25 "copy" 
+                        80 25 "selection2brush" 
                         (lambda () 
-                          (set! *clipboard* (editor-get-tile-selection))))
-(gui-create-button-func 720 450
-                        80 25 "brushtest" 
-                        (lambda () 
-                          (if *clipboard*
-                              (editor-tilemap-draw-brush (random 15) (random 15)
-                                                         *clipboard*))))
+                          (set! *clipboard* (editor-get-tile-selection))
+                          (tilemap-paint-tool-set-brush *clipboard*)
+                          ))
 
 (gui-create-button-func 720 500
                         80 25 "Background" 

@@ -24,10 +24,16 @@
 #include "editor_map.hxx"
 #include "tilemap_paint_tool.hxx"
 
+TileMapPaintTool* TileMapPaintTool::current_ = 0; 
+
 TileMapPaintTool::TileMapPaintTool(EditorMap* p, EditorTileMap* t)
-  : TileMapTool(p), tilemap(t)
+  : TileMapTool(p), 
+    tilemap(t)
 {
+  last_draw = CL_Point(-1, -1);
   painting = false;
+  opaque = false;
+  current_ = this;
 }
 
 TileMapPaintTool::~TileMapPaintTool()
@@ -39,18 +45,41 @@ TileMapPaintTool::draw()
 {
   CL_Point pos = parent->screen2tile(CL_Point(CL_Mouse::get_x(), CL_Mouse::get_y()));
 
-  if (pos.x >= 0 && pos.y >= 0)
+  if (0)
     {
       Tile* tile = TileFactory::current()->create(tilemap->brush_tile);
+
       if (tile)
         {
           CL_Sprite sprite = tile->sur;
           sprite.set_alpha(0.5f);
           sprite.draw(pos.x * TILE_SIZE, pos.y * TILE_SIZE);
         }
+
       CL_Display::fill_rect (CL_Rect(CL_Point(pos.x * TILE_SIZE, pos.y * TILE_SIZE),
                                      CL_Size(TILE_SIZE, TILE_SIZE)),
                              CL_Color(255, 255, 255, 100));
+    }
+  else 
+    {
+      for(int y = 0; y < brush.get_height(); ++y)
+        for(int x = 0; x < brush.get_width(); ++x)
+          {
+            Tile* tile = TileFactory::current()->create(brush(x, y));
+                
+            if (tile)
+              {
+                CL_Sprite sprite = tile->sur;
+                sprite.set_alpha(0.5f);
+                sprite.draw((pos.x + x) * TILE_SIZE, 
+                            (pos.y + y) * TILE_SIZE);
+              }
+                
+            CL_Display::fill_rect (CL_Rect(CL_Point((pos.x + x) * TILE_SIZE, 
+                                                    (pos.y + y) * TILE_SIZE),
+                                           CL_Size(TILE_SIZE, TILE_SIZE)),
+                                   CL_Color(255, 255, 255, 100));
+          }
     }
 }
 
@@ -61,9 +90,8 @@ TileMapPaintTool::on_mouse_down(const CL_InputEvent& event)
 
   if (event.id == CL_MOUSE_LEFT)
     { 
-      if (pos.x >= 0 && pos.x < tilemap->get_field()->get_width()
-          && pos.y >= 0 && pos.y < tilemap->get_field()->get_height())
-        tilemap->get_field()->at(pos.x, pos.y)->set_tile(tilemap->brush_tile);
+      tilemap->draw_tile(brush, parent->screen2tile(event.mouse_pos), opaque);
+      last_draw = pos;
 
       painting = true;
     }
@@ -79,9 +107,11 @@ TileMapPaintTool::on_mouse_move(const CL_InputEvent& event)
   if (painting)
     {
       CL_Point pos = parent->screen2tile(event.mouse_pos);
-      if (pos.x >= 0 && pos.x < tilemap->get_field()->get_width()
-          && pos.y >= 0 && pos.y < tilemap->get_field()->get_height())
-        tilemap->get_field()->at(pos.x, pos.y)->set_tile(tilemap->brush_tile);
+      if (pos != last_draw)
+        {
+          tilemap->draw_tile(brush, pos, opaque);
+          last_draw = pos;
+        }
     }
 }
 
@@ -90,11 +120,20 @@ TileMapPaintTool::on_mouse_up  (const CL_InputEvent& event)
 {
   if (event.id == CL_MOUSE_LEFT)
     {
+      tilemap->draw_tile(brush, parent->screen2tile(event.mouse_pos), opaque);
+      last_draw = CL_Point(-1, -1);
+
       painting = false;
     }
   else if (event.id == CL_MOUSE_RIGHT)
     {
     }
+}
+
+void
+TileMapPaintTool::set_brush(const TileBrush& b)
+{
+  brush = b;
 }
 
 /* EOF */

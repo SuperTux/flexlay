@@ -68,8 +68,15 @@ public:
 
   Field<EditorTile*>* get_map(int i);
 
-  /** Draw the gives brush to the map */
-  void draw_tile(const TileBrush& brush, CL_Point& pos);
+  /** Draw the gives brush to the map 
+   *  @param opaque if true draw fully transparent tiles the same as
+   *  @param opaque tiles, else don't draw transparent tiles at all to
+   *  @param opaque the map
+   */
+  void draw_tile(const TileBrush& brush, const CL_Point& pos, bool opaque);
+
+  /** Draw the given single tile to the map */
+  void draw_tile(int id, const CL_Point& pos);
 
   int get_width()  { return current_field->get_width(); }
   int get_height() { return current_field->get_height(); }

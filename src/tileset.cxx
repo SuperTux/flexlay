@@ -85,19 +85,10 @@ Tileset::add_tile(int id, const Tile& tile)
 Tile* 
 Tileset::create (int id)
 {
-  // FIXME: this might cause throuble for some games
-  // id 0 is always the empty tile
-  if (id == 0)
-    { 
-      return 0;
-    }
+  if (id >= 0 && id < int(impl->tiles.size()))
+    return impl->tiles[id];
   else
-    {
-      if (id > 0 && id < int(impl->tiles.size()))
-        return impl->tiles[id];
-      else
-        return 0;
-    }
+    return 0;
 }
 
 int

@@ -38,7 +38,9 @@ class Config:
         self.config.read(['supertux.cfg', os.path.expanduser('~/.flexlay/supertux.cfg')])
 
         self.datadir      = self.config.get("SuperTux", "datadir")
-        self.recent_files = eval(self.config.get("SuperTux", "recent_files"))
+        str = self.config.get("SuperTux", "recent_files")
+        print str
+        self.recent_files = eval(str)
         
     def __del__(self):
         self.config.set("SuperTux", "datadir", self.datadir)
@@ -59,9 +61,10 @@ def load_game_tiles(tileset, filename):
             if not(image):
                 image = get_value_from_tree(['images', '_'], data, "notile.png")
 
-            tileset.add_tile(id,
-                             Tile(config.datadir + 'images/tilesets/' + image,
-                                  CL_Color(255,   0,   0, 128)))
+            if id != 0: # leave tile 0 transparent
+                tileset.add_tile(id,
+                                 Tile(config.datadir + 'images/tilesets/' + image,
+                                      CL_Color(255,   0,   0, 128)))
 
 class SuperTuxLevel:
     filename = None

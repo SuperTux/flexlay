@@ -33,19 +33,21 @@ class Config:
 
         # Setting defaults
         self.config.add_section("netPanzer")
-        self.config.set("netPanzer", "datadir", "/home/ingo/cvs/supertux/supertux/data/")
+        self.config.set("netPanzer", "datadir", "/home/ingo/projects/netpanzer/cvs/netpanzer/")
         self.config.set("netPanzer", "recent_files", "[]")
 
         self.config.read(['netpanzer.cfg', os.path.expanduser('~/.flexlay/netpanzer.cfg')])
 
         self.datadir      = self.config.get("netPanzer", "datadir")
-        self.recent_files = eval(self.config.get("netPanzer", "recent_files"))
+        str = self.config.get("netPanzer", "recent_files")
+        self.recent_files = eval(str)
         
     def __del__(self):
         self.config.set("netPanzer", "datadir", self.datadir)
         self.config.set("netPanzer", "recent_files", self.recent_files)
-        
-        self.config.write(open(os.path.expanduser('~/.flexlay/supertux.cfg'), 'w'))
+        print "Writing config",
+        self.config.write(open(os.path.expanduser('~/.flexlay/netpanzer.cfg'), 'w'))
+        print "Writing Done"
 
 class Level:
     filename  = None
@@ -70,7 +72,7 @@ class Level:
         # FIXME: Data might not get freed since its 'recursively' refcounted
         self.editormap.set_metadata(make_metadata(self))
 
-    def save(filename):
+    def save(self, filename):
         data.save(filename)
 
     def activate(self, workspace):
@@ -125,9 +127,16 @@ startlevel.activate(workspace)
 
 button_panel = Panel(CL_Rect(CL_Point(0, 23), CL_Size(800, 33)), gui.get_component())
 
+def netpanzer_load_level(filename):
+    level = Level(filename)
+    level.activate(workspace)
+
+def netpanzer_save_level(filename):
+    workspace.get_map().get_metadata().save(filename)
+
 def gui_level_save_as():
     save_dialog.set_filename(os.path.dirname(save_dialog.get_filename()) + "/")
-    save_dialog.run(supertux_save_level)
+    save_dialog.run(netpanzer_save_level)
 
 def gui_level_save():
     if workspace.get_map().get_metadata().filename:
@@ -135,10 +144,10 @@ def gui_level_save():
     else:
         save_dialog.set_filename(os.path.dirname(save_dialog.get_filename())  + "/")
         
-    save_dialog.run(supertux_save_level)
+    save_dialog.run(netpanzer_save_level)
    
 def gui_level_load():
-    load_dialog.run(gui_load_level)
+    load_dialog.run(netpanzer_load_level)
 
 def gui_toggle_minimap():
     if minimap.is_visible():
@@ -258,23 +267,25 @@ object.set_callback(set_objmap_select_tool)
 
 level = None
 
-def gui_load_level(filename):
+mysprite = make_sprite("../data/images/icons16/stock_paste-16.png")
+
+def netpanzer_load_level(filename):
     level = Level(filename)
     level.activate(workspace)
     connect(level.editormap.sig_change(), on_map_change)
     
     if not(has_element(config.recent_files, filename)):
         config.recent_files.append(filename)
-        recent_files_menu.add_item(mysprite, filename, lambda: gui_load_level(filename))
+        recent_files_menu.add_item(mysprite, filename, lambda: netpanzer_load_level(filename))
 
     minimap.update_minimap()
 
-def gui_save_level(filename):
+def netpanzer_save_level(filename):
     workspace.get_map().get_metadata().save(filename)
 
 recent_files_menu = Menu(CL_Point(32*2, 54), gui.get_component())
 for filename in config.recent_files:
-    recent_files_menu.add_item(mysprite, filename, lambda: gui_load_level(filename))
+    recent_files_menu.add_item(mysprite, filename, lambda: netpanzer_load_level(filename))
 
 def has_element(lst, el):
     for i in lst:
@@ -304,9 +315,9 @@ menu.add_item("Zoom/4:1 (400%) ", lambda: gui_set_zoom(4.0))
 minimap = Minimap(editor_map, CL_Rect(CL_Point(3, 488+56 - 128-3), CL_Size(128, 128)), option_panel)
 
 load_dialog = SimpleFileDialog("Load netPanzer Level", "Load", "Cancel", gui.get_component())
-load_dialog.set_filename(config.datadir + "levels/")
+load_dialog.set_filename(config.datadir + "maps/")
 save_dialog = SimpleFileDialog("Save netPanzer Level as...", "Save", "Cancel", gui.get_component())
-save_dialog.set_filename(config.datadir + "levels/")
+save_dialog.set_filename(config.datadir + "maps/")
 
 set_tilemap_paint_tool()
 

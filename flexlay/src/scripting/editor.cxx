@@ -675,30 +675,28 @@ xml_node2scm(CL_DomNode& root)
       // Assemble the whole element
       return gh_cons(gh_symbol2scm("element"), 
                      gh_cons(gh_str02scm(element.get_tag_name().c_str()),
-                             gh_cons(gh_cons(gh_symbol2scm("attributes"), 
-                                             attributes),
+                             gh_cons(attributes,
                                      children)));
     }
   else if (root.is_null())
     {
       return SCM_EOL;
     }
-  else if (root.is_element())
-    {
-    }
   else if (root.is_attr())
     {
     }
   else if (root.is_text())
     {
-      // FIXME: Doesn't seem to work
-      CL_DomCDATASection text = root.to_cdata_section();
-      return gh_list(gh_symbol2scm("character-data"),
-                     gh_str02scm(text.substring_data(0, text.get_length()).c_str()),
+      return gh_list(gh_symbol2scm("text-data"),
+                     gh_str02scm(root.get_node_value().c_str()),
                      SCM_UNDEFINED);
     }
   else if (root.is_cdata_section())
     {
+      CL_DomCDATASection text = root.to_cdata_section();
+      return gh_list(gh_symbol2scm("character-data"),
+                     gh_str02scm(text.get_node_value().c_str()),
+                     SCM_UNDEFINED);
     }
   else if (root.is_entity_reference())
     {

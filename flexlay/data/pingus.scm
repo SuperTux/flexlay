@@ -1,5 +1,6 @@
 (use-modules (oop goops))
 (load "helper.scm")
+(load "xml.scm")
 (display "Pingus Startup Script\n")
 
 (define *game* 'pingus)
@@ -21,6 +22,7 @@
     (editor-map-set-metadata m (make <pingus-level>
                                  #:author "Some Author"
                                  #:objects objmap))
+    (editor-objectmap-set-current   objmap)
 
     m))
 
@@ -39,17 +41,55 @@
                                  #:author "Some Author"
                                  #:objects objmap))
 
+    (editor-objectmap-set-current   objmap)
     (pingus:load-level objmap (cdddr data))
     
     m))
 
 (define (pingus:load-level objmap lst)
-  (for-each (lambda (el)
-              (let* ((element    (cadr  el))
-                     (attributes (caddr el))
-                     (childs     (cdddr el)))
-                (format #t "~a: ~a ~a~%" element attributes childs)
-                ))
+  (define (parse-surface lst)
+    (let ((resfile (nodeset:get-text (node:get-childs (nodeset:get (node:get-childs lst) "resource")) "resource-datafile"))
+          (ident   (nodeset:get-text (node:get-childs (nodeset:get (node:get-childs lst) "resource")) "resource-ident")))
+      (string-append *pingus:datadir* "/images/" 
+                     (string-map (lambda (char) (if (char=? char #\-) #\/ char))
+                                 resfile)
+                     "/" ident ".png")))
+
+  (define (parse-position lst)
+    (let ((childs (node:get-childs lst)))
+      (list (string->number (nodeset:get-text childs "x-pos"))
+            (string->number (nodeset:get-text childs "y-pos"))
+            (string->number (nodeset:get-text childs "z-pos")))))
+
+  (define (parse-background lst)
+    (let ((childs (node:get-childs lst)))
+      (nodeset:get-text childs  "type")
+      (display "Background: \n")
+      (parse-position (nodeset:get childs  "position"))
+      (parse-surface  (nodeset:get childs  "surface"))
+      ))
+
+  (define (parse-groundpiece lst)
+    (let* ((childs (node:get-childs lst))
+           (pos (parse-position (nodeset:get childs  "position"))))
+        (objectmap-add-object objmap
+                              (parse-surface  (nodeset:get childs  "surface"))
+                              (car pos) (cadr pos) '(groundpiece))))
+
+  (define (parse-worldobj lst)
+    (let ((type (node:get-attr lst "type")))
+      (cond ((string=? type "groundpiece")
+             (parse-groundpiece lst))
+            ((string=? type "hotspot")
+             (parse-hotspot lst)))))
+  
+  (for-each (lambda (node)
+              (let ((name (node:get-name node)))
+                (cond ((string=?  name "worldobj")
+                       (parse-worldobj node))
+                      ((string=?  name "background")
+                       (parse-background node))
+                      )))
             lst))
 
 ;; EOF ;;

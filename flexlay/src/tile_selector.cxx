@@ -89,16 +89,19 @@ TileSelector::mouse_down(const CL_InputEvent& event)
 void
 TileSelector::mouse_move(const CL_InputEvent& event)
 {
-  int x = event.mouse_pos.x/static_cast<int>(tileset->get_tile_size()*scale);
-  int y = (event.mouse_pos.y+offset)/static_cast<int>(tileset->get_tile_size()*scale);
-
-  mouse_over_tile = y * width + x;
-
-  if (scrolling)
+  if (tileset)
     {
-      offset = old_offset + (mouse_pos.y - event.mouse_pos.y);
-      if (offset < 0)
-        offset = 0;
+      int x = event.mouse_pos.x/static_cast<int>(tileset->get_tile_size()*scale);
+      int y = (event.mouse_pos.y+offset)/static_cast<int>(tileset->get_tile_size()*scale);
+
+      mouse_over_tile = y * width + x;
+
+      if (scrolling)
+        {
+          offset = old_offset + (mouse_pos.y - event.mouse_pos.y);
+          if (offset < 0)
+            offset = 0;
+        }
     }
 }
 

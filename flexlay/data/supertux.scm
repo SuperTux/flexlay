@@ -65,6 +65,8 @@
 (define-class <supertux-level> ()
   (name   #:init-value "Hello World"
           #:accessor supertux:name)
+  (author #:init-value ""
+          #:accessor supertux:author)
   ;;  (width  #:init-value 20
   ;;          #:accessor supertux:width)
   ;;  (height #:init-value 15
@@ -203,6 +205,7 @@
                (display   "(supertux-level\n")
 
                (display   "  (version 1)\n")
+               (format #t "  (author ~s)\n" (supertux:author level))
                (format #t "  (name ~s)~%"   (supertux:name level))
                (format #t "  (width  ~a)~%" (editor-tilemap-get-width  (supertux:interactive-tm level)))
                (format #t "  (height ~a)~%" (editor-tilemap-get-height (supertux:interactive-tm level)))
@@ -362,6 +365,7 @@
          (version (get-value-from-tree '(version _) data 0)))
     ;; read in the level metadata
     (set! (supertux:name  level)      (get-value-from-tree '(name _) data 20))
+    (set! (supertux:author level)     (get-value-from-tree '(author _) data ""))
     (set! (supertux:theme level)      (get-value-from-tree '(theme _) data "antarctica"))
     (set! (supertux:music level)      (get-value-from-tree '(music _) data "Mortimers_chipdisko.mod"))
     (set! (supertux:background level) (get-value-from-tree '(background _)   data "arctis.png"))

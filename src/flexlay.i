@@ -39,6 +39,7 @@
 #include "directory_view.hxx"
 #include "menu.hxx"
 #include "menubar.hxx"
+#include "scrollbar.hxx"
 %}
 
 %include "std_string.i"
@@ -77,5 +78,7 @@
 %include "directory_view.hxx"
 %include "menu.hxx"
 %include "menubar.hxx"
+%include "scrollbar.hxx"
+
 
 /* EOF */

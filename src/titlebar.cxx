@@ -20,6 +20,7 @@
 #include <iostream>
 #include <ClanLib/Display/display.h>
 #include <ClanLib/Display/keys.h>
+#include <ClanLib/Display/mouse.h>
 #include "fonts.hxx"
 #include "titlebar.hxx"
 
@@ -99,9 +100,22 @@ TitlebarImpl::on_mouse_move(const CL_InputEvent& event)
 void
 TitlebarImpl::draw()
 {
-  CL_Display::fill_rect(CL_Rect(CL_Point(0, 0),
-                                CL_Size(parent->get_width()-1, parent->get_height())), 
-                        CL_Color(250, 250, 250));
+  // FIXME: Hack should be done via has_mouse_over(), but that doesn't include child components
+  if (parent->get_parent()->get_position().is_inside(CL_Point(CL_Mouse::get_x(), 
+                                                              CL_Mouse::get_y())))
+      //parent->get_parent()->has_mouse_over())
+    {
+      CL_Display::fill_rect(CL_Rect(CL_Point(0, 0),
+                                    CL_Size(parent->get_width()-1, parent->get_height())), 
+                            CL_Color(250, 250, 250));
+    }
+  else
+    {
+      CL_Display::fill_rect(CL_Rect(CL_Point(0, 0),
+                                    CL_Size(parent->get_width()-1, parent->get_height())), 
+                            CL_Color(240, 240, 240));
+    }
+
   Fonts::verdana11.draw(4, 0, title);
 }
                   

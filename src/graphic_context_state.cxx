@@ -21,9 +21,21 @@
 #include <ClanLib/GUI/component.h>
 #include "graphic_context_state.hxx"
 
+GraphicContextState::GraphicContextState()
+  : width(1), height(1), offset(0,0), zoom(1.0f)
+{
+}
+
 GraphicContextState::GraphicContextState(int w, int h)
   : width(w), height(h), offset(0,0), zoom(1.0f)
 {  
+}
+
+void
+GraphicContextState::set_size(int w, int h)
+{
+  width  = w;
+  height = h;
 }
 
 void
@@ -57,7 +69,7 @@ GraphicContextState::set_pos(const CL_Pointf& pos)
 }
 
 CL_Pointf
-GraphicContextState::get_pos()
+GraphicContextState::get_pos() const
 {
   return CL_Pointf(-offset.x + (get_width()/2  / zoom),
                    -offset.y + (get_height()/2  / zoom));

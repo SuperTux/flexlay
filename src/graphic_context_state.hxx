@@ -38,8 +38,10 @@ private:
   float zoom;
 
 public:
-  GraphicContextState() {}
+  GraphicContextState();
   GraphicContextState(int w, int h);
+
+  void set_size(int w, int h);
 
   void push();
   void pop();
@@ -48,11 +50,11 @@ public:
       visible on the screen */
   CL_Rect get_clip_rect();
 
-  int get_width()  { return width; }
-  int get_height() { return height; }
+  int get_width()  const { return width; }
+  int get_height() const { return height; }
 
   void      set_pos(const CL_Pointf& pos);
-  CL_Pointf get_pos();
+  CL_Pointf get_pos() const;
 
   /** Set zoom to z, while preserving the screen position pos at the same point */
   void  set_zoom(CL_Point pos, float z);

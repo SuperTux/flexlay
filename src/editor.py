@@ -64,6 +64,11 @@ gui.push_component(window.get_client_area())
 dirview = DirectoryView(CL_Rect(CL_Point(3, 40), CL_Size(300, 200)), gui.get_component())
 dirview.set_directory("/");
 
+scrollbar = Scrollbar(CL_Rect(CL_Point(370, 5), CL_Size(12, 300)), gui.get_component())
+scrollbar.set_range(50, 150)
+scrollbar.set_pagesize(10)
+scrollbar.set_pos(100)
+
 load_icon    = Icon(CL_Point(34*0+2, 2), make_sprite("../data/images/icons24/stock_open.png"), "Some tooltip", gui.get_component());
 save_icon    = Icon(CL_Point(34*1+2, 2), make_sprite("../data/images/icons24/stock_save.png"), "Some tooltip", gui.get_component());
 save_as_icon = Icon(CL_Point(34*2+2, 2), make_sprite("../data/images/icons24/stock_save_as.png"), "Some tooltip", gui.get_component());

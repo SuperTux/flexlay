@@ -1,143 +1,111 @@
-SUBDIRS = guile collision scripting guistyle input
+SUBDIRS = scripting
+EXTRA_DIST = netpanzer-editor supertux-editor windstille-editor
 
-bindir=$(prefix)/games
+bin_PROGRAMS = flexlay averagecolor
 
-bin_PROGRAMS = windstille
+averagecolor_SOURCES  = averagecolor.cxx
+averagecolor_CPPFLAGS = @EDITOR_CFLAGS@
+averagecolor_LDADD    = @EDITOR_LIBS@
 
-EXTRA_DIST = supertux
+flexlay_CPPFLAGS = -I.. @EDITOR_CFLAGS@
+flexlay_LDADD    = scripting/libeditor_scripting.a @EDITOR_LIBS@
+flexlay_SOURCES  = \
+  command.hxx  \
+  command_group.cxx  \
+  command_group.hxx  \
+  editor.cxx  \
+  editor.hxx  \
+  editor_grid_layer.cxx  \
+  editor_grid_layer.hxx  \
+  editor_main.cxx  \
+  editor_main.hxx  \
+  editor_map.cxx  \
+  editor_map.hxx  \
+  editor_map_component.cxx  \
+  editor_map_component.hxx  \
+  editor_map_layer.hxx  \
+  editor_mapsize_layer.cxx  \
+  editor_mapsize_layer.hxx  \
+  editor_names.hxx  \
+  editor_objmap.cxx  \
+  editor_objmap.hxx  \
+  editor_tilemap.cxx  \
+  editor_tilemap.hxx  \
+  field.hxx  \
+  globals.cxx  \
+  globals.hxx  \
+  graphic_context_state.cxx  \
+  graphic_context_state.hxx  \
+  gui_manager.cxx  \
+  gui_manager.hxx  \
+  math.hxx  \
+  minimap.cxx  \
+  minimap.hxx  \
+  object_add_command.cxx  \
+  object_add_command.hxx  \
+  object_brush.cxx  \
+  object_brush.hxx  \
+  object_delete_command.cxx  \
+  object_delete_command.hxx  \
+  object_move_command.cxx  \
+  object_move_command.hxx  \
+  object_selector.cxx  \
+  object_selector.hxx  \
+  object_transform_command.cxx  \
+  object_transform_command.hxx  \
+  objmap_object.cxx  \
+  objmap_object.hxx  \
+  objmap_select_tool.cxx  \
+  objmap_select_tool.hxx  \
+  objmap_sprite_object.cxx  \
+  objmap_sprite_object.hxx  \
+  paint_command.cxx  \
+  paint_command.hxx  \
+  popup_menu.cxx  \
+  popup_menu.hxx  \
+  scm_functor.cxx  \
+  scm_functor.hxx  \
+  scm_helper.cxx  \
+  scm_helper.hxx  \
+  scm_obj.hxx  \
+  string_converter.hxx  \
+  tile.cxx  \
+  tile.hxx  \
+  tile_brush.cxx  \
+  tile_brush.hxx  \
+  tile_editor.cxx  \
+  tile_editor.hxx  \
+  tile_selection.cxx  \
+  tile_selection.hxx  \
+  tile_selector.cxx  \
+  tile_selector.hxx  \
+  tilemap_diamond_tool.cxx  \
+  tilemap_diamond_tool.hxx  \
+  tilemap_paint_tool.cxx  \
+  tilemap_paint_tool.hxx  \
+  tilemap_select_tool.cxx  \
+  tilemap_select_tool.hxx  \
+  tilemap_tool.cxx  \
+  tilemap_tool.hxx  \
+  tileset.cxx  \
+  tileset.hxx  \
+  tool_manager.cxx  \
+  tool_manager.hxx  \
+  workspace.cxx  \
+  workspace.hxx  \
+  zoom_tool.cxx  \
+  zoom_tool.hxx
 
-windstille_SOURCES = \
-  assert.hxx \
-  animation_obj.cxx \
-  animation_obj.hxx \
-  background.hxx \
-  background.cxx \
-  bomb.hxx \
-  bomb.cxx \
-  brush.hxx \
-  brush.cxx \
-  bonus_flyer.cxx \
-  bonus_flyer.hxx \
-  controller_def.hxx \
-  controller_def.cxx \
-  diamond_map.hxx \
-  diamond_map.cxx \
-  default_shoot.cxx \
-  default_shoot.hxx \
-  dialog_manager.hxx \
-  dialog_manager.cxx \
-  delta_manager.hxx \
-  display.hxx \
-  display.cxx \
-  dog.cxx \
-  dog.hxx \
-  energiebar.hxx \
-  energiebar.cxx \
-  feuerkraft_error.hxx \
-  field.hxx \
-  fonts.hxx \
-  fonts.cxx \
-  guile.hxx \
-  guile.cxx \
-  game_delta.hxx \
-  game_world.cxx \
-  game_world.hxx \
-  gameobj.cxx \
-  gameobj.hxx \
-  globals.hxx \
-  globals.cxx \
-  guile_gameobj.cxx \
-  guile_gameobj.hxx \
-  guile_gameobj_factory.cxx \
-  guile_gameobj_factory.hxx \
-  igel.hxx \
-  igel.cxx \
-  math.hxx \
-  music_manager.hxx \
-  music_manager.cxx \
-  laser_shoot.cxx \
-  laser_shoot.hxx \
-  player.cxx \
-  player.hxx \
-  player_view.cxx \
-  player_view.hxx \
-  power_up.cxx \
-  power_up.hxx \
-  scm_functor.hxx \
-  scm_functor.cxx \
-  scm_helper.cxx \
-  scm_helper.hxx \
-  scmconverter.hxx \
-  sprite.hxx \
-  screen.hxx \
-  screen.cxx \
-  screenshot.hxx \
-  screenshot.cxx \
-  scm_obj.hxx \
-  string_converter.hxx \
-  tile.cxx \
-  tile.hxx \
-  tile_factory.cxx \
-  tile_factory.hxx \
-  tile_map.cxx \
-  tile_map.hxx \
-  trigger.hxx \
-  trigger.cxx \
-  water_map.cxx \
-  water_map.hxx \
-  windstille_bonus.cxx \
-  windstille_bonus.hxx \
-  windstille_game.cxx \
-  windstille_game.hxx \
-  windstille_level.cxx \
-  windstille_level.hxx \
-  windstille_main.cxx \
-  windstille_main.hxx \
-  windstille_menu.hxx \
-  windstille_menu.cxx \
-  windstille_error.hxx \
-  windstille_error.cxx \
-  view.hxx \
-  view.cxx \
-  view_component.hxx \
-  view_component.cxx \
-  water_splash.hxx \
-  water_splash.cxx
-
-windstille_LDADD = \
-  scripting/libwindstille_scripting.a \
-  collision/libwindstille_collision.a \
-  guistyle/libwindstille_guistyle.a \
-  input/libfeuerkraft_input.a \
-  @WINDSTILLE_LIBS@
-
-windstille_CPPFLAGS = \
-  @WINDSTILLE_CFLAGS@
-
-REST_LIBS = \
- -lpthread \
- -lc \
- -lgcc \
- -Wl,-dynamic-linker=/lib/ld-linux.so.2 \
- -Wl,-Bdynamic \
- -lGL
-
-REST_LIBS2 = \
--Wl,-Bdynamic \
--lGL \
--lgcc_s \
--lc
-
+#  tilemap_diamond_tool.hxx tilemap_diamond_tool.cxx 
 STATICBIN_LIBS = \
 -L/usr/X11R6/lib/ \
 -Wl,-Bstatic \
- @WINDSTILLE_LIBS@ \
+ @EDITOR_LIBS@ \
 -lguile \
 -lguile-ltdl \
-$(STATIC_READLINE) \
 -lqthreads \
+$(STATIC_READLINE) \
 -lcrypt \
--lHermes \
 -lvorbis \
 -logg \
 -lmikmod \
@@ -153,17 +121,20 @@ $(STATIC_READLINE) \
 -lGLU \
 -ldl \
 -lX11 \
--lstdc++ \
--lgcc_eh \
-$(REST_LIBS2)
+$(REST_LIBS2) \
+-Wl,-Bdynamic \
+-lGL
 
-static: windstille.static
+flexlay.semistatic: $(flexlay_OBJECTS) $(flexlay_DEPENDENCIES) Makefile
+	$(CXX) -s $(CXXFLAGS)   @EDITOR_CFLAGS@ -o $@ $(flexlay_OBJECTS) \
+         $(flexlay_DEPENDENCIES) -Wl,-Bstatic @EDITOR_LIBS@ -Wl,-Bdynamic \
+          -lguile -L/usr/X11R6/lib/ -lX11 -lGL -lpng -ljpeg -lXxf86vm -lGLU
 
-windstille.static: $(windstille_OBJECTS) $(windstille_DEPENDENCIES) Makefile
-	$(CXX) -s -nodefaultlibs $(CXXFLAGS)   @WINDSTILLE_CFLAGS@ -o $@ $(windstille_OBJECTS) \
-         $(windstille_DEPENDENCIES) $(STATICBIN_LIBS) 
+flexlay.static: $(flexlay_OBJECTS) $(flexlay_DEPENDENCIES) Makefile
+	$(CXX) -s $(CXXFLAGS)   @EDITOR_CFLAGS@ -o $@ $(flexlay_OBJECTS) \
+         $(flexlay_DEPENDENCIES) $(STATICBIN_LIBS) 
 
-windstille.static.comp: windstille.static
+flexlay.static.comp: flexlay.static
 	cp $< $@
 	strip -s $@
 	upx-ucl -q --best $@

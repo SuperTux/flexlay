@@ -17,56 +17,41 @@
 ##  along with this program; if not, write to the Free Software
 ##  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
+#gui/ images/
+
 EXTRA_DIST = \
-  windstille.xml \
-  tiles.scm \
-  tiles.xml \
-  tuxtiles.xml \
-  tuxsprites.xml \
-  game.scm \
   editor.scm \
-  windstille.scm \
-  supertux.scm \
+  gui.scm \
   helper.scm \
+  mknetpanzertiles.sh \
+  netp.act \
+  netpanzer.scm \
+  netpanzerbrushes.scm \
+  netpanzersprites.xml \
+  pingus.scm \
+  supertux.scm \
+  tuxsprites.xml \
+  tuxtiles.scm \
+  tuxtiles.xml \
+  windstille.scm \
+  xml.scm \
+  \
+  images/netpanzersprites/outpost.png \
+  images/netpanzersprites/spawnpoint.png \
+  \
+  gui/checkbox/checked.tga \
+  gui/checkbox/checked_disabled.tga \
+  gui/checkbox/unchecked.tga \
+  gui/checkbox/unchecked_disabled.tga \
+  gui/fonts/font_black.tga \
+  gui/fonts/font_gray.tga \
   gui/gui.xml \
-  gui/*/*.tga \
-  gui/*/*.png \
-  $(wildcard levels/*.scm) \
-  $(wildcard controller/*.scm) \
-  $(wildcard *.scm) \
-  $(wildcard images/*.png images/*.jpg) \
-  $(wildcard images/tiles/*.png) \
-  $(wildcard images/tuxtiles/*.png) \
-  $(wildcard images/tuxsprites/*.png) \
-  $(wildcard images/bonus/*.jpg) \
-  $(wildcard images/diamond/*.png) \
-  $(wildcard images/hero_run/*.png) \
-  $(wildcard images/hero_dead/*.png)
-
-#  $(wildcard music/*.ogg) 
-
-nobase_pkgdata_DATA = $(EXTRA_DIST)
-
-tiles.xml:
-	echo "<resources>" >  $@
-	echo "  <section name=\"tiles\">" >> $@
-	for i in images/tiles/*.png; do \
-		echo "    <sprite name=\""`basename $${i%%.png}`"\">"; \
-		echo "      <image file=\"$$i\" />"; \
-		echo "    </sprite>"; \
-	done  >> $@;
-	echo "  </section>" >> $@
-	echo "</resources>" >> $@
-
-tuxtiles.xml: images/tuxtiles/
-	echo "<resources>" >  $@
-	echo "  <section name=\"tiles\">" >> $@
-	for i in images/tuxtiles/*.png; do \
-		echo "    <sprite name=\""`basename $${i%%.png}`"\">"; \
-		echo "      <image file=\"$$i\" />"; \
-		echo "    </sprite>"; \
-	done  >> $@;
-	echo "  </section>" >> $@
-	echo "</resources>" >> $@
+  gui/menu/arrow.png \
+  gui/menu/checked.png \
+  gui/menu/unchecked.png \
+  gui/radiobutton/checked.tga \
+  gui/radiobutton/checked_disabled.tga \
+  gui/radiobutton/unchecked.tga \
+  gui/radiobutton/unchecked_disabled.tga
 
 # EOF #

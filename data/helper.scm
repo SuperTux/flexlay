@@ -1,3 +1,21 @@
+(use-modules (srfi srfi-13))
+
+(define (directory->list:files-only path)
+  (filter (lambda (el)
+            (equal? (stat:type (stat (string-append path el))) 'regular))
+          (directory->list path)))
+
+(define (directory->list path)
+  (let* ((dir (opendir path))
+	 (lst '()))
+    (let loop ((fobj (readdir dir)))
+      (cond ((not (eof-object? fobj))
+	     (set! lst (cons fobj lst))
+	     (loop (readdir dir)))))
+
+    (closedir dir)
+    (reverse lst)))
+
 (define (seq start end)
   (let loop ((ret '())
              (start start)
@@ -54,6 +72,18 @@
                  (else
                   default
                   ))))))
+
+(define (filename:ext filename)
+  (let ((i (string-index-right filename #\.)))
+    (if (and i (> i 0))
+        (substring filename i)
+        #f))) ;; doesn't have an extension
+
+(define (filename:wo/ext filename)
+  (let ((i (string-index-right filename #\.)))
+    (if (and i (> i 0))
+        (substring filename 0 i) 
+        filename))) ;; filename doesn't have extension
 
 (load "gui.scm")
 

@@ -6,12 +6,11 @@
 
 (define *game* 'netpanzer)
 (define *tile-size* 32)
-(game-set-tilesize 32 16)
 (game-load-resources "netpanzertiles.xml")
 (game-load-resources "netpanzersprites.xml")
-(game-load-tiles     "netpanzertiles.scm")
+(define *tileset* (tileset-create-from-file "netpanzertiles.scm"))
 
-(set-window-title "Windstille Editor - netPanzer Mode")
+(set-window-title "Flexlay - netPanzer Mode")
 
 (display "netPanzer Startup Script: done\n")
 
@@ -31,6 +30,18 @@
   (tilemap   #:init-value #f
              #:init-keyword #:tilemap
              #:accessor npm:tilemap))
+
+(define-method (netpanzer:metadata-editor (npm <netpanzer-map>))
+  (create-property-editor
+   "netPanzer Level Properties"
+   (list (list "id-header:"   'string (npm:id-header npm))
+         (list "Name:"        'string (npm:name npm))
+         (list "Description:" 'string (npm:description npm)))
+
+   (lambda (id-header name description)
+     (set! (npm:id-header npm)   id-header)
+     (set! (npm:name npm)        name)
+     (set! (npm:description npm) description))))
 
 (define (tokenize-input)
   (let ((line   (read-line)))
@@ -88,13 +99,13 @@
 
 (define (netpanzer:new-map width height)
   (let ((levelmap (netpanzer:create-levelmap width height)))
-    (editor-map-component-set-map *editor-map* levelmap)
+    (editor-map-activate levelmap)
     (add-buffer levelmap)))
 
 (define (netpanzer:create-levelmap width height)
   (let* ((levelmap (editor-map-create))
          (objmap   (editor-objmap-create))
-         (tilemap  (editor-tilemap-create 0 width height *tile-size*))
+         (tilemap  (editor-tilemap-create *tileset* width height *tile-size*))
          (npm    (make <netpanzer-map> 
                    #:tilemap     tilemap
                    #:objmap      objmap)))
@@ -116,10 +127,10 @@
   (let* ((file (load-netpanzer-map filename))
          (m           (editor-map-create))
          (objmap      (editor-objmap-create))
-         (tilemap     (NetPanzerFileStruct-tilemap-get file))
-         (id-header   (NetPanzerFileStruct-id-header-get file))
-         (name        (NetPanzerFileStruct-name-get file))
-         (description (NetPanzerFileStruct-description-get file))
+         (tilemap     (netpanzer-get-tilemap file))
+         (id-header   (netpanzer-get-id-header file))
+         (name        (netpanzer-get-name file))
+         (description (netpanzer-get-description file))
          (npm         (make <netpanzer-map> 
                         #:id-header   id-header
                         #:name        name
@@ -167,7 +178,7 @@
   (catch #t
          (lambda ()
            (let ((levelmap (netpanzer:create-level-map-from-file filename)))
-             (editor-map-component-set-map *editor-map* levelmap)
+             (editor-map-activate levelmap)
              (add-buffer levelmap)
              ))
          (lambda args
@@ -176,7 +187,7 @@
 
 (define (netpanzer:save-map filename)
   ;; Save .npm
-  (let* ((levelmap (editor-map-component-get-map *editor-map*))
+  (let* ((levelmap (editor-map-get-current))
          (npm      (editor-map-get-metadata levelmap)))
     (save-netpanzer-map filename
                         levelmap
@@ -192,7 +203,7 @@
          (outposts    '()))
     
     (for-each (lambda (ref)
-                (let ((el (editor-objectmap-get-object ref)))
+                (let ((el (editor-objectmap-get-object (npm:objmap npm) ref)))
                   (case (caaddr el)
                     ((outpost)
                      (set! outposts    (cons el outposts)))
@@ -298,7 +309,7 @@
            (index-box     (gui-create-inputbox 10 330 50 25 (number->string index)))
            (map-component (editor-map-component-create 75 10 730 550))
            (levelmap      (editor-map-create))
-           (tilemap       (editor-tilemap-create 0 0 10 10 32)))
+           (tilemap       (editor-tilemap-create *tileset* 0 10 10 32)))
       
       (set! *tilemap* tilemap)
 
@@ -397,6 +408,7 @@
             (pretty-print objects))))
 
       (editor-map-add-layer levelmap tilemap)
+      ;; FIXME: No longer implemented
       (editor-map-component-set-map map-component levelmap)
 
       (gui-component-on-click update-button   do-update)

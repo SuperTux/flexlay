@@ -1,6 +1,6 @@
 //  $Id: tile.hxx,v 1.6 2003/09/22 18:37:05 grumbel Exp $
 // 
-//  Windstille - A Jump'n Shoot Game
+//  Flexlay - A Generic 2D Game Editor
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
 //
 //  This program is free software; you can redistribute it and/or
@@ -31,6 +31,7 @@ class Tile
 {
 private:
   CL_Sprite sur;
+  CL_PixelBuffer* pixelbuffer;
 
   /** Color used for the minimap to represent this tile */
   CL_Color  color;
@@ -39,19 +40,28 @@ private:
       and such */
   CL_Color  attribute_color;
 
+  std::string filename;
 public:
   int id; 
   unsigned char colmap[8];
-  std::string filename;
 
   /** @param filename Surface to use 
    *  @param arg_colmap a 8 char long array */
   Tile(const std::string& filename, 
        const CL_Color& color, const CL_Color& attribute_color, unsigned char arg_colmap[]);
+  
+  ~Tile();
 
   CL_Sprite& get_sprite();
+
+  /** Return a pixelbuffer associated with this tile, caller must not
+      delete the pixelbuffer, the Tile will take care of that */
+  CL_PixelBuffer* get_pixelbuffer();
+
   CL_Color   get_color();
   CL_Color   get_attribute_color();
+
+  std::string get_filename() const { return filename; }
 
   inline bool get_col(unsigned char x, unsigned char  y)
   {
@@ -69,6 +79,8 @@ public:
     else
       colmap[y] &= ~(1 << (7-x));
   }
+
+  CL_Color calc_color();
 };
 
 #endif

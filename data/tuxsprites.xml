@@ -1,0 +1,28 @@
+<resources>
+  <section name="sprites">
+    <sprite name="jumpy">
+      <image file="images/tuxsprites/jumpy.png" />
+      <translation origin="bottom_center" />
+    </sprite>
+
+    <sprite name="mriceblock">
+      <image file="images/tuxsprites/mriceblock.png" />
+      <translation origin="bottom_center" />
+    </sprite>
+
+    <sprite name="mrbomb">
+      <image file="images/tuxsprites/mrbomb.png" />
+      <translation origin="bottom_center" />
+    </sprite>
+
+    <sprite name="flame">
+      <image file="images/tuxsprites/flame.png" />
+      <translation origin="top_left" />
+    </sprite>
+
+    <sprite name="stalactite">
+      <image file="images/tuxsprites/stalactite.png" />
+      <translation origin="top_center" />
+    </sprite>
+  </section>
+</resources>

@@ -1,0 +1,226 @@
+<resources>
+  <section name="tiles">
+    <sprite name="background1">
+      <image file="images/tuxtiles/background1.png" />
+    </sprite>
+    <sprite name="background2">
+      <image file="images/tuxtiles/background2.png" />
+    </sprite>
+    <sprite name="background3">
+      <image file="images/tuxtiles/background3.png" />
+    </sprite>
+    <sprite name="background4">
+      <image file="images/tuxtiles/background4.png" />
+    </sprite>
+    <sprite name="background5">
+      <image file="images/tuxtiles/background5.png" />
+    </sprite>
+    <sprite name="background6">
+      <image file="images/tuxtiles/background6.png" />
+    </sprite>
+    <sprite name="background7">
+      <image file="images/tuxtiles/background7.png" />
+    </sprite>
+    <sprite name="background8">
+      <image file="images/tuxtiles/background8.png" />
+    </sprite>
+    <sprite name="backgroundtile1">
+      <image file="images/tuxtiles/backgroundtile1.png" />
+    </sprite>
+    <sprite name="backgroundtile2">
+      <image file="images/tuxtiles/backgroundtile2.png" />
+    </sprite>
+    <sprite name="backgroundtile3">
+      <image file="images/tuxtiles/backgroundtile3.png" />
+    </sprite>
+    <sprite name="backgroundtile4">
+      <image file="images/tuxtiles/backgroundtile4.png" />
+    </sprite>
+    <sprite name="backgroundtile5">
+      <image file="images/tuxtiles/backgroundtile5.png" />
+    </sprite>
+    <sprite name="block1">
+      <image file="images/tuxtiles/block1.png" />
+    </sprite>
+    <sprite name="block10">
+      <image file="images/tuxtiles/block10.png" />
+    </sprite>
+    <sprite name="block11">
+      <image file="images/tuxtiles/block11.png" />
+    </sprite>
+    <sprite name="block2">
+      <image file="images/tuxtiles/block2.png" />
+    </sprite>
+    <sprite name="block3">
+      <image file="images/tuxtiles/block3.png" />
+    </sprite>
+    <sprite name="block4">
+      <image file="images/tuxtiles/block4.png" />
+    </sprite>
+    <sprite name="block5">
+      <image file="images/tuxtiles/block5.png" />
+    </sprite>
+    <sprite name="block6">
+      <image file="images/tuxtiles/block6.png" />
+    </sprite>
+    <sprite name="block7">
+      <image file="images/tuxtiles/block7.png" />
+    </sprite>
+    <sprite name="block8">
+      <image file="images/tuxtiles/block8.png" />
+    </sprite>
+    <sprite name="block9">
+      <image file="images/tuxtiles/block9.png" />
+    </sprite>
+    <sprite name="bonus1">
+      <image file="images/tuxtiles/bonus1.png" />
+    </sprite>
+    <sprite name="coin1">
+      <image file="images/tuxtiles/coin1.png" />
+    </sprite>
+    <sprite name="coin2">
+      <image file="images/tuxtiles/coin2.png" />
+    </sprite>
+    <sprite name="coin3">
+      <image file="images/tuxtiles/coin3.png" />
+    </sprite>
+    <sprite name="darksnow1">
+      <image file="images/tuxtiles/darksnow1.png" />
+    </sprite>
+    <sprite name="darksnow10">
+      <image file="images/tuxtiles/darksnow10.png" />
+    </sprite>
+    <sprite name="darksnow11">
+      <image file="images/tuxtiles/darksnow11.png" />
+    </sprite>
+    <sprite name="darksnow12">
+      <image file="images/tuxtiles/darksnow12.png" />
+    </sprite>
+    <sprite name="darksnow2">
+      <image file="images/tuxtiles/darksnow2.png" />
+    </sprite>
+    <sprite name="darksnow3">
+      <image file="images/tuxtiles/darksnow3.png" />
+    </sprite>
+    <sprite name="darksnow4">
+      <image file="images/tuxtiles/darksnow4.png" />
+    </sprite>
+    <sprite name="darksnow5">
+      <image file="images/tuxtiles/darksnow5.png" />
+    </sprite>
+    <sprite name="darksnow6">
+      <image file="images/tuxtiles/darksnow6.png" />
+    </sprite>
+    <sprite name="darksnow7">
+      <image file="images/tuxtiles/darksnow7.png" />
+    </sprite>
+    <sprite name="darksnow8">
+      <image file="images/tuxtiles/darksnow8.png" />
+    </sprite>
+    <sprite name="darksnow9">
+      <image file="images/tuxtiles/darksnow9.png" />
+    </sprite>
+    <sprite name="grey">
+      <image file="images/tuxtiles/grey.png" />
+    </sprite>
+    <sprite name="grey2">
+      <image file="images/tuxtiles/grey2.png" />
+    </sprite>
+    <sprite name="grey3">
+      <image file="images/tuxtiles/grey3.png" />
+    </sprite>
+    <sprite name="grey4">
+      <image file="images/tuxtiles/grey4.png" />
+    </sprite>
+    <sprite name="grey5">
+      <image file="images/tuxtiles/grey5.png" />
+    </sprite>
+    <sprite name="grey6">
+      <image file="images/tuxtiles/grey6.png" />
+    </sprite>
+    <sprite name="notile">
+      <image file="images/tuxtiles/notile.png" />
+    </sprite>
+    <sprite name="pipe1">
+      <image file="images/tuxtiles/pipe1.png" />
+    </sprite>
+    <sprite name="pipe2">
+      <image file="images/tuxtiles/pipe2.png" />
+    </sprite>
+    <sprite name="pipe3">
+      <image file="images/tuxtiles/pipe3.png" />
+    </sprite>
+    <sprite name="pipe4">
+      <image file="images/tuxtiles/pipe4.png" />
+    </sprite>
+    <sprite name="pipe5">
+      <image file="images/tuxtiles/pipe5.png" />
+    </sprite>
+    <sprite name="pipe6">
+      <image file="images/tuxtiles/pipe6.png" />
+    </sprite>
+    <sprite name="pipe7">
+      <image file="images/tuxtiles/pipe7.png" />
+    </sprite>
+    <sprite name="pipe8">
+      <image file="images/tuxtiles/pipe8.png" />
+    </sprite>
+    <sprite name="snow1">
+      <image file="images/tuxtiles/snow1.png" />
+    </sprite>
+    <sprite name="snow10">
+      <image file="images/tuxtiles/snow10.png" />
+    </sprite>
+    <sprite name="snow11">
+      <image file="images/tuxtiles/snow11.png" />
+    </sprite>
+    <sprite name="snow12">
+      <image file="images/tuxtiles/snow12.png" />
+    </sprite>
+    <sprite name="snow13">
+      <image file="images/tuxtiles/snow13.png" />
+    </sprite>
+    <sprite name="snow14">
+      <image file="images/tuxtiles/snow14.png" />
+    </sprite>
+    <sprite name="snow15">
+      <image file="images/tuxtiles/snow15.png" />
+    </sprite>
+    <sprite name="snow16">
+      <image file="images/tuxtiles/snow16.png" />
+    </sprite>
+    <sprite name="snow17">
+      <image file="images/tuxtiles/snow17.png" />
+    </sprite>
+    <sprite name="snow18">
+      <image file="images/tuxtiles/snow18.png" />
+    </sprite>
+    <sprite name="snow19">
+      <image file="images/tuxtiles/snow19.png" />
+    </sprite>
+    <sprite name="snow2">
+      <image file="images/tuxtiles/snow2.png" />
+    </sprite>
+    <sprite name="snow3">
+      <image file="images/tuxtiles/snow3.png" />
+    </sprite>
+    <sprite name="snow4">
+      <image file="images/tuxtiles/snow4.png" />
+    </sprite>
+    <sprite name="snow5">
+      <image file="images/tuxtiles/snow5.png" />
+    </sprite>
+    <sprite name="snow6">
+      <image file="images/tuxtiles/snow6.png" />
+    </sprite>
+    <sprite name="snow7">
+      <image file="images/tuxtiles/snow7.png" />
+    </sprite>
+    <sprite name="snow8">
+      <image file="images/tuxtiles/snow8.png" />
+    </sprite>
+    <sprite name="snow9">
+      <image file="images/tuxtiles/snow9.png" />
+    </sprite>
+  </section>
+</resources>

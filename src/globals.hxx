@@ -1,6 +1,6 @@
 //  $Id: globals.hxx,v 1.11 2003/11/07 13:00:39 grumbel Exp $
 // 
-//  Windstille - A Jump'n Shoot Game
+//  Flexlay - A Generic 2D Game Editor
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
 //
 //  This program is free software; you can redistribute it and/or
@@ -23,12 +23,6 @@
 #include <string>
 #include <ClanLib/Core/Resources/resource_manager.h>
 
-typedef enum { WEST, EAST} Direction;
-
-extern int TILE_SIZE;
-extern int SUBTILE_SIZE;
-extern int SUBTILE_NUM;
-
 /** datadir => /usr/local/share/games/windstille/ */
 extern std::string datadir;
 
@@ -40,11 +34,8 @@ extern std::string homedir;
 
 extern CL_ResourceManager* resources;
 
-extern bool bonus_active;
 extern float game_speed;
-extern bool sound_disabled;
-
-extern int debug;
+extern int   debug;
 
 #endif
 

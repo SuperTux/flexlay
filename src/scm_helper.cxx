@@ -1,6 +1,6 @@
 //  $Id: scm_helper.cxx,v 1.2 2003/08/12 08:24:41 grumbel Exp $
 //
-//  Windstille - A Jump'n Shoot Game
+//  Flexlay - A Generic 2D Game Editor
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
 //
 //  This program is free software; you can redistribute it and/or

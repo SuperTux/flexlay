@@ -1,6 +1,6 @@
-AC_INIT(Windstille, 0.2.0)
+AC_INIT(Flexlay, 0.0.1)
 AC_CONFIG_HEADERS([config.h])
-AC_CONFIG_SRCDIR([src/windstille_main.cxx])
+AC_CONFIG_SRCDIR([src/editor_main.cxx])
 AM_INIT_AUTOMAKE(dist-bzip2)
 
 AC_PROG_CC
@@ -8,6 +8,9 @@ AC_PROG_CXX
 AC_PROG_INSTALL
 AC_PROG_RANLIB
 AC_LANG(C++)
+
+AM_PATH_PYTHON
+AM_CHECK_PYTHON_HEADERS
 
 dnl Checking for libraries
 AC_CHECK_LIB(qthreads, main)
@@ -41,29 +44,6 @@ if test "x$SWIG" = "xnothing-found"; then
    AC_MSG_ERROR([You need Swig - http://www.swig.org to proceed.])
 fi
 
-PKG_CHECK_MODULES(WINDSTILLE,
- [
-  clanCore-0.7           >= $REQUIRED_CLANLIB_VERSION
-  clanApp-0.7            >= $REQUIRED_CLANLIB_VERSION
-  clanDisplay-0.7        >= $REQUIRED_CLANLIB_VERSION
-  clanGL-0.7             >= $REQUIRED_CLANLIB_VERSION
-  clanGUI-0.7            >= $REQUIRED_CLANLIB_VERSION
-  clanGUIStyleSilver-0.7 >= $REQUIRED_CLANLIB_VERSION
-dnl clanSound   >= $REQUIRED_CLANLIB_VERSION
-dnl clanMikMod  >= $REQUIRED_CLANLIB_VERSION
-  clanSound-0.7  >= $REQUIRED_CLANLIB_VERSION
-  clanVorbis-0.7  >= $REQUIRED_CLANLIB_VERSION
-  ],
- [])
-
-AC_SUBST(WINDSTILLE_CFLAGS)
-AC_SUBST(WINDSTILLE_LIBS)
-
-INPUT_CFLAGS=$WINDSTILLE_CFLAGS
-INPUT_LIBS=$WINDSTILLE_LIBS
-AC_SUBST(INPUT_CFLAGS)
-AC_SUBST(INPUT_LIBS)
-
 PKG_CHECK_MODULES(EDITOR,
  [
   clanCore-0.7           >= $REQUIRED_CLANLIB_VERSION
@@ -85,13 +65,7 @@ AC_CONFIG_FILES(
     Makefile
     data/Makefile
     src/Makefile
-    src/collision/Makefile
     src/scripting/Makefile
-    src/input/Makefile
-    src/guile/Makefile
-    src/guistyle/Makefile
-    src/editor/Makefile
-    src/editor/scripting/Makefile
 )
 AC_OUTPUT
 

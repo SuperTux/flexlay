@@ -1,6 +1,6 @@
 //  $Id: globals.cxx,v 1.6 2003/11/07 22:41:18 grumbel Exp $
 //
-//  Pingus - A free Lemmings clone
+//  Flexlay - A Generic 2D Game Editor
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
 //
 //  This program is free software; you can redistribute it and/or
@@ -23,13 +23,6 @@ std::string datadir;
 std::string bindir;
 std::string homedir;
 
-int TILE_SIZE    = 128;
-int SUBTILE_SIZE = 16;
-int SUBTILE_NUM  = (TILE_SIZE/SUBTILE_SIZE);
-
-bool bonus_active = true;
-float game_speed = 1.0f;
-int debug = 0;
-bool sound_disabled = false;
+int  debug = 0;
 
 /* EOF */

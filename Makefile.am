@@ -19,7 +19,7 @@
 
 SUBDIRS = src data
 
-EXTRA_DIST = INSTALL.configure BUGS AUTHORS 
+EXTRA_DIST = TODO
 
 dist-binary: distdir
 	cd src && $(MAKE) windstille.static

@@ -32,11 +32,12 @@ class Tileset
     
     tree.each do |i|
       case i[0]
-        when "tile"
-        data  = i[1..-1]
-        id    = get_value_from_tree(['id', '_'], data, -1)
-        image = get_value_from_tree(['editor-images', '_'], data, false)
-        
+      when "tile"
+        data   = i[1..-1]
+        id     = get_value_from_tree(['id', '_'], data, -1)
+        image  = get_value_from_tree(['editor-images', '_'], data, false)
+        hidden = get_value_from_tree(['hidden', '_'], data, false)
+
         # puts "Loading tile: #{id} => #{image}"
 
         if not(image)
@@ -52,11 +53,14 @@ class Tileset
           end
         end
         
-        if id == 0 then
-          add_tile(id, nil)
-        else
-          add_tile(id, Tile.new(pixelbuffer))
+        if not hidden then
+          if id == 0 then
+            add_tile(id, nil)
+          else
+            add_tile(id, Tile.new(pixelbuffer))
+          end
         end
+
       when "tilegroup"
         data  = i[1..-1]
         name  = get_value_from_tree(['name', '_'], data, "Unnamed")

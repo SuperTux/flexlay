@@ -4180,6 +4180,8 @@ fi
   clanGL-0.7             >= $REQUIRED_CLANLIB_VERSION
   clanGUI-0.7            >= $REQUIRED_CLANLIB_VERSION
   clanGUIStyleSilver-0.7 >= $REQUIRED_CLANLIB_VERSION
+  clanSound-0.7  >= $REQUIRED_CLANLIB_VERSION
+  clanVorbis-0.7  >= $REQUIRED_CLANLIB_VERSION
   " >&5
 echo $ECHO_N "checking for
   clanCore-0.7           >= $REQUIRED_CLANLIB_VERSION
@@ -4188,6 +4190,8 @@ echo $ECHO_N "checking for
   clanGL-0.7             >= $REQUIRED_CLANLIB_VERSION
   clanGUI-0.7            >= $REQUIRED_CLANLIB_VERSION
   clanGUIStyleSilver-0.7 >= $REQUIRED_CLANLIB_VERSION
+  clanSound-0.7  >= $REQUIRED_CLANLIB_VERSION
+  clanVorbis-0.7  >= $REQUIRED_CLANLIB_VERSION
   ... $ECHO_C" >&6
 
         if $PKG_CONFIG --exists "
@@ -4197,6 +4201,8 @@ echo $ECHO_N "checking for
   clanGL-0.7             >= $REQUIRED_CLANLIB_VERSION
   clanGUI-0.7            >= $REQUIRED_CLANLIB_VERSION
   clanGUIStyleSilver-0.7 >= $REQUIRED_CLANLIB_VERSION
+  clanSound-0.7  >= $REQUIRED_CLANLIB_VERSION
+  clanVorbis-0.7  >= $REQUIRED_CLANLIB_VERSION
   " ; then
             echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -4211,6 +4217,8 @@ echo $ECHO_N "checking WINDSTILLE_CFLAGS... $ECHO_C" >&6
   clanGL-0.7             >= $REQUIRED_CLANLIB_VERSION
   clanGUI-0.7            >= $REQUIRED_CLANLIB_VERSION
   clanGUIStyleSilver-0.7 >= $REQUIRED_CLANLIB_VERSION
+  clanSound-0.7  >= $REQUIRED_CLANLIB_VERSION
+  clanVorbis-0.7  >= $REQUIRED_CLANLIB_VERSION
   "`
             echo "$as_me:$LINENO: result: $WINDSTILLE_CFLAGS" >&5
 echo "${ECHO_T}$WINDSTILLE_CFLAGS" >&6
@@ -4224,6 +4232,8 @@ echo $ECHO_N "checking WINDSTILLE_LIBS... $ECHO_C" >&6
   clanGL-0.7             >= $REQUIRED_CLANLIB_VERSION
   clanGUI-0.7            >= $REQUIRED_CLANLIB_VERSION
   clanGUIStyleSilver-0.7 >= $REQUIRED_CLANLIB_VERSION
+  clanSound-0.7  >= $REQUIRED_CLANLIB_VERSION
+  clanVorbis-0.7  >= $REQUIRED_CLANLIB_VERSION
   "`
             echo "$as_me:$LINENO: result: $WINDSTILLE_LIBS" >&5
 echo "${ECHO_T}$WINDSTILLE_LIBS" >&6
@@ -4239,6 +4249,8 @@ echo "${ECHO_T}$WINDSTILLE_LIBS" >&6
   clanGL-0.7             >= $REQUIRED_CLANLIB_VERSION
   clanGUI-0.7            >= $REQUIRED_CLANLIB_VERSION
   clanGUIStyleSilver-0.7 >= $REQUIRED_CLANLIB_VERSION
+  clanSound-0.7  >= $REQUIRED_CLANLIB_VERSION
+  clanVorbis-0.7  >= $REQUIRED_CLANLIB_VERSION
   "`
             echo $WINDSTILLE_PKG_ERRORS
         fi
@@ -4261,6 +4273,8 @@ echo "${ECHO_T}$WINDSTILLE_LIBS" >&6
   clanGL-0.7             >= $REQUIRED_CLANLIB_VERSION
   clanGUI-0.7            >= $REQUIRED_CLANLIB_VERSION
   clanGUIStyleSilver-0.7 >= $REQUIRED_CLANLIB_VERSION
+  clanSound-0.7  >= $REQUIRED_CLANLIB_VERSION
+  clanVorbis-0.7  >= $REQUIRED_CLANLIB_VERSION
   ) not met; consider adjusting the PKG_CONFIG_PATH environment variable if your libraries are in a nonstandard prefix so pkg-config can find them." >&5
 echo "$as_me: error: Library requirements (
   clanCore-0.7           >= $REQUIRED_CLANLIB_VERSION
@@ -4269,6 +4283,8 @@ echo "$as_me: error: Library requirements (
   clanGL-0.7             >= $REQUIRED_CLANLIB_VERSION
   clanGUI-0.7            >= $REQUIRED_CLANLIB_VERSION
   clanGUIStyleSilver-0.7 >= $REQUIRED_CLANLIB_VERSION
+  clanSound-0.7  >= $REQUIRED_CLANLIB_VERSION
+  clanVorbis-0.7  >= $REQUIRED_CLANLIB_VERSION
   ) not met; consider adjusting the PKG_CONFIG_PATH environment variable if your libraries are in a nonstandard prefix so pkg-config can find them." >&2;}
    { (exit 1); exit 1; }; }
   fi

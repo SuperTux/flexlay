@@ -29,7 +29,6 @@
 #include <fstream>
 #include "../scm_functor.hxx"
 #include "../globals.hxx"
-#include "../windstille_game.hxx"
 #include "../scm_obj.hxx"
 #include "../string_converter.hxx"
 #include "editor/editor.hxx"

@@ -54,4 +54,10 @@ ObjectAddCommand::redo()
   execute();
 }
 
+std::string
+ObjectAddCommand::serialize()
+{
+  return "";
+}
+
 /* EOF */

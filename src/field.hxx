@@ -44,6 +44,11 @@ public:
   {
   }
 
+  Field(const Field<T>& copy)
+    : width(copy.width), height(copy.height), vec(copy.vec)
+  {
+  }
+
   /** Creates a new field out of a subsection from an already excisting one 
    *  @param pos_x The position of the old field in the new resized one
    *  @param pos_y The position of the old field in the new resized one */
@@ -59,6 +64,17 @@ public:
     for(int y = start_y; y < end_y; ++y)
       for(int x = start_x; x < end_x; ++x)
         at(pos_x + x, pos_y + y) = arg_field.at(x, y);
+  }
+
+  Field<T>& operator=(const Field<T>& copy)
+  {
+    if (this != &copy)
+      {
+        width  = copy.width;
+        height = copy.height;
+        vec    = copy.vec;
+      }
+    return *this;
   }
 
   const T& operator[] (int i) const {
@@ -82,7 +98,7 @@ public:
   }
   
   inline const T& at (int x, int y) const {
-    return (*this) (x, y);
+    return vec [width*y + x];
   }
 
   inline T& at (int x, int y) {

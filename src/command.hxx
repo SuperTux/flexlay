@@ -20,6 +20,8 @@
 #ifndef HEADER_COMMAND_HXX
 #define HEADER_COMMAND_HXX
 
+#include <iosfwd>
+
 /** Command is an abstract base class for all data manipulating
     operations on EditorLayer or even EditorMap metedata. Each Command
     that manipulates data must provide a way to undo and redo the
@@ -37,6 +39,8 @@ public:
 
   /** Undo the effects caused by execute() */
   virtual void undo() =0;
+
+  virtual std::string serialize() =0;
 };
 
 #endif

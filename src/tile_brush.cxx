@@ -28,13 +28,13 @@ TileBrush::TileBrush()
 }
 
 TileBrush::TileBrush(const Field<int>& f, int w, int h, int pos_x, int pos_y)
-  : Field<int>(f, w, h, pos_x, pos_y)
+  : data(f, w, h, pos_x, pos_y)
 {
   opaque = false;
 }
 
 TileBrush::TileBrush(int w, int h)
-  : Field<int>(w, h)
+  : data(w, h)
 {
   opaque = false;
 }

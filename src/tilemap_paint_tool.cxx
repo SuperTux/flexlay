@@ -78,7 +78,7 @@ TileMapPaintTool::draw()
       for(int y = 0; y < brush.get_height(); ++y)
         for(int x = 0; x < brush.get_width(); ++x)
           {
-            Tile* tile = Tileset::current()->create(brush(x, y));
+            Tile* tile = Tileset::current()->create(brush.at(x, y));
                 
             if (tile)
               {
@@ -127,10 +127,8 @@ TileMapPaintTool::on_mouse_down(const CL_InputEvent& event)
             case CL_MOUSE_LEFT:
               mode = PAINTING;
               parent->capture_mouse();
-              command = new PaintCommand(tilemap->get_field(), brush);
+              command = new PaintCommand(tilemap, brush);
               command->add_point(pos);
-
-              tilemap->draw_tile(brush, pos);
               last_draw = pos;
               break;
     
@@ -163,7 +161,6 @@ TileMapPaintTool::on_mouse_move(const CL_InputEvent& event)
           if (current_tile != last_draw)
             {
               command->add_point(current_tile);
-              tilemap->draw_tile(brush, current_tile);
               last_draw = current_tile;
             }
           break;

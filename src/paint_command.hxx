@@ -38,6 +38,7 @@ private:
   typedef std::vector<CL_Point> Points;
   Points points;
   
+  EditorTileMap* tilemap;
   Field<int>* field;
   TileBrush   brush;
   Field<int>  undo_field;
@@ -47,7 +48,7 @@ private:
   TileBrush*  undo_brush;
   
 public:
-  PaintCommand(Field<int>* f, const TileBrush& b);
+  PaintCommand(Field<int>* f,    const TileBrush& b);
   PaintCommand(EditorTileMap* t, const TileBrush& b);
   virtual ~PaintCommand();
   
@@ -57,6 +58,8 @@ public:
   
   void redo();
   void undo();
+
+  std::string serialize();
 };
 
 #endif

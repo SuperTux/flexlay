@@ -194,7 +194,7 @@ editor_set_brush_tile(int i)
   TileBrush brush(1, 1);
 
   brush.set_opaque();
-  brush(0, 0) = i;
+  brush.at(0, 0) = i;
 
   TileMapPaintTool::current()->set_brush(brush);
 }
@@ -512,7 +512,7 @@ editor_get_brush_tile()
   // FIXME: replace this with a tile selector widget in the tile editor
   const TileBrush& brush = TileMapPaintTool::current()->get_brush();
   if (brush.get_width() > 0 && brush.get_height() > 0)
-    return brush(0, 0);
+    return brush.at(0, 0);
   else
     return 0;
 }

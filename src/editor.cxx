@@ -73,6 +73,9 @@ Editor::execute(Command* command)
   redo_stack.clear();
 
   command->execute();
+
+  //std::cout << command->serialize() << std::endl;
+
   undo_stack.push_back(command);
 }
 

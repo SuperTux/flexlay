@@ -63,7 +63,7 @@ TileSelector::mouse_down(const CL_InputEvent& event)
       TileBrush brush(1, 1);
 
       brush.set_opaque();
-      brush(0, 0) = mouse_over_tile;
+      brush.at(0, 0) = mouse_over_tile;
 
       TileMapPaintTool::current()->set_brush(brush);
     }
@@ -135,7 +135,8 @@ TileSelector::draw()
           CL_Display::draw_rect(rect, CL_Color(0,0,0,128));
         }
 
-      if (int(TileMapPaintTool::current()->get_brush().size()) == 1
+      if (TileMapPaintTool::current()->get_brush().get_width() == 1
+          && TileMapPaintTool::current()->get_brush().get_height() == 1
           && TileMapPaintTool::current()->get_brush().at(0, 0) == i)
         {
           CL_Display::fill_rect(rect,

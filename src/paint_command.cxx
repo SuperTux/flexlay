@@ -19,14 +19,15 @@
 
 #include <assert.h>
 #include <iostream>
+#include <sstream>
 #include <ClanLib/Core/core_iostream.h>
 #include <ClanLib/Core/Math/rect.h>
 #include "editor_tilemap.hxx"
 #include "paint_command.hxx"
 
 PaintCommand::PaintCommand(EditorTileMap* t, const TileBrush& b)
-  : field(t->get_map()), brush(b)
-{
+  : tilemap(t), field(t->get_map()), brush(b)
+{  
   undo_field = *field;
 
   redo_brush = 0;
@@ -34,7 +35,7 @@ PaintCommand::PaintCommand(EditorTileMap* t, const TileBrush& b)
 }
 
 PaintCommand::PaintCommand(Field<int>* f, const TileBrush& b)
-  : field(f), brush(b)
+  : tilemap(0), field(f), brush(b)
 {  
   undo_field = *field;
 
@@ -52,6 +53,8 @@ void
 PaintCommand::add_point(const CL_Point& pos)
 {
   points.push_back(pos);
+  if (tilemap)
+    tilemap->draw_tile(brush, pos);
 }
 
 void
@@ -95,6 +98,21 @@ void
 PaintCommand::undo()
 {
   EditorTileMap::draw_tile(field, *undo_brush, pos);
+}
+
+std::string
+PaintCommand::serialize()
+{
+  std::stringstream s;
+
+  s << "_ = PaintCommand(" << tilemap << ", " << &brush << ")" << std::endl;
+  for(Points::iterator i = points.begin(); i != points.end(); ++i)
+    {
+      s << "_.add_paint(" << i->x << ", " << i->y << ")"  << std::endl;
+    }
+  s << "_ = None" << std::endl;
+
+  return s.str();
 }
 
 /* EOF */

@@ -86,4 +86,10 @@ ObjectMoveCommand::undo()
     }
 }
 
+std::string
+ObjectMoveCommand::serialize()
+{
+  return "";
+}
+
 /* EOF */

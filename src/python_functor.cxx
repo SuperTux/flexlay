@@ -55,15 +55,18 @@ PythonFunctor::operator=(const PythonFunctor& copy)
 void
 PythonFunctor::operator()()
 {
-  PyObject* arglist = PyTuple_New(0);
-  if (PyEval_CallObject(obj,  arglist) == 0)
+  if (obj)
     {
-      if (PyErr_Occurred())
+      PyObject* arglist = PyTuple_New(0);
+      if (PyEval_CallObject(obj,  arglist) == 0)
         {
-          PyErr_Print();
+          if (PyErr_Occurred())
+            {
+              PyErr_Print();
+            }
         }
+      Py_DECREF(arglist);
     }
-  Py_DECREF(arglist);
 }
 
 /* EOF */

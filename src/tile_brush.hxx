@@ -23,12 +23,11 @@
 #include "field.hxx"
 
 /** */
-class TileBrush 
-#ifndef SWIGPYTHON
-  : public Field<int>
-#endif
+class TileBrush
 {
 private:
+  Field<int> data;
+
   /** if true transparent tiles are drawn the same as opaque tiles, ie
       erasing tiles formaly on the map and replacing them. If false
       transparent tiles are not drawn at all, thus letting the old
@@ -38,10 +37,15 @@ private:
 public:
   TileBrush();
   TileBrush(int w, int h);
-
-#ifndef SWIGPYTHON
   TileBrush(const Field<int>& f, int w, int h, int pos_x, int pos_y);
-#endif
+
+  int get_width() const  { return data.get_width(); }
+  int get_height() const { return data.get_height(); }
+
+  const int& at(int x, int y) const { return data.at(x, y); }
+  int& at(int x, int y) { return data.at(x, y); }
+
+  void resize(int w, int h, int pos_x = 0, int pos_y = 0) { data.resize(w, h, pos_x, pos_y); }
 
   void set_opaque() { opaque = true; }
   void set_transparent() { opaque = false; }

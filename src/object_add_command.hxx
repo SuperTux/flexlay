@@ -44,6 +44,8 @@ public:
   void execute();
   void undo();
   void redo();
+
+  std::string serialize();
 };
 
 #endif

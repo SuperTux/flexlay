@@ -22,7 +22,6 @@
 (game-add-igel 2568 788)
 (game-add-igel 3038 733)
 (game-add-igel 2503 2128)
-(game-add-igel 3000 2043)
 (game-add-igel 3136 2357)
 (game-add-igel 3431 2360)
 (game-add-igel 3748 2411)

@@ -54,7 +54,7 @@ int main()
   EditorMapComponent editor_map(CL_Rect(0, 0, 799, 599), gui->get_component());
   Workspace workspace(799, 599);
   editor_map.set_workspace(workspace);
-  workspace.set_current_map(m);
+  workspace.set_map(m);
  
   new CL_Button(CL_Rect(CL_Point(50, 150), 
                         CL_Size(100, 25)),

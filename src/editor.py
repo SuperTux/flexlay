@@ -17,6 +17,7 @@
 ##  along with this program; if not, write to the Free Software
 ##  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
+import sys
 from flexlay import *
 from supertux import *
 
@@ -32,7 +33,7 @@ workspace  = Workspace(myrect.get_width(), myrect.get_height())
 editor_map.set_workspace(workspace)
 
 m = EditorMap()
-workspace.set_current_map(m)
+workspace.set_map(m)
 
 tileset = load_supertux_tiles()
 tilemap = TilemapLayer(tileset, 200, 15)
@@ -53,7 +54,7 @@ def draw_something():
     _.add_point(CL_Point(2,2))
     _.add_point(CL_Point(3,3))
     _.add_point(CL_Point(4,4))
-    _.execute()
+    m.execute(_.to_command())
     print "Draw something done"
 
 window = Window(CL_Rect(50, 50, 450, 400), "My Window", gui.get_component())
@@ -101,8 +102,8 @@ paste_icon   = Icon(CL_Point(32*4.1+2, 2), make_sprite("../data/images/icons24/s
 undo_icon = Icon(CL_Point(32*5.1+2, 2), make_sprite("../data/images/icons24/stock_undo.png"), "Some tooltip", willow);
 redo_icon = Icon(CL_Point(32*6.1+2, 2), make_sprite("../data/images/icons24/stock_redo.png"), "Some tooltip", willow);
 
-undo_icon.set_callback(do_something)
-redo_icon.set_callback(do_something)
+undo_icon.set_callback(m.undo)
+redo_icon.set_callback(m.redo)
 
 toolbar = Panel(CL_Rect(CL_Point(0, 23+33), CL_Size(33, 256)), gui.get_component())
 

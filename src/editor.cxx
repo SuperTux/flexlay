@@ -24,7 +24,6 @@
 #include <ClanLib/guistylesilver.h>
 
 #include "gui_manager.hxx"
-#include "command.hxx"
 #include "editor.hxx"
 #include "editor_map.hxx"
 #include "tile_selector.hxx"
@@ -56,42 +55,6 @@ Editor::run()
   std::cout << "Starting GUI manager busy loop..." << std::endl;
   manager->run();
   std::cout << "Starting GUI manager busy loop... done" << std::endl;
-}
-
-void
-Editor::execute(Command command)
-{
-  redo_stack.clear();
-
-  command.execute();
-
-  //std::cout << command->serialize() << std::endl;
-
-  undo_stack.push_back(command);
-}
-
-void
-Editor::undo()
-{
-  if (!undo_stack.empty())
-    {
-      Command command = undo_stack.back();
-      undo_stack.pop_back();
-      command.undo();
-      redo_stack.push_back(command);
-    }
-}
-
-void
-Editor::redo()
-{
-  if (!redo_stack.empty())
-    {
-      Command command = redo_stack.back();
-      redo_stack.pop_back();
-      command.redo();
-      undo_stack.push_back(command);
-    }
 }
 
 /* EOF */

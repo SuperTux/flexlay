@@ -182,7 +182,7 @@ TileMapPaintTool::on_mouse_up  (const CL_InputEvent& event)
 {
   if (!tilemap.is_null())
     {
-      EditorMapComponent::current()->get_workspace().get_current_map().modify();
+      EditorMapComponent::current()->get_workspace().get_map().modify();
 
       EditorMapComponent* parent = EditorMapComponent::current();
       CL_Point pos = tilemap.world2tile(parent->screen2world(event.mouse_pos));
@@ -196,7 +196,7 @@ TileMapPaintTool::on_mouse_up  (const CL_InputEvent& event)
               mode = NONE;
 
               command->add_point(pos);
-              Editor::current()->execute(command->to_command());
+              Workspace::current().get_map().execute(command->to_command());
               command = 0;
 
               tilemap.draw_tile(brush, pos);

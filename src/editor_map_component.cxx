@@ -97,11 +97,11 @@ void
 EditorMapComponent::draw ()
 {
   // Update scrollbars (FIXME: move me to function)
-  scrollbar_v->set_range(0, workspace.get_current_map().get_bounding_rect().get_height());
+  scrollbar_v->set_range(0, workspace.get_map().get_bounding_rect().get_height());
   scrollbar_v->set_pagesize(get_height()/workspace.get_gc_state().get_zoom());
   scrollbar_v->set_pos(workspace.get_gc_state().get_pos().y);
 
-  scrollbar_h->set_range(0, workspace.get_current_map().get_bounding_rect().get_width());
+  scrollbar_h->set_range(0, workspace.get_map().get_bounding_rect().get_width());
   scrollbar_h->set_pagesize(get_width()/workspace.get_gc_state().get_zoom());
   scrollbar_h->set_pos(workspace.get_gc_state().get_pos().x);
 

@@ -31,11 +31,12 @@ class WorkspaceImpl;
 class Workspace
 {
 private:
-  static Workspace* current_;
+  static Workspace current_;
 public:
-  static void set_current(Workspace* w) { current_ = w; }
-  static Workspace* current() { return current_; }
+  static void set_current(Workspace w) { current_ = w; }
+  static Workspace current() { return current_; }
 
+  Workspace();
   Workspace(int w, int h);
 
   void draw();
@@ -44,8 +45,8 @@ public:
   void mouse_down(const CL_InputEvent& event);
   void mouse_move(const CL_InputEvent& event);
 
-  EditorMap get_current_map();
-  void set_current_map(EditorMap m);
+  EditorMap get_map();
+  void set_map(EditorMap m);
 
   GraphicContextState& get_gc_state();
 

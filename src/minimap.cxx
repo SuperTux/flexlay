@@ -64,12 +64,12 @@ void
 Minimap::draw()
 {
   // FIXME: Do this only on map changes
-  if (impl->last_serial != impl->parent->get_workspace().get_current_map().get_serial())
-    //      || editor_map != parent->get_workspace().get_current_map())
+  if (impl->last_serial != impl->parent->get_workspace().get_map().get_serial())
+    //      || editor_map != parent->get_workspace().get_map())
     {
       impl->update_minimap_surface();
-      impl->last_serial = impl->parent->get_workspace().get_current_map().get_serial();
-      impl->editor_map  = impl->parent->get_workspace().get_current_map();
+      impl->last_serial = impl->parent->get_workspace().get_map().get_serial();
+      impl->editor_map  = impl->parent->get_workspace().get_map();
     }
 
   if (0)

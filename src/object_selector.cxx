@@ -87,7 +87,7 @@ ObjectSelector::mouse_up(const CL_InputEvent& event)
                                            drag_obj.data, 
                                            drag_obj.sprite);
                 ObjectAddCommand command(objmap, obj);
-                Editor::current()->execute(command.to_command());
+                Workspace::current().get_map().execute(command.to_command());
               }
             drag_obj.sprite = CL_Sprite();
           }

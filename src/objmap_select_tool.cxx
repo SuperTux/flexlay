@@ -83,7 +83,7 @@ ObjMapSelectTool::on_mouse_up(const CL_InputEvent& event)
         case DRAG:
           if (move_command)
             {
-              Editor::current()->execute(move_command->to_command());
+              Workspace::current().get_map().execute(move_command->to_command());
               move_command = 0;
             }
           state = NONE;

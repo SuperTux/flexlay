@@ -29,7 +29,7 @@
 #include "tool_manager.hxx"
 #include "workspace.hxx"
 
-Workspace* Workspace::current_ = 0;
+Workspace Workspace::current_;
 
 class WorkspaceImpl
 {
@@ -45,10 +45,14 @@ public:
   EditorMap editor_map;
 };
 
+Workspace::Workspace()
+{
+}
+
 Workspace::Workspace(int w, int h)
   : impl(new WorkspaceImpl())
 {
-  current_ = this;
+  current_ = *this;
 
   impl->gc_state  = GraphicContextState(w, h);
   impl->scrolling = false;
@@ -137,13 +141,13 @@ Workspace::mouse_down(const CL_InputEvent& event)
 }
 
 EditorMap
-Workspace::get_current_map()
+Workspace::get_map()
 {
   return impl->editor_map;
 }
 
 void
-Workspace::set_current_map(EditorMap m)
+Workspace::set_map(EditorMap m)
 {
   impl->editor_map = m;
 }

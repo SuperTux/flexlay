@@ -28,7 +28,9 @@
 #include "object_layer.hxx"
 #include "tilemap_layer.hxx"
 #include "layer.hxx"
+#include "command.hxx"
 
+class Command;
 class EditorMapComponent;
 class EditorMapImpl;
 class TileMapTool;
@@ -60,6 +62,16 @@ public:
 
   void set_background_color(const CL_Color& color);
 
+  /** Execute a command and place it on the undo stack, commands given
+      to this function will be deleted by the Editor class, so they
+      have to be new'ed */
+  void execute(Command command);
+
+  /** Move backward in the undo stack */
+  void undo();
+
+  /** Move forward in the undo stack */
+  void redo();
 private:
   CL_SharedPtr<EditorMapImpl> impl;
 };

@@ -44,6 +44,11 @@ public:
 
   /** Metadata attached to this map (ie. mapname, description, scripts, etc.) */
   MetaData metadata;
+
+  typedef std::vector<Command> Commands;
+
+  Commands undo_stack;
+  Commands redo_stack;
 };
 
 EditorMap::EditorMap()
@@ -157,6 +162,38 @@ void
 EditorMap::set_background_color(const CL_Color& color)
 {
  impl-> background_color = color;
+}
+
+void
+EditorMap::execute(Command command)
+{
+  impl->redo_stack.clear();
+  command.execute();
+  impl->undo_stack.push_back(command);
+}
+
+void
+EditorMap::undo()
+{
+  if (!impl->undo_stack.empty())
+    {
+      Command command = impl->undo_stack.back();
+      impl->undo_stack.pop_back();
+      command.undo();
+      impl->redo_stack.push_back(command);
+    }
+}
+
+void
+EditorMap::redo()
+{
+  if (!impl->redo_stack.empty())
+    {
+      Command command = impl->redo_stack.back();
+      impl->redo_stack.pop_back();
+      command.redo();
+      impl->undo_stack.push_back(command);
+    }
 }
 
 /* EOF */

@@ -8,6 +8,7 @@ class Level
     @theme    = "antarctica"
     @time     = 999 
     @filename = nil
+    @music    = ""
     @version  = 2
 
     if params.length() == 2 then

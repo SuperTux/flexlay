@@ -12,9 +12,10 @@ class Sector
   foreground  = nil
   
   objects   = nil
+  sketch    = nil
   editormap = nil
 
-  attr_reader   :objects, :background, :interactive, :foreground, :parent, :width, :height
+  attr_reader   :sketch, :objects, :background, :interactive, :foreground, :parent, :width, :height
   attr_accessor :name, :song, :gravity
   
   def initialize(parent)
@@ -45,12 +46,14 @@ class Sector
     @interactive = TilemapLayer.new($tileset, @width, @height)
     @background  = TilemapLayer.new($tileset, @width, @height)       
     @objects = ObjectLayer.new()
+    @sketch  = SketchLayer.new()
 
     @editormap = EditorMap.new()
     @editormap.add_layer(@background.to_layer())
     @editormap.add_layer(@interactive.to_layer())
     @editormap.add_layer(@objects.to_layer())
     @editormap.add_layer(@foreground.to_layer())
+    @editormap.add_layer(@sketch.to_layer())
     # FIXME: Data might not get freed since its 'recursively' refcounted
     @editormap.set_metadata(self)
     return self
@@ -124,6 +127,7 @@ class Sector
     @foreground  = nil
     
     @objects = ObjectLayer.new()
+    @sketch = SketchLayer.new()
 
     for i in data
       (name,data) = i[0], i[1..-1]
@@ -179,7 +183,7 @@ class Sector
     @editormap.add_layer(@interactive.to_layer()) if @interactive
     @editormap.add_layer(@foreground.to_layer()) if @foreground
     @editormap.add_layer(@objects.to_layer())
-    
+    @editormap.add_layer(@sketch.to_layer())
     @editormap.set_metadata(self)
   end
 

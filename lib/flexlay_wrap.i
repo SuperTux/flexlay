@@ -42,6 +42,9 @@
 #include "scrollbar.hxx"
 #include "graphic_context_state.hxx"
 
+#include "sketch_stroke_tool.hxx"
+#include "sketch_layer.hxx"
+
 #include "tilemap_paint_tool.hxx"
 #include "tilemap_select_tool.hxx"
 #include "objmap_select_tool.hxx"
@@ -125,6 +128,10 @@ VALUE CL_Point2Value(const CL_Point& arg)
 %include "menu.hxx"
 %include "menubar.hxx"
 %include "scrollbar.hxx"
+
+%include "sketch_stroke_tool.hxx"
+%include "sketch_layer.hxx"
+
 %include "tilemap_paint_tool.hxx"
 %include "tilemap_select_tool.hxx"
 %include "objmap_select_tool.hxx"

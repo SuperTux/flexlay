@@ -56,6 +56,7 @@ $tilemap_paint_tool  = TileMapPaintTool.new()
 $tilemap_select_tool = TileMapSelectTool.new()
 $zoom_tool           = ZoomTool.new()
 $objmap_select_tool  = ObjMapSelectTool.new()
+$sketch_stroke_tool  = SketchStrokeTool.new()
 
 $mysprite = make_sprite("../data/images/icons16/stock_paste-16.png")
 

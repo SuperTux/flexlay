@@ -63,7 +63,7 @@ class SuperTuxGUI
     @layer_menu.add_item($mysprite, "Show only current", proc{ gui_show_only_current() })
 
     # FIXME: Use ButtonPanel here instead
-    @toolbar = Panel.new(CL_Rect.new(CL_Point.new(0, 23+33), CL_Size.new(33, 32*4+2)), @gui.get_component())
+    @toolbar = Panel.new(CL_Rect.new(CL_Point.new(0, 23+33), CL_Size.new(33, 32*5+2)), @gui.get_component())
 
     @paint = Icon.new(CL_Rect.new(CL_Point.new(2, 32*0+2), CL_Size.new(32, 32)), make_sprite("../data/images/tools/stock-tool-pencil-22.png"), "Some tooltip", @toolbar);
     @paint.set_callback(proc{ set_tilemap_paint_tool() })
@@ -76,6 +76,9 @@ class SuperTuxGUI
 
     @object = Icon.new(CL_Rect.new(CL_Point.new(2, 32*3+2), CL_Size.new(32,32)), make_sprite("../data/images/tools/stock-tool-clone-22.png"), "Some tooltip", @toolbar);
     @object.set_callback(proc{ set_objmap_select_tool() })
+
+    @stroke = Icon.new(CL_Rect.new(CL_Point.new(2, 32*4+2), CL_Size.new(32,32)), make_sprite("../data/images/tools/stock-tool-pencil-22.png"), "Some tooltip", @toolbar);
+    @stroke.set_callback(proc{ set_sketch_stroke_tool() })
 
     create_menu()
 
@@ -259,6 +262,15 @@ class SuperTuxGUI
     @select.set_up()
     @zoom.set_down()
     @object.set_up()
+    show_none()
+  end
+
+  def set_sketch_stroke_tool()
+    @workspace.set_tool($sketch_stroke_tool.to_tool())
+    @paint.set_up()
+    @select.set_up()
+    @zoom.set_up()
+    @object.set_down()
     show_none()
   end
 

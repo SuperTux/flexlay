@@ -91,6 +91,8 @@ flexlay_lib = libflexlay_env.SharedLibrary(
     'menubar.cxx',
     'popup_menu.cxx',
     'lispreader.cxx',
+    'sketch_layer.cxx',
+    'sketch_stroke_tool.cxx',
     'scrollbar.cxx',
     'tile.cxx',
     'titlebar.cxx',

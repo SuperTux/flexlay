@@ -7,7 +7,6 @@ ToDo:
  - turn proc{} into blocks
  - get rid of 'mysprite'
  - scrollbar in tileselector
- - object properties
  - gui and some magic to set the supertux datadir
  - paralax layers
  - doors/sector support needs improvement
@@ -19,8 +18,11 @@ ToDo:
  - faster tile-loading (load on demand, pixelbuffer cache)
  - make controlpoints unzoomable
  - fix load/save and write a few testcases for them
- - load via command line needs to be handled differently, since it
-   needs GUI to work
+ - seperate undoable functions from not undoable ones
+ - provide feature to group/suspend undo/redo
+ - objects need to have visible text-lables attached to them (name of
+   spawnpoints, etc.)
+ - sexpr based config file, no evil eval games
 
 New Object Types:
 =================

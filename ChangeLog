@@ -1,728 +1,744 @@
-2003-08-12 21:30  grumbel
+------------------------------------------------------------------------
+r147 | grumbel | 2004-01-10 03:19:28 +0100 (Sat, 10 Jan 2004) | 1 line
 
-	* COPYING: - cleanup
 
-2003-08-12 21:24  grumbel
+------------------------------------------------------------------------
+r146 | grumbel | 2003-12-11 14:13:29 +0100 (Thu, 11 Dec 2003) | 2 lines
 
-	* data/tiles.scm, doc/levelmapformat.xml, doc/metatiles.xml,
-	src/game_world.cxx, src/player.cxx, src/player.hxx,
-	src/power_up.cxx, src/tile_factory.cxx, src/tile_map.cxx,
-	src/windstille_game.cxx, src/windstille_level.cxx,
-	src/windstille_main.cxx, src/guile/windstille.scm: - cleanup
+- fixed frame counter
 
-2003-08-12 21:07  grumbel
+------------------------------------------------------------------------
+r145 | grumbel | 2003-12-11 14:03:34 +0100 (Thu, 11 Dec 2003) | 1 line
 
-	* data/images/turrican_jump_east.png,
-	data/images/turrican_jump_west.png, data/images/turrican_roll.png,
-	data/images/turrican_sit.png, data/images/turrican_stand_east.png,
-	data/images/turrican_stand_west.png,
-	data/images/turrican_surround.png,
-	data/images/turrican_walk_east.png,
-	data/images/turrican_walk_west.png, INSTALL, INSTALL.configure,
-	Makefile.am, data/images/.cvsignore: - cleanup
+- added input/ to configure
+------------------------------------------------------------------------
+r144 | grumbel | 2003-12-11 13:59:21 +0100 (Thu, 11 Dec 2003) | 1 line
 
-2003-08-12 21:04  grumbel
+- added input recording and video recording
+------------------------------------------------------------------------
+r143 | grumbel | 2003-12-05 21:57:30 +0100 (Fri, 05 Dec 2003) | 1 line
 
-	* data/: images/bonusflyer.png, images/nebular.png,
-	images/shoot_default.png, images/sprite_jump_east.png,
-	images/sprite_jump_west.png, images/tiles/level1/green1.png,
-	images/tiles/level1/tile1.png, images/tiles/level1/tile10.png,
-	images/tiles/level1/tile11.png, images/tiles/level1/tile12.png,
-	images/tiles/level1/tile13.png, images/tiles/level1/tile14.png,
-	images/tiles/level1/tile15.png, images/tiles/level1/tile16.png,
-	images/tiles/level1/tile17.png, images/tiles/level1/tile18.png,
-	images/tiles/level1/tile19.png, images/tiles/level1/tile2.png,
-	images/tiles/level1/tile20.png, images/tiles/level1/tile21.png,
-	images/tiles/level1/tile22.png, images/tiles/level1/tile23.png,
-	images/tiles/level1/tile24.png, images/tiles/level1/tile25.png,
-	images/tiles/level1/tile26.png, images/tiles/level1/tile27.png,
-	images/tiles/level1/tile29.png, images/tiles/level1/tile3.png,
-	images/tiles/level1/tile30.png, images/tiles/level1/tile31.png,
-	images/tiles/level1/tile32.png, images/tiles/level1/tile33.png,
-	images/tiles/level1/tile34.png, images/tiles/level1/tile35.png,
-	images/tiles/level1/tile36.png, images/tiles/level1/tile38.png,
-	images/tiles/level1/tile39.png, images/tiles/level1/tile4.png,
-	images/tiles/level1/tile40.png, images/tiles/level1/tile41.png,
-	images/tiles/level1/tile42.png, images/tiles/level1/tile43.png,
-	images/tiles/level1/tile44.png, images/tiles/level1/tile45.png,
-	images/tiles/level1/tile46.png, images/tiles/level1/tile47.png,
-	images/tiles/level1/tile48.png, images/tiles/level1/tile49.png,
-	images/tiles/level1/tile5.png, images/tiles/level1/tile50.png,
-	images/tiles/level1/tile51.png, images/tiles/level1/tile52.png,
-	images/tiles/level1/tile53.png, images/tiles/level1/tile54.png,
-	images/tiles/level1/tile55.png, images/tiles/level1/tile56.png,
-	images/tiles/level1/tile57.png, images/tiles/level1/tile58.png,
-	images/tiles/level1/tile59.png, images/tiles/level1/tile6.png,
-	images/tiles/level1/tile60.png, images/tiles/level1/tile61.png,
-	images/tiles/level1/tile62.png, images/tiles/level1/tile63.png,
-	images/tiles/level1/tile64.png, images/tiles/level1/tile65.png,
-	images/tiles/level1/tile66.png, images/tiles/level1/tile67.png,
-	images/tiles/level1/tile68.png, images/tiles/level1/tile69.png,
-	images/tiles/level1/tile7.png, images/tiles/level1/tile71.png,
-	images/tiles/level1/tile72.png, images/tiles/level1/tile73.png,
-	images/tiles/level1/tile75.png, images/tiles/level1/tile76.png,
-	images/tiles/level1/tile77.png, images/tiles/level1/tile8.png,
-	images/tiles/level1/tile9.png, images/tiles/level1/water1.png,
-	images/tiles/level1/water2.png, images/tiles/level1/water3.png,
-	images/tiles/level1/water4.png, images/tiles/level1/waterfall.png,
-	images/tiles/level1/waterfall2.png,
-	images/tiles/level1/waterfall3.png, levels/Makefile.am,
-	levels/bla.xml, levels/level1.xml, levels/level2.xml,
-	levels/level3.xml, levels/level4.xml, levels/level5.xml: - cleanup
+- added clanlib gui stuff
+------------------------------------------------------------------------
+r142 | grumbel | 2003-12-02 22:21:13 +0100 (Tue, 02 Dec 2003) | 1 line
 
-2003-08-12 16:37  grumbel
+- some cleanup of obsolote files
+------------------------------------------------------------------------
+r141 | grumbel | 2003-12-02 22:04:30 +0100 (Tue, 02 Dec 2003) | 1 line
 
-	* README, src/game_world.cxx, src/player.cxx, src/player.hxx,
-	src/windstille_game.cxx, src/windstille_main.cxx: - added darkning
-	- added logo - updated INSTALL and README
+- added ignorance
+------------------------------------------------------------------------
+r138 | grumbel | 2003-12-02 17:50:41 +0100 (Tue, 02 Dec 2003) | 2 lines
 
-2003-08-12 16:34  grumbel
+- disabled readline support
 
-	* data/: tiles.scm, windstille.xml, images/hero_jump.png,
-	images/hero_stand.png, images/logo.png, images/logo_black.png,
-	images/hero_run/hero-0.png, images/hero_run/hero-1.png,
-	images/hero_run/hero-2.png, images/hero_run/hero-3.png,
-	images/hero_run/hero-4.png, images/hero_run/hero-5.png,
-	images/hero_run/hero-6.png, images/hero_run/hero-7.png,
-	images/hero_run/hero-8.png, images/hero_run/hero-9.png,
-	images/tiles/tile1.png, images/tiles/tile10.png,
-	images/tiles/tile2.png, images/tiles/tile3.png,
-	images/tiles/tile4.png, images/tiles/tile5.png,
-	images/tiles/tile6.png, images/tiles/tile7.png,
-	images/tiles/tile8.png, images/tiles/tile9.png, levels/level2.scm:
-	- more gfx
+------------------------------------------------------------------------
+r137 | grumbel | 2003-11-13 13:59:42 +0100 (Thu, 13 Nov 2003) | 2 lines
 
-2003-08-12 10:58  grumbel
+- some minor bug fixes
 
-	* src/: game_world.cxx, globals.hxx, player.cxx, tile_map.cxx,
-	tile_map.hxx, windstille_game.cxx: - added indicator for current
-	active tile
+------------------------------------------------------------------------
+r136 | grumbel | 2003-11-11 15:19:04 +0100 (Tue, 11 Nov 2003) | 2 lines
 
-2003-08-12 10:24  grumbel
+*** empty log message ***
 
-	* Makefile.am, data/Makefile.am, data/tiles.scm,
-	data/windstille.xml, data/levels/level2.scm, src/Makefile.am,
-	src/animation_obj.cxx, src/animation_obj.hxx, src/bonus_flyer.cxx,
-	src/bonus_flyer.hxx, src/controller.hxx, src/default_shoot.cxx,
-	src/default_shoot.hxx, src/delta_manager.hxx, src/display.cxx,
-	src/display.hxx, src/dog.cxx, src/dog.hxx, src/field.hxx,
-	src/game_world.cxx, src/game_world.hxx, src/game_worldsmob.cxx,
-	src/game_worldsmob.hxx, src/gameobj.cxx, src/gameobj.hxx,
-	src/gameobj_smob.cxx, src/gameobj_smob.hxx,
-	src/gamepad_controller.cxx, src/gamepad_controller.hxx,
-	src/globals.hxx, src/guile_gameobj.cxx, src/guile_gameobj.hxx,
-	src/guile_gameobj_factory.cxx, src/guile_gameobj_factory.hxx,
-	src/keyboard_controller.cxx, src/keyboard_controller.hxx,
-	src/laser_shoot.cxx, src/laser_shoot.hxx, src/player.cxx,
-	src/player.hxx, src/player_view.cxx, src/player_view.hxx,
-	src/power_up.cxx, src/power_up.hxx, src/scm_helper.cxx,
-	src/scm_helper.hxx, src/scmconverter.hxx, src/sprite.hxx,
-	src/sprite_smob.cxx, src/sprite_smob.hxx, src/string_converter.hxx,
-	src/tile.cxx, src/tile.hxx, src/tile_factory.cxx,
-	src/tile_factory.hxx, src/tile_map.cxx, src/tile_map.hxx,
-	src/tile_mapsmob.cxx, src/tile_mapsmob.hxx,
-	src/windstille_game.cxx, src/windstille_game.hxx,
-	src/windstille_level.cxx, src/windstille_level.hxx,
-	src/windstille_main.cxx, src/windstille_main.hxx: - fixed copyright
-	header - some cleanup
+------------------------------------------------------------------------
+r135 | grumbel | 2003-11-07 23:41:18 +0100 (Fri, 07 Nov 2003) | 2 lines
 
-2003-08-11 23:50  grumbel
+- fixed a bunch of issues that my last commit broke
 
-	* src/: animation_obj.cxx, keyboard_controller.cxx, player.cxx,
-	player.hxx, tile_map.cxx, windstille_game.cxx: - tweaked the player
-	behaviour a little bit - added friendlier sky color
+------------------------------------------------------------------------
+r134 | grumbel | 2003-11-07 14:00:39 +0100 (Fri, 07 Nov 2003) | 2 lines
 
-2003-08-11 22:26  grumbel
+- restructed the startup a bit
 
-	* data/tiles.scm, data/windstille.xml, data/images/tiles/tile5.png,
-	data/levels/level2.scm, src/globals.hxx, src/player.cxx: - some
-	cleanup and new gfx
+------------------------------------------------------------------------
+r133 | grumbel | 2003-11-06 15:44:48 +0100 (Thu, 06 Nov 2003) | 2 lines
 
-2003-08-11 21:54  grumbel
+what do you do in CVS?
 
-	* src/tile_map.cxx: - fixed crash bug
+------------------------------------------------------------------------
+r132 | grumbel | 2003-11-06 11:32:22 +0100 (Thu, 06 Nov 2003) | 2 lines
 
-2003-08-11 21:50  grumbel
+- finalized the extra screen
 
-	* data/tiles.scm, data/windstille.xml, data/levels/level2.scm,
-	src/game_world.cxx, src/tile.cxx, src/tile.hxx,
-	src/tile_factory.cxx, src/tile_factory.hxx, src/tile_map.cxx,
-	src/windstille_level.cxx, src/windstille_level.hxx,
-	src/editor/editor_tile.cxx, src/editor/editor_tile.hxx,
-	src/editor/editor_tilemap.cxx: - cleaned level format up a bit -
-	integrated tile factory
+------------------------------------------------------------------------
+r131 | grumbel | 2003-11-06 10:53:43 +0100 (Thu, 06 Nov 2003) | 2 lines
 
-2003-08-11 13:19  grumbel
+- more extra pics + timing for the bonus screen
 
-	* configure, configure.ac, data/tiles.scm, data/windstille.xml,
-	data/levels/level2.scm: - cleanup, added handling for sub-tile
-	collision
+------------------------------------------------------------------------
+r130 | grumbel | 2003-11-06 10:47:16 +0100 (Thu, 06 Nov 2003) | 2 lines
 
-2003-08-11 13:18  grumbel
+- more images
 
-	* src/: player.cxx, tile.hxx, tile_factory.cxx, tile_factory.hxx,
-	tile_map.cxx, windstille_main.cxx: - added definition file for
-	tiles
+------------------------------------------------------------------------
+r129 | grumbel | 2003-11-06 10:24:17 +0100 (Thu, 06 Nov 2003) | 2 lines
 
-2003-08-11 12:03  grumbel
+- added better music support
 
-	* src/: Makefile.am, background.cxx, background.hxx,
-	gamepad_controller.cxx, guile_gameobj.cxx,
-	guile_gameobj_factory.hxx, tile_factory.cxx, tile_factory.hxx,
-	tile_map.cxx, tile_map.hxx, windstille_game.cxx,
-	windstille_main.cxx, scm_helper.cxx, scm_helper.hxx, tile.cxx,
-	tile.hxx: - cleanup, added handling for sub-tile collision
+------------------------------------------------------------------------
+r128 | grumbel | 2003-11-06 00:00:27 +0100 (Thu, 06 Nov 2003) | 2 lines
 
-2003-08-11 10:03  grumbel
+missing music
 
-	* src/: game_world.cxx, globals.hxx, player.cxx, tile_map.cxx,
-	tile_map.hxx, windstille_game.cxx, windstille_level.cxx: - added
-	support for 128x128 tiles - added colorfull background gradient
+------------------------------------------------------------------------
+r127 | grumbel | 2003-11-05 23:51:27 +0100 (Wed, 05 Nov 2003) | 2 lines
 
-2003-08-11 00:55  grumbel
+- added some missing files
 
-	* configure.ac, data/levels/level1.scm, src/Makefile.am,
-	src/windstille_level.cxx, src/windstille_level.hxx,
-	src/windstille_main.cxx, src/xmlhelper.cxx, src/xmlhelper.hxx: -
-	replaced xml with guile
+------------------------------------------------------------------------
+r126 | grumbel | 2003-11-05 23:44:49 +0100 (Wed, 05 Nov 2003) | 2 lines
 
-2003-08-10 21:56  grumbel
+- added extra's screen
 
-	* src/AnimationObj.cxx, src/AnimationObj.hxx, src/Background.cxx,
-	src/Background.hxx, src/BonusFlyer.cxx, src/BonusFlyer.hxx,
-	src/Controller.hxx, src/DefaultShoot.cxx, src/DefaultShoot.hxx,
-	src/DeltaManager.hxx, src/Dog.cxx, src/Dog.hxx, src/Field.hxx,
-	src/GameObj.cxx, src/GameObj.hxx, src/GameObjSmob.cxx,
-	src/GameObjSmob.hxx, src/GameWorld.cxx, src/GameWorld.hxx,
-	src/GameWorldSmob.cxx, src/GameWorldSmob.hxx,
-	src/GamepadController.cxx, src/GamepadController.hxx,
-	src/GuileGameObj.cxx, src/GuileGameObj.hxx,
-	src/GuileGameObjFactory.cxx, src/GuileGameObjFactory.hxx,
-	src/KeyboardController.cxx, src/KeyboardController.hxx,
-	src/LaserShoot.cxx, src/LaserShoot.hxx, src/Makefile.am,
-	src/Player.cxx, src/Player.hxx, src/PlayerView.cxx,
-	src/PlayerView.hxx, src/PowerUp.cxx, src/PowerUp.hxx,
-	src/SCMConverter.hxx, src/Sprite.hxx, src/SpriteSmob.cxx,
-	src/SpriteSmob.hxx, src/StringConverter.hxx, src/TileFactory.cxx,
-	src/TileFactory.hxx, src/TileMap.cxx, src/TileMap.hxx,
-	src/TileMapSmob.cxx, src/TileMapSmob.hxx, src/WindstilleGame.cxx,
-	src/WindstilleGame.hxx, src/WindstilleLevel.cxx,
-	src/WindstilleLevel.hxx, src/WindstilleMain.cxx,
-	src/WindstilleMain.hxx, src/XMLhelper.cxx, src/XMLhelper.hxx,
-	src/animation_obj.cxx, src/animation_obj.hxx, src/background.cxx,
-	src/background.hxx, src/bonus_flyer.cxx, src/bonus_flyer.hxx,
-	src/controller.hxx, src/default_shoot.cxx, src/default_shoot.hxx,
-	src/delta_manager.hxx, src/dog.cxx, src/dog.hxx, src/field.hxx,
-	src/game_world.cxx, src/game_world.hxx, src/game_worldsmob.cxx,
-	src/game_worldsmob.hxx, src/gameobj.cxx, src/gameobj.hxx,
-	src/gameobj_smob.cxx, src/gameobj_smob.hxx,
-	src/gamepad_controller.cxx, src/gamepad_controller.hxx,
-	src/guile_gameobj.cxx, src/guile_gameobj.hxx,
-	src/guile_gameobj_factory.cxx, src/guile_gameobj_factory.hxx,
-	src/keyboard_controller.cxx, src/keyboard_controller.hxx,
-	src/laser_shoot.cxx, src/laser_shoot.hxx, src/player.cxx,
-	src/player.hxx, src/player_view.cxx, src/player_view.hxx,
-	src/power_up.cxx, src/power_up.hxx, src/scmconverter.hxx,
-	src/sprite.hxx, src/sprite_smob.cxx, src/sprite_smob.hxx,
-	src/string_converter.hxx, src/tile_factory.cxx,
-	src/tile_factory.hxx, src/tile_map.cxx, src/tile_map.hxx,
-	src/tile_mapsmob.cxx, src/tile_mapsmob.hxx,
-	src/windstille_game.cxx, src/windstille_game.hxx,
-	src/windstille_level.cxx, src/windstille_level.hxx,
-	src/windstille_main.cxx, src/windstille_main.hxx,
-	src/xmlhelper.cxx, src/xmlhelper.hxx, src/editor/Makefile.am,
-	src/editor/editor_tile.cxx, src/editor/editor_tile.hxx,
-	src/editor/editor_tilemap.cxx, src/editor/editor_tilemap.hxx,
-	src/editor/editor_tilemapview.cxx,
-	src/editor/editor_tilemapview.hxx, src/editor/tile_mapeditor.hxx,
-	src/editor/tile_selector.hxx, src/editor/windstille_editor.cxx,
-	src/editor/windstille_editor.hxx, configure, configure.ac,
-	src/editor/EditorTile.cxx, src/editor/EditorTile.hxx,
-	src/editor/EditorTileMap.cxx, src/editor/EditorTileMap.hxx,
-	src/editor/EditorTileMapView.cxx, src/editor/EditorTileMapView.hxx,
-	src/editor/TileMapEditor.hxx, src/editor/TileSelector.hxx,
-	src/editor/WindstilleEditor.cxx, src/editor/WindstilleEditor.hxx: -
-	renamed files to lowercase
+------------------------------------------------------------------------
+r125 | grumbel | 2003-11-05 14:36:17 +0100 (Wed, 05 Nov 2003) | 2 lines
 
-2003-08-10 21:30  grumbel
+- fixed kill and respawn behaviour
 
-	* configure, configure.ac, data/levels/level1.xml,
-	src/GameWorld.cxx, src/PlayerView.cxx, src/TileMap.cxx,
-	src/WindstilleLevel.cxx, src/editor/EditorTileMapView.cxx: - fixed
-	game to compile and run again
+------------------------------------------------------------------------
+r124 | grumbel | 2003-11-05 13:41:37 +0100 (Wed, 05 Nov 2003) | 2 lines
 
-2003-08-06 19:29  grumbel
+- added half working dead animation
 
-	* data/windstille.xml, src/WindstilleMain.cxx: - some CL0.7 fixes
+------------------------------------------------------------------------
+r123 | grumbel | 2003-11-05 12:09:36 +0100 (Wed, 05 Nov 2003) | 2 lines
 
-2003-08-06 19:16  grumbel
+- added light and exit marker
 
-	* AUTHORS, README, acconfig.h, aclocal.m4, autogen.sh, config.h.in,
-	configure, configure.ac, configure.in, src/PlayerView.cxx,
-	src/StringConverter.hxx, src/TileMap.cxx, src/WindstilleGame.cxx,
-	src/WindstilleLevel.cxx, src/WindstilleMain.cxx, src/XMLhelper.hxx:
-	- some cleanup
+------------------------------------------------------------------------
+r122 | grumbel | 2003-11-04 23:48:51 +0100 (Tue, 04 Nov 2003) | 2 lines
 
-2002-09-01 15:07  grumbel
+- fixed fadeout a bit
 
-	* data/windstille.scr: ported .scr file over to ClanLib-0.7, game
-	runs again now (slow like hell and hero sprite is missing...)
+------------------------------------------------------------------------
+r121 | grumbel | 2003-10-29 16:34:43 +0100 (Wed, 29 Oct 2003) | 2 lines
 
-2002-09-01 02:05  grumbel
+- added joystick support
 
-	* aclocal.m4, config.h.in, configure, configure.in,
-	src/AnimationObj.cxx, src/AnimationObj.hxx, src/BonusFlyer.cxx,
-	src/BonusFlyer.hxx, src/DefaultShoot.cxx, src/DefaultShoot.hxx,
-	src/Dog.cxx, src/Dog.hxx, src/Field.hxx,
-	src/KeyboardController.cxx, src/LaserShoot.cxx, src/LaserShoot.hxx,
-	src/Makefile.am, src/Player.cxx, src/Player.hxx, src/PowerUp.cxx,
-	src/PowerUp.hxx, src/SCMConverter.hxx, src/SpriteSmob.cxx,
-	src/TileMap.cxx, src/TileMap.hxx, src/WindstilleGame.cxx,
-	src/WindstilleLevel.cxx, src/WindstilleMain.cxx, src/globals.hxx,
-	src/editor/EditorTile.cxx, src/editor/EditorTile.hxx,
-	src/editor/EditorTileMap.cxx, src/editor/EditorTileMapView.cxx,
-	src/editor/WindstilleEditor.cxx: made it compilable with
-	ClanLib-0.7
+------------------------------------------------------------------------
+r120 | grumbel | 2003-10-12 17:22:31 +0200 (Sun, 12 Oct 2003) | 2 lines
 
-2002-08-28 22:59  grumbel
+missing file
 
-	* data/music/: Windstille_Ralph_Weinert.mp3,
-	Windstille_Ralph_Weinert.ogg: byebye mp3, welcome ogg
+------------------------------------------------------------------------
+r119 | grumbel | 2003-10-12 13:58:09 +0200 (Sun, 12 Oct 2003) | 3 lines
 
-2002-08-25 12:48  grumbel
+- added gui style
+- added some more or less usefull stuff to the gamegui
 
-	* data/music/Windstille_Ralph_Weinert.mp3: - added title song from
-	Ralph Weinert
+------------------------------------------------------------------------
+r118 | grumbel | 2003-10-11 14:15:59 +0200 (Sat, 11 Oct 2003) | 2 lines
 
-2002-03-19 19:05  grumbel
+- moved some stuff from WindstilleGame into ViewComponent
 
-	* src/guile/: helper.scm, windstille.scm: Added missing file
+------------------------------------------------------------------------
+r117 | grumbel | 2003-10-11 10:11:59 +0200 (Sat, 11 Oct 2003) | 3 lines
 
-2002-03-19 18:56  grumbel
+- removed some now reduntant editor code
+- cleaned up gui a bit
 
-	* GOALS, NEWS, README, TODO, aclocal.m4, AUTHORS, ChangeLog,
-	Makefile.am, acconfig.h, autogen.sh, config.h.in, configure,
-	configure.in, stamp-h.in, doc/levelmapformat.xml,
-	doc/metatiles.xml, doc/tilegroups.xml, src/GuileGameObjFactory.cxx,
-	src/GuileGameObjFactory.hxx, src/StringConverter.hxx,
-	src/BonusFlyer.cxx, src/BonusFlyer.hxx, src/DefaultShoot.cxx,
-	src/DeltaManager.hxx, src/GameWorld.cxx, src/GameWorld.hxx,
-	src/Sprite.hxx, src/WindstilleLevel.cxx, src/WindstilleLevel.hxx,
-	src/DefaultShoot.hxx, src/PlayerView.cxx, src/PlayerView.hxx,
-	src/SpriteSmob.cxx, src/SpriteSmob.hxx, src/WindstilleGame.cxx,
-	src/WindstilleGame.hxx, src/Controller.hxx, src/Dog.cxx,
-	src/Dog.hxx, src/PowerUp.cxx, src/PowerUp.hxx,
-	src/SCMConverter.hxx, src/TileMap.cxx, src/TileMap.hxx,
-	src/AnimationObj.cxx, src/AnimationObj.hxx,
-	src/KeyboardController.cxx, src/KeyboardController.hxx,
-	src/Makefile.am, src/TileFactory.cxx, src/TileFactory.hxx,
-	src/XMLhelper.cxx, src/XMLhelper.hxx, src/Background.cxx,
-	src/Background.hxx, src/Field.hxx, src/GameObj.cxx,
-	src/GameObj.hxx, src/GameObjSmob.cxx, src/GameObjSmob.hxx,
-	src/GameWorldSmob.cxx, src/GameWorldSmob.hxx, src/Player.cxx,
-	src/Player.hxx, src/WindstilleMain.cxx, src/WindstilleMain.hxx,
-	src/GamepadController.cxx, src/GamepadController.hxx,
-	src/GuileGameObj.cxx, src/GuileGameObj.hxx, src/LaserShoot.cxx,
-	src/LaserShoot.hxx, src/TileMapSmob.cxx, src/TileMapSmob.hxx,
-	src/globals.hxx, src/editor/EditorTileMapView.cxx,
-	src/editor/EditorTileMapView.hxx, src/guile/Makefile.am,
-	src/guile/bounce.scm, src/guile/dragon.scm, src/guile/for.scm,
-	src/guile/nebular.scm, src/guile/scmdog.scm,
-	src/guile/windstille.scm, data/Makefile.am,
-	src/editor/EditorTile.cxx, src/editor/EditorTile.hxx,
-	src/editor/EditorTileMap.cxx, src/editor/EditorTileMap.hxx,
-	src/editor/Makefile.am, src/editor/TileMapEditor.hxx,
-	src/editor/TileSelector.hxx, src/editor/WindstilleEditor.cxx,
-	src/editor/WindstilleEditor.hxx, data/windstille.scr,
-	data/images/light1.png, data/images/light2.png,
-	data/images/sprite_jump_east.png,
-	data/images/turrican_jump_east.png, data/images/turrican_roll.png,
-	data/images/turrican_stand_west.png,
-	data/images/turrican_surround.png,
-	data/images/turrican_walk_west.png, data/images/light3.png,
-	data/images/bonusflyer.png, data/images/shoot_default.png,
-	data/images/sprite_jump_west.png,
-	data/images/turrican_jump_west.png,
-	data/images/turrican_walk_east.png, data/images/nebular.png,
-	data/images/turrican_sit.png, data/images/turrican_stand_east.png,
-	data/images/tiles/level1/tile1.png,
-	data/images/tiles/level1/tile2.png,
-	data/images/tiles/level1/tile10.png,
-	data/images/tiles/level1/tile11.png,
-	data/images/tiles/level1/tile12.png,
-	data/images/tiles/level1/tile13.png,
-	data/images/tiles/level1/tile14.png,
-	data/images/tiles/level1/tile3.png,
-	data/images/tiles/level1/tile4.png,
-	data/images/tiles/level1/tile5.png,
-	data/images/tiles/level1/tile6.png,
-	data/images/tiles/level1/tile7.png,
-	data/images/tiles/level1/tile8.png,
-	data/images/tiles/level1/tile9.png,
-	data/images/tiles/level1/water1.png,
-	data/images/tiles/level1/water2.png,
-	data/images/tiles/level1/water3.png,
-	data/images/tiles/level1/water4.png,
-	data/images/tiles/level1/tile15.png,
-	data/images/tiles/level1/tile16.png,
-	data/images/tiles/level1/tile17.png,
-	data/images/tiles/level1/tile18.png,
-	data/images/tiles/level1/tile19.png,
-	data/images/tiles/level1/tile20.png,
-	data/images/tiles/level1/tile21.png,
-	data/images/tiles/level1/tile22.png,
-	data/images/tiles/level1/tile23.png,
-	data/images/tiles/level1/tile24.png,
-	data/images/tiles/level1/tile25.png,
-	data/images/tiles/level1/tile26.png,
-	data/images/tiles/level1/tile27.png,
-	data/images/tiles/level1/tile29.png,
-	data/images/tiles/level1/tile30.png,
-	data/images/tiles/level1/tile31.png,
-	data/images/tiles/level1/tile32.png,
-	data/images/tiles/level1/tile33.png,
-	data/images/tiles/level1/tile34.png,
-	data/images/tiles/level1/tile35.png,
-	data/images/tiles/level1/tile36.png,
-	data/images/tiles/level1/tile38.png,
-	data/images/tiles/level1/tile39.png,
-	data/images/tiles/level1/tile40.png,
-	data/images/tiles/level1/tile41.png,
-	data/images/tiles/level1/tile42.png,
-	data/images/tiles/level1/tile43.png,
-	data/images/tiles/level1/tile44.png,
-	data/images/tiles/level1/tile45.png,
-	data/images/tiles/level1/tile46.png,
-	data/images/tiles/level1/tile47.png,
-	data/images/tiles/level1/tile48.png,
-	data/images/tiles/level1/tile49.png,
-	data/images/tiles/level1/tile50.png,
-	data/images/tiles/level1/tile51.png,
-	data/images/tiles/level1/tile52.png,
-	data/images/tiles/level1/tile53.png,
-	data/images/tiles/level1/tile54.png,
-	data/images/tiles/level1/tile55.png,
-	data/images/tiles/level1/tile56.png,
-	data/images/tiles/level1/tile57.png,
-	data/images/tiles/level1/tile58.png,
-	data/images/tiles/level1/tile59.png,
-	data/images/tiles/level1/tile60.png,
-	data/images/tiles/level1/tile61.png,
-	data/images/tiles/level1/tile62.png,
-	data/images/tiles/level1/tile63.png,
-	data/images/tiles/level1/tile64.png,
-	data/images/tiles/level1/green1.png,
-	data/images/tiles/level1/tile65.png,
-	data/images/tiles/level1/tile66.png,
-	data/images/tiles/level1/tile67.png,
-	data/images/tiles/level1/tile68.png,
-	data/images/tiles/level1/tile69.png,
-	data/images/tiles/level1/tile71.png,
-	data/images/tiles/level1/tile72.png,
-	data/images/tiles/level1/tile73.png,
-	data/images/tiles/level1/tile75.png,
-	data/images/tiles/level1/tile76.png,
-	data/images/tiles/level1/tile77.png,
-	data/images/tiles/level1/waterfall.png,
-	data/images/tiles/level1/waterfall2.png,
-	data/images/tiles/level1/waterfall3.png,
-	data/images/tiles/level1/small/tile1.png,
-	data/images/tiles/level1/small/tile10.png,
-	data/images/tiles/level1/small/tile11.png,
-	data/images/tiles/level1/small/tile12.png,
-	data/images/tiles/level1/small/tile13.png,
-	data/images/tiles/level1/small/tile2.png,
-	data/images/tiles/level1/small/tile3.png,
-	data/images/tiles/level1/small/tile4.png,
-	data/images/tiles/level1/small/tile5.png,
-	data/images/tiles/level1/small/tile6.png,
-	data/images/tiles/level1/small/tile7.png,
-	data/images/tiles/level1/small/tile8.png,
-	data/images/tiles/level1/small/tile9.png,
-	data/images/tiles/level1/small/water1.png,
-	data/images/tiles/level1/small/water2.png,
-	data/images/tiles/level1/small/water3.png,
-	data/images/tiles/level1/small/water4.png,
-	data/images/tiles/level1/small/tile14.png,
-	data/images/tiles/level1/small/tile15.png,
-	data/images/tiles/level1/small/tile16.png,
-	data/images/tiles/level1/small/tile17.png,
-	data/images/tiles/level1/small/tile18.png,
-	data/images/tiles/level1/small/tile19.png,
-	data/images/tiles/level1/small/tile20.png,
-	data/images/tiles/level1/small/tile21.png,
-	data/images/tiles/level1/small/tile22.png,
-	data/images/tiles/level1/small/tile23.png,
-	data/images/tiles/level1/small/tile24.png,
-	data/images/tiles/level1/small/tile25.png,
-	data/images/tiles/level1/small/tile26.png,
-	data/images/tiles/level1/small/tile27.png,
-	data/images/tiles/level1/small/tile29.png,
-	data/images/tiles/level1/small/tile30.png,
-	data/images/tiles/level1/small/tile31.png,
-	data/images/tiles/level1/small/tile32.png,
-	data/images/tiles/level1/small/tile33.png,
-	data/images/tiles/level1/small/tile34.png,
-	data/images/tiles/level1/small/tile35.png,
-	data/images/tiles/level1/small/tile36.png,
-	data/images/tiles/level1/small/tile38.png,
-	data/images/tiles/level1/small/tile39.png,
-	data/images/tiles/level1/small/tile40.png,
-	data/images/tiles/level1/small/tile41.png,
-	data/images/tiles/level1/small/tile42.png,
-	data/images/tiles/level1/small/tile43.png,
-	data/images/tiles/level1/small/tile44.png,
-	data/images/tiles/level1/small/tile45.png,
-	data/images/tiles/level1/small/tile46.png,
-	data/images/tiles/level1/small/tile47.png,
-	data/images/tiles/level1/small/tile48.png,
-	data/images/tiles/level1/small/tile49.png,
-	data/images/tiles/level1/small/tile50.png,
-	data/images/tiles/level1/small/tile51.png,
-	data/images/tiles/level1/small/tile52.png,
-	data/images/tiles/level1/small/tile53.png,
-	data/images/tiles/level1/small/tile54.png,
-	data/images/tiles/level1/small/tile55.png,
-	data/images/tiles/level1/small/tile56.png,
-	data/images/tiles/level1/small/tile57.png,
-	data/images/tiles/level1/small/tile58.png,
-	data/images/tiles/level1/small/tile59.png,
-	data/images/tiles/level1/small/tile60.png,
-	data/images/tiles/level1/small/tile61.png,
-	data/images/tiles/level1/small/tile62.png,
-	data/images/tiles/level1/small/tile63.png,
-	data/images/tiles/level1/small/tile64.png,
-	data/images/tiles/level1/small/tile65.png,
-	data/images/tiles/level1/small/tile66.png,
-	data/images/tiles/level1/small/tile67.png,
-	data/images/tiles/level1/small/tile68.png,
-	data/images/tiles/level1/small/tile69.png,
-	data/images/tiles/level1/small/tile71.png,
-	data/images/tiles/level1/small/tile72.png,
-	data/images/tiles/level1/small/tile73.png,
-	data/images/tiles/level1/small/green1.png,
-	data/images/tiles/level1/small/tile75.png,
-	data/images/tiles/level1/small/tile76.png,
-	data/images/tiles/level1/small/tile77.png,
-	data/images/tiles/level1/small/waterfall.png,
-	data/images/tiles/level1/small/waterfall2.png,
-	data/images/tiles/level1/small/waterfall3.png,
-	data/levels/Makefile.am, data/levels/level1.xml,
-	data/levels/level2.xml, data/levels/level3.xml,
-	data/levels/level4.xml, data/levels/bla.xml,
-	data/levels/level5.xml: Windstille
+------------------------------------------------------------------------
+r116 | grumbel | 2003-10-10 23:06:22 +0200 (Fri, 10 Oct 2003) | 5 lines
 
-2002-03-19 18:56  grumbel
+- some little compile fixes
+- fixed naming conflict between X11 and Windstille classes
+- seperated editor gui code into its own class
+- added gui to the game itself (just for debugging)
 
-	* GOALS, NEWS, README, TODO, aclocal.m4, AUTHORS, ChangeLog,
-	Makefile.am, acconfig.h, autogen.sh, config.h.in, configure,
-	configure.in, stamp-h.in, doc/levelmapformat.xml,
-	doc/metatiles.xml, doc/tilegroups.xml, src/GuileGameObjFactory.cxx,
-	src/GuileGameObjFactory.hxx, src/StringConverter.hxx,
-	src/BonusFlyer.cxx, src/BonusFlyer.hxx, src/DefaultShoot.cxx,
-	src/DeltaManager.hxx, src/GameWorld.cxx, src/GameWorld.hxx,
-	src/Sprite.hxx, src/WindstilleLevel.cxx, src/WindstilleLevel.hxx,
-	src/DefaultShoot.hxx, src/PlayerView.cxx, src/PlayerView.hxx,
-	src/SpriteSmob.cxx, src/SpriteSmob.hxx, src/WindstilleGame.cxx,
-	src/WindstilleGame.hxx, src/Controller.hxx, src/Dog.cxx,
-	src/Dog.hxx, src/PowerUp.cxx, src/PowerUp.hxx,
-	src/SCMConverter.hxx, src/TileMap.cxx, src/TileMap.hxx,
-	src/AnimationObj.cxx, src/AnimationObj.hxx,
-	src/KeyboardController.cxx, src/KeyboardController.hxx,
-	src/Makefile.am, src/TileFactory.cxx, src/TileFactory.hxx,
-	src/XMLhelper.cxx, src/XMLhelper.hxx, src/Background.cxx,
-	src/Background.hxx, src/Field.hxx, src/GameObj.cxx,
-	src/GameObj.hxx, src/GameObjSmob.cxx, src/GameObjSmob.hxx,
-	src/GameWorldSmob.cxx, src/GameWorldSmob.hxx, src/Player.cxx,
-	src/Player.hxx, src/WindstilleMain.cxx, src/WindstilleMain.hxx,
-	src/GamepadController.cxx, src/GamepadController.hxx,
-	src/GuileGameObj.cxx, src/GuileGameObj.hxx, src/LaserShoot.cxx,
-	src/LaserShoot.hxx, src/TileMapSmob.cxx, src/TileMapSmob.hxx,
-	src/globals.hxx, src/editor/EditorTileMapView.cxx,
-	src/editor/EditorTileMapView.hxx, src/guile/Makefile.am,
-	src/guile/bounce.scm, src/guile/dragon.scm, src/guile/for.scm,
-	src/guile/nebular.scm, src/guile/scmdog.scm,
-	src/guile/windstille.scm, data/Makefile.am,
-	src/editor/EditorTile.cxx, src/editor/EditorTile.hxx,
-	src/editor/EditorTileMap.cxx, src/editor/EditorTileMap.hxx,
-	src/editor/Makefile.am, src/editor/TileMapEditor.hxx,
-	src/editor/TileSelector.hxx, src/editor/WindstilleEditor.cxx,
-	src/editor/WindstilleEditor.hxx, data/windstille.scr,
-	data/images/light1.png, data/images/light2.png,
-	data/images/sprite_jump_east.png,
-	data/images/turrican_jump_east.png, data/images/turrican_roll.png,
-	data/images/turrican_stand_west.png,
-	data/images/turrican_surround.png,
-	data/images/turrican_walk_west.png, data/images/light3.png,
-	data/images/bonusflyer.png, data/images/shoot_default.png,
-	data/images/sprite_jump_west.png,
-	data/images/turrican_jump_west.png,
-	data/images/turrican_walk_east.png, data/images/nebular.png,
-	data/images/turrican_sit.png, data/images/turrican_stand_east.png,
-	data/images/tiles/level1/tile1.png,
-	data/images/tiles/level1/tile2.png,
-	data/images/tiles/level1/tile10.png,
-	data/images/tiles/level1/tile11.png,
-	data/images/tiles/level1/tile12.png,
-	data/images/tiles/level1/tile13.png,
-	data/images/tiles/level1/tile14.png,
-	data/images/tiles/level1/tile3.png,
-	data/images/tiles/level1/tile4.png,
-	data/images/tiles/level1/tile5.png,
-	data/images/tiles/level1/tile6.png,
-	data/images/tiles/level1/tile7.png,
-	data/images/tiles/level1/tile8.png,
-	data/images/tiles/level1/tile9.png,
-	data/images/tiles/level1/water1.png,
-	data/images/tiles/level1/water2.png,
-	data/images/tiles/level1/water3.png,
-	data/images/tiles/level1/water4.png,
-	data/images/tiles/level1/tile15.png,
-	data/images/tiles/level1/tile16.png,
-	data/images/tiles/level1/tile17.png,
-	data/images/tiles/level1/tile18.png,
-	data/images/tiles/level1/tile19.png,
-	data/images/tiles/level1/tile20.png,
-	data/images/tiles/level1/tile21.png,
-	data/images/tiles/level1/tile22.png,
-	data/images/tiles/level1/tile23.png,
-	data/images/tiles/level1/tile24.png,
-	data/images/tiles/level1/tile25.png,
-	data/images/tiles/level1/tile26.png,
-	data/images/tiles/level1/tile27.png,
-	data/images/tiles/level1/tile29.png,
-	data/images/tiles/level1/tile30.png,
-	data/images/tiles/level1/tile31.png,
-	data/images/tiles/level1/tile32.png,
-	data/images/tiles/level1/tile33.png,
-	data/images/tiles/level1/tile34.png,
-	data/images/tiles/level1/tile35.png,
-	data/images/tiles/level1/tile36.png,
-	data/images/tiles/level1/tile38.png,
-	data/images/tiles/level1/tile39.png,
-	data/images/tiles/level1/tile40.png,
-	data/images/tiles/level1/tile41.png,
-	data/images/tiles/level1/tile42.png,
-	data/images/tiles/level1/tile43.png,
-	data/images/tiles/level1/tile44.png,
-	data/images/tiles/level1/tile45.png,
-	data/images/tiles/level1/tile46.png,
-	data/images/tiles/level1/tile47.png,
-	data/images/tiles/level1/tile48.png,
-	data/images/tiles/level1/tile49.png,
-	data/images/tiles/level1/tile50.png,
-	data/images/tiles/level1/tile51.png,
-	data/images/tiles/level1/tile52.png,
-	data/images/tiles/level1/tile53.png,
-	data/images/tiles/level1/tile54.png,
-	data/images/tiles/level1/tile55.png,
-	data/images/tiles/level1/tile56.png,
-	data/images/tiles/level1/tile57.png,
-	data/images/tiles/level1/tile58.png,
-	data/images/tiles/level1/tile59.png,
-	data/images/tiles/level1/tile60.png,
-	data/images/tiles/level1/tile61.png,
-	data/images/tiles/level1/tile62.png,
-	data/images/tiles/level1/tile63.png,
-	data/images/tiles/level1/tile64.png,
-	data/images/tiles/level1/green1.png,
-	data/images/tiles/level1/tile65.png,
-	data/images/tiles/level1/tile66.png,
-	data/images/tiles/level1/tile67.png,
-	data/images/tiles/level1/tile68.png,
-	data/images/tiles/level1/tile69.png,
-	data/images/tiles/level1/tile71.png,
-	data/images/tiles/level1/tile72.png,
-	data/images/tiles/level1/tile73.png,
-	data/images/tiles/level1/tile75.png,
-	data/images/tiles/level1/tile76.png,
-	data/images/tiles/level1/tile77.png,
-	data/images/tiles/level1/waterfall.png,
-	data/images/tiles/level1/waterfall2.png,
-	data/images/tiles/level1/waterfall3.png,
-	data/images/tiles/level1/small/tile1.png,
-	data/images/tiles/level1/small/tile10.png,
-	data/images/tiles/level1/small/tile11.png,
-	data/images/tiles/level1/small/tile12.png,
-	data/images/tiles/level1/small/tile13.png,
-	data/images/tiles/level1/small/tile2.png,
-	data/images/tiles/level1/small/tile3.png,
-	data/images/tiles/level1/small/tile4.png,
-	data/images/tiles/level1/small/tile5.png,
-	data/images/tiles/level1/small/tile6.png,
-	data/images/tiles/level1/small/tile7.png,
-	data/images/tiles/level1/small/tile8.png,
-	data/images/tiles/level1/small/tile9.png,
-	data/images/tiles/level1/small/water1.png,
-	data/images/tiles/level1/small/water2.png,
-	data/images/tiles/level1/small/water3.png,
-	data/images/tiles/level1/small/water4.png,
-	data/images/tiles/level1/small/tile14.png,
-	data/images/tiles/level1/small/tile15.png,
-	data/images/tiles/level1/small/tile16.png,
-	data/images/tiles/level1/small/tile17.png,
-	data/images/tiles/level1/small/tile18.png,
-	data/images/tiles/level1/small/tile19.png,
-	data/images/tiles/level1/small/tile20.png,
-	data/images/tiles/level1/small/tile21.png,
-	data/images/tiles/level1/small/tile22.png,
-	data/images/tiles/level1/small/tile23.png,
-	data/images/tiles/level1/small/tile24.png,
-	data/images/tiles/level1/small/tile25.png,
-	data/images/tiles/level1/small/tile26.png,
-	data/images/tiles/level1/small/tile27.png,
-	data/images/tiles/level1/small/tile29.png,
-	data/images/tiles/level1/small/tile30.png,
-	data/images/tiles/level1/small/tile31.png,
-	data/images/tiles/level1/small/tile32.png,
-	data/images/tiles/level1/small/tile33.png,
-	data/images/tiles/level1/small/tile34.png,
-	data/images/tiles/level1/small/tile35.png,
-	data/images/tiles/level1/small/tile36.png,
-	data/images/tiles/level1/small/tile38.png,
-	data/images/tiles/level1/small/tile39.png,
-	data/images/tiles/level1/small/tile40.png,
-	data/images/tiles/level1/small/tile41.png,
-	data/images/tiles/level1/small/tile42.png,
-	data/images/tiles/level1/small/tile43.png,
-	data/images/tiles/level1/small/tile44.png,
-	data/images/tiles/level1/small/tile45.png,
-	data/images/tiles/level1/small/tile46.png,
-	data/images/tiles/level1/small/tile47.png,
-	data/images/tiles/level1/small/tile48.png,
-	data/images/tiles/level1/small/tile49.png,
-	data/images/tiles/level1/small/tile50.png,
-	data/images/tiles/level1/small/tile51.png,
-	data/images/tiles/level1/small/tile52.png,
-	data/images/tiles/level1/small/tile53.png,
-	data/images/tiles/level1/small/tile54.png,
-	data/images/tiles/level1/small/tile55.png,
-	data/images/tiles/level1/small/tile56.png,
-	data/images/tiles/level1/small/tile57.png,
-	data/images/tiles/level1/small/tile58.png,
-	data/images/tiles/level1/small/tile59.png,
-	data/images/tiles/level1/small/tile60.png,
-	data/images/tiles/level1/small/tile61.png,
-	data/images/tiles/level1/small/tile62.png,
-	data/images/tiles/level1/small/tile63.png,
-	data/images/tiles/level1/small/tile64.png,
-	data/images/tiles/level1/small/tile65.png,
-	data/images/tiles/level1/small/tile66.png,
-	data/images/tiles/level1/small/tile67.png,
-	data/images/tiles/level1/small/tile68.png,
-	data/images/tiles/level1/small/tile69.png,
-	data/images/tiles/level1/small/tile71.png,
-	data/images/tiles/level1/small/tile72.png,
-	data/images/tiles/level1/small/tile73.png,
-	data/images/tiles/level1/small/green1.png,
-	data/images/tiles/level1/small/tile75.png,
-	data/images/tiles/level1/small/tile76.png,
-	data/images/tiles/level1/small/tile77.png,
-	data/images/tiles/level1/small/waterfall.png,
-	data/images/tiles/level1/small/waterfall2.png,
-	data/images/tiles/level1/small/waterfall3.png,
-	data/levels/Makefile.am, data/levels/level1.xml,
-	data/levels/level2.xml, data/levels/level3.xml,
-	data/levels/level4.xml, data/levels/bla.xml,
-	data/levels/level5.xml: Initial revision
+------------------------------------------------------------------------
+r115 | grumbel | 2003-10-01 01:01:06 +0200 (Wed, 01 Oct 2003) | 2 lines
 
+- added some missing tiles
+
+------------------------------------------------------------------------
+r114 | grumbel | 2003-09-30 18:47:39 +0200 (Tue, 30 Sep 2003) | 2 lines
+
+- fixed broken igel
+
+------------------------------------------------------------------------
+r113 | grumbel | 2003-09-30 18:42:26 +0200 (Tue, 30 Sep 2003) | 3 lines
+
+- added startup dialog
+- added dynamic resize of dialog box
+
+------------------------------------------------------------------------
+r112 | grumbel | 2003-09-30 00:20:57 +0200 (Tue, 30 Sep 2003) | 2 lines
+
+- added clanSound/Vorbis check
+
+------------------------------------------------------------------------
+r111 | grumbel | 2003-09-29 23:51:40 +0200 (Mon, 29 Sep 2003) | 2 lines
+
+- added music
+
+------------------------------------------------------------------------
+r110 | grumbel | 2003-09-29 23:26:46 +0200 (Mon, 29 Sep 2003) | 2 lines
+
+- added some fadeout stuff
+
+------------------------------------------------------------------------
+r109 | grumbel | 2003-09-29 21:56:42 +0200 (Mon, 29 Sep 2003) | 2 lines
+
+- made menu useable
+
+------------------------------------------------------------------------
+r108 | grumbel | 2003-09-29 21:29:17 +0200 (Mon, 29 Sep 2003) | 2 lines
+
+- added (non-working) menu
+
+------------------------------------------------------------------------
+r107 | grumbel | 2003-09-28 18:58:04 +0200 (Sun, 28 Sep 2003) | 2 lines
+
+- added functions to adjust game speed
+
+------------------------------------------------------------------------
+r106 | grumbel | 2003-09-28 13:00:25 +0200 (Sun, 28 Sep 2003) | 2 lines
+
+- added bomb/igel collision
+
+------------------------------------------------------------------------
+r105 | grumbel | 2003-09-28 12:55:34 +0200 (Sun, 28 Sep 2003) | 2 lines
+
+- added bomb/igel collision
+
+------------------------------------------------------------------------
+r104 | grumbel | 2003-09-27 22:57:39 +0200 (Sat, 27 Sep 2003) | 2 lines
+
+- fixed igel a bit, added diamond counting
+
+------------------------------------------------------------------------
+r103 | grumbel | 2003-09-27 10:29:12 +0200 (Sat, 27 Sep 2003) | 3 lines
+
+- added another tree tile
+- added function to return the passed time
+
+------------------------------------------------------------------------
+r102 | grumbel | 2003-09-26 16:29:36 +0200 (Fri, 26 Sep 2003) | 2 lines
+
+- added per level scripts
+
+------------------------------------------------------------------------
+r101 | grumbel | 2003-09-24 20:19:13 +0200 (Wed, 24 Sep 2003) | 2 lines
+
+- some more diamond support
+
+------------------------------------------------------------------------
+r100 | grumbel | 2003-09-24 13:52:00 +0200 (Wed, 24 Sep 2003) | 2 lines
+
+- more levels
+
+------------------------------------------------------------------------
+r99 | grumbel | 2003-09-24 13:49:19 +0200 (Wed, 24 Sep 2003) | 2 lines
+
+- completed level9 a bit more
+
+------------------------------------------------------------------------
+r98 | grumbel | 2003-09-24 01:08:00 +0200 (Wed, 24 Sep 2003) | 2 lines
+
+- new level
+
+------------------------------------------------------------------------
+r97 | grumbel | 2003-09-24 00:10:40 +0200 (Wed, 24 Sep 2003) | 2 lines
+
+- some more tool seperation
+
+------------------------------------------------------------------------
+r96 | grumbel | 2003-09-23 21:41:23 +0200 (Tue, 23 Sep 2003) | 2 lines
+
+- small level
+
+------------------------------------------------------------------------
+r95 | grumbel | 2003-09-23 21:33:43 +0200 (Tue, 23 Sep 2003) | 2 lines
+
+- added limitation to view pos
+
+------------------------------------------------------------------------
+r94 | grumbel | 2003-09-23 21:10:05 +0200 (Tue, 23 Sep 2003) | 2 lines
+
+- seperated tilemap tool  into seperate class
+
+------------------------------------------------------------------------
+r93 | grumbel | 2003-09-23 12:48:03 +0200 (Tue, 23 Sep 2003) | 3 lines
+
+- improved some tiles
+- let editor keep track of the name of the current level
+
+------------------------------------------------------------------------
+r92 | grumbel | 2003-09-22 20:37:05 +0200 (Mon, 22 Sep 2003) | 2 lines
+
+- added tile editor
+
+------------------------------------------------------------------------
+r91 | grumbel | 2003-09-22 11:13:16 +0200 (Mon, 22 Sep 2003) | 2 lines
+
+- more tiles
+
+------------------------------------------------------------------------
+r90 | grumbel | 2003-09-22 00:10:29 +0200 (Mon, 22 Sep 2003) | 2 lines
+
+- some tile stuff
+
+------------------------------------------------------------------------
+r89 | grumbel | 2003-09-21 23:57:40 +0200 (Sun, 21 Sep 2003) | 2 lines
+
+- added some new tiles with new naming convention
+
+------------------------------------------------------------------------
+r88 | grumbel | 2003-09-21 20:24:37 +0200 (Sun, 21 Sep 2003) | 2 lines
+
+- added readline check
+
+------------------------------------------------------------------------
+r87 | grumbel | 2003-09-21 20:05:21 +0200 (Sun, 21 Sep 2003) | 2 lines
+
+- optimized tiledrawing a bit (speed from 90% CPU usage to something hardly noticable ;)
+
+------------------------------------------------------------------------
+r86 | grumbel | 2003-09-21 19:34:54 +0200 (Sun, 21 Sep 2003) | 2 lines
+
+- some dialog triggery
+
+------------------------------------------------------------------------
+r85 | grumbel | 2003-09-21 17:22:59 +0200 (Sun, 21 Sep 2003) | 2 lines
+
+- hooked up dialog stuff a bit into the scripting
+
+------------------------------------------------------------------------
+r84 | grumbel | 2003-09-21 10:49:47 +0200 (Sun, 21 Sep 2003) | 2 lines
+
+some more image goodiness
+
+------------------------------------------------------------------------
+r83 | grumbel | 2003-09-20 23:55:57 +0200 (Sat, 20 Sep 2003) | 2 lines
+
+- seperated some junk out of windstille_game
+
+------------------------------------------------------------------------
+r82 | grumbel | 2003-09-20 23:53:38 +0200 (Sat, 20 Sep 2003) | 3 lines
+
+- fixed jump behaviour
+- cleaned up controller and made it event driven (more or less)
+
+------------------------------------------------------------------------
+r81 | grumbel | 2003-09-17 20:48:45 +0200 (Wed, 17 Sep 2003) | 2 lines
+
+- added some simple trigger code
+
+------------------------------------------------------------------------
+r80 | grumbel | 2003-09-15 19:00:38 +0200 (Mon, 15 Sep 2003) | 2 lines
+
+- fixed stuff to suit clanlib-0.7 cvs
+
+------------------------------------------------------------------------
+r79 | grumbel | 2003-09-13 20:37:57 +0200 (Sat, 13 Sep 2003) | 2 lines
+
+*** empty log message ***
+
+------------------------------------------------------------------------
+r78 | grumbel | 2003-09-13 20:01:17 +0200 (Sat, 13 Sep 2003) | 2 lines
+
+*** empty log message ***
+
+------------------------------------------------------------------------
+r77 | grumbel | 2003-09-13 19:54:40 +0200 (Sat, 13 Sep 2003) | 2 lines
+
+- some more gfx
+
+------------------------------------------------------------------------
+r76 | grumbel | 2003-09-13 12:19:08 +0200 (Sat, 13 Sep 2003) | 2 lines
+
+- fixed update behaviour a bit
+
+------------------------------------------------------------------------
+r75 | grumbel | 2003-09-13 12:11:33 +0200 (Sat, 13 Sep 2003) | 2 lines
+
+- added a first enemy and energie
+
+------------------------------------------------------------------------
+r74 | grumbel | 2003-09-13 00:41:06 +0200 (Sat, 13 Sep 2003) | 2 lines
+
+- added some stupid code to collect diamonds
+
+------------------------------------------------------------------------
+r73 | grumbel | 2003-09-13 00:14:03 +0200 (Sat, 13 Sep 2003) | 2 lines
+
+- added energiebar
+
+------------------------------------------------------------------------
+r72 | grumbel | 2003-09-12 23:43:21 +0200 (Fri, 12 Sep 2003) | 2 lines
+
+- changed splash function
+
+------------------------------------------------------------------------
+r71 | grumbel | 2003-09-12 22:57:29 +0200 (Fri, 12 Sep 2003) | 2 lines
+
+- some cleanup
+
+------------------------------------------------------------------------
+r70 | grumbel | 2003-09-12 22:17:06 +0200 (Fri, 12 Sep 2003) | 4 lines
+
+- added watersplash
+- added water to levelfile
+- seperated scripting a bit
+
+------------------------------------------------------------------------
+r69 | grumbel | 2003-09-12 18:31:21 +0200 (Fri, 12 Sep 2003) | 2 lines
+
+- added diamonds and water
+
+------------------------------------------------------------------------
+r68 | grumbel | 2003-09-12 11:25:48 +0200 (Fri, 12 Sep 2003) | 2 lines
+
+- fixed out-of-bounce crash
+
+------------------------------------------------------------------------
+r67 | grumbel | 2003-09-12 10:27:41 +0200 (Fri, 12 Sep 2003) | 2 lines
+
+- another experimental level
+
+------------------------------------------------------------------------
+r66 | grumbel | 2003-09-11 22:11:01 +0200 (Thu, 11 Sep 2003) | 2 lines
+
+- added some simple file dialogs
+
+------------------------------------------------------------------------
+r65 | grumbel | 2003-09-11 20:58:19 +0200 (Thu, 11 Sep 2003) | 2 lines
+
+- added some load save stuff
+
+------------------------------------------------------------------------
+r64 | grumbel | 2003-09-10 20:56:03 +0200 (Wed, 10 Sep 2003) | 2 lines
+
+- added support for multilayer tilemaps
+
+------------------------------------------------------------------------
+r63 | grumbel | 2003-09-10 15:58:30 +0200 (Wed, 10 Sep 2003) | 4 lines
+
+- added tile selector to the editor
+- fixed few bugs in editor code
+- editor now already half useable
+
+------------------------------------------------------------------------
+r62 | grumbel | 2003-09-10 15:53:11 +0200 (Wed, 10 Sep 2003) | 4 lines
+
+- added tile selector to the editor
+- fixed few bugs in editor code
+- editor now already half useable
+
+------------------------------------------------------------------------
+r61 | grumbel | 2003-09-10 12:58:29 +0200 (Wed, 10 Sep 2003) | 2 lines
+
+- fixed the editor a bit, scrolling around and viewing levels is now possible
+
+------------------------------------------------------------------------
+r60 | grumbel | 2003-09-10 10:25:29 +0200 (Wed, 10 Sep 2003) | 3 lines
+
+- started editor rewrite
+- added scripting support for gui (still pretty much experimental)
+
+------------------------------------------------------------------------
+r59 | grumbel | 2003-09-08 21:59:57 +0200 (Mon, 08 Sep 2003) | 4 lines
+
+- made the game independed of the start path
+- moved args_parse into ClanLib
+- added CL_CommandLine argument parsing
+
+------------------------------------------------------------------------
+r58 | grumbel | 2003-09-07 23:01:45 +0200 (Sun, 07 Sep 2003) | 2 lines
+
+- changed API to be more DirectoryScanner like
+
+------------------------------------------------------------------------
+r57 | grumbel | 2003-09-06 22:38:18 +0200 (Sat, 06 Sep 2003) | 3 lines
+
+- ClanLib nameing style and indention
+- _Generic seperation
+
+------------------------------------------------------------------------
+r56 | grumbel | 2003-09-06 19:29:07 +0200 (Sat, 06 Sep 2003) | 2 lines
+
+- added special handling for usage and extra docu
+
+------------------------------------------------------------------------
+r55 | grumbel | 2003-09-06 17:13:18 +0200 (Sat, 06 Sep 2003) | 2 lines
+
+- fixed bug that caused a single '-' not to be threaded as rest argument
+
+------------------------------------------------------------------------
+r54 | grumbel | 2003-09-06 17:05:10 +0200 (Sat, 06 Sep 2003) | 2 lines
+
+changed class layout a bit so that one doesn't have to derive from ArgsParse
+
+------------------------------------------------------------------------
+r53 | grumbel | 2003-09-06 13:48:01 +0200 (Sat, 06 Sep 2003) | 2 lines
+
+added docu
+
+------------------------------------------------------------------------
+r52 | grumbel | 2003-09-06 13:14:16 +0200 (Sat, 06 Sep 2003) | 3 lines
+
+- added support for --foobar=foo style options
+- option argument is now printed in help
+
+------------------------------------------------------------------------
+r51 | grumbel | 2003-09-05 22:41:52 +0200 (Fri, 05 Sep 2003) | 2 lines
+
+- added argument parser
+
+------------------------------------------------------------------------
+r50 | grumbel | 2003-09-05 00:51:04 +0200 (Fri, 05 Sep 2003) | 3 lines
+
+- fixed bug in scaling collision check
+- added seperate x/y axis for scaling collision check
+
+------------------------------------------------------------------------
+r49 | grumbel | 2003-09-03 00:25:23 +0200 (Wed, 03 Sep 2003) | 2 lines
+
+- fixed bug in scaling test, but still buggy
+
+------------------------------------------------------------------------
+r48 | grumbel | 2003-09-03 00:05:02 +0200 (Wed, 03 Sep 2003) | 3 lines
+
+- added collisionsprite
+- added some support for scaling (broken)
+
+------------------------------------------------------------------------
+r47 | grumbel | 2003-09-02 15:52:04 +0200 (Tue, 02 Sep 2003) | 2 lines
+
+- added benchmark
+
+------------------------------------------------------------------------
+r46 | grumbel | 2003-09-02 15:51:43 +0200 (Tue, 02 Sep 2003) | 2 lines
+
+replaced a few 32 with int_width
+
+------------------------------------------------------------------------
+r45 | grumbel | 2003-09-02 13:16:35 +0200 (Tue, 02 Sep 2003) | 2 lines
+
+- a bug fix and some docu
+
+------------------------------------------------------------------------
+r44 | grumbel | 2003-09-02 13:01:44 +0200 (Tue, 02 Sep 2003) | 2 lines
+
+- seems to work now and I might even know why... time for some more testing
+
+------------------------------------------------------------------------
+r43 | grumbel | 2003-09-02 12:33:01 +0200 (Tue, 02 Sep 2003) | 2 lines
+
+- seems to work, not sure why
+
+------------------------------------------------------------------------
+r42 | grumbel | 2003-09-02 01:43:16 +0200 (Tue, 02 Sep 2003) | 2 lines
+
+- at least 32xHEIGHT is working, rest not, but doesn't look completly wrong
+
+------------------------------------------------------------------------
+r41 | grumbel | 2003-09-01 22:56:57 +0200 (Mon, 01 Sep 2003) | 2 lines
+
+- at least 32xHEIGHT is working...
+
+------------------------------------------------------------------------
+r40 | grumbel | 2003-09-01 17:36:02 +0200 (Mon, 01 Sep 2003) | 2 lines
+
+- some code for pixel perfect collisions
+
+------------------------------------------------------------------------
+r39 | grumbel | 2003-08-28 19:15:31 +0200 (Thu, 28 Aug 2003) | 2 lines
+
+start script for windows
+
+------------------------------------------------------------------------
+r38 | grumbel | 2003-08-23 10:32:28 +0200 (Sat, 23 Aug 2003) | 2 lines
+
+- new music
+
+------------------------------------------------------------------------
+r37 | grumbel | 2003-08-19 15:49:37 +0200 (Tue, 19 Aug 2003) | 2 lines
+
+- removed obsolete files
+
+------------------------------------------------------------------------
+r36 | grumbel | 2003-08-19 15:40:48 +0200 (Tue, 19 Aug 2003) | 2 lines
+
+- added missing assert.h's
+
+------------------------------------------------------------------------
+r35 | grumbel | 2003-08-19 12:33:20 +0200 (Tue, 19 Aug 2003) | 2 lines
+
+- more tiles
+
+------------------------------------------------------------------------
+r34 | grumbel | 2003-08-18 21:53:05 +0200 (Mon, 18 Aug 2003) | 2 lines
+
+- more tiles
+
+------------------------------------------------------------------------
+r33 | grumbel | 2003-08-18 17:14:43 +0200 (Mon, 18 Aug 2003) | 2 lines
+
+- increased level size a bit, more tiles
+
+------------------------------------------------------------------------
+r32 | grumbel | 2003-08-18 10:52:06 +0200 (Mon, 18 Aug 2003) | 2 lines
+
+- added windstille binary start script
+
+------------------------------------------------------------------------
+r31 | grumbel | 2003-08-18 10:50:22 +0200 (Mon, 18 Aug 2003) | 3 lines
+
+- added a few more gfx
+- added a second tile layer (background-tilemap)
+
+------------------------------------------------------------------------
+r30 | grumbel | 2003-08-13 15:49:32 +0200 (Wed, 13 Aug 2003) | 2 lines
+
+- fixed build rules, made release
+
+------------------------------------------------------------------------
+r29 | grumbel | 2003-08-13 01:41:48 +0200 (Wed, 13 Aug 2003) | 2 lines
+
+- added code for static linking
+
+------------------------------------------------------------------------
+r28 | grumbel | 2003-08-12 21:38:08 +0200 (Tue, 12 Aug 2003) | 2 lines
+
+- fixed make dist
+
+------------------------------------------------------------------------
+r27 | grumbel | 2003-08-12 21:30:02 +0200 (Tue, 12 Aug 2003) | 2 lines
+
+- cleanup
+
+------------------------------------------------------------------------
+r26 | grumbel | 2003-08-12 21:24:21 +0200 (Tue, 12 Aug 2003) | 2 lines
+
+- cleanup
+
+------------------------------------------------------------------------
+r25 | grumbel | 2003-08-12 21:09:50 +0200 (Tue, 12 Aug 2003) | 2 lines
+
+- cleanup
+
+------------------------------------------------------------------------
+r24 | grumbel | 2003-08-12 16:37:03 +0200 (Tue, 12 Aug 2003) | 4 lines
+
+- added darkning
+- added logo
+- updated INSTALL and README
+
+------------------------------------------------------------------------
+r23 | grumbel | 2003-08-12 16:34:56 +0200 (Tue, 12 Aug 2003) | 2 lines
+
+- more gfx
+
+------------------------------------------------------------------------
+r22 | grumbel | 2003-08-12 10:58:49 +0200 (Tue, 12 Aug 2003) | 2 lines
+
+- added indicator for current active tile
+
+------------------------------------------------------------------------
+r21 | grumbel | 2003-08-12 10:24:41 +0200 (Tue, 12 Aug 2003) | 3 lines
+
+- fixed copyright header
+- some cleanup
+
+------------------------------------------------------------------------
+r20 | grumbel | 2003-08-11 23:50:35 +0200 (Mon, 11 Aug 2003) | 3 lines
+
+- tweaked the player behaviour a little bit
+- added friendlier sky color
+
+------------------------------------------------------------------------
+r19 | grumbel | 2003-08-11 22:26:07 +0200 (Mon, 11 Aug 2003) | 2 lines
+
+- some cleanup and new gfx
+
+------------------------------------------------------------------------
+r18 | grumbel | 2003-08-11 21:54:22 +0200 (Mon, 11 Aug 2003) | 2 lines
+
+- fixed crash bug
+
+------------------------------------------------------------------------
+r17 | grumbel | 2003-08-11 21:50:12 +0200 (Mon, 11 Aug 2003) | 3 lines
+
+- cleaned level format up a bit
+- integrated tile factory
+
+------------------------------------------------------------------------
+r16 | grumbel | 2003-08-11 13:19:41 +0200 (Mon, 11 Aug 2003) | 2 lines
+
+- cleanup, added handling for sub-tile collision
+
+------------------------------------------------------------------------
+r15 | grumbel | 2003-08-11 13:18:11 +0200 (Mon, 11 Aug 2003) | 2 lines
+
+- added definition file for tiles
+
+------------------------------------------------------------------------
+r14 | grumbel | 2003-08-11 12:04:38 +0200 (Mon, 11 Aug 2003) | 2 lines
+
+- cleanup, added handling for sub-tile collision
+
+------------------------------------------------------------------------
+r13 | grumbel | 2003-08-11 10:03:23 +0200 (Mon, 11 Aug 2003) | 3 lines
+
+- added support for 128x128 tiles
+- added colorfull background gradient
+
+------------------------------------------------------------------------
+r12 | grumbel | 2003-08-11 00:55:50 +0200 (Mon, 11 Aug 2003) | 2 lines
+
+- replaced xml with guile
+
+------------------------------------------------------------------------
+r11 | grumbel | 2003-08-10 21:58:39 +0200 (Sun, 10 Aug 2003) | 2 lines
+
+- renamed files to lowercase
+
+------------------------------------------------------------------------
+r10 | grumbel | 2003-08-10 21:30:03 +0200 (Sun, 10 Aug 2003) | 2 lines
+
+- fixed game to compile and run again
+
+------------------------------------------------------------------------
+r9 | grumbel | 2003-08-06 19:29:19 +0200 (Wed, 06 Aug 2003) | 2 lines
+
+- some CL0.7 fixes
+
+------------------------------------------------------------------------
+r8 | grumbel | 2003-08-06 19:16:19 +0200 (Wed, 06 Aug 2003) | 2 lines
+
+- some cleanup
+
+------------------------------------------------------------------------
+r7 | grumbel | 2002-09-01 15:07:53 +0200 (Sun, 01 Sep 2002) | 2 lines
+
+ported .scr file over to ClanLib-0.7, game runs again now (slow like hell and hero sprite is missing...)
+
+------------------------------------------------------------------------
+r6 | grumbel | 2002-09-01 02:05:33 +0200 (Sun, 01 Sep 2002) | 2 lines
+
+made it compilable with ClanLib-0.7
+
+------------------------------------------------------------------------
+r5 | grumbel | 2002-08-28 22:59:10 +0200 (Wed, 28 Aug 2002) | 2 lines
+
+byebye mp3, welcome ogg
+
+------------------------------------------------------------------------
+r4 | grumbel | 2002-08-25 12:48:07 +0200 (Sun, 25 Aug 2002) | 2 lines
+
+- added title song from Ralph Weinert
+
+------------------------------------------------------------------------
+r3 | grumbel | 2002-03-19 19:05:02 +0100 (Tue, 19 Mar 2002) | 2 lines
+
+Added missing file
+
+------------------------------------------------------------------------
+r1 | grumbel | 2002-03-19 18:56:44 +0100 (Tue, 19 Mar 2002) | 2 lines
+
+Initial revision
+
+------------------------------------------------------------------------

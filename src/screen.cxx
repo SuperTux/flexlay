@@ -48,6 +48,7 @@ Screen::display()
           update(step);
           delta -= step;
         }
+      // FIXME: non constant delta isn't a good idea
       update(delta);
       
       // update(0.020f);

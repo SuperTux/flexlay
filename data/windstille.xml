@@ -241,37 +241,37 @@
       <image file="images/tiles/tile14.png" name="image1" />
     </sprite>
     <sprite name="tile15">
-      <image file="images/tiles/level1/tile15.png" name="image1" />
+      <image file="images/tiles/tile15.png" name="image1" />
     </sprite>
     <sprite name="tile16">
-      <image file="images/tiles/level1/tile16.png" name="image1" />
+      <image file="images/tiles/tile16.png" name="image1" />
     </sprite>
     <sprite name="tile17">
-      <image file="images/tiles/level1/tile17.png" name="image1" />
+      <image file="images/tiles/tile17.png" name="image1" />
     </sprite>
     <sprite name="tile18">
-      <image file="images/tiles/level1/tile18.png" name="image1" />
+      <image file="images/tiles/tile18.png" name="image1" />
     </sprite>
     <sprite name="tile19">
-      <image file="images/tiles/level1/tile19.png" name="image1" />
+      <image file="images/tiles/tile19.png" name="image1" />
     </sprite>
     <sprite name="tile2">
       <image file="images/tiles/tile2.png" name="image1" />
     </sprite>
     <sprite name="tile20">
-      <image file="images/tiles/level1/tile20.png" name="image1" />
+      <image file="images/tiles/tile20.png" name="image1" />
     </sprite>
     <sprite name="tile21">
-      <image file="images/tiles/level1/tile21.png" name="image1" />
+      <image file="images/tiles/tile21.png" name="image1" />
     </sprite>
     <sprite name="tile22">
-      <image file="images/tiles/level1/tile22.png" name="image1" />
+      <image file="images/tiles/tile22.png" name="image1" />
     </sprite>
     <sprite name="tile23">
-      <image file="images/tiles/level1/tile23.png" name="image1" />
+      <image file="images/tiles/tile23.png" name="image1" />
     </sprite>
     <sprite name="tile24">
-      <image file="images/tiles/level1/tile24.png" name="image1" />
+      <image file="images/tiles/tile24.png" name="image1" />
     </sprite>
     <sprite name="tile25">
       <image file="images/tiles/level1/tile25.png" name="image1" />

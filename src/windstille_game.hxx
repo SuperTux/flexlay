@@ -1,4 +1,4 @@
-//  $Id: windstille_game.hxx,v 1.8 2003/10/11 12:15:59 grumbel Exp $
+//  $Id: windstille_game.hxx,v 1.9 2003/11/04 22:48:51 grumbel Exp $
 // 
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -26,9 +26,10 @@
 #include <ClanLib/Signals/slot_container.h>
 #include "screen.hxx"
 
+class CL_InputEvent;
+
 class Energiebar;
 class PlayerView;
-class CL_InputEvent;
 class GameWorld;
 class Background;
 class Player;
@@ -42,6 +43,7 @@ private:
   Player* player;
 
   float blink;
+  float fadeout_value;
 
   std::string filename;
   GameWorld* world;
@@ -50,7 +52,8 @@ private:
   Background* background;
   DialogManager* dialog_manager;
 
-  enum { DIALOG, GAME } state;
+  enum { FADEIN, RUNNING, FADEOUT } state;
+  enum { DIALOG, GAME } control_state;
 
   CL_Font font;
   CL_Sprite portrait;
@@ -69,8 +72,8 @@ public:
   WindstilleGame (GameWorld* w);
   ~WindstilleGame ();
 
-  void set_dialog_state() { state = DIALOG; }
-  void set_game_state()   { state = GAME; }
+  void set_dialog_state() { control_state = DIALOG; }
+  void set_game_state()   { control_state = GAME; }
 
   void on_startup();
   void on_shutdown();
@@ -78,7 +81,6 @@ public:
   void draw();
   void draw_game();
   void update(float delta);
-  void fadeout();
 
   void quit();
 };

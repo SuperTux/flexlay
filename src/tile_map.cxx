@@ -1,4 +1,4 @@
-//  $Id: tile_map.cxx,v 1.16 2003/09/21 18:05:21 grumbel Exp $
+//  $Id: tile_map.cxx,v 1.17 2003/11/04 22:48:51 grumbel Exp $
 //
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -37,8 +37,11 @@ TileMap::TileMap (Field<int>* data)
   : field(data->get_width(),
           data->get_height())
 {
-  std::cout << "TileMap: Size: " 
-            << data->get_width() << "x" << data->get_height() << std::endl;
+  if (debug)
+    {
+      std::cout << "TileMap: Size: " 
+                << data->get_width() << "x" << data->get_height() << std::endl;
+    }
 
   for (int y = 0; y < field.get_height (); ++y) 
     {

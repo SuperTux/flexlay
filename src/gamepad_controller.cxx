@@ -1,4 +1,4 @@
-//  $Id: gamepad_controller.cxx,v 1.4 2003/10/29 15:34:43 grumbel Exp $
+//  $Id: gamepad_controller.cxx,v 1.5 2003/11/04 22:48:51 grumbel Exp $
 //
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -17,12 +17,33 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
+#include <sstream>
+#include "windstille_error.hxx"
 #include "gamepad_controller.hxx"
 
 GamepadController::GamepadController(int num)
 {
-  CL_InputDevice dev = CL_Joystick::get_device(num);
+#if 0
+  if (!(num >= 0 && num <= CL_Joystick::get_device_count()))
+    {
+      std::ostringstream str;
+      str << "GamepadController: Couldn't access joystick " << num << std::endl;
+        
+      if (CL_Joystick::get_device_count() == 0)
+        {
+          str << "No joysticks available" << std::endl;
+        }
+      else
+        {
+          str << "Joystick number must be between 0 and " << CL_Joystick::get_device_count() << std::endl;
+        }
 
+      throw WindstilleError(str.str());
+    }
+#endif
+
+  CL_InputDevice dev = CL_Joystick::get_device(num);
+  
   slots.connect(dev.sig_key_down(),  this, &GamepadController::on_key_down);
   slots.connect(dev.sig_key_up(),    this, &GamepadController::on_key_up);
   slots.connect(dev.sig_axis_move(), this, &GamepadController::on_axis_move);

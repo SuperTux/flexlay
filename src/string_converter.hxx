@@ -1,4 +1,4 @@
-//  $Id: string_converter.hxx,v 1.2 2003/08/12 08:24:41 grumbel Exp $
+//  $Id: string_converter.hxx,v 1.3 2003/11/04 22:48:51 grumbel Exp $
 // 
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -33,17 +33,20 @@ std::string to_string(const T& any)
 }
 
 template <class T>
-void from_string(const std::string& rep, T& x)
+bool from_string(const std::string& rep, T& x)
 {
   // this is necessary so that if "x" is not modified if the conversion fails
   T temp;
   std::istringstream iss(rep);
 
   iss >> temp;
-  if (iss.fail())
-    throw std::invalid_argument
-      ("Exception: 'failed to extract type T from rep' " __FILE__ ": " + rep);
-  x = temp;
+
+  if (iss.fail()) {
+    return false;
+  } else {
+    x = temp;
+    return true;
+  }
 }
 
 #endif

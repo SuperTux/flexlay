@@ -1,4 +1,4 @@
-//  $Id: windstille_menu.cxx,v 1.6 2003/10/10 21:06:22 grumbel Exp $
+//  $Id: windstille_menu.cxx,v 1.7 2003/11/04 22:48:51 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -31,12 +31,12 @@
 #include "editor/editor.hxx"
 
 WindstilleMenu::WindstilleMenu()
-  : background_music(datadir + "music/techdemo.ogg"),
+  : background_music(datadir + "music/jingle.ogg"),
     background("menu_background", resources),
     windstille("logo_large", resources)
 {
   current_choice = 0;
-  windstille.set_alignment(origin_top_center);
+  windstille.set_alignment(origin_center);
   passed_time = 0;
 }
 
@@ -115,9 +115,18 @@ WindstilleMenu::draw()
   //std::cout << "Draw... " << std::endl;
   background.draw(0,0);
 
-  //windstille.set_alpha(sin(passed_time*3.141f)*.2f + .8f);
-  windstille.draw(CL_Display::get_width()/2,
-                  50);
+  if (0) // ugly wooble
+    {
+      windstille.set_color(
+                           sin(passed_time*3.141f)*.2f + .8f,
+                           sin(passed_time*3.141f)*.2f + .8f,
+                           sin(passed_time*3.141f)*.2f + .8f
+                           );
+      windstille.set_scale(cos(passed_time*3.141f)*.05f + .95f,
+                           cos(passed_time*3.141f)*.05f + .95f);
+    }
+
+  windstille.draw(CL_Display::get_width()/2, 145);
   
   Fonts::menu.set_alignment(origin_bottom_center);
   Fonts::menu_h.set_alignment(origin_bottom_center);
@@ -166,9 +175,8 @@ WindstilleMenu::fadeout()
     {
       background.draw(0,0);
 
-      //windstille.set_alpha(sin(passed_time*3.141f)*.2f + .8f);
       windstille.draw(CL_Display::get_width()/2,
-                      50);
+                      145);
       CL_Display::fill_rect(CL_Rect(0, 0, 
                                     CL_Display::get_width(), CL_Display::get_height()),
                             CL_Color(0,0,0, std::min(alpha, 255)));

@@ -1,4 +1,4 @@
-//  $Id: editor.cxx,v 1.9 2003/10/11 08:11:59 grumbel Exp $
+//  $Id: editor.cxx,v 1.10 2003/11/04 22:48:51 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -40,12 +40,6 @@ Editor::Editor()
   manager = new GUIManager();
 
   tilemap   = new EditorTileMap(manager->get_component());
-  popupmenu = new CL_PopupMenu(manager->get_component());
-  menu_data = new CL_MenuData(popupmenu);
-
-  menu_data->insert_item("Hello World");
-  menu_data->insert_item("Hello World2");
-  menu_data->insert_item("Hello World3");
 
   gh_load ((datadir + "editor.scm").c_str());
 }
@@ -59,13 +53,6 @@ void
 Editor::load(const std::string& filename)
 {
   tilemap->load(filename);
-}
-
-void
-Editor::popup_menu()
-{
-  std::cout << "PopUP" << std::endl;
-  popupmenu->popup(manager->get_component());
 }
 
 void

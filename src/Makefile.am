@@ -85,6 +85,8 @@ windstille_SOURCES = \
   windstille_main.hxx \
   windstille_menu.hxx \
   windstille_menu.cxx \
+  windstille_error.hxx \
+  windstille_error.cxx \
   view.hxx \
   view.cxx \
   view_component.hxx \

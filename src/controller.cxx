@@ -1,4 +1,4 @@
-//  $Id: controller.cxx,v 1.2 2003/09/21 17:34:00 grumbel Exp $
+//  $Id: controller.cxx,v 1.3 2003/11/04 22:48:51 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -18,6 +18,7 @@
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include <iostream>
+#include "globals.hxx"
 #include "controller.hxx"
 
 Controller* Controller::current_ = 0;
@@ -35,7 +36,7 @@ Controller::~Controller()
 void
 Controller::send_event(int type, bool state)
 {
-  if (get_state(type) == state)
+  if (get_state(type) == state && debug)
     {
       std::cout << "Controller: Invalid event (nothing changed): " << type << " " << state << std::endl;
     }

@@ -1,4 +1,4 @@
-//  $Id: windstille_main.cxx,v 1.25 2003/10/29 15:34:43 grumbel Exp $
+//  $Id: windstille_main.cxx,v 1.26 2003/11/04 22:48:51 grumbel Exp $
 //
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -26,6 +26,8 @@
 
 #include <guile/gh.h>
 
+#include "string_converter.hxx"
+#include "windstille_error.hxx"
 #include "globals.hxx"
 #include "editor/editor.hxx"
 #include "windstille_game.hxx"
@@ -45,6 +47,14 @@ CL_ResourceManager* resources;
 int 
 WindstilleMain::main(int argc, char** argv)
 {
+#ifdef WIN32
+  if (debug)
+    {
+      console_window = new CL_ConsoleWindow("Windstille Debug Window");
+      redirect_stdio("windstille.log");
+    }
+#endif
+
   scm_boot_guile (argc, argv,::inner_main, 0);
   return 0;
 }
@@ -52,10 +62,11 @@ WindstilleMain::main(int argc, char** argv)
 int 
 WindstilleMain::inner_main(void* closure, int argc, char** argv)
 {
-  int  screen_width  =  800;
+  int  screen_width  = 800;
   int  screen_height = 600;
   bool fullscreen    = false;
   bool allow_resize  = false;
+  int  joystick_id   = -1;
 
   bool launch_editor = false;
   std::string levelfile;
@@ -66,14 +77,40 @@ WindstilleMain::inner_main(void* closure, int argc, char** argv)
   datadir = bindir + "../data/";
   
   try {
+#ifndef WIN32
+    char* home_c = getenv("HOME");
+    if (home_c) 
+      {
+        std::string home = home_c; 
+        home += "/.windstille";
+        if (CL_Directory::create(home))
+          std::cout << "Created " << home << std::endl;
+        homedir = home + "/";
+      }
+    else
+      {
+        throw WindstilleError("Couldn't find environment variable HOME");
+      }
+#else
+    homedir = "config/";
+#endif
 
     CL_CommandLine argp;
-
+    
+    argp.set_help_indent(22);
     argp.add_usage ("[LEVELFILE]");
-    argp.add_doc   ("Windstille is a classic Jump'n Run game.\n");
-    argp.add_option('e', "editor",     "", "Launch the level editor");
-    argp.add_option('g', "geometry",   "WIDTHxHEIGHT", "Change window size to WIDTH and HEIGHT");
+    argp.add_doc   ("Windstille is a classic Jump'n Run game.");
+
+    argp.add_group("Display Options:");
+    argp.add_option('g', "geometry",   "WxH", "Change window size to WIDTH and HEIGHT");
     argp.add_option('f', "fullscreen", "", "Launch the game in fullscreen");
+
+    argp.add_group("Controlls Options:");
+    argp.add_option('j', "joystick", "NUM", "Use joystick number NUM instead of keyboard");
+
+    argp.add_group("Misc Options:");
+    argp.add_option('e', "editor",     "", "Launch the level editor");
+    argp.add_option('d', "debug",      "", "Turn on debug output");
     argp.add_option('h', "help",       "", "Print this help");
 
     argp.parse_args(argc, argv);
@@ -82,6 +119,10 @@ WindstilleMain::inner_main(void* closure, int argc, char** argv)
       {
         switch (argp.get_key())
           {
+          case 'd':
+            debug = 1;
+            break;
+
           case 'e':
             launch_editor = true;
             break;
@@ -97,6 +138,13 @@ WindstilleMain::inner_main(void* closure, int argc, char** argv)
               }
             break;
 		  
+          case 'j':
+            if (!from_string(argp.get_argument(), joystick_id)) {
+              std::cout << "Error: Couldn't convert '" << argp.get_argument() << "' to joystick_id" 
+                        << std::endl;
+            }
+            break;
+
           case 'h':
             argp.print_help();
             return EXIT_SUCCESS;
@@ -141,9 +189,14 @@ WindstilleMain::inner_main(void* closure, int argc, char** argv)
 
     std::cout << "Loading Guile Code... done" << std::endl;
 
+    std::cout << "Detected " << CL_Joystick::get_device_count() << " joysticks" << std::endl;
+
     // FIXME:
-    //new KeyboardController();
-    new GamepadController(1);
+    if (joystick_id != -1)
+      new GamepadController(joystick_id);
+    else
+      new KeyboardController();
+        
     TileFactory::init();
 
     if (!launch_editor && levelfile.empty())
@@ -167,6 +220,10 @@ WindstilleMain::inner_main(void* closure, int argc, char** argv)
       }
   } catch (CL_Error& error) {
     std::cout << "CL_Error: " << error.message << std::endl;
+  } catch (std::exception& err) {
+    std::cout << "std::exception: " << err.what() << std::endl;
+  } catch (...) {
+    std::cout << "Error catched something unknown?!" << std::endl;
   }
   
   TileFactory::deinit();
@@ -177,6 +234,8 @@ WindstilleMain::inner_main(void* closure, int argc, char** argv)
   CL_SetupDisplay::init();
   CL_SetupGL::init();
   CL_SetupCore::init(); 
+
+  delete console_window;
 
   return 0;
 }

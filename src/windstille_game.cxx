@@ -1,4 +1,4 @@
-//  $Id: windstille_game.cxx,v 1.28 2003/10/29 15:34:43 grumbel Exp $
+//  $Id: windstille_game.cxx,v 1.29 2003/11/04 22:48:51 grumbel Exp $
 //
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -50,7 +50,11 @@ WindstilleGame::WindstilleGame(const std::string& arg_filename)
 {
   current_ = this;
   world = new GameWorld(filename);
-  state = GAME;
+
+  state = FADEIN;
+  fadeout_value = 0;
+
+  control_state = GAME;
 
   manager = new GUIManager();
 }
@@ -59,7 +63,7 @@ WindstilleGame::WindstilleGame(GameWorld* w)
 {
   current_ = this;
   world = w;
-  state = GAME;
+  control_state = GAME;
 
   new GUIManager();
 }
@@ -81,11 +85,15 @@ WindstilleGame::draw_game()
   // Draw HUD
   energiebar->draw();
 
-  if (state == DIALOG)
+  switch (control_state)
     {
+    case DIALOG:
       dialog_manager->draw();      
+      break;
+    default:
+      break;
     }
-
+  
   // Draw Logo
   if (1)
     {     
@@ -100,7 +108,27 @@ void
 WindstilleGame::draw()
 {
   draw_game();
+
+  // Draw debug GUI
   GUIManager::current()->draw();
+
+  switch (state)
+    {
+    case FADEOUT:
+      CL_Display::fill_rect(CL_Rect(0, 0, 
+                                    CL_Display::get_width(), CL_Display::get_height()),
+                            CL_Color(0,0,0, std::min(int(fadeout_value*255), 255)));
+      break;
+    case FADEIN:
+      CL_Display::fill_rect(CL_Rect(0, 0, 
+                                    CL_Display::get_width(), CL_Display::get_height()),
+                            CL_Color(0,0,0, 255-std::min(int(fadeout_value*255), 255)));
+      break;
+
+    default:
+      break;
+    }
+
   CL_Display::flip();
 }
 
@@ -111,14 +139,31 @@ WindstilleGame::update(float delta)
 
   view->update (delta);
 
-  if (state == DIALOG)
+  switch (state)
     {
-      dialog_manager->update(delta);
-    }
-  else if (state == GAME)
-    {
-      world->update (delta);
-      energiebar->update(delta);
+    case FADEIN:
+      if (fadeout_value > 1.0f)
+        state = RUNNING;
+      fadeout_value += delta;
+      break;
+    case FADEOUT:
+      if (fadeout_value > 1.0f)
+        Screen::quit();
+
+      fadeout_value += delta;
+      break;
+    case RUNNING:
+      switch (control_state) 
+        {
+        case DIALOG:
+          dialog_manager->update(delta);
+          break;
+        case GAME:
+          world->update (delta);
+          energiebar->update(delta);
+          break;
+        }
+      break;
     }
   
   // Debug stuff
@@ -126,7 +171,10 @@ WindstilleGame::update(float delta)
     GUIManager::current()->show();
   else if (CL_Keyboard::get_keycode(CL_KEY_F2))
     GUIManager::current()->hide();
-
+  
+  if (CL_Keyboard::get_keycode(CL_KEY_ESCAPE))
+    quit();
+  
   Controller::current()->clear();
 
   blink += delta * 3.141f;
@@ -173,25 +221,8 @@ WindstilleGame::on_shutdown ()
 void
 WindstilleGame::quit()
 {
-  fadeout();
-  Screen::quit();
-}
-
-void
-WindstilleGame::fadeout()
-{
-  int alpha = 0;
-  while (alpha <= 255)
-    {
-      draw_game();
-      CL_Display::fill_rect(CL_Rect(0, 0, 
-                                    CL_Display::get_width(), CL_Display::get_height()),
-                            CL_Color(0,0,0, std::min(alpha, 255)));
-      CL_Display::flip();
-      CL_System::keep_alive();
-      CL_System::sleep(50);
-      alpha += 15;
-    }
+  fadeout_value = 0;
+  state = FADEOUT;
 }
 
 /* EOF */

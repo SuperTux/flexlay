@@ -1,4 +1,4 @@
-//  $Id: windstille_level.cxx,v 1.12 2003/09/26 14:29:36 grumbel Exp $
+//  $Id: windstille_level.cxx,v 1.13 2003/11/04 22:48:51 grumbel Exp $
 //
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -20,6 +20,7 @@
 #include <config.h>
 #include <assert.h>
 #include <iostream>
+#include "globals.hxx"
 #include "windstille_level.hxx"
 #include "string_converter.hxx"
 #include "scm_helper.hxx"
@@ -38,7 +39,8 @@ WindstilleLevel::parse_file (const std::string& filename)
 {
   diamond_map = 0;
 
-  std::cout << "Windstille Level: " << filename << std::endl;
+  if (debug)
+    std::cout << "Windstille Level: " << filename << std::endl;
   
   SCM input_stream = scm_open_file(gh_str02scm(filename.c_str()), 
                                    gh_str02scm("r"));
@@ -46,7 +48,7 @@ WindstilleLevel::parse_file (const std::string& filename)
   
   if (!(gh_symbol_p(gh_car(tree)) && gh_equal_p(gh_symbol2scm("windstille-level"), gh_car(tree))))
     {
-      std::cout << "Not a Windstille Level file!" << std::endl;
+      std::cout << filename << ": not a Windstille Level file!" << std::endl;
     }
   else
     {
@@ -161,7 +163,8 @@ WindstilleLevel::parse_properties (SCM tree)
         }
     }
 
-  std::cout << "WindstilleLevel: dimensions: " << width << "x" << height << std::endl;
+  if (debug)
+    std::cout << "WindstilleLevel: dimensions: " << width << "x" << height << std::endl;
 }
 
 void

@@ -1,4 +1,4 @@
-//  $Id: editor.hxx,v 1.8 2003/10/11 08:11:59 grumbel Exp $
+//  $Id: editor.hxx,v 1.9 2003/11/04 22:48:51 grumbel Exp $
 // 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -22,8 +22,6 @@
 
 #include <stack>
 
-class CL_PopupMenu;
-class CL_MenuData;
 class TileEditor;
 class EditorTileMap;
 class GUIManager;
@@ -33,10 +31,6 @@ class Editor
 {
 private:
   GUIManager* manager;
-
-  CL_PopupMenu* popupmenu;
-  CL_MenuData*  menu_data;
-
   EditorTileMap* tilemap;
 
   static Editor* current_;
@@ -49,9 +43,6 @@ public:
   EditorTileMap* get_editor_tilemap() { return tilemap; }
 
   void run();
-
-  void popup_menu();
-
   void load(const std::string& filename);
 
 private:

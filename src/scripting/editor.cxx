@@ -18,6 +18,7 @@
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include <ClanLib/gui.h>
+#include <ClanLib/core.h>
 #include <ClanLib/Display/display.h>
 #include <iostream>
 #include "../scm_functor.hxx"
@@ -458,6 +459,89 @@ SCM map_get_scripts()
     }
   
   return gh_reverse(lst);
+}
+
+SCM
+xml_node2scm(const CL_DomNode& root)
+{
+  SCM lst = SCM_EOL;
+  
+  if (root.is_element())
+    {
+      CL_DomElement element = root.to_element();
+      
+      SCM el = gh_cons(gh_symbol2scm("element"), gh_str02scm(element.get_tag_name().c_str()));
+        
+      lst = gh_cons(el, lst);
+    }
+  else if (root.is_null())
+    {
+      return SCM_EOL;
+    }
+  else if (root.is_element())
+    {
+    }
+  else if (root.is_attr())
+    {
+    }
+  else if (root.is_text())
+    {
+    }
+  else if (root.is_cdata_section())
+    {
+    }
+  else if (root.is_entity_reference())
+    {
+    }
+  else if (root.is_entity())
+    {
+    }
+  else if (root.is_processing_instruction())
+    {
+    }
+  else if (root.is_comment())
+    {
+    }
+  else if (root.is_document())
+    {
+    }
+  else if (root.is_document_type())
+    {
+    }
+  else if (root.is_document_fragment())
+    {
+    }
+  else if (root.is_notation())
+    {
+    }
+  else
+    {
+      std::cout << "Error: Unhandled node type" << std::endl;
+    }
+
+  CL_DomNode child = root.get_first_child();
+  lst = gh_cons(gh_cons(gh_symbol2scm("children"), xml_node2scm(child)),
+                lst);
+
+  CL_DomNode node = root.get_next_sibling();
+  lst = gh_cons(xml_node2scm(node),
+                lst);
+
+  return gh_reverse(lst);
+}
+
+SCM
+load_xml(const char* filename)
+{
+  try {
+    CL_DomDocument document;
+    document.load(new CL_InputSource_File(filename), true, true);
+    CL_DomElement root = document.get_document_element();
+    return xml_node2scm(root);
+  } catch (CL_Error& err) {
+    std::cout << "CL_Error: " << err.message << std::endl;
+    return SCM_BOOL_F;
+  }
 }
 
 /* EOF */

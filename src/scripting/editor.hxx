@@ -73,6 +73,7 @@ void game_play(const char* filename);
 
 SCM get_tile_def(int id);
 SCM get_tile_defs();
+SCM load_xml(const char* filename);
 
 #endif
 

@@ -1,4 +1,4 @@
-//  $Id: windstille_main.cxx,v 1.12 2003/09/10 10:58:29 grumbel Exp $
+//  $Id: windstille_main.cxx,v 1.13 2003/09/10 13:53:11 grumbel Exp $
 //
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -64,6 +64,7 @@ WindstilleMain::inner_main(void* closure, int argc, char** argv)
     argp.add_usage ("[LEVELFILE]");
     argp.add_doc   ("Windstille is a classic Jump'n Run game.\n");
     argp.add_option('e', "editor",     "", "Launch the level editor");
+    argp.add_option('g', "geometry",   "WIDTHxHEIGHT", "Change window size to WIDTH and HEIGHT");
     argp.add_option('f', "fullscreen", "", "Launch the game in fullscreen");
     argp.add_option('h', "help",       "", "Print this help");
 
@@ -79,6 +80,13 @@ WindstilleMain::inner_main(void* closure, int argc, char** argv)
 		  
           case 'f':
             fullscreen = true;
+            break;
+
+          case 'g':
+            if (sscanf(argp.get_argument().c_str(), "%dx%d", &screen_width, &screen_height) == 2)
+              {
+                std::cout << "Geometry: " << screen_width << "x" << screen_height << std::endl;
+              }
             break;
 		  
           case 'h':

@@ -1,4 +1,4 @@
-//  $Id: scripting.hxx,v 1.2 2003/09/10 10:58:29 grumbel Exp $
+//  $Id: scripting.hxx,v 1.3 2003/09/10 13:53:11 grumbel Exp $
 // 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -22,6 +22,8 @@
 
 #include <guile/gh.h>
 
+void editor_set_brush_tile(int i);
+int  editor_get_brush_tile();
 void editor_add_window(int x, int y, int w, int h, const char* title);
 void editor_add_button(int x, int y, int w, int h, const char* text, SCM func);
 void editor_add_label(int x, int y, const char* text);

@@ -6,6 +6,7 @@ libwindstille_editor_a_SOURCES = \
   windstille_wrap.cxx \
   editor_tilemap.hxx editor_tilemap.cxx \
   editor_tile.hxx editor_tile.cxx \
+  tile_selector.hxx tile_selector.cxx \
   editor.hxx editor.cxx \
   $(command_source)
 

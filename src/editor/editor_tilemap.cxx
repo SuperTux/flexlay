@@ -1,4 +1,4 @@
-//  $Id: editor_tilemap.cxx,v 1.4 2003/09/10 10:58:29 grumbel Exp $
+//  $Id: editor_tilemap.cxx,v 1.5 2003/09/10 13:53:11 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -21,10 +21,12 @@
 #include <ClanLib/Display/display.h>
 #include "../windstille_level.hxx"
 #include "../globals.hxx"
+#include "../tile_factory.hxx"
 #include "editor_tilemap.hxx"
 
 EditorTileMap::EditorTileMap(CL_Component* parent)
-  : CL_Component(CL_Rect(CL_Point(0, 0), CL_Size(CL_Display::get_width(), CL_Display::get_height())), parent),
+  : CL_Component(CL_Rect(CL_Point(0, 0), CL_Size(CL_Display::get_width(), CL_Display::get_height())),
+                 parent),
     field (new Field<EditorTile*> (50, 50))
 {
   for (unsigned int y = 0; y < field->get_height (); ++y) {
@@ -42,30 +44,53 @@ EditorTileMap::EditorTileMap(CL_Component* parent)
   trans_offset = CL_Pointf(0,0);
   old_trans_offset = CL_Pointf(0,0);
   click_pos = CL_Point(0,0);
-  scrolling = false;
+  
+  tool = NONE;
+  brush_tile = 0;
 }
 
 void
 EditorTileMap::mouse_up(const CL_InputEvent& event)
 {
-  if (event.id == CL_MOUSE_MIDDLE && scrolling)
+  switch (tool)
     {
-      trans_offset.x = old_trans_offset.x - (click_pos.x - event.mouse_pos.x);
-      trans_offset.y = old_trans_offset.y - (click_pos.y - event.mouse_pos.y);
-
-      old_trans_offset = trans_offset;
-      scrolling = false;
-      release_mouse();
+    case SCROLLING:
+      if (event.id == CL_MOUSE_MIDDLE)
+        {
+          trans_offset.x = old_trans_offset.x - (click_pos.x - event.mouse_pos.x);
+          trans_offset.y = old_trans_offset.y - (click_pos.y - event.mouse_pos.y);
+          
+          old_trans_offset = trans_offset;
+          tool = NONE;
+          release_mouse();
+        }
+      break;
+    case PAINTING:
+      if (event.id == CL_MOUSE_LEFT)
+        tool = NONE;
+      break;
     }
 }
 
 void
 EditorTileMap::mouse_move(const CL_InputEvent& event)
 {
-  if (scrolling)
+  switch (tool)
     {
+    case SCROLLING:
       trans_offset.x = old_trans_offset.x - (click_pos.x - event.mouse_pos.x);
       trans_offset.y = old_trans_offset.y - (click_pos.y - event.mouse_pos.y);
+      break;
+
+    case PAINTING:
+      {
+        CL_Point pos = screen2tile(event.mouse_pos);
+        field->at(pos.x, pos.y)->set_tile(brush_tile);
+      }
+      break;
+      
+    default:
+      break;
     }
 }
 
@@ -76,8 +101,15 @@ EditorTileMap::mouse_down(const CL_InputEvent& event)
     {
       old_trans_offset = trans_offset;
       click_pos = event.mouse_pos;
-      scrolling = true;
+      tool = SCROLLING;
       capture_mouse();
+    }
+  else if (event.id == CL_MOUSE_LEFT)
+    {
+      std::cout << "brushtile: " << brush_tile << std::endl;
+      CL_Point pos = screen2tile(event.mouse_pos);
+      field->at(pos.x, pos.y)->set_tile(brush_tile);
+      tool = PAINTING;
     }
 }
   
@@ -93,7 +125,35 @@ EditorTileMap::draw ()
 	  field->at(x, y)->draw(x * TILE_SIZE, y * TILE_SIZE);
 	}
     }
+
+  if (1)
+    {
+    CL_Point pos =  screen2tile(CL_Point(CL_Mouse::get_x(), CL_Mouse::get_y()));
+
+    if (pos.x >= 0 && pos.y >= 0)
+      {
+        Tile* tile = TileFactory::current()->create(brush_tile);
+        if (tile)
+          {
+            CL_Sprite sprite = tile->sur;
+            sprite.set_alpha(0.5f);
+
+            sprite.draw(pos.x * TILE_SIZE, pos.y * TILE_SIZE);
+          }
+        CL_Display::fill_rect (CL_Rect(CL_Point(pos.x * TILE_SIZE, pos.y * TILE_SIZE),
+                                       CL_Size(TILE_SIZE, TILE_SIZE)),
+                               CL_Color(255, 255, 255, 100));
+      }
+  }
+
   CL_Display::pop_translate_offset();
+}
+
+CL_Point
+EditorTileMap::screen2tile(const CL_Point& pos)
+{
+  return CL_Point(int(pos.x - trans_offset.x)/TILE_SIZE,
+                  int(pos.y - trans_offset.y)/TILE_SIZE);
 }
 
 void

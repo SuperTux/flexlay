@@ -1,4 +1,4 @@
-//  $Id: editor_tile.cxx,v 1.4 2003/09/10 10:58:29 grumbel Exp $
+//  $Id: editor_tile.cxx,v 1.5 2003/09/10 13:53:11 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -55,16 +55,8 @@ EditorTile::draw (int x, int y)
 void
 EditorTile::set_tile (int arg_id)
 {
-  if (arg_id == 0)
-    {
-      tile = 0;
-      id   = 0;
-    }
-  else
-    {
-      tile = TileFactory::current()->create(id);
-      id = arg_id;
-    }
+  id = arg_id;
+  tile = TileFactory::current()->create(id);
 }
 
 /* EOF */

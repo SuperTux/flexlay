@@ -1,4 +1,4 @@
-//  $Id: tile_selector.hxx,v 1.1 2003/08/10 19:56:40 grumbel Exp $
+//  $Id: tile_selector.hxx,v 1.2 2003/09/10 13:53:11 grumbel Exp $
 // 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -20,11 +20,28 @@
 #ifndef TILESELECTOR_HXX
 #define TILESELECTOR_HXX
 
-class TileSelector
+#include <ClanLib/gui.h>
+
+class TileSelector : public CL_Component
 {
 private:
-
+  CL_SlotContainer slots;
+  int width;
+  int height;
+  int index;
+  
+  int offset;
+  int old_offset;
+  int mouse_over_tile;
+  bool scrolling;
+  CL_Point mouse_pos;
 public:
+  /** width and height in number of tiles */
+  TileSelector(int width, int height, CL_Component* parent);
+  void draw();
+  void mouse_move(const CL_InputEvent& event);
+  void mouse_down(const CL_InputEvent& event);
+  void mouse_up  (const CL_InputEvent& event);
 };
 
 #endif

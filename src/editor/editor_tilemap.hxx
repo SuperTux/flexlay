@@ -1,4 +1,4 @@
-//  $Id: editor_tilemap.hxx,v 1.2 2003/09/10 10:58:29 grumbel Exp $
+//  $Id: editor_tilemap.hxx,v 1.3 2003/09/10 13:53:11 grumbel Exp $
 // 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -38,8 +38,10 @@ private:
 
   CL_Point click_pos;
 
-  bool scrolling;
+  enum { NONE, SCROLLING, PAINTING } tool;
 public:
+  int brush_tile;
+
   EditorTileMap (CL_Component* parent);
   
   void draw ();
@@ -51,7 +53,9 @@ public:
   EditorTile* get_tile (int, int);
 
   void load (const std::string& filename);
-  void save (const std::string& filename); 
+  void save (const std::string& filename);
+
+  CL_Point screen2tile(const CL_Point& pos);
 };
 
 #endif

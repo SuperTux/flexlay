@@ -1,4 +1,4 @@
-//  $Id: editor.cxx,v 1.2 2003/09/10 10:58:29 grumbel Exp $
+//  $Id: editor.cxx,v 1.3 2003/09/10 13:53:11 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -25,6 +25,7 @@
 #include "../globals.hxx"
 #include "editor.hxx"
 #include "editor_tilemap.hxx"
+#include "tile_selector.hxx"
 
 extern "C" void SWIG_init(void);
 
@@ -76,8 +77,12 @@ Editor::Editor()
   manager   = new CL_GUIManager(style);
   component = manager;
 
-  EditorTileMap* tilemap = new EditorTileMap(manager);
+  tilemap = new EditorTileMap(manager);
   tilemap->load(datadir + "levels/level1.scm");
+
+  CL_Window* window = new CL_Window(CL_Rect(CL_Point(100, 100), CL_Size(200, 500)), "TileSelector", manager);
+  new TileSelector(3, 10, window->get_client_area());
+  //window->find_preferred_size();
 
   popupmenu = new CL_PopupMenu(manager);
   menu_data  = new CL_MenuData(popupmenu);

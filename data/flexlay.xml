@@ -1,0 +1,13 @@
+<resources>
+  <sprite name="verdana11_black_glyphs">
+    <image file="images/fonts/verdana11_black.png">
+      <alpha />
+    </image>
+  </sprite>
+  <font name="verdana11_black">
+    <bitmap
+      glyphs="verdana11_black_glyphs" 
+      spacelen="4" 
+      letters="!&quot;#$%&amp;'()*+,-./0123456789:;&lt;=&gt;?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~¡¢£¤¥¦§¨©ª«¬­®¯°±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüý" />
+  </font>
+</resources>

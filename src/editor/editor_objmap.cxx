@@ -52,12 +52,30 @@ EditorObjMap::draw()
 }
 
 void
-EditorObjMap::add_object(const char* name, const CL_Point& pos)
+EditorObjMap::add_object(const CL_Sprite& sprite, const CL_Point& pos)
 {
   Obj* obj = new Obj;
-  obj->sprite = CL_Sprite(name, resources);
+  obj->sprite = sprite;
   obj->pos    = pos;
   objects.push_back(obj);  
+}
+
+CL_Rect
+EditorObjMap::get_bounding_rect(const CL_Sprite& sprite)
+{
+  // FIXME: TEST ME
+  CL_Point  align = CL_Point(0, 0);
+  CL_Origin origin_e;
+      
+  sprite.get_alignment(origin_e, align.x, align.y);
+
+  CL_Point origin = calc_origin(origin_e, CL_Size(sprite.get_width(),
+                                                  sprite.get_height()));
+  align.x = -align.x;
+      
+  return CL_Rect(origin + align, 
+                 CL_Size(sprite.get_width(), 
+                         sprite.get_height()));
 }
 
 EditorObjMap::Obj*
@@ -65,7 +83,6 @@ EditorObjMap::find_object(const CL_Point& click_pos)
 {
   for(Objs::iterator i = objects.begin(); i != objects.end(); ++i)
     {
-      // FIXME: This is buggy and doesn't work for all kinds of offsets
       CL_Point  align = CL_Point(0, 0);
       CL_Origin origin_e;
       
@@ -86,6 +103,22 @@ EditorObjMap::find_object(const CL_Point& click_pos)
         }
     }
   return 0;
+}
+
+std::vector<EditorObjMap::Obj*>
+EditorObjMap::get_selection(const CL_Rect& rect)
+{
+  std::vector<EditorObjMap::Obj*> selection;
+
+  for(Objs::iterator i = objects.begin(); i != objects.end(); ++i)
+    {
+      if (rect.is_inside((*i)->pos))
+        {
+          selection.push_back(*i);
+        }
+    }
+
+  return selection;
 }
 
 /* EOF */

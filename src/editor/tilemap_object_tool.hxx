@@ -22,6 +22,7 @@
 
 #include "tilemap_tool.hxx"
 #include "editor_objmap.hxx"
+#include "object_brush.hxx"
 
 class EditorMap;
 
@@ -31,11 +32,19 @@ class TileMapObjectTool : public TileMapTool
 private:
   EditorObjMap* objmap;
   EditorObjMap::Obj* obj;
-  enum { DRAG, NONE } state;
+  enum { DRAG, SELECT, NONE } state;
 
   /** the position on which the object was clicked, relative to the
       object */
   CL_Point offset;
+
+  ObjectBrush brush;
+  CL_Point brush_pos;
+  CL_Point drag_start;
+  CL_Rect selection_rect;
+
+  typedef std::vector<EditorObjMap::Obj*> Selection; 
+  Selection selection;
 public:
   TileMapObjectTool(EditorMap* p, EditorObjMap* t);
   ~TileMapObjectTool();
@@ -46,6 +55,7 @@ public:
   void on_mouse_down(const CL_InputEvent& event);
   void on_mouse_move(const CL_InputEvent& event);
 
+  void set_brush(const std::string& name);
 private:
   TileMapObjectTool (const TileMapObjectTool&);
   TileMapObjectTool& operator= (const TileMapObjectTool&);

@@ -37,6 +37,8 @@
 #include "gui_manager.hxx"
 #include "editor.hxx"
 
+extern CL_ResourceManager* resources;
+
 EditorObjMap*
 editor_get_objmap()
 {
@@ -57,7 +59,7 @@ editor_get_tilemap()
 
 void editor_objectmap_add_object(const char* name, int x, int y)
 {
-  editor_get_objmap()->add_object(name, CL_Point(x, y));
+  editor_get_objmap()->add_object(CL_Sprite(name, resources), CL_Point(x, y));
 }
 
 void

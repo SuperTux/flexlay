@@ -41,6 +41,7 @@ public:
 
   typedef std::vector<Obj*> Objs;
   Objs objects;
+
 public:
   EditorObjMap(EditorMap* p);
   ~EditorObjMap();
@@ -48,9 +49,12 @@ public:
   void update(float delta);
   void draw();
 
-  void add_object(const char* name, const CL_Point& pos);
+  void add_object(const CL_Sprite& sprite, const CL_Point& pos);
+
+  CL_Rect get_bounding_rect(const CL_Sprite& sprite);
 
   EditorObjMap::Obj* find_object(const CL_Point& pos);
+  std::vector<EditorObjMap::Obj*> get_selection(const CL_Rect& rect);
 private:
   EditorObjMap (const EditorObjMap&);
   EditorObjMap& operator= (const EditorObjMap&);

@@ -1,4 +1,4 @@
-//  $Id: WindstilleMain.cxx,v 1.3 2003/08/06 17:16:19 grumbel Exp $
+//  $Id: WindstilleMain.cxx,v 1.4 2003/08/06 17:29:19 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -58,10 +58,10 @@ WindstilleMain::inner_main(void* closure, int argc, char** argv)
                            screen_width, screen_height);
 
   //CL_OpenGL::begin_2d();
-  glEnable (GL_BLEND);
+  //glEnable (GL_BLEND);
 
   try {
-    resources =  new CL_ResourceManager ("../data/windstille.scr", false);
+    resources =  new CL_ResourceManager ("../data/windstille.xml", false);
     
     std::cout << "Loading Guile Code..." << std::endl;
 

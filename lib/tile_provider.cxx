@@ -17,6 +17,7 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
+#include "tile_provider_impl.hxx"
 #include "tile_provider.hxx"
 
 TileProvider::TileProvider(TileProviderImpl* impl_)
@@ -25,9 +26,15 @@ TileProvider::TileProvider(TileProviderImpl* impl_)
 }
 
 CL_Sprite
-TileProvider::get_sprite()
+TileProvider::get_sprite() const
 {
   return impl->get_sprite();
+}
+
+CL_PixelBuffer
+TileProvider::get_pixelbuffer() const
+{
+  return impl->get_pixelbuffer();
 }
 
 /* EOF */

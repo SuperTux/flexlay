@@ -25,11 +25,14 @@
 #include <ClanLib/Display/Providers/provider_factory.h>
 #include <iostream>
 #include "string_converter.hxx"
+#include "tile_provider.hxx"
 #include "tile.hxx"
 
 class TileImpl
 {
 public:
+  TileProvider   provider;
+
   CL_Sprite      sprite;
   CL_PixelBuffer pixelbuffer;
 
@@ -43,6 +46,7 @@ public:
       and such */
   CL_Color  attribute_color;
 
+  // FIXME: old windstille stuff
   unsigned char colmap[8];
 
   std::string filename;
@@ -51,7 +55,8 @@ public:
 Tile::Tile(const TileProvider& provider)
   : impl(new TileImpl())
 {
-  
+  impl->provider  = provider;
+  impl->has_color = false; 
 }
 
 Tile::Tile(const CL_PixelBuffer& pixelbuffer,
@@ -113,41 +118,59 @@ Tile::get_sprite()
     }
   else
     {
-      CL_SpriteDescription desc;
-      desc.add_frame(CL_PixelBuffer(get_pixelbuffer()));
-      impl->sprite = CL_Sprite(desc);
-      
+      if (impl->provider)
+        {
+          impl->sprite = impl->provider.get_sprite();
+        }
+      else
+        {
+          CL_SpriteDescription desc;
+          desc.add_frame(CL_PixelBuffer(get_pixelbuffer()));
+          impl->sprite = CL_Sprite(desc);
+        }
+
       return impl->sprite;
     }
 }
 
 CL_PixelBuffer
 Tile::get_pixelbuffer()
-{	
-  try {
-    if (impl->pixelbuffer)
-      {
-        return impl->pixelbuffer;
-      }
-    else 
-      {
-        if (has_suffix(impl->filename, ".png") || has_suffix(impl->filename, ".jpg"))
-          {
-            impl->pixelbuffer = CL_PixelBuffer(CL_ProviderFactory::load(impl->filename));
+{
+  if (impl->pixelbuffer)
+    {
+      return impl->pixelbuffer;
+    }
+  else 
+    {
+      if (impl->provider)
+        {
+          impl->pixelbuffer = impl->provider.get_pixelbuffer();
+          return impl->pixelbuffer;
+        }
+      else
+        {
+          // FIXME: Move all this into a special provider
+
+          try {
+            if (has_suffix(impl->filename, ".png") || has_suffix(impl->filename, ".jpg"))
+              {
+                impl->pixelbuffer = CL_PixelBuffer(CL_ProviderFactory::load(impl->filename));
+              }
+            else
+              {
+                //CL_SpriteDescription descr(impl->filename, resources);
+                //impl->pixelbuffer = CL_PixelBuffer(*(descr.get_frames().begin()->first));
+                assert(0);
+              }
+            return impl->pixelbuffer;
+          
+          } catch(CL_Error& err) {
+            std::cout << "CL_Error: " << err.message << std::endl;
+            std::cout << "          filename = " << impl->filename << std::endl;
+            return CL_PixelBuffer();
           }
-        else
-          {
-            //CL_SpriteDescription descr(impl->filename, resources);
-            //impl->pixelbuffer = CL_PixelBuffer(*(descr.get_frames().begin()->first));
-            assert(0);
-          }
-        return impl->pixelbuffer;
-      }
-  } catch(CL_Error& err) {
-    std::cout << "CL_Error: " << err.message << std::endl;
-    std::cout << "          filename = " << impl->filename << std::endl;
-    return CL_PixelBuffer();
-  }
+        }
+    }
 }
 
 CL_Color

@@ -28,15 +28,26 @@ require "netpanzerbrushes.rb"
 require "level.rb"
 require "gameobjects.rb"
 
-$screen = CL_Size.new(1024, 768)
+$screen  = CL_Size.new(1024, 768)
 
 flexlay = Flexlay.new()
 flexlay.init($screen.width, $screen.height)
 
+class Config
+  attr_accessor :datadir, :recent_files
+
+  def initialize()
+    @datadir      = "./"
+    @recent_files = []
+  end
+end
+
 $config = Config.new()
 
-$tileset = Tileset.new(32)
-load_netpanzer_tiles($tileset)
+$datadir = "/home/ingo/games/netpanzer-0.1.5"
+NetPanzerData::instance().init($datadir)
+
+$tileset = NetPanzerData::instance().get_tileset()
 
 $editor = Editor.new()
 $gui = $editor.get_gui_manager()

@@ -152,13 +152,4 @@ module GameObjects
   end
 end
 
-class Config
-  attr_accessor :datadir, :recent_files
-
-  def initialize()
-    @datadir      = "./"
-    @recent_files = []
-  end
-end
-
 # EOF #

@@ -17,10 +17,11 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-#ifndef HEADER_TILE_PROVIDER_IMPL_HXX
-#define HEADER_TILE_PROVIDER_IMPL_HXX
+#ifndef HEADER_TILE_PROVIDER_HXX
+#define HEADER_TILE_PROVIDER_HXX
 
 #include <ClanLib/Display/sprite.h>
+#include <ClanLib/Display/pixel_buffer.h>
 #include "shared_ptr.hxx"
 
 class TileProviderImpl;
@@ -29,19 +30,15 @@ class TileProviderImpl;
 class TileProvider
 {
 public:
+  TileProvider() {}
   TileProvider(TileProviderImpl* impl);
 
-  CL_Sprite get_sprite();
+  CL_Sprite      get_sprite() const;
+  CL_PixelBuffer get_pixelbuffer() const;
+
+  operator bool() const { return impl.get(); }
 private:
   SharedPtr<TileProviderImpl> impl;
-};
-
-class TileProviderImpl
-{
-public:
-  TileProviderImpl() {}
-
-  virtual CL_Sprite get_sprite() =0;
 };
 
 #endif

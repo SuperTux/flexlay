@@ -21,13 +21,52 @@
 #define HEADER_SCRIPTING_NETPANZER_HXX
 
 #include <string>
+#include <ClanLib/Display/palette.h>
 #include "../lib/tileset.hxx"
 #include "../lib/tilemap_layer.hxx"
 #include "../lib/shared_ptr.hxx"
 
-void load_netpanzer_tiles(Tileset tileset);
+void load_netpanzer_tileset(Tileset tileset, const char* filename);
 
 class NetPanzerFileStructImpl;
+
+struct NetPanzerTileHeader
+{
+public:
+  char	attrib;
+  char	move_value;
+  char	avg_color;
+};
+
+class NetPanzerData
+{
+private:
+  static NetPanzerData* instance_;
+public:
+  static NetPanzerData* instance() 
+  {
+    if (instance_)
+      return (instance_);
+    else
+      return (instance_ = new NetPanzerData());
+  }
+
+private:
+  std::string    datadir;
+  CL_Palette     palette;
+  Tileset        tileset;
+  unsigned char* tiledata;
+  
+public:
+  NetPanzerData();
+  void init(const std::string& datadir_);
+  const CL_Palette& get_palette() const;
+  const Tileset&    get_tileset() const;
+  unsigned char*    get_tiledata() const;
+
+  CL_Palette load_palette(const std::string& filename);
+  Tileset    load_tileset(const std::string& filename);
+};
 
 class NetPanzerFileStruct
 {

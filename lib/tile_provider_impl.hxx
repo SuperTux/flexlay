@@ -20,13 +20,16 @@
 #ifndef HEADER_TILE_PROVIDER_IMPL_HXX
 #define HEADER_TILE_PROVIDER_IMPL_HXX
 
-/**
- */
+#include <ClanLib/Display/sprite.h>
+#include <ClanLib/Display/pixel_buffer.h>
+
 class TileProviderImpl
 {
-private:
 public:
-  TileProviderImpl();
+  TileProviderImpl() {}
+
+  virtual CL_Sprite      get_sprite()      const =0;
+  virtual CL_PixelBuffer get_pixelbuffer() const =0;
 };
 
 #endif

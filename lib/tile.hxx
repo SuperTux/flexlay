@@ -24,9 +24,9 @@
 #include <ClanLib/Display/sprite.h>
 #include <ClanLib/Display/pixel_buffer.h>
 #include "shared_ptr.hxx"
-#include "tile_provider.hxx"
 
 class TileImpl;
+class TileProvider;
 
 /** A Tile is a surface or sprite together with meta information for
     collision (aka colmap), walkability or such. */

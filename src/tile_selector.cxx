@@ -24,10 +24,9 @@
 #include "tile_selector.hxx"
 #include "tilemap_paint_tool.hxx"
 
-TileSelector::TileSelector(const CL_Rect& rect, int width, int height, CL_Component* parent)
-  : CL_Component(rect,
-                 parent),
-    width(width), height(height)
+TileSelector::TileSelector(const CL_Rect& rect, CL_Component* parent)
+  : CL_Component(rect, parent),
+    width(1)
 {
   index = 0;
 
@@ -160,6 +159,8 @@ void
 TileSelector::set_tileset(Tileset t)
 {
   tileset = t;
+  // Recalc the number of tiles in a row
+  width  = get_width()/tileset.get_tile_size();
 }
 
 void

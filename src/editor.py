@@ -81,9 +81,6 @@ editor_map = EditorMapComponent(myrect, gui.get_component())
 workspace  = Workspace(myrect.get_width(), myrect.get_height())
 editor_map.set_workspace(workspace)
 
-m = EditorMap()
-workspace.set_map(m)
-
 # Tools
 tilemap_paint_tool  = TileMapPaintTool()
 tilemap_select_tool = TileMapSelectTool()
@@ -92,11 +89,8 @@ objmap_select_tool  = ObjMapSelectTool()
 
 workspace.set_tool(tilemap_paint_tool.to_tool());
 
-tileset = load_supertux_tiles()
-tilemap = TilemapLayer(tileset, 200, 15)
-m.add_layer(tilemap.to_layer())
-    
-TilemapLayer_set_current(tilemap)
+startlevel = SuperTuxLevel()
+startlevel.activate(workspace)
 
 def do_quit():
     print "---My Callback---"
@@ -112,30 +106,31 @@ def draw_something():
     _.add_point(CL_Point(4,4))
     workspace.get_map().execute(_.to_command())
 
-window = Window(CL_Rect(50, 50, 450, 400), "My Window", gui.get_component())
+def block():
+    window = Window(CL_Rect(50, 50, 450, 400), "My Window", gui.get_component())
     
-gui.push_component(window.get_client_area())
-dirview = DirectoryView(CL_Rect(CL_Point(3, 40), CL_Size(300, 200)), gui.get_component())
-dirview.set_directory("/");
+    gui.push_component(window.get_client_area())
+    dirview = DirectoryView(CL_Rect(CL_Point(3, 40), CL_Size(300, 200)), gui.get_component())
+    dirview.set_directory("/");
 
-scrollbar = Scrollbar(CL_Rect(CL_Point(370, 5), CL_Size(12, 300)), Scrollbar.VERTICAL, gui.get_component())
-scrollbar.set_range(50, 150)
-scrollbar.set_pagesize(10)
-scrollbar.set_pos(100)
+    scrollbar = Scrollbar(CL_Rect(CL_Point(370, 5), CL_Size(12, 300)), Scrollbar.VERTICAL, gui.get_component())
+    scrollbar.set_range(50, 150)
+    scrollbar.set_pagesize(10)
+    scrollbar.set_pos(100)
 
-load_icon    = Icon(CL_Point(34*0+2, 2), make_sprite("../data/images/icons24/stock_open.png"), "Some tooltip", gui.get_component());
-save_icon    = Icon(CL_Point(34*1+2, 2), make_sprite("../data/images/icons24/stock_save.png"), "Some tooltip", gui.get_component());
-save_as_icon = Icon(CL_Point(34*2+2, 2), make_sprite("../data/images/icons24/stock_save_as.png"), "Some tooltip", gui.get_component());
+    load_icon    = Icon(CL_Point(34*0+2, 2), make_sprite("../data/images/icons24/stock_open.png"), "Some tooltip", gui.get_component());
+    save_icon    = Icon(CL_Point(34*1+2, 2), make_sprite("../data/images/icons24/stock_save.png"), "Some tooltip", gui.get_component());
+    save_as_icon = Icon(CL_Point(34*2+2, 2), make_sprite("../data/images/icons24/stock_save_as.png"), "Some tooltip", gui.get_component());
+    
+    copy_icon    = Icon(CL_Point(34*3.1+2, 2), make_sprite("../data/images/icons24/stock_copy.png"), "Some tooltip", gui.get_component());
+    paste_icon   = Icon(CL_Point(34*4.1+2, 2), make_sprite("../data/images/icons24/stock_paste.png"), "Some tooltip", gui.get_component());
+    
+    def foo():
+        print "Button pressed"
 
-copy_icon    = Icon(CL_Point(34*3.1+2, 2), make_sprite("../data/images/icons24/stock_copy.png"), "Some tooltip", gui.get_component());
-paste_icon   = Icon(CL_Point(34*4.1+2, 2), make_sprite("../data/images/icons24/stock_paste.png"), "Some tooltip", gui.get_component());
+    connect(load_icon.sig_clicked(), foo)
 
-def foo():
-    print "Button pressed"
-
-connect(load_icon.sig_clicked(), foo)
-
-gui.pop_component()
+    gui.pop_component()
 
 willow = Panel(CL_Rect(CL_Point(0, 23), CL_Size(800, 33)), gui.get_component())
 
@@ -173,8 +168,6 @@ def on_map_change():
         redo_icon.enable()
     else:
         redo_icon.disable()        
-
-connect(m.sig_change(), on_map_change)
 
 def set_tilemap_paint_tool():
     workspace.set_tool(tilemap_paint_tool.to_tool())
@@ -225,7 +218,7 @@ object.set_callback(set_objmap_select_tool)
 # erase  = Icon(CL_Point(2, 32+1+2), make_sprite("../data/images/tools/stock-tool-eraser-22.png"), "Some tooltip", toolbar);
 # move   = Icon(CL_Point(2, 32*2+2), make_sprite("../data/images/tools/stock-tool-move-22.png"), "Some tooltip", toolbar);
 
-supertux = SuperTuxGUI(tileset, gui)
+supertux = SuperTuxGUI(load_supertux_tiles(), gui)
 
 def block():
     def CL_Menu_add_item(self, name, func):

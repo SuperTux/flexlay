@@ -133,8 +133,6 @@ EditorMap::get_metadata() const
 CL_Rect
 EditorMap::get_bounding_rect()
 {
-  assert(impl->layers.size() >= 1);
-  
   bool init = false;
   CL_Rect rect;
 

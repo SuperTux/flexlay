@@ -33,7 +33,6 @@ public:
 private:
   CL_SlotContainer slots;
   int width;
-  int height;
   int index;
   
   int offset;
@@ -50,7 +49,7 @@ private:
 
 public:
   /** width and height in number of tiles */
-  TileSelector(const CL_Rect& rect, int width, int height, CL_Component* parent);
+  TileSelector(const CL_Rect& rect, CL_Component* parent);
   
   ~TileSelector();
 

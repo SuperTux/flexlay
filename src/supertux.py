@@ -40,7 +40,6 @@ def load_game_tiles(tileset, filename):
                                   CL_Color(255,   0,   0, 128)))
 
 class SuperTuxLevel:
-    me = None
     name   = "no name"
     author = "no author"
     width  = 20
@@ -54,29 +53,38 @@ class SuperTuxLevel:
 
     editormap = None
 
-    def __init__(self, filename):
-        print "SuperTuxLevel:__init__"
-        self.me = self
+    def __init__(self, filename = None):
+        if filename == None:
+            self.name   = "No Name"
+            self.author = "No Author"
 
-        tree = sexpr_read_from_file(filename)
-        data = tree[1:]
+            self.width  = 20
+            self.height = 15
 
-        self.name   = get_value_from_tree(["name", "_"], data, "no name")
-        self.author = get_value_from_tree(["name", "_"], data, "no author")
+            self.foreground  = TilemapLayer(supertux_tileset, self.width, self.height)
+            self.interactive = TilemapLayer(supertux_tileset, self.width, self.height)
+            self.background  = TilemapLayer(supertux_tileset, self.width, self.height)
+            self.objects = ObjectLayer()
+        else:
+            tree = sexpr_read_from_file(filename)
+            data = tree[1:]
 
-        self.width  = get_value_from_tree(["width", "_"], data, 20)
-        self.height = get_value_from_tree(["height""_"], data, 15)
+            self.name   = get_value_from_tree(["name", "_"], data, "no name")
+            self.author = get_value_from_tree(["name", "_"], data, "no author")
 
-        self.foreground  = TilemapLayer(supertux_tileset, self.width, self.height)
-        self.foreground.set_data(get_value_from_tree(["foreground-tm"], data, []))
+            self.width  = get_value_from_tree(["width", "_"], data, 20)
+            self.height = get_value_from_tree(["height""_"], data, 15)
 
-        self.interactive = TilemapLayer(supertux_tileset, self.width, self.height)
-        self.interactive.set_data(get_value_from_tree(["interactive-tm"], data, []))
+            self.foreground  = TilemapLayer(supertux_tileset, self.width, self.height)
+            self.foreground.set_data(get_value_from_tree(["foreground-tm"], data, []))
 
-        self.background  = TilemapLayer(supertux_tileset, self.width, self.height)
-        self.background.set_data(get_value_from_tree(["background-tm"], data, []))
+            self.interactive = TilemapLayer(supertux_tileset, self.width, self.height)
+            self.interactive.set_data(get_value_from_tree(["interactive-tm"], data, []))
 
-        self.objects = ObjectLayer()
+            self.background  = TilemapLayer(supertux_tileset, self.width, self.height)
+            self.background.set_data(get_value_from_tree(["background-tm"], data, []))
+
+            self.objects = ObjectLayer()
 
         self.editormap = EditorMap()
         self.editormap.add_layer(self.background.to_layer())
@@ -143,8 +151,7 @@ class SuperTuxGUI:
     def __init__(self, tileset, gui):
         self.selector_window = Panel(CL_Rect(CL_Point(800-134, 23+33), CL_Size(128 + 6, 558)),
                                          gui.get_component())
-        self.tileselector = TileSelector(CL_Rect(CL_Point(3, 3), CL_Size(128, 552)),
-                                         6, 3, self.selector_window)
+        self.tileselector = TileSelector(CL_Rect(CL_Point(3, 3), CL_Size(128, 552)), self.selector_window)
         self.tileselector.set_tileset(tileset)
         self.tileselector.set_tiles(range(1,100))
         self.tileselector.show(False)
@@ -178,33 +185,6 @@ def load_supertux_tiles():
     tileset = Tileset(32)
     load_game_tiles(tileset, "/home/ingo/cvs/supertux/supertux/data/images/tilesets/supertux.stgt")
     return tileset 
-        
-def main_loop():
-    flexlay = Flexlay()
-    flexlay.init()
-
-    editor = Editor()
-    gui = editor.get_gui_manager()
-
-    tileset = load_supertux_tiles()
-    editor_map = EditorMapComponent(CL_Rect(0, 0, 799, 599), gui.get_component())
-    workspace  = Workspace(799, 599)
-    editor_map.set_workspace(workspace)
-
-    m = EditorMap()
-    workspace.set_current_map(m)
-    
-    tilemap = TilemapLayer(tileset, 20, 10)
-    m.add_layer(tilemap.to_layer())
-    
-    window = CL_Window(CL_Rect(50, 50, 350, 300), "My Window", gui.get_component())
-    
-    supertux_gui = SuperTuxGUI()
-
-    print "Launching GUI"
-    gui.run()
-    
-    flexlay.deinit()
 
 supertux_datadir = "/home/ingo/cvs/supertux/supertux/data/"
 supertux_tileset = load_supertux_tiles()

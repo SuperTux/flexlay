@@ -128,4 +128,10 @@ ObjMapObject::add_control_points()
   impl->add_control_points();
 }
 
+void
+ObjMapObject::update_control_points()
+{
+  impl->update_control_points();
+}
+
 /* EOF */

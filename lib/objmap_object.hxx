@@ -50,6 +50,7 @@ public:
   CL_Rect get_bound_rect() const;
 
   void add_control_points();
+  void update_control_points();
 
   bool is_null() const;
 

@@ -60,6 +60,8 @@ public:
   void on_mouse_up  (const CL_InputEvent& event);
   void on_mouse_down(const CL_InputEvent& event);
   void on_mouse_move(const CL_InputEvent& event);
+
+  void on_selection_change();
 };
 
 ObjMapSelectTool::ObjMapSelectTool()
@@ -77,9 +79,8 @@ ObjMapSelectTool::~ObjMapSelectTool()
 void
 ObjMapSelectTool::clear_selection()
 {
-  ObjectLayer objmap = ObjectLayer::current();
-  objmap.delete_control_points();
   impl->selection.clear(); 
+  impl->on_selection_change();
 }
 
 ObjMapSelectTool::Selection
@@ -111,7 +112,7 @@ ObjMapSelectToolImpl::draw()
 {
   for (ObjMapSelectTool::Selection::iterator i = selection.begin(); i != selection.end(); ++i)
     {
-      (*i).draw();
+      //      (*i).draw();
       CL_Display::draw_rect((*i).get_bound_rect(), CL_Color(255, 0, 0));
     }
 
@@ -153,17 +154,14 @@ ObjMapSelectToolImpl::on_mouse_up(const CL_InputEvent& event)
 
         case SELECT:
           state = NONE;
+          
           selection_rect.right  = pos.x;
           selection_rect.bottom = pos.y;
           selection_rect.normalize();
 
           selection = objmap.get_selection(selection_rect);
+          on_selection_change();
           parent->release_mouse();
-          
-          if (selection.size() == 1)
-            {
-              selection.front().add_control_points();
-            }
           break;
 
         default:
@@ -223,6 +221,8 @@ ObjMapSelectToolImpl::on_mouse_down(const CL_InputEvent& event)
                         selection.push_back(obj);
                       else
                         selection.erase(i);
+
+                      on_selection_change();
                     }
                   else
                     {
@@ -236,10 +236,7 @@ ObjMapSelectToolImpl::on_mouse_down(const CL_InputEvent& event)
                           selection.clear();
                           objmap.delete_control_points();
                           selection.push_back(obj);
-                          if (selection.size() == 1)
-                            {
-                              selection.front().add_control_points();
-                            }
+                          on_selection_change();
                         }
 
                       move_command = new ObjectMoveCommand(objmap);
@@ -277,11 +274,13 @@ ObjMapSelectToolImpl::on_mouse_move(const CL_InputEvent& event)
     case DRAG:
       if (!control_point.is_null())
         {
-          control_point.set_pos(control_point.get_pos() + (pos - drag_start));
+          control_point.set_pos(pos - offset);
         }
       else
         {
           move_command->move_by(pos - drag_start);
+          if (selection.size() == 1)
+            selection.front().update_control_points();
         }
       /*
       for (ObjMapSelectTool::Selection::iterator i = selection.begin(); 
@@ -309,6 +308,18 @@ Tool
 ObjMapSelectTool::to_tool()
 {
   return Tool(impl); 
+}
+
+void
+ObjMapSelectToolImpl::on_selection_change()
+{
+  ObjectLayer objmap = ObjectLayer::current();
+  objmap.delete_control_points();
+
+  if (selection.size() == 1)
+    {
+      selection.front().add_control_points();
+    } 
 }
 
 /* EOF */

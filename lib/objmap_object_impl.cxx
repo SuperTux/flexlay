@@ -29,6 +29,12 @@ ObjMapObjectImpl::~ObjMapObjectImpl()
 }
 
 void
+ObjMapObjectImpl::update_control_points()
+{
+  std::cout << "Object doesn't have control points to upadate" << std::endl;
+}
+
+void
 ObjMapObjectImpl::add_control_points()
 {
   std::cout << "Object doesn't have control points" << std::endl;

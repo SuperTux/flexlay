@@ -145,7 +145,7 @@ ObjectLayer::add_control_point(const ObjMapControlPoint& obj)
 void
 ObjectLayer::delete_control_points()
 {
-  impl->control_points;
+  impl->control_points.clear();
 }
 
 Layer

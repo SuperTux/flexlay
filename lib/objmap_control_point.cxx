@@ -28,7 +28,14 @@ public:
 
   void draw();
   CL_Rect get_bound_rect() const;
+  CL_Signal_v1<CL_Point> on_set_pos;
 };
+
+CL_Signal_v1<CL_Point>& 
+ObjMapControlPoint::sig_set_pos()
+{
+  return impl->on_set_pos;
+}
 
 ObjMapControlPoint::ObjMapControlPoint(CL_Sprite sprite_, CL_Point pos_, MetaData data_)
   : impl(new ObjMapControlPointImpl)
@@ -51,9 +58,15 @@ ObjMapControlPointImpl::draw()
 }
 
 void
-ObjMapControlPoint::set_pos(const CL_Point& p)
+ObjMapControlPoint::set_pos_raw(const CL_Point& p)
 {
   impl->pos = p;
+}
+
+void
+ObjMapControlPoint::set_pos(const CL_Point& p)
+{
+  impl->on_set_pos(p);
 }
 
 CL_Point

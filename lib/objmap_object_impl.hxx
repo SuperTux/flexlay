@@ -42,6 +42,7 @@ public:
   virtual CL_Rect get_bound_rect() const  =0;
 
   virtual void add_control_points();
+  virtual void update_control_points();
 };
 
 #endif

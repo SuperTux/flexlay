@@ -107,7 +107,8 @@ SpriteStrokeDrawerImpl::draw_dab(const Dab& dab, CL_GraphicContext* gc)
 
         case SpriteStrokeDrawer::DM_ADDITION:
           brush.set_blend_func_separate(blend_src_alpha, blend_one,
-                                        blend_one, blend_one_minus_src_alpha);
+                                        blend_zero, blend_one);
+                                        //blend_one, blend_one_minus_src_alpha);
           brush.draw(dab.pos.x, dab.pos.y, gc);
           break;
               

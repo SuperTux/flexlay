@@ -110,7 +110,10 @@ public:
         CL_Display::pop_modelview();
         surface.draw();
         CL_Display::set_modelview(matrix);
-        CL_Display::push_modelview();
+        // FIXME: I think we need the line below, however with it it
+        //doesn't work, without it, it does, ClanLib bug or just
+        //consfusing function names?
+        //CL_Display::push_modelview();
       }
     else
       { 

@@ -34,7 +34,7 @@ $sketch_stroke_tool  = SketchStrokeTool.new()
 $zoom_tool           = ZoomTool.new()
 
 class PaintGUI
-  attr_reader :workspace
+  attr_reader :workspace, :selector_window
 
   def initialize()
     @editor = Editor.new()
@@ -76,7 +76,7 @@ class PaintGUI
     @brush_hardness = Slider.new(CL_Rect.new(CL_Point.new(3, 170), CL_Size.new(128, 16)),
                                  @selector_window)
     @brush_hardness.set_range(0.0, 1.0)
-    @brush_hardness.set_value(0.5)
+    @brush_hardness.set_value(0.75)
     connect_v1_float(@brush_hardness.sig_on_change, proc{|value|
                        drawer = SpriteStrokeDrawer.new($sketch_stroke_tool.get_drawer())
                        drawer.set_sprite(pixelbuffer2sprite(generate_brushmask(BRUSH_SHAPE_CIRCLE, 
@@ -105,11 +105,22 @@ class PaintGUI
                  $image.activate($gui.workspace())
                })
 
-#    $image.layers_count.times {|i|
-#      button = CL_Button.new(CL_Rect.new(CL_Point.new(25*i+6, 500), CL_Size.new(25, 25)), "#{i}",
-#                             @selector_window)
-#      connect(button.sig_clicked(), proc{ $image.set_active_layer(i) })
-#    }
+    @normal_mode = CL_Button.new(CL_Rect.new(CL_Point.new(5, 500), CL_Size.new(40, 25)), "Norm", @selector_window)
+    @erase_mode  = CL_Button.new(CL_Rect.new(CL_Point.new(45, 500), CL_Size.new(40, 25)), "Erase", @selector_window)
+    @add_mode    = CL_Button.new(CL_Rect.new(CL_Point.new(85, 500), CL_Size.new(40, 25)), "Add", @selector_window)
+
+    connect(@normal_mode.sig_clicked(), proc{ 
+              drawer = SpriteStrokeDrawer.new($sketch_stroke_tool.get_drawer())
+              drawer.set_mode(SpriteStrokeDrawer::DM_NORMAL)
+            })
+    connect(@erase_mode.sig_clicked(),  proc{ 
+              drawer = SpriteStrokeDrawer.new($sketch_stroke_tool.get_drawer())
+              drawer.set_mode(SpriteStrokeDrawer::DM_ERASE)
+            })
+    connect(@add_mode.sig_clicked(),    proc{
+              drawer = SpriteStrokeDrawer.new($sketch_stroke_tool.get_drawer())
+              drawer.set_mode(SpriteStrokeDrawer::DM_ADDITION)
+            })
   end
 
   def quit()
@@ -133,6 +144,8 @@ class Image
       load(filename)
       set_active_layer(0)
     else
+      add_layer()
+      add_layer()
       add_layer()
       set_active_layer(0)
     end
@@ -294,6 +307,20 @@ $image = Image.new()
 # $image.add_layer()
 
 $image.activate($gui.workspace)
+
+drawer = SpriteStrokeDrawer.new($sketch_stroke_tool.get_drawer())
+drawer.set_sprite(pixelbuffer2sprite(generate_brushmask(BRUSH_SHAPE_CIRCLE, 
+                                                        32,  # radius
+                                                        2,   # spikes
+                                                        0.75, # hardness
+                                                        1.0, # aspect
+                                                        0))) # angle
+
+$image.layers_count.times {|i|
+  button = CL_Button.new(CL_Rect.new(CL_Point.new(25*i+6, 450), CL_Size.new(25, 25)), "#{i}",
+                         $gui.selector_window)
+  connect(button.sig_clicked(), proc{ $image.set_active_layer(i) })
+}
 
 $gui.run()
 

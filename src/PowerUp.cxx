@@ -1,4 +1,4 @@
-//  $Id: PowerUp.cxx,v 1.1 2002/03/19 17:56:53 grumbel Exp $
+//  $Id: PowerUp.cxx,v 1.2 2002/09/01 00:05:33 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -20,7 +20,7 @@
 #include "GameWorld.hxx"
 #include "PowerUp.hxx"
 
-PowerUp::PowerUp (Sprite* s, const CL_Vector& arg_pos)
+PowerUp::PowerUp (CL_Sprite s, const CL_Vector& arg_pos)
   : sprite (s), pos (arg_pos)
 {
 }
@@ -28,7 +28,7 @@ PowerUp::PowerUp (Sprite* s, const CL_Vector& arg_pos)
 void
 PowerUp::draw ()
 {
-  sprite->draw (int (pos.x), int (pos.y));
+  sprite.draw (int (pos.x), int (pos.y));
 }
 
 void
@@ -51,11 +51,11 @@ PowerUp::update (float delta)
 }
 
 ShildPowerUp::ShildPowerUp (const CL_Vector& pos)
-  : PowerUp (sprite_storage->create ("powerup/shild"), pos)
+  : PowerUp (CL_Sprite("powerup/shild", resources), pos)
 {}
 
 SpreadPowerUp::SpreadPowerUp (const CL_Vector& pos)
-  : PowerUp (sprite_storage->create ("powerup/spread"), pos)
+  : PowerUp (CL_Sprite("powerup/spread", resources), pos)
 {}
 
 void

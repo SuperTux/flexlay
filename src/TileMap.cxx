@@ -1,4 +1,4 @@
-//  $Id: TileMap.cxx,v 1.1 2002/03/19 17:56:53 grumbel Exp $
+//  $Id: TileMap.cxx,v 1.2 2002/09/01 00:05:33 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -25,7 +25,7 @@
 
 extern CL_ResourceManager* resources;
 
-Tile::Tile (Sprite* arg_sur, int col)
+Tile::Tile (CL_Sprite arg_sur, int col)
 : sur (arg_sur),
   collision (col)
 {
@@ -43,7 +43,7 @@ TileMap::TileMap ()
       //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
 
 
-      *i = new Tile (new Sprite(new SpriteProvider (str.str().c_str (), resources)), 0);
+      *i = new Tile (CL_Sprite(str.str(), resources), 0);
     }
 }
 
@@ -83,7 +83,7 @@ TileMap::TileMap (WindstilleLevel* data)
 	  col = 0;
 	std::cout << col;
 	if (name != "none")
-	  field (x, y) = new Tile (sprite_storage->create(name.c_str()), col);
+	  field (x, y) = new Tile (CL_Sprite(name, resources), col);
 	else
 	  field (x, y) = 0;
       }
@@ -109,7 +109,7 @@ TileMap::draw ()
 	//field (x,y)->sur->setScale (2.0f, 2.0f);
 	if (field (x,y))
 	  {
-	    field (x,y)->sur->draw (x * 64 + 32, y * 64 + 32);
+	    field (x,y)->sur.draw (x * 64 + 32, y * 64 + 32);
 	    if (field (x,y)->collision)
 	      {
 		//CL_Display::fill_rect (x * 64, y*64, x*64 + 64, y*64 + 64, 1.0, 1.0, 1.0, .5);

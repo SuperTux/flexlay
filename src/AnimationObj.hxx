@@ -1,4 +1,4 @@
-//  $Id: AnimationObj.hxx,v 1.1 2002/03/19 17:56:54 grumbel Exp $
+//  $Id: AnimationObj.hxx,v 1.2 2002/09/01 00:05:33 grumbel Exp $
 // 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -30,12 +30,13 @@
 class AnimationObj : public GameObj
 {
 private:
-  Sprite* sprite;
+  CL_Sprite sprite;
   CL_Vector pos;
   
 public:
   AnimationObj (const std::string&, const CL_Vector& position);
-
+  virtual ~AnimationObj() {}
+  
   void draw ();
   void update (float);
 };

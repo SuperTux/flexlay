@@ -5,8 +5,8 @@ bindir=$(prefix)/games
 bin_PROGRAMS = windstille
 
 windstille_SOURCES = \
-  Controller.hxx GameObj.hxx GamepadController.hxx WindstilleMain.hxx \
-  DeltaManager.hxx  GameWorld.hxx  Player.hxx GamepadController.cxx \
+  Controller.hxx GameObj.hxx  WindstilleMain.hxx \
+  DeltaManager.hxx  GameWorld.hxx  Player.hxx  \
   Player.cxx  WindstilleMain.cxx GameWorld.cxx GameObj.cxx \
   DefaultShoot.hxx   DefaultShoot.cxx \
   KeyboardController.hxx   KeyboardController.cxx \

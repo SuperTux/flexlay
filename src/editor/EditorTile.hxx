@@ -1,4 +1,4 @@
-//  $Id: EditorTile.hxx,v 1.1 2002/03/19 17:56:59 grumbel Exp $
+//  $Id: EditorTile.hxx,v 1.2 2002/09/01 00:05:33 grumbel Exp $
 // 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -20,13 +20,13 @@
 #ifndef EDITORTILE_HXX
 #define EDITORTILE_HXX
 
-#include <SphriteLib/sphritelib.h>
 #include <string>
+#include <ClanLib/display.h>
 
 class EditorTile
 {
 private:
-  Sprite* sprite;
+  CL_Sprite* sprite;
   std::string name;
 public:
   EditorTile (const std::string&);

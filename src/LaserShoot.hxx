@@ -1,4 +1,4 @@
-//  $Id: LaserShoot.hxx,v 1.1 2002/03/19 17:56:57 grumbel Exp $
+//  $Id: LaserShoot.hxx,v 1.2 2002/09/01 00:05:33 grumbel Exp $
 // 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -20,7 +20,6 @@
 #ifndef LASERSHOOT_HXX
 #define LASERSHOOT_HXX
 
-#include <SphriteLib/sphritelib.h>
 #include <ClanLib/core.h>
 #include "globals.hxx"
 #include "GameObj.hxx"
@@ -31,10 +30,10 @@ private:
   CL_Vector pos;
   Direction direction;
   int stage;
-  Sprite* sprite;
+  CL_Sprite sprite;
 public:
   LaserShoot (const CL_Vector& arg_pos, Direction arg_dir, int arg_stage);
-
+  virtual ~LaserShoot () {}
   void draw ();
   void update (float delta);
 };

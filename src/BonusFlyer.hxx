@@ -1,4 +1,4 @@
-//  $Id: BonusFlyer.hxx,v 1.1 2002/03/19 17:56:51 grumbel Exp $
+//  $Id: BonusFlyer.hxx,v 1.2 2002/09/01 00:05:33 grumbel Exp $
 // 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -26,13 +26,14 @@
 class BonusFlyer : public GameObj
 {
 private:
-  Sprite* sprite;
+  CL_Sprite sprite;
   CL_Vector2 pos;
   CL_Vector2 vel;
   float passed_time;
 
 public:
   BonusFlyer (const CL_Vector2&);
+  virtual ~BonusFlyer () {}
   void draw ();
   void update (float delta);
 };

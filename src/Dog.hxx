@@ -1,4 +1,4 @@
-//  $Id: Dog.hxx,v 1.1 2002/03/19 17:56:53 grumbel Exp $
+//  $Id: Dog.hxx,v 1.2 2002/09/01 00:05:33 grumbel Exp $
 // 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -21,19 +21,19 @@
 #define DOG_HXX
 
 #include <ClanLib/core.h>
-#include <SphriteLib/sphritelib.h>
 #include "GameObj.hxx"
 #include "globals.hxx"
 
 class Dog : public GameObj
 {
 private:
-  Sprite* sprite;
+  CL_Sprite sprite;
   CL_Vector pos;
   Direction direction;
 public:
   Dog (const CL_Vector& arg_pos, Direction);
-
+  virtual ~Dog () {}
+  
   void draw ();
   void update (float);
 

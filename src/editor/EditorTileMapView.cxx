@@ -1,4 +1,4 @@
-//  $Id: EditorTileMapView.cxx,v 1.1 2002/03/19 17:56:58 grumbel Exp $
+//  $Id: EditorTileMapView.cxx,v 1.2 2002/09/01 00:05:33 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -110,6 +110,7 @@ EditorTileMapView::draw ()
 		-pos.y + CL_Display::get_height ()/2, 0.0);
   tilemap->draw ();
 
+#if 0
   if (CL_Mouse::left_pressed())
   {
     CL_Vector mouse (CL_Mouse::get_x () - CL_Display::get_width ()/2, 
@@ -168,7 +169,7 @@ EditorTileMapView::draw ()
       current_brush_tile.set_tile (*current_tile);
       CL_System::sleep (100);
     }
-
+#endif
   glPopMatrix ();
 
   current_brush_tile.draw (0, 0);
@@ -178,6 +179,7 @@ EditorTileMapView::draw ()
 void
 EditorTileMapView::update ()
 {
+#if 0
   if (CL_Mouse::right_pressed ())
     {
       if (scroll_state == SCROLL_OFF)
@@ -204,6 +206,7 @@ EditorTileMapView::update ()
       tilemap->save (filename);
       std::cout << "Saving to: " << filename << std::endl;
     }
+#endif 0
 }
 
 /* EOF */

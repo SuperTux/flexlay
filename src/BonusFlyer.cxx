@@ -1,4 +1,4 @@
-//  $Id: BonusFlyer.cxx,v 1.1 2002/03/19 17:56:51 grumbel Exp $
+//  $Id: BonusFlyer.cxx,v 1.2 2002/09/01 00:05:33 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -21,7 +21,7 @@
 #include "BonusFlyer.hxx"
 
 BonusFlyer::BonusFlyer (const CL_Vector2& arg_pos)
-  : sprite (sprite_storage->create ("bonusflyer")),
+  : sprite ("bonusflyer", resources),
     pos (arg_pos), vel (100, 0), passed_time (0)
 {
 }
@@ -29,13 +29,13 @@ BonusFlyer::BonusFlyer (const CL_Vector2& arg_pos)
 void
 BonusFlyer::draw ()
 {
-  sprite->draw ((int) pos.x, (int) pos.y);
+  sprite.draw ((int) pos.x, (int) pos.y);
 }
 
 void
 BonusFlyer::update (float delta)
 {
-  sprite->update (delta);
+  sprite.update (delta);
   passed_time += delta;
 
   vel.y = sin (passed_time*5) * 150;

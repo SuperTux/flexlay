@@ -1,4 +1,4 @@
-//  $Id: LaserShoot.cxx,v 1.1 2002/03/19 17:56:57 grumbel Exp $
+//  $Id: LaserShoot.cxx,v 1.2 2002/09/01 00:05:33 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -17,6 +17,7 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
+#include "globals.hxx"
 #include "StringConverter.hxx"
 #include "GameWorld.hxx"
 #include "AnimationObj.hxx"
@@ -27,21 +28,21 @@ LaserShoot::LaserShoot (const CL_Vector& arg_pos, Direction arg_dir, int arg_sta
 {
   assert(stage >= 1 && stage <= 5);
 
-  sprite = sprite_storage->create (std::string("shoot/laser/stage") + to_string(stage));
+  sprite = CL_Sprite (std::string("shoot/laser/stage") + to_string(stage), resources);
 }
 
 void
 LaserShoot::draw ()
 {
   if (direction == WEST)
-    sprite->setScale (-1.0, 1.0);
-  sprite->draw (int (pos.x), int (pos.y));
+    sprite.set_scale (-1.0, 1.0);
+  sprite.draw (int (pos.x), int (pos.y));
 }
 
 void 
 LaserShoot::update (float delta)
 {
-  sprite->update (delta);
+  sprite.update (delta);
   if (direction == WEST)
     pos.x -= 2000 * delta;
   else

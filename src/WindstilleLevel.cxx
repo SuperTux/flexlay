@@ -1,4 +1,4 @@
-//  $Id: WindstilleLevel.cxx,v 1.1 2002/03/19 17:56:51 grumbel Exp $
+//  $Id: WindstilleLevel.cxx,v 1.2 2002/09/01 00:05:33 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -181,7 +181,7 @@ WindstilleLevel::parse_gameobjects (xmlNodePtr cur)
 	cur = cur->next;
 	continue;
       } else if (strcmp((char*)cur->name, "guile-object") == 0) {
-	std::string name = xmlGetValue<string> (cur, "name");
+	std::string name = xmlGetValue<std::string> (cur, "name");
 	std::cout << "Parsing of guile-gameobjects not implemented" << std::endl;
 
       } else {

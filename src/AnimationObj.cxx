@@ -1,4 +1,4 @@
-//  $Id: AnimationObj.cxx,v 1.1 2002/03/19 17:56:54 grumbel Exp $
+//  $Id: AnimationObj.cxx,v 1.2 2002/09/01 00:05:33 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -18,30 +18,28 @@
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include <ClanLib/display.h>
-#include <SphriteLib/sphritelib.h>
-
+#include "globals.hxx"
 #include "AnimationObj.hxx"
 
 extern CL_ResourceManager* resources;
-extern SpriteProviderStorage* sprite_storage;
 
 AnimationObj::AnimationObj (const std::string& str, const CL_Vector& arg_pos)
-  : sprite (sprite_storage->create (str.c_str ())), pos (arg_pos)
+  : sprite (CL_Sprite (str, resources)), pos (arg_pos)
 {
 }
 
 void
 AnimationObj::draw ()
 {
-  sprite->draw (int (pos.x), int (pos.y));
+  sprite.draw (int (pos.x), int (pos.y));
 }
 
 void
 AnimationObj::update (float delta)
 {
-  if (sprite->isFinished ())
+  if (sprite.is_finished ())
     remove ();
-  sprite->update (delta);
+  sprite.update (delta);
 }
 
 /* EOF */

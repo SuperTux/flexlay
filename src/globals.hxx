@@ -1,4 +1,4 @@
-//  $Id: globals.hxx,v 1.1 2002/03/19 17:56:57 grumbel Exp $
+//  $Id: globals.hxx,v 1.2 2002/09/01 00:05:33 grumbel Exp $
 // 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -21,12 +21,11 @@
 #define GLOBALS_HXX
 
 #include <ClanLib/core.h>
-#include <SphriteLib/sphritelib.h>
+#include <ClanLib/display.h>
 
 typedef enum { WEST, EAST} Direction;
 
 extern CL_ResourceManager* resources;
-extern SpriteProviderStorage* sprite_storage;
 
 #endif
 

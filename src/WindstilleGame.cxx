@@ -1,4 +1,4 @@
-//  $Id: WindstilleGame.cxx,v 1.1 2002/03/19 17:56:52 grumbel Exp $
+//  $Id: WindstilleGame.cxx,v 1.2 2002/09/01 00:05:33 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -21,7 +21,7 @@
 
 #include "GameWorld.hxx"
 #include "GameObj.hxx"
-#include "GamepadController.hxx"
+//#include "GamepadController.hxx"
 #include "KeyboardController.hxx"
 #include "DeltaManager.hxx"
 #include "Player.hxx"
@@ -48,6 +48,7 @@ WindstilleGame::display ()
   Controller* controller1;
   Controller* controller2;
 
+#if 0
   if (CL_Input::joysticks.size () >= 2)
     {
       controller1 = new GamepadController (1);
@@ -59,6 +60,7 @@ WindstilleGame::display ()
       controller2 = new KeyboardController ();
     }
   else
+#endif
     {
       controller1 = new KeyboardController ();
       controller2 = new KeyboardController ();
@@ -133,14 +135,14 @@ WindstilleGame::display ()
       float delta = delta_manager.getset ();
       CL_System::sleep (1);
 
-      CL_Display::clear_display (0.0, 0.0, .5, 1.0);
+      CL_Display::clear (CL_Color(0, 0, 127, 255));
 
       view.draw ();
       view.update (delta);
 
       world.update (delta);
 
-      CL_Display::flip_display (false);
+      CL_Display::flip ();
 	
       //world.add (new AnimationObj ("shoot/explosion", CL_Vector (rand ()% 800, rand ()%600)));
 

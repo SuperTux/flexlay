@@ -1,4 +1,4 @@
-//  $Id: Dog.cxx,v 1.1 2002/03/19 17:56:53 grumbel Exp $
+//  $Id: Dog.cxx,v 1.2 2002/09/01 00:05:33 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -21,7 +21,7 @@
 #include "Dog.hxx"
 
 Dog::Dog (const CL_Vector& arg_pos, Direction arg_dir) 
-  : sprite (sprite_storage->create ("dog")),
+  : sprite ("dog", resources),
 pos (arg_pos),
  direction (arg_dir)
 {
@@ -31,19 +31,19 @@ void
 Dog::draw ()
 {
   if (direction == WEST)
-    sprite->setScale (-1.0, 1.0);
+    sprite.set_scale (-1.0, 1.0);
   else
-    sprite->setScale (1.0, 1.0);
+    sprite.set_scale (1.0, 1.0);
 
-  sprite->setHotSpot(24, 36);
+  sprite.set_alignment(origin_center, 24, 36);
 	
-  sprite->draw (int (pos.x), int (pos.y));
+  sprite.draw (int (pos.x), int (pos.y));
 }
 
 void
 Dog::update (float delta)
 {
-  sprite->update (delta);
+  sprite.update (delta);
 
   CL_Vector tmp_pos (pos);
 

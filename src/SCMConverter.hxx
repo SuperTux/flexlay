@@ -1,4 +1,4 @@
-//  $Id: SCMConverter.hxx,v 1.1 2002/03/19 17:56:53 grumbel Exp $
+//  $Id: SCMConverter.hxx,v 1.2 2002/09/01 00:05:33 grumbel Exp $
 // 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -35,7 +35,7 @@ T* checked_smob_cast(long tag, SCM smob)
   assert (!gh_boolean_p(smob));
   if (SCM_NIMP (smob))
     {
-      if (SCM_CAR (smob) == tag)
+      if (reinterpret_cast<long>(SCM_CAR (smob)) == tag)
 	{
 	  T* obj = reinterpret_cast<T*>(SCM_CDR (smob));
 	  return obj;
@@ -64,7 +64,7 @@ T* checked_smob_cast(SCM smob)
   assert (!gh_boolean_p(smob));
   if (SCM_NIMP (smob))
     {
-      if (SCM_CAR (smob) == SmobInfo<T>::get_smob_tag ())
+      if (reinterpret_cast<long>(SCM_CAR (smob)) == SmobInfo<T>::get_smob_tag ())
 	{
 	  T* obj = reinterpret_cast<T*>(SCM_CDR (smob));
 	  return obj;

@@ -1,4 +1,4 @@
-//  $Id: KeyboardController.cxx,v 1.1 2002/03/19 17:56:54 grumbel Exp $
+//  $Id: KeyboardController.cxx,v 1.2 2002/09/01 00:05:33 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -49,7 +49,7 @@ KeyboardController::is_down ()
 bool
 KeyboardController::fire_pressed ()
 {
-  return CL_Keyboard::get_keycode (CL_KEY_LCTRL);
+  return CL_Keyboard::get_keycode (CL_KEY_Q);
 }
 
 bool

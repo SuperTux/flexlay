@@ -1,4 +1,4 @@
-//  $Id: WindstilleMain.cxx,v 1.1 2002/03/19 17:56:56 grumbel Exp $
+//  $Id: WindstilleMain.cxx,v 1.2 2002/09/01 00:05:33 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -19,13 +19,11 @@
 
 //#include <ClanLib/gl.h>
 #include <ClanLib/core.h>
-#include <ClanLib/jpeg.h>
-#include <ClanLib/png.h>
 #include <ClanLib/display.h>
-#include <SphriteLib/sphritelib.h>
 
 #include <guile/gh.h>
 
+#include "globals.hxx"
 #include "editor/WindstilleEditor.hxx"
 #include "WindstilleGame.hxx"
 #include "SpriteSmob.hxx"
@@ -37,7 +35,6 @@
 #include "WindstilleMain.hxx"
 
 CL_ResourceManager* resources;
-SpriteProviderStorage* sprite_storage;
 
 int 
 WindstilleMain::main(int argc, char** argv)
@@ -55,135 +52,18 @@ WindstilleMain::inner_main(void* closure, int argc, char** argv)
   CL_SetupCore::init();
   CL_SetupGL::init();
   CL_SetupDisplay::init();
-  CL_SetupPNG::init ();
-  CL_SetupJPEG::init ();
 
-  CL_Display::set_videomode(screen_width, screen_height, 24, 
-			    false, // fullscreen 
-			    true); // allow resize
+  CL_OpenGLWindow window ("Windstille 0.0.1",
+			  screen_width, screen_height, 24, 
+			  false, // fullscreen 
+			  true); // allow resize
 
-  CL_OpenGL::begin_2d();
+  //CL_OpenGL::begin_2d();
   glEnable (GL_BLEND);
 
   try {
     resources =  new CL_ResourceManager ("../data/windstille.scr", false);
-
-    sprite_storage = new SpriteProviderStorage ();
     
-    /* Going to do ugly things... */
-    sprite_storage->add (new SpriteProvider ("turrican/surround", resources));
-    sprite_storage->add (new SpriteProvider ("turrican/walk", resources));
-    sprite_storage->add (new SpriteProvider ("turrican/jump", resources));
-    sprite_storage->add (new SpriteProvider ("turrican/sit", resources));
-    sprite_storage->add (new SpriteProvider ("turrican/stand", resources));
-    sprite_storage->add (new SpriteProvider ("turrican/roll", resources));
-    sprite_storage->add (new SpriteProvider ("turrican/shild", resources));
-    sprite_storage->add (new SpriteProvider ("shoot/bounce", resources));
-    sprite_storage->add (new SpriteProvider ("shoot/default", resources));
-    sprite_storage->add (new SpriteProvider ("shoot/explosion", resources));
-    sprite_storage->add (new SpriteProvider ("dog", resources));
-    sprite_storage->add (new SpriteProvider ("bonusflyer", resources));
-
-    sprite_storage->add (new SpriteProvider ("powerup/flash", resources));
-    sprite_storage->add (new SpriteProvider ("powerup/laser", resources));
-    sprite_storage->add (new SpriteProvider ("powerup/powerup", resources));
-    sprite_storage->add (new SpriteProvider ("powerup/spread", resources));
-    sprite_storage->add (new SpriteProvider ("powerup/shild", resources));
-
-    sprite_storage->add (new SpriteProvider ("shoot/laser/stage1", resources));
-    sprite_storage->add (new SpriteProvider ("shoot/laser/stage2", resources));
-    sprite_storage->add (new SpriteProvider ("shoot/laser/stage3", resources));
-    sprite_storage->add (new SpriteProvider ("shoot/laser/stage4", resources));
-    sprite_storage->add (new SpriteProvider ("shoot/laser/stage5", resources));
-
-    sprite_storage->add (new SpriteProvider ("tiles/green1", resources));
-    sprite_storage->add (new SpriteProvider ("tiles/tile1", resources));
-    sprite_storage->add (new SpriteProvider ("tiles/tile2", resources));
-    sprite_storage->add (new SpriteProvider ("tiles/tile3", resources));
-    sprite_storage->add (new SpriteProvider ("tiles/tile4", resources));
-    sprite_storage->add (new SpriteProvider ("tiles/tile5", resources));
-    sprite_storage->add (new SpriteProvider ("tiles/tile6", resources));
-    sprite_storage->add (new SpriteProvider ("tiles/tile7", resources));
-    sprite_storage->add (new SpriteProvider ("tiles/tile8", resources));
-    sprite_storage->add (new SpriteProvider ("tiles/tile9", resources));
-
-    sprite_storage->add (new SpriteProvider ("tiles/tile10", resources));
-    sprite_storage->add (new SpriteProvider ("tiles/tile11", resources));
-    sprite_storage->add (new SpriteProvider ("tiles/tile12", resources));
-    sprite_storage->add (new SpriteProvider ("tiles/tile13", resources));
-    sprite_storage->add (new SpriteProvider ("tiles/tile14", resources));
-    sprite_storage->add (new SpriteProvider ("tiles/tile15", resources));
-    sprite_storage->add (new SpriteProvider ("tiles/tile16", resources));
-    sprite_storage->add (new SpriteProvider ("tiles/tile17", resources));
-    sprite_storage->add (new SpriteProvider ("tiles/tile18", resources));
-    sprite_storage->add (new SpriteProvider ("tiles/tile19", resources));
-
-    sprite_storage->add (new SpriteProvider ("tiles/tile20", resources));
-    sprite_storage->add (new SpriteProvider ("tiles/tile21", resources));
-    sprite_storage->add (new SpriteProvider ("tiles/tile22", resources));
-    sprite_storage->add (new SpriteProvider ("tiles/tile23", resources));
-    sprite_storage->add (new SpriteProvider ("tiles/tile24", resources));
-    sprite_storage->add (new SpriteProvider ("tiles/tile25", resources));
-    sprite_storage->add (new SpriteProvider ("tiles/tile26", resources));
-    sprite_storage->add (new SpriteProvider ("tiles/tile27", resources));
-    //sprite_storage->add (new SpriteProvider ("tiles/tile28", resources));
-    sprite_storage->add (new SpriteProvider ("tiles/tile29", resources));
-
-    sprite_storage->add (new SpriteProvider ("tiles/tile30", resources));
-    sprite_storage->add (new SpriteProvider ("tiles/tile31", resources));
-    sprite_storage->add (new SpriteProvider ("tiles/tile32", resources));
-    sprite_storage->add (new SpriteProvider ("tiles/tile33", resources));
-    sprite_storage->add (new SpriteProvider ("tiles/tile34", resources));
-    sprite_storage->add (new SpriteProvider ("tiles/tile35", resources));
-    sprite_storage->add (new SpriteProvider ("tiles/tile36", resources));
-    sprite_storage->add (new SpriteProvider ("tiles/tile39", resources));
-
-    sprite_storage->add (new SpriteProvider ("tiles/tile40", resources));
-    sprite_storage->add (new SpriteProvider ("tiles/tile41", resources));
-    sprite_storage->add (new SpriteProvider ("tiles/tile42", resources));
-    sprite_storage->add (new SpriteProvider ("tiles/tile43", resources));
-    sprite_storage->add (new SpriteProvider ("tiles/tile44", resources));
-    sprite_storage->add (new SpriteProvider ("tiles/tile45", resources));
-    sprite_storage->add (new SpriteProvider ("tiles/tile46", resources));
-    sprite_storage->add (new SpriteProvider ("tiles/tile47", resources));
-    sprite_storage->add (new SpriteProvider ("tiles/tile48", resources));
-    sprite_storage->add (new SpriteProvider ("tiles/tile49", resources));
-
-    sprite_storage->add (new SpriteProvider ("tiles/tile50", resources));
-    sprite_storage->add (new SpriteProvider ("tiles/tile51", resources));
-    sprite_storage->add (new SpriteProvider ("tiles/tile52", resources));
-    sprite_storage->add (new SpriteProvider ("tiles/tile53", resources));
-    sprite_storage->add (new SpriteProvider ("tiles/tile54", resources));
-    sprite_storage->add (new SpriteProvider ("tiles/tile55", resources));
-    sprite_storage->add (new SpriteProvider ("tiles/tile56", resources));
-    sprite_storage->add (new SpriteProvider ("tiles/tile57", resources));
-    sprite_storage->add (new SpriteProvider ("tiles/tile58", resources));
-    sprite_storage->add (new SpriteProvider ("tiles/tile59", resources));
-
-    sprite_storage->add (new SpriteProvider ("tiles/tile60", resources));
-    sprite_storage->add (new SpriteProvider ("tiles/tile61", resources));
-    sprite_storage->add (new SpriteProvider ("tiles/tile62", resources));
-    sprite_storage->add (new SpriteProvider ("tiles/tile63", resources));
-    sprite_storage->add (new SpriteProvider ("tiles/tile64", resources));
-    sprite_storage->add (new SpriteProvider ("tiles/tile65", resources));
-    sprite_storage->add (new SpriteProvider ("tiles/tile66", resources));
-    sprite_storage->add (new SpriteProvider ("tiles/tile67", resources));
-    sprite_storage->add (new SpriteProvider ("tiles/tile68", resources));
-    sprite_storage->add (new SpriteProvider ("tiles/tile69", resources));
-
-    sprite_storage->add (new SpriteProvider ("tiles/tile71", resources));
-    sprite_storage->add (new SpriteProvider ("tiles/tile72", resources));
-    sprite_storage->add (new SpriteProvider ("tiles/tile73", resources));
-    sprite_storage->add (new SpriteProvider ("tiles/tile75", resources));
-    sprite_storage->add (new SpriteProvider ("tiles/tile76", resources));
-    sprite_storage->add (new SpriteProvider ("tiles/tile77", resources));
-
-    sprite_storage->add (new SpriteProvider ("lights/light1", resources));
-    sprite_storage->add (new SpriteProvider ("lights/light2", resources));
-    sprite_storage->add (new SpriteProvider ("lights/light3", resources));
-
-    sprite_storage->add (new SpriteProvider ("nebular", resources));
-
     std::cout << "Loading Guile Code..." << std::endl;
 
     // Debuging on
@@ -235,8 +115,6 @@ WindstilleMain::inner_main(void* closure, int argc, char** argv)
     std::cout << "CL_Error: " << error.message << std::endl;
   }
 
-  CL_SetupJPEG::init ();
-  CL_SetupPNG::init ();
   CL_SetupDisplay::init();
   CL_SetupGL::init();
   CL_SetupCore::init(); 

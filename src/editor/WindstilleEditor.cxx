@@ -1,4 +1,4 @@
-//  $Id: WindstilleEditor.cxx,v 1.1 2002/03/19 17:56:59 grumbel Exp $
+//  $Id: WindstilleEditor.cxx,v 1.2 2002/09/01 00:05:33 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -45,10 +45,10 @@ WindstilleEditor::display ()
   while (true)
     {
       //std::cout << "." << std::flush;
-      CL_Display::clear_display ();
+      CL_Display::clear ();
       view->draw ();
       view->update ();
-      CL_Display::flip_display (true);
+      CL_Display::flip ();
       CL_System::keep_alive ();
     }
 }

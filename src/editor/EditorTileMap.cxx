@@ -1,4 +1,4 @@
-//  $Id: EditorTileMap.cxx,v 1.1 2002/03/19 17:56:59 grumbel Exp $
+//  $Id: EditorTileMap.cxx,v 1.2 2002/09/01 00:05:33 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -17,6 +17,7 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
+#include <iostream>
 #include "../WindstilleLevel.hxx"
 #include "../globals.hxx"
 #include "EditorTileMap.hxx"
@@ -73,7 +74,8 @@ EditorTileMap::get_tile (int x, int y)
 void
 EditorTileMap::save (const std::string& filename)
 {
-  ofstream out (filename.c_str ());
+#if 0
+  std::ofstream out (filename.c_str ());
   
   if (out)
     {
@@ -101,6 +103,7 @@ EditorTileMap::save (const std::string& filename)
     {
       std::cout << "Write error" << std::endl;
     }
+#endif
 }
 
 /* EOF */

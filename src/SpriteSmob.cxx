@@ -1,4 +1,4 @@
-//  $Id: SpriteSmob.cxx,v 1.1 2002/03/19 17:56:52 grumbel Exp $
+//  $Id: SpriteSmob.cxx,v 1.2 2002/09/01 00:05:33 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -19,7 +19,7 @@
 
 #include "SCMConverter.hxx"
 #include <ClanLib/gl.h>
-#include <SphriteLib/sphritelib.h>
+#include <ClanLib/display.h>
 #include "SpriteSmob.hxx"
 #include "globals.hxx"
 
@@ -65,7 +65,7 @@ SpriteSmob::print (SCM image_smob, SCM port, scm_print_state *pstate)
 SCM
 SpriteSmob::update (SCM scm_sprite, SCM scm_delta)
 {
-  Sprite* sprite = checked_smob_cast<Sprite> (tag, scm_sprite);
+  CL_Sprite* sprite = checked_smob_cast<CL_Sprite> (tag, scm_sprite);
   float delta = gh_scm2double (scm_delta);
 
   sprite->update (delta);
@@ -75,7 +75,7 @@ SpriteSmob::update (SCM scm_sprite, SCM scm_delta)
 SCM
 SpriteSmob::draw (SCM scm_sprite, SCM scm_x_pos, SCM scm_y_pos)
 {
-  Sprite* sprite = checked_smob_cast<Sprite> (tag, scm_sprite);  
+  CL_Sprite* sprite = checked_smob_cast<CL_Sprite> (tag, scm_sprite);  
 
   int x_pos = (int) gh_scm2double (scm_x_pos);
   int y_pos = (int) gh_scm2double (scm_y_pos);
@@ -90,20 +90,21 @@ SpriteSmob::draw (SCM scm_sprite, SCM scm_x_pos, SCM scm_y_pos)
 SCM
 SpriteSmob::set_hotspot (SCM scm_sprite, SCM scm_x_pos, SCM scm_y_pos)
 {
-  Sprite* sprite = checked_smob_cast<Sprite> (tag, scm_sprite);
+  CL_Sprite* sprite = checked_smob_cast<CL_Sprite> (tag, scm_sprite);
   int x_pos = (int) gh_scm2double (scm_x_pos);
   int y_pos = (int) gh_scm2double(scm_y_pos);
 
-  sprite->setHotSpot (x_pos, y_pos);
+  sprite->set_alignment (origin_center, x_pos, y_pos);
   return SCM_UNSPECIFIED;
 }
 
 SCM
 SpriteSmob::create (SCM scm_name)
 {
-  Sprite* sprite;
+  CL_Sprite* sprite;
   try {
-    sprite = sprite_storage->create (SCM_CHARS (scm_name));
+    std::cout << "Creating sprite and making a memory leak..." << std::endl;
+    sprite = new CL_Sprite (SCM_CHARS (scm_name), resources);
   } catch (CL_Error& error) {
     std::cout << "CL_Error: " << error.message << std::endl;
     assert (0);

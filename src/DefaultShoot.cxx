@@ -1,4 +1,4 @@
-//  $Id: DefaultShoot.cxx,v 1.1 2002/03/19 17:56:51 grumbel Exp $
+//  $Id: DefaultShoot.cxx,v 1.2 2002/09/01 00:05:33 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -17,17 +17,15 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
+#include "globals.hxx"
 #include "GameWorld.hxx"
 #include "AnimationObj.hxx"
 #include "DefaultShoot.hxx"
 
-extern CL_ResourceManager* resources;
-extern SpriteProviderStorage* sprite_storage;
-
 DefaultShoot::DefaultShoot (const CL_Vector& arg_pos,
 			    DefaultShoot::DirectionState dir)
   : pos (arg_pos),
-    sprite (sprite_storage->create("shoot/default")),
+    sprite ("shoot/default", resources),
     direction (dir)
 { 
 }
@@ -36,11 +34,11 @@ void
 DefaultShoot::draw ()
 {
   if (direction)
-    sprite->setScale (1.0, 1.0);
+    sprite.set_scale (1.0, 1.0);
   else
-    sprite->setScale (-1.0, 1.0);
+    sprite.set_scale (-1.0, 1.0);
 
-  sprite->draw ((int)pos.x, (int) pos.y);
+  sprite.draw ((int)pos.x, (int) pos.y);
 }
 
 void

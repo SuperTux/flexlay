@@ -1,4 +1,4 @@
-//  $Id: PowerUp.hxx,v 1.1 2002/03/19 17:56:53 grumbel Exp $
+//  $Id: PowerUp.hxx,v 1.2 2002/09/01 00:05:33 grumbel Exp $
 // 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -22,7 +22,6 @@
 
 #include <ClanLib/core.h>
 #include <ClanLib/display.h>
-#include <SphriteLib/sphritelib.h>
 #include "GameObj.hxx"
 #include "Player.hxx"
 #include "globals.hxx"
@@ -30,10 +29,11 @@
 class PowerUp : public GameObj
 {
 private:
-  Sprite* sprite;
+  CL_Sprite sprite;
   CL_Vector pos;
 public:
-  PowerUp (Sprite* s, const CL_Vector&);
+  PowerUp (CL_Sprite s, const CL_Vector&);
+  virtual ~PowerUp () {}
 
   void draw ();
   void update (float delta);

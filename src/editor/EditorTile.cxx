@@ -1,4 +1,4 @@
-//  $Id: EditorTile.cxx,v 1.1 2002/03/19 17:56:59 grumbel Exp $
+//  $Id: EditorTile.cxx,v 1.2 2002/09/01 00:05:33 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -37,14 +37,16 @@ EditorTile::draw (int x, int y)
   //std::cout << "drawing: " << x << "x" << y << std::endl;
   if (sprite)
     {
-      sprite->setHotSpot (0, 0);
+      sprite->set_alignment (origin_top_left, 0, 0);
       sprite->draw (x, y);
       //CL_Display::draw_rect (x, y, x + 64, y + 64, 1.0, 1.0, 1.0, 1.0);
     }
   else
     {
-      CL_Display::fill_rect (x, y, x + 64, y + 64, 0.3, 0.3, 0.3, 1.0);
-      CL_Display::draw_rect (x, y, x + 64, y + 64, 1.0, 1.0, 1.0, 1.0);
+      CL_Display::fill_rect (CL_Rect(x, y, x + 64, y + 64),
+			     CL_Color(77, 77, 77, 255));
+      CL_Display::draw_rect (CL_Rect(x, y, x + 64, y + 64),
+			     CL_Color(255, 255, 255, 255));
     }
 }
 
@@ -59,7 +61,10 @@ EditorTile::set_tile (const std::string& str)
     }
   else
     {
+      assert (false);
+#if 0
       sprite = sprite_storage->create (str.c_str ());
+#endif
       name = str;
     }
 }

@@ -1,4 +1,4 @@
-//  $Id: Field.hxx,v 1.1 2002/03/19 17:56:55 grumbel Exp $
+//  $Id: Field.hxx,v 1.2 2002/09/01 00:05:33 grumbel Exp $
 // 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -32,7 +32,7 @@ private:
   std::vector<T> vec;
 
 public:
-  typedef std::vector<T>::iterator iterator;
+  typedef typename std::vector<T>::iterator iterator;
 
   Field (unsigned int w, unsigned int h) 
     : width (w), height (h), vec (width * height)

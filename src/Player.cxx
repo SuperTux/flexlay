@@ -1,4 +1,4 @@
-//  $Id: Player.cxx,v 1.1 2002/03/19 17:56:56 grumbel Exp $
+//  $Id: Player.cxx,v 1.2 2002/09/01 00:05:33 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -17,7 +17,6 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-#include <SphriteLib/sphritelib.h>
 #include "GameWorld.hxx"
 #include "DefaultShoot.hxx"
 #include "LaserShoot.hxx"
@@ -30,13 +29,13 @@ Player::Player (Controller* c) :
   pos (320, 500),
   velocity (0, 0),
   
-  walk     (sprite_storage->create("turrican/walk")),
-  jump     (sprite_storage->create("turrican/jump")),
-  stand    (sprite_storage->create("turrican/stand")),
-  shild    (sprite_storage->create("turrican/shild")),
-  sit      (sprite_storage->create("turrican/sit")),
-  roll     (sprite_storage->create("turrican/roll")),
-  surround (sprite_storage->create("turrican/surround")),
+  walk     ("turrican/walk", resources),
+  jump     ("turrican/jump", resources),
+  stand    ("turrican/stand", resources),
+  shild    ("turrican/shild", resources),
+  sit      ("turrican/sit", resources),
+  roll     ("turrican/roll", resources),
+  surround ("turrican/surround", resources),
 
   state (WALKING),
   gun_state (GUN_READY),
@@ -50,49 +49,49 @@ void
 Player::draw ()
 {
   //std::cout << "onground: " << ground_state << std::endl;
-  Sprite* sprite = 0;
+  CL_Sprite* sprite = 0;
   if (ground_state == ON_GROUND)
     {
       switch (state)
 	{
 	case  WALKING:
-	  sprite = walk;
+	  sprite = &walk;
 	  break;
 
 	case STANDING:
-	  sprite = stand;
+	  sprite = &stand;
 	  break;
 
 	case SITTING:
-	  sprite = sit;
+	  sprite = &sit;
 	  break;
 
 	case ROLLING:
-	  sprite = roll;
+	  sprite = &roll;
 	  break;
 
 	case SURROUND:
-	  sprite = surround;
+	  sprite = &surround;
 	  break;
 	}
     }
   else
     {
-      sprite = jump;
+      sprite = &jump;
     }
 
   if (sprite)
     {
       if (direction == WEST)
-	sprite->setScale (-1.0, 1.0);
+	sprite->set_scale (-1.0, 1.0);
       else
-	sprite->setScale (1.0, 1.0);
+	sprite->set_scale (1.0, 1.0);
 
       sprite->draw (int(pos.x), int(pos.y));
 
       if (shild_time > 0)
 	{
-	  shild->draw (int(pos.x), int(pos.y));
+	  shild.draw (int(pos.x), int(pos.y));
 	}
     }
 }
@@ -100,12 +99,12 @@ Player::draw ()
 void 
 Player::update (float delta)
 {
-  stand->update (delta);
-  surround->update (delta);
-  roll->update (delta);
-  jump->update (delta);
-  walk->update (delta);
-  shild->update (delta);
+  stand.update (delta);
+  surround.update (delta);
+  roll.update (delta);
+  jump.update (delta);
+  walk.update (delta);
+  shild.update (delta);
 
   if (shild_time > 0)
     {

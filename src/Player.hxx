@@ -1,4 +1,4 @@
-//  $Id: Player.hxx,v 1.1 2002/03/19 17:56:56 grumbel Exp $
+//  $Id: Player.hxx,v 1.2 2002/09/01 00:05:33 grumbel Exp $
 // 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -35,14 +35,14 @@ private:
   CL_Vector pos;
   CL_Vector velocity;
   
-  Sprite* walk;
-  Sprite* jump;
-  Sprite* stand;
-  Sprite* shild;
+  CL_Sprite walk;
+  CL_Sprite jump;
+  CL_Sprite stand;
+  CL_Sprite shild;
 
-  Sprite* sit;
-  Sprite* roll;
-  Sprite* surround;
+  CL_Sprite sit;
+  CL_Sprite roll;
+  CL_Sprite surround;
   
 public:
   typedef enum { SURROUND, WALKING, SITTING, STANDING, ROLLING } MovementState;

@@ -36,6 +36,7 @@ private:
   static SketchLayer* current_;
 public:
   static SketchLayer* current() { return current_; }
+  static void set_current(SketchLayer* c) { current_ = c; }
 
   SketchLayer();
   

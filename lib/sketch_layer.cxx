@@ -20,6 +20,7 @@
 #include <iostream>
 #include <ClanLib/gl.h>
 #include <ClanLib/Core/core_iostream.h>
+#include <ClanLib/Core/System/error.h>
 #include <ClanLib/Display/display.h>
 #include <ClanLib/Display/sprite.h>
 #include <ClanLib/Display/pixel_buffer.h>
@@ -44,33 +45,46 @@ public:
 
   /** Used to cache drawings */
   CL_Surface surface;
-  CL_Canvas  canvas;
+  CL_Canvas*  canvas;
   float     last_zoom;
   CL_Pointf last_pos;
   
   SketchLayerImpl() 
-    : surface(new CL_PixelBuffer(800, 600, 800*4, CL_PixelFormat::rgb888), true),
-      canvas(surface),
+    : surface(new CL_PixelBuffer(CL_Display::get_width(), CL_Display::get_height(), 
+                                 CL_Display::get_width()*4, CL_PixelFormat::rgba8888), true),
+      canvas(0),
       last_zoom(0.0f)
   {
-    
+    try {
+      canvas = new CL_Canvas(surface);
+    } catch(CL_Error& err) {
+      std::cout << "CL_Error: " << err.message << std::endl;
+    }
+  }
+
+  ~SketchLayerImpl() {
+    delete canvas;
   }
 
   void add_stroke(const Stroke& stroke)
   {
     strokes.push_back(stroke);
 
-    EditorMapComponent* parent = EditorMapComponent::current();
-    parent->get_workspace().get_gc_state().push(canvas.get_gc());
-    stroke.draw(canvas.get_gc());
-    parent->get_workspace().get_gc_state().pop(canvas.get_gc());
-    canvas.sync_surface();
+    if (canvas)
+      {
+        EditorMapComponent* parent = EditorMapComponent::current();
+        parent->get_workspace().get_gc_state().push(canvas->get_gc());
+        stroke.draw(canvas->get_gc());
+        parent->get_workspace().get_gc_state().pop(canvas->get_gc());
+        canvas->sync_surface();
+      }
   }
   
   void draw(EditorMapComponent* parent) 
   {
-    if (1)
+    if (canvas)
       {
+        // Draw to canvas
         if (last_zoom != parent->get_workspace().get_gc_state().get_zoom() ||
             last_pos  != parent->get_workspace().get_gc_state().get_pos())
           {
@@ -78,19 +92,19 @@ public:
             last_zoom   = parent->get_workspace().get_gc_state().get_zoom();
             last_pos    = parent->get_workspace().get_gc_state().get_pos();
 
-            parent->get_workspace().get_gc_state().push(canvas.get_gc());
-            //canvas.get_gc()->clear(CL_Color(0, 0, 0, 0));
-            canvas.get_gc()->clear(CL_Color::white);
+            parent->get_workspace().get_gc_state().push(canvas->get_gc());
+            canvas->get_gc()->clear(CL_Color(0, 0, 0, 0));
+            //canvas->get_gc()->clear(CL_Color::white);
             for(Strokes::iterator i = strokes.begin(); i != strokes.end(); ++i)
               {
-                i->draw(canvas.get_gc());
+                i->draw(canvas->get_gc());
               }
-            parent->get_workspace().get_gc_state().pop(canvas.get_gc());
+            parent->get_workspace().get_gc_state().pop(canvas->get_gc());
 
-            canvas.sync_surface();
+            canvas->sync_surface();
           }
         
-        surface.set_blend_func(blend_src_alpha, blend_one_minus_src_alpha);
+        surface.set_blend_func(blend_one, blend_one_minus_src_alpha);
 
         CL_Matrix4x4 matrix = CL_Display::get_modelview();
         CL_Display::pop_modelview();
@@ -99,7 +113,8 @@ public:
         CL_Display::push_modelview();
       }
     else
-      {
+      { 
+        // Direct Drawing, slow
         for(Strokes::iterator i = strokes.begin(); i != strokes.end(); ++i)
           {
             i->draw(0);

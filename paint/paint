@@ -1,0 +1,11 @@
+#!/bin/sh
+
+LD_LIBRARY_PATH="$LD_LIBRARY_PATH:`pwd`/../lib:`pwd`/../ruby"
+export LD_LIBRARY_PATH
+
+RUBYLIB=$RUBYLIB:`pwd`/../ruby
+export RUBYLIB
+
+exec ruby ./paint.rb "$@"
+
+# EOF #

@@ -51,6 +51,10 @@ public:
   Dab(float x, float y) 
     : time(0), pos(x, y), pressure(1.0f), tilt(0.0f, 0.0f)
   {}
+
+  Dab(float x_, float y_, float pressure_)
+    : time(0), pos(x_, y_), pressure(pressure_), tilt(0.0f, 0.0f)
+  {}
 };
 
 class Stroke
@@ -61,9 +65,6 @@ public:
   Stroke();
 
   void draw(CL_GraphicContext* gc) const;
-
-  void draw_pass1(CL_GraphicContext* gc) const;
-  void draw_pass2(CL_GraphicContext* gc) const;
 
   void  set_drawer(const StrokeDrawer& drawer_);
   void  add_dab(const Dab& dab);

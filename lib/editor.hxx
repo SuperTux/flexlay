@@ -26,7 +26,7 @@ class TileEditor;
 class EditorMap;
 class GUIManager;
 
-/** */
+/** FIXME: Obsolete class, should be removed, scripting can then use GUIManager directly */
 class Editor
 {
 private:

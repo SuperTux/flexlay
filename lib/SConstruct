@@ -23,7 +23,7 @@ import glob
 
 opts = Options('custom.py')
 opts.Add('CXX', 'The C++ compiler.', 'g++')
-opts.Add('CXXFLAGS', 'The C++ compiler flags.', '-g -O2 -Wall')
+opts.Add('CXXFLAGS', 'The C++ compiler flags.', ['-g', '-O2', '-Wall'])
 opts.Add('CPPPATH', 'additional header path', '')
 opts.Add('LIBPATH', 'additional library path', '')
 
@@ -117,7 +117,7 @@ flexlay_lib = libflexlay_env.SharedLibrary(
     'viewport.cxx',
     'zoom_tool.cxx'],
     CPPPATH=['..'] + clanLib_env['CPPPATH'],
-    CXXFLAGS  = ['$CXXFLAGS'] + clanLib_env['CCFLAGS'],
+    CXXFLAGS  = env['CXXFLAGS'] + clanLib_env['CCFLAGS'],
     LINKFLAGS = clanLib_env['LINKFLAGS'],
     LIBPATH=['$USER_LIBPATH'] + clanLib_env['LIBPATH'],
     LIBS = clanLib_env['LIBS'])

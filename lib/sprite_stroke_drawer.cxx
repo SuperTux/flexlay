@@ -31,11 +31,10 @@ public:
   float     base_size;
   float     spacing;
   CL_Sprite brush;
-
   
   void draw(const Stroke& stroke, CL_GraphicContext* gc);
-  void draw_pass1(const Stroke& stroke, CL_GraphicContext* gc);
-  void draw_pass2(const Stroke& stroke, CL_GraphicContext* gc);
+  void draw_dab(const Dab& dab, CL_GraphicContext* gc);
+
   StrokeDrawerImpl* clone() const;
 };
 
@@ -43,29 +42,68 @@ SpriteStrokeDrawer::SpriteStrokeDrawer()
   : impl(new SpriteStrokeDrawerImpl())
 {
   impl->base_size = 1.0f;
-  impl->spacing   = 20.0f;
+  impl->spacing   = 15.0f;
 }
 
 void
-SpriteStrokeDrawerImpl::draw_pass1(const Stroke& stroke, CL_GraphicContext* gc)
+SpriteStrokeDrawerImpl::draw_dab(const Dab& dab, CL_GraphicContext* gc)
 {
-  glColorMask( 1,1,1,0 );
-  brush.set_blend_func(blend_src_alpha, blend_one_minus_src_alpha);
-  draw(stroke, gc);
+  brush.set_color(color);
+  brush.set_alpha((color.get_alpha()/255.0f) * dab.pressure);
+  brush.set_scale(base_size * dab.pressure,
+                  base_size * dab.pressure);
 
-  glColorMask( 1,1,1,1 );
-  brush.set_blend_func(blend_src_alpha, blend_one_minus_src_alpha);
-}
+  if (gc != 0)
+    {
+      if (1)
+        {
+          /* Correct function:
+             1: dest
+             2: src
+             
+             R = R1 A1 (1 - A2) + R2 A2
+             G = G1 A1 (1 - A2) + G2 A2
+             B = B1 A1 (1 - A2) + B2 A2
+             A = A1 (1 - A2) + A2
 
-void
-SpriteStrokeDrawerImpl::draw_pass2(const Stroke& stroke, CL_GraphicContext* gc)
-{
-  glColorMask( 0,0,0,1 );
-  brush.set_blend_func(blend_dst_alpha, blend_one);
-  draw(stroke, gc);
+             Aout = Afgd + (1 - Afgd) * Abkg 
+             Cout' = Cfgd' + (1 - Afgd) * Cbkg' 
+             where
+             Cfgd' = Cfgd * Afgd
+             Cbkg' = Cbkg * Abkg
+             Cout' = Cout * Aout
 
-  glColorMask( 1,1,1,1 );
-  brush.set_blend_func(blend_src_alpha, blend_one_minus_src_alpha);
+             Aout = (1 - (1 - Afgd) * (1 - Abkg)) 
+             Cout = (Cfgd * Afgd) + (1 - Afgd * Cbkg * Abkg) / Aout 
+             where
+             Cfgd = red, green, blue of foreground
+             Cbkg = red, green, blue of background
+             Afgd = alpha of foreground
+             Abkg = alpha of background
+          */
+
+          // DO Multipass:
+          // 1: GL_ZERO, GL_DST_ALPHA
+          // 2: GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA
+          /*brush.set_blend_func_separate(blend_zero, blend_dst_alpha,
+                                        blend_zero, blend_one);
+                                        brush.draw(dab.pos.x, dab.pos.y, gc);*/
+
+          brush.set_blend_func_separate(blend_src_alpha, blend_one_minus_src_alpha,
+                                        blend_one, blend_one_minus_src_alpha);
+          brush.draw(dab.pos.x, dab.pos.y, gc);
+        }
+      else
+        {   
+          brush.set_blend_func(blend_src_alpha, blend_one_minus_src_alpha);
+          brush.draw(dab.pos.x, dab.pos.y, gc);  
+        }
+    }
+  else
+    {
+      brush.set_blend_func(blend_src_alpha, blend_one_minus_src_alpha);
+      brush.draw(dab.pos.x, dab.pos.y, gc);
+    }
 }
 
 void
@@ -74,61 +112,35 @@ SpriteStrokeDrawerImpl::draw(const Stroke& stroke, CL_GraphicContext* gc)
   if (brush.is_null() || stroke.get_dab_count() == 0)
     return;
     
-  // Spacing is keep relative to the brush size
-  float local_spacing = spacing * base_size;
-
-  brush.set_color(color);
-  brush.set_scale(base_size, base_size);
+  draw_dab(stroke.get_dabs().front(), gc);
   
-  if (stroke.get_dabs().size() == 1 || stroke.get_dabs().size() == 2)
-    { // FIXME: More or less a hack
-      brush.set_color(color);
-      brush.set_alpha((color.get_alpha()/255.0f) * stroke.get_dabs().front().pressure);
-      brush.set_scale(base_size * (1.0f + stroke.get_dabs().front().pressure), 
-                      base_size * (1.0f + stroke.get_dabs().front().pressure));
-
-      brush.draw(stroke.get_dabs().front().pos.x, stroke.get_dabs().front().pos.y, gc);
-    }
-  else
+  float overspace = 0.0f;
+  Stroke::Dabs dabs = stroke.get_dabs();
+  for(unsigned int j = 0; j < dabs.size()-1; ++j)
     {
-      brush.set_color(color);
-      brush.set_alpha((color.get_alpha()/255.0f) * stroke.get_dabs().front().pressure);
-      brush.set_scale(base_size * (1.0f + stroke.get_dabs().front().pressure), 
-                      base_size * (1.0f + stroke.get_dabs().front().pressure));
+      CL_Pointf dist = dabs[j+1].pos - dabs[j].pos;
+      float length = sqrt(dist.x * dist.x + dist.y * dist.y);
+      int n = 1;
+    
+      // Spacing is keep relative to the brush size
+      float local_spacing = spacing * base_size * dabs[j].pressure;
 
-      brush.draw(stroke.get_dabs().front().pos.x, stroke.get_dabs().front().pos.y, gc);
-
-      float overspace = 0.0f;
-      Stroke::Dabs dabs = stroke.get_dabs();
-      for(unsigned int j = 0; j < dabs.size()-1; ++j)
+      while (length + overspace > (local_spacing * n))
         {
-          CL_Pointf dist = dabs[j+1].pos - dabs[j].pos;
-          float length = sqrt(dist.x * dist.x + dist.y * dist.y);
-          int n = 1;
+          float factor = (local_spacing/length) * n - (overspace/length);
           
-          while (length + overspace > (local_spacing * n))
-            {
-              float factor = (local_spacing/length) * n - (overspace/length);
-              CL_Pointf p(dabs[j].pos.x + dist.x * factor,
-                          dabs[j].pos.y + dist.y * factor);
-
-              brush.set_color(color);
-              brush.set_alpha((color.get_alpha()/255.0f) * dabs[j].pressure);
-
-              brush.set_scale(base_size * (1.0f + dabs[j].pressure), 
-                              base_size * (1.0f + dabs[j].pressure));
-  
-              brush.draw(p.x, p.y, gc);
+          // FIXME: Interpolate tilting, pressure, etc. along the line
+          draw_dab(Dab(dabs[j].pos.x + dist.x * factor,
+                       dabs[j].pos.y + dist.y * factor,
+                       dabs[j].pressure),
+                   gc);
               
-              n += 1;
-            }
-
-          // calculate the space that wasn't used in the last iteration
-          overspace = (length + overspace) - (local_spacing * (n-1));
+          n += 1;
         }
-    }
 
-  glColorMask( 1,1,1,1 );
+      // calculate the space that wasn't used in the last iteration
+      overspace = (length + overspace) - (local_spacing * (n-1));
+    }
 }
 
 void

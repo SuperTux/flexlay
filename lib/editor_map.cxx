@@ -75,9 +75,16 @@ EditorMap::draw (EditorMapComponent* parent)
 {
   CL_Rect rect = get_bounding_rect();
 
-  CL_Display::fill_rect(rect, impl->background_color);
-  CL_Display::draw_rect(rect, impl->foreground_color);
-  
+  if (rect != CL_Rect(0,0,0,0))
+    {
+      CL_Display::fill_rect(rect, impl->background_color);
+      CL_Display::draw_rect(rect, impl->foreground_color);
+    }
+  else
+    {
+      CL_Display::clear(impl->background_color);
+    }
+
   for(EditorMapImpl::Layers::iterator i = impl->layers.begin(); i != impl->layers.end(); ++i)
     (*i).draw(parent);
   
@@ -134,7 +141,7 @@ CL_Rect
 EditorMap::get_bounding_rect()
 {
   bool init = false;
-  CL_Rect rect;
+  CL_Rect rect(0,0,0,0);
 
   for(EditorMapImpl::Layers::iterator i = impl->layers.begin(); i != impl->layers.end(); ++i)
     {

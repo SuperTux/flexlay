@@ -24,7 +24,7 @@
 #include <ClanLib/Display/color.h>
 #include <ClanLib/Display/gradient.h>
 
-class ColorPickerColors;
+class ColorPickerHue;
 class ColorPickerAlpha;
 class ColorPickerBrightness;
 
@@ -38,7 +38,7 @@ private:
   std::vector<CL_Slot> slots;
   CL_Color color;
 
-  ColorPickerColors*     colors;
+  ColorPickerHue*     hue;
   ColorPickerBrightness* brightness;
   ColorPickerAlpha*      alpha;
 

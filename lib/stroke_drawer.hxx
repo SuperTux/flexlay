@@ -37,9 +37,6 @@ public:
   
   void draw(const Stroke& stroke, CL_GraphicContext* gc);
 
-  void draw_pass1(const Stroke& stroke, CL_GraphicContext* gc);
-  void draw_pass2(const Stroke& stroke, CL_GraphicContext* gc);
-
   bool is_null() const { return !impl.get(); }
   StrokeDrawer clone() const;
 private:

@@ -69,33 +69,6 @@ Stroke::draw(CL_GraphicContext* gc) const
     }
 }
 
-void 
-Stroke::draw_pass1(CL_GraphicContext* gc) const
-{
-  if (!impl->drawer.is_null())
-    {
-      const_cast<StrokeDrawer&>(impl->drawer).draw_pass1(*this, gc);
-    }
-  else
-    {
-      std::cout << "No drawer set!" << std::endl;
-    }
-}
-
-void 
-Stroke::draw_pass2(CL_GraphicContext* gc) const
-{
-  if (!impl->drawer.is_null())
-    {
-      const_cast<StrokeDrawer&>(impl->drawer).draw_pass2(*this, gc);
-    }
-  else
-    {
-      std::cout << "No drawer set!" << std::endl;
-    }
-}
-
-
 void
 Stroke::add_dab(const Dab& dab) 
 {

@@ -29,7 +29,7 @@
 #include "colorpicker.hxx"
 #include "math.hxx"
 
-class ColorPickerColors : public CL_Component
+class ColorPickerHue : public CL_Component
 {
 public:
   std::vector<CL_Slot> slots;
@@ -38,7 +38,7 @@ public:
   bool pressed;
   CL_Signal_v1<CL_Color> on_color_change;
   
-  ColorPickerColors(const CL_Rect& rect, CL_Component* parent) 
+  ColorPickerHue(const CL_Rect& rect, CL_Component* parent) 
     : CL_Component(rect, parent),
       pressed(false)
   {
@@ -50,11 +50,11 @@ public:
     colors.push_back(CL_Color(255, 255,   0));
     colors.push_back(CL_Color(255,   0,   0));
 
-    slots.push_back(sig_paint().connect(this, &ColorPickerColors::draw));
+    slots.push_back(sig_paint().connect(this, &ColorPickerHue::draw));
 
-    slots.push_back(sig_mouse_down().connect(this, &ColorPickerColors::on_mouse_down));
-    slots.push_back(sig_mouse_up().connect(this, &ColorPickerColors::on_mouse_up));
-    slots.push_back(sig_mouse_move().connect(this, &ColorPickerColors::on_mouse_move));
+    slots.push_back(sig_mouse_down().connect(this, &ColorPickerHue::on_mouse_down));
+    slots.push_back(sig_mouse_up().connect(this, &ColorPickerHue::on_mouse_up));
+    slots.push_back(sig_mouse_move().connect(this, &ColorPickerHue::on_mouse_move));
   }
 
   void update_pointer(const CL_InputEvent& event)
@@ -280,9 +280,9 @@ public:
 
   void update_color()
   {
-    CL_Color new_color(Math::mid(0, int((color.get_red()   * factor_x) + (255 * (factor_y*factor_x))), 255),
-                       Math::mid(0, int((color.get_green() * factor_x) + (255 * (factor_y*factor_x))), 255),   
-                       Math::mid(0, int((color.get_blue()  * factor_x) + (255 * (factor_y*factor_x))), 255),
+    CL_Color new_color(Math::mid(0, int(factor_x * color.get_red()   * (1.0f - factor_y) + factor_x * 255 * (factor_y)), 255),
+                       Math::mid(0, int(factor_x * color.get_green() * (1.0f - factor_y) + factor_x * 255 * (factor_y)), 255),   
+                       Math::mid(0, int(factor_x * color.get_blue()  * (1.0f - factor_y) + factor_x * 255 * (factor_y)), 255),
                        color.get_alpha());
     on_color_change(new_color);
     /*
@@ -341,15 +341,15 @@ ColorPicker::ColorPicker(const CL_Rect& rect, CL_Component* parent)
                                                  CL_Size(int(pwidth*10), int(pheight*10))), 
                                          this);
   
-  colors     = new ColorPickerColors(CL_Rect(CL_Point(int(pwidth*10), 0),
-                                             CL_Size(int(pwidth*1), int(pheight*10))),
-                                     this);
+  hue        = new ColorPickerHue(CL_Rect(CL_Point(int(pwidth*10), 0),
+                                          CL_Size(int(pwidth*1), int(pheight*10))),
+                                  this);
 
   alpha      = new ColorPickerAlpha(CL_Rect(CL_Point(0, int(pheight*10)),
                                             CL_Size(int(pwidth*10), int(pheight*1))),
                                     this);
 
-  slots.push_back(colors->on_color_change.connect(brightness, &ColorPickerBrightness::set_color));
+  slots.push_back(hue->on_color_change.connect(brightness, &ColorPickerBrightness::set_color));
   slots.push_back(brightness->on_color_change.connect(this, &ColorPicker::update_brightness_color));
   slots.push_back(alpha->on_color_change.connect(this, &ColorPicker::update_alpha_color));
   slots.push_back(sig_paint().connect(this, &ColorPicker::draw));

@@ -62,7 +62,8 @@ public:
                                                     CL_Mouse::get_y() - parent->get_screen_y()));
         CL_Sprite s = sprite_drawer.get_sprite();
         s.set_color(sprite_drawer.get_color());
-        s.set_scale(sprite_drawer.get_size(), sprite_drawer.get_size());
+        // FIXME: when using mouse 1.0, when tablet .5f
+        s.set_scale(sprite_drawer.get_size()*0.5f, sprite_drawer.get_size()*0.5f);
         s.set_alpha(0.5);
         s.draw(p.x, p.y);
       }

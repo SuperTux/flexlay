@@ -27,6 +27,7 @@
 class SpriteStrokeDrawerImpl : public StrokeDrawerImpl
 {
 public:
+  SpriteStrokeDrawer::DrawMode mode;
   CL_Color  color;
   float     base_size;
   float     spacing;
@@ -38,11 +39,19 @@ public:
   StrokeDrawerImpl* clone() const;
 };
 
+SpriteStrokeDrawer::SpriteStrokeDrawer(StrokeDrawer drawer)
+{
+  // FIXME: THIS WON'T WORK WITH A REAL SMARTPTR!!!!
+  impl = dynamic_cast<SpriteStrokeDrawerImpl*>(drawer.impl.get());
+  assert(impl.get());
+}
+
 SpriteStrokeDrawer::SpriteStrokeDrawer()
   : impl(new SpriteStrokeDrawerImpl())
 {
   impl->base_size = 1.0f;
   impl->spacing   = 15.0f;
+  impl->mode      = SpriteStrokeDrawer::DM_NORMAL;
 }
 
 void
@@ -66,7 +75,8 @@ SpriteStrokeDrawerImpl::draw_dab(const Dab& dab, CL_GraphicContext* gc)
              B = B1 A1 (1 - A2) + B2 A2
              A = A1 (1 - A2) + A2
 
-             Aout = Afgd + (1 - Afgd) * Abkg 
+             // This is currently used, leads to premultiplied alpha
+             Aout  = Afgd + (1 - Afgd) * Abkg 
              Cout' = Cfgd' + (1 - Afgd) * Cbkg' 
              where
              Cfgd' = Cfgd * Afgd
@@ -88,15 +98,54 @@ SpriteStrokeDrawerImpl::draw_dab(const Dab& dab, CL_GraphicContext* gc)
           /*brush.set_blend_func_separate(blend_zero, blend_dst_alpha,
                                         blend_zero, blend_one);
                                         brush.draw(dab.pos.x, dab.pos.y, gc);*/
+          
+          switch (mode)
+            {
+            case SpriteStrokeDrawer::DM_NORMAL:
+              brush.set_blend_func_separate(blend_src_alpha, blend_one_minus_src_alpha,
+                                            blend_one, blend_one_minus_src_alpha);
+              brush.draw(dab.pos.x, dab.pos.y, gc);
+              break;
 
-          brush.set_blend_func_separate(blend_src_alpha, blend_one_minus_src_alpha,
-                                        blend_one, blend_one_minus_src_alpha);
-          brush.draw(dab.pos.x, dab.pos.y, gc);
+            case SpriteStrokeDrawer::DM_ADDITION:
+              brush.set_blend_func_separate(blend_src_alpha, blend_one,
+                                            blend_one, blend_one_minus_src_alpha);
+              brush.draw(dab.pos.x, dab.pos.y, gc);
+              break;
+              
+            case SpriteStrokeDrawer::DM_ERASE:
+              brush.set_blend_func(blend_zero, blend_one_minus_src_alpha);
+              brush.draw(dab.pos.x, dab.pos.y, gc);
+              break;
+              
+            default:
+              std::cout << "Error: SpriteStrokeDrawer: Unknown draw mode: " << mode << std::endl;
+              break;
+            }
         }
       else
-        {   
-          brush.set_blend_func(blend_src_alpha, blend_one_minus_src_alpha);
-          brush.draw(dab.pos.x, dab.pos.y, gc);  
+        { 
+          switch (mode)
+            {
+            case SpriteStrokeDrawer::DM_NORMAL:  
+              brush.set_blend_func(blend_src_alpha, blend_one_minus_src_alpha);
+              brush.draw(dab.pos.x, dab.pos.y, gc);  
+              break;
+              
+            case SpriteStrokeDrawer::DM_ADDITION:
+              brush.set_blend_func(blend_src_alpha, blend_one);
+              brush.draw(dab.pos.x, dab.pos.y, gc); 
+              break;
+            
+            case SpriteStrokeDrawer::DM_ERASE:
+              brush.set_blend_func(blend_zero, blend_one_minus_src_alpha);
+              brush.draw(dab.pos.x, dab.pos.y, gc);
+              break; 
+
+            default:
+              std::cout << "Error: SpriteStrokeDrawer: Unknown draw mode: " << mode << std::endl;
+              break;
+            }
         }
     }
   else
@@ -183,12 +232,25 @@ void
 SpriteStrokeDrawer::set_sprite(const CL_Sprite& sprite_)
 {
   impl->brush = sprite_;
+  impl->brush.set_alignment(origin_center);
 }
 
 CL_Sprite
 SpriteStrokeDrawer::get_sprite() const
 {
   return impl->brush;
+}
+
+void
+SpriteStrokeDrawer::set_mode(DrawMode mode)
+{
+  impl->mode = mode;
+}
+
+SpriteStrokeDrawer::DrawMode
+SpriteStrokeDrawer::get_mode()
+{
+  return impl->mode;
 }
 
 StrokeDrawerImpl*

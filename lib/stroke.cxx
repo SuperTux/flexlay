@@ -44,6 +44,12 @@ Stroke::set_drawer(const StrokeDrawer& drawer_)
   impl->drawer = drawer_;
 }
 
+StrokeDrawer
+Stroke::get_drawer()
+{
+  return impl->drawer;
+}
+
 Stroke::Dabs
 Stroke::get_dabs() const
 {

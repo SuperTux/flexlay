@@ -85,6 +85,10 @@ class PaintGUI
     connect_v2(@editor_map.sig_on_key("esc"),  proc{ |x, y| puts "bye, bye2"})
     connect_v2(@editor_map.sig_on_key("q"),  proc{ |x, y| $gui.quit()})
     connect_v2(@editor_map.sig_on_key("s"),  proc{ |x, y| $image.save("/tmp/test.scm")})
+    connect_v2(@editor_map.sig_on_key("l"),  proc{ |x, y| 
+                 $image = Image.new("/tmp/test.scm")
+                 $image.activate($gui.workspace())
+               })
 
 #    $image.layers_count.times {|i|
 #      button = CL_Button.new(CL_Rect.new(CL_Point.new(25*i+6, 500), CL_Size.new(25, 25)), "#{i}",
@@ -198,6 +202,25 @@ class Image
 
         # FIXME: No tilt support
         stroke.add_dab(Dab.new(position[0], position[1], pressure))
+      elsif tag == "drawer" then
+        if data[0][0] == "sprite-stroke-drawer" then
+          data = data[0][1..-1]
+          mode    = get_value_from_tree(["mode", "_"], data, SpriteStrokeDrawer::DM_NORMAL)
+          spacing = get_value_from_tree(["spacing", "_"], data, 15.0)
+          size    = get_value_from_tree(["size", "_"],    data,  1.0)
+          color   = get_value_from_tree(["color"],    data, [0, 255, 0, 255])
+          brush   = get_value_from_tree(["brush", "_"],    data, "brush.png")
+
+          drawer = SpriteStrokeDrawer.new()
+          drawer.set_spacing(spacing)
+          drawer.set_mode(mode)
+          drawer.set_size(size)
+          drawer.set_color(CL_Color.new(color[0], color[1], color[2], color[3]))
+          drawer.set_sprite(make_sprite("../data/images/brush/#{brush}"))
+          stroke.set_drawer(drawer.to_drawer)
+        else
+          puts "Error: Unknown drawer: #{data[0][0]}" 
+        end
       end
 
       tree = tree[1..-1]
@@ -215,6 +238,21 @@ class Image
       f.puts "(layer"
       layer.get_strokes().each{|stroke|
         f.puts "  (stroke"
+        
+        # FIXME: This won't work with a real smartptr!
+        sprite_stroke_drawer = SpriteStrokeDrawer.new(stroke.get_drawer())
+
+        f.puts "      (drawer (sprite-stroke-drawer"
+        f.puts "                 (spacing #{sprite_stroke_drawer.get_spacing})"
+        f.puts "                 (size    #{sprite_stroke_drawer.get_size})"
+        f.puts "                 (color   "\
+        "#{sprite_stroke_drawer.get_color.get_red} " \
+        "#{sprite_stroke_drawer.get_color.get_green} " \
+        "#{sprite_stroke_drawer.get_color.get_blue} " \
+        "#{sprite_stroke_drawer.get_color.get_alpha})"
+        f.puts "                 (brush   \"brush.png\")"
+        f.puts "       ))"
+
         stroke.get_dabs().each{|dab|
           f.puts "    (dab"
           f.puts "      (time     #{dab.time})"
@@ -234,8 +272,8 @@ end
 
 $gui   = PaintGUI.new()
 
-# $image = Image.new("/tmp/test.scm")
-$image = Image.new("example2.scm")
+$image = Image.new()
+# $image = Image.new("example2.scm")
 # $image = Image.new()
 # $image.add_layer()
 # $image.add_layer()

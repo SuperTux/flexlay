@@ -31,6 +31,9 @@ class SpriteStrokeDrawerImpl;
 class SpriteStrokeDrawer
 {
 public:
+  enum DrawMode { DM_NORMAL, DM_ERASE, DM_ADDITION };
+
+  SpriteStrokeDrawer(StrokeDrawer drawer);
   SpriteStrokeDrawer();
 
   /** Set the spacing that will be between the sprites that are drawn
@@ -53,6 +56,10 @@ public:
       ignored */
   void      set_sprite(const CL_Sprite& sprite);
   CL_Sprite get_sprite() const;
+
+  /** The modus in which the drawing affects the image (normal, erase, addition, color, etc.) */
+  void set_mode(DrawMode mode);
+  DrawMode get_mode();
 
   StrokeDrawer to_drawer();
 private:

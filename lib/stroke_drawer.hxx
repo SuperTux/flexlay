@@ -39,7 +39,7 @@ public:
 
   bool is_null() const { return !impl.get(); }
   StrokeDrawer clone() const;
-private:
+public:
   SharedPtr<StrokeDrawerImpl> impl;
 };
 

@@ -22,6 +22,7 @@
 
 #include <vector>
 #include <ClanLib/Core/Math/point.h>
+#include <ClanLib/Core/System/system.h>
 #include "shared_ptr.hxx"
 
 class StrokeImpl;
@@ -45,15 +46,15 @@ public:
   CL_Pointf tilt;
 
   Dab()
-    : time(0), pos(0, 0), pressure(1.0f), tilt(0, 0)
+    : time(CL_System::get_time()), pos(0, 0), pressure(1.0f), tilt(0, 0)
   {}
 
   Dab(float x, float y) 
-    : time(0), pos(x, y), pressure(1.0f), tilt(0.0f, 0.0f)
+    : time(CL_System::get_time()), pos(x, y), pressure(1.0f), tilt(0.0f, 0.0f)
   {}
 
   Dab(float x_, float y_, float pressure_)
-    : time(0), pos(x_, y_), pressure(pressure_), tilt(0.0f, 0.0f)
+    : time(CL_System::get_time()), pos(x_, y_), pressure(pressure_), tilt(0.0f, 0.0f)
   {}
 };
 
@@ -67,6 +68,7 @@ public:
   void draw(CL_GraphicContext* gc) const;
 
   void  set_drawer(const StrokeDrawer& drawer_);
+  StrokeDrawer get_drawer();
   void  add_dab(const Dab& dab);
   Dabs  get_dabs()  const;
 

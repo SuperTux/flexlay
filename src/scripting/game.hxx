@@ -1,4 +1,4 @@
-//  $Id: game.hxx,v 1.11 2003/09/27 20:57:39 grumbel Exp $
+//  $Id: game.hxx,v 1.12 2003/09/28 16:58:04 grumbel Exp $
 // 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -54,6 +54,9 @@ float game_get_time();
 
 int game_get_diamonds();
 int game_get_max_diamonds();
+
+float get_game_speed();
+void  set_game_speed(float s);
 
 #endif
 

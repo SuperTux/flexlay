@@ -1,4 +1,4 @@
-//  $Id: game.cxx,v 1.12 2003/09/27 20:57:39 grumbel Exp $
+//  $Id: game.cxx,v 1.13 2003/09/28 16:58:04 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -169,6 +169,16 @@ int game_get_diamonds()
 int game_get_max_diamonds()
 {
   return GameWorld::current()->get_diamond_map()->get_num_max_diamonds();
+}
+
+float get_game_speed()
+{
+  return game_speed;
+}
+
+void  set_game_speed(float s)
+{
+  game_speed = s;
 }
 
 /* EOF */

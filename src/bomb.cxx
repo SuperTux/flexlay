@@ -1,4 +1,4 @@
-//  $Id: bomb.cxx,v 1.3 2003/09/28 10:55:34 grumbel Exp $
+//  $Id: bomb.cxx,v 1.4 2003/09/28 16:58:03 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -27,7 +27,7 @@ Bomb::Bomb(int x, int y)
     explo("explo", resources),
     pos(x,
         (y/SUBTILE_SIZE+1)*SUBTILE_SIZE),
-    count(1.5f),
+    count(2.0f),
     state(COUNTDOWN),
     exploded(false)
 {
@@ -81,8 +81,8 @@ Bomb::explode()
       Igel* igel = dynamic_cast<Igel*>(*i);
       if (igel)
         {
-          if (igel->get_pos().x > pos.x - 20 &&
-              igel->get_pos().x < pos.x + 20 &&
+          if (igel->get_pos().x > pos.x - 30 &&
+              igel->get_pos().x < pos.x + 30 &&
               igel->get_pos().y > pos.y - 20 &&
               igel->get_pos().y < pos.y + 20)
           igel->die();

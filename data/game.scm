@@ -18,6 +18,21 @@
         ((string=? key "d")
          (dialog-show))
 
+        ((string=? key "1")
+         (set-game-speed 1.0))
+
+        ((string=? key "2")
+         (set-game-speed 2.0))
+
+        ((string=? key "3")
+         (set-game-speed .5))
+
+        ((string=? key "4")
+         (set-game-speed .25))
+
+        ((string=? key "5")
+         (set-game-speed .1))
+
         ((string=? key "h")
          (dialog-hide))
         ))

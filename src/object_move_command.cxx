@@ -58,12 +58,6 @@ ObjectMoveCommand::~ObjectMoveCommand()
 void
 ObjectMoveCommandImpl::execute()
 {
-  for(ObjectMoveCommandImpl::Objects::iterator i = objects.begin(); 
-      i != objects.end();
-      ++i)
-    {
-      i->new_pos = i->obj.get_pos();
-    }
 }
 
 void
@@ -73,6 +67,19 @@ ObjectMoveCommand::add_obj(const ObjMapObject& obj)
   o.obj     = obj;
   o.old_pos = obj.get_pos();
   impl->objects.push_back(o);
+}
+
+void
+ObjectMoveCommand::move_by(const CL_Point& delta)
+{
+  for(ObjectMoveCommandImpl::Objects::iterator i = impl->objects.begin(); 
+      i != impl->objects.end();
+      ++i)
+    {
+      i->new_pos = i->old_pos + delta;
+      i->obj.set_pos(i->new_pos);
+      i->obj.sig_move()(i->obj);
+    }
 }
 
 void

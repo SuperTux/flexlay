@@ -133,19 +133,19 @@ $tileset = Tileset.new(32)
 Tileset_load($tileset, $datadir + "images/tilesets/supertux.stgt")
 
 $game_objects = [
-  ["money", "images/shared/jumpy-left-middle-0.png", proc{BadGuy.new("money")}],
-  ["snowball", "images/shared/snowball-left-0.png", proc{BadGuy.new("snowball")}],
-  ["mriceblock", "images/shared/mriceblock-left-0.png", proc{BadGuy.new("mriceblock")}],
-  ["mrbomb", "images/shared/mrbomb-left-0.png", proc{BadGuy.new("mrbomb")}],
-  ["flame", "images/shared/flame-0.png", proc{BadGuy.new("flame")}], 
-  ["stalactite", "images/shared/stalactite.png", proc{BadGuy.new("stalactite")}],
-  ["fish", "images/shared/fish-left-0.png", proc{BadGuy.new("fish")}],
-  ["flyingsnowball", "images/shared/flyingsnowball-left-0.png", proc{BadGuy.new("flyingsnowball")}],
-  ["bouncingsnowball", "images/shared/bouncingsnowball-left-0.png", proc{BadGuy.new("bouncingsnowball")}],
-  ["spiky", "images/shared/spiky-left-0.png", proc{BadGuy.new("spiky")}],
-  ["playerspawn", "images/shared/resetpoint.png", proc{SpawnPoint.new()}],
-  ["door", "images/shared/door.png", proc{Door.new()}],
-  ["trampoline", "images/shared/trampoline-1.png", proc{BadGuy.new("trampoline")}]
+  ["money", "images/shared/jumpy-left-middle-0.png", proc{|data| BadGuy.new("money")}],
+  ["snowball", "images/shared/snowball-left-0.png", proc{|data| BadGuy.new("snowball")}],
+  ["mriceblock", "images/shared/mriceblock-left-0.png", proc{|data| BadGuy.new("mriceblock")}],
+  ["mrbomb", "images/shared/mrbomb-left-0.png", proc{|data| BadGuy.new("mrbomb")}],
+  ["flame", "images/shared/flame-0.png", proc{|data| BadGuy.new("flame")}], 
+  ["stalactite", "images/shared/stalactite.png", proc{|data| BadGuy.new("stalactite")}],
+  ["fish", "images/shared/fish-left-0.png", proc{|data| BadGuy.new("fish")}],
+  ["flyingsnowball", "images/shared/flyingsnowball-left-0.png", proc{|data| BadGuy.new("flyingsnowball")}],
+  ["bouncingsnowball", "images/shared/bouncingsnowball-left-0.png", proc{|data| BadGuy.new("bouncingsnowball")}],
+  ["spiky", "images/shared/spiky-left-0.png", proc{|data| BadGuy.new("spiky")}],
+  ["playerspawn", "images/shared/resetpoint.png", proc{|data| SpawnPoint.new(data)}],
+  ["door", "images/shared/door.png", proc{|data| Door.new(data)}],
+  ["trampoline", "images/shared/trampoline-1.png", proc{|data| BadGuy.new("trampoline")}]
 ]
 
 require "level.rb"

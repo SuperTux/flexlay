@@ -20,6 +20,7 @@
 #ifndef HEADER_OBJMAP_OBJECT_HXX
 #define HEADER_OBJMAP_OBJECT_HXX
 
+#include <ClanLib/signals.h>
 #include <ClanLib/Core/Math/point.h>
 #include <ClanLib/Core/Math/rect.h>
 #include "meta_data.hxx"
@@ -40,6 +41,8 @@ public:
 
   MetaData get_metadata() const;
   void     set_metadata(MetaData data_);
+
+  CL_Signal_v1<ObjMapObject>& sig_move();
 
   void draw();
   CL_Rect get_bound_rect() const;

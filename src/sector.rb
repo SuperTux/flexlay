@@ -160,15 +160,18 @@ class Sector
           x = get_value_from_tree(["x", "_"], data, 0)
           y = get_value_from_tree(["y", "_"], data, 0)
 
+          spriteobj = ObjMapSpriteObject.new(make_sprite($datadir + image),
+                                             CL_Point.new(x, y), make_metadata(nil)).to_object()
+
           if name == "door"
-            metadata = make_metadata(Door.new(data))
+            metadata = make_metadata(Door.new(spriteobj, data))
           else
             metadata = make_metadata(BadGuy.new(name))
           end
 
-          @objects.add_object(ObjMapSpriteObject.new(make_sprite($datadir + image),
-                                                     CL_Point.new(x, y),
-                                                     metadata).to_object())
+          spriteobj.set_metadata(metadata)
+
+          @objects.add_object(spriteobj)
         else
           print "Error: Couldn't resolve object type: ", name, "\n"
           print "Sector: Unhandled tag: ", name, "\n"

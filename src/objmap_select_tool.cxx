@@ -240,12 +240,16 @@ ObjMapSelectToolImpl::on_mouse_move(const CL_InputEvent& event)
   switch(state)
     {
     case DRAG:
+      move_command->move_by(pos - drag_start);
+      /*
       for (ObjMapSelectTool::Selection::iterator i = selection.begin(); 
            i != selection.end(); ++i)
         {
           (*i).set_pos((*i).get_pos() + (pos - drag_start));
-        }
-      drag_start = pos;
+          // FIXME: Move this into ObjMapObject
+          (*i).sig_move()(*i);
+        }*/
+      //drag_start = pos;
       break;
 
     case SELECT:

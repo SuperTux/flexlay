@@ -29,7 +29,7 @@ class SuperTuxGUI
     # Get the metadata info and extract the generator call from it, see $game_objects
     print "on_object_drop:\n"
     metadata = get_ruby_object(cppobj.get_metadata())
-    cppobj.set_metadata(make_metadata(metadata[2].call()))
+    cppobj.set_metadata(make_metadata(metadata[2].call(cppobj)))
   end
 
   def show_objects()

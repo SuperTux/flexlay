@@ -22,6 +22,7 @@
 
 #include <ClanLib/Core/Math/point.h>
 #include <ClanLib/Core/Math/rect.h>
+#include "objmap_object.hxx"
 #include "meta_data.hxx"
 
 class ObjMapObjectImpl 
@@ -29,6 +30,8 @@ class ObjMapObjectImpl
 public:
   CL_Point  pos;
   MetaData  data;
+
+  CL_Signal_v1<ObjMapObject> on_move;
 
   ObjMapObjectImpl();
   virtual ~ObjMapObjectImpl();

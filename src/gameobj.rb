@@ -17,9 +17,20 @@ end
 
 class SpawnPoint<GameObj
   attr_accessor :name
+  attr_reader   :data
 
-  def initialize()
+  def initialize(data)
+    @data = data
     @name = "start"
+    connect_v1_ObjMapObject(data.sig_move(), method(:on_move))
+    on_move(data)
+  end
+
+  def on_move(data)
+    pos = @data.get_pos()
+    pos.x = (((pos.x+16)/32).to_i)*32
+    pos.y = (((pos.y+16)/32).to_i)*32
+    @data.set_pos(pos)
   end
 
   def save(f, obj)
@@ -38,10 +49,22 @@ end
 
 class Door<GameObj
   attr_accessor :sector, :spawnpoint
+  attr_reader   :data
 
-  def initialize(data = [])
-    @sector     = get_value_from_tree(["sector", "_"], data, "main")
-    @spawnpoint = get_value_from_tree(["spawnpoint", "_"], data, "start")
+  def initialize(data, sexpr = [])
+    @data = data
+    @sector     = get_value_from_tree(["sector", "_"], sexpr, "main")
+    @spawnpoint = get_value_from_tree(["spawnpoint", "_"], sexpr, "start")
+
+    connect_v1_ObjMapObject(data.sig_move(), method(:on_move))
+    on_move(data)
+  end
+
+  def on_move(data)
+    pos = @data.get_pos()
+    pos.x = (((pos.x+16)/32).to_i)*32
+    pos.y = (((pos.y+16)/32).to_i)*32
+    @data.set_pos(pos)
   end
 
   def save(f, obj)

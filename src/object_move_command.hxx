@@ -35,6 +35,7 @@ public:
   virtual ~ObjectMoveCommand();
 
   void add_obj(const ObjMapObject& obj);
+  void move_by(const CL_Point& delta);
 
   Command to_command();
 private:

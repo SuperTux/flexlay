@@ -49,7 +49,9 @@ void
 ObjMapObject::set_pos(const CL_Point& p) 
 {
   if (impl.get())
-    impl->pos = p; 
+    {
+      impl->pos = p; 
+    }
 }
 
 MetaData
@@ -100,6 +102,12 @@ bool
 ObjMapObject::operator<(const ObjMapObject& obj) const
 {
   return impl.get() < obj.impl.get();
+}
+
+CL_Signal_v1<ObjMapObject>&
+ObjMapObject::sig_move()
+{
+  return impl->on_move;
 }
 
 /* EOF */

@@ -19,7 +19,7 @@
 
 (define (pingus:new-map width height)
   (let ((levelmap (pingus:create-levelmap width height)))
-    (editor-map-component-set-map *editor-map* levelmap)
+    (editor-map-activate levelmap)
     (add-buffer levelmap)))
 
 (define-method (pingus:create-levelmap width height)

@@ -51,6 +51,7 @@
 #include "../object_delete_command.hxx"
 #include "../object_add_command.hxx"
 #include "gui_manager.hxx"
+#include "../workspace.hxx"
 
 #include "../editor_map.hxx"
 #include "../editor_map_layer.hxx"
@@ -752,18 +753,30 @@ editor_map_component_set_zoom(CL_Component* c, float z)
   m->set_zoom(z);
 }
 
-EditorMap*
-editor_map_component_get_map(CL_Component* c)
+Workspace*
+editor_map_component_get_workspace(CL_Component* c)
 {
   EditorMapComponent* parent_map = dynamic_cast<EditorMapComponent*>(c); 
-  return parent_map->get_map();
+  return parent_map->get_workspace();
 }
 
 void
-editor_map_component_set_map(CL_Component* c, EditorMap* m)
+editor_map_component_set_workspace(CL_Component* c, Workspace* w)
 {
   EditorMapComponent* parent_map = dynamic_cast<EditorMapComponent*>(c); 
-  parent_map->set_map(m);
+  parent_map->set_workspace(w);
+}
+
+void
+workspace_set_current_map(Workspace* workspace, EditorMap* m)
+{
+  workspace->set_current_map(m);
+}
+
+EditorMap*
+workspace_get_current_map(Workspace* workspace)
+{
+  return workspace->get_current_map();
 }
 
 // Map stuff
@@ -1013,5 +1026,25 @@ editor_mapsize_layer_set_size(EditorMapLayer* l, int w, int h)
   EditorMapsizeLayer* layer = dynamic_cast<EditorMapsizeLayer*>(l);
   layer->set_bounding_rect(CL_Rect(CL_Point(0, 0), CL_Size(w, h)));
 }
+
+Workspace*
+workspace_current()
+{
+  return Workspace::current();
+}
+
+Workspace*
+workspace_create()
+{
+  return new Workspace(EditorMapComponent::current()->get_width(),
+                       EditorMapComponent::current()->get_height());
+}
+
+void
+workspace_add_map(Workspace* workspace, EditorMap* m, int x, int y)
+{
+  workspace->add_map(m, CL_Point(x, y));
+}
+
 
 /* EOF */

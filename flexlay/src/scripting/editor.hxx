@@ -24,6 +24,7 @@
 #include <vector>
 #include <guile/gh.h>
 
+class Workspace;
 class EditorMap;
 class EditorObjMap;
 class EditorTileMap;
@@ -48,8 +49,10 @@ void tile_selector_set_tileset(CL_Component*, Tileset* tileset);
 
 CL_Component* object_selector_create(int x, int y, int w, int h, int obj_w, int obj_h);
 CL_Component* editor_map_component_create(int x, int y, int w, int h);
-void          editor_map_component_set_map(CL_Component* c, EditorMap* m);
-EditorMap*    editor_map_component_get_map(CL_Component* c);
+
+void          editor_map_component_set_workspace(CL_Component* c, Workspace* m);
+Workspace*    editor_map_component_get_workspace(CL_Component* c);
+
 void          editor_map_component_set_zoom(CL_Component* c, float z);
 
 void editor_set_brush_tile(int i);
@@ -116,6 +119,12 @@ int             editor_tilemap_get_height(EditorMapLayer* l);
 void            editor_tilemap_set_bgcolor(EditorMapLayer* l, int r, int g, int b, int a);
 void            editor_tilemap_set_fgcolor(EditorMapLayer* l, int r, int g, int b, int a);
 void            editor_tilemap_save_png(EditorMapLayer* l, const char* filename);
+
+Workspace* workspace_current();
+Workspace* workspace_create();
+void workspace_add_map(Workspace* workspace, EditorMap* m, int x, int y);
+void workspace_set_current_map(Workspace* workspace, EditorMap* m);
+EditorMap* workspace_get_current_map(Workspace* workspace);
 
 Tileset* tileset_create(int tile_size);
 Tileset* tileset_create_from_file(const char* resourcefile);

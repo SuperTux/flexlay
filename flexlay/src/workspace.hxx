@@ -33,6 +33,7 @@ public:
 
 public:
   WorkspaceItem();
+  WorkspaceItem(EditorMap* m, const CL_Point& p);
 };
 
 /** */
@@ -50,7 +51,11 @@ public:
   /** Position of the center */
   CL_Pointf old_trans_offset;
 
+  static Workspace* current_;
 public:
+  static void set_current(Workspace* w) { current_ = w; }
+  static Workspace* current() { return current_; }
+
   Workspace(int w, int h);
   ~Workspace();
 
@@ -60,7 +65,11 @@ public:
   void mouse_down(const CL_InputEvent& event);
   void mouse_move(const CL_InputEvent& event);
 
+  void add_map(EditorMap* m, const CL_Point& p);
+
   WorkspaceItem* get_current_item();
+  EditorMap* get_current_map();
+  void set_current_map(EditorMap* );
 private:
   Workspace (const Workspace&);
   Workspace& operator= (const Workspace&);

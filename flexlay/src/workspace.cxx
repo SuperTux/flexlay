@@ -28,19 +28,28 @@
 #include "tool_manager.hxx"
 #include "workspace.hxx"
 
+Workspace* Workspace::current_ = 0;
+
 WorkspaceItem::WorkspaceItem()
 {
   pos = CL_Point(0, 0);
   editor_map = 0;
 }
 
+WorkspaceItem::WorkspaceItem(EditorMap* m, const CL_Point& p)
+  : pos(p), editor_map(m)
+{
+}
+
 Workspace::Workspace(int w, int h)
   : gc_state(w, h)
 {
+  current_ = this;
   scrolling = false;
   click_pos = CL_Point(0, 0);
   old_trans_offset = CL_Pointf(0,0);
 
+  // FIXME: Dummy item
   items.push_back(new WorkspaceItem());
 }
 
@@ -82,6 +91,11 @@ Workspace::draw()
   gc_state.pop();
 }
 
+void
+Workspace::add_map(EditorMap* m, const CL_Point& p)
+{
+  items.push_back(new WorkspaceItem(m, p));  
+}
 
 void
 Workspace::mouse_up(const CL_InputEvent& event)
@@ -140,6 +154,18 @@ Workspace::mouse_down(const CL_InputEvent& event)
       EditorMapComponent::current()->zoom_out(event.mouse_pos);
       break;
     }
+}
+
+EditorMap*
+Workspace::get_current_map()
+{
+  return items.front()->editor_map;
+}
+
+void
+Workspace::set_current_map(EditorMap* m)
+{
+  items.front()->editor_map = m;
 }
 
 /* EOF */

@@ -31,8 +31,15 @@
 (define *tilemap* #f)
 (define *objmap*  #f)
 (define *buffers* '())
+(define *workspace* #f)
 
 (define *editor:file-plugins* '())
+
+(define (editor-map-activate m)
+  (workspace-set-current-map *workspace* m))
+
+(define (editor-map-get-current)
+  (workspace-get-current-map *workspace*))
 
 (define (*error-handler* . args)
   (display "Error: Something went wrong on the C++ side\n")
@@ -72,7 +79,7 @@
                              (gensym "")
                              (basename (editor-map-get-filename m)))
                      (lambda ()
-                       (editor-map-component-set-map *editor-map* m)))
+                       (editor-map-activate m)))
 
   (set! *buffers* (cons m *buffers*)))
 
@@ -92,12 +99,15 @@
   (for-each display args)
   (newline))
 
+(define y 0);; FIXME:
 (define (load-map filename)
   (catch #t
          (lambda ()
            (let* ((plugin   (editor:get-plugin filename))
                   (levelmap (plugin filename)))
-             (editor-map-component-set-map *editor-map* levelmap)
+             (editor-map-activate levelmap)
+             (workspace-add-map *workspace* levelmap 0 y)
+             (set! y (+ y 600))
              (add-buffer levelmap)
              ))
          (lambda args
@@ -161,7 +171,7 @@
       (newline)
       (display ";; EOF ;;\n")
 
-      (editor-map-set-unmodified (editor-map-component-get-map *editor-map*))
+      (editor-map-set-unmodified (editor-map-get-current))
       )))
 
 (define (resize-map)
@@ -193,7 +203,7 @@
                                            (case *game*
                                              ((supertux)
                                               (supertux:resize 
-                                               (editor-map-get-metadata (editor-map-component-get-map *editor-map*))
+                                               (editor-map-get-metadata (editor-map-get-current))
                                                w h x y))
                                              (else
                                               (editor-tilemap-resize *tilemap* w h x y)))))
@@ -436,7 +446,7 @@
 
 
 (define (get-current-map-data)
-  (editor-map-get-metadata (editor-map-component-get-map *editor-map*)))
+  (editor-map-get-metadata (editor-map-get-current)))
 
 (define (create-metadata-editor)
   (let ((window (gui-create-window 100 100 400 200 "Metadata Editor")))
@@ -451,12 +461,12 @@
                                     (gui-create-inputbox 100 y  290 25 (format #f "~a" (cdr el))))
                               boxes))
                   (set! y (+ y 25)))
-                (or (editor-map-get-metadata (editor-map-component-get-map *editor-map*))
+                (or (editor-map-get-metadata (editor-map-get-current))
                     '()))
       
       (gui-create-button-func 300 140 75 25 "Ok"
                               (lambda ()
-                                (editor-map-set-metadata (editor-map-component-get-map *editor-map*)
+                                (editor-map-set-metadata (editor-map-get-current)
                                                          (map (lambda (el)
                                                                 (cons (car el)
                                                                       (gui-inputbox-get-text (cdr el))))
@@ -766,6 +776,9 @@
 (init-recent-files)
 
 (set! *editor-map* (editor-map-component-create 0 22 screen-width (- screen-height 22)))
+(set! *workspace*  (workspace-create))
+(editor-map-component-set-workspace *editor-map* *workspace*)
+
 (gui-add-on-resize-callback
  (lambda (w h)
    (cond (*editor-map*

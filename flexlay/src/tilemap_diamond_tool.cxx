@@ -90,7 +90,7 @@ TileMapDiamondTool::paint(const CL_Point& mpos)
 {
 #if 0
   EditorTileMap* tilemap
-    = dynamic_cast<EditorTileMap*>(EditorMapComponent::current()->get_map()->get_layer_by_name(TILEMAP_NAME));
+    = dynamic_cast<EditorTileMap*>(EditorMapComponent::current()->get_workspace()->get_current_map()->get_layer_by_name(TILEMAP_NAME));
   EditorMapComponent* parent = EditorMapComponent::current();
 
   CL_Point pos = parent->screen2world(mpos);

@@ -28,6 +28,7 @@
 #include "editor_map.hxx"
 #include "editor_map_component.hxx"
 #include "editor_tilemap.hxx"
+#include "workspace.hxx"
 #include "minimap.hxx"
 
 Minimap::Minimap(EditorMapComponent* p, const CL_Point& pos, const CL_Size& size, CL_Component* parent)
@@ -48,12 +49,12 @@ void
 Minimap::draw()
 {
   // FIXME: Do this only on map changes
-  if (last_serial != EditorMapComponent::current()->get_map()->get_serial()
-      || editor_map != EditorMapComponent::current()->get_map())
+  if (last_serial != EditorMapComponent::current()->get_workspace()->get_current_map()->get_serial()
+      || editor_map != EditorMapComponent::current()->get_workspace()->get_current_map())
     {
       update_minimap_surface();
-      last_serial = EditorMapComponent::current()->get_map()->get_serial();
-      editor_map  = EditorMapComponent::current()->get_map();
+      last_serial = EditorMapComponent::current()->get_workspace()->get_current_map()->get_serial();
+      editor_map  = EditorMapComponent::current()->get_workspace()->get_current_map();
     }
 
   if (1)

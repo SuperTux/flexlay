@@ -48,8 +48,8 @@ public:
   EditorMapComponent(const CL_Rect& rect, CL_Component* parent);
   ~EditorMapComponent();
  
-  EditorMap* get_map() const;
-  void       set_map(EditorMap* m);
+  Workspace* get_workspace() const;
+  void       set_workspace(Workspace* m);
 
   void  set_zoom(float z);
   void  zoom_to(CL_Rect rect);

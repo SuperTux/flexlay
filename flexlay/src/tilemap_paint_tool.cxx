@@ -29,6 +29,7 @@
 #include "editor_map_component.hxx"
 #include "tile.hxx"
 #include "editor.hxx"
+#include "workspace.hxx"
 #include "paint_command.hxx"
 #include "editor_names.hxx"
 #include "tilemap_paint_tool.hxx"
@@ -182,7 +183,7 @@ TileMapPaintTool::on_mouse_up  (const CL_InputEvent& event)
 {
   if (tilemap)
     {
-      EditorMapComponent::current()->get_map()->modify();
+      EditorMapComponent::current()->get_workspace()->get_current_map()->modify();
 
       EditorMapComponent* parent = EditorMapComponent::current();
       CL_Point pos = tilemap->world2tile(parent->screen2world(event.mouse_pos));

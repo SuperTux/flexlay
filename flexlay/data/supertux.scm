@@ -123,7 +123,7 @@
 
 (define (supertux:new-map width height)
   (let ((levelmap (supertux:create-levelmap width height)))
-    (editor-map-component-set-map *editor-map* levelmap)
+    (editor-map-activate levelmap)
     (add-buffer levelmap)))
 
 (define (supertux:create-levelmap width height)
@@ -163,7 +163,7 @@
   (if (access? filename F_OK)
       (rename-file filename (string-append filename "~")))
 
-  (let* ((levelmap (editor-map-component-get-map *editor-map*))
+  (let* ((levelmap (editor-map-get-current))
          (level    (editor-map-get-metadata levelmap)))
     (format #t "Level: ~a~%" level)
     (with-output-to-file filename
@@ -256,7 +256,7 @@
   (catch #t
          (lambda ()
            (let ((levelmap (supertux:create-level-map-from-file filename)))
-             (editor-map-component-set-map *editor-map* levelmap)
+             (editor-map-activate levelmap)
              (add-buffer levelmap)
              ))
          (lambda args
@@ -333,7 +333,7 @@
   (if (access? filename F_OK)
       (rename-file filename (string-append filename "~")))
 
-  (let* ((m       (editor-map-component-get-map *editor-map*))
+  (let* ((m       (editor-map-get-current))
          (stwm    (editor-map-get-metadata m))
          (tilemap (stwm:tilemap stwm)))
     (with-output-to-file filename
@@ -493,21 +493,21 @@
         m))))
 
 (define (supertux:set-background-layer-only)
-  (let ((level (editor-map-get-metadata (editor-map-component-get-map *editor-map*))))
+  (let ((level (editor-map-get-metadata (editor-map-get-current))))
     (editor-tilemap-set-fgcolor (supertux:background-tm  level) 255 255 255 255)
     (editor-tilemap-set-fgcolor (supertux:interactive-tm level)   0   0   0  10)
     (editor-tilemap-set-fgcolor (supertux:foreground-tm  level)   0   0   0  10)
     (tilemap-paint-tool-set-tilemap (supertux:background-tm level))))
 
 (define (supertux:set-interactive-layer-only)
-  (let ((level (editor-map-get-metadata (editor-map-component-get-map *editor-map*))))
+  (let ((level (editor-map-get-metadata (editor-map-get-current))))
     (editor-tilemap-set-fgcolor (supertux:background-tm  level)   0   0   0  10)
     (editor-tilemap-set-fgcolor (supertux:interactive-tm level) 255 255 255 255)
     (editor-tilemap-set-fgcolor (supertux:foreground-tm  level)   0   0   0  10)
     (tilemap-paint-tool-set-tilemap (supertux:interactive-tm level))))
 
 (define (supertux:set-foreground-layer-only)
-  (let ((level (editor-map-get-metadata (editor-map-component-get-map *editor-map*))))
+  (let ((level (editor-map-get-metadata (editor-map-get-current))))
     (editor-tilemap-set-fgcolor (supertux:background-tm  level)   0   0   0  10)
     (editor-tilemap-set-fgcolor (supertux:interactive-tm level)   0   0   0  10)
     (editor-tilemap-set-fgcolor (supertux:foreground-tm  level) 255 255 255 255)
@@ -515,28 +515,28 @@
 
 
 (define (supertux:set-background-layer-active)
-  (let ((level (editor-map-get-metadata (editor-map-component-get-map *editor-map*))))
+  (let ((level (editor-map-get-metadata (editor-map-get-current))))
     (editor-tilemap-set-fgcolor (supertux:background-tm  level) 255 255 255 255)
     (editor-tilemap-set-fgcolor (supertux:interactive-tm level) 150 250 150 150)
     (editor-tilemap-set-fgcolor (supertux:foreground-tm  level) 255 150 150 150)
     (tilemap-paint-tool-set-tilemap (supertux:background-tm level))))
 
 (define (supertux:set-interactive-layer-active)
-  (let ((level (editor-map-get-metadata (editor-map-component-get-map *editor-map*))))
+  (let ((level (editor-map-get-metadata (editor-map-get-current))))
     (editor-tilemap-set-fgcolor (supertux:background-tm  level) 150 150 250 150)
     (editor-tilemap-set-fgcolor (supertux:interactive-tm level) 255 255 255 255)
     (editor-tilemap-set-fgcolor (supertux:foreground-tm  level) 255 150 150 150)
     (tilemap-paint-tool-set-tilemap (supertux:interactive-tm level))))
 
 (define (supertux:set-foreground-layer-active)
-  (let ((level (editor-map-get-metadata (editor-map-component-get-map *editor-map*))))
+  (let ((level (editor-map-get-metadata (editor-map-get-current))))
     (editor-tilemap-set-fgcolor (supertux:background-tm  level) 150 150 250 150)
     (editor-tilemap-set-fgcolor (supertux:interactive-tm level) 255 150 150 150)
     (editor-tilemap-set-fgcolor (supertux:foreground-tm  level) 255 255 255 255)
     (tilemap-paint-tool-set-tilemap (supertux:foreground-tm level))))
 
 (define (supertux:show-all-layers)
-  (let ((level (editor-map-get-metadata (editor-map-component-get-map *editor-map*))))
+  (let ((level (editor-map-get-metadata (editor-map-get-current))))
     (editor-tilemap-set-fgcolor (supertux:background-tm  level) 255 255 255 255)
     (editor-tilemap-set-fgcolor (supertux:interactive-tm level) 255 255 255 255)
     (editor-tilemap-set-fgcolor (supertux:foreground-tm  level) 255 255 255 255)))

@@ -36,6 +36,7 @@ private:
   CL_Color background_color;
   CL_Color foreground_color;
   int tile_size;
+  bool hex_mode;
 
   Field<int> field;
 

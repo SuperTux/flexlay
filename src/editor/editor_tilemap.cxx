@@ -45,6 +45,7 @@ EditorTileMap::EditorTileMap(int w, int h, int tile_size_)
   // map-properties thingy
   draw_grid      = true;
   draw_attribute = false;
+  hex_mode = false;
 
   for (int y = 0; y < field.get_height(); ++y) 
     for (int x = 0; x < field.get_width(); ++x)
@@ -103,7 +104,7 @@ EditorTileMap::draw(EditorMapComponent* parent)
                   draw_attribute);
       }
 
-  if (draw_grid)
+  if (0) //draw_grid)
     {
       for (int y = start_y; y <= end_y; ++y)
         CL_Display::draw_line(start_x * tile_size,

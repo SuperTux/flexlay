@@ -4,7 +4,7 @@
 
 (define *game* 'supertux)
 (define *tile-size* 32)
-(define *supertux:datadir* "/home/ingo/cvs/supertux/supertux/data/images/tilesets/")
+(define *supertux:datadir* "/home/ingo/cvs/supertux/supertux/data/")
 (game-set-tilesize 32 16)
 (game-load-resources "tuxtiles.xml")
 (game-load-resources "tuxsprites.xml")
@@ -23,7 +23,7 @@
                                    (list (list 'id   
                                                (get-value-from-tree '(id _) (cdr el) -1))
                                          (list 'image 
-                                               (string-append *supertux:datadir*
+                                               (string-append *supertux:datadir* "images/tilesets/" 
                                                               (or (get-value-from-tree '(editor-images _) (cdr el) #f)
                                                                   (get-value-from-tree '(images _) (cdr el) "notile.png"))))
                                          )))))
@@ -31,7 +31,27 @@
               (else
                (error "Not a supertux tileset")))))))
 
-(supertux:load-tiles (string-append *supertux:datadir* "supertux.stgt"))
+(define (supertux:load-worldmap-tiles filename)
+  (with-input-from-file filename
+    (lambda ()
+      (let* ((data (read))
+             (ident (car data)))
+        (cond ((equal? ident 'supertux-worldmap-tiles)
+               (for-each (lambda (el)
+                           (cond ((equal? (car el) 'tile)
+                                  (tileset-add-tile 
+                                   (list (list 'id   
+                                               (get-value-from-tree '(id _) (cdr el) -1))
+                                         (list 'image 
+                                               (string-append *supertux:datadir* "images/worldmap/"
+                                                              (get-value-from-tree '(image _) (cdr el) "notile.png"))))
+                                   ))))
+                         (cdr data)))
+              (else
+               (error "Not a supertux worldmap tileset")))))))
+
+;;(supertux:load-tiles (string-append *supertux:datadir* "images/tilesets/supertux.stgt"))
+(supertux:load-worldmap-tiles (string-append *supertux:datadir* "images/worldmap/antarctica.stwt"))
 
 ;;(tileset-add-tile '((id 6)
 ;;                    (image "/home/ingo/projects/windstille/trunk/data/images/tuxsprites/mrbomb.png")
@@ -73,6 +93,11 @@
                   #:accessor supertux:background-tm)
   (objmap #:init-value #f 
           #:accessor supertux:objmap))
+
+(define-class <supertux-worldmap> ()
+  (tilemap #:init-value #f
+           #:init-keyword #:tilemap
+           #:accessor stwm:tilemap))
 
 (define (supertux:new-map width height)
   (let ((levelmap (supertux:create-levelmap width height)))
@@ -256,6 +281,49 @@
             (else
              (format #t "couldn't translate ~a~%" num)
              0)))))
+
+
+(define (supertux:create-worldmap-from-file filename)
+  (let* ((m       (editor-map-create))
+         (data    (with-input-from-file filename
+                    (lambda () (cdr (read)))))
+         (width   (get-value-from-tree '(tilemap width  _) data 19))
+         (height  (get-value-from-tree '(tilemap height _) data 14))
+         (tilemap (editor-tilemap-create width height 32))
+         (stwm    (make <supertux-worldmap> #:tilemap tilemap)))
+    (format #t "Size: ~ax~a~%" width height)
+    (editor-tilemap-set-data tilemap (get-value-from-tree '(tilemap data) data '()))
+    (editor-map-add-layer m tilemap)
+    (editor-map-set-metadata m stwm)
+
+    ;; FIXME: this doesn't look all that nice here
+    (tilemap-paint-tool-set-tilemap tilemap)
+    (set! *tilemap* tilemap)
+    (editor-tilemap-set-current tilemap)
+    m))
+
+(define (supertux:save-worldmap filename)
+  (if (access? filename F_OK)
+      (rename-file filename (string-append filename "~")))
+
+  (let* ((m       (editor-map-component-get-map *editor-map*))
+         (stwm    (editor-map-get-metadata m))
+         (tilemap (stwm:tilemap stwm)))
+    (with-output-to-file filename
+      (lambda ()
+        (display ";; Generated with Windstille Editor\n")
+        (display "(supertux-worldmap\n")
+        (display "  (tilemap \n")
+        (format #t "    (width  ~a)~%" (editor-tilemap-get-width  tilemap))
+        (format #t "    (height ~a)~%" (editor-tilemap-get-height tilemap))
+        (display "    (data\n")
+        (write-field "       " 
+                     (editor-tilemap-get-width tilemap)
+                     (editor-tilemap-get-data  tilemap))
+        (display "    ))\n")
+        (display ")\n")
+        (newline)
+        ))))
 
 (define (supertux:create-level-map-from-file filename)
   (display "Loading SuperTux level: ")

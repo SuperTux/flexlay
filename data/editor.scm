@@ -366,7 +366,12 @@
        (gui-add-menu-item menu "File/Export SuperTux" 
                           (lambda ()
                             (simple-file-dialog "Export SuperTux level..." (get-last-file)
-                                                (lambda (filename)   (supertux:save-map filename))))))
+                                                (lambda (filename)   (supertux:save-map filename)))))
+       (gui-add-menu-item menu "File/Export SuperTux Worldmap" 
+                          (lambda ()
+                            (simple-file-dialog "Export SuperTux level..." (get-last-file)
+                                                (lambda (filename)   (supertux:save-worldmap filename)))))
+       )
       ((netpanzer)
        (gui-add-menu-item menu "File/Import NetPanzer.." 
                           (lambda ()
@@ -825,6 +830,14 @@
    (editor:add-file-plugin
     (lambda (filename) (string=? (filename:ext filename) ".npm"))
     (lambda (filename) (netpanzer:create-level-map-from-file filename)))
+   (editor:add-file-plugin
+    (lambda (filename) (string=? (filename:ext filename) ".opt"))
+    (lambda (filename) (netpanzer:create-level-map-from-file 
+                        (string-append (filename:wo/ext filename) ".npm"))))
+   (editor:add-file-plugin
+    (lambda (filename) (string=? (filename:ext filename) ".spn"))
+    (lambda (filename) (netpanzer:create-level-map-from-file 
+                        (string-append (filename:wo/ext filename) ".npm"))))
    )
   ((supertux)
    (object-selector-add-brush *object-selector* "sprites/jumpy" '(money))
@@ -836,7 +849,11 @@
    (editor:add-file-plugin
     (lambda (filename) (or (string=? (filename:ext filename) ".stl")
                            (string=? (filename:ext filename) ".stlv")))
-    (lambda (filename) (supertux:create-level-map-from-file filename))))
+    (lambda (filename) (supertux:create-level-map-from-file filename)))
+   (editor:add-file-plugin
+    (lambda (filename) (string=? (filename:ext filename) ".stwm"))
+    (lambda (filename) (supertux:create-worldmap-from-file filename)))
+   )
   (else
    (create-minimap screen-width 50)))
 

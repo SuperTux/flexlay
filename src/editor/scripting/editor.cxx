@@ -918,10 +918,14 @@ editor_map_get_metadata(EditorMap* m)
 void
 tileset_add_tile(SCM data)
 {
-  if (TileFactory::current())
-    TileFactory::current()->add_tile(data);
-  else
-    std::cout << "No TileFactory present" << std::endl;
+  try {
+    if (TileFactory::current())
+      TileFactory::current()->add_tile(data);
+    else
+      std::cout << "No TileFactory present" << std::endl;
+  } catch (CL_Error& err) {
+    std::cout << "Error: " << err.message << std::endl;
+  }
 }
 
 /* EOF */

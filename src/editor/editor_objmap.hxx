@@ -62,6 +62,7 @@ public:
   std::vector<EditorObjMap::Obj*> get_selection(const CL_Rect& rect);
   Objs* get_objects();
   EditorObjMap::Obj* get_object(int id);
+
 private:
   EditorObjMap (const EditorObjMap&);
   EditorObjMap& operator= (const EditorObjMap&);

@@ -23,8 +23,10 @@
 #include "editor_map_component.hxx"
 #include "editor_map.hxx"
 #include "editor_map_component.hxx"
+#include "../gui_manager.hxx"
 #include "../scm_obj.hxx"
 #include "editor_names.hxx"
+#include "popup_menu.hxx"
 #include "tilemap_object_tool.hxx"
 
 extern CL_ResourceManager* resources;
@@ -104,6 +106,11 @@ TileMapObjectTool::on_mouse_up(const CL_InputEvent& event)
       break;
 
     case CL_MOUSE_RIGHT:
+      {
+        new PopupMenu(CL_Point(event.mouse_pos.x + parent->get_screen_rect().left,
+                               event.mouse_pos.y + parent->get_screen_rect().top), 
+                      GUIManager::current()->get_component());
+      }
       break;
     }
 }

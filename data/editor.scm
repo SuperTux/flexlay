@@ -600,6 +600,9 @@
 
 (set-tool 'tile)
 
+(object-selector-add-brush *object-selector* "sprites/mriceblock" '(iceblock))
+(object-selector-add-brush *object-selector* "sprites/mrbomb"     '(bomb))
+
 (object-selector-add-brush *object-selector* "igel" '(Igel))
 (object-selector-add-brush *object-selector* "hero/run" '(Hero))
 

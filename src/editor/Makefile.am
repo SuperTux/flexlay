@@ -25,6 +25,7 @@ libwindstille_editor_a_SOURCES = \
   tile_selection.hxx tile_selection.cxx \
   command.hxx \
   paint_command.hxx   paint_command.cxx \
-  tool_manager.hxx tool_manager.cxx
+  tool_manager.hxx tool_manager.cxx \
+  popup_menu.hxx popup_menu.cxx
 
 # EOF #

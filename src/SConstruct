@@ -1,7 +1,7 @@
 ## -*- mode: python -*-
 
 env = Environment(CXX = 'g++-3.3',
-                  CXXFLAGS = '-g -Wall',
+                  CXXFLAGS = '-g -O0 -Wall',
                   SWIGFLAGS='-c++ -python',
                   SHLIBPREFIX='')
 

@@ -44,7 +44,13 @@ public:
   static EditorMapComponent* current() { return current_; } 
 
   EditorMapComponent(const CL_Rect& rect, CL_Component* parent);
+#ifdef SWIGPYTHON
+private:
   ~EditorMapComponent();
+public:
+#else
+  ~EditorMapComponent();
+#endif
  
   Workspace get_workspace() const;
   void      set_workspace(Workspace m);

@@ -20,12 +20,12 @@
 #ifndef HEADER_PAINT_COMMAND_HXX
 #define HEADER_PAINT_COMMAND_HXX
 
-#include <vector>
 #include <ClanLib/Core/Math/point.h>
-#include "field.hxx"
 #include "tile_brush.hxx"
 #include "tilemap_layer.hxx"
 #include "command.hxx"
+
+class PaintCommandImpl;
 
 /** The PaintCommand provides functionality to draw onto an TileMap.
     The user needs to supply a brush and a map to draw to and the
@@ -33,20 +33,6 @@
     drawing are handled by the PaintCommand itself. */
 class PaintCommand : public Command
 {
-private: 
-  typedef std::vector<CL_Point> Points;
-  Points points;
-  
-  TilemapLayer tilemap;
-  TileBrush    brush;
-
-  /** Copy of the field used to generate undo informations */
-  Field<int>   undo_field;
-
-  CL_Point     pos;
-  TileBrush*   redo_brush;
-  TileBrush*   undo_brush;
-  
 public:
   PaintCommand(TilemapLayer t, const TileBrush& b);
   virtual ~PaintCommand();
@@ -59,6 +45,9 @@ public:
   void undo();
 
   std::string serialize();
+
+private:
+  CL_SharedPtr<PaintCommandImpl> impl;
 };
 
 #endif

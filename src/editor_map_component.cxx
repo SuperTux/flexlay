@@ -46,6 +46,7 @@ EditorMapComponent::EditorMapComponent(const CL_Rect& rect, CL_Component* parent
 
 EditorMapComponent::~EditorMapComponent()
 {
+  std::cout << "~EditorMapComponent()" << std::endl;
 }
 
 Workspace

@@ -36,6 +36,8 @@ Flexlay::Flexlay()
 void
 Flexlay::init()
 {
+  std::cout << "Flexlay::init()" << std::endl;
+
   CL_SetupCore::init();
 #ifdef HAVE_LIBSDL
   if (use_opengl)
@@ -58,6 +60,8 @@ Flexlay::init()
 void
 Flexlay::deinit()
 {
+  std::cout << "Flexlay::deinit()" << std::endl;
+
   CL_SetupDisplay::deinit();
 
 #ifdef HAVE_LIBSDL

@@ -46,9 +46,14 @@ private:
   Tiles tiles;
 
   Tileset* tileset;
+
+#ifdef SWIGPYTHON
+  ~TileSelector();
+#endif
 public:
   /** width and height in number of tiles */
   TileSelector(int width, int height, CL_Component* parent);
+
 
   void set_tileset(Tileset* t);
   void set_tiles(const Tiles& t);

@@ -43,14 +43,11 @@ Editor::Editor()
 
   manager      = new GUIManager();
   tool_manager = new ToolManager();
-
-#ifdef SWIGGUILE
-  gh_load((datadir + "editor.scm").c_str());
-#endif
 }
 
 Editor::~Editor()
 {
+  delete tool_manager;
   delete manager;
 }
 

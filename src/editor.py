@@ -52,10 +52,10 @@ def load_game_tiles(tileset, filename):
             data  = i[1:]
             id    = get_value_from_tree(['id', '_'], data, -1)
             image = get_value_from_tree(['editor-images', '_'], data, False)
-            
+
             if not(image):
                 image = get_value_from_tree(['images', '_'], data, "notile.png")
-                
+
             tileset.add_tile(id,
                              Tile(supertux_datadir + 'images/tilesets/' + image,
                                   CL_Color(255, 255, 255, 255),
@@ -73,11 +73,11 @@ class SuperTuxLevel:
     background  = None
 
     editormap = None
-    
+
     def __init__(self, filename):
         print "SuperTuxLevel:__init__"
         self.me = self
-        
+
         tree = sexpr_read_from_file(filename)
         data = tree[1:]
 
@@ -113,109 +113,115 @@ flexlay = Flexlay()
 
 flexlay.init()
 
-editor = Editor()
-gui = editor.get_gui_manager()
-
-editor_map = EditorMapComponent(CL_Rect(0, 0, 799, 599), gui.get_component())
-workspace  = Workspace(799, 599)
-editor_map.set_workspace(workspace)
-
-m = EditorMap()
-workspace.set_current_map(m)
 tileset = Tileset(32)
-tilemap = TilemapLayer(tileset, 20, 10)
-m.add_layer(tilemap.to_layer())
-tile = Tile("/home/ingo/cvs/supertux/supertux/data/images/tilesets/bonus1.png",
-            CL_Color(255, 255, 255, 255),
-            CL_Color(255,   0,   0, 128))
-tileset.add_tile(0, tile)
-tileset.add_tile(1, tile)
-tileset.add_tile(2, tile)
-
 load_game_tiles(tileset, "/home/ingo/cvs/supertux/supertux/data/images/tilesets/supertux.stgt")
 
-TilemapLayer_set_current(tilemap)
-tilemap_paint_tool_set_tilemap(tilemap)
+def do_editor():
+    editor = Editor()
+    gui = editor.get_gui_manager()
+    
+    editor_map = EditorMapComponent(CL_Rect(0, 0, 799, 599), gui.get_component())
+    workspace  = Workspace(799, 599)
+    editor_map.set_workspace(workspace)
+    
+    m = EditorMap()
+    workspace.set_current_map(m)
 
-editor_set_brush_tile(1)
+    tilemap = TilemapLayer(tileset, 20, 10)
+    m.add_layer(tilemap.to_layer())
+        
+    TilemapLayer_set_current(tilemap)
+    tilemap_paint_tool_set_tilemap(tilemap)
+    
+    editor_set_brush_tile(1)
+    
+    def foo():
+        print "---My Callback---"
+        gui.quit()
 
-def foo():
-    print "---My Callback---"
-    gui.quit()
+    g = None
 
-g = None
+    def draw_something():
+        print "Draw something"
+        brush = TileBrush(2, 2)
+        brush.set_opaque()
+        _ = PaintCommand(tilemap, brush)
+        _.add_point(CL_Point(1,1))
+        _.add_point(CL_Point(2,2))
+        _.add_point(CL_Point(3,3))
+        _.add_point(CL_Point(4,4))
+        _.execute()
+        g = _
+        print "Draw something done"
 
-def draw_something():
-    print "Draw something"
-    brush = TileBrush(2, 2)
-    brush.set_opaque()
-    _ = PaintCommand(tilemap, brush)
-    _.add_point(CL_Point(1,1))
-    _.add_point(CL_Point(2,2))
-    _.add_point(CL_Point(3,3))
-    _.add_point(CL_Point(4,4))
-    _.execute()
-    g = _
-    print "Draw something done"
+    window = CL_Window(CL_Rect(50, 50, 350, 300), "My Window", gui.get_component())
+        
+    gui.push_component(window)
+    button1 = CL_Button(CL_Rect(50, 50, 200, 75), "Quit", gui.get_component())
+    connect(button1.sig_clicked(), foo)
+    
+    button2 = CL_Button(CL_Rect(CL_Point(50, 100), CL_Size(150, 25)), "Draw", gui.get_component())
+    connect(button2.sig_clicked(), draw_something)
+    
+    def get_data():
+        print tilemap.get_data()
+        
+    def set_data():
+        tilemap.set_data((0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0))
 
-window = CL_Window(CL_Rect(50, 50, 350, 300), "My Window", gui.get_component())
+    button3 = CL_Button(CL_Rect(CL_Point(50, 150), CL_Size(150, 25)), "Get Data", gui.get_component())
+    connect(button3.sig_clicked(), get_data)
+    
+    button4 = CL_Button(CL_Rect(CL_Point(50, 180), CL_Size(150, 25)), "Get Data", gui.get_component())
+    connect(button4.sig_clicked(), set_data)
+    
+    gui.pop_component()
+    
+    tileselectorw = CL_Window(CL_Rect(CL_Point(150, 150), CL_Size(210, 210)), "Tile Selector", gui.get_component())
+    tileselector = TileSelector(5, 3, tileselectorw.get_client_area())
+    tileselector.set_tileset(tileset)
+    tileselector.set_tiles(range(1,100))
 
-gui.push_component(window)
-button1 = CL_Button(CL_Rect(50, 50, 200, 75), "Quit", gui.get_component())
-connect(button1.sig_clicked(), foo)
+    class Menu(CL_Menu):
+        def __init__(self):
+            CL_Menu.__init__(self, gui.get_component())
 
-button2 = CL_Button(CL_Rect(CL_Point(50, 100), CL_Size(150, 25)), "Draw", gui.get_component())
-connect(button2.sig_clicked(), draw_something)
+        def add_item(self, name, func):
+                item = self.create_item(name)
+                connect(item.sig_clicked(), func)
 
-def get_data():
-    print tilemap.get_data()
+    level = None
+    def menu_file_open():
+        print "File/Open"
+        level = SuperTuxLevel('/home/ingo/cvs/supertux/supertux/data/levels/world1/level2.stl')
+        print "Loading done"
+        level.activate(workspace)
+        print "Activation done"
 
-def set_data():
-    tilemap.set_data((0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0))
+    def menu_file_save():
+        print "File/Save"
 
-button3 = CL_Button(CL_Rect(CL_Point(50, 150), CL_Size(150, 25)), "Get Data", gui.get_component())
-connect(button3.sig_clicked(), get_data)
+    def menu_file_save_as():
+        print "File/Save As"
 
-button4 = CL_Button(CL_Rect(CL_Point(50, 180), CL_Size(150, 25)), "Get Data", gui.get_component())
-connect(button4.sig_clicked(), set_data)
+    menu = Menu()
+    a = menu.add_item("File/Open...", menu_file_open)
+    a = menu.add_item("File/Save...", menu_file_save)
+    a = menu.add_item("File/Save As...", menu_file_save_as)
 
-gui.pop_component()
+    print "- entering main loop"
+    gui.run()
 
-tileselectorw = CL_Window(CL_Rect(CL_Point(150, 150), CL_Size(210, 210)), "Tile Selector", gui.get_component())
-tileselector = TileSelector(5, 3, tileselectorw.get_client_area())
-tileselector.set_tileset(tileset)
-tileselector.set_tiles(range(1,100))
+    del button1
+    del button2
+    del button3
+    del button4
+    del window
+    print "- exit main loop"
 
-class Menu(CL_Menu):
-    def __init__(self):
-        CL_Menu.__init__(self, gui.get_component())
-
-    def add_item(self, name, func):
-        item = self.create_item(name)
-        connect(item.sig_clicked(), func)
-
-level = None
-def menu_file_open():
-    print "File/Open"
-    level = SuperTuxLevel('/home/ingo/cvs/supertux/supertux/data/levels/world1/level2.stl')
-    print "Loading done"
-    level.activate(workspace)
-    print "Activation done"
-
-def menu_file_save():
-    print "File/Save"
-
-def menu_file_save_as():
-    print "File/Save As"
-
-menu = Menu()
-a = menu.add_item("File/Open...", menu_file_open)
-a = menu.add_item("File/Save...", menu_file_save)
-a = menu.add_item("File/Save As...", menu_file_save_as)
-
-
-gui.run()
+do_editor()
 
 flexlay.deinit()
+print "deinit done"
 
 # EOF #

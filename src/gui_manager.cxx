@@ -105,6 +105,6 @@ void
 GUIManager::quit()
 {
   manager->quit(); 
-}
+} 
 
 /* EOF */

@@ -1,4 +1,4 @@
-//  $Id: windstille_menu.cxx,v 1.8 2003/11/05 22:44:49 grumbel Exp $
+//  $Id: windstille_menu.cxx,v 1.9 2003/11/06 09:24:17 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -28,12 +28,12 @@
 #include "controller.hxx"
 #include "windstille_menu.hxx"
 #include "windstille_game.hxx"
+#include "music_manager.hxx"
 #include "windstille_bonus.hxx"
 #include "editor/editor.hxx"
 
 WindstilleMenu::WindstilleMenu()
-  : background_music(datadir + "music/jingle.ogg"),
-    background("menu_background", resources),
+  : background("menu_background", resources),
     windstille("logo_large", resources)
 {
   current_choice = 0;
@@ -69,12 +69,14 @@ WindstilleMenu::update(float delta)
             {
               fadeout();
               quit();
+              break;
             }
           else if (current_choice == 2 && bonus_active)
             {
               fadeout();
               WindstilleBonus bonus;
               bonus.display();
+              break;
             }
           else if (current_choice == 0) // start game
             {
@@ -227,17 +229,13 @@ WindstilleMenu::fadeout()
 void
 WindstilleMenu::on_startup()
 {
-  background_music_session = background_music.prepare();
-  background_music_session.play();
-  background_music_session.set_looping(true);
-  background_music_session.set_volume(1.0f);
+  MusicManager::current()->play(datadir + "music/jingle.ogg", false);
 }
 
 void
 WindstilleMenu::on_shutdown()
 {
-  background_music.stop();
-  background_music.set_volume(0);
+  MusicManager::current()->stop();
 }
 
 /* EOF */

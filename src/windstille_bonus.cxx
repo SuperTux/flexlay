@@ -1,4 +1,4 @@
-//  $Id: windstille_bonus.cxx,v 1.1 2003/11/05 22:44:49 grumbel Exp $
+//  $Id: windstille_bonus.cxx,v 1.2 2003/11/06 09:24:17 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -26,6 +26,7 @@
 #include <list>
 #include "fonts.hxx"
 #include "globals.hxx"
+#include "music_manager.hxx"
 #include "windstille_bonus.hxx"
 
 WindstilleBonus::WindstilleBonus()
@@ -94,11 +95,13 @@ WindstilleBonus::update(float delta)
 void
 WindstilleBonus::on_startup()
 {
+  MusicManager::current()->play(datadir + "music/Windstille_Ralph_Weinert.ogg", true);
 }
 
 void
 WindstilleBonus::on_shutdown()
 {
+  MusicManager::current()->stop();
 }
 
 /* EOF */

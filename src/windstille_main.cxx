@@ -1,4 +1,4 @@
-//  $Id: windstille_main.cxx,v 1.26 2003/11/04 22:48:51 grumbel Exp $
+//  $Id: windstille_main.cxx,v 1.27 2003/11/06 09:24:17 grumbel Exp $
 //
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -38,6 +38,7 @@
 #include "keyboard_controller.hxx"
 #include "gamepad_controller.hxx"
 #include "fonts.hxx"
+#include "music_manager.hxx"
 #include "tile_factory.hxx"
 
 extern "C" void SWIG_init(void);
@@ -167,6 +168,9 @@ WindstilleMain::inner_main(void* closure, int argc, char** argv)
     CL_DisplayWindow window (PACKAGE_STRING,
                              screen_width, screen_height, fullscreen, allow_resize);
     CL_SoundOutput sound_output(44100);
+
+    MusicManager::init();
+
     CL_Display::clear();
     CL_Display::flip();
 
@@ -228,6 +232,8 @@ WindstilleMain::inner_main(void* closure, int argc, char** argv)
   
   TileFactory::deinit();
   Fonts::deinit();
+
+  MusicManager::deinit();
 
   CL_SetupVorbis::init();
   CL_SetupSound::init();

@@ -1,4 +1,4 @@
-//  $Id: windstille_game.cxx,v 1.30 2003/11/05 13:36:17 grumbel Exp $
+//  $Id: windstille_game.cxx,v 1.31 2003/11/06 09:24:17 grumbel Exp $
 //
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -29,6 +29,7 @@
 #include "animation_obj.hxx"
 #include "tile_map.hxx"
 #include "dog.hxx"
+#include "music_manager.hxx"
 #include "power_up.hxx"
 #include "bonus_flyer.hxx"
 #include "display.hxx"
@@ -193,6 +194,7 @@ WindstilleGame::update(float delta)
 void
 WindstilleGame::on_startup ()
 { 
+  MusicManager::current()->play(datadir + "music/techdemo.ogg", true);
   blink = 0.0f;
 
   GameObj::set_world (world);
@@ -221,6 +223,8 @@ WindstilleGame::on_startup ()
 void
 WindstilleGame::on_shutdown ()
 {
+  MusicManager::current()->stop();
+
   delete energiebar;
   delete background;
   delete view;

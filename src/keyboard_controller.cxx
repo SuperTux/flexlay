@@ -1,4 +1,4 @@
-//  $Id: keyboard_controller.cxx,v 1.6 2003/09/20 21:53:38 grumbel Exp $
+//  $Id: keyboard_controller.cxx,v 1.7 2003/11/06 09:24:17 grumbel Exp $
 //
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -48,6 +48,7 @@ KeyboardController::on_key_down(const CL_InputEvent& event)
       send_event(InputEvent::DOWN, true);
       break;
     case CL_KEY_LCONTROL:
+    case CL_KEY_ENTER:
       send_event(InputEvent::FIRE, true);
       break;
     }
@@ -71,6 +72,7 @@ KeyboardController::on_key_up(const CL_InputEvent& event)
       send_event(InputEvent::DOWN, false);
       break;
     case CL_KEY_LCONTROL:
+    case CL_KEY_ENTER:
       send_event(InputEvent::FIRE, false);
       break;
     }

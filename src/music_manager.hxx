@@ -1,4 +1,4 @@
-//  $Id: windstille_menu.hxx,v 1.6 2003/11/06 09:24:17 grumbel Exp $
+//  $Id: music_manager.hxx,v 1.1 2003/11/06 09:24:17 grumbel Exp $
 // 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -17,36 +17,42 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-#ifndef HEADER_WINDESTILLE_MENU_HXX
-#define HEADER_WINDESTILLE_MENU_HXX
+#ifndef HEADER_MUSIC_MANAGER_HXX
+#define HEADER_MUSIC_MANAGER_HXX
 
-#include <ClanLib/Display/sprite.h>
+#include <ClanLib/Core/System/keep_alive.h>
 #include <ClanLib/Sound/soundbuffer.h>
-#include "screen.hxx"
+#include <ClanLib/Sound/soundbuffer_session.h>
 
 /** */
-class WindstilleMenu : public Windstille::Screen
+class MusicManager
+  : public CL_KeepAlive
 {
 private:
-  CL_Sprite background;
-  CL_Sprite windstille;
-  int current_choice;
-  float passed_time;
+  unsigned int last_time;
 
+  CL_SoundBuffer background_music;
+  CL_SoundBuffer_Session background_music_session;
+
+  enum State { FADEOUT, PLAYING, STOPPED } state;
+  float volume;
+
+  bool waiting;
+  std::string next_filename;
+  bool next_loop;
+
+  static MusicManager* current_; 
 public:
-  WindstilleMenu();
-  ~WindstilleMenu();
-  
-  void update(float delta);
-  void draw();
-  
-  void on_startup();
-  void on_shutdown();
+  static MusicManager* current() { return current_; }
+  static void init();
+  static void deinit();
 
-private:
-  void fadeout();
-  WindstilleMenu (const WindstilleMenu&);
-  WindstilleMenu& operator= (const WindstilleMenu&);
+  MusicManager();
+
+  void play(const std::string& filename, bool loop);
+  void stop();
+
+  void keep_alive();
 };
 
 #endif

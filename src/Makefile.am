@@ -50,6 +50,8 @@ windstille_SOURCES = \
   gui_manager.cxx \
   igel.hxx \
   igel.cxx \
+  music_manager.hxx \
+  music_manager.cxx \
   keyboard_controller.cxx \
   keyboard_controller.hxx \
   laser_shoot.cxx \

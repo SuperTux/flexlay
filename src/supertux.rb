@@ -125,7 +125,7 @@ class Tileset
   def load(filename)
     tree = sexpr_read_from_file(filename)
     tree = tree[1..-1]
-    for i in tree
+    tree.each do |i|
       if i[0] == "tile"
         data  = i[1..-1]
         id    = get_value_from_tree(['id', '_'], data, -1)
@@ -136,9 +136,16 @@ class Tileset
         end
         
         if id != 0 # leave tile 0 transparent
-          add_tile(id,
-                   Tile.new($datadir + 'images/tilesets/' + image,
-                            CL_Color.new(255,   0,   0, 128)))
+          if image.is_a?(String) then
+            pixelbuffer = make_pixelbuffer($datadir + 'images/tilesets/' + image)
+          elsif image.is_a?(Array) then
+            if image[0] == "region" then
+              pixelbuffer = make_region_pixelbuffer($datadir + 'images/tilesets/' + image[1],
+                                                    image[2], image[3], image[4], image[5])
+            end
+          end
+          
+          add_tile(id, Tile.new(pixelbuffer))
         end
       end
     end
@@ -160,7 +167,7 @@ $game_objects = [
   ["bouncingsnowball", "images/shared/bouncingsnowball-left-0.png", proc{|data| BadGuy.new("bouncingsnowball")}],
   ["spiky", "images/shared/spiky-left-0.png", proc{|data| BadGuy.new("spiky")}],
   ["playerspawn", "images/shared/resetpoint.png", proc{|data| SpawnPoint.new(data)}],
-  ["door", "images/shared/door.png", proc{|data| Door.new(data)}],
+  ["door", "images/shared/door-1.png", proc{|data| Door.new(data)}],
   ["trampoline", "images/shared/trampoline-1.png", proc{|data| BadGuy.new("trampoline")}]
 ]
 

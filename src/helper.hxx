@@ -1,4 +1,4 @@
-//  $Id: editor.hxx,v 1.8 2003/10/11 08:11:59 grumbel Exp $
+//  $Id$
 // 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -17,26 +17,15 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-#ifndef HEADER_SCRIPTING_EDITOR_HXX
-#define HEADER_SCRIPTING_EDITOR_HXX
-
-#include <string>
+#ifndef HEADER_HELPER_HXX
+#define HEADER_HELPER_HXX
 
 #include <ClanLib/Display/sprite.h>
-#include <ClanLib/Display/display.h>
-#include <ClanLib/Signals/signal_v0.h>
-#include "../tile.hxx"
+#include <ClanLib/Display/pixel_buffer.h>
 
-#ifdef SWIGPYTHON
-#include "Python.h"
-
-void connect(CL_Signal_v0& sig, PyObject* obj);
-void connect_v1(CL_Signal_v1<int>& sig, PyObject* obj);
-void connect_v2(CL_Signal_v2<int, int>& sig, PyObject* obj);
-#endif
-
-/*Tile make_tile(const char* filename, 
-  unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha);*/
+CL_Sprite      make_sprite(const std::string& filename);
+CL_PixelBuffer make_pixelbuffer(const std::string& filename);
+CL_PixelBuffer make_region_pixelbuffer(const std::string& filename, int x, int y, int w, int h);
 
 #endif
 

@@ -115,4 +115,14 @@ blit(CL_PixelBuffer target, CL_PixelBuffer brush, int x_pos, int y_pos)
   target.unlock();
 }
 
+void clear(CL_PixelBuffer canvas)
+{
+  unsigned char* buffer;
+
+  canvas.lock();
+  buffer = static_cast<unsigned char*>(canvas.get_data());
+  memset(buffer, 0, sizeof(unsigned char) * canvas.get_pitch() * canvas.get_height());
+  canvas.unlock();
+}
+
 /* EOF */

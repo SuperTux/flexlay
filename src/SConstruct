@@ -78,6 +78,7 @@ env.SharedLibrary(
     'flexlay.cxx',
     'globals.cxx',
     'layer.cxx',
+    'helper.cxx', 
     'graphic_context_state.cxx',
     'gui_manager.cxx',
     'icon.cxx',
@@ -132,20 +133,20 @@ env.SharedLibrary(
           'clanGUI',
           'clanGUIStyleSilver'])
 
-env.SharedLibrary(
-    target = '_flexlay_wrap.so',
-    source = [
-    'flexlay_python_wrap.cxx',
-    'scripting/editor.cxx',
-    'python_functor.cxx',
-    'python_object.cxx',
-    'python_meta_data.cxx',
-    'sexpr_parser.cxx'],
-    CPPPATH=['/home/ingo/run/ClanLib-0.7-current//include/ClanLib-0.7/',
-             '/usr/include/python2.2/',
-             '..'],
-    LIBPATH=['.', '/home/ingo/run/ClanLib-0.7-current//lib/'],
-    LIBS=['flexlay'])
+# env.SharedLibrary(
+#     target = '_flexlay_wrap.so',
+#     source = [
+#     'flexlay_python_wrap.cxx',
+#     'scripting/editor.cxx',
+#     'python_functor.cxx',
+#     'python_object.cxx',
+#     'python_meta_data.cxx',
+#     'sexpr_parser.cxx'],
+#     CPPPATH=['/home/ingo/run/ClanLib-0.7-current//include/ClanLib-0.7/',
+#              '/usr/include/python2.2/',
+#              '..'],
+#     LIBPATH=['.', '/home/ingo/run/ClanLib-0.7-current//lib/'],
+#     LIBS=['flexlay'])
 
 env.SharedLibrary(
     target = '_flexlay_ruby_wrap.so',

@@ -32,6 +32,8 @@ class TileImpl;
 class Tile
 {
 public:
+  Tile(const CL_PixelBuffer& pixelbuffer);
+
   /** @param filename Surface to use 
    *  @param arg_colmap a 8 char long array */
   Tile(const std::string& filename, 

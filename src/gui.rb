@@ -11,7 +11,7 @@ class SuperTuxGUI
                                  $gui.get_component())
     @tileselector = TileSelector.new(CL_Rect.new(CL_Point.new(3, 3), CL_Size.new(128, 552)), @selector_window)
     @tileselector.set_tileset(tileset)
-    @tileselector.set_tiles((1..150).to_a)
+    @tileselector.set_tiles(tileset.get_tiles())
     @tileselector.show(false)
     
     @objectselector = ObjectSelector.new(CL_Rect.new(0, 0, 128, 256), 42, 42, @selector_window)

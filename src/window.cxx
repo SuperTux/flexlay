@@ -27,16 +27,9 @@
 #include "box.hxx"
 #include "fonts.hxx"
 #include "icon.hxx"
+#include "helper.hxx"
 #include "titlebar.hxx"
 #include "window.hxx"
-
-CL_Sprite
-make_sprite(const std::string& filename)
-{
-  CL_SpriteDescription desc;
-  desc.add_frame(CL_ProviderFactory::load(filename), true);
-  return CL_Sprite(desc);
-}
 
 class WindowImpl
 {

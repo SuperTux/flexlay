@@ -47,6 +47,13 @@ public:
   std::string filename;
 };
 
+Tile::Tile(const CL_PixelBuffer& pixelbuffer)
+  : impl(new TileImpl())
+{
+  impl->pixelbuffer = pixelbuffer;
+  impl->has_color = false;
+}
+
 Tile::Tile(const std::string& filename_, 
            const CL_Color& attribute_color_)
   : impl(new TileImpl())
@@ -90,23 +97,11 @@ Tile::get_sprite()
     }
   else
     {
-      try {
-        //std::cout << "Loading Tile: " << filename << std::endl;
-        if (has_suffix(impl->filename, ".png") || has_suffix(impl->filename, ".jpg"))
-          {
-            CL_SpriteDescription desc;
-            desc.add_frame(new CL_PixelBuffer(get_pixelbuffer()), true);
-            impl->sur = CL_Sprite(desc);
-          }
-        else
-          {
-            assert(0);  //impl->sur = CL_Sprite(impl->filename, resources);
-          }
-        return impl->sur;
-      } catch (CL_Error& err) {
-        std::cout << "Tile: CL_Error: " << err.message << std::endl;
-        assert(0);
-      }
+      CL_SpriteDescription desc;
+      desc.add_frame(new CL_PixelBuffer(get_pixelbuffer()), true);
+      impl->sur = CL_Sprite(desc);
+      
+      return impl->sur;
     }
 }
 
@@ -115,20 +110,23 @@ Tile::get_pixelbuffer()
 {	
   try {
     if (impl->pixelbuffer)
-      return impl->pixelbuffer;
-    {
-      if (has_suffix(impl->filename, ".png") || has_suffix(impl->filename, ".jpg"))
-        {
-          impl->pixelbuffer = CL_PixelBuffer(*CL_ProviderFactory::load(impl->filename));
-        }
-      else
-        {
-          //CL_SpriteDescription descr(impl->filename, resources);
-          //impl->pixelbuffer = CL_PixelBuffer(*(descr.get_frames().begin()->first));
-          assert(0);
-        }
-      return impl->pixelbuffer;
-    }
+      {
+        return impl->pixelbuffer;
+      }
+    else 
+      {
+        if (has_suffix(impl->filename, ".png") || has_suffix(impl->filename, ".jpg"))
+          {
+            impl->pixelbuffer = CL_PixelBuffer(*CL_ProviderFactory::load(impl->filename));
+          }
+        else
+          {
+            //CL_SpriteDescription descr(impl->filename, resources);
+            //impl->pixelbuffer = CL_PixelBuffer(*(descr.get_frames().begin()->first));
+            assert(0);
+          }
+        return impl->pixelbuffer;
+      }
   } catch(CL_Error& err) {
     std::cout << "CL_Error: " << err.message << std::endl;
     std::cout << "          filename = " << impl->filename << std::endl;

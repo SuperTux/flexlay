@@ -50,7 +50,7 @@
 #include "objmap_path_node.hxx"
 
 #include "netpanzer.hxx" 
-#include "scripting/editor.hxx"
+#include "helper.hxx"
 
 #ifdef SWIGPYTHON
 #include "sexpr_parser.hxx"
@@ -121,6 +121,7 @@ VALUE ObjMapObject2Value(const ObjMapObject& arg)
 %include "scripting/editor.hxx"
 
 %include "netpanzer.hxx" 
+%include "helper.hxx"
 
 #ifdef SWIGPYTHON
 %include "python_meta_data.hxx"

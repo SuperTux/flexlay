@@ -17,9 +17,8 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-#include <ClanLib/Display/sprite_description.h>
-#include <ClanLib/Display/Providers/provider_factory.h>
 #include <ClanLib/Signals/signal_v0.h>
+#include "../blitter.hxx"
 #include "../python_functor.hxx"
 #include "editor.hxx"
 
@@ -42,15 +41,6 @@ void connect_v2(CL_Signal_v2<int, int>& sig, PyObject* obj)
   sig = CL_Signal_v2<int, int>();
   new CL_Slot(sig.connect_functor(PythonFunctor(obj)));
 }
-
-CL_Sprite
-make_sprite(const std::string& filename)
-{
-  CL_SpriteDescription desc;
-  desc.add_frame(CL_ProviderFactory::load(filename), true);
-  return CL_Sprite(desc);
-}
-
 
 /*
 Tile

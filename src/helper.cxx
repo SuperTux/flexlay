@@ -1,0 +1,75 @@
+//  $Id$
+//
+//  Pingus - A free Lemmings clone
+//  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
+//
+//  This program is free software; you can redistribute it and/or
+//  modify it under the terms of the GNU General Public License
+//  as published by the Free Software Foundation; either version 2
+//  of the License, or (at your option) any later version.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License
+//  along with this program; if not, write to the Free Software
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+
+#include <ClanLib/Display/sprite_description.h>
+#include <ClanLib/Display/pixel_format.h>
+#include <ClanLib/Display/Providers/provider_factory.h>
+#include <ClanLib/core.h>
+#include "blitter.hxx"
+#include "helper.hxx"
+
+CL_Sprite
+make_sprite(const std::string& filename)
+{
+  try {
+    CL_SpriteDescription desc;
+    desc.add_frame(CL_ProviderFactory::load(filename), true);
+    return CL_Sprite(desc);
+  } catch (CL_Error& err) {
+    std::cout << "CL_Error: " << err.message << std::endl;
+    return CL_Sprite();
+  }
+}
+
+CL_PixelBuffer
+make_pixelbuffer(const std::string& filename)
+{
+  try {
+    CL_PixelBuffer* ptr = CL_ProviderFactory::load(filename);
+    CL_PixelBuffer buffer(*ptr);
+    delete ptr;
+
+    return buffer;
+  } catch (CL_Error& err) {
+    std::cout << "CL_Error: " << err.message << std::endl;
+    return CL_PixelBuffer();
+  }
+}
+
+CL_PixelBuffer
+make_region_pixelbuffer(const std::string& filename, int x, int y, int w, int h)
+{
+  try {
+    CL_PixelBuffer* ptr = CL_ProviderFactory::load(filename);
+    CL_PixelBuffer buffer(*ptr);
+    delete ptr;
+
+    CL_PixelBuffer target(w, h, w * (buffer.get_format().get_depth()/8), buffer.get_format());
+    clear(target);
+    blit(target, buffer, -x, -y);
+
+    return target;
+  } catch (CL_Error& err) {
+    std::cout << "CL_Error: " << err.message << std::endl;
+    return CL_PixelBuffer();
+  }
+
+}
+
+/* EOF */

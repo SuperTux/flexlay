@@ -23,6 +23,7 @@
 #include <ClanLib/Display/pixel_buffer.h>
 
 void blit(CL_PixelBuffer target, CL_PixelBuffer brush, int x_pos, int y_pos);
+void clear(CL_PixelBuffer target);
 
 #endif
 

@@ -1,4 +1,4 @@
-//  $Id: tile_factory.cxx,v 1.6 2003/08/12 19:24:21 grumbel Exp $
+//  $Id: tile_factory.cxx,v 1.7 2003/08/19 13:40:48 grumbel Exp $
 //
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -17,6 +17,7 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
+#include <assert.h>
 #include <iostream>
 #include "string_converter.hxx"
 #include "scm_helper.hxx"

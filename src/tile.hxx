@@ -1,4 +1,4 @@
-//  $Id: tile.hxx,v 1.4 2003/08/12 08:24:41 grumbel Exp $
+//  $Id: tile.hxx,v 1.5 2003/08/19 13:40:48 grumbel Exp $
 // 
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -20,6 +20,7 @@
 #ifndef HEADER_TILE_HXX
 #define HEADER_TILE_HXX
 
+#include <assert.h>
 #include <ClanLib/Display/sprite.h>
 
 /** A Tile is a surface or sprite together with information for

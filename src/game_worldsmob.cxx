@@ -1,4 +1,4 @@
-//  $Id: game_worldsmob.cxx,v 1.2 2003/08/12 08:24:41 grumbel Exp $
+//  $Id: game_worldsmob.cxx,v 1.3 2003/08/19 13:40:48 grumbel Exp $
 //
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -17,6 +17,7 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
+#include <assert.h>
 #include "gameobj_smob.hxx"
 #include "game_worldsmob.hxx"
 #include "tile_mapsmob.hxx"

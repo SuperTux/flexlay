@@ -47,11 +47,11 @@ private:
 public:
   static EditorTileMap* current() { return current_; } 
   
-  EditorTileMap(EditorMap* p);
+  EditorTileMap();
   ~EditorTileMap();
 
-  void draw ();
-  void draw_map(Field<int>* field);
+  void draw (EditorMapComponent* parent);
+  void draw_map(EditorMapComponent* parent, Field<int>* field);
 
   void update(float delta) {}
 

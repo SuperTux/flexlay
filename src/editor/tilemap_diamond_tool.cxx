@@ -23,10 +23,11 @@
 #include <ClanLib/Display/input_event.h>
 #include "editor_tilemap.hxx"
 #include "editor_map.hxx"
+#include "editor_map_component.hxx"
 #include "globals.hxx"
 #include "tilemap_diamond_tool.hxx"
 
-TileMapDiamondTool::TileMapDiamondTool(EditorMap* p, EditorTileMap* t)
+TileMapDiamondTool::TileMapDiamondTool(EditorMapComponent* p, EditorTileMap* t)
   : TileMapTool(p), tilemap(t),
     sprite("diamond", resources)
 {

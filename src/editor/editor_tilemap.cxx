@@ -28,12 +28,14 @@
 #include "editor_map.hxx"
 #include "tile_brush.hxx"
 #include "editor_tile.hxx"
+#include "editor_map_component.hxx"
+#include "editor_map_component.hxx"
 #include "editor_tilemap.hxx"
+#include "editor_map_component.hxx"
 
 EditorTileMap* EditorTileMap::current_ = 0;
 
-EditorTileMap::EditorTileMap(EditorMap* p)
-  : EditorMapLayer(p)
+EditorTileMap::EditorTileMap()
 {
   current_ = this;
 
@@ -79,7 +81,7 @@ EditorTileMap::new_level(int w, int h)
 
   
 void
-EditorTileMap::draw_map(Field<int>* field)
+EditorTileMap::draw_map(EditorMapComponent* parent, Field<int>* field)
 {
   float alpha;
   if (field == current_field)
@@ -102,7 +104,7 @@ EditorTileMap::draw_map(Field<int>* field)
 }
 
 void
-EditorTileMap::draw ()
+EditorTileMap::draw(EditorMapComponent* parent)
 {
   CL_Display::fill_rect(CL_Rect(CL_Point(0,0),
                                 CL_Size(current_field->get_width() * TILE_SIZE,
@@ -111,7 +113,7 @@ EditorTileMap::draw ()
   CL_Display::flush();
 
   for(Fields::iterator i = fields.begin(); i != fields.end();++i) 
-    draw_map(*i);
+    draw_map(parent, *i);
   
   CL_Display::flush();
 

@@ -20,13 +20,15 @@
 #include <algorithm>
 #include <ClanLib/Display/keys.h>
 #include <ClanLib/Display/display.h>
+#include "editor_map_component.hxx"
 #include "editor_map.hxx"
+#include "editor_map_component.hxx"
 #include "../scm_obj.hxx"
 #include "tilemap_object_tool.hxx"
 
 extern CL_ResourceManager* resources;
 
-TileMapObjectTool::TileMapObjectTool(EditorMap* p, EditorObjMap* t)
+TileMapObjectTool::TileMapObjectTool(EditorMapComponent* p, EditorObjMap* t)
   : TileMapTool(p), objmap(t)
 {
   obj = 0;

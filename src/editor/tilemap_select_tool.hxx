@@ -35,7 +35,7 @@ private:
   bool creating_selection;
 
 public:
-  TileMapSelectTool(EditorMap* p, EditorTileMap* t);
+  TileMapSelectTool(EditorMapComponent* p, EditorTileMap* t);
   ~TileMapSelectTool();
 
   void draw();

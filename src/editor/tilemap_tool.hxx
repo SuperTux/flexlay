@@ -20,16 +20,17 @@
 #ifndef HEADER_TILEMAP_TOOL_HXX
 #define HEADER_TILEMAP_TOOL_HXX
 
-class EditorMap;
+class EditorMapComponent;
 class CL_InputEvent;
 
 /** */
 class TileMapTool
 {
 protected:
-  EditorMap* parent;
+  EditorMapComponent* parent;
+
 public:
-  TileMapTool(EditorMap* p) : parent(p) {}
+  TileMapTool(EditorMapComponent* p) : parent(p) {}
   virtual ~TileMapTool() {}
 
   virtual void draw() {}

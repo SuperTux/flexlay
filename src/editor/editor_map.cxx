@@ -29,148 +29,33 @@
 #include "tilemap_diamond_tool.hxx"
 #include "editor_names.hxx"
 #include "editor_map.hxx"
+#include "editor_map_component.hxx"
 
 EditorMap* EditorMap::current_ = 0; 
 
-EditorMap::EditorMap(const CL_Rect& rect, CL_Component* parent)
-  : CL_Component(rect, parent)
+EditorMap::EditorMap()
 {
   current_ = this;
 
-  slots.connect(sig_paint(),      this, &EditorMap::draw);
-  slots.connect(sig_mouse_up(),   this, &EditorMap::mouse_up);
-  slots.connect(sig_mouse_down(), this, &EditorMap::mouse_down);
-  slots.connect(sig_mouse_move(), this, &EditorMap::mouse_move);
-
   diamond_map = 0;
 
-  trans_offset     = CL_Pointf(0,0);
-  old_trans_offset = CL_Pointf(0,0);
-  click_pos        = CL_Point(0,0);
-  
-  zoom_factor = 0;
-
-  scrolling = false;
-
   // FIXME: Move this to the scripting level
-  layers.push_back(tilemap = new EditorTileMap(this));
-  layers.push_back(objmap  = new EditorObjMap(this));
-
-  // FIXME: move this to scripting too
-  tools.push_back(new TileMapPaintTool  (this, tilemap));
-  tools.push_back(new TileMapSelectTool (this, tilemap));
-  tools.push_back(new TileMapDiamondTool(this, tilemap));
-  tools.push_back(new TileMapObjectTool (this, objmap));
-
-  tool = tools[0];
+  layers.push_back(tilemap = new EditorTileMap());
+  layers.push_back(objmap  = new EditorObjMap());
 }
 
 EditorMap::~EditorMap()
 {
   cleanup();
-
-  for(Tools::iterator i = tools.begin(); i != tools.end(); ++i)
-    delete *i;
-}
-
-void
-EditorMap::mouse_up(const CL_InputEvent& event)
-{
-  switch (event.id)
-    {
-    case CL_MOUSE_LEFT:
-    case CL_MOUSE_RIGHT:
-      tool->on_mouse_up(event);
-      break;
-
-    case CL_MOUSE_MIDDLE:
-      scrolling = false;
-      trans_offset.x = old_trans_offset.x - (click_pos.x - event.mouse_pos.x);
-      trans_offset.y = old_trans_offset.y - (click_pos.y - event.mouse_pos.y);
-          
-      old_trans_offset = trans_offset;
-      release_mouse();
-      break;
-    }
-}
-
-void
-EditorMap::mouse_move(const CL_InputEvent& event)
-{
-  tool->on_mouse_move(event);
-
-  if (scrolling)
-    {
-      trans_offset.x = old_trans_offset.x - (click_pos.x - event.mouse_pos.x);
-      trans_offset.y = old_trans_offset.y - (click_pos.y - event.mouse_pos.y);
-    }
-}
-
-void
-EditorMap::mouse_down(const CL_InputEvent& event)
-{
-  switch (event.id)
-    {
-    case CL_MOUSE_LEFT:
-    case CL_MOUSE_RIGHT:
-      tool->on_mouse_down(event);
-      break;
-
-    case CL_MOUSE_MIDDLE:
-      scrolling = true;
-      old_trans_offset = trans_offset;
-      click_pos = event.mouse_pos;
-      capture_mouse();
-      break;
-           
-    case CL_MOUSE_WHEEL_UP:
-      zoom_in();
-      break;
-
-    case CL_MOUSE_WHEEL_DOWN:
-      zoom_out();
-      break;
-    }
 }
   
 void
-EditorMap::draw ()
+EditorMap::draw (EditorMapComponent* parent)
 {
-  CL_Display::push_translate_offset(int(trans_offset.x), int(trans_offset.y));
-
   CL_Display::clear(CL_Color(100, 0, 100));
-
   for(Layers::iterator i = layers.begin(); i != layers.end(); ++i)
-    {
-      (*i)->draw();
-    }
-
-  if (1) //has_mouse_over())
-    tool->draw();
-    
+    (*i)->draw(parent);  
   CL_Display::flush();
-
-  CL_Display::pop_translate_offset();
-}
-
-CL_Point
-EditorMap::screen2tile(const CL_Point& pos)
-{
-  int x = int(pos.x - trans_offset.x)/TILE_SIZE;
-  int y = int(pos.y - trans_offset.y)/TILE_SIZE;
-
-  return CL_Point(pos.x - trans_offset.x < 0 ? x-1 : x,
-                  pos.y - trans_offset.y < 0 ? y-1 : y); 
-                  
-}
-
-CL_Point
-EditorMap::screen2world(const CL_Point& pos)
-{
-  int x = int(pos.x - trans_offset.x);
-  int y = int(pos.y - trans_offset.y);
-
-  return CL_Point(x, y);                  
 }
 
 void
@@ -183,49 +68,6 @@ EditorMap::cleanup()
     }
 }
 
-void
-EditorMap::set_tool(int i)
-{
-  if (i >= 0 && i < int(tools.size()))
-    tool = tools[i];
-  else
-    {
-      std::cout << "Only have " << tools.size() << " tools, tool " << i << " can't be selected." << std::endl;
-    }
-}
-
-void
-EditorMap::zoom_out()
-{
-  zoom_factor -= 1;
-  std::cout << "Zoom: " << get_zoom() << std::endl;
-}
-
-void
-EditorMap::zoom_in()
-{
-  zoom_factor += 1;
-  std::cout << "Zoom: " << get_zoom() << std::endl;
-}
-
-float
-EditorMap::get_zoom()
-{
-  if (zoom_factor > 0)
-    return 1.0f * (zoom_factor + 1);
-  else if (zoom_factor < 0)
-    return 1.0f / (-zoom_factor + 1);
-  else
-    return 1.0f;
-}
-
-CL_Rect
-EditorMap::get_clip_rect()
-{
-  return CL_Rect(CL_Point(int(0 - trans_offset.x), int(0 - trans_offset.y)),
-                 CL_Size(get_width(), 
-                         get_height()));
-}
 
 EditorMapLayer*
 EditorMap::get_layer_by_name(int i)
@@ -241,15 +83,6 @@ EditorMap::get_layer_by_name(int i)
     }
 }
 
-TileMapTool*
-EditorMap::get_tool_by_name(int i)
-{
-  if (i >= 0 && i < static_cast<int>(tools.size()))
-    return tools[i];
-  else
-    return 0;  
-}
-
 EditorMapLayer*
 EditorMap::get_layer(int i)
 {
@@ -257,13 +90,6 @@ EditorMap::get_layer(int i)
     return layers[i];
   else
     return 0;
-}
-
-void
-EditorMap::move_to(int x, int y)
-{
-  trans_offset = CL_Pointf(-x + get_width()/2,
-                           -y + get_height()/2);
 }
 
 /* EOF */

@@ -30,6 +30,7 @@
 #include "editor/editor_tilemap.hxx"
 #include "editor/object_selector.hxx"
 #include "editor/editor_map.hxx"
+#include "editor/editor_map_component.hxx"
 #include "editor/tile_editor.hxx"
 #include "editor/tilemap_select_tool.hxx"
 #include "editor/tilemap_paint_tool.hxx"
@@ -211,7 +212,7 @@ SCM
 editor_get_tile_selection()
 {
   TileMapSelectTool* tool 
-    = dynamic_cast<TileMapSelectTool*>(EditorMap::current()->get_tool_by_name(1));
+    = dynamic_cast<TileMapSelectTool*>(EditorMapComponent::current()->get_tool_by_name(1));
 
   if (tool)
     {
@@ -276,21 +277,21 @@ void tilemap_set_active_layer(int i)
 
 void editor_set_tool(int i)
 {
-  EditorMap::current()->set_tool(i);
+  EditorMapComponent::current()->set_tool(i);
 }
 
 CL_Component*
 editor_create_map(int x, int y, int w, int h)
 {
-  return new EditorMap(CL_Rect(CL_Point(x, y),
-                               CL_Size(w, h)),
-                       GUIManager::current()->get_component());
+  return new EditorMapComponent(CL_Rect(CL_Point(x, y),
+                                        CL_Size(w, h)),
+                                GUIManager::current()->get_component());
 }
 
 CL_Component*
 minimap_create(CL_Component* p, int x, int y, int w, int h)
 {
-  EditorMap* parent_map = dynamic_cast<EditorMap*>(p);
+  EditorMapComponent* parent_map = dynamic_cast<EditorMapComponent*>(p);
   return new Minimap(parent_map, 
                      CL_Point(x, y), CL_Size(w, h), 
                      GUIManager::current()->get_component());

@@ -229,7 +229,7 @@
      (error "Tool unknown"))))
 
 (define (create-toolbar)
-  (let ((window (gui-create-window 0 25 50 310 "Toolbar")))
+  (let ((window (gui-create-window 0 25 50 360 "Toolbar")))
     (gui-push-component (gui-window-get-client-area window))
     
 

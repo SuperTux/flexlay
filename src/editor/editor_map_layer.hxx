@@ -20,18 +20,16 @@
 #ifndef HEADER_EDITOR_MAP_LAYER_HXX
 #define HEADER_EDITOR_MAP_LAYER_HXX
 
-class EditorMap;
+class EditorMapComponent;
 
 /** */
 class EditorMapLayer
 {
-protected:
-  EditorMap* parent;
 public:
-  EditorMapLayer(EditorMap* p) { parent = p; }
+  EditorMapLayer() {}
   virtual ~EditorMapLayer() {}
 
-  virtual void draw() =0;
+  virtual void draw(EditorMapComponent* parent) =0;
   virtual void update(float delta) =0;
 private:
   EditorMapLayer (const EditorMapLayer&);

@@ -22,6 +22,7 @@
 #include <ClanLib/display.h>
 #include "../globals.hxx"
 #include "editor_map.hxx"
+#include "editor_map_component.hxx"
 #include "src/scripting/editor.hxx"
 #include "object_selector.hxx"
 
@@ -68,11 +69,11 @@ ObjectSelector::mouse_up(const CL_InputEvent& event)
                 CL_Point screen(event.mouse_pos.x + get_screen_rect().left,
                                 event.mouse_pos.y + get_screen_rect().top);
 
-                CL_Point target(screen.x - EditorMap::current()->get_screen_rect().left,
-                                screen.y - EditorMap::current()->get_screen_rect().top);
+                CL_Point target(screen.x - EditorMapComponent::current()->get_screen_rect().left,
+                                screen.y - EditorMapComponent::current()->get_screen_rect().top);
       
                 editor_get_objmap()->add_object(drag_obj.sprite,
-                                                EditorMap::current()->screen2world(target),
+                                                EditorMapComponent::current()->screen2world(target),
                                                 drag_obj.data);
               }
             drag_obj.sprite = CL_Sprite();

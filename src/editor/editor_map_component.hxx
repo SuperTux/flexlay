@@ -17,8 +17,8 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-#ifndef HEADER_EDITOR_MAP_HXX
-#define HEADER_EDITOR_MAP_HXX
+#ifndef HEADER_EDITOR_MAP_COMPONENT_HXX
+#define HEADER_EDITOR_MAP_COMPONENT_HXX
 
 #include <vector>
 #include <ClanLib/Display/sprite.h>
@@ -28,34 +28,64 @@
 #include "editor_objmap.hxx"
 #include "editor_tilemap.hxx"
 
-class EditorMapComponent;
+class EditorMap;
 class TileMapTool;
 
 /** Object which represents a level, quirled together with the GUI
     stuff */
-class EditorMap
+class EditorMapComponent : public CL_Component
 {
 private:
-  typedef std::vector<EditorMapLayer*> Layers;
-  Layers layers;
+  CL_SlotContainer slots;
 
-  EditorTileMap* tilemap;
-  EditorObjMap*  objmap;
+  EditorMap*     editor_map;
+
+  int zoom_factor;
+  CL_Pointf trans_offset;
+  CL_Pointf old_trans_offset;
+
+  CL_Point click_pos;
+
+  bool scrolling;
+  typedef std::vector<TileMapTool*> Tools;
+  Tools tools;
+  TileMapTool* tool;
 
   Field<int>* diamond_map;
   std::vector<std::string> scripts;
 
   void cleanup();
 
-  static EditorMap* current_; 
+  static EditorMapComponent* current_; 
 public:
-  static EditorMap* current() { return current_; } 
+  static EditorMapComponent* current() { return current_; } 
 
-  EditorMap();
-  ~EditorMap();
+  EditorMapComponent(const CL_Rect& rect, CL_Component* parent);
+  ~EditorMapComponent();
 
-  void draw(EditorMapComponent* parent);
+  // random stuff
+  void set_tool(int i);
+  
+  // Component stuff
+  float get_zoom();
+  void  zoom_out();
+  void  zoom_in();
 
+  void move_to(int x, int y);
+
+  void draw();
+
+  void mouse_up  (const CL_InputEvent& event);
+  void mouse_down(const CL_InputEvent& event);
+  void mouse_move(const CL_InputEvent& event);
+
+  CL_Point screen2tile(const CL_Point& pos);
+  CL_Point screen2world(const CL_Point& pos);
+
+  CL_Rect get_clip_rect();
+
+  // Map stuff
+  TileMapTool*    get_tool_by_name(int i);
   EditorMapLayer* get_layer_by_name(int i);
   EditorMapLayer* get_layer(int i);
   void set_active_layer(int i);

@@ -24,8 +24,7 @@
 
 extern CL_ResourceManager* resources;
 
-EditorObjMap::EditorObjMap(EditorMap* p)
-  : EditorMapLayer(p)
+EditorObjMap::EditorObjMap()
 {
   handle_count = 0;
 }
@@ -44,7 +43,7 @@ EditorObjMap::update(float delta)
 }
 
 void
-EditorObjMap::draw()
+EditorObjMap::draw(EditorMapComponent* parent)
 {
   for(Objs::iterator i = objects.begin(); i != objects.end(); ++i)
     {

@@ -46,7 +46,7 @@ private:
 public:
   static TileMapPaintTool* current() { return current_; } 
 
-  TileMapPaintTool(EditorMap* p, EditorTileMap* t);
+  TileMapPaintTool(EditorMapComponent* p, EditorTileMap* t);
   virtual ~TileMapPaintTool();
   
   const TileBrush& get_brush() { return brush; }

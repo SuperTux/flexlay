@@ -44,7 +44,7 @@ private:
   typedef std::vector<EditorObjMap::Obj*> Selection; 
   Selection selection;
 public:
-  TileMapObjectTool(EditorMap* p, EditorObjMap* t);
+  TileMapObjectTool(EditorMapComponent* p, EditorObjMap* t);
   ~TileMapObjectTool();
 
   void draw();

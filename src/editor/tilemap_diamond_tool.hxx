@@ -33,7 +33,7 @@ private:
   bool color;
   CL_Point current_tile;
 public:
-  TileMapDiamondTool(EditorMap* p, EditorTileMap* t);
+  TileMapDiamondTool(EditorMapComponent* p, EditorTileMap* t);
   ~TileMapDiamondTool();
 
   void draw();

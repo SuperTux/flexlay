@@ -26,6 +26,7 @@
 #include "editor_tilemap.hxx"
 #include "tile_factory.hxx"
 #include "editor_map.hxx"
+#include "editor_map_component.hxx"
 #include "../tile.hxx"
 #include "editor.hxx"
 #include "paint_command.hxx"
@@ -33,7 +34,7 @@
 
 TileMapPaintTool* TileMapPaintTool::current_ = 0; 
 
-TileMapPaintTool::TileMapPaintTool(EditorMap* p, EditorTileMap* t)
+TileMapPaintTool::TileMapPaintTool(EditorMapComponent* p, EditorTileMap* t)
   : TileMapTool(p), 
     tilemap(t)
 {

@@ -23,10 +23,11 @@
 #include "globals.hxx"
 #include "editor_tilemap.hxx"
 #include "editor_map.hxx"
+#include "editor_map_component.hxx"
 #include "tile_brush.hxx"
 #include "tilemap_select_tool.hxx"
 
-TileMapSelectTool::TileMapSelectTool(EditorMap* p, EditorTileMap* t)
+TileMapSelectTool::TileMapSelectTool(EditorMapComponent* p, EditorTileMap* t)
   : TileMapTool(p), tilemap(t)
 {
   creating_selection = false;

@@ -30,7 +30,7 @@ private:
   bool drag_active;
   
   int last_serial;
-  EditorMap* editor_map;
+  EditorMap editor_map;
 
   EditorMapComponent* parent;
   CL_Surface minimap_surface;

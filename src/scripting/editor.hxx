@@ -33,7 +33,6 @@
 
 #include "Python.h"
 
-class Workspace;
 class EditorMap;
 class EditorObjMap;
 class EditorTileMap;
@@ -58,9 +57,6 @@ void tile_selector_set_tileset(CL_Component*, Tileset* tileset);
 CL_Component* object_selector_create(int x, int y, int w, int h, int obj_w, int obj_h);
 CL_Component* editor_map_component_create(int x, int y, int w, int h);
 
-void          editor_map_component_set_workspace(CL_Component* c, Workspace* m);
-Workspace*    editor_map_component_get_workspace(CL_Component* c);
-
 void          editor_map_component_set_zoom(CL_Component* c, float z);
 
 void editor_set_brush_tile(int i);
@@ -79,12 +75,6 @@ int  screen_get_width();
 int  screen_get_height();
 
 void connect(CL_Signal_v0& sig, PyObject* obj);
-
-Workspace* workspace_current();
-Workspace* workspace_create();
-void workspace_add_map(Workspace* workspace, EditorMap* m, int x, int y);
-void workspace_set_current_map(Workspace* workspace, EditorMap* m);
-EditorMap* workspace_get_current_map(Workspace* workspace);
 
 Tileset* tileset_create(int tile_size);
 #ifdef SWIGGUILE

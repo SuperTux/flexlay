@@ -23,7 +23,7 @@
 #include <ClanLib/Core/System/error.h>
 #include "objmap_object.hxx"
 #include "objmap_sprite_object.hxx"
-#include "editor_objmap.hxx"
+#include "object_layer.hxx"
 
 extern CL_ResourceManager* resources;
 ObjectLayer* ObjectLayer::current_ = 0;

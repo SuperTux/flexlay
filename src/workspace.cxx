@@ -17,6 +17,7 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
+#include <iostream>
 #include <ClanLib/Display/display.h>
 #include <ClanLib/Display/keys.h>
 #include "editor.hxx"
@@ -30,70 +31,46 @@
 
 Workspace* Workspace::current_ = 0;
 
-WorkspaceItem::WorkspaceItem()
+class WorkspaceImpl
 {
-  pos = CL_Point(0, 0);
-  editor_map = 0;
-}
+public:
+  GraphicContextState gc_state;
 
-WorkspaceItem::WorkspaceItem(EditorMap* m, const CL_Point& p)
-  : pos(p), editor_map(m)
-{
-}
+  bool scrolling;
+  CL_Point click_pos;
+
+  /** Position of the center */
+  CL_Pointf old_trans_offset;
+
+  EditorMap editor_map;
+};
 
 Workspace::Workspace(int w, int h)
-  : gc_state(w, h)
+  : impl(new WorkspaceImpl())
 {
   current_ = this;
-  scrolling = false;
-  click_pos = CL_Point(0, 0);
-  old_trans_offset = CL_Pointf(0,0);
 
-  // FIXME: Dummy item
-  items.push_back(new WorkspaceItem());
-}
-
-Workspace::~Workspace()
-{
-}
-
-WorkspaceItem*
-Workspace::get_current_item()
-{
-  return items.front();
+  impl->gc_state  = GraphicContextState(w, h);
+  impl->scrolling = false;
+  impl->click_pos = CL_Point(0, 0);
+  impl->old_trans_offset = CL_Pointf(0,0);
 }
 
 void
 Workspace::draw()
 {
-  gc_state.push();
+  impl->gc_state.push();
 
   CL_Display::clear(CL_Color(100, 0, 100));
-  for(Items::iterator i = items.begin(); i != items.end(); ++i)
-    {
-      if ((*i)->editor_map)
-        {
-          CL_Display::push_modelview();
-          CL_Display::add_translate((*i)->pos.x, (*i)->pos.y);
-      
-          (*i)->editor_map->draw(EditorMapComponent::current());
-      
-          CL_Display::pop_modelview();
-        }
-    }
 
+  impl->editor_map.draw(EditorMapComponent::current());
+  
   if (1) // has_mouse_over()) FIXME: Seperate cursor and state here
     Editor::current()->get_tool_manager()->current_tool()->draw();
     
   CL_Display::flush();
 
-  gc_state.pop();
-}
-
-void
-Workspace::add_map(EditorMap* m, const CL_Point& p)
-{
-  items.push_back(new WorkspaceItem(m, p));  
+  impl->gc_state.pop();
 }
 
 void
@@ -107,10 +84,12 @@ Workspace::mouse_up(const CL_InputEvent& event)
       break;
 
     case CL_MOUSE_MIDDLE:
-      scrolling = false;
-      gc_state.set_pos(CL_Pointf(old_trans_offset.x + (click_pos.x - event.mouse_pos.x) / gc_state.get_zoom(),
-                                 old_trans_offset.y + (click_pos.y - event.mouse_pos.y) / gc_state.get_zoom()));
-      old_trans_offset = gc_state.get_pos();
+      impl->scrolling = false;
+      impl->gc_state.set_pos(CL_Pointf(impl->old_trans_offset.x
+                                       + (impl->click_pos.x - event.mouse_pos.x) / impl->gc_state.get_zoom(),
+                                       impl->old_trans_offset.y
+                                       + (impl->click_pos.y - event.mouse_pos.y) / impl->gc_state.get_zoom()));
+      impl->old_trans_offset = impl->gc_state.get_pos();
       EditorMapComponent::current()->release_mouse();
       break;
     }
@@ -121,10 +100,12 @@ Workspace::mouse_move(const CL_InputEvent& event)
 {
   Editor::current()->get_tool_manager()->current_tool()->on_mouse_move(event);
 
-  if (scrolling)
+  if (impl->scrolling)
     {
-      gc_state.set_pos(CL_Pointf(old_trans_offset.x + (click_pos.x - event.mouse_pos.x)/gc_state.get_zoom(),
-                                 old_trans_offset.y + (click_pos.y - event.mouse_pos.y)/gc_state.get_zoom()));
+      impl->gc_state.set_pos(CL_Pointf(impl->old_trans_offset.x
+                                       + (impl->click_pos.x - event.mouse_pos.x)/impl->gc_state.get_zoom(),
+                                       impl->old_trans_offset.y
+                                       + (impl->click_pos.y - event.mouse_pos.y)/impl->gc_state.get_zoom()));
     }
 }
 
@@ -139,12 +120,12 @@ Workspace::mouse_down(const CL_InputEvent& event)
       break;
 
     case CL_MOUSE_MIDDLE:
-      scrolling = true;
-      old_trans_offset = gc_state.get_pos();
-      click_pos = event.mouse_pos;
+      impl->scrolling = true;
+      impl->old_trans_offset = impl->gc_state.get_pos();
+      impl->click_pos = event.mouse_pos;
       EditorMapComponent::current()->capture_mouse();
       break;
-           
+      
     case CL_MOUSE_WHEEL_UP:
       EditorMapComponent::current()->zoom_in(event.mouse_pos);
       break;
@@ -155,16 +136,22 @@ Workspace::mouse_down(const CL_InputEvent& event)
     }
 }
 
-EditorMap*
+EditorMap
 Workspace::get_current_map()
 {
-  return items.front()->editor_map;
+  return impl->editor_map;
 }
 
 void
-Workspace::set_current_map(EditorMap* m)
+Workspace::set_current_map(EditorMap m)
 {
-  items.front()->editor_map = m;
+  impl->editor_map = m;
+}
+
+GraphicContextState&
+Workspace::get_gc_state()
+{
+  return impl->gc_state;
 }
 
 /* EOF */

@@ -38,6 +38,7 @@ private:
   float zoom;
 
 public:
+  GraphicContextState() {}
   GraphicContextState(int w, int h);
 
   void push();

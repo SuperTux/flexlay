@@ -30,44 +30,25 @@
 #include "layer.hxx"
 
 class EditorMapComponent;
+class EditorMapImpl;
 class TileMapTool;
 
 /** Object which represents a level, quirled together with the GUI
     stuff */
 class EditorMap
 {
-private:
-  /** Flag if the map got modified, used for 'Some maps are unsaved'
-      style massages */
-  bool modified;
-
-  /** Gets incremented with each map change so that other component
-      can update if required */
-  int serial;
-
-  typedef std::vector<Layer> Layers;
-  Layers layers;
-
-  CL_Color background_color;
-  CL_Color foreground_color;
-
-  /** Metadata attached to this map (ie. mapname, description, scripts, etc.) */
-#ifdef SWIGGUILE
-  SCMObj metadata;
-#endif
 public:
   EditorMap();
-  ~EditorMap();
 
   void draw(EditorMapComponent* parent);
 
   void add_layer(Layer layer);
 
-  bool is_modified() const { return modified; }
-  void set_unmodified() { modified = false; }
-  void modify()       { modified = true; serial += 1; }
+  bool is_modified() const;
+  void set_unmodified();
+  void modify();
 
-  int get_serial() const { return serial; }
+  int get_serial() const;
 
   Layer get_layer(int i);
 
@@ -80,6 +61,9 @@ public:
   CL_Rect get_bounding_rect();
 
   void set_background_color(const CL_Color& color);
+
+private:
+  CL_SharedPtr<EditorMapImpl> impl;
 };
 
 #endif

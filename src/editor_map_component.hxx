@@ -27,9 +27,8 @@
 #include "field.hxx"
 #include "object_layer.hxx"
 #include "graphic_context_state.hxx"
+#include "workspace.hxx"
 
-class Workspace;
-class EditorMap;
 class TileMapTool;
 
 /** Object which represents a level, quirled together with the GUI
@@ -38,7 +37,7 @@ class EditorMapComponent : public CL_Component
 {
 private:
   CL_SlotContainer slots;
-  Workspace* workspace;
+  Workspace workspace;
 
   static EditorMapComponent* current_; 
 public:
@@ -47,8 +46,8 @@ public:
   EditorMapComponent(const CL_Rect& rect, CL_Component* parent);
   ~EditorMapComponent();
  
-  Workspace* get_workspace() const;
-  void       set_workspace(Workspace* m);
+  Workspace get_workspace() const;
+  void      set_workspace(Workspace m);
 
   void  set_zoom(float z);
   void  zoom_to(CL_Rect rect);

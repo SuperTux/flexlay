@@ -25,29 +25,43 @@
 #include "editor_map.hxx"
 #include "editor_map_component.hxx"
 
-EditorMap::EditorMap()
-  : background_color(100, 80, 100),
-    foreground_color(255, 80, 255)
+class EditorMapImpl
 {
-  modified = false;
-  serial = 0;
-}
+public:
+  /** Flag if the map got modified, used for 'Some maps are unsaved'
+      style massages */
+  bool modified;
 
-EditorMap::~EditorMap()
+  /** Gets incremented with each map change so that other component
+      can update if required */
+  int serial;
+
+  typedef std::vector<Layer> Layers;
+  Layers layers;
+
+  CL_Color background_color;
+  CL_Color foreground_color;
+
+  /** Metadata attached to this map (ie. mapname, description, scripts, etc.) */
+#ifdef SWIGGUILE
+  SCMObj metadata;
+#endif
+};
+
+EditorMap::EditorMap()
+  : impl(new EditorMapImpl())
 {
-  /*
-    for(Layers::iterator i = layers.begin(); i != layers.end(); ++i)
-    {
-      delete (*i);
-    }
-*/
+  impl->background_color = CL_Color(100, 80, 100);
+  impl->foreground_color = CL_Color(255, 80, 255);
+  impl->modified = false;
+  impl->serial = 0;
 }
 
 void
 EditorMap::add_layer(Layer layer)
 {
-  layers.push_back(layer);
-  ++serial;
+  impl->layers.push_back(layer);
+  impl->serial += 1;
 }
 
 void
@@ -55,18 +69,45 @@ EditorMap::draw (EditorMapComponent* parent)
 {
   CL_Rect rect = get_bounding_rect();
 
-  CL_Display::fill_rect(rect, background_color);
-  CL_Display::draw_rect(rect, foreground_color);
-  for(Layers::iterator i = layers.begin(); i != layers.end(); ++i)
-    (*i).draw(parent);  
+  CL_Display::fill_rect(rect, impl->background_color);
+  CL_Display::draw_rect(rect, impl->foreground_color);
+  
+  for(EditorMapImpl::Layers::iterator i = impl->layers.begin(); i != impl->layers.end(); ++i)
+    (*i).draw(parent);
+  
   CL_Display::flush();
+}
+
+bool
+EditorMap::is_modified() const
+{
+  return impl->modified;
+}
+
+void
+EditorMap::set_unmodified() 
+{
+  impl->modified = false; 
+}
+
+void
+EditorMap::modify()
+{
+  impl->modified = true; 
+  impl->serial += 1; 
+}
+
+int
+EditorMap::get_serial() const 
+{ 
+  return impl->serial; 
 }
 
 Layer
 EditorMap::get_layer(int i)
 {
-  if (i >= 0 && i < static_cast<int>(layers.size()))
-    return layers[i];
+  if (i >= 0 && i < static_cast<int>(impl->layers.size()))
+    return impl->layers[i];
   else
     return 0;
 }
@@ -75,25 +116,25 @@ EditorMap::get_layer(int i)
 void
 EditorMap::set_metadata(const SCMObj& obj)
 {
-  metadata = obj; 
+  impl->metadata = obj; 
 }
 
 SCMObj
 EditorMap::get_metadata() const
 {
-  return metadata; 
+  return impl->metadata; 
 }
 #endif
 
 CL_Rect
 EditorMap::get_bounding_rect()
 {
-  assert(layers.size() >= 1);
+  assert(impl->layers.size() >= 1);
   
   bool init = false;
   CL_Rect rect;
 
-  for(Layers::iterator i = layers.begin(); i != layers.end(); ++i)
+  for(EditorMapImpl::Layers::iterator i = impl->layers.begin(); i != impl->layers.end(); ++i)
     {
       if (i->has_bounding_rect())
         {
@@ -119,7 +160,7 @@ EditorMap::get_bounding_rect()
 void
 EditorMap::set_background_color(const CL_Color& color)
 {
-  background_color = color;
+ impl-> background_color = color;
 }
 
 /* EOF */

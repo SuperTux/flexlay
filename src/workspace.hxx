@@ -22,44 +22,20 @@
 
 #include <ClanLib/Display/input_event.h>
 #include "graphic_context_state.hxx"
+#include "editor_map.hxx"
 
-class EditorMap;
-
-class WorkspaceItem
-{
-public:
-  CL_Point pos;
-  EditorMap* editor_map;
-
-public:
-  WorkspaceItem();
-  WorkspaceItem(EditorMap* m, const CL_Point& p);
-};
+class WorkspaceImpl;
 
 /** */
 class Workspace
 {
 private:
-  friend class EditorMapComponent;
-  GraphicContextState gc_state;
-
-  typedef std::vector<WorkspaceItem*> Items;
-  Items items;
-
-  bool scrolling;
-  CL_Point click_pos;
-
-  /** Position of the center */
-  CL_Pointf old_trans_offset;
-
   static Workspace* current_;
-
 public:
   static void set_current(Workspace* w) { current_ = w; }
   static Workspace* current() { return current_; }
 
   Workspace(int w, int h);
-  ~Workspace();
 
   void draw();
 
@@ -67,11 +43,13 @@ public:
   void mouse_down(const CL_InputEvent& event);
   void mouse_move(const CL_InputEvent& event);
 
-  void add_map(EditorMap* m, const CL_Point& p);
+  EditorMap get_current_map();
+  void set_current_map(EditorMap m);
 
-  WorkspaceItem* get_current_item();
-  EditorMap* get_current_map();
-  void set_current_map(EditorMap* );
+  GraphicContextState& get_gc_state();
+
+private:
+  CL_SharedPtr<WorkspaceImpl> impl;
 };
 
 #endif

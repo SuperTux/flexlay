@@ -733,31 +733,6 @@ editor_map_component_set_zoom(CL_Component* c, float z)
   m->set_zoom(z);
 }
 
-Workspace*
-editor_map_component_get_workspace(CL_Component* c)
-{
-  EditorMapComponent* parent_map = dynamic_cast<EditorMapComponent*>(c); 
-  return parent_map->get_workspace();
-}
-
-void
-editor_map_component_set_workspace(CL_Component* c, Workspace* w)
-{
-  EditorMapComponent* parent_map = dynamic_cast<EditorMapComponent*>(c); 
-  parent_map->set_workspace(w);
-}
-
-void
-workspace_set_current_map(Workspace* workspace, EditorMap* m)
-{
-  workspace->set_current_map(m);
-}
-
-EditorMap*
-workspace_get_current_map(Workspace* workspace)
-{
-  return workspace->get_current_map();
-}
 
 // Map stuff
 EditorMap*
@@ -994,12 +969,6 @@ workspace_create()
 {
   return new Workspace(EditorMapComponent::current()->get_width(),
                        EditorMapComponent::current()->get_height());
-}
-
-void
-workspace_add_map(Workspace* workspace, EditorMap* m, int x, int y)
-{
-  workspace->add_map(m, CL_Point(x, y));
 }
 
 void tilemap_paint_tool_set_tilemap(TilemapLayer tilemap)

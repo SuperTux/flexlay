@@ -33,7 +33,8 @@
 EditorMapComponent* EditorMapComponent::current_ = 0; 
 
 EditorMapComponent::EditorMapComponent(const CL_Rect& rect, CL_Component* parent)
-  : CL_Component(rect, parent)
+  : CL_Component(rect, parent),
+    workspace(rect.get_width(), rect.get_height())
 {
   current_ = this;
 
@@ -41,22 +42,20 @@ EditorMapComponent::EditorMapComponent(const CL_Rect& rect, CL_Component* parent
   slots.connect(sig_mouse_up(),   this, &EditorMapComponent::mouse_up);
   slots.connect(sig_mouse_down(), this, &EditorMapComponent::mouse_down);
   slots.connect(sig_mouse_move(), this, &EditorMapComponent::mouse_move);
-  
-  workspace = 0;
 }
 
 EditorMapComponent::~EditorMapComponent()
 {
 }
 
-Workspace*
+Workspace
 EditorMapComponent::get_workspace() const
 {
   return workspace;
 }
 
 void
-EditorMapComponent::set_workspace(Workspace* m)
+EditorMapComponent::set_workspace(Workspace m)
 {
   workspace = m;
 }
@@ -64,98 +63,68 @@ EditorMapComponent::set_workspace(Workspace* m)
 void
 EditorMapComponent::mouse_up(const CL_InputEvent& event)
 {
-  if (workspace) workspace->mouse_up(event);
+  workspace.mouse_up(event);
 }
 
 void
 EditorMapComponent::mouse_move(const CL_InputEvent& event)
 {
-  if (workspace) workspace->mouse_move(event);
+  workspace.mouse_move(event);
 }
 
 void
 EditorMapComponent::mouse_down(const CL_InputEvent& event)
 {
-  if (workspace) workspace->mouse_down(event);
+  workspace.mouse_down(event);
 }
   
 void
 EditorMapComponent::draw ()
 {
-  if (workspace)
-    {
-      workspace->draw();
-    }
-  else
-    {
-      for (int y = 0; y < get_height(); y += 32)
-        for (int x = 0; x < get_width(); x += 32)
-          {
-            if (y % 2)
-              CL_Display::fill_rect(CL_Rect(CL_Point(x, y), CL_Size(32, 32)),
-                                    CL_Color(150, 150, 150));
-            else
-              CL_Display::fill_rect(CL_Rect(CL_Point(x, y), CL_Size(32, 32)),
-                                    CL_Color(50, 50, 50));
-          }
-    }
+  workspace.draw();
 }
 
 CL_Point
 EditorMapComponent::screen2world(const CL_Point& pos)
 {
-  if (workspace) 
-    {
-      CL_Pointf p = workspace->gc_state.screen2world(pos);
-      return CL_Point((int)p.x, (int)p.y);
-    }
-  else
-    {
-      return pos;
-    }
+  CL_Pointf p = workspace.get_gc_state().screen2world(pos);
+  return CL_Point((int)p.x, (int)p.y);
 }
 
 void
 EditorMapComponent::set_zoom(float z)
 {
-  if (workspace) 
-    workspace->gc_state.set_zoom(z);
+  workspace.get_gc_state().set_zoom(z);
 }
 
 void
 EditorMapComponent::zoom_out(CL_Point pos)
 {
-  if (workspace) 
-    workspace->gc_state.set_zoom(pos, workspace->gc_state.get_zoom()/1.25f);
+  workspace.get_gc_state().set_zoom(pos, workspace.get_gc_state().get_zoom()/1.25f);
 }
 
 void
 EditorMapComponent::zoom_in(CL_Point pos)
 {
-  if (workspace) 
-    workspace->gc_state.set_zoom(pos, workspace->gc_state.get_zoom()*1.25f);
+  workspace.get_gc_state().set_zoom(pos, workspace.get_gc_state().get_zoom()*1.25f);
 }
 
 void
 EditorMapComponent::zoom_to(CL_Rect rect)
 {
-  if (workspace) 
-    workspace->gc_state.zoom_to(rect);
+  workspace.get_gc_state().zoom_to(rect);
 }
 
 CL_Rect
 EditorMapComponent::get_clip_rect()
 {
-  if (workspace) 
-    return workspace->gc_state.get_clip_rect();
-  else
-    return CL_Rect();
+  return workspace.get_gc_state().get_clip_rect();
 }
 
 void
 EditorMapComponent::move_to(int x, int y)
 {
-  if (workspace) workspace->gc_state.set_pos(CL_Pointf(x, y));
+  workspace.get_gc_state().set_pos(CL_Pointf(x, y));
 }
 
 /* EOF */

@@ -1,0 +1,17 @@
+Windstille Installion
+=====================
+
+Windstille requires a CVS version of ClanLib-0.7 and a installation of
+Guile 1.6, once you have compiled and installed both a simple:
+
+ % ./configure
+ % make 
+
+compiles Windstille, you way than run it by:
+
+ % cd src/
+ % ./windstille
+
+Installation is currently not supported.
+
+# EOF #

@@ -1,4 +1,4 @@
-##  $Id: Makefile.am,v 1.2 2003/08/12 08:24:41 grumbel Exp $
+##  $Id: Makefile.am,v 1.3 2003/08/12 19:09:50 grumbel Exp $
 ## 
 ##  Windstille - A free Lemmings clone
 ##  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -18,5 +18,7 @@
 ##  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 SUBDIRS = src data
+
+EXTRA_DIST = INSTALL.configure
 
 # EOF #

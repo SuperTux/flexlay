@@ -45,7 +45,8 @@ public:
   }  
 
   void del() {
-    delete this->ptr;
+    delete ptr;
+    ptr = 0;
   }
 
   SharedPtrDeleter<T>* clone() {
@@ -58,10 +59,13 @@ class SharedPtr
 {
 private:
   SharedPtrDeleter<T>* deleter;
-  unsigned int* ref_count;
+  int* ref_count;
 
   void inc() {
-    if (ref_count) *ref_count += 1;
+    if (ref_count)
+      {
+        *ref_count += 1;
+      }
   }
   
   void dec() {
@@ -69,8 +73,9 @@ private:
       {
         *ref_count -= 1;
         if (*ref_count == 0) {
-          deleter->del();
+          //deleter->del();
           delete ref_count;
+          ref_count = 0;
         }
       }
   }
@@ -83,22 +88,16 @@ public:
 
   template<typename D>
   SharedPtr(D* p)
-    : deleter(new SharedPtrDeleterImpl<T>(p)), ref_count(new unsigned int(1))
-  {}
+    : deleter(new SharedPtrDeleterImpl<T>(p)), 
+      ref_count(new int(1))
+  {
+  }
   
   template<class Base>
   SharedPtr(const SharedPtr<Base>& copy)
   {
-    dec();
-    delete deleter;
     deleter   = new SharedPtrDeleterImpl<T>(copy.deleter->ptr);
     ref_count = copy.ref_count;
-    inc();
-  }
-
-  SharedPtr(const SharedPtr<T>& copy) 
-    : deleter(copy.deleter->clone()), ref_count(copy.ref_count)
-  {
     inc();
   }
 
@@ -114,23 +113,10 @@ public:
     return *this;
   }
   
-  SharedPtr<T>& operator= (const SharedPtr<T>& copy) 
-  {
-    if (this != &copy)
-      {
-        dec();
-        delete deleter;
-        deleter   = copy.deleter->clone();
-        ref_count = copy.ref_count;
-        inc();
-      }
-    return *this;
-  }
-
   ~SharedPtr()
   {
     dec();
-    delete deleter;
+    //delete deleter;
   }
 
   //: Dereferencing operator.

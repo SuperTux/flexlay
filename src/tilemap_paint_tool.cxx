@@ -58,6 +58,7 @@ TileMapPaintTool::~TileMapPaintTool()
 void
 TileMapPaintTool::draw()
 {
+  // FIXME: no tile
   if (tilemap.is_null())
     return;
 
@@ -71,13 +72,13 @@ TileMapPaintTool::draw()
       break;
       
     default:
-      int tile_size = tilemap.get_tileset()->get_tile_size();
+      int tile_size = tilemap.get_tileset().get_tile_size();
 
       // Draw the brush:
       for(int y = 0; y < brush.get_height(); ++y)
         for(int x = 0; x < brush.get_width(); ++x)
           {
-            Tile* tile = Tileset::current()->create(brush.at(x, y));
+            Tile* tile = tilemap.get_tileset().create(brush.at(x, y));
                 
             if (tile)
               {

@@ -64,9 +64,10 @@ Minimap::draw()
                             CL_Color(200, 200, 200, 225));
     }
 
+#if 0
   // FIXME: This doesn't work all that well
   TilemapLayer tilemap = TilemapLayer::current();
-  int tile_size = tilemap.get_tileset()->get_tile_size();
+  int tile_size = tilemap.get_tileset().get_tile_size();
 
   if (!tilemap.is_null() && tilemap.get_height() != 0 && tilemap.get_width() != 0)
     {
@@ -78,12 +79,13 @@ Minimap::draw()
 
       Field<int>* field = tilemap.get_field();
 
+      // FIXME: No current tileset
       if (0)
         {
           for(int y = 0; y < field->get_height(); ++y)
             for(int x = 0; x < field->get_width(); ++x)
               {
-                Tile* tile = Tileset::current()->create(field->at(x, y));
+                Tile* tile = Tileset::current().create(field->at(x, y));
                 if (tile)
                   CL_Display::fill_rect(CL_Rect(CL_Point((x * tile_size) * get_width() / map_width,
                                                          (y * tile_size) * get_height() / map_height),
@@ -92,7 +94,6 @@ Minimap::draw()
                 CL_Display::flush();
               }
         }
-
       minimap_surface.draw(CL_Rect(CL_Point(0, 0),
                                    CL_Size(get_width(), get_height())));
 
@@ -107,11 +108,13 @@ Minimap::draw()
       CL_Display::draw_rect(screen_rect,
                             CL_Color(0, 0, 0));
     }
+#endif
 }
 
 void
 Minimap::update_minimap_surface()
 {
+#if 0
   // FIXME: This doesn't work all that well
   TilemapLayer tilemap = TilemapLayer::current();
   
@@ -125,11 +128,12 @@ Minimap::update_minimap_surface()
       int map_width  = tilemap.get_width();
       int map_height = tilemap.get_height();
 
+      // FIXME: No Tileset::current()
       unsigned char* buf = static_cast<unsigned char*>(buffer.get_data());
       for(int y = 0; y < map_height; ++y)
         for(int x = 0; x < map_width; ++x)
           {
-            Tile* tile = Tileset::current()->create(field->at(x, y));
+            Tile* tile = Tileset::current().create(field->at(x, y));
             if (tile)
               {
                 buf[4*(x + y * map_width) + 3] = tile->get_color().get_red();
@@ -148,6 +152,7 @@ Minimap::update_minimap_surface()
 
       minimap_surface = CL_Surface(&buffer);
     }
+#endif
 }
 
 void
@@ -155,7 +160,7 @@ Minimap::mouse_move(const CL_InputEvent& event)
 {
   // FIXME: This doesn't work all that well
   TilemapLayer tilemap = TilemapLayer::current();
-  int tile_size  = tilemap.get_tileset()->get_tile_size();
+  int tile_size  = tilemap.get_tileset().get_tile_size();
   int map_width  = tilemap.get_width()  * tile_size;
   int map_height = tilemap.get_height() * tile_size;
 
@@ -169,7 +174,7 @@ Minimap::mouse_down(const CL_InputEvent& event)
 {
   // FIXME: This doesn't work all that well
   TilemapLayer tilemap = TilemapLayer::current();
-  int tile_size  = tilemap.get_tileset()->get_tile_size();
+  int tile_size  = tilemap.get_tileset().get_tile_size();
   int map_width  = tilemap.get_width()  * tile_size;
   int map_height = tilemap.get_height() * tile_size;
 

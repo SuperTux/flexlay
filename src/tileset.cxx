@@ -29,8 +29,6 @@
 
 extern CL_ResourceManager* resources;
 
-Tileset* Tileset::current_ = 0;
-
 typedef std::vector<Tile*> Tiles;
 typedef Tiles::iterator iterator;
   
@@ -41,12 +39,19 @@ public:
   int tile_size;
 };
 
+Tileset::Tileset()
+  : impl(new TilesetImpl())
+{
+  std::cout << "Tileset::Tileset()" << std::endl;
+  impl->tile_size = 1;
+}
+
 Tileset::Tileset(int tile_size_)
   : impl(new TilesetImpl())
 {
+  assert(tile_size_ > 0);
   std::cout << "Tileset::Tileset(" << tile_size_ << ")" << std::endl;
   impl->tile_size = tile_size_;
-  current_ = this;
 }
 
 Tileset::~Tileset()
@@ -83,19 +88,6 @@ Tileset::create (int id)
       else
         return 0;
     }
-}
-
-void
-Tileset::init()
-{
-  assert(current_ == 0);
-}
-
-/** Destroy the default TileFactor*/
-void
-Tileset::deinit()
-{
-  delete current_;
 }
 
 int

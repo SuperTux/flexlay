@@ -34,19 +34,18 @@ class EditorMapComponent;
 class TilemapLayer
 {
 private:
-  static TilemapLayerImpl* current_;
+  static TilemapLayer current_;
 public:
   static TilemapLayer current();
   static void set_current(TilemapLayer t);
 
-  TilemapLayer();
-  TilemapLayer(TilemapLayerImpl* i);
-  TilemapLayer(Tileset* tileset, int w,  int h);
+  TilemapLayer(); 
+  TilemapLayer(Tileset tileset, int w,  int h);
   ~TilemapLayer();
 
   void draw(EditorMapComponent* parent);
 
-  Tileset* get_tileset();
+  Tileset get_tileset();
 
   int  get_tile (int, int);
 

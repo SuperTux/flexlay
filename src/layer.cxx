@@ -17,25 +17,24 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
+#include <iostream>
 #include "layer_impl.hxx"
 #include "layer.hxx"
 
-Layer::Layer(LayerImpl* i)
-{
-  impl = SharedPtr<LayerImpl>(i);
-}
-
 Layer::Layer()
-{  
+{
+  std::cout << "Layer()" << std::endl;
 }
 
 Layer::Layer(SharedPtr<LayerImpl> i)
   : impl(i)
 {
+  std::cout << "Layer(" << this << ")" << std::endl;
 }
 
 Layer::~Layer()
 {
+  std::cout << "~Layer()" << std::endl;
 }
 
 void

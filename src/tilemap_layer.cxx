@@ -36,7 +36,7 @@
 #include "editor_map_component.hxx"
 #include "tilemap_layer.hxx"
 
-TilemapLayerImpl* TilemapLayer::current_ = 0;
+TilemapLayer TilemapLayer::current_;
 
 class TilemapLayerImpl : public LayerImpl
 {
@@ -48,7 +48,7 @@ public:
     std::cout << "~TilemapLayerImpl(" << this << ")" << std::endl;
   }
 
-  Tileset* tileset;
+  Tileset tileset;
   CL_Color background_color;
   CL_Color foreground_color;
   bool hex_mode;
@@ -68,15 +68,15 @@ TilemapLayer::TilemapLayer()
 {
 }
 
-TilemapLayer::TilemapLayer(TilemapLayerImpl* i)
+/*TilemapLayer::TilemapLayer(const SharedPtr<TilemapLayerImpl>& i)
   : impl(i)
 {
-}
+}*/
 
-TilemapLayer::TilemapLayer(Tileset* tileset_, int w,  int h)
+TilemapLayer::TilemapLayer(Tileset tileset_, int w,  int h)
   : impl(new TilemapLayerImpl())
 {
-  current_ = impl.get();
+  current_ = *this;
 
   impl->field = Field<int>(w, h);
 
@@ -93,10 +93,7 @@ TilemapLayer::TilemapLayer(Tileset* tileset_, int w,  int h)
   impl->background_color = CL_Color(0, 0, 0, 0);
   impl->foreground_color = CL_Color(255, 255, 255, 255);
   
-  if (!tileset_)
-    impl->tileset = Tileset::current();
-  else
-    impl->tileset = tileset_;
+  impl->tileset = tileset_;
 }
 
 TilemapLayer::~TilemapLayer()
@@ -106,7 +103,7 @@ TilemapLayer::~TilemapLayer()
 void
 TilemapLayer::draw_tile(int id, int x, int y, bool attribute)
 {
-  Tile* tile = impl->tileset->create(id);
+  Tile* tile = impl->tileset.create(id);
 
   if (tile)
     {
@@ -118,8 +115,8 @@ TilemapLayer::draw_tile(int id, int x, int y, bool attribute)
       sprite.draw (x, y);
       
       if (attribute)
-        CL_Display::fill_rect(CL_Rect(CL_Point(x, y), CL_Size(impl->tileset->get_tile_size(),
-                                                              impl->tileset->get_tile_size())),
+        CL_Display::fill_rect(CL_Rect(CL_Point(x, y), CL_Size(impl->tileset.get_tile_size(),
+                                                              impl->tileset.get_tile_size())),
                               tile->get_attribute_color());
     }
 }
@@ -133,7 +130,7 @@ TilemapLayer::draw(EditorMapComponent* parent)
 void
 TilemapLayerImpl::draw_tile(int id, int x, int y, bool attribute)
 {
-  Tile* tile = tileset->create(id);
+  Tile* tile = tileset.create(id);
 
   if (tile)
     {
@@ -145,8 +142,8 @@ TilemapLayerImpl::draw_tile(int id, int x, int y, bool attribute)
       sprite.draw (x, y);
       
       if (attribute)
-        CL_Display::fill_rect(CL_Rect(CL_Point(x, y), CL_Size(tileset->get_tile_size(),
-                                                              tileset->get_tile_size())),
+        CL_Display::fill_rect(CL_Rect(CL_Point(x, y), CL_Size(tileset.get_tile_size(),
+                                                              tileset.get_tile_size())),
                               tile->get_attribute_color());
     }
 }
@@ -154,7 +151,7 @@ TilemapLayerImpl::draw_tile(int id, int x, int y, bool attribute)
 void
 TilemapLayerImpl::draw(EditorMapComponent* parent)
 {
-  int tile_size = this->tileset->get_tile_size();
+  int tile_size = this->tileset.get_tile_size();
 
   if (this->background_color.get_alpha() != 0)
     CL_Display::fill_rect(CL_Rect(CL_Point(0,0),
@@ -276,7 +273,7 @@ TilemapLayer::get_draw_grid() const
 CL_PixelBuffer
 TilemapLayer::create_pixelbuffer()
 {
-  int tile_size = impl->tileset->get_tile_size();
+  int tile_size = impl->tileset.get_tile_size();
 
   CL_PixelBuffer pixelbuffer(get_width()  * tile_size,
                              get_height() * tile_size,
@@ -307,7 +304,7 @@ TilemapLayer::create_pixelbuffer()
   for (int y = 0; y < get_height(); ++y)
     for (int x = 0; x < get_width(); ++x)
       {
-        Tile* tile = impl->tileset->create(impl->field.at(x, y));
+        Tile* tile = impl->tileset.create(impl->field.at(x, y));
 
         if (tile)
           {
@@ -332,15 +329,15 @@ CL_Rect
 TilemapLayerImpl::get_bounding_rect()
 {
   return CL_Rect(CL_Point(0, 0),
-                 CL_Size(field.get_width()  * tileset->get_tile_size(), 
-                         field.get_height() * tileset->get_tile_size()));
+                 CL_Size(field.get_width()  * tileset.get_tile_size(), 
+                         field.get_height() * tileset.get_tile_size()));
 }
 
 CL_Point
 TilemapLayer::world2tile(const CL_Point& pos) const
 {
-  int x = pos.x / impl->tileset->get_tile_size();
-  int y = pos.y / impl->tileset->get_tile_size();
+  int x = pos.x / impl->tileset.get_tile_size();
+  int y = pos.y / impl->tileset.get_tile_size();
 
   return CL_Point(pos.x < 0 ? x-1 : x,
                   pos.y < 0 ? y-1 : y);
@@ -355,16 +352,16 @@ TilemapLayer::get_field()
 TilemapLayer
 TilemapLayer::current()
 {
-  return TilemapLayer(current_); 
+  return current_; 
 }
 
 void
 TilemapLayer::set_current(TilemapLayer t) 
 {
-  current_ = t.impl.get();
+  current_ = t;
 }
 
-Tileset*
+Tileset
 TilemapLayer::get_tileset()
 {
   return impl->tileset;
@@ -421,6 +418,7 @@ TilemapLayerImpl::has_bounding_rect() const
 Layer
 TilemapLayer::to_layer()
 {
+  std::cout << " TilemapLayer::to_layer()" << std::endl;
   return Layer(impl);
 }
 

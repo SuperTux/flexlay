@@ -25,9 +25,19 @@
 #include "tileset.hxx"
 #include "tile_selection.hxx"
 
-TileSelection::TileSelection()
+class TileSelectionImpl
 {
-  active = false;
+public:
+  TilemapLayer tilemap;
+  CL_Point start_pos;
+  CL_Rect  selection;
+  bool active;
+};
+
+TileSelection::TileSelection()
+  : impl(new TileSelectionImpl())
+{
+  impl->active = false;
 }
 
 TileSelection::~TileSelection()
@@ -37,48 +47,50 @@ TileSelection::~TileSelection()
 void
 TileSelection::start(TilemapLayer tilemap_, const CL_Point& pos)
 {
-  tilemap = tilemap_;
-  active = true;
-  start_pos = pos;
-  update(start_pos);
+  impl->tilemap = tilemap_;
+  impl->active = true;
+  impl->start_pos = pos;
+  update(impl->start_pos);
 }
 
 void
 TileSelection::update(const CL_Point& pos)
 {
-  selection = CL_Rect(std::min(start_pos.x, pos.x),
-                      std::min(start_pos.y, pos.y),
-                      std::max(start_pos.x, pos.x) + 1,
-                      std::max(start_pos.y, pos.y) + 1);
+  impl->selection = CL_Rect(std::min(impl->start_pos.x, pos.x),
+                            std::min(impl->start_pos.y, pos.y),
+                            std::max(impl->start_pos.x, pos.x) + 1,
+                            std::max(impl->start_pos.y, pos.y) + 1);
 }
 
 bool
 TileSelection::is_active()
 {
-  return active;
+  return impl->active;
 }
 
 void
 TileSelection::clear()
 {
-  selection = CL_Rect();
-  active = false;
+  impl->selection = CL_Rect();
+  impl->active = false;
 }
 
 void
 TileSelection::draw(const CL_Color& color)
 {
-  int tile_size = tilemap.get_tileset()->get_tile_size();
+  int tile_size = impl->tilemap.get_tileset().get_tile_size();
 
-  CL_Display::fill_rect(CL_Rect(selection.left  * tile_size, selection.top    * tile_size,
-                                selection.right * tile_size, selection.bottom * tile_size),
+  CL_Display::fill_rect(CL_Rect(impl->selection.left   * tile_size, 
+                                impl->selection.top    * tile_size,
+                                impl->selection.right  * tile_size, 
+                                impl->selection.bottom * tile_size),
                         color);
 }
 
 TileBrush
 TileSelection::get_brush(const Field<int>& field) const
 {
-  CL_Rect sel = selection;
+  CL_Rect sel = impl->selection;
 
   sel.normalize();
 
@@ -114,6 +126,12 @@ TileSelection::get_brush(const Field<int>& field) const
 
       return brush;
     }
+}
+
+CL_Rect
+TileSelection::get_rect() const
+{
+  return impl->selection; 
 }
 
 /* EOF */

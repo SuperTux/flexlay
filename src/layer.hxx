@@ -36,10 +36,9 @@ class Layer
 private:
 public:
   Layer();
-  Layer(LayerImpl* i);
   Layer(SharedPtr<LayerImpl> i);
   ~Layer();
-  
+
   void draw(EditorMapComponent* parent);
   bool has_bounding_rect() const;
   CL_Rect get_bounding_rect();

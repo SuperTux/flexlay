@@ -20,9 +20,9 @@
 #ifndef HEADER_PAINT_COMMAND_HXX
 #define HEADER_PAINT_COMMAND_HXX
 
-#include <ClanLib/Core/System/sharedptr.h>
 #include <ClanLib/Core/Math/point.h>
 #include "tile_brush.hxx"
+#include "shared_ptr.hxx"
 #include "tilemap_layer.hxx"
 #include "command.hxx"
 
@@ -48,7 +48,7 @@ public:
   std::string serialize();
 
 private:
-  CL_SharedPtr<PaintCommandImpl> impl;
+  SharedPtr<PaintCommandImpl> impl;
 };
 
 #endif

@@ -26,17 +26,14 @@
 #include "tile_brush.hxx"
 #include "tilemap_layer.hxx"
 
+class TileSelectionImpl;
+
 /** The TileSelection is a little helper class to manage rectangular
     selections of tiles and provides a way to convert this selection
     to a Brush which then can be used for either serialisation or be
     used for painting on the map itself */
 class TileSelection
 {
-private:
-  TilemapLayer tilemap;
-  CL_Point start_pos;
-  CL_Rect  selection;
-  bool active;
 public:
   TileSelection();
   ~TileSelection();
@@ -47,11 +44,13 @@ public:
   void clear();
   bool is_active();
 
-  CL_Rect get_rect() const{ return selection; }
+  CL_Rect get_rect() const;
 
   void draw(const CL_Color& color = CL_Color(255, 255, 255, 100));
 
   TileBrush get_brush(const Field<int>& field) const;
+private:
+  SharedPtr<TileSelectionImpl> impl;
 };
 
 #endif

@@ -32,13 +32,12 @@ class TilesetImpl;
     necesarry information that are needed to display a TileMap */
 class Tileset
 {
-private:
-  static Tileset* current_;
-
 public:
+  explicit Tileset();
+
   /** Create an empty Tileset, so that the user can add stuff via
       scripting to it */
-  Tileset(int tile_size_);
+  explicit Tileset(int tile_size_);
 
   ~Tileset();
 
@@ -53,16 +52,6 @@ public:
   int get_tile_size() const;
   
   void add_tile(int id, const Tile& tile);
-
-  /** Create the default TileFactor*/
-  static void init();
-
-  /** Destroy the default TileFactor*/
-  static void deinit();
-
-  /** Access the default TileFactor*/
-  static Tileset* current() { return current_; }
-  static void set_current(Tileset* c) { current_ = c; }
 
 private:
   CL_SharedPtr<TilesetImpl> impl;

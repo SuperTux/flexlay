@@ -21,9 +21,18 @@
 #include "objmap_object.hxx"
 #include "object_add_command.hxx"
 
-ObjectAddCommand::ObjectAddCommand(ObjectLayer* o, ObjMapObject* ob)
-  : objmap(o), obj(ob)
+class ObjectAddCommandImpl
 {
+public:
+  ObjectLayer* objmap;
+  ObjMapObject* obj;
+};
+
+ObjectAddCommand::ObjectAddCommand(ObjectLayer* objmap_, ObjMapObject* obj_)
+  : impl(new ObjectAddCommandImpl())
+{
+  impl->objmap = objmap_;
+  impl->obj    = obj_;
 }
 
 ObjectAddCommand::~ObjectAddCommand()
@@ -33,19 +42,19 @@ ObjectAddCommand::~ObjectAddCommand()
 int
 ObjectAddCommand::get_handle() const
 { 
-  return obj->get_handle(); 
+  return impl->obj->get_handle(); 
 }
 
 void
 ObjectAddCommand::execute()
 {
-  objmap->add_object(obj);
+  impl->objmap->add_object(impl->obj);
 }
 
 void
 ObjectAddCommand::undo()
 {
-  objmap->delete_object(obj->get_handle());
+  impl->objmap->delete_object(impl->obj->get_handle());
 }
 
 void

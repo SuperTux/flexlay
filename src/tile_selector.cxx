@@ -26,7 +26,8 @@
 
 TileSelector::TileSelector(int width, int height, CL_Component* parent)
   : CL_Component(CL_Rect(CL_Point(0,0), 
-                         CL_Size(parent->get_width(),  // FIXME: Dirty hack, replace with a resizeable window
+                         // FIXME: Dirty hack, replace with a resizeable window
+                         CL_Size(parent->get_width(),  
                                  parent->get_height())), 
                  parent),
     width(width), height(height)
@@ -42,7 +43,6 @@ TileSelector::TileSelector(int width, int height, CL_Component* parent)
   mouse_over_tile = -1;
   scrolling = false;
   offset = 0;
-  tileset = 0;
 }
 
 void
@@ -76,32 +76,29 @@ TileSelector::mouse_down(const CL_InputEvent& event)
     }
   else if (event.id == CL_MOUSE_WHEEL_UP)
     {
-      offset -= static_cast<int>(tileset->get_tile_size()*scale);
+      offset -= static_cast<int>(tileset.get_tile_size()*scale);
       if (offset < 0)
         offset = 0;
     }
   else if (event.id == CL_MOUSE_WHEEL_DOWN)
     {
-      offset += static_cast<int>(tileset->get_tile_size()*scale);
+      offset += static_cast<int>(tileset.get_tile_size()*scale);
     }
 }
 
 void
 TileSelector::mouse_move(const CL_InputEvent& event)
 {
-  if (tileset)
+  int x = event.mouse_pos.x/static_cast<int>(tileset.get_tile_size()*scale);
+  int y = (event.mouse_pos.y+offset)/static_cast<int>(tileset.get_tile_size()*scale);
+
+  mouse_over_tile = y * width + x;
+
+  if (scrolling)
     {
-      int x = event.mouse_pos.x/static_cast<int>(tileset->get_tile_size()*scale);
-      int y = (event.mouse_pos.y+offset)/static_cast<int>(tileset->get_tile_size()*scale);
-
-      mouse_over_tile = y * width + x;
-
-      if (scrolling)
-        {
-          offset = old_offset + (mouse_pos.y - event.mouse_pos.y);
-          if (offset < 0)
-            offset = 0;
-        }
+      offset = old_offset + (mouse_pos.y - event.mouse_pos.y);
+      if (offset < 0)
+        offset = 0;
     }
 }
 
@@ -116,12 +113,12 @@ TileSelector::draw()
       int x = i % width;
       int y = i / width;
 
-      Tile* tile = tileset->create(i);
+      Tile* tile = tileset.create(i);
 
-      CL_Rect rect(CL_Point(static_cast<int>(x * tileset->get_tile_size()*scale),
-                            static_cast<int>(y * tileset->get_tile_size()*scale)),
-                   CL_Size(static_cast<int>(tileset->get_tile_size()*scale),
-                           static_cast<int>(tileset->get_tile_size()*scale)));
+      CL_Rect rect(CL_Point(static_cast<int>(x * tileset.get_tile_size()*scale),
+                            static_cast<int>(y * tileset.get_tile_size()*scale)),
+                   CL_Size(static_cast<int>(tileset.get_tile_size()*scale),
+                           static_cast<int>(tileset.get_tile_size()*scale)));
 
       if (tile)
         {
@@ -129,8 +126,8 @@ TileSelector::draw()
 
           sprite.set_scale(scale, scale);
 
-          sprite.draw(static_cast<int>(x * tileset->get_tile_size()*scale), 
-                      static_cast<int>(y * tileset->get_tile_size()*scale));
+          sprite.draw(static_cast<int>(x * tileset.get_tile_size()*scale), 
+                      static_cast<int>(y * tileset.get_tile_size()*scale));
 
           CL_Display::draw_rect(rect, CL_Color(0,0,0,128));
         }
@@ -158,7 +155,7 @@ TileSelector::set_scale(float s)
 }
 
 void
-TileSelector::set_tileset(Tileset* t)
+TileSelector::set_tileset(Tileset t)
 {
   tileset = t;
 }

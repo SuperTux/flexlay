@@ -58,7 +58,6 @@
 %include "editor_map_component.hxx"
 %include "flexlay.hxx"
 %include "globals.hxx"
-%include "python_functor.hxx"
 %include "gui_manager.hxx"
 %include "tile_selector.hxx"
 %include "object_brush.hxx"

@@ -21,6 +21,7 @@
 #define TILESELECTOR_HXX
 
 #include <ClanLib/gui.h>
+#include "tileset.hxx"
 
 class Tileset;
 
@@ -45,7 +46,7 @@ private:
   /** set of tiles that should be available in the TileSelector */
   Tiles tiles;
 
-  Tileset* tileset;
+  Tileset tileset;
 
 #ifdef SWIGPYTHON
   ~TileSelector();
@@ -55,7 +56,7 @@ public:
   TileSelector(int width, int height, CL_Component* parent);
 
 
-  void set_tileset(Tileset* t);
+  void set_tileset(Tileset t);
   void set_tiles(const Tiles& t);
   
   /** Set the factor by which tiles are scaled down in the selector

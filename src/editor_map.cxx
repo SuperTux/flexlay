@@ -109,7 +109,7 @@ EditorMap::get_layer(int i)
   if (i >= 0 && i < static_cast<int>(impl->layers.size()))
     return impl->layers[i];
   else
-    return 0;
+    return Layer();
 }
 
 #ifdef SWIGGUILE

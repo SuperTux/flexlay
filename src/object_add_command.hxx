@@ -24,6 +24,7 @@
 
 class ObjectLayer;
 class ObjMapObject;
+class ObjectAddCommandImpl;
 
 /** ObjectAddCommand adds on object to an ObjectLayer, the user needs
     to supply an Object together with the \a ObjectLayer to which it
@@ -31,10 +32,6 @@ class ObjMapObject;
     not the object */
 class ObjectAddCommand : public Command
 {
-private:
-  ObjectLayer* objmap;
-  ObjMapObject* obj;
-
 public:
   ObjectAddCommand(ObjectLayer* o, ObjMapObject* ob);
   virtual ~ObjectAddCommand();
@@ -46,6 +43,9 @@ public:
   void redo();
 
   std::string serialize();
+
+private:
+  SharedPtr<ObjectAddCommandImpl> impl;
 };
 
 #endif

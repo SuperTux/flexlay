@@ -7,18 +7,15 @@
 #include <ClanLib/GUI/window.h>
 #include <ClanLib/Core/Math/rect.h>
 #include <ClanLib/Core/Math/point.h>
-#include "scripting/editor.hxx"
 #include "command.hxx"
 #include "paint_command.hxx"
 #include "object_move_command.hxx"
 #include "object_add_command.hxx"
 #include "object_delete_command.hxx"
-#include "scripting/editor.hxx"
 #include "tile.hxx"
 #include "tile_brush.hxx"
 #include "editor.hxx"
 #include "meta_data.hxx"
-#include "python_meta_data.hxx"
 
 #include "layer.hxx"
 #include "tilemap_layer.hxx"
@@ -31,12 +28,10 @@
 #include "editor_map_component.hxx"
 #include "flexlay.hxx"
 #include "globals.hxx"
-#include "python_functor.hxx"
 #include "gui_manager.hxx"
 #include "tile_selector.hxx"
 #include "object_brush.hxx"
 #include "object_selector.hxx"
-#include "sexpr_parser.hxx"
 #include "icon.hxx"
 #include "window.hxx"
 #include "panel.hxx"
@@ -55,26 +50,30 @@
 #include "objmap_path_node.hxx"
 
 #include "netpanzer.hxx" 
+
+#ifdef SWIGPYTHON
+#include "sexpr_parser.hxx"
+#include "scripting/editor.hxx"
+#include "python_meta_data.hxx"
+#include "python_functor.hxx"
+#endif
 %}
 
 %include "std_string.i"
 %include "std_vector.i"
-%template(std_vector_int) std::vector<int>;
-%template(std_vector_ObjMapObject) std::vector<ObjMapObject>;
+%template(Std_vector_int) std::vector<int>;
+%template(Std_vector_ObjMapObject) std::vector<ObjMapObject>;
 
 %include "clanlib.i"
-%include "scripting/editor.hxx"
 %include "command.hxx"
 %include "paint_command.hxx"
 %include "object_move_command.hxx"
 %include "object_add_command.hxx"
 %include "object_delete_command.hxx"
-%include "scripting/editor.hxx"
 %include "tile.hxx"
 %include "tile_brush.hxx"
 %include "editor.hxx"
 %include "meta_data.hxx"
-%include "python_meta_data.hxx"
  
 %include "layer.hxx"
 %include "tilemap_layer.hxx"
@@ -90,7 +89,6 @@
 %include "tile_selector.hxx"
 %include "object_brush.hxx"
 %include "object_selector.hxx"
-%include "sexpr_parser.hxx"
 %include "icon.hxx"
 %include "window.hxx"
 %include "panel.hxx"
@@ -109,5 +107,11 @@
 %include "objmap_path_node.hxx"
 
 %include "netpanzer.hxx" 
+
+#ifdef SWIGPYTHON
+%include "scripting/editor.hxx"
+%include "python_meta_data.hxx"
+%include "sexpr_parser.hxx"
+#endif
 
 /* EOF */

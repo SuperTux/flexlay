@@ -217,4 +217,24 @@ def gui_switch_sector_menu():
                         lambda i=i: workspace.get_map().get_metadata().parent.activate_sector(i, workspace))
     mymenu.run()
 
+def gui_add_sector():
+    level = workspace.get_map().get_data().get_level()
+    dialog = GenericDialog("Add Sector", gui.get_component())
+
+    name = "newsector"
+    width  = 50
+    height = 20
+    
+    dialog.add_string("Name: ", name)
+    dialog.add_int("Width: ",   width)
+    dialog.add_int("Height: ",  height)
+    
+    def resize_callback(name, w, h):
+        sector = Sector().new(w, h)
+        sector.name = name
+        level.add_sector(sector)
+        
+    dialog.set_callback(resize_callback)
+    
+
 # EOF #

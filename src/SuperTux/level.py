@@ -222,6 +222,9 @@ class Level:
                 sec.activate(workspace)
                 break
 
+    def add_sector(self, sector):
+        sectors.append(sector)
+
     def get_sectors(self):
         return map(lambda sec: sec.name, self.sectors)
 

@@ -183,6 +183,7 @@ menu.add_item("File/Quit",  gui.quit)
 menu.add_item("Edit/Resize", lambda: gui_resize_level())
 menu.add_item("Edit/Resize to selection", lambda: gui_resize_level_to_selection())
 menu.add_item("Edit/Debug Shell", lambda: run_python())
+menu.add_item("Edit/Add Sector...", lambda: gui_add_sector())
     
 menu.add_item("Zoom/1:4 (25%) ",  lambda: gui_set_zoom(0.25))
 menu.add_item("Zoom/1:2 (50%) ",  lambda: gui_set_zoom(0.5))

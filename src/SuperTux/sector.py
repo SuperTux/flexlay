@@ -17,6 +17,9 @@ class Sector:
     def __init__(self, parent):
         self.parent = parent
 
+    def get_level(self):
+        return self.parent
+
     def new(self, width, height):
         self.name = "<No Name>"
         self.song = "<No Song>"
@@ -37,6 +40,7 @@ class Sector:
         self.editormap.add_layer(self.foreground.to_layer())
         # FIXME: Data might not get freed since its 'recursively' refcounted
         self.editormap.set_metadata(make_metadata(self))
+        return self
 
     def load_v1(self, data):
         self.name = "<No Name>"

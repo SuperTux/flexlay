@@ -24,7 +24,7 @@ env = Environment(CXX = 'g++-3.3',
                   SWIGFLAGS='-c++ -python',
                   SHLIBPREFIX='')
 
-Depends('flexlay_wrap.cxx', ['flexlay_wrap.i',
+Depends('flexlay_python_wrap.cxx', ['flexlay_wrap.i',
                              'clanlib.i',
                              'scripting/editor.hxx',
                              'command.hxx',
@@ -52,7 +52,8 @@ Depends('flexlay_wrap.cxx', ['flexlay_wrap.i',
                              'object_brush.hxx',
                              'object_selector.hxx'])
 
-env.Command('flexlay_wrap.cxx', 'flexlay_wrap.i', "swig -python -o flexlay_wrap.cxx -c++ $SOURCE")
+env.Command('flexlay_python_wrap.cxx', 'flexlay_wrap.i', "swig -python -o flexlay_python_wrap.cxx -c++ $SOURCE")
+env.Command('flexlay_ruby_wrap.cxx',   'flexlay_wrap.i', "swig -ruby   -o flexlay_ruby_wrap.cxx -c++ $SOURCE")
 
 env.Program('sharedptrtest', 'sharedptrtest.cxx',
             CPPPATH=['/home/ingo/run/ClanLib-0.7-current/include/ClanLib-0.7/'])
@@ -134,7 +135,7 @@ env.SharedLibrary(
 env.SharedLibrary(
     target = '_flexlay_wrap.so',
     source = [
-    'flexlay_wrap.cxx',
+    'flexlay_python_wrap.cxx',
     'scripting/editor.cxx',
     'python_functor.cxx',
     'python_object.cxx',
@@ -143,6 +144,17 @@ env.SharedLibrary(
     CPPPATH=['/home/ingo/run/ClanLib-0.7-current//include/ClanLib-0.7/',
              '/usr/include/python2.2/',
              '..'],
+    LIBPATH=['.', '/home/ingo/run/ClanLib-0.7-current//lib/'],
+    LIBS=['flexlay'])
+
+env.SharedLibrary(
+    target = '_flexlay_ruby_wrap.so',
+    source = [
+    'flexlay_ruby_wrap.cxx',
+    ],
+    CPPPATH=['/home/ingo/run/ClanLib-0.7-current//include/ClanLib-0.7/',
+            '/usr/lib/ruby/1.8/i386-linux/',
+            '..'],
     LIBPATH=['.', '/home/ingo/run/ClanLib-0.7-current//lib/'],
     LIBS=['flexlay'])
 

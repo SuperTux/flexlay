@@ -220,16 +220,19 @@ class Image
     
     # Skip flexlay-paint tag
     tree = tree[1..-1]
-
-    while (not tree.empty?) do
+    puts "REst: #{tree.length}"
+    while not tree.empty? do
       (tag, *data) = tree[0]
 
       puts "Tag: #{tag}"
+
       if tag == "layer" then
+        puts "MUMU LAYER" 
         parse_layer(data)
       end
 
       tree = tree[1..-1]
+      puts "REst2: #{tree.length}"
     end
 
     set_active_layer(0)
@@ -354,8 +357,8 @@ class Image
         f.puts ")"
       }
       f.puts ")"
-      f.puts ")"
     }
+    f.puts ")"
     f.close()
   end
 end

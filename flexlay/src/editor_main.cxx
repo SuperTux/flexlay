@@ -131,7 +131,7 @@ int
 EditorMain::main(int argc, char** argv)
 {
   try {
-    std::cout << "Windstille Editor V0.0" << std::endl;
+    std::cout << PACKAGE_STRING << std::endl;
 
     parse_command_line(argc, argv);
 
@@ -139,7 +139,7 @@ EditorMain::main(int argc, char** argv)
     bindir  = CL_System::get_exe_path();
 
     if (datadir.empty())
-      datadir = bindir + "../../data/";
+      datadir = bindir + "../data/";
 
 #ifndef WIN32
     char* home_c = getenv("HOME");
@@ -198,7 +198,7 @@ EditorMain::main(int argc, char** argv)
                                   screen_width, screen_height, fullscreen, allow_resize);
 
     resources =  new CL_ResourceManager();
-    resources->add_resources(CL_ResourceManager(datadir + "windstille.xml", false));
+    //resources->add_resources(CL_ResourceManager(datadir + "windstille.xml", false));
 
     std::cout << "Loading Windstille startup script: " << game_definition_file << std::flush;
     gh_load((datadir + game_definition_file).c_str());

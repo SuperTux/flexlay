@@ -1,14 +1,14 @@
 SUBDIRS = scripting
 
-bin_PROGRAMS = editor averagecolor
+bin_PROGRAMS = flexlay averagecolor
 
 averagecolor_SOURCES  = averagecolor.cxx
 averagecolor_CPPFLAGS = @EDITOR_CFLAGS@
 averagecolor_LDADD    = @EDITOR_LIBS@
 
-editor_CPPFLAGS = -I.. @EDITOR_CFLAGS@
-editor_LDADD    = scripting/libeditor_scripting.a @EDITOR_LIBS@
-editor_SOURCES = \
+flexlay_CPPFLAGS = -I.. @EDITOR_CFLAGS@
+flexlay_LDADD    = scripting/libeditor_scripting.a @EDITOR_LIBS@
+flexlay_SOURCES  = \
   editor_main.hxx editor_main.cxx \
   tile.hxx tile.cxx \
   scm_functor.hxx scm_functor.cxx \

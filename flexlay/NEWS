@@ -1,0 +1,20 @@
+Windstille 0.2.0
+================
+ - one new level (quite large)
+ - one new enemy
+ - support for laying bombs
+ - run and jump speed a bit tuned
+ - start menu
+ - level editor
+ - bonus screen with sketches
+ - configurable joystick/keyboard support
+ - in-game music
+
+
+Windstille 0.1.0
+================
+ - first release
+ - very simple test level
+ - basic jump'n run elements
+
+# EOF #

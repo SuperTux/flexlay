@@ -64,8 +64,8 @@ class Sector
 
   def load_v1(data)
     @name = "main"
-    @music = ""
-    @gravity = 10.0
+    @music = get_value_from_tree(["music", "_"], data, "")
+    @gravity = get_value_from_tree(["gravity", "_"], data, 10.0)
     
     @width  = get_value_from_tree(["width", "_"], data, 20)
     @height = get_value_from_tree(["height", "_"], data, 15)
@@ -78,36 +78,42 @@ class Sector
     
     @background  = TilemapLayer.new($tileset, @width, @height)
     @background.set_data(get_value_from_tree(["background-tm"], data, []))
-    
+
+	@cameramode = "normal"
+
     @objects = ObjectLayer.new()
     for i in get_value_from_tree(["objects"], data, [])
-      type = i[0]
-      x = get_value_from_tree(["x", "_"], i[1..-1], 0)
-      y = get_value_from_tree(["y", "_"], i[1..-1], 0)
-      print("Object position: ", type, " ", x, " ", y, "\n")
-      object = $game_objects.find{|x| x[0] == type}
-      print "Resolved object: ", object, "\n"
-      if object
-        # fixme
-        #        @objects.add_object(ObjMapSpriteObject.new(make_sprite($datadir + object[1]),
-        #                                                   CL_Point.new(x, y),
-        #                                                   make_metadata(BadGuy.new(object[0]))).to_object())
-      else
-        print "Error: Couldn't resolve object type: ", type, "\n"
-      end
+      (name, odata) = i[0], i[1..-1]
+	  print "Create object: ", name, "\n"
+      create_gameobject_from_data(@objects, name, odata)
     end
-    
-# FIXME: doesn't work
-#     for i in get_value_from_tree(["reset-points"], data, [])
-#       type = i[0]
-#       x = get_value_from_tree(["x", "_"], i[1..-1], [])
-#       y = get_value_from_tree(["y", "_"], i[1..-1], [])
-#       object = $game_objects.find("resetpoint")
-#       @objects.add_object(ObjMapSpriteObject.new(make_sprite($datadir + object[1]),
-#                                                  CL_Point.new(x, y),
-#                                                  make_metadata(BadGuy.new(object[0]))).to_object())
-#     end
 
+	start_pos_x = get_value_from_tree(["start_pos_x", "_"], data, 0)
+	start_pos_y = get_value_from_tree(["start_pos_y", "_"], data, 0)
+	sexpr = [["name", "main"], ["x", start_pos_x], ["y", start_pos_y]]
+	create_gameobject_from_data(@objects, "spawnpoint", sexpr)
+
+	background = get_value_from_tree(["background", "_"], data, "")
+	if(background != "")
+	  sexpr = [["image", background], ["speed", 0.5]]
+	  create_gameobject_from_data(@objects, "background", sexpr)
+	end
+
+	partsys = get_value_from_tree(["particle_system", "_"], data, "")
+	if(partsys == "snow")
+	  sexpr = []
+	  create_gameobject_from_data(@objects, "particles-snow", sexpr)
+	elsif(partsys == "rain")
+	  sexpr = []
+	  create_gameobject_from_data(@objects, "particles-rain", sexpr)
+	elsif(partsys == "clouds")
+	  sexpr = []
+	  create_gameobject_from_data(@objects, "particles-clouds", sexpr)
+	elsif(partsys == "")
+	elsif
+	  print "Unknown particle system type '", partsys, "'\n"
+	end
+	    
     @editormap = EditorMap.new()
     @editormap.add_layer(@background.to_layer())
     @editormap.add_layer(@interactive.to_layer())

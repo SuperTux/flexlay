@@ -89,7 +89,7 @@ class SpawnPoint<GameObj
 
   def initialize(data, sexpr = [])
     @data = data
-    @name = "start"
+    @name = get_value_from_tree(["name", "_"],  sexpr, "main")
     connect_v1_ObjMapObject(data.to_object.sig_move(), method(:on_move))
     on_move(data)
   end
@@ -157,8 +157,8 @@ class ParticleSystem<GameObj
 	f.write("       (particles-%s\n" % [@type])
 	if(@layer != -1)
       f.write("         (layer %d)\n" % [@layer])
-	f.write("       )\n")
 	end
+	f.write("       )\n")
   end
 
   def property_dialog()

@@ -487,12 +487,12 @@ class SuperTuxGUI
     dialog = GenericDialog.new("Edit Sector", @gui.get_component())
     
     dialog.add_string("Name: ",   level.current_sector.name)
-    dialog.add_string("Music: ",   level.current_sector.song)
+    dialog.add_string("Music: ",   level.current_sector.music)
     dialog.add_float("Gravity: ", level.current_sector.gravity)
     
-    dialog.set_block() { |name, song, gravity|
+    dialog.set_block() { |name, music, gravity|
       level.current_sector.name = name
-      level.current_sector.song = song
+      level.current_sector.music = music
       level.current_sector.gravity = gravity
     }
   end

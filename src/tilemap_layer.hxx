@@ -20,9 +20,9 @@
 #ifndef HEADER_TILEMAP_LAYER_HXX
 #define HEADER_TILEMAP_LAYER_HXX
 
-#include <ClanLib/Core/System/sharedptr.h>
 #include <ClanLib/Display/pixel_buffer.h>
 #include "field.hxx"
+#include "shared_ptr.hxx"
 #include "layer.hxx"
 
 class Tileset;
@@ -97,7 +97,7 @@ public:
   Layer to_layer();
 
 private:
-  CL_SharedPtr<TilemapLayerImpl> impl;
+  SharedPtr<TilemapLayerImpl> impl;
 };
 
 #endif

@@ -20,8 +20,8 @@
 #ifndef HEADER_LAYER_HXX
 #define HEADER_LAYER_HXX
 
-#include <ClanLib/Core/System/sharedptr.h>
 #include <ClanLib/Core/Math/rect.h>
+#include "shared_ptr.hxx"
 
 class EditorMapComponent;
 class LayerImpl;
@@ -37,14 +37,15 @@ private:
 public:
   Layer();
   Layer(LayerImpl* i);
-  Layer(CL_SharedPtr<LayerImpl> i);
+  Layer(SharedPtr<LayerImpl> i);
+  ~Layer();
   
   void draw(EditorMapComponent* parent);
   bool has_bounding_rect() const;
   CL_Rect get_bounding_rect();
 
 private:
-  CL_SharedPtr<LayerImpl> impl;
+  SharedPtr<LayerImpl> impl;
 };
 
 #endif

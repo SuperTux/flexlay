@@ -30,6 +30,9 @@ Depends('flexlay_wrap.cxx', ['flexlay.i',
                              'object_selector.hxx']) 
 env.Command('flexlay_wrap.cxx', 'flexlay.i', "swig -python -c++ $SOURCE")
 
+env.Program('sharedptrtest', 'sharedptrtest.cxx',
+            CPPPATH=['/home/ingo/run/ClanLib-0.7-current//include/ClanLib-0.7/'])
+
 env.SharedLibrary(
     target = '_flexlay.so',
     source = [

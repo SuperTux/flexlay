@@ -421,8 +421,7 @@ TilemapLayerImpl::has_bounding_rect() const
 Layer
 TilemapLayer::to_layer()
 {
-  // FIXME: BUG!!!!!
-  return Layer(impl.get());
+  return Layer(impl);
 }
 
 /* EOF */

@@ -21,16 +21,20 @@
 #include "layer.hxx"
 
 Layer::Layer(LayerImpl* i)
-  : impl(i)
 {
+  impl = SharedPtr<LayerImpl>(i);
 }
 
 Layer::Layer()
 {  
 }
 
-Layer::Layer(CL_SharedPtr<LayerImpl> i)
+Layer::Layer(SharedPtr<LayerImpl> i)
   : impl(i)
+{
+}
+
+Layer::~Layer()
 {
 }
 

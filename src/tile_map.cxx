@@ -1,4 +1,4 @@
-//  $Id: tile_map.cxx,v 1.13 2003/09/12 09:25:48 grumbel Exp $
+//  $Id: tile_map.cxx,v 1.14 2003/09/13 10:11:33 grumbel Exp $
 //
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -117,7 +117,7 @@ TileMap::is_ground (float x, float y)
 
   if (x < 0 || x_pos >= field.get_width())
     {
-      std::cout << "TileMap::is_ground (): Out of range: " << x_pos << " " << y_pos << std::endl;
+      //std::cout << "TileMap::is_ground (): Out of range: " << x_pos << " " << y_pos << std::endl;
       return 1;
     }
   else if (y < 0 || y_pos >= field.get_height())

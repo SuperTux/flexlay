@@ -1,4 +1,4 @@
-//  $Id: player.cxx,v 1.13 2003/09/12 20:17:06 grumbel Exp $
+//  $Id: player.cxx,v 1.14 2003/09/13 10:11:33 grumbel Exp $
 //
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -41,6 +41,7 @@ Player::Player (Controller* c) :
   gun_state (GUN_READY),
   ground_state (IN_AIR)
 {  
+  energie = 20;
   current_ = this;
 
   walk.set_alignment(origin_bottom_center, 0, 3);
@@ -48,6 +49,7 @@ Player::Player (Controller* c) :
   stand.set_alignment(origin_bottom_center, 0, 3);
 
   direction = WEST;
+  hit_count = 0.0f;
 }
 
 void
@@ -86,6 +88,16 @@ Player::draw ()
       else
 	sprite->set_scale (-1.0, 1.0);
 
+      if (hit_count > 0)
+        {
+          if (rand()%2)
+            sprite->set_alpha(1.0f - hit_count);
+          else
+            sprite->set_alpha(1.0f);
+        }
+      else
+        sprite->set_alpha(1.0f);
+
       sprite->draw (int(pos.x), int(pos.y));
     }
 
@@ -121,6 +133,9 @@ Player::get_subtile_pos()
 void 
 Player::update (float delta)
 {
+  if (hit_count > 0)
+    hit_count -= delta;
+
   walk.update(delta);
   
   if (controller->is_left ())
@@ -264,6 +279,26 @@ bool
 Player::stuck ()
 {
   return get_world ()->get_tilemap()->is_ground(pos.x, pos.y);
+}
+
+int
+Player::get_energie()
+{
+  return energie;
+}
+
+int
+Player::get_max_energie()
+{
+  return 20;
+}
+
+void
+Player::hit(int points)
+{
+  if (energie > 0 && hit_count <= 0)
+    energie -= points;
+  hit_count = 1.0f;
 }
 
 /* EOF */

@@ -1,5 +1,5 @@
-//  $Id: game.cxx,v 1.2 2003/09/13 10:11:33 grumbel Exp $
-//
+//  $Id: igel.hxx,v 1.1 2003/09/13 10:11:33 grumbel Exp $
+// 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
 //
@@ -12,33 +12,37 @@
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
-//
+// 
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-#include "scripting/game.hxx"
-#include "water_map.hxx"
-#include "game_world.hxx"
-#include "igel.hxx"
-#include "player.hxx"
+#ifndef HEADER_IGEL_HXX
+#define HEADER_IGEL_HXX
 
-void
-game_add_water(int x, int y, int w, int h)
-{
-  GameWorld::current()->get_watermap()->add_water(x, y, w, h);
-}
+#include <ClanLib/Display/sprite.h>
+#include "gameobj.hxx"
 
-void
-game_add_igel(int x, int y)
+/** */
+class Igel : public GameObj
 {
-  GameWorld::current()->add(new Igel(x, y));
-}
+private:
+  CL_Sprite sprite;
+  CL_Pointf pos;
+  bool direction_left;
+  enum { WALKING, FALLING } state;
+public:
+  Igel(int x, int y);
+  virtual ~Igel();
 
-void
-game_set_player(float x, float y)
-{
-  Player::current()->set_position(CL_Vector(x, y));
-}
+  void draw();
+  void update(float delta);
+private:
+  bool on_ground();
+  Igel (const Igel&);
+  Igel& operator= (const Igel&);
+};
+
+#endif
 
 /* EOF */

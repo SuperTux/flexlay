@@ -1,4 +1,4 @@
-//  $Id: diamond_map.cxx,v 1.2 2003/09/12 22:41:06 grumbel Exp $
+//  $Id: diamond_map.cxx,v 1.3 2003/09/13 10:11:33 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -53,6 +53,8 @@ DiamondMap::update (float delta)
   CL_Vector pos = Player::current()->get_pos();
 
   dmap[width * (int(pos.y)/64) + (int(pos.x)/64)] = false;
+  dmap[width * ((int(pos.y)/64)-1) + (int(pos.x)/64)] = false;
+  dmap[width * ((int(pos.y)/64)-2) + (int(pos.x)/64)] = false;
 
   sprite.update(delta);
 }

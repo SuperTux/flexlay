@@ -1,4 +1,4 @@
-//  $Id: energiebar.cxx,v 1.1 2003/09/12 22:14:03 grumbel Exp $
+//  $Id: energiebar.cxx,v 1.2 2003/09/13 10:11:33 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -22,6 +22,7 @@
 #include <ClanLib/Display/display_window.h>
 #include <ClanLib/Display/graphic_context.h>
 #include "globals.hxx"
+#include "player.hxx"
 #include "energiebar.hxx"
 
 Energiebar::Energiebar()
@@ -36,7 +37,10 @@ Energiebar::~Energiebar()
 void
 Energiebar::draw()
 {
-  for(int i = 0; i < 15; ++i)
+  int energie     = Player::current()->get_energie();
+  int max_energie = Player::current()->get_max_energie();
+
+  for(int i = 0; i < energie; ++i)
     {
       float red   = 1.0f;
       float green = (i/20.0f);
@@ -46,7 +50,7 @@ Energiebar::draw()
       CL_Display::get_current_window()->get_gc()->flush();
     }
 
-  for(int i = 15; i < 20; ++i)
+  for(int i = energie; i < max_energie; ++i)
     {
       bar.set_color(.5f, .5f, .5f, .5f);
       bar.draw(15 + (i * 10), 15);

@@ -32,6 +32,8 @@ windstille_SOURCES = \
   guile_gameobj.hxx \
   guile_gameobj_factory.cxx \
   guile_gameobj_factory.hxx \
+  igel.hxx \
+  igel.cxx \
   keyboard_controller.cxx \
   keyboard_controller.hxx \
   laser_shoot.cxx \

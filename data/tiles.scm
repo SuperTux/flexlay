@@ -457,16 +457,6 @@
                #b00001111))
 
 
- (tile (id 42)
-       (image "tiles/brwn_brwn_brwn_air_1")
-       (colmap #b11111111
-               #b11111111
-               #b11111111
-               #b11111111
-               #b00001111
-               #b00001111
-               #b00001111
-               #b00001111))
 
  (tile (id 43)
        (image "tiles/brwn_brwn_air_air_1")
@@ -478,6 +468,17 @@
                #b00000000
                #b00000000
                #b00000000))
+
+ (tile (id 47)
+       (image "tiles/brwn_brwn_brwn_air_1")
+       (colmap #b00001111 
+               #b00001111
+               #b00001111
+               #b00001111
+               #b11111111
+               #b11111111
+               #b11111111
+               #b11111111))
 
  (tile (id 44)
        (image "tiles/brwn_air_brwn_brwn_1")
@@ -501,7 +502,32 @@
                #b11110000
                #b11110000))
 
+
+ (tile (id 42)
+       (image "tiles/brwn_brwn_brwn_air_1")
+       (colmap #b11111111
+               #b11111111
+               #b11111111
+               #b11111111
+               #b00001111
+               #b00001111
+               #b00001111
+               #b00001111))
+
+
  (tile (id 46)
+       (image "tiles/brwn_air_air_brwn_1")
+       (colmap #b11110000 
+               #b11110001
+               #b11110000
+               #b11110000
+               #b11110000
+               #b11110000
+               #b11110000
+               #b11110000))
+
+
+ (tile (id 48)
        (image "tiles/air_air_air_brwn_1")
        (colmap #b00000000 
                #b00000000
@@ -512,27 +538,6 @@
                #b11110000
                #b11110000))
 
- (tile (id 47)
-       (image "tiles/brwn_brwn_brwn_air_1")
-       (colmap #b11111111 
-               #b11111111
-               #b11111111
-               #b11111111
-               #b00001111
-               #b00001111
-               #b00001111
-               #b00001111))
-
- (tile (id 48)
-       (image "tiles/brwn_air_air_brwn_1")
-       (colmap #b11110000 
-               #b11110001
-               #b11110000
-               #b11110000
-               #b11110000
-               #b11110000
-               #b11110000
-               #b11110000))
 
  (tile (id 49)
        (image "tiles/brwn_air_air_air_1")

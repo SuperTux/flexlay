@@ -2,7 +2,7 @@
 (load "helper.scm")
 
 (game-add-water 10 100 180 50)
-(game-set-player 1000 1300)
+(game-set-player 1500 1300)
 
 (game-add-igel 1000 1300)
 (game-add-igel 800 1300)

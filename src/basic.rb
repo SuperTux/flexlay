@@ -39,19 +39,25 @@ include Flexlay_wrap
 
 require "flexlay.rb"
 
+require "basic_gui.rb"
+require "basic_level.rb"
+
 ## Init Flexlay itself
 flexlay = Flexlay.new()
 flexlay.init()
 
-## Init the GUI manager
-$editor = Editor.new()
-$gui = $editor.get_gui_manager()
-
-## Create some basic GUI
-myrect      = CL_Rect.new(CL_Point.new(0, 56), CL_Size.new(665, 488+56))
-$editor_map = EditorMapComponent.new(myrect, $gui.get_component())
-$workspace  = Workspace.new(myrect.get_width(), myrect.get_height())
-$editor_map.set_workspace($workspace)
+class Counter
+  counter = 0;
+  
+  def initialize(i)
+    @counter = i
+  end
+  
+  def inc(i)
+    @counter += i
+    return @counter
+  end
+end
 
 ## Initialize Tools
 $tilemap_paint_tool  = TileMapPaintTool.new()
@@ -59,19 +65,17 @@ $tilemap_select_tool = TileMapSelectTool.new()
 $zoom_tool           = ZoomTool.new()
 $objmap_select_tool  = ObjMapSelectTool.new()
 
-$workspace.set_tool($tilemap_paint_tool.to_tool());
-
 $mysprite = make_sprite("../data/images/icons16/stock_paste-16.png")
-
-$minimap = Minimap.new($editor_map, CL_Rect.new(CL_Point.new(3 + myrect.left, 
-                                                             488+3-14  + myrect.top), 
-                                                CL_Size.new(794-134-16, 50)), 
-                       $gui.get_component())
 
 $tileset = Tileset.new(32)
 
-require "basic_level.rb"
-require "basic_gui.rb"
+## Create some basic GUI
+$gui = GUI.new()
+
+$gui.workspace.set_tool($tilemap_paint_tool.to_tool());
+
+startlevel = Level.new(100, 50)
+startlevel.activate($workspace)
 
 $gui.run()
 

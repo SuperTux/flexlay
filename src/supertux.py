@@ -59,22 +59,25 @@ class SuperTuxLevel:
 
     editormap = None
 
-    def __init__(self, filename = None):
-        self.filename = filename
-        
-        if filename == None:
+    def __init__(self, *params):
+        if len(params) == 2:
+            (width, height) = params
+            
             self.name   = "No Name"
             self.author = "No Author"
 
-            self.width  = 200
-            self.height = 100
+            self.width  = width
+            self.height = height
 
             self.foreground  = TilemapLayer(supertux_tileset, self.width, self.height)
             self.interactive = TilemapLayer(supertux_tileset, self.width, self.height)
             self.background  = TilemapLayer(supertux_tileset, self.width, self.height)
             self.objects = ObjectLayer()
-        else:
-            tree = sexpr_read_from_file(filename)
+            
+        elif len(params) == 1:
+            (self.filename,) = params
+            
+            tree = sexpr_read_from_file(self.filename)
             data = tree[1:]
 
             self.name   = get_value_from_tree(["name", "_"], data, "no name")
@@ -93,6 +96,9 @@ class SuperTuxLevel:
             self.background.set_data(get_value_from_tree(["background-tm"], data, []))
 
             self.objects = ObjectLayer()
+            
+        else:
+            raise "Wrong arguments for SuperTux::___init__"
 
         self.editormap = EditorMap()
         self.editormap.add_layer(self.background.to_layer())
@@ -156,10 +162,15 @@ SuperTuxLevel.FOREGROUND  = 2
 class DisplayProperties:
     layer = SuperTuxLevel.INTERACTIVE
     show_all = False
+    current_only = False
     
     def set(self, map):
-        active   = CL_Color(255, 255, 255)
-        deactive = CL_Color(150, 150, 250, 150)
+        if self.current_only:
+            active   = CL_Color(255, 255, 255)
+            deactive = CL_Color(150, 150, 250, 150)
+        else:
+            active   = CL_Color(255, 255, 255)
+            deactive = CL_Color(0, 0, 0, 10)
 
         if (self.show_all):
             map.foreground.set_foreground_color(active)

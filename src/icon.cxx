@@ -51,23 +51,6 @@ public:
   void mouse_move(const CL_InputEvent& event);
 };
 
-Icon::Icon(const CL_Point& pos, const CL_Sprite& sprite, const std::string& tooltip, 
-           CL_Component* parent)
-  : CL_Component(CL_Rect(pos, CL_Size(32, 32)), parent),
-    impl(new IconImpl(this))
-{
-  impl->sprite       = sprite;
-  impl->tooltip      = tooltip;
-  impl->draw_tooltip = true;
-  impl->down         = false;
-  impl->is_down      = false;
-  impl->is_enabled   = true;
-
-  impl->slots.push_back(sig_paint().connect(impl.get(), &IconImpl::draw));
-  impl->slots.push_back(sig_mouse_down().connect(impl.get(), &IconImpl::mouse_down));
-  impl->slots.push_back(sig_mouse_up().connect(impl.get(),   &IconImpl::mouse_up));
-}
-
 Icon::Icon(const CL_Rect& rect, const CL_Sprite& sprite, const std::string& tooltip, 
            CL_Component* parent)
   : CL_Component(rect, parent),

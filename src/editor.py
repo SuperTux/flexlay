@@ -62,7 +62,7 @@ objmap_select_tool  = ObjMapSelectTool()
 
 workspace.set_tool(tilemap_paint_tool.to_tool());
 
-startlevel = SuperTuxLevel()
+startlevel = SuperTuxLevel(100, 50)
 startlevel.activate(workspace)
 
 def do_quit():
@@ -130,22 +130,31 @@ class Counter:
 
 p = Counter(2)
 
-new_icon         = Icon(CL_Point(p.inc(0),  2), make_sprite("../data/images/icons24/stock_new.png"), "Some tooltip", willow);
-load_icon        = Icon(CL_Point(p.inc(32), 2), make_sprite("../data/images/icons24/stock_open.png"), "Some tooltip", willow);
-load_recent_icon = Icon(CL_Point(p.inc(32), 2), make_sprite("../data/images/icons24/downarrow.png"), "Some tooltip", willow);
-save_icon        = Icon(CL_Point(p.inc(32), 2), make_sprite("../data/images/icons24/stock_save.png"), "Some tooltip", willow);
-save_as_icon     = Icon(CL_Point(p.inc(32), 2), make_sprite("../data/images/icons24/stock_save_as.png"), "Some tooltip", willow);
+new_icon         = Icon(CL_Rect(CL_Point(p.inc(0),  2), CL_Size(32, 32)),
+                                make_sprite("../data/images/icons24/stock_new.png"), "Some tooltip", willow);
+load_icon        = Icon(CL_Rect(CL_Point(p.inc(32), 2), CL_Size(32, 32)),
+                        make_sprite("../data/images/icons24/stock_open.png"), "Some tooltip", willow);
+load_recent_icon = Icon(CL_Rect(CL_Point(p.inc(32), 2), CL_Size(16, 32)),
+                        make_sprite("../data/images/icons24/downarrow.png"), "Some tooltip", willow);
+save_icon        = Icon(CL_Rect(CL_Point(p.inc(16), 2), CL_Size(32, 32)),
+                        make_sprite("../data/images/icons24/stock_save.png"), "Some tooltip", willow);
+save_as_icon     = Icon(CL_Rect(CL_Point(p.inc(32), 2), CL_Size(32, 32)),
+                        make_sprite("../data/images/icons24/stock_save_as.png"), "Some tooltip", willow);
 
 load_icon.set_callback(gui_level_load)
 load_recent_icon.set_callback(lambda: recent_files_menu.run())
 save_icon.set_callback(gui_level_save)
 save_as_icon.set_callback(gui_level_save_as)
 
-copy_icon    = Icon(CL_Point(p.inc(48), 2), make_sprite("../data/images/icons24/stock_copy.png"), "Some tooltip", willow);
-paste_icon   = Icon(CL_Point(p.inc(32), 2), make_sprite("../data/images/icons24/stock_paste.png"), "Some tooltip", willow);
+copy_icon    = Icon(CL_Rect(CL_Point(p.inc(48), 2), CL_Size(32, 32)),
+                    make_sprite("../data/images/icons24/stock_copy.png"), "Some tooltip", willow);
+paste_icon   = Icon(CL_Rect(CL_Point(p.inc(32), 2), CL_Size(32, 32)),
+                    make_sprite("../data/images/icons24/stock_paste.png"), "Some tooltip", willow);
 
-undo_icon = Icon(CL_Point(p.inc(48), 2), make_sprite("../data/images/icons24/stock_undo.png"), "Some tooltip", willow);
-redo_icon = Icon(CL_Point(p.inc(32), 2), make_sprite("../data/images/icons24/stock_redo.png"), "Some tooltip", willow);
+undo_icon = Icon(CL_Rect(CL_Point(p.inc(48), 2), CL_Size(32, 32)),
+                 make_sprite("../data/images/icons24/stock_undo.png"), "Some tooltip", willow);
+redo_icon = Icon(CL_Rect(CL_Point(p.inc(32), 2), CL_Size(32, 32)),
+                 make_sprite("../data/images/icons24/stock_redo.png"), "Some tooltip", willow);
 
 undo_icon.set_callback(editor.undo)
 redo_icon.set_callback(editor.redo)
@@ -153,10 +162,14 @@ redo_icon.set_callback(editor.redo)
 undo_icon.disable()
 redo_icon.disable()
 
-foreground_icon  = Icon(CL_Point(p.inc(48), 2), make_sprite("../data/images/icons24/foreground.png"), "Some tooltip", willow);
-interactive_icon = Icon(CL_Point(p.inc(32), 2), make_sprite("../data/images/icons24/interactive.png"), "Some tooltip", willow);
-background_icon  = Icon(CL_Point(p.inc(32), 2), make_sprite("../data/images/icons24/background.png"), "Some tooltip", willow);
-eye_icon         = Icon(CL_Point(p.inc(32), 2), make_sprite("../data/images/icons24/eye.png"), "Some tooltip", willow);
+foreground_icon  = Icon(CL_Rect(CL_Point(p.inc(48), 2), CL_Size(32, 32)),
+                        make_sprite("../data/images/icons24/foreground.png"), "Some tooltip", willow);
+interactive_icon = Icon(CL_Rect(CL_Point(p.inc(32), 2), CL_Size(32, 32)),
+                        make_sprite("../data/images/icons24/interactive.png"), "Some tooltip", willow);
+background_icon  = Icon(CL_Rect(CL_Point(p.inc(32), 2), CL_Size(32, 32)),
+                        make_sprite("../data/images/icons24/background.png"), "Some tooltip", willow);
+eye_icon         = Icon(CL_Rect(CL_Point(p.inc(32), 2), CL_Size(32, 32)),
+                        make_sprite("../data/images/icons24/eye.png"), "Some tooltip", willow);
 
 layer_menu = Menu(CL_Point(32*11+2, 54), gui.get_component())
 
@@ -205,16 +218,16 @@ def set_objmap_select_tool():
 
 toolbar = Panel(CL_Rect(CL_Point(0, 23+33), CL_Size(33, 32*4+2)), gui.get_component())
 
-paint = Icon(CL_Point(2, 32*0+2), make_sprite("../data/images/tools/stock-tool-pencil-22.png"), "Some tooltip", toolbar);
+paint = Icon(CL_Rect(CL_Point(2, 32*0+2), CL_Size(32, 32)), make_sprite("../data/images/tools/stock-tool-pencil-22.png"), "Some tooltip", toolbar);
 paint.set_callback(set_tilemap_paint_tool)
 
-select = Icon(CL_Point(2, 32*1+2), make_sprite("../data/images/tools/stock-tool-rect-select-22.png"), "Some tooltip", toolbar);
+select = Icon(CL_Rect(CL_Point(2, 32*1+2), CL_Size(32,32)), make_sprite("../data/images/tools/stock-tool-rect-select-22.png"), "Some tooltip", toolbar);
 select.set_callback(set_tilemap_select_tool)
 
-zoom = Icon(CL_Point(2, 32*2+2), make_sprite("../data/images/tools/stock-tool-zoom-22.png"), "Some tooltip", toolbar);
+zoom = Icon(CL_Rect(CL_Point(2, 32*2+2), CL_Size(32,32)), make_sprite("../data/images/tools/stock-tool-zoom-22.png"), "Some tooltip", toolbar);
 zoom.set_callback(set_zoom_tool)
 
-object = Icon(CL_Point(2, 32*3+2), make_sprite("../data/images/tools/stock-tool-clone-22.png"), "Some tooltip", toolbar);
+object = Icon(CL_Rect(CL_Point(2, 32*3+2), CL_Size(32,32)), make_sprite("../data/images/tools/stock-tool-clone-22.png"), "Some tooltip", toolbar);
 object.set_callback(set_objmap_select_tool)
 
 # erase  = Icon(CL_Point(2, 32+1+2), make_sprite("../data/images/tools/stock-tool-eraser-22.png"), "Some tooltip", toolbar);
@@ -249,10 +262,17 @@ def menu_show_interactive():
 
 def menu_show_all():
     display_properties.show_all = True
+    display_properties.current_only = False
+    display_properties.set(workspace.get_map().get_metadata())
+
+def menu_show_current():
+    display_properties.show_all = False
+    display_properties.current_only = False
     display_properties.set(workspace.get_map().get_metadata())
 
 def menu_show_only_current():
     display_properties.show_all = False
+    display_properties.current_only = True
     display_properties.set(workspace.get_map().get_metadata())
 
 foreground_icon.set_callback(menu_show_foreground)
@@ -278,6 +298,7 @@ Menu.add_item = Menu_add_item
 del Menu_add_item
 
 layer_menu.add_item(mysprite, "Show all", menu_show_all)
+layer_menu.add_item(mysprite, "Show current", menu_show_current)
 layer_menu.add_item(mysprite, "Show only current", menu_show_only_current)
 
 supertux = SuperTuxGUI(load_supertux_tiles(), gui)

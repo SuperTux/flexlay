@@ -32,7 +32,6 @@ class Icon : public CL_Component
 {
 private:
 public:
-  Icon(const CL_Point& pos, const CL_Sprite& sprite, const std::string& tooltip, CL_Component* parent);
   Icon(const CL_Rect& rect, const CL_Sprite& sprite, const std::string& tooltip, CL_Component* parent);
 
   void disable();

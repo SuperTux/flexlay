@@ -43,7 +43,7 @@ def create_gameobject_from_data(objmap, name, sexpr)
     x = get_value_from_tree(["x", "_"], sexpr, 0)
     y = get_value_from_tree(["y", "_"], sexpr, 0)
     
-    obj = create_gameobject(objmap, object, CL_Point.new(x, y), sexpr)
+    obj = create_gameobject(objmap, object, CL_Pointf.new(x, y), sexpr)
   else
     print "Error: Couldn't resolve object type: ", name, "\n"
     print "Sector: Unhandled tag: ", name, "\n"

@@ -35,7 +35,7 @@ class SuperTuxGUI
     @tileselector.set_tiles($tileset.get_tiles())
     @tileselector.show(false)
     
-    @objectselector = ObjectSelector.new(CL_Rect.new(0, 0, 128, 256), 42, 42, @selector_window)
+    @objectselector = ObjectSelector.new(CL_Rect.new(0, 0, 128, 552), 42, 42, @selector_window)
     @objectselector.show(true)
 
     # connect_v1_ObjMapObject

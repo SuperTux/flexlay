@@ -27,10 +27,12 @@ require "sexpr.rb"
 flexlay = Flexlay.new()
 
 $screen_rect = CL_Rect.new(CL_Point.new(0, 0), CL_Size.new(800, 600))
+# $screen_rect = CL_Rect.new(CL_Point.new(0, 0), CL_Size.new(1152, 864))
 
 flexlay.init($screen_rect.get_width(), $screen_rect.get_height(), false)
 
 $sketch_stroke_tool  = SketchStrokeTool.new()
+$layer_move_tool     = LayerMoveTool.new()
 $zoom_tool           = ZoomTool.new()
 
 class PaintGUI
@@ -43,7 +45,8 @@ class PaintGUI
     @editor_map = EditorMapComponent.new($screen_rect, @gui.get_component())
     @workspace  = Workspace.new($screen_rect.get_width(), $screen_rect.get_height())
     @editor_map.set_workspace(@workspace)
-    @workspace.set_tool($sketch_stroke_tool.to_tool());
+    # @workspace.set_tool($sketch_stroke_tool.to_tool());
+    @workspace.set_tool($layer_move_tool.to_tool());
 
     @selector_window_main = Window.new(CL_Rect.new(CL_Point.new($screen_rect.get_width()-160, 5), 
                                                    CL_Size.new(128 + 6 + 10, 558)),
@@ -144,10 +147,10 @@ class PaintGUI
                })
 
     connect_v2(@editor_map.sig_on_key("g"),  proc{ |x, y|
-                 $gui.workspace.get_gc_state.set_rotation($gui.workspace.get_gc_state.get_rotation() + 1)
+                 $gui.workspace.get_gc_state.set_rotation($gui.workspace.get_gc_state.get_rotation() - 10)
                })
     connect_v2(@editor_map.sig_on_key("c"),  proc{ |x, y| 
-                 $gui.workspace.get_gc_state.set_rotation($gui.workspace.get_gc_state.get_rotation() - 1)
+                 $gui.workspace.get_gc_state.set_rotation($gui.workspace.get_gc_state.get_rotation() + 10)
                })
 
     @normal_mode = CL_Button.new(CL_Rect.new(CL_Point.new(5, 500), CL_Size.new(40, 25)), "Norm", @selector_window)
@@ -172,6 +175,16 @@ class PaintGUI
               drawer.set_mode(SpriteStrokeDrawer::DM_SHADER)
             })
 
+    button_panel = ButtonPanel.new(0, 0, 33, 33*3, false, @gui.get_component)
+    button_panel.add_icon("../data/images/tools/stock-tool-pencil-22.png", proc{ 
+                            @workspace.set_tool($sketch_stroke_tool.to_tool())
+                          })
+    button_panel.add_icon("../data/images/tools/stock-tool-move-22.png", proc{ 
+                            @workspace.set_tool($layer_move_tool.to_tool())
+                          })
+    button_panel.add_icon("../data/images/tools/stock-tool-zoom-22.png", proc{ 
+                            @workspace.set_tool($zoom_tool.to_tool())
+                          })
   end
 
   def quit()
@@ -204,12 +217,13 @@ class Image
   
   def set_active_layer(i)
     if (i >= 0 && i < layers.size) then
-      SketchLayer.set_current(layers[i])
+      BitmapLayer.set_current(layers[i])
     end
   end
 
   def add_layer()
-    layer = SketchLayer.new()
+    layer = BitmapLayer.new(640, 480)
+    layer.to_layer().set_pos(CL_Pointf.new(rand(100)-50, rand(100)-50))
     @layers.push(layer)
     @editormap.add_layer(layer.to_layer()) 
     puts "Add layer: #{layer}" 

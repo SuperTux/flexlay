@@ -71,14 +71,23 @@ TileSelection::draw(const CL_Color& color)
 TileBrush
 TileSelection::get_brush(const Field<int>& field) const
 {
-  TileBrush brush(selection.get_width(), 
-                  selection.get_height());
+  CL_Rect sel = selection;
 
-  for(int y = selection.top; y < selection.bottom; ++y)
-    for(int x = selection.left; x < selection.right; ++x)
+  // Cut the selection to the field size
+  sel.left = std::max(0, sel.left); 
+  sel.top  = std::max(0, sel.top); 
+
+  sel.right  = std::min(field.get_width(),  sel.right); 
+  sel.bottom = std::min(field.get_height(), sel.bottom); 
+
+  TileBrush brush(sel.get_width(), 
+                  sel.get_height());
+
+  for(int y = sel.top; y < sel.bottom; ++y)
+    for(int x = sel.left; x < sel.right; ++x)
       {
-        brush.at(x - selection.left, 
-                 y - selection.top) = field.at(x, y);
+        brush.at(x - sel.left, 
+                 y - sel.top) = field.at(x, y);
       }
 
   return brush;

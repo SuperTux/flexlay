@@ -41,7 +41,7 @@
   </sprite>
 
   <sprite name="igel_die">
-    <animation speed="100" loop="no" />
+    <animation speed="70" loop="no" />
     <translation origin="bottom_center" />
 
     <image file="images/igel_die1.png" />

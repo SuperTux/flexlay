@@ -58,18 +58,22 @@ class SimpleFileDialog
   end
   
   def run(func)
-    connect(@ok_button.sig_clicked(), @on_ok)
-    connect(@cancel_button.sig_clicked(), @on_cancel)
+    connect(@ok_button.sig_clicked(), method(:on_ok))
+    connect(@cancel_button.sig_clicked(), method(:on_cancel))
     @callback = func
     @window.show()
   end
   
   def on_ok()
+    print "OK: ", @callback
     @window.hide();
-    @callback.call(@inputbox.get_text())
+    if @callback
+      @callback.call(@inputbox.get_text())
+    end
   end
   
   def on_cancel()
+    print "CANCEL"
     @window.hide();
   end
 end

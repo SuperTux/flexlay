@@ -14,7 +14,7 @@ class SuperTuxGUI
 
   def initialize(tileset, gui)
     @selector_window = Panel.new(CL_Rect.new(CL_Point.new(800-134, 23+33), CL_Size.new(128 + 6, 558)),
-                                 gui.get_component())
+                                 $gui.get_component())
     @tileselector = TileSelector.new(CL_Rect.new(CL_Point.new(3, 3), CL_Size.new(128, 552)), @selector_window)
     @tileselector.set_tileset(tileset)
     @tileselector.set_tiles((1..100).to_a)
@@ -46,22 +46,23 @@ class SuperTuxGUI
 end
 
 def gui_level_save_as()
-  save_dialog.set_filename(os.path.dirname(save_dialog.get_filename()) + "/")
-  save_dialog.run(supertux_save_level)
+  $save_dialog.set_filename(File.dirname($save_dialog.get_filename()) + "/")
+  $save_dialog.run(proc{|filename| supertux_save_level(filename) })
 end
 
 def gui_level_save()
-  if $workspace.get_map().get_metadata().filename
-    save_dialog.set_filename($workspace.get_map().get_metadata().filename)
-  else
-    save_dialog.set_filename(os.path.dirname(save_dialog.get_filename())  + "/")
+  filename = $workspace.get_map().get_metadata().parent.filename
+  if filename
+    $save_dialog.set_filename(filename)
+  else # FIXME
+    $save_dialog.set_filename(File.dirname($save_dialog.get_filename())  + "/")
   end
   
-  save_dialog.run(supertux_save_level)
+  $save_dialog.run(proc{|filename| supertux_save_level(filename) })
 end   
 
 def gui_level_load()
-  load_dialog.run(supertux_load_level)
+  $load_dialog.run(proc{|filename| supertux_load_level(filename) })
 end
 
 def gui_toggle_minimap()
@@ -79,23 +80,23 @@ def gui_toggle_grid()
   tilemap.set_draw_grid(!tilemap.get_draw_grid())
 
   if tilemap.get_draw_grid()
-    grid_icon.set_down()
+    $grid_icon.set_down()
   else
-    grid_icon.set_up()
+    $grid_icon.set_up()
   end
 end
 
 def on_map_change()
   if ($workspace.get_map().undo_stack_size() > 0)
-    undo_icon.enable()
+    $undo_icon.enable()
   else
-    undo_icon.disable()
+    $undo_icon.disable()
   end
 
   if ($workspace.get_map().redo_stack_size() > 0)
-    redo_icon.enable()
+    $redo_icon.enable()
   else
-    redo_icon.disable()        
+    $redo_icon.disable()        
   end
 end
 
@@ -197,8 +198,8 @@ def gui_toggle_display_props()
 end
 
 def gui_resize_level()
-  level = $workspace.get_map().get_data()
-  dialog = GenericDialog.new("Resize Level", gui.get_component())
+  level = $workspace.get_map().get_metadata()
+  dialog = GenericDialog.new("Resize Level", $gui.get_component())
   dialog.add_int("Width: ", level.width)
   dialog.add_int("Height: ", level.height)
   dialog.add_int("X: ", 0)
@@ -208,8 +209,8 @@ def gui_resize_level()
 end
 
 def gui_resize_level_to_selection()
-  level = $workspace.get_map().get_data()
-  rect  = tilemap_select_tool.get_selection_rect()
+  level = $workspace.get_map().get_metadata()
+  rect  = $tilemap_select_tool.get_selection_rect()
   if (rect.get_width() > 2 and rect.get_height() > 2)
     level.resize(rect.get_size(), CL_Point.new(-rect.left, -rect.top))
   end
@@ -222,7 +223,7 @@ def supertux_load_level(filename)
   
   if not(config.recent_files.find(filename)) then
     config.recent_files.append(filename)
-    recent_files_menu.add_item($mysprite, filename, 
+    $recent_files_menu.add_item($mysprite, filename, 
                                proc { supertux_load_level(filename) })
   end
 
@@ -250,17 +251,17 @@ def supertux_save_level(filename)
 end
 
 def gui_switch_sector_menu()
-  mymenu = Menu.new(CL_Point.new(530, 54), gui.get_component())
+  mymenu = Menu.new(CL_Point.new(530, 54), $gui.get_component())
   for i in $workspace.get_map().get_metadata().parent.get_sectors()
     mymenu.add_item($mysprite, "Sector (%s)" % i,
-                    proc { $workspace.get_map().get_metadata().parent.activate_sector(i, workspace) })
+                    proc { $workspace.get_map().get_metadata().parent.activate_sector(i, $workspace) })
   end
   mymenu.run()
 end
 
 def gui_add_sector()
-  level = $workspace.get_map().get_data().get_level()
-  dialog = GenericDialog.new("Add Sector", gui.get_component())
+  level = $workspace.get_map().get_metadata().get_level()
+  dialog = GenericDialog.new("Add Sector", $gui.get_component())
 
   name = "newsector"
   width  = 50

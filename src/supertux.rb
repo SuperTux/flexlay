@@ -35,6 +35,12 @@ $objmap_select_tool  = ObjMapSelectTool.new()
 
 $workspace.set_tool($tilemap_paint_tool.to_tool());
 
+$recent_files = []
+$recent_files_menu = Menu.new(CL_Point.new(32*2, 54), $gui.get_component())
+for filename in $recent_files
+  $recent_files_menu.add_item(mysprite, filename, proc{ supertux_load_level(filename) })
+end
+
 $minimap = Minimap.new($editor_map, CL_Rect.new(CL_Point.new(3, 488+3-14), 
                                                CL_Size.new(794-134-16, 50)), $editor_map)
 
@@ -150,6 +156,9 @@ class Level
   
   sectors = nil
   current_sector = nil
+
+  attr_reader :version, :filename, :name, :author, :theme, :time, :music, :objects, :camera, :sectors, :current_sector
+  attr_writer :version, :filename, :name, :author, :theme, :time, :music, :objects, :camera, :sectors, :current_sector
   
   def initialize(*params)
     if params.length() == 2 then
@@ -223,14 +232,6 @@ class Level
     @time    = int(get_value_from_tree(["time", "_"], data, "999"))       
   end
   
-  def resize(size, pos)
-    @width  = size.width
-    @height = size.height
-    @background.resize(size, pos)
-    @interactive.resize(size, pos)
-    @foreground.resize(size, pos)
-  end
-
   def save(filename)
     save_v2(filename)
   end
@@ -419,8 +420,8 @@ class Sector
   objects   = nil
   editormap = nil
 
-  attr_reader :background, :interactive, :foreground
-  attr_writer :background, :interactive, :foreground
+  attr_reader :name, :background, :interactive, :foreground, :parent
+  attr_writer :name, :song, :gravity
  
   def initialize(parent)
     @parent = parent
@@ -428,6 +429,14 @@ class Sector
 
   def get_level()
     return @parent
+  end
+
+  def resize(size, pos)
+    @width  = size.width
+    @height = size.height
+    @background.resize(size, pos)
+    @interactive.resize(size, pos)
+    @foreground.resize(size, pos)
   end
 
   def new_from_size(width, height)

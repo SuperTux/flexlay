@@ -348,6 +348,8 @@ set_tilemap_paint_tool()
 
 gui.run()
 
+del config
+
 flexlay.deinit()
 print "deinit done"
 

@@ -1,3 +1,4 @@
+#! /usr/bin/env python2.2
 ##  $Id$
 ## 
 ##  Flexlay - A Generic 2D Game Editor
@@ -21,6 +22,8 @@ from flexlay import *
 from sexpr   import *
 import ConfigParser
 import os
+import sys
+from optparse import OptionParser
 
 game_objects = [["money", "images/shared/jumpy-left-middle-0.png"],
                 ["snowball", "images/shared/snowball-left-0.png"],
@@ -327,7 +330,34 @@ def load_supertux_tiles():
     load_game_tiles(tileset, "/home/ingo/cvs/supertux/supertux/data/images/tilesets/supertux.stgt")
     return tileset 
 
+def has_element(lst, el):
+    for i in lst:
+        if i == el:
+            return True
+    return False
+
+def supertux_load_level(filename):   
+    print "Loading: ", filename
+    level = SuperTuxLevel(filename)
+    level.activate(workspace)
+    connect(level.editormap.sig_change(), on_map_change)
+    
+    if not(has_element(config.recent_files, filename)):
+        config.recent_files.append(filename)
+        recent_files_menu.add_item(mysprite, filename, lambda: supertux_load_level(filename))
+
+    minimap.update_minimap()
+
 # Begin: Main loop
+parser = OptionParser()
+parser.add_option("-f", "--file", dest="filename",
+                  help="write report to FILE", metavar="FILE")
+parser.add_option("-q", "--quiet",
+                  action="store_false", dest="verbose", default=True,
+                  help="don't print status messages to stdout")
+
+(options, args) = parser.parse_args()
+
 print "SUperTUX"
 flexlay = Flexlay()
 flexlay.init()
@@ -365,10 +395,21 @@ def on_map_change():
     else:
         redo_icon.disable()        
 
-startlevel = SuperTuxLevel(100, 50)
-# startlevel = netpanzer.Level(256, 256)
-startlevel.activate(workspace)
-connect(startlevel.editormap.sig_change(), on_map_change)
+mysprite = make_sprite("../data/images/icons16/stock_paste-16.png")
+
+recent_files_menu = Menu(CL_Point(32*2, 54), gui.get_component())
+for filename in config.recent_files:
+    recent_files_menu.add_item(mysprite, filename, lambda: supertux_load_level(filename))
+
+minimap = Minimap(editor_map, CL_Rect(CL_Point(3, 488+3-14), CL_Size(794-134-16, 50)), editor_map)
+
+if args == []:
+    startlevel = SuperTuxLevel(100, 50)
+    # startlevel = netpanzer.Level(256, 256)
+    startlevel.activate(workspace)
+    connect(startlevel.editormap.sig_change(), on_map_change)
+else:
+    supertux_load_level(args[0])
 
 button_panel = Panel(CL_Rect(CL_Point(0, 23), CL_Size(800, 33)), gui.get_component())
 
@@ -464,7 +505,7 @@ background_icon  = Icon(CL_Rect(CL_Point(p.inc(32), 2), CL_Size(32, 32)),
 eye_icon         = Icon(CL_Rect(CL_Point(p.inc(32), 2), CL_Size(32, 32)),
                         make_sprite("../data/images/icons24/eye.png"), "Some tooltip", button_panel);
 
-layer_menu = Menu(CL_Point(32*11+2, 54), gui.get_component())
+layer_menu = Menu(CL_Point(32*15+2, 54), gui.get_component())
 
 def set_tilemap_paint_tool():
     workspace.set_tool(tilemap_paint_tool.to_tool())
@@ -574,8 +615,6 @@ interactive_icon.set_callback(gui_show_interactive)
 background_icon.set_callback(gui_show_background)
 eye_icon.set_callback(layer_menu.run)
 
-mysprite = make_sprite("../data/images/icons16/stock_paste-16.png")
-
 layer_menu.add_item(mysprite, "Show all", gui_show_all)
 layer_menu.add_item(mysprite, "Show current", gui_show_current)
 layer_menu.add_item(mysprite, "Show only current", gui_show_only_current)
@@ -595,30 +634,8 @@ def menu_file_open():
 def supertux_save_level(filename):
     workspace.get_map().get_metadata().save(filename)
 
-recent_files_menu = Menu(CL_Point(32*2, 54), gui.get_component())
-for filename in config.recent_files:
-    recent_files_menu.add_item(mysprite, filename, lambda: supertux_load_level(filename))
-
-def has_element(lst, el):
-    for i in lst:
-        if i == el:
-            return True
-    return False
-
 def netpanzer_load_level(filename):
     NetPanzerFileStruct(filename)
-
-def supertux_load_level(filename):   
-    print "Loading: ", filename
-    level = SuperTuxLevel(filename)
-    level.activate(workspace)
-    connect(level.editormap.sig_change(), on_map_change)
-    
-    if not(has_element(config.recent_files, filename)):
-        config.recent_files.append(filename)
-        recent_files_menu.add_item(mysprite, filename, lambda: supertux_load_level(filename))
-
-    minimap.update_minimap()
 
 menu = CL_Menu(gui.get_component())
 menu.add_item("File/Open...", gui_level_load)
@@ -653,8 +670,6 @@ mymenu.add_item(mysprite, "Foobar", None)
 mymenu.add_item(mysprite, "blubaoeuau aueau aeu", None)
 mymenu.add_item(mysprite, "bla", None)
 
-minimap = Minimap(editor_map, CL_Rect(CL_Point(3, 488+3-14), CL_Size(794-134-16, 50)), editor_map)
-
 load_dialog = SimpleFileDialog("Load SuperTux Level", "Load", "Cancel", gui.get_component())
 load_dialog.set_filename(config.datadir + "levels/")
 save_dialog = SimpleFileDialog("Save SuperTux Level as...", "Save", "Cancel", gui.get_component())
@@ -668,6 +683,8 @@ gui_show_current()
 set_tilemap_paint_tool()
 
 gui.run()
+
+del config
 
 flexlay.deinit()
 print "deinit done"

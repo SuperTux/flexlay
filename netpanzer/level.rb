@@ -17,6 +17,8 @@
 ##  along with this program; if not, write to the Free Software
 ##  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
+require "gameobjects.rb"
+
 class Level
   attr_accessor :filename, :data, :editormap, :objects
 
@@ -40,24 +42,31 @@ class Level
   end
 
   def save_optfile(filename)
-    outposts = [] # FIXME
-    
+    outposts = @objects.get_objects().
+      find_all {|obj| obj.get_data().is_a? GameObjects::Outpost }.
+      map {|obj| obj.get_data() }    
+
     f = open(filename, "w")
     f.write("ObjectiveCount: %d\n\n" % outposts.length)
-    outposts.each {|name, x , y|
-        f.write("Name: %s\n" % "Foobar")
-      f.write("Location: %d %d\n\n" % x.to_i/32, y.to_i/32)
+    outposts.each {|obj|
+      f.write("Name: %s\n" % obj.name)
+      f.write("Location: %d %d\n\n" % [obj.x, obj.y])
     }
+    f.close()
   end
 
   def save_spnfile(filename)
-    spawnpoints = []
+    spawnpoints = @objects.get_objects().
+      find_all {|obj| obj.get_data().is_a? GameObjects::SpawnPoint }.
+      map {|obj| obj.get_data() }
+
     f = open(filename, "w")
 
     f.write("SpawnCount: %d\n\n" % spawnpoints.length)
-    spawnpoints.each {|x, y|
-      f.print("Location: %d %d\n" % [x.to_i/32, y.to_i/32])
+    spawnpoints.each {|obj|
+      f.print("Location: %d %d\n" % [obj.x, obj.y])
     }
+    f.close()
   end
 
   def save(filename)

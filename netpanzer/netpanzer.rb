@@ -65,7 +65,7 @@ def on_object_drop(brush, pos)
   obj = get_ruby_object(brush.get_data()).call()
   pos = $editor_map.screen2world(pos)
   sprite_obj = ObjMapSpriteObject.new(obj.class.get_sprite(), pos, make_metadata(obj))
-  obj.data = obj
+  obj.data = sprite_obj
   
   cmd = ObjectAddCommand.new(get_ruby_object($workspace.get_map().get_metadata()).objects)
   cmd.add_object(sprite_obj.to_object)
@@ -180,14 +180,20 @@ def set_tilemap_paint_tool()
   $select.set_up()
   $zoom.set_up()
   $object.set_up()
+
+  $brushbox.show(true)
+  $objectselector.show(false)
 end
 
 def set_tilemap_select_tool()
   $workspace.set_tool($tilemap_select_tool.to_tool())
   $paint.set_up()
-   $select.set_down()
+  $select.set_down()
   $zoom.set_up()
   $object.set_up()
+
+  $brushbox.show(false)
+  $objectselector.show(false)
 end
 
 def set_zoom_tool()
@@ -196,6 +202,9 @@ def set_zoom_tool()
   $select.set_up()
   $zoom.set_down()
   $object.set_up()
+
+  $brushbox.show(false)
+  $objectselector.show(false)
 end
 
 def set_objmap_select_tool()
@@ -204,6 +213,9 @@ def set_objmap_select_tool()
   $select.set_up()
   $zoom.set_up()
   $object.set_down()
+
+  $brushbox.show(false)
+  $objectselector.show(true)
 end
 
 $toolbar = Panel.new(CL_Rect.new(CL_Point.new(0, 23+33), CL_Size.new(33, 32*4+2)), $gui.get_component())
@@ -227,16 +239,15 @@ def netpanzer_load_level(filename)
   level.activate($workspace)
   connect(level.editormap.sig_change(), proc{on_map_change})
   
-  if not(has_element(config.recent_files, filename))
-    config.recent_files.append(filename)
-    recent_files_menu.add_item(mysprite, filename, proc{ netpanzer_load_level(filename) })
-
-    minimap.update_minimap()
-  end
+#  if not(has_element($config.recent_files, filename))
+#    $config.recent_files.push(filename)
+#    recent_files_menu.add_item(mysprite, filename, proc{ netpanzer_load_level(filename) })
+#  end
+  $minimap.update_minimap()
 end
 
 def netpanzer_save_level(filename)
-  $workspace.get_map().get_metadata().save(filename)
+  get_ruby_object($workspace.get_map().get_metadata()).save(filename)
 end
 
 recent_files_menu = Menu.new(CL_Point.new(32*2, 54), $gui.get_component())
@@ -250,7 +261,7 @@ def has_element(lst, el)
       return True
     end
   }
-  return False
+  return false
 end
 
 menu = CL_Menu.new($gui.get_component())
@@ -273,7 +284,7 @@ menu.add_item("Zoom/2:1 (200%) ", proc{ gui_set_zoom(2.0) })
 menu.add_item("Zoom/4:1 (400%) ", proc{ gui_set_zoom(4.0) })
 
 # minimap_panel = Panel(CL_Rect(CL_Point(0, 600-56), CL_Size(800-134, 56)), $gui.get_component())
-minimap = Minimap.new($editor_map, CL_Rect.new(CL_Point.new(3, 488+56 - 128-3), CL_Size.new(128, 128)), $option_panel)
+$minimap = Minimap.new($editor_map, CL_Rect.new(CL_Point.new(3, 488+56 - 128-3), CL_Size.new(128, 128)), $option_panel)
 
 $load_dialog = SimpleFileDialog.new("Load netPanzer Level", "Load", "Cancel", $gui.get_component())
 $load_dialog.set_filename($config.datadir + "maps/")

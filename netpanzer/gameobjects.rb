@@ -19,16 +19,50 @@
 
 module GameObjects
   class GameObject
-    attr_accessor :data
+    attr_reader :data
+    
+    def data=(data)
+      @data = data
+      connect_v1_ObjMapObject(@data.to_object.sig_move(), method(:on_move))
+    end
+
+    def on_move(data)
+      pos = @data.to_object.get_pos()
+      pos.x = (((pos.x+16)/32).to_i)*32
+      pos.y = (((pos.y+16)/32).to_i)*32
+      @data.to_object.set_pos(pos)
+    end
   end
 
   class Outpost < GameObject
+    attr_accessor :name
+
+    def initialize()
+      @name = "Foobar"
+    end
+
+    def x()
+      return (@data.to_object.get_pos.x()/32).to_i
+    end
+
+    def y()
+      return (@data.to_object.get_pos.y()/32).to_i
+    end
+
     def Outpost.get_sprite()
       return make_sprite_from_resource("sprites/outpost", $resources)
     end
   end
   
   class SpawnPoint < GameObject
+    def x()
+      return (@data.to_object.get_pos.x()/32).to_i
+    end
+
+    def y()
+      return (@data.to_object.get_pos.y()/32).to_i
+    end
+
     def SpawnPoint.get_sprite()
       return make_sprite_from_resource("sprites/spawnpoint", $resources)
     end

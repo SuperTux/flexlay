@@ -1,4 +1,4 @@
-//  $Id: windstille_bonus.hxx,v 1.1 2003/11/05 22:44:49 grumbel Exp $
+//  $Id: windstille_bonus.hxx,v 1.2 2003/11/06 10:32:22 grumbel Exp $
 // 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -33,6 +33,9 @@ private:
   CL_Sprite sprite;
   CL_Point pos;
 
+  float fadeout_value;
+  enum { FADEIN, RUNNING, FADEOUT } state;
+
   typedef std::vector<std::string> Names;
   Names lst;
 public:
@@ -41,6 +44,8 @@ public:
   
   void draw();
   void update(float delta);
+
+  void quit();
 
   void on_startup();
   void on_shutdown();

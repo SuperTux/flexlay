@@ -736,6 +736,8 @@
     <sprite name="walkinggun"><image file="images/bonus/walkinggun.jpg" /></sprite>
     <sprite name="wallgen"><image file="images/bonus/wallgen.jpg" /></sprite>
     <sprite name="waterrunner"><image file="images/bonus/waterrunner.jpg" /></sprite>
-    <sprite name="worm"><image file="images/bonus/worm.jpg" /></sprite>
   </section>  
+
+  <sprite name="bonus_end"><image file="images/bonus/bonus_end.jpg" /></sprite>
+
 </resources>

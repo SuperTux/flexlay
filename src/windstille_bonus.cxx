@@ -1,4 +1,4 @@
-//  $Id: windstille_bonus.cxx,v 1.3 2003/11/06 09:53:43 grumbel Exp $
+//  $Id: windstille_bonus.cxx,v 1.4 2003/11/06 10:32:22 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -35,7 +35,11 @@ WindstilleBonus::WindstilleBonus()
   std::copy(llst.begin(), llst.end(), std::back_inserter(lst));
   std::random_shuffle(lst.begin(), lst.end());
 
+  lst.push_back("bonus_end");
+
   index = 0;
+  state = FADEIN;
+  fadeout_value = 0;
   passed_time = 0;
   pos.x = rand()%400 + 200;
   pos.y = rand()%300 + 150;
@@ -50,14 +54,12 @@ WindstilleBonus::~WindstilleBonus()
 void
 WindstilleBonus::draw()
 {
-  CL_Display::clear();
-  /*CL_Display::clear(CL_Color(int(255 * std::max(0.0f, std::min(1.0f, 1.5f - passed_time/2.0f))),
-                             int(255 * std::max(0.0f, std::min(1.0f, 1.5f - passed_time/2.0f))),
-                             int(255 * std::max(0.0f, std::min(1.0f, 1.5f - passed_time/2.0f))),
-                             255));*/
-
-  sprite.draw(pos.x, pos.y);
-
+  //CL_Display::clear();
+  CL_Display::fill_rect(CL_Rect(0, 0, CL_Display::get_width(), CL_Display::get_height()),
+                        CL_Gradient(CL_Color(0,0,0),
+                                    CL_Color(0,0,100),
+                                    CL_Color(0,0,100),
+                                    CL_Color(0,0,50)));
   {
     CL_Font font = Fonts::dialog;
     font.set_alignment(origin_top_left);
@@ -66,45 +68,100 @@ WindstilleBonus::draw()
     font.draw(CL_Display::get_width() - 20,
               CL_Display::get_height() - 20, "You'll never know...");
   }
+  
+  if (state == RUNNING || state == FADEOUT)
+    sprite.draw(pos.x, pos.y);
 
+  switch (state)
+    {
+    case FADEOUT:
+      CL_Display::fill_rect(CL_Rect(0, 0, 
+                                    CL_Display::get_width(), CL_Display::get_height()),
+                            CL_Color(0,0,0, std::min(int(fadeout_value*255), 255)));
+      break;
+    case FADEIN:
+      CL_Display::fill_rect(CL_Rect(0, 0, 
+                                    CL_Display::get_width(), CL_Display::get_height()),
+                            CL_Color(0,0,0, 255-std::min(int(fadeout_value*255), 255)));
+      break;
+    default:
+      break;
+    }
   CL_Display::flip();
 }
 
 void
 WindstilleBonus::update(float delta)
 {
-  if (CL_Keyboard::get_keycode(CL_KEY_ESCAPE))
-    quit();
-
-  passed_time += delta;
-
-  if (passed_time > 1.85f)
+  switch (state)
     {
-      index += 1;
+    case FADEIN:
+      if (fadeout_value > 1.0f)
+        {
+          state = RUNNING;
+          MusicManager::current()->play(datadir + "music/Windstille_Ralph_Weinert.ogg", true);
+        }
+      fadeout_value += delta;
+      break;
 
-      if (index < int(lst.size()))
+    case FADEOUT:
+      if (fadeout_value > 1.0f)
+        Screen::quit();
+
+      fadeout_value += delta;
+      break;
+
+    case RUNNING:
+      if (CL_Keyboard::get_keycode(CL_KEY_ESCAPE))
+        quit();
+
+      passed_time += delta;
+
+      if (passed_time > 1.85f)
         {
-          passed_time = 0;
-          sprite = CL_Sprite(lst[index], resources);
-          sprite.set_alignment(origin_center);
-          pos.x = rand()%400 + 200;
-          pos.y = rand()%300 + 150;
+          index += 1;
+
+          if (index < int(lst.size()))
+            {
+              passed_time = 0;
+              sprite = CL_Sprite(lst[index], resources);
+              sprite.set_alignment(origin_center);
+
+              if (index == int(lst.size()) - 1)
+                {
+                  pos.x = 400;
+                  pos.y = 300;
+                }
+              else
+                {
+                  pos.x = rand()%400 + 200;
+                  pos.y = rand()%300 + 150;
+                }
+            }
+          else
+            {
+              quit();
+            }
         }
-      else
-        {
-          quit();
-        }
+
+      sprite.set_scale(1.0f + passed_time/3.0f,
+                       1.0f + passed_time/3.0f);
+      sprite.set_alpha(std::max(0.0f, std::min(1.0f, 1.0f - passed_time/1.85f)));
+      break;
     }
+}
 
-  sprite.set_scale(1.0f + passed_time/3.0f,
-                   1.0f + passed_time/3.0f);
-  sprite.set_alpha(std::max(0.0f, std::min(1.0f, 1.0f - passed_time/1.85f)));
+void
+WindstilleBonus::quit()
+{
+  state = FADEOUT;
+  fadeout_value = 0;
 }
 
 void
 WindstilleBonus::on_startup()
 {
-  MusicManager::current()->play(datadir + "music/Windstille_Ralph_Weinert.ogg", true);
+  MusicManager::current()->stop();
 }
 
 void

@@ -119,8 +119,8 @@ void            editor_tilemap_set_fgcolor(EditorMapLayer* l, int r, int g, int 
 void            editor_tilemap_save_png(EditorMapLayer* l, const char* filename);
 
 Tileset* tileset_create();
-
 void tileset_add_tile(Tileset* tileset, SCM data);
+void tileset_set_current(Tileset* tileset);
 
 #endif
 

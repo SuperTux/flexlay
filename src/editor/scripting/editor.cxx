@@ -926,4 +926,10 @@ tileset_add_tile(Tileset* tileset, SCM data)
   }
 }
 
+void
+tileset_set_current(Tileset* tileset)
+{
+  Tileset::set_current(tileset);
+}
+
 /* EOF */

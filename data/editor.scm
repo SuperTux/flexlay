@@ -313,7 +313,12 @@
   (set! *menu* (gui-create-menu))
   (let ((menu *menu*))
     ;; File Menu
-    (gui-add-menu-item menu "File/New.."  show-new-level-dialog)
+    (case *game*
+      ((supertux)
+       (gui-add-menu-item menu "File/New/Level..."  show-new-level-dialog)
+       (gui-add-menu-item menu "File/New/Worldmap..."  show-new-level-dialog))
+      (else
+       (gui-add-menu-item menu "File/New.."  show-new-level-dialog)))
 
     (for-each (lambda (level)
                 (gui-add-menu-item menu (string-append "File/Open Recent >/" (basename level))

@@ -102,6 +102,23 @@
            #:init-keyword #:tilemap
            #:accessor stwm:tilemap))
 
+(define-generic supertux:activate)
+
+(define-method (supertux:activate (stwm <supertux-worldmap>))
+  (let ((tilemap (stwm:tilemap stwm)))
+    (tilemap-paint-tool-set-tilemap tilemap)
+    (set! *tilemap* tilemap)
+    (editor-tilemap-set-current tilemap)
+    (tileset-set-current *worldmap-tileset*)))
+
+(define-method (supertux:activate (stlv <supertux-level>))
+  (tilemap-paint-tool-set-tilemap (supertux:interactive-tm stlv))
+  (editor-tilemap-set-current     (supertux:interactive-tm stlv))
+  (editor-objectmap-set-current   (supertux:objmap stlv))
+  (set! *tilemap* (supertux:interactive-tm stlv))
+  (set! *objmap* (supertux:objmap stlv))
+  (tileset-set-current *level-tileset*))
+
 (define (supertux:new-map width height)
   (let ((levelmap (supertux:create-levelmap width height)))
     (editor-map-component-set-map *editor-map* levelmap)
@@ -124,16 +141,7 @@
     (editor-map-add-layer levelmap (supertux:foreground-tm  level))
     (editor-map-add-layer levelmap (supertux:objmap         level))
 
-    ;; FIXME: Log this to a tilemap?
-;;    (editor-map-add-layer levelmap (editor-grid-layer-create width height *tile-size*))
-
-    ;; FIXME: this doesn't look all that nice here
-    (tilemap-paint-tool-set-tilemap (supertux:interactive-tm level))
-    (editor-tilemap-set-current     (supertux:interactive-tm level))
-    (editor-objectmap-set-current   (supertux:objmap level))
-    (set! *tilemap* (supertux:interactive-tm level))
-    (set! *objmap* (supertux:objmap level))
-
+    (supertux:activate level)
     (editor-toggle-grid *tilemap*)
     
     (editor-map-set-filename levelmap "/tmp/foobar.stlv")
@@ -314,14 +322,9 @@
     (format #t "Size: ~ax~a~%" width height)
     (editor-tilemap-set-data tilemap (get-value-from-tree '(tilemap data) data '()))
     (editor-map-add-layer m tilemap)
-;;    (editor-map-add-layer levelmap (editor-grid-layer-create width height *tile-size*))
     (editor-map-set-metadata m stwm)
-
-    ;; FIXME: this doesn't look all that nice here
-    (tilemap-paint-tool-set-tilemap tilemap)
-    (set! *tilemap* tilemap)
-    (editor-tilemap-set-current tilemap)
     (editor-toggle-grid *tilemap*)
+    (supertux:activate stwm)
     m))
 
 (define-method (supertux:save-map (stwm <supertux-worldmap>) filename)
@@ -445,11 +448,7 @@
 
         (editor-map-add-layer m (supertux:objmap         level))
 
-        ;; FIXME: this doesn't look all that nice here
-        (tilemap-paint-tool-set-tilemap (supertux:interactive-tm level))
-        (editor-tilemap-set-current     (supertux:interactive-tm level))
-        (editor-objectmap-set-current (supertux:objmap level))
-        (set! *tilemap* (supertux:interactive-tm level))
+        (supertux:activate level)
 
         (editor-map-set-filename m filename)
         (editor-map-set-metadata m level)

@@ -25,6 +25,7 @@
 #include "objmap_sprite_object.hxx"
 #include "objmap_control_point.hxx"
 #include "object_layer.hxx"
+#include "editor_map_component.hxx"
 #include "layer_impl.hxx"
 
 ObjectLayer ObjectLayer::current_;
@@ -57,7 +58,9 @@ ObjectLayerImpl::draw(EditorMapComponent* parent, CL_GraphicContext* gc)
 {
   for(ObjectLayer::Objects::iterator i = objects.begin(); i != objects.end(); ++i)
     {
-      (*i).draw(gc);
+      // FIXME: Add clipping here
+      if (parent->get_clip_rect().is_overlapped((*i).get_bound_rect()))
+        (*i).draw(gc);
     }
 
   for(ObjectLayer::ControlPoints::iterator i = control_points.begin(); i != control_points.end(); ++i)

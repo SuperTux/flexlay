@@ -24,6 +24,7 @@
 #include <ClanLib/Display/sprite.h>
 #include <ClanLib/Display/pixel_buffer.h>
 #include "shared_ptr.hxx"
+#include "tile_provider.hxx"
 
 class TileImpl;
 
@@ -32,6 +33,8 @@ class TileImpl;
 class Tile
 {
 public:
+  Tile(const TileProvider& provider);
+  
   Tile(const CL_PixelBuffer& pixelbuffer);
 
   Tile(const CL_PixelBuffer& pixelbuffer,
@@ -49,6 +52,7 @@ public:
       delete the pixelbuffer, the Tile will take care of that */
   CL_PixelBuffer get_pixelbuffer();
 
+  // FIXME: Document all those functions
   CL_Color   get_color();
   CL_Color   get_attribute_color();
 

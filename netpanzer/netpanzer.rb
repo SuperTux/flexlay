@@ -28,8 +28,10 @@ require "netpanzerbrushes.rb"
 require "level.rb"
 require "gameobjects.rb"
 
+$screen = CL_Size.new(1024, 768)
+
 flexlay = Flexlay.new()
-flexlay.init()
+flexlay.init($screen.width, $screen.height)
 
 $config = Config.new()
 
@@ -39,18 +41,18 @@ load_netpanzer_tiles($tileset)
 $editor = Editor.new()
 $gui = $editor.get_gui_manager()
 
-myrect = CL_Rect.new(CL_Point.new(0, 56), CL_Size.new(665, 488+56))
+myrect = CL_Rect.new(CL_Point.new(0, 56), CL_Size.new($screen.width-134-1, ($screen.height-112)+56))
 $editor_map = EditorMapComponent.new(myrect, $gui.get_component())
 $workspace  = Workspace.new(myrect.get_width(), myrect.get_height())
 $editor_map.set_workspace($workspace)
 
-$option_panel = Panel.new(CL_Rect.new(CL_Point.new(666, 56), CL_Size.new(134, 488+56)), $gui.get_component())
+$option_panel = Panel.new(CL_Rect.new(CL_Point.new($screen.width-134, 56), CL_Size.new(134, $screen.height-112+56)), $gui.get_component())
 
-$brushbox = CL_ListBox.new(CL_Rect.new(CL_Point.new(3, 3), CL_Size.new(128, 488+56-128-9)), $option_panel)
+$brushbox = CL_ListBox.new(CL_Rect.new(CL_Point.new(3, 3), CL_Size.new(128, $screen.height-112+56-128-9)), $option_panel)
 $brushbox.show(false)
 
-$objectselector = ObjectSelector.new(CL_Rect.new(CL_Point.new(3, 3), CL_Size.new(128, 488+56-128-9)),
-                                     42, 42, $option_panel)
+$objectselector = ObjectSelector.new(CL_Rect.new(CL_Point.new(3, 3), CL_Size.new(128, $screen.height-112+56-128-9)),
+                                     64, 64, $option_panel)
 
 $resources = CL_ResourceManager.new("netpanzersprites.xml")
 
@@ -60,7 +62,7 @@ $objectselector.add_brush(ObjectBrush.new(GameObjects::SpawnPoint.get_sprite(),
                                           make_metadata(proc{GameObjects::SpawnPoint.new()})))
 
 $brushes.size.times {|i|
-  $objectselector.add_brush(ObjectBrush.new(make_sprite("sprites/#{i}.png"),
+  $objectselector.add_brush(ObjectBrush.new(make_sprite("thumbnails/#{i}.png"),
                                             make_metadata(proc{GameObjects::TileObject.new(i)})))
 }
 
@@ -116,13 +118,26 @@ def on_map_change()
 #   end
 end
 
-$startlevel = Level.new(256, 256)
-$startlevel.activate($workspace)
-connect($startlevel.editormap.sig_change(), proc{on_map_change})
+# $startlevel = Level.new(256, 256)
+# $startlevel.activate($workspace)
+# connect($startlevel.editormap.sig_change(), proc{on_map_change})
 
 def gui_level_save_as()
   $save_dialog.set_filename(File::dirname($save_dialog.get_filename()) + "/")
   $save_dialog.run(method(:netpanzer_save_level))
+end
+
+def gui_level_new()
+  dialog = GenericDialog.new("SecretArea Property Dialog", $gui.get_component())
+  dialog.add_string("Name: ", "New Level")
+  dialog.add_int("Width: ", 128)
+  dialog.add_int("Height: ", 128)
+  dialog.set_callback(proc{|name, width, height|
+                        level = Level.new(width, height)
+                        level.activate($workspace)
+                        level.name = name
+                        connect(level.editormap.sig_change(), proc{on_map_change})
+                      })
 end
 
 def gui_level_save()
@@ -139,7 +154,7 @@ def gui_level_load()
   $load_dialog.run(method(:netpanzer_load_level))
 end
 
-$button_panel = ButtonPanel.new(0, 23, 800, 33, true, $gui.get_component)
+$button_panel = ButtonPanel.new(0, 23, $screen.width, 33, true, $gui.get_component)
 
 $button_panel.add_icon("../data/images/icons24/stock_new.png",
                        proc{ gui_level_new() })
@@ -270,6 +285,7 @@ def has_element(lst, el)
 end
 
 menu = CL_Menu.new($gui.get_component())
+menu.add_item("File/New...", proc{gui_level_new})
 menu.add_item("File/Open...", proc{gui_level_load})
 menu.add_item("File/Save...", proc{gui_level_save})
 menu.add_item("File/Save As...", proc{gui_level_save_as})
@@ -304,8 +320,11 @@ menu.add_item("Zoom/1:1 (100%) ", proc{ gui_set_zoom(1.0) })
 menu.add_item("Zoom/2:1 (200%) ", proc{ gui_set_zoom(2.0) })
 menu.add_item("Zoom/4:1 (400%) ", proc{ gui_set_zoom(4.0) })
 
+menu.add_item("Scripts/Flatten",  proc{ $workspace.get_map().get_data().flatten() })
+menu.add_item("Scripts/Unflatten",  proc{ $workspace.get_map().get_data().unflatten() })
+
 # minimap_panel = Panel(CL_Rect(CL_Point(0, 600-56), CL_Size(800-134, 56)), $gui.get_component())
-$minimap = Minimap.new($editor_map, CL_Rect.new(CL_Point.new(3, 488+56 - 128-3), CL_Size.new(128, 128)), $option_panel)
+$minimap = Minimap.new($editor_map, CL_Rect.new(CL_Point.new(3, ($screen.height-112)+56 - 128-3), CL_Size.new(128, 128)), $option_panel)
 
 $load_dialog = SimpleFileDialog.new("Load netPanzer Level", "Load", "Cancel", $gui.get_component())
 $load_dialog.set_filename($config.datadir + "maps/")
@@ -313,6 +332,8 @@ $save_dialog = SimpleFileDialog.new("Save netPanzer Level as...", "Save", "Cance
 $save_dialog.set_filename($config.datadir + "maps/")
 
 set_tilemap_paint_tool()
+
+gui_level_new()
 
 # generate_sprites()
 $gui.run()

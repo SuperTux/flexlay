@@ -47,14 +47,21 @@ class Level
     @editormap.set_data(self)
   end
 
+  def name()
+    return @data.get_name()
+  end
+
+  def name=(name)
+    @data.set_name(name)
+  end
+
   def load_optfile(filename)
     f = File.new(filename)
     count = /ObjectiveCount: ([0-9]+)/.match(f.readline().chop)[1].to_i
-    f.readline() # Skip empty line
     count.times{|i|
+      f.readline() # Skip empty line
       name = /Name: (.+)/.match(f.readline().chop)
       loc  = /Location: ([0-9]+) ([0-9]+)/.match(f.readline().chop)
-      f.readline() # Skip empty line
       GameObjects::Outpost.create(@objects,
                                   name,
                                   loc[1].to_i, loc[2].to_i)
@@ -65,7 +72,6 @@ class Level
   def load_spnfile(filename)
     f = File.new(filename)
     count = /SpawnCount: ([0-9]+)/.match(f.readline().chop)[1].to_i
-    f.readline() # Skip empty line
     count.times{|i|
       loc  = /Location: ([0-9]+) ([0-9]+)/.match(f.readline().chop)
       GameObjects::SpawnPoint.create(@objects,
@@ -95,7 +101,7 @@ class Level
 
     f = open(filename, "w")
 
-    f.write("SpawnCount: %d\n\n" % spawnpoints.length)
+    f.write("SpawnCount: %d\n" % spawnpoints.length)
     spawnpoints.each {|obj|
       f.print("Location: %d %d\n" % [obj.x, obj.y])
     }
@@ -114,16 +120,37 @@ class Level
     end
   end
 
-  def flatten()
-    @objects.get_objects().each { |obj|
-      obj.get_data().draw_to_tilemap(@tilemap)
-    }
-  end
-
   def activate(workspace)
     $workspace.set_map(@editormap)
     TilemapLayer.set_current(@data.get_tilemap())
     ObjectLayer.set_current(@objects)
+  end
+
+
+  def flatten()
+    # Converts all objects to the Tilemap
+    @objects.get_objects().each { |obj|
+      obj.get_data().draw_to_tilemap(@tilemap)
+    }
+  end
+  
+  def unflatten()
+    # Reconstructs objects from the Tilemap
+    data   = @tilemap.get_data()
+    width  = @tilemap.get_width()
+    height = @tilemap.get_height()
+    first_tiles = {}
+    $brushes.each_with_index{|i,index| first_tiles[i[0]] = index }
+
+    (0..height-1).each{|y|
+      (0..width-1).each{|x|
+        tile = data[width*y + x]
+        if tile != 0 && first_tiles.has_key?(tile) then
+          # Insert checking for dups here
+          GameObjects::TileObject.create(@objects, first_tiles[data[width*y + x]], x, y)
+        end
+      }
+    }
   end
 end
 

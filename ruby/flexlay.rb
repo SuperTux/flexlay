@@ -140,8 +140,10 @@ class SimpleFileDialog
   
   def run(func)
     connect(@ok_button.sig_clicked(), method(:on_ok))
+    connect(@inputbox.sig_return_pressed(), method(:on_ok))
     connect(@cancel_button.sig_clicked(), method(:on_cancel))
     @callback = func
+    @inputbox.set_focus()
     @window.show()
   end
   

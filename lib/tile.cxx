@@ -48,6 +48,12 @@ public:
   std::string filename;
 };
 
+Tile::Tile(const TileProvider& provider)
+  : impl(new TileImpl())
+{
+  
+}
+
 Tile::Tile(const CL_PixelBuffer& pixelbuffer,
            const CL_Sprite& sprite)
   : impl(new TileImpl())

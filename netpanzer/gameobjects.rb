@@ -83,7 +83,7 @@ module GameObjects
 
       brush = TileBrush.new(width, height)
       brush.set_data(Range.new(start, start + (width*height)-1).to_a)
-      tilemap.draw_tile(brush, CL_Point.new(x(), y()))
+      tilemap.draw_tile(brush, CL_Point.new(x()-18, y()-6))
     end
   end
   
@@ -115,11 +115,6 @@ module GameObjects
   class TileObject < GameObject
     def initialize(brushindex)
       @brushindex = brushindex
-      (start, width, height, @name) = $brushes[brushindex]
-      
-      # FIXME: Could be shared among all TileObjects
-      @brush = TileBrush.new(width, height)
-      @brush.set_data(Range.new(start, start + (width*height)-1).to_a)
     end
 
     def x()
@@ -131,18 +126,23 @@ module GameObjects
     end
 
     def draw_to_tilemap(tilemap)
-      tilemap.draw_tile(@brush, CL_Point.new(x(), y()))
+      (start, width, height, @name) = $brushes[@brushindex]
+      
+      brush = TileBrush.new(width, height)
+      brush.set_data(Range.new(start, start + (width*height)-1).to_a)
+
+      tilemap.draw_tile(brush, CL_Point.new(x(), y()))
     end
 
     def get_sprite()
       sprite = make_sprite("sprites/#{@brushindex}.png")
-      sprite.set_scale(4.0, 4.0)
       return sprite
     end
 
     def TileObject.create(objmap, brushindex, x, y)
       obj = TileObject.new(brushindex)
-      sprite_obj = ObjMapSpriteObject.new(get_sprite(), CL_Pointf.new(x*32, y*32),
+      sprite_obj = ObjMapSpriteObject.new(make_sprite("sprites/#{brushindex}.png"),
+                                          CL_Pointf.new(x*32, y*32),
                                           make_metadata(obj))
       obj.data = sprite_obj
       objmap.add_object(sprite_obj.to_object)

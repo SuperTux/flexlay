@@ -8,6 +8,7 @@ public:
 	CL_Component(CL_Component* parent, CL_StyleManager* style = NULL);
         void show(bool show = true);
        	bool is_visible(bool check_parents = true);
+        void set_focus();
 	void set_size(int new_width, int new_height);
 	void set_position(int new_x, int new_y);
 	const CL_Rect& get_position();
@@ -159,6 +160,8 @@ public:
 		const CL_Rect &pos,
 		CL_Component *parent,
 		CL_StyleManager *style = NULL);
+
+	CL_Signal_v0& sig_return_pressed();
 
 	void set_text(const std::string &text);
 	const std::string &get_text() const;        

@@ -111,6 +111,7 @@ flexlay_lib = libflexlay_env.SharedLibrary(
     'tile.cxx',
     'titlebar.cxx',
     'tile_brush.cxx',
+    'tile_provider.cxx',
     'tile_editor.cxx',
     'tile_selection.cxx',
     'tile_selector.cxx',

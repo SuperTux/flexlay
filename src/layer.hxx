@@ -21,6 +21,7 @@
 #define HEADER_LAYER_HXX
 
 #include <ClanLib/Core/Math/rect.h>
+#include "meta_data.hxx"
 #include "shared_ptr.hxx"
 
 class EditorMapComponent;
@@ -38,6 +39,9 @@ public:
   Layer();
   Layer(SharedPtr<LayerImpl> i);
   ~Layer();
+
+  MetaData get_metadata() const;
+  void     set_metadata(MetaData data_);
 
   void draw(EditorMapComponent* parent);
   bool has_bounding_rect() const;

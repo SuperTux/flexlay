@@ -21,13 +21,18 @@
 #define HEADER_LAYER_IMPL_HXX
 
 #include <ClanLib/Core/Math/rect.h>
+#include "meta_data.hxx"
 
 class EditorMapComponent;
 
 class LayerImpl
 {
-private:
 public:
+  MetaData  data;
+
+  LayerImpl() {}
+  virtual ~LayerImpl() {}
+
   virtual void draw(EditorMapComponent* parent) =0;
   virtual bool has_bounding_rect() const =0;
   virtual CL_Rect get_bounding_rect() { return CL_Rect(); }

@@ -47,6 +47,7 @@ public:
   bool is_null() const;
 
   bool operator==(const ObjMapObject& obj) const;
+  bool operator<(const ObjMapObject& obj) const;
 private:
   SharedPtr<ObjMapObjectImpl> impl;
 };

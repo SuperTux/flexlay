@@ -25,6 +25,13 @@ def assoc_ref(lst, str):
     else:
         return assoc_ref(lst[1:], str)
 
+def sexpr_filter(name, tree):
+    ret = []
+    for i in tree:
+        if i[0] == name:
+            ret.append(i[1:])
+    return ret
+
 def get_value_from_tree(spec, tree, default):
     if spec == []:
         return tree

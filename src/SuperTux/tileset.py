@@ -1,7 +1,7 @@
 from flexlay import *
 from sexpr   import *
 
-def load_game_tiles(tileset, filename):
+def Tileset_load(self, filename):
     "Load game tiles from filename into tileset"
     tree = sexpr_read_from_file(filename)
     tree = tree[1:]
@@ -15,9 +15,10 @@ def load_game_tiles(tileset, filename):
                 image = get_value_from_tree(['images', '_'], data, "notile.png")
 
             if id != 0: # leave tile 0 transparent
-                tileset.add_tile(id,
-                                 Tile(config.datadir + 'images/tilesets/' + image,
+                self.add_tile(id,
+                              Tile(config.datadir + 'images/tilesets/' + image,
                                       CL_Color(255,   0,   0, 128)))
-                
+Tileset.load = Tileset_load
+del Tileset_load
 
 # EOF #

@@ -96,4 +96,10 @@ ObjMapObject::operator==(const ObjMapObject& obj) const
   return impl.get() == obj.impl.get();
 }
 
+bool
+ObjMapObject::operator<(const ObjMapObject& obj) const
+{
+  return impl.get() < obj.impl.get();
+}
+
 /* EOF */

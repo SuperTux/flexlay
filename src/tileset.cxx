@@ -64,11 +64,6 @@ Tileset::Tileset(int tile_size_)
   impl->tile_size = tile_size_;
 }
 
-Tileset::Tileset(const Tileset& copy)
-  : impl(copy.impl)
-{
-}
-
 Tileset::~Tileset()
 {
 }

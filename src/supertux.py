@@ -252,6 +252,9 @@ connect_v2(editor_map.sig_on_key("6"),  lambda x, y: editor_map.zoom_out(CL_Poin
 connect_v2(editor_map.sig_on_key("i"),  lambda x, y: insert_path_node(x,y))
 connect_v2(editor_map.sig_on_key("c"),  lambda x, y: connect_path_nodes())
 
+connect_v2(editor_map.sig_on_key("7"),  lambda x, y: workspace.get_map().get_metadata().activate_sector("main", workspace))
+connect_v2(editor_map.sig_on_key("8"),  lambda x, y: workspace.get_map().get_metadata().activate_sector("another_world", workspace))
+
 gui.run()
 
 del config

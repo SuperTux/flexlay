@@ -39,8 +39,6 @@ public:
       scripting to it */
   explicit Tileset(int tile_size_);
 
-  Tileset(const Tileset& copy);
-
   ~Tileset();
 
   /** Check if the tile is already loaded and return it. If it is not

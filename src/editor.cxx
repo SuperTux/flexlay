@@ -32,8 +32,6 @@
 
 Editor::Editor()
 {
-  current_ = this;
-
   manager      = new GUIManager();
 }
 

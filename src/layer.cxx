@@ -59,4 +59,20 @@ Layer::get_bounding_rect()
     return CL_Rect();
 }
 
+MetaData
+Layer::get_metadata() const
+{
+  if (impl.get())
+    return impl->data; 
+  else
+    return MetaData();
+}
+
+void
+Layer::set_metadata(MetaData data_)
+{
+  if (impl.get())
+    impl->data = data_;
+}
+
 /* EOF */

@@ -13,11 +13,12 @@ print "Config ready: ", config
 execfile("SuperTux/tileset.py")
 execfile("SuperTux/gui.py")
 execfile("SuperTux/shell.py")
+execfile("SuperTux/sector.py")
 execfile("SuperTux/level.py")
 execfile("SuperTux/display_properties.py")
 
 tileset = Tileset(32)
-load_game_tiles(tileset, "/home/ingo/cvs/supertux/supertux/data/images/tilesets/supertux.stgt")
+tileset.load("/home/ingo/cvs/supertux/supertux/data/images/tilesets/supertux.stgt")
 
     
 game_objects = [["money", "images/shared/jumpy-left-middle-0.png"],

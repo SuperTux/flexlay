@@ -27,7 +27,7 @@
 class EditorTile
 {
 public:
-  static void draw (int id, int x, int y, float alpha);
+  static void draw (int id, int x, int y, bool grid, float alpha);
 };
 
 #endif

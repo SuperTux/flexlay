@@ -23,6 +23,7 @@
 #include "../scripting/editor.hxx"
 #include "editor.hxx"
 #include "editor_map.hxx"
+#include "editor_tilemap.hxx"
 #include "minimap.hxx"
 
 Minimap::Minimap(const CL_Point& pos, const CL_Size& size, CL_Component* parent)
@@ -39,16 +40,32 @@ Minimap::Minimap(const CL_Point& pos, const CL_Size& size, CL_Component* parent)
 void
 Minimap::draw()
 {
-  if (0)
+  if (1)
     {
       CL_Display::fill_rect(CL_Rect(CL_Point(0, 0),
                                     CL_Size(get_width(),
                                             get_height())),
-                            CL_Color(255, 0, 255));
+                            CL_Color(200, 200, 200, 225));
     }
 
   int map_width  = map_get_width()  * TILE_SIZE;
   int map_height = map_get_height() * TILE_SIZE;
+
+  CL_Size small_tile(TILE_SIZE * get_width() / map_width + 1,
+                     TILE_SIZE * get_height() / map_height + 1);
+
+  Field<int>* tilemap = editor_get_tilemap()->get_map(1);
+
+  for(int y = 0; y < tilemap->get_height(); ++y)
+    for(int x = 0; x < tilemap->get_width(); ++x)
+      {
+        if (tilemap->at(x, y))
+          CL_Display::fill_rect(CL_Rect(CL_Point((x * TILE_SIZE) * get_width() / map_width,
+                                                 (y * TILE_SIZE) * get_height() / map_height),
+                                        small_tile),
+                                CL_Color(100, 100, 100));
+        CL_Display::flush();
+      }
 
   CL_Rect rect = Editor::current()->get_map()->get_clip_rect();
 

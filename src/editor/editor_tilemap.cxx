@@ -35,8 +35,8 @@ EditorTileMap::EditorTileMap()
   diamond_map = 0;
 
   new_level(80, 30);
-
-  scrolling = false;
+  
+  draw_grid = true;
 }
 
 EditorTileMap::~EditorTileMap()
@@ -92,7 +92,7 @@ EditorTileMap::draw_map(Field<int>* field)
   for (int y = start_y; y < end_y; ++y)
     for (int x = start_x; x < end_x; ++x)
       {
-        EditorTile::draw(field->at(x, y), x * TILE_SIZE, y * TILE_SIZE, alpha);
+        EditorTile::draw(field->at(x, y), x * TILE_SIZE, y * TILE_SIZE, draw_grid, alpha);
       }
 }
 
@@ -231,6 +231,18 @@ EditorTileMap::draw_tile(const TileBrush& brush, const CL_Point& pos)
             current_field->at(pos.x + x, pos.y + y) = brush.at(x, y);
           }
       }
+}
+
+void
+EditorTileMap::set_draw_grid(bool t)
+{
+  draw_grid = t;
+}
+
+bool
+EditorTileMap::get_draw_grid() const
+{
+  return draw_grid;
 }
 
 /* EOF */

@@ -58,7 +58,7 @@ private:
 
   void cleanup();
 public:
-  EditorMap(CL_Component* parent);
+  EditorMap(const CL_Rect& rect, CL_Component* parent);
   ~EditorMap();
 
   void set_tool(int i);
@@ -83,9 +83,6 @@ public:
 
   CL_Rect get_clip_rect();
   
-  int get_width(); 
-  int get_height();
-
   std::vector<std::string> get_scripts() { return scripts; }
 
   CL_Point screen2tile(const CL_Point& pos);

@@ -53,6 +53,7 @@ TileMapSelectTool::on_mouse_up  (const CL_InputEvent& event)
   if (event.id == CL_MOUSE_LEFT)
     {
       active = false;
+      parent->release_mouse();
       update_selection(parent->screen2tile(event.mouse_pos).x + 1,
                        parent->screen2tile(event.mouse_pos).y + 1);
     }
@@ -64,6 +65,7 @@ TileMapSelectTool::on_mouse_down(const CL_InputEvent& event)
   if (event.id == CL_MOUSE_LEFT)
     {
       active = true;
+      parent->capture_mouse();
       click_pos = parent->screen2tile(event.mouse_pos);
     }
   else if (event.id == CL_MOUSE_RIGHT)

@@ -8,15 +8,19 @@
 (define *tileeditor* #f)
 (define *tileeditor-window* #f)
 (define *tileselector-window* #f)
-(define last-files (list *windstille-levelfile*))
+(define *minimap* #f)
+(define *menu*    #f)
+(define *statusbar* #f)
+(define *clipboard* #f)
+(define *recent-files* (list *windstille-levelfile*))
 (define datadir  *windstille-datadir*)
 
 (define (push-last-file filename)
   (cond ((not (string=? filename (get-last-file)))
-         (set! last-files (cons filename last-files)))))
+         (set! *recent-files* (cons filename *recent-files*)))))
 
 (define (get-last-file)
-  (car last-files))
+  (car *recent-files*))
 
 (define (serialize-level)
   `(windstille-level
@@ -89,7 +93,7 @@
                                      (gui-hide-component window)))
 
     (gui-pop-component)))
-    
+
 (define (show-new-level-dialog)
   (let ((window (gui-create-window 200 200 200 160 "Create a New Level...")))
     (gui-push-component (gui-window-get-client-area window))
@@ -114,105 +118,104 @@
                                 (gui-hide-component window)))
       (gui-pop-component))))
 
-(define menu (gui-create-menu))
-;; File Menu
-(gui-add-menu-item menu "File/New.."  show-new-level-dialog)
-(gui-add-menu-item menu "File/Open.." 
-                   (lambda ()
-                     (simple-file-dialog "Load a level..." (get-last-file)
-                                         (lambda (filename)
-                                           (load-map filename)))))
-
-(define *open-history* (list "../data/levels/tuxlevel3.scm"
-                             "../data/levels/tuxlevel2.scm"
-                             "../data/levels/tuxlevel4.scm"))
-
-(for-each (lambda (level)
-            (gui-add-menu-item menu (string-append "File/Open Recent >/" (basename level))
-                               (lambda ()
-                                 (load-map level))))
-          *open-history*)
-
-(gui-add-menu-item menu "File/Save..." 
-                   (lambda ()
-                     (simple-file-dialog "Save a level..." (get-last-file)
-                                         (lambda (filename) 
-                                           (save-map filename)
-                                           (push-last-file filename)))))
-
-(gui-add-menu-item menu "File/Play" 
-                   (lambda ()
-                     (let ((file (tmpnam)))
-                       (save-map file)
-                       (game-play file)
-                       (delete-file file))))
-
-(gui-add-menu-item menu "File/Quit" 
-                   (lambda ()
-                     (gui-quit)))
-
-;; Dialog Menu
-(gui-add-menu-item menu "Dialogs/Resize.."  resize-map)
-
-(gui-add-menu-item menu "Dialogs/TileSelector" 
-                   (lambda ()
-                     (gui-component-toggle-visibility *tileselector-window*)))
-
-(gui-add-menu-item menu "Dialogs/Tile Editor"
-                   (lambda ()
-                     (gui-component-toggle-visibility *tileeditor-window*)))
-
-(define *clipboard* #f)
-(gui-create-button-func 720 475
-                        80 25 "selection2brush" 
-                        (lambda () 
-                          (set! *clipboard* (editor-get-tile-selection))
-                          (tilemap-paint-tool-set-brush *clipboard*)
-                          (editor-set-tool 0)
-                          ))
-
-(gui-create-button-func 720 500
-                        80 25 "Background" 
-                        (lambda () (tilemap-set-active-layer 0)))
-
-(gui-create-button-func 720 525
-                        80 25 "Foreground" 
-                        (lambda () (tilemap-set-active-layer 1)))
-
-(gui-create-button-func 260 0
-                        80 25 "Diamonds" 
-                        (lambda ()
-                          (tilemap-set-active-layer 1)))
+(define (create-menu)
+  (set! *menu* (gui-create-menu))
+  (let ((menu *menu*))
+    ;; File Menu
+    (gui-add-menu-item menu "File/New.."  show-new-level-dialog)
+    (gui-add-menu-item menu "File/Open.." 
+                       (lambda ()
+                         (simple-file-dialog "Load a level..." (get-last-file)
+                                             (lambda (filename)
+                                               (load-map filename)))))
 
 
-(gui-create-button-func (- screen-width 80)
-                        (- screen-height 25)
-                        80 25 "Shell" 
-                        windstille:repl)
+    (for-each (lambda (level)
+                (gui-add-menu-item menu (string-append "File/Open Recent >/" (basename level))
+                                   (lambda ()
+                                     (load-map level))))
+              *recent-files*)
 
-(gui-create-button-func 0
-                        (- screen-height 25)
-                        100 25 "Tile" 
-                        (lambda ()
-                          (editor-set-tool 0)))
+    (gui-add-menu-item menu "File/Save..." 
+                       (lambda ()
+                         (simple-file-dialog "Save a level..." (get-last-file)
+                                             (lambda (filename) 
+                                               (save-map filename)
+                                               (push-last-file filename)))))
 
-(gui-create-button-func (+ 100)
-                        (- screen-height 25)
-                        100 25 "Diamond" 
-                        (lambda ()
-                          (editor-set-tool 2)))
+    (gui-add-menu-item menu "File/Play" 
+                       (lambda ()
+                         (let ((file (tmpnam)))
+                           (save-map file)
+                           (game-play file)
+                           (delete-file file))))
 
-(gui-create-button-func (+ 200)
-                        (- screen-height 25)
-                        100 25 "Objects" 
-                        (lambda ()
-                          (editor-set-tool 3)))
+    (gui-add-menu-item menu "File/Quit" 
+                       (lambda ()
+                         (on-gui-quit)
+                         (gui-quit)))
 
-(gui-create-button-func (+ 300)
-                        (- screen-height 25)
-                        100 25 "Select"
-                        (lambda ()
-                          (editor-set-tool 1)))
+    ;; Dialog Menu
+    (gui-add-menu-item menu "Dialogs/Draw Grid" editor-toggle-grid)
+    (gui-add-menu-item menu "Dialogs/Resize.."  resize-map)
+    (gui-add-menu-item menu "Dialogs/Minimap"  (lambda ()
+                                                 (gui-component-toggle-visibility *minimap*)))
+
+    (gui-add-menu-item menu "Dialogs/TileSelector" 
+                       (lambda ()
+                         (gui-component-toggle-visibility *tileselector-window*)))
+
+    (gui-add-menu-item menu "Dialogs/Tile Editor"
+                       (lambda ()
+                         (gui-component-toggle-visibility *tileeditor-window*)))))
+
+(define (create-toolbar)
+  (let ((window (gui-create-window 0 25 50 300 "Toolbar")))
+    (gui-push-component (gui-window-get-client-area window))
+    
+
+    (gui-create-button-func 0 0
+                            40 25 "Tile" 
+                            (lambda ()
+                              (editor-set-tool 0)))
+
+
+    (gui-create-button-func 0  25
+                            40 25 "Select"
+                            (lambda ()
+                              (editor-set-tool 1)))
+
+    (gui-create-button-func 0 50
+                            40 25 "Diam." 
+                            (lambda ()
+                              (editor-set-tool 2)))
+
+    (gui-create-button-func 0 75                              
+                            40 25 "Objs" 
+                            (lambda ()
+                              (editor-set-tool 3)))
+
+
+    (gui-create-button-func 0 100
+                            40 25 "Brush" 
+                            (lambda () 
+                              (set! *clipboard* (editor-get-tile-selection))
+                              (tilemap-paint-tool-set-brush *clipboard*)
+                              (editor-set-tool 0)))
+
+    (gui-create-button-func 0 150
+                            40 25 "BG" 
+                            (lambda () (tilemap-set-active-layer 0)))
+
+    (gui-create-button-func 0 175
+                            40 25 "FG" 
+                            (lambda () (tilemap-set-active-layer 1)))
+
+    (gui-create-button-func 0 225
+                            40 25 "Shell" 
+                            windstille:repl)
+    )
+  (gui-pop-component))
 
 (define (simple-file-dialog title filename func)
   (let ((window (gui-create-window 200 200 250 160 title)))
@@ -248,25 +251,26 @@
       (newline)
       (display ";; EOF ;;\n"))))
 
+(define (create-tile-editor)
+  (let ((window (gui-create-window 200 200 250 180 "Tile Editor")))
+    (gui-push-component (gui-window-get-client-area window))
+    (set! *tileeditor* (editor-add-tileeditor 10 10))
+    (let ((gettile (gui-create-button 148 10 75 25 "Get Tile"))
+          (dump    (gui-create-button 148 95 75 25 "Dump")))
+      
+      (gui-component-on-click gettile
+                              (lambda ()
+                                (tileeditor-set-tile *tileeditor* (editor-get-brush-tile))))
+      (gui-component-on-click dump
+                              (lambda () 
+                                (dump-tile-definitions (string-append datadir "tiles.scm"))))
 
-(let ((window (gui-create-window 200 200 250 180 "Tile Editor")))
-  (gui-push-component (gui-window-get-client-area window))
-  (set! *tileeditor* (editor-add-tileeditor 10 10))
-  (let ((gettile (gui-create-button 148 10 75 25 "Get Tile"))
-        (dump    (gui-create-button 148 95 75 25 "Dump")))
-    
-    (gui-component-on-click gettile
-                            (lambda ()
-                              (tileeditor-set-tile *tileeditor* (editor-get-brush-tile))))
-    (gui-component-on-click dump
-                            (lambda () 
-                              (dump-tile-definitions (string-append datadir "tiles.scm"))))
+      (gui-component-on-close window (lambda ()
+                                       (gui-hide-component window)))
 
-    (gui-component-on-close window (lambda ()
-                                     (gui-hide-component window)))
-
-    (set! *tileeditor-window* window))
-  (gui-pop-component))
+      (set! *tileeditor-window* window))
+    (gui-pop-component)
+    (gui-hide-component *tileeditor-window*)))
 
 (define (create-disclaimer)
   (let ((window (gui-create-window 200 200 300 130 "Disclaimer")))
@@ -281,27 +285,60 @@
                               (gui-hide-component window)))
     (gui-pop-component)))
 
-(let ((window (gui-create-window 600 25 200 400 "TileSelector")))
-  (gui-push-component (gui-window-get-client-area window))
-  
-  (case *game*
-    ((windstille)
-     (tile-selector-create (- screen-width (* 3 64)) 0 3 8 .5))
-    ((supertux)
-     (tile-selector-create (- screen-width (* 3 64)) 0 6 8 1.0))
-    (else
-     (tile-selector-create (- screen-width (* 3 64)) 0 3 8 .5)))
+(define (create-tile-selector)
+  (let ((window (gui-create-window 600 25 200 400 "TileSelector")))
+    (gui-push-component (gui-window-get-client-area window))
+    
+    (case *game*
+      ((windstille)
+       (tile-selector-create (- screen-width (* 3 64)) 0 3 8 .5))
+      ((supertux)
+       (tile-selector-create (- screen-width (* 3 64)) 0 6 8 1.0))
+      (else
+       (tile-selector-create (- screen-width (* 3 64)) 0 3 8 .5)))
 
-  (gui-component-on-close window (lambda ()
-                                   (gui-hide-component window)))
-  (set! *tileselector-window* window)
-  (gui-pop-component))
+    (gui-component-on-close window (lambda ()
+                                     (gui-hide-component window)))
+    (set! *tileselector-window* window)
+    (gui-pop-component)))
 
-(gui-hide-component *tileeditor-window*)
+(define (create-minimap)
+;;  (let ((window (gui-create-window (- screen-width 230) 
+;;                                   (- screen-height 110)
+;;                                   230 110 "Minimap")))
+;;    (gui-push-component (gui-window-get-client-area window))
+  (let ((width screen-width)
+        (height 50))
+    (set! *minimap* (minimap-create (- screen-width width) 
+                                    (- screen-height height)
+                                    width height))))
+;;    (gui-pop-component)
+ ;;  (gui-component-on-close window (lambda ()
+;;                                  (gui-hide-component window)))
+;;     window)))
 
-(let ((window (gui-create-window 460 490 230 110 "Minimap")))
-  (gui-push-component (gui-window-get-client-area window))
-  (minimap-create 0 0 225 85)
-  (gui-pop-component))
+(define (on-gui-quit)
+  (with-output-to-file (string-append *windstille-homedir* "editor-variables.scm")
+    (lambda ()
+      (display ";; Automatically Written file, don't edit by hand!\n\n")
+      (write `(set! *recent-files* (append *recent-files* (quote ,*recent-files*))))(newline)
+      (display "\n;; EOF ;;\n")
+      )))
+
+(catch #t
+       (lambda ()
+         (primitive-load (string-append *windstille-homedir* "editor-variables.scm")))
+       (lambda args
+         (display "Error: ")(display args)(newline)))
+
+(create-menu)
+(gui-push-component *menu*)
+(set! *statusbar* (gui-create-label 400 5 "[XxY]"))
+(gui-pop-component)
+
+(create-toolbar)
+(create-tile-editor)
+(create-tile-selector)
+(create-minimap)
 
 ;; EOF ;;

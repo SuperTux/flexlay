@@ -1,5 +1,5 @@
 #!/bin/sh
 
-./windstille --game supertux.scm "$@"
+exec ./windstille --game supertux.scm "$@"
 
 # EOF #

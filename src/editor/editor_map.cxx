@@ -29,10 +29,8 @@
 #include "tilemap_diamond_tool.hxx"
 #include "editor_map.hxx"
 
-EditorMap::EditorMap(CL_Component* parent)
-  : CL_Component(CL_Rect(CL_Point(0, 0),
-                         CL_Size(CL_Display::get_width(), CL_Display::get_height())),
-                 parent)
+EditorMap::EditorMap(const CL_Rect& rect, CL_Component* parent)
+  : CL_Component(rect, parent)
 {
   slots.connect(sig_paint(),      this, &EditorMap::draw);
   slots.connect(sig_mouse_up(),   this, &EditorMap::mouse_up);
@@ -218,8 +216,8 @@ CL_Rect
 EditorMap::get_clip_rect()
 {
   return CL_Rect(CL_Point(int(0 - trans_offset.x), int(0 - trans_offset.y)),
-                 CL_Size(CL_Display::get_width(), 
-                         CL_Display::get_height()));
+                 CL_Size(get_width(), 
+                         get_height()));
 }
 
 EditorMapLayer*
@@ -254,25 +252,11 @@ EditorMap::get_layer(int i)
     return 0;
 }
 
-int
-EditorMap::get_width()
-{
-  assert(!"FIXME: Implement me");
-  return 0;
-}
-
-int
-EditorMap::get_height()
-{
-  assert(!"FIXME: Implement me");
-  return 0; 
-}
-
 void
 EditorMap::move_to(int x, int y)
 {
-  trans_offset = CL_Pointf(-x + CL_Display::get_width()/2,
-                           -y + CL_Display::get_height()/2);
+  trans_offset = CL_Pointf(-x + get_width()/2,
+                           -y + get_height()/2);
 }
 
 /* EOF */

@@ -39,7 +39,9 @@ Editor::Editor()
 
   manager = new GUIManager();
 
-  map_comp = new EditorMap(manager->get_component());
+  map_comp = new EditorMap(CL_Rect(CL_Point(0, 25),
+                                   CL_Size(800, 575)),
+                           manager->get_component());
   //tilemap = new EditorTileMap(manager->get_component());
   //objmap  = new EditorObjMap(manager->get_component());
 

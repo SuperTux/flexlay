@@ -37,7 +37,7 @@ private:
   Fields fields;
   Field<int>* current_field;
 
-  bool scrolling;
+  bool draw_grid;
 
   Field<int>* diamond_map;
 
@@ -78,6 +78,9 @@ public:
 
   int get_width()  { return current_field->get_width(); }
   int get_height() { return current_field->get_height(); }
+
+  void set_draw_grid(bool t);
+  bool get_draw_grid() const;
 };
 
 #endif

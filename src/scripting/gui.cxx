@@ -73,7 +73,9 @@ CL_Component*
 gui_create_menu()
 {
   CL_Component* manager = GUIManager::current()->get_component();
-  return new CL_Menu(manager);
+  CL_Menu* menu = new CL_Menu(manager);
+  //menu->add_child(new CL_Label(CL_Point(250, 5), "Hello World", menu));
+  return menu;
 }
 
 void

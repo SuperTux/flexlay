@@ -280,6 +280,7 @@ WindstilleMain::init_modules()
 
   gh_define("*windstille-levelfile*",      gh_str02scm(levelfile.c_str()));
   gh_define("*windstille-datadir*",        gh_str02scm(datadir.c_str()));
+  gh_define("*windstille-homedir*",        gh_str02scm(homedir.c_str()));
   gh_define("*windstille-package-string*", gh_str02scm(PACKAGE_STRING));
   std::cout << "done" << std::endl;
   

@@ -31,6 +31,7 @@ private:
   CL_Sprite sprite;
   bool painting;
   bool color;
+  CL_Point current_tile;
 public:
   TileMapDiamondTool(EditorMap* p, EditorTileMap* t);
   ~TileMapDiamondTool();

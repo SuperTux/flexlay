@@ -31,6 +31,7 @@ TileMapDiamondTool::TileMapDiamondTool(EditorMap* p, EditorTileMap* t)
     sprite("diamond", resources)
 {
   painting = false;
+  current_tile = CL_Point(0, 0);
 }
 
 TileMapDiamondTool::~TileMapDiamondTool() 
@@ -43,8 +44,8 @@ TileMapDiamondTool::draw()
   CL_Point pos = parent->screen2world(CL_Point(CL_Mouse::get_x(), CL_Mouse::get_y()));
  
   sprite.set_frame(7);
-  sprite.draw(pos.x/64 * 64,
-              pos.y/64 * 64);
+  sprite.draw(current_tile.x/64 * 64,
+              current_tile.y/64 * 64);
 }
 
 void
@@ -77,6 +78,7 @@ TileMapDiamondTool::on_mouse_move(const CL_InputEvent& event)
     {
       paint(event.mouse_pos);
     }
+  current_tile = parent->screen2world(event.mouse_pos);
 }
 
 void

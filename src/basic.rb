@@ -83,7 +83,16 @@ $controller = Controller.new()
 
 $mysprite = make_sprite("../data/images/icons16/stock_paste-16.png")
 
+             
+$resources = CL_ResourceManager.new("../data/flexlay.xml")
+
 $tileset = Tileset.new(32)
+$tileset.add_tile(1, Tile.new(make_pixelbuffer("../data/images/icons16/stock_paste-16.png")))
+$tileset.add_tile(2, Tile.new(make_pixelbuffer("../data/images/icons24/stock_jump-to.png")))
+$tileset.add_tile(3, Tile.new(make_pixelbuffer_from_resource("tile1", $resources),
+                              make_sprite_from_resource("tile1", $resources)))
+$tileset.add_tile(4, Tile.new(make_pixelbuffer_from_resource("tile2", $resources),
+                              make_sprite_from_resource("tile2", $resources)))
 
 ## Create some basic GUI
 $gui = GUI.new()

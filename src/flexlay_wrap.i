@@ -135,5 +135,4 @@ VALUE ObjMapObject2Value(const ObjMapObject& arg)
 %include "ruby_sexpr_parser.hxx"
 #endif
 
-
 /* EOF */

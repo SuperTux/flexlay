@@ -57,6 +57,13 @@ Tile::Tile(const CL_PixelBuffer& pixelbuffer,
   impl->has_color   = false;
 }
 
+Tile::Tile(const CL_PixelBuffer& pixelbuffer)
+  : impl(new TileImpl())
+{
+  impl->pixelbuffer = pixelbuffer;
+  impl->has_color   = false;
+}
+
 Tile::Tile(const std::string& filename_, 
            const CL_Color& attribute_color_)
   : impl(new TileImpl())

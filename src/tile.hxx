@@ -32,8 +32,10 @@ class TileImpl;
 class Tile
 {
 public:
+  Tile(const CL_PixelBuffer& pixelbuffer);
+
   Tile(const CL_PixelBuffer& pixelbuffer,
-       const CL_Sprite& sprite = CL_Sprite());
+       const CL_Sprite& sprite);
 
   /** @param filename Surface to use 
    *  @param arg_colmap a 8 char long array */

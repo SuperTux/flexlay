@@ -120,10 +120,10 @@ class GUI
     @tileselector = TileSelector.new(CL_Rect.new(CL_Point.new(3, 3), CL_Size.new(128, 552)), @selector_window)
     @tileselector.set_tileset($tileset)
     @tileselector.set_tiles($tileset.get_tiles())
-    @tileselector.show(false)
+    @tileselector.show(true)
     
     @objectselector = ObjectSelector.new(CL_Rect.new(0, 0, 128, 256), 42, 42, @selector_window)
-    @objectselector.show(true)
+    @objectselector.show(false)
 
     connect_v1_ObjMapObject(@objectselector.sig_drop(), proc{ on_object_drop() })
 

@@ -44,14 +44,18 @@ public:
   CL_Component* client_area;
   CL_Component* parent;
 
+  CL_Rect old_position;
+  bool is_maximized;
+
   Titlebar* titlebar;
-  CL_Component* close;
-  CL_Component* minimize;
-  CL_Component* maximize;
+  Icon* close;
+  Icon* minimize;
+  Icon* maximize;
 
   std::vector<CL_Slot> slots;
 
   void draw();
+  void do_maximize();
 };
 
 Window::Window(const CL_Rect& rect, const std::string& title, CL_Component* parent)
@@ -76,8 +80,11 @@ Window::Window(const CL_Rect& rect, const std::string& title, CL_Component* pare
                                                CL_Size(rect.get_width()-10,
                                                        rect.get_height()-28)), this);
   impl->parent  = this;
- 
+  impl->is_maximized = false;
+
   impl->slots.push_back(sig_paint().connect(impl.get(),      &WindowImpl::draw));
+  impl->slots.push_back(impl->maximize->sig_clicked().connect(impl.get(), &WindowImpl::do_maximize));
+
 }
 
 Window::~Window()
@@ -110,6 +117,23 @@ WindowImpl::draw()
     CL_Display::draw_line(1, 1,
     1, rect.get_height()-2, highlight);
   */
+}
+
+void
+WindowImpl::do_maximize()
+{
+  // FIXME: Move this to scripting language
+  if (!is_maximized)
+    {
+      is_maximized = true;
+      old_position = parent->get_position();
+      parent->set_position(parent->get_parent()->get_position());
+    }
+  else
+    {
+      is_maximized = false;
+      parent->set_position(old_position);
+    }
 }
 
 CL_Component*

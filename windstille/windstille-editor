@@ -1,0 +1,11 @@
+#!/bin/sh
+
+LD_LIBRARY_PATH=$LD_LIBRARY_PATH:../lib:../ruby
+export LD_LIBRARY_PATH
+
+RUBYLIB=.:$RUBYLIB:../ruby
+export RUBYLIB
+
+exec ruby ./windstille.rb "$@"
+
+# EOF #

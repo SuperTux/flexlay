@@ -189,11 +189,11 @@ $button_panel.add_icon("../data/images/icons24/stock_paste.png", proc{})
 $button_panel.add_separator()
 $undo_icon = $button_panel.add_icon("../data/images/icons24/stock_undo.png", proc{$workspace.get_map().undo()})
 $redo_icon = $button_panel.add_icon("../data/images/icons24/stock_redo.png", proc{$workspace.get_map().redo()})
-$button_panel.add_seperator()
+$button_panel.add_separator()
 
 
 $tool_button_panel = ButtonPanel.new(320, 23, $screen.width, 33, true, $gui.get_component)
-$tool_button_panel.add_seperator()
+$tool_button_panel.add_separator()
 $tool_button_panel.add_icon("../data/images/icons24/object_raise.png", proc{
                          $objmap_select_tool.get_selection().each {|obj|
                            $workspace.get_map().get_data().objects.raise(obj)

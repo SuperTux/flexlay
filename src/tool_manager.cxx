@@ -29,19 +29,18 @@
 ToolManager::ToolManager()
 {
   // FIXME: move this to scripting too
-  tools.push_back(new TileMapPaintTool  ());
-  tools.push_back(new TileMapSelectTool ());
-  tools.push_back(0); //new TileMapDiamondTool());
-  tools.push_back(new ObjMapSelectTool  ());
-  tools.push_back(new ZoomTool());
+  tools.push_back(TileMapPaintTool().to_tool());
+  tools.push_back(TileMapSelectTool().to_tool());
+  //tools.push_back(Tool()); //new TileMapDiamondTool());
+  tools.push_back(ObjMapSelectTool().to_tool());
+  tools.push_back(ZoomTool().to_tool());
 
-  tool = tools[0]; 
+  //tool = tools[0]; 
+  tool = 0;
 }
 
 ToolManager::~ToolManager()
 {
-  for(Tools::iterator i = tools.begin(); i != tools.end(); ++i)
-    delete *i;
 }
 
 void
@@ -49,10 +48,10 @@ ToolManager::set_tool(int i)
 {
   if (i >= 0 && i < int(tools.size()))
     {
-      if (tool != tools[i])
+      if (tool != i)
         {
           on_tool_change();
-          tool = tools[i];
+          tool = i;
         }
     }
   else
@@ -61,19 +60,16 @@ ToolManager::set_tool(int i)
     }
 }
 
-TileMapTool*
-ToolManager::get_tool_by_name(int i)
-{
-  if (i >= 0 && i < static_cast<int>(tools.size()))
-    return tools[i];
-  else
-    return 0;  
-}
-
 CL_Signal_v0&
 ToolManager::sig_tool_change()
 {
   return on_tool_change;
+}
+
+Tool
+ToolManager::current_tool()
+{
+  return tools[tool]; 
 }
 
 /* EOF */

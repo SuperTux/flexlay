@@ -19,10 +19,11 @@
 
 import sys
 from flexlay import *
-from supertux import *
 
 flexlay = Flexlay()
 flexlay.init()
+
+from supertux import *
 
 editor = Editor()
 gui = editor.get_gui_manager()

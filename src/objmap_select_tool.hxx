@@ -20,56 +20,31 @@
 #ifndef HEADER_OBJMAP_SELECT_TOOL_HXX
 #define HEADER_OBJMAP_SELECT_TOOL_HXX
 
-#include "tilemap_tool.hxx"
 #include "object_layer.hxx"
 #include "object_brush.hxx"
+#include "tool.hxx"
 
 class CL_Menu;
-class EditorMap;
-class ObjectMoveCommand;
-class ObjectDeleteCommand;
+class ObjMapSelectToolImpl;
 
 /** */
-class ObjMapSelectTool : public TileMapTool
+class ObjMapSelectTool
 {
 public:
   typedef std::vector<ObjectLayer::Obj*> Selection; 
 
-private:
-  CL_Signal_v1<CL_Menu*> on_popup_menu_display;
-
-  enum { DRAG, SELECT, NONE } state;
-
-  /** the position on which the object was clicked, relative to the
-      object */
-  CL_Point offset;
-
-  CL_Point drag_start;
-  CL_Rect selection_rect;
-
-  Selection selection;
-  ObjectMoveCommand* move_command;
-  ObjectDeleteCommand* delete_command;
-
-public:
   ObjMapSelectTool();
   ~ObjMapSelectTool();
 
-  void draw();
+  void clear_selection();
+  Selection get_selection() const;
+  void set_selection(const Selection& sel);
 
-  void on_mouse_up  (const CL_InputEvent& event);
-  void on_mouse_down(const CL_InputEvent& event);
-  void on_mouse_move(const CL_InputEvent& event);
+  CL_Signal_v1<CL_Menu*>& sig_on_popup_menu_display();
 
-  void clear_selection() { selection.clear(); }
-  Selection get_selection() const { return selection; }
-  void set_selection(const Selection& sel) { selection = sel; }
-
-  CL_Signal_v1<CL_Menu*>& sig_on_popup_menu_display() { return on_popup_menu_display; }
-
+  Tool to_tool();
 private:
-  ObjMapSelectTool (const ObjMapSelectTool&);
-  ObjMapSelectTool& operator= (const ObjMapSelectTool&);
+  SharedPtr<ObjMapSelectToolImpl> impl;
 };
 
 #endif

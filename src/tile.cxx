@@ -114,20 +114,26 @@ Tile::get_sprite()
 CL_PixelBuffer
 Tile::get_pixelbuffer()
 {	
-  if (impl->pixelbuffer)
-    return impl->pixelbuffer;
-  {
-    if (has_suffix(impl->filename, ".png") || has_suffix(impl->filename, ".jpg"))
-      {
-        impl->pixelbuffer = CL_PixelBuffer(*CL_ProviderFactory::load(impl->filename));
-      }
-    else
-      {
-        //CL_SpriteDescription descr(impl->filename, resources);
-        //impl->pixelbuffer = CL_PixelBuffer(*(descr.get_frames().begin()->first));
-        assert(0);
-      }
-    return impl->pixelbuffer;
+  try {
+    if (impl->pixelbuffer)
+      return impl->pixelbuffer;
+    {
+      if (has_suffix(impl->filename, ".png") || has_suffix(impl->filename, ".jpg"))
+        {
+          impl->pixelbuffer = CL_PixelBuffer(*CL_ProviderFactory::load(impl->filename));
+        }
+      else
+        {
+          //CL_SpriteDescription descr(impl->filename, resources);
+          //impl->pixelbuffer = CL_PixelBuffer(*(descr.get_frames().begin()->first));
+          assert(0);
+        }
+      return impl->pixelbuffer;
+    }
+  } catch(CL_Error& err) {
+    std::cout << "CL_Error: " << err.message << std::endl;
+    std::cout << "          filename = " << impl->filename << std::endl;
+    return CL_PixelBuffer();
   }
 }
 

@@ -30,7 +30,6 @@
 #include "workspace.hxx"
 
 class Scrollbar;
-class TileMapTool;
 
 /** Object which represents a level, quirled together with the GUI
     stuff */

@@ -23,24 +23,27 @@
 class EditorMapComponent;
 class CL_InputEvent;
 
+#include "shared_ptr.hxx"
+
+class ToolImpl;
+
 /** */
-class TileMapTool
+class Tool
 {
 protected:
 
 public:
-  TileMapTool() {}
-  virtual ~TileMapTool() {}
+  Tool(SharedPtr<ToolImpl> impl_);
+  ~Tool();
 
-  virtual void draw() {}
+  void draw();
 
-  virtual void on_mouse_up  (const CL_InputEvent& event) {}
-  virtual void on_mouse_down(const CL_InputEvent& event) {}
-  virtual void on_mouse_move(const CL_InputEvent& event) {}
+  void on_mouse_up  (const CL_InputEvent& event);
+  void on_mouse_down(const CL_InputEvent& event);
+  void on_mouse_move(const CL_InputEvent& event);
 
 private:
-  TileMapTool (const TileMapTool&);
-  TileMapTool& operator= (const TileMapTool&);
+  SharedPtr<ToolImpl> impl;
 };
 
 #endif

@@ -22,32 +22,24 @@
 
 #include <ClanLib/Core/Math/rect.h>
 #include <ClanLib/Core/Math/point.h>
+#include "tool.hxx"
 #include "tile_selection.hxx"
-#include "tilemap_tool.hxx"
+
+class TileMapSelectToolImpl;
 
 /** */
-class TileMapSelectTool : public TileMapTool
+class TileMapSelectTool
 {
-private:
-  TileSelection  selection;
-  bool creating_selection;
-
 public:
   TileMapSelectTool();
   ~TileMapSelectTool();
 
-  void draw();
-  
-  void on_mouse_up  (const CL_InputEvent& event);
-  void on_mouse_down(const CL_InputEvent& event);
-  void on_mouse_move(const CL_InputEvent& event);
-
   /** Convert the selection into a TileBrush */
   TileBrush get_selection() const;
 
+  Tool to_tool();
 private:
-  TileMapSelectTool (const TileMapSelectTool&);
-  TileMapSelectTool& operator= (const TileMapSelectTool&);
+  SharedPtr<TileMapSelectToolImpl> impl;
 };
 
 #endif

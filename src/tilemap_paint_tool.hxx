@@ -20,41 +20,29 @@
 #ifndef HEADER_TILEMAP_PAINT_TOOL_HXX
 #define HEADER_TILEMAP_PAINT_TOOL_HXX
 
+#include "tool.hxx"
 #include "tile_brush.hxx"
-#include "tile_selection.hxx"
-#include "tilemap_tool.hxx"
 #include "tilemap_layer.hxx"
 
-class PaintCommand;
+class TileMapPaintToolImpl;
 
 /** */
-class TileMapPaintTool : public TileMapTool
+class TileMapPaintTool
 {
 private:
-  enum { PAINTING, SELECTING, NONE } mode;
-
-  TileSelection selection;
-  TileBrush brush;
-  CL_Point last_draw;
-  CL_Point current_tile;
-
-  PaintCommand* command;
-
-  static TileMapPaintTool* current_; 
+  static TileMapPaintTool current_; 
 public:
-  static TileMapPaintTool* current() { return current_; } 
+  static TileMapPaintTool current() { return current_; } 
 
   TileMapPaintTool();
-  virtual ~TileMapPaintTool();
+  ~TileMapPaintTool();
   
-  const TileBrush& get_brush() { return brush; }
+  const TileBrush& get_brush();
   void set_brush(const TileBrush& b);
-  void draw();
 
+  Tool to_tool();
 private:
-  void on_mouse_down(const CL_InputEvent& event);
-  void on_mouse_move(const CL_InputEvent& event);
-  void on_mouse_up  (const CL_InputEvent& event);
+  SharedPtr<TileMapPaintToolImpl> impl;
 };
 
 #endif

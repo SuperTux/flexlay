@@ -30,15 +30,43 @@
 #include "editor.hxx"
 #include "objmap_object.hxx"
 #include "object_move_command.hxx"
+#include "object_delete_command.hxx"
+#include "tool_impl.hxx"
 #include "objmap_select_tool.hxx"
 
 extern CL_ResourceManager* resources;
 
-ObjMapSelectTool::ObjMapSelectTool()
+class ObjMapSelectToolImpl : public ToolImpl
 {
-  state = NONE;
-  offset = CL_Point(0, 0);
-  move_command = 0;
+public:
+  CL_Signal_v1<CL_Menu*> on_popup_menu_display;
+
+  enum { DRAG, SELECT, NONE } state;
+
+  /** the position on which the object was clicked, relative to the
+      object */
+  CL_Point offset;
+
+  CL_Point drag_start;
+  CL_Rect selection_rect;
+
+  ObjMapSelectTool::Selection selection;
+  ObjectMoveCommand*   move_command;
+  ObjectDeleteCommand* delete_command;
+
+  void draw();
+
+  void on_mouse_up  (const CL_InputEvent& event);
+  void on_mouse_down(const CL_InputEvent& event);
+  void on_mouse_move(const CL_InputEvent& event);
+};
+
+ObjMapSelectTool::ObjMapSelectTool()
+  : impl(new ObjMapSelectToolImpl())
+{
+  impl->state = ObjMapSelectToolImpl::NONE;
+  impl->offset = CL_Point(0, 0);
+  impl->move_command = 0;
 }
 
 ObjMapSelectTool::~ObjMapSelectTool()
@@ -46,9 +74,33 @@ ObjMapSelectTool::~ObjMapSelectTool()
 }
  
 void
-ObjMapSelectTool::draw()
+ObjMapSelectTool::clear_selection()
 {
-  for (Selection::iterator i = selection.begin(); i != selection.end(); ++i)
+  impl->selection.clear(); 
+}
+
+ObjMapSelectTool::Selection
+ObjMapSelectTool::get_selection() const 
+{ 
+  return impl->selection;
+}
+
+void
+ObjMapSelectTool::set_selection(const Selection& sel) 
+{ 
+  impl->selection = sel; 
+}
+
+CL_Signal_v1<CL_Menu*>& 
+ObjMapSelectTool::sig_on_popup_menu_display()
+{
+  return impl->on_popup_menu_display; 
+}
+
+void
+ObjMapSelectToolImpl::draw()
+{
+  for (ObjMapSelectTool::Selection::iterator i = selection.begin(); i != selection.end(); ++i)
     {
       (*i)->draw();
       CL_Display::draw_rect((*i)->get_bound_rect(), CL_Color(255, 0, 0));
@@ -67,7 +119,7 @@ ObjMapSelectTool::draw()
 }
 
 void
-ObjMapSelectTool::on_mouse_up(const CL_InputEvent& event)
+ObjMapSelectToolImpl::on_mouse_up(const CL_InputEvent& event)
 {
   ObjectLayer objmap = ObjectLayer::current();
 
@@ -117,7 +169,7 @@ ObjMapSelectTool::on_mouse_up(const CL_InputEvent& event)
 }
 
 void
-ObjMapSelectTool::on_mouse_down(const CL_InputEvent& event)
+ObjMapSelectToolImpl::on_mouse_down(const CL_InputEvent& event)
 {
   ObjectLayer objmap = ObjectLayer::current();
 
@@ -136,7 +188,8 @@ ObjMapSelectTool::on_mouse_down(const CL_InputEvent& event)
             {
               if (CL_Keyboard::get_keycode(CL_KEY_LSHIFT))
                 {
-                  Selection::iterator i = std::find(selection.begin(), selection.end(), obj);
+                  ObjMapSelectTool::Selection::iterator i
+                    = std::find(selection.begin(), selection.end(), obj);
                   if (i == selection.end())
                     selection.push_back(obj);
                   else
@@ -156,7 +209,8 @@ ObjMapSelectTool::on_mouse_down(const CL_InputEvent& event)
                     }
 
                   move_command = new ObjectMoveCommand(objmap);
-                  for (Selection::iterator i = selection.begin(); i != selection.end(); ++i)
+                  for (ObjMapSelectTool::Selection::iterator i = selection.begin();
+                       i != selection.end(); ++i)
                     {
                       move_command->add_obj((*i)->get_handle());
                     }
@@ -178,7 +232,7 @@ ObjMapSelectTool::on_mouse_down(const CL_InputEvent& event)
 }
 
 void
-ObjMapSelectTool::on_mouse_move(const CL_InputEvent& event)
+ObjMapSelectToolImpl::on_mouse_move(const CL_InputEvent& event)
 {
   EditorMapComponent* parent = EditorMapComponent::current();
   CL_Point pos = parent->screen2world(event.mouse_pos);
@@ -186,7 +240,8 @@ ObjMapSelectTool::on_mouse_move(const CL_InputEvent& event)
   switch(state)
     {
     case DRAG:
-      for (Selection::iterator i = selection.begin(); i != selection.end(); ++i)
+      for (ObjMapSelectTool::Selection::iterator i = selection.begin(); 
+           i != selection.end(); ++i)
         {
           (*i)->set_pos((*i)->get_pos() + (pos - drag_start));
         }
@@ -202,6 +257,12 @@ ObjMapSelectTool::on_mouse_move(const CL_InputEvent& event)
       // FIXME: Add some kind of highlighting here if mouse is over an object
       break;
     }
+}
+
+Tool
+ObjMapSelectTool::to_tool()
+{
+  return Tool(impl); 
 }
 
 /* EOF */

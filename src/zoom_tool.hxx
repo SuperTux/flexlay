@@ -22,28 +22,20 @@
 
 #include <ClanLib/Core/Math/rect.h>
 #include <ClanLib/Display/input_event.h>
-#include "tilemap_tool.hxx"
+#include "tool.hxx"
+
+class ZoomToolImpl;
 
 /** */
-class ZoomTool : public TileMapTool
+class ZoomTool
 {
-private:
-  enum { CREATE_ZOOM_RECT, NONE } state;
-
-  CL_Rect zoom_rect;
 public:
   ZoomTool();
   ~ZoomTool();
-  
-  void draw();
 
+  Tool to_tool();
 private:
-  void on_mouse_up  (const CL_InputEvent& event);
-  void on_mouse_down(const CL_InputEvent& event);
-  void on_mouse_move(const CL_InputEvent& event);
- 
-  ZoomTool (const ZoomTool&);
-  ZoomTool& operator= (const ZoomTool&);
+  SharedPtr<ZoomToolImpl> impl;
 };
 
 #endif

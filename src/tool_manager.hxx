@@ -21,18 +21,17 @@
 #define HEADER_TOOL_MANAGER_HXX
 
 #include <vector>
-
-class TileMapTool;
+#include "tool.hxx"
 
 /** The ToolManager is a simple class which holds all available tools
     and keep track of which on is the currently selected one. */
 class ToolManager
 {
 private:
-  typedef std::vector<TileMapTool*> Tools;
+  typedef std::vector<Tool> Tools;
   Tools tools;
 
-  TileMapTool* tool;
+  int tool;
   CL_Signal_v0 on_tool_change;
 public:
   ToolManager();
@@ -40,8 +39,7 @@ public:
 
   // random stuff
   void set_tool(int i);
-  TileMapTool* get_tool_by_name(int i);
-  TileMapTool* current_tool() { return tool; }
+  Tool current_tool();
 
   CL_Signal_v0& sig_tool_change();
 };

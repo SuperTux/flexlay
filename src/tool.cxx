@@ -17,8 +17,44 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-#include "tilemap_tool.hxx"
+#include "tool_impl.hxx"
+#include "tool.hxx"
 
+Tool::Tool(SharedPtr<ToolImpl> impl_)
+  : impl(impl_)
+{
+}
 
+Tool::~Tool() 
+{
+}
+
+void
+Tool::draw()
+{
+  if (impl.get())
+    impl->draw();
+}
+
+void
+Tool::on_mouse_up  (const CL_InputEvent& event)
+{
+  if (impl.get())
+    impl->on_mouse_up(event);
+}
+
+void
+Tool::on_mouse_down(const CL_InputEvent& event)
+{
+  if (impl.get())
+    impl->on_mouse_down(event);
+}
+
+void
+Tool::on_mouse_move(const CL_InputEvent& event)
+{
+  if (impl.get())
+    impl->on_mouse_move(event);
+}
 
 /* EOF */

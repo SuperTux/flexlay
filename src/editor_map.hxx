@@ -33,7 +33,6 @@
 class Command;
 class EditorMapComponent;
 class EditorMapImpl;
-class TileMapTool;
 
 /** Object which represents a level, quirled together with the GUI
     stuff */

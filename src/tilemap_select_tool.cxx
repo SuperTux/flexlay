@@ -22,15 +22,30 @@
 #include <ClanLib/Display/input_event.h>
 #include "globals.hxx"
 #include "tilemap_layer.hxx"
+#include "tool_impl.hxx"
 #include "editor_map.hxx"
 #include "editor_map_component.hxx"
 #include "tile_brush.hxx"
 #include "editor_names.hxx"
 #include "tilemap_select_tool.hxx"
 
-TileMapSelectTool::TileMapSelectTool()
+class TileMapSelectToolImpl : public ToolImpl
 {
-  creating_selection = false;
+public:
+  TileSelection  selection;
+  bool creating_selection;
+
+  void draw();
+  
+  void on_mouse_up  (const CL_InputEvent& event);
+  void on_mouse_down(const CL_InputEvent& event);
+  void on_mouse_move(const CL_InputEvent& event);
+};
+
+TileMapSelectTool::TileMapSelectTool()
+  : impl(new TileMapSelectToolImpl())
+{
+  impl->creating_selection = false;
 }
 
 TileMapSelectTool::~TileMapSelectTool()
@@ -38,7 +53,7 @@ TileMapSelectTool::~TileMapSelectTool()
 }
 
 void
-TileMapSelectTool::draw()
+TileMapSelectToolImpl::draw()
 {
   if (selection.is_active())
     {
@@ -47,7 +62,7 @@ TileMapSelectTool::draw()
 }
 
 void
-TileMapSelectTool::on_mouse_up  (const CL_InputEvent& event)
+TileMapSelectToolImpl::on_mouse_up  (const CL_InputEvent& event)
 {
   EditorMapComponent* parent = EditorMapComponent::current();
 
@@ -63,7 +78,7 @@ TileMapSelectTool::on_mouse_up  (const CL_InputEvent& event)
 }
 
 void
-TileMapSelectTool::on_mouse_down(const CL_InputEvent& event)
+TileMapSelectToolImpl::on_mouse_down(const CL_InputEvent& event)
 {
   EditorMapComponent* parent = EditorMapComponent::current();
 
@@ -86,7 +101,7 @@ TileMapSelectTool::on_mouse_down(const CL_InputEvent& event)
 }
 
 void
-TileMapSelectTool::on_mouse_move(const CL_InputEvent& event)
+TileMapSelectToolImpl::on_mouse_move(const CL_InputEvent& event)
 { 
   EditorMapComponent* parent = EditorMapComponent::current();
 
@@ -100,7 +115,13 @@ TileBrush
 TileMapSelectTool::get_selection() const
 {
   TilemapLayer tilemap = TilemapLayer::current();
-  return selection.get_brush(*tilemap.get_field());
+  return impl->selection.get_brush(*tilemap.get_field());
+}
+
+Tool
+TileMapSelectTool::to_tool()
+{
+  return Tool(impl); 
 }
 
 /* EOF */

@@ -20,11 +20,27 @@
 #include <ClanLib/Display/keys.h>
 #include <ClanLib/Display/display.h>
 #include "editor_map_component.hxx"
+#include "tool_impl.hxx"
 #include "zoom_tool.hxx"
 
-ZoomTool::ZoomTool()
+class ZoomToolImpl : public ToolImpl
 {
-  state = NONE;
+public:
+  enum { CREATE_ZOOM_RECT, NONE } state;
+
+  CL_Rect zoom_rect;
+
+  void draw();
+  
+  void on_mouse_up  (const CL_InputEvent& event);
+  void on_mouse_down(const CL_InputEvent& event);
+  void on_mouse_move(const CL_InputEvent& event);
+};
+
+ZoomTool::ZoomTool()
+  : impl(new ZoomToolImpl())
+{
+  impl->state = ZoomToolImpl::NONE;
 }
 
 ZoomTool::~ZoomTool()
@@ -32,7 +48,7 @@ ZoomTool::~ZoomTool()
 }
 
 void
-ZoomTool::draw()
+ZoomToolImpl::draw()
 {
   switch (state)
     {
@@ -49,7 +65,7 @@ ZoomTool::draw()
 }
 
 void
-ZoomTool::on_mouse_up  (const CL_InputEvent& event)
+ZoomToolImpl::on_mouse_up  (const CL_InputEvent& event)
 {
   EditorMapComponent* parent = EditorMapComponent::current();
 
@@ -81,7 +97,7 @@ ZoomTool::on_mouse_up  (const CL_InputEvent& event)
 }
 
 void
-ZoomTool::on_mouse_down(const CL_InputEvent& event)
+ZoomToolImpl::on_mouse_down(const CL_InputEvent& event)
 {
   EditorMapComponent* parent = EditorMapComponent::current();
 
@@ -122,7 +138,7 @@ ZoomTool::on_mouse_down(const CL_InputEvent& event)
 }
 
 void
-ZoomTool::on_mouse_move(const CL_InputEvent& event)
+ZoomToolImpl::on_mouse_move(const CL_InputEvent& event)
 {
   EditorMapComponent* parent = EditorMapComponent::current();
 
@@ -139,5 +155,11 @@ ZoomTool::on_mouse_move(const CL_InputEvent& event)
       break;
     }
 }
+
+Tool
+ZoomTool::to_tool()
+{
+  return Tool(impl); 
+}  
 
 /* EOF */

@@ -36,7 +36,7 @@ def load_game_tiles(tileset, filename):
 
             tileset.add_tile(id,
                              Tile(supertux_datadir + 'images/tilesets/' + image,
-                                  CL_Color(255, 255, 255, 255),
+                                  CL_Color(254, 254, 254, 254),
                                   CL_Color(255,   0,   0, 128)))
 
 class SuperTuxLevel:

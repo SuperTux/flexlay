@@ -22,6 +22,7 @@
 #include <ClanLib/Display/keyboard.h>
 #include <ClanLib/Display/keys.h>
 #include <ClanLib/Display/display.h>
+
 #include "globals.hxx"
 #include "tilemap_layer.hxx"
 #include "tileset.hxx"
@@ -32,23 +33,46 @@
 #include "workspace.hxx"
 #include "paint_command.hxx"
 #include "editor_names.hxx"
+#include "tile_selection.hxx"
+#include "tool_impl.hxx"
 #include "tilemap_paint_tool.hxx"
 
-TileMapPaintTool* TileMapPaintTool::current_ = 0; 
+TileMapPaintTool TileMapPaintTool::current_;
+
+class TileMapPaintToolImpl : public ToolImpl
+{
+public:
+  enum { PAINTING, SELECTING, NONE } mode;
+
+  TileSelection selection;
+  TileBrush brush;
+  CL_Point last_draw;
+  CL_Point current_tile;
+
+  PaintCommand* command;
+
+  void draw();
+
+  void on_mouse_down(const CL_InputEvent& event);
+  void on_mouse_move(const CL_InputEvent& event);
+  void on_mouse_up  (const CL_InputEvent& event);
+};
 
 TileMapPaintTool::TileMapPaintTool()
+  : impl(new TileMapPaintToolImpl())
 {
-  last_draw = CL_Point(-1, -1);
+  impl->last_draw = CL_Point(-1, -1);
 
-  current_  = this;
-  brush = TileBrush(1, 1);
-  brush.at(0, 0) = 0;
-  brush.set_opaque();
-  current_tile = CL_Point(0,0);
+  current_  = *this;
+  
+  impl->brush = TileBrush(1, 1);
+  impl->brush.at(0, 0) = 0;
+  impl->brush.set_opaque();
+  impl->current_tile = CL_Point(0,0);
 
-  command = 0;
+  impl->command = 0;
 
-  mode = NONE;
+  impl->mode = TileMapPaintToolImpl::NONE;
 }
 
 TileMapPaintTool::~TileMapPaintTool()
@@ -56,7 +80,7 @@ TileMapPaintTool::~TileMapPaintTool()
 }
 
 void
-TileMapPaintTool::draw()
+TileMapPaintToolImpl::draw()
 {
   TilemapLayer tilemap = TilemapLayer::current();
 
@@ -65,7 +89,7 @@ TileMapPaintTool::draw()
 
   switch(mode)
     {
-    case SELECTING:
+    case TileMapPaintToolImpl::SELECTING:
       if (CL_Keyboard::get_keycode(CL_KEY_LSHIFT))
         selection.draw(CL_Color(255,  128, 128, 100));
       else 
@@ -112,8 +136,14 @@ TileMapPaintTool::draw()
     }
 }
 
+const TileBrush& 
+TileMapPaintTool::get_brush() 
+{
+  return impl->brush; 
+}
+
 void
-TileMapPaintTool::on_mouse_down(const CL_InputEvent& event)
+TileMapPaintToolImpl::on_mouse_down(const CL_InputEvent& event)
 {
   TilemapLayer tilemap = TilemapLayer::current();
 
@@ -124,11 +154,11 @@ TileMapPaintTool::on_mouse_down(const CL_InputEvent& event)
 
       switch (mode)
         {
-        case NONE:
+        case TileMapPaintToolImpl::NONE:
           switch (event.id)
             {
             case CL_MOUSE_LEFT:
-              mode = PAINTING;
+              mode = TileMapPaintToolImpl::PAINTING;
               parent->capture_mouse();
               command = new PaintCommand(tilemap, brush);
               command->add_point(pos);
@@ -136,7 +166,7 @@ TileMapPaintTool::on_mouse_down(const CL_InputEvent& event)
               break;
     
             case CL_MOUSE_RIGHT:
-              mode = SELECTING;
+              mode = TileMapPaintToolImpl::SELECTING;
               parent->capture_mouse();
 
               selection.start(tilemap, pos);
@@ -151,7 +181,7 @@ TileMapPaintTool::on_mouse_down(const CL_InputEvent& event)
 }
  
 void
-TileMapPaintTool::on_mouse_move(const CL_InputEvent& event)
+TileMapPaintToolImpl::on_mouse_move(const CL_InputEvent& event)
 {
   TilemapLayer tilemap = TilemapLayer::current();
 
@@ -181,7 +211,7 @@ TileMapPaintTool::on_mouse_move(const CL_InputEvent& event)
 }
 
 void
-TileMapPaintTool::on_mouse_up  (const CL_InputEvent& event)
+TileMapPaintToolImpl::on_mouse_up  (const CL_InputEvent& event)
 {
   TilemapLayer tilemap = TilemapLayer::current();
 
@@ -239,7 +269,13 @@ TileMapPaintTool::on_mouse_up  (const CL_InputEvent& event)
 void
 TileMapPaintTool::set_brush(const TileBrush& b)
 {
-  brush = b;
+  impl->brush = b;
+}
+
+Tool
+TileMapPaintTool::to_tool()
+{ 
+  return Tool(impl);
 }
 
 /* EOF */

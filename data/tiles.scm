@@ -573,6 +573,155 @@
                #b00000000))
 
 
+ (tile (id 52)
+       (image "tiles/brwn_brwn_brwn_dbrw_1")
+       (colmap #b11111111 
+               #b11111111
+               #b11111111
+               #b11111111
+               #b11111111
+               #b11111111
+               #b11111111
+               #b11111111))
+
+
+ (tile (id 53)
+       (image "tiles/brwn_brwn_dbrw_brwn_1")
+       (colmap #b11111111 
+               #b11111111
+               #b11111111
+               #b11111111
+               #b11111111
+               #b11111111
+               #b11111111
+               #b11111111))
+
+ (tile (id 54)
+       (image "tiles/brwn_brwn_dbrw_dbrw_1")
+       (colmap #b11111111 
+               #b11111111
+               #b11111111
+               #b11111111
+               #b11111111
+               #b11111111
+               #b11111111
+               #b11111111))
+
+ (tile (id 55)
+       (image "tiles/brwn_dbrw_brwn_brwn_1")
+       (colmap #b11111111 
+               #b11111111
+               #b11111111
+               #b11111111
+               #b11111111
+               #b11111111
+               #b11111111
+               #b11111111))
+
+ (tile (id 56)
+       (image "tiles/brwn_dbrw_brwn_dbrw_1")
+       (colmap #b11111111 
+               #b11111111
+               #b11111111
+               #b11111111
+               #b11111111
+               #b11111111
+               #b11111111
+               #b11111111))
+
+
+ (tile (id 57)
+       (image "tiles/brwn_dbrw_dbrw_brwn_1")
+       (colmap #b11111111 
+               #b11111111
+               #b11111111
+               #b11111111
+               #b11111111
+               #b11111111
+               #b11111111
+               #b11111111))
+
+
+ (tile (id 58)
+       (image "tiles/brwn_dbrw_dbrw_dbrw_1")
+       (colmap #b11111111 
+               #b11111111
+               #b11111111
+               #b11111111
+               #b11111111
+               #b11111111
+               #b11111111
+               #b11111111))
+
+ (tile (id 59)
+       (image "tiles/dbrw_brwn_brwn_brwn_1")
+       (colmap #b11111111 
+               #b11111111
+               #b11111111
+               #b11111111
+               #b11111111
+               #b11111111
+               #b11111111
+               #b11111111))
+
+ (tile (id 60)
+       (image "tiles/dbrw_brwn_brwn_dbrw_1")
+       (colmap #b11111111 
+               #b11111111
+               #b11111111
+               #b11111111
+               #b11111111
+               #b11111111
+               #b11111111
+               #b11111111))
+
+ (tile (id 61)
+       (image "tiles/dbrw_brwn_dbrw_brwn_1")
+       (colmap #b11111111 
+               #b11111111
+               #b11111111
+               #b11111111
+               #b11111111
+               #b11111111
+               #b11111111
+               #b11111111))
+
+ (tile (id 62)
+       (image "tiles/dbrw_brwn_dbrw_dbrw_1")
+       (colmap #b11111111 
+               #b11111111
+               #b11111111
+               #b11111111
+               #b11111111
+               #b11111111
+               #b11111111
+               #b11111111))
+
+ (tile (id 63)
+       (image "tiles/dbrw_dbrw_brwn_brwn_1")
+       (colmap #b11111111 
+               #b11111111
+               #b11111111
+               #b11111111
+               #b11111111
+               #b11111111
+               #b11111111
+               #b11111111))
+
+
+ (tile (id 64)
+       (image "tiles/dbrw_dbrw_brwn_dbrw_1")
+       (colmap #b11111111 
+               #b11111111
+               #b11111111
+               #b11111111
+               #b11111111
+               #b11111111
+               #b11111111
+               #b11111111))
+
+
+
  ;; (group (id 11)
  ;;        (tiles 1 2 3))
  )

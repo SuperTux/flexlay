@@ -96,7 +96,7 @@
                    (- screen-height 25)
                    100 25 "Select")
 
-(tile-selector-create (- screen-width (* 3 64)) 0 3 8)
+(tile-selector-create (- screen-width (* 3 64)) 0 3 18)
 
 (define (show-new-level-dialog)
   (let ((window (editor-add-window 200 200 200 160 "Property Window")))

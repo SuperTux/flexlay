@@ -741,6 +741,26 @@ editor_tilemap_save_png(EditorMapLayer* l, const char* filename)
   delete pixelbuffer;
 }
 
+int
+editor_tilemap_get_width(EditorMapLayer* l)
+{
+  EditorTileMap* tilemap = dynamic_cast<EditorTileMap*>(l);
+  if (tilemap)
+    return tilemap->get_width();
+  else 
+    return 0;
+}
+
+int
+editor_tilemap_get_height(EditorMapLayer* l)
+{
+  EditorTileMap* tilemap = dynamic_cast<EditorTileMap*>(l);
+  if (tilemap)
+    return tilemap->get_height();
+  else 
+    return 0;
+}
+
 SCM
 editor_tilemap_get_data(EditorMapLayer* l)
 {

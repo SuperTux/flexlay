@@ -335,6 +335,10 @@
 
 (case *game*
   ((supertux)
+    (gui-add-menu-item menu "File/Import SuperTux" 
+                       (lambda ()
+                         (simple-file-dialog "Export SuperTux level..." (get-last-file)
+                                             (lambda (filename)   (supertux:load-map filename)))))  
     (gui-add-menu-item menu "File/Export SuperTux" 
                        (lambda ()
                          (simple-file-dialog "Export SuperTux level..." (get-last-file)

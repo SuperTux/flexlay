@@ -121,7 +121,7 @@ class Level
   end
 
   def activate(workspace)
-    $workspace.set_map(@editormap)
+    workspace.set_map(@editormap)
     TilemapLayer.set_current(@data.get_tilemap())
     ObjectLayer.set_current(@objects)
   end

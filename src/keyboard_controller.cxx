@@ -1,4 +1,4 @@
-//  $Id: keyboard_controller.cxx,v 1.1 2003/08/10 19:56:40 grumbel Exp $
+//  $Id: keyboard_controller.cxx,v 1.2 2003/08/11 21:50:35 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -36,13 +36,13 @@ KeyboardController::is_left ()
 bool 
 KeyboardController::is_up ()
 {
-  return CL_Keyboard::get_keycode (CL_KEY_UP);
+  return CL_Keyboard::get_keycode (CL_KEY_DOWN);
 }
 
 bool 
 KeyboardController::is_down ()
 {
-  return CL_Keyboard::get_keycode (CL_KEY_DOWN);
+  return CL_Keyboard::get_keycode (CL_KEY_UP);
 }
   
 // Buttons
@@ -55,7 +55,7 @@ KeyboardController::fire_pressed ()
 bool
 KeyboardController::jump_pressed ()
 {
-  return CL_Keyboard::get_keycode (CL_KEY_UP);
+  return CL_Keyboard::get_keycode (CL_KEY_DOWN);
 }
 
 bool

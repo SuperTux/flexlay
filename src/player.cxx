@@ -1,4 +1,4 @@
-//  $Id: player.cxx,v 1.4 2003/08/11 20:26:07 grumbel Exp $
+//  $Id: player.cxx,v 1.5 2003/08/11 21:50:35 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -112,32 +112,22 @@ Player::draw ()
 void 
 Player::update (float delta)
 {
-  stand.update (delta);
-  surround.update (delta);
-  roll.update (delta);
-  jump.update (delta);
-  walk.update (delta);
-  shild.update (delta);
-
-  if (shild_time > 0)
-    {
-      shild_time -= delta;
-    }
-
-  if (!on_ground ())
-    ground_state = IN_AIR;
-
   if (controller->is_left ())
     direction = WEST;
   else if  (controller->is_right ())
     direction = EAST;
 
-  if (ground_state == IN_AIR)
-    update_air (delta);
-  else
-    update_ground (delta);
-
-  update_shooting (delta);
+  switch(ground_state)
+    {
+    case ON_GROUND:
+      update_ground (delta);
+      if (!on_ground ())
+        ground_state = IN_AIR;
+      break;
+    case IN_AIR:
+      update_air (delta);
+      break;
+    }
 }
 
 void 
@@ -172,36 +162,27 @@ Player::update_ground (float delta)
 
   if (controller->jump_pressed ()) 
     {
-      velocity.y = -1000;
+      velocity.y = -750;
       ground_state = IN_AIR;
-    } 
-  else if (controller->is_down () &&
-           controller->smartbomb_pressed ()) 
-    {
-      state = ROLLING;
-    } 
-  else if  (controller->is_down ()) 
-    {
-      state = SITTING;
-    }
-  else if  (controller->is_left () || controller->is_right ()) 
-    {
-      state = WALKING;
     } 
   else
     {
-      state = STANDING;
-    }
-
-  if (state == WALKING)
-    {
       float tmp_x_pos = pos.x;
+
       if (controller->is_left ())
-	pos.x -= 200 * delta;
+        {
+          pos.x -= 200 * delta;
+        }
       else if (controller->is_right ())
-	pos.x += 200 * delta;
-      if (stuck ())
-	pos.x = tmp_x_pos;
+        {
+          pos.x += 200 * delta;
+        }
+
+      if (stuck ()) 
+        {
+          // FIXME: Calculate nearest position to colliding object here
+          pos.x = tmp_x_pos;
+        }
     }
 }
 
@@ -229,14 +210,8 @@ Player::update_air (float delta)
     {
       ground_state = ON_GROUND;
       // Cut the position to the tile size 
-      pos.y = int(pos.y / SUBTILE_SIZE) * SUBTILE_SIZE;
+      pos.y = int(pos.y / SUBTILE_SIZE) * SUBTILE_SIZE + SUBTILE_SIZE - 1;
     } 
-  
-  if (stuck ()) 
-    {
-      pos.y = tmp_y_pos;
-      velocity.y = 0;
-    }
 }
   
 void 

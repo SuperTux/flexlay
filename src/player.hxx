@@ -1,4 +1,4 @@
-//  $Id: player.hxx,v 1.1 2003/08/10 19:56:40 grumbel Exp $
+//  $Id: player.hxx,v 1.2 2003/08/11 21:50:35 grumbel Exp $
 // 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -32,7 +32,15 @@ class Player : public GameObj
 {
 private:
   Controller* controller;
+
+  /** Position as a float */
   CL_Vector pos;
+  
+  /** X-Position in subtile coordinates */
+  int x_pos;
+  /** Y-Position in subtile coordinates */
+  int y_pos;
+  
   CL_Vector velocity;
   
   CL_Sprite walk;

@@ -1,4 +1,4 @@
-//  $Id: windstille_game.cxx,v 1.3 2003/08/11 10:03:55 grumbel Exp $
+//  $Id: windstille_game.cxx,v 1.4 2003/08/11 21:50:35 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -156,16 +156,15 @@ WindstilleGame::display ()
 
         glBegin(GL_QUADS);
         // Sky
-        glColor3f(0.0f, 0.0f, 0.0f);
+        glColor3f(0.0f, 0.0f, 1.0f);
 
         glVertex2f(0, 0);
         glVertex2f(800, 0);
       
-        glColor3f(0.0f, 0.0f, 1.0f);
+        glColor3f(0.5f, 0.5f, 1.0f);
         glVertex2f(800,  300);
         glVertex2f(0, 300);
 
-        glColor3f(0.0f, 0.0f, 1.0f);
         glVertex2f(0, 300);
         glVertex2f(800,  300);
 

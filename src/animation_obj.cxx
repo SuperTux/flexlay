@@ -1,4 +1,4 @@
-//  $Id: animation_obj.cxx,v 1.1 2003/08/10 19:56:40 grumbel Exp $
+//  $Id: animation_obj.cxx,v 1.2 2003/08/11 21:50:35 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -24,7 +24,8 @@
 extern CL_ResourceManager* resources;
 
 AnimationObj::AnimationObj (const std::string& str, const CL_Vector& arg_pos)
-  : sprite (CL_Sprite (str, resources)), pos (arg_pos)
+  : sprite(CL_Sprite (str, resources)), 
+    pos(arg_pos)
 {
 }
 

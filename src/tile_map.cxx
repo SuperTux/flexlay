@@ -1,4 +1,4 @@
-//  $Id: tile_map.cxx,v 1.6 2003/08/11 19:54:22 grumbel Exp $
+//  $Id: tile_map.cxx,v 1.7 2003/08/11 21:50:35 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -63,16 +63,19 @@ TileMap::draw ()
 	  {
 	    field (x,y)->sur.draw (x * TILE_SIZE, 
                                    y * TILE_SIZE);
-            for(int tile_y = 0; tile_y < 8; ++tile_y)
-              for(int tile_x = 0; tile_x < 8; ++tile_x)
-                {
-                  if (field (x,y)->get_col(tile_x, tile_y))
+            if (0)
+              {
+                for(int tile_y = 0; tile_y < 8; ++tile_y)
+                  for(int tile_x = 0; tile_x < 8; ++tile_x)
                     {
-                      CL_Display::fill_rect(CL_Rect(x * TILE_SIZE + tile_x*16, y*TILE_SIZE + tile_y*16,
-                                                    x * TILE_SIZE + tile_x*16 + 16, y * TILE_SIZE + tile_y*16 + 16),
-                                            CL_Color(255, 0, 0, 128));
+                      if (field (x,y)->get_col(tile_x, tile_y))
+                        {
+                          CL_Display::fill_rect(CL_Rect(x * TILE_SIZE + tile_x*16, y*TILE_SIZE + tile_y*16,
+                                                        x * TILE_SIZE + tile_x*16 + 16, y * TILE_SIZE + tile_y*16 + 16),
+                                                CL_Color(255, 0, 0, 128));
+                        }
                     }
-                }
+              }
 	  }
       }
 }
@@ -86,13 +89,16 @@ TileMap::is_ground (float x, float y)
   unsigned int sub_tile_x = int(x) / (TILE_SIZE/8) - x_pos*8;
   unsigned int sub_tile_y = int(y) / (TILE_SIZE/8) - y_pos*8;
 
-  if (x < 0 || x_pos >= field.get_width() 
-      || 
-      y < 0 || y_pos >= field.get_height())
+  if (x < 0 || x_pos >= field.get_width())
     {
       std::cout << "TileMap::is_ground (): Out of range: " << x_pos << " " << y_pos << std::endl;
       return 1;
     }
+  else if (y < 0 || y_pos >= field.get_height())
+    {
+      return 0;
+    }
+
 
   if (field (x_pos, y_pos))
     return field (x_pos, y_pos)->get_col(sub_tile_x, sub_tile_y);

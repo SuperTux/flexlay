@@ -1,4 +1,4 @@
-//  $Id: player.cxx,v 1.15 2003/09/13 10:19:08 grumbel Exp $
+//  $Id: player.cxx,v 1.16 2003/09/15 17:00:38 grumbel Exp $
 //
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -24,6 +24,7 @@
 #include "laser_shoot.hxx"
 #include "controller.hxx"
 #include "player.hxx"
+#include "bomb.hxx"
 #include "globals.hxx"
 
 Player* Player::current_ = 0;
@@ -34,6 +35,7 @@ Player::Player (Controller* c) :
   velocity (0, 0),
   
   walk     ("hero/run",   resources),
+  sit      ("hero/sit",   resources),
   jump     ("hero/jump",  resources),
   stand    ("hero/stand", resources),
 
@@ -207,25 +209,38 @@ Player::update_ground (float delta)
     {
       float tmp_x_pos = pos.x;
 
-      if (controller->is_left ())
+      if (controller->is_down())
         {
-          pos.x -= 300 * delta;
-          state = WALKING;
-        }
-      else if (controller->is_right ())
-        {
-          pos.x += 300 * delta;
-          state = WALKING;
+          state = SITTING;
+          if (controller->fire_pressed() && !bomb_placed)
+            {
+              GameWorld::current()->add(new Bomb(int(pos.x), int(pos.y)));
+              bomb_placed = true;
+            }
         }
       else
         {
-          state = STANDING;
-        }
-
-      if (stuck ()) 
-        {
-          // FIXME: Calculate nearest position to colliding object here
-          pos.x = tmp_x_pos;
+          bomb_placed = false;
+          if (controller->is_left ())
+            {
+              pos.x -= 300 * delta;
+              state = WALKING;
+            }
+          else if (controller->is_right ())
+            {
+              pos.x += 300 * delta;
+              state = WALKING;
+            }
+          else
+            {
+              state = STANDING;
+            }
+      
+          if (stuck ()) 
+            {
+              // FIXME: Calculate nearest position to colliding object here
+              pos.x = tmp_x_pos;
+            }
         }
     }
 }

@@ -90,6 +90,11 @@
       <image file="images/hero_run/hero-0.png" name="image10" />
     </sprite>
 
+    <sprite name="sit">
+      <image file="images/hero_sit.png" name="image1" /> 
+      <translation origin="bottom_center" x="0"  y="5" />
+    </sprite>
+
     <sprite name="jump">
       <image file="images/hero_jump.png" name="image1" /> 
     </sprite>
@@ -98,6 +103,21 @@
       <image file="images/hero_stand.png" name="image1" />
     </sprite>
   </section>
+
+  <sprite name="bomb">
+    <animation speed="200" />
+    <translation origin="bottom_center" />
+    <image file="images/bomb.png" name="image1" />
+    <image file="images/bomb1.png" name="image2" />
+  </sprite>
+
+  <sprite name="explo">
+    <animation speed="60" loop="no" />
+    <translation origin="bottom_center" />
+    <image file="images/explosion.png" name="image1">
+      <grid array="6,1" size="64,98" />
+    </image>
+  </sprite>
 
   <section name="turrican">
     <sprite name="jump">

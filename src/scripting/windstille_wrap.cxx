@@ -1370,6 +1370,32 @@ _wrap_game_add_water (SCM s_0, SCM s_1, SCM s_2, SCM s_3)
 
 
 static SCM
+_wrap_game_add_bomb (SCM s_0, SCM s_1)
+{
+    #define FUNC_NAME "game-add-bomb"
+    int arg1 ;
+    int arg2 ;
+    SCM gswig_result;
+    int gswig_list_p = 0;
+    
+    {
+        arg1 = gh_scm2int(s_0);
+    }
+    {
+        arg2 = gh_scm2int(s_1);
+    }
+    gh_defer_ints();
+    game_add_bomb(arg1,arg2);
+    
+    gh_allow_ints();
+    gswig_result = GH_UNSPECIFIED;
+    
+    return gswig_result;
+    #undef FUNC_NAME
+}
+
+
+static SCM
 _wrap_game_add_igel (SCM s_0, SCM s_1)
 {
     #define FUNC_NAME "game-add-igel"
@@ -1530,6 +1556,7 @@ SWIG_init (void)
     gh_new_procedure("file-dialog", (swig_guile_proc) _wrap_file_dialog, 0, 0, 0);
     gh_new_procedure("game-play", (swig_guile_proc) _wrap_game_play, 1, 0, 0);
     gh_new_procedure("game-add-water", (swig_guile_proc) _wrap_game_add_water, 4, 0, 0);
+    gh_new_procedure("game-add-bomb", (swig_guile_proc) _wrap_game_add_bomb, 2, 0, 0);
     gh_new_procedure("game-add-igel", (swig_guile_proc) _wrap_game_add_igel, 2, 0, 0);
     gh_new_procedure("game-set-player", (swig_guile_proc) _wrap_game_set_player, 2, 0, 0);
     gh_new_procedure("make-game-world", (swig_guile_proc) _wrap_make_game_world, 2, 0, 0);

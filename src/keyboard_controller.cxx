@@ -1,4 +1,4 @@
-//  $Id: keyboard_controller.cxx,v 1.4 2003/08/18 08:50:22 grumbel Exp $
+//  $Id: keyboard_controller.cxx,v 1.5 2003/09/15 17:00:38 grumbel Exp $
 //
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -49,7 +49,7 @@ KeyboardController::is_down ()
 bool
 KeyboardController::fire_pressed ()
 {
-  return CL_Keyboard::get_keycode (CL_KEY_Q);
+  return CL_Keyboard::get_keycode (CL_KEY_LCONTROL);
 }
 
 bool

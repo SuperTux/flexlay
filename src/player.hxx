@@ -1,4 +1,4 @@
-//  $Id: player.hxx,v 1.7 2003/09/13 10:11:33 grumbel Exp $
+//  $Id: player.hxx,v 1.8 2003/09/15 17:00:38 grumbel Exp $
 // 
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -63,13 +63,14 @@ private:
   CL_Vector velocity;
   
   CL_Sprite walk;
+  CL_Sprite sit;
   CL_Sprite jump;
   CL_Sprite stand;
 
-  CL_Sprite sit;
   CL_Sprite roll;
   CL_Sprite surround;
 
+  bool bomb_placed;
   float hit_count;
   int energie;
 public:

@@ -1,4 +1,4 @@
-//  $Id: windstille_game.cxx,v 1.15 2003/09/13 18:01:17 grumbel Exp $
+//  $Id: windstille_game.cxx,v 1.16 2003/09/15 17:00:38 grumbel Exp $
 //
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -110,6 +110,7 @@ WindstilleGame::display ()
 
   gh_load ((datadir + "game.scm").c_str());
 
+  bool pause = false;
   while (!CL_Keyboard::get_keycode (CL_KEY_ESCAPE))
     {
       float delta = delta_manager.getset ();
@@ -143,9 +144,17 @@ WindstilleGame::display ()
 
       view.draw ();
       
-      {
-        float step = 20/1000.0f;
-        float d = delta;
+      if (CL_Keyboard::get_keycode (CL_KEY_P))
+        {
+          pause = !pause;
+          while (CL_Keyboard::get_keycode (CL_KEY_P))
+            CL_System::keep_alive();
+        }
+
+      if (!pause)
+        {
+          float step = 20/1000.0f;
+          float d = delta;
           while (d > step)
             {
               view.update (step);
@@ -156,7 +165,7 @@ WindstilleGame::display ()
           view.update (d);
           world->update (d);
           energiebar.update(d);
-      }
+        }
 
       if (0) // Laser
         {
@@ -181,52 +190,52 @@ WindstilleGame::display ()
       
       if (0)
         { // Darkness
-        int   vborder = 250;
-        int   hborder = 350;
-        float left   = hborder;
-        float right  = 800 - hborder;
-        float top    = vborder;
-        float bottom = 600 - vborder;
-        float alpha  = .8f;
+          int   vborder = 250;
+          int   hborder = 350;
+          float left   = hborder;
+          float right  = 800 - hborder;
+          float top    = vborder;
+          float bottom = 600 - vborder;
+          float alpha  = .8f;
 
-        Display::begin_gl();
-        glEnable (GL_BLEND);
-        glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
-        glBegin(GL_QUADS);
+          Display::begin_gl();
+          glEnable (GL_BLEND);
+          glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+          glBegin(GL_QUADS);
         
-        glColor4f(0.0f, 0.0f, 0.0f, alpha);
-        glVertex2f(0, 0);
-        glVertex2f(800, 0);
-        glColor4f(0.0f, 0.0f, 0.0f, 0.0f);
-        glVertex2f(right, top);
-        glVertex2f(left, top);
+          glColor4f(0.0f, 0.0f, 0.0f, alpha);
+          glVertex2f(0, 0);
+          glVertex2f(800, 0);
+          glColor4f(0.0f, 0.0f, 0.0f, 0.0f);
+          glVertex2f(right, top);
+          glVertex2f(left, top);
 
-        glColor4f(0.0f, 0.0f, 0.0f, 0.0f);
-        glVertex2f(left, bottom);
-        glVertex2f(right, bottom);
-        glColor4f(0.0f, 0.0f, 0.0f, alpha);
-        glVertex2f(800, 600);
-        glVertex2f(  0, 600);
+          glColor4f(0.0f, 0.0f, 0.0f, 0.0f);
+          glVertex2f(left, bottom);
+          glVertex2f(right, bottom);
+          glColor4f(0.0f, 0.0f, 0.0f, alpha);
+          glVertex2f(800, 600);
+          glVertex2f(  0, 600);
 
-        glColor4f(0.0f, 0.0f, 0.0f, alpha);
-        glVertex2f(0, 0);
-        glColor4f(0.0f, 0.0f, 0.0f, 0.0f);
-        glVertex2f(left, top);
-        glVertex2f(left, bottom);
-        glColor4f(0.0f, 0.0f, 0.0f, alpha);
-        glVertex2f(  0, 600);
+          glColor4f(0.0f, 0.0f, 0.0f, alpha);
+          glVertex2f(0, 0);
+          glColor4f(0.0f, 0.0f, 0.0f, 0.0f);
+          glVertex2f(left, top);
+          glVertex2f(left, bottom);
+          glColor4f(0.0f, 0.0f, 0.0f, alpha);
+          glVertex2f(  0, 600);
 
-        glColor4f(0.0f, 0.0f, 0.0f, 0.0f);
-        glVertex2f(right, top);
-        glColor4f(0.0f, 0.0f, 0.0f, alpha);
-        glVertex2f(800, 0);
-        glVertex2f(800, 600);
-        glColor4f(0.0f, 0.0f, 0.0f, 0.0f);
-        glVertex2f(right, bottom);
+          glColor4f(0.0f, 0.0f, 0.0f, 0.0f);
+          glVertex2f(right, top);
+          glColor4f(0.0f, 0.0f, 0.0f, alpha);
+          glVertex2f(800, 0);
+          glVertex2f(800, 600);
+          glColor4f(0.0f, 0.0f, 0.0f, 0.0f);
+          glVertex2f(right, bottom);
 
-        glEnd();
-        Display::end_gl();
-      }
+          glEnd();
+          Display::end_gl();
+        }
 
       if (1)
         {

@@ -4154,29 +4154,29 @@ fi
      PKG_CONFIG_MIN_VERSION=0.9.0
      if $PKG_CONFIG --atleast-pkgconfig-version $PKG_CONFIG_MIN_VERSION; then
         echo "$as_me:$LINENO: checking for
-  clanCore    >= $REQUIRED_CLANLIB_VERSION
-  clanApp     >= $REQUIRED_CLANLIB_VERSION
-  clanDisplay >= $REQUIRED_CLANLIB_VERSION
-  clanGL      >= $REQUIRED_CLANLIB_VERSION
-  clanGUI     >= $REQUIRED_CLANLIB_VERSION
-  clanGUIStyleSilver >= $REQUIRED_CLANLIB_VERSION
+  clanCore-0.7           >= $REQUIRED_CLANLIB_VERSION
+  clanApp-0.7            >= $REQUIRED_CLANLIB_VERSION
+  clanDisplay-0.7        >= $REQUIRED_CLANLIB_VERSION
+  clanGL-0.7             >= $REQUIRED_CLANLIB_VERSION
+  clanGUI-0.7            >= $REQUIRED_CLANLIB_VERSION
+  clanGUIStyleSilver-0.7 >= $REQUIRED_CLANLIB_VERSION
   " >&5
 echo $ECHO_N "checking for
-  clanCore    >= $REQUIRED_CLANLIB_VERSION
-  clanApp     >= $REQUIRED_CLANLIB_VERSION
-  clanDisplay >= $REQUIRED_CLANLIB_VERSION
-  clanGL      >= $REQUIRED_CLANLIB_VERSION
-  clanGUI     >= $REQUIRED_CLANLIB_VERSION
-  clanGUIStyleSilver >= $REQUIRED_CLANLIB_VERSION
+  clanCore-0.7           >= $REQUIRED_CLANLIB_VERSION
+  clanApp-0.7            >= $REQUIRED_CLANLIB_VERSION
+  clanDisplay-0.7        >= $REQUIRED_CLANLIB_VERSION
+  clanGL-0.7             >= $REQUIRED_CLANLIB_VERSION
+  clanGUI-0.7            >= $REQUIRED_CLANLIB_VERSION
+  clanGUIStyleSilver-0.7 >= $REQUIRED_CLANLIB_VERSION
   ... $ECHO_C" >&6
 
         if $PKG_CONFIG --exists "
-  clanCore    >= $REQUIRED_CLANLIB_VERSION
-  clanApp     >= $REQUIRED_CLANLIB_VERSION
-  clanDisplay >= $REQUIRED_CLANLIB_VERSION
-  clanGL      >= $REQUIRED_CLANLIB_VERSION
-  clanGUI     >= $REQUIRED_CLANLIB_VERSION
-  clanGUIStyleSilver >= $REQUIRED_CLANLIB_VERSION
+  clanCore-0.7           >= $REQUIRED_CLANLIB_VERSION
+  clanApp-0.7            >= $REQUIRED_CLANLIB_VERSION
+  clanDisplay-0.7        >= $REQUIRED_CLANLIB_VERSION
+  clanGL-0.7             >= $REQUIRED_CLANLIB_VERSION
+  clanGUI-0.7            >= $REQUIRED_CLANLIB_VERSION
+  clanGUIStyleSilver-0.7 >= $REQUIRED_CLANLIB_VERSION
   " ; then
             echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -4185,12 +4185,12 @@ echo "${ECHO_T}yes" >&6
             echo "$as_me:$LINENO: checking WINDSTILLE_CFLAGS" >&5
 echo $ECHO_N "checking WINDSTILLE_CFLAGS... $ECHO_C" >&6
             WINDSTILLE_CFLAGS=`$PKG_CONFIG --cflags "
-  clanCore    >= $REQUIRED_CLANLIB_VERSION
-  clanApp     >= $REQUIRED_CLANLIB_VERSION
-  clanDisplay >= $REQUIRED_CLANLIB_VERSION
-  clanGL      >= $REQUIRED_CLANLIB_VERSION
-  clanGUI     >= $REQUIRED_CLANLIB_VERSION
-  clanGUIStyleSilver >= $REQUIRED_CLANLIB_VERSION
+  clanCore-0.7           >= $REQUIRED_CLANLIB_VERSION
+  clanApp-0.7            >= $REQUIRED_CLANLIB_VERSION
+  clanDisplay-0.7        >= $REQUIRED_CLANLIB_VERSION
+  clanGL-0.7             >= $REQUIRED_CLANLIB_VERSION
+  clanGUI-0.7            >= $REQUIRED_CLANLIB_VERSION
+  clanGUIStyleSilver-0.7 >= $REQUIRED_CLANLIB_VERSION
   "`
             echo "$as_me:$LINENO: result: $WINDSTILLE_CFLAGS" >&5
 echo "${ECHO_T}$WINDSTILLE_CFLAGS" >&6
@@ -4198,12 +4198,12 @@ echo "${ECHO_T}$WINDSTILLE_CFLAGS" >&6
             echo "$as_me:$LINENO: checking WINDSTILLE_LIBS" >&5
 echo $ECHO_N "checking WINDSTILLE_LIBS... $ECHO_C" >&6
             WINDSTILLE_LIBS=`$PKG_CONFIG --libs "
-  clanCore    >= $REQUIRED_CLANLIB_VERSION
-  clanApp     >= $REQUIRED_CLANLIB_VERSION
-  clanDisplay >= $REQUIRED_CLANLIB_VERSION
-  clanGL      >= $REQUIRED_CLANLIB_VERSION
-  clanGUI     >= $REQUIRED_CLANLIB_VERSION
-  clanGUIStyleSilver >= $REQUIRED_CLANLIB_VERSION
+  clanCore-0.7           >= $REQUIRED_CLANLIB_VERSION
+  clanApp-0.7            >= $REQUIRED_CLANLIB_VERSION
+  clanDisplay-0.7        >= $REQUIRED_CLANLIB_VERSION
+  clanGL-0.7             >= $REQUIRED_CLANLIB_VERSION
+  clanGUI-0.7            >= $REQUIRED_CLANLIB_VERSION
+  clanGUIStyleSilver-0.7 >= $REQUIRED_CLANLIB_VERSION
   "`
             echo "$as_me:$LINENO: result: $WINDSTILLE_LIBS" >&5
 echo "${ECHO_T}$WINDSTILLE_LIBS" >&6
@@ -4213,12 +4213,12 @@ echo "${ECHO_T}$WINDSTILLE_LIBS" >&6
             ## If we have a custom action on failure, don't print errors, but
             ## do set a variable so people can do so.
             WINDSTILLE_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "
-  clanCore    >= $REQUIRED_CLANLIB_VERSION
-  clanApp     >= $REQUIRED_CLANLIB_VERSION
-  clanDisplay >= $REQUIRED_CLANLIB_VERSION
-  clanGL      >= $REQUIRED_CLANLIB_VERSION
-  clanGUI     >= $REQUIRED_CLANLIB_VERSION
-  clanGUIStyleSilver >= $REQUIRED_CLANLIB_VERSION
+  clanCore-0.7           >= $REQUIRED_CLANLIB_VERSION
+  clanApp-0.7            >= $REQUIRED_CLANLIB_VERSION
+  clanDisplay-0.7        >= $REQUIRED_CLANLIB_VERSION
+  clanGL-0.7             >= $REQUIRED_CLANLIB_VERSION
+  clanGUI-0.7            >= $REQUIRED_CLANLIB_VERSION
+  clanGUIStyleSilver-0.7 >= $REQUIRED_CLANLIB_VERSION
   "`
             echo $WINDSTILLE_PKG_ERRORS
         fi
@@ -4235,20 +4235,20 @@ echo "${ECHO_T}$WINDSTILLE_LIBS" >&6
      :
   else
      { { echo "$as_me:$LINENO: error: Library requirements (
-  clanCore    >= $REQUIRED_CLANLIB_VERSION
-  clanApp     >= $REQUIRED_CLANLIB_VERSION
-  clanDisplay >= $REQUIRED_CLANLIB_VERSION
-  clanGL      >= $REQUIRED_CLANLIB_VERSION
-  clanGUI     >= $REQUIRED_CLANLIB_VERSION
-  clanGUIStyleSilver >= $REQUIRED_CLANLIB_VERSION
+  clanCore-0.7           >= $REQUIRED_CLANLIB_VERSION
+  clanApp-0.7            >= $REQUIRED_CLANLIB_VERSION
+  clanDisplay-0.7        >= $REQUIRED_CLANLIB_VERSION
+  clanGL-0.7             >= $REQUIRED_CLANLIB_VERSION
+  clanGUI-0.7            >= $REQUIRED_CLANLIB_VERSION
+  clanGUIStyleSilver-0.7 >= $REQUIRED_CLANLIB_VERSION
   ) not met; consider adjusting the PKG_CONFIG_PATH environment variable if your libraries are in a nonstandard prefix so pkg-config can find them." >&5
 echo "$as_me: error: Library requirements (
-  clanCore    >= $REQUIRED_CLANLIB_VERSION
-  clanApp     >= $REQUIRED_CLANLIB_VERSION
-  clanDisplay >= $REQUIRED_CLANLIB_VERSION
-  clanGL      >= $REQUIRED_CLANLIB_VERSION
-  clanGUI     >= $REQUIRED_CLANLIB_VERSION
-  clanGUIStyleSilver >= $REQUIRED_CLANLIB_VERSION
+  clanCore-0.7           >= $REQUIRED_CLANLIB_VERSION
+  clanApp-0.7            >= $REQUIRED_CLANLIB_VERSION
+  clanDisplay-0.7        >= $REQUIRED_CLANLIB_VERSION
+  clanGL-0.7             >= $REQUIRED_CLANLIB_VERSION
+  clanGUI-0.7            >= $REQUIRED_CLANLIB_VERSION
+  clanGUIStyleSilver-0.7 >= $REQUIRED_CLANLIB_VERSION
   ) not met; consider adjusting the PKG_CONFIG_PATH environment variable if your libraries are in a nonstandard prefix so pkg-config can find them." >&2;}
    { (exit 1); exit 1; }; }
   fi
@@ -4256,6 +4256,8 @@ echo "$as_me: error: Library requirements (
 
 
 
+
+CXXFLAGS="$CXXFLAGS $WINDSTILLE_CFLAGS"
 
                                                                       ac_config_files="$ac_config_files Makefile data/Makefile src/Makefile src/collision/Makefile src/scripting/Makefile src/guile/Makefile src/editor/Makefile"
 

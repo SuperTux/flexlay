@@ -1,10 +1,8 @@
+(use-modules (ice-9 readline))
 (catch #t
-       (lambda () 
-         (use-modules (ice-9 readline))
-         (activate-readline))
-       (lambda args (display "Guile Error: ")(display args)(newline)))
-
-(display "EDITOR HELLOWORLD\n")
+       'activate-readline
+       (lambda args
+         (display "Guile Error: ")(display args)(newline)))
 
 (define screen-width  (screen-get-width))
 (define screen-height (screen-get-height))

@@ -7,6 +7,8 @@ bin_PROGRAMS = windstille
 windstille_SOURCES = \
   animation_obj.cxx \
   animation_obj.hxx \
+  bomb.hxx \
+  bomb.cxx \
   bonus_flyer.cxx \
   bonus_flyer.hxx \
   controller.hxx \
@@ -68,14 +70,14 @@ windstille_SOURCES = \
   water_splash.cxx \
   windstille_main.hxx
 
-windstille_CXXFLAGS = \
-  @WINDSTILLE_CFLAGS@
-
 windstille_LDADD = \
   scripting/libwindstille_scripting.a \
   editor/libwindstille_editor.a \
   collision/libwindstille_collision.a \
   @WINDSTILLE_LIBS@
+
+windstille_CPPFLAGS = \
+  @WINDSTILLE_CFLAGS@
 
 REST_LIBS = \
 -lpthread \

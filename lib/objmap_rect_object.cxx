@@ -127,6 +127,12 @@ public:
   void update_control_points();
 };
 
+CL_Rect
+ObjMapRectObject::get_rect() const
+{
+  return impl->get_bound_rect();
+}
+
 void
 ObjMapRectObjectImpl::update_control_points()
 {

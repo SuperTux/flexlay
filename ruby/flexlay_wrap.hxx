@@ -20,11 +20,24 @@
 #ifndef HEADER_FLEXLAY_WRAP_HXX
 #define HEADER_FLEXLAY_WRAP_HXX
 
+#include <iostream>
+#include <typeinfo>
 #include "ruby.h"
 
+class CL_Point;
+class ObjectBrush;
 class ObjMapObject;
 
-VALUE ObjMapObject2Value(const ObjMapObject& arg);
+template<class C>
+VALUE convert_to_ruby_value(const C& c)
+{
+  std::cout << "Error: conversion for type '" << typeid(c).name() << "' missing" << std::endl;
+  return Qnil;
+}
+
+template<> VALUE convert_to_ruby_value<ObjMapObject>(const ObjMapObject& arg);
+template<> VALUE convert_to_ruby_value<ObjectBrush>(const ObjectBrush& arg);
+template<> VALUE convert_to_ruby_value<int>(const int& arg);
 
 #endif
 

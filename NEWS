@@ -2,9 +2,7 @@ Flexlay 0.1.0
 =============
  - new directory layout, modules for different games and languages are
    now seperate
-
-Flexlay 0.0.2
-=============
+ - support for resizable rectangular objects
  - switched build system from autohell to SCons
  - restructured the scripting bindings
  - C++ object hierachy now completly available in scripting
@@ -15,6 +13,7 @@ Flexlay 0.0.2
  - configurable keyboard shortcut support
  - support for constrained object movement
  - SuperTux: support for multiple sublevels
+
 
 Flexlay 0.0.1
 ==============

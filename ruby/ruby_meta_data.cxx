@@ -69,4 +69,10 @@ void connect_v1_ObjMapObject(CL_Signal_v1<ObjMapObject>& sig, VALUE func)
   new CL_Slot(sig.connect_functor(RubyFunctor(func)));
 }
 
+void connect_v2_ObjectBrush_Point(CL_Signal_v2<ObjectBrush, CL_Point>& sig, VALUE func)
+{
+  sig = CL_Signal_v2<ObjectBrush, CL_Point>();
+  new CL_Slot(sig.connect_functor(RubyFunctor(func)));
+}
+
 /* EOF */

@@ -17,24 +17,33 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-#ifndef HEADER_RUBY_META_DATA_HXX
-#define HEADER_RUBY_META_DATA_HXX
+#ifndef HEADER_RUBY_CONVERTER_HXX
+#define HEADER_RUBY_CONVERTER_HXX
 
-#include <ClanLib/signals.h>
-#include "ruby.h"
-#include "meta_data.hxx"
-#include "objmap_object.hxx"
-#include "object_brush.hxx"
+#include "flexlay_wrap.hxx"
 
-MetaData  make_metadata(VALUE obj);
-VALUE get_ruby_object(const MetaData& data);
+// The following functions are defined in flexlay_wrap.i, a bit hacky but seems to work
+VALUE ObjMapObject2Value(const ObjMapObject& arg);
+VALUE ObjectBrush2Value(const ObjectBrush& arg);
+VALUE ObjectBrush2Value(const CL_Point& arg);
 
-void connect(CL_Signal_v0& sig, VALUE obj);
-void connect_v1(CL_Signal_v1<int>& sig, VALUE obj);
-void connect_v2(CL_Signal_v2<int, int>& sig, VALUE obj);
+template<>
+VALUE convert_to_ruby_value<ObjMapObject>(const ObjMapObject& arg)
+{
+  return ObjMapObject2Value(arg);
+}
 
-void connect_v1_ObjMapObject(CL_Signal_v1<ObjMapObject>& sig, VALUE func);
-void connect_v2_ObjectBrush_Point(CL_Signal_v2<ObjectBrush, CL_Point>& sig, VALUE func);
+template<>
+VALUE convert_to_ruby_value<ObjectBrush>(const ObjectBrush& arg)
+{
+  return ObjectBrush2Value(arg);
+}
+
+template<>
+VALUE convert_to_ruby_value<int>(const int& arg)
+{
+  return INT2FIX(arg);
+}
 
 #endif
 

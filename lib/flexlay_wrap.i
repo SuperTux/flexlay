@@ -71,6 +71,18 @@ VALUE ObjMapObject2Value(const ObjMapObject& arg)
  return SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_ObjMapObject, 1);
 }
 
+VALUE ObjectBrush2Value(const ObjectBrush& arg)
+{
+ ObjectBrush* resultptr = new ObjectBrush(arg);
+ return SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_ObjectBrush, 1);
+}
+
+VALUE ObjectBrush2Value(const CL_Point& arg)
+{
+ CL_Point* resultptr = new CL_Point(arg);
+ return SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_CL_Point, 1);
+}
+
 #endif
 %}
 
@@ -136,5 +148,6 @@ VALUE ObjMapObject2Value(const ObjMapObject& arg)
 %include "../ruby/ruby_meta_data.hxx"
 %include "../ruby/ruby_sexpr_parser.hxx"
 #endif
+
 
 /* EOF */

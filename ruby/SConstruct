@@ -70,7 +70,8 @@ flexlay_ruby_lib = libflexlay_ruby_env.SharedLibrary(
     'ruby_functor.cxx',
     'ruby_meta_data.cxx',
     'ruby_sexpr_parser.cxx',
-    'ruby_object.cxx'
+    'ruby_object.cxx',
+    'ruby_converter.cxx'
     ],
     CPPPATH=['$USER_CPPPATH','$RUBYDIR','../lib/'] + clanLib_env['CPPPATH'],
     LINKFLAGS = clanLib_env['LINKFLAGS'],

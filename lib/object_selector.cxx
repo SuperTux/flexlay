@@ -70,6 +70,7 @@ ObjectSelector::mouse_up(const CL_InputEvent& event)
                 CL_Point target(screen.x - EditorMapComponent::current()->get_screen_rect().left,
                                 screen.y - EditorMapComponent::current()->get_screen_rect().top);
       
+                // FIXME: Move this to the scripting layer
                 ObjectAddCommand command(ObjectLayer::current());
 
                 ObjMapObject obj = brushes[drag_obj].to_sprite_object
@@ -78,7 +79,9 @@ ObjectSelector::mouse_up(const CL_InputEvent& event)
                 command.add_object(obj);
                 Workspace::current().get_map().execute(command.to_command());
                 
-                on_drop(obj);
+                std::cout << "C++: Calling on_drop" << std::endl;
+                on_drop(brushes[drag_obj], target);
+                std::cout << "C++: Calling on_drop: done" << std::endl;
               }
             drag_obj = -1;
           }
@@ -204,7 +207,7 @@ ObjectSelector::add_brush(const ObjectBrush& brush)
   brushes.push_back(brush);
 }
 
-CL_Signal_v1<ObjMapObject>&
+CL_Signal_v2<ObjectBrush, CL_Point>&
 ObjectSelector::sig_drop()
 {
   return on_drop;

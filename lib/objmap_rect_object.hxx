@@ -36,6 +36,7 @@ public:
     
   void draw();
 
+  CL_Rect get_rect() const;
   ObjMapObject to_object();
 private:
   SharedPtr<ObjMapRectObjectImpl> impl;

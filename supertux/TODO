@@ -9,7 +9,58 @@ ToDo:
  - scrollbar in tileselector
  - object properties
  - gui and some magic to set the supertux datadir
+ - paralax layers
+ - doors/sector support needs improvement
+ - moving platforms + path
+ - camera path 
+ - automatic backup of files
+ - reset points
 
+New Object Types:
+=================
+  writer.start_list("secretarea");
+  writer.write_float("x", bbox.p1.x);
+  writer.write_float("y", bbox.p1.y);
+  writer.write_float("width", bbox.get_width());
+  writer.write_float("height", bbox.get_height());
+  writer.write_string("message", message);
+
+  writer.start_list("sequencetrigger");
+  writer.write_float("x", bbox.p1.x);
+  writer.write_float("y", bbox.p1.y);
+  writer.write_float("width", bbox.get_width());
+  writer.write_float("height", bbox.get_height());
+  writer.write_string("sequence", sequence_name);
+
+  writer.start_list("door");
+  writer.write_float("x", bbox.p1.x);
+  writer.write_float("y", bbox.p1.y);
+  writer.write_float("width", bbox.get_width());
+  writer.write_float("height", bbox.get_height()); 
+  writer.write_string("sector", target_sector);
+  writer.write_string("spawnpoint", target_spawnpoint);
+
+  writer.start_list("camera"); 
+  if(mode == NORMAL) {
+    writer.write_string("mode", "normal");
+    writer.write_bool("backscrolling", do_backscrolling);
+  } else if(mode == AUTOSCROLL) {
+    writer.write_string("mode", "autoscroll");
+    writer.start_list("path");
+    for(std::vector<ScrollPoint>::iterator i = scrollpoints.begin();
+        i != scrollpoints.end(); ++i) {
+      writer.start_list("point");
+      writer.write_float("x", i->position.x);
+      writer.write_float("y", i->position.y);
+      writer.write_float("speed", i->speed);
+      writer.end_list("point");
+    }
+    writer.end_list("path");
+  } else if(mode == MANUAL) {
+    writer.write_string("mode", "manual");
+  }
+
+   
 Bugs
 ====
 

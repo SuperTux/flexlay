@@ -4,6 +4,19 @@ class GameObj
   end
 end
 
+class SecretArea
+  attr_accessor :message
+
+  def save(f, obj)
+    rect = obj.get_rect()
+    f.write("        (secretarea (x #{rect.left})\n" \
+            "                    (y #{rect.top})\n"  \
+            "                    (width #{rect.get_width()})\n" \
+            "                    (height #{rect.get_height()})\n" \
+            "                    (message \"#{@message.inspect}\"))")
+  end
+end
+
 class BadGuy<GameObj
   def initialize(type)
     @type = type

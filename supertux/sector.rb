@@ -165,9 +165,9 @@ class Sector
                                              CL_Point.new(x, y), make_metadata(nil)).to_object()
 
           if name == "door"
-            metadata = make_metadata(Door.new(spriteobj, data))
+            metadata = Door.new(spriteobj, data)
           else
-            metadata = make_metadata(BadGuy.new(name))
+            metadata = BadGuy.new(name)
           end
 
           spriteobj.set_metadata(metadata)
@@ -250,7 +250,7 @@ class Sector
     f.write("      (mode \"normal\")\n")
     f.write("      (path\n")
     for obj in @objects.get_objects()
-      pathnode = get_ruby_object(obj.get_metadata())
+      pathnode = obj.get_metadata()
       if (pathnode.is_a?(PathNode))
         f.write("       (point (x %d) (y %d) (speed 1))\n" % obj.get_pos().x, obj.get_pos().y)
       end
@@ -258,7 +258,7 @@ class Sector
     f.write("    ))\n\n")
 
     for obj in @objects.get_objects()
-      badguy = get_ruby_object(obj.get_metadata())
+      badguy = obj.get_metadata()
       if (badguy.is_a?(GameObj))
         badguy.save(f, obj)
       end

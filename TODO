@@ -1,0 +1,4 @@
+- SConstruct file needs configuration features (check for clanlib,
+   check for ruby.h, check for swig1.3)
+
+# EOF #

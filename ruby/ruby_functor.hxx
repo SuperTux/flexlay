@@ -20,9 +20,10 @@
 #ifndef HEADER_RUBY_FUNCTOR_HXX
 #define HEADER_RUBY_FUNCTOR_HXX
 
+#include <iostream>
 #include "ruby.h"
-#include "objmap_object.hxx"
 #include "ruby_object.hxx"
+#include "flexlay_wrap.hxx"
 
 /** */
 class RubyFunctor
@@ -38,9 +39,40 @@ public:
   void operator()(int i);
   void operator()(int x, int y);
 
-  void operator()(ObjMapObject obj);
+  /** Print backtrace in case of error */
+  static void print_error();
 
-  static VALUE call_protected(VALUE self);
+  // FIXME: Protect these function calls somehow
+  template<class C> void operator()(const C& c)
+  {
+    //VALUE arg1 = convert_to_ruby_value(c);
+    //rb_funcall(val.ptr(), rb_intern("call"), 1, arg1);
+    int state = 0;
+    VALUE args[2];
+    args[0] = reinterpret_cast<VALUE>(this);
+    args[1] = convert_to_ruby_value(c);
+    args[2] = convert_to_ruby_value(c);
+    rb_protect(&RubyFunctor::funcall_protect2, reinterpret_cast<VALUE>(args), &state);
+    if (state)
+      print_error();
+  }
+
+  template<class C, class D> void operator()(const C& c, const D& d)
+  {
+    std::cout << "Calling operator() with two args" << std::endl;
+    int state = 0;
+    VALUE args[2];
+    args[0] = reinterpret_cast<VALUE>(this);
+    args[1] = convert_to_ruby_value(c);
+    args[2] = convert_to_ruby_value(c);
+    rb_protect(&RubyFunctor::funcall_protect2, reinterpret_cast<VALUE>(args), &state);
+    if (state)
+      print_error();
+  }
+  
+  static VALUE funcall_protect(VALUE self);
+  static VALUE funcall_protect1(VALUE self);
+  static VALUE funcall_protect2(VALUE self);
 };
 
 #endif

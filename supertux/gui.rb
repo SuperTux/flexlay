@@ -8,6 +8,10 @@ class SuperTuxGUI
 
   attr_reader :tileselector, :editor_map, :workspace, :minimap, :recent_files_menu, :gui
 
+  def get_component()
+    return @gui.get_component()
+  end
+
   def initialize()
     @editor = Editor.new()
     @gui    = @editor.get_gui_manager()
@@ -34,7 +38,8 @@ class SuperTuxGUI
     @objectselector = ObjectSelector.new(CL_Rect.new(0, 0, 128, 256), 42, 42, @selector_window)
     @objectselector.show(true)
 
-    connect_v1_ObjMapObject(@objectselector.sig_drop(), method(:on_object_drop))
+    # connect_v1_ObjMapObject
+    connect_v2_ObjectBrush_Point(@objectselector.sig_drop(), method(:on_object_drop))
 
     $game_objects.each do |object|
       @objectselector.add_brush(ObjectBrush.new(make_sprite($datadir + object[1]),
@@ -93,7 +98,11 @@ class SuperTuxGUI
                                  $objmap_select_tool.clear_selection()
                                })
                  menu.add_item($mysprite, "Edit Properties", proc{
-                                 puts "Implement me"
+                                 $objmap_select_tool.get_selection().each {|i|
+                                   puts i
+                                   puts i.get_data()
+                                   i.get_data().property_dialog()
+                                 }
                                })
                  menu.run()
                })
@@ -122,10 +131,9 @@ class SuperTuxGUI
 
     connect_v2(@editor_map.sig_on_key("a"),  proc { |x, y|
                  pos = @editor_map.screen2world(CL_Point.new(x, y))
-                 puts "Inserting rect at: #{pos.x}, #{pos.y}"
                  rectobj = ObjMapRectObject.new(CL_Rect.new(pos,
                                                             CL_Size.new(128, 64)),
-                                                CL_Color.new(0, 255, 255, 255),
+                                                CL_Color.new(0, 255, 255, 155),
                                                 make_metadata(nil))
                  # rectobj.set_metadata(metadata)
                  @workspace.get_map().get_metadata().objects.add_object(rectobj.to_object())
@@ -201,11 +209,12 @@ class SuperTuxGUI
     button_panel.add_icon("../data/images/icons24/eye.png", proc{ @tilegroup_menu.run() })
   end
 
-  def on_object_drop(cppobj)
+  def on_object_drop(brush, pos)
+    print "on_object_drop: #{brush} #{pos}"
     # Get the metadata info and extract the generator call from it, see $game_objects
-    print "on_object_drop:\n"
-    metadata = get_ruby_object(cppobj.get_metadata())
-    cppobj.set_metadata(make_metadata(metadata[2].call(cppobj)))
+    #print "on_object_drop:\n"
+    #metadata = cppobj.get_metadata()
+    #cppobj.set_metadata(metadata[2].call(cppobj))
   end
 
   def run()
@@ -573,7 +582,7 @@ class SuperTuxGUI
     print "Connecting path nodes"
     pathnodes = []
     for i in $objmap_select_tool.get_selection()
-      obj = get_ruby_object(i.get_metadata())
+      obj = i.get_metadata()
       if obj.is_a?(PathNode)
         pathnodes.push(obj.node)
       end

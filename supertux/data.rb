@@ -11,7 +11,8 @@ $game_objects = [
   ["spiky", "images/shared/spiky-left-0.png", proc{|data| BadGuy.new("spiky")}],
   ["playerspawn", "images/shared/resetpoint.png", proc{|data| SpawnPoint.new(data)}],
   ["door", "images/shared/door-1.png", proc{|data| Door.new(data)}],
-  ["trampoline", "images/shared/trampoline-1.png", proc{|data| BadGuy.new("trampoline")}]
+  ["trampoline", "images/shared/trampoline-1.png", proc{|data| BadGuy.new("trampoline")}],
+#   ["secretarea", "images/shared/secretarea.png", proc{|data| SecretArea.new()}]
 ]
 
 $solid_itiles = [10, 11, 12, 13, 14, 15, 20, 21, 22, 23, 30, 31, 113, 114]

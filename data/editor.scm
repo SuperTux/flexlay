@@ -301,12 +301,6 @@
                          (simple-file-dialog "Load a level..." (get-last-file)
                                              (lambda (filename)
                                                (load-map filename)))))
-    (gui-add-menu-item menu "File/Open NetPanzer.." 
-                       (lambda ()
-                         (simple-file-dialog "Load a level..." (get-last-file)
-                                             (lambda (filename)
-                                               (netpanzer:load-map filename)))))
-
 
     (for-each (lambda (level)
                 (gui-add-menu-item menu (string-append "File/Open Recent >/" (basename level))
@@ -319,13 +313,6 @@
                          (simple-file-dialog "Save a level..." (get-last-file)
                                              (lambda (filename) 
                                                (save-map filename)
-                                               (push-last-file filename)))))
-
-    (gui-add-menu-item menu "File/Save Netpanzer" 
-                       (lambda ()
-                         (simple-file-dialog "Save a level..." (get-last-file)
-                                             (lambda (filename) 
-                                               (netpanzer:save-map filename)
                                                (push-last-file filename)))))
 
     (gui-add-menu-item menu "File/Save As..." 
@@ -346,12 +333,30 @@
                                                       (save-map filename)
                                                       (push-last-file filename)))))))
 
-    (gui-add-menu-item menu "File/Play" 
+(case *game*
+  ((netpanzer)
+    (gui-add-menu-item menu "File/Import NetPanzer.." 
                        (lambda ()
-                         (let ((file (tmpnam)))
-                           (save-map file)
-                           (game-play file)
-                           (delete-file file))))
+                         (simple-file-dialog "Import netPanzer level..." (get-last-file)
+                                             (lambda (filename)
+                                               (netpanzer:load-map filename)))))
+
+
+    (gui-add-menu-item menu "File/Export Netpanzer" 
+                       (lambda ()
+                         (simple-file-dialog "Export netPanzer level..." (get-last-file)
+                                             (lambda (filename) 
+                                               (netpanzer:save-map filename)
+                                               (push-last-file filename)))))
+    ))
+
+;; Move this to game specifc code
+;;    (gui-add-menu-item menu "File/Play" 
+;;                       (lambda ()
+;;                         (let ((file (tmpnam)))
+;;                           (save-map file)
+;;                           (game-play file)
+;;                           (delete-file file))))
 
     (gui-add-menu-item menu "File/Quit" 
                        (lambda ()
@@ -502,7 +507,8 @@
     (let ((ok       (gui-create-button 190 100 50 25 "Ok"))
           (cancel   (gui-create-button 130 100 50 25 "Cancel"))
           (filename (gui-create-inputbox 10 30 180 30 filename))
-          (browse   (gui-create-button 190 30 50 20 "Browse...")))
+          ;;(browse   (gui-create-button 190 30 50 20 "Browse..."))
+          )
 
       (gui-component-on-click ok 
                               (lambda ()   
@@ -513,11 +519,11 @@
                               (lambda () 
                                 (gui-hide-component window)))
 
-      (gui-component-on-click browse
-                              (lambda ()
-                                (gui-file-dialog (gui-inputbox-get-text filename)
-                                                 (lambda (filename)
-                                                   (gui-inputbox-set-text filename)))))
+;;      (gui-component-on-click browse
+;;                              (lambda ()
+;;                                (gui-file-dialog (gui-inputbox-get-text filename)
+;;                                                (lambda (filename)
+;;                                                   (gui-inputbox-set-text filename)))))
 
       (gui-pop-component)
       window)))
@@ -744,7 +750,22 @@
 (load-variables)
 (init-recent-files)
 
-(set! *editor-map* (editor-map-component-create 0 22 screen-width (- screen-height 25)))
+(set! *editor-map* (editor-map-component-create 0 22 screen-width (- screen-height 22)))
+(gui-add-on-resize-callback
+ (lambda (w h)
+   (set! screen-width  w)
+   (set! screen-height h)
+   
+   (gui-component-set-rect *editor-map*
+                           0 22 screen-width (- screen-height 22))
+
+   (let ((width  (gui-component-get-width  *minimap*))
+         (height (gui-component-get-height *minimap*)))
+     (gui-component-set-rect *minimap*
+                           (- screen-width  width) 
+                           (- screen-height height)
+                           width height))))
+
 (create-menu)
 
 (create-toolbar)

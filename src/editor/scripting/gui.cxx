@@ -19,6 +19,7 @@
 
 #include <iostream>
 #include <ClanLib/signals.h>
+#include <ClanLib/display.h>
 #include <ClanLib/gui.h>
 #include <ClanLib/GUI/gui_manager.h>
 #include "scm_functor.hxx"
@@ -46,9 +47,17 @@ gui_add_button(int x, int y, int w, int h, const char* text)
                        text, manager);
 }
 
-void gui_component_set_position(CL_Component* comp, int x, int y)
+void
+gui_component_set_position(CL_Component* comp, int x, int y)
 {
   comp->set_position(x, y);
+}
+
+void
+gui_component_set_rect(CL_Component* comp, int x, int y, int w, int h)
+{
+  comp->set_position(CL_Rect(CL_Point(x, y),
+                             CL_Size(w, h)));
 }
 
 void
@@ -278,6 +287,35 @@ gui_listbox_on_click(CL_Component* box, SCM func)
     {
       new CL_Slot(listbox->sig_highlighted().connect_functor(SCMIntFunctor(func)));
     }
+}
+
+struct OnResizeCallback
+{
+  SCMFunctor func;
+  OnResizeCallback(const SCMFunctor& f) 
+    : func(f)
+  {
+  }
+  void operator()(int w, int h) {
+    func(SCM_MAKINUM(w), 
+         SCM_MAKINUM(h));
+  }
+};
+
+
+void gui_add_on_resize_callback(SCM func)
+{
+  new CL_Slot(CL_Display::get_current_window()->sig_resize().connect_functor(OnResizeCallback(SCMFunctor(func))));
+}
+
+int gui_component_get_width(CL_Component* comp)
+{
+  return comp->get_width();
+}
+
+int gui_component_get_height(CL_Component* comp)
+{
+  return comp->get_height();
 }
 
 /* EOF */

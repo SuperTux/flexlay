@@ -72,6 +72,9 @@ void gui_component_on_click(CL_Component* comp, SCM func);
     window closing */
 void gui_component_on_close(CL_Component* comp, SCM func);
 
+int gui_component_get_width(CL_Component* comp);
+int gui_component_get_height(CL_Component* comp);
+
 /** Return the client area of a window, i.e. the area to which buttons
     get added */
 CL_Component* gui_window_get_client_area(CL_Component* comp);
@@ -85,6 +88,7 @@ void gui_show_component(CL_Component* comp);
 void gui_hide_component(CL_Component* comp);
 
 void gui_component_set_position(CL_Component* comp, int x, int y);
+void gui_component_set_rect(CL_Component* comp, int x, int y, int w, int h);
 
 bool gui_component_is_visible(CL_Component* comp);
 
@@ -106,6 +110,8 @@ void gui_quit();
 void gui_hide();
 void gui_show();
 bool gui_is_visible();
+
+void gui_add_on_resize_callback(SCM func);
 
 #endif
 

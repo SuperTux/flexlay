@@ -81,7 +81,7 @@ TileFactory::parse_tile(SCM data)
   int id;
   std::string image;
   CL_Color color(255, 255, 255, 255);
-  CL_Color attribute_color(255, 255, 255, 255);
+  CL_Color attribute_color(255, 255, 255, 100);
   unsigned char colmap[8];
   
   while (!gh_null_p(data))

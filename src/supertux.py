@@ -130,7 +130,7 @@ class SuperTuxLevel:
             data = tree[1:]
 
             self.name   = get_value_from_tree(["name", "_"], data, "no name")
-            self.author = get_value_from_tree(["name", "_"], data, "no author")
+            self.author = get_value_from_tree(["author", "_"], data, "no author")
 
             self.width  = get_value_from_tree(["width", "_"], data, 20)
             self.height = get_value_from_tree(["height""_"], data, 15)
@@ -156,6 +156,15 @@ class SuperTuxLevel:
                 x = get_value_from_tree(["x", "_"], i[1:], [])
                 y = get_value_from_tree(["y", "_"], i[1:], [])
                 object = find(game_objects, type)
+                self.objects.add_object(ObjMapSpriteObject(make_sprite(config.datadir + object[1]),
+                                                           CL_Point(x, y),
+                                                           make_metadata(BadGuy(object[0]))).to_object())
+                
+            for i in get_value_from_tree(["reset-points"], data, []):
+                type = i[0]
+                x = get_value_from_tree(["x", "_"], i[1:], [])
+                y = get_value_from_tree(["y", "_"], i[1:], [])
+                object = find(game_objects, "resetpoint")
                 self.objects.add_object(ObjMapSpriteObject(make_sprite(config.datadir + object[1]),
                                                            CL_Point(x, y),
                                                            make_metadata(BadGuy(object[0]))).to_object())
@@ -207,7 +216,16 @@ class SuperTuxLevel:
         for obj in self.objects.get_objects():
             badguy = get_python_object(obj.get_metadata())
             pos    = obj.get_pos()
-            f.write("     (%s (x %d) (y %d))\n" % (badguy.type, pos.x, pos.y))
+            if (badguy.type != "resetpoint"):
+                f.write("     (%s (x %d) (y %d))\n" % (badguy.type, pos.x, pos.y))
+        f.write("  )\n\n")
+
+        f.write("  (reset-points\n")
+        for obj in self.objects.get_objects():
+            badguy = get_python_object(obj.get_metadata())
+            pos    = obj.get_pos()
+            if (badguy.type == "resetpoint"):
+                f.write("     (point (x %d) (y %d))\n" % (badguy.type, pos.x, pos.y))
         f.write("  )\n\n")
         
         f.write(" )\n\n;; EOF ;;\n")

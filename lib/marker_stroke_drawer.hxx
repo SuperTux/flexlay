@@ -20,6 +20,10 @@
 #ifndef HEADER_MARKER_STROKE_DRAWER_HXX
 #define HEADER_MARKER_STROKE_DRAWER_HXX
 
+#include "stroke_drawer.hxx"
+
+class MarkerStrokeDrawerImpl;
+
 /** */
 class MarkerStrokeDrawer
 {
@@ -27,7 +31,10 @@ private:
 public:
   MarkerStrokeDrawer();
   
-  void draw(const Stroke& stroke);
+  StrokeDrawer to_drawer();
+
+private:
+  SharedPtr<MarkerStrokeDrawerImpl> impl;
 };
 
 #endif

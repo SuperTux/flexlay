@@ -16,6 +16,7 @@ std::cout << "CL_Error: " << err.message << std::endl;
  
 %{
 #include <ClanLib/Display/color.h>
+#include <ClanLib/Display/Providers/provider_factory.h>
 #include <ClanLib/GUI/component.h>
 #include <ClanLib/GUI/button.h>
 #include <ClanLib/GUI/window.h>
@@ -65,6 +66,7 @@ std::cout << "CL_Error: " << err.message << std::endl;
 #include "stroke_drawer.hxx"
 #include "drawer_properties.hxx"
 #include "sprite_stroke_drawer.hxx"
+#include "marker_stroke_drawer.hxx"
 #include "brushmask.hxx"
 #include "brush.hxx"
 #include "generated_brush.hxx"
@@ -183,6 +185,7 @@ VALUE CL_Point2Value(const CL_Point& arg)
 %include "stroke_drawer.hxx"
 %include "drawer_properties.hxx"
 %include "sprite_stroke_drawer.hxx"
+%include "marker_stroke_drawer.hxx"
 %include "brushmask.hxx"
 %include "brush.hxx"
 %include "generated_brush.hxx"
@@ -214,5 +217,6 @@ VALUE CL_Point2Value(const CL_Point& arg)
 %include "../ruby/ruby_sexpr_parser.hxx"
 
 #endif
+
 
 /* EOF */

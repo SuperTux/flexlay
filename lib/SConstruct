@@ -105,7 +105,7 @@ flexlay_lib = libflexlay_env.SharedLibrary(
     'stroke_drawer.cxx',
     'sprite_stroke_drawer.cxx',
     'sprite_brush.cxx',
-#    'marker_stroke_drawer.cxx',
+    'marker_stroke_drawer.cxx',
     'slider.cxx', 
     'scrollbar.cxx',
     'tile.cxx',

@@ -34,11 +34,12 @@
 #include "workspace.hxx"
 #include "layer_impl.hxx"
 #include "bitmap_layer.hxx"
+#include "objmap_object_impl.hxx"
 #include "math.hxx"
 
 BitmapLayer* BitmapLayer::current_ = 0;
 
-class BitmapLayerImpl : public LayerImpl
+class BitmapLayerImpl : public ObjMapObjectImpl
 {
 public:
   typedef std::vector<Stroke> Strokes;
@@ -57,8 +58,6 @@ public:
   {
     try {
       canvas = new CL_Canvas(surface);
-      canvas->get_gc()->clear(CL_Color(0, 0, 0, 0));
-      canvas->get_gc()->flush();
       canvas->sync_surface();
     } catch(CL_Error& err) {
       std::cout << "CL_Error: " << err.message << std::endl;
@@ -66,6 +65,19 @@ public:
     }
   }
   
+  BitmapLayerImpl(CL_PixelBuffer buffer)
+    : surface(buffer),
+      canvas(0)
+  {
+    try {
+      canvas = new CL_Canvas(surface);
+      canvas->sync_surface();
+    } catch(CL_Error& err) {
+      std::cout << "CL_Error: " << err.message << std::endl;
+      throw err;
+    }
+  }
+
   BitmapLayerImpl(int width, int height) 
     : surface(CL_PixelBuffer(width, height, width*4, CL_PixelFormat::rgba8888)),
       canvas(0)
@@ -85,7 +97,7 @@ public:
     delete canvas;
   }
 
-  void draw(EditorMapComponent* parent, CL_GraphicContext* gc) 
+  void draw(CL_GraphicContext* gc)
   {
     assert(canvas);
 
@@ -94,10 +106,14 @@ public:
       return;
 
     surface.set_blend_func(blend_one, blend_one_minus_src_alpha);
-    surface.draw(0, 0, gc);
+    surface.draw(pos.x, pos.y, gc);
 
-    if (BitmapLayer::current()->impl.get() == this)
-      gc->draw_rect(get_bounding_rect(), CL_Color(155, 155, 155, 100));
+    gc->draw_rect(get_bounding_rect(), CL_Color(155, 155, 155, 100));
+  }
+
+  CL_Rectf get_bound_rect() const  
+  {
+    return CL_Rectf(CL_Pointf(ObjMapObjectImpl::pos), CL_Sizef(surface.get_width(), surface.get_height()));
   }
 
   CL_Rect get_bounding_rect() { 
@@ -123,6 +139,12 @@ BitmapLayer::BitmapLayer(int width, int height)
   current_ = this;
 }
 
+BitmapLayer::BitmapLayer(CL_PixelBuffer buffer)
+  : impl(new BitmapLayerImpl(buffer))
+{
+  current_ = this;
+}
+
 void
 BitmapLayer::add_stroke(const Stroke& stroke)
 {
@@ -134,12 +156,6 @@ BitmapLayer::add_stroke(const Stroke& stroke)
       impl->canvas->get_gc()->flush();
       impl->canvas->sync_surface();
     }
-}
-
-Layer
-BitmapLayer::to_layer()
-{
-   return Layer(impl);
 }
 
 std::vector<Stroke>
@@ -160,11 +176,25 @@ BitmapLayer::get_canvas() const
   return impl->canvas;
 }
 
+void
+BitmapLayer::set_pixeldata(CL_PixelBuffer buffer)
+{
+  //impl->canvas->set_pixeldata(buffer);
+  CL_Surface(buffer).draw(0, 0, impl->canvas->get_gc());
+  impl->canvas->get_gc()->flush();
+  impl->canvas->sync_surface();
+}
+
 CL_PixelBuffer
 BitmapLayer::get_pixeldata() const
 {
-  assert(0); // FIME: implemnet me
-  return CL_PixelBuffer();
+  return impl->canvas->get_pixeldata();
+}
+
+ObjMapObject
+BitmapLayer::to_object()
+{
+  return ObjMapObject(impl);
 }
 
 /* EOF */

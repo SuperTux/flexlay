@@ -6,6 +6,10 @@ class Image
     @editormap = EditorMap.new()
     @editormap.set_bounding_rect(CL_Rect.new(0, 0, 1024, 768))
     @editormap.set_background_color(CL_Color.new(255, 255, 255))
+
+    @objectmap = ObjectLayer.new()
+    @editormap.add_layer(@objectmap.to_layer()) 
+
     @layers  = []
     
     if filename then
@@ -18,27 +22,33 @@ class Image
   end
   
   def set_active_layer(i)
-    if (i >= 0 && i < layers.size) then
-      BitmapLayer.set_current(layers[i])
+    if (i >= 0 && i < @layers.size) then
+      BitmapLayer.set_current(@layers[i])
     end
   end
 
-  def add_layer()
-    layer = BitmapLayer.new(1024, 768)
-    layer.to_layer().set_pos(CL_Pointf.new(0, 0))
-    @layers.push(layer)
-    @editormap.add_layer(layer.to_layer()) 
-    puts "Add layer: #{layer}" 
-    return layer
+  def add_layer(filename = nil)
+    if filename then
+      layer = BitmapLayer.new(make_pixelbuffer(filename))
+      @layers.push(layer)
+      @objectmap.add_object(layer.to_object())
+      return layer
+    else
+      layer = BitmapLayer.new(1024, 768)
+      @layers.push(layer)
+      @objectmap.add_object(layer.to_object())
+      return layer
+    end
   end
 
   def layers_count()
-    return layers.size
+    return @layers.size
   end
 
   def activate(workspace)
     workspace.set_map(@editormap)
-    BitmapLayer.set_current(layers[0])
+    BitmapLayer.set_current(@layers[0])
+    ObjectLayer.set_current(@objectmap)
     connect(@editormap.sig_change(), proc{$gui.on_map_change()})
   end
 

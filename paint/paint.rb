@@ -37,6 +37,7 @@ flexlay.init($screen_rect.get_width(), $screen_rect.get_height(), false)
 $sketch_stroke_tool  = SketchStrokeTool.new()
 $layer_move_tool     = LayerMoveTool.new()
 $zoom_tool           = ZoomTool.new()
+$objmap_select_tool  = ObjMapSelectTool.new()
 
 DrawerProperties.current().set_color(CL_Color.new(0, 0, 0, 50))
 
@@ -44,17 +45,21 @@ $gui   = PaintGUI.new()
 
 $animation = Animation.new()
 $image = $animation.get_current_image()
+# $image.add_layer("/tmp/img.png")
+# $image.layers[0].set_pixeldata(make_pixelbuffer("/tmp/img.png"))
+# BitmapLayer.set_current($image.layers[0])
 
 $image.activate($gui.workspace)
 
-drawer = SpriteStrokeDrawer.new($sketch_stroke_tool.get_drawer())
+# drawer = SpriteStrokeDrawer.new($sketch_stroke_tool.get_drawer())
+
 if true then
   DrawerProperties.current().set_brush(GeneratedBrush.new(BRUSH_SHAPE_CIRCLE, 
-                                      32,  # radius
-                                      2,   # spikes
-                                      0.75, # hardness
-                                      1.0, # aspect
-                                      0).to_brush()) # angle
+                                                          32,  # radius
+                                                          2,   # spikes
+                                                          0.75, # hardness
+                                                          1.0, # aspect
+                                                          0).to_brush()) # angle
 else
   DrawerProperties.current().set_brush(SpriteBrush.new(make_sprite("../data/images/brush/brush8.png")).to_brush)
 end

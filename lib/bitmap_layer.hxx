@@ -23,6 +23,7 @@
 #include <vector>
 #include <ClanLib/Core/Math/point.h>
 #include <ClanLib/Display/color.h>
+#include "objmap_object.hxx"
 #include "layer.hxx"
 #include "stroke.hxx"
 
@@ -31,7 +32,7 @@ class BitmapLayerImpl;
 /** This layer holds a simple bitmap, size and color format are
     configurable, it works similar to the SketchLayer, however it
     doesn't rerender the image all the time, but simply holds it in a
-    CL_Canvas */
+    CL_Canvas making it a whole lot faster. */
 class BitmapLayer
 {
   friend class BitmapLayerImpl;
@@ -42,6 +43,7 @@ public:
   static void set_current(BitmapLayer* c) { current_ = c; }
 
   BitmapLayer(CL_Surface surface);
+  BitmapLayer(CL_PixelBuffer buffer);
   BitmapLayer(int width, int height);
   
   void add_stroke(const Stroke&);
@@ -50,11 +52,12 @@ public:
 
   CL_Surface get_background_surface();
 
+  void set_pixeldata(CL_PixelBuffer buffer);
   CL_PixelBuffer get_pixeldata() const;
   CL_Canvas*     get_canvas() const;
   
   bool is_null() const { return !impl.get(); }
-  Layer to_layer();
+  ObjMapObject to_object();
 
 private:
   SharedPtr<BitmapLayerImpl> impl;

@@ -30,6 +30,7 @@
 #include "bitmap_layer.hxx"
 #include "sketch_stroke_tool.hxx"
 #include "sprite_stroke_drawer.hxx"
+#include "marker_stroke_drawer.hxx"
 #include "stroke.hxx"
 #include "stroke_drawer.hxx"
 #include "drawer_properties.hxx"
@@ -40,13 +41,13 @@ class SketchStrokeToolImpl : public ToolImpl
 public:
   bool drawing;
   Stroke   stroke;
-  SpriteStrokeDrawer sprite_drawer;
-
+  StrokeDrawer   drawer;
+  
   SketchStrokeToolImpl()
     : drawing(false)
   {
-    sprite_drawer.set_mode(SpriteStrokeDrawer::DM_NORMAL);
-    //sprite_drawer.set_sprite(CL_Sprite("brush", &(Flexlay::current()->resources)));
+    drawer = SpriteStrokeDrawer().to_drawer();
+    //drawer = MarkerStrokeDrawer().to_drawer();
   }
 
   void draw() 
@@ -55,8 +56,8 @@ public:
       {
         // FIXME: This translation is a bit ugly, layer position should be handled somewhat different
         CL_Display::push_modelview();
-        CL_Display::add_translate(BitmapLayer::current()->to_layer().get_pos().x,
-                                  BitmapLayer::current()->to_layer().get_pos().y);
+        CL_Display::add_translate(BitmapLayer::current()->to_object().get_pos().x,
+                                  BitmapLayer::current()->to_object().get_pos().y);
         stroke.draw(0);
         CL_Display::pop_modelview();
       }
@@ -95,7 +96,7 @@ public:
         EditorMapComponent* parent = EditorMapComponent::current();
         parent->capture_mouse();
         stroke = Stroke();
-        stroke.set_drawer(sprite_drawer.to_drawer().clone());
+        stroke.set_drawer(drawer.clone());
         add_dab(event);
       }
   }
@@ -106,8 +107,8 @@ public:
     CL_Pointf p = parent->screen2world(event.mouse_pos);    
     
     // FIXME: This is ugly, events relative to the layer should be handled somewhat differently
-    Dab dab(p.x - BitmapLayer::current()->to_layer().get_pos().x,
-            p.y - BitmapLayer::current()->to_layer().get_pos().y);
+    Dab dab(p.x - BitmapLayer::current()->to_object().get_pos().x,
+            p.y - BitmapLayer::current()->to_object().get_pos().y);
 
     // FIXME: Make tablet configurable
     if (CL_Display::get_current_window()->get_ic()->get_mouse_count() >= 4)
@@ -159,7 +160,7 @@ SketchStrokeTool::to_tool()
 StrokeDrawer
 SketchStrokeTool::get_drawer()
 {
-  return impl->sprite_drawer.to_drawer();
+  return impl->drawer;
 }
 
 /* EOF */

@@ -148,7 +148,7 @@ SpriteStrokeDrawerImpl::draw(const Stroke& stroke, CL_GraphicContext* gc)
                     //surface.set_blend_func_separate(blend_src_alpha, blend_one_minus_src_alpha,
                     //                                blend_one, blend_zero);
                     surface.set_alignment(origin_center);
-                    surface.set_alpha(0.8);
+                    surface.set_alpha(0.5);
                     //surface.set_scale(DrawerProperties::current()->get_size(),
                     //                 DrawerProperties::current()->get_size());
                     surface.draw(dab.pos.x, dab.pos.y, gc);

@@ -237,5 +237,20 @@ public:
 	void set_checked(bool check = true);
 };
 
+class CL_ProviderFactory
+{
+public:
+	static CL_PixelBuffer load(
+		const std::string &filename,
+		const std::string &type = "",
+		CL_InputSourceProvider *input_provider = 0);
+
+	static void save(
+		CL_PixelBuffer buffer,
+		const std::string &filename,
+		const std::string &type = "",
+		CL_OutputSourceProvider *output_provider = 0);
+};
+
 /* EOF */
 

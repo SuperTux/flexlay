@@ -101,10 +101,23 @@ class PaintGUI
 #                       self.gui_set_zoom(value)
 #                     })
 
+    connect_v2(@editor_map.sig_on_key("a"), proc{ |x,y|
+                 gc = @editor_map.get_workspace().get_gc_state()
+                 gc.set_zoom(CL_Pointf.new(x, y), gc.get_zoom() * 1.25)
+               })
+
+    connect_v2(@editor_map.sig_on_key("o"), proc{ |x,y|
+                 gc = @editor_map.get_workspace().get_gc_state()
+                 gc.set_zoom(CL_Pointf.new(x, y), gc.get_zoom() / 1.25)
+               })
+
     connect_v2(@editor_map.sig_on_key("escape"),  proc{ |x, y| puts "bye, bye"})
     connect_v2(@editor_map.sig_on_key("esc"),  proc{ |x, y| puts "bye, bye2"})
     connect_v2(@editor_map.sig_on_key("q"),  proc{ |x, y| $gui.quit()})
-    connect_v2(@editor_map.sig_on_key("s"),  proc{ |x, y| $image.save("/tmp/test.scm")})
+    connect_v2(@editor_map.sig_on_key("s"),  proc{ |x, y| 
+                 CL_ProviderFactory.save(BitmapLayer.current().get_pixeldata(), "/tmp/bla.png")
+                 # $image.save("/tmp/test.scm")
+               })
     connect_v2(@editor_map.sig_on_key("l"),  proc{ |x, y| 
                  $image = Image.new("/tmp/test.scm")
                  $image.activate($gui.workspace())
@@ -148,7 +161,7 @@ class PaintGUI
               drawer.set_mode(SpriteStrokeDrawer::DM_SMUDGE)
             })
 
-    button_panel = ButtonPanel.new(0, 0, 33, 33*3, false, @gui.get_component)
+    button_panel = ButtonPanel.new(0, 0, 33, 33*4, false, @gui.get_component)
     button_panel.add_icon("../data/images/tools/stock-tool-pencil-22.png", proc{ 
                             @workspace.set_tool($sketch_stroke_tool.to_tool())
                           })
@@ -157,6 +170,10 @@ class PaintGUI
                           })
     button_panel.add_icon("../data/images/tools/stock-tool-move-22.png", proc{ 
                             @workspace.set_tool($layer_move_tool.to_tool())
+                          })
+
+    button_panel.add_icon("../data/images/tools/stock-tool-clone-22.png", proc{ 
+                            @workspace.set_tool($objmap_select_tool.to_tool())
                           })
 
     anim_panel = ButtonPanel.new($screen_rect.get_width()/2 - (32*3)/2-16-32, 0, 32*3+1+16, 33,
@@ -184,6 +201,9 @@ class PaintGUI
 
   def run()
     @gui.run()
+  end
+
+  def on_map_change()
   end
 end
 

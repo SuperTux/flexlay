@@ -134,6 +134,19 @@ ObjMapRectObject::get_rect() const
 }
 
 void
+ObjMapRectObject::set_color(const CL_Color& color)
+{
+  impl->color = color;
+}
+
+void
+ObjMapRectObject::set_rect(const CL_Rect& rect)
+{
+  impl->pos  = CL_Point(rect.left, rect.top);
+  impl->size = CL_Size(rect.get_width(), rect.get_height());
+}
+
+void
 ObjMapRectObjectImpl::update_control_points()
 {
   cp_top_left.set_pos_raw(pos);

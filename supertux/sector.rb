@@ -249,19 +249,20 @@ class Sector
     f.write("    (camera\n")
     f.write("      (mode \"normal\")\n")
     f.write("      (path\n")
-    for obj in @objects.get_objects()
+
+    @objects.get_objects().each {|obj|
       pathnode = obj.get_metadata()
       if (pathnode.is_a?(PathNode))
         f.write("       (point (x %d) (y %d) (speed 1))\n" % obj.get_pos().x, obj.get_pos().y)
       end
-    end
+    }
+
     f.write("    ))\n\n")
 
     for obj in @objects.get_objects()
-      badguy = obj.get_metadata()
-      if (badguy.is_a?(GameObj))
-        badguy.save(f, obj)
-      end
+      # FIXME: not sure why I need get_ruby_object() here
+      badguy = get_ruby_object(obj.get_metadata())
+      badguy.save(f, obj)
     end
   end
 end

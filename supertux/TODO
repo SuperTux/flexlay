@@ -16,31 +16,12 @@ ToDo:
  - automatic backup of files
  - reset points
  - get rid of make_metadat, get_ruby_object in SuperTux code
+ - faster tile-loading (load on demand, pixelbuffer cache)
+ - make controlpoints unzoomable
+ - fix load/save and write a few testcases for them
 
 New Object Types:
 =================
-  writer.start_list("secretarea");
-  writer.write_float("x", bbox.p1.x);
-  writer.write_float("y", bbox.p1.y);
-  writer.write_float("width", bbox.get_width());
-  writer.write_float("height", bbox.get_height());
-  writer.write_string("message", message);
-
-  writer.start_list("sequencetrigger");
-  writer.write_float("x", bbox.p1.x);
-  writer.write_float("y", bbox.p1.y);
-  writer.write_float("width", bbox.get_width());
-  writer.write_float("height", bbox.get_height());
-  writer.write_string("sequence", sequence_name);
-
-  writer.start_list("door");
-  writer.write_float("x", bbox.p1.x);
-  writer.write_float("y", bbox.p1.y);
-  writer.write_float("width", bbox.get_width());
-  writer.write_float("height", bbox.get_height()); 
-  writer.write_string("sector", target_sector);
-  writer.write_string("spawnpoint", target_spawnpoint);
-
   writer.start_list("camera"); 
   if(mode == NORMAL) {
     writer.write_string("mode", "normal");

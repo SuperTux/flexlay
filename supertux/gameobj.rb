@@ -30,6 +30,34 @@ class SecretArea<GameObj
   end
 end
 
+class SequenceTrigger<GameObj
+  attr_accessor :sequence, :data
+  
+  def initialize(data)
+    @sequence = ""
+    @data = data
+    data.set_color(CL_Color.new(255, 0, 0, 128))
+  end
+
+  def save(f, obj)
+    rect = obj.get_rect()
+    f.write("        (secretarea (x #{rect.left})\n" \
+            "                    (y #{rect.top})\n"  \
+            "                    (width #{rect.get_width()})\n" \
+            "                    (height #{rect.get_height()})\n" \
+            "                    (sequence \"#{@sequence.inspect}\"))")
+  end
+
+  def property_dialog()
+    puts @sequence.inspect
+    dialog = GenericDialog.new("SecretArea Property Dialog", $gui.get_component())
+    dialog.add_string("Sequence: ", @sequence)
+    dialog.set_callback(proc{|sequence| 
+                          @sequence = sequence
+                        })
+  end
+end
+
 class BadGuy<GameObj
   def initialize(type)
     @type = type
@@ -97,6 +125,9 @@ class Door<GameObj
     pos = obj.get_pos()
     f.write("       (door\n")
     f.write("         (x %d) (y %d)" % [pos.x, pos.y])
+    # FIXME: not so sure if width/height make sense
+    f.write("         (width  32)\n")
+    f.write("         (height 64)\n")
     f.write("         (sector \"%s\")\n" % @sector)
     f.write("         (spawnpoint \"%s\")\n" % @spawnpoint)
     f.write("         )\n")

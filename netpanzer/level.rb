@@ -30,6 +30,9 @@ class Level
     elsif params.length == 1 then
       (@filename,) = params
       @data = NetPanzerFileStruct.new($tileset, @filename)
+
+      load_optfile(@filename[0..-5] + ".opt")
+      load_spnfile(@filename[0..-5] + ".spn")
     end      
 
     @objects   = ObjectLayer.new()
@@ -39,6 +42,29 @@ class Level
 
     # FIXME: Data might not get freed since its 'recursively' refcounted
     @editormap.set_metadata(make_metadata(self))
+  end
+
+  def load_optfile(filename)
+    f = File.new(filename)
+    count = /ObjectiveCount: ([0-9]+)/.match(f.readline())[1].to_i
+    f.readline() # Skip empty line
+    count.times{|i|
+      name = /Name: (.+)/.match(f.readline())
+      loc  = /Location: ([0-9]+) ([0-9]+)/.match(f.readline())
+      f.readline() # Skip empty line
+    }
+    f.close()
+  end
+
+  def load_spnfile(filename)
+    f = File.new(filename)
+    count = /SpawnCount: ([0-9]+)/.match(f.readline())[1].to_i
+    f.readline() # Skip empty line
+    count.times{|i|
+      loc  = /Location: ([0-9]+) ([0-9]+)/.match(f.readline())
+      puts "Location: #{loc[1].to_i} #{loc[2].to_i}"
+    }
+    f.close()
   end
 
   def save_optfile(filename)
@@ -73,7 +99,7 @@ class Level
     if filename[-4..-1] == ".npm"
       data.save(filename)
       save_optfile(filename[0..-5] + ".opt")
-      save_optfile(filename[0..-5] + ".spn")
+      save_spnfile(filename[0..-5] + ".spn")
     else
       raise "Fileextension not valid, must be .npm!"
     end

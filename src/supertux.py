@@ -131,7 +131,7 @@ workspace.set_current_map(m)
 tilemap = TilemapLayer(tileset, 20, 10)
 m.add_layer(tilemap.to_layer())
 
-# window = CL_Window(CL_Rect(50, 50, 350, 300), "My Window", gui.get_component())
+window = CL_Window(CL_Rect(50, 50, 350, 300), "My Window", gui.get_component())
     
 print "Launching GUI"
 gui.run()

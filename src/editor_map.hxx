@@ -42,7 +42,7 @@ public:
 
   void draw(EditorMapComponent* parent);
 
-  void add_layer(Layer layer);
+  void add_layer(const Layer& layer);
 
   bool is_modified() const;
   void set_unmodified();

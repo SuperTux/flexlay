@@ -58,7 +58,7 @@ EditorMap::EditorMap()
 }
 
 void
-EditorMap::add_layer(Layer layer)
+EditorMap::add_layer(const Layer& layer)
 {
   impl->layers.push_back(layer);
   impl->serial += 1;

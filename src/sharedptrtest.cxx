@@ -19,13 +19,21 @@
 
 #include <iostream>
 #include <ClanLib/Core/System/sharedptr.h>
+#include <boost/shared_ptr.hpp>
 #include "sharedptrtest.hxx"
+
+#define SharedPtr boost::shared_ptr
 
 class B
 {
 public:
   B() { std::cout << "B(" << this << ")" << std::endl; }
   virtual ~B() { std::cout << "~B(" << this << ")" << std::endl; }
+
+  virtual void do_something()
+  {
+    std::cout << "B: do_something" << std::endl;
+  }
 };
 
 class A : public B
@@ -33,6 +41,11 @@ class A : public B
 public:
   A() { std::cout << "A(" << this << ")" << std::endl; }
   virtual ~A() { std::cout << "~A(" << this << ")" << std::endl; }
+  
+  void do_something()
+  {
+    std::cout << "A: do_something" << std::endl;
+  }
 };
 
 class C;
@@ -60,6 +73,20 @@ int main()
         p0   = aptr0;
       }
     }
+  }
+
+  std::cout << "\nInteresting part: " << std::endl;
+  {
+    std::cout << "### SharedPtr<A> p1;" << std::endl;
+    SharedPtr<B> p1;
+    {
+      std::cout << "### SharedPtr<A> p(new A());" << std::endl;
+      SharedPtr<A> p(new A());
+      std::cout << "### p1 = p;" << std::endl;
+      p1 = p;
+    }
+    std::cout << "### p1->do_something()" << std::endl;
+    p1->do_something();
   }
 }
 

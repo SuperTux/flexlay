@@ -20,6 +20,10 @@
 #ifndef HEADER_SHARED_PTR_HXX
 #define HEADER_SHARED_PTR_HXX
 
+#if 1
+#include <boost/shared_ptr.hpp>
+#define SharedPtr boost::shared_ptr
+#else
 #include <iostream>
 #include <typeinfo>
  
@@ -47,7 +51,8 @@ public:
   }  
 
   void del() {
-    delete ptr;
+    if (ptr)
+      delete ptr;
     ptr = 0;
   }
 };
@@ -60,6 +65,8 @@ private:
   int* ref_count;
 
   void inc() {
+    std::cout << "inc: " << (ref_count ? *ref_count : -45) << std::endl;
+
     if (ref_count)
       {
         *ref_count += 1;
@@ -67,6 +74,8 @@ private:
   }
   
   void dec() {
+    std::cout << "dec: " << (ref_count ? *ref_count : -45) << std::endl;
+
     if (ref_count)
       {
         *ref_count -= 1;
@@ -110,7 +119,7 @@ public:
   
   template<class Base>
   SharedPtr(const SharedPtr<Base>& copy)
-    : deleter(), ref_count(0)
+    : deleter(0), ref_count(0)
   {
     if (copy.deleter)
       {
@@ -136,6 +145,7 @@ public:
   template<class Base>
   SharedPtr<T>& operator= (const SharedPtr<Base>& copy) 
   {
+    std::cout << "SharedPtr<T>& operator= (const SharedPtr<Base>& copy)" << std::endl;
     if (ref_count != copy.ref_count)
       {
         dec();
@@ -162,7 +172,7 @@ public:
 
     return *this;
   }
-#if 0
+
   SharedPtr<T>& operator= (const SharedPtr<T>& copy) 
   {
     if (this != &copy)
@@ -205,7 +215,6 @@ public:
 
     return *this;
   }
-#endif 
   
   ~SharedPtr()
   {
@@ -230,6 +239,7 @@ public:
       return 0; 
   }
 };
+#endif
 
 #endif
 

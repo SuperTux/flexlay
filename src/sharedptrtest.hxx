@@ -20,7 +20,6 @@
 #ifndef HEADER_SHAREDPTRTEST_HXX
 #define HEADER_SHAREDPTRTEST_HXX
 
-#include "shared_ptr.hxx"
 
 #endif
 

@@ -130,7 +130,7 @@ env.SharedLibrary(
     'workspace.cxx',
     'zoom_tool.cxx'],
     CPPPATH=['/home/ingo/run/ClanLib-0.7-current//include/ClanLib-0.7/',
-             '/usr/include/python2.3/',
+             '/usr/include/python2.2/',
              '..'],
     LIBPATH=['/home/ingo/run/ClanLib-0.7-current//lib/'],
     LIBS=['clanCore',

@@ -46,6 +46,7 @@
 #include "sketch_layer.hxx"
 
 #include "colorpicker.hxx"
+#include "slider.hxx"
 #include "tilemap_paint_tool.hxx"
 #include "tilemap_select_tool.hxx"
 #include "objmap_select_tool.hxx"
@@ -107,6 +108,8 @@ VALUE CL_Point2Value(const CL_Point& arg)
 %include "std_vector.i"
 %template(Std_vector_int) std::vector<int>;
 %template(Std_vector_ObjMapObject) std::vector<ObjMapObject>;
+%template(Std_vector_CL_Pointf) std::vector<CL_Pointf>;
+%template(Std_vector_Stroke) std::vector<Stroke>;
 
 %include "clanlib.i"
 %include "command.hxx"
@@ -147,6 +150,7 @@ VALUE CL_Point2Value(const CL_Point& arg)
 %include "sketch_layer.hxx"
 
 %include "colorpicker.hxx"
+%include "slider.hxx"
 %include "tilemap_paint_tool.hxx"
 %include "tilemap_select_tool.hxx"
 %include "objmap_select_tool.hxx"
@@ -170,5 +174,5 @@ VALUE CL_Point2Value(const CL_Point& arg)
 %include "../ruby/ruby_meta_data.hxx"
 %include "../ruby/ruby_sexpr_parser.hxx"
 #endif
- 
+
 /* EOF */

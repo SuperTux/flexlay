@@ -49,7 +49,7 @@ require "gameobj.rb"
 require "sexpr.rb"
 
 flexlay = Flexlay.new()
-flexlay.init()
+flexlay.init(false)
 
 # Tools
 $tilemap_paint_tool  = TileMapPaintTool.new()

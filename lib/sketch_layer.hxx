@@ -34,18 +34,36 @@ public:
   typedef std::vector<CL_Pointf> Normals;
   Points points;
   Normals normals;
-
+  float size;
   CL_Color color;
+  CL_Rectf bounding_rect;
   
 public:
   Stroke() {
     color = CL_Color(255, 255, 255, 255);
+    size  = 1.0f;
   }
 
   void finish();
 
+  CL_Rectf get_bounding_rect();
+
+  Points get_points() { return points; }
+
+  CL_Color get_color() const {
+    return color;
+  }
+
   void set_color(const CL_Color& color_) {
     color = color_;
+  }
+
+  float get_size() const {
+    return size;
+  }
+
+  void set_size(float size_) {
+    size = size_; 
   }
 
   void add_point(float x, float y) {
@@ -65,6 +83,8 @@ public:
   SketchLayer();
   
   void add_stroke(const Stroke&);
+
+  std::vector<Stroke> get_strokes();
 
   bool is_null() const { return !impl.get(); }
   Layer to_layer();

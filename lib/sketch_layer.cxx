@@ -26,6 +26,7 @@
 #include "flexlay.hxx"
 #include "layer_impl.hxx"
 #include "sketch_layer.hxx"
+#include "math.hxx"
 
 SketchLayer* SketchLayer::current_ = 0;
 
@@ -61,8 +62,25 @@ Stroke::finish()
       normals.push_back(CL_Pointf(1.0f, 1.0f));
     }
 
-  std::cout << normals.size() << " == " <<  points.size() << std::endl;
+  //std::cout << normals.size() << " == " <<  points.size() << std::endl;
   assert(normals.size() == points.size());
+
+  // Calc bounding rect
+  if (points.size() >= 1)
+    {
+      bounding_rect.left = bounding_rect.right  = points.front().x;
+      bounding_rect.top  = bounding_rect.bottom = points.front().y;
+
+      for(Points::iterator i = points.begin()+1; i != points.end(); ++i)
+        {
+          bounding_rect.left   = Math::min(bounding_rect.left,   i->x);
+          bounding_rect.right  = Math::max(bounding_rect.right,  i->x);;
+          bounding_rect.top    = Math::min(bounding_rect.top,    i->y);
+          bounding_rect.bottom = Math::min(bounding_rect.bottom, i->y);
+        }
+
+      // FIXME: Need to take brush size into account
+    }
 }
 
 class SketchLayerImpl : public LayerImpl
@@ -81,38 +99,41 @@ public:
   {
 
     //glLineWidth(3.0);
-
-    for(Strokes::iterator i = strokes.begin(); i != strokes.end(); ++i)
+    if (1)
       {
-        float spacing = 8.0f;
-        brush.set_color(i->color);
+        for(Strokes::iterator i = strokes.begin(); i != strokes.end(); ++i)
+          {
+            float spacing = 8.0f * i->size;
+            brush.set_color(i->color);
+            brush.set_scale(i->size, i->size);
         
-        if (i->points.size() == 1 || i->points.size() == 2)
-          {
-            brush.draw((int)i->points.front().x, (int)i->points.front().y);
-          }
-        else
-          {
-            float overspace = 0.0f;
-            for(unsigned int j = 0; j < i->points.size()-1; ++j)
+            if (i->points.size() == 1 || i->points.size() == 2)
               {
-                CL_Pointf dist = i->points[j+1] - i->points[j];
-                float length = sqrt(dist.x * dist.x + dist.y * dist.y);
-                int n = 1;
-
-                while (length + overspace > (spacing * n))
+                brush.draw(i->points.front().x, i->points.front().y);
+              }
+            else
+              {
+                float overspace = 0.0f;
+                for(unsigned int j = 0; j < i->points.size()-1; ++j)
                   {
-                    float factor = (spacing/length) * n - (overspace/length);
-                    CL_Pointf p(i->points[j].x + dist.x * factor,
-                                i->points[j].y + dist.y * factor);
-                    brush.draw((int)p.x, (int)p.y);
-                
-                    n += 1;
-                  }
+                    CL_Pointf dist = i->points[j+1] - i->points[j];
+                    float length = sqrt(dist.x * dist.x + dist.y * dist.y);
+                    int n = 1;
 
-                // Space that wasn't used in the last iteration
-                overspace = (length + overspace) - (spacing * (n-1));
-                //std::cout << "Overspace: " << overspace << std::endl;
+                    while (length + overspace > (spacing * n))
+                      {
+                        float factor = (spacing/length) * n - (overspace/length);
+                        CL_Pointf p(i->points[j].x + dist.x * factor,
+                                    i->points[j].y + dist.y * factor);
+                        brush.draw(p.x, p.y);
+                
+                        n += 1;
+                      }
+
+                    // Space that wasn't used in the last iteration
+                    overspace = (length + overspace) - (spacing * (n-1));
+                    //std::cout << "Overspace: " << overspace << std::endl;
+                  }
               }
           }
       }
@@ -127,8 +148,8 @@ public:
           {
             if (i->points.size() >= 2)
               {
-                float len = 1.0f;
-                float len2 = 2.0f;
+                float len  = i->get_size()*8.0f;
+                float len2 = i->get_size()*16.0f;
             
                 glEnable(GL_BLEND);
                 glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
@@ -263,5 +284,10 @@ SketchLayer::to_layer()
    return Layer(impl);
 }
 
+std::vector<Stroke>
+SketchLayer::get_strokes()
+{
+  return impl->strokes;
+}
 
 /* EOF */

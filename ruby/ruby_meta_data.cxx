@@ -51,6 +51,12 @@ void connect(CL_Signal_v0& sig, VALUE obj)
   new CL_Slot(sig.connect_functor(RubyFunctor(obj)));
 }
 
+void connect_v1_float(CL_Signal_v1<float>& sig, VALUE obj)
+{
+  sig = CL_Signal_v1<float>();
+  new CL_Slot(sig.connect_functor(RubyFunctor(obj)));
+}
+
 void connect_v1(CL_Signal_v1<int>& sig, VALUE obj)
 {
   sig = CL_Signal_v1<int>();

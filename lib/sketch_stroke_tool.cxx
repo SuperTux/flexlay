@@ -33,11 +33,13 @@ public:
   bool drawing;
   CL_Color color;
   Stroke stroke;
+  float size;
 
   SketchStrokeToolImpl()
     : drawing(false)
   {
     color = CL_Color(255, 255, 255, 255);
+    size  = 1.0f;
   }
 
   void draw() {
@@ -68,6 +70,7 @@ public:
         stroke.finish();
         // add to map
         SketchLayer::current()->add_stroke(stroke);
+
         stroke = Stroke();
       }    
   }
@@ -80,6 +83,7 @@ public:
         parent->capture_mouse();
         stroke = Stroke();
         stroke.set_color(color);
+        stroke.set_size(size);
         CL_Pointf p = parent->screen2world(event.mouse_pos);
         stroke.add_point(p.x, p.y);
       }
@@ -105,6 +109,12 @@ void
 SketchStrokeTool::set_color(CL_Color color)
 {
   impl->color = color;
+}
+
+void
+SketchStrokeTool::set_size(float size_)
+{
+  impl->size = size_;
 }
 
 Tool

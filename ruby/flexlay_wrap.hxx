@@ -41,6 +41,7 @@ template<> VALUE convert_to_ruby_value<ObjMapObject>(const ObjMapObject& arg);
 template<> VALUE convert_to_ruby_value<ObjectBrush>(const ObjectBrush& arg);
 template<> VALUE convert_to_ruby_value<CL_Color>(const CL_Color& arg);
 template<> VALUE convert_to_ruby_value<int>(const int& arg);
+template<> VALUE convert_to_ruby_value<float>(const float& arg);
 
 #endif
 

@@ -95,7 +95,7 @@ public:
 
   Flexlay();
 
-  void init();
+  void init(bool fullscreen = false);
   void deinit();
 };
 

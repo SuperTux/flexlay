@@ -153,10 +153,12 @@ public:
   std::vector<CL_Slot> slots;
   bool pressed;
   CL_Signal_v1<float> on_color_change;
+  float alpha;
 
   ColorPickerAlpha(const CL_Rect& rect, CL_Component* parent) 
     : CL_Component(rect, parent),
-      pressed(false)
+      pressed(false),
+      alpha(0.5f)
   {
     slots.push_back(sig_paint().connect(this, &ColorPickerAlpha::draw));
 
@@ -164,6 +166,12 @@ public:
     slots.push_back(sig_mouse_up().connect(this, &ColorPickerAlpha::on_mouse_up));
     slots.push_back(sig_mouse_move().connect(this, &ColorPickerAlpha::on_mouse_move));
   }
+
+  void set_alpha(float alpha_)
+  {
+    alpha = alpha_;
+    on_color_change(alpha);
+  }  
 
   void draw()
   {
@@ -182,8 +190,8 @@ public:
 
   void update_pointer(const CL_InputEvent& event)
   {
-    float alpha = Math::mid(0.0f, float(event.mouse_pos.x) / get_width(), 1.0f);
-    on_color_change(1.0f - alpha);
+    alpha = 1.0f - (Math::mid(0.0f, float(event.mouse_pos.x) / get_width(), 1.0f));
+    on_color_change(alpha);
   }
 
   void on_mouse_up(const CL_InputEvent& event)
@@ -345,6 +353,9 @@ ColorPicker::ColorPicker(const CL_Rect& rect, CL_Component* parent)
   slots.push_back(brightness->on_color_change.connect(this, &ColorPicker::update_brightness_color));
   slots.push_back(alpha->on_color_change.connect(this, &ColorPicker::update_alpha_color));
   slots.push_back(sig_paint().connect(this, &ColorPicker::draw));
+
+  brightness->set_color(CL_Color(255, 0, 0));
+  alpha->set_alpha(0.5f);
 }
 
 void

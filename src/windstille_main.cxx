@@ -1,4 +1,4 @@
-//  $Id: windstille_main.cxx,v 1.28 2003/11/07 13:00:39 grumbel Exp $
+//  $Id: windstille_main.cxx,v 1.29 2003/11/07 22:41:18 grumbel Exp $
 //
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -136,34 +136,26 @@ WindstilleMain::main(int argc, char** argv)
   datadir = bindir + "../data/";
 
 #ifndef WIN32
-    char* home_c = getenv("HOME");
-    if (home_c) 
-      {
-        std::string home = home_c; 
-        home += "/.windstille";
-        if (CL_Directory::create(home))
-          std::cout << "Created " << home << std::endl;
-        homedir = home + "/";
-      }
-    else
-      {
-        throw WindstilleError("Couldn't find environment variable HOME");
-      }
+  char* home_c = getenv("HOME");
+  if (home_c) 
+    {
+      std::string home = home_c; 
+      home += "/.windstille";
+      if (CL_Directory::create(home))
+        std::cout << "Created " << home << std::endl;
+      homedir = home + "/";
+    }
+  else
+    {
+      throw WindstilleError("Couldn't find environment variable HOME");
+    }
 #else
-    homedir = "config/";
+  homedir = "config/";
 #endif
   
   try {
     parse_command_line(argc, argv);
     init_modules();
-
-    for (int i = 0; i < 255; ++i)
-      {
-        CL_Display::clear(CL_Color(i, i, i));
-        CL_Display::flip();
-        CL_System::keep_alive();
-        CL_System::sleep(20);
-      }
     
     std::cout << "Detected " << CL_Joystick::get_device_count() << " joysticks" << std::endl;
 
@@ -173,6 +165,7 @@ WindstilleMain::main(int argc, char** argv)
     else
       new KeyboardController();
         
+    TileFactory::init();
     if (!launch_editor && levelfile.empty())
       {
         std::cout << "Starting Menu" << std::endl;
@@ -192,6 +185,7 @@ WindstilleMain::main(int argc, char** argv)
           editor.load (levelfile);
         editor.run();
       }
+    TileFactory::deinit();
 
     deinit_modules();
 
@@ -214,8 +208,7 @@ WindstilleMain::init_modules()
 
   std::cout << "Loading Guile Code..." << std::endl;
 
-  gh_eval_str("(display \"Guile: Enabling debugging...\\n\")"
-              "(debug-enable 'debug)"
+  gh_eval_str("(debug-enable 'debug)"
               "(debug-enable 'backtrace)"
               "(read-enable 'positions)");
 
@@ -243,8 +236,7 @@ WindstilleMain::init_modules()
   resources =  new CL_ResourceManager();
   resources->add_resources(CL_ResourceManager(datadir + "tiles.xml", false));
   resources->add_resources(CL_ResourceManager(datadir + "windstille.xml", false));
-  
-  TileFactory::init();
+
   Fonts::init(); 
   MusicManager::init();
 }
@@ -254,7 +246,6 @@ WindstilleMain::deinit_modules()
 {
   MusicManager::deinit();
   Fonts::deinit();
-  TileFactory::deinit();
 
   if (!sound_disabled)
     delete sound;

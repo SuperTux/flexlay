@@ -31,7 +31,7 @@ def sexpr_filter(name, tree)
   ret = []
   for i in tree
     if i[0] == name
-      ret.push(*i[1..-1])
+      ret.push(i[1..-1])
     end
   end
     

@@ -217,17 +217,17 @@ def gui_resize_level_to_selection()
 end
 
 def supertux_load_level(filename)
-  print "Loading: ", filename
-  level = Level(filename)
-  level.activate(workspace)
+  print "Loading: ", filename, "\n"
+  level = Level.new(filename)
+  level.activate($workspace)
   
-  if not(config.recent_files.find(filename)) then
-    config.recent_files.append(filename)
+  if not($recent_files.find{|el| el == filename}) then
+    $recent_files.push(filename)
     $recent_files_menu.add_item($mysprite, filename, 
-                               proc { supertux_load_level(filename) })
+                                proc { supertux_load_level(filename) })
   end
 
-  minimap.update_minimap()
+  $minimap.update_minimap()
 end
 
 def gui_set_zoom(zoom)
@@ -240,19 +240,20 @@ end
 def menu_file_open()
   print "File/Open"
   level = Level('/home/ingo/cvs/supertux/supertux/data/levels/world1/level2.stl')
-  print "Loading done"
-  level.activate(workspace)
+  print "Loading done\n"
+  level.activate($workspace)
   connect(level.editormap.sig_change(), proc{on_map_change()})
   print "Activation done"
 end
 
 def supertux_save_level(filename)
-  $workspace.get_map().get_metadata().save(filename)
+  $workspace.get_map().get_metadata().parent.save(filename)
 end
 
 def gui_switch_sector_menu()
   mymenu = Menu.new(CL_Point.new(530, 54), $gui.get_component())
   for i in $workspace.get_map().get_metadata().parent.get_sectors()
+    print "Sectors: ", i, "\n"
     mymenu.add_item($mysprite, "Sector (%s)" % i,
                     proc { $workspace.get_map().get_metadata().parent.activate_sector(i, $workspace) })
   end

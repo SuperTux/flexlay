@@ -104,8 +104,6 @@ $interactive_icon.set_callback(proc{ gui_show_interactive() })
 $background_icon.set_callback(proc{ gui_show_background() })
 $eye_icon.set_callback(proc{ $layer_menu.run() })
 
-$mysprite = make_sprite("../data/images/icons16/stock_paste-16.png")
-
 $layer_menu.add_item($mysprite, "Show all", proc{ gui_show_all() })
 $layer_menu.add_item($mysprite, "Show current", proc{ gui_show_current() })
 $layer_menu.add_item($mysprite, "Show only current", proc{ gui_show_only_current() })
@@ -169,7 +167,7 @@ def connect_path_nodes()
   for i in objmap_select_tool.get_selection()
     obj = get_python_object(i.get_metadata())
     if obj.__class__ == PathNode
-      pathnodes.append(obj.node)
+      pathnodes.push(obj.node)
     end
   end
 

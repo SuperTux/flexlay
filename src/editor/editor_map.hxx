@@ -37,7 +37,14 @@ class EditorMap
 {
 private:
   std::string filename;
+
+  /** Flag if the map got modified, used for 'Some maps are unsaved'
+      style massages */
   bool modified;
+
+  /** Gets incremented with each map change so that other component
+      can update if required */
+  int serial;
 
   typedef std::vector<EditorMapLayer*> Layers;
   Layers layers;
@@ -57,7 +64,9 @@ public:
 
   bool is_modified() const { return modified; }
   void set_unmodified() { modified = false; }
-  void modify()       { modified = true; }
+  void modify()       { modified = true; serial += 1; }
+
+  int get_serial() const { return serial; }
 
   EditorMapLayer* get_layer_by_name(int i);
   EditorMapLayer* get_layer(int i);

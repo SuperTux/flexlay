@@ -608,7 +608,8 @@
                                  (list width height opaque
                                        (list->vector (seq start (+ start (* width height)))))))))
                               )
-
+      (gui-component-on-close window (lambda ()
+                                       (gui-hide-component window)))
     (gui-pop-component)))
 
 (define (create-netpanzer-tiler)
@@ -896,7 +897,8 @@
 
 ;;(create-brush-selector)
 ;;(create-netpanzer-tiler)
-(create-netpanzer-brushbox)
+(if (equal? *game* 'netpanzer)
+    (create-netpanzer-brushbox))
 
 (set-tool 'tile)
 

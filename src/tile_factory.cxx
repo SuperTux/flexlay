@@ -77,9 +77,11 @@ TileFactory::TileFactory (const std::string& filename)
 void
 TileFactory::parse_tile(SCM data)
 {
+  // FIXME: Move this to scripting and add a TileFactory::add()
   int id;
   std::string image;
   CL_Color color(255, 255, 255, 255);
+  CL_Color attribute_color(255, 255, 255, 255);
   unsigned char colmap[8];
   
   while (!gh_null_p(data))
@@ -101,6 +103,13 @@ TileFactory::parse_tile(SCM data)
                                gh_scm2int(gh_cadr(data)),
                                gh_scm2int(gh_caddr(data)),
                                gh_scm2int(gh_car(gh_cdddr(data))));
+            }
+          else if (gh_equal_p(gh_symbol2scm("attribute-color"), name))
+            {
+              attribute_color = CL_Color(gh_scm2int(gh_car(data)),
+                                         gh_scm2int(gh_cadr(data)),
+                                         gh_scm2int(gh_caddr(data)),
+                                         gh_scm2int(gh_car(gh_cdddr(data))));
             }
           else if (gh_equal_p(gh_symbol2scm("image"), name))           
             {
@@ -148,7 +157,7 @@ TileFactory::parse_tile(SCM data)
     {
       tiles.resize(id+1);
     }
-  tiles[id] = new Tile(image, color, colmap);
+  tiles[id] = new Tile(image, color, attribute_color, colmap);
   tiles[id]->id = id;
 }
 

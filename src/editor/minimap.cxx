@@ -19,9 +19,13 @@
 
 #include <iostream>
 #include <ClanLib/Display/display.h>
+#include <ClanLib/Display/pixel_format.h>
+#include <ClanLib/Display/pixel_buffer.h>
 #include "../globals.hxx"
 #include "../scripting/editor.hxx"
 #include "editor.hxx"
+#include "tile.hxx"
+#include "tile_factory.hxx"
 #include "editor_map.hxx"
 #include "editor_map_component.hxx"
 #include "editor_tilemap.hxx"
@@ -37,18 +41,30 @@ Minimap::Minimap(EditorMapComponent* p, const CL_Point& pos, const CL_Size& size
   slots.push_back(sig_mouse_up().connect(this, &Minimap::mouse_up));
 
   drag_active = false;
+  last_serial = -1;
+  editor_map = 0;
 }
 
 void
 Minimap::draw()
 {
-  if (1)
+  // FIXME: Do this only on map changes
+  if (last_serial != EditorMapComponent::current()->get_map()->get_serial()
+      || editor_map != EditorMapComponent::current()->get_map())
     {
+      update_minimap_surface();
+      last_serial = EditorMapComponent::current()->get_map()->get_serial();
+      editor_map  = EditorMapComponent::current()->get_map();
+    }
+
+  if (1)
+    { // Draw background color
       CL_Display::fill_rect(CL_Rect(CL_Point(0, 0),
                                     CL_Size(get_width(),
                                             get_height())),
                             CL_Color(200, 200, 200, 225));
     }
+
 
   int map_width  = map_get_width()  * TILE_SIZE;
   int map_height = map_get_height() * TILE_SIZE;
@@ -58,28 +74,63 @@ Minimap::draw()
 
   Field<int>* tilemap = editor_get_tilemap()->get_map(1);
 
-  for(int y = 0; y < tilemap->get_height(); ++y)
-    for(int x = 0; x < tilemap->get_width(); ++x)
-      {
-        if (tilemap->at(x, y))
-          CL_Display::fill_rect(CL_Rect(CL_Point((x * TILE_SIZE) * get_width() / map_width,
-                                                 (y * TILE_SIZE) * get_height() / map_height),
-                                        small_tile),
-                                CL_Color(100, 100, 100));
-        CL_Display::flush();
-      }
+  if (0)
+    {
+      for(int y = 0; y < tilemap->get_height(); ++y)
+        for(int x = 0; x < tilemap->get_width(); ++x)
+          {
+            Tile* tile = TileFactory::current()->create(tilemap->at(x, y));
+            if (tile)
+              CL_Display::fill_rect(CL_Rect(CL_Point((x * TILE_SIZE) * get_width() / map_width,
+                                                     (y * TILE_SIZE) * get_height() / map_height),
+                                            small_tile),
+                                    tile->get_color());
+            CL_Display::flush();
+          }
+    }
 
+  minimap_surface.draw(CL_Rect(CL_Point(0, 0),
+                               CL_Size(get_width(), get_height())));
+
+  // Draw cursor
   CL_Rect rect = parent->get_clip_rect();
-
   CL_Rect screen_rect(CL_Point(rect.left  * get_width()  / map_width,
                                rect.top   * get_height() / map_height),
                       CL_Size(rect.get_width() * get_width() /map_width,
                               rect.get_height()* get_height()/map_height));
-
   CL_Display::fill_rect(screen_rect,
                         CL_Color(255, 255, 0, 50));
   CL_Display::draw_rect(screen_rect,
                         CL_Color(0, 0, 0));
+}
+
+void
+Minimap::update_minimap_surface()
+{
+  Field<int>* tilemap = editor_get_tilemap()->get_map(1);
+  CL_PixelBuffer buffer(map_get_width(), map_get_height(), 
+                        map_get_width()*3, CL_PixelFormat::rgb888);
+  
+  unsigned char* buf = static_cast<unsigned char*>(buffer.get_data());
+  for(int y = 0; y < map_get_height(); ++y)
+    for(int x = 0; x < map_get_width(); ++x)
+      {
+        Tile* tile = TileFactory::current()->create(tilemap->at(x, y));
+        if (tile)
+          {
+            buf[3*(x + y * map_get_width()) + 0] = tile->get_attribute_color().get_blue();
+            buf[3*(x + y * map_get_width()) + 1] = tile->get_attribute_color().get_green();
+            buf[3*(x + y * map_get_width()) + 2] = tile->get_attribute_color().get_red();
+          } 
+        else
+          {
+            buf[3*(x + y * map_get_width()) + 0] = 0;
+            buf[3*(x + y * map_get_width()) + 1] = 0;
+            buf[3*(x + y * map_get_width()) + 2] = 0;
+          }
+      }
+
+  minimap_surface = CL_Surface(&buffer);
 }
 
 void
@@ -110,6 +161,12 @@ Minimap::mouse_up  (const CL_InputEvent& event)
 {
   drag_active = false;
   release_mouse();
+}
+
+void
+Minimap::update_minimap()
+{
+  update_minimap_surface();
 }
 
 /* EOF */

@@ -22,8 +22,13 @@
 #include "globals.hxx"
 #include "tile.hxx"
 
-Tile::Tile(const std::string& filename_, const CL_Color& color_, unsigned char arg_colmap[])
-  : color(color_), filename(filename_)
+Tile::Tile(const std::string& filename_, 
+           const CL_Color& color_, 
+           const CL_Color& attribute_color_, 
+           unsigned char arg_colmap[])
+  : color(color_),
+    attribute_color(attribute_color_),
+    filename(filename_)
 {
   //sur.set_alignment(origin_center, 0, 0);
   memcpy(colmap, arg_colmap, 8);
@@ -33,6 +38,12 @@ CL_Color
 Tile::get_color()
 {
   return color;
+}
+
+CL_Color
+Tile::get_attribute_color()
+{
+  return attribute_color;
 }
 
 CL_Sprite&

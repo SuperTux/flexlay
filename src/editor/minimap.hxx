@@ -28,11 +28,19 @@ class Minimap : public CL_Component
 private:
   std::vector<CL_Slot> slots;
   bool drag_active;
+  
+  int last_serial;
+  EditorMap* editor_map;
+
   EditorMapComponent* parent;
+  CL_Surface minimap_surface;
+
+  void update_minimap_surface();
 public:
   Minimap(EditorMapComponent* p, const CL_Point& pos, const CL_Size& size, CL_Component* parent);
   
   void draw();
+  void update_minimap();
 
   void mouse_move(const CL_InputEvent& event);
   void mouse_down(const CL_InputEvent& event);

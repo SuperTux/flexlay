@@ -30,6 +30,7 @@ EditorMap::EditorMap(const std::string& filename_)
   : filename(filename_)
 {
   modified = false;
+  serial = 0;
 }
 
 EditorMap::~EditorMap()
@@ -45,6 +46,7 @@ void
 EditorMap::add_layer(EditorMapLayer* layer)
 {
   layers.push_back(layer);
+  ++serial;
 }
 
 void

@@ -41,7 +41,7 @@ EditorTile::draw(int id, int x, int y, bool grid, bool attribute, float alpha)
       
       if (attribute)
         CL_Display::fill_rect(CL_Rect(CL_Point(x, y), CL_Size(TILE_SIZE + 1, TILE_SIZE + 1)),
-                              tile->get_color());
+                              tile->get_attribute_color());
 
       if (grid)
         CL_Display::draw_rect(CL_Rect(CL_Point(x, y), CL_Size(TILE_SIZE + 1, TILE_SIZE + 1)),

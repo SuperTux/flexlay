@@ -31,6 +31,8 @@ windstille_SOURCES = \
   field.hxx \
   fonts.hxx \
   fonts.cxx \
+  gamepad_controller.cxx \
+  gamepad_controller.hxx \
   game_delta.hxx \
   game_world.cxx \
   game_world.hxx \
@@ -116,13 +118,7 @@ REST_LIBS2 = \
 STATICBIN_LIBS = \
 -L/usr/X11R6/lib/ \
 -Wl,-Bstatic \
--lclanApp \
--lclanVorbis \
--lclanMikMod \
--lclanSound \
--lclanGL \
--lclanDisplay \
--lclanCore \
+ @WINDSTILLE_LIBS@ \
 -lguile \
 -lguile-ltdl \
 $(STATIC_READLINE) \
@@ -151,7 +147,7 @@ $(REST_LIBS2)
 static: windstille.static
 
 windstille.static: $(windstille_OBJECTS) $(windstille_DEPENDENCIES) Makefile
-	$(CXX) -s -nodefaultlibs $(CXXFLAGS)  -o $@ $(windstille_OBJECTS) \
+	$(CXX) -s -nodefaultlibs $(CXXFLAGS)   @WINDSTILLE_CFLAGS@ -o $@ $(windstille_OBJECTS) \
          $(windstille_DEPENDENCIES) $(STATICBIN_LIBS) 
 
 windstille.static.comp: windstille.static

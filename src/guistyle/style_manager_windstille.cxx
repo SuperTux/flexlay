@@ -1,4 +1,4 @@
-//  $Id: style_manager_windstille.cxx,v 1.1 2003/10/12 11:58:09 grumbel Exp $
+//  $Id: style_manager_windstille.cxx,v 1.2 2003/10/29 15:34:43 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -28,11 +28,18 @@ StyleManager_Windstille::StyleManager_Windstille(CL_ResourceManager *resources)
 
 void StyleManager_Windstille::connect_styles(const std::string &type, CL_Component *component)
 {
-  std::cout << "connect_style: " << type << std::endl;
-  if (type == "button")
+  if (0)
     {
-      CL_Button *button = (CL_Button *)component;
-      button->set_style(new Button_Windstille(button));
+      std::cout << "connect_style: " << type << std::endl;
+      if (type == "button")
+        {
+          CL_Button *button = (CL_Button *)component;
+          button->set_style(new Button_Windstille(button));
+        }
+      else
+        {
+          CL_StyleManager_Silver::connect_styles(type, component);
+        }
     }
   else
     {

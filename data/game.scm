@@ -108,8 +108,8 @@
                                      (lambda () 
                                        (eval-string (gui-inputbox-get-text input)))
                                      (lambda err
-                                       (display "Error: ")(display err)(newline)))))
-    (gui-pop-component)))
+                                       (display "Error: ")(display err)(newline))))))
+  (gui-pop-component))
 
 (gui-create-button-func 0 0 100 25 "Hide Debug GUI"
                         (lambda () (gui-hide)))

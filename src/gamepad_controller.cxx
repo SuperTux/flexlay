@@ -1,4 +1,4 @@
-//  $Id: gamepad_controller.cxx,v 1.3 2003/08/12 08:24:41 grumbel Exp $
+//  $Id: gamepad_controller.cxx,v 1.4 2003/10/29 15:34:43 grumbel Exp $
 //
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -19,74 +19,79 @@
 
 #include "gamepad_controller.hxx"
 
-GamepadController::GamepadController (unsigned int joy_num)
+GamepadController::GamepadController(int num)
 {
-  if (CL_Input::joysticks.size () > joy_num)
+  CL_InputDevice dev = CL_Joystick::get_device(num);
+
+  slots.connect(dev.sig_key_down(),  this, &GamepadController::on_key_down);
+  slots.connect(dev.sig_key_up(),    this, &GamepadController::on_key_up);
+  slots.connect(dev.sig_axis_move(), this, &GamepadController::on_axis_move);
+}
+
+
+GamepadController::~GamepadController()
+{
+}
+
+void
+GamepadController::on_key_down(const CL_InputEvent& event)
+{
+  if (event.id == 0)
     {
-      std::cout << "Joystick found" << std::endl;
-      y_axis = CL_Input::joysticks[joy_num]->get_axis (1);
-      x_axis = CL_Input::joysticks[joy_num]->get_axis (0);
-      
-      surround_button  = CL_Input::joysticks[joy_num]->get_button (6);
-      smartbomb_button = CL_Input::joysticks[joy_num]->get_button (3);
-      fire_button      = CL_Input::joysticks[joy_num]->get_button (4);
-      jump_button      = CL_Input::joysticks[joy_num]->get_button (1);
+      send_event(InputEvent::JUMP, true);
     }
-  else
+  else if (event.id == 1)
     {
-      std::cout << "No Joystick found" << std::endl;
-      exit (1);
+      send_event(InputEvent::FIRE, true);
     }
 }
 
-// Directional Pad
-bool 
-GamepadController::is_right ()
+void
+GamepadController::on_key_up(const CL_InputEvent& event)
 {
-  return (x_axis->get_pos () > 0.5);
+  if (event.id == 0)
+    {
+      send_event(InputEvent::JUMP, false);
+    }
+  else if (event.id == 1)
+    {
+      send_event(InputEvent::FIRE, false);
+    } 
 }
 
-bool
-GamepadController::is_left ()
+void
+GamepadController::on_axis_move(const CL_InputEvent& event)
 {
-  return (x_axis->get_pos () < -0.5);
+  if (event.id == 1)
+    {
+      if (event.axis_pos > 0.5f)
+        send_event(InputEvent::DOWN, true);
+      else
+        send_event(InputEvent::DOWN, false);
+
+      if (event.axis_pos < -0.5f)
+        send_event(InputEvent::UP, true);
+      else
+        send_event(InputEvent::UP, false);
+    }
+  else if (event.id == 0)
+    {
+      if (event.axis_pos < -0.5f)
+        send_event(InputEvent::LEFT, true);
+      else
+        send_event(InputEvent::LEFT, false);
+
+      if (event.axis_pos > 0.5f)
+        send_event(InputEvent::RIGHT, true);
+      else
+        send_event(InputEvent::RIGHT, false);
+    }
 }
 
-bool
-GamepadController::is_up ()
+void
+GamepadController::update(float delta)
 {
-  return (y_axis->get_pos () < -0.5);
-}
-
-bool 
-GamepadController::is_down ()
-{
-  return (y_axis->get_pos () > 0.5);
-}
-
-// Buttons
-bool 
-GamepadController::fire_pressed ()
-{
-  return fire_button->is_pressed ();
-}
-
-bool 
-GamepadController::jump_pressed ()
-{
-  return jump_button->is_pressed ();
-}
-
-bool 
-GamepadController::surround_pressed ()
-{
-  return surround_button->is_pressed ();
-}
-
-bool 
-GamepadController::smartbomb_pressed ()
-{
-  return smartbomb_button->is_pressed ();
+  
 }
 
 /* EOF */

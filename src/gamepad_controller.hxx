@@ -1,4 +1,4 @@
-//  $Id: gamepad_controller.hxx,v 1.2 2003/08/12 08:24:41 grumbel Exp $
+//  $Id: gamepad_controller.hxx,v 1.3 2003/10/29 15:34:43 grumbel Exp $
 // 
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -26,27 +26,16 @@
 class GamepadController : public Controller
 {
 private:
-  CL_InputAxis* x_axis;
-  CL_InputAxis* y_axis;
+  CL_SlotContainer slots;
 
-  CL_InputButton* fire_button;
-  CL_InputButton* jump_button;
-  CL_InputButton* surround_button;
-  CL_InputButton* smartbomb_button;
+  void on_key_down(const CL_InputEvent&);
+  void on_key_up(const CL_InputEvent&);
+  void on_axis_move(const CL_InputEvent&);
 public:
-  GamepadController (unsigned int joy_num);
+  GamepadController(int num);
+  virtual ~GamepadController();
 
-  // Directional Pad
-  bool is_right ();
-  bool is_left ();
-  bool is_up ();
-  bool is_down ();
-
-  // Buttons
-  bool fire_pressed ();
-  bool jump_pressed ();
-  bool surround_pressed ();
-  bool smartbomb_pressed ();
+  void update(float delta);
 };
 
 #endif

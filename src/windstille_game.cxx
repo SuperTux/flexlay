@@ -1,4 +1,4 @@
-//  $Id: windstille_game.cxx,v 1.27 2003/10/12 11:58:09 grumbel Exp $
+//  $Id: windstille_game.cxx,v 1.28 2003/10/29 15:34:43 grumbel Exp $
 //
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -22,7 +22,7 @@
 
 #include "game_world.hxx"
 #include "gameobj.hxx"
-//#include "gamepad_controller.hxx"
+#include "gamepad_controller.hxx"
 #include "keyboard_controller.hxx"
 #include "player.hxx"
 #include "animation_obj.hxx"

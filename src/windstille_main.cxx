@@ -1,4 +1,4 @@
-//  $Id: windstille_main.cxx,v 1.24 2003/09/30 16:42:26 grumbel Exp $
+//  $Id: windstille_main.cxx,v 1.25 2003/10/29 15:34:43 grumbel Exp $
 //
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -34,6 +34,7 @@
 #include "windstille_main.hxx"
 #include "windstille_menu.hxx"
 #include "keyboard_controller.hxx"
+#include "gamepad_controller.hxx"
 #include "fonts.hxx"
 #include "tile_factory.hxx"
 
@@ -141,7 +142,8 @@ WindstilleMain::inner_main(void* closure, int argc, char** argv)
     std::cout << "Loading Guile Code... done" << std::endl;
 
     // FIXME:
-    new KeyboardController();
+    //new KeyboardController();
+    new GamepadController(1);
     TileFactory::init();
 
     if (!launch_editor && levelfile.empty())

@@ -10,6 +10,8 @@ windstille_SOURCES = \
   bonus_flyer.cxx \
   bonus_flyer.hxx \
   controller.hxx \
+  diamond_map.hxx \
+  diamond_map.cxx \
   default_shoot.cxx \
   default_shoot.hxx \
   delta_manager.hxx \
@@ -51,6 +53,8 @@ windstille_SOURCES = \
   tile_factory.hxx \
   tile_map.cxx \
   tile_map.hxx \
+  water_map.cxx \
+  water_map.hxx \
   windstille_game.cxx \
   windstille_game.hxx \
   windstille_level.cxx \

@@ -1,4 +1,4 @@
-//  $Id: editor_tilemap.cxx,v 1.9 2003/09/12 09:25:48 grumbel Exp $
+//  $Id: editor_tilemap.cxx,v 1.10 2003/09/12 16:31:21 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -43,7 +43,7 @@ EditorTileMap::EditorTileMap(CL_Component* parent)
   
   tool = NONE;
   brush_tile = 0;
-  zoom = .5f;
+  zoom_factor = 0;
 }
 
 EditorTileMap::~EditorTileMap()
@@ -170,32 +170,17 @@ EditorTileMap::draw_map(Field<EditorTile*>* field)
 	  field->at(x, y)->draw(x * TILE_SIZE, y * TILE_SIZE, alpha);
 	}
     }
-
-  if (has_mouse_over())
-    {
-    CL_Point pos =  screen2tile(CL_Point(CL_Mouse::get_x(), CL_Mouse::get_y()));
-
-    if (pos.x >= 0 && pos.y >= 0)
-      {
-        Tile* tile = TileFactory::current()->create(brush_tile);
-        if (tile)
-          {
-            CL_Sprite sprite = tile->sur;
-            sprite.set_alpha(0.5f);
-            sprite.draw(pos.x * TILE_SIZE, pos.y * TILE_SIZE);
-          }
-        CL_Display::fill_rect (CL_Rect(CL_Point(pos.x * TILE_SIZE, pos.y * TILE_SIZE),
-                                       CL_Size(TILE_SIZE, TILE_SIZE)),
-                               CL_Color(255, 255, 255, 100));
-      }
-    }
 }
 
 void
 EditorTileMap::draw ()
 {
+  //CL_Display::get_current_window()->get_gc()->flush();
   //glPushMatrix();
-  //glScalef(zoom, zoom, 1.0f);
+
+  //glScalef(get_zoom(), get_zoom(), 1.0f);
+  //glTranslatef(trans_offset.x, trans_offset.y, 0.0f);
+
   CL_Display::push_translate_offset(int(trans_offset.x), int(trans_offset.y));
 
   CL_Display::clear(CL_Color(100, 0, 100));
@@ -204,13 +189,32 @@ EditorTileMap::draw ()
                                 CL_Size(current_field->get_width() * TILE_SIZE,
                                         current_field->get_height() * TILE_SIZE)),
                         CL_Color(0, 0, 150, 255));
+
   for(Fields::iterator i = fields.begin(); i != fields.end();++i) 
+    draw_map(*i);
+  
+  // Draw 'cursor'
+  if (has_mouse_over())
     {
-      draw_map(*i);
+      CL_Point pos =  screen2tile(CL_Point(CL_Mouse::get_x(), CL_Mouse::get_y()));
+
+      if (pos.x >= 0 && pos.y >= 0)
+        {
+          Tile* tile = TileFactory::current()->create(brush_tile);
+          if (tile)
+            {
+              CL_Sprite sprite = tile->sur;
+              sprite.set_alpha(0.5f);
+              sprite.draw(pos.x * TILE_SIZE, pos.y * TILE_SIZE);
+            }
+          CL_Display::fill_rect (CL_Rect(CL_Point(pos.x * TILE_SIZE, pos.y * TILE_SIZE),
+                                         CL_Size(TILE_SIZE, TILE_SIZE)),
+                                 CL_Color(255, 255, 255, 100));
+        }
     }
 
   CL_Display::pop_translate_offset();
-  //glPopMatrix();
+  // glPopMatrix();
 }
 
 CL_Point
@@ -329,13 +333,26 @@ EditorTileMap::set_tool(int i)
 void
 EditorTileMap::zoom_out()
 {
-  std::cout << "zoomout" << std::endl;
+  zoom_factor -= 1;
+  std::cout << "Zoom: " << get_zoom() << std::endl;
 }
 
 void
 EditorTileMap::zoom_in()
 {
-  std::cout << "zoomin" << std::endl;
+  zoom_factor += 1;
+  std::cout << "Zoom: " << get_zoom() << std::endl;
+}
+
+float
+EditorTileMap::get_zoom()
+{
+  if (zoom_factor > 0)
+    return 1.0f * (zoom_factor + 1);
+  else if (zoom_factor < 0)
+    return 1.0f / (-zoom_factor + 1);
+  else
+    return 1.0f;
 }
 
 Field<EditorTile*>* 

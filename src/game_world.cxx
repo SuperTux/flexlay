@@ -1,4 +1,4 @@
-//  $Id: game_world.cxx,v 1.10 2003/09/11 18:58:19 grumbel Exp $
+//  $Id: game_world.cxx,v 1.11 2003/09/12 16:31:21 grumbel Exp $
 //
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -21,6 +21,9 @@
 #include "player.hxx"
 #include "gameobj.hxx"
 #include "game_world.hxx"
+#include "diamond_map.hxx"
+#include "tile_map.hxx"
+#include "water_map.hxx"
 #include "windstille_level.hxx"
 
 bool removable (GameObj* obj) {
@@ -34,6 +37,17 @@ GameWorld::GameWorld (const std::string& filename)
   
   tilemap = new TileMap(level.get_tilemap());
   background_tilemap = new TileMap(level.get_background_tilemap());
+
+  diamond_map = new DiamondMap(50, 50);
+  water_map   = new WaterMap();
+}
+
+GameWorld::~GameWorld()
+{
+  delete diamond_map;
+  delete water_map;
+  delete tilemap;
+  delete background_tilemap;
 }
 
 void
@@ -41,52 +55,21 @@ GameWorld::draw ()
 {
   background_tilemap->draw ();
 
+  diamond_map->draw();
   for (std::list<GameObj*>::iterator i = objects.begin ();
        i != objects.end (); ++i)
     (*i)->draw ();
-
+  water_map->draw();
   tilemap->draw ();
-
-  if (0) // Water
-    {
-      int x1 = 0;
-      int y1 = 100;
-      int x2 = 8000;
-      int y2 = 5000;
-      
-      Display::begin_gl();
-      {
-        glEnable (GL_BLEND);
-        glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
-        glBegin(GL_QUADS);
-        { // Water
-          glColor4f(0.8f, 0.8f, 1.0f, 0.5f);
-
-          glVertex2f(x1, y1);
-          glVertex2f(x2, y1);
- 
-          glColor4f(0.0f, 0.0f, 0.8f, 0.5f);
-          glVertex2f(x2, y1 + 15);
-          glVertex2f(x1, y1 + 15);
-
-          glVertex2f(x1,  y1 + 15);
-          glVertex2f(800, y1 + 15);
-
-          glColor4f(0.0f, 0.0f, .2f, 0.5f);
-          glVertex2f(x2, y2);
-          glVertex2f(x1, y2);
-        }
-        glEnd();
-      }
-      Display::end_gl();
-    }
-
 }
 
 void
 GameWorld::update (float delta)
 {
   passed_time += delta;
+
+  diamond_map->update(delta);
+  water_map->update(delta);
 
   std::list<GameObj*> tmp_objects (objects);
 

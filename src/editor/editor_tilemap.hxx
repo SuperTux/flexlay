@@ -1,4 +1,4 @@
-//  $Id: editor_tilemap.hxx,v 1.5 2003/09/11 18:58:19 grumbel Exp $
+//  $Id: editor_tilemap.hxx,v 1.6 2003/09/12 16:31:21 grumbel Exp $
 // 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -35,7 +35,7 @@ private:
   Field<EditorTile*>* current_field;
   typedef Field<EditorTile*>::iterator FieldIter;
   
-  float zoom;
+  int zoom_factor;
   CL_Pointf trans_offset;
   CL_Pointf old_trans_offset;
 
@@ -51,6 +51,7 @@ public:
 
   void set_tool(int i);
 
+  float get_zoom();
   void zoom_out();
   void zoom_in();
 

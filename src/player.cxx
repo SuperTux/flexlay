@@ -1,4 +1,4 @@
-//  $Id: player.cxx,v 1.11 2003/09/11 18:58:19 grumbel Exp $
+//  $Id: player.cxx,v 1.12 2003/09/12 16:31:21 grumbel Exp $
 //
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -17,6 +17,7 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
+#include "tile_map.hxx"
 #include "display.hxx"
 #include "game_world.hxx"
 #include "default_shoot.hxx"
@@ -30,9 +31,9 @@ Player::Player (Controller* c) :
   pos (320, 500),
   velocity (0, 0),
   
-  walk     ("hero/run",     resources),
-  jump     ("hero/jump",     resources),
-  stand    ("hero/stand",    resources),
+  walk     ("hero/run",   resources),
+  jump     ("hero/jump",  resources),
+  stand    ("hero/stand", resources),
 
   state (WALKING),
   gun_state (GUN_READY),

@@ -1,4 +1,4 @@
-//  $Id: default_shoot.cxx,v 1.2 2003/08/12 08:24:41 grumbel Exp $
+//  $Id: default_shoot.cxx,v 1.3 2003/09/12 16:31:20 grumbel Exp $
 //
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -20,6 +20,7 @@
 #include "globals.hxx"
 #include "game_world.hxx"
 #include "animation_obj.hxx"
+#include "tile_map.hxx"
 #include "default_shoot.hxx"
 
 DefaultShoot::DefaultShoot (const CL_Vector& arg_pos,

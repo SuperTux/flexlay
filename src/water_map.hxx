@@ -1,7 +1,7 @@
-//  $Id: dog.hxx,v 1.3 2003/09/12 16:31:21 grumbel Exp $
+//  $Id: water_map.hxx,v 1.1 2003/09/12 16:31:21 grumbel Exp $
 // 
-//  Windstille - A Jump'n Shoot Game
-//  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
+//  Pingus - A free Lemmings clone
+//  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -17,29 +17,34 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-#ifndef DOG_HXX
-#define DOG_HXX
+#ifndef HEADER_WATER_MAP_HXX
+#define HEADER_WATER_MAP_HXX
 
-#include <ClanLib/Core/Math/cl_vector.h>
-#include <ClanLib/Display/sprite.h>
-#include "gameobj.hxx"
-#include "globals.hxx"
-
-class Dog : public GameObj
+/** */
+class WaterMap
 {
 private:
-  CL_Sprite sprite;
-  CL_Vector pos;
-  Direction direction;
-public:
-  Dog (const CL_Vector& arg_pos, Direction);
-  virtual ~Dog () {}
-  
-  void draw ();
-  void update (float);
+  struct Water {
+    Water(int x, int y, int w, int h)
+      : x(x), y(y), w(w), h(h)
+    {
+    }
+    int x, y;
+    int w, h;
+  };  
 
-  bool on_ground ();
-  bool stuck ();
+  typedef std::vector<Water> Waters;
+  Waters waters;
+public:
+  WaterMap();
+  ~WaterMap();
+
+  void draw();
+  void update(float delta);
+
+private:
+  WaterMap (const WaterMap&);
+  WaterMap& operator= (const WaterMap&);
 };
 
 #endif

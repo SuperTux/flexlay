@@ -6,6 +6,10 @@
 (define screen-width  (screen-get-width))
 (define screen-height (screen-get-height))
 (define empty (lambda () #f))
+(define last-file "/tmp/foobar.scm")
+
+(define (add-last-file filename)
+  #f)
 
 (define (serialize-level)
   `(windstille-level
@@ -29,10 +33,6 @@
                    50 25 "New" 
                    (lambda () 
                      (show-new-level-dialog)))
-
-(editor-add-button-func 0 75 50 25 "Quit" 
-                   (lambda ()
-                     (editor-quit)))
 (editor-add-button-func 0 25
                    50 25 "Load" 
                    (lambda ()
@@ -45,6 +45,17 @@
                    (lambda () 
                      (simple-file-dialog "Save a level..." "/tmp/foobar.scm"
                                          (lambda (filename) (save-map "/tmp/foobar.scm")))))
+
+(editor-add-button-func 0 75 50 25 "Play" 
+                   (lambda ()
+                     (let ((file (tmpnam)))
+                       (save-map file)
+                       (game-play file)
+                       (delete-file file))))
+
+(editor-add-button-func 0 100 50 25 "Quit" 
+                   (lambda ()
+                     (editor-quit)))
 
 (editor-add-button-func 100 0
                    100 25 "Background" 
@@ -92,34 +103,9 @@
                    (lambda ()
                      (editor-set-brush-tile 0)))
 
-(editor-add-button-func (+ 300)
+(editor-add-button (+ 300)
                    (- screen-height 25)
-                   100 25 "Select" 
-                   empty)
-
-
-(let ((window (editor-add-window 200 200 320 240 "Property Window")))
-  (push-component (window-get-client-area window))
-
-  (editor-add-label 10 10 "Width: ")
-  (editor-add-label 10 30 "Height: ")
-
-  (let* ((width  (editor-add-inputbox 50 10 50 25 "100"))
-         (height (editor-add-inputbox 50 30 50 25 "20"))
-         (ok-button (editor-add-button-func 160 180 60 25 "Ok" 
-                                       (lambda ()
-                                         (component-hide window))))
-         (cancel (editor-add-button-func 240 180 60 25 "Cancel"  
-                                    (lambda ()
-                                      (component-hide window)))))
-    (pop-component))
-
-  (editor-add-button-func (+ 400)
-                     (- screen-height 25)
-                     100 25 "Properties" 
-                     (lambda ()
-                       (component-show window))))
-
+                   100 25 "Select")
 
 (tile-selector-create (- screen-width (* 3 64)) 0 3 8)
 
@@ -165,15 +151,5 @@
                             (component-hide window)))
       (pop-component)
       )))
-
-#!
-(editor-add-window 10 10 125 300 "Hello Window")
-(editor-add-button-func 10  10 100 25 "Hello World1"  empty)
-(editor-add-button-func 10  40 100 25 "Hello World2"  empty)
-(editor-add-button-func 10  70 100 25 "Hello World3"  empty)
-(editor-add-button-func 10 100 100 25 "Hello World3"  empty)
-(editor-add-label  10 130   "Foobar:")
-(editor-add-inputbox  60 130 50 25  "50")
-!#
 
 ;; EOF ;;

@@ -27,6 +27,25 @@
       <image file="images/light3.png" name="image1" />
     </sprite>
   </section>
+
+  <sprite name="diamond">
+    <animation
+      speed="50"
+      loop="yes"
+      pingpong="yes" />
+
+    <image file="images/diamond/diamond1.png"  name="image1" />
+    <image file="images/diamond/diamond2.png"  name="image2" />
+    <image file="images/diamond/diamond3.png"  name="image3" />
+    <image file="images/diamond/diamond4.png"  name="image4" />
+    <image file="images/diamond/diamond5.png"  name="image5" />
+    <image file="images/diamond/diamond6.png"  name="image6" />
+    <image file="images/diamond/diamond7.png"  name="image7" />
+    <image file="images/diamond/diamond8.png"  name="image8" />
+    <image file="images/diamond/diamond9.png"  name="image9" />
+    <image file="images/diamond/diamond10.png" name="image10" />
+    <image file="images/diamond/diamond11.png" name="image11" />
+  </sprite>
   
   <section name="hero">
     <description name="run1" play_speed="30">
@@ -80,148 +99,148 @@
     </sprite>
     <sprite name="roll" translation_hotspot="top_left,29,82">
       <image file="images/turrican_roll/frame1.png"
-      name="image1" />
+        name="image1" />
       <image file="images/turrican_roll/frame2.png"
-      name="image2" />
+        name="image2" />
       <image file="images/turrican_roll/frame3.png"
-      name="image3" />
+        name="image3" />
       <image file="images/turrican_roll/frame4.png"
-      name="image4" />
+        name="image4" />
     </sprite>
     <sprite name="stand" translation_hotspot="top_left,29,82">
       <image file="images/turrican_stand_east.png" name="image1" />
     </sprite>
     <sprite name="walk" translation_hotspot="top_left,32,74">
       <image file="images/turrican_walk/frame1.png"
-      name="image1" />
+        name="image1" />
       <image file="images/turrican_walk/frame2.png"
-      name="image2" />
+        name="image2" />
       <image file="images/turrican_walk/frame3.png"
-      name="image3" />
+        name="image3" />
       <image file="images/turrican_walk/frame4.png"
-      name="image4" />
+        name="image4" />
       <image file="images/turrican_walk/frame5.png"
-      name="image5" />
+        name="image5" />
       <image file="images/turrican_walk/frame6.png"
-      name="image6" />
+        name="image6" />
       <image file="images/turrican_walk/frame7.png"
-      name="image7" />
+        name="image7" />
       <image file="images/turrican_walk/frame8.png"
-      name="image8" />
+        name="image8" />
       <image file="images/turrican_walk/frame9.png"
-      name="image9" />
+        name="image9" />
       <image file="images/turrican_walk/frame10.png"
-      name="image10" />
+        name="image10" />
       <image file="images/turrican_walk/frame11.png"
-      name="image11" />
+        name="image11" />
       <image file="images/turrican_walk/frame12.png"
-      name="image12" />
+        name="image12" />
       <image file="images/turrican_walk/frame13.png"
-      name="image13" />
+        name="image13" />
       <image file="images/turrican_walk/frame14.png"
-      name="image14" />
+        name="image14" />
     </sprite>
     <sprite name="surround" translation_hotspot="top_left,39,86">
       <image file="images/turrican_surround/frame1.png"
-      name="image1" />
+        name="image1" />
       <image file="images/turrican_surround/frame2.png"
-      name="image2" />
+        name="image2" />
       <image file="images/turrican_surround/frame3.png"
-      name="image3" />
+        name="image3" />
       <image file="images/turrican_surround/frame4.png"
-      name="image4" />
+        name="image4" />
       <image file="images/turrican_surround/frame5.png"
-      name="image5" />
+        name="image5" />
       <image file="images/turrican_surround/frame6.png"
-      name="image6" />
+        name="image6" />
       <image file="images/turrican_surround/frame7.png"
-      name="image7" />
+        name="image7" />
       <image file="images/turrican_surround/frame8.png"
-      name="image8" />
+        name="image8" />
       <image file="images/turrican_surround/frame9.png"
-      name="image9" />
+        name="image9" />
       <image file="images/turrican_surround/frame10.png"
-      name="image10" />
+        name="image10" />
       <image file="images/turrican_surround/frame11.png"
-      name="image11" />
+        name="image11" />
       <image file="images/turrican_surround/frame12.png"
-      name="image12" />
+        name="image12" />
       <image file="images/turrican_surround/frame13.png"
-      name="image13" />
+        name="image13" />
       <image file="images/turrican_surround/frame14.png"
-      name="image14" />
+        name="image14" />
       <image file="images/turrican_surround/frame15.png"
-      name="image15" />
+        name="image15" />
       <image file="images/turrican_surround/frame16.png"
-      name="image16" />
+        name="image16" />
       <image file="images/turrican_surround/frame17.png"
-      name="image17" />
+        name="image17" />
       <image file="images/turrican_surround/frame18.png"
-      name="image18" />
+        name="image18" />
       <image file="images/turrican_surround/frame19.png"
-      name="image19" />
+        name="image19" />
       <image file="images/turrican_surround/frame20.png"
-      name="image20" />
+        name="image20" />
       <image file="images/turrican_surround/frame21.png"
-      name="image21" />
+        name="image21" />
       <image file="images/turrican_surround/frame22.png"
-      name="image22" />
+        name="image22" />
       <image file="images/turrican_surround/frame23.png"
-      name="image23" />
+        name="image23" />
       <image file="images/turrican_surround/frame24.png"
-      name="image24" />
+        name="image24" />
       <image file="images/turrican_surround/frame25.png"
-      name="image25" />
+        name="image25" />
       <image file="images/turrican_surround/frame26.png"
-      name="image26" />
+        name="image26" />
       <image file="images/turrican_surround/frame27.png"
-      name="image27" />
+        name="image27" />
       <image file="images/turrican_surround/frame28.png"
-      name="image28" />
+        name="image28" />
       <image file="images/turrican_surround/frame29.png"
-      name="image29" />
+        name="image29" />
       <image file="images/turrican_surround/frame30.png"
-      name="image30" />
+        name="image30" />
     </sprite>
   </section>
   <section name="shoot">
     <section name="laser">
       <sprite name="stage1">
         <image file="images/shoot/laser/stage1.png"
-        name="image1" />
+          name="image1" />
       </sprite>
       <sprite name="stage2">
         <image file="images/shoot/laser/stage2.png"
-        name="image1" />
+          name="image1" />
       </sprite>
       <sprite name="stage3">
         <image file="images/shoot/laser/stage3.png"
-        name="image1" />
+          name="image1" />
       </sprite>
       <sprite name="stage4">
         <image file="images/shoot/laser/stage4.png"
-        name="image1" />
+          name="image1" />
       </sprite>
       <sprite name="stage5">
         <image file="images/shoot/laser/stage5.png"
-        name="image1" />
+          name="image1" />
       </sprite>
     </section>
     <sprite name="explosion">
       <image file="images/shoot/explosion/frame1.png"
-      name="image1" />
+        name="image1" />
       <image file="images/shoot/explosion/frame2.png"
-      name="image2" />
+        name="image2" />
       <image file="images/shoot/explosion/frame3.png"
-      name="image3" />
+        name="image3" />
       <image file="images/shoot/explosion/frame4.png"
-      name="image4" />
+        name="image4" />
       <image file="images/shoot/explosion/frame5.png"
-      name="image5" />
+        name="image5" />
       <image file="images/shoot/explosion/frame6.png"
-      name="image6" />
+        name="image6" />
       <image file="images/shoot/explosion/frame7.png"
-      name="image7" />
+        name="image7" />
     </sprite>
     <sprite name="default">
       <image file="images/shoot_default.png" name="image1" />
@@ -474,15 +493,15 @@
     </sprite>
     <sprite name="waterfall">
       <image file="images/tiles/level1/waterfall.png"
-      name="image1" />
+        name="image1" />
     </sprite>
     <sprite name="waterfall2">
       <image file="images/tiles/level1/waterfall2.png"
-      name="image1" />
+        name="image1" />
     </sprite>
     <sprite name="waterfall3">
       <image file="images/tiles/level1/waterfall3.png"
-      name="image1" />
+        name="image1" />
     </sprite>
   </section>
   <sprite name="bonusflyer">
@@ -492,7 +511,7 @@
     <image file="images/nebular.png" name="image1" />
   </sprite>
   <sprite name="dog" play_speed="500"
-  translation_hotspot="top_left,24,42">
+    translation_hotspot="top_left,24,42">
     <image file="images/dog/frame1.png" name="image1" />
     <image file="images/dog/frame2.png" name="image2" />
     <image file="images/dog/frame3.png" name="image3" />

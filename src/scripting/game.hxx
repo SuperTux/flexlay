@@ -1,4 +1,4 @@
-//  $Id: game.hxx,v 1.4 2003/09/15 17:00:38 grumbel Exp $
+//  $Id: game.hxx,v 1.5 2003/09/17 18:48:45 grumbel Exp $
 // 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -20,6 +20,8 @@
 #ifndef HEADER_WORLD_HXX
 #define HEADER_WORLD_HXX
 
+#include <guile/gh.h>
+
 class GameWorld;
 
 void game_add_water(int x, int y, int w, int h);
@@ -29,6 +31,8 @@ void game_set_player(float x, float y);
 
 GameWorld* make_game_world(int w, int h);
 void start_game(GameWorld*);
+
+void add_region_trigger(int x, int y, int w, int h, SCM func);
 
 #endif
 

@@ -1,4 +1,4 @@
-//  $Id: editor.cxx,v 1.1 2003/09/12 20:17:06 grumbel Exp $
+//  $Id: editor.cxx,v 1.2 2003/09/17 18:48:45 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -59,9 +59,9 @@ void
 component_on_click(CL_Component* comp, SCM func)
 {
   CL_Button* button = dynamic_cast<CL_Button*>(comp);
-  SCMFunctor* functor = new SCMFunctor(func);
   CL_SlotContainer* slot_container = Editor::current()->get_slot_container();
-  slot_container->connect(button->sig_clicked(), functor, &SCMFunctor::call);
+  
+  slot_container->connect_functor(button->sig_clicked(), SCMFunctor(func));
 }
 
 CL_Component* 

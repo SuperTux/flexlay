@@ -1,4 +1,4 @@
-//  $Id: game.cxx,v 1.5 2003/09/17 18:48:45 grumbel Exp $
+//  $Id: trigger.cxx,v 1.1 2003/09/17 18:48:45 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -17,54 +17,59 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-#include "scripting/game.hxx"
-#include "water_map.hxx"
+#include <list>
 #include "game_world.hxx"
-#include "igel.hxx"
-#include "bomb.hxx"
-#include "windstille_game.hxx"
 #include "trigger.hxx"
 #include "player.hxx"
 
-void
-game_add_water(int x, int y, int w, int h)
+RegionTriggerCondition::RegionTriggerCondition(CL_Rectf rect)
+  : rect(rect)
 {
-  GameWorld::current()->get_watermap()->add_water(x, y, w, h);
+}
+
+bool
+RegionTriggerCondition::check()
+{
+  GameWorld* world = GameWorld::current();
+
+  Player* player = *(world->get_players()->begin());
+
+  return rect.is_inside(CL_Pointf(player->get_pos().x,
+                                  player->get_pos().y));
+}
+
+Trigger::Trigger(TriggerCondition* condition, SCMFunctor func)
+  : condition(condition),
+    func(func),
+    triggered(false)
+{
+}
+
+Trigger::~Trigger()
+{
+  delete condition;
 }
 
 void
-game_add_bomb(int x, int y)
+Trigger::draw ()
 {
-  GameWorld::current()->add(new Bomb(x, y));
+  
 }
 
 void
-game_add_igel(int x, int y)
+Trigger::update (float delta)
 {
-  GameWorld::current()->add(new Igel(x, y));
-}
+  condition->update(delta);
 
-void
-game_set_player(float x, float y)
-{
-  Player::current()->set_position(CL_Vector(x, y));
-}
-
-GameWorld* make_game_world(int w, int h)
-{
-  return new GameWorld(w, h);
-}
-
-void start_game(GameWorld* world)
-{
-  WindstilleGame game (world);
-  game.display ();
-}
-
-void add_region_trigger(int x, int y, int w, int h, SCM func)
-{
-  GameWorld::current()->add(new Trigger(new RegionTriggerCondition(CL_Rectf(x, y, w, h)), 
-                                        func));
+  if (!triggered && condition->check())
+    {
+      triggered = true;
+      func();
+    }
+  else if (!condition->check())
+    {
+      triggered = false;
+    }
 }
 
 /* EOF */

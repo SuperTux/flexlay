@@ -59,6 +59,8 @@ windstille_SOURCES = \
   tile_factory.hxx \
   tile_map.cxx \
   tile_map.hxx \
+  trigger.hxx \
+  trigger.cxx \
   water_map.cxx \
   water_map.hxx \
   windstille_game.cxx \

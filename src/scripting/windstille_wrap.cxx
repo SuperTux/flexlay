@@ -1499,6 +1499,42 @@ _wrap_start_game (SCM s_0)
 }
 
 
+static SCM
+_wrap_add_region_trigger (SCM s_0, SCM s_1, SCM s_2, SCM s_3, SCM s_4)
+{
+    #define FUNC_NAME "add-region-trigger"
+    int arg1 ;
+    int arg2 ;
+    int arg3 ;
+    int arg4 ;
+    SCM arg5 ;
+    SCM gswig_result;
+    int gswig_list_p = 0;
+    
+    {
+        arg1 = gh_scm2int(s_0);
+    }
+    {
+        arg2 = gh_scm2int(s_1);
+    }
+    {
+        arg3 = gh_scm2int(s_2);
+    }
+    {
+        arg4 = gh_scm2int(s_3);
+    }
+    arg5=s_4;
+    gh_defer_ints();
+    add_region_trigger(arg1,arg2,arg3,arg4,arg5);
+    
+    gh_allow_ints();
+    gswig_result = GH_UNSPECIFIED;
+    
+    return gswig_result;
+    #undef FUNC_NAME
+}
+
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -1561,6 +1597,7 @@ SWIG_init (void)
     gh_new_procedure("game-set-player", (swig_guile_proc) _wrap_game_set_player, 2, 0, 0);
     gh_new_procedure("make-game-world", (swig_guile_proc) _wrap_make_game_world, 2, 0, 0);
     gh_new_procedure("start-game", (swig_guile_proc) _wrap_start_game, 1, 0, 0);
+    gh_new_procedure("add-region-trigger", (swig_guile_proc) _wrap_add_region_trigger, 5, 0, 0);
     SWIG_Guile_RegisterTypes(swig_types, swig_types_initial);
 }
 

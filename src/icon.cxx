@@ -36,6 +36,7 @@ public:
   std::string tooltip;
   bool draw_tooltip;
   bool down;
+  bool is_enabled;
   CL_Signal_v0 sig_on_click;
 
   void draw();
@@ -54,6 +55,7 @@ Icon::Icon(const CL_Point& pos, const CL_Sprite& sprite, const std::string& tool
   impl->tooltip      = tooltip;
   impl->draw_tooltip = true;
   impl->down         = false;
+  impl->is_enabled   = true;
 
   impl->slots.push_back(sig_paint().connect(impl.get(), &IconImpl::draw));
   impl->slots.push_back(sig_mouse_down().connect(impl.get(), &IconImpl::mouse_down));
@@ -69,6 +71,7 @@ Icon::Icon(const CL_Rect& rect, const CL_Sprite& sprite, const std::string& tool
   impl->tooltip      = tooltip;
   impl->draw_tooltip = true;
   impl->down         = false;
+  impl->is_enabled   = true;
 
   impl->slots.push_back(sig_paint().connect(impl.get(), &IconImpl::draw));
   impl->slots.push_back(sig_mouse_down().connect(impl.get(), &IconImpl::mouse_down));
@@ -86,43 +89,71 @@ IconImpl::draw()
 {
   CL_Rect rect(CL_Point(0, 0), CL_Size(parent->get_width()-4, parent->get_height()-4));
 
-  if (parent->has_mouse_over())
+  sprite.set_alignment(origin_center);
+
+  if (is_enabled)
     {
-      if (down)
-        Box::draw_button_down(rect);
+      if (parent->has_mouse_over())
+        {
+          if (down)
+            Box::draw_button_down(rect);
+          else
+            Box::draw_button_up(rect);
+        }
       else
-        Box::draw_button_up(rect);
+        Box::draw_button_neutral(rect);
+
+      sprite.set_alpha(1.0f);
     }
   else
-    Box::draw_button_neutral(rect);
-
-  sprite.set_alignment(origin_center);
+    {
+      Box::draw_button_neutral(rect);
+      sprite.set_alpha(0.3f);
+    }
   sprite.draw((rect.get_width()+1)/2, (rect.get_height()+1)/2);
 }
 
 void
 IconImpl::mouse_up  (const CL_InputEvent& event)
 {
-  down         = false;
-  parent->release_mouse();  
-
-  if (parent->has_mouse_over())
+  if (is_enabled)
     {
-      sig_on_click();
+      down         = false;
+      parent->release_mouse();  
+
+      if (parent->has_mouse_over())
+        {
+          sig_on_click();
+        }
     }
 }
 
 void
 IconImpl::mouse_down(const CL_InputEvent& event)
 {
-  down         = true;
-  parent->capture_mouse();
+  if (is_enabled)
+    {
+      down         = true;
+      parent->capture_mouse();
+    }
 }
 
 void 
 IconImpl::mouse_move(const CL_InputEvent& event)
 {
-  std::cout << "icon: mouse_move: " << event << std::endl;
+  //std::cout << "icon: mouse_move: " << event << std::endl;
+}
+
+void
+Icon::disable()
+{
+  impl->is_enabled = false;
+}
+
+void
+Icon::enable()
+{
+  impl->is_enabled = true;
 }
 
 /* EOF */

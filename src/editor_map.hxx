@@ -72,6 +72,12 @@ public:
 
   /** Move forward in the undo stack */
   void redo();
+
+  int undo_stack_size();
+
+  int redo_stack_size();
+
+  CL_Signal_v0& sig_change();
 private:
   CL_SharedPtr<EditorMapImpl> impl;
 };

@@ -105,6 +105,22 @@ redo_icon = Icon(CL_Point(32*6.1+2, 2), make_sprite("../data/images/icons24/stoc
 undo_icon.set_callback(m.undo)
 redo_icon.set_callback(m.redo)
 
+undo_icon.disable()
+redo_icon.disable()
+
+def on_map_change():
+    if (m.undo_stack_size() > 0):
+        undo_icon.enable()
+    else:
+        undo_icon.disable()
+
+    if (m.redo_stack_size() > 0):
+        redo_icon.enable()
+    else:
+        redo_icon.disable()        
+
+connect(m.sig_change(), on_map_change)
+
 toolbar = Panel(CL_Rect(CL_Point(0, 23+33), CL_Size(33, 256)), gui.get_component())
 
 select = Icon(CL_Point(2, 32*0+2), make_sprite("../data/images/tools/stock-tool-rect-select-22.png"), "Some tooltip", toolbar);

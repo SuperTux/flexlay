@@ -29,6 +29,7 @@
 #include "layer.hxx"
 #include "tilemap_layer.hxx"
 #include "flexlay.hxx"
+#include "editor_map.hxx"
 
 int main()
 {

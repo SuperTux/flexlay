@@ -49,6 +49,9 @@ public:
 
   Commands undo_stack;
   Commands redo_stack;
+
+  CL_Signal_v0 on_change;
+
 };
 
 EditorMap::EditorMap()
@@ -161,7 +164,7 @@ EditorMap::get_bounding_rect()
 void
 EditorMap::set_background_color(const CL_Color& color)
 {
- impl-> background_color = color;
+  impl-> background_color = color;
 }
 
 void
@@ -170,6 +173,7 @@ EditorMap::execute(Command command)
   impl->redo_stack.clear();
   command.execute();
   impl->undo_stack.push_back(command);
+  impl->on_change();
 }
 
 void
@@ -181,6 +185,7 @@ EditorMap::undo()
       impl->undo_stack.pop_back();
       command.undo();
       impl->redo_stack.push_back(command);
+      impl->on_change();
     }
 }
 
@@ -193,7 +198,26 @@ EditorMap::redo()
       impl->redo_stack.pop_back();
       command.redo();
       impl->undo_stack.push_back(command);
+      impl->on_change();
     }
+}
+
+int
+EditorMap::undo_stack_size()
+{
+  return impl->undo_stack.size();
+}
+
+int
+EditorMap::redo_stack_size()
+{
+  return impl->redo_stack.size();
+}
+
+CL_Signal_v0&
+EditorMap::sig_change()
+{
+  return impl->on_change;
 }
 
 /* EOF */

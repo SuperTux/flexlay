@@ -147,7 +147,7 @@ Workspace::get_map()
 }
 
 void
-Workspace::set_map(EditorMap m)
+Workspace::set_map(const EditorMap& m)
 {
   impl->editor_map = m;
 }

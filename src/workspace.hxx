@@ -23,9 +23,9 @@
 #include <ClanLib/Core/System/sharedptr.h>
 #include <ClanLib/Display/input_event.h>
 #include "graphic_context_state.hxx"
-#include "editor_map.hxx"
 
 class WorkspaceImpl;
+class EditorMap;
 
 /** */
 class Workspace
@@ -46,7 +46,7 @@ public:
   void mouse_move(const CL_InputEvent& event);
 
   EditorMap get_map();
-  void set_map(EditorMap m);
+  void set_map(const EditorMap& m);
 
   GraphicContextState& get_gc_state();
 

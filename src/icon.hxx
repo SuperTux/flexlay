@@ -34,6 +34,9 @@ private:
 public:
   Icon(const CL_Point& pos, const CL_Sprite& sprite, const std::string& tooltip, CL_Component* parent);
   Icon(const CL_Rect& rect, const CL_Sprite& sprite, const std::string& tooltip, CL_Component* parent);
+
+  void disable();
+  void enable();
   
   CL_Signal_v0& sig_clicked();
 

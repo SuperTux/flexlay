@@ -36,6 +36,21 @@
     <sprite name="block4">
       <image file="images/tuxtiles/block4.png" />
     </sprite>
+    <sprite name="block5">
+      <image file="images/tuxtiles/block5.png" />
+    </sprite>
+    <sprite name="block6">
+      <image file="images/tuxtiles/block6.png" />
+    </sprite>
+    <sprite name="block7">
+      <image file="images/tuxtiles/block7.png" />
+    </sprite>
+    <sprite name="block8">
+      <image file="images/tuxtiles/block8.png" />
+    </sprite>
+    <sprite name="block9">
+      <image file="images/tuxtiles/block9.png" />
+    </sprite>
     <sprite name="bonus1">
       <image file="images/tuxtiles/bonus1.png" />
     </sprite>

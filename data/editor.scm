@@ -330,7 +330,7 @@
       ((windstille)
        (tile-selector-create (- screen-width (* 3 64)) 0 3 8 .5))
       ((supertux)
-       (tile-selector-create (- screen-width (* 3 64)) 0 6 8 1.0))
+       (tile-selector-create (- screen-width (* 3 64)) 0 6 12 1.0))
       (else
        (tile-selector-create (- screen-width (* 3 64)) 0 3 8 .5)))
 

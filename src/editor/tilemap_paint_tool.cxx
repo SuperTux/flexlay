@@ -19,6 +19,7 @@
 
 #include <iostream>
 #include <ClanLib/Display/mouse.h>
+#include <ClanLib/Display/keyboard.h>
 #include <ClanLib/Display/keys.h>
 #include <ClanLib/Display/display.h>
 #include "globals.hxx"
@@ -52,7 +53,10 @@ TileMapPaintTool::draw()
 {
   if (selecting)
     {
-      selection.draw();
+      if (CL_Keyboard::get_keycode(CL_KEY_LSHIFT))
+        selection.draw(CL_Color(255,  128, 128, 100));
+      else 
+        selection.draw();
     }
   else
     {
@@ -67,12 +71,25 @@ TileMapPaintTool::draw()
                 sprite.set_alpha(0.5f);
                 sprite.draw((current_tile.x + x) * TILE_SIZE, 
                             (current_tile.y + y) * TILE_SIZE);
+                CL_Display::fill_rect(CL_Rect(CL_Point((current_tile.x + x) * TILE_SIZE, 
+                                                       (current_tile.y + y) * TILE_SIZE),
+                                              CL_Size(TILE_SIZE, TILE_SIZE)),
+                                      CL_Color(255, 255, 255, 100));
               }
-                
-            CL_Display::fill_rect (CL_Rect(CL_Point((current_tile.x + x) * TILE_SIZE, 
-                                                    (current_tile.y + y) * TILE_SIZE),
-                                           CL_Size(TILE_SIZE, TILE_SIZE)),
-                                   CL_Color(255, 255, 255, 100));
+            else if (brush.is_opaque())
+              {
+                CL_Display::fill_rect(CL_Rect(CL_Point((current_tile.x + x) * TILE_SIZE, 
+                                                       (current_tile.y + y) * TILE_SIZE),
+                                              CL_Size(TILE_SIZE, TILE_SIZE)),
+                                      CL_Color(255, 255, 255, 100));
+              }
+            else
+              {
+                CL_Display::fill_rect(CL_Rect(CL_Point((current_tile.x + x) * TILE_SIZE, 
+                                                       (current_tile.y + y) * TILE_SIZE),
+                                              CL_Size(TILE_SIZE, TILE_SIZE)),
+                                      CL_Color(255, 255, 255, 50));
+              }
           }
     }
 }
@@ -142,7 +159,13 @@ TileMapPaintTool::on_mouse_up  (const CL_InputEvent& event)
 
       selection.update(parent->screen2tile(event.mouse_pos));
       brush = selection.get_brush(*tilemap->get_field());
-      brush.set_transparent();
+
+      if ((brush.get_width() > 1 || brush.get_height() > 1)
+          && !CL_Keyboard::get_keycode(CL_KEY_LSHIFT))
+        brush.set_transparent();
+      else
+        brush.set_opaque();
+
       selection.clear();
       break;
     }

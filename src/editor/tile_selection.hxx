@@ -43,7 +43,7 @@ public:
 
   CL_Rect get_rect() const{ return selection; }
 
-  void draw();
+  void draw(const CL_Color& color = CL_Color(255, 255, 255, 100));
 
   TileBrush get_brush(const Field<int>& field) const;
 };

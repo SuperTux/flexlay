@@ -61,11 +61,11 @@ TileSelection::clear()
 }
 
 void
-TileSelection::draw()
+TileSelection::draw(const CL_Color& color)
 {
   CL_Display::fill_rect(CL_Rect(selection.left  * TILE_SIZE, selection.top    * TILE_SIZE,
                                 selection.right * TILE_SIZE, selection.bottom * TILE_SIZE),
-                         CL_Color(255, 255, 255, 100));
+                        color);
 }
 
 TileBrush

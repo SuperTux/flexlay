@@ -142,6 +142,26 @@
  (tile (id 46)
        (image "tiles/coin3")
        (colmap 255 255 255 255 255 255 255 255))
+
+
+ (tile (id 47)
+       (image "tiles/block4")
+       (colmap 255 255 255 255 255 255 255 255))
+ (tile (id 48)
+       (image "tiles/block5")
+       (colmap 255 255 255 255 255 255 255 255))
+ (tile (id 49)
+       (image "tiles/block6")
+       (colmap 255 255 255 255 255 255 255 255))
+ (tile (id 50)
+       (image "tiles/block7")
+       (colmap 255 255 255 255 255 255 255 255))
+ (tile (id 51)
+       (image "tiles/block8")
+       (colmap 255 255 255 255 255 255 255 255))
+ (tile (id 52)
+       (image "tiles/block9")
+       (colmap 255 255 255 255 255 255 255 255))
  )
 
 ;; EOF ;;

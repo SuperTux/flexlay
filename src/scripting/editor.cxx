@@ -19,6 +19,7 @@
 
 #include <ClanLib/gui.h>
 #include <ClanLib/core.h>
+#include <ClanLib/Display/palette.h>
 #include <ClanLib/Display/display.h>
 #include <ClanLib/Display/display_window.h>
 #include <iostream>
@@ -838,6 +839,61 @@ objectmap_tool_set_popupmenu_callback(SCM func)
   new CL_Slot(tool->sig_on_popup_menu_display().connect_functor(callback));
 }
 
+CL_Palette netpanzer_load_palette(const char* filename)
+{
+  CL_Palette palette;
+  unsigned char color_array[256 * 3];
+
+  std::ifstream in(filename);
+
+  if (!in)
+    {
+      std::cout << "Couldn't load palette" << std::endl;
+      return palette;
+    }
+
+  in.read(reinterpret_cast<char*>(color_array), sizeof(color_array));
+
+  for(int i = 0; i < 256; ++i)
+    {
+      palette.colors[i].set_red  (color_array[3*i + 0]);
+      palette.colors[i].set_green(color_array[3*i + 1]);
+      palette.colors[i].set_blue (color_array[3*i + 2]);
+    }
+
+  return palette;
+}
+
+unsigned char find_nearest_color(const CL_Palette& palette, const CL_Color& rgb)
+{ // Copyright (C) 1998 Pyrosoft Inc. (www.pyrosoftgames.com), Matthew Bogue
+  float bestDist = 10000000.0f;
+  int   best     = 0;
+                                                                                                                
+  float vPic = sqrt(rgb.get_red() * rgb.get_red() 
+                    + rgb.get_green() * rgb.get_green()
+                    + rgb.get_blue() * rgb.get_blue()) * 0.57735027;
+ 
+  for (int i = 0; i < 256; i++) {
+    float vPal = sqrt(palette.colors[i].get_red()     * palette.colors[i].get_red()
+                      + palette.colors[i].get_green() * palette.colors[i].get_green()
+                      + palette.colors[i].get_blue()  * palette.colors[i].get_blue()) * 0.57735027;
+                                                                                                                
+    float dr = palette.colors[i].get_red()   - rgb.get_red();
+    float dg = palette.colors[i].get_green() - rgb.get_green();
+    float db = palette.colors[i].get_blue()  - rgb.get_blue();
+    float dv = vPal-vPic;
+    float dist = dr * dr * 0.3 + dg * dg * 0.59 + db * db * 0.11 + dv * dv * 0.7;
+                                                                                                                
+    if (dist < bestDist) {
+      bestDist = dist;
+      best = i;
+    }
+  }
+                                                                                                                
+  return best;
+                                                                                                                
+}
+
 void
 save_netpanzer_map(const char* filename, EditorMap* m, 
                    const char* name_, const char* description_)
@@ -881,9 +937,18 @@ save_netpanzer_map(const char* filename, EditorMap* m,
     }
   out.write(reinterpret_cast<char*>(&(*vec.begin())), 
             sizeof(unsigned short)*vec.size());
+
+  // Generate thumbnail
+  CL_Palette palette = netpanzer_load_palette((datadir + "netp.act").c_str());
   
-  // FIXME: Add thumbnail generator here
   std::vector<unsigned char> thumbnail(x_size * y_size);
+  for(int i = 0; i < int(thumbnail.size()); ++i)
+    {
+      Tile* tile = TileFactory::current()->create((*field)[i]);
+      if (tile)
+        thumbnail[i] = find_nearest_color(palette, tile->get_color());
+    }
+
   out.write(reinterpret_cast<char*>(&(*thumbnail.begin())), 
             sizeof(unsigned char)*thumbnail.size());
 }

@@ -23,7 +23,6 @@
 #include <iostream>
 #include "globals.hxx"
 #include "string_converter.hxx"
-#include "scm_helper.hxx"
 #include "tile.hxx"
 #include "tileset.hxx"
 

@@ -85,7 +85,6 @@ flexlay_lib = libflexlay_env.SharedLibrary(
     'objmap_sprite_object.cxx',
     'paint_command.cxx',
     'panel.cxx',
-    'netpanzer.cxx', # fixme: move into seperate library
     'menu.cxx',
     'menubar.cxx',
     'popup_menu.cxx',
@@ -113,27 +112,11 @@ flexlay_lib = libflexlay_env.SharedLibrary(
     LIBPATH=['$USER_LIBPATH'] + clanLib_env['LIBPATH'],
     LIBS = clanLib_env['LIBS'])
 
-libflexlay_ruby_env = env.Copy()
-flexlay_ruby_lib = libflexlay_ruby_env.SharedLibrary(
-    target = 'flexlay_wrap.so',
-    source = [
-    'flexlay_ruby_wrap.cxx',
-    'ruby_functor.cxx',
-    'ruby_meta_data.cxx',
-    'ruby_sexpr_parser.cxx',
-    'ruby_object.cxx'
-    ],
-    CPPPATH=['$USER_CPPPATH','$RUBYDIR','..'] + clanLib_env['CPPPATH'],
-    LINKFLAGS = clanLib_env['LINKFLAGS'],
-    LIBPATH=['.'] + clanLib_env['LIBPATH'],
-    LIBS=['flexlay'] + clanLib_env['LIBS'])
-
 flexlay_data = \
              glob.glob('../data/images/files/*.png') + \
              glob.glob('../data/images/fonts/*.png') + \
              glob.glob('../data/images/icons16/*.png') + \
              glob.glob('../data/images/icons24/*.png') + \
-             glob.glob('../data/images/netpanzersprites/*.png') + \
              glob.glob('../data/gui/gui.xml')    + \
              glob.glob('../data/gui/*/*.tga')    + \
              glob.glob('../data/gui/*/*.png')    + \

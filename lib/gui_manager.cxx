@@ -23,7 +23,6 @@
 #include <ClanLib/core.h>
 
 #include "globals.hxx"
-#include "scripting/gui.hxx"
 #include "gui_manager.hxx"
 
 GUIManager* GUIManager::current_ = 0;

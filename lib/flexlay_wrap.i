@@ -50,7 +50,7 @@
 #include "zoom_tool.hxx"
 #include "objmap_path_node.hxx"
 
-#include "netpanzer.hxx" 
+// #include "netpanzer.hxx" 
 #include "helper.hxx"
 
 #ifdef SWIGPYTHON
@@ -120,9 +120,9 @@ VALUE ObjMapObject2Value(const ObjMapObject& arg)
 %include "zoom_tool.hxx" 
 %include "graphic_context_state.hxx"
 %include "objmap_path_node.hxx"
-%include "scripting/editor.hxx"
+# %include "scripting/editor.hxx"
 
-%include "netpanzer.hxx" 
+// %include "netpanzer.hxx" 
 %include "helper.hxx"
 
 #ifdef SWIGPYTHON

@@ -1,4 +1,4 @@
-//  $Id: game_world.cxx,v 1.8 2003/08/18 08:50:22 grumbel Exp $
+//  $Id: game_world.cxx,v 1.9 2003/09/05 20:41:51 grumbel Exp $
 //
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -17,6 +17,7 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
+#include "display.hxx"
 #include "player.hxx"
 #include "gameobj.hxx"
 #include "game_world.hxx"
@@ -43,6 +44,40 @@ GameWorld::draw ()
   for (std::list<GameObj*>::iterator i = objects.begin ();
        i != objects.end (); ++i)
     (*i)->draw ();
+
+  if (1) // Water
+    {
+      int x1 = 0;
+      int y1 = 100;
+      int x2 = 8000;
+      int y2 = 5000;
+      
+      Display::begin_gl();
+      {
+        glEnable (GL_BLEND);
+        glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+        glBegin(GL_QUADS);
+        { // Water
+          glColor4f(0.8f, 0.8f, 1.0f, 0.5f);
+
+          glVertex2f(x1, y1);
+          glVertex2f(x2, y1);
+ 
+          glColor4f(0.0f, 0.0f, 0.8f, 0.5f);
+          glVertex2f(x2, y1 + 15);
+          glVertex2f(x1, y1 + 15);
+
+          glVertex2f(x1,  y1 + 15);
+          glVertex2f(800, y1 + 15);
+
+          glColor4f(0.0f, 0.0f, .2f, 0.5f);
+          glVertex2f(x2, y2);
+          glVertex2f(x1, y2);
+        }
+        glEnd();
+      }
+      Display::end_gl();
+    }
 
   tilemap->draw ();
 }

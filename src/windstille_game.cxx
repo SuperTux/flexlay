@@ -1,4 +1,4 @@
-//  $Id: windstille_game.cxx,v 1.10 2003/08/19 13:40:48 grumbel Exp $
+//  $Id: windstille_game.cxx,v 1.11 2003/09/05 20:41:51 grumbel Exp $
 //
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -130,35 +130,6 @@ WindstilleGame::display ()
       view.update (delta);
 
       world.update (delta);
-
-      if (0) // Water
-        {
-          Display::begin_gl();
-          {
-            glEnable (GL_BLEND);
-            glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
-            glBegin(GL_QUADS);
-            { // Water
-              glColor4f(0.8f, 0.8f, 1.0f, 0.5f);
-
-              glVertex2f(0, 500);
-              glVertex2f(800, 500);
- 
-              glColor4f(0.0f, 0.0f, 0.8f, 0.5f);
-              glVertex2f(800,  515);
-              glVertex2f(0, 515);
-
-              glVertex2f(0, 515);
-              glVertex2f(800,  515);
-
-              glColor4f(0.0f, 0.0f, .2f, 0.5f);
-              glVertex2f(800,  600);
-              glVertex2f(0, 600);
-            }
-            glEnd();
-          }
-          Display::end_gl();
-        }
 
       if (0) // Laser
         {

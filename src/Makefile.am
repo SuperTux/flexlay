@@ -1,10 +1,14 @@
-SUBDIRS = editor guile
+SUBDIRS = editor guile collision
 
 bindir=$(prefix)/games
 
-bin_PROGRAMS = windstille
+bin_PROGRAMS = windstille args_parse_test
+
+args_parse_test_SOURCES = args_parse_test.cxx args_parse.cxx
 
 windstille_SOURCES = \
+  args_parse.cxx \
+  args_parse.hxx \
   animation_obj.cxx \
   animation_obj.hxx \
   bonus_flyer.cxx \
@@ -55,7 +59,9 @@ windstille_SOURCES = \
   windstille_main.cxx \
   windstille_main.hxx
 
-windstille_LDADD = editor/libwindstille_editor.a
+windstille_LDADD = \
+  editor/libwindstille_editor.a \
+  collision/libwindstille_collision.a
 
 REST_LIBS = \
 -lpthread \

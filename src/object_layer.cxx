@@ -24,16 +24,23 @@
 #include "objmap_object.hxx"
 #include "objmap_sprite_object.hxx"
 #include "object_layer.hxx"
+#include "layer_impl.hxx"
 
 extern CL_ResourceManager* resources;
 ObjectLayer ObjectLayer::current_;
 
-class ObjectLayerImpl
+class ObjectLayerImpl : public LayerImpl
 {
 public:
+  ObjectLayerImpl() {}
+  virtual ~ObjectLayerImpl() {}
+
   ObjectLayer::Objs objects;
   int handle_count;
   CL_SlotContainer slots;
+
+  void draw(EditorMapComponent* parent);
+  bool has_bounding_rect() const { return false; }
 };
 
 ObjectLayer::ObjectLayer()
@@ -47,9 +54,9 @@ ObjectLayer::~ObjectLayer()
 }
 
 void
-ObjectLayer::draw(EditorMapComponent* parent)
+ObjectLayerImpl::draw(EditorMapComponent* parent)
 {
-  for(Objs::iterator i = impl->objects.begin(); i != impl->objects.end(); ++i)
+  for(ObjectLayer::Objs::iterator i = objects.begin(); i != objects.end(); ++i)
     {
       (*i)->draw();
     }
@@ -152,8 +159,7 @@ ObjectLayer::get_next_object_handle()
 Layer
 ObjectLayer::to_layer()
 {
-  //return Layer(impl);
-  return Layer();
+  return Layer(impl);
 }
 
 /* EOF */

@@ -27,18 +27,11 @@
 #include "object_add_command.hxx"
 #include "objmap_sprite_object.hxx"
 
-ObjectSelector::ObjectSelector(const CL_Point& p,
-                               int width, int height, 
+ObjectSelector::ObjectSelector(const CL_Rect& rect, 
                                int obj_w, int obj_h,
                                CL_Component* parent)
-  // FIXME: Component size should be configurable in a sane way,
-  // however for the moment it is easier to simply expand it to its
-  // full parent size
-  : CL_Component(CL_Rect(CL_Point(0,30), 
-                         CL_Size(parent->get_width(),
-                                 parent->get_height()-30)), //p, CL_Size(width * obj_w, height * obj_h)),
-                 parent),
-    width(width), height(height),
+  : CL_Component(rect, parent),
+    width(rect.get_width()/obj_w), height(rect.get_height()/obj_h),
     obj_width(obj_w), obj_height(obj_h)
 {
   index = 0;

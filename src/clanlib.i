@@ -54,6 +54,7 @@ private:
 	~CL_Component();
 public:
 	CL_Component(CL_Component* parent, CL_StyleManager* style = NULL);
+        void show(bool show = true);
 };
 
 class CL_Window : public CL_Component

@@ -37,6 +37,45 @@ Editor.redo = Editor_redo
 del Editor_redo
 del Editor_undo
 
+# class FileDialog:
+#     window = None
+
+#     def __init__(self):
+        
+
+#     def show(self, filename, func):
+#         window = Window(CL_Rect(50, 50, 450, 400), "My Window", gui.get_component())
+        
+
+# (define (simple-file-dialog title filename func)
+#   (let ((window (gui-create-window 200 100 460 125 title)))
+#     (gui-push-component (gui-window-get-client-area window))
+#     (gui-create-label 10 10 "Filename: ")
+#     (let ((ok       (gui-create-button 390 60 50 25 "Ok"))
+#           (cancel   (gui-create-button 330 60 50 25 "Cancel"))
+#           (filename (gui-create-inputbox 10 30 435 30 filename))
+#           ;;(browse   (gui-create-button 190 30 50 20 "Browse..."))
+#           )
+
+#       (gui-component-on-click ok 
+#                               (lambda ()   
+#                                 (func (gui-inputbox-get-text filename))
+#                                 (gui-hide-component window)))
+
+#       (gui-component-on-click cancel
+#                               (lambda () 
+#                                 (gui-hide-component window)))
+
+#       ;;      (gui-component-on-click browse
+#       ;;                              (lambda ()
+#       ;;                                (gui-file-dialog (gui-inputbox-get-text filename)
+#       ;;                                                (lambda (filename)
+#       ;;                                                   (gui-inputbox-set-text filename)))))
+
+#       (gui-pop-component)
+#       window)))
+   
+
 myrect = CL_Rect(CL_Point(0, 56), CL_Size(665, 488))
 editor_map = EditorMapComponent(myrect, gui.get_component())
 workspace  = Workspace(myrect.get_width(), myrect.get_height())
@@ -143,6 +182,7 @@ def set_tilemap_paint_tool():
     select.set_up()
     zoom.set_up()
     object.set_up()
+    supertux.show_tiles()
 
 def set_tilemap_select_tool():
     workspace.set_tool(tilemap_select_tool.to_tool())
@@ -150,6 +190,7 @@ def set_tilemap_select_tool():
     select.set_down()
     zoom.set_up()
     object.set_up()
+    supertux.show_none()
     
 def set_zoom_tool():
     workspace.set_tool(zoom_tool.to_tool())
@@ -157,6 +198,7 @@ def set_zoom_tool():
     select.set_up()
     zoom.set_down()
     object.set_up()
+    supertux.show_none()
     
 def set_objmap_select_tool():
     workspace.set_tool(objmap_select_tool.to_tool())
@@ -164,6 +206,7 @@ def set_objmap_select_tool():
     select.set_up()
     zoom.set_up()
     object.set_down()
+    supertux.show_objects()
 
 toolbar = Panel(CL_Rect(CL_Point(0, 23+33), CL_Size(33, 32*4+2)), gui.get_component())
 
@@ -203,12 +246,16 @@ def menu_file_open():
 def menu_file_save():
     print "File/Save"
 
+def menu_file_save_commands():
+    print "File/Save As"
+    
 def menu_file_save_as():
     print "File/Save As"
 
 menu = CL_Menu(gui.get_component())
 menu.add_item("File/Open...", menu_file_open)
 menu.add_item("File/Save...", menu_file_save)
+menu.add_item("File/Save Commands...", menu_file_save_commands)
 menu.add_item("File/Save As...", menu_file_save_as)
 menu.add_item("File/Quit",  do_quit)
 
@@ -255,7 +302,7 @@ del Menu_add_item
 
 mysprite = make_sprite("../data/images/icons16/stock_paste-16.png")
 
-mymenu = Menu(CL_Point(100, 100), gui.get_component())
+mymenu = Menu(CL_Point(134, 54), gui.get_component())
 mymenu.add_item(mysprite, "Foobar aeuaeu", None)
 mymenu.add_item(mysprite, "blub", do_something)
 mymenu.add_item(mysprite, "bla", None)
@@ -267,7 +314,7 @@ mymenu.add_item(mysprite, "bla", None)
 def show_menu():
     mymenu.run()
 
-copy_icon.set_callback(show_menu)
+paste_icon.set_callback(show_menu)
 
 minimap_panel = Panel(CL_Rect(CL_Point(0, 600-56), CL_Size(800-134, 56)), gui.get_component())
 minimap = Minimap(editor_map, CL_Rect(CL_Point(3, 3), CL_Size(794-134, 50)), minimap_panel)

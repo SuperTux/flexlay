@@ -88,6 +88,10 @@ class SuperTuxLevel:
 
     def activate(self, workspace):
         workspace.set_map(self.editormap)
+        TilemapLayer.set_current(self.interactive)
+        print "ObjectLayerCurrent: ", ObjectLayer.current()
+        ObjectLayer.set_current(self.objects)
+        print "ObjectLayerCurrent: ", ObjectLayer.current()
         #(tilemap-paint-tool-set-tilemap (supertux:interactive-tm stlv))
         #(editor-tilemap-set-current     (supertux:interactive-tm stlv))
         #(editor-objectmap-set-current   (supertux:objmap stlv))
@@ -131,17 +135,45 @@ class DisplayProperties:
 class SuperTuxGUI:
     quit_button = None
     menu        = None
-    tileselector_window = None
-    tileselector = None
+    
+    selector_window = None
+    tileselector    = None
+    objectselector  = None
 
     def __init__(self, tileset, gui):
-        self.tileselector_window = Panel(CL_Rect(CL_Point(800-134, 23+33), CL_Size(128 + 6, 558)),
+        self.selector_window = Panel(CL_Rect(CL_Point(800-134, 23+33), CL_Size(128 + 6, 558)),
                                          gui.get_component())
         self.tileselector = TileSelector(CL_Rect(CL_Point(3, 3), CL_Size(128, 552)),
-                                         6, 3, self.tileselector_window)
+                                         6, 3, self.selector_window)
         self.tileselector.set_tileset(tileset)
         self.tileselector.set_tiles(range(1,100))
+        self.tileselector.show(False)
 
+        self.objectselector = ObjectSelector(CL_Rect(0, 0, 128, 256), 42, 42, self.selector_window)
+        self.objectselector.show(True)
+        self.objectselector.add_brush(ObjectBrush(make_sprite("../data/images/tools/stock-tool-pencil-22.png"),
+                                                  make_metadata(None)))
+        self.objectselector.add_brush(ObjectBrush(make_sprite("../data/images/tools/stock-tool-pencil-22.png"),
+                                                  make_metadata(None)))
+        self.objectselector.add_brush(ObjectBrush(make_sprite("../data/images/tools/stock-tool-pencil-22.png"),
+                                                  make_metadata(None)))        
+        self.objectselector.add_brush(ObjectBrush(make_sprite("../data/images/tools/stock-tool-pencil-22.png"),
+                                                  make_metadata(None)))
+        self.objectselector.add_brush(ObjectBrush(make_sprite("../data/images/tools/stock-tool-pencil-22.png"),
+                                                  make_metadata(None)))
+
+    def show_objects(self):
+        self.tileselector.show(False)        
+        self.objectselector.show(True)
+
+    def show_tiles(self):
+        self.tileselector.show(True)        
+        self.objectselector.show(False)
+
+    def show_none(self):
+        self.tileselector.show(False)        
+        self.objectselector.show(False)
+        
 def load_supertux_tiles():
     tileset = Tileset(32)
     load_game_tiles(tileset, "/home/ingo/cvs/supertux/supertux/data/images/tilesets/supertux.stgt")

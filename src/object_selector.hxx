@@ -50,7 +50,7 @@ private:
   ObjectBrush drag_obj;
   
 public:
-  ObjectSelector(const CL_Point& p, int w, int h, int obj_w, int obj_h, CL_Component* parent);
+  ObjectSelector(const CL_Rect& rect, int obj_w, int obj_h, CL_Component* parent);
   ~ObjectSelector();
 
   void draw();

@@ -76,8 +76,6 @@ TilemapLayer::TilemapLayer()
 TilemapLayer::TilemapLayer(Tileset tileset_, int w,  int h)
   : impl(new TilemapLayerImpl())
 {
-  current_ = *this;
-
   impl->field = Field<int>(w, h);
 
   // FIXME: Move this to the widget or to some more generic
@@ -418,8 +416,7 @@ TilemapLayerImpl::has_bounding_rect() const
 Layer
 TilemapLayer::to_layer()
 {
-  std::cout << " TilemapLayer::to_layer()" << std::endl;
-  return Layer(impl);
+   return Layer(impl);
 }
 
 /* EOF */

@@ -60,6 +60,7 @@ Icon::Icon(const CL_Point& pos, const CL_Sprite& sprite, const std::string& tool
   impl->tooltip      = tooltip;
   impl->draw_tooltip = true;
   impl->down         = false;
+  impl->is_down      = false;
   impl->is_enabled   = true;
 
   impl->slots.push_back(sig_paint().connect(impl.get(), &IconImpl::draw));

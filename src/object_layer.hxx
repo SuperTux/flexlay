@@ -26,6 +26,7 @@
 #include <ClanLib/Core/Math/point.h>
 #include "meta_data.hxx"
 #include "layer.hxx"
+#include "shared_ptr.hxx"
 
 class ObjMapObject;
 class ObjectLayerImpl;
@@ -47,8 +48,6 @@ public:
   ObjectLayer();
   ~ObjectLayer();
 
-  void draw(EditorMapComponent* parent);
-
   /** Add an object to the map and return a handle to it */
   int  add_object(const CL_Sprite& sprite, const CL_Point& pos, const MetaData& data);
 
@@ -65,7 +64,7 @@ public:
   Layer to_layer();
 
 private:
-  CL_SharedPtr<ObjectLayerImpl> impl;
+  SharedPtr<ObjectLayerImpl> impl;
 };
 
 #endif

@@ -14,7 +14,7 @@ class WorldMap
     @editormap.set_metadata(self)
     @editormap.set_bounding_rect(CL_Rect.new(0, 0, 2400, 600));
 
-    load('/home/ingo/projects/pingus/svn/trunk/src/worldmapout.xml')
+    load($datadir + 'worldmaps/tutorial.xml')
   end    
 
   def activate(workspace)

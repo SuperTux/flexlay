@@ -30,10 +30,14 @@ class Level
     @number_of_pingus = header['number-of-pingus'].text.to_i
     @number_to_save   = header['number-to-save'].text.to_i
 
-    @ambient_light = CL_Color.new((header['ambient-light/red'].text.to_f * 255).to_i,
+    if header['ambient-light/red'] then
+      @ambient_light = CL_Color.new((header['ambient-light/red'].text.to_f * 255).to_i,
                                   (header['ambient-light/green'].text.to_f * 255).to_i,
                                   (header['ambient-light/blue'].text.to_f  * 255).to_i,
                                   (header['ambient-light/alpha'].text.to_f * 255).to_i)
+    else
+      @ambient_light = CL_Color.new(1, 1, 1, 1);
+    end
 
     @comment = header['comment'].text
     @levelsize = CL_Size.new(header['levelsize/width'].text.to_i,

@@ -59,11 +59,11 @@ $resources.add_resources(CL_ResourceManager.new($datadir + "data/worldmaps.xml")
 $resources.add_resources(CL_ResourceManager.new($datadir + "data/worldobjs.xml"));
 $resources.add_resources(CL_ResourceManager.new($datadir + "data/alias.xml"));
 
-if true then
+if false then
   worldmap = WorldMap.new()
   worldmap.activate($gui.workspace)
 else
-  level = Level.new('/home/ingo/projects/pingus/svn/trunk/src/levelout.xml')
+  level = Level.new($datadir + 'levels/tutorial/snow22-grumbel.pingus')
   level.activate($gui.workspace)
   level.save("/tmp/levelout.xml")
 end

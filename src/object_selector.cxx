@@ -23,6 +23,7 @@
 #include "editor_map.hxx"
 #include "editor_map_component.hxx"
 #include "object_selector.hxx"
+#include "object_add_command.hxx"
 #include "editor.hxx"
 
 ObjectSelector::ObjectSelector(const CL_Rect& rect, 
@@ -69,9 +70,10 @@ ObjectSelector::mouse_up(const CL_InputEvent& event)
                 CL_Point target(screen.x - EditorMapComponent::current()->get_screen_rect().left,
                                 screen.y - EditorMapComponent::current()->get_screen_rect().top);
       
-                ObjectLayer objmap = ObjectLayer::current();
-                brushes[drag_obj].add_to_layer(objmap, 
-                                               EditorMapComponent::current()->screen2world(target));
+                ObjectAddCommand command(ObjectLayer::current());
+                command.add_object(brushes[drag_obj].to_sprite_object
+                                   (EditorMapComponent::current()->screen2world(target)).to_object());
+                Workspace::current().get_map().execute(command.to_command());
               }
             drag_obj = -1;
           }

@@ -38,9 +38,7 @@ public:
   CL_Point get_pos() const;
   void     set_pos(const CL_Point& p);
 
-  MetaData get_data() const;
-
-  int get_handle() const;
+  MetaData get_metadata() const;
 
   void draw();
   CL_Rect get_bound_rect() const;

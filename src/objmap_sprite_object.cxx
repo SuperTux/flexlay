@@ -32,9 +32,13 @@ public:
   ObjMapObject*  duplicate(int handle_);
 };
 
-ObjMapSpriteObject::ObjMapSpriteObject(const CL_Point& pos_, 
-                                       const MetaData& data_, 
-                                       const CL_Sprite& sprite_)
+ObjMapSpriteObject::ObjMapSpriteObject()
+{
+}
+
+ObjMapSpriteObject::ObjMapSpriteObject(const CL_Sprite& sprite_,
+                                       const CL_Point& pos_, 
+                                       const MetaData& data_)
   : impl(new ObjMapSpriteObjectImpl())
 {
   impl->pos    = pos_;

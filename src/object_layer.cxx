@@ -32,7 +32,7 @@ ObjectLayer ObjectLayer::current_;
 class ObjectLayerImpl : public LayerImpl
 {
 public:
-  ObjectLayer::Objs objects;
+  ObjectLayer::Objects objects;
   CL_SlotContainer slots;
 
   ObjectLayerImpl() {}
@@ -54,7 +54,7 @@ ObjectLayer::~ObjectLayer()
 void
 ObjectLayerImpl::draw(EditorMapComponent* parent)
 {
-  for(ObjectLayer::Objs::iterator i = objects.begin(); i != objects.end(); ++i)
+  for(ObjectLayer::Objects::iterator i = objects.begin(); i != objects.end(); ++i)
     {
       (*i).draw();
     }
@@ -63,7 +63,7 @@ ObjectLayerImpl::draw(EditorMapComponent* parent)
 ObjMapObject
 ObjectLayer::find_object(const CL_Point& click_pos)
 {
-  for(Objs::reverse_iterator i = impl->objects.rbegin(); i != impl->objects.rend(); ++i)
+  for(Objects::reverse_iterator i = impl->objects.rbegin(); i != impl->objects.rend(); ++i)
     {
       CL_Rect rect = (*i).get_bound_rect();
      
@@ -76,7 +76,7 @@ ObjectLayer::find_object(const CL_Point& click_pos)
 void
 ObjectLayer::delete_object(const ObjMapObject& obj)
 {
-  for(Objs::iterator i = impl->objects.begin(); i != impl->objects.end(); ++i)
+  for(Objects::iterator i = impl->objects.begin(); i != impl->objects.end(); ++i)
     {
       if (obj == (*i))
         {
@@ -86,12 +86,12 @@ ObjectLayer::delete_object(const ObjMapObject& obj)
     }
 }
 
-ObjectLayer::Objs
+ObjectLayer::Objects
 ObjectLayer::get_selection(const CL_Rect& rect)
 {
-  Objs selection;
+  Objects selection;
 
-  for(Objs::iterator i = impl->objects.begin(); i != impl->objects.end(); ++i)
+  for(Objects::iterator i = impl->objects.begin(); i != impl->objects.end(); ++i)
     {
       // FIXME:
       if (rect.is_inside((*i).get_pos()))
@@ -103,7 +103,7 @@ ObjectLayer::get_selection(const CL_Rect& rect)
   return selection;
 }
 
-ObjectLayer::Objs
+ObjectLayer::Objects
 ObjectLayer::get_objects()
 {
   return impl->objects;

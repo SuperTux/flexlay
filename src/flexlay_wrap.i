@@ -49,6 +49,8 @@
 #include "tilemap_paint_tool.hxx"
 #include "tilemap_select_tool.hxx"
 #include "objmap_select_tool.hxx"
+#include "objmap_sprite_object.hxx"
+#include "objmap_object.hxx"
 #include "zoom_tool.hxx"
 
 #include "netpanzer.hxx" 
@@ -57,6 +59,7 @@
 %include "std_string.i"
 %include "std_vector.i"
 %template(std_vector_int) std::vector<int>;
+%template(std_vector_ObjMapObject) std::vector<ObjMapObject>;
 
 %include "clanlib.i"
 %include "scripting/editor.hxx"
@@ -98,6 +101,8 @@
 %include "tilemap_paint_tool.hxx"
 %include "tilemap_select_tool.hxx"
 %include "objmap_select_tool.hxx"
+%include "objmap_sprite_object.hxx"
+%include "objmap_object.hxx"
 %include "zoom_tool.hxx" 
 %include "graphic_context_state.hxx"
 

@@ -21,7 +21,9 @@
 #define HEADER_OBJMAP_SPRITE_OBJECT_HXX
 
 #include <ClanLib/Display/sprite.h>
+#include <ClanLib/Core/Math/point.h>
 #include "shared_ptr.hxx"
+#include "meta_data.hxx"
 #include "objmap_object.hxx"
 
 class ObjMapSpriteObjectImpl;
@@ -30,9 +32,10 @@ class ObjMapSpriteObjectImpl;
 class ObjMapSpriteObject
 {
 public:
-  ObjMapSpriteObject(const CL_Point& pos_, 
-                     const MetaData& data_, 
-                     const CL_Sprite& s);
+  ObjMapSpriteObject();
+  ObjMapSpriteObject(const CL_Sprite& s,
+                     const CL_Point& pos_, 
+                     const MetaData& data_);
 
   void flip_horizontal();
   void flip_vertical();

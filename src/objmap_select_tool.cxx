@@ -182,7 +182,7 @@ ObjMapSelectToolImpl::on_mouse_down(const CL_InputEvent& event)
       switch(state)
         {
         default:
-          ObjectLayer::Obj obj = objmap.find_object(pos);
+          ObjMapObject obj = objmap.find_object(pos);
           
           if (!obj.is_null())
             {

@@ -21,8 +21,10 @@
 #define HEADER_OBJECT_BRUSH_HXX
 
 #include <ClanLib/Display/sprite.h>
+#include <ClanLib/Core/Math/point.h>
 #include "object_layer.hxx"
 #include "objmap_object.hxx"
+#include "objmap_sprite_object.hxx"
 #include "meta_data.hxx"
 
 class ObjectBrushImpl;
@@ -36,7 +38,7 @@ public:
 
   CL_Sprite get_sprite();
 
-  ObjMapObject add_to_layer(ObjectLayer layer, const CL_Point& pos);
+  ObjMapSpriteObject to_sprite_object(const CL_Point& pos);
 private:
   SharedPtr<ObjectBrushImpl> impl;
 };

@@ -53,7 +53,7 @@ ObjMapObject::set_pos(const CL_Point& p)
 }
 
 MetaData
-ObjMapObject::get_data() const
+ObjMapObject::get_metadata() const
 {
   if (impl.get())
     return impl->data; 

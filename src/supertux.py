@@ -78,6 +78,13 @@ def load_game_tiles(tileset, filename):
                                  Tile(config.datadir + 'images/tilesets/' + image,
                                       CL_Color(255,   0,   0, 128)))
 
+class BadGuy:
+    type = None
+
+    def __init__(self,  type):
+        self.type = type
+    
+
 class SuperTuxLevel:
     filename = None
     
@@ -118,7 +125,7 @@ class SuperTuxLevel:
             
             tree = sexpr_read_from_file(self.filename)
             if tree == None:
-                raise "Couldn't load level"
+                raise ("Couldn't load level: ", filename)
             
             data = tree[1:]
 
@@ -148,10 +155,10 @@ class SuperTuxLevel:
                 type = i[0]
                 x = get_value_from_tree(["x", "_"], i[1:], [])
                 y = get_value_from_tree(["y", "_"], i[1:], [])
-                print "Got: ", type, x, y
                 object = find(game_objects, type)
-                ObjectBrush(make_sprite(config.datadir + object[1]),
-                            make_metadata(object[0])).add_to_layer(self.objects, CL_Point(x, y))
+                self.objects.add_object(ObjMapSpriteObject(make_sprite(config.datadir + object[1]),
+                                                           CL_Point(x, y),
+                                                           make_metadata(BadGuy(object[0]))).to_object())
            
         else:
             raise "Wrong arguments for SuperTux::___init__"
@@ -197,9 +204,10 @@ class SuperTuxLevel:
         f.write("  )\n\n")
 
         f.write("  (objects\n")
-        for (obj, data) in []:
-            pos = obj.get_pos()
-            f.write("     (%s (x %d) (y %d))" % (data, pos.x, pos.y))
+        for obj in self.objects.get_objects():
+            badguy = get_python_object(obj.get_metadata())
+            pos    = obj.get_pos()
+            f.write("     (%s (x %d) (y %d))\n" % (badguy.type, pos.x, pos.y))
         f.write("  )\n\n")
         
         f.write(" )\n\n;; EOF ;;\n")
@@ -275,7 +283,7 @@ class SuperTuxGUI:
         self.objectselector.show(True)
         for object in game_objects:
             self.objectselector.add_brush(ObjectBrush(make_sprite(config.datadir + object[1]),
-                                                      make_metadata(object[0])))
+                                                      make_metadata(BadGuy(object[0]))))
 
     def show_objects(self):
         self.tileselector.show(False)        

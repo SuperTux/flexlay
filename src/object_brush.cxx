@@ -50,14 +50,11 @@ ObjectBrush::get_sprite()
   return impl->sprite;
 }
 
-ObjMapObject
-ObjectBrush::add_to_layer(ObjectLayer layer, const CL_Point& pos)
+ObjMapSpriteObject
+ObjectBrush::to_sprite_object(const CL_Point& pos)
 {
-  ObjMapSpriteObject obj(pos, impl->data, impl->sprite);
-  ObjectAddCommand command(layer);
-  command.add_object(obj.to_object());
-  Workspace::current().get_map().execute(command.to_command());
-  return obj.to_object();
+  ObjMapSpriteObject obj(impl->sprite, pos, impl->data);  
+  return obj;
 }
 
 /* EOF */

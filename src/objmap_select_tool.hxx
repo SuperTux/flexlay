@@ -31,7 +31,7 @@ class ObjMapSelectToolImpl;
 class ObjMapSelectTool
 {
 public:
-  typedef std::vector<ObjectLayer::Obj> Selection; 
+  typedef std::vector<ObjMapObject> Selection; 
 
   ObjMapSelectTool();
   ~ObjMapSelectTool();

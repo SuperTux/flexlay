@@ -37,8 +37,7 @@ class ObjectLayerImpl;
 class ObjectLayer
 {
 public:
-  typedef ObjMapObject Obj;
-  typedef std::vector<ObjMapObject> Objs;
+  typedef std::vector<ObjMapObject> Objects;
 
   static ObjectLayer current_;
 
@@ -53,7 +52,7 @@ public:
 
   ObjMapObject find_object(const CL_Point& pos);
   std::vector<ObjMapObject> get_selection(const CL_Rect& rect);
-  Objs get_objects();
+  std::vector<ObjMapObject> get_objects();
 
   Layer to_layer();
 

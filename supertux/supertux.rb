@@ -296,13 +296,11 @@ require "sector.rb"
 
 $supertux = SuperTuxGUI.new($tileset, $gui)
 
-args = []
-
-if args == []
+if ARGV == []
   startlevel = Level.new(100, 50)
   startlevel.activate($supertux.workspace)
 else
-  supertux_load_level(args[0])
+  supertux_load_level(ARGV[0])
 end
 
 level = nil

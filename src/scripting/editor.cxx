@@ -60,6 +60,7 @@
 #include "../editor_grid_layer.hxx"
 #include "../editor_tilemap.hxx"
 
+#include "../python_functor.hxx"
 #include "editor.hxx"
 
 SCM component2scm(CL_Component* comp);
@@ -1000,6 +1001,13 @@ tileset_create(int tile_size)
 {
   return new Tileset(tile_size);
 }
+
+void connect(CL_Signal_v0& sig, PyObject* obj)
+{
+  std::cout << "Connecting functor: " << std::endl;
+  new CL_Slot(sig.connect_functor(PythonFunctor(obj)));
+}
+
 
 #ifdef SWIGGUILE
 Tileset*

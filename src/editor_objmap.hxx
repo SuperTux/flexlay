@@ -31,8 +31,9 @@
 
 class ObjMapObject;
 
-/** GUI Component that holds positioned objects, ie. objects which
-    consist of a CL_Sprite and some properties */
+/** The EditorObjMap provides a simple Layer for holding positioned
+    objects. Objects consist of a CL_Sprite and some properties
+    accessible from scripting languages */
 class EditorObjMap : public EditorMapLayer
 {
 private:

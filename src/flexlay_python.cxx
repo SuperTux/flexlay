@@ -7,8 +7,12 @@
 #include <boost/python.hpp>
 #include <iostream>
 
+#include "command.hxx"
+#include "paint_command.hxx"
+
 #include "scripting/editor.hxx"
 #include "tile.hxx"
+#include "tile_brush.hxx"
 #include "editor.hxx"
 #include "editor_map.hxx"
 #include "workspace.hxx"
@@ -131,6 +135,22 @@ BOOST_PYTHON_MODULE(flexlay)
     ("TileMap", init<Tileset*, int, int>())
     .def("get_tile", &EditorTileMap::get_tile)
     .def("resize",   &EditorTileMap::resize);
+
+  class_<TileBrush>
+    ("TileBrush", init<int, int>())
+    .def("set_opaque",      &TileBrush::set_opaque)
+    .def("set_transparent", &TileBrush::set_transparent)
+    .def("auto_crop",       &TileBrush::auto_crop);
+
+  class_<Command, boost::noncopyable>
+    ("Command", no_init)
+    .def("execute", &Command::execute)
+    .def("undo",    &Command::undo)
+    .def("redo",    &Command::redo);
+  
+  class_<PaintCommand, bases<Command>, PaintCommand, boost::noncopyable>
+    ("PaintCommand", init<EditorTileMap*, TileBrush>())
+    .def("add_point", &PaintCommand::add_point);
 
   def("tilemap_set_current", &EditorTileMap::set_current);
   def("tilemap_paint_tool_set_tilemap", &tilemap_paint_tool_set_tilemap);

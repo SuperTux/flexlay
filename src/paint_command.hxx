@@ -26,7 +26,12 @@
 #include "tile_brush.hxx"
 #include "command.hxx"
 
-/** */
+class EditorTileMap;
+
+/** The PaintCommand provides functionality to draw onto an
+    EditorTileMap. The user needs to supply a brush and a map to draw
+    to and the points to which should be drawn, undo, redo and the
+    internals of drawing are handled by the PaintCommand itself. */
 class PaintCommand : public Command
 {
 private: 
@@ -43,6 +48,7 @@ private:
   
 public:
   PaintCommand(Field<int>* f, const TileBrush& b);
+  PaintCommand(EditorTileMap* t, const TileBrush& b);
   virtual ~PaintCommand();
   
   void add_point(const CL_Point& pos);

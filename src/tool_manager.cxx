@@ -21,7 +21,6 @@
 #include "tilemap_paint_tool.hxx"
 #include "tilemap_select_tool.hxx"
 #include "objmap_select_tool.hxx"
-#include "tilemap_diamond_tool.hxx"
 #include "zoom_tool.hxx"
 #include "editor_tilemap.hxx"
 #include "editor_map.hxx"

@@ -20,20 +20,21 @@
 #ifndef HEADER_PYTHON_FUNCTOR_HXX
 #define HEADER_PYTHON_FUNCTOR_HXX
 
+#include <boost/python.hpp>
 #include "Python.h"
 
 /** */
 class PythonFunctor
 {
 private:
-  boost::python::object obj;
+  PyObject* obj;
 public:
   PythonFunctor();
-  PythonFunctor(boost::python::object o);
-  ~PythonFunctor();
-
+  PythonFunctor(PyObject* o);
   PythonFunctor(const PythonFunctor& copy);
   PythonFunctor& operator=(const PythonFunctor& copy);
+
+  ~PythonFunctor();
 
   void operator()();
 };

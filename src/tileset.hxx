@@ -28,7 +28,9 @@
 
 class Tile;
 
-/** */
+/** A \a Tileset provides the mapping from an \a id to a \a Tile
+    structure. It also contains information of the tile_size and other
+    necesarry information that are needed to display a TileMap */
 class Tileset
 {
 private:
@@ -41,8 +43,6 @@ private:
 
   static Tileset* current_;
 public:
-  static std::string tile_def_file;
-
   typedef Tiles::iterator iterator;
   
   iterator begin() { return tiles.begin(); }

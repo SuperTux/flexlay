@@ -24,6 +24,15 @@
 #include "editor_tilemap.hxx"
 #include "paint_command.hxx"
 
+PaintCommand::PaintCommand(EditorTileMap* t, const TileBrush& b)
+  : field(t->get_map()), brush(b)
+{
+  undo_field = *field;
+
+  redo_brush = 0;
+  undo_brush = 0;
+}
+
 PaintCommand::PaintCommand(Field<int>* f, const TileBrush& b)
   : field(f), brush(b)
 {  

@@ -23,9 +23,13 @@
 #include <string>
 #include <vector>
 
+#include <ClanLib/Signals/signal_v0.h>
+
 #ifdef SWIGGUILE
 #  include <guile/gh.h>
 #endif
+
+#include "Python.h"
 
 class Workspace;
 class EditorMap;
@@ -102,6 +106,8 @@ void            editor_tilemap_set_bgcolor(EditorMapLayer* l, int r, int g, int 
 void            editor_tilemap_set_fgcolor(EditorMapLayer* l, int r, int g, int b, int a);
 void            editor_tilemap_save_png(EditorMapLayer* l, const char* filename);
 
+void connect(CL_Signal_v0& sig, PyObject* obj);
+
 Workspace* workspace_current();
 Workspace* workspace_create();
 void workspace_add_map(Workspace* workspace, EditorMap* m, int x, int y);
@@ -109,7 +115,9 @@ void workspace_set_current_map(Workspace* workspace, EditorMap* m);
 EditorMap* workspace_get_current_map(Workspace* workspace);
 
 Tileset* tileset_create(int tile_size);
+#ifdef SWIGGUILE
 Tileset* tileset_create_from_file(const char* resourcefile);
+#endif
 void tileset_set_current(Tileset* tileset);
 
 EditorMapLayer* editor_mapsize_layer_create(int w, int h);

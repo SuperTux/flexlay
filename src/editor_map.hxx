@@ -78,7 +78,6 @@ public:
 
   EditorMapLayer* get_layer_by_name(int i);
   EditorMapLayer* get_layer(int i);
-  void set_active_layer(int i);
 
 #ifdef SWIGGUILE
   void   set_metadata(const SCMObj& obj);

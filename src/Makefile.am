@@ -96,8 +96,6 @@ flexlay_SOURCES  = \
   tile_selection.hxx  \
   tile_selector.cxx  \
   tile_selector.hxx  \
-  tilemap_diamond_tool.cxx  \
-  tilemap_diamond_tool.hxx  \
   tilemap_paint_tool.cxx  \
   tilemap_paint_tool.hxx  \
   tilemap_select_tool.cxx  \

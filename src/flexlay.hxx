@@ -22,6 +22,58 @@
 
 #include <ClanLib/Display/display_window.h>
 
+/*! \mainpage Flexlay - A Flexible Layered 2D Editor
+  
+\section intro Introduction
+
+Flexlay is a rather flexible layered editor mainly meant for editing
+game data such as levels, tilemaps, enemy placement and such. It
+provides a basic framework which makes it easy to add new
+functionality, special dialog windows and such needed to customize it
+for a specific game. Flexlay itself is actually a Python module and
+not an editor in itself, however due to reasonably simple Python
+scripts one can already have a fully working editor.
+
+\section structure Structure
+
+Flexlay provides the following basic classes on which everything else
+is build:
+
+Command: each operation on data is encapsuled in a Command object
+which provides undo/redo capability, together with a way to easily
+record macros and write scripts with it.
+
+EditorMapLayer: a map layer is the class that holds the data, special
+layers such as object or tilemap layers derive from this class to
+provide the capabilites needed to use them
+
+Tool: A tool manages and dispatches mouse input to Commands, thus
+giving the user an interactive way to manipulate map data.
+
+GUI: Flexlay provides a simple GUI framework that can be used from
+Python to create dialogboxes, add buttons to the main window and such.
+
+\section games Games
+
+Currently Flexlay supports the following games with different levels
+of completeness:
+
+netPanzer: fully working load/save and map editing capabilites
+
+SuperTux: fully working load/save and map editing capabilites, however
+a bit limited when it comes to object properties
+
+Windstille: fully working load/save support, however due to the game
+itself not being ready this is not so usefull
+
+Pingus: just very basic load support
+
+*/
+
+/** Flexlay holds the DisplayWindow and manages the graphic mode and
+    screen resolution that should be. Its the top most class that
+    needs to be inited before the rest becomes useable. FIXME: Make
+    Flexlay 'batchable' so that it can run without a GUI */
 class Flexlay
 {
 private:
@@ -40,8 +92,6 @@ public:
   void init();
   void deinit();
 };
-
-extern Flexlay flexlay;
 
 #endif
 

@@ -39,7 +39,8 @@ public:
 /** */
 class Workspace
 {
-public:
+private:
+  friend class EditorMapComponent;
   GraphicContextState gc_state;
 
   typedef std::vector<WorkspaceItem*> Items;
@@ -52,6 +53,7 @@ public:
   CL_Pointf old_trans_offset;
 
   static Workspace* current_;
+
 public:
   static void set_current(Workspace* w) { current_ = w; }
   static Workspace* current() { return current_; }

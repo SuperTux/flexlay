@@ -20,7 +20,10 @@
 #ifndef HEADER_COMMAND_HXX
 #define HEADER_COMMAND_HXX
 
-/** */
+/** Command is an abstract base class for all data manipulating
+    operations on EditorLayer or even EditorMap metedata. Each Command
+    that manipulates data must provide a way to undo and redo the
+    operations. */
 class Command
 {
 private:

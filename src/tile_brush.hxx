@@ -23,7 +23,10 @@
 #include "field.hxx"
 
 /** */
-class TileBrush : public Field<int>
+class TileBrush 
+#ifndef SWIGPYTHON
+  : public Field<int>
+#endif
 {
 private:
   /** if true transparent tiles are drawn the same as opaque tiles, ie
@@ -35,7 +38,10 @@ private:
 public:
   TileBrush();
   TileBrush(int w, int h);
+
+#ifndef SWIGPYTHON
   TileBrush(const Field<int>& f, int w, int h, int pos_x, int pos_y);
+#endif
 
   void set_opaque() { opaque = true; }
   void set_transparent() { opaque = false; }

@@ -27,7 +27,10 @@
 
 class EditorTileMap;
 
-/** */
+/** The TileSelection is a little helper class to manage rectangular
+    selections of tiles and provides a way to convert this selection
+    to a Brush which then can be used for either serialisation or be
+    used for painting on the map itself */
 class TileSelection
 {
 private:

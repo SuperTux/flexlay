@@ -17,7 +17,6 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-#include <boost/python.hpp>
 #include "python_functor.hxx"
 
 PythonFunctor::PythonFunctor()
@@ -25,18 +24,21 @@ PythonFunctor::PythonFunctor()
 {
 }
 
-PythonFunctor::PythonFunctor(boost::python::object o)
+PythonFunctor::PythonFunctor(PyObject* o)
 {
   obj = o;
+  Py_XINCREF(obj);
 }
 
 PythonFunctor::PythonFunctor(const PythonFunctor& copy)
 {
   obj = copy.obj;
+  Py_XINCREF(obj);
 }
 
 PythonFunctor::~PythonFunctor()
 {
+  Py_XDECREF(obj);
 }
 
 PythonFunctor&
@@ -45,6 +47,7 @@ PythonFunctor::operator=(const PythonFunctor& copy)
   if (this != &copy)
     {
       obj = copy.obj;
+      Py_XINCREF(obj);
     }
   return *this;  
 }
@@ -53,7 +56,13 @@ void
 PythonFunctor::operator()()
 {
   PyObject* arglist = PyTuple_New(0);
-  PyEval_CallObject(obj.ptr(),  arglist);
+  if (PyEval_CallObject(obj,  arglist) == 0)
+    {
+      if (PyErr_Occurred())
+        {
+          PyErr_Print();
+        }
+    }
   Py_DECREF(arglist);
 }
 

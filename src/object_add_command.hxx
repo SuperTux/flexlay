@@ -25,7 +25,10 @@
 class EditorObjMap;
 class ObjMapObject;
 
-/** */
+/** ObjectAddCommand adds on object to an EditorObjMap, the user needs
+    to supply an Object together with the \a EditorObjMap to which it
+    should be added. FIXME: position should be part of the command,
+    not the object */
 class ObjectAddCommand : public Command
 {
 private:

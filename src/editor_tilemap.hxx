@@ -29,8 +29,11 @@ class Tileset;
 class CL_PixelBuffer;
 class TileBrush;
 
-/** Holds the tilemap data for the editor and provides functions to
-    manipulate them */
+/** EditorTileMap holds the tilemap data for the editor and provides
+    functions to manipulate them. Each \a EditorTilemap is associated
+    with a \a Tileset, which provides information on which ids are
+    mapped to which Tiles, the tilemap itself only knows the ids of
+    tiles.  */
 class EditorTileMap : public EditorMapLayer
 {
 private:

@@ -24,7 +24,8 @@
 
 class TileMapTool;
 
-/** */
+/** The ToolManager is a simple class which holds all available tools
+    and keep track of which on is the currently selected one. */
 class ToolManager
 {
 private:

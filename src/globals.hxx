@@ -34,7 +34,6 @@ extern std::string homedir;
 
 extern CL_ResourceManager* resources;
 
-extern float game_speed;
 extern int   debug;
 
 #endif

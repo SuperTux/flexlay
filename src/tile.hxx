@@ -24,10 +24,8 @@
 #include <ClanLib/Display/sprite.h>
 #include <ClanLib/Display/pixel_buffer.h>
 
-/** A Tile is a surface or sprite together with information for
- *  collision detection (aka colmap). The collision map is at a
- *  resolution of 8x8 bits. Position information is handled in the
- *  TileMap and not here. (flyweight pattern). */
+/** A Tile is a surface or sprite together with meta information for
+    collision (aka colmap), walkability or such. */
 class Tile
 {
 private:
@@ -42,6 +40,7 @@ private:
   CL_Color  attribute_color;
 
   std::string filename;
+
 public:
   unsigned char colmap[8];
 

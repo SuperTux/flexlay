@@ -24,8 +24,6 @@
 #include "globals.hxx"
 #include "flexlay.hxx"
 
-Flexlay flexlay;
-
 Flexlay::Flexlay()
 {
   screen_width  = 800;

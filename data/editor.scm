@@ -49,8 +49,43 @@
         (display level)
         (newline)))))
 
+(define (resize-map)
+  (let ((window (gui-create-window 200 200 150 160 "Resize Map")))
+    (gui-push-component (gui-window-get-client-area window))
+
+    (gui-create-label 10 10 "X: ")
+    (gui-create-label 10 30 "Y: ")
+
+    (gui-create-label 10 50 "Width: ")
+    (gui-create-label 10 70 "Height: ")
+
+    (let ((x (gui-create-inputbox 80 10 50 25 "0"))
+          (y (gui-create-inputbox 80 30 50 25 "0"))
+          (w (gui-create-inputbox 80 50 50 25 (number->string (map-get-width))))
+          (h (gui-create-inputbox 80 70 50 25 (number->string (map-get-height)))))
+      
+      (gui-create-button-func 60 100 75 25 "Ok"
+                              (lambda ()
+                                (gui-hide-component window)
+                                (catch #t
+                                       (lambda ()
+                                         (editor-resize-map
+                                          (string->number (gui-inputbox-get-text w))
+                                          (string->number (gui-inputbox-get-text h))
+                                          (string->number (gui-inputbox-get-text x))
+                                          (string->number (gui-inputbox-get-text y))))
+                                       (lambda args
+                                         (display "Error: ")
+                                         (display args)
+                                         (newline))))))
+
+    (gui-component-on-close window (lambda ()
+                                     (gui-hide-component window)))
+
+    (gui-pop-component)))
+    
 (define (show-new-level-dialog)
-  (let ((window (gui-create-window 200 200 200 160 "Property Window")))
+  (let ((window (gui-create-window 200 200 200 160 "Create a New Level...")))
     (gui-push-component (gui-window-get-client-area window))
 
     (gui-create-label 10 10 "Width: ")
@@ -111,6 +146,8 @@
                      (gui-quit)))
 
 ;; Dialog Menu
+(gui-add-menu-item menu "Dialogs/Resize.."  resize-map)
+
 (gui-add-menu-item menu "Dialogs/TileSelector" 
                    (lambda ()
                      (gui-component-toggle-visibility *tileselector-window*)))

@@ -72,6 +72,24 @@ public:
     return (*this) (x, y);
   }
 
+  void resize(int w, int h, int pos_x = 0, int pos_y = 0) 
+  {
+    // FIXME: Slow?
+    Field<T> field(w, h);
+
+    int start_x = std::max(0, -pos_x);
+    int start_y = std::max(0, -pos_y);
+
+    int end_x = std::min(get_width(),  field.get_width()  - pos_x);
+    int end_y = std::min(get_height(), field.get_height() - pos_y);
+
+    for(int y = start_y; y < end_y; ++y)
+      for(int x = start_x; x < end_x; ++x)
+        field.at(pos_x + x, pos_y + y) = at(x, y);
+
+    (*this) = field;
+  }
+
   iterator begin () { return vec.begin (); }
   iterator end () { return vec.end (); }
 

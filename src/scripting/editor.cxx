@@ -108,6 +108,20 @@ scm2brush(SCM s_brush)
   return brush;
 }
 
+void
+editor_resize_map(int w, int h, int x, int y)
+{
+  EditorTileMap* tilemap = dynamic_cast<EditorTileMap*>(Editor::current()->get_map()->get_layer_by_name(0));
+  if (tilemap)
+    {
+      tilemap->resize(w, h, x, y);
+    }
+  else
+    {
+      assert(!"Error: Tilemap not found");
+    }
+}
+
 void 
 tilemap_paint_tool_set_brush(SCM brush)
 {

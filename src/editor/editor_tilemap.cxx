@@ -198,9 +198,10 @@ EditorTileMap::get_map(int i)
 }
 
 void
-EditorTileMap::resize(int x, int y, int w, int h)
+EditorTileMap::resize(int w, int h, int x, int y)
 {
-  
+  for (Fields::iterator i = fields.begin(); i != fields.end(); ++i)
+    (*i)->resize(w, h, x, y);
 }
 
 void

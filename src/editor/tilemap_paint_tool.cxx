@@ -37,6 +37,9 @@ TileMapPaintTool::TileMapPaintTool(EditorMap* p, EditorTileMap* t)
   last_draw = CL_Point(-1, -1);
   painting  = false;
   current_  = this;
+  brush = TileBrush(1, 1);
+  brush.at(0, 0) = 0;
+  brush.set_opaque();
 }
 
 TileMapPaintTool::~TileMapPaintTool()
@@ -83,8 +86,10 @@ TileMapPaintTool::on_mouse_down(const CL_InputEvent& event)
     }
   else if (event.id == CL_MOUSE_RIGHT)
     {
-      // FIXME: insert selection code here
-      //tilemap->brush_tile = tilemap->get_field()->at(pos.x, pos.y)->get_id();
+      // FIXME: add support for larger brushes here (selecton like)
+      brush = TileBrush(1, 1);
+      brush.at(0, 0) = tilemap->get_field()->at(pos.x, pos.y);
+      brush.set_opaque();
     }
 }
  

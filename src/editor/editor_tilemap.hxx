@@ -66,7 +66,7 @@ public:
       @param y position of the old map in the new resized one
       @param w height of the new map
       @param h height of the new map */
-  void resize(int x, int y, int w, int h);
+  void resize(int w, int h, int x, int y);
 
   Field<int>* get_map(int i);
 

@@ -18,6 +18,7 @@
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include <ClanLib/Display/display.h>
+#include <ClanLib/Display/keys.h>
 #include "scrollbar.hxx"
 
 class ScrollbarImpl
@@ -32,8 +33,16 @@ public:
   float max;
   float pagesize;
   float pos;
+
+  float old_pos;
+  
+  bool pressed;
+  CL_Point click_pos;
   
   void draw();
+  void on_mouse_up(const CL_InputEvent& event);
+  void on_mouse_down(const CL_InputEvent& event);
+  void on_mouse_move(const CL_InputEvent& event);
 };
 
 Scrollbar::Scrollbar(const CL_Rect& rect, CL_Component* parent)
@@ -44,8 +53,13 @@ Scrollbar::Scrollbar(const CL_Rect& rect, CL_Component* parent)
   impl->max = 100;
   impl->pagesize = 10;
   impl->pos  = 0;
+  impl->pressed = false;
 
   impl->slots.push_back(sig_paint().connect(impl.get(), &ScrollbarImpl::draw));
+
+  impl->slots.push_back(sig_mouse_down().connect(impl.get(), &ScrollbarImpl::on_mouse_down));
+  impl->slots.push_back(sig_mouse_up().connect(impl.get(), &ScrollbarImpl::on_mouse_up));
+  impl->slots.push_back(sig_mouse_move().connect(impl.get(), &ScrollbarImpl::on_mouse_move));
 }
   
 void
@@ -84,6 +98,46 @@ ScrollbarImpl::draw()
                                 CL_Size(parent->get_width()-5,
                                         int(pagesize*scale))),
                         CL_Color(0, 0, 0));
+}
+
+void
+ScrollbarImpl::on_mouse_up(const CL_InputEvent& event)
+{
+  if (event.id == CL_MOUSE_LEFT)
+    {
+      pressed = false;
+      parent->release_mouse();
+    }
+}
+
+void
+ScrollbarImpl::on_mouse_down(const CL_InputEvent& event)
+{
+  if (event.id == CL_MOUSE_LEFT)
+    {
+      pressed   = true;
+      click_pos = event.mouse_pos;
+      
+      parent->capture_mouse();
+
+      float scale = parent->get_height()/(max - min);      
+      old_pos = pos * scale;
+
+      click_pos.x += parent->get_position().left;
+      click_pos.y += parent->get_position().top;
+    }
+}
+
+void
+ScrollbarImpl::on_mouse_move(const CL_InputEvent& event)
+{
+  if(pressed)
+    {
+      CL_Rect rect = parent->get_position();
+      
+      float scale = parent->get_height()/(max - min);
+      pos = (old_pos  - (click_pos.y - (rect.top  + event.mouse_pos.y)))/scale;
+    }
 }
 
 /* EOF */

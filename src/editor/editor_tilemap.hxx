@@ -62,7 +62,7 @@ public:
       @param y position of the old map in the new resized one
       @param w height of the new map
       @param h height of the new map */
-  void resize(int w, int h, int x, int y);
+  void resize(const CL_Size& size, const CL_Point& point);
 
   Field<int>* get_map() { return &field; }
 
@@ -89,6 +89,9 @@ public:
   CL_PixelBuffer* create_pixelbuffer();
 
   static void draw_tile(Field<int>* field, const TileBrush& brush, const CL_Point& pos);
+
+  bool has_bounding_rect() const { return true; }
+  CL_Rect get_bounding_rect();
 };
 
 #endif

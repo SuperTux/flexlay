@@ -51,6 +51,8 @@ private:
 
   std::vector<std::string> scripts;
   
+  CL_Color background_color;
+
   /** Metadata attached to this map (ie. mapname, description, scripts, etc.) */
   SCMObj metadata;
 public:
@@ -76,6 +78,10 @@ public:
 
   void   set_metadata(const SCMObj& obj);
   SCMObj get_metadata() const;
+
+  CL_Rect get_bounding_rect();
+
+  void set_background_color(const CL_Color& color);
   
   std::vector<std::string> get_scripts() { return scripts; }
 };

@@ -135,9 +135,9 @@ EditorTileMap::get_tile (int x, int y)
 }
 
 void
-EditorTileMap::resize(int w, int h, int x, int y)
+EditorTileMap::resize(const CL_Size& size, const CL_Point& point)
 {
-  field.resize(w, h, x, y);
+  field.resize(size.width, size.height, point.x, point.y);
 }
 
 void
@@ -335,6 +335,13 @@ EditorTileMap::create_pixelbuffer()
       }
 
   return pixelbuffer;
+}
+
+CL_Rect
+EditorTileMap::get_bounding_rect()
+{
+  return CL_Rect(CL_Point(0, 0),
+                 CL_Size(field.get_width() * tile_size, field.get_height() * tile_size));
 }
 
 /* EOF */

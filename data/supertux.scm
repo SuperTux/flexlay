@@ -134,6 +134,14 @@
     (editor-map-set-metadata levelmap level)
     levelmap))
 
+(define-method (supertux:resize (stwm <supertux-worldmap>) w h x y)
+  (editor-tilemap-resize (stwm:tilemap stwm) w h x y))
+
+(define-method (supertux:resize (stlv <supertux-level>) w h x y)
+  (editor-tilemap-resize (supertux:background-tm  stlv) w h x y)
+  (editor-tilemap-resize (supertux:interactive-tm stlv) w h x y)
+  (editor-tilemap-resize (supertux:foreground-tm  stlv) w h x y))
+
 (define (supertux:save-map filename)
   ;; FIXME: This is old style singleton code
   (if (access? filename F_OK)

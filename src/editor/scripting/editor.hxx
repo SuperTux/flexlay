@@ -108,7 +108,7 @@ void            editor_map_set_filename(EditorMap* m, const char* name);
 void            editor_toggle_grid(EditorMapLayer* layer);
 void            editor_toggle_attributes(EditorMapLayer* layer);
 EditorMapLayer* editor_tilemap_create(int w, int h, int tile_size);
-void            editor_tilemap_resize(EditorMapLayer* , int x, int y, int w, int h);
+void            editor_tilemap_resize(EditorMapLayer* , int w, int h, int x, int y);
 void            editor_tilemap_set_data(EditorMapLayer* l, SCM data);
 SCM             editor_tilemap_get_data(EditorMapLayer* l);
 int             editor_tilemap_get_width(EditorMapLayer* l);

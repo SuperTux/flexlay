@@ -68,7 +68,7 @@ Minimap::draw()
   // FIXME: This doesn't work all that well
   EditorTileMap* tilemap = EditorTileMap::current();
 
-  if (tilemap)
+  if (tilemap && tilemap->get_height() != 0 && tilemap->get_width() != 0)
     {
       int map_width  = tilemap->get_width()  * TILE_SIZE;
       int map_height = tilemap->get_height() * TILE_SIZE;

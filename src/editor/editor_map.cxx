@@ -18,6 +18,7 @@
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include <iostream>
+#include <ClanLib/Core/core_iostream.h>
 #include <ClanLib/Display/display.h>
 #include <ClanLib/Display/keys.h>
 #include "../windstille_level.hxx"
@@ -27,7 +28,8 @@
 #include "editor_map_component.hxx"
 
 EditorMap::EditorMap(const std::string& filename_)
-  : filename(filename_)
+  : filename(filename_),
+    background_color(100, 80, 100)
 {
   modified = false;
   serial = 0;
@@ -52,7 +54,9 @@ EditorMap::add_layer(EditorMapLayer* layer)
 void
 EditorMap::draw (EditorMapComponent* parent)
 {
-  CL_Display::clear(CL_Color(100, 0, 100));
+  CL_Rect rect = get_bounding_rect();
+
+  CL_Display::fill_rect(rect, background_color);
   for(Layers::iterator i = layers.begin(); i != layers.end(); ++i)
     (*i)->draw(parent);  
   CL_Display::flush();
@@ -83,6 +87,43 @@ SCMObj
 EditorMap::get_metadata() const
 {
   return metadata; 
+}
+
+CL_Rect
+EditorMap::get_bounding_rect()
+{
+  assert(layers.size() >= 1);
+  
+  bool init = false;
+  CL_Rect rect;
+  
+  for(Layers::iterator i = layers.begin(); i != layers.end(); ++i)
+    {
+      if ((*i)->has_bounding_rect())
+        {
+          if (!init)
+            {
+              rect = (*i)->get_bounding_rect();
+              init = true;
+            }
+          else
+            {
+              CL_Rect other = (*i)->get_bounding_rect();
+              rect.top    = std::min(rect.top,    other.top);
+              rect.bottom = std::max(rect.bottom, other.bottom);
+              rect.left   = std::min(rect.left,   other.left);
+              rect.right  = std::max(rect.right,  other.right);              
+            }
+        }
+    }
+
+  return rect;
+}
+
+void
+EditorMap::set_background_color(const CL_Color& color)
+{
+  background_color = color;
 }
 
 /* EOF */

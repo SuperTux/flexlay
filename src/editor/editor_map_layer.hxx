@@ -31,6 +31,9 @@ public:
 
   virtual void draw(EditorMapComponent* parent) =0;
 
+  virtual bool has_bounding_rect() const { return false; }
+  virtual CL_Rect get_bounding_rect() { return CL_Rect(); }
+
 private:
   EditorMapLayer (const EditorMapLayer&);
   EditorMapLayer& operator= (const EditorMapLayer&);

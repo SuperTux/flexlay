@@ -261,11 +261,17 @@
                                 (gui-hide-component window)
                                 (catch #t
                                        (lambda ()
-                                         (editor-tilemap-resize *tilemap*
-                                          (string->number (gui-inputbox-get-text w))
-                                          (string->number (gui-inputbox-get-text h))
-                                          (string->number (gui-inputbox-get-text x))
-                                          (string->number (gui-inputbox-get-text y))))
+                                         (let ((w (string->number (gui-inputbox-get-text w)))
+                                               (h (string->number (gui-inputbox-get-text h)))
+                                               (x (string->number (gui-inputbox-get-text x)))
+                                               (y (string->number (gui-inputbox-get-text y))))
+                                           (case *game*
+                                             ((supertux)
+                                              (supertux:resize 
+                                               (editor-map-get-metadata (editor-map-component-get-map *editor-map*))
+                                               w h x y))
+                                             (else
+                                              (editor-tilemap-resize *tilemap* w h x y)))))
                                        (lambda args
                                          (editor-error args))))))
 

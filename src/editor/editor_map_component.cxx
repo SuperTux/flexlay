@@ -122,6 +122,8 @@ EditorMapComponent::draw ()
 {
   CL_Display::push_translate_offset(int(trans_offset.x), int(trans_offset.y));
 
+  CL_Display::clear(CL_Color(100, 0, 100));
+
   if (editor_map)
     editor_map->draw(this);
 

@@ -32,7 +32,6 @@ dnl clanVorbis  >= $REQUIRED_CLANLIB_VERSION
 AC_CONFIG_FILES( 
     Makefile
     data/Makefile
-    data/levels/Makefile
     src/Makefile
     src/guile/Makefile
     src/editor/Makefile

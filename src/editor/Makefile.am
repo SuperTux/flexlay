@@ -20,6 +20,7 @@ editor_SOURCES = \
   editor.hxx editor.cxx \
   editor_objmap.hxx   editor_objmap.cxx \
   editor_map.hxx editor_map.cxx \
+  editor_grid_layer.hxx editor_grid_layer.cxx \
   editor_map_component.hxx editor_map_component.cxx \
   tile_editor.hxx  tile_editor.cxx \
   tilemap_tool.hxx tilemap_tool.cxx \

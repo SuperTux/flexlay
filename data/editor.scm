@@ -30,6 +30,11 @@
 
 (define *editor:file-plugins* '())
 
+(define (*error-handler* . args)
+  (display "Error: Something went wrong on the C++ side\n")
+  (backtrace)
+  (display args)(newline))
+
 (define (editor:add-file-plugin pred func)
   "Add a handler for a new filetype"
   (set! *editor:file-plugins*
@@ -246,15 +251,17 @@
 
     (let ((x (gui-create-inputbox 80 10 50 25 "0"))
           (y (gui-create-inputbox 80 30 50 25 "0"))
-          (w (gui-create-inputbox 80 50 50 25 (number->string (map-get-width))))
-          (h (gui-create-inputbox 80 70 50 25 (number->string (map-get-height)))))
+          (w (gui-create-inputbox 80 50 50 25 (number->string                      
+                                               (editor-tilemap-get-width *tilemap*))))
+          (h (gui-create-inputbox 80 70 50 25 (number->string 
+                                               (editor-tilemap-get-width *tilemap*)))))
       
       (gui-create-button-func 60 100 75 25 "Ok"
                               (lambda ()
                                 (gui-hide-component window)
                                 (catch #t
                                        (lambda ()
-                                         (editor-resize-map
+                                         (editor-tilemap-resize *tilemap*
                                           (string->number (gui-inputbox-get-text w))
                                           (string->number (gui-inputbox-get-text h))
                                           (string->number (gui-inputbox-get-text x))
@@ -264,7 +271,6 @@
 
     (gui-component-on-close window (lambda ()
                                      (gui-hide-component window)))
-
     (gui-pop-component)))
 
 (define (yes-no-dialog title-text text yes-text no-text yes-func no-func)

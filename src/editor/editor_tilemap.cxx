@@ -43,7 +43,7 @@ EditorTileMap::EditorTileMap(int w, int h, int tile_size_)
 {
   // FIXME: Move this to the widget or to some more generic
   // map-properties thingy
-  draw_grid      = true;
+  draw_grid      = false;
   draw_attribute = false;
   hex_mode = false;
 

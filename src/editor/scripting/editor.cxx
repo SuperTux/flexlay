@@ -52,6 +52,7 @@
 #include "../editor/editor_map.hxx"
 #include "../editor/editor_map_layer.hxx"
 #include "../editor/editor_objmap.hxx"
+#include "../editor/editor_grid_layer.hxx"
 #include "../editor/editor_tilemap.hxx"
 
 #include "editor.hxx"
@@ -173,6 +174,12 @@ editor_set_brush_tile(int i)
   brush(0, 0) = i;
 
   TileMapPaintTool::current()->set_brush(brush);
+}
+
+EditorMapLayer*
+editor_grid_layer_create(int w, int h, int tile_size)
+{
+  return new EditorGridLayer(CL_Point(0, 0), w, h, tile_size);
 }
 
 void
@@ -412,27 +419,12 @@ objmap_sprite_object_flip(EditorMapLayer* layer, int id)
     }
 }
 
-void tilemap_resize(EditorMapLayer* m, int x, int y, int w, int h)
+void
+editor_tilemap_resize(EditorMapLayer* m, int x, int y, int w, int h)
 {
   EditorTileMap* tilemap = dynamic_cast<EditorTileMap*>(m);
   if (tilemap)
     tilemap->resize(w, h, x, y);  
-}
-
-void
-editor_resize_map(int w, int h, int x, int y)
-{
-  EditorTileMap* tilemap 
-    = dynamic_cast<EditorTileMap*>(EditorMapComponent::current()->get_map()->get_layer_by_name(TILEMAP_NAME));
-
-  if (tilemap)
-    {
-      tilemap->resize(w, h, x, y);
-    }
-  else
-    {
-      assert(!"Error: Tilemap not found");
-    }
 }
 
 void 

@@ -57,6 +57,9 @@ void
 SCMFunctor::operator()()
 {
   scm_call_0(func);
+  //SCM lst = scm_listify(scm_sym_lambda, SCM_EOL, scm_listify(func, SCM_UNDEFINED), SCM_UNDEFINED);
+  //SCM wrapped_func = scm_primitive_eval(lst);
+  //scm_catch(SCM_BOOL_T, wrapped_func, scm_variable_ref(scm_c_lookup("*error-handler*")));
 }
 
 void

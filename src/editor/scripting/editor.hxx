@@ -52,12 +52,10 @@ CL_Component* editor_map_component_create(int x, int y, int w, int h);
 void          editor_map_component_set_map(CL_Component* c, EditorMap* m);
 EditorMap*    editor_map_component_get_map(CL_Component* c);
 
-void editor_resize_map(int w, int h, int x, int y);
 void editor_set_brush_tile(int i);
 int  editor_get_brush_tile();
 void editor_set_tool(int i);
 SCM  editor_get_tile_selection();
-void tilemap_resize(EditorMapLayer* , int x, int y, int w, int h);
 void tilemap_paint_tool_set_brush(TileBrush brush);
 void tilemap_paint_tool_set_tilemap(EditorMapLayer* layer);
 
@@ -101,6 +99,7 @@ void            editor_map_add_layer(EditorMap* m, EditorMapLayer* layer);
 bool            editor_map_is_modified(EditorMap* m);
 void            editor_map_set_unmodified(EditorMap* m);
 
+EditorMapLayer* editor_grid_layer_create(int w, int h, int tile_size);
 EditorMapLayer* editor_objmap_create();
 
 std::string     editor_map_get_filename(EditorMap* m);
@@ -109,6 +108,7 @@ void            editor_map_set_filename(EditorMap* m, const char* name);
 void            editor_toggle_grid(EditorMapLayer* layer);
 void            editor_toggle_attributes(EditorMapLayer* layer);
 EditorMapLayer* editor_tilemap_create(int w, int h, int tile_size);
+void            editor_tilemap_resize(EditorMapLayer* , int x, int y, int w, int h);
 void            editor_tilemap_set_data(EditorMapLayer* l, SCM data);
 SCM             editor_tilemap_get_data(EditorMapLayer* l);
 int             editor_tilemap_get_width(EditorMapLayer* l);

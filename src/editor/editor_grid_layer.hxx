@@ -20,15 +20,20 @@
 #ifndef HEADER_EDITOR_GRID_LAYER_HXX
 #define HEADER_EDITOR_GRID_LAYER_HXX
 
-/** */
+#include <ClanLib/Core/Math/point.h>
+#include "editor_map_layer.hxx"
+
+/** Little helper layer that displays a simple grid
+ */
 class EditorGridLayer : public EditorMapLayer
 {
 private:
   CL_Point pos;
   int width;
   int height;
+  int tile_size;
 public:
-  EditorGridLayer(const CL_Point pos_, int w, int h);
+  EditorGridLayer(const CL_Point pos_, int w, int h, int tile_size);
   void draw(EditorMapComponent* parent);
 };
 

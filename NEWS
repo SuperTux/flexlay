@@ -1,3 +1,8 @@
+Flexlay 0.1.0
+=============
+ - new directory layout, modules for different games and languages are
+   now seperate
+
 Flexlay 0.0.2
 =============
  - switched build system from autohell to SCons

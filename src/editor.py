@@ -74,7 +74,6 @@ save_as_icon = Icon(CL_Point(34*2+2, 2), make_sprite("../data/images/icons24/sto
 copy_icon    = Icon(CL_Point(34*3.1+2, 2), make_sprite("../data/images/icons24/stock_copy.png"), "Some tooltip", gui.get_component());
 paste_icon   = Icon(CL_Point(34*4.1+2, 2), make_sprite("../data/images/icons24/stock_paste.png"), "Some tooltip", gui.get_component());
 
-
 def foo():
     print "Button pressed"
 
@@ -84,6 +83,14 @@ gui.pop_component()
 
 willow = Panel(CL_Rect(CL_Point(0, 23), CL_Size(800, 33)), gui.get_component())
 
+def Icon_set_callback(self, func):
+    connect(self.sig_clicked(), func)
+Icon.set_callback = Icon_set_callback
+del Icon_set_callback
+
+def do_something():
+    print "do_something"
+
 load_icon    = Icon(CL_Point(32*0+2, 2), make_sprite("../data/images/icons24/stock_open.png"), "Some tooltip", willow);
 save_icon    = Icon(CL_Point(32*1+2, 2), make_sprite("../data/images/icons24/stock_save.png"), "Some tooltip", willow);
 save_as_icon = Icon(CL_Point(32*2+2, 2), make_sprite("../data/images/icons24/stock_save_as.png"), "Some tooltip", willow);
@@ -91,6 +98,11 @@ save_as_icon = Icon(CL_Point(32*2+2, 2), make_sprite("../data/images/icons24/sto
 copy_icon    = Icon(CL_Point(32*3.1+2, 2), make_sprite("../data/images/icons24/stock_copy.png"), "Some tooltip", willow);
 paste_icon   = Icon(CL_Point(32*4.1+2, 2), make_sprite("../data/images/icons24/stock_paste.png"), "Some tooltip", willow);
 
+undo_icon = Icon(CL_Point(32*5.1+2, 2), make_sprite("../data/images/icons24/stock_undo.png"), "Some tooltip", willow);
+redo_icon = Icon(CL_Point(32*6.1+2, 2), make_sprite("../data/images/icons24/stock_redo.png"), "Some tooltip", willow);
+
+undo_icon.set_callback(do_something)
+redo_icon.set_callback(do_something)
 
 toolbar = Panel(CL_Rect(CL_Point(0, 23+33), CL_Size(33, 256)), gui.get_component())
 
@@ -101,13 +113,12 @@ paint  = Icon(CL_Point(2, 32*3+2), make_sprite("../data/images/tools/stock-tool-
 
 supertux = SuperTuxGUI(tileset, gui)
 
-class MMenu(CL_Menu):
-    def __init__(self):
-        CL_Menu.__init__(self, gui.get_component())
-
-    def add_item(self, name, func):
-            item = self.create_item(name)
-            connect(item.sig_clicked(), func)
+def block():
+    def CL_Menu_add_item(self, name, func):
+        item = self.create_item(name)
+        connect(item.sig_clicked(), func)
+    CL_Menu.add_item = CL_Menu_add_item
+block()
 
 level = None
 def menu_file_open():
@@ -123,7 +134,7 @@ def menu_file_save():
 def menu_file_save_as():
     print "File/Save As"
 
-menu = MMenu()
+menu = CL_Menu(gui.get_component())
 a = menu.add_item("File/Open...", menu_file_open)
 a = menu.add_item("File/Save...", menu_file_save)
 a = menu.add_item("File/Save As...", menu_file_save_as)
@@ -131,17 +142,27 @@ a = menu.add_item("File/Quit",  do_quit)
 
 mysprite = make_sprite("../data/images/icons16/stock_paste-16.png")
 
+def Menu_add_item(self, sprite, text, func):
+    i = self.__add_item(mysprite, text)
+    if func != None:
+        connect(self.sig_clicked(i), func)
+Menu.__add_item = Menu.add_item
+Menu.add_item = Menu_add_item
+del Menu_add_item
+
 mymenu = Menu(CL_Point(100, 100), gui.get_component())
-mymenu.add_item(mysprite, "Foobar aeuaeu")
-mymenu.add_item(mysprite, "blub")
-mymenu.add_item(mysprite, "bla")
+mymenu.add_item(mysprite, "Foobar aeuaeu", None)
+mymenu.add_item(mysprite, "blub", do_something)
+mymenu.add_item(mysprite, "bla", None)
 mymenu.add_seperator()
-mymenu.add_item(mysprite, "Foobar")
-mymenu.add_item(mysprite, "blubaoeuau aueau aeu")
-mymenu.add_item(mysprite, "bla")
+mymenu.add_item(mysprite, "Foobar", None)
+mymenu.add_item(mysprite, "blubaoeuau aueau aeu", None)
+mymenu.add_item(mysprite, "bla", None)
 
 def show_menu():
     mymenu.run()
+
+copy_icon.set_callback(show_menu)
     
 # _button = CL_Button(CL_Rect(100, 100, 200, 125), "Hello World", gui.get_component())
 # connect(_button.sig_clicked(), show_menu)

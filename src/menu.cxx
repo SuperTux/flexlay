@@ -54,12 +54,19 @@ class MenuItem
 {
 protected:
   MenuImpl* parent;
+  CL_Signal_v0 on_clicked;
+
 public:
   MenuItem(MenuImpl* parent_) 
     : parent(parent_) {}
+
+  virtual ~MenuItem() {}
+
   virtual void draw(int x, int y, bool active) =0;
   virtual int get_width() =0;
   virtual int get_height() =0;
+
+  CL_Signal_v0& sig_clicked() { return on_clicked; }
 };
 
 class SeperatorMenuItem : public MenuItem
@@ -87,6 +94,7 @@ class TextMenuItem : public MenuItem
 private:
   CL_Sprite sprite;
   std::string text;
+
 public:
   TextMenuItem(const CL_Sprite& sprite_, const std::string& text_, MenuImpl* parent_)
     : MenuItem(parent_),
@@ -133,7 +141,7 @@ Menu::add_seperator()
 {
   impl->items.push_back(new SeperatorMenuItem(impl.get()));
   impl->recalc_size();
-  return impl->items.size();
+  return impl->items.size()-1;
 }
 
 MenuItemHandle
@@ -141,7 +149,7 @@ Menu::add_item(const CL_Sprite& sprite, const std::string& name)
 {
   impl->items.push_back(new TextMenuItem(sprite, name, impl.get()));
   impl->recalc_size();
-  return impl->items.size();
+  return impl->items.size()-1;
 }
 
 MenuItemHandle
@@ -200,8 +208,7 @@ MenuImpl::get_height()
 void
 MenuImpl::on_mouse_down(const CL_InputEvent& event)
 {
-  std::cout << "Click on item: " << current_item << std::endl;
-
+  items[current_item]->sig_clicked()();
   parent->release_mouse();
   parent->show(false);
 }
@@ -221,6 +228,12 @@ MenuImpl::on_mouse_move(const CL_InputEvent& event)
         }
     }
   current_item = -1;
+}
+
+CL_Signal_v0&
+Menu::sig_clicked(MenuItemHandle item)
+{
+  return impl->items[item]->sig_clicked();
 }
 
 void

@@ -1,6 +1,6 @@
 //  $Id$
-// 
-//  Flexlay - A Generic 2D Game Editor
+//
+//  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
 //
 //  This program is free software; you can redistribute it and/or
@@ -12,41 +12,37 @@
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
-// 
+//
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-#ifndef HEADER_MENU_HXX
-#define HEADER_MENU_HXX
+#include "paned.hxx"
 
-#include <string>
-#include <ClanLib/GUI/component.h>
-#include <ClanLib/Core/Math/rect.h>
-#include "shared_ptr.hxx"
-
-class MenuImpl;
-class CL_Sprite;
-
-typedef int MenuItemHandle;
-
-/** */
-class Menu : public CL_Component
+class PanedImpl
 {
 public:
-  Menu(const CL_Point& pos, CL_Component* parent);
-
-  MenuItemHandle add_item(const CL_Sprite& sprite, const std::string& name);
-  MenuItemHandle add_submenu(const std::string& name, const Menu& submenu);
-  MenuItemHandle add_seperator();
-
-  CL_Signal_v0& sig_clicked(MenuItemHandle item);
-
-  void run();
-private:
-  SharedPtr<MenuImpl> impl;
+  CL_Component* first;
+  CL_Component* second;
 };
 
-#endif
+Paned::Paned(CL_Component* parent)
+  : impl(new PanedImpl())
+{
+  impl->first  = 0;
+  impl->second = 0;
+}
+
+void
+Paned::set_first(CL_Component* first)
+{
+  impl->first = first;
+}
+
+void
+Paned::set_second(CL_Component* second)
+{
+  impl->second = second;
+}
 
 /* EOF */

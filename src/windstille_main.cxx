@@ -1,4 +1,4 @@
-//  $Id: windstille_main.cxx,v 1.14 2003/09/12 09:25:48 grumbel Exp $
+//  $Id: windstille_main.cxx,v 1.15 2003/09/12 20:17:06 grumbel Exp $
 //
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -31,6 +31,8 @@
 #include "windstille_level.hxx"
 #include "windstille_main.hxx"
 #include "tile_factory.hxx"
+
+extern "C" void SWIG_init(void);
 
 CL_ResourceManager* resources;
 
@@ -100,6 +102,8 @@ WindstilleMain::inner_main(void* closure, int argc, char** argv)
           }
       }
 
+    SWIG_init();
+
     CL_SetupCore::init();
     CL_SetupGL::init();
     CL_SetupDisplay::init();
@@ -125,6 +129,7 @@ WindstilleMain::inner_main(void* closure, int argc, char** argv)
           levelfile = datadir + "levels/level2.scm";
 
         TileFactory::init();
+
         WindstilleGame game (levelfile);
         std::cout << "WindstilleMain: entering main-loop..." << std::endl;
         game.display ();

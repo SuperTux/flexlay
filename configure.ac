@@ -16,6 +16,8 @@ AC_CHECK_HEADER(guile/gh.h)
 
 REQUIRED_CLANLIB_VERSION="0.7.3"
 
+CXXFLAGS="$CXXFLAGS -I\${top_srcdir}/src/"
+
 AC_MSG_CHECKING(for debug mode)
 AC_ARG_ENABLE(debug, AC_HELP_STRING([--enable-debug], [Enable debugging support (default: yes)]),, enable_debug="yes")
 if test "$enable_debug" != "no"; then
@@ -52,6 +54,7 @@ AC_CONFIG_FILES(
     data/Makefile
     src/Makefile
     src/collision/Makefile
+    src/scripting/Makefile
     src/guile/Makefile
     src/editor/Makefile
 )

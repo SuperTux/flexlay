@@ -1,4 +1,4 @@
-//  $Id: water_map.cxx,v 1.1 2003/09/12 16:31:21 grumbel Exp $
+//  $Id: water_map.cxx,v 1.2 2003/09/12 20:17:06 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -19,12 +19,13 @@
 
 #include <ClanLib/Display/display.h>
 #include "globals.hxx"
+#include "player.hxx"
+#include "game_world.hxx"
 #include "water_map.hxx"
+#include "water_splash.hxx"
 
 WaterMap::WaterMap()
 {
-  waters.push_back(Water(128/SUBTILE_SIZE, 39,
-                         64, 300/SUBTILE_SIZE));
 }
 
 WaterMap::~WaterMap()
@@ -48,7 +49,7 @@ WaterMap::draw()
                                         CL_Color(  0,   0, 200, 128),
                                         CL_Color(  0,   0, 200, 128)));
 
-      CL_Display::fill_rect(CL_Rect(x+15, y+15, x + w, y + h - 15), 
+      CL_Display::fill_rect(CL_Rect(x, y+15, x + w, y + h - 15), 
                             CL_Gradient(CL_Color(  0,   0, 200, 128),
                                         CL_Color(  0,   0, 200, 128),
                                         CL_Color(  0,   0,  50, 128),
@@ -94,6 +95,33 @@ WaterMap::draw()
 void
 WaterMap::update(float delta)
 {
+  CL_Vector pos = Player::current()->get_pos();
+
+  for (Waters::iterator i = waters.begin(); i != waters.end(); ++i)
+    {
+      // Transform subtile CO to pixels
+      int x = i->x * SUBTILE_SIZE;
+      int y = i->y * SUBTILE_SIZE;
+      int w = i->w * SUBTILE_SIZE;
+
+      if (pos.x > x && pos.x < x + w)
+        {
+          // Player went through water
+          if ((old_pos.y < y && pos.y > y)
+              || (old_pos.y > y && pos.y < y))
+            {
+              std::cout << "WATER SPLASH" << std::endl;
+              GameWorld::current()->add(new WaterSplash(pos.x, y));
+            }
+        }
+    }
+  old_pos = pos;
+}
+
+void
+WaterMap::add_water(int x, int y, int w, int h)
+{
+  waters.push_back(Water(x, y, w, h));
 }
 
 /* EOF */

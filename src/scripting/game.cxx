@@ -1,5 +1,5 @@
-//  $Id: water_map.hxx,v 1.2 2003/09/12 20:17:06 grumbel Exp $
-// 
+//  $Id: game.cxx,v 1.1 2003/09/12 20:17:06 grumbel Exp $
+//
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
 //
@@ -12,47 +12,26 @@
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
-// 
+//
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-#ifndef HEADER_WATER_MAP_HXX
-#define HEADER_WATER_MAP_HXX
+#include "scripting/game.hxx"
+#include "water_map.hxx"
+#include "game_world.hxx"
+#include "player.hxx"
 
-#include <vector>
-#include <ClanLib/Core/Math/cl_vector.h>
-
-/** */
-class WaterMap
+void
+game_add_water(int x, int y, int w, int h)
 {
-private:
-  struct Water {
-    Water(int x, int y, int w, int h)
-      : x(x), y(y), w(w), h(h)
-    {
-    }
-    int x, y;
-    int w, h;
-  };  
+  GameWorld::current()->get_watermap()->add_water(x, y, w, h);
+}
 
-  typedef std::vector<Water> Waters;
-  Waters waters;
-  CL_Vector old_pos;
-public:
-  WaterMap();
-  ~WaterMap();
-
-  void draw();
-  void update(float delta);
-
-  void add_water(int x, int y, int w, int h);
-
-private:
-  WaterMap (const WaterMap&);
-  WaterMap& operator= (const WaterMap&);
-};
-
-#endif
+void
+game_set_player(float x, float y)
+{
+  Player::current()->set_position(CL_Vector(x, y));
+}
 
 /* EOF */

@@ -1,4 +1,4 @@
-//  $Id: windstille_level.cxx,v 1.9 2003/09/11 18:58:19 grumbel Exp $
+//  $Id: windstille_level.cxx,v 1.10 2003/09/12 20:17:06 grumbel Exp $
 //
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -64,6 +64,10 @@ WindstilleLevel::parse_file (const std::string& filename)
                 {
                   parse_background_tilemap(data);
                 }
+              else if (gh_equal_p(gh_symbol2scm("water"), name)) 
+                {
+                  parse_water(data);
+                }
               else
                 {
                   std::cout << "WindstilleLevel: Unknown tag: " << scm2string(name) << std::endl;
@@ -77,6 +81,34 @@ WindstilleLevel::parse_file (const std::string& filename)
         }
     }
 
+}
+
+void
+WindstilleLevel::parse_water(SCM tree)
+{
+  while (!gh_null_p(tree))
+    {
+      SCM current = gh_car(tree);
+
+      if (gh_pair_p(current))
+        {
+          SCM name    = gh_car(current);
+          SCM data    = gh_cdr(current);
+      
+          if (gh_equal_p(gh_symbol2scm("water"), name)) 
+            {
+              //gh_display(data);
+              //gh_newline();
+              int x = gh_scm2int(gh_car(data));
+              int y = gh_scm2int(gh_cadr(data));
+              int w = gh_scm2int(gh_caddr(data));
+              int h = gh_scm2int(gh_car(gh_cdddr(data)));
+              std::cout << "Water: " << x << " " << y << " " << w << " " << h << std::endl;
+            }
+
+          tree = gh_cdr(tree);
+        }
+    }  
 }
 
 void

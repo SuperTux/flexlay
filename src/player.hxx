@@ -1,4 +1,4 @@
-//  $Id: player.hxx,v 1.5 2003/08/12 19:24:21 grumbel Exp $
+//  $Id: player.hxx,v 1.6 2003/09/12 20:17:06 grumbel Exp $
 // 
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -83,9 +83,12 @@ private:
   GroundState ground_state;
   
   double reload_time;
+  static Player* current_;
 public:
   Player (Controller*);
   virtual ~Player () {}
+
+  static Player* current() { return current_; }
 
   void draw ();
   void update (float delta);

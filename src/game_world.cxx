@@ -1,4 +1,4 @@
-//  $Id: game_world.cxx,v 1.11 2003/09/12 16:31:21 grumbel Exp $
+//  $Id: game_world.cxx,v 1.12 2003/09/12 20:17:06 grumbel Exp $
 //
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -26,6 +26,8 @@
 #include "water_map.hxx"
 #include "windstille_level.hxx"
 
+GameWorld* GameWorld::current_ = 0;
+
 bool removable (GameObj* obj) {
   return obj->is_removable ();
 }
@@ -33,6 +35,8 @@ bool removable (GameObj* obj) {
 GameWorld::GameWorld (const std::string& filename)
   : passed_time (0)
 {
+  current_ = this;
+  
   WindstilleLevel level (filename);
   
   tilemap = new TileMap(level.get_tilemap());

@@ -1,4 +1,4 @@
-SUBDIRS = editor guile collision
+SUBDIRS = editor guile collision scripting
 
 bindir=$(prefix)/games
 
@@ -60,12 +60,15 @@ windstille_SOURCES = \
   windstille_level.cxx \
   windstille_level.hxx \
   windstille_main.cxx \
+  water_splash.hxx \
+  water_splash.cxx \
   windstille_main.hxx
 
 windstille_CXXFLAGS = \
   @WINDSTILLE_CFLAGS@
 
 windstille_LDADD = \
+  scripting/libwindstille_scripting.a \
   editor/libwindstille_editor.a \
   collision/libwindstille_collision.a \
   @WINDSTILLE_LIBS@
@@ -128,6 +131,5 @@ windstille.static.comp: windstille.static
 	cp $< $@
 	strip -s $@
 	upx-ucl -q --best $@
-
 
 # EOF #

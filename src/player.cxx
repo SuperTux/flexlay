@@ -1,4 +1,4 @@
-//  $Id: player.cxx,v 1.12 2003/09/12 16:31:21 grumbel Exp $
+//  $Id: player.cxx,v 1.13 2003/09/12 20:17:06 grumbel Exp $
 //
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -26,6 +26,8 @@
 #include "player.hxx"
 #include "globals.hxx"
 
+Player* Player::current_ = 0;
+
 Player::Player (Controller* c) :
   controller (c),
   pos (320, 500),
@@ -39,6 +41,8 @@ Player::Player (Controller* c) :
   gun_state (GUN_READY),
   ground_state (IN_AIR)
 {  
+  current_ = this;
+
   walk.set_alignment(origin_bottom_center, 0, 3);
   jump.set_alignment(origin_bottom_center, 0, 3);
   stand.set_alignment(origin_bottom_center, 0, 3);

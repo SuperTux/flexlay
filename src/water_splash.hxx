@@ -1,4 +1,4 @@
-//  $Id: water_map.hxx,v 1.2 2003/09/12 20:17:06 grumbel Exp $
+//  $Id: water_splash.hxx,v 1.1 2003/09/12 20:17:06 grumbel Exp $
 // 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -17,40 +17,29 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-#ifndef HEADER_WATER_MAP_HXX
-#define HEADER_WATER_MAP_HXX
+#ifndef HEADER_WATER_SPLASH_HXX
+#define HEADER_WATER_SPLASH_HXX
 
-#include <vector>
+#include <ClanLib/Display/sprite.h>
 #include <ClanLib/Core/Math/cl_vector.h>
+#include "gameobj.hxx"
 
 /** */
-class WaterMap
+class WaterSplash : public GameObj
 {
 private:
-  struct Water {
-    Water(int x, int y, int w, int h)
-      : x(x), y(y), w(w), h(h)
-    {
-    }
-    int x, y;
-    int w, h;
-  };  
-
-  typedef std::vector<Water> Waters;
-  Waters waters;
-  CL_Vector old_pos;
+  CL_Vector pos;
+  CL_Sprite sprite;
+  float time;
 public:
-  WaterMap();
-  ~WaterMap();
+  WaterSplash(float x, float y);
+  virtual ~WaterSplash();
 
-  void draw();
-  void update(float delta);
-
-  void add_water(int x, int y, int w, int h);
-
+  void draw ();
+  void update (float);
 private:
-  WaterMap (const WaterMap&);
-  WaterMap& operator= (const WaterMap&);
+  WaterSplash (const WaterSplash&);
+  WaterSplash& operator= (const WaterSplash&);
 };
 
 #endif

@@ -1,4 +1,4 @@
-//  $Id: editor.cxx,v 1.6 2003/09/12 09:25:48 grumbel Exp $
+//  $Id: editor.cxx,v 1.7 2003/09/12 20:17:06 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -22,20 +22,16 @@
 #include <ClanLib/display.h>
 #include <ClanLib/guistylesilver.h>
 #include <guile/gh.h>
-#include "../globals.hxx"
+#include "globals.hxx"
 #include "editor.hxx"
 #include "editor_tilemap.hxx"
 #include "tile_selector.hxx"
-
-extern "C" void SWIG_init(void);
 
 Editor* Editor::current_ = 0;
 
 Editor::Editor()
 {
   current_ = this;
-
-  SWIG_init();
 
   slot_container = new CL_SlotContainer();
   resources = new CL_ResourceManager(datadir + "gui/gui.xml", false);

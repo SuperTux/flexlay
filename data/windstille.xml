@@ -28,6 +28,11 @@
     </sprite>
   </section>
 
+  <sprite name="watersplash">
+    <image file="images/watersplash.png" name="image1" />
+    <translation origin="bottom_center" />
+  </sprite>
+
   <sprite name="diamond">
     <animation
       speed="50"

@@ -1,4 +1,4 @@
-//  $Id: windstille_level.hxx,v 1.5 2003/08/18 08:50:22 grumbel Exp $
+//  $Id: windstille_level.hxx,v 1.6 2003/09/12 20:17:06 grumbel Exp $
 // 
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -42,7 +42,7 @@ private:
   Field<int>* parse_tilemap (SCM cur);
   void parse_foreground_tilemap (SCM cur);
   void parse_background_tilemap (SCM cur);
-
+  void parse_water(SCM cur);
   void parse_backgound_tilemap (SCM cur);
   void parse_gameobjects (SCM cur);
 };

@@ -4033,6 +4033,8 @@ fi
 
 REQUIRED_CLANLIB_VERSION="0.7.3"
 
+CXXFLAGS="$CXXFLAGS -I\${top_srcdir}/src/"
+
 echo "$as_me:$LINENO: checking for debug mode" >&5
 echo $ECHO_N "checking for debug mode... $ECHO_C" >&6
 # Check whether --enable-debug or --disable-debug was given.
@@ -4255,7 +4257,7 @@ echo "$as_me: error: Library requirements (
 
 
 
-                                                            ac_config_files="$ac_config_files Makefile data/Makefile src/Makefile src/collision/Makefile src/guile/Makefile src/editor/Makefile"
+                                                                      ac_config_files="$ac_config_files Makefile data/Makefile src/Makefile src/collision/Makefile src/scripting/Makefile src/guile/Makefile src/editor/Makefile"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -4816,6 +4818,7 @@ do
   "data/Makefile" ) CONFIG_FILES="$CONFIG_FILES data/Makefile" ;;
   "src/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/Makefile" ;;
   "src/collision/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/collision/Makefile" ;;
+  "src/scripting/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/scripting/Makefile" ;;
   "src/guile/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/guile/Makefile" ;;
   "src/editor/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/editor/Makefile" ;;
   "depfiles" ) CONFIG_COMMANDS="$CONFIG_COMMANDS depfiles" ;;

@@ -1,4 +1,4 @@
-//  $Id: tile_selector.cxx,v 1.4 2003/09/12 16:31:21 grumbel Exp $
+//  $Id: tile_selector.cxx,v 1.5 2003/09/12 20:17:06 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -22,7 +22,7 @@
 #include "../globals.hxx"
 #include "../tile_factory.hxx"
 #include "../tile.hxx"
-#include "scripting.hxx"
+#include "src/scripting/editor.hxx"
 #include "tile_selector.hxx"
 
 TileSelector::TileSelector(int width, int height, CL_Component* parent)

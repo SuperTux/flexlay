@@ -1,4 +1,4 @@
-//  $Id: tile.cxx,v 1.1 2003/08/11 10:04:38 grumbel Exp $
+//  $Id: tile.cxx,v 1.2 2003/08/11 19:50:12 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -22,6 +22,7 @@
 Tile::Tile(CL_Sprite arg_sur, unsigned char arg_colmap[])
   : sur(arg_sur)
 {
+  //sur.set_alignment(origin_center, 0, 0);
   memcpy(colmap, arg_colmap, 8);
 }
 

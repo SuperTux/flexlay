@@ -1,4 +1,4 @@
-//  $Id: editor_tilemap.cxx,v 1.1 2003/08/10 19:56:40 grumbel Exp $
+//  $Id: editor_tilemap.cxx,v 1.2 2003/08/11 19:50:12 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -28,7 +28,7 @@ EditorTileMap::EditorTileMap (int width, int height)
   for (unsigned int y = 0; y < field->get_height (); ++y) {
     for (unsigned int x = 0; x < field->get_width (); ++x)
       {
-	field->at (x, y) = new EditorTile ("none");
+	field->at(x, y) = new EditorTile (0);
       }
   }  
 }
@@ -43,7 +43,7 @@ EditorTileMap::EditorTileMap (const std::string& filename)
   for (unsigned int y = 0; y < field->get_height (); ++y) {
     for (unsigned int x = 0; x < field->get_width (); ++x)
       {
-	std::string name = data.get_field()->at(x, y);
+	int name = data.get_field()->at(x, y);
 	field->at (x, y) = new EditorTile (name);
       }
   }
@@ -91,7 +91,7 @@ EditorTileMap::save (const std::string& filename)
 	  out << "<row>" << std::endl;
 	  for (unsigned int x = 0; x < field->get_width (); ++x)
 	    {
-	      out << "<tile>" << field->at (x, y)->get_name () << "</tile>" << std::endl;
+	      out << "<tile>" << field->at (x, y)->get_id() << "</tile>" << std::endl;
 	    }
 	  out << "</row>" << std::endl;
 	}

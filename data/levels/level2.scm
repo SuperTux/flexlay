@@ -2,113 +2,13 @@
  (properties
   (name "Hello World"))
  (tilemap (width 10) (height 9)
+          (data  0  0  0  0  0  0  0  0  0  0
+                 0  0  0  0  0  0  0  0  0  0
+                 0  0  0  0  0  0  0  0  0  0
+                 0  0  0  0  0  0  0  0  0  0
+                 0  0  0  0  0  0  0  0  0  0
+                 3  2  2  2  4  3  2  2  2  4
+                 1  1  1  1  1  1  1  1  1  1
+                 1  1  1  1  1  1  1  1  1  1)))
 
-          (row
-           (tile "none")
-           (tile "none")
-           (tile "none")
-           (tile "none")
-           (tile "none")
-           (tile "none")
-           (tile "none")
-           (tile "none")
-           (tile "none")
-           (tile "none")
-           )
-
-          (row
-           (tile "none")
-           (tile "none")
-           (tile "none")
-           (tile "none")
-           (tile "none")
-           (tile "none")
-           (tile "none")
-           (tile "none")
-           (tile "none")
-           (tile "none"))
-
-          (row
-           (tile "none")
-           (tile "none")
-           (tile "none")
-           (tile "none")
-           (tile "none")
-           (tile "none")
-           (tile "none")
-           (tile "none")
-           (tile "none")
-           (tile "none"))
-
-          (row
-           (tile "none")
-           (tile "none")
-           (tile "none")
-           (tile "none")
-           (tile "none")
-           (tile "none")
-           (tile "none")
-           (tile "none")
-           (tile "none")
-           (tile "none"))
-
-          (row
-           (tile "none")
-           (tile "none")
-           (tile "none")
-           (tile "none")
-           (tile "none")
-           (tile "none")
-           (tile "none")
-           (tile "none")
-           (tile "none")
-           (tile "none"))
-
-          (row
-           (tile "none")
-           (tile "none")
-           (tile "none")
-           (tile "none")
-           (tile "none")
-           (tile "none")
-           (tile "none")
-           (tile "none")
-           (tile "none")
-           (tile "none"))
-
-          (row
-           (tile "tiles/tile3")
-           (tile "tiles/tile2")
-           (tile "tiles/tile2")           
-           (tile "tiles/tile2")
-           (tile "tiles/tile4")
-           (tile "tiles/tile3")
-           (tile "tiles/tile2")
-           (tile "tiles/tile2")           
-           (tile "tiles/tile2")
-           (tile "tiles/tile4"))
-
-          (row
-           (tile "tiles/tile1")
-           (tile "tiles/tile1")
-           (tile "tiles/tile1")           
-           (tile "tiles/tile1")
-           (tile "tiles/tile1")
-           (tile "tiles/tile1")
-           (tile "tiles/tile1")
-           (tile "tiles/tile1")           
-           (tile "tiles/tile1")
-           (tile "tiles/tile1"))
-
-          (row
-           (tile "tiles/tile1")
-           (tile "tiles/tile1")
-           (tile "tiles/tile1")           
-           (tile "tiles/tile1")
-           (tile "tiles/tile1")
-           (tile "tiles/tile1")
-           (tile "tiles/tile1")
-           (tile "tiles/tile1")           
-           (tile "tiles/tile1")
-           (tile "tiles/tile1"))
-          ))
+;; EOF ;;

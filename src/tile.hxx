@@ -1,4 +1,4 @@
-//  $Id: tile.hxx,v 1.2 2003/08/11 11:18:11 grumbel Exp $
+//  $Id: tile.hxx,v 1.3 2003/08/11 19:50:12 grumbel Exp $
 // 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -40,7 +40,7 @@ public:
   {
     assert(x < 8);
     assert(y < 8);
-    return (colmap[y] & (1 << x));
+    return (colmap[y] & (1 << (7-x)));
   }
 };
 

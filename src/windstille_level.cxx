@@ -1,4 +1,4 @@
-//  $Id: windstille_level.cxx,v 1.3 2003/08/11 08:03:23 grumbel Exp $
+//  $Id: windstille_level.cxx,v 1.4 2003/08/11 19:50:12 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -102,9 +102,9 @@ WindstilleLevel::parse_tilemap (SCM cur)
   int width  = gh_scm2int(gh_cadar(cur));
   int height = gh_scm2int(gh_car(gh_cdadr(cur)));
   
-  std::cout << "Size: " << width << "x" << height << std::endl;
+  std::cout << "\nSize: " << width << "x" << height << std::endl;
   
-  field = new Field<std::string>(width, height);
+  field = new Field<int>(width, height);
 
   cur = gh_cddr(cur);
   
@@ -115,18 +115,25 @@ WindstilleLevel::parse_tilemap (SCM cur)
       SCM name = gh_caar(cur);
       SCM data = gh_cdar(cur);
       
-      if (gh_equal_p(gh_symbol2scm("row"), name))
+      if (gh_equal_p(gh_symbol2scm("data"), name))
         {
-          x = 0;
-          while (!gh_null_p(data) && x < width)
+          while (!gh_null_p(data) && y < height)
             {
-              std::string str = scm2string(gh_cadar(data));
-              std::cout << "Tile (" << x << ", " << y << "): " << str << std::endl;
-              (*field)(x, y) = str;
-              data = gh_cdr(data);
+              int id = gh_scm2int(gh_car(data));
+              std::cout << "Tile (" << x << ", " << y << "): " << id << std::endl;
+              (*field)(x, y) = id;
+              
               x += 1;
+
+              if (x >= width)
+                {
+                  x = 0;
+                  y += 1;
+                }
+              
+              data = gh_cdr(data);
             }
-          y += 1;
+          assert(y != height);
         }
           
       cur = gh_cdr(cur);

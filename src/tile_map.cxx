@@ -1,4 +1,4 @@
-//  $Id: tile_map.cxx,v 1.4 2003/08/11 11:18:11 grumbel Exp $
+//  $Id: tile_map.cxx,v 1.5 2003/08/11 19:50:12 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -22,6 +22,7 @@
 #include "tile_map.hxx"
 #include "windstille_level.hxx"
 #include "tile.hxx"
+#include "tile_factory.hxx"
 #include "globals.hxx"
 
 extern CL_ResourceManager* resources;
@@ -36,44 +37,7 @@ TileMap::TileMap (WindstilleLevel* data)
   for (unsigned int y = 0; y < field.get_height (); ++y) {
     for (unsigned int x = 0; x < field.get_width (); ++x)
       {
-        unsigned char cole[8] = { 0, 0, 0, 0, 0, 0, 0, 0 };
-        unsigned char colf[8] = { 255, 255, 255, 255, 255, 255, 255, 255 };
-        unsigned char* col = colf;
-
-	std::string name = (*data->get_field()) (x, y);
-	if (name == "tiles/green1" ||
-            name == "tiles/tile3"  ||
-            name == "tiles/tile2"  ||
-            name == "tiles/tile4"  ||
-	    name == "tiles/tile10" ||
-	    name == "tiles/tile15" ||
-	    name == "tiles/tile16" ||
-	    name == "tiles/tile6" ||
-	    name == "tiles/tile7" ||
-	    name == "tiles/tile8" ||
-	    name == "tiles/tile64" ||
-	    name == "tiles/tile65" ||
-	    name == "tiles/tile66" ||
-	    name == "tiles/tile67" ||
-	    name == "tiles/tile68" ||
-	    name == "tiles/tile69" ||
-	    name == "tiles/tile70" ||
-	    name == "tiles/tile71" ||
-	    name == "tiles/tile72" ||
-	    name == "tiles/tile73" ||
-	    name == "tiles/tile74" ||
-	    name == "tiles/tile75" ||
-	    name == "tiles/tile76" ||
-	    name == "tiles/tile77" ||
-            name == "none")
-          {
-            col = cole;
-          }
-
-	if (name != "none")
-	  field (x, y) = new Tile (CL_Sprite(name, resources), col);
-	else
-	  field (x, y) = 0;
+        field(x, y) = TileFactory::current()->create((*data->get_field())(x, y));
       }
     std::cout << std::endl;
   }
@@ -97,7 +61,8 @@ TileMap::draw ()
 	//field (x,y)->sur->setScale (2.0f, 2.0f);
 	if (field (x,y))
 	  {
-	    field (x,y)->sur.draw (x * TILE_SIZE + TILE_SIZE/2, y * TILE_SIZE + TILE_SIZE/2);
+	    field (x,y)->sur.draw (x * TILE_SIZE, 
+                                   y * TILE_SIZE);
             for(int tile_y = 0; tile_y < 8; ++tile_y)
               for(int tile_x = 0; tile_x < 8; ++tile_x)
                 {

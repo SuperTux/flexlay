@@ -28,8 +28,8 @@
     </sprite>
   </section>
   <section name="turrican">
-    <sprite name="jump" translation_hotspot="top_left,29,82">
-      <image file="images/sprite_jump_east.png" name="image1" />
+    <sprite name="jump">
+      <image file="images/sprite_jump_east.png" name="image1" translation_hotspot="top_left,29,82" />
     </sprite>
     <sprite name="walk" translation_hotspot="top_left,29,85">
       <image file="images/turrican_jump_east.png" name="image1" />

@@ -1,4 +1,4 @@
-//  $Id: editor_tile.cxx,v 1.1 2003/08/10 19:56:40 grumbel Exp $
+//  $Id: editor_tile.cxx,v 1.2 2003/08/11 19:50:12 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -23,12 +23,12 @@
 
 EditorTile::EditorTile ()
 {
-  set_tile ("none");
+  set_tile (0);
 }
 
-EditorTile::EditorTile (const std::string& str)
+EditorTile::EditorTile (int id)
 {
-  set_tile (str);
+  set_tile (0);
 }
 
 void
@@ -51,21 +51,17 @@ EditorTile::draw (int x, int y)
 }
 
 void
-EditorTile::set_tile (const std::string& str)
+EditorTile::set_tile (int arg_id)
 {
-  //std::cout << "str: " << str << std::endl;
-  if (str == "none")
+  if (arg_id == 0)
     {
       sprite = 0;
-      name = str;
+      id     = 0;
     }
   else
     {
       assert (false);
-#if 0
-      sprite = sprite_storage->create (str.c_str ());
-#endif
-      name = str;
+      id = arg_id;
     }
 }
 

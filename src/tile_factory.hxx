@@ -1,4 +1,4 @@
-//  $Id: tile_factory.hxx,v 1.3 2003/08/11 11:18:11 grumbel Exp $
+//  $Id: tile_factory.hxx,v 1.4 2003/08/11 19:50:12 grumbel Exp $
 // 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -29,13 +29,20 @@ class Tile;
 class TileFactory
 {
 private:
-  std::map<std::string, Tile*> tiles;
+  typedef std::map<int, Tile*> Tiles;
+  Tiles tiles;
 
   static TileFactory* current_;
 public:
   /** Create a TileFactory from a given tile definition file */
   TileFactory (const std::string& filename);
 
+  /** Check if the tile is already loaded and return it. If it is not
+   *  already loaded, load it 
+   *
+   *  @param id The id of the tile to create as defined in the def. file
+   *
+   *  @return on success the tile is returned, on failure 0 */
   Tile* create(int id);
 
   /** Create the default TileFactor*/

@@ -1,4 +1,4 @@
-//  $Id: game_world.cxx,v 1.2 2003/08/11 08:03:23 grumbel Exp $
+//  $Id: game_world.cxx,v 1.3 2003/08/11 19:50:12 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -37,11 +37,11 @@ GameWorld::GameWorld (const std::string& filename)
 void
 GameWorld::draw ()
 {
-  tilemap->draw ();
-
   for (std::list<GameObj*>::iterator i = objects.begin ();
        i != objects.end (); ++i)
     (*i)->draw ();
+
+  tilemap->draw ();
 }
 
 void

@@ -1,4 +1,4 @@
-//  $Id: tile_factory.cxx,v 1.3 2003/08/11 11:18:11 grumbel Exp $
+//  $Id: tile_factory.cxx,v 1.4 2003/08/11 19:50:12 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -18,8 +18,12 @@
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include <iostream>
+#include "string_converter.hxx"
 #include "scm_helper.hxx"
+#include "tile.hxx"
 #include "tile_factory.hxx"
+
+extern CL_ResourceManager* resources;
 
 TileFactory* TileFactory::current_ = 0;
 
@@ -123,14 +127,30 @@ TileFactory::parse_tile(SCM data)
             << int(colmap[6]) << ", "
             << int(colmap[7])
             << std::endl;
+
+  tiles[id] = new Tile(CL_Sprite(image, resources), colmap);
 }
 
-/** Check if the tile is already loaded and return it. If it is not
-    already loaded, load it */
 Tile* 
 TileFactory::create (int id)
 {
-  
+  // id 0 is always the empty tile
+  if (id == 0)
+    { 
+      return 0;
+    }
+  else
+    {
+      Tiles::iterator i = tiles.find(id);
+      if (i != tiles.end())
+        {
+          return i->second;
+        }
+      else
+        {
+          return 0;
+        }
+    } 
 }
 
 void

@@ -1,4 +1,4 @@
-//  $Id: windstille_level.hxx,v 1.2 2003/08/10 22:55:50 grumbel Exp $
+//  $Id: windstille_level.hxx,v 1.3 2003/08/11 19:50:12 grumbel Exp $
 // 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -27,12 +27,12 @@
 class WindstilleLevel
 {
 private:
-  Field<std::string>* field;
+  Field<int>* field;
 
 public:
   WindstilleLevel (const std::string& filename);
 
-  Field<std::string>* get_field () const { return field; }
+  Field<int>* get_field () const { return field; }
 private:
   void parse_file (const std::string& filename);
   void parse_properties (SCM cur);

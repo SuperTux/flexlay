@@ -1,4 +1,4 @@
-//  $Id: editor_tile.hxx,v 1.1 2003/08/10 19:56:40 grumbel Exp $
+//  $Id: editor_tile.hxx,v 1.2 2003/08/11 19:50:12 grumbel Exp $
 // 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -27,14 +27,14 @@ class EditorTile
 {
 private:
   CL_Sprite* sprite;
-  std::string name;
+  int id;
 public:
-  EditorTile (const std::string&);
+  EditorTile (int id);
   EditorTile ();
 
-  void set_tile (const std::string&);
+  void set_tile (int id);
   void draw (int x, int y);
-  std::string get_name () const { return name; } 
+  int  get_id () const { return id; } 
 };
 
 #endif

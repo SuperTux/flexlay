@@ -1,4 +1,4 @@
-//  $Id: collision_mask.hxx,v 1.3 2003/09/01 23:43:16 grumbel Exp $
+//  $Id: collision_mask.hxx,v 1.4 2003/09/02 13:51:43 grumbel Exp $
 // 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -20,6 +20,7 @@
 #ifndef HEADER_COLLISION_MASK_HXX
 #define HEADER_COLLISION_MASK_HXX
 
+#include <assert.h>
 #include <ClanLib/Core/IOData/datatypes.h>
 
 typedef unsigned int cm_uint32;
@@ -27,8 +28,9 @@ typedef unsigned int cm_uint32;
 /** */
 class CollisionMask
 {
+public:
+  static const unsigned int int_width;
 private:
-  static const int int_width;
   cm_uint32* data;
 
   /** Width of the collision mask in cm_uint32's */
@@ -52,7 +54,13 @@ public:
    *  @param x  X in tile units (pixels/32)
    *  @param y  Y in pixel units
    */
-  inline cm_uint32 get_line(int x, int y) const;
+  inline cm_uint32 get_line(int x, int y) const
+  {
+    assert(x >= 0 && y >= 0 && x < pitch && y < height);
+    
+    return data[y * pitch + x];
+  }
+
 
   inline void put_pixel(int x, int y, bool pixel);
   inline bool get_pixel(int x, int y) const;

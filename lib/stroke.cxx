@@ -31,6 +31,37 @@ public:
   // its for caching only and can be generated
   //typedef std::vector<CL_Pointf> Normals;
   //Normals normals;
+
+  mutable bool bounding_rect_needs_recalc;
+  mutable CL_Rectf bounding_rect;
+
+  CL_Rectf calc_bounding_rect() const
+  {
+    CL_Rectf rect;
+
+    // FIXME: Keep the drawer into account (ie. brushsize)
+    if (dabs.size() > 0)
+      {
+        rect.left = rect.right  = dabs.front().pos.x;
+        rect.top  = rect.bottom = dabs.front().pos.y;
+
+        for(Stroke::Dabs::const_iterator i = dabs.begin()+1; i != dabs.end(); ++i)
+          {
+            rect.left = std::min(i->pos.x, rect.left);
+            rect.top  = std::min(i->pos.y, rect.top);
+
+            rect.right  = std::max(i->pos.x, rect.right);
+            rect.bottom = std::max(i->pos.y, rect.bottom);
+          }
+      }
+    
+    return rect;
+  }
+
+  StrokeImpl() 
+    : bounding_rect_needs_recalc(true)
+  {
+  }
 };
 
 Stroke::Stroke() 
@@ -134,5 +165,17 @@ Stroke::add_dab(const Dab& dab)
       // FIXME: Need to take brush size into account
     }
 */
+
+CL_Rectf
+Stroke::get_bounding_rect() const
+{
+  if (impl->bounding_rect_needs_recalc)
+    {
+      impl->bounding_rect = impl->calc_bounding_rect();
+      impl->bounding_rect_needs_recalc = false;
+    }
+  
+  return impl->bounding_rect;
+}
 
 /* EOF */

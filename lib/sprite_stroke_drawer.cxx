@@ -129,6 +129,7 @@ SpriteStrokeDrawerImpl::draw_dab(const Dab& dab, CL_GraphicContext* gc)
 
         case SpriteStrokeDrawer::DM_SHADER:
           {
+#if 0 
             CL_OpenGLState state(gc);
             state.set_active();
             state.setup_2d();
@@ -186,6 +187,7 @@ SpriteStrokeDrawerImpl::draw_dab(const Dab& dab, CL_GraphicContext* gc)
             
             state.set_active();
             clUseProgram(0);
+#endif
           }
           break;
               

@@ -22,6 +22,7 @@
 
 #include <vector>
 #include <ClanLib/Core/Math/point.h>
+#include <ClanLib/Core/Math/rect.h>
 #include <ClanLib/Core/System/system.h>
 #include "shared_ptr.hxx"
 
@@ -29,6 +30,9 @@ class StrokeImpl;
 class StrokeDrawer;
 class CL_GraphicContext;
 
+/** A dab is basically an event send from the mouse to the drawing
+    canvas, it consists of time, position, tilt, pressure and possible
+    additional information that is needed */
 class Dab
 {
 public:
@@ -58,11 +62,12 @@ public:
   {}
 };
 
+/** A Stroke is a series of Dabs */
 class Stroke
 {
 public:
   typedef std::vector<Dab> Dabs;
-
+  
   Stroke();
 
   void draw(CL_GraphicContext* gc) const;
@@ -73,6 +78,8 @@ public:
   Dabs  get_dabs()  const;
 
   int get_dab_count() const;
+
+  CL_Rectf get_bounding_rect() const;
 private:
   SharedPtr<StrokeImpl> impl;
 };

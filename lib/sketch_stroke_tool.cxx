@@ -105,7 +105,7 @@ public:
 
     if (CL_Display::get_current_window()->get_ic()->get_mouse_count() >= 4)
       {
-        CL_InputDevice tablet = CL_Display::get_current_window()->get_ic()->get_mouse(3);
+        CL_InputDevice tablet = CL_Display::get_current_window()->get_ic()->get_mouse(5);
 
         if (0)
           {

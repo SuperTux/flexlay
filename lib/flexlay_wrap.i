@@ -205,4 +205,5 @@ VALUE CL_Point2Value(const CL_Point& arg)
 
 #endif
 
+
 /* EOF */

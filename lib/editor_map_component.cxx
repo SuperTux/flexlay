@@ -177,7 +177,7 @@ EditorMapComponent::zoom_to(CL_Rectf rect)
   impl->workspace.get_gc_state().zoom_to(rect);
 }
 
-CL_Rect
+CL_Rectf
 EditorMapComponent::get_clip_rect()
 {
   return impl->workspace.get_gc_state().get_clip_rect();

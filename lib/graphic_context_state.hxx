@@ -44,7 +44,7 @@ public:
 
   /** Return a rectangle in world coordinates that represents the area
       visible on the screen */
-  CL_Rect get_clip_rect();
+  CL_Rectf get_clip_rect();
 
   int get_width()  const;
   int get_height() const;

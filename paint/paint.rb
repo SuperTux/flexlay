@@ -26,7 +26,7 @@ require "sexpr.rb"
 
 flexlay = Flexlay.new()
 
-$screen_rect = CL_Rect.new(CL_Point.new(0, 0), CL_Size.new(1152, 864))
+$screen_rect = CL_Rect.new(CL_Point.new(0, 0), CL_Size.new(800, 600))
 
 flexlay.init($screen_rect.get_width(), $screen_rect.get_height(), false)
 

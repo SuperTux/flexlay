@@ -107,7 +107,8 @@ class GUI
     (type, sprite) = get_ruby_object(brush.get_data()) # object type 'groundpiece'
     
     worldobj = WorldObj.new(type, sprite)
-    
+
+    puts "String: #{worldobj.get_image()}"
     obj = ObjMapSpriteObject.new(CL_Sprite.new(worldobj.get_image(), $resources), 
                                  pos, 
                                  make_metadata(worldobj))

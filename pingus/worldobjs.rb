@@ -154,6 +154,8 @@ class WorldObj
         
       when "ROT90"
       when "ROT180"
+        @data.flip_vertical()
+        @data.flip_horizontal()
       when "ROT270"
       when "ROT0FLIP"
         @data.flip_horizontal()

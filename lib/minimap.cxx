@@ -120,7 +120,7 @@ Minimap::draw()
                                    CL_Size(get_width(), get_height())));
 
       // Draw cursor
-      CL_Rect rect = impl->parent->get_clip_rect();
+      CL_Rect rect(impl->parent->get_clip_rect());
       CL_Rect screen_rect(CL_Point(rect.left  * get_width()  / map_width,
                                    rect.top   * get_height() / map_height),
                           CL_Size(rect.get_width() * get_width() /map_width,

@@ -103,9 +103,18 @@ public:
             parent->get_workspace().get_gc_state().push(canvas->get_gc());
             canvas->get_gc()->clear(CL_Color(0, 0, 0, 0));
             //canvas->get_gc()->clear(CL_Color::white);
+
+            CL_Rectf visible_area = parent->get_clip_rect();
+
             for(Strokes::iterator i = strokes.begin(); i != strokes.end(); ++i)
               {
-                i->draw(canvas->get_gc());
+                // canvas->get_gc()->draw_rect(i->get_bounding_rect(), CL_Color(0, 255, 0));
+                // canvas->get_gc()->flush();
+
+                if (visible_area.is_overlapped(i->get_bounding_rect()))
+                  {
+                    i->draw(canvas->get_gc());
+                  }
               }
             parent->get_workspace().get_gc_state().pop(canvas->get_gc());
 

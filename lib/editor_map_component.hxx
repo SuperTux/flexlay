@@ -61,7 +61,7 @@ public:
 
   CL_Pointf screen2world(const CL_Point& pos);
 
-  CL_Rect get_clip_rect();
+  CL_Rectf get_clip_rect();
 
 private:
   SharedPtr<EditorMapComponentImpl> impl;

@@ -153,7 +153,7 @@ TilemapLayerImpl::draw(EditorMapComponent* parent)
                           this->background_color);
   CL_Display::flush();
 
-  CL_Rect rect = parent->get_clip_rect();
+  CL_Rect rect(parent->get_clip_rect());
 
   int start_x = std::max(0, rect.left / tile_size);
   int start_y = std::max(0, rect.top  / tile_size);

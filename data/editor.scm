@@ -58,6 +58,8 @@
   (push-last-file filename))
 
 (define (save-map filename)
+  (rename-file filename (string-append filename "~"))
+
   (let ((level (serialize-level)))
     (with-output-to-file filename
       (lambda ()

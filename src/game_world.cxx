@@ -1,4 +1,4 @@
-//  $Id: game_world.cxx,v 1.13 2003/09/13 18:01:17 grumbel Exp $
+//  $Id: game_world.cxx,v 1.14 2003/09/26 14:29:35 grumbel Exp $
 //
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -39,7 +39,7 @@ GameWorld::GameWorld (int w, int h)
 
   tilemap            = new TileMap(w, h);
   background_tilemap = new TileMap(w, h);
-  diamond_map        = new DiamondMap(w, h);
+  diamond_map        = new DiamondMap(new Field<int>(w, h));
   water_map          = new WaterMap();
 }
 
@@ -52,8 +52,10 @@ GameWorld::GameWorld (const std::string& filename)
   
   tilemap            = new TileMap(level.get_tilemap());
   background_tilemap = new TileMap(level.get_background_tilemap());
-  diamond_map = new DiamondMap(50, 50);
-  water_map   = new WaterMap();
+  diamond_map        = new DiamondMap(level.get_diamond_map());
+  water_map          = new WaterMap();
+
+  scripts = *level.get_scripts();
 }
 
 GameWorld::~GameWorld()
@@ -118,6 +120,16 @@ GameWorld::remove_player (Player* obj)
 { 
   objects.remove (obj); 
   player_objects.remove (obj); 
+}
+
+void
+GameWorld::on_startup()
+{
+  for (std::vector<std::string>::iterator i = scripts.begin();
+       i != scripts.end(); ++i)
+    {
+      gh_load((datadir + "levels/" + *i).c_str());
+    }
 }
 
 /* EOF */

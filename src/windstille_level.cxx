@@ -1,4 +1,4 @@
-//  $Id: windstille_level.cxx,v 1.11 2003/09/24 18:19:13 grumbel Exp $
+//  $Id: windstille_level.cxx,v 1.12 2003/09/26 14:29:36 grumbel Exp $
 //
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -80,6 +80,10 @@ WindstilleLevel::parse_file (const std::string& filename)
                 {
                   parse_diamond_map(data);
                 }
+              else if (gh_equal_p(gh_symbol2scm("scripts"), name)) 
+                {
+                  parse_scripts(data);
+                }
               else
                 {
                   std::cout << "WindstilleLevel: Unknown tag: " << scm2string(name) << std::endl;
@@ -92,7 +96,11 @@ WindstilleLevel::parse_file (const std::string& filename)
           tree = gh_cdr(tree);
         }
     }
-
+  if (!diamond_map)
+    {
+      std::cout << "No diamond map in level file" << std::endl;
+      diamond_map = new Field<int>(width * 2, height * 2);
+    }
 }
 
 void
@@ -209,7 +217,7 @@ WindstilleLevel::parse_tilemap (SCM cur)
 void
 WindstilleLevel::parse_diamond_map(SCM data)
 {
-  diamond_map = new Field<int>(width, height);
+  diamond_map = new Field<int>(width * 2, height * 2);
 
   for(Field<int>::iterator i = diamond_map->begin(); i != diamond_map->end(); ++i)
     {
@@ -219,13 +227,13 @@ WindstilleLevel::parse_diamond_map(SCM data)
   int x = 0;
   int y = 0;
 
-  while (!gh_null_p(data) && y < height)
+  while (!gh_null_p(data) && y < height*2)
     {
       (*diamond_map)(x, y) = gh_scm2int(gh_car(data));
               
       x += 1;
 
-      if (x >= width)
+      if (x >= width*2)
         {
           x = 0;
           y += 1;
@@ -234,8 +242,21 @@ WindstilleLevel::parse_diamond_map(SCM data)
       data = gh_cdr(data);
     }
 
-  if (y != height)
+  if (y != height*2)
     std::cout << "WindstilleLevel: Something went wrong: y=" << y << " height=" << height << std::endl;
+}
+
+void
+WindstilleLevel::parse_scripts(SCM data)
+{
+  while (!gh_null_p(data))
+    {
+      char* str = gh_scm2newstr(gh_car(data), 0);
+      scripts.push_back(str);
+      free(str);
+
+      data = gh_cdr(data);
+    }
 }
 
 void

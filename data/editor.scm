@@ -21,13 +21,17 @@
 (define (serialize-level)
   `(windstille-level
     (properties
-     (name "Hello World"))
+     (name "Hello World")
+     (width  ,(map-get-width))
+     (height ,(map-get-height)))
+    (scripts ,@(map-get-scripts))
     (tilemap
-     (width ,(map-get-width)) (height ,(map-get-height))
      (data ,@(map-get-data 1)))
     (background-tilemap
-     (width ,(map-get-width)) (height ,(map-get-height))
-     (data ,@(map-get-data 0)))))
+     (data ,@(map-get-data 0)))
+    (diamond-map
+     ,@(diamond-map-get-data)
+     )))
 
 (define (save-map filename)
   (let ((level (serialize-level)))
@@ -76,7 +80,8 @@
 
 (editor-add-button-func 260 0
                         80 25 "Diamonds" 
-                        (lambda () (tilemap-set-active-layer 1)))
+                        (lambda ()
+                          (tilemap-set-active-layer 1)))
 
 
 (editor-add-button-func (- screen-width 80)
@@ -92,9 +97,9 @@
                      
 (editor-add-button-func (+ 100)
                    (- screen-height 25)
-                   100 25 "Tile Erase" 
+                   100 25 "Diamond" 
                    (lambda ()
-                     (editor-set-brush-tile 0)))
+                     (editor-set-tool 2)))
 
 (editor-add-button-func (+ 200)
                    (- screen-height 25)

@@ -1,4 +1,4 @@
-//  $Id: editor_tilemap.cxx,v 1.13 2003/09/24 18:19:13 grumbel Exp $
+//  $Id: editor_tilemap.cxx,v 1.14 2003/09/26 14:29:36 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -26,6 +26,7 @@
 #include "../tile_factory.hxx"
 #include "tilemap_paint_tool.hxx"
 #include "tilemap_select_tool.hxx"
+#include "tilemap_diamond_tool.hxx"
 #include "editor_tilemap.hxx"
 
 EditorTileMap::EditorTileMap(CL_Component* parent)
@@ -52,6 +53,7 @@ EditorTileMap::EditorTileMap(CL_Component* parent)
 
   tools.push_back(new TileMapPaintTool(this));
   tools.push_back(new TileMapSelectTool(this));
+  tools.push_back(new TileMapDiamondTool(this));
 
   tool = tools[0];
 }
@@ -193,6 +195,8 @@ EditorTileMap::draw ()
                                         current_field->get_height() * TILE_SIZE)),
                         CL_Color(0, 0, 150, 255));
 
+  CL_Display::flush();
+
   for(Fields::iterator i = fields.begin(); i != fields.end();++i) 
     draw_map(*i);
   
@@ -201,6 +205,7 @@ EditorTileMap::draw ()
     {
       tool->draw();
     }
+  CL_Display::flush();
 
   if (diamond_map)
     {
@@ -231,9 +236,19 @@ EditorTileMap::screen2tile(const CL_Point& pos)
                   
 }
 
+CL_Point
+EditorTileMap::screen2world(const CL_Point& pos)
+{
+  int x = int(pos.x - trans_offset.x);
+  int y = int(pos.y - trans_offset.y);
+
+  return CL_Point(x, y);                  
+}
+
 void
 EditorTileMap::cleanup()
 {
+  scripts.clear();
   for (Fields::iterator i = fields.begin(); i != fields.end(); ++i)
     {
       delete *i;
@@ -277,6 +292,7 @@ EditorTileMap::load(const std::string& filename)
   }
 
   diamond_map = new Field<int>(*data.get_diamond_map());
+  scripts = *data.get_scripts();
 }
 
 EditorTile*
@@ -292,36 +308,6 @@ EditorTileMap::get_tile (int x, int y)
 void
 EditorTileMap::save (const std::string& filename)
 {
-#if 0
-  std::ofstream out (filename.c_str ());
-  
-  if (out)
-    {
-      out << "<windstille-level>\n"
-	  << "  <properties>\n"
-	  << "    <levelname>Bla</levelname>\n"
-	  << "  </properties>\n" << std::endl;
-
-      out << "<tilemap width=\"" << field->get_width () << "\" height=\"" << field->get_height () << "\">";
-
-      for (unsigned int y = 0; y < field->get_height (); ++y)
-	{
-	  out << "<row>" << std::endl;
-	  for (unsigned int x = 0; x < field->get_width (); ++x)
-	    {
-	      out << "<tile>" << field->at (x, y)->get_id() << "</tile>" << std::endl;
-	    }
-	  out << "</row>" << std::endl;
-	}
-
-      out << "</tilemap>";
-      out << "</windstille-level>" << std::endl;
-    }
-  else
-    {
-      std::cout << "Write error" << std::endl;
-    }
-#endif
 }
 
 void
@@ -336,6 +322,10 @@ EditorTileMap::set_tool(int i)
 {
   if (i >= 0 && i < int(tools.size()))
     tool = tools[i];
+  else
+    {
+      std::cout << "Only have " << tools.size() << " tools, tool " << i << " can't be selected." << std::endl;
+    }
 }
 
 void

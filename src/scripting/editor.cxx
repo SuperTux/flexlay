@@ -1,4 +1,4 @@
-//  $Id: editor.cxx,v 1.5 2003/09/23 22:07:32 grumbel Exp $
+//  $Id: editor.cxx,v 1.6 2003/09/26 14:29:36 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -195,6 +195,24 @@ CL_Component* window_get_client_area(CL_Component* comp)
   return comp->get_client_area();
 }
 
+SCM diamond_map_get_data()
+{
+  Field<int>* field = Editor::current()->get_editor_tilemap()->get_diamond_map();
+  
+  if (field)
+    {
+      SCM vec = SCM_EOL;
+      for (Field<int>::iterator i = field->begin(); i != field->end(); ++i)
+        vec = gh_cons(gh_int2scm(*i), vec);
+
+      return gh_reverse(vec);
+    }
+  else
+    {
+      return SCM_EOL;
+    }
+}
+
 SCM map_get_data(int i)
 {
   Field<EditorTile*>* field = Editor::current()->get_editor_tilemap()->get_map(i);
@@ -324,6 +342,20 @@ SCM get_tile_defs()
       lst = gh_cons(get_tile_def((*i).second), lst);
     }
 
+  return gh_reverse(lst);
+}
+
+SCM map_get_scripts()
+{
+  SCM lst = SCM_EOL;
+
+  std::vector<std::string> scripts = Editor::current()->get_editor_tilemap()->get_scripts();
+  for (std::vector<std::string>::iterator i = scripts.begin(); 
+       i != scripts.end(); ++i)
+    {
+      lst = gh_cons(gh_str02scm(i->c_str()), lst);
+    }
+  
   return gh_reverse(lst);
 }
 

@@ -1,4 +1,4 @@
-//  $Id: diamond_map.hxx,v 1.2 2003/09/24 18:19:13 grumbel Exp $
+//  $Id: diamond_map.hxx,v 1.3 2003/09/26 14:29:35 grumbel Exp $
 // 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -20,20 +20,18 @@
 #ifndef HEADER_DIAMOND_MAP_HXX
 #define HEADER_DIAMOND_MAP_HXX
 
-#include <vector>
 #include <ClanLib/display.h>
+#include "field.hxx"
 
 /** */
 class DiamondMap
 {
 private:
-  int width;
-  int height;
+  Field<int> dmap;
   CL_Sprite sprite;
-  std::vector<bool> dmap;
   int num_diamonds;
 public:
-  DiamondMap(int w, int h);
+  DiamondMap(Field<int>* d);
   virtual ~DiamondMap();
 
   void draw ();

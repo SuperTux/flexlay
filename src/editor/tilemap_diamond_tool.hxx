@@ -1,4 +1,4 @@
-//  $Id: tilemap_diamond_tool.hxx,v 1.1 2003/09/23 22:07:32 grumbel Exp $
+//  $Id: tilemap_diamond_tool.hxx,v 1.2 2003/09/26 14:29:36 grumbel Exp $
 // 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -20,10 +20,16 @@
 #ifndef HEADER_TILEMAP_DIAMOND_TOOL_HXX
 #define HEADER_TILEMAP_DIAMOND_TOOL_HXX
 
+#include <ClanLib/Display/sprite.h>
+#include "tilemap_tool.hxx"
+
 /** */
-class TileMapDiamondTool
+class TileMapDiamondTool : public TileMapTool
 {
 private:
+  CL_Sprite sprite;
+  bool painting;
+  bool color;
 public:
   TileMapDiamondTool(EditorTileMap* t);
   ~TileMapDiamondTool();
@@ -35,6 +41,8 @@ public:
   void on_mouse_move(const CL_InputEvent& event);
 
 private:
+  void paint(const CL_Point&);
+
   TileMapDiamondTool (const TileMapDiamondTool&);
   TileMapDiamondTool& operator= (const TileMapDiamondTool&);
 };

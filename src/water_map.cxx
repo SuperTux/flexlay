@@ -1,4 +1,4 @@
-//  $Id: water_map.cxx,v 1.2 2003/09/12 20:17:06 grumbel Exp $
+//  $Id: water_map.cxx,v 1.3 2003/09/26 14:29:35 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -38,10 +38,10 @@ WaterMap::draw()
   for (Waters::iterator i = waters.begin(); i != waters.end(); ++i)
     {
       // Transform subtile CO to pixels
-      int x = i->x * SUBTILE_SIZE;
-      int y = i->y * SUBTILE_SIZE;
-      int w = i->w * SUBTILE_SIZE;
-      int h = i->h * SUBTILE_SIZE;
+      int x = i->x;
+      int y = i->y;
+      int w = i->w;
+      int h = i->h;
 
       CL_Display::fill_rect(CL_Rect(x, y, x + w, y + 15), 
                             CL_Gradient(CL_Color(200, 200, 200, 128),
@@ -100,9 +100,9 @@ WaterMap::update(float delta)
   for (Waters::iterator i = waters.begin(); i != waters.end(); ++i)
     {
       // Transform subtile CO to pixels
-      int x = i->x * SUBTILE_SIZE;
-      int y = i->y * SUBTILE_SIZE;
-      int w = i->w * SUBTILE_SIZE;
+      int x = i->x;
+      int y = i->y;
+      int w = i->w;
 
       if (pos.x > x && pos.x < x + w)
         {

@@ -1,4 +1,4 @@
-//  $Id: editor_tilemap.hxx,v 1.9 2003/09/24 18:19:13 grumbel Exp $
+//  $Id: editor_tilemap.hxx,v 1.10 2003/09/26 14:29:36 grumbel Exp $
 // 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -49,6 +49,7 @@ private:
   TileMapTool* tool;
 
   Field<int>* diamond_map;
+  std::vector<std::string> scripts;
 
   void cleanup();
 public:
@@ -72,6 +73,7 @@ public:
 
   /** Return the current active field */
   Field<EditorTile*>* get_field() { return current_field; }
+  Field<int>*         get_diamond_map() { return diamond_map; }
 
   EditorTile* get_tile (int, int);
   void set_active_layer(int i);
@@ -83,10 +85,14 @@ public:
   CL_Rect get_clip_rect();
   
   Field<EditorTile*>* get_map(int i);
+
   int get_width()  { return current_field->get_width(); }
   int get_height() { return current_field->get_height(); }
 
+  std::vector<std::string> get_scripts() { return scripts; }
+
   CL_Point screen2tile(const CL_Point& pos);
+  CL_Point screen2world(const CL_Point& pos);
 };
 
 #endif

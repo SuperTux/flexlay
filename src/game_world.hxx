@@ -1,4 +1,4 @@
-//  $Id: game_world.hxx,v 1.7 2003/09/23 19:33:43 grumbel Exp $
+//  $Id: game_world.hxx,v 1.8 2003/09/26 14:29:35 grumbel Exp $
 // 
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -21,6 +21,8 @@
 #define GAMEWORLD_HXX
 
 #include <list>
+#include <vector>
+#include <string>
 
 class TileMap;
 class DiamondMap;
@@ -38,6 +40,8 @@ private:
   float passed_time;
   DiamondMap* diamond_map;
   WaterMap*   water_map;
+
+  std::vector<std::string> scripts;
 
   static GameWorld* current_;
 public:
@@ -65,6 +69,8 @@ public:
 
   /** return height in pixels */
   int get_height () const;
+
+  void on_startup();
 
   std::list<Player*>* get_players () { return &player_objects; }
 

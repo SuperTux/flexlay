@@ -1,4 +1,4 @@
-//  $Id: game.cxx,v 1.9 2003/09/23 10:48:03 grumbel Exp $
+//  $Id: game.cxx,v 1.10 2003/09/26 14:29:36 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -28,9 +28,10 @@
 #include "player.hxx"
 
 void
-game_add_water(int x, int y, int w, int h)
+game_add_water(int x1, int y1, int x2, int y2)
 {
-  GameWorld::current()->get_watermap()->add_water(x, y, w, h);
+  GameWorld::current()->get_watermap()->add_water(x1, y1,
+                                                  x2 - x1, y2 - y1);
 }
 
 void

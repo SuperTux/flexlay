@@ -1,4 +1,4 @@
-//  $Id: windstille_game.cxx,v 1.19 2003/09/21 17:34:00 grumbel Exp $
+//  $Id: windstille_game.cxx,v 1.20 2003/09/26 14:29:36 grumbel Exp $
 //
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -158,6 +158,8 @@ WindstilleGame::on_startup ()
   slots.connect(CL_Mouse::sig_key_down(), this, &WindstilleGame::on_mouse_down);
   slots.connect(CL_Mouse::sig_key_up(), this, &WindstilleGame::on_mouse_up);
   slots.connect(CL_Keyboard::sig_key_down(), this, &WindstilleGame::on_key_down);
+
+  world->on_startup();
 }
 
 void

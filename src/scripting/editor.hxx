@@ -1,4 +1,4 @@
-//  $Id: editor.hxx,v 1.5 2003/09/23 22:07:32 grumbel Exp $
+//  $Id: editor.hxx,v 1.6 2003/09/26 14:29:36 grumbel Exp $
 // 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -56,6 +56,8 @@ void editor_quit();
 int  screen_get_width();
 int  screen_get_height();
 
+SCM  diamond_map_get_data();
+SCM  map_get_scripts();
 SCM  map_get_data(int i);
 int  map_get_width();
 int  map_get_height();

@@ -48,6 +48,7 @@ private:
   bool draw_attribute;
 
   static TileMap* current_;
+
 public:
   static TileMap* current() { return current_; }
   static void set_current(TileMap* c) { current_ = c; }

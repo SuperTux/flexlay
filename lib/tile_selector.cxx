@@ -49,6 +49,24 @@ TileSelector::~TileSelector()
   std::cout << "~TileSelector()" << std::endl;
 }
 
+CL_Rect 
+TileSelector::get_selection()
+{
+  CL_Rect selection(current_pos.x, current_pos.y, 
+                    region_select_start.x, region_select_start.y);
+
+  selection.normalize();
+  selection.right  += 1;
+  selection.bottom += 1;
+
+  selection.left  = Math::mid(0, selection.left, width);
+  selection.right = Math::mid(0, selection.right, width);
+
+  selection.top    = Math::max(0, selection.top);
+  
+  return selection;
+}
+
 void
 TileSelector::mouse_up(const CL_InputEvent& event)
 {
@@ -60,17 +78,9 @@ TileSelector::mouse_up(const CL_InputEvent& event)
   else if (event.id == CL_MOUSE_RIGHT)
     {
       release_mouse();
+      region_select = false;
 
-      CL_Rect selection(current_pos.x, current_pos.y, 
-                        region_select_start.x, region_select_start.y);
-      selection.normalize();
-      selection.right  += 1;
-      selection.bottom += 1;
-
-      selection.left  = Math::mid(0, selection.left, width);
-      selection.right = Math::mid(0, selection.right, width);
-
-      selection.top    = Math::max(0, selection.top);
+      CL_Rect selection = get_selection();
       //selection.bottom = Math::mid(0, selection.right, width);
 
       TileBrush brush(selection.get_width(), selection.get_height());
@@ -161,7 +171,7 @@ TileSelector::draw()
   CL_Display::push_modelview();
   CL_Display::add_translate(0, -offset);
 
-  // FIXME: add right click support here
+  // Draw tiles
   for(int i = 0; i < int(tiles.size()); ++i)
     {
       int x = i % width;
@@ -198,6 +208,18 @@ TileSelector::draw()
           CL_Display::fill_rect(rect, CL_Color(0,0,255, 20));
         }
     }
+
+  if (region_select)
+    {
+      CL_Rect rect = get_selection();
+
+      rect.top    *= static_cast<int>(tileset.get_tile_size()*scale);
+      rect.bottom *= static_cast<int>(tileset.get_tile_size()*scale);
+      rect.left   *= static_cast<int>(tileset.get_tile_size()*scale);
+      rect.right  *= static_cast<int>(tileset.get_tile_size()*scale);
+
+      CL_Display::fill_rect(rect, CL_Color(0,0,255, 100));
+    }
   
   CL_Display::pop_modelview();
   CL_Display::pop_modelview();
@@ -229,6 +251,7 @@ void
 TileSelector::set_tiles(const Tiles& t)
 {
   tiles = t;
+  offset = 0;
 }
 
 /* EOF */

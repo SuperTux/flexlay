@@ -30,10 +30,12 @@ class MenubarImpl;
 /** */
 class Menubar : public CL_Component
 {
+protected:
+  virtual ~Menubar() {}
 public:
   Menubar(const CL_Point& pos, CL_Component* parent);
 
-  void add_submenu(const std::string& name, const Menu& menu);
+  void add_submenu(const std::string& name, Menu* menu);
 private:
   SharedPtr<MenubarImpl> impl;
 };

@@ -30,7 +30,8 @@ class IconImpl;
 /** */
 class Icon : public CL_Component
 {
-private:
+protected:
+  virtual ~Icon() {}
 public:
   Icon(const CL_Rect& rect, const CL_Sprite& sprite, const std::string& tooltip, CL_Component* parent);
 

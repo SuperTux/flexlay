@@ -33,9 +33,10 @@ private:
   Tile* tile;
   CL_SlotContainer slots;
   CL_Point mouse_pos;
+protected:
+  virtual ~TileEditor();
 public:
   TileEditor(int x, int y, int w, int h, CL_Component* parent);
-  virtual ~TileEditor();
   
   void draw();
   void mouse_move(const CL_InputEvent& event);

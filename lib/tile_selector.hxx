@@ -50,12 +50,12 @@ private:
 
   Tileset tileset;
 
+protected:
+  virtual ~TileSelector();
 public:
   /** width and height in number of tiles */
   TileSelector(const CL_Rect& rect, CL_Component* parent);
   
-  ~TileSelector();
-
   void set_tileset(Tileset t);
   void set_tiles(const Tiles& t);
   Tiles get_tiles() const;
@@ -70,6 +70,8 @@ public:
   CL_Point get_mouse_tile_pos(const CL_InputEvent& event);
 
 private:
+  CL_Rect get_selection();
+
   void mouse_move(const CL_InputEvent& event);
   void mouse_down(const CL_InputEvent& event);
   void mouse_up  (const CL_InputEvent& event);

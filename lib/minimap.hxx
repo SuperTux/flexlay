@@ -27,6 +27,8 @@ class MinimapImpl;
 /** */
 class Minimap : public CL_Component
 {
+protected:
+  virtual ~Minimap() {}
 public:
   Minimap(EditorMapComponent* p, const CL_Rect& rect, CL_Component* parent);
   

@@ -29,6 +29,8 @@ class ViewportImpl;
 /** */
 class Viewport : public CL_Component
 {
+protected:
+  virtual ~Viewport() {}
 public:
   Viewport(CL_Component* child, const CL_Rect& rect, CL_Component* parent);
   

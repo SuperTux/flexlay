@@ -23,11 +23,11 @@
 class MenubarItem
 {
 public:
-  MenubarItem(const std::string& name_, const Menu& menu_)
+  MenubarItem(const std::string& name_, Menu* menu_)
     : name(name_), menu(menu_){}
 
   std::string name;
-  Menu menu;
+  Menu* menu;
 };
 
 class MenubarImpl
@@ -45,7 +45,7 @@ Menubar::Menubar(const CL_Point& pos, CL_Component* parent)
 }
 
 void
-Menubar::add_submenu(const std::string& name, const Menu& menu)
+Menubar::add_submenu(const std::string& name, Menu* menu)
 {
   impl->items.push_back(MenubarItem(name, menu));
 }

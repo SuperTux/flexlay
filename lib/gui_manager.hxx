@@ -29,12 +29,13 @@ class GUIManager
 {
 private:
   static GUIManager* current_;
+
 public:
   static GUIManager* current() { return current_; }
 
   GUIManager();
   ~GUIManager();
-  
+
   void draw();
   void update();
 

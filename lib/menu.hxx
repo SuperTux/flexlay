@@ -33,9 +33,11 @@ typedef int MenuItemHandle;
 /** */
 class Menu : public CL_Component
 {
+protected:
+  virtual ~Menu();
+
 public:
   Menu(const CL_Point& pos, CL_Component* parent);
-  virtual ~Menu();
 
   void clear();
 

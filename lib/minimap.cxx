@@ -63,6 +63,9 @@ Minimap::Minimap(EditorMapComponent* p, const CL_Rect& rect,
 void
 Minimap::draw()
 {
+  if (!impl->parent || impl->parent->get_workspace().is_null())
+    return;
+
   CL_Display::push_translate(get_screen_x(), get_screen_y());
 
   // FIXME: Do this only on map changes

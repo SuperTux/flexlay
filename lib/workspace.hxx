@@ -52,6 +52,8 @@ public:
   GraphicContextState& get_gc_state();
 
   void set_tool(const Tool& tool);
+
+  bool is_null() const { return !impl.get(); }
 private:
   CL_SharedPtr<WorkspaceImpl> impl;
 };

@@ -29,11 +29,11 @@ class WindowImpl;
 /** */
 class Window : public CL_Component
 {
-private:
+protected:
+  virtual ~Window();
 public:
   Window(const CL_Rect& rect, const std::string& title, CL_Component* parent);
-  virtual ~Window();
-
+  
   void hide();
   void show();
 

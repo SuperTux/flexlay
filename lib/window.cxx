@@ -86,7 +86,7 @@ Window::Window(const CL_Rect& rect, const std::string& title, CL_Component* pare
 
 Window::~Window()
 {
-  delete impl->client_area;
+  std::cout << "deleting: Window" << std::endl;
 }
 
 void

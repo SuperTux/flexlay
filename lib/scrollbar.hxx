@@ -29,6 +29,8 @@ class ScrollbarImpl;
 /** */
 class Scrollbar : public CL_Component
 {
+protected:
+  virtual ~Scrollbar() {}
 public:
   enum Orientation { HORIZONTAL, VERTICAL };
 

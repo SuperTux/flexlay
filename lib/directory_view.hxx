@@ -29,9 +29,10 @@ class DirectoryViewImpl;
 class DirectoryView : public CL_Component
 {
 private:
+protected:
+  virtual ~DirectoryView();
 public:
   DirectoryView(const CL_Rect& rect, CL_Component* parent);
-  ~DirectoryView();
 
   /** Set the directory which should be shown */
   void set_directory(const std::string& path_);

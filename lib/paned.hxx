@@ -23,6 +23,8 @@
 /** */
 class Paned : public CL_Component
 {
+protected:
+  virtual Paned() {}
 public:
   Paned(CL_Component* parent);
   

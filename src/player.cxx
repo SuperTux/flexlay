@@ -1,4 +1,4 @@
-//  $Id: player.cxx,v 1.3 2003/08/11 11:18:11 grumbel Exp $
+//  $Id: player.cxx,v 1.4 2003/08/11 20:26:07 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -29,12 +29,12 @@ Player::Player (Controller* c) :
   pos (320, 500),
   velocity (0, 0),
   
-  walk     ("turrican/walk", resources),
-  jump     ("turrican/jump", resources),
-  stand    ("turrican/stand", resources),
-  shild    ("turrican/shild", resources),
-  sit      ("turrican/sit", resources),
-  roll     ("turrican/roll", resources),
+  walk     ("turrican/walk",     resources),
+  jump     ("turrican/jump",     resources),
+  stand    ("turrican/stand",    resources),
+  shild    ("turrican/shild",    resources),
+  sit      ("turrican/sit",      resources),
+  roll     ("turrican/roll",     resources),
   surround ("turrican/surround", resources),
 
   state (WALKING),
@@ -42,6 +42,13 @@ Player::Player (Controller* c) :
   ground_state (IN_AIR),
   shild_time (0)
 {  
+  walk.set_alignment(origin_bottom_center);
+  jump.set_alignment(origin_bottom_center);
+  stand.set_alignment(origin_bottom_center);
+  shild.set_alignment(origin_bottom_center);
+  roll.set_alignment(origin_bottom_center);
+  surround.set_alignment(origin_bottom_center);
+
   direction = WEST;
 }
 
@@ -96,6 +103,10 @@ Player::draw ()
 	  shild.draw (int(pos.x), int(pos.y));
 	}
     }
+
+  CL_Display::fill_rect(CL_Rect(int(pos.x - 5), int(pos.y - 5),
+                                int(pos.x + 5), int(pos.y + 5)),
+                        CL_Color(255, 255, 255));
 }
 
 void 
@@ -137,13 +148,13 @@ Player::update_shooting (float delta)
       switch (gun_state)
 	{
 	case GUN_READY:
-	  if (controller->fire_pressed ()) {
-
-	    //get_world ()->add (new DefaultShoot (pos, (DefaultShoot::DirectionState) direction));
-	    get_world ()->add (new LaserShoot (pos, direction, 5));
-	    gun_state = GUN_RELOADING;
-	    reload_time = 0;
-	  }
+	  if (controller->fire_pressed ()) 
+            {
+              //get_world ()->add (new DefaultShoot (pos, (DefaultShoot::DirectionState) direction));
+              get_world ()->add (new LaserShoot (pos, direction, 5));
+              gun_state = GUN_RELOADING;
+              reload_time = 0;
+            }
 	  break;
 	case GUN_RELOADING:
 	  if (reload_time > 1)
@@ -159,19 +170,28 @@ Player::update_ground (float delta)
 {
   velocity = CL_Vector();
 
-  if (controller->jump_pressed ()) {
-    velocity.y = -1000;
-    ground_state = IN_AIR;
-  } else if (controller->is_down () &&
-	     controller->smartbomb_pressed ()) {
-    state = ROLLING;
-  } else if  (controller->is_down ()) {
-    state = SITTING;
-  } else if  (controller->is_left () || controller->is_right ()) {
-    state = WALKING;
-  } else {
-    state = STANDING;
-  }
+  if (controller->jump_pressed ()) 
+    {
+      velocity.y = -1000;
+      ground_state = IN_AIR;
+    } 
+  else if (controller->is_down () &&
+           controller->smartbomb_pressed ()) 
+    {
+      state = ROLLING;
+    } 
+  else if  (controller->is_down ()) 
+    {
+      state = SITTING;
+    }
+  else if  (controller->is_left () || controller->is_right ()) 
+    {
+      state = WALKING;
+    } 
+  else
+    {
+      state = STANDING;
+    }
 
   if (state == WALKING)
     {
@@ -205,15 +225,18 @@ Player::update_air (float delta)
   pos += velocity * delta;
   velocity.y += 1500 * delta;
 
-  if (on_ground () && velocity.y > 0) {
-    ground_state = ON_GROUND;
-    // Cut the position to the tile
-    pos.y = int(pos.y / TILE_SIZE) * TILE_SIZE + TILE_SIZE/2;
-  } 
-  if (stuck ()) {
-    pos.y = tmp_y_pos;
-    velocity.y = 0;
-  }
+  if (on_ground () && velocity.y > 0) 
+    {
+      ground_state = ON_GROUND;
+      // Cut the position to the tile size 
+      pos.y = int(pos.y / SUBTILE_SIZE) * SUBTILE_SIZE;
+    } 
+  
+  if (stuck ()) 
+    {
+      pos.y = tmp_y_pos;
+      velocity.y = 0;
+    }
 }
   
 void 
@@ -231,13 +254,13 @@ Player::set_direction (Direction dir)
 bool
 Player::on_ground ()
 {
-  return get_world ()->get_tilemap()->is_ground (pos.x, pos.y+TILE_SIZE/2);
+  return get_world ()->get_tilemap()->is_ground(pos.x, pos.y+16);
 }
 
 bool 
 Player::stuck ()
 {
-  return get_world ()->get_tilemap()->is_ground (pos.x, pos.y);
+  return get_world ()->get_tilemap()->is_ground(pos.x, pos.y);
 }
 
 void

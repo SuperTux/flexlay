@@ -200,6 +200,7 @@
     <sprite name="tile1">
       <image file="images/tiles/tile1.png" name="image1" />
     </sprite>
+
     <sprite name="tile10">
       <image file="images/tiles/level1/tile10.png" name="image1" />
     </sprite>
@@ -324,7 +325,7 @@
       <image file="images/tiles/level1/tile49.png" name="image1" />
     </sprite>
     <sprite name="tile5">
-      <image file="images/tiles/level1/tile5.png" name="image1" />
+      <image file="images/tiles/tile5.png" name="image1" />
     </sprite>
     <sprite name="tile50">
       <image file="images/tiles/level1/tile50.png" name="image1" />

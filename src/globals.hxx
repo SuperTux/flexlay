@@ -1,4 +1,4 @@
-//  $Id: globals.hxx,v 1.3 2003/08/11 08:03:23 grumbel Exp $
+//  $Id: globals.hxx,v 1.4 2003/08/11 20:26:07 grumbel Exp $
 // 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -25,7 +25,8 @@
 
 typedef enum { WEST, EAST} Direction;
 
-#define TILE_SIZE 128
+#define TILE_SIZE    128
+#define SUBTILE_SIZE  16
 
 extern CL_ResourceManager* resources;
 

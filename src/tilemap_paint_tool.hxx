@@ -52,7 +52,6 @@ public:
   const TileBrush& get_brush() { return brush; }
   void set_brush(const TileBrush& b);
   void draw();
-  void set_tilemap(TilemapLayer t) { tilemap = t; }
 
 private:
   void on_mouse_down(const CL_InputEvent& event);

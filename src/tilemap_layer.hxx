@@ -34,12 +34,13 @@ class EditorMapComponent;
 class TilemapLayer
 {
 private:
-  static TilemapLayer* current_;
+  static TilemapLayerImpl* current_;
 public:
-  static TilemapLayer* current();
-  static void set_current(TilemapLayer* t);
+  static TilemapLayer current();
+  static void set_current(TilemapLayer t);
 
   TilemapLayer();
+  TilemapLayer(TilemapLayerImpl* i);
   TilemapLayer(Tileset* tileset, int w,  int h);
   ~TilemapLayer();
 
@@ -91,7 +92,7 @@ public:
       coordinate */
   CL_Point world2tile(const CL_Point& pos) const;
 
-  bool is_null() const { return impl.is_null(); }
+  bool is_null() const { return !impl.get(); }
 
   Layer to_layer();
 

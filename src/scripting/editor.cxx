@@ -927,7 +927,7 @@ tileset_create(int tile_size)
 
 void connect(CL_Signal_v0& sig, PyObject* obj)
 {
-  std::cout << "Connecting functor: " << std::endl;
+  //std::cout << "Connecting functor: " << std::endl;
   new CL_Slot(sig.connect_functor(PythonFunctor(obj)));
 }
 
@@ -969,11 +969,6 @@ workspace_create()
 {
   return new Workspace(EditorMapComponent::current()->get_width(),
                        EditorMapComponent::current()->get_height());
-}
-
-void tilemap_paint_tool_set_tilemap(TilemapLayer tilemap)
-{
-  TileMapPaintTool::current()->set_tilemap(tilemap);
 }
 
 /* EOF */

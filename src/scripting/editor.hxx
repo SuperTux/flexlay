@@ -69,7 +69,6 @@ void tilemap_object_tool_clear_selection();
 CL_Component* editor_add_tileeditor(int x, int y, int w, int h);
 
 void tileeditor_set_tile(CL_Component* comp, int id);
-void tilemap_paint_tool_set_tilemap(TilemapLayer tilemap);
 
 int  screen_get_width();
 int  screen_get_height();

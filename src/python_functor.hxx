@@ -20,7 +20,7 @@
 #ifndef HEADER_PYTHON_FUNCTOR_HXX
 #define HEADER_PYTHON_FUNCTOR_HXX
 
-#include <boost/python.hpp>
+#include <ClanLib/Core/System/sharedptr.h>
 #include "Python.h"
 
 /** */

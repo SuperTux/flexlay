@@ -131,7 +131,6 @@ def do_editor():
     m.add_layer(tilemap.to_layer())
         
     TilemapLayer_set_current(tilemap)
-    tilemap_paint_tool_set_tilemap(tilemap)
     
     editor_set_brush_tile(1)
     
@@ -209,15 +208,7 @@ def do_editor():
     a = menu.add_item("File/Save...", menu_file_save)
     a = menu.add_item("File/Save As...", menu_file_save_as)
 
-    print "- entering main loop"
     gui.run()
-
-    del button1
-    del button2
-    del button3
-    del button4
-    del window
-    print "- exit main loop"
 
 do_editor()
 

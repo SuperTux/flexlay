@@ -57,7 +57,7 @@ TileMapSelectTool::on_mouse_up  (const CL_InputEvent& event)
       creating_selection = false;
       parent->release_mouse();
 
-      selection.update(TilemapLayer::current()->world2tile(parent->screen2world(event.mouse_pos)));
+      selection.update(TilemapLayer::current().world2tile(parent->screen2world(event.mouse_pos)));
       break;
     }
 }
@@ -73,8 +73,8 @@ TileMapSelectTool::on_mouse_down(const CL_InputEvent& event)
       {
         creating_selection = true;
         parent->capture_mouse();
-        TilemapLayer* tilemap = TilemapLayer::current();
-        selection.start(*tilemap, tilemap->world2tile(parent->screen2world(event.mouse_pos)));
+        TilemapLayer tilemap = TilemapLayer::current();
+        selection.start(tilemap, tilemap.world2tile(parent->screen2world(event.mouse_pos)));
       }
       break;
       
@@ -92,15 +92,15 @@ TileMapSelectTool::on_mouse_move(const CL_InputEvent& event)
 
   if (creating_selection)
     {
-      selection.update(TilemapLayer::current()->world2tile(parent->screen2world(event.mouse_pos)));
+      selection.update(TilemapLayer::current().world2tile(parent->screen2world(event.mouse_pos)));
     }
 }
 
 TileBrush
 TileMapSelectTool::get_selection() const
 {
-  TilemapLayer* tilemap = TilemapLayer::current();
-  return selection.get_brush(*tilemap->get_field());
+  TilemapLayer tilemap = TilemapLayer::current();
+  return selection.get_brush(*tilemap.get_field());
 }
 
 /* EOF */

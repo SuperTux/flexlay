@@ -26,8 +26,12 @@ Layer::Layer(LayerImpl* i)
 }
 
 Layer::Layer()
-  : impl(0)
 {  
+}
+
+Layer::Layer(CL_SharedPtr<LayerImpl> i)
+  : impl(i)
+{
 }
 
 void

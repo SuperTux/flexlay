@@ -65,18 +65,18 @@ Minimap::draw()
     }
 
   // FIXME: This doesn't work all that well
-  TilemapLayer* tilemap = TilemapLayer::current();
-  int tile_size = tilemap->get_tileset()->get_tile_size();
+  TilemapLayer tilemap = TilemapLayer::current();
+  int tile_size = tilemap.get_tileset()->get_tile_size();
 
-  if (tilemap && tilemap->get_height() != 0 && tilemap->get_width() != 0)
+  if (!tilemap.is_null() && tilemap.get_height() != 0 && tilemap.get_width() != 0)
     {
-      int map_width  = tilemap->get_width()  * tile_size;
-      int map_height = tilemap->get_height() * tile_size;
+      int map_width  = tilemap.get_width()  * tile_size;
+      int map_height = tilemap.get_height() * tile_size;
 
       CL_Size small_tile(tile_size * get_width() / map_width + 1,
                          tile_size * get_height() / map_height + 1);
 
-      Field<int>* field = tilemap->get_field();
+      Field<int>* field = tilemap.get_field();
 
       if (0)
         {
@@ -113,17 +113,17 @@ void
 Minimap::update_minimap_surface()
 {
   // FIXME: This doesn't work all that well
-  TilemapLayer* tilemap = TilemapLayer::current();
-
-  if (tilemap)
-    {
-      Field<int>* field = tilemap->get_field();
-
-      CL_PixelBuffer buffer(tilemap->get_width(), tilemap->get_height(), 
-                            tilemap->get_width()*4, CL_PixelFormat::rgba8888);
+  TilemapLayer tilemap = TilemapLayer::current();
   
-      int map_width  = tilemap->get_width();
-      int map_height = tilemap->get_height();
+  if (!tilemap.is_null())
+    {
+      Field<int>* field = tilemap.get_field();
+
+      CL_PixelBuffer buffer(tilemap.get_width(), tilemap.get_height(), 
+                            tilemap.get_width()*4, CL_PixelFormat::rgba8888);
+  
+      int map_width  = tilemap.get_width();
+      int map_height = tilemap.get_height();
 
       unsigned char* buf = static_cast<unsigned char*>(buffer.get_data());
       for(int y = 0; y < map_height; ++y)
@@ -154,10 +154,10 @@ void
 Minimap::mouse_move(const CL_InputEvent& event)
 {
   // FIXME: This doesn't work all that well
-  TilemapLayer* tilemap = TilemapLayer::current();
-  int tile_size  = tilemap->get_tileset()->get_tile_size();
-  int map_width  = tilemap->get_width()  * tile_size;
-  int map_height = tilemap->get_height() * tile_size;
+  TilemapLayer tilemap = TilemapLayer::current();
+  int tile_size  = tilemap.get_tileset()->get_tile_size();
+  int map_width  = tilemap.get_width()  * tile_size;
+  int map_height = tilemap.get_height() * tile_size;
 
   if (drag_active)
     parent->move_to(event.mouse_pos.x * map_width / get_width(),
@@ -168,10 +168,10 @@ void
 Minimap::mouse_down(const CL_InputEvent& event)
 {
   // FIXME: This doesn't work all that well
-  TilemapLayer* tilemap = TilemapLayer::current();
-  int tile_size  = tilemap->get_tileset()->get_tile_size();
-  int map_width  = tilemap->get_width()  * tile_size;
-  int map_height = tilemap->get_height() * tile_size;
+  TilemapLayer tilemap = TilemapLayer::current();
+  int tile_size  = tilemap.get_tileset()->get_tile_size();
+  int map_width  = tilemap.get_width()  * tile_size;
+  int map_height = tilemap.get_height() * tile_size;
 
   parent->move_to(event.mouse_pos.x * map_width / get_width(),
                   event.mouse_pos.y * map_height / get_height());

@@ -20,6 +20,7 @@
 #ifndef HEADER_WORKSPACE_HXX
 #define HEADER_WORKSPACE_HXX
 
+#include <ClanLib/Core/System/sharedptr.h>
 #include <ClanLib/Display/input_event.h>
 #include "graphic_context_state.hxx"
 #include "editor_map.hxx"

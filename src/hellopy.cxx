@@ -1,5 +1,5 @@
 #include <Python.h>
-#include <boost/python.hpp>
+#include <ClanLib/Core/System/sharedptr.h>
 #include <iostream>
 
 struct Callback

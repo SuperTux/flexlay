@@ -113,6 +113,8 @@ TileMapPaintTool::draw()
 void
 TileMapPaintTool::on_mouse_down(const CL_InputEvent& event)
 {
+  tilemap = TilemapLayer::current();
+
   if (!tilemap.is_null())
     {
       EditorMapComponent* parent = EditorMapComponent::current();

@@ -36,16 +36,16 @@
 #include "editor_map_component.hxx"
 #include "tilemap_layer.hxx"
 
-TilemapLayer* TilemapLayer::current_ = 0;
+TilemapLayerImpl* TilemapLayer::current_ = 0;
 
 class TilemapLayerImpl : public LayerImpl
 {
 public:
   TilemapLayerImpl() {
-    std::cout << "TilemapLayerImpl()" << std::endl;
+    std::cout << "TilemapLayerImpl(" << this << ")" << std::endl;
   }
   virtual ~TilemapLayerImpl() {
-    std::cout << "~TilemapLayerImpl()" << std::endl;
+    std::cout << "~TilemapLayerImpl(" << this << ")" << std::endl;
   }
 
   Tileset* tileset;
@@ -68,10 +68,15 @@ TilemapLayer::TilemapLayer()
 {
 }
 
+TilemapLayer::TilemapLayer(TilemapLayerImpl* i)
+  : impl(i)
+{
+}
+
 TilemapLayer::TilemapLayer(Tileset* tileset_, int w,  int h)
   : impl(new TilemapLayerImpl())
 {
-  current_ = this;
+  current_ = impl.get();
 
   impl->field = Field<int>(w, h);
 
@@ -347,16 +352,16 @@ TilemapLayer::get_field()
   return &impl->field; 
 }
 
-TilemapLayer*
+TilemapLayer
 TilemapLayer::current()
 {
-  return current_; 
+  return TilemapLayer(current_); 
 }
 
 void
-TilemapLayer::set_current(TilemapLayer* t) 
+TilemapLayer::set_current(TilemapLayer t) 
 {
-  current_ = t; 
+  current_ = t.impl.get();
 }
 
 Tileset*
@@ -416,7 +421,8 @@ TilemapLayerImpl::has_bounding_rect() const
 Layer
 TilemapLayer::to_layer()
 {
-  return Layer(impl);
+  // FIXME: BUG!!!!!
+  return Layer(impl.get());
 }
 
 /* EOF */

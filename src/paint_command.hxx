@@ -20,6 +20,7 @@
 #ifndef HEADER_PAINT_COMMAND_HXX
 #define HEADER_PAINT_COMMAND_HXX
 
+#include <ClanLib/Core/System/sharedptr.h>
 #include <ClanLib/Core/Math/point.h>
 #include "tile_brush.hxx"
 #include "tilemap_layer.hxx"

@@ -30,6 +30,21 @@
 	  ((pred? (car objs)) (loop (cdr objs) (cons (car objs) result)))
 	  (else (loop (cdr objs) result)))))
 
+(define (get-value-from-tree pos lst default)
+  (cond ((null? pos)
+         lst)
+        ((null? lst)
+         default)
+        ((equal? pos '(_))
+         (car lst))
+        (else
+         (let ((el (assoc-ref lst (car pos))))
+           (cond (el
+                  (get-value-from-tree (cdr pos) el default))
+                 (else
+                  default
+                  ))))))
+
 (load "gui.scm")
 
 ;; EOF ;;

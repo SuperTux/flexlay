@@ -44,8 +44,9 @@ public:
   iterator begin() { return tiles.begin(); }
   iterator end()   { return tiles.end(); }
 
-  /** Create a TileFactory from a given tile definition file */
-  TileFactory (const std::string& filename);
+  /** Create an empty TileFactory, so that the user can add stuff via
+      scripting to it */
+  TileFactory ();
 
   /** Check if the tile is already loaded and return it. If it is not
    *  already loaded, load it 
@@ -63,9 +64,10 @@ public:
 
   /** Access the default TileFactor*/
   static TileFactory* current() { return current_; }
+  static void set_current(TileFactory* c) { current_ = c; }
 
-private:
-  void parse_tile(SCM data);
+  void load_tile_file(const std::string& filename);
+  void add_tile(SCM data);
 };
 
 #endif

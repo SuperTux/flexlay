@@ -36,6 +36,8 @@
 #include "editor_tilemap.hxx"
 #include "editor_map_component.hxx"
 
+EditorTileMap* EditorTileMap::current_ = 0;
+
 EditorTileMap::EditorTileMap(int w, int h, int tile_size_)
   : tile_size(tile_size_), field(w, h)
 {

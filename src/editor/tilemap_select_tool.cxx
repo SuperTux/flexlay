@@ -97,8 +97,7 @@ TileMapSelectTool::on_mouse_move(const CL_InputEvent& event)
 TileBrush
 TileMapSelectTool::get_selection() const
 {
-  EditorTileMap* tilemap 
-    = dynamic_cast<EditorTileMap*>(EditorMapComponent::current()->get_map()->get_layer_by_name(TILEMAP_NAME));
+  EditorTileMap* tilemap = EditorTileMap::current();
   return selection.get_brush(*tilemap->get_field());
 }
 

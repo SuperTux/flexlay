@@ -92,7 +92,7 @@ game_set_tilesize(int size, int subsize)
 void
 game_load_tiles(const char* resourcefile)
 {
-  TileFactory::tile_def_file = resourcefile;
+  TileFactory::current()->load_tile_file(datadir + resourcefile);
 }
 
 void
@@ -120,27 +120,6 @@ void editor_undo()
   Editor::current()->undo();
 }
 
-EditorObjMap*
-editor_get_objmap()
-{
-  return dynamic_cast<EditorObjMap*>(EditorMapComponent::current()->get_map()->get_layer_by_name(OBJECTMAP_NAME));
-}
-
-/*EditorTileMap*
-editor_get_tilemap()
-{
-  EditorTileMap* tilemap 
-    = dynamic_cast<EditorTileMap*>(EditorMapComponent::current()->get_map()->get_layer_by_name(TILEMAP_NAME));
-
-  if (tilemap)
-    return tilemap;
-  else
-    {
-      assert(!"Error: Tilemap not found");
-      return 0;
-    }
-}*/
-
 int
 objectmap_add_object(EditorMapLayer* obj, const char* name, int x, int y, SCM userdata)
 {
@@ -165,11 +144,16 @@ objectmap_add_object(EditorMapLayer* obj, const char* name, int x, int y, SCM us
     }
 }
 
-int editor_objectmap_add_object(const char* name, int x, int y, SCM userdata)
+int editor_objectmap_add_object(EditorMapLayer* layer, const char* name, int x, int y, SCM userdata)
 {
-  int handle = editor_get_objmap()->add_object(CL_Sprite(name, resources), CL_Point(x, y), 
-                                               SCMObj(userdata));
-  return handle;
+  EditorObjMap* objmap = dynamic_cast<EditorObjMap*>(layer);
+  if (objmap)
+    {
+      int handle = objmap->add_object(CL_Sprite(name, resources), CL_Point(x, y), 
+                                      SCMObj(userdata));
+      return handle;
+    }
+  return -1;
 }
 
 void
@@ -212,6 +196,7 @@ obj2scm(const EditorObjMap::Obj& obj)
                  SCM_UNDEFINED); 
   return lst;
 }
+
 
 void
 object_selector_add_brush(CL_Component* comp, const char* name, SCM data)
@@ -267,52 +252,83 @@ scm2brush(SCM s_brush)
   return brush;
 }
 
+void
+editor_objectmap_set_current(EditorMapLayer* layer)
+{
+  EditorObjMap* objmap = dynamic_cast<EditorObjMap*>(layer);
+  EditorObjMap::set_current(objmap);
+}
+
+void
+editor_tilemap_set_current(EditorMapLayer* layer)
+{
+  EditorTileMap* tilemap = dynamic_cast<EditorTileMap*>(layer);
+  EditorTileMap::set_current(tilemap);
+}
+
 int
-editor_objectmap_duplicate_object(int id)
+editor_objectmap_duplicate_object(EditorMapLayer* layer, int id)
 {
-  return editor_get_objmap()->duplicate_object(id);
-}
-
-void
-editor_objectmap_delete_objects(SCM lst)
-{
-  ObjectDeleteCommand* command = new ObjectDeleteCommand(editor_get_objmap());
-  
-  std::vector<int> selection = scm2vector(lst);
-  for(std::vector<int>::const_iterator i = selection.begin(); i != selection.end(); ++i) {
-    command->add_object(*i);
-  }
-  Editor::current()->execute(command);
-}
-
-void
-tilemap_object_tool_set_objects(SCM lst)
-{
-  ObjMapSelectTool::Selection selection;
-  ObjMapSelectTool* tool 
-    = dynamic_cast<ObjMapSelectTool*>
-    (Editor::current()->get_tool_manager()->get_tool_by_name(OBJECT_TOOL_NAME));
-
-  while (!gh_null_p(lst))
+  EditorObjMap* objmap = dynamic_cast<EditorObjMap*>(layer);
+  if (objmap)
     {
-      ObjMapObject* obj = editor_get_objmap()->get_object(gh_scm2int(gh_car(lst)));
-
-      if (obj)
-        selection.push_back(obj);
-      else
-        std::cout << "Invalide handle: " << std::endl;
-
-      lst = gh_cdr(lst);
+      return objmap->duplicate_object(id);
     }
+  return -1;
+}  
+
+void
+editor_objectmap_delete_objects(EditorMapLayer* layer, SCM lst)
+{
+  EditorObjMap* objmap = dynamic_cast<EditorObjMap*>(layer);
+  if (objmap)
+    {
+      ObjectDeleteCommand* command = new ObjectDeleteCommand(objmap);
   
-  tool->set_selection(selection);
+      std::vector<int> selection = scm2vector(lst);
+      for(std::vector<int>::const_iterator i = selection.begin(); i != selection.end(); ++i) {
+        command->add_object(*i);
+      }
+      Editor::current()->execute(command);
+    }
 }
 
 void
-editor_objectmap_set_pos(int id, int x, int y)
+tilemap_object_tool_set_objects(EditorMapLayer* layer, SCM lst)
 {
-  ObjMapObject* obj = editor_get_objmap()->get_object(id);
-  obj->set_pos(CL_Point(x, y));
+  EditorObjMap* objmap = dynamic_cast<EditorObjMap*>(layer);
+  if (objmap)
+    {
+      ObjMapSelectTool::Selection selection;
+      ObjMapSelectTool* tool 
+        = dynamic_cast<ObjMapSelectTool*>
+        (Editor::current()->get_tool_manager()->get_tool_by_name(OBJECT_TOOL_NAME));
+
+      while (!gh_null_p(lst))
+        {
+          ObjMapObject* obj = objmap->get_object(gh_scm2int(gh_car(lst)));
+
+          if (obj)
+            selection.push_back(obj);
+          else
+            std::cout << "Invalide handle: " << std::endl;
+
+          lst = gh_cdr(lst);
+        }
+  
+      tool->set_selection(selection);
+    }
+}
+
+void
+editor_objectmap_set_pos(EditorMapLayer* layer, int id, int x, int y)
+{
+  EditorObjMap* objmap = dynamic_cast<EditorObjMap*>(layer);
+  if (objmap)
+    {
+      ObjMapObject* obj = objmap->get_object(id);
+      obj->set_pos(CL_Point(x, y));
+    }
 }
 
 SCM
@@ -379,11 +395,15 @@ editor_objectmap_get_object(EditorMapLayer* layer, int id)
 }
 
 void
-objmap_sprite_object_flip(int id)
+objmap_sprite_object_flip(EditorMapLayer* layer, int id)
 {
-  ObjMapSpriteObject* obj = dynamic_cast<ObjMapSpriteObject*>(editor_get_objmap()->get_object(id));
-  if (obj)
-    obj->flip_horizontal();
+  EditorObjMap* objmap = dynamic_cast<EditorObjMap*>(layer);
+  if (objmap)
+    {
+      ObjMapSpriteObject* obj = dynamic_cast<ObjMapSpriteObject*>(objmap->get_object(id));
+      if (obj)
+        obj->flip_horizontal();
+    }
 }
 
 void tilemap_resize(EditorMapLayer* m, int x, int y, int w, int h)
@@ -887,6 +907,15 @@ SCM
 editor_map_get_metadata(EditorMap* m)
 {
   return m->get_metadata().get_scm();
+}
+
+void
+tileset_add_tile(SCM data)
+{
+  if (TileFactory::current())
+    TileFactory::current()->add_tile(data);
+  else
+    std::cout << "No TileFactory present" << std::endl;
 }
 
 /* EOF */

@@ -177,11 +177,12 @@ EditorMain::main(int argc, char** argv)
     resources =  new CL_ResourceManager();
     resources->add_resources(CL_ResourceManager(datadir + "windstille.xml", false));
 
+    TileFactory::init();
+
     std::cout << "Loading Windstille startup script: " << game_definition_file << std::flush;
     gh_load((datadir + game_definition_file).c_str());
     std::cout << "done" << std::endl;
 
-    TileFactory::init();
     Editor editor;
 
     if (!levelfile.empty ())

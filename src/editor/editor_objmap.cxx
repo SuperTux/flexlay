@@ -25,6 +25,7 @@
 #include "editor_objmap.hxx"
 
 extern CL_ResourceManager* resources;
+EditorObjMap* EditorObjMap::current_ = 0;
 
 EditorObjMap::EditorObjMap()
 {

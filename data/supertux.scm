@@ -1,12 +1,39 @@
 (use-modules (oop goops))
+(load "helper.scm")
 (display "SuperTux Startup Script\n")
 
 (define *game* 'supertux)
 (define *tile-size* 32)
+(define *supertux:datadir* "/home/ingo/cvs/supertux/supertux/data/images/tilesets/")
 (game-set-tilesize 32 16)
 (game-load-resources "tuxtiles.xml")
 (game-load-resources "tuxsprites.xml")
-(game-load-tiles     "tuxtiles.scm")
+;;(game-load-tiles     "tuxtiles.scm")
+
+(define (supertux:load-tiles filename)
+  (with-input-from-file filename
+    (lambda ()
+      (let* ((data (read))
+             (ident (car data)))
+        (cond ((equal? ident 'supertux-tiles)
+               (for-each (lambda (el)
+                           (cond ((equal? (car el) 'tile)
+                                  (display (cdr el))(newline)
+                                  (tileset-add-tile 
+                                   (list (list 'id   
+                                               (get-value-from-tree '(id _) (cdr el) -1))
+                                         (list 'image 
+                                               (string-append *supertux:datadir* (get-value-from-tree '(images _) (cdr el) "notile.png")))
+                                         )))))
+                         (cdr data)))
+              (else
+               (error "Not a supertux tileset")))))))
+
+(supertux:load-tiles (string-append *supertux:datadir* "supertux.stgt"))
+
+;;(tileset-add-tile '((id 6)
+;;                    (image "/home/ingo/projects/windstille/trunk/data/images/tuxsprites/mrbomb.png")
+;;                    (colmap   0   0   0   0   0   0   0   0)))
 
 (set-window-title "Windstille Editor - SuperTux Mode")
 
@@ -14,10 +41,10 @@
 (define-class <supertux-level> ()
   (name   #:init-value "Hello World"
           #:accessor supertux:name)
-                                        ;  (width  #:init-value 20
-                                        ;          #:accessor supertux:width)
-                                        ;  (height #:init-value 15
-                                        ;          #:accessor supertux:height)
+  ;;  (width  #:init-value 20
+  ;;          #:accessor supertux:width)
+  ;;  (height #:init-value 15
+  ;;          #:accessor supertux:height)
   (background #:init-value "" 
               #:accessor supertux:background)
   (music      #:init-value "Mortimers_chipdisko.mod"
@@ -62,6 +89,8 @@
     
     ;; FIXME: this doesn't look all that nice here
     (tilemap-paint-tool-set-tilemap (supertux:interactive-tm level))
+    (editor-tilemap-set-current (supertux:interactive-tm level))
+    (editor-objectmap-set-current (supertux:objmap level))
 
     (editor-map-set-filename levelmap "/tmp/foobar.stlv")
     (editor-map-set-metadata levelmap level)
@@ -172,15 +201,62 @@
            (editor-error args)))
   (push-last-file filename))
 
+(define (supertux:translate-v0-tiles num)
+  (let ((transtbl '((#\0 0)
+                    (#\1 0)
+                    (#\2 0)
+                    (#\. 0)
+                    (#\x 104)
+                    (#\X 77)
+                    (#\y 78)
+                    (#\Y 105)
+                    (#\A 83)
+                    (#\B 102)
+                    (#\! 103)
+                    (#\a 84)
+                    (#\C 85)
+                    (#\D 86)
+                    (#\E 87)
+                    (#\F 88)
+                    (#\c 89)
+                    (#\d 90)
+                    (#\e 91)
+                    (#\f 92)
+                    (#\G 93)
+                    (#\H 94)
+                    (#\I 95)
+                    (#\J 96)
+                    (#\g 97)
+                    (#\h 98)
+                    (#\i 99)
+                    (#\j 100)
+                    (#\# 11)
+                    (#\[ 13 )
+                    (#\= 14)
+                    (#\] 15)
+                    (#\$ 82)
+                    (#\^ 76)
+                    (#\* 80)
+                    (#\| 79)
+                    (#\\ 81)
+                    (#\& 75))))
+    (let ((ret (assoc-ref transtbl (integer->char num))))
+      (cond (ret
+             (car ret))
+            (else
+             (format #t "couldn't translate ~a~%" num)
+             0)))))
+
 (define (supertux:create-level-map-from-file filename)
   (display "Loading SuperTux level: ")
   (display filename)
   (newline)
-  (let ((data (with-input-from-file filename
-                (lambda () (cdr (read)))))
-        (level (make <supertux-level>)))
+  (let* ((data (with-input-from-file filename
+                 (lambda () (cdr (read)))))
+         (level   (make <supertux-level>))
+         (version (get-value-from-tree '(version _) data 0)))
     ;; read in the level metadata
-    (set! (supertux:name  level)       (get-value-from-tree '(name _) data 20))
+    (set! (supertux:name  level)      (get-value-from-tree '(name _) data 20))
     (set! (supertux:theme level)      (get-value-from-tree '(theme _) data "antarctica"))
     (set! (supertux:music level)      (get-value-from-tree '(music _) data "Mortimers_chipdisko.mod"))
     (set! (supertux:background level) (get-value-from-tree '(background _)   data "arctis.png"))
@@ -219,12 +295,19 @@
             (editor-tilemap-set-data (supertux:background-tm level) background-tm)
             (display "Error: background-tm missing\n"))
 
+        (cond ((= version 0)
+               (let ((tilemap (get-value-from-tree '(interactive-tm) data '())))
+                 (editor-tilemap-set-data (supertux:interactive-tm level)
+                                          (map supertux:translate-v0-tiles tilemap)))))
+
         (display (supertux:interactive-tm level))(newline)
 
         (for-each (lambda (el)
                     (let ((x (get-value-from-tree '(x _) (cdr el) 0))
                           (y (get-value-from-tree '(y _) (cdr el) 0)))
                       (case (car el)
+                        ((money)
+                         (objectmap-add-object objmap "sprites/jumpy" x y '(money)))
                         ((mriceblock)
                          (objectmap-add-object objmap "sprites/mriceblock" x y '(mriceblock)))
                         ((mrbomb)
@@ -246,6 +329,8 @@
 
         ;; FIXME: this doesn't look all that nice here
         (tilemap-paint-tool-set-tilemap (supertux:interactive-tm level))
+        (editor-tilemap-set-current (supertux:interactive-tm level))
+        (editor-objectmap-set-current (supertux:objmap level))
 
         (editor-map-set-filename m filename)
         (editor-map-set-metadata m level)
@@ -256,18 +341,18 @@
     (case layer
       ((background)
        (editor-tilemap-set-fgcolor (supertux:background-tm  level) 255 255 255 255)
-       (editor-tilemap-set-fgcolor (supertux:interactive-tm level) 255 150 150 150)
+       (editor-tilemap-set-fgcolor (supertux:interactive-tm level) 150 250 150 150)
        (editor-tilemap-set-fgcolor (supertux:foreground-tm  level) 255 150 150 150)
        (tilemap-paint-tool-set-tilemap (supertux:background-tm level)))
 
       ((interactive)
-       (editor-tilemap-set-fgcolor (supertux:background-tm  level) 255 150 150 150)
+       (editor-tilemap-set-fgcolor (supertux:background-tm  level) 150 150 250 150)
        (editor-tilemap-set-fgcolor (supertux:interactive-tm level) 255 255 255 255)
        (editor-tilemap-set-fgcolor (supertux:foreground-tm  level) 255 150 150 150)
        (tilemap-paint-tool-set-tilemap (supertux:interactive-tm level)))
 
       ((foreground)
-       (editor-tilemap-set-fgcolor (supertux:background-tm  level) 255 150 150 150)
+       (editor-tilemap-set-fgcolor (supertux:background-tm  level) 150 150 250 150)
        (editor-tilemap-set-fgcolor (supertux:interactive-tm level) 255 150 150 150)
        (editor-tilemap-set-fgcolor (supertux:foreground-tm  level) 255 255 255 255)
        (tilemap-paint-tool-set-tilemap (supertux:foreground-tm level))))))

@@ -20,6 +20,7 @@
 #include <ClanLib/Core/System/error.h>
 #include <ClanLib/Display/sprite_description.h>
 #include <ClanLib/Display/pixel_buffer.h>
+#include <ClanLib/Display/Providers/provider_factory.h>
 #include <iostream>
 #include "globals.hxx"
 #include "tile.hxx"
@@ -54,6 +55,14 @@ Tile::get_attribute_color()
   return attribute_color;
 }
 
+bool has_suffix(const std::string& data, const std::string& suffix)
+{
+  if (data.length() >= suffix.length())
+    return data.compare(data.length() - suffix.length(), suffix.length(), suffix) == 0;
+  else
+    return false;
+}
+
 CL_Sprite&
 Tile::get_sprite()
 {
@@ -63,7 +72,16 @@ Tile::get_sprite()
     {
       try {
         //std::cout << "Loading Tile: " << filename << std::endl;
-        sur = CL_Sprite(filename, resources);
+        if (has_suffix(filename, ".png") || has_suffix(filename, ".jpg"))
+          {
+            CL_SpriteDescription desc;
+            desc.add_frame(get_pixelbuffer(), false);
+            sur = CL_Sprite(desc);
+          }
+        else
+          {
+            sur = CL_Sprite(filename, resources);
+          }
         return sur;
       } catch (CL_Error& err) {
         std::cout << "Tile: CL_Error: " << err.message << std::endl;
@@ -78,10 +96,17 @@ Tile::get_pixelbuffer()
   if (pixelbuffer)
     return pixelbuffer;
   {
-    CL_SpriteDescription descr(filename, resources);
-    pixelbuffer = new CL_PixelBuffer(*(descr.get_frames().begin()->first));
+    if (has_suffix(filename, ".png") || has_suffix(filename, ".jpg"))
+      {
+        pixelbuffer = CL_ProviderFactory::load(filename);
+      }
+    else
+      {
+        CL_SpriteDescription descr(filename, resources);
+        pixelbuffer = new CL_PixelBuffer(*(descr.get_frames().begin()->first));
+      }
     return pixelbuffer;
-  }  
+  }
 }
 
 /* EOF */

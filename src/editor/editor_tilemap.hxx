@@ -42,7 +42,11 @@ private:
   bool draw_grid;
   bool draw_attribute;
 
+  static EditorTileMap* current_;
 public:
+  static EditorTileMap* current() { return current_; }
+  static void set_current(EditorTileMap* c) { current_ = c; }
+  
   EditorTileMap(int w,  int h, int tile_size_);
   ~EditorTileMap();
 

@@ -45,10 +45,6 @@ void editor_undo();
 
 void set_window_title(const char* name);
 
-// FIXME: Hack
-//EditorTileMap* editor_get_tilemap();
-EditorObjMap*  editor_get_objmap();
-
 CL_Component* minimap_create(CL_Component* p, int x, int y, int w, int h);
 CL_Component* tile_selector_create(int x, int y, int w, int h, float scale);
 CL_Component* object_selector_create(int x, int y, int w, int h, int obj_w, int obj_h);
@@ -69,16 +65,19 @@ void object_selector_add_brush(CL_Component* comp, const char* name, SCM brush);
 
 int  objectmap_add_object(EditorMapLayer* obj, const char* name, int x, int y, SCM userdata);
 
-int  editor_objectmap_add_object(const char* name, int x, int y, SCM userdata);
-void editor_objectmap_delete_objects(SCM selection);
-int  editor_objectmap_duplicate_object(int id);
-SCM  editor_objectmap_get_objects(EditorMapLayer* layer);
-SCM  editor_objectmap_get_object(EditorMapLayer* layer, int id);
-void editor_objectmap_set_pos(int id, int x, int y);
+int  editor_objectmap_add_object      (EditorMapLayer* layer, const char* name, int x, int y, SCM userdata);
+void editor_objectmap_delete_objects  (EditorMapLayer* layer,SCM selection);
+int  editor_objectmap_duplicate_object(EditorMapLayer* layer, int id);
+SCM  editor_objectmap_get_objects     (EditorMapLayer* layer);
+SCM  editor_objectmap_get_object      (EditorMapLayer* layer, int id);
+void editor_objectmap_set_pos         (EditorMapLayer* layer, int id, int x, int y);
 
-void objmap_sprite_object_flip(int id);
+void editor_tilemap_set_current(EditorMapLayer* layer);
+void editor_objectmap_set_current(EditorMapLayer* layer);
+
+void objmap_sprite_object_flip(EditorMapLayer* layer, int id);
 SCM  tilemap_object_tool_get_objects();
-void tilemap_object_tool_set_objects(SCM lst);
+void tilemap_object_tool_set_objects(EditorMapLayer* layer, SCM lst);
 void tilemap_object_tool_clear_selection();
 
 void objectmap_tool_set_popupmenu_callback(SCM callback);
@@ -117,6 +116,8 @@ int             editor_tilemap_get_height(EditorMapLayer* l);
 void            editor_tilemap_set_bgcolor(EditorMapLayer* l, int r, int g, int b, int a);
 void            editor_tilemap_set_fgcolor(EditorMapLayer* l, int r, int g, int b, int a);
 void            editor_tilemap_save_png(EditorMapLayer* l, const char* filename);
+
+void tileset_add_tile(SCM data);
 
 #endif
 

@@ -53,7 +53,6 @@ public:
   ~ObjectSelector();
 
   void draw();
-
   void add_brush(const ObjectBrush& brush);
 
   void mouse_move(const CL_InputEvent& event);

@@ -42,7 +42,11 @@ public:
   Objs objects;
 
   int handle_count;
+  static EditorObjMap* current_;
 public:
+  static EditorObjMap* current() { return current_; }
+  static void set_current(EditorObjMap* c) { current_ = c; }
+
   EditorObjMap();
   ~EditorObjMap();
 

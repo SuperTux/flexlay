@@ -25,6 +25,7 @@
 (define *recent-files-size* 25)
 (define datadir  *windstille-datadir*)
 (define *tilemap* #f)
+(define *objmap*  #f)
 (define *buffers* '())
 
 (define *editor:file-plugins* '())
@@ -98,22 +99,6 @@
     (editor-map-add-layer m tilemap)
     (editor-map-add-layer m objmap)
     m))
-
-(define (get-value-from-tree pos lst default)
-  (cond ((null? pos)
-         lst)
-        ((null? lst)
-         default)
-        ((equal? pos '(_))
-         (car lst))
-        (else
-         (let ((el (assoc-ref lst (car pos))))
-           (cond (el
-                  (get-value-from-tree (cdr pos) el default))
-                 (else
-                  default
-                  ))))))
-
 
 (define (create-level-map-from-file filename)
   (let ((data (with-input-from-file filename
@@ -834,6 +819,9 @@
    (object-selector-add-brush *object-selector* "sprites/outpost"     '(outpost "Unnamed"))
    )
   ((supertux)
+   (object-selector-add-brush *object-selector* "sprites/jumpy" '(money))
+   (object-selector-add-brush *object-selector* "sprites/mriceblock" '(mriceblock))
+   (object-selector-add-brush *object-selector* "sprites/mrbomb"     '(mrbomb))
    (create-minimap screen-width 50)
    (editor:add-file-plugin
     (lambda (filename) (or (string=? (filename:ext filename) ".stl")
@@ -849,9 +837,6 @@
        (gui-hide-component *tileselector-window*)))
 
 (set-tool 'tile)
-
-;;(object-selector-add-brush *object-selector* "sprites/mriceblock" '(mriceblock))
-;;(object-selector-add-brush *object-selector* "sprites/mrbomb"     '(mrbomb))
 
 (new-map 60 15)
 

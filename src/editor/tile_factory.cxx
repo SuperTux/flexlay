@@ -31,9 +31,12 @@ extern CL_ResourceManager* resources;
 
 TileFactory* TileFactory::current_ = 0;
 
-std::string TileFactory::tile_def_file = "tuxtiles.scm";
+TileFactory::TileFactory()
+{
+}
 
-TileFactory::TileFactory (const std::string& filename)
+void
+TileFactory::load_tile_file(const std::string& filename)
 {
   SCM input_stream = scm_open_file(gh_str02scm(filename.c_str()), 
                                    gh_str02scm("r"));
@@ -58,7 +61,7 @@ TileFactory::TileFactory (const std::string& filename)
       
               if (gh_equal_p(gh_symbol2scm("tile"), name)) 
                 {
-                  parse_tile(data);
+                  add_tile(data);
                 }
               else
                 {
@@ -75,7 +78,7 @@ TileFactory::TileFactory (const std::string& filename)
 }
 
 void
-TileFactory::parse_tile(SCM data)
+TileFactory::add_tile(SCM data)
 {
   // FIXME: Move this to scripting and add a TileFactory::add()
   int id;
@@ -111,7 +114,7 @@ TileFactory::parse_tile(SCM data)
                                          gh_scm2int(gh_caddr(data)),
                                          gh_scm2int(gh_car(gh_cdddr(data))));
             }
-          else if (gh_equal_p(gh_symbol2scm("image"), name))           
+          else if (gh_equal_p(gh_symbol2scm("image"), name))
             {
               image = scm2string(gh_car(data));
             }
@@ -153,12 +156,17 @@ TileFactory::parse_tile(SCM data)
                 << std::endl;
     }
 
-  if (id >= int(tiles.size()))
+  if (id < 0)
+    std::cout << "Tile Id bug: " << id << std::endl;
+  else
     {
-      tiles.resize(id+1);
+      if (id >= int(tiles.size()))
+        {
+          tiles.resize(id+1);
+        }
+      tiles[id] = new Tile(image, color, attribute_color, colmap);
+      tiles[id]->id = id;
     }
-  tiles[id] = new Tile(image, color, attribute_color, colmap);
-  tiles[id]->id = id;
 }
 
 Tile* 
@@ -183,7 +191,7 @@ void
 TileFactory::init()
 {
   assert(current_ == 0);
-  current_ = new TileFactory(datadir + tile_def_file);
+  current_ = new TileFactory();
 }
 
 /** Destroy the default TileFactor*/

@@ -70,116 +70,121 @@ ObjMapSelectTool::draw()
 void
 ObjMapSelectTool::on_mouse_up(const CL_InputEvent& event)
 {
-  EditorObjMap* objmap = dynamic_cast<EditorObjMap*>(EditorMapComponent::current()->get_map()->get_layer_by_name(OBJECTMAP_NAME));
-  EditorMapComponent* parent = EditorMapComponent::current();
-
-  CL_Point pos = parent->screen2world(event.mouse_pos);
-
-  switch (event.id)
+  EditorObjMap* objmap = EditorObjMap::current();
+  if (objmap)
     {
-    case CL_MOUSE_LEFT:
-      switch(state)
+      EditorMapComponent* parent = EditorMapComponent::current();
+
+      CL_Point pos = parent->screen2world(event.mouse_pos);
+
+      switch (event.id)
         {
-        case DRAG:
-          if (move_command)
+        case CL_MOUSE_LEFT:
+          switch(state)
             {
-              Editor::current()->execute(move_command);
-              move_command = 0;
+            case DRAG:
+              if (move_command)
+                {
+                  Editor::current()->execute(move_command);
+                  move_command = 0;
+                }
+              state = NONE;
+              parent->release_mouse();
+              break;
+
+            case SELECT:
+              state = NONE;
+              selection_rect.right  = pos.x;
+              selection_rect.bottom = pos.y;
+              selection_rect.normalize();
+
+              selection = objmap->get_selection(selection_rect);
+              parent->release_mouse();
+              break;
+
+            default:
+              break;
             }
-          state = NONE;
-          parent->release_mouse();
           break;
 
-        case SELECT:
-          state = NONE;
-          selection_rect.right  = pos.x;
-          selection_rect.bottom = pos.y;
-          selection_rect.normalize();
-
-          selection = objmap->get_selection(selection_rect);
-          parent->release_mouse();
-          break;
-
-        default:
+        case CL_MOUSE_RIGHT:
+          {
+            PopupMenu* menu = new PopupMenu(CL_Point(event.mouse_pos.x + parent->get_screen_rect().left,
+                                                     event.mouse_pos.y + parent->get_screen_rect().top), 
+                                            GUIManager::current()->get_component());
+            on_popup_menu_display(menu->get_menu());
+          }
           break;
         }
-      break;
-
-    case CL_MOUSE_RIGHT:
-      {
-        PopupMenu* menu = new PopupMenu(CL_Point(event.mouse_pos.x + parent->get_screen_rect().left,
-                                                 event.mouse_pos.y + parent->get_screen_rect().top), 
-                                        GUIManager::current()->get_component());
-        on_popup_menu_display(menu->get_menu());
-      }
-      break;
     }
 }
 
 void
 ObjMapSelectTool::on_mouse_down(const CL_InputEvent& event)
 {
-  EditorObjMap* objmap = dynamic_cast<EditorObjMap*>(EditorMapComponent::current()->get_map()->get_layer_by_name(OBJECTMAP_NAME));
-  EditorMapComponent* parent = EditorMapComponent::current();
-  CL_Point pos = parent->screen2world(event.mouse_pos);
-      
-  switch (event.id)
+  EditorObjMap* objmap = EditorObjMap::current();
+  if (objmap)
     {
-    case CL_MOUSE_LEFT:
-      switch(state)
+      EditorMapComponent* parent = EditorMapComponent::current();
+      CL_Point pos = parent->screen2world(event.mouse_pos);
+      
+      switch (event.id)
         {
-        default:
-          EditorObjMap::Obj* obj = objmap->find_object(pos);
-          
-          if (obj)
+        case CL_MOUSE_LEFT:
+          switch(state)
             {
-              if (CL_Keyboard::get_keycode(CL_KEY_LSHIFT))
+            default:
+              EditorObjMap::Obj* obj = objmap->find_object(pos);
+          
+              if (obj)
                 {
-                  Selection::iterator i = std::find(selection.begin(), selection.end(), obj);
-                  if (i == selection.end())
-                    selection.push_back(obj);
+                  if (CL_Keyboard::get_keycode(CL_KEY_LSHIFT))
+                    {
+                      Selection::iterator i = std::find(selection.begin(), selection.end(), obj);
+                      if (i == selection.end())
+                        selection.push_back(obj);
+                      else
+                        selection.erase(i);
+                    }
                   else
-                    selection.erase(i);
+                    {
+                      state = DRAG;
+                      parent->capture_mouse();
+                      offset = pos - obj->get_pos();
+                      drag_start = pos;
+
+                      if (std::find(selection.begin(), selection.end(), obj) == selection.end())
+                        { // Clicked object is not in the selection, so we add it
+                          selection.clear();
+                          selection.push_back(obj);
+                        }
+
+                      move_command = new ObjectMoveCommand(objmap);
+                      for (Selection::iterator i = selection.begin(); i != selection.end(); ++i)
+                        {
+                          move_command->add_obj((*i)->get_handle());
+                        }
+                    }
                 }
               else
                 {
-                  state = DRAG;
+                  state = SELECT;
+                  selection_rect = CL_Rect(pos.x, pos.y, pos.x, pos.y);
                   parent->capture_mouse();
-                  offset = pos - obj->get_pos();
-                  drag_start = pos;
-
-                  if (std::find(selection.begin(), selection.end(), obj) == selection.end())
-                    { // Clicked object is not in the selection, so we add it
-                      selection.clear();
-                      selection.push_back(obj);
-                    }
-
-                  move_command = new ObjectMoveCommand(objmap);
-                  for (Selection::iterator i = selection.begin(); i != selection.end(); ++i)
-                    {
-                      move_command->add_obj((*i)->get_handle());
-                    }
                 }
-            }
-          else
-            {
-              state = SELECT;
-              selection_rect = CL_Rect(pos.x, pos.y, pos.x, pos.y);
-              parent->capture_mouse();
+              break;
             }
           break;
-        }
-      break;
 
-    case CL_MOUSE_RIGHT:
-      break;
+        case CL_MOUSE_RIGHT:
+          break;
+        }
     }
 }
 
 void
 ObjMapSelectTool::on_mouse_move(const CL_InputEvent& event)
 {
-  //EditorObjMap* objmap = dynamic_cast<EditorObjMap*>(EditorMapComponent::current()->get_map()->get_layer_by_name(OBJECTMAP_NAME));
   EditorMapComponent* parent = EditorMapComponent::current();
   CL_Point pos = parent->screen2world(event.mouse_pos);
 

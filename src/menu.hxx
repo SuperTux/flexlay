@@ -20,14 +20,27 @@
 #ifndef HEADER_MENU_HXX
 #define HEADER_MENU_HXX
 
-/** */
-class Menu
-{
-private:
-public:
-  Menu(CL_Component* parent);
+#include <string>
+#include <ClanLib/GUI/component.h>
+#include <ClanLib/Core/Math/rect.h>
+#include "shared_ptr.hxx"
 
-  MenuItem add_item(const std::string& );
+class MenuImpl;
+
+typedef int MenuItemHandle;
+
+/** */
+class Menu : public CL_Component
+{
+public:
+  Menu(const CL_Point& pos, CL_Component* parent);
+
+  MenuItemHandle add_item(const std::string& name);
+  MenuItemHandle add_submenu(const std::string& name, const Menu& submenu);
+  MenuItemHandle add_seperator();
+  
+private:
+  SharedPtr<MenuImpl> impl;
 };
 
 #endif

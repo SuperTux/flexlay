@@ -21,7 +21,7 @@
 #include <ClanLib/Display/display.h>
 #include "box.hxx"
 
-CL_Color background   (220, 220, 220);
+CL_Color background   (210, 210, 210);
 CL_Color background_hl(240, 240, 240);
 CL_Color background_sw(200, 200, 200);
 CL_Color highlight    (255, 255, 255);
@@ -93,6 +93,13 @@ Box::draw_panel_down(const CL_Rect& rect)
                         rect.right, rect.bottom, highlight);
   CL_Display::draw_line(rect.right, rect.top, 
                         rect.right, rect.bottom, highlight);
+}
+
+void
+Box::draw_window(const CL_Rect& rect)
+{
+  draw_panel(CL_Rect(rect.left+1, rect.top+1, rect.right-2, rect.bottom-2));
+  CL_Display::draw_rect(rect, CL_Color(0, 0, 0));
 }
 
 /* EOF */

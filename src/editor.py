@@ -64,12 +64,12 @@ gui.push_component(window.get_client_area())
 dirview = DirectoryView(CL_Rect(CL_Point(3, 40), CL_Size(300, 200)), gui.get_component())
 dirview.set_directory("/");
 
-load_icon    = Icon(CL_Point(34*0+2, 2), make_sprite("../data/images/icons/stock_open.png"), "Some tooltip", gui.get_component());
-save_icon    = Icon(CL_Point(34*1+2, 2), make_sprite("../data/images/icons/stock_save.png"), "Some tooltip", gui.get_component());
-save_as_icon = Icon(CL_Point(34*2+2, 2), make_sprite("../data/images/icons/stock_save_as.png"), "Some tooltip", gui.get_component());
+load_icon    = Icon(CL_Point(34*0+2, 2), make_sprite("../data/images/icons24/stock_open.png"), "Some tooltip", gui.get_component());
+save_icon    = Icon(CL_Point(34*1+2, 2), make_sprite("../data/images/icons24/stock_save.png"), "Some tooltip", gui.get_component());
+save_as_icon = Icon(CL_Point(34*2+2, 2), make_sprite("../data/images/icons24/stock_save_as.png"), "Some tooltip", gui.get_component());
 
-copy_icon    = Icon(CL_Point(34*3.1+2, 2), make_sprite("../data/images/icons/stock_copy.png"), "Some tooltip", gui.get_component());
-paste_icon   = Icon(CL_Point(34*4.1+2, 2), make_sprite("../data/images/icons/stock_paste.png"), "Some tooltip", gui.get_component());
+copy_icon    = Icon(CL_Point(34*3.1+2, 2), make_sprite("../data/images/icons24/stock_copy.png"), "Some tooltip", gui.get_component());
+paste_icon   = Icon(CL_Point(34*4.1+2, 2), make_sprite("../data/images/icons24/stock_paste.png"), "Some tooltip", gui.get_component());
 
 
 def foo():
@@ -81,12 +81,12 @@ gui.pop_component()
 
 willow = Panel(CL_Rect(CL_Point(0, 23), CL_Size(800, 33)), gui.get_component())
 
-load_icon    = Icon(CL_Point(32*0+2, 2), make_sprite("../data/images/icons/stock_open.png"), "Some tooltip", willow);
-save_icon    = Icon(CL_Point(32*1+2, 2), make_sprite("../data/images/icons/stock_save.png"), "Some tooltip", willow);
-save_as_icon = Icon(CL_Point(32*2+2, 2), make_sprite("../data/images/icons/stock_save_as.png"), "Some tooltip", willow);
+load_icon    = Icon(CL_Point(32*0+2, 2), make_sprite("../data/images/icons24/stock_open.png"), "Some tooltip", willow);
+save_icon    = Icon(CL_Point(32*1+2, 2), make_sprite("../data/images/icons24/stock_save.png"), "Some tooltip", willow);
+save_as_icon = Icon(CL_Point(32*2+2, 2), make_sprite("../data/images/icons24/stock_save_as.png"), "Some tooltip", willow);
 
-copy_icon    = Icon(CL_Point(32*3.1+2, 2), make_sprite("../data/images/icons/stock_copy.png"), "Some tooltip", willow);
-paste_icon   = Icon(CL_Point(32*4.1+2, 2), make_sprite("../data/images/icons/stock_paste.png"), "Some tooltip", willow);
+copy_icon    = Icon(CL_Point(32*3.1+2, 2), make_sprite("../data/images/icons24/stock_copy.png"), "Some tooltip", willow);
+paste_icon   = Icon(CL_Point(32*4.1+2, 2), make_sprite("../data/images/icons24/stock_paste.png"), "Some tooltip", willow);
 
 
 toolbar = Panel(CL_Rect(CL_Point(0, 23+33), CL_Size(33, 256)), gui.get_component())
@@ -98,7 +98,7 @@ paint  = Icon(CL_Point(2, 32*3+2), make_sprite("../data/images/tools/stock-tool-
 
 supertux = SuperTuxGUI(tileset, gui)
 
-class Menu(CL_Menu):
+class MMenu(CL_Menu):
     def __init__(self):
         CL_Menu.__init__(self, gui.get_component())
 
@@ -120,11 +120,20 @@ def menu_file_save():
 def menu_file_save_as():
     print "File/Save As"
 
-menu = Menu()
+menu = MMenu()
 a = menu.add_item("File/Open...", menu_file_open)
 a = menu.add_item("File/Save...", menu_file_save)
 a = menu.add_item("File/Save As...", menu_file_save_as)
 a = menu.add_item("File/Quit",  do_quit)
+
+mymenu = Menu(CL_Point(100, 100), gui.get_component())
+mymenu.add_item("Foobar")
+mymenu.add_item("blub")
+mymenu.add_item("bla")
+mymenu.add_seperator()
+mymenu.add_item("Foobar")
+mymenu.add_item("blub")
+mymenu.add_item("bla")
 
 minimap_panel = Panel(CL_Rect(CL_Point(0, 600-56), CL_Size(800-134, 56)), gui.get_component())
 minimap = Minimap(editor_map, CL_Rect(CL_Point(3, 3), CL_Size(794-134, 50)), minimap_panel)

@@ -37,6 +37,7 @@
 #include "window.hxx"
 #include "panel.hxx"
 #include "directory_view.hxx"
+#include "menu.hxx"
 %}
 
 %include "std_string.i"
@@ -73,5 +74,7 @@
 %include "panel.hxx"
 %include "minimap.hxx"
 %include "directory_view.hxx"
+%include "menu.hxx"
+
 
 /* EOF */

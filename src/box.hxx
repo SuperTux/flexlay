@@ -31,6 +31,7 @@ public:
   static void draw_button_neutral(const CL_Rect& rect);
   static void draw_panel(const CL_Rect& rect);
   static void draw_panel_down(const CL_Rect& rect);
+  static void draw_window(const CL_Rect& rect);
 };
 
 #endif

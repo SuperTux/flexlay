@@ -72,9 +72,9 @@ Window::Window(const CL_Rect& rect, const std::string& title, CL_Component* pare
                             make_sprite("../data/images/window/maximize.png"),
                             "", this);
 
-  impl->client_area = new CL_Component(CL_Rect(CL_Point(3, 3+12+6), 
-                                               CL_Size(rect.get_width()-8,
-                                                       rect.get_height()-25)), this);
+  impl->client_area = new CL_Component(CL_Rect(CL_Point(4, 3+12+7), 
+                                               CL_Size(rect.get_width()-10,
+                                                       rect.get_height()-28)), this);
   impl->parent = this;
   impl->pressed = false;
   impl->title = title;
@@ -98,7 +98,7 @@ WindowImpl::draw()
 
   CL_Rect rect = parent->get_position() ;
 
-  Box::draw_panel(CL_Rect(CL_Point(0, 0), CL_Size(rect.get_width()-1, rect.get_height()-1)));
+  Box::draw_window(CL_Rect(CL_Point(0, 0), CL_Size(rect.get_width()-1, rect.get_height()-1)));
 
   CL_Display::fill_rect(CL_Rect(CL_Point(3+16,3), CL_Size(parent->get_width()-6-18-18-18, 12+3)), CL_Color(250, 250, 250));
   Fonts::verdana11.draw(8+15, 3, title);

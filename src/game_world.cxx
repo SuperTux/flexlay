@@ -1,4 +1,4 @@
-//  $Id: game_world.cxx,v 1.9 2003/09/05 20:41:51 grumbel Exp $
+//  $Id: game_world.cxx,v 1.10 2003/09/11 18:58:19 grumbel Exp $
 //
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -45,7 +45,9 @@ GameWorld::draw ()
        i != objects.end (); ++i)
     (*i)->draw ();
 
-  if (1) // Water
+  tilemap->draw ();
+
+  if (0) // Water
     {
       int x1 = 0;
       int y1 = 100;
@@ -79,7 +81,6 @@ GameWorld::draw ()
       Display::end_gl();
     }
 
-  tilemap->draw ();
 }
 
 void

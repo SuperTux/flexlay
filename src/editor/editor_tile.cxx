@@ -1,4 +1,4 @@
-//  $Id: editor_tile.cxx,v 1.6 2003/09/10 18:56:03 grumbel Exp $
+//  $Id: editor_tile.cxx,v 1.7 2003/09/11 18:58:19 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -30,7 +30,7 @@ EditorTile::EditorTile ()
 
 EditorTile::EditorTile (int id)
 {
-  tile = TileFactory::current()->create(id);
+  set_tile(id);
 }
 
 void
@@ -38,19 +38,21 @@ EditorTile::draw (int x, int y, float alpha)
 {
   if (tile)
     {
-      tile->sur.set_alignment (origin_top_left, 0, 0);
-      tile->sur.set_alpha(alpha);
-      tile->sur.draw (x, y);
-      tile->sur.set_alpha(1.0f);
-      CL_Display::draw_rect(CL_Rect(x, y, x + TILE_SIZE, y + TILE_SIZE),
-                            CL_Color(255, 255, 255, 128));
+      CL_Sprite sprite = tile->sur;
+      sprite.set_alignment (origin_top_left, 0, 0);
+      if (alpha != 1.0f)
+        sprite.set_color(.8f, .8f, 1.0f, alpha);
+      sprite.draw (x, y);
+      sprite.set_alpha(1.0f);
+      CL_Display::draw_rect(CL_Rect(CL_Point(x, y), CL_Size(TILE_SIZE + 1, TILE_SIZE + 1)),
+                            CL_Color(128, 128, 128, 255));
     }
   else
     {
       //CL_Display::fill_rect (CL_Rect(x, y, x + TILE_SIZE, y + TILE_SIZE),
       //CL_Color(77, 77, 77, 255));
-      CL_Display::draw_rect (CL_Rect(x, y, x + TILE_SIZE, y + TILE_SIZE),
-			     CL_Color(255, 255, 255, 128));
+      CL_Display::draw_rect (CL_Rect(CL_Point(x, y), CL_Size(TILE_SIZE + 1, TILE_SIZE + 1)),
+			     CL_Color(128, 128, 128, 255));
     }
 }
 

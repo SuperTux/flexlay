@@ -1,4 +1,4 @@
-//  $Id: editor.cxx,v 1.4 2003/09/10 18:56:03 grumbel Exp $
+//  $Id: editor.cxx,v 1.5 2003/09/11 18:58:19 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -31,40 +31,6 @@ extern "C" void SWIG_init(void);
 
 Editor* Editor::current_ = 0;
 
-class MyComponent : public CL_Component
-{
-private:
-  CL_SlotContainer slots;
-public:
-  MyComponent(const CL_Rect& pos, CL_Component* parent)
-    : CL_Component(pos, parent)
-  {
-    slots.connect(sig_paint(), this, &MyComponent::paint);
-    slots.connect(sig_mouse_up(), this, &MyComponent::up);
-    slots.connect(sig_mouse_down(), this, &MyComponent::down);
-  }
-
-  void up(const CL_InputEvent &key)
-  {
-    std::cout << "Up: " << key.id << std::endl;
-  }
-
-  void down(const CL_InputEvent &key)
-  {
-    std::cout << "Down: " << key.id <<  std::endl;
-  }
-
-  void paint() 
-  {
-    CL_Display::clear(CL_Color::red);
-  }
-};
-
-static void some_func()
-{
-  std::cout << "QUIT" << std::endl;
-}
-
 Editor::Editor()
 {
   current_ = this;
@@ -75,16 +41,11 @@ Editor::Editor()
   resources = new CL_ResourceManager(datadir + "gui/gui.xml", false);
   style     = new CL_StyleManager_Silver(resources);
   manager   = new CL_GUIManager(style);
-  component = manager;
+
+  push_component(manager);
 
   tilemap = new EditorTileMap(manager);
-  tilemap->load(datadir + "levels/level1.scm", true);
-
-  CL_Window* window = new CL_Window(CL_Rect(CL_Point(CL_Display::get_width()-264, 0),
-                                            CL_Size(264, CL_Display::get_height())),
-                                    "TileSelector", manager);
-  new TileSelector(4, 10, window->get_client_area());
-  //window->find_preferred_size();
+  //tilemap->load(datadir + "levels/level1.scm");
 
   popupmenu = new CL_PopupMenu(manager);
   menu_data  = new CL_MenuData(popupmenu);

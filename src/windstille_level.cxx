@@ -1,4 +1,4 @@
-//  $Id: windstille_level.cxx,v 1.8 2003/08/19 13:40:48 grumbel Exp $
+//  $Id: windstille_level.cxx,v 1.9 2003/09/11 18:58:19 grumbel Exp $
 //
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -136,7 +136,6 @@ WindstilleLevel::parse_tilemap (SCM cur)
           while (!gh_null_p(data) && y < height)
             {
               int id = gh_scm2int(gh_car(data));
-              //std::cout << "Tile (" << x << ", " << y << "): " << id << std::endl;
               (*field)(x, y) = id;
               
               x += 1;
@@ -149,7 +148,8 @@ WindstilleLevel::parse_tilemap (SCM cur)
               
               data = gh_cdr(data);
             }
-          assert(y != height);
+          if (y != height)
+            std::cout << "WindstilleLevel: Something went wrong: y=" << y << " height=" << height << std::endl;
         }
           
       cur = gh_cdr(cur);

@@ -1,4 +1,4 @@
-//  $Id: player.cxx,v 1.10 2003/08/18 08:50:22 grumbel Exp $
+//  $Id: player.cxx,v 1.11 2003/09/11 18:58:19 grumbel Exp $
 //
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -226,7 +226,6 @@ Player::update_air (float delta)
   if (stuck ())
     pos.x = tmp_x_pos;
 
-  float tmp_y_pos = pos.y;
   pos += velocity * delta;
   velocity.y += 1500 * delta;
 

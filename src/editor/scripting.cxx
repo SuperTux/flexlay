@@ -1,4 +1,4 @@
-//  $Id: scripting.cxx,v 1.4 2003/09/10 18:56:03 grumbel Exp $
+//  $Id: scripting.cxx,v 1.5 2003/09/11 18:58:19 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -18,8 +18,11 @@
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include <ClanLib/gui.h>
+#include <iostream>
 #include "../scm_functor.hxx"
+#include "../globals.hxx"
 #include "editor.hxx"
+#include "tile_selector.hxx"
 #include "editor_tilemap.hxx"
 #include "scripting.hxx"
 
@@ -35,7 +38,7 @@ editor_get_brush_tile()
   return Editor::current()->get_editor_tilemap()->brush_tile;
 }
 
-void
+CL_Component*
 editor_add_button(int x, int y, int w, int h, const char* text, SCM func)
 {
   CL_Component* manager = Editor::current()->get_component();
@@ -45,31 +48,29 @@ editor_add_button(int x, int y, int w, int h, const char* text, SCM func)
                                     text, manager);
   SCMFunctor* functor = new SCMFunctor(func);
   slot_container->connect(button->sig_clicked(), functor, &SCMFunctor::call);
+
+  return button;
 }
 
-void
+CL_Component* 
 editor_add_label(int x, int y, const char* text)
 {
   CL_Component* manager = Editor::current()->get_component();
-  CL_SlotContainer* slot_container = Editor::current()->get_slot_container();
-
-  new CL_Label(CL_Point(x, y), text, manager);
+  return new CL_Label(CL_Point(x, y), text, manager);
 }
 
-void
+CL_Component*
 editor_add_window(int x, int y, int w, int h, const char* title)
 {
   CL_Component* manager = Editor::current()->get_component();
-  CL_SlotContainer* slot_container = Editor::current()->get_slot_container();
-
-  Editor::current()->set_component((new CL_Window(CL_Rect(CL_Point(x, y), CL_Size(w, h)), title, manager))->get_client_area());
+  return new CL_Window(CL_Rect(CL_Point(x, y), CL_Size(w, h)), title, manager);
 }
 
-void
+CL_Component*
 editor_add_inputbox(int x, int y, int w, int h, const char* text)
 {
   CL_Component* manager = Editor::current()->get_component();
-  new CL_InputBox(CL_Rect(CL_Point(x,y), CL_Size(w, h)), text, manager);
+  return new CL_InputBox(CL_Rect(CL_Point(x,y), CL_Size(w, h)), text, manager);
 }
 
 void
@@ -93,6 +94,111 @@ screen_get_height()
 void tilemap_set_active_layer(int i)
 {
   Editor::current()->get_editor_tilemap()->set_active_layer(i);
+}
+
+void editor_set_tool(SCM func)
+{
+  
+}
+
+void tile_selector_create(int x, int y, int w, int h)
+{
+  CL_Window* window = new CL_Window(CL_Rect(CL_Point(x, y),
+                                            CL_Size(w*(TILE_SIZE/2), h*(TILE_SIZE/2) + 32)),
+                                    "TileSelector", Editor::current()->get_component());
+  new TileSelector(w, h, window->get_client_area());
+}
+
+CL_Component*
+push_component(CL_Component* c)
+{
+  Editor::current()->push_component(c);
+  return c;
+}
+
+void
+pop_component()
+{
+  Editor::current()->pop_component();
+}
+
+void window_close(CL_Component* comp)
+{
+  comp->close();
+}
+
+const char* 
+inputbox_get_text(CL_Component* comp)
+{
+  CL_InputBox* box = dynamic_cast<CL_InputBox*>(comp);
+  if (box)
+    {
+      return box->get_text().c_str();
+    }
+  else
+    {
+      return 0;
+    }
+}
+
+void
+component_hide(CL_Component* comp)
+{
+  comp->show(false);
+}
+
+void
+component_show(CL_Component* comp)
+{
+  comp->show(true);
+}
+
+CL_Component* window_get_client_area(CL_Component* comp)
+{
+  return comp->get_client_area();
+}
+
+SCM map_get_data(int i)
+{
+  Field<EditorTile*>* field = Editor::current()->get_editor_tilemap()->get_map(i);
+  if (field)
+    {
+      std::cout << ": " << field->get_width() << "x" << field->get_height() 
+                << " " << field->size() << std::endl;
+
+      SCM vec = SCM_EOL;
+      for (Field<EditorTile*>::iterator i = field->begin(); i != field->end(); ++i)
+        {
+          vec = gh_cons(gh_int2scm((*i)->get_id()), vec);
+        }
+      return gh_reverse(vec);
+    }
+  else
+
+    {
+      return SCM_BOOL_F;
+    }
+}
+
+int map_get_width()
+{
+  return Editor::current()->get_editor_tilemap()->get_width();
+}
+
+int map_get_height()
+{
+  return Editor::current()->get_editor_tilemap()->get_height();
+}
+
+void map_set_size(int w, int h)
+{
+  //return Editor::current()->get_editor_tilemap()->get_height();
+}
+
+void
+editor_load(const char* filename)
+{
+  Editor::current()->get_editor_tilemap()->load(filename);
 }
 
 /* EOF */

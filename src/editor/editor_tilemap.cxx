@@ -1,4 +1,4 @@
-//  $Id: editor_tilemap.cxx,v 1.6 2003/09/10 18:56:03 grumbel Exp $
+//  $Id: editor_tilemap.cxx,v 1.7 2003/09/11 18:58:19 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -19,6 +19,7 @@
 
 #include <iostream>
 #include <ClanLib/Display/display.h>
+#include <ClanLib/gl.h>
 #include "../windstille_level.hxx"
 #include "../globals.hxx"
 #include "../tile_factory.hxx"
@@ -28,8 +29,33 @@ EditorTileMap::EditorTileMap(CL_Component* parent)
   : CL_Component(CL_Rect(CL_Point(0, 0), CL_Size(CL_Display::get_width(), CL_Display::get_height())),
                  parent)
 {
-  current_field = new Field<EditorTile*> (50, 50);
+  slots.connect(sig_paint(), this, &EditorTileMap::draw);
+  slots.connect(sig_mouse_up(),   this, &EditorTileMap::mouse_up);
+  slots.connect(sig_mouse_down(), this, &EditorTileMap::mouse_down);
+  slots.connect(sig_mouse_move(), this, &EditorTileMap::mouse_move);
 
+  new_level(80, 30);
+
+  trans_offset = CL_Pointf(0,0);
+  old_trans_offset = CL_Pointf(0,0);
+  click_pos = CL_Point(0,0);
+  
+  tool = NONE;
+  brush_tile = 0;
+  zoom = 1.0f;
+}
+
+EditorTileMap::~EditorTileMap()
+{
+  cleanup();
+}
+
+void
+EditorTileMap::new_level(int w, int h)
+{
+  cleanup();
+
+  current_field = new Field<EditorTile*> (w, h);
   for (unsigned int y = 0; y < current_field->get_height (); ++y) {
     for (unsigned int x = 0; x < current_field->get_width (); ++x)
       {
@@ -38,22 +64,14 @@ EditorTileMap::EditorTileMap(CL_Component* parent)
   }
   fields.push_back(current_field);
 
-  slots.connect(sig_paint(), this, &EditorTileMap::draw);
-  slots.connect(sig_mouse_up(),   this, &EditorTileMap::mouse_up);
-  slots.connect(sig_mouse_down(), this, &EditorTileMap::mouse_down);
-  slots.connect(sig_mouse_move(), this, &EditorTileMap::mouse_move);
-
-  trans_offset = CL_Pointf(0,0);
-  old_trans_offset = CL_Pointf(0,0);
-  click_pos = CL_Point(0,0);
-  
-  tool = NONE;
-  brush_tile = 0;
-}
-
-EditorTileMap::~EditorTileMap()
-{
-  cleanup();
+  current_field = new Field<EditorTile*> (w, h);
+  for (unsigned int y = 0; y < current_field->get_height (); ++y) {
+    for (unsigned int x = 0; x < current_field->get_width (); ++x)
+      {
+	current_field->at(x, y) = new EditorTile (0);
+      }
+  }
+  fields.push_back(current_field);
 }
 
 void
@@ -75,6 +93,8 @@ EditorTileMap::mouse_up(const CL_InputEvent& event)
     case PAINTING:
       if (event.id == CL_MOUSE_LEFT)
         tool = NONE;
+      break;
+    case NONE:
       break;
     }
 }
@@ -118,6 +138,14 @@ EditorTileMap::mouse_down(const CL_InputEvent& event)
       current_field->at(pos.x, pos.y)->set_tile(brush_tile);
       tool = PAINTING;
     }
+  else if (event.id == CL_MOUSE_WHEEL_UP)
+    {
+      zoom_in();
+    }
+  else if (event.id == CL_MOUSE_WHEEL_DOWN)
+    {
+      zoom_out();
+    }
 }
   
 void
@@ -148,7 +176,6 @@ EditorTileMap::draw_map(Field<EditorTile*>* field)
           {
             CL_Sprite sprite = tile->sur;
             sprite.set_alpha(0.5f);
-
             sprite.draw(pos.x * TILE_SIZE, pos.y * TILE_SIZE);
           }
         CL_Display::fill_rect (CL_Rect(CL_Point(pos.x * TILE_SIZE, pos.y * TILE_SIZE),
@@ -161,17 +188,23 @@ EditorTileMap::draw_map(Field<EditorTile*>* field)
 void
 EditorTileMap::draw ()
 {
+  glPushMatrix();
+  glScalef(zoom, zoom, 1.0f);
+  CL_Display::push_translate_offset(int(trans_offset.x), int(trans_offset.y));
+
   CL_Display::clear(CL_Color(100, 0, 100));
+
   CL_Display::fill_rect(CL_Rect(CL_Point(0,0),
                                 CL_Size(current_field->get_width() * TILE_SIZE,
                                         current_field->get_height() * TILE_SIZE)),
                         CL_Color::black);
-  CL_Display::push_translate_offset(int(trans_offset.x), int(trans_offset.y));
   for(Fields::iterator i = fields.begin(); i != fields.end();++i) 
     {
       draw_map(*i);
     }
+
   CL_Display::pop_translate_offset();
+  glPopMatrix();
 }
 
 CL_Point
@@ -192,7 +225,7 @@ EditorTileMap::cleanup()
 }
 
 void
-EditorTileMap::load(const std::string& filename, bool background)
+EditorTileMap::load(const std::string& filename)
 {
   cleanup();
 
@@ -273,8 +306,35 @@ EditorTileMap::save (const std::string& filename)
 void
 EditorTileMap::set_active_layer(int i)
 {
-  if (i >= 0 && i < fields.size())
+  if (i >= 0 && i < int(fields.size()))
     current_field = fields[i];
+}
+
+void
+EditorTileMap::set_tool(int i)
+{
+  
+}
+
+void
+EditorTileMap::zoom_out()
+{
+  std::cout << "zoomout" << std::endl;
+}
+
+void
+EditorTileMap::zoom_in()
+{
+  std::cout << "zoomin" << std::endl;
+}
+
+Field<EditorTile*>* 
+EditorTileMap::get_map(int i)
+{
+  if (i >= 0 && i < int(fields.size()))
+    return fields[i];
+  else
+    return 0;
 }
 
 /* EOF */

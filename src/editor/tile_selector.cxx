@@ -1,4 +1,4 @@
-//  $Id: tile_selector.cxx,v 1.2 2003/09/10 18:56:03 grumbel Exp $
+//  $Id: tile_selector.cxx,v 1.3 2003/09/11 18:58:19 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -88,7 +88,7 @@ void
 TileSelector::draw()
 {
   CL_Display::push_translate_offset(0, -offset);
-  for(int y = 0; y < height; ++y)
+  for(int y = 0; y < /*height FIXME*/ 20; ++y)
     for(int x = 0; x < width; ++x)
       {
         int i = width * y + x;

@@ -1,4 +1,4 @@
-//  $Id: editor_tilemap.hxx,v 1.4 2003/09/10 18:56:03 grumbel Exp $
+//  $Id: editor_tilemap.hxx,v 1.5 2003/09/11 18:58:19 grumbel Exp $
 // 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -35,6 +35,7 @@ private:
   Field<EditorTile*>* current_field;
   typedef Field<EditorTile*>::iterator FieldIter;
   
+  float zoom;
   CL_Pointf trans_offset;
   CL_Pointf old_trans_offset;
 
@@ -48,6 +49,11 @@ public:
   EditorTileMap (CL_Component* parent);
   ~EditorTileMap();
 
+  void set_tool(int i);
+
+  void zoom_out();
+  void zoom_in();
+
   void draw ();
   void draw_map(Field<EditorTile*>* field);
 
@@ -58,8 +64,13 @@ public:
   EditorTile* get_tile (int, int);
   void set_active_layer(int i);
 
-  void load (const std::string& filename, bool background);
+  void load (const std::string& filename);
   void save (const std::string& filename);
+  void new_level(int w, int h);
+
+  Field<EditorTile*>* get_map(int i);
+  int get_width()  { return current_field->get_width(); }
+  int get_height() { return current_field->get_height(); }
 
   CL_Point screen2tile(const CL_Point& pos);
 };

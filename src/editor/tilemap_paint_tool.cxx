@@ -27,7 +27,7 @@
 #include "tileset.hxx"
 #include "editor_map.hxx"
 #include "editor_map_component.hxx"
-#include "../tile.hxx"
+#include "tile.hxx"
 #include "editor.hxx"
 #include "paint_command.hxx"
 #include "editor_names.hxx"

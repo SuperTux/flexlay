@@ -21,7 +21,6 @@
 #include <ClanLib/Core/core_iostream.h>
 #include <ClanLib/Display/display.h>
 #include <ClanLib/Display/keys.h>
-#include "../windstille_level.hxx"
 #include "editor_names.hxx"
 #include "editor_map.hxx"
 #include "editor_map_component.hxx"

@@ -20,7 +20,7 @@
 #include <ClanLib/Display/display.h>
 #include <iostream>
 #include <ClanLib/Core/core_iostream.h>
-#include "../math.hxx"
+#include "math.hxx"
 #include "tile_selection.hxx"
 
 TileSelection::TileSelection()

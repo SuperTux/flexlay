@@ -24,7 +24,7 @@
 #include <ClanLib/Display/sprite.h>
 #include <ClanLib/GUI/component.h>
 #include <ClanLib/Core/Math/point.h>
-#include "../field.hxx"
+#include "field.hxx"
 #include "editor_objmap.hxx"
 #include "editor_tilemap.hxx"
 

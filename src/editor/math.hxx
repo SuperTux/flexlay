@@ -17,39 +17,36 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-#ifndef HEADER_OBJMAP_OBJECT_HXX
-#define HEADER_OBJMAP_OBJECT_HXX
+#ifndef HEADER_MATH_HXX
+#define HEADER_MATH_HXX
 
-#include <ClanLib/Core/Math/point.h>
-#include <ClanLib/Core/Math/rect.h>
-#include "scm_obj.hxx"
+namespace Math {
 
-/** */
-class ObjMapObject
+template<class T> 
+T min (const T& a, const T& b) 
 {
-private:
-  int       handle;
+  if (a < b)
+    return a;
+  else
+    return b;
+}
 
-protected:
-  CL_Point  pos;
-  SCMObj    data;
+template<class T> 
+T max (const T& a, const T& b) 
+{
+  if (a > b)
+    return a;
+  else
+    return b;
+}
 
-public:
-  ObjMapObject(int handle_, const CL_Point& pos, const SCMObj& data);
-  ObjMapObject(int handle_, const ObjMapObject& obj);
-  virtual ~ObjMapObject() {}
+template<class T> 
+T mid (const T& a, const T& b, const T& c) 
+{
+  return max<T>((a), min<T>((b), (c)));
+}
 
-  CL_Point get_pos() const { return pos; }
-  void     set_pos(const CL_Point& p) { pos = p; }
-
-  SCMObj get_data() const { return data; }
-
-  virtual void draw() =0;
-  virtual CL_Rect get_bound_rect() const  =0;
-  virtual ObjMapObject*  duplicate(int handle_) =0;
-
-  int get_handle() const { return handle; }
-};
+} // namespace Math
 
 #endif
 

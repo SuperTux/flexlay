@@ -24,7 +24,7 @@
 #include <ClanLib/Display/sprite.h>
 #include <ClanLib/GUI/component.h>
 #include <ClanLib/Core/Math/point.h>
-#include "../scm_obj.hxx"
+#include "scm_obj.hxx"
 #include "editor_map_layer.hxx"
 
 class ObjMapObject;

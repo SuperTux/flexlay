@@ -19,7 +19,7 @@
 
 #include <assert.h>
 #include <string>
-#include "../tileset.hxx"
+#include "tileset.hxx"
 #include "editor_tile.hxx"
 
 void

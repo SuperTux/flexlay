@@ -20,7 +20,7 @@
 #ifndef HEADER_EDITOR_TILE_BRUSH_HXX
 #define HEADER_EDITOR_TILE_BRUSH_HXX
 
-#include "../field.hxx"
+#include "field.hxx"
 
 /** */
 class TileBrush : public Field<int>

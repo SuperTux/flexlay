@@ -22,7 +22,7 @@
 
 #include <ClanLib/gui.h>
 #include <ClanLib/Display/color.h>
-#include "../field.hxx"
+#include "field.hxx"
 #include "editor_map_layer.hxx"
 
 class Tileset;

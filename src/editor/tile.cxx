@@ -24,7 +24,7 @@
 #include <ClanLib/Display/palette.h>
 #include <ClanLib/Display/Providers/provider_factory.h>
 #include <iostream>
-#include "../string_converter.hxx"
+#include "string_converter.hxx"
 #include "tile.hxx"
 
 extern CL_ResourceManager* resources;

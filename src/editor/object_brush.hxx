@@ -20,7 +20,7 @@
 #ifndef HEADER_OBJECT_BRUSH_HXX
 #define HEADER_OBJECT_BRUSH_HXX
 
-#include "../scm_obj.hxx"
+#include "scm_obj.hxx"
 #include <ClanLib/Display/sprite.h>
 
 class ObjectBrush

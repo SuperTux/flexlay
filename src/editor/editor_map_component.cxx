@@ -20,7 +20,6 @@
 #include <iostream>
 #include <ClanLib/Display/display.h>
 #include <ClanLib/Display/keys.h>
-#include "../windstille_level.hxx"
 #include "tileset.hxx"
 #include "editor_names.hxx"
 #include "editor_map.hxx"

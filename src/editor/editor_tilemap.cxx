@@ -24,7 +24,6 @@
 #include <ClanLib/Display/pixel_format.h>
 #include <ClanLib/Display/palette.h>
 #include <ClanLib/gl.h>
-#include "../windstille_level.hxx"
 #include "tile.hxx"
 #include "tileset.hxx"
 #include "editor.hxx"

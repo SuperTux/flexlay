@@ -22,7 +22,7 @@
 
 #include <vector>
 #include <ClanLib/Core/Math/point.h>
-#include "../field.hxx"
+#include "field.hxx"
 #include "tile_brush.hxx"
 #include "command.hxx"
 

@@ -20,7 +20,7 @@
 #include <iostream>
 #include <ClanLib/display.h>
 #include "tileset.hxx"
-#include "../tile.hxx"
+#include "tile.hxx"
 #include "tile_selector.hxx"
 #include "tilemap_paint_tool.hxx"
 

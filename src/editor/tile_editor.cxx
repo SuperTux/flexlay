@@ -22,7 +22,7 @@
 #include <ClanLib/Display/display.h>
 #include <ClanLib/Display/keys.h>
 #include <ClanLib/Display/mouse.h>
-#include "../tile.hxx"
+#include "tile.hxx"
 #include "globals.hxx"
 #include "tile_editor.hxx"
 

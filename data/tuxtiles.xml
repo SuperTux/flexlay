@@ -102,6 +102,30 @@
     <sprite name="notile">
       <image file="images/tuxtiles/notile.png" />
     </sprite>
+    <sprite name="pipe1">
+      <image file="images/tuxtiles/pipe1.png" />
+    </sprite>
+    <sprite name="pipe2">
+      <image file="images/tuxtiles/pipe2.png" />
+    </sprite>
+    <sprite name="pipe3">
+      <image file="images/tuxtiles/pipe3.png" />
+    </sprite>
+    <sprite name="pipe4">
+      <image file="images/tuxtiles/pipe4.png" />
+    </sprite>
+    <sprite name="pipe5">
+      <image file="images/tuxtiles/pipe5.png" />
+    </sprite>
+    <sprite name="pipe6">
+      <image file="images/tuxtiles/pipe6.png" />
+    </sprite>
+    <sprite name="pipe7">
+      <image file="images/tuxtiles/pipe7.png" />
+    </sprite>
+    <sprite name="pipe8">
+      <image file="images/tuxtiles/pipe8.png" />
+    </sprite>
     <sprite name="snow1">
       <image file="images/tuxtiles/snow1.png" />
     </sprite>

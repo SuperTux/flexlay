@@ -106,6 +106,8 @@ struct NetPanzerFileStruct
 };
 
 NetPanzerFileStruct* load_netpanzer_map(const char* filename);
+void save_netpanzer_map(const char* filename, EditorMap* m, 
+                        const char* name_, const char* description_);
 
 // Map stuff
 EditorMap*      editor_map_create();

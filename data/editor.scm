@@ -110,7 +110,7 @@
                                       (+ (* (string->number (cadr el)) 32) 16)
                                       '(spawnpoint)))
               (parse-netpanzer-spn-file spnname)))))
-  
+    
     (editor-map-set-filename m filename)
     m))
 
@@ -137,7 +137,12 @@
                         ((mriceblock)
                          (objectmap-add-object objmap "sprites/mriceblock" x y '(mriceblock)))
                         ((mrbomb)
-                         (objectmap-add-object objmap "sprites/mrbomb" x y '(mrbomb))))))
+                         (objectmap-add-object objmap "sprites/mrbomb" x y '(mrbomb)))
+                        ((spawnpoint)
+                         (objectmap-add-object objmap "sprites/spawnpoint" x y '(outpost)))
+                        ((outpost)
+                         (objectmap-add-object objmap "sprites/outpost"  x y '(spawnpoint)))
+                        )))
                   objects)
         
         (editor-map-add-layer m tilemap)
@@ -192,6 +197,61 @@
                        (set! x 0)
                        )))
               field)))
+
+(define (netpanzer:save-map filename)
+  ;; Save .npm
+  (save-netpanzer-map filename
+                      (editor-map-component-get-map *editor-map*)
+                      "A Name" 
+                      "A Description")
+  
+  ;; Save .opt/.spn
+  (let* ((rawname (substring filename 0 (- (string-length filename) 4)))
+         (optname (string-append rawname ".opt"))
+         (spnname (string-append rawname ".spn"))
+         (spawnpoints '())
+         (outposts    '()))
+    
+    (for-each (lambda (ref)
+                (let ((el (editor-objectmap-get-object ref)))
+                      (display "EL: ")
+                      (display el)(newline)
+                      (case (caaddr el)
+                        ((outpost)
+                         (set! outposts    (cons el outposts)))
+                        ((spawnpoint)
+                         (set! spawnpoints (cons el spawnpoints)))
+                        (else
+                         (display "Unknown: ")
+                         (display el)
+                         (newline)))))
+              (editor-objectmap-get-objects))
+
+    (set! spawnpoints (reverse spawnpoints))
+    (set! outposts    (reverse outposts))
+
+    (with-output-to-file optname
+      (lambda ()
+        (format #t "ObjectiveCount: ~a~%" (length outposts))
+        (newline)
+
+        (for-each (lambda (el)
+                    (format #t "Name: ~a~%" "Foobar");;(car el))
+                    (format #t "Location: ~a ~a~%" 
+                            (quotient (car el)  32)
+                            (quotient (cadr el) 32))
+                    (newline))
+                  outposts)))
+
+    (with-output-to-file spnname
+      (lambda ()
+        (format #t "SpawnCount: ~a~%" (length outposts))
+
+        (for-each (lambda (el)
+                    (format #t "Location: ~a ~a~%" 
+                            (quotient (car el)  32)
+                            (quotient (cadr el) 32)))
+                  outposts)))))
 
 (define (save-map filename)
   ;; FIXME: This is old style singleton code
@@ -350,6 +410,13 @@
                          (simple-file-dialog "Save a level..." (get-last-file)
                                              (lambda (filename) 
                                                (save-map filename)
+                                               (push-last-file filename)))))
+
+    (gui-add-menu-item menu "File/Save Netpanzer" 
+                       (lambda ()
+                         (simple-file-dialog "Save a level..." (get-last-file)
+                                             (lambda (filename) 
+                                               (netpanzer:save-map filename)
                                                (push-last-file filename)))))
 
     (gui-add-menu-item menu "File/Save As..." 
@@ -941,7 +1008,10 @@
 
 (case *game*
   ((netpanzer)
-   (create-minimap 150 150))
+   (create-minimap 150 150)
+   (object-selector-add-brush *object-selector* "sprites/spawnpoint"  '(spawnpoint))
+   (object-selector-add-brush *object-selector* "sprites/outpost"     '(outpost "Unnamed"))
+   )
   (else
    (create-minimap screen-width 50)))
 

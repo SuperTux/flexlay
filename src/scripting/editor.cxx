@@ -838,6 +838,56 @@ objectmap_tool_set_popupmenu_callback(SCM func)
   new CL_Slot(tool->sig_on_popup_menu_display().connect_functor(callback));
 }
 
+void
+save_netpanzer_map(const char* filename, EditorMap* m, 
+                   const char* name_, const char* description_)
+{
+  EditorTileMap* tilemap = dynamic_cast<EditorTileMap*>(m->get_layer_by_name(TILEMAP_NAME));
+
+  if (!tilemap)
+    return;
+    
+  unsigned char   netp_id_header[64] = "Created with Windstille Editor";
+  unsigned short  id       = 0; // ?
+  char   name[256];
+  strcpy(name, name_);
+  char   description[1024];
+  strcpy(description, description_);
+  unsigned short  x_size   = tilemap->get_width();
+  unsigned short  y_size   = tilemap->get_height();
+  char            tile_set[256] = "summer12mb.tls";
+ 
+  unsigned short  thumbnail_x_pix = tilemap->get_width();
+  unsigned short  thumbnail_y_pix = tilemap->get_height();
+    
+  std::ofstream out(filename);
+
+  out.write(reinterpret_cast<char*>(&netp_id_header), sizeof(netp_id_header));
+  out.write(reinterpret_cast<char*>(&id), sizeof(short));
+  out.write(reinterpret_cast<char*>(&name), sizeof(name));
+  out.write(reinterpret_cast<char*>(&description), sizeof(description));
+  out.write(reinterpret_cast<char*>(&x_size), sizeof(short));
+  out.write(reinterpret_cast<char*>(&y_size), sizeof(short));
+  out.write(reinterpret_cast<char*>(&tile_set), sizeof(tile_set));
+  out.write(reinterpret_cast<char*>(&thumbnail_x_pix), sizeof(short));
+  out.write(reinterpret_cast<char*>(&thumbnail_y_pix), sizeof(short));
+
+  std::vector<unsigned short> vec(x_size * y_size);
+
+  Field<int>* field = tilemap->get_map(1);
+  for(int i = 0; i < x_size * y_size; ++i)
+    {
+      vec[i] = (*field)[i];
+    }
+  out.write(reinterpret_cast<char*>(&(*vec.begin())), 
+            sizeof(unsigned short)*vec.size());
+  
+  // FIXME: Add thumbnail generator here
+  std::vector<unsigned char> thumbnail(x_size * y_size);
+  out.write(reinterpret_cast<char*>(&(*thumbnail.begin())), 
+            sizeof(unsigned char)*thumbnail.size());
+}
+
 NetPanzerFileStruct*
 load_netpanzer_map(const char* filename)
 {
@@ -848,7 +898,7 @@ load_netpanzer_map(const char* filename)
   char   description[1024];
   unsigned short  x_size; // width
   unsigned short  y_size; // height
-  char            tile_set[256]; // What is this?
+  char            tile_set[256]; // name of the tileset: "summer12mb.tls"
  
   unsigned short  thumbnail_x_pix;
   unsigned short  thumbnail_y_pix;
@@ -878,11 +928,9 @@ load_netpanzer_map(const char* filename)
   for(int i = 0; i < x_size*y_size; ++i)
     (*field)[i] = vec[i];
 
-  NetPanzerFileStruct* netpanzer_file = new NetPanzerFileStruct;
+  std::cout << "Thumbnail: " << thumbnail_x_pix << " " << thumbnail_y_pix << std::endl;
 
-  std::cout << "Size: " << x_size << "x" << y_size << std::endl;
-  std::cout << "Name:  " << name << std::endl;
-  std::cout << "Descr: " << description << std::endl;
+  NetPanzerFileStruct* netpanzer_file = new NetPanzerFileStruct;
 
   netpanzer_file->tilemap     = tilemap;
   netpanzer_file->name        = name;

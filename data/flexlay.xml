@@ -1,4 +1,10 @@
 <resources>
+  <sprite name="brush">
+    <image file="images/brush/brush3.png"/>
+    <translation origin="center" />
+  </sprite>
+
+
   <sprite name="resize_vert">
     <image file="images/icons16/resize_vert.png"/>
     <translation origin="center" />

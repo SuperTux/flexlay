@@ -65,21 +65,24 @@ Minimap::draw()
                             CL_Color(200, 200, 200, 225));
     }
 
+  // FIXME: This doesn't work all that well
+  EditorTileMap* tilemap = dynamic_cast<EditorTileMap*>
+    (EditorMapComponent::current()->get_map()->get_layer(0));
 
-  int map_width  = map_get_width()  * TILE_SIZE;
-  int map_height = map_get_height() * TILE_SIZE;
+  int map_width  = tilemap->get_width()  * TILE_SIZE;
+  int map_height = tilemap->get_height() * TILE_SIZE;
 
   CL_Size small_tile(TILE_SIZE * get_width() / map_width + 1,
                      TILE_SIZE * get_height() / map_height + 1);
 
-  Field<int>* tilemap = editor_get_tilemap()->get_map();
+  Field<int>* field = tilemap->get_map();
 
   if (0)
     {
-      for(int y = 0; y < tilemap->get_height(); ++y)
-        for(int x = 0; x < tilemap->get_width(); ++x)
+      for(int y = 0; y < field->get_height(); ++y)
+        for(int x = 0; x < field->get_width(); ++x)
           {
-            Tile* tile = TileFactory::current()->create(tilemap->at(x, y));
+            Tile* tile = TileFactory::current()->create(field->at(x, y));
             if (tile)
               CL_Display::fill_rect(CL_Rect(CL_Point((x * TILE_SIZE) * get_width() / map_width,
                                                      (y * TILE_SIZE) * get_height() / map_height),
@@ -107,28 +110,36 @@ Minimap::draw()
 void
 Minimap::update_minimap_surface()
 {
-  Field<int>* tilemap = editor_get_tilemap()->get_map();
-  CL_PixelBuffer buffer(map_get_width(), map_get_height(), 
-                        map_get_width()*4, CL_PixelFormat::rgba8888);
+  // FIXME: This doesn't work all that well
+  EditorTileMap* tilemap = dynamic_cast<EditorTileMap*>
+    (EditorMapComponent::current()->get_map()->get_layer(0));
+
+  Field<int>* field = tilemap->get_map();
+
+  CL_PixelBuffer buffer(tilemap->get_width(), tilemap->get_height(), 
+                        tilemap->get_width()*4, CL_PixelFormat::rgba8888);
   
+  int map_width  = tilemap->get_width();
+  int map_height = tilemap->get_height();
+
   unsigned char* buf = static_cast<unsigned char*>(buffer.get_data());
-  for(int y = 0; y < map_get_height(); ++y)
-    for(int x = 0; x < map_get_width(); ++x)
+  for(int y = 0; y < map_height; ++y)
+    for(int x = 0; x < map_width; ++x)
       {
-        Tile* tile = TileFactory::current()->create(tilemap->at(x, y));
+        Tile* tile = TileFactory::current()->create(field->at(x, y));
         if (tile)
           {
-            buf[4*(x + y * map_get_width()) + 3] = tile->get_color().get_red();
-            buf[4*(x + y * map_get_width()) + 2] = tile->get_color().get_green();
-            buf[4*(x + y * map_get_width()) + 1] = tile->get_color().get_blue();
-            buf[4*(x + y * map_get_width()) + 0] = tile->get_color().get_alpha();
+            buf[4*(x + y * map_width) + 3] = tile->get_color().get_red();
+            buf[4*(x + y * map_width) + 2] = tile->get_color().get_green();
+            buf[4*(x + y * map_width) + 1] = tile->get_color().get_blue();
+            buf[4*(x + y * map_width) + 0] = tile->get_color().get_alpha();
           } 
         else
           {
-            buf[4*(x + y * map_get_width()) + 0] = 0;
-            buf[4*(x + y * map_get_width()) + 1] = 0;
-            buf[4*(x + y * map_get_width()) + 2] = 0;
-            buf[4*(x + y * map_get_width()) + 3] = 0;
+            buf[4*(x + y * map_width) + 0] = 0;
+            buf[4*(x + y * map_width) + 1] = 0;
+            buf[4*(x + y * map_width) + 2] = 0;
+            buf[4*(x + y * map_width) + 3] = 0;
           }
       }
 
@@ -138,8 +149,12 @@ Minimap::update_minimap_surface()
 void
 Minimap::mouse_move(const CL_InputEvent& event)
 {
-  int map_width  = map_get_width()  * TILE_SIZE;
-  int map_height = map_get_height() * TILE_SIZE;
+  // FIXME: This doesn't work all that well
+  EditorTileMap* tilemap = dynamic_cast<EditorTileMap*>
+    (EditorMapComponent::current()->get_map()->get_layer(0));
+
+  int map_width  = tilemap->get_width()  * TILE_SIZE;
+  int map_height = tilemap->get_height() * TILE_SIZE;
 
   if (drag_active)
     parent->move_to(event.mouse_pos.x * map_width / get_width(),
@@ -149,8 +164,12 @@ Minimap::mouse_move(const CL_InputEvent& event)
 void
 Minimap::mouse_down(const CL_InputEvent& event)
 {
-  int map_width  = map_get_width()  * TILE_SIZE;
-  int map_height = map_get_height() * TILE_SIZE;
+  // FIXME: This doesn't work all that well
+  EditorTileMap* tilemap = dynamic_cast<EditorTileMap*>
+    (EditorMapComponent::current()->get_map()->get_layer(0));
+
+  int map_width  = tilemap->get_width()  * TILE_SIZE;
+  int map_height = tilemap->get_height() * TILE_SIZE;
 
   parent->move_to(event.mouse_pos.x * map_width / get_width(),
                   event.mouse_pos.y * map_height / get_height());

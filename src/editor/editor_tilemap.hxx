@@ -21,6 +21,7 @@
 #define EDITORTILEMAP_HXX
 
 #include <ClanLib/gui.h>
+#include <ClanLib/Display/color.h>
 #include "../field.hxx"
 #include "editor_map_layer.hxx"
 
@@ -32,6 +33,8 @@ class TileBrush;
 class EditorTileMap : public EditorMapLayer
 {
 private:
+  CL_Color background_color;
+  CL_Color foreground_color;
   int tile_size;
 
   Field<int> field;
@@ -64,10 +67,13 @@ public:
   /** Draw the given single tile to the map */
   void draw_tile(int id, const CL_Point& pos);
 
-  void draw_tile(int id, int x, int y, bool attribute, float alpha);
+  void draw_tile(int id, int x, int y, bool attribute);
 
   int get_width()  const { return field.get_width(); }
   int get_height() const { return field.get_height(); }
+
+  void set_background_color(const CL_Color& color) { background_color = color; }
+  void set_foreground_color(const CL_Color& color) { foreground_color = color; }
 
   void set_draw_attribute(bool t);
   bool get_draw_attribute() const;

@@ -124,6 +124,27 @@ gui_create_menu()
   return menu;
 }
 
+CL_MenuNode*
+gui_add_menu_toggle_item(CL_Component* c_menu, const char* name, SCM func)
+{
+  CL_Menu* menu = dynamic_cast<CL_Menu*>(c_menu);
+
+  if (menu)
+    {
+      CL_MenuNode* node = menu->create_toggle_item(name); 
+      menu->reposition();
+      //node->sig_clicked().connect_functor(SCMFunctor(func)).set_persistent();
+      //std::cout << "Connecting menu function" << std::endl;
+      new CL_Slot(node->sig_clicked().connect_functor(SCMFunctor(func)));
+      return node;
+    }
+  else
+    {
+      std::cout << "Error: " << c_menu << " not a menu item" << std::endl;
+      return 0;
+    }
+}
+
 void
 gui_add_menu_item(CL_Component* c_menu, const char* name, SCM func)
 {

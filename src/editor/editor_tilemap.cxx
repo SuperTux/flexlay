@@ -47,6 +47,9 @@ EditorTileMap::EditorTileMap(int w, int h, int tile_size_)
   for (int y = 0; y < field.get_height(); ++y) 
     for (int x = 0; x < field.get_width(); ++x)
       field.at(x, y) = 0;
+
+  background_color = CL_Color(0, 0, 0, 0);
+  foreground_color = CL_Color(255, 255, 255, 255);
 }
 
 EditorTileMap::~EditorTileMap()
@@ -54,7 +57,7 @@ EditorTileMap::~EditorTileMap()
 }
 
 void
-EditorTileMap::draw_tile(int id, int x, int y, bool attribute, float alpha)
+EditorTileMap::draw_tile(int id, int x, int y, bool attribute)
 {
   Tile* tile = TileFactory::current()->create(id);
 
@@ -63,8 +66,7 @@ EditorTileMap::draw_tile(int id, int x, int y, bool attribute, float alpha)
       CL_Sprite sprite = tile->get_sprite();
       sprite.set_alignment (origin_top_left, 0, 0);
 
-      if (alpha != 1.0f)
-        sprite.set_color(.8f, .8f, 1.0f, alpha);
+      sprite.set_color(foreground_color);
 
       sprite.draw (x, y);
       
@@ -77,14 +79,12 @@ EditorTileMap::draw_tile(int id, int x, int y, bool attribute, float alpha)
 void
 EditorTileMap::draw(EditorMapComponent* parent)
 {
-  CL_Display::fill_rect(CL_Rect(CL_Point(0,0),
-                                CL_Size(field.get_width() * tile_size,
-                                        field.get_height() * tile_size)),
-                        CL_Color(0, 0, 150, 255));
+  if (background_color.get_alpha() != 0)
+    CL_Display::fill_rect(CL_Rect(CL_Point(0,0),
+                                  CL_Size(field.get_width() * tile_size,
+                                          field.get_height() * tile_size)),
+                          background_color);
   CL_Display::flush();
-
-  // FIXME: Make layers 'transparentable'
-  float alpha = 1.0f;
 
   CL_Rect rect = parent->get_clip_rect();
 
@@ -98,7 +98,7 @@ EditorTileMap::draw(EditorMapComponent* parent)
       {
         draw_tile(field.at(x, y), 
                   x * tile_size, y * tile_size, 
-                  draw_attribute, alpha);
+                  draw_attribute);
       }
 
   if (draw_grid)

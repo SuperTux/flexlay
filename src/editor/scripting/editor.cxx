@@ -126,7 +126,7 @@ editor_get_objmap()
   return dynamic_cast<EditorObjMap*>(EditorMapComponent::current()->get_map()->get_layer_by_name(OBJECTMAP_NAME));
 }
 
-EditorTileMap*
+/*EditorTileMap*
 editor_get_tilemap()
 {
   EditorTileMap* tilemap 
@@ -139,7 +139,7 @@ editor_get_tilemap()
       assert(!"Error: Tilemap not found");
       return 0;
     }
-}
+}*/
 
 int
 objectmap_add_object(EditorMapLayer* obj, const char* name, int x, int y, SCM userdata)
@@ -186,15 +186,19 @@ editor_set_brush_tile(int i)
 }
 
 void
-editor_toggle_grid()
+editor_toggle_grid(EditorMapLayer* layer)
 {
-  editor_get_tilemap()->set_draw_grid(!editor_get_tilemap()->get_draw_grid());
+  EditorTileMap* tilemap = dynamic_cast<EditorTileMap*>(layer);
+  if (tilemap)
+    tilemap->set_draw_grid(!tilemap->get_draw_grid());
 }
 
 void
-editor_toggle_attributes()
+editor_toggle_attributes(EditorMapLayer* layer)
 {
-  editor_get_tilemap()->set_draw_attribute(!editor_get_tilemap()->get_draw_attribute());
+  EditorTileMap* tilemap = dynamic_cast<EditorTileMap*>(layer);
+  if (tilemap)
+    tilemap->set_draw_attribute(!tilemap->get_draw_attribute());
 }
 
 SCM
@@ -312,18 +316,23 @@ editor_objectmap_set_pos(int id, int x, int y)
 }
 
 SCM
-editor_objectmap_get_objects()
+editor_objectmap_get_objects(EditorMapLayer* layer)
 {
-  SCM lst = SCM_EOL;
-
-  for(EditorObjMap::Objs::iterator i = editor_get_objmap()->get_objects()->begin();
-      i != editor_get_objmap()->get_objects()->end();
-      ++i)
+  EditorObjMap* objmap = dynamic_cast<EditorObjMap*>(layer);
+  if (objmap)
     {
-      lst = gh_cons(SCM_MAKINUM((*i)->get_handle()), lst);
-    }
+      SCM lst = SCM_EOL;
 
-  return gh_reverse(lst);
+      for(EditorObjMap::Objs::iterator i = objmap->get_objects()->begin();
+          i != objmap->get_objects()->end();
+          ++i)
+        {
+          lst = gh_cons(SCM_MAKINUM((*i)->get_handle()), lst);
+        }
+
+      return gh_reverse(lst);
+    }
+  return SCM_EOL;
 }
 
 void
@@ -351,19 +360,22 @@ tilemap_object_tool_get_objects()
     {
       lst = gh_cons(SCM_MAKINUM((*i)->get_handle()), lst);
     }
-
   return gh_reverse(lst);
 }
 
 SCM
-editor_objectmap_get_object(int id)
+editor_objectmap_get_object(EditorMapLayer* layer, int id)
 {
-  EditorObjMap::Obj* obj = editor_get_objmap()->get_object(id);
+  EditorObjMap* objmap = dynamic_cast<EditorObjMap*>(layer);
+  if (objmap)
+    {
+      EditorObjMap::Obj* obj = objmap->get_object(id);
 
-  if (obj)
-    return obj2scm(*obj);
-  else
-    return SCM_BOOL_F;
+      if (obj)
+        return obj2scm(*obj);
+    }
+
+  return SCM_BOOL_F;
 }
 
 void
@@ -401,6 +413,12 @@ void
 tilemap_paint_tool_set_brush(TileBrush brush)
 {
   TileMapPaintTool::current()->set_brush(brush);
+}
+
+void
+tilemap_paint_tool_set_tilemap(EditorMapLayer* layer)
+{
+  TileMapPaintTool::current()->set_tilemap(dynamic_cast<EditorTileMap*>(layer));
 }
 
 SCM
@@ -479,16 +497,6 @@ tile_selector_create(int x, int y, int w, int h, float scale)
   return ret;
 }
 
-int map_get_width()
-{
-  return editor_get_tilemap()->get_width();
-}
-
-int map_get_height()
-{
-  return editor_get_tilemap()->get_height();
-}
-
 CL_Component*
 editor_add_tileeditor(int x, int y)
 {
@@ -548,20 +556,6 @@ SCM get_tile_defs()
       lst = gh_cons(get_tile_def(i - TileFactory::current()->begin()), lst);
     }
 
-  return gh_reverse(lst);
-}
-
-SCM map_get_scripts()
-{
-  SCM lst = SCM_EOL;
-
-  std::vector<std::string> scripts = EditorMapComponent::current()->get_map()->get_scripts();
-  for (std::vector<std::string>::iterator i = scripts.begin(); 
-       i != scripts.end(); ++i)
-    {
-      lst = gh_cons(gh_str02scm(i->c_str()), lst);
-    }
-  
   return gh_reverse(lst);
 }
 
@@ -759,6 +753,26 @@ editor_tilemap_get_height(EditorMapLayer* l)
     return tilemap->get_height();
   else 
     return 0;
+}
+
+void
+editor_tilemap_set_bgcolor(EditorMapLayer* l, int r, int g, int b, int a)
+{
+  EditorTileMap* tilemap = dynamic_cast<EditorTileMap*>(l);
+  if (tilemap)
+    {
+      tilemap->set_background_color(CL_Color(r, g, b, a));
+    }
+}
+
+void
+editor_tilemap_set_fgcolor(EditorMapLayer* l, int r, int g, int b, int a)
+{
+  EditorTileMap* tilemap = dynamic_cast<EditorTileMap*>(l);
+  if (tilemap)
+    {
+      tilemap->set_foreground_color(CL_Color(r, g, b, a));
+    }
 }
 
 SCM

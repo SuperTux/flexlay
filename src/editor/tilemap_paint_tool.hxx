@@ -40,6 +40,8 @@ private:
 
   PaintCommand* command;
 
+  EditorTileMap* tilemap;
+
   static TileMapPaintTool* current_; 
 public:
   static TileMapPaintTool* current() { return current_; } 
@@ -54,6 +56,8 @@ public:
   void on_mouse_down(const CL_InputEvent& event);
   void on_mouse_move(const CL_InputEvent& event);
   void on_mouse_up  (const CL_InputEvent& event);
+
+  void set_tilemap(EditorTileMap* t) { tilemap = t; }
 };
 
 #endif

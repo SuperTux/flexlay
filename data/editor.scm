@@ -1,10 +1,13 @@
-(use-modules (ice-9 pretty-print))
+(use-modules (srfi srfi-13)
+             (srfi srfi-1)
+             (ice-9 pretty-print))
 
 (load "helper.scm")
-
+(debug-enable 'backtrace)
 (define screen-width  (screen-get-width))
 (define screen-height (screen-get-height))
 (define empty (lambda () #f))
+(define *editor:file-plugins '())
 (define *editor-map* #f)
 (define *editor-variables* '())
 (define *tileeditor* #f)
@@ -24,13 +27,40 @@
 (define *tilemap* #f)
 (define *buffers* '())
 
+(define *editor:file-plugins* '())
+
+(define (editor:add-file-plugin pred func)
+  "Add a handler for a new filetype"
+  (set! *editor:file-plugins*
+        (cons (cons pred func) *editor:file-plugins*)))
+
+(define (editor:get-plugin filename)
+  (cdr (find (lambda (el) ((car el) filename))
+             *editor:file-plugins*)))
+
+;; Default file plug-in, in case others fail
+(editor:add-file-plugin (lambda (filename) #t)
+                        (lambda (filename)
+                          (create-level-map-from-file filename)))
+
+(define (filename:ext filename)
+  (let ((i (string-index-right filename #\.)))
+    (if (and i (> i 0))
+        (substring filename i)
+        #f))) ;; doesn't have an extension
+
+(define (filename:wo/ext filename)
+  (let ((i (string-index-right filename #\.)))
+    (if (and i (> i 0))
+        (substring filename 0 i) 
+        filename))) ;; filename doesn't have extension
+
 (define (add-buffer m)
   ;; FIXME: Doesn't work?!
   (gui-add-menu-item *menu*
                      (format #f "Buffers/~a. ~a"
                              (gensym "")
-                             (basename (editor-map-get-filename m))
-                             )
+                             (basename (editor-map-get-filename m)))
                      (lambda ()
                        (editor-map-component-set-map *editor-map* m)))
 
@@ -93,7 +123,6 @@
           (height     (get-value-from-tree '(properties height _)     data 15))
           (foreground (get-value-from-tree '(tilemap data)            data '()))
           (background (get-value-from-tree '(background-tilemap data) data '()))
-          ;;          (diamonds   (get-value-from-tree '(diamond-map)             data '()))
           (objects    (get-value-from-tree '(objects)                 data '())))
       
       ;; load level file and extract tiledata and w/h
@@ -133,12 +162,15 @@
 (define (load-map filename)
   (catch #t
          (lambda ()
-           (let ((levelmap (create-level-map-from-file filename)))
+           (let* ((plugin   (editor:get-plugin filename))
+                  (levelmap (plugin filename)))
              (editor-map-component-set-map *editor-map* levelmap)
              (add-buffer levelmap)
              ))
          (lambda args
-           (editor-error args)))
+           (backtrace)
+           (editor-error args)
+           ))
   (push-last-file filename))
 
 (define (write-field indent width field)
@@ -172,16 +204,16 @@
 
       (display   "  (properties\n")
       (display   "    (name \"Hello World\")\n")
-      (format #t "    (width  ~a)~%" (map-get-width))
-      (format #t "    (height ~a)~%" (map-get-height))
+      (format #t "    (width  ~a)~%" (editor-tilemap-get-width  *tilemap*))
+      (format #t "    (height ~a)~%" (editor-tilemap-get-height *tilemap*))
       (display   "   )\n\n")
 
-      (display   "  (scripts ")
-      (for-each (lambda (file)
-                  (write file)
-                  (display " "))
-                (map-get-scripts))
-      (display   "   )\n\n")
+      ;;      (display   "  (scripts ")
+      ;;      (for-each (lambda (file)
+      ;;                  (write file)
+      ;;                  (display " "))
+      ;;                (map-get-scripts))
+      ;;      (display   "   )\n\n")
 
       (display     "  (tilemap (data\n")
       (write-field "   " (map-get-width) (editor-tilemap-get-data *tilemap*))
@@ -333,39 +365,39 @@
                                                       (save-map filename)
                                                       (push-last-file filename)))))))
 
-(case *game*
-  ((supertux)
-    (gui-add-menu-item menu "File/Import SuperTux" 
-                       (lambda ()
-                         (simple-file-dialog "Export SuperTux level..." (get-last-file)
-                                             (lambda (filename)   (supertux:load-map filename)))))  
-    (gui-add-menu-item menu "File/Export SuperTux" 
-                       (lambda ()
-                         (simple-file-dialog "Export SuperTux level..." (get-last-file)
-                                             (lambda (filename)   (supertux:save-map filename))))))
-  ((netpanzer)
-    (gui-add-menu-item menu "File/Import NetPanzer.." 
-                       (lambda ()
-                         (simple-file-dialog "Import netPanzer level..." (get-last-file)
-                                             (lambda (filename)
-                                               (netpanzer:load-map filename)))))
+    (case *game*
+      ((supertux)
+       (gui-add-menu-item menu "File/Import SuperTux" 
+                          (lambda ()
+                            (simple-file-dialog "Export SuperTux level..." (get-last-file)
+                                                (lambda (filename)   (supertux:load-map filename)))))  
+       (gui-add-menu-item menu "File/Export SuperTux" 
+                          (lambda ()
+                            (simple-file-dialog "Export SuperTux level..." (get-last-file)
+                                                (lambda (filename)   (supertux:save-map filename))))))
+      ((netpanzer)
+       (gui-add-menu-item menu "File/Import NetPanzer.." 
+                          (lambda ()
+                            (simple-file-dialog "Import netPanzer level..." (get-last-file)
+                                                (lambda (filename)
+                                                  (netpanzer:load-map filename)))))
 
 
-    (gui-add-menu-item menu "File/Export Netpanzer" 
-                       (lambda ()
-                         (simple-file-dialog "Export netPanzer level..." (get-last-file)
-                                             (lambda (filename) 
-                                               (netpanzer:save-map filename)
-                                               (push-last-file filename)))))
-    ))
+       (gui-add-menu-item menu "File/Export Netpanzer" 
+                          (lambda ()
+                            (simple-file-dialog "Export netPanzer level..." (get-last-file)
+                                                (lambda (filename) 
+                                                  (netpanzer:save-map filename)
+                                                  (push-last-file filename)))))
+       ))
 
-;; Move this to game specifc code
-;;    (gui-add-menu-item menu "File/Play" 
-;;                       (lambda ()
-;;                         (let ((file (tmpnam)))
-;;                           (save-map file)
-;;                           (game-play file)
-;;                           (delete-file file))))
+    ;; Move this to game specifc code
+    ;;    (gui-add-menu-item menu "File/Play" 
+    ;;                       (lambda ()
+    ;;                         (let ((file (tmpnam)))
+    ;;                           (save-map file)
+    ;;                           (game-play file)
+    ;;                           (delete-file file))))
 
     (gui-add-menu-item menu "File/Quit" 
                        (lambda ()
@@ -392,8 +424,12 @@
     ;; Dialog Menu
     (gui-add-menu-item menu "Dialogs/Edit Metadata" (lambda () (create-metadata-editor)))
 
-    (gui-add-menu-item menu "Dialogs/Draw Grid" editor-toggle-grid)
-    (gui-add-menu-item menu "Dialogs/Draw Attributes" editor-toggle-attributes)
+    (gui-add-menu-item menu "Dialogs/Draw Grid" 
+                       (lambda ()
+                         (editor-toggle-grid *tilemap*)))
+    (gui-add-menu-item menu "Dialogs/Draw Attributes" 
+                       (lambda ()
+                         (editor-toggle-attributes *tilemap*)))
     (gui-add-menu-item menu "Dialogs/Resize.."  resize-map)
     (gui-add-menu-item menu "Dialogs/Minimap"  (lambda ()
                                                  (gui-component-toggle-visibility *minimap*)))
@@ -404,7 +440,17 @@
 
     (gui-add-menu-item menu "Dialogs/Tile Editor"
                        (lambda ()
-                         (gui-component-toggle-visibility *tileeditor-window*)))))
+                         (gui-component-toggle-visibility *tileeditor-window*)))
+    
+    (case *game*
+      ((supertux)
+       (gui-add-menu-item menu "Layers/Background"
+                                 (lambda () (supertux:set-active-layer 'background)))
+       (gui-add-menu-item menu "Layers/Interactive"
+                                 (lambda () (supertux:set-active-layer 'interactive)))
+       (gui-add-menu-item menu "Layers/Foreground"
+                                 (lambda () (supertux:set-active-layer 'foreground)))))
+    ))
 
 (define (set-tool sym)
   (case sym 
@@ -492,7 +538,7 @@
                             40 25 "SavePNG" 
                             (lambda () 
                               (editor-tilemap-save-png *tilemap* "/tmp/foobar.pnm")))
-                            ;;(tilemap-set-active-layer 0)))
+    ;;(tilemap-set-active-layer 0)))
 
     (gui-create-button-func 0 175
                             40 25 "FG" 
@@ -530,11 +576,11 @@
                               (lambda () 
                                 (gui-hide-component window)))
 
-;;      (gui-component-on-click browse
-;;                              (lambda ()
-;;                                (gui-file-dialog (gui-inputbox-get-text filename)
-;;                                                (lambda (filename)
-;;                                                   (gui-inputbox-set-text filename)))))
+      ;;      (gui-component-on-click browse
+      ;;                              (lambda ()
+      ;;                                (gui-file-dialog (gui-inputbox-get-text filename)
+      ;;                                                (lambda (filename)
+      ;;                                                   (gui-inputbox-set-text filename)))))
 
       (gui-pop-component)
       window)))
@@ -760,18 +806,19 @@
 (set! *editor-map* (editor-map-component-create 0 22 screen-width (- screen-height 22)))
 (gui-add-on-resize-callback
  (lambda (w h)
-   (set! screen-width  w)
-   (set! screen-height h)
-   
-   (gui-component-set-rect *editor-map*
-                           0 22 screen-width (- screen-height 22))
+   (cond (*editor-map*
+          (set! screen-width  w)
+          (set! screen-height h)
+          
+          (gui-component-set-rect *editor-map*
+                                  0 22 screen-width (- screen-height 22))
 
-   (let ((width  (gui-component-get-width  *minimap*))
-         (height (gui-component-get-height *minimap*)))
-     (gui-component-set-rect *minimap*
-                           (- screen-width  width) 
-                           (- screen-height height)
-                           width height))))
+          (let ((width  (gui-component-get-width  *minimap*))
+                (height (gui-component-get-height *minimap*)))
+            (gui-component-set-rect *minimap*
+                                    (- screen-width  width) 
+                                    (- screen-height height)
+                                    width height))))))
 
 (create-menu)
 
@@ -786,6 +833,12 @@
    (object-selector-add-brush *object-selector* "sprites/spawnpoint"  '(spawnpoint))
    (object-selector-add-brush *object-selector* "sprites/outpost"     '(outpost "Unnamed"))
    )
+  ((supertux)
+   (create-minimap screen-width 50)
+   (editor:add-file-plugin
+    (lambda (filename) (or (string=? (filename:ext filename) ".stl")
+                           (string=? (filename:ext filename) ".stlv")))
+    (lambda (filename) (supertux:create-level-map-from-file filename))))
   (else
    (create-minimap screen-width 50)))
 

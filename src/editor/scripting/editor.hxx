@@ -46,7 +46,7 @@ void editor_undo();
 void set_window_title(const char* name);
 
 // FIXME: Hack
-EditorTileMap* editor_get_tilemap();
+//EditorTileMap* editor_get_tilemap();
 EditorObjMap*  editor_get_objmap();
 
 CL_Component* minimap_create(CL_Component* p, int x, int y, int w, int h);
@@ -56,8 +56,6 @@ CL_Component* editor_map_component_create(int x, int y, int w, int h);
 void          editor_map_component_set_map(CL_Component* c, EditorMap* m);
 EditorMap*    editor_map_component_get_map(CL_Component* c);
 
-void editor_toggle_grid();
-void editor_toggle_attributes();
 void editor_resize_map(int w, int h, int x, int y);
 void editor_set_brush_tile(int i);
 int  editor_get_brush_tile();
@@ -65,6 +63,7 @@ void editor_set_tool(int i);
 SCM  editor_get_tile_selection();
 void tilemap_resize(EditorMapLayer* , int x, int y, int w, int h);
 void tilemap_paint_tool_set_brush(TileBrush brush);
+void tilemap_paint_tool_set_tilemap(EditorMapLayer* layer);
 
 void object_selector_add_brush(CL_Component* comp, const char* name, SCM brush);
 
@@ -73,8 +72,8 @@ int  objectmap_add_object(EditorMapLayer* obj, const char* name, int x, int y, S
 int  editor_objectmap_add_object(const char* name, int x, int y, SCM userdata);
 void editor_objectmap_delete_objects(SCM selection);
 int  editor_objectmap_duplicate_object(int id);
-SCM  editor_objectmap_get_objects();
-SCM  editor_objectmap_get_object(int id);
+SCM  editor_objectmap_get_objects(EditorMapLayer* layer);
+SCM  editor_objectmap_get_object(EditorMapLayer* layer, int id);
 void editor_objectmap_set_pos(int id, int x, int y);
 
 void objmap_sprite_object_flip(int id);
@@ -90,11 +89,6 @@ void tileeditor_set_tile(CL_Component* comp, int id);
 
 int  screen_get_width();
 int  screen_get_height();
-
-// FIXME: evil shortcut functions, should be replaced
-SCM  map_get_scripts();
-int  map_get_width();
-int  map_get_height();
 
 SCM get_tile_def(int id);
 SCM get_tile_defs();
@@ -112,11 +106,16 @@ EditorMapLayer* editor_objmap_create();
 
 std::string     editor_map_get_filename(EditorMap* m);
 void            editor_map_set_filename(EditorMap* m, const char* name);
+
+void            editor_toggle_grid(EditorMapLayer* layer);
+void            editor_toggle_attributes(EditorMapLayer* layer);
 EditorMapLayer* editor_tilemap_create(int w, int h, int tile_size);
 void            editor_tilemap_set_data(EditorMapLayer* l, SCM data);
 SCM             editor_tilemap_get_data(EditorMapLayer* l);
 int             editor_tilemap_get_width(EditorMapLayer* l);
 int             editor_tilemap_get_height(EditorMapLayer* l);
+void            editor_tilemap_set_bgcolor(EditorMapLayer* l, int r, int g, int b, int a);
+void            editor_tilemap_set_fgcolor(EditorMapLayer* l, int r, int g, int b, int a);
 void            editor_tilemap_save_png(EditorMapLayer* l, const char* filename);
 
 #endif

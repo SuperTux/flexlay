@@ -22,6 +22,7 @@
 
 #include <guile/gh.h>
 
+class CL_MenuNode;
 class CL_Component;
 
 /** Add comp to the component stack and thus make comp the currently
@@ -60,6 +61,7 @@ CL_Component* gui_create_menu();
 
 /** Add an item to a menu */
 void gui_add_menu_item(CL_Component* menu, const char* name, SCM func);
+CL_MenuNode* gui_add_menu_toggle_item(CL_Component* c_menu, const char* name, SCM func);
 
 /** Remove the component \a comp from its parent 
     FIXME: Who deallocates?! */

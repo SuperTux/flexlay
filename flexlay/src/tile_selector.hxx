@@ -1,6 +1,6 @@
 //  $Id: tile_selector.hxx,v 1.2 2003/09/10 13:53:11 grumbel Exp $
 // 
-//  Pingus - A free Lemmings clone
+//  Flexlay - A Generic 2D Game Editor
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
 //
 //  This program is free software; you can redistribute it and/or

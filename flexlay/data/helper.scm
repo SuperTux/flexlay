@@ -73,6 +73,18 @@
                   default
                   ))))))
 
+(define (filename:ext filename)
+  (let ((i (string-index-right filename #\.)))
+    (if (and i (> i 0))
+        (substring filename i)
+        #f))) ;; doesn't have an extension
+
+(define (filename:wo/ext filename)
+  (let ((i (string-index-right filename #\.)))
+    (if (and i (> i 0))
+        (substring filename 0 i) 
+        filename))) ;; filename doesn't have extension
+
 (load "gui.scm")
 
 ;; EOF ;;

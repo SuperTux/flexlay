@@ -1,4 +1,5 @@
 SUBDIRS = scripting
+EXTRA_DIST = netpanzer-editor supertux-editor windstille-editor
 
 bin_PROGRAMS = flexlay averagecolor
 
@@ -40,7 +41,6 @@ flexlay_SOURCES  = \
   math.hxx  \
   minimap.cxx  \
   minimap.hxx  \
-  netpanzer  \
   object_add_command.cxx  \
   object_add_command.hxx  \
   object_brush.cxx  \
@@ -69,7 +69,6 @@ flexlay_SOURCES  = \
   scm_helper.hxx  \
   scm_obj.hxx  \
   string_converter.hxx  \
-  supertux  \
   tile.cxx  \
   tile.hxx  \
   tile_brush.cxx  \

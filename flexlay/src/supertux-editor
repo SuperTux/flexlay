@@ -1,5 +1,6 @@
 #!/bin/sh
 
-exec ./flexlay --game supertux.scm "$@"
+export PATH=".:$PATH"
+exec flexlay --game supertux.scm "$@"
 
 # EOF #

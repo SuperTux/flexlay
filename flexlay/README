@@ -1,19 +1,27 @@
-Windstille Informations
-=======================
+Flexlay
+=======
 
-Windstille is a classic 2d jump'n shoot game in which the player will
-be placed in a foreign alien world and has to find its way back into
-safety. Windstille is currently available for GNU/Linux and Windows.
-Its webpage at which one might find new versions, source code,
-artworks and more informations is located at:
+Flexlay is a generic 2d game editor. It currently supports multi
+layered tile- and object maps, full undo/redo, support for
+tile-brushes, easy copy/paste, multiple buffers, minimap support, a
+metadata editor and some other stuff usefull for creating levels for
+2d games.
 
- * http://www.nongnu.org/windstille/
+Supported games are at the moment:
 
-For informations on how to compile and run Windstille see the file
-INSTALL. Windstille makes use of OpenGL so you will need working
-hardware 3d support.
+ Windstille - http://www.nongnu.org/windstille/
+ netPanzer  - http://netpanzer.berlios.de/
+ SuperTux   - http://super-tux.sourceforge.net/
 
-Windstille is covered under the GNU GPL, which means that you can copy
+Flexlay can't be run on its own, but instead of you have to start it
+via wrapper scripts (supertux-editor, windstille-editor,
+netpanzer-editor).
+
+For informations on how to compile and run Flexlay see the file
+INSTALL. Flexlay makes use of OpenGL so you will need working hardware
+3d support.
+
+Flexlay is covered under the GNU GPL, which means that you can copy
 and even modify it pretty much as you like, as long as you keep the
 copyright headers in place and distribute the source too if you
 distribute binaries, see the file COPYING for details.

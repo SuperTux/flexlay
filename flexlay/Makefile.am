@@ -19,6 +19,8 @@
 
 SUBDIRS = src data
 
+EXTRA_DIST = TODO
+
 dist-binary: distdir
 	cd src && $(MAKE) windstille.static
 	$(mkinstalldirs) $(distdir)/share/guile/ $(distdir)/lib/

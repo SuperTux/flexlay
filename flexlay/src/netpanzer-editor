@@ -1,5 +1,8 @@
 #!/bin/sh
 
-exec ./flexlay --game netpanzer.scm "$@"
+#!/bin/sh
+
+export PATH=".:$PATH"
+exec flexlay --game netpanzer.scm "$@"
 
 # EOF #

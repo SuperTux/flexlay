@@ -1,6 +1,6 @@
 //  $Id: gui_manager.cxx,v 1.3 2003/11/05 12:41:37 grumbel Exp $
 //
-//  Pingus - A free Lemmings clone
+//  Flexlay - A Generic 2D Game Editor
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
 //
 //  This program is free software; you can redistribute it and/or

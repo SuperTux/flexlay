@@ -27,12 +27,14 @@
 (define *clipboard* #f)
 (define *recent-files* '())
 (define *recent-files-size* 25)
-(define datadir  *windstille-datadir*)
+(define datadir  *flexlay-datadir*)
 (define *tilemap* #f)
 (define *objmap*  #f)
 (define *buffers* '())
 (define *workspace* #f)
-
+(define *variable-file* (string-append *flexlay-homedir*
+                                      (symbol->string *game*)
+                                      "-variables.scm"))
 (define *editor:file-plugins* '())
 
 (define (editor-map-activate m)
@@ -59,18 +61,6 @@
 (editor:add-file-plugin (lambda (filename) #t)
                         (lambda (filename)
                           (error "Couldn't load " filename)))
-
-(define (filename:ext filename)
-  (let ((i (string-index-right filename #\.)))
-    (if (and i (> i 0))
-        (substring filename i)
-        #f))) ;; doesn't have an extension
-
-(define (filename:wo/ext filename)
-  (let ((i (string-index-right filename #\.)))
-    (if (and i (> i 0))
-        (substring filename 0 i) 
-        filename))) ;; filename doesn't have extension
 
 (define (add-buffer m)
   ;; FIXME: Doesn't work?!
@@ -372,8 +362,11 @@
                            )))
 
     ;; Dialog Menu
-    (gui-add-menu-item menu "Dialogs/Edit Metadata" (lambda ()
-                                                      (netpanzer:metadata-editor (get-current-map-data))))
+    (case *game*
+      ((netpanzer)
+       (gui-add-menu-item menu "Dialogs/Edit Metadata" 
+                          (lambda ()
+                            (netpanzer:metadata-editor (get-current-map-data))))))
 
     (gui-add-menu-item menu "Dialogs/Draw Grid" 
                        (lambda ()
@@ -523,9 +516,9 @@
                               (editor-tilemap-save-png *tilemap* "/tmp/foobar.pnm")))
     ;;(tilemap-set-active-layer 0)))
 
-    (gui-create-button-func 0 175
-                            40 25 "FG" 
-                            (lambda () #f))
+;;    (gui-create-button-func 0 175
+;;                            40 25 "FG" 
+;;                            (lambda () #f))
 
     (gui-create-button-func 0 225
                             40 25 "Undo" 
@@ -541,12 +534,12 @@
   (gui-pop-component))
 
 (define (simple-file-dialog title filename func)
-  (let ((window (gui-create-window 200 200 250 160 title)))
+  (let ((window (gui-create-window 200 100 460 125 title)))
     (gui-push-component (gui-window-get-client-area window))
     (gui-create-label 10 10 "Filename: ")
-    (let ((ok       (gui-create-button 190 100 50 25 "Ok"))
-          (cancel   (gui-create-button 130 100 50 25 "Cancel"))
-          (filename (gui-create-inputbox 10 30 180 30 filename))
+    (let ((ok       (gui-create-button 390 60 50 25 "Ok"))
+          (cancel   (gui-create-button 330 60 50 25 "Cancel"))
+          (filename (gui-create-inputbox 10 30 435 30 filename))
           ;;(browse   (gui-create-button 190 30 50 20 "Browse..."))
           )
 
@@ -674,15 +667,7 @@
     (gui-pop-component)))
 
 (define (on-gui-quit)
-  (with-output-to-file (string-append *windstille-homedir* "editor-variables.scm")
-    (lambda ()
-      (display ";; Automatically Written file, don't edit by hand!\n\n")
-      (write (list
-              (cons '*recent-files* 
-                    *recent-files*)))
-      (newline)
-      (display "\n;; EOF ;;\n")
-      )))
+  (variables:save *variable-file*))
 
 (define (truncate-list n lst)
   (cond ((or (null? lst)
@@ -704,11 +689,22 @@
 
   (remove-doubles-helper lst '()))
 
-(define (load-variables)
+(define (variables:save filename)
+  (with-output-to-file filename
+    (lambda ()
+      (display ";; Automatically Written file, don't edit by hand!\n\n")
+      (write (list
+              (cons '*recent-files* 
+                    *recent-files*)))
+      (newline)
+      (display "\n;; EOF ;;\n")
+      )))
+
+(define (variables:load filename)
   (let ((editor-variables '()))
     (catch #t
            (lambda ()
-             (call-with-input-file (string-append *windstille-homedir* "editor-variables.scm")
+             (call-with-input-file (string-append filename)
                (lambda (port)
                  (let ((vars (read port)))
                    (cond ((list? vars)
@@ -721,7 +717,7 @@
              ))))
 
 (define (init-recent-files)
-  (set! *recent-files* (append  *windstille-levelfiles* *recent-files*))
+  (set! *recent-files* (append  *flexlay-levelfiles* *recent-files*))
 
 
   (let ((ent (assoc-ref *editor-variables* '*recent-files*)))
@@ -772,7 +768,7 @@
                                   )))
    ))
 
-(load-variables)
+(variables:load *variable-file*)
 (init-recent-files)
 
 (set! *editor-map* (editor-map-component-create 0 22 screen-width (- screen-height 22)))
@@ -894,14 +890,17 @@
    (tile-selector-set-tileset *tileselector* *level-tileset*)
    (tile-selector-set-tiles   *tileselector* (seq 1 150))
    (supertux:new-map 20 15))
+
   ((netpanzer)
    (tile-selector-set-tileset *tileselector* *tileset*)
    (netpanzer:new-map 20 15))
+
   ((pingus)
    (load-brushes "images/groundpieces/ground/crystal/")
    (load-brushes "images/groundpieces/ground/snow/")
    (load-brushes "images/groundpieces/ground/desert/")
    (pingus:new-map 800 600))
+
   ((windstille)
    (tile-selector-set-tileset *tileselector* *tileset*)
    (tile-selector-set-tiles   *tileselector* (seq 1 150))

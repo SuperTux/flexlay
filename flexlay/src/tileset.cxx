@@ -1,6 +1,6 @@
 //  $Id: tile_factory.cxx,v 1.10 2003/09/22 18:37:05 grumbel Exp $
 //
-//  Windstille - A Jump'n Shoot Game
+//  Flexlay - A Generic 2D Game Editor
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
 //
 //  This program is free software; you can redistribute it and/or
@@ -72,12 +72,12 @@ Tileset::load_tile_file(const std::string& filename)
                 }
               else
                 {
-                  std::cout << "WindstilleLevel: Unknown tag: " << scm2string(name) << std::endl;
+                  std::cout << "Tileset: Unknown tag: " << scm2string(name) << std::endl;
                 }
             }
           else
             {
-              std::cout << "WindstilleLevel: Not a pair!"  << std::endl;
+              std::cout << "Tileset: Not a pair!"  << std::endl;
             }
           tree = gh_cdr(tree);
         }

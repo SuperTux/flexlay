@@ -7,7 +7,6 @@
 (define *supertux:datadir* "/home/ingo/cvs/supertux/supertux/data/")
 (game-load-resources "tuxtiles.xml")
 (game-load-resources "tuxsprites.xml")
-;;(game-load-tiles     "tuxtiles.scm")
 
 (define *worldmap-tileset* (tileset-create *tile-size*))
 (define *level-tileset*    (tileset-create *tile-size*))

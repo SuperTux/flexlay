@@ -1,6 +1,6 @@
 //  $Id: tile_factory.hxx,v 1.8 2003/09/22 18:37:05 grumbel Exp $
 // 
-//  Windstille - A Jump'n Shoot Game
+//  Flexlay - A Generic 2D Game Editor
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
 //
 //  This program is free software; you can redistribute it and/or

@@ -1,6 +1,6 @@
 //  $Id$
 //
-//  Pingus - A free Lemmings clone
+//  Flexlay - A Generic 2D Game Editor
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
 //
 //  This program is free software; you can redistribute it and/or
@@ -61,7 +61,7 @@ EditorMain::parse_command_line(int argc, char** argv)
 
   argp.set_help_indent(22);
   argp.add_usage ("[OPTION]... [LEVELFILE]...");
-  argp.add_doc   ("Windstille Editor - A generic game editor");
+  argp.add_doc   ("Flexlay - A Generic Game Editor");
 
   argp.add_group("Display Options:");
   argp.add_option('g', "geometry",   "WxH", "Change window size to WIDTH and HEIGHT");
@@ -159,7 +159,7 @@ EditorMain::main(int argc, char** argv)
     if (home_c) 
       {
         std::string home = home_c; 
-        home += "/.windstille";
+        home += "/.flexlay";
         if (CL_Directory::create(home))
           std::cout << "Created " << home << std::endl;
         homedir = home + "/";
@@ -190,10 +190,10 @@ EditorMain::main(int argc, char** argv)
                                  levelfiles_scm);
       }
 
-    gh_define("*windstille-levelfiles*",      gh_reverse(levelfiles_scm));
-    gh_define("*windstille-datadir*",        gh_str02scm(datadir.c_str()));
-    gh_define("*windstille-homedir*",        gh_str02scm(homedir.c_str()));
-    gh_define("*windstille-package-string*", gh_str02scm(PACKAGE_STRING));
+    gh_define("*flexlay-levelfiles*",     gh_reverse(levelfiles_scm));
+    gh_define("*flexlay-datadir*",        gh_str02scm(datadir.c_str()));
+    gh_define("*flexlay-homedir*",        gh_str02scm(homedir.c_str()));
+    gh_define("*flexlay-package-string*", gh_str02scm(PACKAGE_STRING));
     std::cout << "done" << std::endl;
 
     CL_SetupCore::init();
@@ -211,9 +211,9 @@ EditorMain::main(int argc, char** argv)
                                   screen_width, screen_height, fullscreen, allow_resize);
 
     resources =  new CL_ResourceManager();
-    //resources->add_resources(CL_ResourceManager(datadir + "windstille.xml", false));
+    //resources->add_resources(CL_ResourceManager(datadir + "flexlay.xml", false));
 
-    std::cout << "Loading Windstille startup script: " << game_definition_file << std::flush;
+    std::cout << "Loading Flexlay startup script: " << game_definition_file << std::flush;
     gh_load((datadir + game_definition_file).c_str());
     std::cout << "done" << std::endl;
 

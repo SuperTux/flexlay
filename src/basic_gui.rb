@@ -22,7 +22,7 @@
 
 ## GUI class which holds all the GUI components and the state of them
 class GUI
-  attr_reader :workspace, :gui
+  attr_reader :workspace, :gui, :tileselector
 
   def run()
     ## Enter main loop here

@@ -110,7 +110,7 @@ libflexlay_env.SharedLibrary(
     'zoom_tool.cxx'],
     CPPPATH=['..'] + clanLib_env['CPPPATH'],
     CXXFLAGS  = clanLib_env['CCFLAGS'],
-    LINKFLAGS = ['-Wl,-rpath', '$USER_LIBPATH'] + clanLib_env['LINKFLAGS'],
+#  LINKFLAGS = ['-Wl,-rpath', '$USER_LIBPATH'] + clanLib_env['LINKFLAGS'],
     LIBPATH=['$USER_LIBPATH'] + clanLib_env['LIBPATH'],
     LIBS = clanLib_env['LIBS'])
 
@@ -125,7 +125,7 @@ libflexlay_ruby_env.SharedLibrary(
     'ruby_object.cxx'
     ],
     CPPPATH=['$USER_CPPPATH','$RUBYDIR','..'] + clanLib_env['CPPPATH'],
-    LINKFLAGS = ['-Wl,-rpath', '$USER_LIBPATH'] + clanLib_env['LINKFLAGS'],
+#    LINKFLAGS = ['-Wl,-rpath', '$USER_LIBPATH'] + clanLib_env['LINKFLAGS'],
     LIBPATH=['.'] + clanLib_env['LIBPATH'],
     LIBS=['flexlay'] + clanLib_env['LIBS'])
 

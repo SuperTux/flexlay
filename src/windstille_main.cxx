@@ -1,4 +1,4 @@
-//  $Id: windstille_main.cxx,v 1.27 2003/11/06 09:24:17 grumbel Exp $
+//  $Id: windstille_main.cxx,v 1.28 2003/11/07 13:00:39 grumbel Exp $
 //
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -45,39 +45,96 @@ extern "C" void SWIG_init(void);
 
 CL_ResourceManager* resources;
 
-int 
-WindstilleMain::main(int argc, char** argv)
+WindstilleMain::WindstilleMain()
 {
-#ifdef WIN32
-  if (debug)
-    {
-      console_window = new CL_ConsoleWindow("Windstille Debug Window");
-      redirect_stdio("windstille.log");
-    }
-#endif
+  screen_width  = 800;
+  screen_height = 600;
+  fullscreen    = false;
+  allow_resize  = false;
+  joystick_id   = -1;
+  launch_editor = false;
+}
 
-  scm_boot_guile (argc, argv,::inner_main, 0);
-  return 0;
+WindstilleMain::~WindstilleMain()
+{
+}
+
+void
+WindstilleMain::parse_command_line(int argc, char** argv)
+{
+  CL_CommandLine argp;
+    
+  argp.set_help_indent(22);
+  argp.add_usage ("[LEVELFILE]");
+  argp.add_doc   ("Windstille is a classic Jump'n Run game.");
+
+  argp.add_group("Display Options:");
+  argp.add_option('g', "geometry",   "WxH", "Change window size to WIDTH and HEIGHT");
+  argp.add_option('f', "fullscreen", "", "Launch the game in fullscreen");
+
+  argp.add_group("Controlls Options:");
+  argp.add_option('j', "joystick", "NUM", "Use joystick number NUM instead of keyboard");
+
+  argp.add_group("Misc Options:");
+  argp.add_option('e', "editor",     "", "Launch the level editor");
+  argp.add_option('d', "debug",      "", "Turn on debug output");
+  argp.add_option('h', "help",       "", "Print this help");
+
+  argp.parse_args(argc, argv);
+
+  while (argp.next())
+    {
+      switch (argp.get_key())
+        {
+        case 'd':
+          debug = 1;
+          break;
+
+        case 'e':
+          launch_editor = true;
+          break;
+		  
+        case 'f':
+          fullscreen = true;
+          break;
+
+        case 'g':
+          if (sscanf(argp.get_argument().c_str(), "%dx%d", &screen_width, &screen_height) == 2)
+            {
+              std::cout << "Geometry: " << screen_width << "x" << screen_height << std::endl;
+            }
+          break;
+		  
+        case 'j':
+          if (!from_string(argp.get_argument(), joystick_id)) {
+            std::cout << "Error: Couldn't convert '" << argp.get_argument() << "' to joystick_id" 
+                      << std::endl;
+          }
+          break;
+
+        case 'h':
+          argp.print_help();
+          exit(EXIT_SUCCESS);
+          break;
+
+        case CL_CommandLine::REST_ARG:
+          levelfile = argp.get_argument();
+          break;
+        }
+    }
 }
 
 int 
-WindstilleMain::inner_main(void* closure, int argc, char** argv)
+WindstilleMain::main(int argc, char** argv)
 {
-  int  screen_width  = 800;
-  int  screen_height = 600;
-  bool fullscreen    = false;
-  bool allow_resize  = false;
-  int  joystick_id   = -1;
+  CL_ConsoleWindow console("Windstille Debug Window");
+  console.redirect_stdio();
 
-  bool launch_editor = false;
-  std::string levelfile;
-  
   // Init the path
   bindir  = CL_System::get_exe_path();
   libdir  = bindir + "../lib/";
   datadir = bindir + "../data/";
-  
-  try {
+
 #ifndef WIN32
     char* home_c = getenv("HOME");
     if (home_c) 
@@ -95,104 +152,19 @@ WindstilleMain::inner_main(void* closure, int argc, char** argv)
 #else
     homedir = "config/";
 #endif
+  
+  try {
+    parse_command_line(argc, argv);
+    init_modules();
 
-    CL_CommandLine argp;
-    
-    argp.set_help_indent(22);
-    argp.add_usage ("[LEVELFILE]");
-    argp.add_doc   ("Windstille is a classic Jump'n Run game.");
-
-    argp.add_group("Display Options:");
-    argp.add_option('g', "geometry",   "WxH", "Change window size to WIDTH and HEIGHT");
-    argp.add_option('f', "fullscreen", "", "Launch the game in fullscreen");
-
-    argp.add_group("Controlls Options:");
-    argp.add_option('j', "joystick", "NUM", "Use joystick number NUM instead of keyboard");
-
-    argp.add_group("Misc Options:");
-    argp.add_option('e', "editor",     "", "Launch the level editor");
-    argp.add_option('d', "debug",      "", "Turn on debug output");
-    argp.add_option('h', "help",       "", "Print this help");
-
-    argp.parse_args(argc, argv);
-
-    while (argp.next())
+    for (int i = 0; i < 255; ++i)
       {
-        switch (argp.get_key())
-          {
-          case 'd':
-            debug = 1;
-            break;
-
-          case 'e':
-            launch_editor = true;
-            break;
-		  
-          case 'f':
-            fullscreen = true;
-            break;
-
-          case 'g':
-            if (sscanf(argp.get_argument().c_str(), "%dx%d", &screen_width, &screen_height) == 2)
-              {
-                std::cout << "Geometry: " << screen_width << "x" << screen_height << std::endl;
-              }
-            break;
-		  
-          case 'j':
-            if (!from_string(argp.get_argument(), joystick_id)) {
-              std::cout << "Error: Couldn't convert '" << argp.get_argument() << "' to joystick_id" 
-                        << std::endl;
-            }
-            break;
-
-          case 'h':
-            argp.print_help();
-            return EXIT_SUCCESS;
-            break;
-
-          case CL_CommandLine::REST_ARG:
-            levelfile = argp.get_argument();
-            break;
-          }
+        CL_Display::clear(CL_Color(i, i, i));
+        CL_Display::flip();
+        CL_System::keep_alive();
+        CL_System::sleep(20);
       }
-
-    SWIG_init();
-
-    CL_SetupCore::init();
-    CL_SetupGL::init();
-    CL_SetupDisplay::init();
-    CL_SetupSound::init();
-    CL_SetupVorbis::init();
-
-    CL_DisplayWindow window (PACKAGE_STRING,
-                             screen_width, screen_height, fullscreen, allow_resize);
-    CL_SoundOutput sound_output(44100);
-
-    MusicManager::init();
-
-    CL_Display::clear();
-    CL_Display::flip();
-
-    resources =  new CL_ResourceManager();
-    resources->add_resources(CL_ResourceManager(datadir + "tiles.xml", false));
-    resources->add_resources(CL_ResourceManager(datadir + "windstille.xml", false));
-
-    Fonts::init();
     
-    std::cout << "Loading Guile Code..." << std::endl;
-
-    gh_eval_str("(display \"Guile: Enabling debugging...\\n\")"
-                "(debug-enable 'debug)"
-                "(debug-enable 'backtrace)"
-                "(read-enable 'positions)");
-
-    gh_define("*windstille-levelfile*", gh_str02scm(levelfile.c_str()));
-    gh_define("*windstille-datadir*", gh_str02scm(datadir.c_str()));
-    gh_define("*windstille-package-string*", gh_str02scm(PACKAGE_STRING));
-
-    std::cout << "Loading Guile Code... done" << std::endl;
-
     std::cout << "Detected " << CL_Joystick::get_device_count() << " joysticks" << std::endl;
 
     // FIXME:
@@ -201,8 +173,6 @@ WindstilleMain::inner_main(void* closure, int argc, char** argv)
     else
       new KeyboardController();
         
-    TileFactory::init();
-
     if (!launch_editor && levelfile.empty())
       {
         std::cout << "Starting Menu" << std::endl;
@@ -222,6 +192,9 @@ WindstilleMain::inner_main(void* closure, int argc, char** argv)
           editor.load (levelfile);
         editor.run();
       }
+
+    deinit_modules();
+
   } catch (CL_Error& error) {
     std::cout << "CL_Error: " << error.message << std::endl;
   } catch (std::exception& err) {
@@ -229,21 +202,74 @@ WindstilleMain::inner_main(void* closure, int argc, char** argv)
   } catch (...) {
     std::cout << "Error catched something unknown?!" << std::endl;
   }
+
+  return 0;
+}
+
+void
+WindstilleMain::init_modules()
+{
+  scm_init_guile();
+  SWIG_init();
+
+  std::cout << "Loading Guile Code..." << std::endl;
+
+  gh_eval_str("(display \"Guile: Enabling debugging...\\n\")"
+              "(debug-enable 'debug)"
+              "(debug-enable 'backtrace)"
+              "(read-enable 'positions)");
+
+  gh_define("*windstille-levelfile*",      gh_str02scm(levelfile.c_str()));
+  gh_define("*windstille-datadir*",        gh_str02scm(datadir.c_str()));
+  gh_define("*windstille-package-string*", gh_str02scm(PACKAGE_STRING));
+
+  std::cout << "Loading Guile Code... done" << std::endl;
+
+  CL_SetupCore::init();
+  CL_SetupGL::init();
+  CL_SetupDisplay::init();
+
+  if (!sound_disabled)
+    {
+      CL_SetupSound::init();
+      CL_SetupVorbis::init();
+    }
+
+  window = new CL_DisplayWindow(PACKAGE_STRING,
+                                screen_width, screen_height, fullscreen, allow_resize);
+  if (!sound_disabled)
+    sound = new CL_SoundOutput(44100);
+
+  resources =  new CL_ResourceManager();
+  resources->add_resources(CL_ResourceManager(datadir + "tiles.xml", false));
+  resources->add_resources(CL_ResourceManager(datadir + "windstille.xml", false));
   
-  TileFactory::deinit();
-  Fonts::deinit();
+  TileFactory::init();
+  Fonts::init(); 
+  MusicManager::init();
+}
 
+void
+WindstilleMain::deinit_modules()
+{
   MusicManager::deinit();
+  Fonts::deinit();
+  TileFactory::deinit();
 
-  CL_SetupVorbis::init();
-  CL_SetupSound::init();
+  if (!sound_disabled)
+    delete sound;
+  
+  delete window;
+
+  if (!sound_disabled)
+    {
+      CL_SetupVorbis::init();
+      CL_SetupSound::init();
+    }
+
   CL_SetupDisplay::init();
   CL_SetupGL::init();
   CL_SetupCore::init(); 
-
-  delete console_window;
-
-  return 0;
 }
 
 /* EOF */

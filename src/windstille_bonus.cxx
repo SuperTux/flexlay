@@ -1,4 +1,4 @@
-//  $Id: windstille_bonus.cxx,v 1.4 2003/11/06 10:32:22 grumbel Exp $
+//  $Id: windstille_bonus.cxx,v 1.5 2003/11/07 13:00:39 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -63,7 +63,7 @@ WindstilleBonus::draw()
   {
     CL_Font font = Fonts::dialog;
     font.set_alignment(origin_top_left);
-    font.draw(20, 20, "What's more to come?");
+    font.draw(20, 20, "What's to come?");
     font.set_alignment(origin_bottom_right);
     font.draw(CL_Display::get_width() - 20,
               CL_Display::get_height() - 20, "You'll never know...");

@@ -1,4 +1,4 @@
-//  $Id: music_manager.cxx,v 1.2 2003/11/06 09:53:43 grumbel Exp $
+//  $Id: music_manager.cxx,v 1.3 2003/11/07 13:00:39 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -19,6 +19,7 @@
 
 #include <iostream>
 #include <ClanLib/Core/System/system.h>
+#include "globals.hxx"
 #include "music_manager.hxx"
 
 MusicManager* MusicManager::current_ = 0; 
@@ -37,6 +38,9 @@ MusicManager::deinit()
 
 MusicManager::MusicManager()
 {
+  if (sound_disabled)
+    return;
+
   last_time = CL_System::get_time();
   state = STOPPED;
   waiting = false;
@@ -45,6 +49,9 @@ MusicManager::MusicManager()
 void
 MusicManager::play(const std::string& filename, bool loop)
 {
+  if (sound_disabled)
+    return;
+
   if (state == STOPPED)
     {
       state = PLAYING;
@@ -67,6 +74,9 @@ MusicManager::play(const std::string& filename, bool loop)
 void
 MusicManager::stop()
 {
+  if (sound_disabled)
+    return;
+
   if (state == PLAYING)
     state = FADEOUT;
 }
@@ -74,6 +84,9 @@ MusicManager::stop()
 void
 MusicManager::keep_alive()
 {
+  if (sound_disabled)
+    return;
+
   unsigned int cur_time = CL_System::get_time();
   float delta = (cur_time - last_time)/1000.0f;
   last_time = cur_time;

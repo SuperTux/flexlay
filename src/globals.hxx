@@ -1,4 +1,4 @@
-//  $Id: globals.hxx,v 1.10 2003/11/05 22:44:49 grumbel Exp $
+//  $Id: globals.hxx,v 1.11 2003/11/07 13:00:39 grumbel Exp $
 // 
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -45,6 +45,7 @@ extern CL_ResourceManager* resources;
 
 extern bool bonus_active;
 extern float game_speed;
+extern bool sound_disabled;
 
 extern int debug;
 

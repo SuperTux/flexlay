@@ -1,4 +1,4 @@
-//  $Id: windstille_main.hxx,v 1.3 2003/11/04 22:48:51 grumbel Exp $
+//  $Id: windstille_main.hxx,v 1.4 2003/11/07 13:00:39 grumbel Exp $
 // 
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -26,19 +26,29 @@
 class WindstilleMain : public CL_ClanApplication
 {
 private:
-  CL_ConsoleWindow* console_window;
+  int  screen_width;
+  int  screen_height;
+  bool fullscreen;
+  bool allow_resize;
+  int  joystick_id;
 
+  bool launch_editor;
+  std::string levelfile;
+  
+  CL_SoundOutput*   sound;
+  CL_DisplayWindow* window;
 public:
+  WindstilleMain();
+  ~WindstilleMain();
+
   virtual char* get_title() { return "Windstille"; }
   virtual int main(int argc, char** argv);
-  virtual int inner_main(void* closure, int argc, char** argv);
-} main_app;
 
-// Wrapper to call the member func
-void inner_main (void* closure, int argc, char* argv[])
-{
-  main_app.inner_main (closure, argc, argv);
-}
+private:
+  void parse_command_line(int argc, char** argv);
+  void init_modules();
+  void deinit_modules();
+} main_app;
 
 #endif
 

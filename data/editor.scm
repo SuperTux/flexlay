@@ -2,8 +2,8 @@
              (srfi srfi-1)
              (ice-9 pretty-print))
 
-(use-modules (ice-9 readline))
-(activate-readline)
+;(use-modules (ice-9 readline))
+;(activate-readline)
 
 (load "helper.scm")
 (debug-enable 'backtrace)
@@ -610,7 +610,7 @@
 (define (create-tile-editor)
   (let ((window (gui-create-window 200 200 250 180 "Tile Editor")))
     (gui-push-component (gui-window-get-client-area window))
-    (set! *tileeditor* (editor-add-tileeditor 10 10))
+    (set! *tileeditor* (editor-add-tileeditor 10 10 *tile-size* *tile-size*))
     (let ((gettile (gui-create-button 148 10 75 25 "Get Tile"))
           (dump    (gui-create-button 148 95 75 25 "Dump")))
       
@@ -670,8 +670,6 @@
              (tile-selector-create (- screen-width (* 20 32)) 0 20 15 1.0))
             (else
              (tile-selector-create (- screen-width (* 3 64)) 0 3 8 .5))))
-
-    (tile-selector-set-tiles *tileselector* (seq 1 100))
 
     (gui-component-on-close window (lambda ()
                                      (gui-hide-component window)))
@@ -856,7 +854,7 @@
                               '(money))
    (object-selector-add-brush *object-selector*
                               (string-append *supertux:datadir* "images/shared/snowball-left-0.png")
-                              '(bsod))
+                              '(snowball))
    (object-selector-add-brush *object-selector*
                               (string-append *supertux:datadir* "images/shared/mriceblock-left-0.png")
                               '(mriceblock))
@@ -907,6 +905,8 @@
 
 (case *game*
   ((supertux)
+   (tile-selector-set-tileset *tileselector* *level-tileset*)
+   (tile-selector-set-tiles   *tileselector* (seq 1 100))
    (supertux:new-map 20 15))
   ((netpanzer)
    (netpanzer:new-map 20 15))

@@ -24,9 +24,10 @@
 #include <ClanLib/Display/palette.h>
 #include <ClanLib/Display/Providers/provider_factory.h>
 #include <iostream>
-#include "globals.hxx"
 #include "../string_converter.hxx"
 #include "tile.hxx"
+
+extern CL_ResourceManager* resources;
 
 Tile::Tile(const std::string& filename_, 
            const CL_Color& color_, 

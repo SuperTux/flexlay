@@ -5,13 +5,12 @@
 (define *game* 'supertux)
 (define *tile-size* 32)
 (define *supertux:datadir* "/home/ingo/cvs/supertux/supertux/data/")
-(game-set-tilesize 32 16)
 (game-load-resources "tuxtiles.xml")
 (game-load-resources "tuxsprites.xml")
 ;;(game-load-tiles     "tuxtiles.scm")
 
-(define *worldmap-tileset* (tileset-create))
-(define *level-tileset* (tileset-create))
+(define *worldmap-tileset* (tileset-create *tile-size*))
+(define *level-tileset*    (tileset-create *tile-size*))
 
 (define (supertux:load-tiles filename)
   (with-input-from-file filename
@@ -413,7 +412,7 @@
                                  (cond ((= el 48) ;; 0
                                         (objectmap-add-object objmap 
                                                               (string-append *supertux:datadir* "images/shared/snowball-left-0.png")
-                                                              x y '(bsod)))
+                                                              x y '(snowball)))
                                        ((= el 49) ;; 1
                                         (objectmap-add-object objmap 
                                                               (string-append *supertux:datadir* "images/shared/mriceblock-left-0.png")
@@ -444,7 +443,7 @@
                         ((snowball bsod)
                          (objectmap-add-object objmap
                                                (string-append *supertux:datadir* "images/shared/snowball-left-0.png")
-                                               x y '(bsod)))
+                                               x y '(snowball)))
                         ((mrbomb)
                          (objectmap-add-object objmap
                                                (string-append *supertux:datadir* "images/shared/mrbomb-left-0.png")

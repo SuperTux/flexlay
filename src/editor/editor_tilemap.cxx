@@ -25,7 +25,6 @@
 #include <ClanLib/Display/palette.h>
 #include <ClanLib/gl.h>
 #include "../windstille_level.hxx"
-#include "../globals.hxx"
 #include "tile.hxx"
 #include "tileset.hxx"
 #include "editor.hxx"
@@ -79,7 +78,7 @@ EditorTileMap::draw_tile(int id, int x, int y, bool attribute)
       sprite.draw (x, y);
       
       if (attribute)
-        CL_Display::fill_rect(CL_Rect(CL_Point(x, y), CL_Size(TILE_SIZE + 1, TILE_SIZE + 1)),
+        CL_Display::fill_rect(CL_Rect(CL_Point(x, y), CL_Size(tile_size, tile_size)),
                               tile->get_attribute_color());
     }
 }
@@ -347,6 +346,16 @@ EditorTileMap::get_bounding_rect()
 {
   return CL_Rect(CL_Point(0, 0),
                  CL_Size(field.get_width() * tile_size, field.get_height() * tile_size));
+}
+
+CL_Point
+EditorTileMap::world2tile(const CL_Point& pos) const
+{
+  int x = pos.x/tile_size;
+  int y = pos.y/tile_size;
+
+  return CL_Point(pos.x < 0 ? x-1 : x,
+                  pos.y < 0 ? y-1 : y);
 }
 
 /* EOF */

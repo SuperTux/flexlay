@@ -24,8 +24,8 @@
 #include <ClanLib/sdl.h>
 #include <ClanLib/display.h>
 #include <guile/gh.h>
-#include "../globals.hxx"
 #include "editor.hxx"
+#include "globals.hxx"
 #include "tileset.hxx"
 #include "editor_main.hxx"
 
@@ -55,7 +55,9 @@ EditorMain::parse_command_line(int argc, char** argv)
   const int debug_flag  = 256;
   const int game_flag   = 257;
   const int opengl_flag = 258;
+#ifdef HAVE_LIBSDL
   const int sdl_flag = 259;
+#endif
 
   argp.set_help_indent(22);
   argp.add_usage ("[OPTION]... [LEVELFILE]...");
@@ -65,8 +67,9 @@ EditorMain::parse_command_line(int argc, char** argv)
   argp.add_option('g', "geometry",   "WxH", "Change window size to WIDTH and HEIGHT");
   argp.add_option('f', "fullscreen", "", "Launch the game in fullscreen");
   argp.add_option(opengl_flag, "opengl", "", "Use OpenGL mode");
+#ifdef HAVE_LIBSDL
   argp.add_option(sdl_flag, "sdl", "", "Use SDL mode");
-
+#endif
   argp.add_group("Misc Options:");
   argp.add_option(game_flag, "game", "GAME", "Load the game definition file at startup");
   argp.add_option('d', "datadir",    "DIR", "Fetch game data from DIR");
@@ -91,9 +94,11 @@ EditorMain::parse_command_line(int argc, char** argv)
           game_definition_file = argp.get_argument();
           break;
 
+#ifdef HAVE_LIBSDL
         case sdl_flag:
           use_opengl = true;
           break;
+#endif
 
         case opengl_flag:
           use_opengl = true;
@@ -179,10 +184,14 @@ EditorMain::main(int argc, char** argv)
     std::cout << "done" << std::endl;
 
     CL_SetupCore::init();
+#ifdef HAVE_LIBSDL
     if (use_opengl)
       CL_SetupGL::init();
     else
       CL_SetupSDL::init();
+#else
+    CL_SetupGL::init();
+#endif
     CL_SetupDisplay::init();
 
     window = new CL_DisplayWindow(PACKAGE_STRING,
@@ -206,10 +215,16 @@ EditorMain::main(int argc, char** argv)
     editor.run();
 
     CL_SetupDisplay::deinit();
+
+#ifdef HAVE_LIBSDL
     if (use_opengl)
       CL_SetupGL::deinit();
     else
       CL_SetupSDL::init();
+#else
+    CL_SetupGL::deinit();
+#endif
+
     CL_SetupCore::deinit();
 
   } catch (CL_Error& error) {

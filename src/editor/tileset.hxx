@@ -35,6 +35,8 @@ private:
   typedef std::vector<Tile*> Tiles;
   Tiles tiles;
 
+  int tile_size;
+
   static Tileset* current_;
 public:
   static std::string tile_def_file;
@@ -46,7 +48,7 @@ public:
 
   /** Create an empty Tileset, so that the user can add stuff via
       scripting to it */
-  Tileset();
+  Tileset(int tile_size_);
 
   ~Tileset();
 
@@ -57,6 +59,8 @@ public:
    *
    *  @return on success the tile is returned, on failure 0 */
   Tile* create(int id);
+
+  int get_tile_size() const { return tile_size; }
 
   /** Create the default TileFactor*/
   static void init();

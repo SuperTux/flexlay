@@ -20,7 +20,6 @@
 #include <iostream>
 #include <ClanLib/Core/core_iostream.h>
 #include <ClanLib/display.h>
-#include "../globals.hxx"
 #include "editor_map.hxx"
 #include "editor_map_component.hxx"
 #include "scripting/editor.hxx"
@@ -131,13 +130,13 @@ ObjectSelector::mouse_down(const CL_InputEvent& event)
           break;
       
         case CL_MOUSE_WHEEL_UP:
-          offset -= static_cast<int>(TILE_SIZE*scale);
+          offset -= static_cast<int>(32*scale); // FIXME: configurable scrollspeed might be a good idea
           if (offset < 0)
             offset = 0;
           break;
 
         case CL_MOUSE_WHEEL_DOWN:
-          offset += static_cast<int>(TILE_SIZE*scale);
+          offset += static_cast<int>(32*scale); // FIXME: configurable scrollspeed might be a good idea
           break;
         }
     }

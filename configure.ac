@@ -70,7 +70,7 @@ PKG_CHECK_MODULES(EDITOR,
   clanApp-0.7            >= $REQUIRED_CLANLIB_VERSION
   clanDisplay-0.7        >= $REQUIRED_CLANLIB_VERSION
   clanGL-0.7             >= $REQUIRED_CLANLIB_VERSION
-  clanSDL-0.7             >= $REQUIRED_CLANLIB_VERSION
+dnl  clanSDL-0.7             >= $REQUIRED_CLANLIB_VERSION
   clanGUI-0.7            >= $REQUIRED_CLANLIB_VERSION
   clanGUIStyleSilver-0.7 >= $REQUIRED_CLANLIB_VERSION
   ],

@@ -32,9 +32,6 @@ class CL_Component;
 class TileBrush;
 class Tileset;
 
-/** Set the size of the tiles and there subsize */
-void game_set_tilesize(int size, int subsize);
-
 /** Load a tile definition file into the Tileset */
 void game_load_tiles(const char* resourcefile);
 
@@ -50,6 +47,7 @@ CL_Component* minimap_create(CL_Component* p, int x, int y, int w, int h);
 
 CL_Component* tile_selector_create(int x, int y, int w, int h, float scale);
 void tile_selector_set_tiles(CL_Component*, const std::vector<int>& tiles);
+void tile_selector_set_tileset(CL_Component*, Tileset* tileset);
 
 CL_Component* object_selector_create(int x, int y, int w, int h, int obj_w, int obj_h);
 CL_Component* editor_map_component_create(int x, int y, int w, int h);
@@ -84,7 +82,7 @@ void tilemap_object_tool_clear_selection();
 
 void objectmap_tool_set_popupmenu_callback(SCM callback);
 
-CL_Component* editor_add_tileeditor(int x, int y);
+CL_Component* editor_add_tileeditor(int x, int y, int w, int h);
 
 void tileeditor_set_tile(CL_Component* comp, int id);
 
@@ -121,7 +119,7 @@ void            editor_tilemap_set_bgcolor(EditorMapLayer* l, int r, int g, int 
 void            editor_tilemap_set_fgcolor(EditorMapLayer* l, int r, int g, int b, int a);
 void            editor_tilemap_save_png(EditorMapLayer* l, const char* filename);
 
-Tileset* tileset_create();
+Tileset* tileset_create(int tile_size);
 void tileset_add_tile(Tileset* tileset, SCM data);
 void tileset_set_current(Tileset* tileset);
 

@@ -19,14 +19,16 @@
 
 #include <iostream>
 #include <ClanLib/display.h>
-#include "../globals.hxx"
 #include "tileset.hxx"
 #include "../tile.hxx"
 #include "tile_selector.hxx"
 #include "tilemap_paint_tool.hxx"
 
 TileSelector::TileSelector(int width, int height, CL_Component* parent)
-  : CL_Component(CL_Rect(CL_Point(0,0), CL_Size(width * TILE_SIZE, height * TILE_SIZE)), parent),
+  : CL_Component(CL_Rect(CL_Point(0,0), 
+                         CL_Size(width * 32,  // FIXME: Dirty hack, replace with a resizeable window
+                                 height * 32)), 
+                 parent),
     width(width), height(height)
 {
   index = 0;
@@ -74,21 +76,21 @@ TileSelector::mouse_down(const CL_InputEvent& event)
     }
   else if (event.id == CL_MOUSE_WHEEL_UP)
     {
-      offset -= static_cast<int>(TILE_SIZE*scale);
+      offset -= static_cast<int>(tileset->get_tile_size()*scale);
       if (offset < 0)
         offset = 0;
     }
   else if (event.id == CL_MOUSE_WHEEL_DOWN)
     {
-      offset += static_cast<int>(TILE_SIZE*scale);
+      offset += static_cast<int>(tileset->get_tile_size()*scale);
     }
 }
 
 void
 TileSelector::mouse_move(const CL_InputEvent& event)
 {
-  int x = event.mouse_pos.x/static_cast<int>(TILE_SIZE*scale);
-  int y = (event.mouse_pos.y+offset)/static_cast<int>(TILE_SIZE*scale);
+  int x = event.mouse_pos.x/static_cast<int>(tileset->get_tile_size()*scale);
+  int y = (event.mouse_pos.y+offset)/static_cast<int>(tileset->get_tile_size()*scale);
 
   mouse_over_tile = y * width + x;
 
@@ -110,12 +112,12 @@ TileSelector::draw()
         int x = i % width;
         int y = i / width;
 
-        Tile* tile = Tileset::current()->create(i);
+        Tile* tile = tileset->create(i);
 
-        CL_Rect rect(CL_Point(static_cast<int>(x * TILE_SIZE*scale),
-                              static_cast<int>(y * TILE_SIZE*scale)),
-                     CL_Size(static_cast<int>(TILE_SIZE*scale),
-                             static_cast<int>(TILE_SIZE*scale)));
+        CL_Rect rect(CL_Point(static_cast<int>(x * tileset->get_tile_size()*scale),
+                              static_cast<int>(y * tileset->get_tile_size()*scale)),
+                     CL_Size(static_cast<int>(tileset->get_tile_size()*scale),
+                             static_cast<int>(tileset->get_tile_size()*scale)));
 
         if (tile)
           {
@@ -123,8 +125,8 @@ TileSelector::draw()
 
             sprite.set_scale(scale, scale);
 
-            sprite.draw(static_cast<int>(x * TILE_SIZE*scale), 
-                        static_cast<int>(y * TILE_SIZE*scale));
+            sprite.draw(static_cast<int>(x * tileset->get_tile_size()*scale), 
+                        static_cast<int>(y * tileset->get_tile_size()*scale));
 
             CL_Display::draw_rect(rect, CL_Color(0,0,0,128));
           }

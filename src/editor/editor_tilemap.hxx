@@ -92,8 +92,14 @@ public:
 
   static void draw_tile(Field<int>* field, const TileBrush& brush, const CL_Point& pos);
 
+  int get_tile_size() const { return tile_size; }
+
   bool has_bounding_rect() const { return true; }
   CL_Rect get_bounding_rect();
+
+  /** Convert a coordinate given in world position into a tile
+      coordinate */
+  CL_Point world2tile(const CL_Point& pos) const;
 };
 
 #endif

@@ -20,7 +20,6 @@
 #include <ClanLib/Display/display.h>
 #include <iostream>
 #include <ClanLib/Core/core_iostream.h>
-#include "../globals.hxx"
 #include "../math.hxx"
 #include "tile_selection.hxx"
 
@@ -66,8 +65,10 @@ TileSelection::clear()
 void
 TileSelection::draw(const CL_Color& color)
 {
-  CL_Display::fill_rect(CL_Rect(selection.left  * TILE_SIZE, selection.top    * TILE_SIZE,
-                                selection.right * TILE_SIZE, selection.bottom * TILE_SIZE),
+  int tile_size = 32; // FIXME: TileSize should be part of the tileset
+
+  CL_Display::fill_rect(CL_Rect(selection.left  * tile_size, selection.top    * tile_size,
+                                selection.right * tile_size, selection.bottom * tile_size),
                         color);
 }
 

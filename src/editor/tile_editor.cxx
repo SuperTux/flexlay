@@ -22,12 +22,14 @@
 #include <ClanLib/Display/display.h>
 #include <ClanLib/Display/keys.h>
 #include <ClanLib/Display/mouse.h>
-#include "../globals.hxx"
 #include "../tile.hxx"
+#include "globals.hxx"
 #include "tile_editor.hxx"
 
-TileEditor::TileEditor(int x, int y, CL_Component* parent)
-  : CL_Component(CL_Rect(CL_Rect(CL_Point(x, y), CL_Size(TILE_SIZE, TILE_SIZE))), parent),
+TileEditor::TileEditor(int x, int y, int w, int h, CL_Component* parent)
+  : CL_Component(CL_Rect(CL_Rect(CL_Point(x, y), 
+                                 CL_Size(w, h))), // FIXME: make this editable via script
+                 parent),
     no_tile("tiles/notile", resources)
 {
   tile = 0;

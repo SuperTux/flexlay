@@ -19,7 +19,6 @@
 
 #include <assert.h>
 #include <string>
-#include "../globals.hxx"
 #include "../tileset.hxx"
 #include "editor_tile.hxx"
 

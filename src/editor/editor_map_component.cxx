@@ -21,7 +21,6 @@
 #include <ClanLib/Display/display.h>
 #include <ClanLib/Display/keys.h>
 #include "../windstille_level.hxx"
-#include "../globals.hxx"
 #include "tileset.hxx"
 #include "editor_names.hxx"
 #include "editor_map.hxx"
@@ -135,6 +134,7 @@ EditorMapComponent::draw ()
   CL_Display::pop_translate_offset();
 }
 
+/*
 CL_Point
 EditorMapComponent::screen2tile(const CL_Point& pos)
 {
@@ -145,7 +145,7 @@ EditorMapComponent::screen2tile(const CL_Point& pos)
   return CL_Point(pos.x - trans_offset.x < 0 ? x-1 : x,
                   pos.y - trans_offset.y < 0 ? y-1 : y); 
                   
-}
+}*/
 
 CL_Point
 EditorMapComponent::screen2world(const CL_Point& pos)

@@ -87,14 +87,6 @@ SCM vector2scm(const std::vector<int>& vec)
 }
 
 void
-game_set_tilesize(int size, int subsize)
-{
-  TILE_SIZE = size;
-  SUBTILE_SIZE = subsize;
-  SUBTILE_NUM = (TILE_SIZE/SUBTILE_SIZE);
-}
-
-void
 game_load_tiles(const char* resourcefile)
 {
   Tileset::current()->load_tile_file(datadir + resourcefile);
@@ -580,11 +572,18 @@ tile_selector_set_tiles(CL_Component* comp, const std::vector<int>& tiles)
   tile_selector->set_tiles(tiles);
 }
 
+void
+tile_selector_set_tileset(CL_Component* comp, Tileset* tileset)
+{
+  TileSelector* tile_selector = dynamic_cast<TileSelector*>(comp);
+  tile_selector->set_tileset(tileset);
+}
+
 CL_Component*
-editor_add_tileeditor(int x, int y)
+editor_add_tileeditor(int x, int y, int w, int h)
 {
   CL_Component* manager = GUIManager::current()->get_component();
-  return new TileEditor(x, y, manager);
+  return new TileEditor(x, y, w, h, manager);
 }
 
 void tileeditor_set_tile(CL_Component* comp, int id)
@@ -974,9 +973,9 @@ editor_map_get_metadata(EditorMap* m)
 
 
 Tileset*
-tileset_create()
+tileset_create(int tile_size)
 {
-  return new Tileset();
+  return new Tileset(tile_size);
 }
 
 void

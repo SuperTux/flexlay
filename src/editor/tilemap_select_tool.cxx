@@ -57,7 +57,7 @@ TileMapSelectTool::on_mouse_up  (const CL_InputEvent& event)
       creating_selection = false;
       parent->release_mouse();
 
-      selection.update(parent->screen2tile(event.mouse_pos));
+      selection.update(EditorTileMap::current()->world2tile(parent->screen2world(event.mouse_pos)));
       break;
     }
 }
@@ -73,7 +73,7 @@ TileMapSelectTool::on_mouse_down(const CL_InputEvent& event)
       creating_selection = true;
       parent->capture_mouse();
 
-      selection.start(parent->screen2tile(event.mouse_pos));
+      selection.start(EditorTileMap::current()->world2tile(parent->screen2world(event.mouse_pos)));
       break;
       
     case CL_MOUSE_RIGHT:
@@ -90,7 +90,7 @@ TileMapSelectTool::on_mouse_move(const CL_InputEvent& event)
 
   if (creating_selection)
     {
-      selection.update(parent->screen2tile(event.mouse_pos));
+      selection.update(EditorTileMap::current()->world2tile(parent->screen2world(event.mouse_pos)));
     }
 }
 

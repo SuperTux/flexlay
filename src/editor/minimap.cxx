@@ -21,7 +21,6 @@
 #include <ClanLib/Display/display.h>
 #include <ClanLib/Display/pixel_format.h>
 #include <ClanLib/Display/pixel_buffer.h>
-#include "../globals.hxx"
 #include "scripting/editor.hxx"
 #include "editor.hxx"
 #include "tile.hxx"
@@ -67,14 +66,15 @@ Minimap::draw()
 
   // FIXME: This doesn't work all that well
   EditorTileMap* tilemap = EditorTileMap::current();
+  int tile_size = tilemap->get_tile_size();
 
   if (tilemap && tilemap->get_height() != 0 && tilemap->get_width() != 0)
     {
-      int map_width  = tilemap->get_width()  * TILE_SIZE;
-      int map_height = tilemap->get_height() * TILE_SIZE;
+      int map_width  = tilemap->get_width()  * tile_size;
+      int map_height = tilemap->get_height() * tile_size;
 
-      CL_Size small_tile(TILE_SIZE * get_width() / map_width + 1,
-                         TILE_SIZE * get_height() / map_height + 1);
+      CL_Size small_tile(tile_size * get_width() / map_width + 1,
+                         tile_size * get_height() / map_height + 1);
 
       Field<int>* field = tilemap->get_map();
 
@@ -85,8 +85,8 @@ Minimap::draw()
               {
                 Tile* tile = Tileset::current()->create(field->at(x, y));
                 if (tile)
-                  CL_Display::fill_rect(CL_Rect(CL_Point((x * TILE_SIZE) * get_width() / map_width,
-                                                         (y * TILE_SIZE) * get_height() / map_height),
+                  CL_Display::fill_rect(CL_Rect(CL_Point((x * tile_size) * get_width() / map_width,
+                                                         (y * tile_size) * get_height() / map_height),
                                                 small_tile),
                                         tile->get_color());
                 CL_Display::flush();
@@ -155,9 +155,9 @@ Minimap::mouse_move(const CL_InputEvent& event)
 {
   // FIXME: This doesn't work all that well
   EditorTileMap* tilemap = EditorTileMap::current();
-
-  int map_width  = tilemap->get_width()  * TILE_SIZE;
-  int map_height = tilemap->get_height() * TILE_SIZE;
+  int tile_size  = tilemap->get_tile_size();
+  int map_width  = tilemap->get_width()  * tile_size;
+  int map_height = tilemap->get_height() * tile_size;
 
   if (drag_active)
     parent->move_to(event.mouse_pos.x * map_width / get_width(),
@@ -169,9 +169,9 @@ Minimap::mouse_down(const CL_InputEvent& event)
 {
   // FIXME: This doesn't work all that well
   EditorTileMap* tilemap = EditorTileMap::current();
-
-  int map_width  = tilemap->get_width()  * TILE_SIZE;
-  int map_height = tilemap->get_height() * TILE_SIZE;
+  int tile_size  = tilemap->get_tile_size();
+  int map_width  = tilemap->get_width()  * tile_size;
+  int map_height = tilemap->get_height() * tile_size;
 
   parent->move_to(event.mouse_pos.x * map_width / get_width(),
                   event.mouse_pos.y * map_height / get_height());

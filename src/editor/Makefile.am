@@ -11,10 +11,10 @@ editor_LDADD    = scripting/libeditor_scripting.a @EDITOR_LIBS@
 editor_SOURCES = \
   editor_main.hxx editor_main.cxx \
   tile.hxx tile.cxx \
-  ../scm_functor.hxx  ../scm_functor.cxx \
-  ../scm_helper.hxx  ../scm_helper.cxx \
-  ../globals.hxx  ../globals.cxx \
-  tileset.hxx   tileset.cxx \
+  scm_functor.hxx scm_functor.cxx \
+  scm_helper.hxx  scm_helper.cxx \
+  globals.hxx  globals.cxx \
+  tileset.hxx  tileset.cxx \
   editor_tilemap.hxx editor_tilemap.cxx \
   tile_selector.hxx tile_selector.cxx \
   editor.hxx editor.cxx \
@@ -47,9 +47,36 @@ editor_SOURCES = \
   object_transform_command.hxx  object_transform_command.cxx
 
 #  tilemap_diamond_tool.hxx tilemap_diamond_tool.cxx 
+STATICBIN_LIBS = \
+-L/usr/X11R6/lib/ \
+-Wl,-Bstatic \
+ @EDITOR_LIBS@ \
+-lguile \
+-lguile-ltdl \
+-lqthreads \
+$(STATIC_READLINE) \
+-lcrypt \
+-lvorbis \
+-logg \
+-lmikmod \
+-ljpeg \
+-lpng12 \
+-lz \
+-lm \
+-lX11 \
+-lXxf86vm \
+-lSM \
+-lXt \
+-lXext \
+-lGLU \
+-ldl \
+-lX11 \
+$(REST_LIBS2) \
+-Wl,-Bdynamic \
+-lGL
 
 editor.static: $(editor_OBJECTS) $(editor_DEPENDENCIES) Makefile
-	$(CXX) -s -nodefaultlibs $(CXXFLAGS)   @EDITOR_CFLAGS@ -o $@ $(editor_OBJECTS) \
+	$(CXX) -s $(CXXFLAGS)   @EDITOR_CFLAGS@ -o $@ $(editor_OBJECTS) \
          $(editor_DEPENDENCIES) $(STATICBIN_LIBS) 
 
 editor.static.comp: editor.static

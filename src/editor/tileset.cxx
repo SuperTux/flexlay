@@ -31,9 +31,10 @@ extern CL_ResourceManager* resources;
 
 Tileset* Tileset::current_ = 0;
 
-Tileset::Tileset()
+Tileset::Tileset(int tile_size_)
 {
   current_ = this;
+  tile_size = tile_size_;
 }
 
 Tileset::~Tileset()

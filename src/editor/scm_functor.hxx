@@ -1,6 +1,6 @@
-//  $Id: tile_editor.hxx,v 1.1 2003/09/22 18:37:05 grumbel Exp $
+//  $Id: scm_functor.hxx,v 1.1 2003/09/10 08:25:29 grumbel Exp $
 // 
-//  Pingus - A free Lemmings clone
+//  Feuerkraft - A Tank Battle Game
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
 //
 //  This program is free software; you can redistribute it and/or
@@ -17,38 +17,30 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-#ifndef HEADER_TILE_EDITOR_HXX
-#define HEADER_TILE_EDITOR_HXX
+#ifndef HEADER_SCM_FUNCTOR_HXX
+#define HEADER_SCM_FUNCTOR_HXX
 
-#include <ClanLib/GUI/component.h>
-#include <ClanLib/Signals/slot_container.h>
-#include <ClanLib/Core/Math/point.h>
-
-class Tile;
+#include <libguile.h>
 
 /** */
-class TileEditor : public CL_Component
+class SCMFunctor
 {
 private:
-  CL_Sprite no_tile;
-  Tile* tile;
-  CL_SlotContainer slots;
-  CL_Point mouse_pos;
+  SCM func;
 public:
-  TileEditor(int x, int y, int w, int h, CL_Component* parent);
-  virtual ~TileEditor();
-  
-  void draw();
-  void mouse_move(const CL_InputEvent& event);
-  void mouse_down(const CL_InputEvent& event);
-  void mouse_up  (const CL_InputEvent& event);
+  SCMFunctor(SCM func);
+  virtual ~SCMFunctor();
 
-  void set_tile(Tile* tile);
-private:
-  void paint(CL_Point pos, bool val);
+  SCMFunctor(const SCMFunctor&);
 
-  TileEditor (const TileEditor&);
-  TileEditor& operator= (const TileEditor&);
+  SCMFunctor& operator= (const SCMFunctor&);
+
+  void call() { (*this)(); };
+
+  void operator()();
+  void operator()(SCM arg);
+  void operator()(SCM arg1, SCM arg2);
+  void operator()(SCM arg1, SCM arg2, SCM arg3);
 };
 
 #endif

@@ -70,7 +70,6 @@ public:
   void mouse_down(const CL_InputEvent& event);
   void mouse_move(const CL_InputEvent& event);
 
-  CL_Point screen2tile(const CL_Point& pos);
   CL_Point screen2world(const CL_Point& pos);
 
   CL_Rect get_clip_rect();

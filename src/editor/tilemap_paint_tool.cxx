@@ -58,6 +58,9 @@ TileMapPaintTool::~TileMapPaintTool()
 void
 TileMapPaintTool::draw()
 {
+  if (!tilemap)
+    return;
+
   switch(mode)
     {
     case SELECTING:
@@ -68,6 +71,8 @@ TileMapPaintTool::draw()
       break;
       
     default:
+      int tile_size = tilemap->get_tile_size();
+
       // Draw the brush:
       for(int y = 0; y < brush.get_height(); ++y)
         for(int x = 0; x < brush.get_width(); ++x)
@@ -78,26 +83,26 @@ TileMapPaintTool::draw()
               {
                 CL_Sprite sprite = tile->get_sprite();
                 sprite.set_alpha(0.5f);
-                sprite.draw((current_tile.x + x) * TILE_SIZE, 
-                            (current_tile.y + y) * TILE_SIZE);
+                sprite.draw((current_tile.x + x) * tile_size, 
+                            (current_tile.y + y) * tile_size);
 
-                CL_Display::fill_rect(CL_Rect(CL_Point((current_tile.x + x) * TILE_SIZE, 
-                                                       (current_tile.y + y) * TILE_SIZE),
-                                              CL_Size(TILE_SIZE, TILE_SIZE)),
+                CL_Display::fill_rect(CL_Rect(CL_Point((current_tile.x + x) * tile_size, 
+                                                       (current_tile.y + y) * tile_size),
+                                              CL_Size(tile_size, tile_size)),
                                       CL_Color(255, 255, 255, 100));
               }
             else if (brush.is_opaque())
               {
-                CL_Display::fill_rect(CL_Rect(CL_Point((current_tile.x + x) * TILE_SIZE, 
-                                                       (current_tile.y + y) * TILE_SIZE),
-                                              CL_Size(TILE_SIZE, TILE_SIZE)),
+                CL_Display::fill_rect(CL_Rect(CL_Point((current_tile.x + x) * tile_size, 
+                                                       (current_tile.y + y) * tile_size),
+                                              CL_Size(tile_size, tile_size)),
                                       CL_Color(255, 255, 255, 100));
               }
             else
               {
-                CL_Display::fill_rect(CL_Rect(CL_Point((current_tile.x + x) * TILE_SIZE, 
-                                                       (current_tile.y + y) * TILE_SIZE),
-                                              CL_Size(TILE_SIZE, TILE_SIZE)),
+                CL_Display::fill_rect(CL_Rect(CL_Point((current_tile.x + x) * tile_size, 
+                                                       (current_tile.y + y) * tile_size),
+                                              CL_Size(tile_size, tile_size)),
                                       CL_Color(255, 255, 255, 50));
               }
           }
@@ -111,7 +116,7 @@ TileMapPaintTool::on_mouse_down(const CL_InputEvent& event)
   if (tilemap)
     {
       EditorMapComponent* parent = EditorMapComponent::current();
-      CL_Point pos = parent->screen2tile(event.mouse_pos);
+      CL_Point pos = tilemap->world2tile(parent->screen2world(event.mouse_pos));
 
       switch (mode)
         {
@@ -149,7 +154,7 @@ TileMapPaintTool::on_mouse_move(const CL_InputEvent& event)
   if (tilemap)
     {
       EditorMapComponent* parent = EditorMapComponent::current();
-      current_tile = parent->screen2tile(event.mouse_pos);
+      current_tile = tilemap->world2tile(parent->screen2world(event.mouse_pos));
 
       switch (mode)
         {
@@ -180,7 +185,7 @@ TileMapPaintTool::on_mouse_up  (const CL_InputEvent& event)
       EditorMapComponent::current()->get_map()->modify();
 
       EditorMapComponent* parent = EditorMapComponent::current();
-      CL_Point pos = parent->screen2tile(event.mouse_pos);
+      CL_Point pos = tilemap->world2tile(parent->screen2world(event.mouse_pos));
 
       switch (event.id)
         {

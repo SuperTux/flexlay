@@ -36,7 +36,6 @@ class Layer
 private:
 public:
   Layer();
-  Layer(const Layer& copy);
   Layer(SharedPtr<LayerImpl> i);
   ~Layer();
 

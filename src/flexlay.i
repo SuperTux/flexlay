@@ -17,6 +17,8 @@
 #include "tile.hxx"
 #include "tile_brush.hxx"
 #include "editor.hxx"
+#include "meta_data.hxx"
+#include "python_meta_data.hxx"
 
 #include "layer.hxx"
 #include "tilemap_layer.hxx"
@@ -59,6 +61,8 @@
 %include "tile.hxx"
 %include "tile_brush.hxx"
 %include "editor.hxx"
+%include "meta_data.hxx"
+%include "python_meta_data.hxx"
  
 %include "layer.hxx"
 %include "tilemap_layer.hxx"
@@ -83,5 +87,6 @@
 %include "menu.hxx"
 %include "menubar.hxx"
 %include "scrollbar.hxx"
+
  
 /* EOF */

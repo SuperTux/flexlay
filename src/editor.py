@@ -102,19 +102,19 @@ paste_icon   = Icon(CL_Point(32*4.1+2, 2), make_sprite("../data/images/icons24/s
 undo_icon = Icon(CL_Point(32*5.1+2, 2), make_sprite("../data/images/icons24/stock_undo.png"), "Some tooltip", willow);
 redo_icon = Icon(CL_Point(32*6.1+2, 2), make_sprite("../data/images/icons24/stock_redo.png"), "Some tooltip", willow);
 
-undo_icon.set_callback(m.undo)
-redo_icon.set_callback(m.redo)
+undo_icon.set_callback(workspace.get_map().undo)
+redo_icon.set_callback(workspace.get_map().redo)
 
 undo_icon.disable()
 redo_icon.disable()
 
 def on_map_change():
-    if (m.undo_stack_size() > 0):
+    if (workspace.get_map().undo_stack_size() > 0):
         undo_icon.enable()
     else:
         undo_icon.disable()
 
-    if (m.redo_stack_size() > 0):
+    if (workspace.get_map().redo_stack_size() > 0):
         redo_icon.enable()
     else:
         redo_icon.disable()        

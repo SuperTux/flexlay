@@ -41,7 +41,6 @@ public:
 
   ~TilesetImpl()
   {
-    std::cout << "Tileset: destroy" << std::endl;
     for(Tiles::iterator i = tiles.begin(); i != tiles.end(); ++i)
       {
         delete *i;
@@ -55,7 +54,6 @@ public:
 Tileset::Tileset()
   : impl(new TilesetImpl())
 {
-  std::cout << "Tileset::Tileset()" << std::endl;
   impl->tile_size = 1;
 }
 
@@ -63,7 +61,6 @@ Tileset::Tileset(int tile_size_)
   : impl(new TilesetImpl())
 {
   assert(tile_size_ > 0);
-  std::cout << "Tileset::Tileset(" << tile_size_ << ")" << std::endl;
   impl->tile_size = tile_size_;
 }
 

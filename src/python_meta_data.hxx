@@ -22,11 +22,9 @@
 
 #include "python_object.hxx"
 #include "meta_data.hxx"
-#include "meta_data_impl.hxx"
 
-typedef MetaDataGeneric<PythonObject> PythonMetaData;
-
-PythonObject get_python_object(const MetaData& data);
+MetaData  make_metadata(PyObject* obj);
+PyObject* get_python_object(const MetaData& data);
 
 #endif
 

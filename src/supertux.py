@@ -84,11 +84,7 @@ class SuperTuxLevel:
         self.editormap.add_layer(self.background.to_layer())
         self.editormap.add_layer(self.objects.to_layer())
 
-    def __del__(self):
-        print "SuperTuxLevel:__del__"
-
     def activate(self, workspace):
-        #editor_tilemap_set_current(self.interactive.to_layer())
         workspace.set_map(self.editormap)
 
 class SuperTuxGUI:

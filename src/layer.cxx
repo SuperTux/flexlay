@@ -23,24 +23,15 @@
 
 Layer::Layer()
 {
-  std::cout << "Layer(empty: " << impl.get() << ")" << std::endl;
-}
-
-Layer::Layer(const Layer& copy)
-  : impl(copy.impl)
-{
-  std::cout << "Layer(copy: " << impl.get() << ")" << std::endl;
 }
 
 Layer::Layer(SharedPtr<LayerImpl> i)
   : impl(i)
 {
-  std::cout << "Layer(#" << impl.get() << ")" << std::endl;
 }
 
 Layer::~Layer()
 {
-  std::cout << "~Layer(" << impl.get() << ")" << std::endl;
 }
 
 void

@@ -19,8 +19,16 @@
 
 #include <iostream>
 #include "python_meta_data.hxx"
+#include "meta_data_impl.hxx"
 
-PythonObject get_python_object(const MetaData& data_obj)
+typedef MetaDataGeneric<PythonObject> PythonMetaData;
+
+MetaData make_metadata(PyObject* obj)
+{
+  return MetaData(SharedPtr<MetaDataImpl>(new PythonMetaData(PythonObject(obj))));
+}
+
+PyObject* get_python_object(const MetaData& data_obj)
 {
   MetaDataImpl*    data = data_obj.get_impl().get();
   if (data)
@@ -28,7 +36,7 @@ PythonObject get_python_object(const MetaData& data_obj)
       PythonMetaData* pyobj = dynamic_cast<PythonMetaData*>(data);
       if (pyobj)
         {
-          return pyobj->data;
+          return pyobj->data.ptr();
         }
       else
         {

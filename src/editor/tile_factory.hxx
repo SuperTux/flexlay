@@ -46,7 +46,9 @@ public:
 
   /** Create an empty TileFactory, so that the user can add stuff via
       scripting to it */
-  TileFactory ();
+  TileFactory();
+
+  ~TileFactory();
 
   /** Check if the tile is already loaded and return it. If it is not
    *  already loaded, load it 

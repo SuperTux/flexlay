@@ -9,7 +9,8 @@
 (game-load-resources "tuxtiles.xml")
 (game-load-resources "tuxsprites.xml")
 ;;(game-load-tiles     "tuxtiles.scm")
-
+(define *tileset* (tileset-create))
+(tileset-create)
 (define (supertux:load-tiles filename)
   (with-input-from-file filename
     (lambda ()
@@ -19,7 +20,7 @@
                (for-each (lambda (el)
                            (cond ((equal? (car el) 'tile)
                                   ;;(display (cdr el))(newline)
-                                  (tileset-add-tile 
+                                  (tileset-add-tile *tileset*
                                    (list (list 'id   
                                                (get-value-from-tree '(id _) (cdr el) -1))
                                          (list 'image 
@@ -39,7 +40,7 @@
         (cond ((equal? ident 'supertux-worldmap-tiles)
                (for-each (lambda (el)
                            (cond ((equal? (car el) 'tile)
-                                  (tileset-add-tile 
+                                  (tileset-add-tile *tileset*
                                    (list (list 'id   
                                                (get-value-from-tree '(id _) (cdr el) -1))
                                          (list 'image 
@@ -142,7 +143,7 @@
   (editor-tilemap-resize (supertux:interactive-tm stlv) w h x y)
   (editor-tilemap-resize (supertux:foreground-tm  stlv) w h x y))
 
-(define (supertux:save-map filename)
+(define-method (supertux:save-map (stlv <supertux-level>) filename)
   ;; FIXME: This is old style singleton code
   (if (access? filename F_OK)
       (rename-file filename (string-append filename "~")))
@@ -315,10 +316,9 @@
     (set! *tilemap* tilemap)
     (editor-tilemap-set-current tilemap)
     (editor-toggle-grid *tilemap*)
-
     m))
 
-(define (supertux:save-worldmap filename)
+(define-method (supertux:save-map (stwm <supertux-worldmap>) filename)
   (if (access? filename F_OK)
       (rename-file filename (string-append filename "~")))
 

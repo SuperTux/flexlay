@@ -33,6 +33,12 @@ TileFactory* TileFactory::current_ = 0;
 
 TileFactory::TileFactory()
 {
+  current_ = this;
+}
+
+TileFactory::~TileFactory()
+{
+  std::cout << "TileFactory: destroy" << std::endl;
 }
 
 void
@@ -191,7 +197,6 @@ void
 TileFactory::init()
 {
   assert(current_ == 0);
-  current_ = new TileFactory();
 }
 
 /** Destroy the default TileFactor*/

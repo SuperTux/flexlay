@@ -198,27 +198,9 @@
       (format #t "    (height ~a)~%" (editor-tilemap-get-height *tilemap*))
       (display   "   )\n\n")
 
-      ;;      (display   "  (scripts ")
-      ;;      (for-each (lambda (file)
-      ;;                  (write file)
-      ;;                  (display " "))
-      ;;                (map-get-scripts))
-      ;;      (display   "   )\n\n")
-
       (display     "  (tilemap (data\n")
       (write-field "   " (map-get-width) (editor-tilemap-get-data *tilemap*))
       (display     "   ))\n\n")
-
-      ;; FIXME: Currently not supported
-      ;;      (display   "  (background-tilemap (data\n")
-      ;;      (write-field "   " (map-get-width) (map-get-data 0))
-      ;;     (display   "   ))\n\n")
-
-      ;;      (format #t "  (diamond-map\n")
-      ;;      (write-field "   " 
-      ;;                   (map-get-width)
-      ;;                   (diamond-map-get-data))
-      ;;      (display   " )\n")
 
       (format #t "  (objects\n")
       (for-each (lambda (el)
@@ -332,11 +314,6 @@
   (let ((menu *menu*))
     ;; File Menu
     (gui-add-menu-item menu "File/New.."  show-new-level-dialog)
-    (gui-add-menu-item menu "File/Open.." 
-                       (lambda ()
-                         (simple-file-dialog "Load a level..." (get-last-file)
-                                             (lambda (filename)
-                                               (load-map filename)))))
 
     (for-each (lambda (level)
                 (gui-add-menu-item menu (string-append "File/Open Recent >/" (basename level))
@@ -344,46 +321,20 @@
                                      (load-map level))))
               *recent-files*)
 
-    (gui-add-menu-item menu "File/Save" 
-                       (lambda ()
-                         (simple-file-dialog "Save a level..." (get-last-file)
-                                             (lambda (filename) 
-                                               (save-map filename)
-                                               (push-last-file filename)))))
-
-    (gui-add-menu-item menu "File/Save As..." 
-                       (lambda ()
-                         (simple-file-dialog "Save As" (get-last-file)
-                                             (lambda (filename) 
-                                               (cond ((access? filename F_OK)
-                                                      (yes-no-dialog 
-                                                       "File already exist!"
-                                                       (string-append
-                                                        "Replace '" filename "'?")
-                                                       "Replace" "Cancel" 
-                                                       (lambda ()
-                                                         (save-map filename)
-                                                         (push-last-file filename))
-                                                       #f))
-                                                     (else
-                                                      (save-map filename)
-                                                      (push-last-file filename)))))))
-
     (case *game*
       ((supertux)
-       (gui-add-menu-item menu "File/Import SuperTux" 
+       (gui-add-menu-item menu "File/Open..." 
                           (lambda ()
-                            (simple-file-dialog "Export SuperTux level..." (get-last-file)
-                                                (lambda (filename)   (supertux:load-map filename)))))  
-       (gui-add-menu-item menu "File/Export SuperTux" 
+                            (simple-file-dialog "Load level..." (get-last-file)
+                                                (lambda (filename) 
+                                                  (supertux:load-map filename)))))
+
+       (gui-add-menu-item menu "File/Save..." 
                           (lambda ()
-                            (simple-file-dialog "Export SuperTux level..." (get-last-file)
-                                                (lambda (filename)   (supertux:save-map filename)))))
-       (gui-add-menu-item menu "File/Export SuperTux Worldmap" 
-                          (lambda ()
-                            (simple-file-dialog "Export SuperTux level..." (get-last-file)
-                                                (lambda (filename)   (supertux:save-worldmap filename)))))
-       )
+                            (simple-file-dialog "Save level..." (get-last-file)
+                                                (lambda (filename)   
+                                                  (supertux:save-map (get-current-map-data) filename))))))
+      
       ((netpanzer)
        (gui-add-menu-item menu "File/Import NetPanzer.." 
                           (lambda ()
@@ -397,8 +348,40 @@
                             (simple-file-dialog "Export netPanzer level..." (get-last-file)
                                                 (lambda (filename) 
                                                   (netpanzer:save-map filename)
+                                                  (push-last-file filename))))))
+      
+      (else
+       (gui-add-menu-item menu "File/Open.." 
+                          (lambda ()
+                            (simple-file-dialog "Load a level..." (get-last-file)
+                                                (lambda (filename)
+                                                  (load-map filename)))))
+
+       (gui-add-menu-item menu "File/Save" 
+                          (lambda ()
+                            (simple-file-dialog "Save a level..." (get-last-file)
+                                                (lambda (filename) 
+                                                  (save-map filename)
                                                   (push-last-file filename)))))
-       ))
+
+       (gui-add-menu-item menu "File/Save As..." 
+                          (lambda ()
+                            (simple-file-dialog "Save As" (get-last-file)
+                                                (lambda (filename) 
+                                                  (cond ((access? filename F_OK)
+                                                         (yes-no-dialog 
+                                                          "File already exist!"
+                                                          (string-append
+                                                           "Replace '" filename "'?")
+                                                          "Replace" "Cancel" 
+                                                          (lambda ()
+                                                            (save-map filename)
+                                                            (push-last-file filename))
+                                                          #f))
+                                                        (else
+                                                         (save-map filename)
+                                                         (push-last-file filename))))))))
+      )
 
     ;; Move this to game specifc code
     ;;    (gui-add-menu-item menu "File/Play" 
@@ -488,6 +471,10 @@
      (gui-hide-component *tileselector-window*))
     (else
      (editor-error "Tool unknown"))))
+
+
+(define (get-current-map-data)
+  (editor-map-get-metadata (editor-map-component-get-map *editor-map*)))
 
 (define (create-metadata-editor)
   (let ((window (gui-create-window 100 100 400 200 "Metadata Editor")))

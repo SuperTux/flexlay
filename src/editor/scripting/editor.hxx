@@ -30,6 +30,7 @@ class EditorTileMap;
 class EditorMapLayer;
 class CL_Component;
 class TileBrush;
+class TileFactory;
 
 /** Set the size of the tiles and there subsize */
 void game_set_tilesize(int size, int subsize);
@@ -117,7 +118,9 @@ void            editor_tilemap_set_bgcolor(EditorMapLayer* l, int r, int g, int 
 void            editor_tilemap_set_fgcolor(EditorMapLayer* l, int r, int g, int b, int a);
 void            editor_tilemap_save_png(EditorMapLayer* l, const char* filename);
 
-void tileset_add_tile(SCM data);
+TileFactory* tileset_create();
+
+void tileset_add_tile(TileFactory* tileset, SCM data);
 
 #endif
 

@@ -34,7 +34,7 @@ libeditor_scripting_a_SOURCES = \
 # Include editor_wrap.cxx in case the user doesn't have swig installed
 EXTRA_DIST = editor_wrap.cxx editor.i
 
-editor_wrap.cxx: editor.i $(command_source)
+editor_wrap.cxx: editor.i $(command_source) Makefile
 	$(SWIG) -guile -c++  -o $@ $<
 
 # We override the default compile command to skip all the warnings

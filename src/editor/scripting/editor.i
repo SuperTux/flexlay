@@ -13,7 +13,7 @@ SCM string2scm(const std::string& str);
 
 SCM
 component2scm(CL_Component* comp) {
-  return SWIG_Guile_MakePtr (comp, SWIGTYPE_p_CL_Component);
+  return SWIG_NewPointerObj(comp, SWIGTYPE_p_CL_Component, 0);
 }
 
 %}
@@ -41,6 +41,8 @@ component2scm(CL_Component* comp) {
 %typemap(out) std::string {
     $result = string2scm($1);
 }
+
+%newobject tileset_create();
 
 %include "editor.hxx"
 %include "gui.hxx"

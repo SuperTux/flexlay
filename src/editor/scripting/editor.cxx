@@ -909,8 +909,15 @@ editor_map_get_metadata(EditorMap* m)
   return m->get_metadata().get_scm();
 }
 
+
+TileFactory*
+tileset_create()
+{
+  return new TileFactory();
+}
+
 void
-tileset_add_tile(SCM data)
+tileset_add_tile(TileFactory* tileset, SCM data)
 {
   try {
     if (TileFactory::current())

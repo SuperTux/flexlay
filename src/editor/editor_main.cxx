@@ -191,8 +191,6 @@ EditorMain::main(int argc, char** argv)
     resources =  new CL_ResourceManager();
     resources->add_resources(CL_ResourceManager(datadir + "windstille.xml", false));
 
-    TileFactory::init();
-
     std::cout << "Loading Windstille startup script: " << game_definition_file << std::flush;
     gh_load((datadir + game_definition_file).c_str());
     std::cout << "done" << std::endl;
@@ -206,7 +204,6 @@ EditorMain::main(int argc, char** argv)
                gh_str02scm(i->c_str()));
         
     editor.run();
-    TileFactory::deinit();
 
     CL_SetupDisplay::deinit();
     if (use_opengl)

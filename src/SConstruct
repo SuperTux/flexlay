@@ -2,13 +2,15 @@
 
 env = Environment(CXX = 'g++-3.3',
                   CCFLAGS = '-g -O2 -Wall',
-                  SWIGFLAGS='-c++ -python')
+                  SWIGFLAGS='-c++ -python',
+                  SHLIBPREFIX='')
 
 Depends('flexlay_wrap.cxx', ['flexlay.i', 'clanlib.i'])
 
 env.Command('flexlay_wrap.cxx', 'flexlay.i', "swig -python -c++ $SOURCE")
+
 env.SharedLibrary(
-    target = '_flexlay',
+    target = '_flexlay.so',
     source = [
     'flexlay_wrap.cxx',
     'command_group.cxx',

@@ -170,8 +170,10 @@ ObjectSelector::mouse_move(const CL_InputEvent& event)
 void 
 ObjectSelector::draw()
 {
-  CL_Display::push_translate_offset(0, -offset);
-  
+  // Handle scrolling in the Component
+  CL_Display::push_modelview();
+  CL_Display::add_translate(0, -offset);
+    
   for(int i = 0; i < (int)brushes.size(); ++i)
     {
       int x = i%width;
@@ -197,7 +199,7 @@ ObjectSelector::draw()
           CL_Display::fill_rect(rect, CL_Color(0,0,255, 20));
         }
     }
-  CL_Display::pop_translate_offset();
+  CL_Display::pop_modelview();
 
   if (drag_obj.sprite)
     {

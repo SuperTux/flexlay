@@ -66,7 +66,7 @@ EditorMain::parse_command_line(int argc, char** argv)
   argp.add_group("Display Options:");
   argp.add_option('g', "geometry",   "WxH", "Change window size to WIDTH and HEIGHT");
   argp.add_option('f', "fullscreen", "", "Launch the game in fullscreen");
-  argp.add_option(opengl_flag, "opengl", "", "Use OpenGL mode");
+  argp.add_option(opengl_flag, "opengl", "", "Use OpenGL mode (default)");
 #ifdef HAVE_LIBSDL
   argp.add_option(sdl_flag, "sdl", "", "Use SDL mode");
 #endif

@@ -27,6 +27,7 @@
 #include "field.hxx"
 #include "editor_objmap.hxx"
 #include "editor_tilemap.hxx"
+#include "graphic_context_state.hxx"
 
 class EditorMap;
 class TileMapTool;
@@ -36,12 +37,14 @@ class TileMapTool;
 class EditorMapComponent : public CL_Component
 {
 private:
+  GraphicContextState gc_state;
   CL_SlotContainer slots;
 
   EditorMap*     editor_map;
 
   int zoom_factor;
-  CL_Pointf trans_offset;
+  
+  /** Position of the center */
   CL_Pointf old_trans_offset;
 
   CL_Point click_pos;
@@ -58,6 +61,7 @@ public:
   EditorMap* get_map() const { return editor_map; }
   void       set_map(EditorMap* m) { editor_map = m; }
 
+  void  set_zoom(float z);
   float get_zoom();
   void  zoom_out();
   void  zoom_in();

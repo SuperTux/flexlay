@@ -31,7 +31,8 @@
 EditorMapComponent* EditorMapComponent::current_ = 0; 
 
 EditorMapComponent::EditorMapComponent(const CL_Rect& rect, CL_Component* parent)
-  : CL_Component(rect, parent)
+  : CL_Component(rect, parent),
+    gc_state(this)
 {
   current_ = this;
 
@@ -40,10 +41,6 @@ EditorMapComponent::EditorMapComponent(const CL_Rect& rect, CL_Component* parent
   slots.connect(sig_mouse_down(), this, &EditorMapComponent::mouse_down);
   slots.connect(sig_mouse_move(), this, &EditorMapComponent::mouse_move);
 
-  trans_offset     = CL_Pointf(0,0);
-  old_trans_offset = CL_Pointf(0,0);
-  click_pos        = CL_Point(0,0);
-  
   zoom_factor = 0;
 
   editor_map = 0;
@@ -67,10 +64,9 @@ EditorMapComponent::mouse_up(const CL_InputEvent& event)
 
     case CL_MOUSE_MIDDLE:
       scrolling = false;
-      trans_offset.x = old_trans_offset.x - (click_pos.x - event.mouse_pos.x);
-      trans_offset.y = old_trans_offset.y - (click_pos.y - event.mouse_pos.y);
-          
-      old_trans_offset = trans_offset;
+      gc_state.set_pos(CL_Pointf(old_trans_offset.x - (click_pos.x - event.mouse_pos.x),
+                                 old_trans_offset.y - (click_pos.y - event.mouse_pos.y)));
+      old_trans_offset = gc_state.get_pos();
       release_mouse();
       break;
     }
@@ -83,8 +79,8 @@ EditorMapComponent::mouse_move(const CL_InputEvent& event)
 
   if (scrolling)
     {
-      trans_offset.x = old_trans_offset.x - (click_pos.x - event.mouse_pos.x);
-      trans_offset.y = old_trans_offset.y - (click_pos.y - event.mouse_pos.y);
+      gc_state.set_pos(CL_Pointf(old_trans_offset.x - (click_pos.x - event.mouse_pos.x),
+                                 old_trans_offset.y - (click_pos.y - event.mouse_pos.y)));
     }
 }
 
@@ -100,7 +96,7 @@ EditorMapComponent::mouse_down(const CL_InputEvent& event)
 
     case CL_MOUSE_MIDDLE:
       scrolling = true;
-      old_trans_offset = trans_offset;
+      old_trans_offset = gc_state.get_pos();
       click_pos = event.mouse_pos;
       capture_mouse();
       break;
@@ -118,7 +114,7 @@ EditorMapComponent::mouse_down(const CL_InputEvent& event)
 void
 EditorMapComponent::draw ()
 {
-  CL_Display::push_translate_offset(int(trans_offset.x), int(trans_offset.y));
+  gc_state.push();
 
   CL_Display::clear(CL_Color(100, 0, 100));
 
@@ -130,69 +126,78 @@ EditorMapComponent::draw ()
     
   CL_Display::flush();
 
-  CL_Display::pop_translate_offset();
+  gc_state.pop();
 }
-
-/*
-CL_Point
-EditorMapComponent::screen2tile(const CL_Point& pos)
-{
-  // FIXME: Move this to EditorTilMap
-  int x = int(pos.x - trans_offset.x)/TILE_SIZE;
-  int y = int(pos.y - trans_offset.y)/TILE_SIZE;
-
-  return CL_Point(pos.x - trans_offset.x < 0 ? x-1 : x,
-                  pos.y - trans_offset.y < 0 ? y-1 : y); 
-                  
-}*/
 
 CL_Point
 EditorMapComponent::screen2world(const CL_Point& pos)
 {
-  int x = int(pos.x - trans_offset.x);
-  int y = int(pos.y - trans_offset.y);
-
-  return CL_Point(x, y);                  
+  return gc_state.screen2world(pos);
 }
 
 void
 EditorMapComponent::zoom_out()
 {
-  zoom_factor -= 1;
-  std::cout << "Zoom: " << get_zoom() << std::endl;
+  gc_state.set_zoom(gc_state.get_zoom()/1.25f);
+  //zoom_factor -= 1;
+  //std::cout << "Zoom: " << get_zoom() << std::endl;
 }
 
 void
 EditorMapComponent::zoom_in()
 {
-  zoom_factor += 1;
-  std::cout << "Zoom: " << get_zoom() << std::endl;
+  gc_state.set_zoom(gc_state.get_zoom()*1.25f);
+  //zoom_factor += 1;
+  //std::cout << "Zoom: " << get_zoom() << std::endl;
 }
 
 float
 EditorMapComponent::get_zoom()
 {
+  return gc_state.get_zoom();
+  /*
   if (zoom_factor > 0)
     return 1.0f * (zoom_factor + 1);
   else if (zoom_factor < 0)
     return 1.0f / (-zoom_factor + 1);
   else
     return 1.0f;
+  */
+}
+
+void
+EditorMapComponent::set_zoom(float z)
+{
+  gc_state.set_zoom(z);
+  /*
+    if (z > 0)
+    {
+    if (z == 1.0f)
+    zoom_factor = 0;
+    else if (z < 1.0f)
+    zoom_factor = int(1 - 1/z);
+    else if (z > 1.0f)
+    zoom_factor = int(z);
+
+    gc.set_zoom(z);
+    }
+    else
+    {
+    std::cout << "Illegal zoom value: " << z << std::endl;
+    }
+  */
 }
 
 CL_Rect
 EditorMapComponent::get_clip_rect()
 {
-  return CL_Rect(CL_Point(int(0 - trans_offset.x), int(0 - trans_offset.y)),
-                 CL_Size(get_width(), 
-                         get_height()));
+  return gc_state.get_clip_rect();
 }
 
 void
 EditorMapComponent::move_to(int x, int y)
 {
-  trans_offset = CL_Pointf(-x + get_width()/2,
-                           -y + get_height()/2);
+  gc_state.set_pos(CL_Pointf(x, y));
 }
 
 /* EOF */

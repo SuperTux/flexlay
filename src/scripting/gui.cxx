@@ -17,6 +17,7 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
+#include <iostream>
 #include <ClanLib/signals.h>
 #include <ClanLib/gui.h>
 #include <ClanLib/GUI/gui_manager.h>
@@ -167,7 +168,11 @@ gui_window_get_client_area(CL_Component* comp)
 void
 gui_file_dialog(const char* filename, SCM func)
 {
-  new CL_FileDialog("File Dialog", "/", "", GUIManager::current()->get_component());
+  try {
+    new CL_FileDialog("File Dialog", "/", "", GUIManager::current()->get_component());
+  } catch (CL_Error& err) {
+    std::cout << "CL_Error: " << err.message << std::endl;
+  }
 }
 
 void

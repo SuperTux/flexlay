@@ -14,7 +14,7 @@ AC_CHECK_LIB(qthreads, main)
 AC_CHECK_LIB(guile, scm_boot_guile)
 AC_CHECK_HEADER(guile/gh.h)
 
-REQUIRED_CLANLIB_VERSION="0.7.3"
+REQUIRED_CLANLIB_VERSION="0.7.7"
 
 CXXFLAGS="$CXXFLAGS -I\${top_srcdir}/src/"
 

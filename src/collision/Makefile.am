@@ -1,3 +1,5 @@
+bindir=$(prefix)/games
+
 noinst_LIBRARIES = libwindstille_collision.a
 
 libwindstille_collision_a_SOURCES = \

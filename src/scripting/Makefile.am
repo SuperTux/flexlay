@@ -32,7 +32,7 @@ libwindstille_scripting_a_SOURCES = \
   $(command_source)
 
 # Include windstille_wrap.cxx in case the user doesn't have swig installed
-EXTRA_DIST = windstille_wrap.cxx
+EXTRA_DIST = windstille_wrap.cxx windstille.i
 
 windstille_wrap.cxx: windstille.i $(command_source)
 	$(SWIG) -guile -c++  -o $@ $<

@@ -31,6 +31,7 @@ windstille_SOURCES = \
   dog.hxx \
   energiebar.hxx \
   energiebar.cxx \
+  feuerkraft_error.hxx \
   field.hxx \
   fonts.hxx \
   fonts.cxx \

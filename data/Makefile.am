@@ -23,6 +23,9 @@ EXTRA_DIST = \
   tiles.xml \
   game.scm \
   editor.scm \
+  gui/gui.xml \
+  gui/*/*.tga \
+  gui/*/*.png \
   $(wildcard music/*.ogg) \
   $(wildcard levels/*.scm) \
   $(wildcard *.scm) \
@@ -31,6 +34,7 @@ EXTRA_DIST = \
   $(wildcard images/bonus/*.jpg) \
   $(wildcard images/diamond/*.png) \
   $(wildcard images/hero_run/*.png) \
+  $(wildcard images/controller/*.scm) \
   $(wildcard images/hero_dead/*.png)
 
 nobase_pkgdata_DATA = $(EXTRA_DIST)

@@ -173,5 +173,6 @@ public:
 	void remove_resources(const CL_ResourceManager &additional_resources);
 };
 
+
 /* EOF */
 

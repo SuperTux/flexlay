@@ -60,6 +60,7 @@ Depends('flexlay_python_wrap.cxx', ['flexlay_wrap.i',
                              'object_brush.hxx',
                              'object_selector.hxx'])
 
+Depends('flexlay_wrap.i', ['clanlib.i'])
 env.Command('flexlay_python_wrap.cxx', 'flexlay_wrap.i', "swig -python -o flexlay_python_wrap.cxx -c++ $SOURCE")
 env.Command('flexlay_ruby_wrap.cxx',   'flexlay_wrap.i', "swig -ruby   -o flexlay_ruby_wrap.cxx -c++ $SOURCE")
 

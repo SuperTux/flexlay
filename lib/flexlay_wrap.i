@@ -77,7 +77,7 @@ VALUE ObjectBrush2Value(const ObjectBrush& arg)
  return SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_ObjectBrush, 1);
 }
 
-VALUE ObjectBrush2Value(const CL_Point& arg)
+VALUE CL_Point2Value(const CL_Point& arg)
 {
  CL_Point* resultptr = new CL_Point(arg);
  return SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_CL_Point, 1);

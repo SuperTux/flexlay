@@ -71,13 +71,13 @@ ObjectSelector::mouse_up(const CL_InputEvent& event)
                                 screen.y - EditorMapComponent::current()->get_screen_rect().top);
       
                 // FIXME: Move this to the scripting layer
-                ObjectAddCommand command(ObjectLayer::current());
+                //ObjectAddCommand command(ObjectLayer::current());
 
-                ObjMapObject obj = brushes[drag_obj].to_sprite_object
-                  (EditorMapComponent::current()->screen2world(target)).to_object();
+                //ObjMapObject obj = brushes[drag_obj].to_sprite_object
+                //(EditorMapComponent::current()->screen2world(target)).to_object();
 
-                command.add_object(obj);
-                Workspace::current().get_map().execute(command.to_command());
+                //command.add_object(obj);
+                //Workspace::current().get_map().execute(command.to_command());
                 
                 std::cout << "C++: Calling on_drop" << std::endl;
                 on_drop(brushes[drag_obj], target);

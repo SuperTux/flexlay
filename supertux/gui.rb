@@ -215,6 +215,18 @@ class SuperTuxGUI
     #print "on_object_drop:\n"
     #metadata = cppobj.get_metadata()
     #cppobj.set_metadata(metadata[2].call(cppobj))
+
+    data = get_ruby_object(brush.get_data())
+    puts "\nXXXXXXXXXXXX"
+    puts data
+    puts "XXXXXXXXXXXX"
+    obj = ObjMapSpriteObject.new(make_sprite($datadir + data[1]), pos, make_metadata(nil))
+    obj.to_object.set_metadata(make_metadata(data[2].call(obj)))
+    
+    cmd = ObjectAddCommand.new(@workspace.get_map().get_metadata().objects)
+    cmd.add_object(obj.to_object);
+    @workspace.get_map().execute(cmd.to_command());
+
   end
 
   def run()

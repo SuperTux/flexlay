@@ -19,6 +19,8 @@ windstille_SOURCES = \
   display.cxx \
   dog.cxx \
   dog.hxx \
+  energiebar.hxx \
+  energiebar.cxx \
   field.hxx \
   game_world.cxx \
   game_world.hxx \

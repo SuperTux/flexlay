@@ -1,4 +1,4 @@
-//  $Id: windstille_game.cxx,v 1.12 2003/09/12 20:17:06 grumbel Exp $
+//  $Id: windstille_game.cxx,v 1.13 2003/09/12 22:14:03 grumbel Exp $
 //
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -33,6 +33,7 @@
 #include "bonus_flyer.hxx"
 #include "display.hxx"
 #include "player_view.hxx"
+#include "energiebar.hxx"
 
 #include "guile_gameobj_factory.hxx"
 #include "windstille_game.hxx"
@@ -71,6 +72,8 @@ WindstilleGame::display ()
   Player player1 (controller1);
   player1.set_position (CL_Vector (100, 400));
   player1.set_direction (WEST);
+
+  Energiebar energiebar;
 
   GameWorld world (filename);
   GameObj::set_world (&world);
@@ -213,7 +216,8 @@ WindstilleGame::display ()
           logo_black.draw(800 - 302, 600 - 95);
         }
 
-
+      energiebar.update(delta);
+      energiebar.draw();
       CL_Display::flip ();
 	
       //world.add (new AnimationObj ("shoot/explosion", CL_Vector (rand ()% 800, rand ()%600)));

@@ -27,6 +27,18 @@
     <sprite name="backgroundtile1">
       <image file="images/tuxtiles/backgroundtile1.png" />
     </sprite>
+    <sprite name="backgroundtile2">
+      <image file="images/tuxtiles/backgroundtile2.png" />
+    </sprite>
+    <sprite name="backgroundtile3">
+      <image file="images/tuxtiles/backgroundtile3.png" />
+    </sprite>
+    <sprite name="backgroundtile4">
+      <image file="images/tuxtiles/backgroundtile4.png" />
+    </sprite>
+    <sprite name="backgroundtile5">
+      <image file="images/tuxtiles/backgroundtile5.png" />
+    </sprite>
     <sprite name="block1">
       <image file="images/tuxtiles/block1.png" />
     </sprite>
@@ -107,6 +119,24 @@
     </sprite>
     <sprite name="darksnow9">
       <image file="images/tuxtiles/darksnow9.png" />
+    </sprite>
+    <sprite name="grey">
+      <image file="images/tuxtiles/grey.png" />
+    </sprite>
+    <sprite name="grey2">
+      <image file="images/tuxtiles/grey2.png" />
+    </sprite>
+    <sprite name="grey3">
+      <image file="images/tuxtiles/grey3.png" />
+    </sprite>
+    <sprite name="grey4">
+      <image file="images/tuxtiles/grey4.png" />
+    </sprite>
+    <sprite name="grey5">
+      <image file="images/tuxtiles/grey5.png" />
+    </sprite>
+    <sprite name="grey6">
+      <image file="images/tuxtiles/grey6.png" />
     </sprite>
     <sprite name="notile">
       <image file="images/tuxtiles/notile.png" />

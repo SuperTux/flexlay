@@ -8,7 +8,9 @@
 (define *editor-map* #f)
 (define *editor-variables* '())
 (define *tileeditor* #f)
+(define *brushes* '())
 (define *tileeditor-window* #f)
+(define *brush-selector* #f)
 (define *tileselector-window* #f)
 (define *object-inserter-window* #f)
 (define *object-selector* #f)
@@ -39,7 +41,10 @@
 
 
 (define (get-last-file)
-  (car *recent-files*))
+  (cond ((null? *recent-files*)
+         "../data/levels/newlevel.scm")
+        (else
+         (car *recent-files*))))
 
 (define (new-map width height)
   (display "Creating new level...\n")
@@ -54,7 +59,7 @@
 
 (define (create-level-map width height)
   (let* ((m       (editor-map-create))
-         (tilemap (editor-tilemap-create width height 32))
+         (tilemap (editor-tilemap-create width height *tile-size*))
          (objmap  (editor-objmap-create)))
     (editor-map-add-layer m tilemap)
     (editor-map-add-layer m objmap)
@@ -88,7 +93,7 @@
       
       ;; load level file and extract tiledata and w/h
       (let* ((m       (editor-map-create))
-             (tilemap (editor-tilemap-create width height 32))
+             (tilemap (editor-tilemap-create width height *tile-size*))
              (objmap  (editor-objmap-create)))
 
         (for-each (lambda (el)
@@ -107,8 +112,10 @@
         (editor-map-set-filename m filename)
 
         ;; set data to the tilemap
-        (editor-tilemap-set-data tilemap 1 foreground)
-        (editor-tilemap-set-data tilemap 0 background)
+        (if (not (null? foreground))
+            (editor-tilemap-set-data tilemap 1 foreground))
+        (if (not (null? background))
+            (editor-tilemap-set-data tilemap 0 background))
         m))))
 
 (define (load-map filename)
@@ -399,14 +406,16 @@
                             (lambda ()
                               (set-tool 'object)))
 
-;; FIXME: Brush stuff is now rather useless
-;;   (gui-create-button-func 0 100
-;;                            40 25 "Brush" 
-;;                            (lambda () 
-;;                              (set! *clipboard* (editor-get-tile-selection))
-;;                              (cond (*clipboard*
-;;                                     (tilemap-paint-tool-set-brush *clipboard*)
-;;                                     (set-tool 'tile)))))
+    (gui-create-button-func 0 100
+                            40 25 "Brush" 
+                            (lambda () 
+                              (set! *clipboard* (editor-get-tile-selection))
+                              (cond (*clipboard*
+                                     (set! *brushes*
+                                           (assoc-set! *brushes* "Fooname" *clipboard*))))
+                              (display *brushes*)(newline)))
+                                     ;;(tilemap-paint-tool-set-brush *clipboard*)
+                                     ;;(set-tool 'tile)
 
     (gui-create-button-func 0 150
                             40 25 "BG" 
@@ -521,6 +530,9 @@
        (tile-selector-create (- screen-width (* 3 64)) 0 3 8 .5))
       ((supertux)
        (tile-selector-create (- screen-width (* 3 64)) 0 6 12 1.0))
+      ((netpanzer)
+       (display "Netpanzer\n")
+       (tile-selector-create (- screen-width (* 20 32)) 0 20 15 1.0))
       (else
        (tile-selector-create (- screen-width (* 3 64)) 0 3 8 .5)))
 
@@ -545,6 +557,20 @@
 ;;  (gui-component-on-close window (lambda ()
 ;;                                  (gui-hide-component window)))
 ;;     window)))
+
+(define (create-brush-selector)
+  (let ((window (gui-create-window (- screen-width 230) 
+                                   30
+                                   230 400 "Brush Selector"))
+        (y 30))
+    (gui-push-component (gui-window-get-client-area window))
+    (for-each (lambda (brush) 
+                (gui-create-button-func 10 y
+                                        150 25
+                                        (lambda ()
+                                          (tilemap-paint-tool-set-brush brush))))
+              *brushes*)
+    (gui-pop-component)))
 
 (define (on-gui-quit)
   (with-output-to-file (string-append *windstille-homedir* "editor-variables.scm")
@@ -590,7 +616,8 @@
                           (editor-error "Couldn't read vars from config file\n"))
                          )))))
            (lambda args
-             (editor-error args)))))
+             #f ;; Do nothing if file isn't there
+             ))))
 
 (define (init-recent-files)
   (if (not (string=? "" *windstille-levelfile*))
@@ -611,10 +638,6 @@
 
 (objectmap-tool-set-popupmenu-callback 
  (lambda (menu)
-     (gui-add-menu-item menu "Testomat/Foobar"
-                        (lambda () 
-                          (display "Foobar\n")))
-
      (gui-add-menu-item menu "Print Objects" 
                         (lambda () 
                           (for-each (lambda (el)
@@ -662,15 +685,16 @@
 (create-tile-editor)
 (create-tile-selector)
 (create-object-inserter)
-(create-minimap)
+
+(if (not (equal? *game* 'netpanzer))
+    (create-minimap))
+
+(create-brush-selector)
 
 (set-tool 'tile)
 
-(object-selector-add-brush *object-selector* "sprites/mriceblock" '(mriceblock))
-(object-selector-add-brush *object-selector* "sprites/mrbomb"     '(mrbomb))
-
-(object-selector-add-brush *object-selector* "igel" '(Iel))
-(object-selector-add-brush *object-selector* "hero/run" '(Hero))
+;;(object-selector-add-brush *object-selector* "sprites/mriceblock" '(mriceblock))
+;;(object-selector-add-brush *object-selector* "sprites/mrbomb"     '(mrbomb))
 
 (new-map 60 15)
 

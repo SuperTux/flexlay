@@ -22,21 +22,28 @@ EXTRA_DIST = \
   tiles.scm \
   tiles.xml \
   tuxtiles.xml \
+  tuxsprites.xml \
   game.scm \
   editor.scm \
+  windstille.scm \
+  supertux.scm \
+  helper.scm \
   gui/gui.xml \
   gui/*/*.tga \
   gui/*/*.png \
-  $(wildcard music/*.ogg) \
   $(wildcard levels/*.scm) \
   $(wildcard controller/*.scm) \
   $(wildcard *.scm) \
   $(wildcard images/*.png images/*.jpg) \
   $(wildcard images/tiles/*.png) \
+  $(wildcard images/tuxtiles/*.png) \
+  $(wildcard images/tuxsprites/*.png) \
   $(wildcard images/bonus/*.jpg) \
   $(wildcard images/diamond/*.png) \
   $(wildcard images/hero_run/*.png) \
   $(wildcard images/hero_dead/*.png)
+
+#  $(wildcard music/*.ogg) 
 
 nobase_pkgdata_DATA = $(EXTRA_DIST)
 

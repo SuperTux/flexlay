@@ -1,4 +1,4 @@
-//  $Id: windstille_main.cxx,v 1.3 2003/08/11 10:03:55 grumbel Exp $
+//  $Id: windstille_main.cxx,v 1.4 2003/08/11 11:18:11 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -34,6 +34,7 @@
 #include "guile_gameobj_factory.hxx"
 #include "windstille_level.hxx"
 #include "windstille_main.hxx"
+#include "tile_factory.hxx"
 
 CL_ResourceManager* resources;
 
@@ -97,9 +98,12 @@ WindstilleMain::inner_main(void* closure, int argc, char** argv)
       {
 	if (filename.empty ())
 	  filename = "../data/levels/level2.scm";
+
+        TileFactory::init();
 	WindstilleGame game (filename);
 	std::cout << "Launching game..." << std::endl;
 	game.display ();
+        TileFactory::deinit();
       }
     else
       {

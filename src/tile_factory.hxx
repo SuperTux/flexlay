@@ -1,4 +1,4 @@
-//  $Id: tile_factory.hxx,v 1.2 2003/08/11 10:03:55 grumbel Exp $
+//  $Id: tile_factory.hxx,v 1.3 2003/08/11 11:18:11 grumbel Exp $
 // 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -31,15 +31,24 @@ class TileFactory
 private:
   std::map<std::string, Tile*> tiles;
 
-  TileFactory ();
-
   static TileFactory* current_;
 public:
-  Tile* create (const std::string& name);
+  /** Create a TileFactory from a given tile definition file */
+  TileFactory (const std::string& filename);
 
+  Tile* create(int id);
+
+  /** Create the default TileFactor*/
   static void init();
+
+  /** Destroy the default TileFactor*/
   static void deinit();
+
+  /** Access the default TileFactor*/
   static TileFactory* current() { return current_; }
+
+private:
+  void parse_tile(SCM data);
 };
 
 #endif

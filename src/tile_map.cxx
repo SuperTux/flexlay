@@ -1,4 +1,4 @@
-//  $Id: tile_map.cxx,v 1.3 2003/08/11 10:03:55 grumbel Exp $
+//  $Id: tile_map.cxx,v 1.4 2003/08/11 11:18:11 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -98,10 +98,16 @@ TileMap::draw ()
 	if (field (x,y))
 	  {
 	    field (x,y)->sur.draw (x * TILE_SIZE + TILE_SIZE/2, y * TILE_SIZE + TILE_SIZE/2);
-	    if (field (x,y)->collision)
-	      {
-		//CL_Display::fill_rect (x * TILE_SIZE, y*TILE_SIZE, x*TILE_SIZE + TILE_SIZE, y*TILE_SIZE + TILE_SIZE, 1.0, 1.0, 1.0, .5);
-	      }
+            for(int tile_y = 0; tile_y < 8; ++tile_y)
+              for(int tile_x = 0; tile_x < 8; ++tile_x)
+                {
+                  if (field (x,y)->get_col(tile_x, tile_y))
+                    {
+                      CL_Display::fill_rect(CL_Rect(x * TILE_SIZE + tile_x*16, y*TILE_SIZE + tile_y*16,
+                                                    x * TILE_SIZE + tile_x*16 + 16, y * TILE_SIZE + tile_y*16 + 16),
+                                            CL_Color(255, 0, 0, 128));
+                    }
+                }
 	  }
       }
 }

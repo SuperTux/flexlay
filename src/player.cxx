@@ -1,4 +1,4 @@
-//  $Id: player.cxx,v 1.2 2003/08/11 08:03:23 grumbel Exp $
+//  $Id: player.cxx,v 1.3 2003/08/11 11:18:11 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -50,8 +50,10 @@ Player::draw ()
 {
   //std::cout << "onground: " << ground_state << std::endl;
   CL_Sprite* sprite = 0;
-  if (ground_state == ON_GROUND)
+
+  switch (ground_state)
     {
+    case ON_GROUND:
       switch (state)
 	{
 	case  WALKING:
@@ -74,10 +76,10 @@ Player::draw ()
 	  sprite = &surround;
 	  break;
 	}
-    }
-  else
-    {
+      break;
+    default:
       sprite = &jump;
+      break;
     }
 
   if (sprite)
@@ -202,6 +204,7 @@ Player::update_air (float delta)
   float tmp_y_pos = pos.y;
   pos += velocity * delta;
   velocity.y += 1500 * delta;
+
   if (on_ground () && velocity.y > 0) {
     ground_state = ON_GROUND;
     // Cut the position to the tile

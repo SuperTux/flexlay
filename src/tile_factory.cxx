@@ -1,4 +1,4 @@
-//  $Id: tile_factory.cxx,v 1.2 2003/08/11 10:03:55 grumbel Exp $
+//  $Id: tile_factory.cxx,v 1.3 2003/08/11 11:18:11 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -18,19 +18,133 @@
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include <iostream>
+#include "scm_helper.hxx"
 #include "tile_factory.hxx"
 
-TileFactory::TileFactory ()
+TileFactory* TileFactory::current_ = 0;
+
+TileFactory::TileFactory (const std::string& filename)
 {
-  std::cout << "TileFactory ()" << std::endl;
+  SCM input_stream = scm_open_file(gh_str02scm(filename.c_str()), 
+                                   gh_str02scm("r"));
+  SCM tree = scm_read(input_stream);
+  
+  if (!(gh_symbol_p(gh_car(tree)) && gh_equal_p(gh_symbol2scm("windstille-tiles"), gh_car(tree))))
+    {
+      std::cout << "Not a Windstille Tile File!" << std::endl;
+    }
+  else
+    {
+      tree = gh_cdr(tree);
+
+      while (!gh_null_p(tree))
+        {
+          SCM current = gh_car(tree);
+          
+          if (gh_pair_p(current))
+            {
+              SCM name    = gh_car(current);
+              SCM data    = gh_cdr(current);
+      
+              if (gh_equal_p(gh_symbol2scm("tile"), name)) 
+                {
+                  parse_tile(data);
+                }
+              else
+                {
+                  std::cout << "WindstilleLevel: Unknown tag: " << scm2string(name) << std::endl;
+                }
+            }
+          else
+            {
+              std::cout << "WindstilleLevel: Not a pair!"  << std::endl;
+            }
+          tree = gh_cdr(tree);
+        }
+    }
+}
+
+void
+TileFactory::parse_tile(SCM data)
+{
+  std::cout << "Parsing a tile: " << std::endl;
+  int id;
+  std::string image;
+  unsigned char colmap[8];
+  
+  while (!gh_null_p(data))
+    {
+      SCM current = gh_car(data);
+          
+      if (gh_pair_p(current))
+        {
+          SCM name    = gh_car(current);
+          SCM data    = gh_cdr(current);
+
+          if (gh_equal_p(gh_symbol2scm("id"), name))           
+            {
+              id = gh_scm2int(gh_car(data));
+            }
+          else if (gh_equal_p(gh_symbol2scm("image"), name))           
+            {
+              image = scm2string(gh_car(data));
+            }
+          else if (gh_equal_p(gh_symbol2scm("colmap"), name))
+            {
+              colmap[0] = gh_scm2int(gh_car(data));
+              data = gh_cdr(data);
+              colmap[1] = gh_scm2int(gh_car(data));
+              data = gh_cdr(data);
+              colmap[2] = gh_scm2int(gh_car(data));
+              data = gh_cdr(data);
+              colmap[3] = gh_scm2int(gh_car(data));
+              data = gh_cdr(data);
+              colmap[4] = gh_scm2int(gh_car(data));
+              data = gh_cdr(data);
+              colmap[5] = gh_scm2int(gh_car(data));
+              data = gh_cdr(data);
+              colmap[6] = gh_scm2int(gh_car(data));
+              data = gh_cdr(data);
+              colmap[7] = gh_scm2int(gh_car(data));
+            }
+        }
+      data = gh_cdr(data);
+    }
+
+  std::cout << "Tile: id     = " << id << "\n"
+            << "      image  = " << image << "\n"
+            << "      colmap = " 
+            << int(colmap[0]) << ", "
+            << int(colmap[1]) << ", "
+            << int(colmap[2]) << ", "
+            << int(colmap[3]) << ", "
+            << int(colmap[4]) << ", "
+            << int(colmap[5]) << ", "
+            << int(colmap[6]) << ", "
+            << int(colmap[7])
+            << std::endl;
 }
 
 /** Check if the tile is already loaded and return it. If it is not
     already loaded, load it */
 Tile* 
-TileFactory::create (const std::string& name)
+TileFactory::create (int id)
 {
+  
+}
 
+void
+TileFactory::init()
+{
+  assert(current_ == 0);
+  current_ = new TileFactory("../data/tiles.scm");
+}
+
+/** Destroy the default TileFactor*/
+void
+TileFactory::deinit()
+{
+  delete current_;
 }
 
 /* EOF */

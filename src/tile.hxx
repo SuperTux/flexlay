@@ -1,4 +1,4 @@
-//  $Id: tile.hxx,v 1.1 2003/08/11 10:04:38 grumbel Exp $
+//  $Id: tile.hxx,v 1.2 2003/08/11 11:18:11 grumbel Exp $
 // 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -30,7 +30,6 @@ class Tile
 {
 public:
   CL_Sprite sur;
-  int collision;
   unsigned char colmap[8];
 
   /** @param arg_sur Surface to use 

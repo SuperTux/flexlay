@@ -1,4 +1,4 @@
-//  $Id: collision_mask.cxx,v 1.4 2003/09/02 10:33:01 grumbel Exp $
+//  $Id: collision_mask.cxx,v 1.5 2003/09/02 11:01:44 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -208,34 +208,22 @@ CollisionMask::pixel_collides_with(const CollisionMask& mask, int pixel_x_of, in
             cm_uint32 target2 = mask.get_line(x - tile_x_of,
                                               y - pixel_y_of);
 
-            //put_int(source | ((target1 >> right_shift) |  (target2 << left_shift)));
-
             if (source & ((target1 << left_shift) |  (target2 >> right_shift)))
               return true;
           }
-
-     
-      if (0)
-        for (int y = start_y; y < end_y; ++y)
-          {
-            cm_uint32 source  = get_line(end_x-1, y);
-            cm_uint32 target1 = mask.get_line(end_x - 1 - tile_x_of,
-                                              y - pixel_y_of);
-
-            if (end_x - tile_x_of < mask.pitch)
-              {
-                cm_uint32 target2 = mask.get_line(end_x - tile_x_of,
-                                                  y - pixel_y_of);
-
-                if (source & ((target1 >> right_shift) |  (target2 << left_shift)))
-                  return true;
-              }
-            else
-              {
-                if (source & (target1 << left_shift))
-                  return true;              
-              }
-          }
+      
+      if (end_x - tile_x_of == mask.pitch)
+        {
+          for (int y = start_y; y < end_y; ++y)
+            {
+              cm_uint32 source  = get_line(end_x, y);
+              cm_uint32 target = mask.get_line(end_x - 1 - tile_x_of,
+                                                y - pixel_y_of);
+            
+              if (source & (target << left_shift))
+                return true;              
+            }
+        }
     }
 
   return false;

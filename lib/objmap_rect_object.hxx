@@ -1,6 +1,6 @@
 //  $Id$
-//
-//  Pingus - A free Lemmings clone
+// 
+//  Flexlay - A Generic 2D Game Editor
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
 //
 //  This program is free software; you can redistribute it and/or
@@ -12,26 +12,35 @@
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
-//
+// 
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-#include <iostream>
+#ifndef HEADER_OBJMAP_RECT_OBJECT_HXX
+#define HEADER_OBJMAP_RECT_OBJECT_HXX
+
+#include <ClanLib/Core/Math/rect.h>
+#include <ClanLib/Display/color.h>
+#include "objmap_object.hxx"
 #include "objmap_object_impl.hxx"
 
-ObjMapObjectImpl::ObjMapObjectImpl()
-{
-}
+class ObjMapRectObjectImpl;
 
-ObjMapObjectImpl::~ObjMapObjectImpl()
+class ObjMapRectObject
 {
-}
+public:
+  ObjMapRectObject(const CL_Rect&  rect_,
+                   const CL_Color& color_,
+                   const MetaData& data_);
+    
+  void draw();
 
-void
-ObjMapObjectImpl::add_control_points()
-{
-  std::cout << "Object doesn't have control points" << std::endl;
-}
+  ObjMapObject to_object();
+private:
+  SharedPtr<ObjMapRectObjectImpl> impl;
+};
+
+#endif
 
 /* EOF */

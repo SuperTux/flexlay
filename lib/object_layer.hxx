@@ -27,6 +27,7 @@
 #include "meta_data.hxx"
 #include "layer.hxx"
 #include "objmap_object.hxx"
+#include "objmap_control_point.hxx"
 #include "shared_ptr.hxx"
 
 class ObjectLayerImpl;
@@ -38,6 +39,7 @@ class ObjectLayer
 {
 public:
   typedef std::vector<ObjMapObject> Objects;
+  typedef std::vector<ObjMapControlPoint> ControlPoints;
 
   static ObjectLayer current_;
 
@@ -50,7 +52,11 @@ public:
   void add_object(const ObjMapObject& obj);
   void delete_object(const ObjMapObject& obj);
 
+  void add_control_point(const ObjMapControlPoint& obj);
+  void delete_control_points();
+
   ObjMapObject find_object(const CL_Point& pos);
+  ObjMapControlPoint find_control_point(const CL_Point& pos);
   std::vector<ObjMapObject> get_selection(const CL_Rect& rect);
   std::vector<ObjMapObject> get_objects();
 

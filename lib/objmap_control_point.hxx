@@ -1,6 +1,6 @@
 //  $Id$
 // 
-//  Flexlay - A Generic 2D Game Editor
+//  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
 //
 //  This program is free software; you can redistribute it and/or
@@ -17,46 +17,36 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-#ifndef HEADER_OBJMAP_OBJECT_HXX
-#define HEADER_OBJMAP_OBJECT_HXX
+#ifndef HEADER_OBJMAP_CONTROL_POINT_HXX
+#define HEADER_OBJMAP_CONTROL_POINT_HXX
 
-#include <ClanLib/signals.h>
+#include <ClanLib/Display/sprite.h>
 #include <ClanLib/Core/Math/point.h>
-#include <ClanLib/Core/Math/rect.h>
 #include "meta_data.hxx"
+#include "shared_ptr.hxx"
 
-class ObjMapObjectImpl;
+class ObjMapControlPointImpl;
 
-/** */
-class ObjMapObject
+/** An ObjMapControlPoint is used to control a property of an object,
+    such as size, rotation or scaling. ControlPoints get drawn around
+    the object in a size which is independend of the current zoom
+    level and can be draged around with the mous. */
+class ObjMapControlPoint
 {
+private:
 public:
-  ObjMapObject();
-  ObjMapObject(const SharedPtr<ObjMapObjectImpl>& impl_);
-  ObjMapObject(const CL_Point& pos, const MetaData& data);
-  virtual ~ObjMapObject() {}
+  ObjMapControlPoint() : impl(0) {}
+  ObjMapControlPoint(CL_Sprite sprite_, CL_Point pos_, MetaData data_);
 
   CL_Point get_pos() const;
   void     set_pos(const CL_Point& p);
+  void     draw();
 
-  MetaData get_metadata() const;
-  void     set_metadata(MetaData data_);
-
-  CL_Signal_v1<ObjMapObject>& sig_move();
-  CL_Signal_v1<ObjMapObject>& sig_select();
-  CL_Signal_v1<ObjMapObject>& sig_deselect();
-
-  void draw();
   CL_Rect get_bound_rect() const;
 
-  void add_control_points();
-
-  bool is_null() const;
-
-  bool operator==(const ObjMapObject& obj) const;
-  bool operator<(const ObjMapObject& obj) const;
+  bool is_null() const { return !impl.get(); }
 private:
-  SharedPtr<ObjMapObjectImpl> impl;
+  SharedPtr<ObjMapControlPointImpl> impl;
 };
 
 #endif

@@ -23,16 +23,17 @@
 #include <ClanLib/Core/System/error.h>
 #include "objmap_object.hxx"
 #include "objmap_sprite_object.hxx"
+#include "objmap_control_point.hxx"
 #include "object_layer.hxx"
 #include "layer_impl.hxx"
 
-extern CL_ResourceManager* resources;
 ObjectLayer ObjectLayer::current_;
 
 class ObjectLayerImpl : public LayerImpl
 {
 public:
   ObjectLayer::Objects objects;
+  ObjectLayer::ControlPoints control_points;
   CL_SlotContainer slots;
 
   ObjectLayerImpl() {}
@@ -58,6 +59,26 @@ ObjectLayerImpl::draw(EditorMapComponent* parent)
     {
       (*i).draw();
     }
+
+  for(ObjectLayer::ControlPoints::iterator i = control_points.begin(); i != control_points.end(); ++i)
+    {
+      (*i).draw();
+    }
+}
+
+ObjMapControlPoint
+ObjectLayer::find_control_point(const CL_Point& click_pos)
+{
+  for(ControlPoints::reverse_iterator i = impl->control_points.rbegin(); 
+      i != impl->control_points.rend(); 
+      ++i)
+    {
+      CL_Rect rect = (*i).get_bound_rect();
+     
+      if (rect.is_inside(click_pos))
+        return *i;
+    }
+  return ObjMapControlPoint(); 
 }
 
 ObjMapObject
@@ -113,6 +134,18 @@ void
 ObjectLayer::add_object(const ObjMapObject& obj)
 {
   impl->objects.push_back(obj);
+}
+
+void
+ObjectLayer::add_control_point(const ObjMapControlPoint& obj)
+{
+  impl->control_points.push_back(obj);
+}
+
+void
+ObjectLayer::delete_control_points()
+{
+  impl->control_points;
 }
 
 Layer

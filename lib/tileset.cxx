@@ -26,8 +26,6 @@
 #include "tile.hxx"
 #include "tileset.hxx"
 
-extern CL_ResourceManager* resources;
-
 typedef std::vector<Tile*> Tiles;
 typedef std::vector<int> TileIds;
 typedef Tiles::iterator iterator;

@@ -83,6 +83,8 @@ flexlay_lib = libflexlay_env.SharedLibrary(
     'objmap_object_impl.cxx',
     'objmap_select_tool.cxx',
     'objmap_sprite_object.cxx',
+    'objmap_control_point.cxx',
+    'objmap_rect_object.cxx',
     'paint_command.cxx',
     'panel.cxx',
     'menu.cxx',

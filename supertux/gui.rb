@@ -118,6 +118,18 @@ class SuperTuxGUI
     connect_v2(@editor_map.sig_on_key("8"),  proc{ |x, y| @workspace.get_map().get_metadata().parent.activate_sector("another_world", @workspace)})
     
     connect_v2(@editor_map.sig_on_key("e"),  proc{ |x, y| gui_show_object_properties()})
+
+
+    connect_v2(@editor_map.sig_on_key("a"),  proc { |x, y|
+                 pos = @editor_map.screen2world(CL_Point.new(x, y))
+                 puts "Inserting rect at: #{pos.x}, #{pos.y}"
+                 rectobj = ObjMapRectObject.new(CL_Rect.new(pos,
+                                                            CL_Size.new(128, 64)),
+                                                CL_Color.new(0, 255, 255, 255),
+                                                make_metadata(nil))
+                 # rectobj.set_metadata(metadata)
+                 @workspace.get_map().get_metadata().objects.add_object(rectobj.to_object())
+               })
   end
 
   def create_menu()

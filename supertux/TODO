@@ -8,6 +8,7 @@ ToDo:
  - get rid of 'mysprite'
  - scrollbar in tileselector
  - object properties
+ - gui and some magic to set the supertux datadir
 
 Bugs
 ====

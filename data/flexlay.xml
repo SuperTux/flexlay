@@ -1,4 +1,12 @@
 <resources>
+  <sprite name="resize_vert">
+    <image file="images/icons16/resize_vert.png"/>
+  </sprite>
+
+  <sprite name="resize_horz">
+    <image file="images/icons16/resize_horz.png"/>
+  </sprite>
+
   <sprite name="tile1">
     <image file="images/icons24/stock_right.png"/>
   </sprite>

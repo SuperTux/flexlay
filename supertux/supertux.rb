@@ -20,6 +20,18 @@
 
 $config_file = File.expand_path("~/.flexlay/supertux.rb")
 
+def find_supertux_datadir()
+  # try to automatically detect the supertux datadir
+  possible_locations = [
+    "~/cvs/supertux/supertux/data",
+    "~/cvs/supertux/data",
+    "/usr/share/games/supertux",
+    "/usr/local/share/games/supertux",
+    "/opt/supertux/data",
+  ]
+  # `which supertux`
+end
+
 # Config file loading hack
 if File.exist?($config_file) then
   require $config_file

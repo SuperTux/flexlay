@@ -88,7 +88,11 @@ public:
   bool use_opengl;
 
   CL_ResourceManager resources;
+
+  static Flexlay* current() { return current_; }
 public:
+  static Flexlay* current_;
+
   Flexlay();
 
   void init();

@@ -105,9 +105,27 @@ ObjMapObject::operator<(const ObjMapObject& obj) const
 }
 
 CL_Signal_v1<ObjMapObject>&
+ObjMapObject::sig_select()
+{
+  return impl->on_select;
+}
+
+CL_Signal_v1<ObjMapObject>&
+ObjMapObject::sig_deselect()
+{
+  return impl->on_deselect;
+}
+
+CL_Signal_v1<ObjMapObject>&
 ObjMapObject::sig_move()
 {
   return impl->on_move;
+}
+
+void
+ObjMapObject::add_control_points()
+{
+  impl->add_control_points();
 }
 
 /* EOF */

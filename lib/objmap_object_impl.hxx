@@ -32,12 +32,16 @@ public:
   MetaData  data;
 
   CL_Signal_v1<ObjMapObject> on_move;
+  CL_Signal_v1<ObjMapObject> on_select;
+  CL_Signal_v1<ObjMapObject> on_deselect;
 
   ObjMapObjectImpl();
   virtual ~ObjMapObjectImpl();
 
   virtual void draw() =0;
   virtual CL_Rect get_bound_rect() const  =0;
+
+  virtual void add_control_points();
 };
 
 #endif

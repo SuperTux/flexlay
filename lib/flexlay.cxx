@@ -27,6 +27,8 @@
 #include "fonts.hxx"
 #include "flexlay.hxx"
 
+Flexlay* Flexlay::current_ = 0;
+
 Flexlay::Flexlay()
 {
   screen_width  = 800;
@@ -34,6 +36,8 @@ Flexlay::Flexlay()
   fullscreen    = false;
   allow_resize  = true;
   use_opengl    = true;
+  
+  current_ = this;
 }
 
 void

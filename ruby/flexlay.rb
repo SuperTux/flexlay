@@ -210,7 +210,7 @@ class GenericDialog
   def update()
     y = 10
     @items.each do |(type, label, comp)| 
-      if type == "int" or type == "string" or type == "float" or "void"
+      if type == "int" or type == "string" or type == "float" or type == "void"
         label.set_position(10, y)
         if comp then
           comp.set_position(110, y)

@@ -80,8 +80,6 @@ public:
   EditorMapLayer* get_layer(int i);
   void set_active_layer(int i);
 
-  void load (const std::string& filename);
-  void save (const std::string& filename);
   void new_level(int w, int h);
 
   CL_Rect get_clip_rect();

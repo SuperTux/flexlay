@@ -199,4 +199,10 @@ EditorTileMap::get_map(int i)
     return 0;
 }
 
+void
+EditorTileMap::resize(int w, int h)
+{
+  
+}
+
 /* EOF */

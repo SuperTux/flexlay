@@ -60,8 +60,9 @@ public:
   void set_active_layer(int i);
 
   void load (const std::string& filename);
-  void save (const std::string& filename);
   void new_level(int w, int h);
+
+  void resize(int w, int h);
 
   Field<EditorTile*>* get_map(int i);
 

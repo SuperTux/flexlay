@@ -190,19 +190,6 @@ EditorMap::cleanup()
 }
 
 void
-EditorMap::load(const std::string& filename)
-{
-  WindstilleLevel data (filename);
-  new_level(10, 10);
-  scripts = *data.get_scripts();
-}
-
-void
-EditorMap::save (const std::string& filename)
-{
-}
-
-void
 EditorMap::set_tool(int i)
 {
   if (i >= 0 && i < int(tools.size()))

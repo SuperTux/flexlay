@@ -28,7 +28,6 @@ PopupMenu::PopupMenu(const CL_Point& pos,  CL_Component* parent)
   menu->open();
   
   slots.push_back(CL_Mouse::sig_key_down().connect(this, &PopupMenu::on_mouse_up));
-
   std::cout << "Menu open" << std::endl;
 }
 
@@ -50,7 +49,9 @@ PopupMenu::on_mouse_up(const CL_InputEvent& event)
     }
   else
     {
-      
+      // FIXME: this should be in the constructor, but doesn't work
+      // there since the menu collapses then instantly
+      menu->set_root_collapsing(true); 
     }
 }
 

@@ -245,13 +245,13 @@
 
     (with-output-to-file spnname
       (lambda ()
-        (format #t "SpawnCount: ~a~%" (length outposts))
+        (format #t "SpawnCount: ~a~%" (length spawnpoints))
 
         (for-each (lambda (el)
                     (format #t "Location: ~a ~a~%" 
                             (quotient (car el)  32)
                             (quotient (cadr el) 32)))
-                  outposts)))))
+                  spawnpoints)))))
 
 (define (save-map filename)
   ;; FIXME: This is old style singleton code

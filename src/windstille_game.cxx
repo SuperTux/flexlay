@@ -1,4 +1,4 @@
-//  $Id: windstille_game.cxx,v 1.25 2003/10/10 21:06:22 grumbel Exp $
+//  $Id: windstille_game.cxx,v 1.26 2003/10/11 12:15:59 grumbel Exp $
 //
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -35,6 +35,7 @@
 #include "energiebar.hxx"
 #include "background.hxx"
 #include "gui_manager.hxx"
+#include "view_component.hxx"
 #include "dialog_manager.hxx"
 
 #include "guile_gameobj_factory.hxx"
@@ -51,7 +52,7 @@ WindstilleGame::WindstilleGame(const std::string& arg_filename)
   world = new GameWorld(filename);
   state = GAME;
 
-  new GUIManager();
+  manager = new GUIManager();
 }
 
 WindstilleGame::WindstilleGame(GameWorld* w)
@@ -67,31 +68,6 @@ WindstilleGame::~WindstilleGame()
 {
   delete GUIManager::current();
   delete world;
-}
-
-void
-WindstilleGame::on_mouse_up(const CL_InputEvent& event)
-{
-  CL_Pointf pos = view->screen2world(CL_Pointf(event.mouse_pos.x,
-                                               event.mouse_pos.y));
-  gh_call2(gh_lookup("*mouse-up-handler*"), 
-           gh_double2scm(pos.x), gh_double2scm(pos.y));
-}
-
-void
-WindstilleGame::on_mouse_down(const CL_InputEvent& event)
-{
-  CL_Pointf pos = view->screen2world(CL_Pointf(event.mouse_pos.x,
-                                               event.mouse_pos.y));
-  gh_call2(gh_lookup("*mouse-down-handler*"), 
-           gh_double2scm(pos.x), gh_double2scm(pos.y));
-}
-
-void
-WindstilleGame::on_key_down(const CL_InputEvent& event)
-{
-  gh_call1(gh_lookup("*key-down-handler*"), 
-           gh_str02scm(CL_Keyboard::get_device().keyid_to_string(event.id).c_str()));
 }
 
 void
@@ -160,6 +136,9 @@ WindstilleGame::on_startup ()
   player = new Player(Controller::current());
   view   = new PlayerView(player);
   
+  // FIXME: Mem leak
+  new ViewComponent(GUIManager::current()->get_component(), view);
+
   energiebar = new Energiebar();
   background = new Background();
   dialog_manager = new DialogManager();
@@ -171,10 +150,6 @@ WindstilleGame::on_startup ()
   logo       = CL_Sprite("logo", resources);
   portrait   = CL_Sprite("hero/portrait", resources);
   logo_black = CL_Sprite("logo_black", resources);
-
-  slots.connect(CL_Mouse::sig_key_down(), this, &WindstilleGame::on_mouse_down);
-  slots.connect(CL_Mouse::sig_key_up(), this, &WindstilleGame::on_mouse_up);
-  slots.connect(CL_Keyboard::sig_key_down(), this, &WindstilleGame::on_key_down);
 
   world->on_startup();
 }

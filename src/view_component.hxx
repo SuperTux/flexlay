@@ -1,4 +1,4 @@
-//  $Id: view.hxx,v 1.2 2003/10/11 12:15:59 grumbel Exp $
+//  $Id: view_component.hxx,v 1.1 2003/10/11 12:15:59 grumbel Exp $
 // 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -17,33 +17,28 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-#ifndef HEADER_VIEW_HXX
-#define HEADER_VIEW_HXX
+#ifndef HEADER_VIEW_COMPONENT_HXX
+#define HEADER_VIEW_COMPONENT_HXX
 
-#include <ClanLib/Core/Math/rect.h>
+#include <ClanLib/Signals/slot.h>
+#include <ClanLib/GUI/component.h>
 
-/** */
-class View
+class View;
+          
+/** clanGUI wrapper for View class, used for the debug GUI in the game */
+class ViewComponent : public CL_Component
 {
 private:
+  View* view;
+  std::vector<CL_Slot> slots;
 public:
-  View() {}
-  virtual ~View() {}
+  ViewComponent(CL_Component* parent, View* view);
 
-  /** @return the rectangle which represents the currently visible
-      area, everything outside of it doesn't have to be drawn */
-  virtual CL_Rect get_clip_rect() =0;
-  virtual CL_Pointf screen2world(CL_Pointf point) =0;
-  virtual CL_Pointf world2screen(CL_Pointf point) =0;
-
-  static View* current() { return current_; }
-
-protected:
-  static View* current_;
+  void on_input_down(const CL_InputEvent& event);
+  void on_input_up(const CL_InputEvent& event);
 private:
-
-  View (const View&);
-  View& operator= (const View&);
+  ViewComponent (const ViewComponent&);
+  ViewComponent& operator= (const ViewComponent&);
 };
 
 #endif

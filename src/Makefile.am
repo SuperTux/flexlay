@@ -85,6 +85,8 @@ windstille_SOURCES = \
   windstille_menu.cxx \
   view.hxx \
   view.cxx \
+  view_component.hxx \
+  view_component.cxx \
   water_splash.hxx \
   water_splash.cxx
 

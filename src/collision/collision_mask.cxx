@@ -1,4 +1,4 @@
-//  $Id: collision_mask.cxx,v 1.7 2003/09/02 13:51:43 grumbel Exp $
+//  $Id: collision_mask.cxx,v 1.8 2003/09/02 22:05:02 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -36,6 +36,16 @@ void put_int(cm_uint32 val)
   std::cout << std::endl;
 }
 
+CollisionMask::CollisionMask(const CollisionMask& mask)
+  : width(mask.width),
+    height(mask.height),
+    pitch(mask.pitch)
+{
+  int len = height * pitch;
+  data = new cm_uint32[len];
+  memcpy(data, mask.data, sizeof(cm_uint32));
+}
+
 CollisionMask::CollisionMask(int arg_width, int arg_height)
   : width(arg_width),
     height(arg_height),
@@ -47,6 +57,11 @@ CollisionMask::CollisionMask(int arg_width, int arg_height)
   memset(data, ~0, sizeof(cm_uint32) * len);
 }
 
+CollisionMask::CollisionMask(CL_PixelBuffer* provider)
+{
+  create_from(provider);
+}
+
 CollisionMask::CollisionMask(int arg_width, int arg_height, cm_uint32* arg_data)
   : width(arg_width), 
     height(arg_height),
@@ -54,14 +69,19 @@ CollisionMask::CollisionMask(int arg_width, int arg_height, cm_uint32* arg_data)
 {
   int len = height * pitch;
   data = new cm_uint32[len];
-  memset(data, 0, sizeof(cm_uint32) * len);
   memcpy(data, arg_data, sizeof(cm_uint32));
 }
 
 CollisionMask::CollisionMask(const std::string filename)
 {
   CL_PixelBuffer* provider = CL_ProviderFactory::load(filename);
-  
+  create_from(provider);
+  delete provider;
+}
+
+void
+CollisionMask::create_from(CL_PixelBuffer* provider)
+{  
   provider->lock();
 
   width  = provider->get_width();
@@ -81,9 +101,7 @@ CollisionMask::CollisionMask(const std::string filename)
 
   std::cout << width << "x" << height << std::endl;
 
-  provider->unlock();
-
-  delete provider;
+  provider->unlock(); 
 }
 
 CollisionMask::~CollisionMask()
@@ -105,9 +123,33 @@ CollisionMask::put_pixel(int x, int y, bool pixel)
 bool
 CollisionMask::get_pixel(int x, int y) const
 {
-  assert(x < width && y < height);
+  assert(x >=0 && y >=0 && x < width && y < height);
 
   return data[y * pitch + x/int_width] & (1 << (int_width - 1 - (x % int_width)));
+}
+
+bool
+CollisionMask::collides_with(const CollisionMask& mask, int x_of, int y_of, float scale) const
+{
+  int start_y = std::max(0, y_of); 
+  int end_y   = std::min(height, static_cast<int>(y_of + (mask.height*scale)));
+
+  int start_x = std::max(0, x_of);
+  int end_x   = std::min(width, static_cast<int>(x_of + (mask.width*scale)));
+
+  int o_start_x = start_x - x_of;
+  int o_start_y = start_y - y_of;
+
+  for (int x = start_x; x < end_x; ++x)
+    for (int y = start_y; y < end_y; ++y)
+      {
+        if (get_pixel(x, y) && mask.get_pixel(start_x + int((x - start_x) / scale) - x_of,
+                                              start_y + int((y - start_y) / scale) - y_of
+                                              ))
+          return true;
+      }
+
+  return false; 
 }
 
 bool

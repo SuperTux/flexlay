@@ -1,4 +1,4 @@
-//  $Id: collision_mask.hxx,v 1.4 2003/09/02 13:51:43 grumbel Exp $
+//  $Id: collision_mask.hxx,v 1.5 2003/09/02 22:05:02 grumbel Exp $
 // 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -21,11 +21,14 @@
 #define HEADER_COLLISION_MASK_HXX
 
 #include <assert.h>
+#include <string>
 #include <ClanLib/Core/IOData/datatypes.h>
+#include <ClanLib/Display/pixel_buffer.h>
 
 typedef unsigned int cm_uint32;
 
-/** */
+/** A CollisionMask is a bitmap with 1 bit per pixel, you can take two
+    CollisionMask and check if they overlap. */
 class CollisionMask
 {
 public:
@@ -43,9 +46,13 @@ public:
 
   /** Generate a collision mask from a given bitmap */
   CollisionMask(int width, int height, cm_uint32* data);
+
+  CollisionMask(CL_PixelBuffer* provider);
   
   /** Creates a collision mask from a file */
   CollisionMask(const std::string filename);
+
+  CollisionMask(const CollisionMask& mask);
 
   ~CollisionMask();
 
@@ -72,6 +79,11 @@ public:
       optimizations where possible */
   bool collides_with      (const CollisionMask& mask, int x_of, int y_of) const;
 
+  /** Check if mask collides with this, where mask is offseted by
+      x_of, y_of and scaled by scale, scale must be <= 1.0f or else
+      not all collisions might get detected */
+  bool collides_with      (const CollisionMask& mask, int x_of, int y_of, float scale) const;
+
   /** Checks for collision of the bounding boxes of the two collision
       masks */
   bool bbox_collides_with (const CollisionMask& mask, int x_of, int y_of) const;
@@ -81,10 +93,11 @@ public:
   bool slow_pixel_collides_with(const CollisionMask& mask, int x_of, int y_of) const;
 
 private:
+  void create_from(CL_PixelBuffer* provider);
+
   /** Checks pixel precisly if the two collision masks collide */
   bool pixel_collides_with(const CollisionMask& mask, int x_of, int y_of) const;
 
-  CollisionMask (const CollisionMask&);
   CollisionMask& operator= (const CollisionMask&);
 };
 

@@ -32,6 +32,7 @@
 #include "object_brush.hxx"
 #include "object_selector.hxx"
 #include "sexpr_parser.hxx"
+#include "icon.hxx"
 %}
 
 %include "std_string.i"
@@ -63,6 +64,7 @@
 %include "object_brush.hxx"
 %include "object_selector.hxx"
 %include "sexpr_parser.hxx"
+%include "icon.hxx"
 
 
 /* EOF */

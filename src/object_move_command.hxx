@@ -24,23 +24,14 @@
 
 class ObjectLayer;
 
+class ObjectMoveCommandImpl;
+
 /** */
 class ObjectMoveCommand : public Command
 {
-private:
-  ObjectLayer* objmap;
-
-  struct Obj {
-    CL_Point old_pos;
-    CL_Point new_pos;
-    int id;
-  };
-  
-  typedef std::vector<Obj> Objects;
-  Objects objects;
 public:
   ObjectMoveCommand(ObjectLayer* o);
-  virtual ~ObjectMoveCommand() {}
+  virtual ~ObjectMoveCommand();
 
   void add_obj(int id);
 
@@ -49,6 +40,9 @@ public:
   void undo();
 
   std::string serialize();
+
+private:
+  SharedPtr<ObjectMoveCommandImpl> impl;
 };
 
 #endif

@@ -1,4 +1,4 @@
-//  $Id: editor.hxx,v 1.8 2003/10/11 08:11:59 grumbel Exp $
+//  $Id$
 // 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -17,20 +17,31 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-#ifndef HEADER_SCRIPTING_EDITOR_HXX
-#define HEADER_SCRIPTING_EDITOR_HXX
+#ifndef HEADER_ICON_HXX
+#define HEADER_ICON_HXX
 
-#include <string>
-
+#include <ClanLib/GUI/component.h>
+#include <ClanLib/Core/Math/point.h>
 #include <ClanLib/Display/sprite.h>
-#include <ClanLib/Display/display.h>
-#include <ClanLib/Signals/signal_v0.h>
+#include "shared_ptr.hxx"
 
-#include "Python.h"
+class IconImpl;
 
-void connect(CL_Signal_v0& sig, PyObject* obj);
+/** */
+class Icon : public CL_Component
+{
+private:
+public:
+  Icon(const CL_Point& pos, const CL_Sprite& sprite, const std::string& tooltip, CL_Component* parent);
+  
+  CL_Signal_v0& sig_clicked();
 
-CL_Sprite make_sprite(const std::string& filename);
+private:
+  Icon (const Icon&);
+  Icon& operator= (const Icon&);
+
+  SharedPtr<IconImpl> impl;
+};
 
 #endif
 

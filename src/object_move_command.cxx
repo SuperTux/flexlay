@@ -21,20 +21,42 @@
 #include "objmap_object.hxx"
 #include "object_move_command.hxx"
 
-ObjectMoveCommand::ObjectMoveCommand(ObjectLayer* o)
-  : objmap(o)
+class ObjectMoveCommandImpl
 {
+public:
+  ObjectMoveCommandImpl() {}
+  ~ObjectMoveCommandImpl() {}
+
+  ObjectLayer* objmap;
   
+  struct Obj {
+    CL_Point old_pos;
+    CL_Point new_pos;
+    int id;
+  };
+  
+  typedef std::vector<Obj> Objects;
+  Objects objects;
+};
+
+ObjectMoveCommand::ObjectMoveCommand(ObjectLayer* o)
+  : impl(new ObjectMoveCommandImpl())
+{
+  impl->objmap = o;
+}
+
+ObjectMoveCommand::~ObjectMoveCommand()
+{
 }
   
 void
 ObjectMoveCommand::execute()
 {
-  for(Objects::iterator i = objects.begin(); 
-      i != objects.end();
+  for(ObjectMoveCommandImpl::Objects::iterator i = impl->objects.begin(); 
+      i != impl->objects.end();
       ++i)
     {
-      ObjMapObject* obj = objmap->get_object(i->id);
+      ObjMapObject* obj = impl->objmap->get_object(i->id);
       if (obj) 
         {
           i->new_pos = obj->get_pos();
@@ -45,25 +67,25 @@ ObjectMoveCommand::execute()
 void
 ObjectMoveCommand::add_obj(int id)
 {
-  ObjMapObject* obj = objmap->get_object(id);
+  ObjMapObject* obj = impl->objmap->get_object(id);
 
   if (obj)
     {
-      Obj o;
+      ObjectMoveCommandImpl::Obj o;
       o.id      = id;
       o.old_pos = obj->get_pos();
-      objects.push_back(o);
+      impl->objects.push_back(o);
     }
 }
 
 void
 ObjectMoveCommand::redo()
 {
-  for(Objects::iterator i = objects.begin(); 
-      i != objects.end();
+  for(ObjectMoveCommandImpl::Objects::iterator i = impl->objects.begin(); 
+      i != impl->objects.end();
       ++i)
     {
-      ObjMapObject* obj = objmap->get_object(i->id);
+      ObjMapObject* obj = impl->objmap->get_object(i->id);
       if (obj)
         {
           obj->set_pos(i->new_pos);
@@ -74,11 +96,11 @@ ObjectMoveCommand::redo()
 void
 ObjectMoveCommand::undo()
 {
-  for(Objects::iterator i = objects.begin(); 
-      i != objects.end();
+  for(ObjectMoveCommandImpl::Objects::iterator i = impl->objects.begin(); 
+      i != impl->objects.end();
       ++i)
     {
-      ObjMapObject* obj = objmap->get_object(i->id);
+      ObjMapObject* obj = impl->objmap->get_object(i->id);
       if (obj)
         {
           obj->set_pos(i->old_pos);

@@ -33,12 +33,11 @@ editor_map.set_workspace(workspace)
 m = EditorMap()
 workspace.set_current_map(m)
 
+tileset = load_supertux_tiles()
 tilemap = TilemapLayer(tileset, 20, 10)
 m.add_layer(tilemap.to_layer())
     
 TilemapLayer_set_current(tilemap)
-
-editor_set_brush_tile(1)
 
 def foo():
     print "---My Callback---"
@@ -61,19 +60,30 @@ def draw_something():
 
 window = CL_Window(CL_Rect(50, 50, 350, 300), "My Window", gui.get_component())
     
-gui.push_component(window)
+gui.push_component(window.get_client_area())
 button1 = CL_Button(CL_Rect(50, 50, 200, 75), "Quit", gui.get_component())
 connect(button1.sig_clicked(), foo)
 
 button2 = CL_Button(CL_Rect(CL_Point(50, 100), CL_Size(150, 25)), "Draw", gui.get_component())
 connect(button2.sig_clicked(), draw_something)
 
+load_icon    = Icon(CL_Point(34*0, 0), make_sprite("../data/images/icons/stock_open.png"), "Some tooltip", gui.get_component());
+save_icon    = Icon(CL_Point(34*1, 0), make_sprite("../data/images/icons/stock_save.png"), "Some tooltip", gui.get_component());
+save_as_icon = Icon(CL_Point(34*2, 0), make_sprite("../data/images/icons/stock_save_as.png"), "Some tooltip", gui.get_component());
+
+copy_icon    = Icon(CL_Point(34*3.1, 0), make_sprite("../data/images/icons/stock_copy.png"), "Some tooltip", gui.get_component());
+paste_icon   = Icon(CL_Point(34*4.1, 0), make_sprite("../data/images/icons/stock_paste.png"), "Some tooltip", gui.get_component());
+
+def foo():
+    print "Button pressed"
+
+connect(load_icon.sig_clicked(), foo)
+
+gui.get_component()
+
 gui.pop_component()
 
-tileselectorw = CL_Window(CL_Rect(CL_Point(150, 150), CL_Size(210, 210)), "Tile Selector", gui.get_component())
-tileselector = TileSelector(5, 3, tileselectorw.get_client_area())
-tileselector.set_tileset(tileset)
-tileselector.set_tiles(range(1,100))
+supertux = SuperTuxGUI(tileset, gui)
 
 class Menu(CL_Menu):
     def __init__(self):

@@ -39,9 +39,9 @@ int main()
 
   GUIManager* gui = editor.get_gui_manager();
 
-  CL_Button* button = new CL_Button(CL_Rect(CL_Point(50, 50), 
-                                            CL_Size(100, 25)),
-                                    "Hello World", gui->get_component());
+  new CL_Button(CL_Rect(CL_Point(50, 50), 
+                        CL_Size(100, 25)),
+                "Hello World", gui->get_component());
 
   EditorMap m;
   Tileset tileset(32);
@@ -56,9 +56,9 @@ int main()
   editor_map.set_workspace(workspace);
   workspace.set_current_map(m);
  
-  CL_Button* button2 = new CL_Button(CL_Rect(CL_Point(50, 150), 
-                                             CL_Size(100, 25)),
-                                     "Quit", gui->get_component());
+  new CL_Button(CL_Rect(CL_Point(50, 150), 
+                        CL_Size(100, 25)),
+                "Quit", gui->get_component());
 
   gui->run();
  

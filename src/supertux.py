@@ -21,7 +21,7 @@ from flexlay import *
 from sexpr   import *
 import time
 
-time.sleep(1)
+supertux_datadir = "/home/ingo/cvs/supertux/supertux/data/"
 
 def load_game_tiles(tileset, filename):
     "Load game tiles from filename into tileset"
@@ -94,43 +94,45 @@ class SuperTuxGUI:
     tileselector_window = None
     tileselector = None
 
-    def __init__(self):
-        self.tileselector_window = CL_Window(CL_Rect(CL_Point(150, 150), CL_Size(210, 210)),
+    def __init__(self, tileset, gui):
+        self.tileselector_window = CL_Window(CL_Rect(CL_Point(580, 30), CL_Size(210, 560)),
                                              "Tile Selector", gui.get_component())
-        self.tileselector = TileSelector(5, 3, self.tileselector_window.get_client_area())
+        self.tileselector = TileSelector(6, 3, self.tileselector_window.get_client_area())
         self.tileselector.set_tileset(tileset)
         self.tileselector.set_tiles(range(1,100))
+
+def load_supertux_tiles():
+    tileset = Tileset(32)
+    load_game_tiles(tileset, "/home/ingo/cvs/supertux/supertux/data/images/tilesets/supertux.stgt")
+    return tileset 
         
-### Begin: 'Main Loop'
-supertux_datadir = "/home/ingo/cvs/supertux/supertux/data/"
+def main_loop():
+    flexlay = Flexlay()
+    flexlay.init()
 
-flexlay = Flexlay()
-flexlay.init()
+    editor = Editor()
+    gui = editor.get_gui_manager()
 
-editor = Editor()
-gui = editor.get_gui_manager()
+    tileset = load_supertux_tiles()
+    editor_map = EditorMapComponent(CL_Rect(0, 0, 799, 599), gui.get_component())
+    workspace  = Workspace(799, 599)
+    editor_map.set_workspace(workspace)
 
-tileset = Tileset(32)
-load_game_tiles(tileset, "/home/ingo/cvs/supertux/supertux/data/images/tilesets/supertux.stgt")
+    m = EditorMap()
+    workspace.set_current_map(m)
     
-editor_map = EditorMapComponent(CL_Rect(0, 0, 799, 599), gui.get_component())
-workspace  = Workspace(799, 599)
-editor_map.set_workspace(workspace)
+    tilemap = TilemapLayer(tileset, 20, 10)
+    m.add_layer(tilemap.to_layer())
+    
+    window = CL_Window(CL_Rect(50, 50, 350, 300), "My Window", gui.get_component())
+    
+    supertux_gui = SuperTuxGUI()
 
-m = EditorMap()
-workspace.set_current_map(m)
-
-tilemap = TilemapLayer(tileset, 20, 10)
-m.add_layer(tilemap.to_layer())
-
-window = CL_Window(CL_Rect(50, 50, 350, 300), "My Window", gui.get_component())
-
-supertux_gui = SuperTuxGUI()
-
-print "Launching GUI"
-gui.run()
-
-flexlay.deinit()
+    print "Launching GUI"
+    gui.run()
+    
+    flexlay.deinit()
+    
 ### End: 'Main Loop'
 
 # EOF #

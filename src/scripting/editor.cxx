@@ -17,6 +17,8 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
+#include <ClanLib/Display/sprite_description.h>
+#include <ClanLib/Display/Providers/provider_factory.h>
 #include <ClanLib/Signals/signal_v0.h>
 #include "../python_functor.hxx"
 #include "editor.hxx"
@@ -25,6 +27,14 @@ void connect(CL_Signal_v0& sig, PyObject* obj)
 {
   //std::cout << "Connecting functor: " << std::endl;
   new CL_Slot(sig.connect_functor(PythonFunctor(obj)));
+}
+
+CL_Sprite
+make_sprite(const std::string& filename)
+{
+  CL_SpriteDescription desc;
+  desc.add_frame(CL_ProviderFactory::load(filename), true);
+  return CL_Sprite(desc);
 }
 
 /* EOF */

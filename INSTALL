@@ -47,4 +47,13 @@ Installing:
 
 Currently not supported, run directly from the source directory.
 
+Notes:
+======
+
+Flexlay is still a moving target, so most often you are better of
+using the latest development version instead of a tarball release.
+Latest version is available via subversion at:
+
+svn checkout svn://svn.berlios.de/flexlay/trunk/
+
 # EOF #

@@ -53,7 +53,7 @@ flexlay_ruby_lib = libflexlay_ruby_env.SharedLibrary(
     CPPPATH=['$USER_CPPPATH','$RUBYDIR','../lib/'] + clanLib_env['CPPPATH'],
     LINKFLAGS = clanLib_env['LINKFLAGS'],
     LIBPATH=['../lib', '../ruby'] + clanLib_env['LIBPATH'],
-    LIBS=['swigrun', 'flexlay'] + clanLib_env['LIBS'])
+    LIBS=['flexlay'] + clanLib_env['LIBS'])
 
 # install_ruby = env.Alias('install_headers', Install(env['DESTDIR'] + env['PREFIX'] + '/include/flexlay', flexlay_headers))
 # env.Alias('install', [install_ruby])

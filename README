@@ -14,6 +14,10 @@ Supported games are at the moment:
  SuperTux   - http://super-tux.sourceforge.net/
  Pingus     - http://pingus.seul.org/
 
+Other Stuff:
+
+ Paint - A basic application with animation and graphic tablet support 
+
 Flexlay can't be run on its own, but instead of you have to start it
 via wrapper scripts (supertux-editor, windstille-editor,
 netpanzer-editor).

@@ -99,24 +99,25 @@ public:
     EditorMapComponent* parent = EditorMapComponent::current();
     CL_Pointf p = parent->screen2world(event.mouse_pos);    
 
-    CL_InputDevice tablet = CL_Display::get_current_window()->get_ic()->get_mouse(3);
-
-    if (0)
-      {
-        std::cout << "Mouse Count: " << CL_Display::get_current_window()->get_ic()->get_mouse_count() << std::endl;
-        std::cout << tablet.get_name() << ": ";
-        for(int i = 0; i < tablet.get_axis_count(); ++i)
-          std::cout << tablet.get_axis(i) << " ";
-        std::cout << std::endl;
-      }
-
-    assert(tablet.get_axis_count() >= 5);
-
     Dab dab(p.x, p.y);
 
-    dab.pressure = tablet.get_axis(2);
-    dab.tilt.x   = tablet.get_axis(3);
-    dab.tilt.y   = tablet.get_axis(4);
+    if (CL_Display::get_current_window()->get_ic()->get_mouse_count() >= 3)
+      {
+        CL_InputDevice tablet = CL_Display::get_current_window()->get_ic()->get_mouse(3);
+
+        if (0)
+          {
+            std::cout << "Mouse Count: " << CL_Display::get_current_window()->get_ic()->get_mouse_count() << std::endl;
+            std::cout << tablet.get_name() << ": ";
+            for(int i = 0; i < tablet.get_axis_count(); ++i)
+              std::cout << tablet.get_axis(i) << " ";
+            std::cout << std::endl;
+          }
+
+        dab.pressure = tablet.get_axis(2);
+        dab.tilt.x   = tablet.get_axis(3);
+        dab.tilt.y   = tablet.get_axis(4);
+      }
 
     //std::cout << dab.pressure << " " << dab.tilt.x << " " << dab.tilt.y << std::endl;
 

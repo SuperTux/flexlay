@@ -1,13 +1,14 @@
-(catch #t
-       (lambda () 
-         (eval
-          '(begin (use-modules (ice-9 readline))
-                  (activate-readline))
-          (current-module)))
-       (lambda args 
-         (display "Error: ")
-         (display args)
-         (newline)))
+(cond (#f
+       (catch #t
+              (lambda () 
+                (eval
+                 '(begin (use-modules (ice-9 readline))
+                         (activate-readline))
+                 (current-module)))
+              (lambda args 
+                (display "Error: ")
+                (display args)
+                (newline)))))
 
 (define (windstille:repl)
   (display "### Windstille repl, exit with (quit)\n")

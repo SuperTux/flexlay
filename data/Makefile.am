@@ -1,4 +1,4 @@
-##  $Id: Makefile.am,v 1.5 2003/09/21 21:57:40 grumbel Exp $
+##  $Id: Makefile.am,v 1.6 2003/12/02 16:50:41 grumbel Exp $
 ## 
 ##  Windstille - A free Lemmings clone
 ##  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -21,10 +21,17 @@ EXTRA_DIST = \
   windstille.xml \
   tiles.scm \
   tiles.xml \
+  game.scm \
+  editor.scm \
+  $(wildcard music/*.ogg) \
   $(wildcard levels/*.scm) \
-  $(wildcard images/*.png) \
+  $(wildcard *.scm) \
+  $(wildcard images/*.png images/*.jpg) \
   $(wildcard images/tiles/*.png) \
-  $(wildcard images/hero_run/*.png)
+  $(wildcard images/bonus/*.jpg) \
+  $(wildcard images/diamond/*.png) \
+  $(wildcard images/hero_run/*.png) \
+  $(wildcard images/hero_dead/*.png)
 
 nobase_pkgdata_DATA = $(EXTRA_DIST)
 

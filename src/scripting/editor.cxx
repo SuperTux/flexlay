@@ -22,6 +22,7 @@
 #include <ClanLib/Display/display.h>
 #include <ClanLib/Display/display_window.h>
 #include <iostream>
+#include <fstream>
 #include "../scm_functor.hxx"
 #include "../globals.hxx"
 #include "../windstille_game.hxx"
@@ -835,6 +836,59 @@ objectmap_tool_set_popupmenu_callback(SCM func)
   MenuConverter callback(func);
 
   new CL_Slot(tool->sig_on_popup_menu_display().connect_functor(callback));
+}
+
+NetPanzerFileStruct*
+load_netpanzer_map(const char* filename)
+{
+  // FIXME: endian issues
+  unsigned char   netp_id_header[64]; // Copyright PyroSoft Inc.  ...
+  unsigned short  id; // What is this?
+  char   name[256];
+  char   description[1024];
+  unsigned short  x_size; // width
+  unsigned short  y_size; // height
+  char            tile_set[256]; // What is this?
+ 
+  unsigned short  thumbnail_x_pix;
+  unsigned short  thumbnail_y_pix;
+
+  std::ifstream file(filename);
+
+  if (!file)
+    return 0;
+
+  file.read(reinterpret_cast<char*>(&netp_id_header), sizeof(netp_id_header));
+  file.read(reinterpret_cast<char*>(&id), sizeof(short));
+  file.read(reinterpret_cast<char*>(&name), sizeof(name));
+  file.read(reinterpret_cast<char*>(&description), sizeof(description));
+  file.read(reinterpret_cast<char*>(&x_size), sizeof(short));
+  file.read(reinterpret_cast<char*>(&y_size), sizeof(short));
+  file.read(reinterpret_cast<char*>(&tile_set), sizeof(tile_set));
+  file.read(reinterpret_cast<char*>(&thumbnail_x_pix), sizeof(short));
+  file.read(reinterpret_cast<char*>(&thumbnail_y_pix), sizeof(short));
+
+  EditorTileMap* tilemap = new EditorTileMap(x_size, y_size, 32);
+  Field<int>* field      = tilemap->get_map(1);
+
+  std::vector<unsigned short> vec;
+  vec.resize(x_size * y_size);
+  file.read(reinterpret_cast<char*>(&(*vec.begin())), sizeof(unsigned short)*vec.size());
+
+  for(int i = 0; i < x_size*y_size; ++i)
+    (*field)[i] = vec[i];
+
+  NetPanzerFileStruct* netpanzer_file = new NetPanzerFileStruct;
+
+  std::cout << "Size: " << x_size << "x" << y_size << std::endl;
+  std::cout << "Name:  " << name << std::endl;
+  std::cout << "Descr: " << description << std::endl;
+
+  netpanzer_file->tilemap     = tilemap;
+  netpanzer_file->name        = name;
+  netpanzer_file->description = description;
+
+  return netpanzer_file;
 }
 
 /* EOF */

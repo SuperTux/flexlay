@@ -80,6 +80,40 @@
                   default
                   ))))))
 
+(define (netpanzer:create-level-map-from-file filename)
+  (let* ((file (load-netpanzer-map filename))
+         (m       (editor-map-create))
+         (objmap  (editor-objmap-create)))
+
+    (editor-map-add-layer m (NetPanzerFileStruct-tilemap-get file))
+    (editor-map-add-layer m objmap)
+
+    (cond ((equal? *game* 'netpanzer)
+           (let* ((rawname (substring filename 0 (- (string-length filename) 4)))
+                  (optname (string-append rawname ".opt"))
+                  (spnname (string-append rawname ".spn")))
+             
+             ;; Generate outposts
+             (for-each 
+              (lambda (el)
+                (objectmap-add-object objmap "sprites/outpost"
+                                      (+ (* (string->number (cadr el))  32) 16)
+                                      (+ (* (string->number (caddr el)) 32) 16)
+                                      (list 'outpost (car el))))
+              (parse-netpanzer-opt-file optname))
+             
+             ;; Generate spawnpoints
+             (for-each
+              (lambda (el)
+                (objectmap-add-object objmap "sprites/spawnpoint"
+                                      (+ (* (string->number (car el)) 32) 16)
+                                      (+ (* (string->number (cadr el)) 32) 16)
+                                      '(spawnpoint)))
+              (parse-netpanzer-spn-file spnname)))))
+  
+    (editor-map-set-filename m filename)
+    m))
+
 (define (create-level-map-from-file filename)
   (let ((data (with-input-from-file filename
                 (lambda () (cdr (read))))))
@@ -105,33 +139,6 @@
                         ((mrbomb)
                          (objectmap-add-object objmap "sprites/mrbomb" x y '(mrbomb))))))
                   objects)
-
-        (catch #t
-               (lambda ()
-                 (cond ((equal? *game* 'netpanzer)
-                        (let* ((rawname (substring filename 0 (- (string-length filename) 4)))
-                               (optname (string-append rawname ".opt"))
-                               (spnname (string-append rawname ".spn")))
-                          
-                          ;; Generate outposts
-                          (for-each 
-                           (lambda (el)
-                             (objectmap-add-object objmap "sprites/outpost"
-                                                   (+ (* (string->number (cadr el))  32) 16)
-                                                   (+ (* (string->number (caddr el)) 32) 16)
-                                                   (list 'outpost (car el))))
-                           (parse-netpanzer-opt-file optname))
-                          
-                          ;; Generate spawnpoints
-                          (for-each
-                           (lambda (el)
-                             (objectmap-add-object objmap "sprites/spawnpoint"
-                                                   (+ (* (string->number (car el)) 32) 16)
-                                                   (+ (* (string->number (cadr el)) 32) 16)
-                                                   '(spawnpoint)))
-                           (parse-netpanzer-spn-file spnname))))))
-               (lambda args
-                 (display "Error: ")(display args)(newline)))
         
         (editor-map-add-layer m tilemap)
         (editor-map-add-layer m objmap)
@@ -149,6 +156,17 @@
   (catch #t
          (lambda ()
            (let ((levelmap (create-level-map-from-file filename)))
+             (editor-map-component-set-map *editor-map* levelmap)
+             (add-buffer levelmap)
+             ))
+         (lambda args
+           (editor-error args)))
+  (push-last-file filename))
+
+(define (netpanzer:load-map filename)
+  (catch #t
+         (lambda ()
+           (let ((levelmap (netpanzer:create-level-map-from-file filename)))
              (editor-map-component-set-map *editor-map* levelmap)
              (add-buffer levelmap)
              ))
@@ -314,6 +332,11 @@
                          (simple-file-dialog "Load a level..." (get-last-file)
                                              (lambda (filename)
                                                (load-map filename)))))
+    (gui-add-menu-item menu "File/Open NetPanzer.." 
+                       (lambda ()
+                         (simple-file-dialog "Load a level..." (get-last-file)
+                                             (lambda (filename)
+                                               (netpanzer:load-map filename)))))
 
 
     (for-each (lambda (level)

@@ -98,6 +98,15 @@ SCM get_tile_def(int id);
 SCM get_tile_defs();
 SCM load_xml(const char* filename);
 
+struct NetPanzerFileStruct
+{
+  std::string name;
+  std::string description;
+  EditorMapLayer* tilemap;
+};
+
+NetPanzerFileStruct* load_netpanzer_map(const char* filename);
+
 // Map stuff
 EditorMap*      editor_map_create();
 void            editor_map_add_layer(EditorMap* m, EditorMapLayer* layer);

@@ -44,7 +44,7 @@ public:
   SketchStrokeToolImpl()
     : drawing(false)
   {
-    sprite_drawer.set_mode(SpriteStrokeDrawer::DM_ADDITION);
+    sprite_drawer.set_mode(SpriteStrokeDrawer::DM_NORMAL);
     sprite_drawer.set_sprite(CL_Sprite("brush", &(Flexlay::current()->resources)));
     sprite_drawer.set_color(CL_Color(255, 255, 255, 255));
     sprite_drawer.set_size(1.0f);  
@@ -159,6 +159,12 @@ Tool
 SketchStrokeTool::to_tool()
 {
   return Tool(impl);
+}
+
+StrokeDrawer
+SketchStrokeTool::get_drawer()
+{
+  return impl->sprite_drawer.to_drawer();
 }
 
 /* EOF */

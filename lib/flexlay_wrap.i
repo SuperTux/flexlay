@@ -61,6 +61,7 @@ std::cout << "CL_Error: " << err.message << std::endl;
 #include "stroke.hxx"
 #include "stroke_drawer.hxx"
 #include "sprite_stroke_drawer.hxx"
+#include "brushmask.hxx"
 
 #include "colorpicker.hxx"
 #include "slider.hxx"
@@ -169,6 +170,7 @@ VALUE CL_Point2Value(const CL_Point& arg)
 %include "stroke.hxx"
 %include "stroke_drawer.hxx"
 %include "sprite_stroke_drawer.hxx"
+%include "brushmask.hxx"
 
 %include "colorpicker.hxx"
 %include "slider.hxx"
@@ -196,5 +198,6 @@ VALUE CL_Point2Value(const CL_Point& arg)
 %include "../ruby/ruby_sexpr_parser.hxx"
 
 #endif
+
 
 /* EOF */

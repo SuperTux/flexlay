@@ -1,7 +1,7 @@
 //  $Id$
 // 
 //  Pingus - A free Lemmings clone
-//  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
+//  Copyright (C) 2004 Ingo Ruhnke <grumbel@gmx.de>
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -17,29 +17,23 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-#ifndef HEADER_SKETCH_STROKE_TOOL_HXX
-#define HEADER_SKETCH_STROKE_TOOL_HXX
+#ifndef HEADER_BRUSHMASK_HXX
+#define HEADER_BRUSHMASK_HXX
 
-#include "tool_impl.hxx"
-#include "stroke_drawer.hxx"
+#include <ClanLib/Display/pixel_buffer.h>
 
-class SketchStrokeToolImpl;
-
-/** */
-class SketchStrokeTool
-{
-private:
-public:
-  SketchStrokeTool();
-
-  void set_size(float size);
-  void set_color(const CL_Color& color);
-  StrokeDrawer get_drawer();
-
-  Tool to_tool();
-private:
-  SharedPtr<SketchStrokeToolImpl> impl;
+enum BrushShape {
+  BRUSH_SHAPE_CIRCLE,
+  BRUSH_SHAPE_SQUARE,
+  BRUSH_SHAPE_DIAMOND
 };
+
+CL_PixelBuffer generate_brushmask(BrushShape shape,
+                                  float  radius,
+                                  int    spikes,        /* 2 - 20     */
+                                  float  hardness,      /* 0.0 - 1.0  */
+                                  float  aspect_ratio,  /* y/x        */
+                                  float  angle);        /* in degrees */
 
 #endif
 

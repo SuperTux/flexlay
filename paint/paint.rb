@@ -73,6 +73,21 @@ class PaintGUI
                        $sketch_stroke_tool.set_size(value)
                      })
 
+    @brush_hardness = Slider.new(CL_Rect.new(CL_Point.new(3, 170), CL_Size.new(128, 16)),
+                                 @selector_window)
+    @brush_hardness.set_range(0.0, 1.0)
+    @brush_hardness.set_value(0.5)
+    connect_v1_float(@brush_hardness.sig_on_change, proc{|value|
+                       drawer = SpriteStrokeDrawer.new($sketch_stroke_tool.get_drawer())
+                       drawer.set_sprite(pixelbuffer2sprite(generate_brushmask(BRUSH_SHAPE_CIRCLE, 
+                                                                               32,  # radius
+                                                                               2,   # spikes
+                                                                               value, # hardness
+                                                                               1.0, # aspect
+                                                                               0))) # angle
+                     })
+
+
 #    @zoom_slider = Slider.new(CL_Rect.new(CL_Point.new(3, 182), CL_Size.new(128, 16)), @selector_window)
 #    @zoom_slider.set_range(0.25, 10.0) # FIXME: using 0 size brush makes clanlib crashi
 #    @zoom_slider.set_value(1.0)

@@ -64,94 +64,86 @@ SpriteStrokeDrawerImpl::draw_dab(const Dab& dab, CL_GraphicContext* gc)
 
   if (gc != 0)
     {
-      if (1)
-        {
-          /* Correct function:
-             1: dest
-             2: src
+      /* Correct function:
+         1: dest
+         2: src
              
-             R = R1 A1 (1 - A2) + R2 A2
-             G = G1 A1 (1 - A2) + G2 A2
-             B = B1 A1 (1 - A2) + B2 A2
-             A = A1 (1 - A2) + A2
+         R = R1 A1 (1 - A2) + R2 A2
+         G = G1 A1 (1 - A2) + G2 A2
+         B = B1 A1 (1 - A2) + B2 A2
+         A = A1 (1 - A2) + A2
 
-             // This is currently used, leads to premultiplied alpha
-             Aout  = Afgd + (1 - Afgd) * Abkg 
-             Cout' = Cfgd' + (1 - Afgd) * Cbkg' 
-             where
-             Cfgd' = Cfgd * Afgd
-             Cbkg' = Cbkg * Abkg
-             Cout' = Cout * Aout
+         // This is currently used, leads to premultiplied alpha
+         Aout  = Afgd + (1 - Afgd) * Abkg 
+         Cout' = Cfgd' + (1 - Afgd) * Cbkg' 
+         where
+         Cfgd' = Cfgd * Afgd
+         Cbkg' = Cbkg * Abkg
+         Cout' = Cout * Aout
 
-             Aout = (1 - (1 - Afgd) * (1 - Abkg)) 
-             Cout = (Cfgd * Afgd) + (1 - Afgd * Cbkg * Abkg) / Aout 
-             where
-             Cfgd = red, green, blue of foreground
-             Cbkg = red, green, blue of background
-             Afgd = alpha of foreground
-             Abkg = alpha of background
-          */
+         Aout = (1 - (1 - Afgd) * (1 - Abkg)) 
+         Cout = (Cfgd * Afgd) + (1 - Afgd * Cbkg * Abkg) / Aout 
+         where
+         Cfgd = red, green, blue of foreground
+         Cbkg = red, green, blue of background
+         Afgd = alpha of foreground
+         Abkg = alpha of background
+      */
 
-          // DO Multipass:
-          // 1: GL_ZERO, GL_DST_ALPHA
-          // 2: GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA
-          /*brush.set_blend_func_separate(blend_zero, blend_dst_alpha,
-                                        blend_zero, blend_one);
-                                        brush.draw(dab.pos.x, dab.pos.y, gc);*/
+      // DO Multipass:
+      // 1: GL_ZERO, GL_DST_ALPHA
+      // 2: GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA
+      /*brush.set_blend_func_separate(blend_zero, blend_dst_alpha,
+        blend_zero, blend_one);
+        brush.draw(dab.pos.x, dab.pos.y, gc);*/
           
-          switch (mode)
-            {
-            case SpriteStrokeDrawer::DM_NORMAL:
-              brush.set_blend_func_separate(blend_src_alpha, blend_one_minus_src_alpha,
-                                            blend_one, blend_one_minus_src_alpha);
-              brush.draw(dab.pos.x, dab.pos.y, gc);
-              break;
+      switch (mode)
+        {
+        case SpriteStrokeDrawer::DM_NORMAL:
+          brush.set_blend_func_separate(blend_src_alpha, blend_one_minus_src_alpha,
+                                        blend_one, blend_one_minus_src_alpha);
+          brush.draw(dab.pos.x, dab.pos.y, gc);
+          break;
 
-            case SpriteStrokeDrawer::DM_ADDITION:
-              brush.set_blend_func_separate(blend_src_alpha, blend_one,
-                                            blend_one, blend_one_minus_src_alpha);
-              brush.draw(dab.pos.x, dab.pos.y, gc);
-              break;
+        case SpriteStrokeDrawer::DM_ADDITION:
+          brush.set_blend_func_separate(blend_src_alpha, blend_one,
+                                        blend_one, blend_one_minus_src_alpha);
+          brush.draw(dab.pos.x, dab.pos.y, gc);
+          break;
               
-            case SpriteStrokeDrawer::DM_ERASE:
-              brush.set_blend_func(blend_zero, blend_one_minus_src_alpha);
-              brush.draw(dab.pos.x, dab.pos.y, gc);
-              break;
+        case SpriteStrokeDrawer::DM_ERASE:
+          brush.set_blend_func(blend_zero, blend_one_minus_src_alpha);
+          brush.draw(dab.pos.x, dab.pos.y, gc);
+          break;
               
-            default:
-              std::cout << "Error: SpriteStrokeDrawer: Unknown draw mode: " << mode << std::endl;
-              break;
-            }
-        }
-      else
-        { 
-          switch (mode)
-            {
-            case SpriteStrokeDrawer::DM_NORMAL:  
-              brush.set_blend_func(blend_src_alpha, blend_one_minus_src_alpha);
-              brush.draw(dab.pos.x, dab.pos.y, gc);  
-              break;
-              
-            case SpriteStrokeDrawer::DM_ADDITION:
-              brush.set_blend_func(blend_src_alpha, blend_one);
-              brush.draw(dab.pos.x, dab.pos.y, gc); 
-              break;
-            
-            case SpriteStrokeDrawer::DM_ERASE:
-              brush.set_blend_func(blend_zero, blend_one_minus_src_alpha);
-              brush.draw(dab.pos.x, dab.pos.y, gc);
-              break; 
-
-            default:
-              std::cout << "Error: SpriteStrokeDrawer: Unknown draw mode: " << mode << std::endl;
-              break;
-            }
+        default:
+          std::cout << "Error: SpriteStrokeDrawer: Unknown draw mode: " << mode << std::endl;
+          break;
         }
     }
   else
     {
-      brush.set_blend_func(blend_src_alpha, blend_one_minus_src_alpha);
-      brush.draw(dab.pos.x, dab.pos.y, gc);
+      switch (mode)
+        {
+        case SpriteStrokeDrawer::DM_NORMAL:  
+          brush.set_blend_func(blend_src_alpha, blend_one_minus_src_alpha);
+          brush.draw(dab.pos.x, dab.pos.y, gc);  
+          break;
+              
+        case SpriteStrokeDrawer::DM_ADDITION:
+          brush.set_blend_func(blend_src_alpha, blend_one);
+          brush.draw(dab.pos.x, dab.pos.y, gc); 
+          break;
+            
+        case SpriteStrokeDrawer::DM_ERASE:
+          brush.set_blend_func(blend_zero, blend_one_minus_src_alpha);
+          brush.draw(dab.pos.x, dab.pos.y, gc);
+          break; 
+
+        default:
+          std::cout << "Error: SpriteStrokeDrawer: Unknown draw mode: " << mode << std::endl;
+          break;
+        }
     }
 }
 

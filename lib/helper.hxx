@@ -23,6 +23,7 @@
 #include <ClanLib/Display/sprite.h>
 #include <ClanLib/Display/pixel_buffer.h>
 
+CL_Sprite      pixelbuffer2sprite(const CL_PixelBuffer& buffer);
 CL_Sprite      make_sprite(const std::string& filename);
 CL_PixelBuffer make_pixelbuffer(const std::string& filename);
 CL_PixelBuffer make_region_pixelbuffer(const std::string& filename, int x, int y, int w, int h);

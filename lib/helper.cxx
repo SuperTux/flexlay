@@ -25,6 +25,14 @@
 #include "helper.hxx"
 
 CL_Sprite
+pixelbuffer2sprite(const CL_PixelBuffer& buffer)
+{
+  CL_SpriteDescription desc;
+  desc.add_frame(new CL_PixelBuffer(buffer), true);
+  return CL_Sprite(desc);
+}
+
+CL_Sprite
 make_sprite(const std::string& filename)
 {
   try {

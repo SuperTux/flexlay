@@ -6,6 +6,7 @@
 (define screen-height (screen-get-height))
 (define empty (lambda () #f))
 (define *editor-map* #f)
+(define *editor-variables* '())
 (define *tileeditor* #f)
 (define *tileeditor-window* #f)
 (define *tileselector-window* #f)
@@ -13,7 +14,8 @@
 (define *menu*    #f)
 (define *statusbar* #f)
 (define *clipboard* #f)
-(define *recent-files* (list *windstille-levelfile*))
+(define *recent-files* '())
+(define *recent-files-size* 15)
 (define datadir  *windstille-datadir*)
 
 (define (push-last-file filename)
@@ -304,18 +306,18 @@
     (gui-pop-component)))
 
 (define (create-minimap)
-;;  (let ((window (gui-create-window (- screen-width 230) 
-;;                                   (- screen-height 110)
-;;                                   230 110 "Minimap")))
-;;    (gui-push-component (gui-window-get-client-area window))
+  ;;  (let ((window (gui-create-window (- screen-width 230) 
+  ;;                                   (- screen-height 110)
+  ;;                                   230 110 "Minimap")))
+  ;;    (gui-push-component (gui-window-get-client-area window))
   (let ((width screen-width)
         (height 50))
     (set! *minimap* (minimap-create *editor-map*
-                     (- screen-width width) 
-                     (- screen-height height)
-                     width height))))
+                                    (- screen-width width) 
+                                    (- screen-height height)
+                                    width height))))
 ;;    (gui-pop-component)
- ;;  (gui-component-on-close window (lambda ()
+;;  (gui-component-on-close window (lambda ()
 ;;                                  (gui-hide-component window)))
 ;;     window)))
 
@@ -323,15 +325,65 @@
   (with-output-to-file (string-append *windstille-homedir* "editor-variables.scm")
     (lambda ()
       (display ";; Automatically Written file, don't edit by hand!\n\n")
-      (write `(set! *recent-files* (append *recent-files* (quote ,*recent-files*))))(newline)
+      (write (list
+              (cons '*recent-files* 
+                    *recent-files*)))
+      (newline)
       (display "\n;; EOF ;;\n")
       )))
 
-(catch #t
-       (lambda ()
-         (primitive-load (string-append *windstille-homedir* "editor-variables.scm")))
-       (lambda args
-         (display "Error: ")(display args)(newline)))
+(define (truncate-list n lst)
+  (cond ((or (null? lst)
+             (= n 0))
+         '())
+        (else
+         (cons (car lst)
+               (truncate-list (- n 1) (cdr lst))))))
+
+(define (remove-doubles lst)
+  (define (remove-doubles-helper lst ret)
+    (cond ((null? lst)
+           (reverse ret))
+          (else
+           (if (not (member (car lst) ret))
+               (remove-doubles-helper (cdr lst) (cons (car lst) ret))
+               (remove-doubles-helper (cdr lst) ret)
+               ))))
+
+  (remove-doubles-helper lst '()))
+
+(define (load-variables)
+  (let ((editor-variables '()))
+    (catch #t
+           (lambda ()
+             (call-with-input-file (string-append *windstille-homedir* "editor-variables.scm")
+               (lambda (port)
+                 (let ((vars (read port)))
+                   (cond ((list? vars)
+                          (set! *editor-variables* vars))
+                         (else
+                          (display "Error: Couldn't read vars from config file\n"))
+                         )))))
+           (lambda args
+             (display "Error: ")(display args)(newline)))))
+
+(define (init-recent-files)
+  (if (not (string=? "" *windstille-levelfile*))
+      (set! *recent-files* (cons  *windstille-levelfile* *recent-files*)))
+
+
+  (let ((ent (assoc-ref *editor-variables* '*recent-files*)))
+    (cond (ent
+           (set! *recent-files* 
+                 (truncate-list *recent-files-size*
+                                (remove-doubles (append *recent-files* ent)))))
+          (else
+           (display "Error: ")
+           (write *editor-variables*)
+           (newline)))))
+
+(load-variables)
+(init-recent-files)
 
 (set! *editor-map* (editor-create-map 0 25 800 575))
 (create-menu)

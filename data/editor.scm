@@ -599,12 +599,20 @@
                           ))
      (gui-add-menu-item menu "Print Selection"
                         (lambda ()
-                          (display (editor-objectmap-get-objects))
+                          (display (tilemap-object-tool-get-objects))
                           (newline)))
+     (gui-add-menu-item menu "Delete Selection"
+                        (lambda ()
+                          (for-each editor-objectmap-delete-object
+                                    (tilemap-object-tool-get-objects))
+                          (tilemap-object-tool-clear-selection)
+                          ))
      (gui-add-menu-item menu "Flip Screen"
                         (lambda ()
                           (for-each objmap-sprite-object-flip
-                                    (editor-objectmap-get-objects))))
+                                    ;;(editor-objectmap-get-objects)
+                                    (tilemap-object-tool-get-objects)
+                                    )))
      )
    (newline)))
 

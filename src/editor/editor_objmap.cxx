@@ -85,6 +85,20 @@ EditorObjMap::find_object(const CL_Point& click_pos)
   return 0;
 }
 
+void
+EditorObjMap::delete_object(int id)
+{
+  for(Objs::iterator i = objects.begin(); i != objects.end(); ++i)
+    {
+      if ((*i)->get_handle() == id)
+        {
+          //delete *i;
+          objects.erase(i);
+          break;
+        }
+    }
+}
+
 std::vector<EditorObjMap::Obj*>
 EditorObjMap::get_selection(const CL_Rect& rect)
 {

@@ -30,6 +30,9 @@ class EditorMap;
 /** */
 class TileMapObjectTool : public TileMapTool
 {
+public:
+  typedef std::vector<EditorObjMap::Obj*> Selection; 
+
 private:
   CL_Signal_v1<CL_Menu*> on_popup_menu_display;
 
@@ -43,8 +46,8 @@ private:
   CL_Point drag_start;
   CL_Rect selection_rect;
 
-  typedef std::vector<EditorObjMap::Obj*> Selection; 
   Selection selection;
+
 public:
   TileMapObjectTool();
   ~TileMapObjectTool();
@@ -54,6 +57,9 @@ public:
   void on_mouse_up  (const CL_InputEvent& event);
   void on_mouse_down(const CL_InputEvent& event);
   void on_mouse_move(const CL_InputEvent& event);
+
+  void clear_selection() { selection.clear(); }
+  Selection get_selection() const { return selection; }
 
   CL_Signal_v1<CL_Menu*>& sig_on_popup_menu_display() { return on_popup_menu_display; }
 private:

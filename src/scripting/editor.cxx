@@ -176,6 +176,12 @@ scm2brush(SCM s_brush)
   return brush;
 }
 
+void
+editor_objectmap_delete_object(int id)
+{
+  editor_get_objmap()->delete_object(id); 
+}
+
 SCM
 editor_objectmap_get_objects()
 {
@@ -184,6 +190,35 @@ editor_objectmap_get_objects()
   for(EditorObjMap::Objs::iterator i = editor_get_objmap()->get_objects()->begin();
       i != editor_get_objmap()->get_objects()->end();
       ++i)
+    {
+      lst = gh_cons(SCM_MAKINUM((*i)->get_handle()), lst);
+    }
+
+  return gh_reverse(lst);
+}
+
+void
+tilemap_object_tool_clear_selection()
+{
+  TileMapObjectTool* tool 
+    = dynamic_cast<TileMapObjectTool*>
+    (Editor::current()->get_tool_manager()->get_tool_by_name(OBJECT_TOOL_NAME));
+
+  tool->clear_selection();
+}
+
+SCM
+tilemap_object_tool_get_objects()
+{
+  SCM lst = SCM_EOL;
+
+  TileMapObjectTool* tool 
+    = dynamic_cast<TileMapObjectTool*>
+    (Editor::current()->get_tool_manager()->get_tool_by_name(OBJECT_TOOL_NAME));
+
+  TileMapObjectTool::Selection selection = tool->get_selection();
+
+  for(EditorObjMap::Objs::iterator i = selection.begin(); i != selection.end(); ++i)
     {
       lst = gh_cons(SCM_MAKINUM((*i)->get_handle()), lst);
     }

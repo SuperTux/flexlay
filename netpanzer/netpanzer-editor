@@ -1,8 +1,11 @@
 #!/bin/sh
 
-#!/bin/sh
+LD_LIBRARY_PATH=$LD_LIBRARY_PATH:../lib:../ruby
+export LD_LIBRARY_PATH
 
-export PATH=".:$PATH"
-exec flexlay --game netpanzer.scm "$@"
+RUBYLIB=$RUBYLIB:../ruby
+export RUBYLIB
+
+exec ruby -w ./netpanzer.rb "$@"
 
 # EOF #

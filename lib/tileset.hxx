@@ -20,7 +20,7 @@
 #ifndef TILESET_HXX
 #define TILESET_HXX
 
-#include <map>
+#include <vector>
 #include <string>
 #include <ClanLib/Core/System/sharedptr.h>
 

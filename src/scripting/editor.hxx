@@ -54,7 +54,6 @@ void editor_set_brush_tile(int i);
 int  editor_get_brush_tile();
 void editor_set_tool(int i);
 SCM  editor_get_tile_selection();
-void tilemap_set_active_layer(int i);
 void tilemap_resize(EditorMapLayer* , int x, int y, int w, int h);
 void tilemap_paint_tool_set_brush(TileBrush brush);
 
@@ -83,9 +82,8 @@ void tileeditor_set_tile(CL_Component* comp, int id);
 int  screen_get_width();
 int  screen_get_height();
 
-SCM  diamond_map_get_data();
+// FIXME: evil shortcut functions, should be replaced
 SCM  map_get_scripts();
-SCM  map_get_data(int i);
 int  map_get_width();
 int  map_get_height();
 void map_set_size(int w, int h);
@@ -123,7 +121,8 @@ EditorMapLayer* editor_objmap_create();
 std::string     editor_map_get_filename(EditorMap* m);
 void            editor_map_set_filename(EditorMap* m, const char* name);
 EditorMapLayer* editor_tilemap_create(int w, int h, int tile_size);
-void            editor_tilemap_set_data(EditorMapLayer* l, int m, SCM data);
+void            editor_tilemap_set_data(EditorMapLayer* l, SCM data);
+SCM             editor_tilemap_get_data(EditorMapLayer* l);
 
 #endif
 

@@ -32,7 +32,7 @@ ToolManager::ToolManager()
   // FIXME: move this to scripting too
   tools.push_back(new TileMapPaintTool  ());
   tools.push_back(new TileMapSelectTool ());
-  tools.push_back(new TileMapDiamondTool());
+  tools.push_back(0); //new TileMapDiamondTool());
   tools.push_back(new ObjMapSelectTool  ());
 
   tool = tools[0]; 

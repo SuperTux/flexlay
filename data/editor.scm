@@ -21,6 +21,7 @@
 (define *recent-files* '())
 (define *recent-files-size* 25)
 (define datadir  *windstille-datadir*)
+(define *tilemap* #f)
 (define *buffers* '())
 
 (define (add-buffer m)
@@ -61,6 +62,9 @@
   (let* ((m       (editor-map-create))
          (tilemap (editor-tilemap-create width height *tile-size*))
          (objmap  (editor-objmap-create)))
+
+    (set! *tilemap* tilemap)
+
     (editor-map-add-layer m tilemap)
     (editor-map-add-layer m objmap)
     m))
@@ -127,13 +131,15 @@
           (height     (get-value-from-tree '(properties height _)     data 15))
           (foreground (get-value-from-tree '(tilemap data)            data '()))
           (background (get-value-from-tree '(background-tilemap data) data '()))
-          (diamonds   (get-value-from-tree '(diamond-map)             data '()))
+          ;;          (diamonds   (get-value-from-tree '(diamond-map)             data '()))
           (objects    (get-value-from-tree '(objects)                 data '())))
       
       ;; load level file and extract tiledata and w/h
       (let* ((m       (editor-map-create))
              (tilemap (editor-tilemap-create width height *tile-size*))
              (objmap  (editor-objmap-create)))
+
+        (set! *tilemap* tilemap)
 
         (for-each (lambda (el)
                     (let ((x (car  (get-value-from-tree '(pos) (cdr el) 0)))
@@ -157,9 +163,9 @@
 
         ;; set data to the tilemap
         (if (not (null? foreground))
-            (editor-tilemap-set-data tilemap 1 foreground))
-        (if (not (null? background))
-            (editor-tilemap-set-data tilemap 0 background))
+            (editor-tilemap-set-data tilemap foreground))
+        ;;        (if (not (null? background))
+        ;;            (editor-tilemap-set-data tilemap 0 background))
         m))))
 
 (define (load-map filename)
@@ -282,18 +288,19 @@
       (display   "   )\n\n")
 
       (display     "  (tilemap (data\n")
-      (write-field "   " (map-get-width) (map-get-data 1))
+      (write-field "   " (map-get-width) (editor-tilemap-get-data *tilemap*))
       (display     "   ))\n\n")
 
-      (display   "  (background-tilemap (data\n")
-      (write-field "   " (map-get-width) (map-get-data 0))
-      (display   "   ))\n\n")
+      ;; FIXME: Currently not supported
+      ;;      (display   "  (background-tilemap (data\n")
+      ;;      (write-field "   " (map-get-width) (map-get-data 0))
+      ;;     (display   "   ))\n\n")
 
-      (format #t "  (diamond-map\n")
-      (write-field "   " 
-                   (map-get-width)
-                   (diamond-map-get-data))
-      (display   " )\n")
+      ;;      (format #t "  (diamond-map\n")
+      ;;      (write-field "   " 
+      ;;                   (map-get-width)
+      ;;                   (diamond-map-get-data))
+      ;;      (display   " )\n")
 
       (format #t "  (objects\n")
       (for-each (lambda (el)
@@ -549,10 +556,10 @@
                             (lambda ()
                               (set-tool 'select)))
 
-    (gui-create-button-func 0 50
-                            40 25 "Diam." 
-                            (lambda ()
-                              (set-tool 'diamond)))
+    ;;    (gui-create-button-func 0 50
+    ;;                            40 25 "Diam." 
+    ;;                            (lambda ()
+    ;;                              (set-tool 'diamond)))
 
     (gui-create-button-func 0 75                              
                             40 25 "Objs" 
@@ -573,11 +580,11 @@
 
     (gui-create-button-func 0 150
                             40 25 "BG" 
-                            (lambda () (tilemap-set-active-layer 0)))
+                            (lambda () #f));;(tilemap-set-active-layer 0)))
 
     (gui-create-button-func 0 175
                             40 25 "FG" 
-                            (lambda () (tilemap-set-active-layer 1)))
+                            (lambda () #f))
 
     (gui-create-button-func 0 225
                             40 25 "Undo" 
@@ -589,8 +596,7 @@
 
     (gui-create-button-func 0 300
                             40 25 "Shell" 
-                            windstille:repl)
-    )
+                            windstille:repl))
   (gui-pop-component))
 
 (define (simple-file-dialog title filename func)
@@ -803,6 +809,8 @@
            (levelmap      (editor-map-create))
            (tilemap       (editor-tilemap-create 10 10 32)))
       
+      (set! *tilemap* tilemap)
+
       (define (update-from-boxes)
         (catch #t
                (lambda ()

@@ -34,112 +34,58 @@
 #include "editor_map_component.hxx"
 
 EditorTileMap::EditorTileMap(int w, int h, int tile_size_)
-  : tile_size(tile_size_) 
+  : tile_size(tile_size_), field(w, h)
 {
-  // FIXME: Move this to the widget
+  // FIXME: Move this to the widget or to some more generic
+  // map-properties thingy
   draw_grid      = true;
   draw_attribute = false;
 
-  diamond_map   = new Field<int>(w*2, h*2);
-  current_field = new Field<int>(w, h);
-
-  for (int y = 0; y < current_field->get_height (); ++y) 
-    for (int x = 0; x < current_field->get_width (); ++x)
-      current_field->at(x, y) = 0;
-  fields.push_back(current_field);
-
-  current_field = new Field<int> (w, h);
-  for (int y = 0; y < current_field->get_height (); ++y)
-    for (int x = 0; x < current_field->get_width (); ++x)
-      current_field->at(x, y) = 0;
-  fields.push_back(current_field);
+  for (int y = 0; y < field.get_height(); ++y) 
+    for (int x = 0; x < field.get_width(); ++x)
+      field.at(x, y) = 0;
 }
 
 EditorTileMap::~EditorTileMap()
 {
-  for (Fields::iterator i = fields.begin(); i != fields.end(); ++i)
-    delete *i;
-    
-  fields.clear();
-
-  delete diamond_map;
-  diamond_map = 0;
-}
-  
-void
-EditorTileMap::draw_map(EditorMapComponent* parent, Field<int>* field)
-{
-  float alpha;
-  if (field == current_field)
-    alpha = 1.0f;
-  else
-    alpha = .5f;
-
-  CL_Rect rect = parent->get_clip_rect();
-
-  int start_x = std::max(0, rect.left/tile_size);
-  int start_y = std::max(0, rect.top/tile_size);
-  int end_x   = std::min(field->get_width(),  rect.right/tile_size + 1);
-  int end_y   = std::min(field->get_height(), rect.bottom/tile_size + 1);
-
-  for (int y = start_y; y < end_y; ++y)
-    for (int x = start_x; x < end_x; ++x)
-      {
-        EditorTile::draw(field->at(x, y), x * tile_size, y * tile_size, draw_grid, draw_attribute, alpha);
-      }
 }
 
 void
 EditorTileMap::draw(EditorMapComponent* parent)
 {
   CL_Display::fill_rect(CL_Rect(CL_Point(0,0),
-                                CL_Size(current_field->get_width() * tile_size,
-                                        current_field->get_height() * tile_size)),
+                                CL_Size(field.get_width() * tile_size,
+                                        field.get_height() * tile_size)),
                         CL_Color(0, 0, 150, 255));
   CL_Display::flush();
 
-  for(Fields::iterator i = fields.begin(); i != fields.end();++i) 
-    draw_map(parent, *i);
-  
-  CL_Display::flush();
+  // FIXME: Make layers 'transparentable'
+  float alpha = 1.0f;
 
-  if (diamond_map)
-    {
-      for(int y = 0; y < diamond_map->get_height(); ++y)
-        for(int x = 0; x < diamond_map->get_width(); ++x)
-          {
-            if ((*diamond_map)(x, y))
-              {
-                CL_Display::fill_rect(CL_Rect(CL_Point(x*64, y*64),
-                                              CL_Size(64, 64)),
-                                      CL_Color(255, 255, 0, 155));
-              }
-          }
-    }
+  CL_Rect rect = parent->get_clip_rect();
+
+  int start_x = std::max(0, rect.left/tile_size);
+  int start_y = std::max(0, rect.top/tile_size);
+  int end_x   = std::min(field.get_width(),  rect.right/tile_size + 1);
+  int end_y   = std::min(field.get_height(), rect.bottom/tile_size + 1);
+
+  for (int y = start_y; y < end_y; ++y)
+    for (int x = start_x; x < end_x; ++x)
+      {
+        EditorTile::draw(field.at(x, y), 
+                         x * tile_size, y * tile_size, 
+                         draw_grid, draw_attribute, alpha);
+      }
+
+  CL_Display::flush();
 }
 
 int
 EditorTileMap::get_tile (int x, int y)
 {
-  if (x >= 0 && x < (int)current_field->get_width () &&
-      y >= 0 && y < (int)current_field->get_height ())
-    return current_field->at(x, y);
-  else
-    return 0;
-}
-
-void
-EditorTileMap::set_active_layer(int i)
-{
-  if (i >= 0 && i < int(fields.size()))
-    current_field = fields[i];
-}
-
-Field<int>* 
-EditorTileMap::get_map(int i)
-{
-  if (i >= 0 && i < int(fields.size()))
-    return fields[i];
+  if (x >= 0 && x < (int)field.get_width() &&
+      y >= 0 && y < (int)field.get_height())
+    return field.at(x, y);
   else
     return 0;
 }
@@ -147,24 +93,23 @@ EditorTileMap::get_map(int i)
 void
 EditorTileMap::resize(int w, int h, int x, int y)
 {
-  for (Fields::iterator i = fields.begin(); i != fields.end(); ++i)
-    (*i)->resize(w, h, x, y);
+  field.resize(w, h, x, y);
 }
 
 void
 EditorTileMap::draw_tile(int id, const CL_Point& pos)
 {
-  if (pos.x >= 0 && pos.x < current_field->get_width()
-      && pos.y >= 0 && pos.y < current_field->get_height())
+  if (pos.x >= 0 && pos.x < field.get_width()
+      && pos.y >= 0 && pos.y < field.get_height())
     {
-      current_field->at(pos.x, pos.y) = id;
+      field.at(pos.x, pos.y) = id;
     }
 }
 
 void
 EditorTileMap::draw_tile(const TileBrush& brush, const CL_Point& pos)
 {
-  draw_tile(current_field, brush, pos);
+  draw_tile(&field, brush, pos);
 }
 
 void

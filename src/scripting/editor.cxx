@@ -416,11 +416,6 @@ screen_get_height()
   return CL_Display::get_height();
 }
 
-void tilemap_set_active_layer(int i)
-{
-  editor_get_tilemap()->set_active_layer(i);
-}
-
 void editor_set_tool(int i)
 {
   Editor::current()->get_tool_manager()->set_tool(i);
@@ -458,46 +453,6 @@ tile_selector_create(int x, int y, int w, int h, float scale)
   TileSelector* ret = new TileSelector(w, h, GUIManager::current()->get_component());
   ret->set_scale(scale);
   return ret;
-}
-
-SCM diamond_map_get_data()
-{
-  Field<int>* field = editor_get_tilemap()->get_diamond_map();
-  
-  if (field)
-    {
-      SCM vec = SCM_EOL;
-      for (Field<int>::iterator i = field->begin(); i != field->end(); ++i)
-        vec = gh_cons(gh_int2scm(*i), vec);
-
-      return gh_reverse(vec);
-    }
-  else
-    {
-      return SCM_EOL;
-    }
-}
-
-SCM map_get_data(int i)
-{
-  Field<int>* field = editor_get_tilemap()->get_map(i);
-  if (field)
-    {
-      std::cout << ": " << field->get_width() << "x" << field->get_height() 
-                << " " << field->size() << std::endl;
-
-      SCM vec = SCM_EOL;
-      for (Field<int>::iterator i = field->begin(); i != field->end(); ++i)
-        {
-          vec = gh_cons(gh_int2scm(*i), vec);
-        }
-      return gh_reverse(vec);
-    }
-  else
-
-    {
-      return SCM_BOOL_F;
-    }
 }
 
 int map_get_width()
@@ -757,13 +712,33 @@ editor_tilemap_create(int w, int h, int tile_size)
   return new EditorTileMap(w, h, tile_size);
 }
 
-void
-editor_tilemap_set_data(EditorMapLayer* l, int m, SCM lst)
+SCM
+editor_tilemap_get_data(EditorMapLayer* l)
 {
   EditorTileMap* tilemap = dynamic_cast<EditorTileMap*>(l);
   if (tilemap)
     {
-      Field<int>* field = tilemap->get_map(m);
+      Field<int>* field = tilemap->get_map();
+      SCM vec = SCM_EOL;
+      for (Field<int>::iterator i = field->begin(); i != field->end(); ++i)
+        {
+          vec = gh_cons(gh_int2scm(*i), vec);
+        }
+      return gh_reverse(vec);
+    }
+  else
+    {
+      return SCM_BOOL_F;
+    }
+}
+
+void
+editor_tilemap_set_data(EditorMapLayer* l, SCM lst)
+{
+  EditorTileMap* tilemap = dynamic_cast<EditorTileMap*>(l);
+  if (tilemap)
+    {
+      Field<int>* field = tilemap->get_map();
       for(Field<int>::iterator i = field->begin(); 
           i != field->end() && gh_pair_p(lst);
           ++i)
@@ -931,7 +906,7 @@ save_netpanzer_map(const char* filename, EditorMap* m,
 
   std::vector<unsigned short> vec(x_size * y_size);
 
-  Field<int>* field = tilemap->get_map(1);
+  Field<int>* field = tilemap->get_map();
   for(int i = 0; i < x_size * y_size; ++i)
     {
       vec[i] = (*field)[i];
@@ -985,7 +960,7 @@ load_netpanzer_map(const char* filename)
   file.read(reinterpret_cast<char*>(&thumbnail_y_pix), sizeof(short));
 
   EditorTileMap* tilemap = new EditorTileMap(x_size, y_size, 32);
-  Field<int>* field      = tilemap->get_map(1);
+  Field<int>* field      = tilemap->get_map();
 
   std::vector<unsigned short> vec;
   vec.resize(x_size * y_size);

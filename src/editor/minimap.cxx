@@ -72,7 +72,7 @@ Minimap::draw()
   CL_Size small_tile(TILE_SIZE * get_width() / map_width + 1,
                      TILE_SIZE * get_height() / map_height + 1);
 
-  Field<int>* tilemap = editor_get_tilemap()->get_map(1);
+  Field<int>* tilemap = editor_get_tilemap()->get_map();
 
   if (0)
     {
@@ -107,7 +107,7 @@ Minimap::draw()
 void
 Minimap::update_minimap_surface()
 {
-  Field<int>* tilemap = editor_get_tilemap()->get_map(1);
+  Field<int>* tilemap = editor_get_tilemap()->get_map();
   CL_PixelBuffer buffer(map_get_width(), map_get_height(), 
                         map_get_width()*4, CL_PixelFormat::rgba8888);
   

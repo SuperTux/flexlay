@@ -33,30 +33,21 @@ class EditorTileMap : public EditorMapLayer
 private:
   int tile_size;
 
-  typedef std::vector<Field<int>*> Fields;
-  typedef Field<int>::iterator FieldIter;
-
-  Fields fields;
-  Field<int>* current_field;
+  Field<int> field;
 
   bool draw_grid;
   bool draw_attribute;
-
-  Field<int>* diamond_map;
 
 public:
   EditorTileMap(int w,  int h, int tile_size_);
   ~EditorTileMap();
 
   void draw (EditorMapComponent* parent);
-  void draw_map(EditorMapComponent* parent, Field<int>* field);
 
-  /** Return the current active field */
-  Field<int>* get_field() { return current_field; }
-  Field<int>* get_diamond_map() { return diamond_map; }
+  /** Return a pointer to the raw field representing this map */
+  Field<int>* get_field() { return &field; }
 
   int  get_tile (int, int);
-  void set_active_layer(int i);
 
   /** @param x position of the old map in the new resized one
       @param y position of the old map in the new resized one
@@ -64,7 +55,7 @@ public:
       @param h height of the new map */
   void resize(int w, int h, int x, int y);
 
-  Field<int>* get_map(int i);
+  Field<int>* get_map() { return &field; }
 
   /** Draw the gives brush to the map */
   void draw_tile(const TileBrush& brush, const CL_Point& pos);
@@ -72,8 +63,8 @@ public:
   /** Draw the given single tile to the map */
   void draw_tile(int id, const CL_Point& pos);
 
-  int get_width()  { return current_field->get_width(); }
-  int get_height() { return current_field->get_height(); }
+  int get_width()  const { return field.get_width(); }
+  int get_height() const { return field.get_height(); }
 
   void set_draw_attribute(bool t);
   bool get_draw_attribute() const;

@@ -68,4 +68,43 @@
          tokens)
         (reverse res)))))
 
+(define (netpanzer:create-level-map-from-file filename)
+  (let* ((file (load-netpanzer-map filename))
+         (m       (editor-map-create))
+         (objmap  (editor-objmap-create)))
+
+    (editor-map-set-metadata m (list
+                                (cons 'id-header   (NetPanzerFileStruct-id-header-get file))
+                                (cons 'name        (NetPanzerFileStruct-name-get file))
+                                (cons 'description (NetPanzerFileStruct-description-get file))))
+
+    (editor-map-add-layer m (NetPanzerFileStruct-tilemap-get file))
+    (editor-map-add-layer m objmap)
+
+    (cond ((equal? *game* 'netpanzer)
+           (let* ((rawname (substring filename 0 (- (string-length filename) 4)))
+                  (optname (string-append rawname ".opt"))
+                  (spnname (string-append rawname ".spn")))
+             
+             ;; Generate outposts
+             (for-each 
+              (lambda (el)
+                (objectmap-add-object objmap "sprites/outpost"
+                                      (+ (* (string->number (cadr el))  32) 16)
+                                      (+ (* (string->number (caddr el)) 32) 16)
+                                      (list 'outpost (car el))))
+              (parse-netpanzer-opt-file optname))
+             
+             ;; Generate spawnpoints
+             (for-each
+              (lambda (el)
+                (objectmap-add-object objmap "sprites/spawnpoint"
+                                      (+ (* (string->number (car el)) 32) 16)
+                                      (+ (* (string->number (cadr el)) 32) 16)
+                                      '(spawnpoint)))
+              (parse-netpanzer-spn-file spnname)))))
+    
+    (editor-map-set-filename m filename)
+    m))
+
 ;; EOF ;;

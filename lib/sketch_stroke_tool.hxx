@@ -32,7 +32,7 @@ public:
   SketchStrokeTool();
 
   void set_size(float size);
-  void set_color(CL_Color color);
+  void set_color(const CL_Color& color);
   Tool to_tool();
 private:
   SharedPtr<SketchStrokeToolImpl> impl;

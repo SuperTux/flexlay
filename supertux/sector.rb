@@ -152,7 +152,6 @@ class Sector
                 stroke.set_size(rest2[0])
               end
             }
-            stroke.finish()
             @sketch.add_stroke(stroke)
           else
             puts "sketchlayer: Unknonwn: #{el}"

@@ -1,6 +1,6 @@
 <resources>
   <sprite name="brush">
-    <image file="images/brush/brush1.png"/>
+    <image file="images/brush/brush.png"/>
     <translation origin="center" />
   </sprite>
 

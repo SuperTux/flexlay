@@ -17,37 +17,17 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-#ifndef HEADER_SKETCH_LAYER_HXX
-#define HEADER_SKETCH_LAYER_HXX
+#ifndef HEADER_MARKER_STROKE_DRAWER_HXX
+#define HEADER_MARKER_STROKE_DRAWER_HXX
 
-#include <vector>
-#include <ClanLib/Core/Math/point.h>
-#include <ClanLib/Display/color.h>
-#include "layer.hxx"
-#include "stroke.hxx"
-
-class SketchLayerImpl;
-
-/** Simple drawing layer to add sketches and stuff above a regular
-    level */
-class SketchLayer
+/** */
+class MarkerStrokeDrawer
 {
 private:
-  static SketchLayer* current_;
 public:
-  static SketchLayer* current() { return current_; }
-
-  SketchLayer();
+  MarkerStrokeDrawer();
   
-  void add_stroke(const Stroke&);
-
-  std::vector<Stroke> get_strokes();
-
-  bool is_null() const { return !impl.get(); }
-  Layer to_layer();
-
-private:
-  SharedPtr<SketchLayerImpl> impl;  
+  void draw(const Stroke& stroke);
 };
 
 #endif

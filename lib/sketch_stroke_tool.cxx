@@ -26,35 +26,30 @@
 #include "tool.hxx"
 #include "sketch_layer.hxx"
 #include "sketch_stroke_tool.hxx"
+#include "sprite_stroke_drawer.hxx"
+#include "stroke.hxx"
+#include "stroke_drawer.hxx"
+#include "flexlay.hxx"
 
 class SketchStrokeToolImpl : public ToolImpl
 {
 public:
   bool drawing;
-  CL_Color color;
-  Stroke stroke;
-  float size;
+  Stroke   stroke;
+  SpriteStrokeDrawer sprite_drawer;
 
   SketchStrokeToolImpl()
     : drawing(false)
   {
-    color = CL_Color(255, 255, 255, 255);
-    size  = 1.0f;
+    sprite_drawer.set_sprite(CL_Sprite("brush", &(Flexlay::current()->resources)));
+    sprite_drawer.set_color(CL_Color(255, 255, 255, 255));
+    sprite_drawer.set_size(1.0f);  
   }
 
-  void draw() {
-    CL_OpenGLState state(CL_Display::get_current_window()->get_gc());
-    state.set_active();
-    state.setup_2d();
-
-    if (stroke.points.size() >= 2)
-      {
-        glColor4ub(stroke.color.get_red(), stroke.color.get_green(), stroke.color.get_blue(), stroke.color.get_alpha());
-        glBegin(GL_LINE_STRIP);
-        for(Stroke::Points::iterator j = stroke.points.begin(); j != stroke.points.end(); ++j)
-          glVertex2f(j->x, j->y);
-        glEnd();
-      }
+  void draw() 
+  {
+    if (drawing)
+      stroke.draw();
   }
 
   void on_mouse_up  (const CL_InputEvent& event) 
@@ -66,12 +61,9 @@ public:
         parent->release_mouse();
         
         CL_Pointf p = parent->screen2world(event.mouse_pos);
-        stroke.add_point(p.x, p.y);
-        stroke.finish();
-        // add to map
-        SketchLayer::current()->add_stroke(stroke);
+        stroke.add_dab(Dab(p.x, p.y));
 
-        stroke = Stroke();
+        SketchLayer::current()->add_stroke(stroke);
       }    
   }
 
@@ -82,10 +74,9 @@ public:
         EditorMapComponent* parent = EditorMapComponent::current();
         parent->capture_mouse();
         stroke = Stroke();
-        stroke.set_color(color);
-        stroke.set_size(size);
+        stroke.set_drawer(sprite_drawer.to_drawer().clone());
         CL_Pointf p = parent->screen2world(event.mouse_pos);
-        stroke.add_point(p.x, p.y);
+        stroke.add_dab(Dab(p.x, p.y));
       }
   }
 
@@ -95,7 +86,7 @@ public:
       {
         EditorMapComponent* parent = EditorMapComponent::current();
         CL_Pointf p = parent->screen2world(event.mouse_pos);
-        stroke.add_point(p.x, p.y);    
+        stroke.add_dab(Dab(p.x, p.y));
       }
   }
 };
@@ -106,15 +97,15 @@ SketchStrokeTool::SketchStrokeTool()
 }
 
 void 
-SketchStrokeTool::set_color(CL_Color color)
+SketchStrokeTool::set_color(const CL_Color& color_)
 {
-  impl->color = color;
+  impl->sprite_drawer.set_color(color_);
 }
 
 void
 SketchStrokeTool::set_size(float size_)
 {
-  impl->size = size_;
+  impl->sprite_drawer.set_size(size_);
 }
 
 Tool

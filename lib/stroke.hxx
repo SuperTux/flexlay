@@ -17,38 +17,54 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-#ifndef HEADER_SKETCH_LAYER_HXX
-#define HEADER_SKETCH_LAYER_HXX
+#ifndef HEADER_STROKE_HXX
+#define HEADER_STROKE_HXX
 
 #include <vector>
 #include <ClanLib/Core/Math/point.h>
-#include <ClanLib/Display/color.h>
-#include "layer.hxx"
-#include "stroke.hxx"
+#include "shared_ptr.hxx"
 
-class SketchLayerImpl;
+class StrokeImpl;
+class StrokeDrawer;
 
-/** Simple drawing layer to add sketches and stuff above a regular
-    level */
-class SketchLayer
+class Dab
 {
-private:
-  static SketchLayer* current_;
 public:
-  static SketchLayer* current() { return current_; }
+  /** Time at which the dot was placed */
+  unsigned int time;
 
-  SketchLayer();
-  
-  void add_stroke(const Stroke&);
+  /** Position at which the dot is placed */
+  CL_Pointf pos;
 
-  std::vector<Stroke> get_strokes();
+  /** The pressure with which the dot was drawn (can be interpreted as
+      size, opacity or similar things by the StrokeDrawer */
+  float pressure;
 
-  bool is_null() const { return !impl.get(); }
-  Layer to_layer();
+  /** Tilting of the pen while painting the dot */
+  CL_Pointf tilt;
+
+  Dab(float x, float y) 
+    : time(0), pos(x, y), pressure(1.0f), tilt(0.0f, 0.0f)
+  {}
+};
+
+class Stroke
+{
+public:
+  typedef std::vector<Dab> Dabs;
+
+  Stroke();
+
+  void draw();
+
+  void  set_drawer(const StrokeDrawer& drawer_);
+  void  add_dab(const Dab& dab);
+  Dabs  get_dabs()  const;
 
 private:
-  SharedPtr<SketchLayerImpl> impl;  
+  SharedPtr<StrokeImpl> impl;
 };
+
 
 #endif
 

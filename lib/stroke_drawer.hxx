@@ -17,37 +17,29 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-#ifndef HEADER_SKETCH_LAYER_HXX
-#define HEADER_SKETCH_LAYER_HXX
+#ifndef HEADER_STROKE_DRAWER_HXX
+#define HEADER_STROKE_DRAWER_HXX
 
-#include <vector>
-#include <ClanLib/Core/Math/point.h>
-#include <ClanLib/Display/color.h>
-#include "layer.hxx"
-#include "stroke.hxx"
+#include "shared_ptr.hxx"
 
-class SketchLayerImpl;
+class Stroke;
+class StrokeDrawerImpl;
 
-/** Simple drawing layer to add sketches and stuff above a regular
-    level */
-class SketchLayer
+/** Abstract class which handles the drawing of a Stroke
+ */
+class StrokeDrawer
 {
 private:
-  static SketchLayer* current_;
 public:
-  static SketchLayer* current() { return current_; }
-
-  SketchLayer();
+  StrokeDrawer();
+  StrokeDrawer(SharedPtr<StrokeDrawerImpl> impl);
   
-  void add_stroke(const Stroke&);
-
-  std::vector<Stroke> get_strokes();
+  void draw(const Stroke& stroke);
 
   bool is_null() const { return !impl.get(); }
-  Layer to_layer();
-
+  StrokeDrawer clone() const;
 private:
-  SharedPtr<SketchLayerImpl> impl;  
+  SharedPtr<StrokeDrawerImpl> impl;
 };
 
 #endif

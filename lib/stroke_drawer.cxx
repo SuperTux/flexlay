@@ -1,5 +1,5 @@
 //  $Id$
-// 
+//
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
 //
@@ -12,44 +12,36 @@
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
-// 
+//
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-#ifndef HEADER_SKETCH_LAYER_HXX
-#define HEADER_SKETCH_LAYER_HXX
-
-#include <vector>
-#include <ClanLib/Core/Math/point.h>
-#include <ClanLib/Display/color.h>
-#include "layer.hxx"
 #include "stroke.hxx"
+#include "stroke_drawer_impl.hxx"
+#include "stroke_drawer.hxx"
 
-class SketchLayerImpl;
-
-/** Simple drawing layer to add sketches and stuff above a regular
-    level */
-class SketchLayer
+StrokeDrawer::StrokeDrawer()
 {
-private:
-  static SketchLayer* current_;
-public:
-  static SketchLayer* current() { return current_; }
+}
 
-  SketchLayer();
+StrokeDrawer::StrokeDrawer(SharedPtr<StrokeDrawerImpl> impl_)
+  :impl(impl_)
+{
   
-  void add_stroke(const Stroke&);
+}
 
-  std::vector<Stroke> get_strokes();
+void
+StrokeDrawer::draw(const Stroke& stroke)
+{
+  if (impl.get() != 0)
+    impl->draw(stroke);
+}
 
-  bool is_null() const { return !impl.get(); }
-  Layer to_layer();
-
-private:
-  SharedPtr<SketchLayerImpl> impl;  
-};
-
-#endif
+StrokeDrawer
+StrokeDrawer::clone() const
+{
+  return StrokeDrawer(impl->clone());
+}
 
 /* EOF */

@@ -44,6 +44,7 @@
  
 #include "sketch_stroke_tool.hxx"
 #include "sketch_layer.hxx"
+#include "stroke.hxx"
 
 #include "colorpicker.hxx"
 #include "slider.hxx"
@@ -174,5 +175,6 @@ VALUE CL_Point2Value(const CL_Point& arg)
 %include "../ruby/ruby_meta_data.hxx"
 %include "../ruby/ruby_sexpr_parser.hxx"
 #endif
+
 
 /* EOF */

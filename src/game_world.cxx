@@ -1,4 +1,4 @@
-//  $Id: game_world.cxx,v 1.6 2003/08/12 14:37:03 grumbel Exp $
+//  $Id: game_world.cxx,v 1.7 2003/08/12 19:24:21 grumbel Exp $
 //
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -30,7 +30,6 @@ GameWorld::GameWorld (const std::string& filename)
   : passed_time (0)
 {
   WindstilleLevel level (filename);
-  std::cout << "GameWorld: Creating Tilemap" << std::endl;
   tilemap = new TileMap(&level);
 }
 

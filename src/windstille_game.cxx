@@ -1,4 +1,4 @@
-//  $Id: windstille_game.cxx,v 1.7 2003/08/12 14:37:03 grumbel Exp $
+//  $Id: windstille_game.cxx,v 1.8 2003/08/12 19:24:21 grumbel Exp $
 //
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -72,7 +72,6 @@ WindstilleGame::display ()
   player1.set_position (CL_Vector (100, 400));
   player1.set_direction (WEST);
 
-  std::cout << "Creating world" << std::endl;
   GameWorld world (filename);
   GameObj::set_world (&world);
 

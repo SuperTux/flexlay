@@ -1,4 +1,4 @@
-//  $Id: power_up.cxx,v 1.2 2003/08/12 08:24:41 grumbel Exp $
+//  $Id: power_up.cxx,v 1.3 2003/08/12 19:24:21 grumbel Exp $
 //
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -61,7 +61,6 @@ SpreadPowerUp::SpreadPowerUp (const CL_Vector& pos)
 void
 ShildPowerUp::player_catched (Player* player)
 {
-  player->activate_shild ();
 }
 
 void

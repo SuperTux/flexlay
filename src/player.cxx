@@ -1,4 +1,4 @@
-//  $Id: player.cxx,v 1.8 2003/08/12 14:37:03 grumbel Exp $
+//  $Id: player.cxx,v 1.9 2003/08/12 19:24:21 grumbel Exp $
 //
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -33,22 +33,14 @@ Player::Player (Controller* c) :
   walk     ("hero/run",     resources),
   jump     ("hero/jump",     resources),
   stand    ("hero/stand",    resources),
-  shild    ("turrican/shild",    resources),
-  sit      ("turrican/sit",      resources),
-  roll     ("turrican/roll",     resources),
-  surround ("turrican/surround", resources),
 
   state (WALKING),
   gun_state (GUN_READY),
-  ground_state (IN_AIR),
-  shild_time (0)
+  ground_state (IN_AIR)
 {  
   walk.set_alignment(origin_bottom_center, 0, 3);
   jump.set_alignment(origin_bottom_center, 0, 3);
   stand.set_alignment(origin_bottom_center, 0, 3);
-  shild.set_alignment(origin_bottom_center);
-  roll.set_alignment(origin_bottom_center);
-  surround.set_alignment(origin_bottom_center);
 
   direction = WEST;
 }
@@ -75,14 +67,6 @@ Player::draw ()
 	case SITTING:
 	  sprite = &sit;
 	  break;
-
-	case ROLLING:
-	  sprite = &roll;
-	  break;
-
-	case SURROUND:
-	  sprite = &surround;
-	  break;
 	}
       break;
     default:
@@ -98,11 +82,6 @@ Player::draw ()
 	sprite->set_scale (-1.0, 1.0);
 
       sprite->draw (int(pos.x), int(pos.y));
-
-      if (shild_time > 0)
-	{
-	  shild.draw (int(pos.x), int(pos.y));
-	}
     }
 
   if (0)
@@ -175,25 +154,22 @@ Player::update (float delta)
 void 
 Player::update_shooting (float delta)
 {
-  if (state != ROLLING)
+  switch (gun_state)
     {
-      switch (gun_state)
-	{
-	case GUN_READY:
-	  if (controller->fire_pressed ()) 
-            {
-              //get_world ()->add (new DefaultShoot (pos, (DefaultShoot::DirectionState) direction));
-              get_world ()->add (new LaserShoot (pos, direction, 5));
-              gun_state = GUN_RELOADING;
-              reload_time = 0;
-            }
-	  break;
-	case GUN_RELOADING:
-	  if (reload_time > 1)
-	    gun_state = GUN_READY;
-	  reload_time += 20 * delta;
-	  break;
-	}
+    case GUN_READY:
+      if (controller->fire_pressed ()) 
+        {
+          //get_world ()->add (new DefaultShoot (pos, (DefaultShoot::DirectionState) direction));
+          get_world ()->add (new LaserShoot (pos, direction, 5));
+          gun_state = GUN_RELOADING;
+          reload_time = 0;
+        }
+      break;
+    case GUN_RELOADING:
+      if (reload_time > 1)
+        gun_state = GUN_READY;
+      reload_time += 20 * delta;
+      break;
     }
 }
 
@@ -284,12 +260,6 @@ bool
 Player::stuck ()
 {
   return get_world ()->get_tilemap()->is_ground(pos.x, pos.y);
-}
-
-void
-Player::activate_shild ()
-{
-  shild_time = 25;
 }
 
 /* EOF */

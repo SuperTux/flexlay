@@ -1,4 +1,4 @@
-//  $Id: windstille_level.cxx,v 1.5 2003/08/12 08:24:41 grumbel Exp $
+//  $Id: windstille_level.cxx,v 1.6 2003/08/12 19:24:21 grumbel Exp $
 //
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -98,11 +98,10 @@ WindstilleLevel::parse_properties (SCM cur)
 void
 WindstilleLevel::parse_tilemap (SCM cur)
 {
-  gh_display(cur);
   int width  = gh_scm2int(gh_cadar(cur));
   int height = gh_scm2int(gh_car(gh_cdadr(cur)));
   
-  std::cout << "\nSize: " << width << "x" << height << std::endl;
+  std::cout << "WindstilleLevel: Size: " << width << "x" << height << std::endl;
   
   field = new Field<int>(width, height);
 
@@ -120,7 +119,7 @@ WindstilleLevel::parse_tilemap (SCM cur)
           while (!gh_null_p(data) && y < height)
             {
               int id = gh_scm2int(gh_car(data));
-              std::cout << "Tile (" << x << ", " << y << "): " << id << std::endl;
+              //std::cout << "Tile (" << x << ", " << y << "): " << id << std::endl;
               (*field)(x, y) = id;
               
               x += 1;

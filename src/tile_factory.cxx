@@ -1,4 +1,4 @@
-//  $Id: tile_factory.cxx,v 1.5 2003/08/12 08:24:41 grumbel Exp $
+//  $Id: tile_factory.cxx,v 1.6 2003/08/12 19:24:21 grumbel Exp $
 //
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -71,7 +71,6 @@ TileFactory::TileFactory (const std::string& filename)
 void
 TileFactory::parse_tile(SCM data)
 {
-  std::cout << "Parsing a tile: " << std::endl;
   int id;
   std::string image;
   unsigned char colmap[8];
@@ -115,18 +114,21 @@ TileFactory::parse_tile(SCM data)
       data = gh_cdr(data);
     }
 
-  std::cout << "Tile: id     = " << id << "\n"
-            << "      image  = " << image << "\n"
-            << "      colmap = " 
-            << int(colmap[0]) << ", "
-            << int(colmap[1]) << ", "
-            << int(colmap[2]) << ", "
-            << int(colmap[3]) << ", "
-            << int(colmap[4]) << ", "
-            << int(colmap[5]) << ", "
-            << int(colmap[6]) << ", "
-            << int(colmap[7])
-            << std::endl;
+  if (0) // Debugging code
+    {
+      std::cout << "Tile: id     = " << id << "\n"
+                << "      image  = " << image << "\n"
+                << "      colmap = " 
+                << int(colmap[0]) << ", "
+                << int(colmap[1]) << ", "
+                << int(colmap[2]) << ", "
+                << int(colmap[3]) << ", "
+                << int(colmap[4]) << ", "
+                << int(colmap[5]) << ", "
+                << int(colmap[6]) << ", "
+                << int(colmap[7])
+                << std::endl;
+    }
 
   tiles[id] = new Tile(CL_Sprite(image, resources), colmap);
 }

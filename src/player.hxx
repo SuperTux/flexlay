@@ -1,4 +1,4 @@
-//  $Id: player.hxx,v 1.4 2003/08/12 14:37:03 grumbel Exp $
+//  $Id: player.hxx,v 1.5 2003/08/12 19:24:21 grumbel Exp $
 // 
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -65,14 +65,13 @@ private:
   CL_Sprite walk;
   CL_Sprite jump;
   CL_Sprite stand;
-  CL_Sprite shild;
 
   CL_Sprite sit;
   CL_Sprite roll;
   CL_Sprite surround;
   
 public:
-  typedef enum { SURROUND, WALKING, SITTING, STANDING, ROLLING } MovementState;
+  typedef enum { WALKING, SITTING, STANDING } MovementState;
   typedef enum { GUN_READY, GUN_RELOADING } GunState;
   typedef enum { ON_GROUND, IN_AIR } GroundState;
 
@@ -84,7 +83,6 @@ private:
   GroundState ground_state;
   
   double reload_time;
-  float shild_time;
 public:
   Player (Controller*);
   virtual ~Player () {}
@@ -97,8 +95,6 @@ public:
 
   CL_Vector get_pos () const { return pos; }
   SubTilePos get_subtile_pos();
-
-  void activate_shild ();
 
 private:
   // true if the tile under Player is ground

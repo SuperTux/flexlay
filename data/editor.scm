@@ -46,7 +46,7 @@
   (display indent)
   (let ((x 0))
     (for-each (lambda (el)
-                (cond ((>= el 10)
+                (cond ((or (>= el 10) (< el 0))
                        (display el)
                        (display " "))
                       (else

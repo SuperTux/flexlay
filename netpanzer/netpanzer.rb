@@ -45,7 +45,12 @@ end
 $config = Config.new()
 
 $datadir = "/home/ingo/games/netpanzer-0.1.5"
-NetPanzerData::instance().init($datadir)
+
+$brushes.each_with_index{|(start, width, height, name), index|
+  NetPanzerData::instance().register_tilegroup(start, width, height)
+}
+
+NetPanzerData::instance().load_data($datadir)
 
 $tileset = NetPanzerData::instance().get_tileset()
 
@@ -286,15 +291,6 @@ for filename in $config.recent_files
     recent_files_menu.add_item(mysprite, filename, proc{ netpanzer_load_level(filename) })
 end
 
-def has_element(lst, el)
-  lst.each {|i|
-    if i == el then 
-      return True
-    end
-  }
-  return false
-end
-
 menu = CL_Menu.new($gui.get_component())
 menu.add_item("File/New...", proc{gui_level_new})
 menu.add_item("File/Open...", proc{gui_level_load})
@@ -327,14 +323,13 @@ end
 
 menu.add_item("Zoom/1:4 (25%) ",  proc{ gui_set_zoom(0.25) })
 menu.add_item("Zoom/1:2 (50%) ",  proc{ gui_set_zoom(0.5) })
-menu.add_item("Zoom/1:1 (100%) ", proc{ gui_set_zoom(1.0) }) 
+menu.add_item("Zoom/1:1 (100%) ", proc{ gui_set_zoom(1.0) })
 menu.add_item("Zoom/2:1 (200%) ", proc{ gui_set_zoom(2.0) })
 menu.add_item("Zoom/4:1 (400%) ", proc{ gui_set_zoom(4.0) })
 
 menu.add_item("Scripts/Flatten",  proc{ $workspace.get_map().get_data().flatten() })
 menu.add_item("Scripts/Unflatten",  proc{ $workspace.get_map().get_data().unflatten() })
 
-# minimap_panel = Panel(CL_Rect(CL_Point(0, 600-56), CL_Size(800-134, 56)), $gui.get_component())
 $minimap = Minimap.new($editor_map, CL_Rect.new(CL_Point.new(3, ($screen.height-112)+56 - 128-3), CL_Size.new(128, 128)), $option_panel)
 
 $load_dialog = SimpleFileDialog.new("Load netPanzer Level", "Load", "Cancel", $gui.get_component())

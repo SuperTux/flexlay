@@ -32,12 +32,12 @@
 #include "tile_provider_impl.hxx"
 #include "tile.hxx"
 #include "tileset.hxx"
+#include "blitter.hxx"
 #include "tilemap_layer.hxx"
 #include "editor_map.hxx"
 #include "netpanzer.hxx"
 
 NetPanzerData* NetPanzerData::instance_ = 0;
-
 
 class NetPanzerTileProviderImpl : public TileProviderImpl
 {
@@ -64,10 +64,13 @@ public:
       }
     else
       {
-        CL_SpriteDescription desc;
-        desc.add_frame(get_pixelbuffer());
-        sprite = CL_Sprite(desc);
-        
+        NetPanzerTileGroup& tilegroup = NetPanzerData::instance()->find_tilegroup(id);
+        int dist = id - tilegroup.start;
+
+        CL_Rect rect(CL_Point((dist % tilegroup.width) * 32,
+                              (dist / tilegroup.width) * 32),
+                     CL_Size(32, 32));
+        sprite.add_frame(tilegroup.get_surface(), rect);
         return sprite;
       }
   }
@@ -79,12 +82,13 @@ public:
         return buffer;
       }
     else
-      {	
+      {
         // FIXME: ClanLibs indexed handling seems broken, so we do
         // the conversion ourself
         const CL_Palette& palette = NetPanzerData::instance()->get_palette();
         unsigned char* data = NetPanzerData::instance()->get_tiledata() + (32*32) * id;
         buffer = CL_PixelBuffer(32, 32, 32*3, CL_PixelFormat::rgb888);
+
         buffer.lock();
         unsigned char* target = static_cast<unsigned char*>(buffer.get_data());
 
@@ -106,11 +110,93 @@ NetPanzerData::NetPanzerData()
 }
 
 void
-NetPanzerData::init(const std::string& datadir_)
+NetPanzerData::register_tilegroup(int start, int width, int height)
+{
+  NetPanzerTileGroup group;
+
+  group.start  = start;
+  group.width  = width;
+  group.height = height;
+
+  tilegroups.push_back(group);
+}
+
+void
+NetPanzerData::load_data(const std::string& datadir_)
 {
   datadir = datadir_;
+  std::cout << "NetPanzerData: Loading data from '" << datadir << "'" << std::endl;
   palette = load_palette(datadir + "/" + "wads/netp.act");
   tileset = load_tileset(datadir + "/" + "wads/summer12mb.tls");
+}
+
+CL_Surface
+NetPanzerTileGroup::get_surface()
+{
+  if (!surface)
+    {
+      CL_PixelBuffer buffer(width*32, height*32, width*32*4, CL_PixelFormat::rgba8888);
+
+      for(int y = 0; y < height; ++y)
+        for(int x = 0; x < width; ++x)
+          {
+            const CL_Palette& palette = NetPanzerData::instance()->get_palette();
+            unsigned char* data = NetPanzerData::instance()->get_tiledata() + (32*32) * (start + width*y + x);
+            
+            CL_PixelBuffer tile(32, 32, 32*3, CL_PixelFormat::rgb888);
+            tile.lock();
+            unsigned char* target = static_cast<unsigned char*>(tile.get_data());
+
+            for(int i = 0; i < 32*32; ++i)
+              {
+                target[3*i+0] = palette[data[i]].get_blue();
+                target[3*i+1] = palette[data[i]].get_green();
+                target[3*i+2] = palette[data[i]].get_red();
+              }
+            tile.unlock();
+                
+            blit(buffer, tile, x * 32, y * 32);
+          }
+      
+      surface = CL_Surface(buffer);
+    }
+
+  return surface;
+}
+
+CL_Sprite
+NetPanzerData::get_tilegroup_sprite(int index)
+{
+  for(TileGroups::iterator i = tilegroups.begin(); i != tilegroups.end(); ++i)
+    {
+      if (index == i->start)
+        {
+          CL_Sprite sprite;
+          sprite.add_frame(i->get_surface(), CL_Rect(CL_Point(0, 0),
+                                                     CL_Size(i->get_surface().get_width(),
+                                                             i->get_surface().get_height())));
+          return sprite;
+        }
+    }
+
+  std::cout << "NetPanzerData: Couldn't get tilegroup_sprite for '" << index << "'" << std::endl;
+  return CL_Sprite();
+}
+
+NetPanzerTileGroup&
+NetPanzerData::find_tilegroup(int index)
+{
+  for(TileGroups::iterator i = tilegroups.begin(); i != tilegroups.end(); ++i)
+    {
+      if (i->start <= index && index < i->start + (i->width*i->height))
+        {
+          return *i;
+        }
+    }
+
+  std::cout << "NetPanzerData: Couldn't find tilegroup for '" << index << "'" << std::endl;
+  // return some junk just to keep it running
+  return tilegroups.front();
 }
 
 const Tileset&
@@ -183,12 +269,6 @@ NetPanzerData::load_tileset(const std::string& filename)
       file.read(reinterpret_cast<char*>(&tile_count), sizeof(tile_count));
       file.read(reinterpret_cast<char*>(raw_palette), sizeof(raw_palette));
 
-      std::cout << "ID:      " << netp_id_header << std::endl;
-      std::cout << "Version: " << version << std::endl;
-      std::cout << "Width:   " << width << std::endl;
-      std::cout << "Height:  " << height << std::endl;
-      std::cout << "Count:   " << tile_count << std::endl;
-
       NetPanzerTileHeader* tile_headers = new NetPanzerTileHeader[tile_count];
 
       file.read(reinterpret_cast<char*>(tile_headers), 
@@ -200,44 +280,19 @@ NetPanzerData::load_tileset(const std::string& filename)
       file.read(reinterpret_cast<char*>(tiledata), tilesize*tile_count);
       file.close();
 
-      if (0)
-        {
-          // FIXME: The palette in the netpanzer 'summer12mb.tls' file
-          // is either broken or otherwise corrupt, so we ignore it
-          // and use the seperate palette file 'netp.act' which works
-          // fine.
-
-          // Convert palette in native format
-          CL_Palette palette;
-          for(int i = 0; i < 256; ++i)
-            {
-              palette.colors[i].set_red  (raw_palette[3*i + 0]);
-              palette.colors[i].set_green(raw_palette[3*i + 1]);
-              palette.colors[i].set_blue (raw_palette[3*i + 2]);
-              palette.colors[i].set_alpha(255);
-
-              if (0)
-                {
-                  std::cout << "Palette: "
-                            << (int)raw_palette[3*i + 0] << " "
-                            << (int)raw_palette[3*i + 1] << " "
-                            << (int)raw_palette[3*i + 2]
-                            << std::endl;
-                }
-            }
-          
-          NetPanzerData::instance()->palette  = palette;
-        }
-
+      // FIXME: The palette in the netpanzer 'summer12mb.tls' file
+      // is either broken or otherwise corrupt, so we ignore it
+      // and use the seperate palette file 'netp.act' which works
+      // fine.
+      
       NetPanzerData::instance()->tiledata = tiledata;
       
       Tileset tileset(width);
 
       for(int i = 0; i < tile_count; ++i)
         {
-          Tile* tile = new Tile(TileProvider(new NetPanzerTileProviderImpl(i)));
-          tileset.add_tile(i, tile);
-          delete tile;
+          Tile tile(TileProvider(new NetPanzerTileProviderImpl(i)));
+          tileset.add_tile(i, &tile);
         }
       return tileset;
     }

@@ -22,6 +22,8 @@
 
 #include <string>
 #include <ClanLib/Display/palette.h>
+#include <ClanLib/Display/surface.h>
+#include <ClanLib/Display/sprite.h>
 #include "../lib/tileset.hxx"
 #include "../lib/tilemap_layer.hxx"
 #include "../lib/shared_ptr.hxx"
@@ -36,6 +38,19 @@ public:
   char	attrib;
   char	move_value;
   char	avg_color;
+};
+
+struct NetPanzerTileGroup
+{
+  int start;
+  int width;
+  int height;
+  
+  CL_Surface get_surface(); 
+
+private:
+  /** Surface holding the tilegroups image */
+  CL_Surface surface;
 };
 
 class NetPanzerData
@@ -56,16 +71,33 @@ private:
   CL_Palette     palette;
   Tileset        tileset;
   unsigned char* tiledata;
-  
+  typedef std::vector<NetPanzerTileGroup> TileGroups;
+  TileGroups tilegroups;
+
 public:
   NetPanzerData();
-  void init(const std::string& datadir_);
+
+  /** Register a tilegroup, ie. a section of tiles that belong
+      together and form an building, lake, a section of trees, etc.
+
+      \param start the tile-id for the upper/left tile
+      \param width the width of tilegroup
+      \param height the height of the tilegroup
+  */
+  void register_tilegroup(int start, int width, int height);
+
+  void load_data(const std::string& datadir_);
   const CL_Palette& get_palette() const;
   const Tileset&    get_tileset() const;
   unsigned char*    get_tiledata() const;
 
   CL_Palette load_palette(const std::string& filename);
   Tileset    load_tileset(const std::string& filename);
+  CL_Sprite  get_tilegroup_sprite(int index);
+
+  /** Locate the tilegroup in which the tile with \a tileindex is
+      located */
+  NetPanzerTileGroup& find_tilegroup(int tileindex);
 };
 
 class NetPanzerFileStruct

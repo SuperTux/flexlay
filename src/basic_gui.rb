@@ -98,26 +98,21 @@ class GUI
     @eye_icon         = Icon.new(CL_Rect.new(CL_Point.new(p.inc(32), 2), CL_Size.new(32, 32)),
                                  make_sprite("../data/images/icons24/eye.png"), "Some tooltip", @button_panel);
 
-    @sector_icon         = Icon.new(CL_Rect.new(CL_Point.new(p.inc(48), 2), CL_Size.new(32, 32)),
-                                    make_sprite("../data/images/icons24/sector.png"), "Some tooltip", @button_panel);
-
-    @sector_icon.set_callback(proc{ switch_sector_menu() })
-
     @layer_menu = Menu.new(CL_Point.new(32*15+2, 54), @gui.get_component())
 
     @toolbar = Panel.new(CL_Rect.new(CL_Point.new(0, 23+33), CL_Size.new(33, 32*4+2)), @gui.get_component())
 
     @paint = Icon.new(CL_Rect.new(CL_Point.new(2, 32*0+2), CL_Size.new(32, 32)), make_sprite("../data/images/tools/stock-tool-pencil-22.png"), "Some tooltip", @toolbar);
-    @paint.set_callback(proc{ set_tilemap_paint_tool() })
+    @paint.set_callback(proc{ $controller.set_tilemap_paint_tool() })
 
     @select = Icon.new(CL_Rect.new(CL_Point.new(2, 32*1+2), CL_Size.new(32,32)), make_sprite("../data/images/tools/stock-tool-rect-select-22.png"), "Some tooltip", @toolbar);
-    @select.set_callback(proc{ set_tilemap_select_tool() })
+    @select.set_callback(proc{ $controller.set_tilemap_select_tool() })
 
     @zoom = Icon.new(CL_Rect.new(CL_Point.new(2, 32*2+2), CL_Size.new(32,32)), make_sprite("../data/images/tools/stock-tool-zoom-22.png"), "Some tooltip", @toolbar);
-    @zoom.set_callback(proc{ set_zoom_tool() })
+    @zoom.set_callback(proc{ $controller.set_zoom_tool() })
 
     @object = Icon.new(CL_Rect.new(CL_Point.new(2, 32*3+2), CL_Size.new(32,32)), make_sprite("../data/images/tools/stock-tool-clone-22.png"), "Some tooltip", @toolbar);
-    @object.set_callback(proc{ set_objmap_select_tool() })
+    @object.set_callback(proc{ $controller.set_objmap_select_tool() })
 
     # erase  = Icon.new(CL_Point.new(2, 32+1+2), make_sprite("../data/images/tools/stock-tool-eraser-22.png"), "Some tooltip", $toolbar);
     # move   = Icon.new(CL_Point.new(2, 32*2+2), make_sprite("../data/images/tools/stock-tool-move-22.png"), "Some tooltip", $toolbar);
@@ -138,12 +133,9 @@ class GUI
     @menu.add_item("File/Save As...", proc{ level_save_as() })
     @menu.add_item("File/Quit",  proc{ @gui.quit() })
 
-    @menu.add_item("Edit/Smooth Selection", proc{ smooth_level_struct() })
     @menu.add_item("Edit/Resize", proc{ resize_level() })
     @menu.add_item("Edit/Resize to selection", proc{ resize_level_to_selection()})
     @menu.add_item("Edit/Debug Shell", proc{ run_python()})
-    @menu.add_item("Edit/Add Sector...", proc{ add_sector()})
-    @menu.add_item("Edit/Remove Current Sector", proc{ remove_sector()})
 
     @menu.add_item("Zoom/1:4 (25%) ",  proc{ set_zoom(0.25) })
     @menu.add_item("Zoom/1:2 (50%) ",  proc{ set_zoom(0.5) })
@@ -203,6 +195,41 @@ class GUI
     else
       @grid_icon.set_up()
     end
+  end
+
+  def set_tilemap_paint_tool()
+    @paint.set_down()
+    @select.set_up()
+    @zoom.set_up()
+    @object.set_up()
+  end
+
+  def set_tilemap_select_tool()
+    @paint.set_up()
+    @select.set_down()
+    @zoom.set_up()
+    @object.set_up()
+  end
+
+  def set_zoom_tool()
+    @paint.set_up()
+    @select.set_up()
+    @zoom.set_down()
+    @object.set_up()
+  end
+
+  def set_objmap_select_tool()
+    @paint.set_up()
+    @select.set_up()
+    @zoom.set_up()
+    @object.set_down()
+  end
+
+  def set_zoom(zoom)
+    gc = @editor_map.get_workspace().get_gc_state()
+    pos = gc.get_pos()
+    gc.set_zoom(zoom)
+    gc.set_pos(pos)
   end
 end
 

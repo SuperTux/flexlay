@@ -50,8 +50,8 @@
               (else
                (error "Not a supertux worldmap tileset")))))))
 
-;;(supertux:load-tiles (string-append *supertux:datadir* "images/tilesets/supertux.stgt"))
-(supertux:load-worldmap-tiles (string-append *supertux:datadir* "images/worldmap/antarctica.stwt"))
+(supertux:load-tiles (string-append *supertux:datadir* "images/tilesets/supertux.stgt"))
+;;(supertux:load-worldmap-tiles (string-append *supertux:datadir* "images/worldmap/antarctica.stwt"))
 
 ;;(tileset-add-tile '((id 6)
 ;;                    (image "/home/ingo/projects/windstille/trunk/data/images/tuxsprites/mrbomb.png")

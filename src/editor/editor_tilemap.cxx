@@ -104,7 +104,7 @@ EditorTileMap::draw(EditorMapComponent* parent)
                   draw_attribute);
       }
 
-  if (0) //draw_grid)
+  if (draw_grid)
     {
       for (int y = start_y; y <= end_y; ++y)
         CL_Display::draw_line(start_x * tile_size,

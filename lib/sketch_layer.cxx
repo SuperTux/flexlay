@@ -159,4 +159,10 @@ SketchLayer::get_strokes()
   return impl->strokes;
 }
 
+CL_Surface
+SketchLayer::get_background_surface()
+{
+  return impl->surface;
+}
+
 /* EOF */

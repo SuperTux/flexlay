@@ -44,6 +44,8 @@ public:
 
   std::vector<Stroke> get_strokes();
 
+  CL_Surface get_background_surface();
+
   bool is_null() const { return !impl.get(); }
   Layer to_layer();
 

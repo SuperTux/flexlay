@@ -5,9 +5,8 @@ class SuperTuxGUI
   selector_window = nil
   tileselector    = nil
   objectselector  = nil
-  colorpicker     = nil
 
-  attr_reader :colorpicker, :tileselector, :editor_map, :workspace, :minimap, :recent_files_menu, :gui
+  attr_reader :tileselector, :editor_map, :workspace, :minimap, :recent_files_menu, :gui
 
   def get_component()
     return @gui.get_component()
@@ -47,28 +46,28 @@ class SuperTuxGUI
                                                 make_metadata(object)))
     }
 
-    @colorpicker = ColorPicker.new(CL_Rect.new(CL_Point.new(3, 3), CL_Size.new(128, 128)),
-                                   @selector_window)
+    # @colorpicker = ColorPicker.new(CL_Rect.new(CL_Point.new(3, 3), CL_Size.new(128, 128)),
+    #                                    @selector_window)
+    #
+    #     connect_v1_Color(@colorpicker.sig_color_change(), proc{|color|
+    #                        $sketch_stroke_tool.set_color(color)
+    #                      })
 
-    connect_v1_Color(@colorpicker.sig_color_change(), proc{|color|
-                       $sketch_stroke_tool.set_color(color)
-                     })
+#     @size_slider = Slider.new(CL_Rect.new(CL_Point.new(3, 150), CL_Size.new(128, 16)), @selector_window)
+#     @size_slider.set_range(0.01, 2.0) # FIXME: using 0 size brush makes clanlib crashi
+#     @size_slider.set_value(1.0)
+#     connect_v1_float(@size_slider.sig_on_change, proc{|value|
+#                        # puts "Value: #{value}"
+#                        $sketch_stroke_tool.set_size(value)
+#                      })
 
-    @size_slider = Slider.new(CL_Rect.new(CL_Point.new(3, 150), CL_Size.new(128, 16)), @selector_window)
-    @size_slider.set_range(0.01, 2.0) # FIXME: using 0 size brush makes clanlib crashi
-    @size_slider.set_value(1.0)
-    connect_v1_float(@size_slider.sig_on_change, proc{|value|
-                       # puts "Value: #{value}"
-                       $sketch_stroke_tool.set_size(value)
-                     })
-
-    @zoom_slider = Slider.new(CL_Rect.new(CL_Point.new(3, 182), CL_Size.new(128, 16)), @selector_window)
-    @zoom_slider.set_range(0.25, 10.0) # FIXME: using 0 size brush makes clanlib crashi
-    @zoom_slider.set_value(1.0)
-    connect_v1_float(@zoom_slider.sig_on_change, proc{|value|
-                       # puts "Value: #{value}"
-                       self.gui_set_zoom(value)
-                     })
+#     @zoom_slider = Slider.new(CL_Rect.new(CL_Point.new(3, 182), CL_Size.new(128, 16)), @selector_window)
+#     @zoom_slider.set_range(0.25, 10.0) # FIXME: using 0 size brush makes clanlib crashi
+#     @zoom_slider.set_value(1.0)
+#     connect_v1_float(@zoom_slider.sig_on_change, proc{|value|
+#                        # puts "Value: #{value}"
+#                        self.gui_set_zoom(value)
+#                      })
 
     create_button_panel()
 
@@ -101,8 +100,8 @@ class SuperTuxGUI
     @object = Icon.new(CL_Rect.new(CL_Point.new(2, 32*3+2), CL_Size.new(32,32)), make_sprite("../data/images/tools/stock-tool-clone-22.png"), "Some tooltip", @toolbar);
     @object.set_callback(proc{ set_objmap_select_tool() })
 
-    @stroke = Icon.new(CL_Rect.new(CL_Point.new(2, 32*4+2), CL_Size.new(32,32)), make_sprite("../data/images/tools/stock-tool-pencil-22.png"), "Some tooltip", @toolbar);
-    @stroke.set_callback(proc{ set_sketch_stroke_tool() })
+#     @stroke = Icon.new(CL_Rect.new(CL_Point.new(2, 32*4+2), CL_Size.new(32,32)), make_sprite("../data/images/tools/stock-tool-pencil-22.png"), "Some tooltip", @toolbar);
+#     @stroke.set_callback(proc{ set_sketch_stroke_tool() })
 
     create_menu()
 
@@ -247,28 +246,28 @@ class SuperTuxGUI
     @gui.run()
   end
 
-  def show_colorpicker()
-    @tileselector.show(false)        
-    @objectselector.show(false)
-    @colorpicker.show(true)
-  end
+#   def show_colorpicker()
+#     @tileselector.show(false)        
+#     @objectselector.show(false)
+# #    @colorpicker.show(true)
+#   end
 
   def show_objects()
     @tileselector.show(false)        
     @objectselector.show(true)
-    @colorpicker.show(false)
+#    @colorpicker.show(false)
   end
 
   def show_tiles()
     @tileselector.show(true)        
     @objectselector.show(false)
-    @colorpicker.show(false)
+#    @colorpicker.show(false)
   end
 
   def show_none()
     @tileselector.show(false)        
     @objectselector.show(false)
-    @colorpicker.show(false)
+#    @colorpicker.show(false)
   end
 
   def set_tilemap_paint_tool()
@@ -298,14 +297,14 @@ class SuperTuxGUI
     show_none()
   end
 
-  def set_sketch_stroke_tool()
-    @workspace.set_tool($sketch_stroke_tool.to_tool())
-    @paint.set_up()
-    @select.set_up()
-    @zoom.set_up()
-    @object.set_down()
-    show_colorpicker()
-  end
+#   def set_sketch_stroke_tool()
+#     @workspace.set_tool($sketch_stroke_tool.to_tool())
+#     @paint.set_up()
+#     @select.set_up()
+#     @zoom.set_up()
+#     @object.set_down()
+#     show_colorpicker()
+#   end
 
   def set_objmap_select_tool()
     @workspace.set_tool($objmap_select_tool.to_tool())

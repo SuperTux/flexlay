@@ -32,7 +32,7 @@ class SpriteStrokeDrawerImpl;
 class SpriteStrokeDrawer
 {
 public:
-  enum DrawMode { DM_NORMAL, DM_ERASE, DM_ADDITION };
+  enum DrawMode { DM_NORMAL, DM_ERASE, DM_ADDITION, DM_SHADER };
 
   SpriteStrokeDrawer(StrokeDrawer drawer);
   SpriteStrokeDrawer();

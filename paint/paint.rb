@@ -146,6 +146,7 @@ class PaintGUI
     @normal_mode = CL_Button.new(CL_Rect.new(CL_Point.new(5, 500), CL_Size.new(40, 25)), "Norm", @selector_window)
     @erase_mode  = CL_Button.new(CL_Rect.new(CL_Point.new(45, 500), CL_Size.new(40, 25)), "Erase", @selector_window)
     @add_mode    = CL_Button.new(CL_Rect.new(CL_Point.new(85, 500), CL_Size.new(40, 25)), "Add", @selector_window)
+    @shader_mode = CL_Button.new(CL_Rect.new(CL_Point.new(125, 500), CL_Size.new(40, 25)), "Shad", @selector_window)
 
     connect(@normal_mode.sig_clicked(), proc{ 
               drawer = SpriteStrokeDrawer.new($sketch_stroke_tool.get_drawer())
@@ -159,6 +160,11 @@ class PaintGUI
               drawer = SpriteStrokeDrawer.new($sketch_stroke_tool.get_drawer())
               drawer.set_mode(SpriteStrokeDrawer::DM_ADDITION)
             })
+    connect(@shader_mode.sig_clicked(),    proc{
+              drawer = SpriteStrokeDrawer.new($sketch_stroke_tool.get_drawer())
+              drawer.set_mode(SpriteStrokeDrawer::DM_SHADER)
+            })
+
   end
 
   def quit()

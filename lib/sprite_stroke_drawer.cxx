@@ -21,9 +21,14 @@
 #include <assert.h>
 #include <ClanLib/Display/blend_func.h>
 #include <ClanLib/gl.h>
+#include <ClanLib/GL/opengl_wrap.h>
 #include "stroke.hxx"
+#include "flexlay.hxx"
 #include "stroke_drawer_impl.hxx"
 #include "sprite_stroke_drawer.hxx"
+#include "sketch_layer.hxx"
+
+CL_ProgramObject* program = 0;
 
 class SpriteStrokeDrawerImpl : public StrokeDrawerImpl
 {
@@ -61,10 +66,11 @@ void
 SpriteStrokeDrawerImpl::draw_dab(const Dab& dab, CL_GraphicContext* gc)
 {
   CL_Sprite sprite = brush.get_sprite();
+
   sprite.set_color(color);
   sprite.set_alpha((color.get_alpha()/255.0f) * dab.pressure);
   sprite.set_scale(base_size * dab.pressure,
-                    base_size * dab.pressure);
+                   base_size * dab.pressure);
 
   if (gc != 0)
     {
@@ -105,20 +111,82 @@ SpriteStrokeDrawerImpl::draw_dab(const Dab& dab, CL_GraphicContext* gc)
         {
         case SpriteStrokeDrawer::DM_NORMAL:
           sprite.set_blend_func_separate(blend_src_alpha, blend_one_minus_src_alpha,
-                                        blend_one, blend_one_minus_src_alpha);
+                                         blend_one, blend_one_minus_src_alpha);
           sprite.draw(dab.pos.x, dab.pos.y, gc);
           break;
 
         case SpriteStrokeDrawer::DM_ADDITION:
           sprite.set_blend_func_separate(blend_src_alpha, blend_one,
-                                        blend_zero, blend_one);
-                                        //blend_one, blend_one_minus_src_alpha);
+                                         blend_zero, blend_one);
+          //blend_one, blend_one_minus_src_alpha);
           sprite.draw(dab.pos.x, dab.pos.y, gc);
           break;
               
         case SpriteStrokeDrawer::DM_ERASE:
           sprite.set_blend_func(blend_zero, blend_one_minus_src_alpha);
           sprite.draw(dab.pos.x, dab.pos.y, gc);
+          break;
+
+        case SpriteStrokeDrawer::DM_SHADER:
+          {
+            CL_OpenGLState state(gc);
+            state.set_active();
+            state.setup_2d();
+
+            if (program == 0)
+              {
+                program = new CL_ProgramObject();
+                
+                CL_ShaderObject shader("shader", &(Flexlay::current()->resources));
+                std::cout << "Shader status: " << (shader.get_compile_status() ? "true" : "false") << std::endl;
+                std::cout << "Shader log: " << shader.get_info_log() << std::endl;
+                std::cout << "Shader handle: " << shader.get_handle() << std::endl;
+
+                program->attach(shader);
+                program->link();
+                std::cout << "Program status: " << (program->get_link_status() ? "true" : "false") << std::endl;
+                std::cout << "Program log: " << program->get_info_log() << std::endl;
+                std::cout << "Program handle: " << program->get_handle() << std::endl;
+
+                clUseProgram(program->get_handle());
+              }
+            else
+              {
+                clUseProgram(program->get_handle());
+              }
+            
+            CL_OpenGLSurface glsurface(sprite.get_frame_surface(0));
+            glActiveTexture(GL_TEXTURE0);
+            glsurface.bind();
+            glEnable(GL_TEXTURE_2D);
+
+            /*CL_OpenGLSurface glsurface2(SketchLayer::current()->get_background_surface());
+            glActiveTexture(GL_TEXTURE1);
+            glsurface2.bind();
+            glEnable(GL_TEXTURE_2D);*/
+            
+            clUniform1i(program->get_attribute_location("mytex"), 0);
+            //clUniform1i(program->get_attribute_location("background"), 1);
+            //program->validate();
+            //std::cout << "Program validate status: " << (program->get_validate_status() ? "true" : "false") << std::endl;
+            //std::cout << "Program log: " << program->get_info_log() << std::endl;
+
+            clBegin(CL_QUADS);
+            clColor4b(color.get_red(), color.get_green(), color.get_blue(), color.get_alpha());
+            float size = base_size * dab.pressure;
+            clVertex2f((dab.pos.x - sprite.get_width()/2) * size, (dab.pos.y - sprite.get_height()/2) * size);
+            clTexCoord2d(0.0, 0.0);
+            clVertex2f((dab.pos.x + sprite.get_width()/2) * size, (dab.pos.y - sprite.get_height()/2) * size);
+            clTexCoord2d(1.0, 0.0);
+            clVertex2f((dab.pos.x + sprite.get_width()/2) * size, (dab.pos.y + sprite.get_height()/2) * size);
+            clTexCoord2d(1.0, 1.0);
+            clVertex2f((dab.pos.x - sprite.get_width()/2) * size, (dab.pos.y + sprite.get_height()/2) * size);
+            clTexCoord2d(0.0, 1.0);
+            clEnd();
+            
+            state.set_active();
+            clUseProgram(0);
+          }
           break;
               
         default:

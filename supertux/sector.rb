@@ -12,10 +12,10 @@ class Sector
   foreground  = nil
   
   objects   = nil
-  sketch    = nil
+#  sketch    = nil
   editormap = nil
 
-  attr_reader   :sketch, :objects, :background, :interactive, :foreground, :parent, :width, :height
+  attr_reader   :objects, :background, :interactive, :foreground, :parent, :width, :height
   attr_accessor :name, :song, :gravity
   
   def initialize(parent)
@@ -46,15 +46,15 @@ class Sector
     @interactive = TilemapLayer.new($tileset, @width, @height)
     @background  = TilemapLayer.new($tileset, @width, @height)       
     @objects = ObjectLayer.new()
-    @sketch  = SketchLayer.new()
+    # @sketch  = SketchLayer.new()
 
     @editormap = EditorMap.new()
-    @editormap.set_background_color(CL_Color.new(255, 255, 255))
+#    @editormap.set_background_color(CL_Color.new(255, 255, 255))
     @editormap.add_layer(@background.to_layer())
     @editormap.add_layer(@interactive.to_layer())
     @editormap.add_layer(@objects.to_layer())
     @editormap.add_layer(@foreground.to_layer())
-    @editormap.add_layer(@sketch.to_layer())
+#    @editormap.add_layer(@sketch.to_layer())
     # FIXME: Data might not get freed since its 'recursively' refcounted
     @editormap.set_metadata(self)
     return self
@@ -128,7 +128,7 @@ class Sector
     @foreground  = nil
     
     @objects = ObjectLayer.new()
-    @sketch = SketchLayer.new()
+#    @sketch = SketchLayer.new()
 
     for i in data
       (name,data) = i[0], i[1..-1]
@@ -138,25 +138,6 @@ class Sector
         @gravity = data[0]
       elsif name == "playerspawn"
         print "playerspawn unhandled"
-      elsif name == "strokelayer"
-        data.each {|(el, *rest)|
-          # puts "#{el} -> #{rest}"
-          if (el == "stroke") then
-            stroke = Stroke.new()
-            rest.each {|(el2, *rest2)|
-              if el2 == "point" then
-                stroke.add_dab(Dab.new(rest2[0], rest2[1]))
-              elsif el2 == "color"
-                stroke.set_color(CL_Color.new(rest2[0], rest2[1], rest2[2], rest2[3]))
-              elsif el2 == "size"
-                stroke.set_size(rest2[0])
-              end
-            }
-            @sketch.add_stroke(stroke)
-          else
-            puts "sketchlayer: Unknonwn: #{el}"
-          end
-        }
       elsif name == "tilemap"
         width   = get_value_from_tree(["width", "_"],  data, 20)
         height  = get_value_from_tree(["height", "_"], data, 15)
@@ -203,7 +184,7 @@ class Sector
     @editormap.add_layer(@interactive.to_layer()) if @interactive
     @editormap.add_layer(@foreground.to_layer()) if @foreground
     @editormap.add_layer(@objects.to_layer())
-    @editormap.add_layer(@sketch.to_layer())
+#    @editormap.add_layer(@sketch.to_layer())
     @editormap.set_metadata(self)
   end
 
@@ -235,26 +216,6 @@ class Sector
     f.write("))\n")    
   end
 
-  def save_strokelayer(f, strokelayer)
-    f.write("    (strokelayer\n")
-    #puts "Strokes: #{strokelayer.get_strokes()} #{strokelayer.get_strokes().size()}"
-    strokelayer.get_strokes.each { |stroke|
-      f.write("      (stroke\n")
-      f.write("        (color "\
-              "#{stroke.get_color.get_red()} "\
-              "#{stroke.get_color.get_green()} "\
-              "#{stroke.get_color.get_blue()} "\
-              "#{stroke.get_color.get_alpha()})\n")
-      f.write("        (size  #{stroke.get_size})\n")
-      stroke.get_dabs.each {|p|
-        f.write("        (point #{p.x} #{p.y})\n")
-      }
-      f.write("  )\n")
-    }
-    f.write(")\n")
-  end
-
-
   def save(f)   
     f.write("    (name  \"%s\")\n"  % @name)
     f.write("    (width  %d)\n"  % @width)
@@ -269,7 +230,7 @@ class Sector
     save_tilemap(f, @background,  "background")
     save_tilemap(f, @interactive, "main", :solid)
     save_tilemap(f, @foreground,  "foreground")
-    save_strokelayer(f, @sketch)
+#    save_strokelayer(f, @sketch)
 
     f.write("    (camera\n")
     f.write("      (mode \"normal\")\n")

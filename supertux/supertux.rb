@@ -49,7 +49,9 @@ require "gameobj.rb"
 require "sexpr.rb"
 
 flexlay = Flexlay.new()
-flexlay.init()
+width = 1024
+height = 768
+flexlay.init(width, height)
 
 # Tools
 $tilemap_paint_tool  = TileMapPaintTool.new()
@@ -102,7 +104,7 @@ $tileset = Tileset.new(32)
 $tileset.load($datadir + "images/tilesets/supertux.stgt")
 $tileset.create_ungrouped_tiles_group()
 
-$gui = SuperTuxGUI.new()
+$gui = SuperTuxGUI.new(width, height)
 
 if !$recent_files then
   $recent_files = []

@@ -12,24 +12,32 @@ class SuperTuxGUI
     return @gui.get_component()
   end
 
-  def initialize()
+  def initialize(width, height)
     @gui    = GUIManager.new()
 
     @display_properties = DisplayProperties.new()
 
-    myrect      = CL_Rect.new(CL_Point.new(0, 56), CL_Size.new(665, 488+56))
-    @editor_map = EditorMapComponent.new(myrect, @gui.get_component())
-    @workspace  = Workspace.new(myrect.get_width(), myrect.get_height())
+    buttonpanel_rect = CL_Rect.new(CL_Point.new(0, 23), CL_Size.new(width, 33))
+    selector_rect = CL_Rect.new(
+            CL_Point.new(width - 134, buttonpanel_rect.bottom),
+            CL_Size.new(134, height-buttonpanel_rect.bottom))
+    minimap_rect = CL_Rect.new(CL_Point.new(3, height-53),
+            CL_Size.new(width - selector_rect.get_width() - 4, 50))
+    map_rect = CL_Rect.new(CL_Point.new(0, buttonpanel_rect.bottom),
+            CL_Size.new(width - selector_rect.get_width() - 1,
+                        height - buttonpanel_rect.bottom -
+                        minimap_rect.get_height() - 3))
+
+    @editor_map = EditorMapComponent.new(map_rect, @gui.get_component())
+    @workspace  = Workspace.new(map_rect.get_width(), map_rect.get_height())
     @editor_map.set_workspace(@workspace)
     @workspace.set_tool($tilemap_paint_tool.to_tool());
-    @minimap = Minimap.new(@editor_map, CL_Rect.new(CL_Point.new(3 + myrect.left, 
-                                                                 488+3-14  + myrect.top), 
-                                                    CL_Size.new(794-134-16, 50)), 
-                           @gui.get_component())
+    @minimap = Minimap.new(@editor_map, minimap_rect, @gui.get_component())
 
-    @selector_window = Panel.new(CL_Rect.new(CL_Point.new(800-134, 23+33), CL_Size.new(128 + 6, 558)),
-                                 @gui.get_component())
-    @tileselector = TileSelector.new(CL_Rect.new(CL_Point.new(3, 3), CL_Size.new(128, 552)), @selector_window)
+    @selector_window = Panel.new(selector_rect, @gui.get_component())
+    @tileselector = TileSelector.new(CL_Rect.new(CL_Point.new(3, 3),
+            CL_Size.new(selector_rect.get_width() -3 ,
+                        selector_rect.get_height() - 3)), @selector_window)
     @tileselector.set_tileset($tileset)
     @tileselector.set_tiles($tileset.get_tiles())
     @tileselector.show(false)
@@ -45,7 +53,7 @@ class SuperTuxGUI
                                                 make_metadata(object)))
     }
 
-    create_button_panel()
+    create_button_panel(buttonpanel_rect)
 
     # FIXME: Having position in the Menus here is EXTREMLY ugly
     @tilegroup_menu = Menu.new(CL_Point.new(35*15+2, 54), @gui.get_component())
@@ -62,7 +70,8 @@ class SuperTuxGUI
     @layer_menu.add_item($mysprite, "Show only current", proc{ gui_show_only_current() })
 
     # FIXME: Use ButtonPanel here instead
-    @toolbar = Panel.new(CL_Rect.new(CL_Point.new(0, 23+33), CL_Size.new(33, 32*5+2)), @gui.get_component())
+    @toolbar = Panel.new(CL_Rect.new(CL_Point.new(0, 23+33),
+                CL_Size.new(33, 32*4+2)), @gui.get_component())
 
     @paint = Icon.new(CL_Rect.new(CL_Point.new(2, 32*0+2), CL_Size.new(32, 32)), make_sprite("../data/images/tools/stock-tool-pencil-22.png"), "Some tooltip", @toolbar);
     @paint.set_callback(proc{ set_tilemap_paint_tool() })
@@ -163,9 +172,9 @@ class SuperTuxGUI
     @menu.add_item("Zoom/4:1 (400%) ", proc{ self.gui_set_zoom(4.0) })
   end
 
-  def create_button_panel()
-    # button_panel = Panel.new(CL_Rect.new(CL_Point.new(0, 23), CL_Size.new(800, 33)), @gui.get_component())
-    button_panel = ButtonPanel.new(0, 23, 800, 33, true, @gui.get_component)
+  def create_button_panel(rect)
+    button_panel = ButtonPanel.new(rect.left, rect.top,
+            rect.get_width(), rect.get_height(), true, @gui.get_component)
     
     # File Handling
     button_panel.add_icon("../data/images/icons24/stock_new.png")

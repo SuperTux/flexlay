@@ -51,7 +51,7 @@ end
 
 $config = Config.new()
 
-$datadir = "/home/ingo/games/netpanzer-0.1.5"
+$datadir = "/home/matze/projects/netpanzer"
 
 $brushes.each_with_index{|(start, width, height, name), index|
   NetPanzerData::instance().register_tilegroup(start, width, height)

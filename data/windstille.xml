@@ -274,46 +274,49 @@
       <image file="images/tiles/tile24.png" name="image1" />
     </sprite>
     <sprite name="tile25">
-      <image file="images/tiles/level1/tile25.png" name="image1" />
+      <image file="images/tiles/tile25.png" name="image1" />
     </sprite>
     <sprite name="tile26">
-      <image file="images/tiles/level1/tile26.png" name="image1" />
+      <image file="images/tiles/tile26.png" name="image1" />
     </sprite>
     <sprite name="tile27">
-      <image file="images/tiles/level1/tile27.png" name="image1" />
+      <image file="images/tiles/tile27.png" name="image1" />
+    </sprite>
+    <sprite name="tile28">
+      <image file="images/tiles/tile28.png" name="image1" />
     </sprite>
     <sprite name="tile29">
-      <image file="images/tiles/level1/tile29.png" name="image1" />
+      <image file="images/tiles/tile29.png" name="image1" />
     </sprite>
     <sprite name="tile3">
       <image file="images/tiles/tile3.png" name="image1" />
     </sprite>
     <sprite name="tile30">
-      <image file="images/tiles/level1/tile30.png" name="image1" />
+      <image file="images/tiles/tile30.png" name="image1" />
     </sprite>
     <sprite name="tile31">
-      <image file="images/tiles/level1/tile31.png" name="image1" />
+      <image file="images/tiles/tile31.png" name="image1" />
     </sprite>
     <sprite name="tile32">
-      <image file="images/tiles/level1/tile32.png" name="image1" />
+      <image file="images/tiles/tile32.png" name="image1" />
     </sprite>
     <sprite name="tile33">
-      <image file="images/tiles/level1/tile33.png" name="image1" />
+      <image file="images/tiles/tile33.png" name="image1" />
     </sprite>
     <sprite name="tile34">
-      <image file="images/tiles/level1/tile34.png" name="image1" />
+      <image file="images/tiles/tile34.png" name="image1" />
     </sprite>
     <sprite name="tile35">
-      <image file="images/tiles/level1/tile35.png" name="image1" />
+      <image file="images/tiles/tile35.png" name="image1" />
     </sprite>
     <sprite name="tile36">
-      <image file="images/tiles/level1/tile36.png" name="image1" />
+      <image file="images/tiles/tile36.png" name="image1" />
     </sprite>
     <sprite name="tile38">
-      <image file="images/tiles/level1/tile38.png" name="image1" />
+      <image file="images/tiles/tile38.png" name="image1" />
     </sprite>
     <sprite name="tile39">
-      <image file="images/tiles/level1/tile39.png" name="image1" />
+      <image file="images/tiles/tile39.png" name="image1" />
     </sprite>
     <sprite name="tile4">
       <image file="images/tiles/tile4.png" name="image1" />

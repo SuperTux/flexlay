@@ -1,4 +1,4 @@
-//  $Id: XMLhelper.hxx,v 1.1 2002/03/19 17:56:54 grumbel Exp $
+//  $Id: XMLhelper.hxx,v 1.2 2003/08/06 17:16:19 grumbel Exp $
 // 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -26,14 +26,6 @@
 #include <ClanLib/core.h>
 
 #include <libxml/parser.h>
-
-// Some compatibility stuff
-#ifdef LIBXML_2
-#define ROOT children
-#else // libxml 1.x
-#define children childs
-#define ROOT root
-#endif
 
 // Hack: if xmlIsBlankNode() is not present, we define an empty dummy
 #ifdef NO_XMLISBLANKNODE

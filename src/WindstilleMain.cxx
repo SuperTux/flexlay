@@ -1,4 +1,4 @@
-//  $Id: WindstilleMain.cxx,v 1.2 2002/09/01 00:05:33 grumbel Exp $
+//  $Id: WindstilleMain.cxx,v 1.3 2003/08/06 17:16:19 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -17,6 +17,7 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
+#include <config.h>
 //#include <ClanLib/gl.h>
 #include <ClanLib/core.h>
 #include <ClanLib/display.h>
@@ -53,10 +54,8 @@ WindstilleMain::inner_main(void* closure, int argc, char** argv)
   CL_SetupGL::init();
   CL_SetupDisplay::init();
 
-  CL_OpenGLWindow window ("Windstille 0.0.1",
-			  screen_width, screen_height, 24, 
-			  false, // fullscreen 
-			  true); // allow resize
+  CL_DisplayWindow window (PACKAGE_STRING,
+                           screen_width, screen_height);
 
   //CL_OpenGL::begin_2d();
   glEnable (GL_BLEND);

@@ -1,4 +1,4 @@
-//  $Id: StringConverter.hxx,v 1.1 2002/03/19 17:56:50 grumbel Exp $
+//  $Id: StringConverter.hxx,v 1.2 2003/08/06 17:16:19 grumbel Exp $
 // 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -20,44 +20,25 @@
 #ifndef STRINGCONVERTER_HXX
 #define STRINGCONVERTER_HXX
 
-#ifdef HAVE_CONFIG_H
 #include <config.h>
-#endif
-
 #include <stdexcept>
-
-#ifdef HAVE_SSTREAM
 #include <sstream>
-#else
-#include <strstream>
-#endif
 
 template <class T>
 std::string to_string(const T& any)
 {
-#ifdef HAVE_SSTREAM
   std::ostringstream oss;
   oss << any;
   return oss.str();
-#else
-  std::ostrstream oss;
-  oss << any << std::ends;
-  std::string temp(oss.str());
-  oss.freeze(false); // tell the ostrstream that it should free the memory
-  return temp;
-#endif
 }
 
 template <class T>
 void from_string(const std::string& rep, T& x)
 {
- // this is necessary so that if "x" is not modified if the conversion fails
+  // this is necessary so that if "x" is not modified if the conversion fails
   T temp;
-#ifdef HAVE_SSTREAM
   std::istringstream iss(rep);
-#else
-  std::istrstream iss(rep.c_str());
-#endif
+
   iss >> temp;
   if (iss.fail())
     throw std::invalid_argument

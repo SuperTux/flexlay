@@ -1,4 +1,4 @@
-//  $Id: WindstilleGame.cxx,v 1.2 2002/09/01 00:05:33 grumbel Exp $
+//  $Id: WindstilleGame.cxx,v 1.3 2003/08/06 17:16:19 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -128,7 +128,7 @@ WindstilleGame::display ()
   world.add (GuileGameObjFactory::create ("bounce"));
   world.add (GuileGameObjFactory::create ("bounce"));
 
-  PlayerView view (&player1);
+  PlayerView view (&player2);
 
   while (!CL_Keyboard::get_keycode (CL_KEY_ESCAPE))
     {

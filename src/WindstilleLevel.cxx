@@ -1,4 +1,4 @@
-//  $Id: WindstilleLevel.cxx,v 1.2 2002/09/01 00:05:33 grumbel Exp $
+//  $Id: WindstilleLevel.cxx,v 1.3 2003/08/06 17:16:19 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -22,19 +22,6 @@
 #include "WindstilleLevel.hxx"
 #include "StringConverter.hxx"
 #include "XMLhelper.hxx"
-
-// Some compatibility stuff
-#ifdef LIBXML_2
-#define ROOT children
-#else // libxml 1.x
-#define children childs
-#define ROOT root
-#endif
-
-// Hack: if xmlIsBlankNode() is not present, we define an empty dummy
-#ifdef NO_XMLISBLANKNODE
-int xmlIsBlankNode(xmlNodePtr node);
-#endif
 
 template<class T>
 T xmlGetValue (xmlNodePtr cur, const std::string& str) 
@@ -67,7 +54,7 @@ WindstilleLevel::parse_file (const std::string& filename)
       assert (!"Error: Levelfile not found");
     }
 
-  xmlNodePtr cur = doc->ROOT;
+  xmlNodePtr cur = doc->children;
 
   if (xmlIsBlankNode(cur)) cur = cur->next;
 

@@ -1,4 +1,4 @@
-//  $Id: PlayerView.cxx,v 1.1 2002/03/19 17:56:52 grumbel Exp $
+//  $Id: PlayerView.cxx,v 1.2 2003/08/06 17:16:19 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -42,6 +42,8 @@ void
 PlayerView::update (float delta)
 {
   CL_Vector tpos = player->get_pos ();
+
+  std::cout << "player pos: " << tpos.x << " " << tpos.y << std::endl;
 
   float dist = tpos.x - pos.x;
   if (dist > 150)

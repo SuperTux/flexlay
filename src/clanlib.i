@@ -42,6 +42,8 @@ public:
 
 	int get_width() const;
 	int get_height() const;
+
+	CL_Size get_size();
 };
 
 class CL_Color

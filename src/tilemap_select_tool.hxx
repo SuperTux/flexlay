@@ -37,6 +37,8 @@ public:
   /** Convert the selection into a TileBrush */
   TileBrush get_selection() const;
 
+  CL_Rect get_selection_rect() const;
+
   Tool to_tool();
 private:
   SharedPtr<TileMapSelectToolImpl> impl;

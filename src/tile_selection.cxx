@@ -131,7 +131,9 @@ TileSelection::get_brush(const Field<int>& field) const
 CL_Rect
 TileSelection::get_rect() const
 {
-  return impl->selection; 
+  CL_Rect sel = impl->selection;
+  sel.normalize();
+  return sel;
 }
 
 /* EOF */

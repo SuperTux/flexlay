@@ -108,5 +108,4 @@
 
 %include "netpanzer.hxx" 
 
-
 /* EOF */

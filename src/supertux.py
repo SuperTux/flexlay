@@ -23,7 +23,16 @@ from sexpr   import *
 import ConfigParser
 import os
 import sys
+import code
 from optparse import OptionParser
+
+def run_python():
+    repl = code.InteractiveConsole()
+    repl.runsource("import readline")
+    repl.runsource("import rlcompleter")
+    repl.runsource("readline.parse_and_bind('tab: complete')")
+    repl.interact("Use Ctrl-D to exit subshell")
+    print "### Interactive Console finished"
 
 game_objects = [["money", "images/shared/jumpy-left-middle-0.png"],
                 ["snowball", "images/shared/snowball-left-0.png"],
@@ -197,8 +206,8 @@ class SuperTuxLevel:
         f.write("  (version 1)\n")
         f.write("  (name   \"%s\")\n" % self.name)
         f.write("  (author \"%s\")\n" % self.author)
-        f.write("  (width  %d)\n"  % self.width)
-        f.write("  (height  %d)\n" % self.height)
+        f.write("  (width  %s)\n"  % self.width)
+        f.write("  (height  %s)\n" % self.height)
 
         f.write("  (music  \"%s\")\n" % self.music)
         f.write("  (time   \"%s\")\n" % self.time)
@@ -227,7 +236,7 @@ class SuperTuxLevel:
             badguy = get_python_object(obj.get_metadata())
             pos    = obj.get_pos()
             if (badguy.type != "resetpoint"):
-                f.write("     (%s (x %d) (y %d))\n" % (badguy.type, pos.x, pos.y))
+                f.write("     (%s (x %d) (y %d))\n" % (badguy.type, int(pos.x), int(pos.y)))
         f.write("  )\n\n")
 
         f.write("  (reset-points\n")
@@ -235,7 +244,7 @@ class SuperTuxLevel:
             badguy = get_python_object(obj.get_metadata())
             pos    = obj.get_pos()
             if (badguy.type == "resetpoint"):
-                f.write("     (point (x %d) (y %d))\n" % (badguy.type, pos.x, pos.y))
+                f.write("     (point (x %d) (y %d))\n" % (int(pos.x), int(pos.y)))
         f.write("  )\n\n")
         
         f.write(" )\n\n;; EOF ;;\n")
@@ -610,6 +619,12 @@ def gui_resize_level():
         level.resize(CL_Size(w, h), CL_Point(x, y))
     dialog.set_callback(resize_callback)
 
+def gui_resize_level_to_selection():
+    level = workspace.get_map().get_data()
+    rect  = tilemap_select_tool.get_selection_rect()
+    if (rect.get_width() > 2 and rect.get_height() > 2):
+        level.resize(rect.get_size(), CL_Point(-rect.left, -rect.top))
+
 foreground_icon.set_callback(gui_show_foreground)
 interactive_icon.set_callback(gui_show_interactive)
 background_icon.set_callback(gui_show_background)
@@ -644,7 +659,9 @@ menu.add_item("File/Save...", gui_level_save)
 menu.add_item("File/Save As...", gui_level_save_as)
 menu.add_item("File/Quit",  gui.quit)
 
-menu.add_item("Edit/Resize", gui_resize_level)
+menu.add_item("Edit/Resize", lambda: gui_resize_level())
+menu.add_item("Edit/Resize to selection", lambda: gui_resize_level_to_selection())
+menu.add_item("Edit/Debug Shell", lambda: run_python())
 
 def gui_set_zoom(zoom):
     gc = editor_map.get_workspace().get_gc_state()

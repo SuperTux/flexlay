@@ -1,4 +1,4 @@
-//  $Id: args_parse.hxx,v 1.3 2003/09/06 11:48:01 grumbel Exp $
+//  $Id: args_parse.hxx,v 1.4 2003/09/06 15:05:10 grumbel Exp $
 // 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -68,9 +68,6 @@ class ArgsParse
 private:
   std::string programm;
 
-  int   argc;
-  char** argv;
-  
   struct Option 
   {
     int key;
@@ -82,7 +79,21 @@ private:
   
   typedef std::vector<Option> Options;
   Options options;
+
 public:
+  struct ParsedOption {
+    int key;
+    std::string argument;
+  };
+private:
+  typedef std::vector<ParsedOption> ParsedOptions;
+  ParsedOptions parsed_options;
+
+public:  
+  typedef  ParsedOptions::iterator iterator;
+  iterator begin() { return parsed_options.begin(); }
+  iterator end()   { return parsed_options.end(); }
+
   static const int REST_ARG = -2;
   static const int NO_SHORT_OPTION = -1;
 
@@ -96,18 +107,16 @@ public:
 
   void parse_args(int argc, char** argv);
   void print_help();
-
-  virtual void read_option(int id, const std::string& argument) =0;
-  virtual void parse_error(const std::string& msg);
+  
 private:
+  void read_option(int id, const std::string& argument);
   int parse_arg(int i);
 
-  std::pair<std::string, std::string> split_long_option(const std::string& option);
-
+  /** Find the Option structure that matches \a short_option */
   Option* lookup_short_option(char short_option);
-  Option* lookup_long_option(const std::string& long_option);
 
-  void parse_option(int argc, char** argv);
+  /** Find the Option structure that matches \a long_option */
+  Option* lookup_long_option (const std::string& long_option);
 
   ArgsParse (const ArgsParse&);
   ArgsParse& operator= (const ArgsParse&);

@@ -1,4 +1,4 @@
-//  $Id: args_parse.cxx,v 1.2 2003/09/06 11:14:16 grumbel Exp $
+//  $Id: args_parse.cxx,v 1.3 2003/09/06 15:05:10 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -20,6 +20,7 @@
 #include <iomanip>
 #include <iostream>
 #include <sstream>
+#include <ClanLib/Core/System/error.h>
 #include <ClanLib/Core/System/clanstring.h>
 #include "args_parse.hxx"
 
@@ -28,117 +29,90 @@ ArgsParse::ArgsParse()
 }
 
 void
-ArgsParse::parse_args(int arg_argc, char** arg_argv)
+ArgsParse::parse_args(int argc, char** argv)
 {
-  argc = arg_argc;
-  argv = arg_argv;
-
   programm = argv[0];
 
-  int i = 1;
-  while (i < argc)
-    {
-      i = parse_arg(i);
-    }
-}
-
-std::pair<std::string, std::string>
-ArgsParse::split_long_option(const std::string& option)
-{
-  std::string::size_type i = option.find('=');
-  if (i != std::string::npos) {
-    return std::pair<std::string, std::string>(option.substr(0, i),
-                                               option.substr(i+1));
-  } else {
-    return std::pair<std::string, std::string>(option, "");
-  }
-}
-
-int
-ArgsParse::parse_arg(int i)
-{
-  if (argv[i][0] == '-') {
-    if (argv[i][1] == '-') {
-      if (argv[i][2] == '\0') { 
-        // Got a '--', so we stop evaluating arguments
-        ++i;
-        while(i < argc) {
-          read_option(REST_ARG, argv[i]);
+  for(int i = 1; i < argc; ++i) {
+    if (argv[i][0] == '-') {
+      if (argv[i][1] == '-') {
+        if (argv[i][2] == '\0') { 
+          // Got a '--', so we stop evaluating arguments
           ++i;
-        }
-        return i;
-      } else {
-        std::string opt = argv[i] + 2;
-        std::string long_opt;
-        std::string long_opt_arg;
-
-        std::string::size_type pos = opt.find('=');
-
-        if (pos != std::string::npos) {
-          long_opt = opt.substr(0, pos);
-          long_opt_arg = opt.substr(pos+1);
-        } else {
-          long_opt = opt;
-        }
-
-        // Long Option
-        Option* option = lookup_long_option(long_opt);
-
-        if (option) {
-          if (option->argument.empty()) {
-            read_option(option->key, "");
-          } else {
-            if (pos != std::string::npos) {
-              read_option(option->key, long_opt_arg);
-            } else {            
-              if (i == argc - 1) {
-                parse_error(std::string(argv[i]) + " requires argument: " + option->argument);
-              } else {
-                read_option(option->key, argv[i + 1]);
-                return i+2;
-              }
-            }
+          while(i < argc) {
+            read_option(REST_ARG, argv[i]);
+            ++i;
           }
         } else {
-          parse_error("Unknown long option '" + std::string(argv[i]) + "'");
-        }
-      }
-    } else {
-      char* p = argv[i] + 1;
-          
-      if (p) {
-        // Handle option chains
-        while (*p) {
-          // Short option(s)
-          Option* option = lookup_short_option(*p);
+          std::string opt = argv[i] + 2;
+          std::string long_opt;
+          std::string long_opt_arg;
+
+          std::string::size_type pos = opt.find('=');
+
+          if (pos != std::string::npos) {
+            long_opt = opt.substr(0, pos);
+            long_opt_arg = opt.substr(pos+1);
+          } else {
+            long_opt = opt;
+          }
+
+          // Long Option
+          Option* option = lookup_long_option(long_opt);
 
           if (option) {
             if (option->argument.empty()) {
               read_option(option->key, "");
             } else {
-              if (i == argc - 1 || *(p+1) != '\0') {
-                // No more arguments
-                parse_error(/**p +*/ " requires argument");
-              } else {
-                read_option(option->key, argv[i + 1]);
-                return i+2;
+              if (pos != std::string::npos) {
+                read_option(option->key, long_opt_arg);
+              } else {            
+                if (i == argc - 1) {
+                  throw CL_Error("option '" + std::string(argv[i]) + "' requires an argument");
+                } else {
+                  read_option(option->key, argv[i + 1]);
+                  ++i;
+                }
               }
             }
           } else {
-            parse_error("Unknown short option ''"); // FIXME
+            throw CL_Error("unrecognized option '" + std::string(argv[i]) + "'");
           }
-
-          ++p;
         }
       } else {
-        read_option(REST_ARG, "-");
-      }
-    }
-  } else {
-    read_option(REST_ARG, argv[i]);
-  }
+        char* p = argv[i] + 1;
+          
+        if (p) {
+          // Handle option chains
+          while (*p) {
+            // Short option(s)
+            Option* option = lookup_short_option(*p);
 
-  return i + 1;
+            if (option) {
+              if (option->argument.empty()) {
+                read_option(option->key, "");
+              } else {
+                if (i == argc - 1 || *(p+1) != '\0') {
+                  // No more arguments
+                  throw CL_Error("option requires an argument -- " + std::string(1, *p));
+                } else {
+                  read_option(option->key, argv[i + 1]);
+                  ++i;
+                }
+              }
+            } else {
+              throw CL_Error("invalid option -- " + std::string(1, *p));
+            }
+            ++p; 
+          }
+        } else {
+          read_option(REST_ARG, "-");
+        } 
+      }
+    } else {
+      read_option(REST_ARG, argv[i]);
+    }
+  }
 }
 
 ArgsParse::Option*
@@ -161,6 +135,17 @@ ArgsParse::lookup_long_option(const std::string& long_option)
         return &*i;
     }
   return 0;
+}
+
+void
+ArgsParse::read_option(int key, const std::string& argument)
+{
+  ParsedOption parsed_option;
+  
+  parsed_option.key = key;
+  parsed_option.argument = argument;
+
+  parsed_options.push_back(parsed_option);
 }
 
 void
@@ -213,12 +198,6 @@ ArgsParse::add_option(int key,
   option.visible      = visible;
 
   options.push_back(option);
-}
-
-void
-ArgsParse::parse_error(const std::string& msg)
-{
-  std::cout << "Parse Error: " << msg << std::endl;
 }
 
 /* EOF */

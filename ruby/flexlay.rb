@@ -147,16 +147,15 @@ class GenericDialog
   def on_ok()
     @window.hide()
     if @callback
-      vals = @items.map{|item|
+      vals = []
+      @items.each{|item|
         (type, label, comp) = item
         if type == "int"
-          comp.get_text().to_i
+          vals.push(comp.get_text().to_i)
         elsif type == "float"
-          comp.get_text().to_f
+          vals.push(comp.get_text().to_f)
         elsif type == "string"
-          comp.get_text()
-        else
-          nil
+          vals.push(comp.get_text())
         end
       }
       @callback.call(*vals)
@@ -169,6 +168,13 @@ class GenericDialog
 
   def set_callback(c)
     @callback = c
+  end
+
+  def add_label(text)
+    @items.push(["void", 
+                  CL_Label.new(CL_Point.new(10, 10), text, @window.get_client_area()),
+                  nil])
+    update()
   end
 
   def add_float(name, value = 0)
@@ -204,9 +210,11 @@ class GenericDialog
   def update()
     y = 10
     @items.each do |(type, label, comp)| 
-      if type == "int" or type == "string" or type == "float"
+      if type == "int" or type == "string" or type == "float" or "void"
         label.set_position(10, y)
-        comp.set_position(110, y)
+        if comp then
+          comp.set_position(110, y)
+        end
         y += 25
 
         @cancel.set_position(200, y)

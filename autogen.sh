@@ -1,8 +1,8 @@
 #!/bin/sh
 
 aclocal-1.7
-automake-1.7 -f --copy --add-missing
 autoheader
+automake-1.7 -f --copy --add-missing
 autoconf
 
 # EOF #

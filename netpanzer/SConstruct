@@ -38,7 +38,7 @@ Help(opts.GenerateHelpText(env))
 
 Depends('netpanzer.i', ['netpanzer.hxx'])
 env.Command('netpanzer_wrap.cxx', 'netpanzer.i',
-            "swig -noruntime -ruby   -o netpanzer_wrap.cxx -c++ $SOURCE")
+            "swig -c++ -ruby -o netpanzer_wrap.cxx  $SOURCE")
 
 clanLib_env = Environment()
 clanLib_env.ParseConfig("pkg-config --cflags --libs clanCore-0.7 clanDisplay-0.7 clanGL-0.7 clanSignals-0.7 clanGUI-0.7 clanGUIStyleSilver-0.7")

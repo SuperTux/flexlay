@@ -86,12 +86,6 @@ std::cout << "CL_Error: " << err.message << std::endl;
 // #include "netpanzer.hxx" 
 #include "helper.hxx"
 
-#ifdef SWIGPYTHON
-#include "sexpr_parser.hxx"
-#include "python_meta_data.hxx"
-#include "python_functor.hxx"
-#endif
-
 #ifdef SWIGRUBY
 #include "ruby_sexpr_parser.hxx"
 #include "ruby_meta_data.hxx"
@@ -127,7 +121,6 @@ VALUE CL_Point2Value(const CL_Point& arg)
  CL_Point* resultptr = new CL_Point(arg);
  return SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_CL_Point, 1);
 }
-
 #endif
 %}
 
@@ -207,15 +200,9 @@ VALUE CL_Point2Value(const CL_Point& arg)
 // %include "netpanzer.hxx" 
 %include "helper.hxx"
 
-#ifdef SWIGPYTHON
-%include "python_meta_data.hxx"
-%include "sexpr_parser.hxx"
-#endif
-
 #ifdef SWIGRUBY
 %include "../ruby/ruby_meta_data.hxx"
 %include "../ruby/ruby_sexpr_parser.hxx"
-
 #endif
 
 

@@ -37,12 +37,6 @@ env = Environment(SHLIBPREFIX='',
                   options=opts)
 Help(opts.GenerateHelpText(env))
 
-env.Command('swigrun_wrap.cxx', 'swigrun.i',
-            "swig -runtime -ruby -o $TARGET -c++ $SOURCE")
-
-env.SharedLibrary(target='libswigrun.so', source='swigrun_wrap.cxx',
-              CPPPATH=['$USER_CPPPATH','$RUBYDIR'])
-
 def gen_i_depends(path, filename):
     print os.getcwd()
     lst = []
@@ -57,7 +51,7 @@ def gen_i_depends(path, filename):
 
 Depends('../lib/flexlay_wrap.i', gen_i_depends(Dir("../lib").abspath, File("../lib/flexlay_wrap.i").abspath))
 env.Command('flexlay_ruby_wrap.cxx', '../lib/flexlay_wrap.i',
-            "swig -noruntime -ruby -o $TARGET -c++ $SOURCE")
+            "swig -c++ -ruby -o $TARGET $SOURCE")
 
 clanLib_env = Environment()
 clanLib_env.ParseConfig("pkg-config --cflags --libs clanCore-0.7 clanDisplay-0.7 clanGL-0.7 clanSignals-0.7 clanGUI-0.7 clanGUIStyleSilver-0.7")
@@ -76,7 +70,7 @@ flexlay_ruby_lib = libflexlay_ruby_env.SharedLibrary(
     CPPPATH=['$USER_CPPPATH','$RUBYDIR','../lib/'] + clanLib_env['CPPPATH'],
     LINKFLAGS = clanLib_env['LINKFLAGS'],
     LIBPATH=['../lib', '.'] + clanLib_env['LIBPATH'],
-    LIBS=['swigrun', 'flexlay'] + clanLib_env['LIBS'])
+    LIBS=['flexlay'] + clanLib_env['LIBS'])
 
 # install_ruby = env.Alias('install_headers', Install(env['DESTDIR'] + env['PREFIX'] + '/include/flexlay', flexlay_headers))
 # env.Alias('install', [install_ruby])

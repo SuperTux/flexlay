@@ -222,6 +222,48 @@ def gui_resize_level()
                         level.resize(CL_Size.new(w, h), CL_Point.new(x, y))})
 end
 
+def gui_smooth_level_struct()
+  puts "Smoothing level structure"
+  tilemap = TilemapLayer.current()
+  data    = tilemap.get_data()
+  width   = tilemap.get_width()
+  height  = tilemap.get_height()
+
+  get = proc { |x, y| return data[y*width + x] }
+  set = proc { |x, y, val| data[y*width + x] = val }
+
+  smooth = proc do |x, y|
+    $itile_conditions.each do |ary|
+      if (($solid_itiles.index(get[x-1,y-1]) ? 1 : 0) == ary[0] \
+          and ($solid_itiles.index(get[x,  y-1]) ? 1 : 0) == ary[1] \
+          and ($solid_itiles.index(get[x+1,y-1]) ? 1 : 0) == ary[2] \
+          and ($solid_itiles.index(get[x-1,y  ]) ? 1 : 0) == ary[3] \
+          and ($solid_itiles.index(get[x,  y  ]) ? 1 : 0) == ary[4] \
+          and ($solid_itiles.index(get[x+1,y  ]) ? 1 : 0) == ary[5] \
+          and ($solid_itiles.index(get[x-1,y+1]) ? 1 : 0) == ary[6] \
+          and ($solid_itiles.index(get[x,  y+1]) ? 1 : 0) == ary[7] \
+          and ($solid_itiles.index(get[x+1,y+1]) ? 1 : 0) == ary[8])
+      then
+        set[x,y, ary[9]]
+      end
+    end
+  end
+
+  rect  = $tilemap_select_tool.get_selection_rect()
+
+  start_x = rect.left
+  end_x   = rect.right
+  start_y = rect.top
+  end_y   = rect.bottom
+
+  for y in (start_y..end_y) do
+    for x in (start_x..end_x) do
+      smooth[x,y]
+    end
+  end
+  tilemap.set_data(data)
+end
+
 def gui_resize_level_to_selection()
   level = $workspace.get_map().get_metadata()
   rect  = $tilemap_select_tool.get_selection_rect()

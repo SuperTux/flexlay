@@ -119,6 +119,7 @@ $menu.add_item("File/Save...", proc{ gui_level_save() })
 $menu.add_item("File/Save As...", proc{ gui_level_save_as() })
 $menu.add_item("File/Quit",  proc{ $gui.quit })
 
+$menu.add_item("Edit/Smooth Selection", proc{ gui_smooth_level_struct() })
 $menu.add_item("Edit/Resize", proc{ gui_resize_level() })
 $menu.add_item("Edit/Resize to selection", proc{ gui_resize_level_to_selection()})
 $menu.add_item("Edit/Debug Shell", proc{ run_python()})

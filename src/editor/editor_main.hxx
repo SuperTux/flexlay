@@ -31,7 +31,11 @@ private:
   int  screen_height;
   bool fullscreen;
   bool allow_resize;
+  std::string levelfile;
+  std::string game_definition_file;
   CL_DisplayWindow* window;
+
+  void parse_command_line(int argc, char** argv);
 
 public:
   EditorMain();

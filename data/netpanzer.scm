@@ -180,7 +180,7 @@
     (gui-push-component (gui-window-get-client-area window))
 
     (let* ((listbox (gui-listbox-create 10 5 175 360))
-           (objects (with-input-from-file "netpanzer-tile-objects.txt"
+           (objects (with-input-from-file (string-append datadir "netpanzerbrushes.scm")
                       (lambda ()
                         (read)))))
       (for-each (lambda (el)

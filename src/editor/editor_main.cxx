@@ -37,20 +37,84 @@ EditorMain::EditorMain()
   screen_width  = 800;
   screen_height = 600;
   fullscreen   = false;
-  allow_resize = false;
+  allow_resize = true;
+  game_definition_file = "windstille.scm";
 }
 
 EditorMain::~EditorMain()
 {
 }
 
+void
+EditorMain::parse_command_line(int argc, char** argv)
+{
+  CL_CommandLine argp;
+
+  const int debug_flag = 256;
+  const int game_flag  = 257;
+
+  argp.set_help_indent(22);
+  argp.add_usage ("[LEVELFILE]");
+  argp.add_doc   ("Windstille Editor - A generic game editor");
+
+  argp.add_group("Display Options:");
+  argp.add_option('g', "geometry",   "WxH", "Change window size to WIDTH and HEIGHT");
+  argp.add_option('f', "fullscreen", "", "Launch the game in fullscreen");
+
+  argp.add_group("Misc Options:");
+  argp.add_option(game_flag, "game", "GAME", "Load the game definition file at startup");
+  argp.add_option('d', "datadir",    "DIR", "Fetch game data from DIR");
+  argp.add_option(debug_flag, "debug",      "", "Turn on debug output");
+  argp.add_option('h', "help",       "", "Print this help");
+
+  argp.parse_args(argc, argv);
+
+  while (argp.next())
+    {
+      switch (argp.get_key())
+        {
+        case 'd':
+          datadir = argp.get_argument();
+          break;
+
+        case debug_flag:
+          debug = 1;
+          break;
+
+        case game_flag:
+          game_definition_file = argp.get_argument();
+          break;
+
+        case 'f':
+          fullscreen = true;
+          break;
+
+        case 'g':
+          if (sscanf(argp.get_argument().c_str(), "%dx%d", &screen_width, &screen_height) == 2)
+            std::cout << "Geometry: " << screen_width << "x" << screen_height << std::endl;
+          else
+            throw CL_Error("Geometry option '-g' requires argument of type {WIDTH}x{HEIGHT}");
+          break;
+
+        case 'h':
+          argp.print_help();
+          exit(EXIT_SUCCESS);
+          break;
+
+        case CL_CommandLine::REST_ARG:
+          levelfile = argp.get_argument();
+          break;
+        }
+    }
+}
+
 int
 EditorMain::main(int argc, char** argv)
 {
   try {
-    std::string levelfile;
-    std::string game_definition_file = "windstille.scm";
     std::cout << "Windstille Editor V0.0" << std::endl;
+
+    parse_command_line(argc, argv);
 
     // Init the path
     bindir  = CL_System::get_exe_path();

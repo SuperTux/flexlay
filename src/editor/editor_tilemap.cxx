@@ -51,7 +51,7 @@ EditorTileMap::~EditorTileMap()
 }
 
 void
-EditorTileMap::draw_tile(int id, int x, int y, bool grid, bool attribute, float alpha)
+EditorTileMap::draw_tile(int id, int x, int y, bool attribute, float alpha)
 {
   Tile* tile = TileFactory::current()->create(id);
 
@@ -68,16 +68,6 @@ EditorTileMap::draw_tile(int id, int x, int y, bool grid, bool attribute, float 
       if (attribute)
         CL_Display::fill_rect(CL_Rect(CL_Point(x, y), CL_Size(TILE_SIZE + 1, TILE_SIZE + 1)),
                               tile->get_attribute_color());
-
-      if (grid)
-        CL_Display::draw_rect(CL_Rect(CL_Point(x, y), CL_Size(TILE_SIZE + 1, TILE_SIZE + 1)),
-                              CL_Color(128, 128, 128, 255));
-    }
-  else
-    {
-      if (grid)
-        CL_Display::draw_rect (CL_Rect(CL_Point(x, y), CL_Size(TILE_SIZE + 1, TILE_SIZE + 1)),
-                               CL_Color(128, 128, 128, 255));
     }
 }
 
@@ -105,8 +95,25 @@ EditorTileMap::draw(EditorMapComponent* parent)
       {
         draw_tile(field.at(x, y), 
                   x * tile_size, y * tile_size, 
-                  draw_grid, draw_attribute, alpha);
+                  draw_attribute, alpha);
       }
+
+  if (draw_grid)
+    {
+      for (int y = start_y; y <= end_y; ++y)
+        CL_Display::draw_line(start_x * tile_size,
+                              y * tile_size,
+                              end_x   * tile_size,
+                              y * tile_size, 
+                              CL_Color(150, 150, 150));
+  
+      for (int x = start_x; x <= end_x; ++x)
+        CL_Display::draw_line(x * tile_size,
+                              start_y * tile_size,
+                              x   * tile_size,
+                              end_y * tile_size, 
+                              CL_Color(150, 150, 150));
+    }
 
   CL_Display::flush();
 }

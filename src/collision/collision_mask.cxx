@@ -1,4 +1,4 @@
-//  $Id: collision_mask.cxx,v 1.9 2003/09/02 22:25:23 grumbel Exp $
+//  $Id: collision_mask.cxx,v 1.10 2003/09/04 22:51:04 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -129,22 +129,33 @@ CollisionMask::get_pixel(int x, int y) const
 }
 
 bool
-CollisionMask::collides_with(const CollisionMask& mask, int x_of, int y_of, float scale) const
+CollisionMask::collides_with(const CollisionMask& mask, int x_of, int y_of, float scale_x, float scale_y) const
 {
   int start_y = std::max(0, y_of); 
-  int end_y   = std::min(height, static_cast<int>(y_of + (mask.height*scale) + 1));
+  int end_y   = std::min(height, static_cast<int>(y_of + (mask.height*scale_y) + 1));
 
   int start_x = std::max(0, x_of);
-  int end_x   = std::min(width, static_cast<int>(x_of + (mask.width*scale) + 1));
+  int end_x   = std::min(width, static_cast<int>(x_of + (mask.width*scale_x) + 1));
 
-  std::cout << start_x << " " << end_x << " y: " << start_y << " " << end_y << std::endl;
+  int t_x;
+  int t_y;
+
+  if (x_of < 0)
+    t_x = int(-x_of / scale_x);
+  else
+    t_x = start_x - x_of;
+
+  if (y_of < 0)
+    t_y = int(-y_of / scale_y);
+  else
+    t_y = start_y - y_of;
 
   for (int x = start_x; x < end_x; ++x)
     for (int y = start_y; y < end_y; ++y)
       {
         if (get_pixel(x, y) 
-            && mask.get_pixel(std::min(mask.width-1,  start_x + int((x - start_x) / scale) - x_of),
-                              std::min(mask.height-1, start_y + int((y - start_y) / scale) - y_of)))
+            && mask.get_pixel(std::max(0, std::min(mask.width-1,  t_x + int((x - start_x) / scale_x))),
+                              std::max(0, std::min(mask.height-1, t_y + int((y - start_y) / scale_y)))))
           return true;
       }
 

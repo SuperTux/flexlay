@@ -1,4 +1,4 @@
-//  $Id: colltest.cxx,v 1.4 2003/09/02 22:25:23 grumbel Exp $
+//  $Id: colltest.cxx,v 1.5 2003/09/04 22:51:04 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -22,7 +22,7 @@
 #include <ClanLib/gl.h>
 #include <ClanLib/application.h>
 
-#include "collision_mask.cxx"
+#include "collision_mask.hxx"
 
 class CollTest : CL_ClanApplication
 {
@@ -43,28 +43,29 @@ public:
         CL_Surface sprite1("../../data/images/colltest2.png");
         CL_Surface sprite2("../../data/images/colltest.png");
 
-        float scale = 1.0f;
+        float scale_x = 1.0f;
+        float scale_y = 1.0f;
 
         while (!CL_Keyboard::get_keycode(CL_KEY_ESCAPE))
           {
             if (CL_Mouse::get_keycode(CL_MOUSE_LEFT))
               {
-                scale += 0.01f;
+                scale_x += 0.01f;
               }
             else if (CL_Mouse::get_keycode(CL_MOUSE_RIGHT))
               {
-                scale -= 0.01f;
+                scale_x -= 0.01f;
               }
 
-            sprite2.set_scale(scale, scale);
+            sprite2.set_scale(scale_x, scale_y);
         
             int mx = CL_Mouse::get_x();
             int my = CL_Mouse::get_y();
 
             if (mask1.collides_with(mask2, 
-                                    mx - 150, my - 150,  scale))
+                                    mx - 150, my - 150,  scale_x, scale_y))
               {
-                CL_Display::clear(CL_Color(255, 255, 255));
+                CL_Display::clear(CL_Color::black);
               }
             else
               {

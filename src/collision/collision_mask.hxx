@@ -1,4 +1,4 @@
-//  $Id: collision_mask.hxx,v 1.5 2003/09/02 22:05:02 grumbel Exp $
+//  $Id: collision_mask.hxx,v 1.6 2003/09/04 22:51:04 grumbel Exp $
 // 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -80,9 +80,9 @@ public:
   bool collides_with      (const CollisionMask& mask, int x_of, int y_of) const;
 
   /** Check if mask collides with this, where mask is offseted by
-      x_of, y_of and scaled by scale, scale must be <= 1.0f or else
+      x_of, y_of and scaled by scale, scale must be >= 1.0f or else
       not all collisions might get detected */
-  bool collides_with      (const CollisionMask& mask, int x_of, int y_of, float scale) const;
+  bool collides_with      (const CollisionMask& mask, int x_of, int y_of, float scale_x, float scale_y) const;
 
   /** Checks for collision of the bounding boxes of the two collision
       masks */

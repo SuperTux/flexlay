@@ -7,6 +7,7 @@ libwindstille_collision_a_SOURCES = \
 bin_PROGRAMS = colltest collision_benchmark collision_sprite_test
 
 colltest_SOURCES = colltest.cxx
+colltest_LDADD = libwindstille_collision.a
 
 collision_benchmark_SOURCES = collision_benchmark.cxx
 collision_benchmark_LDADD = libwindstille_collision.a

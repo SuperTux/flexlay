@@ -358,7 +358,7 @@
       <image file="images/tiles/level1/tile59.png" name="image1" />
     </sprite>
     <sprite name="tile6">
-      <image file="images/tiles/level1/tile6.png" name="image1" />
+      <image file="images/tiles/tile6.png" name="image1" />
     </sprite>
     <sprite name="tile60">
       <image file="images/tiles/level1/tile60.png" name="image1" />
@@ -391,7 +391,7 @@
       <image file="images/tiles/level1/tile69.png" name="image1" />
     </sprite>
     <sprite name="tile7">
-      <image file="images/tiles/level1/tile7.png" name="image1" />
+      <image file="images/tiles/tile7.png" name="image1" />
     </sprite>
     <sprite name="tile71">
       <image file="images/tiles/level1/tile71.png" name="image1" />
@@ -412,7 +412,7 @@
       <image file="images/tiles/level1/tile77.png" name="image1" />
     </sprite>
     <sprite name="tile8">
-      <image file="images/tiles/level1/tile8.png" name="image1" />
+      <image file="images/tiles/tile8.png" name="image1" />
     </sprite>
     <sprite name="tile9">
       <image file="images/tiles/level1/tile9.png" name="image1" />

@@ -13,6 +13,8 @@ windstille_SOURCES = \
   default_shoot.cxx \
   default_shoot.hxx \
   delta_manager.hxx \
+  display.hxx \
+  display.cxx \
   dog.cxx \
   dog.hxx \
   field.hxx \

@@ -1,6 +1,6 @@
-//  $Id: windstille_game.cxx,v 1.4 2003/08/11 21:50:35 grumbel Exp $
+//  $Id: windstille_game.cxx,v 1.5 2003/08/12 08:24:41 grumbel Exp $
 //
-//  Pingus - A free Lemmings clone
+//  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
 //
 //  This program is free software; you can redistribute it and/or
@@ -30,6 +30,7 @@
 #include "dog.hxx"
 #include "power_up.hxx"
 #include "bonus_flyer.hxx"
+#include "display.hxx"
 #include "player_view.hxx"
 
 #include "guile_gameobj_factory.hxx"
@@ -180,61 +181,56 @@ WindstilleGame::display ()
 
       world.update (delta);
 
-      CL_Display::begin_3d();
-      {
-        glMatrixMode(GL_MODELVIEW);
-        glLoadIdentity();
-        gluOrtho2D (0, 800, 600, 0);
-
-        glEnable (GL_BLEND);
-        glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
-        glBegin(GL_QUADS);
-        { // Water
-          glColor4f(0.8f, 0.8f, 1.0f, 0.5f);
-
-          glVertex2f(0, 500);
-          glVertex2f(800, 500);
- 
-          glColor4f(0.0f, 0.0f, 0.8f, 0.5f);
-          glVertex2f(800,  515);
-          glVertex2f(0, 515);
-
-          glVertex2f(0, 515);
-          glVertex2f(800,  515);
-
-          glColor4f(0.0f, 0.0f, .2f, 0.5f);
-          glVertex2f(800,  600);
-          glVertex2f(0, 600);
-        }
-        glEnd();
-      }
-      CL_Display::end_3d();
-
-      if (0) // Laser
+      if (0) // Water
         {
-          CL_Display::begin_3d();
+          Display::begin_gl();
           {
-            glMatrixMode(GL_MODELVIEW);
-            glLoadIdentity();
-            gluOrtho2D (0, 800, 600, 0);
-
-            glBlendFunc( GL_SRC_ALPHA, GL_ONE );
-
+            glEnable (GL_BLEND);
+            glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
             glBegin(GL_QUADS);
-            {
-              glColor4f(1.0f, 1.0f, 0.0f, 0.9f);
-              glVertex2f(150,  400);
-              glVertex2f(300, 400);
+            { // Water
+              glColor4f(0.8f, 0.8f, 1.0f, 0.5f);
 
-              glColor4f(1.0f, 1.0f, 0.0f, 0.1f);
-              glVertex2f(300, 420);
-              glVertex2f(150,  420);
+              glVertex2f(0, 500);
+              glVertex2f(800, 500);
+ 
+              glColor4f(0.0f, 0.0f, 0.8f, 0.5f);
+              glVertex2f(800,  515);
+              glVertex2f(0, 515);
+
+              glVertex2f(0, 515);
+              glVertex2f(800,  515);
+
+              glColor4f(0.0f, 0.0f, .2f, 0.5f);
+              glVertex2f(800,  600);
+              glVertex2f(0, 600);
             }
             glEnd();
           }
-          CL_Display::end_3d();
+          Display::end_gl();
         }
 
+      if (0) // Laser
+        {
+          Display::begin_gl();
+          
+          glBlendFunc( GL_SRC_ALPHA, GL_ONE );
+
+          glBegin(GL_QUADS);
+          {
+            glColor4f(1.0f, 1.0f, 0.0f, 0.9f);
+            glVertex2f(150,  400);
+            glVertex2f(300, 400);
+
+            glColor4f(1.0f, 1.0f, 0.0f, 0.1f);
+            glVertex2f(300, 420);
+            glVertex2f(150,  420);
+          }
+          glEnd();
+
+          Display::end_gl();
+        }
+      
       CL_Display::flip ();
 	
       //world.add (new AnimationObj ("shoot/explosion", CL_Vector (rand ()% 800, rand ()%600)));

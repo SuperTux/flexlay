@@ -1,5 +1,5 @@
-//  $Id: scm_helper.hxx,v 1.2 2003/08/12 08:24:41 grumbel Exp $
-// 
+//  $Id: display.cxx,v 1.1 2003/08/12 08:24:41 grumbel Exp $
+//
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
 //
@@ -12,19 +12,31 @@
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
-// 
+//
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-#ifndef HEADER_SCM_HELPER_HXX
-#define HEADER_SCM_HELPER_HXX
+#include <ClanLib/gl.h>
+#include <ClanLib/Display/display.h>
+#include "display.hxx"
 
-#include <guile/gh.h>
-#include <string>
+void
+Display::begin_gl()
+{
+  int viewport[4];
+  glGetIntegerv(GL_VIEWPORT, viewport);
 
-std::string scm2string(SCM str);
+  CL_Display::begin_3d();
+  glMatrixMode(GL_MODELVIEW);
+  glLoadIdentity();
+  gluOrtho2D (0, viewport[2], viewport[3], 0);
+}
 
-#endif
+void
+Display::end_gl()
+{
+  CL_Display::end_3d();
+}
 
 /* EOF */

@@ -1,4 +1,4 @@
-//  $Id: scm_helper.hxx,v 1.2 2003/08/12 08:24:41 grumbel Exp $
+//  $Id: display.hxx,v 1.1 2003/08/12 08:24:41 grumbel Exp $
 // 
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -17,13 +17,20 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-#ifndef HEADER_SCM_HELPER_HXX
-#define HEADER_SCM_HELPER_HXX
+#ifndef HEADER_DISPLAY_HXX
+#define HEADER_DISPLAY_HXX
 
-#include <guile/gh.h>
-#include <string>
+/** */
+class Display
+{
+private:
+public:
+  /** Enter 2d OpenGL mode and allow to draw polygons and such */
+  static void begin_gl();
 
-std::string scm2string(SCM str);
+  /** Leave 2d OpenGL mode and give controll back to ClanLib */
+  static void end_gl();
+};
 
 #endif
 

@@ -1,6 +1,6 @@
-//  $Id: tile.cxx,v 1.2 2003/08/11 19:50:12 grumbel Exp $
+//  $Id: tile.cxx,v 1.3 2003/08/12 08:24:41 grumbel Exp $
 //
-//  Pingus - A free Lemmings clone
+//  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
 //
 //  This program is free software; you can redistribute it and/or

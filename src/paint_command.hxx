@@ -24,9 +24,8 @@
 #include <ClanLib/Core/Math/point.h>
 #include "field.hxx"
 #include "tile_brush.hxx"
+#include "tilemap_layer.hxx"
 #include "command.hxx"
-
-class TileMap;
 
 /** The PaintCommand provides functionality to draw onto an TileMap.
     The user needs to supply a brush and a map to draw to and the
@@ -38,18 +37,18 @@ private:
   typedef std::vector<CL_Point> Points;
   Points points;
   
-  TileMap* tilemap;
-  Field<int>* field;
-  TileBrush   brush;
-  Field<int>  undo_field;
+  TilemapLayer tilemap;
+  TileBrush    brush;
 
-  CL_Point    pos;
-  TileBrush*  redo_brush;
-  TileBrush*  undo_brush;
+  /** Copy of the field used to generate undo informations */
+  Field<int>   undo_field;
+
+  CL_Point     pos;
+  TileBrush*   redo_brush;
+  TileBrush*   undo_brush;
   
 public:
-  PaintCommand(Field<int>* f,    const TileBrush& b);
-  PaintCommand(TileMap* t, const TileBrush& b);
+  PaintCommand(TilemapLayer t, const TileBrush& b);
   virtual ~PaintCommand();
   
   void add_point(const CL_Point& pos);

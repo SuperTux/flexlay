@@ -26,7 +26,7 @@
 #include <ClanLib/Core/Math/point.h>
 #include "field.hxx"
 #include "editor_objmap.hxx"
-#include "tilemap.hxx"
+#include "tilemap_layer.hxx"
 #include "editor_map_layer.hxx"
 
 class EditorMapComponent;
@@ -37,8 +37,6 @@ class TileMapTool;
 class EditorMap
 {
 private:
-  std::string filename;
-
   /** Flag if the map got modified, used for 'Some maps are unsaved'
       style massages */
   bool modified;
@@ -50,8 +48,6 @@ private:
   typedef std::vector<EditorMapLayer*> Layers;
   Layers layers;
 
-  std::vector<std::string> scripts;
-  
   CL_Color background_color;
   CL_Color foreground_color;
 
@@ -60,11 +56,8 @@ private:
   SCMObj metadata;
 #endif
 public:
-  EditorMap(const std::string& filename_);
+  EditorMap();
   ~EditorMap();
-
-  std::string get_filename() const { return filename; }
-  void        set_filename(const std::string& f) { filename = f; }
 
   void draw(EditorMapComponent* parent);
 
@@ -76,7 +69,6 @@ public:
 
   int get_serial() const { return serial; }
 
-  EditorMapLayer* get_layer_by_name(int i);
   EditorMapLayer* get_layer(int i);
 
 #ifdef SWIGGUILE
@@ -88,8 +80,6 @@ public:
   CL_Rect get_bounding_rect();
 
   void set_background_color(const CL_Color& color);
-  
-  std::vector<std::string> get_scripts() { return scripts; }
 };
 
 #endif

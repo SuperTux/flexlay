@@ -20,13 +20,12 @@
 #ifndef TILESET_HXX
 #define TILESET_HXX
 
-#ifdef SWIGGUILE
-#include <libguile.h>
-#endif
 #include <map>
 #include <string>
+#include <ClanLib/Core/System/sharedptr.h>
 
 class Tile;
+class TilesetImpl;
 
 /** A \a Tileset provides the mapping from an \a id to a \a Tile
     structure. It also contains information of the tile_size and other
@@ -34,20 +33,9 @@ class Tile;
 class Tileset
 {
 private:
-  // FIXME: Replace ths with a vector, map is potentially slow
-  //typedef std::map<int, Tile*> Tiles;
-  typedef std::vector<Tile*> Tiles;
-  Tiles tiles;
-
-  int tile_size;
-
   static Tileset* current_;
-public:
-  typedef Tiles::iterator iterator;
-  
-  iterator begin() { return tiles.begin(); }
-  iterator end()   { return tiles.end(); }
 
+public:
   /** Create an empty Tileset, so that the user can add stuff via
       scripting to it */
   Tileset(int tile_size_);
@@ -62,9 +50,9 @@ public:
    *  @return on success the tile is returned, on failure 0 */
   Tile* create(int id);
 
-  int get_tile_size() const { return tile_size; }
+  int get_tile_size() const;
   
-  void add_tile(int id, Tile* tile);
+  void add_tile(int id, const Tile& tile);
 
   /** Create the default TileFactor*/
   static void init();
@@ -76,10 +64,8 @@ public:
   static Tileset* current() { return current_; }
   static void set_current(Tileset* c) { current_ = c; }
 
-#ifdef SWIGGUILE
-  void load_tile_file(const std::string& filename);
-  void add_tile_from_scm(SCM data);
-#endif
+private:
+  CL_SharedPtr<TilesetImpl> impl;
 };
 
 #endif

@@ -25,9 +25,8 @@
 #include "editor_map.hxx"
 #include "editor_map_component.hxx"
 
-EditorMap::EditorMap(const std::string& filename_)
-  : filename(filename_),
-    background_color(100, 80, 100),
+EditorMap::EditorMap()
+  : background_color(100, 80, 100),
     foreground_color(255, 80, 255)
 {
   modified = false;
@@ -36,11 +35,12 @@ EditorMap::EditorMap(const std::string& filename_)
 
 EditorMap::~EditorMap()
 {
-  scripts.clear();
-  for(Layers::iterator i = layers.begin(); i != layers.end(); ++i)
+  /*
+    for(Layers::iterator i = layers.begin(); i != layers.end(); ++i)
     {
       delete (*i);
     }
+*/
 }
 
 void
@@ -60,12 +60,6 @@ EditorMap::draw (EditorMapComponent* parent)
   for(Layers::iterator i = layers.begin(); i != layers.end(); ++i)
     (*i)->draw(parent);  
   CL_Display::flush();
-}
-
-EditorMapLayer*
-EditorMap::get_layer_by_name(int i)
-{
-  return layers[i];
 }
 
 EditorMapLayer*
@@ -98,7 +92,7 @@ EditorMap::get_bounding_rect()
   
   bool init = false;
   CL_Rect rect;
-  
+
   for(Layers::iterator i = layers.begin(); i != layers.end(); ++i)
     {
       if ((*i)->has_bounding_rect())

@@ -18,6 +18,96 @@
 ##  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 from flexlay import *
+from supertux import *
+
+supertux_datadir = "/home/ingo/cvs/supertux/supertux/data/"
+
+def assoc_ref(lst, str):
+    if lst == []:
+        return False
+    elif lst[0][0] == str:
+        return lst[0][1:]
+    else:
+        return assoc_ref(lst[1:], str)
+
+def get_value_from_tree(spec, tree, default):
+    if spec == []:
+        return tree
+    elif spec == ['_']:
+        return tree[0]
+    elif tree == []:
+        return default
+    else:
+        el = assoc_ref(tree, spec[0])
+        if el:
+            return get_value_from_tree(spec[1:], el, default)
+        else:
+            return default
+
+def load_game_tiles(tileset, filename):
+    tree = sexpr_read_from_file(filename)
+    tree = tree[1:]
+    for i in tree:
+        if i[0] == "tile":
+            data  = i[1:]
+            id    = get_value_from_tree(['id', '_'], data, -1)
+            image = get_value_from_tree(['editor-images', '_'], data, False)
+            
+            if not(image):
+                image = get_value_from_tree(['images', '_'], data, "notile.png")
+                
+            tileset.add_tile(id,
+                             Tile(supertux_datadir + 'images/tilesets/' + image,
+                                  CL_Color(255, 255, 255, 255),
+                                  CL_Color(255,   0,   0, 128)))
+
+class SuperTuxLevel:
+    me = None
+    name   = "no name"
+    author = "no author"
+    width  = 20
+    height = 15
+
+    foreground  = None
+    interactive = None
+    background  = None
+
+    editormap = None
+    
+    def __init__(self, filename):
+        print "SuperTuxLevel:__init__"
+        self.me = self
+        
+        tree = sexpr_read_from_file(filename)
+        data = tree[1:]
+
+        self.name   = get_value_from_tree(["name", "_"], data, "no name")
+        self.author = get_value_from_tree(["name", "_"], data, "no author")
+
+        self.width  = get_value_from_tree(["width", "_"], data, 20)
+        self.height = get_value_from_tree(["height""_"], data, 15)
+
+        self.foreground  = TilemapLayer(tileset, self.width, self.height)
+        self.foreground.set_data(get_value_from_tree(["foreground-tm"], data, []))
+
+        self.interactive = TilemapLayer(tileset, self.width, self.height)
+        self.interactive.set_data(get_value_from_tree(["interactive-tm"], data, []))
+
+        self.background  = TilemapLayer(tileset, self.width, self.height)
+        self.background.set_data(get_value_from_tree(["background-tm"], data, []))
+
+        self.editormap = EditorMap()
+        self.editormap.add_layer(self.foreground)
+        self.editormap.add_layer(self.interactive)
+        self.editormap.add_layer(self.background)
+
+    def __del__(self):
+        print "SuperTuxLevel:__del__"
+
+    def activate(self, workspace):
+        editor_tilemap_set_current(self.interactive)
+        workspace.set_current_map(self.editormap)
+
 
 flexlay = Flexlay()
 
@@ -30,10 +120,10 @@ editor_map = EditorMapComponent(CL_Rect(0, 0, 799, 599), gui.get_component())
 workspace  = Workspace(799, 599)
 editor_map.set_workspace(workspace)
 
-m = EditorMap("Foobar")
+m = EditorMap()
 workspace.set_current_map(m)
 tileset = Tileset(32)
-tilemap = TileMap(tileset, 20, 10)
+tilemap = TilemapLayer(tileset, 20, 10)
 m.add_layer(tilemap)
 tile = Tile("/home/ingo/cvs/supertux/supertux/data/images/tilesets/bonus1.png",
             CL_Color(255, 255, 255, 255),
@@ -41,6 +131,8 @@ tile = Tile("/home/ingo/cvs/supertux/supertux/data/images/tilesets/bonus1.png",
 tileset.add_tile(0, tile)
 tileset.add_tile(1, tile)
 tileset.add_tile(2, tile)
+
+load_game_tiles(tileset, "/home/ingo/cvs/supertux/supertux/data/images/tilesets/supertux.stgt")
 
 editor_tilemap_set_current(tilemap)
 tilemap_paint_tool_set_tilemap(tilemap)
@@ -89,6 +181,11 @@ connect(button4.sig_clicked(), set_data)
 
 gui.pop_component()
 
+tileselectorw = CL_Window(CL_Rect(CL_Point(150, 150), CL_Size(210, 210)), "Tile Selector", gui.get_component())
+tileselector = TileSelector(5, 3, tileselectorw.get_client_area())
+tileselector.set_tileset(tileset)
+tileselector.set_tiles(range(1,100))
+
 class Menu(CL_Menu):
     def __init__(self):
         CL_Menu.__init__(self, gui.get_component())
@@ -97,8 +194,13 @@ class Menu(CL_Menu):
         item = self.create_item(name)
         connect(item.sig_clicked(), func)
 
+level = None
 def menu_file_open():
     print "File/Open"
+    level = SuperTuxLevel('/home/ingo/cvs/supertux/supertux/data/levels/world1/level2.stl')
+    print "Loading done"
+    level.activate(workspace)
+    print "Activation done"
 
 def menu_file_save():
     print "File/Save"
@@ -110,6 +212,8 @@ menu = Menu()
 a = menu.add_item("File/Open...", menu_file_open)
 a = menu.add_item("File/Save...", menu_file_save)
 a = menu.add_item("File/Save As...", menu_file_save_as)
+
+
 gui.run()
 
 flexlay.deinit()

@@ -66,7 +66,6 @@ void editor_set_brush_tile(int i);
 int  editor_get_brush_tile();
 void editor_set_tool(int i);
 void tilemap_paint_tool_set_brush(TileBrush brush);
-void tilemap_paint_tool_set_tilemap(EditorMapLayer* layer);
 
 int  editor_objectmap_duplicate_object(EditorMapLayer* layer, int id);
 void editor_objectmap_set_pos         (EditorMapLayer* layer, int id, int x, int y);
@@ -93,12 +92,8 @@ void            editor_map_set_unmodified(EditorMap* m);
 EditorMapLayer* editor_grid_layer_create(int w, int h, int tile_size);
 EditorMapLayer* editor_objmap_create();
 
-std::string     editor_map_get_filename(EditorMap* m);
-void            editor_map_set_filename(EditorMap* m, const char* name);
-
 void            editor_toggle_grid(EditorMapLayer* layer);
 void            editor_toggle_attributes(EditorMapLayer* layer);
-EditorMapLayer* editor_tilemap_create(Tileset* tileset, int w, int h, int tile_size);
 void            editor_tilemap_resize(EditorMapLayer* , int w, int h, int x, int y);
 int             editor_tilemap_get_width(EditorMapLayer* l);
 int             editor_tilemap_get_height(EditorMapLayer* l);

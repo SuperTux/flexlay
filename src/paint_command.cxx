@@ -22,22 +22,13 @@
 #include <sstream>
 #include <ClanLib/Core/core_iostream.h>
 #include <ClanLib/Core/Math/rect.h>
-#include "tilemap.hxx"
+#include "tilemap_layer.hxx"
 #include "paint_command.hxx"
 
-PaintCommand::PaintCommand(TileMap* t, const TileBrush& b)
-  : tilemap(t), field(t->get_map()), brush(b)
+PaintCommand::PaintCommand(TilemapLayer t, const TileBrush& b)
+  : tilemap(t), brush(b)
 {  
-  undo_field = *field;
-
-  redo_brush = 0;
-  undo_brush = 0;
-}
-
-PaintCommand::PaintCommand(Field<int>* f, const TileBrush& b)
-  : tilemap(0), field(f), brush(b)
-{  
-  undo_field = *field;
+  undo_field = *(tilemap.get_field());
 
   redo_brush = 0;
   undo_brush = 0;
@@ -53,8 +44,7 @@ void
 PaintCommand::add_point(const CL_Point& pos)
 {
   points.push_back(pos);
-  if (tilemap)
-    tilemap->draw_tile(brush, pos);
+  tilemap.draw_tile(brush, pos);
 }
 
 void
@@ -79,7 +69,7 @@ PaintCommand::execute()
   pos.x = rect.left;
   pos.y = rect.top;
 
-  redo_brush = new TileBrush(*field,     rect.get_width(), rect.get_height(), -pos.x, -pos.y);
+  redo_brush = new TileBrush(*(tilemap.get_field()), rect.get_width(), rect.get_height(), -pos.x, -pos.y);
   undo_brush = new TileBrush(undo_field, rect.get_width(), rect.get_height(), -pos.x, -pos.y);
   
   redo_brush->set_opaque();
@@ -91,13 +81,13 @@ PaintCommand::execute()
 void
 PaintCommand::redo()
 {
-  TileMap::draw_tile(field, *redo_brush, pos);
+  TilemapLayer::draw_tile(tilemap.get_field(), *redo_brush, pos);
 }
 
 void
 PaintCommand::undo()
 {
-  TileMap::draw_tile(field, *undo_brush, pos);
+  TilemapLayer::draw_tile(tilemap.get_field(), *undo_brush, pos);
 }
 
 std::string
@@ -105,7 +95,7 @@ PaintCommand::serialize()
 {
   std::stringstream s;
 
-  s << "_ = PaintCommand(" << tilemap << ", " << &brush << ")" << std::endl;
+  s << "_ = PaintCommand(" << &tilemap << ", " << &brush << ")" << std::endl;
   for(Points::iterator i = points.begin(); i != points.end(); ++i)
     {
       s << "_.add_paint(" << i->x << ", " << i->y << ")"  << std::endl;

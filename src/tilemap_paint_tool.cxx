@@ -23,7 +23,7 @@
 #include <ClanLib/Display/keys.h>
 #include <ClanLib/Display/display.h>
 #include "globals.hxx"
-#include "tilemap.hxx"
+#include "tilemap_layer.hxx"
 #include "tileset.hxx"
 #include "editor_map.hxx"
 #include "editor_map_component.hxx"
@@ -49,7 +49,6 @@ TileMapPaintTool::TileMapPaintTool()
   command = 0;
 
   mode = NONE;
-  tilemap = 0;
 }
 
 TileMapPaintTool::~TileMapPaintTool()
@@ -59,7 +58,7 @@ TileMapPaintTool::~TileMapPaintTool()
 void
 TileMapPaintTool::draw()
 {
-  if (!tilemap)
+  if (tilemap.is_null())
     return;
 
   switch(mode)
@@ -72,7 +71,7 @@ TileMapPaintTool::draw()
       break;
       
     default:
-      int tile_size = tilemap->get_tileset()->get_tile_size();
+      int tile_size = tilemap.get_tileset()->get_tile_size();
 
       // Draw the brush:
       for(int y = 0; y < brush.get_height(); ++y)
@@ -114,10 +113,10 @@ TileMapPaintTool::draw()
 void
 TileMapPaintTool::on_mouse_down(const CL_InputEvent& event)
 {
-  if (tilemap)
+  if (!tilemap.is_null())
     {
       EditorMapComponent* parent = EditorMapComponent::current();
-      CL_Point pos = tilemap->world2tile(parent->screen2world(event.mouse_pos));
+      CL_Point pos = tilemap.world2tile(parent->screen2world(event.mouse_pos));
 
       switch (mode)
         {
@@ -150,10 +149,10 @@ TileMapPaintTool::on_mouse_down(const CL_InputEvent& event)
 void
 TileMapPaintTool::on_mouse_move(const CL_InputEvent& event)
 {
-  if (tilemap)
+  if (!tilemap.is_null())
     {
       EditorMapComponent* parent = EditorMapComponent::current();
-      current_tile = tilemap->world2tile(parent->screen2world(event.mouse_pos));
+      current_tile = tilemap.world2tile(parent->screen2world(event.mouse_pos));
 
       switch (mode)
         {
@@ -178,12 +177,12 @@ TileMapPaintTool::on_mouse_move(const CL_InputEvent& event)
 void
 TileMapPaintTool::on_mouse_up  (const CL_InputEvent& event)
 {
-  if (tilemap)
+  if (!tilemap.is_null())
     {
       EditorMapComponent::current()->get_workspace()->get_current_map()->modify();
 
       EditorMapComponent* parent = EditorMapComponent::current();
-      CL_Point pos = tilemap->world2tile(parent->screen2world(event.mouse_pos));
+      CL_Point pos = tilemap.world2tile(parent->screen2world(event.mouse_pos));
 
       switch (event.id)
         {
@@ -197,7 +196,7 @@ TileMapPaintTool::on_mouse_up  (const CL_InputEvent& event)
               Editor::current()->execute(command);
               command = 0;
 
-              tilemap->draw_tile(brush, pos);
+              tilemap.draw_tile(brush, pos);
               last_draw = CL_Point(-1, -1);
             }
           break;
@@ -209,7 +208,7 @@ TileMapPaintTool::on_mouse_up  (const CL_InputEvent& event)
               mode = NONE;
 
               selection.update(pos);
-              brush = selection.get_brush(*tilemap->get_field());
+              brush = selection.get_brush(*tilemap.get_field());
 
               if ((brush.get_width() > 1 || brush.get_height() > 1)
                   && !CL_Keyboard::get_keycode(CL_KEY_LSHIFT))

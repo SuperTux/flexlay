@@ -23,9 +23,9 @@
 #include "tile_brush.hxx"
 #include "tile_selection.hxx"
 #include "tilemap_tool.hxx"
+#include "tilemap_layer.hxx"
 
 class PaintCommand;
-class TileMap;
 
 /** */
 class TileMapPaintTool : public TileMapTool
@@ -40,7 +40,7 @@ private:
 
   PaintCommand* command;
 
-  TileMap* tilemap;
+  TilemapLayer tilemap;
 
   static TileMapPaintTool* current_; 
 public:
@@ -52,7 +52,7 @@ public:
   const TileBrush& get_brush() { return brush; }
   void set_brush(const TileBrush& b);
   void draw();
-  void set_tilemap(TileMap* t) { tilemap = t; }
+  void set_tilemap(TilemapLayer t) { tilemap = t; }
 
 private:
   void on_mouse_down(const CL_InputEvent& event);

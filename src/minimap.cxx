@@ -27,7 +27,7 @@
 #include "tileset.hxx"
 #include "editor_map.hxx"
 #include "editor_map_component.hxx"
-#include "tilemap.hxx"
+#include "tilemap_layer.hxx"
 #include "workspace.hxx"
 #include "minimap.hxx"
 
@@ -66,7 +66,7 @@ Minimap::draw()
     }
 
   // FIXME: This doesn't work all that well
-  TileMap* tilemap = TileMap::current();
+  TilemapLayer* tilemap = TilemapLayer::current();
   int tile_size = tilemap->get_tileset()->get_tile_size();
 
   if (tilemap && tilemap->get_height() != 0 && tilemap->get_width() != 0)
@@ -77,7 +77,7 @@ Minimap::draw()
       CL_Size small_tile(tile_size * get_width() / map_width + 1,
                          tile_size * get_height() / map_height + 1);
 
-      Field<int>* field = tilemap->get_map();
+      Field<int>* field = tilemap->get_field();
 
       if (0)
         {
@@ -114,11 +114,11 @@ void
 Minimap::update_minimap_surface()
 {
   // FIXME: This doesn't work all that well
-  TileMap* tilemap = TileMap::current();
+  TilemapLayer* tilemap = TilemapLayer::current();
 
   if (tilemap)
     {
-      Field<int>* field = tilemap->get_map();
+      Field<int>* field = tilemap->get_field();
 
       CL_PixelBuffer buffer(tilemap->get_width(), tilemap->get_height(), 
                             tilemap->get_width()*4, CL_PixelFormat::rgba8888);
@@ -155,7 +155,7 @@ void
 Minimap::mouse_move(const CL_InputEvent& event)
 {
   // FIXME: This doesn't work all that well
-  TileMap* tilemap = TileMap::current();
+  TilemapLayer* tilemap = TilemapLayer::current();
   int tile_size  = tilemap->get_tileset()->get_tile_size();
   int map_width  = tilemap->get_width()  * tile_size;
   int map_height = tilemap->get_height() * tile_size;
@@ -169,7 +169,7 @@ void
 Minimap::mouse_down(const CL_InputEvent& event)
 {
   // FIXME: This doesn't work all that well
-  TileMap* tilemap = TileMap::current();
+  TilemapLayer* tilemap = TilemapLayer::current();
   int tile_size  = tilemap->get_tileset()->get_tile_size();
   int map_width  = tilemap->get_width()  * tile_size;
   int map_height = tilemap->get_height() * tile_size;

@@ -1,6 +1,6 @@
 //  $Id$
 // 
-//  Flexlay - A Generic 2D Game Editor
+//  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
 //
 //  This program is free software; you can redistribute it and/or
@@ -17,32 +17,20 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-#ifndef HEADER_EDITOR_MAP_LAYER_HXX
-#define HEADER_EDITOR_MAP_LAYER_HXX
+#ifndef HEADER_LAYER_IMPL_HXX
+#define HEADER_LAYER_IMPL_HXX
 
 #include <ClanLib/Core/Math/rect.h>
 
 class EditorMapComponent;
 
-/** Each \a EditorMap consists out of one or more \a EditorMapLayer,
-    The \a EditorMapLayer is an abstract base class from which the
-    data holding layers derive. The basic functionality of a layer
-    consists only of data holding and visualization. (FIXME: move
-    visuals off into another class) */
-class EditorMapLayer
+class LayerImpl
 {
-public:
-  EditorMapLayer();
-  virtual ~EditorMapLayer();
-
-  virtual void draw(EditorMapComponent* parent) =0;
-
-  virtual bool has_bounding_rect() const { return false; }
-  virtual CL_Rect get_bounding_rect() { return CL_Rect(); }
-
 private:
-  EditorMapLayer (const EditorMapLayer&);
-  EditorMapLayer& operator= (const EditorMapLayer&);
+public:
+  virtual void draw(EditorMapComponent* parent) =0;
+  virtual bool has_bounding_rect() const =0;
+  virtual CL_Rect get_bounding_rect() =0;
 };
 
 #endif

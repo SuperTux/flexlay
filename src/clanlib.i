@@ -61,6 +61,7 @@ public:
             const std::string &title,
             CL_Component *parent,
             CL_StyleManager *style = NULL);
+  CL_Component* get_client_area();
 };
 
 class CL_Button : public CL_Component

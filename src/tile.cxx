@@ -68,7 +68,9 @@ CL_Sprite&
 Tile::get_sprite()
 {
   if (sur)
-    return sur;
+    {
+      return sur;
+    }
   else
     {
       try {

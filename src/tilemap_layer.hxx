@@ -1,7 +1,7 @@
-//  $Id: editor_tilemap.hxx,v 1.10 2003/09/26 14:29:36 grumbel Exp $
+//  $Id$
 // 
-//  Flexlay - A Generic 2D Game Editor
-//  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
+//  Pingus - A free Lemmings clone
+//  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -17,53 +17,38 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-#ifndef FLEXLAY_TILEMAP_HXX
-#define FLEXLAY_TILEMAP_HXX
+#ifndef HEADER_TILEMAP_LAYER_HXX
+#define HEADER_TILEMAP_LAYER_HXX
 
-#include <ClanLib/gui.h>
-#include <ClanLib/Display/color.h>
+#include <ClanLib/Core/System/sharedptr.h>
+#include <ClanLib/Display/pixel_buffer.h>
 #include "field.hxx"
-#include "editor_map_layer.hxx"
 
 class Tileset;
-class CL_PixelBuffer;
 class TileBrush;
+class TilemapLayerImpl;
+class EditorMapComponent;
 
-/** TileMap holds the tilemap data for the editor and provides
-    functions to manipulate them. Each \a EditorTilemap is associated
-    with a \a Tileset, which provides information on which ids are
-    mapped to which Tiles, the tilemap itself only knows the ids of
-    tiles.  */
-class TileMap : public EditorMapLayer
+/** */
+class TilemapLayer
 {
 private:
-  Tileset* tileset;
-  CL_Color background_color;
-  CL_Color foreground_color;
-  bool hex_mode;
-
-  Field<int> field;
-
-  bool draw_grid;
-  bool draw_attribute;
-
-  static TileMap* current_;
-
+  static TilemapLayer* current_;
 public:
-  static TileMap* current() { return current_; }
-  static void set_current(TileMap* c) { current_ = c; }
-  
-  TileMap(Tileset* tileset, int w,  int h);
-  ~TileMap();
+  static TilemapLayer* current();
+  static void set_current(TilemapLayer* t);
 
-  void draw (EditorMapComponent* parent);
+  TilemapLayer();
+  TilemapLayer(Tileset* tileset, int w,  int h);
+  ~TilemapLayer();
 
-  /** Return a pointer to the raw field representing this map */
-  Field<int>* get_field() { return &field; }
+  void draw(EditorMapComponent* parent);
 
-  Tileset* get_tileset() { return tileset; }
+  Tileset* get_tileset();
 
   int  get_tile (int, int);
+
+  Field<int>* get_field();
 
   /** @param x position of the old map in the new resized one
       @param y position of the old map in the new resized one
@@ -71,10 +56,8 @@ public:
       @param h height of the new map */
   void resize(const CL_Size& size, const CL_Point& point);
 
-  Field<int>* get_map() { return &field; }
-
-  std::vector<int> get_data() { return field.get_data(); }
-  void set_data(std::vector<int> d) { field.set_data(d); }
+  std::vector<int> get_data();
+  void set_data(std::vector<int> d);
 
   /** Draw the gives brush to the map */
   void draw_tile(const TileBrush& brush, const CL_Point& pos);
@@ -84,11 +67,11 @@ public:
 
   void draw_tile(int id, int x, int y, bool attribute);
 
-  int get_width()  const { return field.get_width(); }
-  int get_height() const { return field.get_height(); }
+  int get_width()  const;
+  int get_height() const;
 
-  void set_background_color(const CL_Color& color) { background_color = color; }
-  void set_foreground_color(const CL_Color& color) { foreground_color = color; }
+  void set_background_color(const CL_Color& color);
+  void set_foreground_color(const CL_Color& color);
 
   void set_draw_attribute(bool t);
   bool get_draw_attribute() const;
@@ -100,12 +83,17 @@ public:
 
   static void draw_tile(Field<int>* field, const TileBrush& brush, const CL_Point& pos);
 
-  bool has_bounding_rect() const { return true; }
+  bool has_bounding_rect() const;
   CL_Rect get_bounding_rect();
 
   /** Convert a coordinate given in world position into a tile
       coordinate */
   CL_Point world2tile(const CL_Point& pos) const;
+
+  bool is_null() const { return impl.is_null(); }
+
+private:
+  CL_SharedPtr<TilemapLayerImpl> impl;
 };
 
 #endif

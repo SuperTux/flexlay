@@ -1,7 +1,7 @@
-//  $Id: editor_tilemap.cxx,v 1.14 2003/09/26 14:29:36 grumbel Exp $
+//  $Id$
 //
-//  Flexlay - A Generic 2D Game Editor
-//  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
+//  Pingus - A free Lemmings clone
+//  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -31,40 +31,98 @@
 #include "tile_brush.hxx"
 #include "editor_map_component.hxx"
 #include "editor_map_component.hxx"
-#include "tilemap_layer.hxx"
 #include "blitter.hxx"
+#include "layer_impl.hxx"
 #include "editor_map_component.hxx"
+#include "tilemap_layer.hxx"
 
-TileMap* TileMap::current_ = 0;
+TilemapLayer* TilemapLayer::current_ = 0;
 
-TileMap::TileMap(Tileset* tileset_, int w, int h)
-  : field(w, h)
+class TilemapLayerImpl
 {
-  // FIXME: Move this to the widget or to some more generic
-  // map-properties thingy
-  draw_grid      = false;
-  draw_attribute = false;
-  hex_mode = false;
+public:
+  TilemapLayerImpl() {}
+  virtual ~TilemapLayerImpl() {}
 
-  for (int y = 0; y < field.get_height(); ++y) 
-    for (int x = 0; x < field.get_width(); ++x)
-      field.at(x, y) = 0;
+  Tileset* tileset;
+  CL_Color background_color;
+  CL_Color foreground_color;
+  bool hex_mode;
 
-  background_color = CL_Color(0, 0, 0, 0);
-  foreground_color = CL_Color(255, 255, 255, 255);
-  
-  if (!tileset_)
-    tileset = Tileset::current();
-  else
-    tileset = tileset_;
+  Field<int> field;
+
+  bool draw_grid;
+  bool draw_attribute;
+
+  bool has_bounding_rect() const;
+  CL_Rect get_bounding_rect();
+  void draw(EditorMapComponent* parent);
+  void draw_tile(int id, int x, int y, bool attribute);
+};
+
+TilemapLayer::TilemapLayer()
+{
 }
 
-TileMap::~TileMap()
+TilemapLayer::TilemapLayer(Tileset* tileset_, int w,  int h)
+  : impl(new TilemapLayerImpl())
+{
+  current_ = this;
+
+  impl->field = Field<int>(w, h);
+
+  // FIXME: Move this to the widget or to some more generic
+  // map-properties thingy
+  impl->draw_grid      = false;
+  impl->draw_attribute = false;
+  impl->hex_mode = false;
+
+  for (int y = 0; y < impl->field.get_height(); ++y) 
+    for (int x = 0; x < impl->field.get_width(); ++x)
+      impl->field.at(x, y) = 0;
+
+  impl->background_color = CL_Color(0, 0, 0, 0);
+  impl->foreground_color = CL_Color(255, 255, 255, 255);
+  
+  if (!tileset_)
+    impl->tileset = Tileset::current();
+  else
+    impl->tileset = tileset_;
+}
+
+TilemapLayer::~TilemapLayer()
 {
 }
 
 void
-TileMap::draw_tile(int id, int x, int y, bool attribute)
+TilemapLayer::draw_tile(int id, int x, int y, bool attribute)
+{
+  Tile* tile = impl->tileset->create(id);
+
+  if (tile)
+    {
+      CL_Sprite sprite = tile->get_sprite();
+      sprite.set_alignment (origin_top_left, 0, 0);
+
+      sprite.set_color(impl->foreground_color);
+
+      sprite.draw (x, y);
+      
+      if (attribute)
+        CL_Display::fill_rect(CL_Rect(CL_Point(x, y), CL_Size(impl->tileset->get_tile_size(),
+                                                              impl->tileset->get_tile_size())),
+                              tile->get_attribute_color());
+    }
+}
+
+void
+TilemapLayer::draw(EditorMapComponent* parent)
+{
+  impl->draw(parent);
+}
+
+void
+TilemapLayerImpl::draw_tile(int id, int x, int y, bool attribute)
 {
   Tile* tile = tileset->create(id);
 
@@ -85,33 +143,33 @@ TileMap::draw_tile(int id, int x, int y, bool attribute)
 }
 
 void
-TileMap::draw(EditorMapComponent* parent)
+TilemapLayerImpl::draw(EditorMapComponent* parent)
 {
-  int tile_size = tileset->get_tile_size();
+  int tile_size = this->tileset->get_tile_size();
 
-  if (background_color.get_alpha() != 0)
+  if (this->background_color.get_alpha() != 0)
     CL_Display::fill_rect(CL_Rect(CL_Point(0,0),
-                                  CL_Size(field.get_width()  * tile_size,
-                                          field.get_height() * tile_size)),
-                          background_color);
+                                  CL_Size(this->field.get_width()  * tile_size,
+                                          this->field.get_height() * tile_size)),
+                          this->background_color);
   CL_Display::flush();
 
   CL_Rect rect = parent->get_clip_rect();
 
   int start_x = std::max(0, rect.left / tile_size);
   int start_y = std::max(0, rect.top  / tile_size);
-  int end_x   = std::min(field.get_width(),  rect.right  / tile_size + 1);
-  int end_y   = std::min(field.get_height(), rect.bottom / tile_size + 1);
+  int end_x   = std::min(this->field.get_width(),  rect.right  / tile_size + 1);
+  int end_y   = std::min(this->field.get_height(), rect.bottom / tile_size + 1);
 
   for (int y = start_y; y < end_y; ++y)
     for (int x = start_x; x < end_x; ++x)
       {
-        draw_tile(field.at(x, y), 
+        draw_tile(this->field.at(x, y), 
                   x * tile_size, y * tile_size,
-                  draw_attribute);
+                  this->draw_attribute);
       }
 
-  if (1 || draw_grid)
+  if (this->draw_grid)
     {
       for (int y = start_y; y <= end_y; ++y)
         CL_Display::draw_line(start_x * tile_size,
@@ -132,39 +190,39 @@ TileMap::draw(EditorMapComponent* parent)
 }
 
 int
-TileMap::get_tile (int x, int y)
+TilemapLayer::get_tile (int x, int y)
 {
-  if (x >= 0 && x < (int)field.get_width() &&
-      y >= 0 && y < (int)field.get_height())
-    return field.at(x, y);
+  if (x >= 0 && x < (int)impl->field.get_width() &&
+      y >= 0 && y < (int)impl->field.get_height())
+    return impl->field.at(x, y);
   else
     return 0;
 }
 
 void
-TileMap::resize(const CL_Size& size, const CL_Point& point)
+TilemapLayer::resize(const CL_Size& size, const CL_Point& point)
 {
-  field.resize(size.width, size.height, point.x, point.y);
+  impl->field.resize(size.width, size.height, point.x, point.y);
 }
 
 void
-TileMap::draw_tile(int id, const CL_Point& pos)
+TilemapLayer::draw_tile(int id, const CL_Point& pos)
 {
-  if (pos.x >= 0 && pos.x < field.get_width()
-      && pos.y >= 0 && pos.y < field.get_height())
+  if (pos.x >= 0 && pos.x < impl->field.get_width()
+      && pos.y >= 0 && pos.y < impl->field.get_height())
     {
-      field.at(pos.x, pos.y) = id;
+      impl->field.at(pos.x, pos.y) = id;
     }
 }
 
 void
-TileMap::draw_tile(const TileBrush& brush, const CL_Point& pos)
+TilemapLayer::draw_tile(const TileBrush& brush, const CL_Point& pos)
 {
-  draw_tile(&field, brush, pos);
+  draw_tile(&impl->field, brush, pos);
 }
 
 void
-TileMap::draw_tile(Field<int>* field, const TileBrush& brush, const CL_Point& pos)
+TilemapLayer::draw_tile(Field<int>* field, const TileBrush& brush, const CL_Point& pos)
 {
   int start_x = std::max(0, -pos.x);
   int start_y = std::max(0, -pos.y);
@@ -183,33 +241,33 @@ TileMap::draw_tile(Field<int>* field, const TileBrush& brush, const CL_Point& po
 }
 
 void
-TileMap::set_draw_attribute(bool t)
+TilemapLayer::set_draw_attribute(bool t)
 {
-  draw_attribute = t;
+  impl->draw_attribute = t;
 }
 
 bool
-TileMap::get_draw_attribute() const
+TilemapLayer::get_draw_attribute() const
 {
-  return draw_attribute;
+  return impl->draw_attribute;
 }
 
 void
-TileMap::set_draw_grid(bool t)
+TilemapLayer::set_draw_grid(bool t)
 {
-  draw_grid = t;
+  impl->draw_grid = t;
 }
 
 bool
-TileMap::get_draw_grid() const
+TilemapLayer::get_draw_grid() const
 {
-  return draw_grid;
+  return impl->draw_grid;
 }
 
 CL_PixelBuffer
-TileMap::create_pixelbuffer()
+TilemapLayer::create_pixelbuffer()
 {
-  int tile_size = tileset->get_tile_size();
+  int tile_size = impl->tileset->get_tile_size();
 
   CL_PixelBuffer pixelbuffer(get_width()  * tile_size,
                              get_height() * tile_size,
@@ -240,7 +298,7 @@ TileMap::create_pixelbuffer()
   for (int y = 0; y < get_height(); ++y)
     for (int x = 0; x < get_width(); ++x)
       {
-        Tile* tile = tileset->create(field.at(x, y));
+        Tile* tile = impl->tileset->create(impl->field.at(x, y));
 
         if (tile)
           {
@@ -256,7 +314,13 @@ TileMap::create_pixelbuffer()
 }
 
 CL_Rect
-TileMap::get_bounding_rect()
+TilemapLayer::get_bounding_rect()
+{
+  return impl->get_bounding_rect();
+}
+
+CL_Rect
+TilemapLayerImpl::get_bounding_rect()
 {
   return CL_Rect(CL_Point(0, 0),
                  CL_Size(field.get_width()  * tileset->get_tile_size(), 
@@ -264,13 +328,85 @@ TileMap::get_bounding_rect()
 }
 
 CL_Point
-TileMap::world2tile(const CL_Point& pos) const
+TilemapLayer::world2tile(const CL_Point& pos) const
 {
-  int x = pos.x / tileset->get_tile_size();
-  int y = pos.y / tileset->get_tile_size();
+  int x = pos.x / impl->tileset->get_tile_size();
+  int y = pos.y / impl->tileset->get_tile_size();
 
   return CL_Point(pos.x < 0 ? x-1 : x,
                   pos.y < 0 ? y-1 : y);
+}
+
+Field<int>*
+TilemapLayer::get_field()
+{
+  return &impl->field; 
+}
+
+TilemapLayer*
+TilemapLayer::current()
+{
+  return current_; 
+}
+
+void
+TilemapLayer::set_current(TilemapLayer* t) 
+{
+  current_ = t; 
+}
+
+Tileset*
+TilemapLayer::get_tileset()
+{
+  return impl->tileset;
+}
+
+std::vector<int>
+TilemapLayer::get_data()
+{
+  return impl->field.get_data();
+}
+
+void
+TilemapLayer::set_data(std::vector<int> d)
+{
+  impl->field.set_data(d);
+}
+
+void 
+TilemapLayer::set_background_color(const CL_Color& color)
+{
+  impl->background_color = color;
+}
+
+void 
+TilemapLayer::set_foreground_color(const CL_Color& color)
+{
+  impl->foreground_color = color;
+}
+
+int
+TilemapLayer::get_width()  const
+{
+  return impl->field.get_width();
+}
+
+int
+TilemapLayer::get_height() const
+{
+  return impl->field.get_height();
+}
+
+bool
+TilemapLayer::has_bounding_rect() const
+{
+  return impl->has_bounding_rect();
+}
+
+bool
+TilemapLayerImpl::has_bounding_rect() const
+{
+  return true;
 }
 
 /* EOF */

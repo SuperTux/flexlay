@@ -31,161 +31,41 @@ extern CL_ResourceManager* resources;
 
 Tileset* Tileset::current_ = 0;
 
-Tileset::Tileset(int tile_size_)
+typedef std::vector<Tile*> Tiles;
+typedef Tiles::iterator iterator;
+  
+class TilesetImpl 
 {
+public:
+  Tiles tiles;
+  int tile_size;
+};
+
+Tileset::Tileset(int tile_size_)
+  : impl(new TilesetImpl())
+{
+  std::cout << "Tileset::Tileset(" << tile_size_ << ")" << std::endl;
+  impl->tile_size = tile_size_;
   current_ = this;
-  tile_size = tile_size_;
 }
 
 Tileset::~Tileset()
 {
   std::cout << "Tileset: destroy" << std::endl;
-}
-
-void
-Tileset::add_tile(int id, Tile* tile)
-{
-  // FIXME: Memleaky
-  if (id >= int(tiles.size()))
-    tiles.resize(id+1, 0);
-
-  tiles[id] = tile;
-}
-
-#ifdef SWIGGUILE
-void
-Tileset::load_tile_file(const std::string& filename)
-{
-  SCM input_stream = scm_open_file(gh_str02scm(filename.c_str()), 
-                                   gh_str02scm("r"));
-  SCM tree = scm_read(input_stream);
-  
-  if (!(gh_symbol_p(gh_car(tree)) && gh_equal_p(gh_symbol2scm("windstille-tiles"), gh_car(tree))))
+  for(Tiles::iterator i = impl->tiles.begin(); i != impl->tiles.end(); ++i)
     {
-      std::cout << "Not a Windstille Tile File!" << std::endl;
-    }
-  else
-    {
-      tree = gh_cdr(tree);
-
-      while (!gh_null_p(tree))
-        {
-          SCM current = gh_car(tree);
-          
-          if (gh_pair_p(current))
-            {
-              SCM name    = gh_car(current);
-              SCM data    = gh_cdr(current);
-      
-              if (gh_equal_p(gh_symbol2scm("tile"), name)) 
-                {
-                  add_tile_from_scm(data);
-                }
-              else
-                {
-                  std::cout << "Tileset: Unknown tag: " << scm2string(name) << std::endl;
-                }
-            }
-          else
-            {
-              std::cout << "Tileset: Not a pair!"  << std::endl;
-            }
-          tree = gh_cdr(tree);
-        }
+      delete *i;
     }
 }
 
 void
-Tileset::add_tile_from_scm(SCM data)
+Tileset::add_tile(int id, const Tile& tile)
 {
-  // FIXME: Move this to scripting and add a Tileset::add()
-  int id = 0;
-  std::string image;
-  CL_Color color(254, 254, 254, 254);
-  CL_Color attribute_color(255, 255, 255, 100);
-  unsigned char colmap[8];
-  
-  while (!gh_null_p(data))
-    {
-      SCM current = gh_car(data);
-          
-      if (gh_pair_p(current))
-        {
-          SCM name    = gh_car(current);
-          SCM data    = gh_cdr(current);
+  if (id >= int(impl->tiles.size()))
+    impl->tiles.resize(id+1, 0);
 
-          if (gh_equal_p(gh_symbol2scm("id"), name))           
-            {
-              id = gh_scm2int(gh_car(data));
-            }
-          else if (gh_equal_p(gh_symbol2scm("color"), name))
-            {
-              color = CL_Color(gh_scm2int(gh_car(data)),
-                               gh_scm2int(gh_cadr(data)),
-                               gh_scm2int(gh_caddr(data)),
-                               gh_scm2int(gh_car(gh_cdddr(data))));
-            }
-          else if (gh_equal_p(gh_symbol2scm("attribute-color"), name))
-            {
-              attribute_color = CL_Color(gh_scm2int(gh_car(data)),
-                                         gh_scm2int(gh_cadr(data)),
-                                         gh_scm2int(gh_caddr(data)),
-                                         gh_scm2int(gh_car(gh_cdddr(data))));
-            }
-          else if (gh_equal_p(gh_symbol2scm("image"), name))
-            {
-              image = scm2string(gh_car(data));
-            }
-          else if (gh_equal_p(gh_symbol2scm("colmap"), name))
-            {
-              colmap[0] = gh_scm2int(gh_car(data));
-              data = gh_cdr(data);
-              colmap[1] = gh_scm2int(gh_car(data));
-              data = gh_cdr(data);
-              colmap[2] = gh_scm2int(gh_car(data));
-              data = gh_cdr(data);
-              colmap[3] = gh_scm2int(gh_car(data));
-              data = gh_cdr(data);
-              colmap[4] = gh_scm2int(gh_car(data));
-              data = gh_cdr(data);
-              colmap[5] = gh_scm2int(gh_car(data));
-              data = gh_cdr(data);
-              colmap[6] = gh_scm2int(gh_car(data));
-              data = gh_cdr(data);
-              colmap[7] = gh_scm2int(gh_car(data));
-            }
-        }
-      data = gh_cdr(data);
-    }
-
-  if (0) // Debugging code
-    {
-      std::cout << "Tile: id     = " << id << "\n"
-                << "      image  = " << image << "\n"
-                << "      colmap = " 
-                << int(colmap[0]) << ", "
-                << int(colmap[1]) << ", "
-                << int(colmap[2]) << ", "
-                << int(colmap[3]) << ", "
-                << int(colmap[4]) << ", "
-                << int(colmap[5]) << ", "
-                << int(colmap[6]) << ", "
-                << int(colmap[7])
-                << std::endl;
-    }
-
-  if (id < 0)
-    std::cout << "Tile Id bug: " << id << std::endl;
-  else
-    {
-      if (id >= int(tiles.size()))
-        {
-          tiles.resize(id+1);
-        }
-      tiles[id] = new Tile(image, color, attribute_color, colmap);
-    }
+  impl->tiles[id] = new Tile(tile);
 }
-#endif
 
 Tile* 
 Tileset::create (int id)
@@ -198,8 +78,8 @@ Tileset::create (int id)
     }
   else
     {
-      if (id > 0 && id < int(tiles.size()))
-        return tiles[id];
+      if (id > 0 && id < int(impl->tiles.size()))
+        return impl->tiles[id];
       else
         return 0;
     }
@@ -216,6 +96,12 @@ void
 Tileset::deinit()
 {
   delete current_;
+}
+
+int
+Tileset::get_tile_size() const 
+{
+  return impl->tile_size; 
 }
 
 /* EOF */

@@ -22,7 +22,6 @@
 
 #include <ClanLib/Core/Math/rect.h>
 #include <ClanLib/Core/Math/point.h>
-#include "tilemap.hxx"
 #include "tile_selection.hxx"
 #include "tilemap_tool.hxx"
 

@@ -39,7 +39,7 @@ class GUI
     @workspace  = Workspace.new(myrect.get_width(), myrect.get_height())
     @editor_map.set_workspace(@workspace)
 
-    @minimap = Minimap.new($editor_map, CL_Rect.new(CL_Point.new(3 + myrect.left, 
+    @minimap = Minimap.new(@editor_map, CL_Rect.new(CL_Point.new(3 + myrect.left, 
                                                                  488+3-14  + myrect.top), 
                                                     CL_Size.new(794-134-16, 50)), 
                            @gui.get_component())
@@ -154,6 +154,23 @@ class GUI
     # show_interactive()
     # show_current()
     # set_tilemap_paint_tool()
+
+    @selector_window = Panel.new(CL_Rect.new(CL_Point.new(800-134, 23+33), CL_Size.new(128 + 6, 558)),
+                                 @gui.get_component())
+    @tileselector = TileSelector.new(CL_Rect.new(CL_Point.new(3, 3), CL_Size.new(128, 552)), @selector_window)
+    @tileselector.set_tileset($tileset)
+    @tileselector.set_tiles($tileset.get_tiles())
+    @tileselector.show(false)
+    
+    @objectselector = ObjectSelector.new(CL_Rect.new(0, 0, 128, 256), 42, 42, @selector_window)
+    @objectselector.show(true)
+
+    connect_v1_ObjMapObject(@objectselector.sig_drop(), proc{ on_object_drop() })
+
+#    $game_objects.each do |object|
+#     @objectselector.add_brush(ObjectBrush.new(make_sprite($datadir + object[1]),
+#                                                make_metadata(object)))
+#    end
 
     connect_v2(@editor_map.sig_on_key("f1"), proc{ |x, y| toggle_minimap()})
     connect_v2(@editor_map.sig_on_key("m"),  proc{ |x, y| toggle_minimap()})

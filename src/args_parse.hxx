@@ -1,4 +1,4 @@
-//  $Id: args_parse.hxx,v 1.4 2003/09/06 15:05:10 grumbel Exp $
+//  $Id: args_parse.hxx,v 1.5 2003/09/06 17:29:07 grumbel Exp $
 // 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -66,6 +66,8 @@
 class ArgsParse
 {
 private:
+  int help_indent;
+
   std::string programm;
 
   struct Option 
@@ -94,10 +96,19 @@ public:
   iterator begin() { return parsed_options.begin(); }
   iterator end()   { return parsed_options.end(); }
 
-  static const int REST_ARG = -2;
+  static const int REST_ARG  = -2;
+  static const int GROUP     = -3;
+  static const int DOC       = -4;
+  static const int USAGE     = -5;
   static const int NO_SHORT_OPTION = -1;
 
   ArgsParse();
+
+  void set_help_indent(int i) { help_indent = i; }
+
+  void add_usage(const std::string& usage);
+  void add_doc(const std::string& doc);
+  void add_group(const std::string& grouptopic);
   
   void add_option(int key,
                   const std::string& long_option, 
@@ -110,7 +121,6 @@ public:
   
 private:
   void read_option(int id, const std::string& argument);
-  int parse_arg(int i);
 
   /** Find the Option structure that matches \a short_option */
   Option* lookup_short_option(char short_option);

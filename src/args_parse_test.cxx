@@ -1,4 +1,4 @@
-//  $Id: args_parse_test.cxx,v 1.3 2003/09/06 15:05:10 grumbel Exp $
+//  $Id: args_parse_test.cxx,v 1.4 2003/09/06 17:29:07 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -30,13 +30,27 @@ public:
 
   MyArgsParse(int argc, char** argv) 
   {
+    argp.add_usage("[OPTIONS]... [FILES]...");
+    argp.add_usage("foobar [OPTIONS]... [FILES]...");
+
+    argp.add_doc("This programm does nothing usefull..");
+
+    argp.add_group ("Options that want a file:");
     argp.add_option('c',     "config", "FILE", "Config the app");
     argp.add_option('f',     "file",   "FILE", "Load a file");
+
+    argp.add_group ("Options that don't want a file:");
     argp.add_option('z',     "zero",   "",     "Zero Args");
     argp.add_option('a',     "",       "",     "short a");
     argp.add_option('h',     "help",   "",     "help");
+
+    argp.add_group ("Options without a short arg:");
     argp.add_option(ARG_ARG, "arg",    "",     "long a");
     
+    argp.add_doc("For more info have a look at FOobar does nothing usefull..\n"
+                 "Examples can be found at blubbark...\n"
+                 "....");
+
     argp.parse_args(argc, argv);
   }
   
@@ -77,10 +91,10 @@ public:
 int main(int argc, char** argv)
 {
   try {
-  MyArgsParse args(argc, argv);
-  args.read_options();
+    MyArgsParse args(argc, argv);
+    args.read_options();
   } catch (CL_Error& err) {
-    std::cout << "CL_Error: " << err.message << std::endl;
+    std::cout << argv[0] << err.message << std::endl;
   }
 }
 

@@ -1,4 +1,4 @@
-//  $Id: args_parse.cxx,v 1.4 2003/09/06 15:13:18 grumbel Exp $
+//  $Id: args_parse.cxx,v 1.5 2003/09/06 17:29:07 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -26,6 +26,7 @@
 
 ArgsParse::ArgsParse()
 {
+  help_indent = 18;
 }
 
 void
@@ -153,35 +154,86 @@ ArgsParse::read_option(int key, const std::string& argument)
 void
 ArgsParse::print_help()
 {
-  std::cout << "Usage: " << programm << " [OPTIONS]\n" << std::endl;
-
   std::ostringstream str;
 
+  bool first_usage = true;
   for(Options::iterator i = options.begin(); i != options.end(); ++i)
     {
       if (i->visible)
         {
-          str.str("");
+          if (i->key == USAGE) {
+            if (first_usage) {
+              std::cout << "Usage: " << programm << " " <<  i->help << std::endl; 
+              first_usage = false;
+            } else {
+              std::cout << "or:    " << programm << " " << i->help << std::endl; 
+            }
+          } else if (i->key == GROUP) {
+            if (i != options.begin())
+              std::cout << std::endl;
+            std::cout << i->help << std::endl;
+          } else if (i->key == DOC) {
+            if (i != options.begin())
+              std::cout << std::endl;
+            std::cout << i->help << std::endl;
+          } else {
+            str.str("");
+            if (i->key > 255 || i->key < 0)
+              str << "--" <<  i->long_option;
+            else if (i->long_option.empty())
+              str << "-" << char(i->key);
+            else
+              str << "-" << char(i->key) << ", --" << i->long_option;
 
-          if (i->key > 255 || i->key < 0)
-            str << "--" <<  i->long_option;
-          else if (i->long_option.empty())
-            str << "-" << char(i->key);
-          else
-            str << "-" << char(i->key) << ", --" << i->long_option;
+            if (!i->argument.empty())
+              if (i->long_option.empty())
+                str << " " << i->argument;
+              else
+                str << "=" << i->argument;
 
-          if (!i->argument.empty())
-          if (i->long_option.empty())
-            str << " " << i->argument;
-          else
-            str << "=" << i->argument;
-
-          std::cout << "    " 
-                    << std::setiosflags( std::ios::left ) << std::setw(18) << str.str() << std::setw(0)
-                    << "    " << i->help << std::endl;
+            std::cout << "  " 
+                      << std::setiosflags(std::ios::left) << std::setw(help_indent) << str.str() << std::setw(0)
+                      << " " << i->help << std::endl;
+          }
         }
     }
   std::cout << std::endl;
+}
+
+void
+ArgsParse::add_usage(const std::string& usage)
+{
+  Option option;
+
+  option.key          = USAGE;
+  option.help         = usage;
+  option.visible      = true;
+
+  options.push_back(option);   
+}
+
+void
+ArgsParse::add_doc(const std::string& grouptopic)
+{
+  Option option;
+
+  option.key          = DOC;
+  option.help         = grouptopic;
+  option.visible      = true;
+
+  options.push_back(option);  
+}
+
+void
+ArgsParse::add_group(const std::string& grouptopic)
+{
+  Option option;
+
+  option.key          = GROUP;
+  option.help         = grouptopic;
+  option.visible      = true;
+
+  options.push_back(option);  
 }
 
 void

@@ -1,6 +1,6 @@
 class GameObj
   def property_dialog()
-    print "No PropertyDialog Implemented for type: ", self.class(), "\n"
+    print "Object ", self.class, " has no properties\n"
   end
 end
 
@@ -45,7 +45,6 @@ class SequenceTrigger<GameObj
     @data     = data
     @sequence = get_value_from_tree(["sequence", "_"], sexpr, "")
     @data.set_color(CL_Color.new(255, 0, 0, 128))
-    
 
     x  = get_value_from_tree(["x", "_"],  sexpr, 0)
     y  = get_value_from_tree(["y", "_"],  sexpr, 0)
@@ -88,7 +87,7 @@ class SpawnPoint<GameObj
   attr_accessor :name
   attr_reader   :data
 
-  def initialize(data)
+  def initialize(data, sexpr = [])
     @data = data
     @name = "start"
     connect_v1_ObjMapObject(data.to_object.sig_move(), method(:on_move))
@@ -113,6 +112,107 @@ class SpawnPoint<GameObj
     dialog.set_callback(proc{|name| 
                           @name = name
                         })
+  end
+end
+
+class SimpleObject<GameObj
+  def initialize(type)
+    @type = type
+  end
+
+  def save(f, obj)
+    pos = obj.get_pos()
+    f.write("       (%s (x %d) (y %d))\n" % [@type, pos.x, pos.y])
+  end  
+end
+
+class SimpleTileObject<GameObj
+  def initialize(data, type, sexpr = [])
+    @type = type
+    @data = data
+    connect_v1_ObjMapObject(@data.to_object.sig_move(), method(:on_move))
+    on_move(data)
+  end
+
+  def on_move(data)
+    pos = @data.to_object.get_pos()    
+    pos.x = (((pos.x+16)/32).to_i)*32
+    pos.y = (((pos.y+16)/32).to_i)*32
+    @data.to_object.set_pos(pos)       
+  end
+
+  def save(f, obj)
+    pos = obj.get_pos()
+    f.write("       (%s (x %d) (y %d))\n" % [@type, pos.x, pos.y])
+  end  
+end
+
+class ParticleSystem<GameObj
+  def initialize(type, sexpr = [])
+	@type = type
+	@layer = get_value_from_tree(["layer", "_"], sexpr, -1)
+  end
+
+  def save(f, obj)
+	f.write("       (particles-%s\n" % [@type])
+	if(@layer != -1)
+      f.write("         (layer %d)\n" % [@layer])
+	f.write("       )\n")
+	end
+  end
+
+  def property_dialog()
+    dialog = GenericDialog.new("%s-ParticleSystem Property Dialog" % [@type],
+			$gui.get_component())
+    dialog.add_int("Layer: ", @layer)
+    dialog.set_callback(proc{|layer| 
+                          @layer = layer
+                        })
+  end
+end
+
+class Background<GameObj
+  attr_accessor :message
+  attr_accessor :speed
+  attr_accessor :layer
+
+  def initialize(sexpr = [])
+	@image = get_value_from_tree(["image", "_"], sexpr, "")
+	@speed = get_value_from_tree(["speed", "_"], sexpr, 1.0)
+	@layer = get_value_from_tree(["layer", "_"], sexpr, -1)
+  end
+
+  def save(f, obj)
+    f.write("       (background\n")
+	f.write("         (image \"%s\")\n" % [@image])
+	f.write("         (speed %f)\n" % [@speed])
+	if(@layer != -1)
+	  f.write("         (layer %d)\n" % [@layer])
+	end
+	f.write("       )\n")
+  end
+
+  def property_dialog()
+    dialog = GenericDialog.new("Background Property Dialog", $gui.get_component())
+    dialog.add_string("Image: ", @image)
+	dialog.add_float("Speed: ", @speed)
+	dialog.add_int("Layer: ", @layer)
+	dialog.set_callback(proc{|image, speed|
+						  @image = image
+						  @speed = speed
+						  @layer = layer
+						})
+  end
+end
+
+class UnimplementedObject<GameObj
+  def initialize(sexpr = [])
+	@sexpr = sexpr
+  end
+
+  def save(f)
+	f.write("           (sexpr %s)\n" % [@sexpr])
+	# TODO
   end
 end
 

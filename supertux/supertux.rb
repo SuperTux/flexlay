@@ -90,7 +90,7 @@ end
 
 $config  = Config.new()
 if !$datadir then
-  $datadir = File.expand_path("~/cvs/supertux/supertux/data/")+"/"
+  $datadir = File.expand_path("~/projects/supertux/data/")+"/"
 end
 
 require "data.rb"

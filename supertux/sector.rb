@@ -1,7 +1,7 @@
 class Sector
   parent    = nil
   name      = nil
-  song      = nil
+  music     = nil
   gravity   = 10.0
   
   width  = nil
@@ -11,12 +11,14 @@ class Sector
   interactive = nil
   foreground  = nil
   
-  objects   = nil
+  objects	  = nil
 #  sketch    = nil
   editormap = nil
 
+  cameramode = "normal"
+
   attr_reader   :objects, :background, :interactive, :foreground, :parent, :width, :height
-  attr_accessor :name, :song, :gravity
+  attr_accessor :name, :music, :gravity
   
   def initialize(parent)
     @parent = parent
@@ -36,7 +38,7 @@ class Sector
 
   def new_from_size(name, width, height)
     @name = name
-    @song = "<No Song>"
+    @music = ""
     @gravity = 10.0
     
     @width  = width
@@ -45,7 +47,7 @@ class Sector
     @foreground  = TilemapLayer.new($tileset, @width, @height)
     @interactive = TilemapLayer.new($tileset, @width, @height)
     @background  = TilemapLayer.new($tileset, @width, @height)       
-    @objects = ObjectLayer.new()
+    @objects	 = ObjectLayer.new()
     # @sketch  = SketchLayer.new()
 
     @editormap = EditorMap.new()
@@ -61,8 +63,8 @@ class Sector
   end
 
   def load_v1(data)
-    @name = "<No Name>"
-    @song = "supertux-1.ogg"
+    @name = "main"
+    @music = ""
     @gravity = 10.0
     
     @width  = get_value_from_tree(["width", "_"], data, 20)
@@ -117,11 +119,11 @@ class Sector
   
   def load_v2(data)
     @name = "<No Name>"
-    @song = "supertux-1.ogg"
+    @music = ""
     @gravity = 10.0
     
-    @width  = 20
-    @height = 15
+    @width  = 0
+    @height = 0
 
     @background  = nil
     @interactive = nil
@@ -136,9 +138,10 @@ class Sector
         @name = data[0]
       elsif name == "gravity"
         @gravity = data[0]
-      elsif name == "playerspawn"
-        print "playerspawn unhandled"
+	  elsif name == "music"
+		@music = data[0]
       elsif name == "tilemap"
+		layer   = get_value_from_tree(["layer", "_"], data, "interactive")
         width   = get_value_from_tree(["width", "_"],  data, 20)
         height  = get_value_from_tree(["height", "_"], data, 15)
         solid   = get_value_from_tree(["solid", "_"],  data, false)
@@ -150,31 +153,32 @@ class Sector
           @interactive = tilemap
           @width       = width
           @height      = height
-        elsif not(@background)
+        elsif layer == "background"
           @background = tilemap
-        elsif not(@foreground)
-          @foreground = tilemap
+        elsif layer == "foreground"
+		  @foreground = tilemap
         else
-          print "Error: Duplicate tilemap in levelfile\n"
+          print "Flexlay doesn't handle tilemap layer '", layer, "'.\n"
         end
-      elsif name == "background"
-        print "background unhandled\n"
+	  elsif name == "camera"
+		@cameramode = "normal"
+		# TODO...
       else
         puts "Creating #{name}..."
-        create_gameobject_from_data(@objects, name, data)
+		create_gameobject_from_data(@objects, name, data)
       end
     end
     
     print "Tileset: ", $tileset, " ", width, " ", height, "\n"
 
+	if(@interactive == nil || @width == 0 || @height == 0)
+	  throw "No interactive tilemap in sector '", @name , "'.\n"
+	end
+
     if (@background == nil)
       @background = TilemapLayer.new($tileset, @width, @height)
     end
 
-    if (@interactive == nil)
-      @interactive = TilemapLayer.new($tileset, @width, @height)
-    end
-    
     if (@foreground == nil)
       @foreground = TilemapLayer.new($tileset, @width, @height)
     end
@@ -218,9 +222,9 @@ class Sector
 
   def save(f)   
     f.write("    (name  \"%s\")\n"  % @name)
-    f.write("    (width  %d)\n"  % @width)
-    f.write("    (height  %d)\n" % @height)   
-    f.write("    (music  \"%s\")\n" % @song)
+    if(@music != "")
+        f.write("    (music  \"%s\")\n" % @music)
+    end
     f.write("    (gravity %f)\n" % @gravity)
     
     # FIXME: Make me configurable
@@ -228,27 +232,26 @@ class Sector
             "                (speed 0.5))\n")
    
     save_tilemap(f, @background,  "background")
-    save_tilemap(f, @interactive, "main", :solid)
+    save_tilemap(f, @interactive, "interactive", :solid)
     save_tilemap(f, @foreground,  "foreground")
 #    save_strokelayer(f, @sketch)
 
     f.write("    (camera\n")
-    f.write("      (mode \"normal\")\n")
-    f.write("      (path\n")
-
-    @objects.get_objects().each {|obj|
-      pathnode = obj.get_metadata()
-      if (pathnode.is_a?(PathNode))
-        f.write("       (point (x %d) (y %d) (speed 1))\n" % obj.get_pos().x, obj.get_pos().y)
-      end
-    }
-
-    f.write("    ))\n\n")
+    f.write("      (mode \"%s\")\n" % [@cameramode])
+#    f.write("      (path\n")
+#    @objects.get_objects().each {|obj|
+#      pathnode = obj.get_metadata()
+#      if (pathnode.is_a?(PathNode))
+#        f.write("       (point (x %d) (y %d) (speed 1))\n" % obj.get_pos().x, obj.get_pos().y)
+#      end
+#    }
+#    f.write("      )")
+	f.write("    )\n\n")
 
     for obj in @objects.get_objects()
       # FIXME: not sure why I need get_ruby_object() here
-      badguy = get_ruby_object(obj.get_metadata())
-      badguy.save(f, obj)
+      object = get_ruby_object(obj.get_metadata())
+      object.save(f, obj)
     end
   end
 end

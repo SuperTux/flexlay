@@ -1,36 +1,48 @@
 $game_objects = [
-  ["money", "images/shared/jumpy-left-middle-0.png", "sprite",
-    proc{|data| BadGuy.new("money")}],
+  ["jumpy", "images/shared/jumpy-left-middle-0.png", "sprite",
+    proc{|data, sexpr| BadGuy.new("jumpy")}],
   ["snowball", "images/shared/snowball-left-0.png", "sprite",
-    proc{|data| BadGuy.new("snowball")}],
+    proc{|data, sexpr| BadGuy.new("snowball")}],
   ["mriceblock", "images/shared/mriceblock-left-0.png", "sprite",
-    proc{|data| BadGuy.new("mriceblock")}],
+    proc{|data, sexpr| BadGuy.new("mriceblock")}],
   ["mrbomb", "images/shared/mrbomb-left-0.png", "sprite",
-    proc{|data| BadGuy.new("mrbomb")}],
+    proc{|data, sexpr| BadGuy.new("mrbomb")}],
   ["flame", "images/shared/flame-0.png", "sprite",
-    proc{|data| BadGuy.new("flame")}], 
+    proc{|data, sexpr| BadGuy.new("flame")}], 
   ["stalactite", "images/shared/stalactite.png", "sprite",
-    proc{|data| BadGuy.new("stalactite")}],
+    proc{|data, sexpr| BadGuy.new("stalactite")}],
   ["fish", "images/shared/fish-left-0.png", "sprite",
-    proc{|data| BadGuy.new("fish")}],
+    proc{|data, sexpr| BadGuy.new("fish")}],
   ["flyingsnowball", "images/shared/flyingsnowball-left-0.png", "sprite",
-    proc{|data| BadGuy.new("flyingsnowball")}],
+    proc{|data, sexpr| BadGuy.new("flyingsnowball")}],
   ["bouncingsnowball", "images/shared/bouncingsnowball-left-0.png", "sprite",
-    proc{|data| BadGuy.new("bouncingsnowball")}],
+    proc{|data, sexpr| BadGuy.new("bouncingsnowball")}],
   ["spiky", "images/shared/spiky-left-0.png", "sprite",
-    proc{|data| BadGuy.new("spiky")}],
-  ["playerspawn", "images/shared/spawnpoint.png", "sprite",
-    proc{|data| SpawnPoint.new(data)}],
+    proc{|data, sexpr| BadGuy.new("spiky")}],
   ["spawnpoint", "images/shared/spawnpoint.png", "sprite",
-    proc{|data| SpawnPoint.new(data)}],
+    proc{|data, sexpr| SpawnPoint.new(data)}],
   ["door", "images/shared/door-1.png", "sprite",
-    proc{|data| Door.new(data)}],
+    proc{|data, sexpr| Door.new(data)}],
   ["trampoline", "images/shared/trampoline-1.png", "sprite",
-    proc{|data| BadGuy.new("trampoline")}],
+    proc{|data, sexpr| BadGuy.new("trampoline")}],
+  ["bell", "images/shared/bell/bell-m.png", "sprite",
+    proc{|data, sexpr| SimpleObject.new("bell")}],
+  ["rock", "images/tilesets/block11.png", "sprite",
+	proc{|data, sexpr| SimpleObject.new("rock")}],
+  ["unstable_tile", "images/shared/unstable_tile.png", "sprite",
+    proc{|data, sexpr| SimpleTileObject.new(data, "unstable_tile")}],
   ["secretarea", "images/shared/secretarea.png", "rect",
     proc{|data, sexpr| SecretArea.new(data, sexpr)}],
   ["sequencetrigger", "images/shared/sequencetrigger.png", "rect",
-    proc{|data, sexpr| SequenceTrigger.new(data, sexpr)}]
+    proc{|data, sexpr| SequenceTrigger.new(sexpr)}],
+  ["background", "images/editor/background.png", "sprite",
+	proc{|data, sexpr| Background.new(sexpr)}],
+  ["particles-snow", "images/editor/snow.png", "sprite",
+    proc{|data, sexpr| ParticleSystem.new("snow", sexpr)}],
+  ["particles-clouds", "images/editor/clouds.png", "sprite",
+    proc{|data, sexpr| ParticleSystem.new("clouds", sexpr)}],
+  ["particles-rain", "images/editor/rain.png", "sprite",
+    proc{|data, sexpr| ParticleSystem.new("rain", sexpr)}],
 ]
 
 def create_gameobject_from_data(objmap, name, sexpr)
@@ -43,10 +55,10 @@ def create_gameobject_from_data(objmap, name, sexpr)
     x = get_value_from_tree(["x", "_"], sexpr, 0)
     y = get_value_from_tree(["y", "_"], sexpr, 0)
     
-    obj = create_gameobject(objmap, object, CL_Pointf.new(x, y), sexpr)
+    create_gameobject(objmap, object, CL_Pointf.new(x, y), sexpr)
   else
     print "Error: Couldn't resolve object type: ", name, "\n"
-    print "Sector: Unhandled tag: ", name, "\n"
+	print "Sector: Unhandled tag: ", name, "\n"
   end
 end
 
@@ -56,7 +68,7 @@ def create_gameobject(objmap, data, pos, sexpr = [])
     
   when "sprite" 
     obj = ObjMapSpriteObject.new(make_sprite($datadir + data[1]), pos, make_metadata(nil))
-    obj.to_object.set_metadata(make_metadata(data[3].call(obj)))
+    obj.to_object.set_metadata(make_metadata(data[3].call(obj, sexpr)))
     
   when "rect"
     obj = ObjMapRectObject.new(CL_Rect.new(CL_Point.new(pos.x.to_i, pos.y.to_i), CL_Size.new(64, 64)),

@@ -13,7 +13,6 @@ ToDo:
  - moving platforms + path
  - camera path 
  - automatic backup of files
- - reset points
  - get rid of make_metadat, get_ruby_object in SuperTux code
  - faster tile-loading (load on demand, pixelbuffer cache)
  - make controlpoints unzoomable
@@ -23,6 +22,9 @@ ToDo:
  - objects need to have visible text-lables attached to them (name of
    spawnpoints, etc.)
  - sexpr based config file, no evil eval games
+ - all pseudo object without position (background, particle-system) should be
+   placed beside each other beginning at 0, -32. (Currently they're all placed
+   at 0,0)
 
 New Object Types:
 =================
@@ -51,5 +53,6 @@ Bugs
 ====
 
  - switching to the current sector resets visible properties
+ - sometime the tilemap is alot huger than the level
 
 # EOF #

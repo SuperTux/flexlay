@@ -1,4 +1,4 @@
-//  $Id: windstille_menu.cxx,v 1.10 2003/11/06 09:53:43 grumbel Exp $
+//  $Id: windstille_menu.cxx,v 1.11 2003/11/13 12:59:42 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -20,6 +20,7 @@
 #include <config.h>
 #include <iostream>
 #include <ClanLib/Display/display.h>
+#include <ClanLib/Display/display_window.h>
 #include <ClanLib/Display/keys.h>
 #include <ClanLib/Core/System/system.h>
 #include <ClanLib/Display/keyboard.h>
@@ -235,6 +236,7 @@ WindstilleMenu::fadeout()
 void
 WindstilleMenu::on_startup()
 {
+  CL_Display::get_current_window()->hide_cursor();
   MusicManager::current()->play(datadir + "music/jingle.ogg", false);
 }
 

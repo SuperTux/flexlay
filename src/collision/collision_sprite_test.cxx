@@ -1,4 +1,4 @@
-//  $Id: collision_sprite_test.cxx,v 1.1 2003/09/02 22:05:02 grumbel Exp $
+//  $Id: collision_sprite_test.cxx,v 1.2 2003/11/13 12:59:42 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -38,7 +38,7 @@ public:
 
         CL_DisplayWindow window("colltest", 640, 480, false, false);
 
-        CL_ResourceManager* resources = new CL_ResourceManager("../../data/windstille.xml");
+        CL_ResourceManager* resources = new CL_ResourceManager("../data/windstille.xml");
 
         CL_Sprite       sprite("hero/run", resources);
         //CL_SpriteDescription desc("hero/run1", resources);

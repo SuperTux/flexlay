@@ -1,4 +1,4 @@
-//  $Id: colltest.cxx,v 1.5 2003/09/04 22:51:04 grumbel Exp $
+//  $Id: colltest.cxx,v 1.6 2003/11/13 12:59:42 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -37,11 +37,11 @@ public:
 
         CL_DisplayWindow window("colltest", 640, 480, false, false);
 
-        CollisionMask mask1("../../data/images/colltest2.png");
-        CollisionMask mask2("../../data/images/colltest.png");
+        CollisionMask mask1("../data/images/colltest2.png");
+        CollisionMask mask2("../data/images/colltest.png");
 
-        CL_Surface sprite1("../../data/images/colltest2.png");
-        CL_Surface sprite2("../../data/images/colltest.png");
+        CL_Surface sprite1("../data/images/colltest2.png");
+        CL_Surface sprite2("../data/images/colltest.png");
 
         float scale_x = 1.0f;
         float scale_y = 1.0f;

@@ -1,4 +1,4 @@
-//  $Id: windstille_level.cxx,v 1.13 2003/11/04 22:48:51 grumbel Exp $
+//  $Id: windstille_level.cxx,v 1.14 2003/11/13 12:59:42 grumbel Exp $
 //
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -153,10 +153,16 @@ WindstilleLevel::parse_properties (SCM tree)
             {
               height = gh_scm2int(data);
             }
+          else if (gh_equal_p(gh_symbol2scm("name"), name))
+            {
+            }
           else
             {
-              std::cout << "WindstilleLevel::parse_properties: Unknown tag: " 
+              char* str = gh_symbol2newstr(name, 0);
+              std::cout << "WindstilleLevel::parse_properties: Unknown tag: "
+                        << str
                         << std::endl;
+              free(str);
             }
 
           tree = gh_cdr(tree);

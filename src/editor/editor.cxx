@@ -1,4 +1,4 @@
-//  $Id: editor.cxx,v 1.10 2003/11/04 22:48:51 grumbel Exp $
+//  $Id: editor.cxx,v 1.11 2003/11/13 12:59:42 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -58,6 +58,7 @@ Editor::load(const std::string& filename)
 void
 Editor::run()
 {
+  CL_Display::get_current_window()->show_cursor();
   manager->run();
 }
 

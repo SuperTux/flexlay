@@ -1,4 +1,4 @@
-//  $Id: windstille_main.cxx,v 1.29 2003/11/07 22:41:18 grumbel Exp $
+//  $Id: windstille_main.cxx,v 1.30 2003/11/13 12:59:42 grumbel Exp $
 //
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -49,7 +49,11 @@ WindstilleMain::WindstilleMain()
 {
   screen_width  = 800;
   screen_height = 600;
+#ifdef WIN32
+  fullscreen    = true;
+#else
   fullscreen    = false;
+#endif
   allow_resize  = false;
   joystick_id   = -1;
   launch_editor = false;
@@ -71,6 +75,10 @@ WindstilleMain::parse_command_line(int argc, char** argv)
   argp.add_group("Display Options:");
   argp.add_option('g', "geometry",   "WxH", "Change window size to WIDTH and HEIGHT");
   argp.add_option('f', "fullscreen", "", "Launch the game in fullscreen");
+
+  argp.add_group("Sound Options:");
+  argp.add_option('s', "disable-sound", "", "Disable sound");
+  argp.add_option('S', "enable-sound", "", "Enable sound");
 
   argp.add_group("Controlls Options:");
   argp.add_option('j', "joystick", "NUM", "Use joystick number NUM instead of keyboard");
@@ -104,7 +112,15 @@ WindstilleMain::parse_command_line(int argc, char** argv)
               std::cout << "Geometry: " << screen_width << "x" << screen_height << std::endl;
             }
           break;
-		  
+        
+        case 's':
+          sound_disabled = true;
+          break;
+
+        case 'S':
+          sound_disabled = false;
+          break;  
+
         case 'j':
           if (!from_string(argp.get_argument(), joystick_id)) {
             std::cout << "Error: Couldn't convert '" << argp.get_argument() << "' to joystick_id" 
@@ -127,8 +143,10 @@ WindstilleMain::parse_command_line(int argc, char** argv)
 int 
 WindstilleMain::main(int argc, char** argv)
 {
-  CL_ConsoleWindow console("Windstille Debug Window");
-  console.redirect_stdio();
+#ifdef WIN32
+  CL_ConsoleWindow console;
+  console.redirect_stdio("windstille.log");
+#endif
 
   // Init the path
   bindir  = CL_System::get_exe_path();
@@ -203,10 +221,17 @@ WindstilleMain::main(int argc, char** argv)
 void
 WindstilleMain::init_modules()
 {
+#ifdef WIN32
+  // Make sure that Guile find its files
+  // FIXME: this doesn't use 'datadir'
+  putenv("GUILE_LOAD_PATH=data\\guile\\");
+#endif
+
+  // Init Guile
   scm_init_guile();
   SWIG_init();
 
-  std::cout << "Loading Guile Code..." << std::endl;
+  std::cout << "Loading Guile Code... " << std::flush;
 
   gh_eval_str("(debug-enable 'debug)"
               "(debug-enable 'backtrace)"
@@ -216,8 +241,9 @@ WindstilleMain::init_modules()
   gh_define("*windstille-datadir*",        gh_str02scm(datadir.c_str()));
   gh_define("*windstille-package-string*", gh_str02scm(PACKAGE_STRING));
 
-  std::cout << "Loading Guile Code... done" << std::endl;
+  std::cout << "done" << std::endl;
 
+  // Init ClanLib
   CL_SetupCore::init();
   CL_SetupGL::init();
   CL_SetupDisplay::init();
@@ -230,6 +256,9 @@ WindstilleMain::init_modules()
 
   window = new CL_DisplayWindow(PACKAGE_STRING,
                                 screen_width, screen_height, fullscreen, allow_resize);
+  CL_Display::clear();
+  CL_Display::flip();
+
   if (!sound_disabled)
     sound = new CL_SoundOutput(44100);
 

@@ -1,4 +1,4 @@
-//  $Id: windstille_bonus.cxx,v 1.5 2003/11/07 13:00:39 grumbel Exp $
+//  $Id: windstille_bonus.cxx,v 1.6 2003/11/13 12:59:42 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -20,6 +20,7 @@
 #include <iostream>
 #include <algorithm>
 #include <ClanLib/Display/display.h>
+#include <ClanLib/Display/display_window.h>
 #include <ClanLib/Display/keyboard.h>
 #include <ClanLib/Display/keys.h>
 #include <ClanLib/Display/font.h>
@@ -161,6 +162,7 @@ WindstilleBonus::quit()
 void
 WindstilleBonus::on_startup()
 {
+  CL_Display::get_current_window()->hide_cursor();
   MusicManager::current()->stop();
 }
 

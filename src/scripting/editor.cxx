@@ -462,17 +462,49 @@ SCM map_get_scripts()
 }
 
 SCM
-xml_node2scm(const CL_DomNode& root)
+xml_node2scm(CL_DomNode& root)
 {
-  SCM lst = SCM_EOL;
-  
+  /*
+   * (element ("foo" (("name" . "Paul")))
+   *          (element ("bar" ())
+   *                   (character-data "Some text"))
+   *          (element ("void" ()))) 
+   */
   if (root.is_element())
     {
       CL_DomElement element = root.to_element();
       
-      SCM el = gh_cons(gh_symbol2scm("element"), gh_str02scm(element.get_tag_name().c_str()));
-        
-      lst = gh_cons(el, lst);
+      // Construct attributes
+      SCM attributes = SCM_EOL;
+      std::cout << "Attributes: " << root.get_attributes().get_length() << std::endl;
+      CL_DomNamedNodeMap attrs = root.get_attributes();
+      for(int i = 0; i < attrs.get_length(); ++i)
+        {
+          if (attrs.item(i).is_attr())
+            {
+              CL_DomAttr attr = attrs.item(i).to_attr();
+              attributes = gh_cons(gh_cons(gh_str02scm(attr.get_name().c_str()),
+                                           gh_str02scm(attr.get_value().c_str())),
+                                   attributes);
+            }
+        }
+      attributes = gh_reverse(attributes);
+
+      // Construct children
+      SCM children   = SCM_EOL;
+      CL_DomNode child = root.get_first_child();
+      while(!child.is_null())
+        {
+          children = gh_cons(xml_node2scm(child), children);
+          child = child.get_next_sibling();
+        }
+      children = gh_reverse(children);
+      
+      // Assemble the whole element
+      return gh_cons(gh_symbol2scm("element"), 
+                     gh_cons(gh_cons(gh_str02scm(element.get_tag_name().c_str()),
+                                     attributes),
+                             children));
     }
   else if (root.is_null())
     {
@@ -486,6 +518,10 @@ xml_node2scm(const CL_DomNode& root)
     }
   else if (root.is_text())
     {
+      CL_DomCDATASection text = root.to_cdata_section();
+      return gh_list(gh_symbol2scm("character-data"),
+                     gh_str02scm(text.substring_data(0, text.get_length()).c_str()),
+                     SCM_UNDEFINED);
     }
   else if (root.is_cdata_section())
     {
@@ -519,15 +555,7 @@ xml_node2scm(const CL_DomNode& root)
       std::cout << "Error: Unhandled node type" << std::endl;
     }
 
-  CL_DomNode child = root.get_first_child();
-  lst = gh_cons(gh_cons(gh_symbol2scm("children"), xml_node2scm(child)),
-                lst);
-
-  CL_DomNode node = root.get_next_sibling();
-  lst = gh_cons(xml_node2scm(node),
-                lst);
-
-  return gh_reverse(lst);
+  return SCM_BOOL_F;
 }
 
 SCM

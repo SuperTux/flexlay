@@ -193,6 +193,9 @@
  (tile (id 62)
        (image "tiles/block11")
        (colmap 255 255 255 255 255 255 255 255))
+ (tile (id 63)
+       (image "tiles/backgroundtile1")
+       (colmap 255 255 255 255 255 255 255 255))
  )
 
 ;; EOF ;;

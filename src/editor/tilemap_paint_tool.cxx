@@ -37,6 +37,8 @@ TileMapPaintTool::TileMapPaintTool(EditorMap* p, EditorTileMap* t)
 {
   last_draw = CL_Point(-1, -1);
   painting  = false;
+  selecting = false;
+
   current_  = this;
   brush = TileBrush(1, 1);
   brush.at(0, 0) = 0;

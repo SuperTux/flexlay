@@ -455,7 +455,7 @@
 (load-variables)
 (init-recent-files)
 
-(set! *editor-map* (editor-create-map 0 25 800 575))
+(set! *editor-map* (editor-create-map 0 25 screen-width (- screen-height 25)))
 (create-menu)
 (gui-push-component *menu*)
 (set! *statusbar* (gui-create-label 400 5 "[XxY]"))

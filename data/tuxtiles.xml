@@ -24,6 +24,9 @@
     <sprite name="background8">
       <image file="images/tuxtiles/background8.png" />
     </sprite>
+    <sprite name="backgroundtile1">
+      <image file="images/tuxtiles/backgroundtile1.png" />
+    </sprite>
     <sprite name="block1">
       <image file="images/tuxtiles/block1.png" />
     </sprite>

@@ -22,6 +22,7 @@
 
 #include <assert.h>
 #include <ClanLib/Display/sprite.h>
+#include <ClanLib/Display/pixel_buffer.h>
 
 /** A Tile is a surface or sprite together with information for
  *  collision detection (aka colmap). The collision map is at a
@@ -31,7 +32,7 @@ class Tile
 {
 private:
   CL_Sprite sur;
-  CL_PixelBuffer* pixelbuffer;
+  CL_PixelBuffer pixelbuffer;
 
   /** Color used for the minimap to represent this tile */
   CL_Color  color;
@@ -42,13 +43,14 @@ private:
 
   std::string filename;
 public:
-  int id; 
   unsigned char colmap[8];
 
   /** @param filename Surface to use 
    *  @param arg_colmap a 8 char long array */
   Tile(const std::string& filename, 
-       const CL_Color& color, const CL_Color& attribute_color, unsigned char arg_colmap[]);
+       const CL_Color& color, 
+       const CL_Color& attribute_color, 
+       unsigned char* arg_colmap = NULL);
   
   ~Tile();
 
@@ -56,7 +58,7 @@ public:
 
   /** Return a pixelbuffer associated with this tile, caller must not
       delete the pixelbuffer, the Tile will take care of that */
-  CL_PixelBuffer* get_pixelbuffer();
+  CL_PixelBuffer get_pixelbuffer();
 
   CL_Color   get_color();
   CL_Color   get_attribute_color();

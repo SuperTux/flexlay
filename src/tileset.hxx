@@ -63,6 +63,8 @@ public:
   Tile* create(int id);
 
   int get_tile_size() const { return tile_size; }
+  
+  void add_tile(int id, Tile* tile);
 
   /** Create the default TileFactor*/
   static void init();
@@ -76,7 +78,7 @@ public:
 
 #ifdef SWIGGUILE
   void load_tile_file(const std::string& filename);
-  void add_tile(SCM data);
+  void add_tile_from_scm(SCM data);
 #endif
 };
 

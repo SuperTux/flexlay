@@ -1,8 +1,8 @@
 ## -*- mode: python -*-
 
 BuildDir('build', '.', duplicate=0)
-env = Environment(CC = 'g++',
-                  CCFLAGS = '-O2 -Wall')
+env = Environment(CXX = 'g++-3.3',
+                  CCFLAGS = '-g -O2 -Wall')
 
 env.SharedLibrary(
     'hellopy',
@@ -15,6 +15,7 @@ env.SharedLibrary(
     source = [
     'build/command_group.cxx',
     'build/editor.cxx',
+    'build/scripting/editor.cxx',
     'build/editor_grid_layer.cxx',
     'build/editor_map.cxx',
     'build/editor_map_component.cxx',

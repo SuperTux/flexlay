@@ -42,6 +42,16 @@ Tileset::~Tileset()
   std::cout << "Tileset: destroy" << std::endl;
 }
 
+void
+Tileset::add_tile(int id, Tile* tile)
+{
+  // FIXME: Memleaky
+  if (id >= int(tiles.size()))
+    tiles.resize(id+1, 0);
+
+  tiles[id] = tile;
+}
+
 #ifdef SWIGGUILE
 void
 Tileset::load_tile_file(const std::string& filename)
@@ -69,7 +79,7 @@ Tileset::load_tile_file(const std::string& filename)
       
               if (gh_equal_p(gh_symbol2scm("tile"), name)) 
                 {
-                  add_tile(data);
+                  add_tile_from_scm(data);
                 }
               else
                 {
@@ -86,7 +96,7 @@ Tileset::load_tile_file(const std::string& filename)
 }
 
 void
-Tileset::add_tile(SCM data)
+Tileset::add_tile_from_scm(SCM data)
 {
   // FIXME: Move this to scripting and add a Tileset::add()
   int id = 0;
@@ -173,7 +183,6 @@ Tileset::add_tile(SCM data)
           tiles.resize(id+1);
         }
       tiles[id] = new Tile(image, color, attribute_color, colmap);
-      tiles[id]->id = id;
     }
 }
 #endif

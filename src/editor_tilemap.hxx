@@ -37,7 +37,6 @@ private:
   Tileset* tileset;
   CL_Color background_color;
   CL_Color foreground_color;
-  int tile_size;
   bool hex_mode;
 
   Field<int> field;
@@ -50,7 +49,7 @@ public:
   static EditorTileMap* current() { return current_; }
   static void set_current(EditorTileMap* c) { current_ = c; }
   
-  EditorTileMap(Tileset* tileset, int w,  int h, int tile_size_);
+  EditorTileMap(Tileset* tileset, int w,  int h);
   ~EditorTileMap();
 
   void draw (EditorMapComponent* parent);
@@ -90,11 +89,9 @@ public:
   void set_draw_grid(bool t);
   bool get_draw_grid() const;
 
-  CL_PixelBuffer* create_pixelbuffer();
+  CL_PixelBuffer create_pixelbuffer();
 
   static void draw_tile(Field<int>* field, const TileBrush& brush, const CL_Point& pos);
-
-  int get_tile_size() const { return tile_size; }
 
   bool has_bounding_rect() const { return true; }
   CL_Rect get_bounding_rect();

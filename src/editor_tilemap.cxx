@@ -36,8 +36,8 @@
 
 EditorTileMap* EditorTileMap::current_ = 0;
 
-EditorTileMap::EditorTileMap(Tileset* tileset_, int w, int h, int tile_size_)
-  : tile_size(tile_size_), field(w, h)
+EditorTileMap::EditorTileMap(Tileset* tileset_, int w, int h)
+  : field(w, h)
 {
   // FIXME: Move this to the widget or to some more generic
   // map-properties thingy
@@ -77,7 +77,8 @@ EditorTileMap::draw_tile(int id, int x, int y, bool attribute)
       sprite.draw (x, y);
       
       if (attribute)
-        CL_Display::fill_rect(CL_Rect(CL_Point(x, y), CL_Size(tile_size, tile_size)),
+        CL_Display::fill_rect(CL_Rect(CL_Point(x, y), CL_Size(tileset->get_tile_size(),
+                                                              tileset->get_tile_size())),
                               tile->get_attribute_color());
     }
 }
@@ -85,48 +86,45 @@ EditorTileMap::draw_tile(int id, int x, int y, bool attribute)
 void
 EditorTileMap::draw(EditorMapComponent* parent)
 {
+  int tile_size = tileset->get_tile_size();
+
   if (background_color.get_alpha() != 0)
     CL_Display::fill_rect(CL_Rect(CL_Point(0,0),
-                                  CL_Size(field.get_width() * tile_size,
+                                  CL_Size(field.get_width()  * tile_size,
                                           field.get_height() * tile_size)),
                           background_color);
   CL_Display::flush();
 
   CL_Rect rect = parent->get_clip_rect();
 
-  int start_x = std::max(0, rect.left/tile_size);
-  int start_y = std::max(0, rect.top/tile_size);
-  int end_x   = std::min(field.get_width(),  rect.right/tile_size + 1);
-  int end_y   = std::min(field.get_height(), rect.bottom/tile_size + 1);
+  int start_x = std::max(0, rect.left / tile_size);
+  int start_y = std::max(0, rect.top  / tile_size);
+  int end_x   = std::min(field.get_width(),  rect.right  / tile_size + 1);
+  int end_y   = std::min(field.get_height(), rect.bottom / tile_size + 1);
 
   for (int y = start_y; y < end_y; ++y)
     for (int x = start_x; x < end_x; ++x)
       {
         draw_tile(field.at(x, y), 
-                  x * tile_size, y * tile_size, 
+                  x * tile_size, y * tile_size,
                   draw_attribute);
       }
 
-  if (draw_grid)
+  if (1 || draw_grid)
     {
       for (int y = start_y; y <= end_y; ++y)
         CL_Display::draw_line(start_x * tile_size,
-                              y * tile_size,
+                              y       * tile_size,
                               end_x   * tile_size,
-                              y * tile_size, 
-                              y % 5 ?
-                              CL_Color(150, 150, 150) :
-                              CL_Color(255, 255, 255)
-                              );
+                              y       * tile_size, 
+                              y % 5 ? CL_Color(150, 150, 150) : CL_Color(255, 255, 255));
   
       for (int x = start_x; x <= end_x; ++x)
-        CL_Display::draw_line(x * tile_size,
+        CL_Display::draw_line(x       * tile_size,
                               start_y * tile_size,
-                              x   * tile_size,
-                              end_y * tile_size, 
-                              x % 5 ?
-                              CL_Color(150, 150, 150) :
-                              CL_Color(255, 255, 255));
+                              x       * tile_size,
+                              end_y   * tile_size, 
+                              x % 5 ? CL_Color(150, 150, 150) : CL_Color(255, 255, 255));
     }
 
   CL_Display::flush();
@@ -298,20 +296,22 @@ blit(CL_PixelBuffer& target, CL_PixelBuffer& brush, int x_pos, int y_pos)
   target.unlock();
 }
 
-CL_PixelBuffer*
+CL_PixelBuffer
 EditorTileMap::create_pixelbuffer()
 {
-  CL_PixelBuffer* pixelbuffer = new CL_PixelBuffer(get_width()  * tile_size,
-                                                   get_height() * tile_size,
-                                                   get_width()  * tile_size * 4,
-                                                   CL_PixelFormat::rgba8888);
+  int tile_size = tileset->get_tile_size();
+
+  CL_PixelBuffer pixelbuffer(get_width()  * tile_size,
+                             get_height() * tile_size,
+                             get_width()  * tile_size * 4,
+                             CL_PixelFormat::rgba8888);
 
   {
-    pixelbuffer->lock();
-    unsigned char* buf = static_cast<unsigned char*>(pixelbuffer->get_data());
+    pixelbuffer.lock();
+    unsigned char* buf = static_cast<unsigned char*>(pixelbuffer.get_data());
 
-    int width  = pixelbuffer->get_width();
-    int height = pixelbuffer->get_height();
+    int width  = pixelbuffer.get_width();
+    int height = pixelbuffer.get_height();
 
     // Draw a nice gradient
     for(int y = 0; y < height; ++y)
@@ -324,7 +324,7 @@ EditorTileMap::create_pixelbuffer()
             buf[4*(y*width + x) + 3] = 255*y/height;
           }
       }
-    pixelbuffer->unlock();
+    pixelbuffer.unlock();
   }
 
   for (int y = 0; y < get_height(); ++y)
@@ -334,10 +334,10 @@ EditorTileMap::create_pixelbuffer()
 
         if (tile)
           {
-            CL_PixelBuffer* buf = tile->get_pixelbuffer();
+            CL_PixelBuffer buf = tile->get_pixelbuffer();
             if (buf)
               {
-                blit(*pixelbuffer, *buf, x*tile_size, y*tile_size);
+                blit(pixelbuffer, buf, x*tile_size, y*tile_size);
               }
           }
       }
@@ -349,14 +349,15 @@ CL_Rect
 EditorTileMap::get_bounding_rect()
 {
   return CL_Rect(CL_Point(0, 0),
-                 CL_Size(field.get_width() * tile_size, field.get_height() * tile_size));
+                 CL_Size(field.get_width()  * tileset->get_tile_size(), 
+                         field.get_height() * tileset->get_tile_size()));
 }
 
 CL_Point
 EditorTileMap::world2tile(const CL_Point& pos) const
 {
-  int x = pos.x/tile_size;
-  int y = pos.y/tile_size;
+  int x = pos.x / tileset->get_tile_size();
+  int y = pos.y / tileset->get_tile_size();
 
   return CL_Point(pos.x < 0 ? x-1 : x,
                   pos.y < 0 ? y-1 : y);

@@ -67,7 +67,7 @@ Minimap::draw()
 
   // FIXME: This doesn't work all that well
   EditorTileMap* tilemap = EditorTileMap::current();
-  int tile_size = tilemap->get_tile_size();
+  int tile_size = tilemap->get_tileset()->get_tile_size();
 
   if (tilemap && tilemap->get_height() != 0 && tilemap->get_width() != 0)
     {
@@ -156,7 +156,7 @@ Minimap::mouse_move(const CL_InputEvent& event)
 {
   // FIXME: This doesn't work all that well
   EditorTileMap* tilemap = EditorTileMap::current();
-  int tile_size  = tilemap->get_tile_size();
+  int tile_size  = tilemap->get_tileset()->get_tile_size();
   int map_width  = tilemap->get_width()  * tile_size;
   int map_height = tilemap->get_height() * tile_size;
 
@@ -170,7 +170,7 @@ Minimap::mouse_down(const CL_InputEvent& event)
 {
   // FIXME: This doesn't work all that well
   EditorTileMap* tilemap = EditorTileMap::current();
-  int tile_size  = tilemap->get_tile_size();
+  int tile_size  = tilemap->get_tileset()->get_tile_size();
   int map_width  = tilemap->get_width()  * tile_size;
   int map_height = tilemap->get_height() * tile_size;
 

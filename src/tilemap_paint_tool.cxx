@@ -72,7 +72,7 @@ TileMapPaintTool::draw()
       break;
       
     default:
-      int tile_size = tilemap->get_tile_size();
+      int tile_size = tilemap->get_tileset()->get_tile_size();
 
       // Draw the brush:
       for(int y = 0; y < brush.get_height(); ++y)

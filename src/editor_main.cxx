@@ -23,7 +23,9 @@
 #include <ClanLib/gl.h>
 #include <ClanLib/sdl.h>
 #include <ClanLib/display.h>
-#include <guile/gh.h>
+#ifdef SWIGGUILE
+#  include <guile/gh.h>
+#endif
 #include "editor.hxx"
 #include "globals.hxx"
 #include "tileset.hxx"

@@ -22,7 +22,10 @@
 
 #include <string>
 #include <vector>
-#include <guile/gh.h>
+
+#ifdef SWIGGUILE
+#  include <guile/gh.h>
+#endif
 
 class Workspace;
 class EditorMap;
@@ -112,6 +115,7 @@ void tileset_set_current(Tileset* tileset);
 EditorMapLayer* editor_mapsize_layer_create(int w, int h);
 void editor_mapsize_layer_set_size(EditorMapLayer*, int w, int h);
 
+#ifdef SWIGGUILE
 // Guile Specific Stuff
 SCM  editor_get_tile_selection();
 void object_selector_add_brush(CL_Component* comp, const char* name, SCM brush);
@@ -131,6 +135,7 @@ SCM             editor_map_get_metadata(EditorMap* m);
 void            editor_tilemap_set_data(EditorMapLayer* l, SCM data);
 SCM             editor_tilemap_get_data(EditorMapLayer* l);
 void tileset_add_tile(Tileset* tileset, SCM data);
+#endif
 
 #endif
 

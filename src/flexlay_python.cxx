@@ -7,6 +7,8 @@
 #include <boost/python.hpp>
 #include <iostream>
 
+#include "scripting/editor.hxx"
+#include "tile.hxx"
 #include "editor.hxx"
 #include "editor_map.hxx"
 #include "workspace.hxx"
@@ -38,7 +40,8 @@ BOOST_PYTHON_MODULE(flexlay)
 
   def("flexlay_init",   &flexlay_init);
   def("flexlay_deinit", &flexlay_deinit);
-
+  def("editor_set_brush_tile", editor_set_brush_tile);
+  
   register_exception_translator<CL_Error>(&clerror_translator);
 
   class_<GUIManager>("GUIManager")
@@ -99,13 +102,25 @@ BOOST_PYTHON_MODULE(flexlay)
     .def("set_zoom",      &EditorMapComponent::set_zoom)
     .def("set_workspace", &EditorMapComponent::set_workspace);
 
+  class_<CL_Color>("Color", init<int, int, int, int>())
+    .add_property("red",   &CL_Color::set_red,   &CL_Color::set_red)
+    .add_property("green", &CL_Color::set_green, &CL_Color::set_green)
+    .add_property("blue",  &CL_Color::set_blue,  &CL_Color::set_blue)
+    .add_property("alpha", &CL_Color::set_alpha, &CL_Color::set_alpha);
+
+  class_<Tile>("Tile", init<std::string, CL_Color, CL_Color>());
+
   class_<Tileset>("Tileset", init<int>())
-    .def("get_tilesize", &Tileset::get_tile_size);
+    .def("get_tilesize", &Tileset::get_tile_size)
+    .def("add_tile",     &Tileset::add_tile);
 
   class_<EditorTileMap, bases<EditorMapLayer>, EditorTileMap, boost::noncopyable>
-    ("TileMap", init<Tileset*, int, int, int>())
+    ("TileMap", init<Tileset*, int, int>())
     .def("get_tile", &EditorTileMap::get_tile)
     .def("resize",   &EditorTileMap::resize);
+
+  def("tilemap_set_current", &EditorTileMap::set_current);
+  def("tilemap_paint_tool_set_tilemap", &tilemap_paint_tool_set_tilemap);
 }
 
 /* EOF */

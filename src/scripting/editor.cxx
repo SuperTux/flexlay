@@ -45,12 +45,12 @@
 #include "../tilemap_paint_tool.hxx"
 #include "../minimap.hxx"
 #include "../editor_names.hxx"
-#include "tileset.hxx"
-#include "tile.hxx"
+#include "../tileset.hxx"
+#include "../tile.hxx"
 #include "../tool_manager.hxx"
 #include "../object_delete_command.hxx"
 #include "../object_add_command.hxx"
-#include "gui_manager.hxx"
+#include "../gui_manager.hxx"
 #include "../workspace.hxx"
 
 #include "../editor_map.hxx"
@@ -66,7 +66,7 @@ SCM component2scm(CL_Component* comp);
 
 extern CL_ResourceManager* resources;
 
-
+#ifdef SWIGGUILE
 std::vector<int>
 scm2vector(SCM lst)
 {
@@ -86,6 +86,7 @@ SCM vector2scm(const std::vector<int>& vec)
   }
   return gh_reverse(lst);
 }
+#endif
 
 void
 game_load_resources(const char* resourcefile)
@@ -149,51 +150,9 @@ editor_objectmap_add_sprite_object (EditorMapLayer* layer, SCM desc, int x, int 
 }
 #endif
 
+#ifdef SWIGGUILE
 int
-objectmap_add_object(EditorMapLayer* obj, const char* filename, int x, int y, SCM userdata)
-{
-  EditorObjMap* objmap = dynamic_cast<EditorObjMap*>(obj);
-
-  if (objmap)
-    {
-      try {
-        CL_Sprite sprite;
-
-        if (has_suffix(filename, ".png") || has_suffix(filename, ".jpg"))
-          {
-            CL_SpriteDescription desc;
-            desc.add_frame(CL_ProviderFactory::load(filename), true);
-            sprite = CL_Sprite(desc);
-            //sprite.set_alignment(origin_bottom_center, -16, -32);
-          }
-        else
-          {
-            sprite = CL_Sprite(filename, resources);
-          }        
-
-        ObjMapObject* obj 
-          = new ObjMapSpriteObject(objmap->get_next_object_handle(), 
-                                   CL_Point(x, y), 
-                                   SCMObj(userdata), 
-                                   sprite);
-
-        ObjectAddCommand* command = new ObjectAddCommand(objmap, obj);
-        Editor::current()->execute(command);
-      
-        return command->get_handle();
-      } catch(CL_Error& err) {
-        std::cout << "Error: " << err.message << std::endl;
-        return -1;
-      }
-
-    }
-  else
-    {
-      return -1;
-    }
-}
-
-int editor_objectmap_add_object(EditorMapLayer* layer, const char* filename, int x, int y, SCM userdata)
+objectmap_add_object(EditorMapLayer* layer, const char* filename, int x, int y, SCM userdata)
 {
   EditorObjMap* objmap = dynamic_cast<EditorObjMap*>(layer);
   try {
@@ -224,6 +183,7 @@ int editor_objectmap_add_object(EditorMapLayer* layer, const char* filename, int
 
   return -1;
 }
+#endif
 
 void
 editor_set_brush_tile(int i)
@@ -260,6 +220,7 @@ editor_toggle_attributes(EditorMapLayer* layer)
     tilemap->set_draw_attribute(!tilemap->get_draw_attribute());
 }
 
+#ifdef SWIGGUILE
 SCM
 obj2scm(const EditorObjMap::Obj& obj)
 {
@@ -344,6 +305,7 @@ scm2brush(SCM s_brush)
 
   return brush;
 }
+#endif
 
 void
 editor_objectmap_set_current(EditorMapLayer* layer)
@@ -370,6 +332,7 @@ editor_objectmap_duplicate_object(EditorMapLayer* layer, int id)
   return -1;
 }  
 
+#ifdef SWIGGUILE
 void
 editor_objectmap_delete_objects(EditorMapLayer* layer, SCM lst)
 {
@@ -412,6 +375,7 @@ tilemap_object_tool_set_objects(EditorMapLayer* layer, SCM lst)
       tool->set_selection(selection);
     }
 }
+#endif
 
 void
 editor_objectmap_set_pos(EditorMapLayer* layer, int id, int x, int y)
@@ -424,6 +388,7 @@ editor_objectmap_set_pos(EditorMapLayer* layer, int id, int x, int y)
     }
 }
 
+#ifdef SWIGGUILE
 SCM
 editor_objectmap_get_objects(EditorMapLayer* layer)
 {
@@ -443,6 +408,7 @@ editor_objectmap_get_objects(EditorMapLayer* layer)
     }
   return SCM_EOL;
 }
+#endif
 
 void
 tilemap_object_tool_clear_selection()
@@ -454,6 +420,7 @@ tilemap_object_tool_clear_selection()
   tool->clear_selection();
 }
 
+#ifdef SWIGGUILE
 SCM
 tilemap_object_tool_get_objects()
 {
@@ -486,6 +453,7 @@ editor_objectmap_get_object(EditorMapLayer* layer, int id)
 
   return SCM_BOOL_F;
 }
+#endif
 
 void
 objmap_sprite_object_flip(EditorMapLayer* layer, int id)
@@ -521,6 +489,7 @@ tilemap_paint_tool_set_tilemap(EditorMapLayer* layer)
   TileMapPaintTool::current()->set_tilemap(dynamic_cast<EditorTileMap*>(layer));
 }
 
+#ifdef SWIGGUILE
 SCM
 editor_get_tile_selection()
 {
@@ -534,6 +503,7 @@ editor_get_tile_selection()
   else
     return SCM_BOOL_F;
 }
+#endif 
 
 int
 editor_get_brush_tile()
@@ -625,13 +595,14 @@ void tileeditor_set_tile(CL_Component* comp, int id)
     tileeditor->set_tile(Tileset::current()->create(id));
 }
 
+#ifdef SWIGGUILE
 SCM get_tile_def(Tile* tile)
 {
   SCM lst = gh_cons(scm_str2symbol("tile"), SCM_EOL);
 
   if (tile)
     {
-      lst = gh_cons(gh_list(scm_str2symbol("id"), SCM_MAKINUM(tile->id), (SCM_UNDEFINED)),
+      lst = gh_cons(gh_list(scm_str2symbol("id"), 0 /*FIXME: SCM_MAKINUM(tile->id)*/, (SCM_UNDEFINED)),
                     lst);
 
       lst = gh_cons(gh_list(scm_str2symbol("image"),
@@ -782,6 +753,7 @@ load_xml(const char* filename)
     return SCM_BOOL_F;
   }
 }
+#endif
 
 void 
 editor_map_component_set_zoom(CL_Component* c, float z)
@@ -838,32 +810,30 @@ editor_objmap_create()
 EditorMapLayer* 
 editor_tilemap_create(Tileset* tileset, int w, int h, int tile_size)
 {
-  return new EditorTileMap(tileset, w, h, tile_size);
+  return new EditorTileMap(tileset, w, h);
 }
 
 void
 editor_tilemap_save_png(EditorMapLayer* l, const char* filename)
 {
   EditorTileMap* tilemap = dynamic_cast<EditorTileMap*>(l);
-  CL_PixelBuffer* pixelbuffer = tilemap->create_pixelbuffer();
+  CL_PixelBuffer pixelbuffer = tilemap->create_pixelbuffer();
 
-  pixelbuffer->lock();
+  pixelbuffer.lock();
   std::ofstream out(filename);
 
   out << "P6\n"
-      << pixelbuffer->get_width() << " " << pixelbuffer->get_height() << "\n"
+      << pixelbuffer.get_width() << " " << pixelbuffer.get_height() << "\n"
       << "255\n";
-  char* buf = static_cast<char*>(pixelbuffer->get_data());
-  for(int i = 0; i < int(pixelbuffer->get_pitch() * pixelbuffer->get_height()); i += 4)
+  char* buf = static_cast<char*>(pixelbuffer.get_data());
+  for(int i = 0; i < int(pixelbuffer.get_pitch() * pixelbuffer.get_height()); i += 4)
     {
       out.write(&buf[i + 3], 1);
       out.write(&buf[i + 2], 1);
       out.write(&buf[i + 1], 1);
     }
 
-  pixelbuffer->unlock();
-
-  delete pixelbuffer;
+  pixelbuffer.unlock();
 }
 
 int
@@ -906,6 +876,7 @@ editor_tilemap_set_fgcolor(EditorMapLayer* l, int r, int g, int b, int a)
     }
 }
 
+#ifdef SWIGGUILE
 SCM
 editor_tilemap_get_data(EditorMapLayer* l)
 {
@@ -942,6 +913,7 @@ editor_tilemap_set_data(EditorMapLayer* l, SCM lst)
         }
     }
 }
+#endif
 
 std::string
 editor_map_get_filename(EditorMap* m)
@@ -977,6 +949,7 @@ std::string scm2string(SCM s)
   return tmp;
 }*/
 
+#ifdef SWIGGUILE
 SCM string2scm(const std::string& str)
 {
   return gh_str02scm(str.c_str());
@@ -1019,6 +992,7 @@ editor_map_get_metadata(EditorMap* m)
 {
   return m->get_metadata().get_scm();
 }
+#endif
 
 
 Tileset*
@@ -1027,6 +1001,7 @@ tileset_create(int tile_size)
   return new Tileset(tile_size);
 }
 
+#ifdef SWIGGUILE
 Tileset*
 tileset_create_from_file(const char* resourcefile)
 {
@@ -1039,11 +1014,12 @@ void
 tileset_add_tile(Tileset* tileset, SCM data)
 {
   try {
-    tileset->add_tile(data);
+    tileset->add_tile_from_scm(data);
   } catch (CL_Error& err) {
     std::cout << "Error: " << err.message << std::endl;
   }
 }
+#endif
 
 void
 tileset_set_current(Tileset* tileset)

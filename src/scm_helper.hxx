@@ -20,10 +20,14 @@
 #ifndef HEADER_SCM_HELPER_HXX
 #define HEADER_SCM_HELPER_HXX
 
-#include <guile/gh.h>
+#ifdef SWIGGUILE
+# include <guile/gh.h>
+#endif
 #include <string>
 
+#ifdef SWIGGUILE
 std::string scm2string(SCM str);
+#endif
 
 #endif
 

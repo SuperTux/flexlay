@@ -25,6 +25,4 @@ std::string homedir;
 
 int  debug = 0;
 
-CL_ResourceManager* resources = 0;
-
 /* EOF */

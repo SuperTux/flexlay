@@ -30,7 +30,6 @@ class Tile;
 class TileEditor : public CL_Component
 {
 private:
-  CL_Sprite no_tile;
   Tile* tile;
   CL_SlotContainer slots;
   CL_Point mouse_pos;

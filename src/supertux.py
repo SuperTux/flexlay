@@ -112,15 +112,7 @@ gui = editor.get_gui_manager()
 
 tileset = Tileset(32)
 load_game_tiles(tileset, "/home/ingo/cvs/supertux/supertux/data/images/tilesets/supertux.stgt")
-
-# tileselector_window = CL_Window(CL_Rect(CL_Point(150, 150), CL_Size(210, 210)),
-#                                     "Tile Selector", gui.get_component())
-# tileselector = TileSelector(5, 3, tileselector_window.get_client_area())
-# tileselector.set_tileset(tileset)
-#tileselector.set_tiles(range(1,100))
-        
-# supertux_gui = SuperTuxGUI()
-
+    
 editor_map = EditorMapComponent(CL_Rect(0, 0, 799, 599), gui.get_component())
 workspace  = Workspace(799, 599)
 editor_map.set_workspace(workspace)
@@ -132,7 +124,9 @@ tilemap = TilemapLayer(tileset, 20, 10)
 m.add_layer(tilemap.to_layer())
 
 window = CL_Window(CL_Rect(50, 50, 350, 300), "My Window", gui.get_component())
-    
+
+supertux_gui = SuperTuxGUI()
+
 print "Launching GUI"
 gui.run()
 

@@ -78,7 +78,7 @@ int main()
   std::cout << "\nInteresting part: " << std::endl;
   {
     std::cout << "### SharedPtr<A> p1;" << std::endl;
-    SharedPtr<B> p1;
+    SharedPtr<A> p1;
     {
       std::cout << "### SharedPtr<A> p(new A());" << std::endl;
       SharedPtr<A> p(new A());

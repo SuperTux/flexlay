@@ -39,31 +39,26 @@ int main()
 
   GUIManager* gui = editor.get_gui_manager();
 
+  CL_Button* button = new CL_Button(CL_Rect(CL_Point(50, 50), 
+                                            CL_Size(100, 25)),
+                                    "Hello World", gui->get_component());
+
   EditorMap m;
   Tileset tileset(32);
+  TilemapLayer tilemap(tileset, 20, 10);
+  
+  m.add_layer(tilemap.to_layer());
 
-    std::cout << "\nTilemapLayer: start" << std::endl;
-    TilemapLayer tilemap(tileset, 20, 10);
-    std::cout << "bound1: " << tilemap.get_bounding_rect() << std::endl;
-    Layer l = tilemap.to_layer();
-    Layer l2 = l;
-    std::cout << "bound2: " << l2.get_bounding_rect() << std::endl;
-    std::cout << "adding layer " << std::endl;
-    m.add_layer(l2);
-    std::cout << "layer added" << std::endl;
-    std::cout << "bound4: " << l.get_bounding_rect() << std::endl;
-
-  std::cout << "TilemapLayer: end\n" << std::endl;
-
+  TilemapLayer::set_current(tilemap);
 
   EditorMapComponent editor_map(CL_Rect(0, 0, 799, 599), gui->get_component());
   Workspace workspace(799, 599);
   editor_map.set_workspace(workspace);
   workspace.set_current_map(m);
  
-  CL_Button* button = new CL_Button(CL_Rect(CL_Point(50, 50), 
-                                            CL_Size(100, 25)),
-                                    "Hello World", gui->get_component());
+  CL_Button* button2 = new CL_Button(CL_Rect(CL_Point(50, 150), 
+                                             CL_Size(100, 25)),
+                                     "Quit", gui->get_component());
 
   gui->run();
  

@@ -110,7 +110,6 @@ TileSelector::mouse_move(const CL_InputEvent& event)
 void 
 TileSelector::draw()
 {
-  std::cout << "TileSelector::draw()" << std::endl;
   CL_Display::push_modelview();
   CL_Display::add_translate(0, -offset);
 

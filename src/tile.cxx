@@ -27,8 +27,6 @@
 #include "string_converter.hxx"
 #include "tile.hxx"
 
-extern CL_ResourceManager* resources;
-
 class TileImpl
 {
 public:
@@ -103,7 +101,7 @@ Tile::get_sprite()
           }
         else
           {
-            impl->sur = CL_Sprite(impl->filename, resources);
+            assert(0);  //impl->sur = CL_Sprite(impl->filename, resources);
           }
         return impl->sur;
       } catch (CL_Error& err) {
@@ -125,8 +123,9 @@ Tile::get_pixelbuffer()
       }
     else
       {
-        CL_SpriteDescription descr(impl->filename, resources);
-        impl->pixelbuffer = CL_PixelBuffer(*(descr.get_frames().begin()->first));
+        //CL_SpriteDescription descr(impl->filename, resources);
+        //impl->pixelbuffer = CL_PixelBuffer(*(descr.get_frames().begin()->first));
+        assert(0);
       }
     return impl->pixelbuffer;
   }

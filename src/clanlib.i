@@ -1,3 +1,5 @@
+%include "std_string.i"
+
 class CL_Size
 {
 public:

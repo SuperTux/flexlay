@@ -32,8 +32,6 @@ extern std::string bindir;
 /** homedir => /home/juser/.windstille/ */
 extern std::string homedir;
 
-extern CL_ResourceManager* resources;
-
 extern int   debug;
 
 #endif

@@ -20,6 +20,8 @@
 #include <config.h>
 #include <ClanLib/core.h>
 #include <ClanLib/display.h>
+#include <ClanLib/gui.h>
+#include <ClanLib/guistylesilver.h>
 #include <ClanLib/gl.h>
 #include "globals.hxx"
 #include "flexlay.hxx"
@@ -48,13 +50,12 @@ Flexlay::init()
   CL_SetupGL::init();
 #endif
   CL_SetupDisplay::init();
-
+  CL_SetupGUI::init();
+  
   datadir = "../data/";
 
   window = new CL_DisplayWindow(PACKAGE_STRING,
                                 screen_width, screen_height, fullscreen, allow_resize);
-
-  resources = new CL_ResourceManager();
 }
 
 void

@@ -36,6 +36,8 @@ public:
 CL_Sprite(      
 	        	const std::string &resource_id,
 		        CL_ResourceManager *manager);
+	void set_scale(float x, float y);
+
 };
 
 

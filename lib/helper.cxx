@@ -98,4 +98,10 @@ make_pixelbuffer_from_resource(const std::string& filename, CL_ResourceManager& 
   }
 }
 
+CL_PixelBuffer
+make_pixelbuffer(int width, int height)
+{
+  return CL_PixelBuffer(width, height, width*4, CL_PixelFormat::rgba8888);
+}
+
 /* EOF */

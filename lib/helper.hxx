@@ -27,6 +27,7 @@ CL_Sprite      pixelbuffer2sprite(const CL_PixelBuffer& buffer);
 CL_Sprite      make_sprite(const std::string& filename);
 CL_PixelBuffer make_pixelbuffer(const std::string& filename);
 CL_PixelBuffer make_region_pixelbuffer(const std::string& filename, int x, int y, int w, int h);
+CL_PixelBuffer make_pixelbuffer(int width, int height);
 
 CL_Sprite      make_sprite_from_resource(const std::string& filename, CL_ResourceManager& resources);
 CL_PixelBuffer make_pixelbuffer_from_resource(const std::string& filename, CL_ResourceManager& resources);

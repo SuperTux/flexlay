@@ -32,6 +32,7 @@ std::cout << "CL_Error: " << err.message << std::endl;
 #include "editor.hxx"
 #include "meta_data.hxx"
 #include "console.hxx"
+#include "blitter.hxx"
 
 #include "layer.hxx"
 #include "tilemap_layer.hxx"
@@ -145,6 +146,7 @@ VALUE CL_Point2Value(const CL_Point& arg)
 %include "editor.hxx"
 %include "meta_data.hxx"
 %include "console.hxx"
+%include "blitter.hxx"
  
 %include "layer.hxx"
 %include "tilemap_layer.hxx"

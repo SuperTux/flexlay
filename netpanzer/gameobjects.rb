@@ -27,6 +27,11 @@ module GameObjects
     def data=(data)
       @data = data
       connect_v1_ObjMapObject(@data.to_object.sig_move(), method(:on_move))
+      on_move(@data)
+    end
+
+    def get_sprite()
+      self.class.get_sprite()
     end
 
     def on_move(data)
@@ -109,6 +114,7 @@ module GameObjects
   # TileObject is used to hold tilebrushes
   class TileObject < GameObject
     def initialize(brushindex)
+      @brushindex = brushindex
       (start, width, height, @name) = $brushes[brushindex]
       
       # FIXME: Could be shared among all TileObjects
@@ -128,6 +134,12 @@ module GameObjects
       tilemap.draw_tile(@brush, CL_Point.new(x(), y()))
     end
 
+    def get_sprite()
+      sprite = make_sprite("sprites/#{@brushindex}.png")
+      sprite.set_scale(4.0, 4.0)
+      return sprite
+    end
+
     def TileObject.create(objmap, brushindex, x, y)
       obj = TileObject.new(brushindex)
       sprite_obj = ObjMapSpriteObject.new(get_sprite(), CL_Pointf.new(x*32, y*32),
@@ -136,10 +148,6 @@ module GameObjects
       objmap.add_object(sprite_obj.to_object)
       
       return obj
-    end
-    
-    def TileObject.get_sprite()
-      return make_sprite_from_resource("sprites/spawnpoint", $resources)
     end
   end
 end

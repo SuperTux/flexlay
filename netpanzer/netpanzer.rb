@@ -60,7 +60,7 @@ $objectselector.add_brush(ObjectBrush.new(GameObjects::SpawnPoint.get_sprite(),
                                           make_metadata(proc{GameObjects::SpawnPoint.new()})))
 
 $brushes.size.times {|i|
-  $objectselector.add_brush(ObjectBrush.new(GameObjects::TileObject.get_sprite(),
+  $objectselector.add_brush(ObjectBrush.new(make_sprite("sprites/#{i}.png"),
                                             make_metadata(proc{GameObjects::TileObject.new(i)})))
 }
 
@@ -69,7 +69,7 @@ $objectselector.show(true)
 def on_object_drop(brush, pos)
   obj = get_ruby_object(brush.get_data()).call()
   pos = $editor_map.screen2world(pos)
-  sprite_obj = ObjMapSpriteObject.new(obj.class.get_sprite(), pos, make_metadata(obj))
+  sprite_obj = ObjMapSpriteObject.new(obj.get_sprite(), pos, make_metadata(obj))
   obj.data = sprite_obj
   
   cmd = ObjectAddCommand.new($workspace.get_map().get_data().objects)
@@ -282,6 +282,22 @@ def gui_set_zoom(zoom)
   gc.set_pos(pos)
 end
 
+def generate_sprites()
+  $brushes.each_with_index{|(start, width, height, name), index|
+    puts "#{index}"
+    buffer = make_pixelbuffer(width * 32, height * 32)
+
+    (0..(height-1)).each {|y|
+      (0..(width-1)).each {|x|
+        tile = $tileset.create(start + width * y + x)
+        blit(buffer, tile.get_pixelbuffer(), x * 32, y * 32)
+      }
+    }
+    
+    CL_ProviderFactory.save(buffer, "sprites/#{index}.png")
+  }
+end
+
 menu.add_item("Zoom/1:4 (25%) ",  proc{ gui_set_zoom(0.25) })
 menu.add_item("Zoom/1:2 (50%) ",  proc{ gui_set_zoom(0.5) })
 menu.add_item("Zoom/1:1 (100%) ", proc{ gui_set_zoom(1.0) }) 
@@ -298,6 +314,7 @@ $save_dialog.set_filename($config.datadir + "maps/")
 
 set_tilemap_paint_tool()
 
+# generate_sprites()
 $gui.run()
 
 # flexlay.deinit()

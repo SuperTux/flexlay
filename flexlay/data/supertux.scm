@@ -75,12 +75,26 @@
               #:accessor supertux:background)
   (music      #:init-value "Mortimers_chipdisko.mod"
               #:accessor supertux:music)
-  (bkgd_red   #:init-value 150
-              #:accessor supertux:bkgd_red)
-  (bkgd_green #:init-value 200
-              #:accessor supertux:bkgd_green)
-  (bkgd_blue  #:init-value 255
-              #:accessor supertux:bkgd_blue)
+
+  (start-pos-x #:accessor supertux:start-pos-x
+               #:init-value 100)
+  (start-pos-y #:accessor supertux:start-pos-y
+               #:init-value 100)
+
+  (bkgd_red_bottom   #:init-value 150
+                  #:accessor supertux:bkgd_red_bottom)
+  (bkgd_green_bottom #:init-value 200
+              #:accessor supertux:bkgd_green_bottom)
+  (bkgd_blue_bottom  #:init-value 255
+              #:accessor supertux:bkgd_blue_bottom)
+
+  (bkgd_red_top   #:init-value 150
+                  #:accessor supertux:bkgd_red_top)
+  (bkgd_green_top #:init-value 200
+              #:accessor supertux:bkgd_green_top)
+  (bkgd_blue_top  #:init-value 255
+              #:accessor supertux:bkgd_blue_top)
+
   (time       #:init-value 500
               #:accessor supertux:time)
   (gravity    #:init-value 10
@@ -183,9 +197,13 @@
                (format #t "  (background \"arctis.png\")\n")
                (format #t "  (music  \"~a\")~%" "Mortimers_chipdisko.mod")
 
-               (format #t "  (bkgd_red    ~a)~%" 150)
-               (format #t "  (bkgd_green  ~a)~%" 200)
-               (format #t "  (bkgd_blue   ~a)~%" 255)
+               (format #t "  (bkgd_red_top    ~a)~%" 150)
+               (format #t "  (bkgd_green_top  ~a)~%" 200)
+               (format #t "  (bkgd_blue_top   ~a)~%" 255)
+
+               (format #t "  (bkgd_red_bottom    ~a)~%" 150)
+               (format #t "  (bkgd_green_bottom  ~a)~%" 200)
+               (format #t "  (bkgd_blue_bottom   ~a)~%" 255)
 
                (format #t "  (time  ~a)~%" 500)
                (format #t "  (gravity  ~a)~%" 10)
@@ -210,12 +228,19 @@
                (format #t "  (width  ~a)~%" (editor-tilemap-get-width  (supertux:interactive-tm level)))
                (format #t "  (height ~a)~%" (editor-tilemap-get-height (supertux:interactive-tm level)))
 
+               (format #t "  (start_pos_x    ~a)~%" (supertux:start-pos-x level))
+               (format #t "  (start_pos_y    ~a)~%" (supertux:start-pos-y level))
+
                (format #t "  (background ~s)~%" (supertux:background level))
                (format #t "  (music ~s)~%" (supertux:music level))
 
-               (format #t "  (bkgd_red    ~a)~%" (supertux:bkgd_red level))
-               (format #t "  (bkgd_green  ~a)~%" (supertux:bkgd_green level))
-               (format #t "  (bkgd_blue   ~a)~%" (supertux:bkgd_blue level))
+               (format #t "  (bkgd_red_top    ~a)~%" (supertux:bkgd_red_top level))
+               (format #t "  (bkgd_green_top  ~a)~%" (supertux:bkgd_red_top level))
+               (format #t "  (bkgd_blue_top   ~a)~%" (supertux:bkgd_red_top level))
+
+               (format #t "  (bkgd_red_bottom    ~a)~%" (supertux:bkgd_red_bottom level))
+               (format #t "  (bkgd_green_bottom  ~a)~%" (supertux:bkgd_red_bottom level))
+               (format #t "  (bkgd_blue_bottom   ~a)~%" (supertux:bkgd_red_bottom level))
 
                (format #t "  (time  ~a)~%" (supertux:time level))
                (format #t "  (gravity  ~a)~%" (supertux:gravity level))
@@ -369,9 +394,18 @@
     (set! (supertux:theme level)      (get-value-from-tree '(theme _) data "antarctica"))
     (set! (supertux:music level)      (get-value-from-tree '(music _) data "Mortimers_chipdisko.mod"))
     (set! (supertux:background level) (get-value-from-tree '(background _)   data "arctis.png"))
-    (set! (supertux:bkgd_red   level) (get-value-from-tree '(bkgd_red _)     data 150))
-    (set! (supertux:bkgd_green level) (get-value-from-tree '(bkgd_green _)   data 200))
-    (set! (supertux:bkgd_blue  level) (get-value-from-tree '(bkgd_blue _)    data 255))
+
+    (set! (supertux:start-pos-x level) (get-value-from-tree '(start_pos_x  _) data 100))
+    (set! (supertux:start-pos-y level) (get-value-from-tree '(start_pos_y  _) data 170))
+
+    (set! (supertux:bkgd_red_bottom   level) (get-value-from-tree '(bkgd_red_bottom   _) data 150))
+    (set! (supertux:bkgd_green_bottom level) (get-value-from-tree '(bkgd_green_bottom _) data 200))
+    (set! (supertux:bkgd_blue_bottom  level) (get-value-from-tree '(bkgd_blue_bottom  _) data 255))
+
+    (set! (supertux:bkgd_red_top   level) (get-value-from-tree '(bkgd_red_top   _) data 150))
+    (set! (supertux:bkgd_green_top level) (get-value-from-tree '(bkgd_green_top _) data 200))
+    (set! (supertux:bkgd_blue_top  level) (get-value-from-tree '(bkgd_blue_top  _) data 255))
+
     (set! (supertux:time  level)      (get-value-from-tree '(time _)         data 250))
     (set! (supertux:particle-system level)     (get-value-from-tree '(particle_system _) data ""))
     (set! (supertux:gravity         level)     (get-value-from-tree '(gravity _)      data 10))
@@ -423,7 +457,7 @@
                                        ((= el 49) ;; 1
                                         (objectmap-add-object objmap 
                                                               (string-append *supertux:datadir* "images/shared/mriceblock-left-0.png")
-                                                              x y '(laptop)))
+                                                              x y '(mriceblock)))
                                        ((= el 50) ;; 2
                                         (objectmap-add-object objmap
                                                               "sprites/jumpy" 
@@ -446,7 +480,7 @@
                         ((mriceblock laptop)
                          (objectmap-add-object objmap
                                                (string-append *supertux:datadir* "images/shared/mriceblock-left-0.png")
-                                               x y '(laptop)))
+                                               x y '(mriceblock)))
                         ((snowball bsod)
                          (objectmap-add-object objmap
                                                (string-append *supertux:datadir* "images/shared/snowball-left-0.png")

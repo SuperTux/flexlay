@@ -106,7 +106,7 @@
            (let* ((plugin   (editor:get-plugin filename))
                   (levelmap (plugin filename)))
              (editor-map-activate levelmap)
-             (workspace-add-map *workspace* levelmap 0 y)
+             ;;(workspace-add-map *workspace* levelmap 0 y)
              (set! y (+ y 600))
              (add-buffer levelmap)
              ))

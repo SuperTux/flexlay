@@ -312,9 +312,11 @@
     (gui-push-component (gui-window-get-client-area window))
     
     (gui-create-button-func 10  5 80 25 "Igel" 
-                            (lambda () (editor-objectmap-add-object "igel" 0 0)))
+                            (lambda () (editor-objectmap-add-object "igel" 0 0 
+                                                                    '(foo bar blub))))
     (gui-create-button-func 10 35 80 25 "Hero" 
-                            (lambda () (editor-objectmap-add-object "hero/dead" 0 0)))
+                            (lambda () (editor-objectmap-add-object "hero/dead" 0 0
+                                                                    '("hero/dead" aoeu aeu ))))
 
     (gui-component-on-close window (lambda ()
                                      (gui-hide-component window)))

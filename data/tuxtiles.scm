@@ -132,6 +132,16 @@
  (tile (id 43)
        (image "tiles/darksnow12")
        (colmap 255 255 255 255 255 255 255 255))
+
+ (tile (id 44)
+       (image "tiles/coin1")
+       (colmap 255 255 255 255 255 255 255 255))
+ (tile (id 45)
+       (image "tiles/coin2")
+       (colmap 255 255 255 255 255 255 255 255))
+ (tile (id 46)
+       (image "tiles/coin3")
+       (colmap 255 255 255 255 255 255 255 255))
  )
 
 ;; EOF ;;

@@ -27,6 +27,7 @@ extern CL_ResourceManager* resources;
 EditorObjMap::EditorObjMap(EditorMap* p)
   : EditorMapLayer(p)
 {
+  handle_count = 0;
 }
 
 EditorObjMap::~EditorObjMap()
@@ -51,13 +52,19 @@ EditorObjMap::draw()
     }
 }
 
-void
-EditorObjMap::add_object(const CL_Sprite& sprite, const CL_Point& pos)
+int
+EditorObjMap::add_object(const CL_Sprite& sprite, const CL_Point& pos, const SCMObj& data)
 {
   Obj* obj = new Obj;
+
+  obj->handle = ++handle_count;
   obj->sprite = sprite;
   obj->pos    = pos;
+  obj->data   = data;
+
   objects.push_back(obj);  
+
+  return obj->handle;
 }
 
 CL_Rect
@@ -119,6 +126,21 @@ EditorObjMap::get_selection(const CL_Rect& rect)
     }
 
   return selection;
+}
+
+EditorObjMap::Obj*
+EditorObjMap::get_object(int id)
+{
+  for(Objs::iterator i = objects.begin(); i != objects.end(); ++i)
+    if ((*i)->handle == id)
+      return *i;
+  return 0;
+}
+
+EditorObjMap::Objs*
+EditorObjMap::get_objects()
+{
+  return &objects;
 }
 
 /* EOF */

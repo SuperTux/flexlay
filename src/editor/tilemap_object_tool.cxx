@@ -21,6 +21,7 @@
 #include <ClanLib/Display/keys.h>
 #include <ClanLib/Display/display.h>
 #include "editor_map.hxx"
+#include "../scm_obj.hxx"
 #include "tilemap_object_tool.hxx"
 
 extern CL_ResourceManager* resources;
@@ -148,7 +149,7 @@ TileMapObjectTool::on_mouse_down(const CL_InputEvent& event)
       break;
 
     case CL_MOUSE_RIGHT:
-      objmap->add_object(brush.get_sprite(), pos);
+      objmap->add_object(brush.get_sprite(), pos, SCMObj(SCM_BOOL_F));
       break;
     }
 }

@@ -23,6 +23,7 @@
 #include "../scm_functor.hxx"
 #include "../globals.hxx"
 #include "../windstille_game.hxx"
+#include "../scm_obj.hxx"
 #include "editor/editor.hxx"
 #include "editor/tile_selector.hxx"
 #include "editor/editor_tilemap.hxx"
@@ -57,9 +58,11 @@ editor_get_tilemap()
     }
 }
 
-void editor_objectmap_add_object(const char* name, int x, int y)
+int editor_objectmap_add_object(const char* name, int x, int y, SCM userdata)
 {
-  editor_get_objmap()->add_object(CL_Sprite(name, resources), CL_Point(x, y));
+  int handle = editor_get_objmap()->add_object(CL_Sprite(name, resources), CL_Point(x, y), 
+                                               SCMObj(userdata));
+  return handle;
 }
 
 void
@@ -79,6 +82,18 @@ void
 editor_toggle_grid()
 {
   editor_get_tilemap()->set_draw_grid(!editor_get_tilemap()->get_draw_grid());
+}
+
+SCM
+obj2scm(const EditorObjMap::Obj& obj)
+{
+  SCM lst = SCM_EOL;
+  
+  return gh_list(gh_long2scm(obj.pos.x),
+                 gh_long2scm(obj.pos.y),
+                 obj.data.get_scm(),
+                 SCM_UNDEFINED); 
+  return lst;
 }
 
 SCM
@@ -126,6 +141,32 @@ scm2brush(SCM s_brush)
     }
 
   return brush;
+}
+
+SCM
+editor_objectmap_get_objects()
+{
+  SCM lst = SCM_EOL;
+
+  for(EditorObjMap::Objs::iterator i = editor_get_objmap()->get_objects()->begin();
+      i != editor_get_objmap()->get_objects()->end();
+      ++i)
+    {
+      lst = gh_cons(SCM_MAKINUM((*i)->handle), lst);
+    }
+
+  return gh_reverse(lst);
+}
+
+SCM
+editor_objectmap_get_object(int id)
+{
+  EditorObjMap::Obj* obj = editor_get_objmap()->get_object(id);
+
+  if (obj)
+    return obj2scm(*obj);
+  else
+    return SCM_BOOL_F;
 }
 
 void

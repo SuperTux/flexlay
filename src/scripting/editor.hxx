@@ -41,7 +41,10 @@ void editor_set_tool(int i);
 SCM  editor_get_tile_selection();
 void tilemap_set_active_layer(int i);
 void tilemap_paint_tool_set_brush(SCM brush);
-void editor_objectmap_add_object(const char* name, int x, int y);
+
+int  editor_objectmap_add_object(const char* name, int x, int y, SCM userdata);
+SCM  editor_objectmap_get_objects();
+SCM  editor_objectmap_get_object(int id);
 
 CL_Component* editor_add_tileeditor(int x, int y);
 

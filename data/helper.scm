@@ -1,4 +1,4 @@
-(cond (#f
+(cond (#t
        (catch #t
               (lambda () 
                 (eval

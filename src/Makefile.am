@@ -72,6 +72,7 @@ windstille_SOURCES = \
   screen.cxx \
   screenshot.hxx \
   screenshot.cxx \
+  scm_obj.hxx \
   string_converter.hxx \
   tile.cxx \
   tile.hxx \

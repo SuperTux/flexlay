@@ -34,7 +34,7 @@
 Player* Player::current_ = 0;
 
 Player::Player () :
-  pos (320, 500),
+  pos (320, 200),
   velocity (0, 0),
   
   walk     ("hero/run",   resources),

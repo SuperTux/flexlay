@@ -24,6 +24,7 @@
 #include <ClanLib/Display/sprite.h>
 #include <ClanLib/GUI/component.h>
 #include <ClanLib/Core/Math/point.h>
+#include "../scm_obj.hxx"
 #include "editor_map_layer.hxx"
 
 /** GUI Component that holds positioned objects, ie. objects which
@@ -35,13 +36,16 @@ private:
 
 public:
   struct Obj {
+    int       handle;
     CL_Sprite sprite;
     CL_Point  pos;
+    SCMObj    data;
   };
 
   typedef std::vector<Obj*> Objs;
   Objs objects;
 
+  int handle_count;
 public:
   EditorObjMap(EditorMap* p);
   ~EditorObjMap();
@@ -49,12 +53,15 @@ public:
   void update(float delta);
   void draw();
 
-  void add_object(const CL_Sprite& sprite, const CL_Point& pos);
+  /** Add an object to the map and return a handle to it */
+  int add_object(const CL_Sprite& sprite, const CL_Point& pos, const SCMObj& data);
 
   CL_Rect get_bounding_rect(const CL_Sprite& sprite);
 
   EditorObjMap::Obj* find_object(const CL_Point& pos);
   std::vector<EditorObjMap::Obj*> get_selection(const CL_Rect& rect);
+  Objs* get_objects();
+  EditorObjMap::Obj* get_object(int id);
 private:
   EditorObjMap (const EditorObjMap&);
   EditorObjMap& operator= (const EditorObjMap&);

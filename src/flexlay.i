@@ -50,6 +50,8 @@
 #include "tilemap_select_tool.hxx"
 #include "objmap_select_tool.hxx"
 #include "zoom_tool.hxx"
+
+#include "netpanzer.hxx" 
 %}
 
 %include "std_string.i"
@@ -93,12 +95,13 @@
 %include "menu.hxx"
 %include "menubar.hxx"
 %include "scrollbar.hxx"
-
 %include "tilemap_paint_tool.hxx"
 %include "tilemap_select_tool.hxx"
 %include "objmap_select_tool.hxx"
 %include "zoom_tool.hxx" 
 %include "graphic_context_state.hxx"
+
+%include "netpanzer.hxx" 
 
 
 /* EOF */

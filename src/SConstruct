@@ -93,6 +93,7 @@ env.SharedLibrary(
     'objmap_sprite_object.cxx',
     'paint_command.cxx',
     'panel.cxx',
+    'netpanzer.cxx', # fixme: move into seperate library
     'menu.cxx',
     'menubar.cxx',
     'popup_menu.cxx',

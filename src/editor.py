@@ -24,7 +24,8 @@ from flexlay import *
 flexlay = Flexlay()
 flexlay.init()
 
-from supertux import *
+from   supertux import *
+# import netpanzer
 
 screen_w = 800
 screen_h = 600
@@ -61,6 +62,7 @@ objmap_select_tool  = ObjMapSelectTool()
 workspace.set_tool(tilemap_paint_tool.to_tool());
 
 startlevel = SuperTuxLevel(100, 50)
+# startlevel = netpanzer.Level(256, 256)
 startlevel.activate(workspace)
 
 def do_quit():
@@ -310,6 +312,7 @@ layer_menu.add_item(mysprite, "Show current", gui_show_current)
 layer_menu.add_item(mysprite, "Show only current", gui_show_only_current)
 
 supertux = SuperTuxGUI(load_supertux_tiles(), gui)
+# supertux.tileselector.set_tileset(netpanzer.tileset)
 
 level = None
 def menu_file_open():
@@ -332,6 +335,9 @@ def has_element(lst, el):
         if i == el:
             return True
     return False
+
+def netpanzer_load_level(filename):
+    NetPanzerFileStruct(filename)
 
 def supertux_load_level(filename):   
     print "Loading: ", filename

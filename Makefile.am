@@ -1,7 +1,7 @@
 ##  $Id: Makefile.am,v 1.6 2003/08/18 08:50:22 grumbel Exp $
 ## 
-##  Windstille - A free Lemmings clone
-##  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
+##  Flexlay - A Generic 2D Game Editor
+##  Copyright (C) 2003 Ingo Ruhnke <grumbel@gmx.de>
 ##
 ##  This program is free software; you can redistribute it and/or
 ##  modify it under the terms of the GNU General Public License

@@ -11,6 +11,7 @@
 #include "netpanzer.hxx"
 #include "../tile_brush.hxx"
 
+#ifdef SWIGGUILE
 TileBrush scm2brush(SCM s_brush);
 SCM       brush2scm(const TileBrush& brush);
 //std::string scm2string(SCM s);
@@ -20,9 +21,11 @@ SCM
 component2scm(CL_Component* comp) {
   return SWIG_NewPointerObj(comp, SWIGTYPE_p_CL_Component, 0);
 }
+#endif
 
 %}
 
+#ifdef SWIGGUILE
 %typemap(in) SCMFunctor {
     $1 = SCMFunctor($input);
 }
@@ -48,6 +51,7 @@ component2scm(CL_Component* comp) {
 %typemap(out) std::string {
     $result = gh_str02scm($1.c_str());
 }
+#endif
 
 %newobject tileset_create();
 

@@ -42,6 +42,7 @@ Tileset::~Tileset()
   std::cout << "Tileset: destroy" << std::endl;
 }
 
+#ifdef SWIGGUILE
 void
 Tileset::load_tile_file(const std::string& filename)
 {
@@ -88,7 +89,7 @@ void
 Tileset::add_tile(SCM data)
 {
   // FIXME: Move this to scripting and add a Tileset::add()
-  int id;
+  int id = 0;
   std::string image;
   CL_Color color(254, 254, 254, 254);
   CL_Color attribute_color(255, 255, 255, 100);
@@ -175,6 +176,7 @@ Tileset::add_tile(SCM data)
       tiles[id]->id = id;
     }
 }
+#endif
 
 Tile* 
 Tileset::create (int id)

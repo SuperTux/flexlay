@@ -22,7 +22,9 @@
 #include <ClanLib/display.h>
 #include <ClanLib/gui.h>
 #include <ClanLib/guistylesilver.h>
+#ifdef SWIGGUILE
 #include <guile/gh.h>
+#endif
 
 #include "gui_manager.hxx"
 #include "command.hxx"
@@ -41,7 +43,10 @@ Editor::Editor()
 
   manager      = new GUIManager();
   tool_manager = new ToolManager();
+
+#ifdef SWIGGUILE
   gh_load((datadir + "editor.scm").c_str());
+#endif
 }
 
 Editor::~Editor()

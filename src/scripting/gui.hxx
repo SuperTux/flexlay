@@ -20,7 +20,9 @@
 #ifndef HEADER_SCRIPTING_GUI_HXX
 #define HEADER_SCRIPTING_GUI_HXX
 
+#ifdef SWIGGUILE
 #include <guile/gh.h>
+#endif
 
 class CL_MenuNode;
 class CL_Component;
@@ -38,12 +40,8 @@ void gui_pop_component();
 /** Create a window at the given position \a x, \a y and with the
     given dimensions \w and \h, all units in pixel */
 CL_Component* gui_create_window(int x, int y, 
-                             int w, int h, 
-                             const char* title);
-
-/** Create a button which launches func on click */
-CL_Component* gui_create_button_func(int x, int y, int w, int h, const char* text, 
-                                     SCM func);
+                                int w, int h, 
+                                const char* title);
 
 /** Create a button without attaching a callback directly to it,
     attaching a callback can later be done with a signal function. */
@@ -59,20 +57,9 @@ CL_Component* gui_create_inputbox(int x, int y, int w, int h, const char* text);
 /** Create a menu */
 CL_Component* gui_create_menu();
 
-/** Add an item to a menu */
-void gui_add_menu_item(CL_Component* menu, const char* name, SCM func);
-CL_MenuNode* gui_add_menu_toggle_item(CL_Component* c_menu, const char* name, SCM func);
-
 /** Remove the component \a comp from its parent 
     FIXME: Who deallocates?! */
 void gui_remove_component(CL_Component* comp);
-
-/** Connect a function to an on_click event */
-void gui_component_on_click(CL_Component* comp, SCM func);
-
-/** Connect a function to an on_close event, mainly used to react on
-    window closing */
-void gui_component_on_close(CL_Component* comp, SCM func);
 
 int gui_component_get_width(CL_Component* comp);
 int gui_component_get_height(CL_Component* comp);
@@ -98,13 +85,9 @@ bool gui_component_is_visible(CL_Component* comp);
 std::string gui_inputbox_get_text(CL_Component* comp);
 void        gui_inputbox_set_text(CL_Component* comp, std::string str);
 
-/** Start a file dialog, call func once ok is pressed.
-    @param filename The directory where to start the file manager in */
-void gui_file_dialog(const char* filename, SCM func);
 
 CL_Component* gui_listbox_create(int x, int y, int w, int h);
 int           gui_listbox_add(CL_Component* box, const char* str);
-void          gui_listbox_on_click(CL_Component* box, SCM func);
 
 /** Quit the GUI manager, works only if the GUIManager is in a busy loop */
 void gui_quit();
@@ -113,7 +96,29 @@ void gui_hide();
 void gui_show();
 bool gui_is_visible();
 
+#ifdef SWIGGUILE
+/** Create a button which launches func on click */
+CL_Component* gui_create_button_func(int x, int y, int w, int h, const char* text, 
+                                     SCM func);
+/** Add an item to a menu */
+void gui_add_menu_item(CL_Component* menu, const char* name, SCM func);
+CL_MenuNode* gui_add_menu_toggle_item(CL_Component* c_menu, const char* name, SCM func);
+
+/** Connect a function to an on_click event */
+void gui_component_on_click(CL_Component* comp, SCM func);
+
+/** Connect a function to an on_close event, mainly used to react on
+    window closing */
+void gui_component_on_close(CL_Component* comp, SCM func);
+
+/** Start a file dialog, call func once ok is pressed.
+    @param filename The directory where to start the file manager in */
+void gui_file_dialog(const char* filename, SCM func);
+
+void          gui_listbox_on_click(CL_Component* box, SCM func);
+
 void gui_add_on_resize_callback(SCM func);
+#endif
 
 #endif
 

@@ -77,6 +77,7 @@ EditorMap::get_layer(int i)
     return 0;
 }
 
+#ifdef SWIGGUILE
 void
 EditorMap::set_metadata(const SCMObj& obj)
 {
@@ -88,6 +89,7 @@ EditorMap::get_metadata() const
 {
   return metadata; 
 }
+#endif
 
 CL_Rect
 EditorMap::get_bounding_rect()

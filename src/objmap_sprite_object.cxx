@@ -20,9 +20,16 @@
 #include <ClanLib/Display/display.h>
 #include "objmap_sprite_object.hxx"
 
-ObjMapSpriteObject::ObjMapSpriteObject(int handle_, const CL_Point& pos_, const SCMObj& data_, 
+ObjMapSpriteObject::ObjMapSpriteObject(int handle_, const CL_Point& pos_, 
+#ifdef SWIGGUILE
+                                       const SCMObj& data_, 
+#endif
                                        const CL_Sprite& sprite_)
-  : ObjMapObject(handle_, pos_, data_), sprite(sprite_)
+  : ObjMapObject(handle_, pos_
+#ifdef SWIGGUILE
+                 ,data_
+#endif
+                 ), sprite(sprite_)
 {
   
 }

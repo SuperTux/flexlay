@@ -1,4 +1,4 @@
-AC_INIT(Flexlay, 0.0.1)
+AC_INIT(Flexlay, 0.0.3)
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_SRCDIR([src/editor_main.cxx])
 AM_INIT_AUTOMAKE(dist-bzip2)
@@ -7,10 +7,11 @@ AC_PROG_CC
 AC_PROG_CXX
 AC_PROG_INSTALL
 AC_PROG_RANLIB
+#AC_PROG_LIBTOOL
 AC_LANG(C++)
 
-AM_PATH_PYTHON
-AM_CHECK_PYTHON_HEADERS
+# AM_PATH_PYTHON(2.2)
+# AM_CHECK_PYTHON_HEADERS(2.2)
 
 dnl Checking for libraries
 AC_CHECK_LIB(qthreads, main)

@@ -25,7 +25,7 @@ command_source = \
 noinst_LIBRARIES = libeditor_scripting.a
 
 libeditor_scripting_a_CPPFLAGS = \
-  -I.. @EDITOR_CFLAGS@
+  -I.. @EDITOR_CFLAGS@ -DSWIGGUILE
 
 libeditor_scripting_a_SOURCES = \
   editor_guile_wrap.cxx \
@@ -34,7 +34,7 @@ libeditor_scripting_a_SOURCES = \
 # Include editor_wrap.cxx in case the user doesn't have swig installed
 EXTRA_DIST = editor_guile_wrap.cxx editor.i $(command_source)
 
-editor_python_wrap.cxx: editor.i $(command_source) Makefile
+editor_python_wrap.cxx: editor.i $(command_source)
 	$(SWIG) -python -c++  -o $@ $<
 
 # We override the default compile command to skip all the warnings
@@ -42,12 +42,12 @@ editor_python_wrap.cxx: editor.i $(command_source) Makefile
 libeditor_scripting_a-editor_python_wrap.o : editor_python_wrap.cxx
 	$(CXX) $(PYTHON_INCLUDES) @EDITOR_CFLAGS@ -c -O2 -o $@ $<
 
-editor_guile_wrap.cxx: editor.i $(command_source) Makefile
+editor_guile_wrap.cxx: editor.i $(command_source)
 	$(SWIG) -guile -c++  -o $@ $<
 
 # We override the default compile command to skip all the warnings
 # that compiling the wrappers causes.
 libeditor_scripting_a-editor_guile_wrap.o : editor_guile_wrap.cxx
-	$(CXX) @EDITOR_CFLAGS@ -c -O2 -o $@ $<
+	$(CXX) -DSWIGGUILE @EDITOR_CFLAGS@ -c -O2 -o $@ $<
 
 # EOF #

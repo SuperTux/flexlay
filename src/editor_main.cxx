@@ -27,19 +27,13 @@
 #include "editor.hxx"
 #include "globals.hxx"
 #include "tileset.hxx"
+#include "flexlay.hxx"
 #include "editor_main.hxx"
 
 extern "C" void SWIG_init(void);
 
-CL_ResourceManager* resources;
-
 EditorMain::EditorMain()
 {
-  screen_width  = 800;
-  screen_height = 600;
-  fullscreen   = false;
-  allow_resize = true;
-  use_opengl = true;
   game_definition_file = "windstille.scm";
 }
 
@@ -101,16 +95,17 @@ EditorMain::parse_command_line(int argc, char** argv)
 #endif
 
         case opengl_flag:
-          use_opengl = true;
+          flexlay.use_opengl = true;
           break;
 
         case 'f':
-          fullscreen = true;
+          flexlay.fullscreen = true;
           break;
 
         case 'g':
-          if (sscanf(argp.get_argument().c_str(), "%dx%d", &screen_width, &screen_height) == 2)
-            std::cout << "Geometry: " << screen_width << "x" << screen_height << std::endl;
+          if (sscanf(argp.get_argument().c_str(), "%dx%d",
+                     &flexlay.screen_width, &flexlay.screen_height) == 2)
+            std::cout << "Geometry: " << flexlay.screen_width << "x" << flexlay.screen_height << std::endl;
           else
             throw CL_Error("Geometry option '-g' requires argument of type {WIDTH}x{HEIGHT}");
           break;
@@ -196,23 +191,8 @@ EditorMain::main(int argc, char** argv)
     gh_define("*flexlay-package-string*", gh_str02scm(PACKAGE_STRING));
     std::cout << "done" << std::endl;
 
-    CL_SetupCore::init();
-#ifdef HAVE_LIBSDL
-    if (use_opengl)
-      CL_SetupGL::init();
-    else
-      CL_SetupSDL::init();
-#else
-    CL_SetupGL::init();
-#endif
-    CL_SetupDisplay::init();
-
-    window = new CL_DisplayWindow(PACKAGE_STRING,
-                                  screen_width, screen_height, fullscreen, allow_resize);
-
-    resources =  new CL_ResourceManager();
-    //resources->add_resources(CL_ResourceManager(datadir + "flexlay.xml", false));
-
+    flexlay.init();
+    
     std::cout << "Loading Flexlay startup script: " << game_definition_file << std::flush;
     gh_load((datadir + game_definition_file).c_str());
     std::cout << "done" << std::endl;
@@ -227,19 +207,7 @@ EditorMain::main(int argc, char** argv)
         
     editor.run();
 
-    CL_SetupDisplay::deinit();
-
-#ifdef HAVE_LIBSDL
-    if (use_opengl)
-      CL_SetupGL::deinit();
-    else
-      CL_SetupSDL::init();
-#else
-    CL_SetupGL::deinit();
-#endif
-
-    CL_SetupCore::deinit();
-
+    flexlay.deinit();
   } catch (CL_Error& error) {
     std::cout << "CL_Error: " << error.message << std::endl;
   } catch (std::exception& err) {

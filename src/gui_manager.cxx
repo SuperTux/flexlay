@@ -17,6 +17,7 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
+#include <iostream>
 #include <ClanLib/gui.h>
 #include <ClanLib/guistylesilver.h>
 #include <ClanLib/core.h>
@@ -33,11 +34,10 @@ GUIManager::GUIManager()
   resources = new CL_ResourceManager(datadir + "gui/gui.xml", false);
   style     = new CL_StyleManager_Silver(resources);
   manager   = new CL_GUIManager(style);
-
-  current_ = this;
+  current_  = this;
 
   // Make the manager the first component on the stack
-  gui_push_component(manager);
+  push_component(manager);
 }
 
 GUIManager::~GUIManager()
@@ -99,6 +99,12 @@ bool
 GUIManager::is_visible()
 {
   return manager->is_input_enabled();
+}
+
+void
+GUIManager::quit()
+{
+  manager->quit(); 
 }
 
 /* EOF */

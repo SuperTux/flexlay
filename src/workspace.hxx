@@ -70,9 +70,6 @@ public:
   WorkspaceItem* get_current_item();
   EditorMap* get_current_map();
   void set_current_map(EditorMap* );
-private:
-  Workspace (const Workspace&);
-  Workspace& operator= (const Workspace&);
 };
 
 #endif

@@ -22,10 +22,14 @@
 #include <ClanLib/display.h>
 #include <ClanLib/gui.h>
 #include <ClanLib/GUI/gui_manager.h>
-#include "scm_functor.hxx"
 #include "../gui_manager.hxx"
 #include "gui.hxx"
 
+#ifdef SWIGGUILE
+#  include "scm_functor.hxx"
+#endif
+
+#ifdef SWIGGUILE
 template<class A>
 SCM any2scm(const A& a);
 
@@ -76,27 +80,6 @@ struct SCMVirtualFunctor
   }
 };
 
-CL_Component*
-gui_add_button(int x, int y, int w, int h, const char* text)
-{
-  CL_Component* manager = GUIManager::current()->get_component();
-  return new CL_Button(CL_Rect(CL_Point(x, y), CL_Size(w, h)),
-                       text, manager);
-}
-
-void
-gui_component_set_position(CL_Component* comp, int x, int y)
-{
-  comp->set_position(x, y);
-}
-
-void
-gui_component_set_rect(CL_Component* comp, int x, int y, int w, int h)
-{
-  comp->set_position(CL_Rect(CL_Point(x, y),
-                             CL_Size(w, h)));
-}
-
 void
 gui_component_on_click(CL_Component* comp, SCM func)
 {
@@ -115,14 +98,6 @@ gui_component_on_close(CL_Component* comp, SCM func)
   new CL_Slot(window->sig_close().connect_functor_virtual(SCMVirtualFunctor(SCMFunctor(func))));
 }
 
-CL_Component*
-gui_create_menu()
-{
-  CL_Component* manager = GUIManager::current()->get_component();
-  CL_Menu* menu = new CL_Menu(manager);
-  //menu->add_child(new CL_Label(CL_Point(250, 5), "Hello World", menu));
-  return menu;
-}
 
 CL_MenuNode*
 gui_add_menu_toggle_item(CL_Component* c_menu, const char* name, SCM func)
@@ -165,6 +140,74 @@ gui_add_menu_item(CL_Component* c_menu, const char* name, SCM func)
 }
 
 CL_Component*
+gui_create_button_func(int x, int y, int w, int h, const char* text, SCM func)
+{
+  CL_Component* comp = gui_create_button(x, y, w, h, text);
+  gui_component_on_click(comp, func);
+  return comp;
+}
+
+void
+gui_file_dialog(const char* filename, SCM func)
+{
+  try {
+    new CL_FileDialog("File Dialog", "/", "", GUIManager::current()->get_component());
+  } catch (CL_Error& err) {
+    std::cout << "CL_Error: " << err.message << std::endl;
+  }
+}
+
+void
+gui_listbox_on_click(CL_Component* box, SCM func)
+{
+  CL_ListBox* listbox = dynamic_cast<CL_ListBox*>(box);
+  if (listbox)
+    {
+      new CL_Slot(listbox->sig_highlighted().connect_functor(SCMGenericFunctor1<int>(func)));
+    }
+}
+
+void gui_add_on_resize_callback(SCM func)
+{
+  new CL_Slot(CL_Display::get_current_window()->sig_resize().
+              connect_functor(SCMGenericFunctor2<int, int>(func)));
+}
+
+#endif
+// ---------------------------------------------------------------
+
+CL_Component*
+gui_add_button(int x, int y, int w, int h, const char* text)
+{
+  CL_Component* manager = GUIManager::current()->get_component();
+  return new CL_Button(CL_Rect(CL_Point(x, y), CL_Size(w, h)),
+                       text, manager);
+}
+
+void
+gui_component_set_position(CL_Component* comp, int x, int y)
+{
+  comp->set_position(x, y);
+}
+
+void
+gui_component_set_rect(CL_Component* comp, int x, int y, int w, int h)
+{
+  comp->set_position(CL_Rect(CL_Point(x, y),
+                             CL_Size(w, h)));
+}
+
+
+CL_Component*
+gui_create_menu()
+{
+  CL_Component* manager = GUIManager::current()->get_component();
+  CL_Menu* menu = new CL_Menu(manager);
+  //menu->add_child(new CL_Label(CL_Point(250, 5), "Hello World", menu));
+  return menu;
+}
+
+CL_Component*
 gui_create_button(int x, int y, int w, int h, const char* text)
 {
   CL_Component* manager = GUIManager::current()->get_component();
@@ -172,13 +215,6 @@ gui_create_button(int x, int y, int w, int h, const char* text)
                        text, manager);
 }
 
-CL_Component*
-gui_create_button_func(int x, int y, int w, int h, const char* text, SCM func)
-{
-  CL_Component* comp = gui_create_button(x, y, w, h, text);
-  gui_component_on_click(comp, func);
-  return comp;
-}
 
 CL_Component* 
 gui_create_label(int x, int y, const char* text)
@@ -273,15 +309,6 @@ gui_window_get_client_area(CL_Component* comp)
   return comp->get_client_area();
 }
 
-void
-gui_file_dialog(const char* filename, SCM func)
-{
-  try {
-    new CL_FileDialog("File Dialog", "/", "", GUIManager::current()->get_component());
-  } catch (CL_Error& err) {
-    std::cout << "CL_Error: " << err.message << std::endl;
-  }
-}
 
 void
 gui_quit()
@@ -323,21 +350,6 @@ gui_listbox_add(CL_Component* box, const char* str)
     return -1;
 }
 
-void
-gui_listbox_on_click(CL_Component* box, SCM func)
-{
-  CL_ListBox* listbox = dynamic_cast<CL_ListBox*>(box);
-  if (listbox)
-    {
-      new CL_Slot(listbox->sig_highlighted().connect_functor(SCMGenericFunctor1<int>(func)));
-    }
-}
-
-void gui_add_on_resize_callback(SCM func)
-{
-  new CL_Slot(CL_Display::get_current_window()->sig_resize().
-              connect_functor(SCMGenericFunctor2<int, int>(func)));
-}
 
 int gui_component_get_width(CL_Component* comp)
 {

@@ -47,7 +47,8 @@ public:
   ~Editor();
 
   ToolManager* get_tool_manager() const { return tool_manager; }
-
+  GUIManager*  get_gui_manager() const { return manager; }
+  
   void run();
 
   // FIXME: Move undo stuff to EditorMap or some other per map class

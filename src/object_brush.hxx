@@ -20,17 +20,25 @@
 #ifndef HEADER_OBJECT_BRUSH_HXX
 #define HEADER_OBJECT_BRUSH_HXX
 
+#ifdef SWIGGUILE
 #include "scm_obj.hxx"
+#endif
 #include <ClanLib/Display/sprite.h>
 
 class ObjectBrush
 {
 public:
   CL_Sprite sprite;
+#ifdef SWIGGUILE
   SCMObj    data;
+#endif
 
   ObjectBrush();
-  ObjectBrush(const CL_Sprite& sprite_,  const SCMObj& data_);
+  ObjectBrush(const CL_Sprite& sprite_
+#ifdef SWIGGUILE
+              ,  const SCMObj& data_
+#endif
+);
 };
 
 #endif

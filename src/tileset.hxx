@@ -20,7 +20,9 @@
 #ifndef TILESET_HXX
 #define TILESET_HXX
 
+#ifdef SWIGGUILE
 #include <libguile.h>
+#endif
 #include <map>
 #include <string>
 
@@ -72,8 +74,10 @@ public:
   static Tileset* current() { return current_; }
   static void set_current(Tileset* c) { current_ = c; }
 
+#ifdef SWIGGUILE
   void load_tile_file(const std::string& filename);
   void add_tile(SCM data);
+#endif
 };
 
 #endif

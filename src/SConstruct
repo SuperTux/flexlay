@@ -1,0 +1,69 @@
+## -*- mode: python -*-
+
+BuildDir('build', '.', duplicate=0)
+env = Environment(CC = 'g++',
+                  CCFLAGS = '-O2 -Wall')
+
+env.SharedLibrary(
+    'hellopy',
+    ['hellopy.cxx'],
+    CPPPATH=['/usr/include/python2.2/'],
+    LIBS=['boost_python'])
+
+env.SharedLibrary(
+    target = 'flexlay',
+    source = [
+    'build/command_group.cxx',
+    'build/editor.cxx',
+    'build/editor_grid_layer.cxx',
+    'build/editor_map.cxx',
+    'build/editor_map_component.cxx',
+    'build/editor_mapsize_layer.cxx',
+    'build/editor_objmap.cxx',
+    'build/editor_tilemap.cxx',
+    'build/flexlay.cxx',
+    'build/flexlay_python.cxx',
+    'build/globals.cxx',
+    'build/graphic_context_state.cxx',
+    'build/gui_manager.cxx',
+    'build/minimap.cxx',
+    'build/object_add_command.cxx',
+    'build/object_brush.cxx',
+    'build/object_delete_command.cxx',
+    'build/object_move_command.cxx',
+    'build/object_selector.cxx',
+    'build/object_transform_command.cxx',
+    'build/objmap_object.cxx',
+    'build/objmap_select_tool.cxx',
+    'build/objmap_sprite_object.cxx',
+    'build/paint_command.cxx',
+    'build/popup_menu.cxx',
+    'build/python_functor.cxx',
+    'build/scripting/gui.cxx',
+    'build/tile.cxx',
+    'build/tile_brush.cxx',
+    'build/tile_editor.cxx',
+    'build/tile_selection.cxx',
+    'build/tile_selector.cxx',
+    'build/tilemap_diamond_tool.cxx',
+    'build/tilemap_paint_tool.cxx',
+    'build/tilemap_select_tool.cxx',
+    'build/tilemap_tool.cxx',
+    'build/tileset.cxx',
+    'build/tool_manager.cxx',
+    'build/workspace.cxx',
+    'build/zoom_tool.cxx'],
+    CPPPATH=['/home/ingo/run/ClanLib-0.7-current//include/ClanLib-0.7/',
+             '/usr/include/python2.2/',
+             '..'],
+    LIBPATH=['/home/ingo/run/ClanLib-0.7-current//lib/'],
+    LIBS=['clanCore',
+          'clanDisplay',
+          'clanGL',
+          'clanSignals',
+          'clanGUI',
+          'clanGUIStyleSilver',
+          'boost_python'])
+
+
+# EOF #

@@ -27,14 +27,8 @@
 class EditorMain : public CL_ClanApplication
 {
 private:
-  int  screen_width;
-  int  screen_height;
-  bool fullscreen;
-  bool allow_resize;
-  bool use_opengl;
   std::vector<std::string> levelfiles;
   std::string game_definition_file;
-  CL_DisplayWindow* window;
 
   void parse_command_line(int argc, char** argv);
 

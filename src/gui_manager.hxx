@@ -49,6 +49,7 @@ public:
   void update();
 
   void run();
+  void quit();
 
   void push_component(CL_Component* c) { components.push(c); }
   void pop_component() { components.pop(); }

@@ -58,32 +58,17 @@ void          editor_map_component_set_zoom(CL_Component* c, float z);
 void editor_set_brush_tile(int i);
 int  editor_get_brush_tile();
 void editor_set_tool(int i);
-SCM  editor_get_tile_selection();
 void tilemap_paint_tool_set_brush(TileBrush brush);
 void tilemap_paint_tool_set_tilemap(EditorMapLayer* layer);
 
-void object_selector_add_brush(CL_Component* comp, const char* name, SCM brush);
-
-int  objectmap_add_object(EditorMapLayer* obj, const char* name, int x, int y, SCM userdata);
-#if 0
-int  objectmap_add_sprite_object (EditorMapLayer* layer, SCM desc, int x, int y, SCM userdata);
-#endif
-
-void editor_objectmap_delete_objects  (EditorMapLayer* layer,SCM selection);
 int  editor_objectmap_duplicate_object(EditorMapLayer* layer, int id);
-SCM  editor_objectmap_get_objects     (EditorMapLayer* layer);
-SCM  editor_objectmap_get_object      (EditorMapLayer* layer, int id);
 void editor_objectmap_set_pos         (EditorMapLayer* layer, int id, int x, int y);
 
 void editor_tilemap_set_current(EditorMapLayer* layer);
 void editor_objectmap_set_current(EditorMapLayer* layer);
 
 void objmap_sprite_object_flip(EditorMapLayer* layer, int id);
-SCM  tilemap_object_tool_get_objects();
-void tilemap_object_tool_set_objects(EditorMapLayer* layer, SCM lst);
 void tilemap_object_tool_clear_selection();
-
-void objectmap_tool_set_popupmenu_callback(SCM callback);
 
 CL_Component* editor_add_tileeditor(int x, int y, int w, int h);
 
@@ -92,14 +77,8 @@ void tileeditor_set_tile(CL_Component* comp, int id);
 int  screen_get_width();
 int  screen_get_height();
 
-SCM get_tile_def(int id);
-SCM get_tile_defs();
-SCM load_xml(const char* filename);
-
 // Map stuff
 EditorMap*      editor_map_create();
-void            editor_map_set_metadata(EditorMap* m, SCM data); 
-SCM             editor_map_get_metadata(EditorMap* m); 
 void            editor_map_add_layer(EditorMap* m, EditorMapLayer* layer);
 bool            editor_map_is_modified(EditorMap* m);
 void            editor_map_set_unmodified(EditorMap* m);
@@ -114,8 +93,6 @@ void            editor_toggle_grid(EditorMapLayer* layer);
 void            editor_toggle_attributes(EditorMapLayer* layer);
 EditorMapLayer* editor_tilemap_create(Tileset* tileset, int w, int h, int tile_size);
 void            editor_tilemap_resize(EditorMapLayer* , int w, int h, int x, int y);
-void            editor_tilemap_set_data(EditorMapLayer* l, SCM data);
-SCM             editor_tilemap_get_data(EditorMapLayer* l);
 int             editor_tilemap_get_width(EditorMapLayer* l);
 int             editor_tilemap_get_height(EditorMapLayer* l);
 void            editor_tilemap_set_bgcolor(EditorMapLayer* l, int r, int g, int b, int a);
@@ -130,11 +107,30 @@ EditorMap* workspace_get_current_map(Workspace* workspace);
 
 Tileset* tileset_create(int tile_size);
 Tileset* tileset_create_from_file(const char* resourcefile);
-void tileset_add_tile(Tileset* tileset, SCM data);
 void tileset_set_current(Tileset* tileset);
 
 EditorMapLayer* editor_mapsize_layer_create(int w, int h);
 void editor_mapsize_layer_set_size(EditorMapLayer*, int w, int h);
+
+// Guile Specific Stuff
+SCM  editor_get_tile_selection();
+void object_selector_add_brush(CL_Component* comp, const char* name, SCM brush);
+int  objectmap_add_object(EditorMapLayer* obj, const char* name, int x, int y, SCM userdata);
+//int  objectmap_add_sprite_object (EditorMapLayer* layer, SCM desc, int x, int y, SCM userdata);
+void editor_objectmap_delete_objects  (EditorMapLayer* layer,SCM selection);
+SCM  editor_objectmap_get_objects     (EditorMapLayer* layer);
+SCM  editor_objectmap_get_object      (EditorMapLayer* layer, int id);
+SCM  tilemap_object_tool_get_objects();
+void tilemap_object_tool_set_objects(EditorMapLayer* layer, SCM lst);
+void objectmap_tool_set_popupmenu_callback(SCM callback);
+SCM get_tile_def(int id);
+SCM get_tile_defs();
+SCM load_xml(const char* filename);
+void            editor_map_set_metadata(EditorMap* m, SCM data); 
+SCM             editor_map_get_metadata(EditorMap* m); 
+void            editor_tilemap_set_data(EditorMapLayer* l, SCM data);
+SCM             editor_tilemap_get_data(EditorMapLayer* l);
+void tileset_add_tile(Tileset* tileset, SCM data);
 
 #endif
 

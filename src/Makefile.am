@@ -1,13 +1,28 @@
+##  $Id: Makefile.am,v 1.6 2003/08/18 08:50:22 grumbel Exp $
+## 
+##  Flexlay - A Generic 2D Game Editor
+##  Copyright (C) 2003 Ingo Ruhnke <grumbel@gmx.de>
+##
+##  This program is free software; you can redistribute it and/or
+##  modify it under the terms of the GNU General Public License
+##  as published by the Free Software Foundation; either version 2
+##  of the License, or (at your option) any later version.
+##
+##  This program is distributed in the hope that it will be useful,
+##  but WITHOUT ANY WARRANTY; without even the implied warranty of
+##  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+##  GNU General Public License for more details.
+## 
+##  You should have received a copy of the GNU General Public License
+##  along with this program; if not, write to the Free Software
+##  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+
 SUBDIRS = scripting
 EXTRA_DIST = netpanzer-editor supertux-editor windstille-editor
 
-bin_PROGRAMS = flexlay averagecolor
+bin_PROGRAMS = flexlay
 
-averagecolor_SOURCES  = averagecolor.cxx
-averagecolor_CPPFLAGS = @EDITOR_CFLAGS@
-averagecolor_LDADD    = @EDITOR_LIBS@
-
-flexlay_CPPFLAGS = -I.. @EDITOR_CFLAGS@
+flexlay_CPPFLAGS = -I.. @EDITOR_CFLAGS@ -DSWIGGUILE
 flexlay_LDADD    = scripting/libeditor_scripting.a @EDITOR_LIBS@
 flexlay_SOURCES  = \
   command.hxx  \
@@ -32,6 +47,8 @@ flexlay_SOURCES  = \
   editor_tilemap.cxx  \
   editor_tilemap.hxx  \
   field.hxx  \
+  flexlay.hxx \
+  flexlay.cxx \
   globals.cxx  \
   globals.hxx  \
   graphic_context_state.cxx  \
@@ -95,6 +112,19 @@ flexlay_SOURCES  = \
   workspace.hxx  \
   zoom_tool.cxx  \
   zoom_tool.hxx
+
+#pkglib_LTLIBRARIES = libflexlay.la
+#libflexlay_la_SOURCES = \
+#  flexlay_python.cxx \
+#  globals.cxx  \
+#  globals.hxx  \
+#  scripting/gui.cxx \
+#  scripting/gui.hxx \
+#  gui_manager.cxx \
+#  gui_manager.hxx
+
+#libflexlay_la_CPPFLAGS = -I/usr/include/python2.2/ @EDITOR_CFLAGS@
+#libflexlay_la_LDFLAGS = -lboost_python @EDITOR_LIBS@
 
 #  tilemap_diamond_tool.hxx tilemap_diamond_tool.cxx 
 STATICBIN_LIBS = \

@@ -30,7 +30,12 @@ private:
   CL_Sprite sprite;
 
 public:
-  ObjMapSpriteObject(int handle_, const CL_Point& pos_, const SCMObj& data_, const CL_Sprite& s);
+  ObjMapSpriteObject(int handle_, 
+                     const CL_Point& pos_, 
+#ifdef SWIGGUILEconst 
+                     SCMObj& data_, 
+#endif
+                     const CL_Sprite& s);
   ObjMapSpriteObject(int handle_, const ObjMapSpriteObject& obj);
 
   void flip_horizontal();

@@ -56,7 +56,9 @@ private:
   CL_Color foreground_color;
 
   /** Metadata attached to this map (ie. mapname, description, scripts, etc.) */
+#ifdef SWIGGUILE
   SCMObj metadata;
+#endif
 public:
   EditorMap(const std::string& filename_);
   ~EditorMap();
@@ -78,8 +80,10 @@ public:
   EditorMapLayer* get_layer(int i);
   void set_active_layer(int i);
 
+#ifdef SWIGGUILE
   void   set_metadata(const SCMObj& obj);
   SCMObj get_metadata() const;
+#endif
 
   bool has_bounding_rect() const { return true; }
   CL_Rect get_bounding_rect();

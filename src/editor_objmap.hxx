@@ -24,7 +24,9 @@
 #include <ClanLib/Display/sprite.h>
 #include <ClanLib/GUI/component.h>
 #include <ClanLib/Core/Math/point.h>
+#ifdef SWIGGUILE
 #include "scm_obj.hxx"
+#endif
 #include "editor_map_layer.hxx"
 
 class ObjMapObject;
@@ -53,7 +55,9 @@ public:
   void draw(EditorMapComponent* parent);
 
   /** Add an object to the map and return a handle to it */
+#ifdef SWIGGUILE
   int  add_object(const CL_Sprite& sprite, const CL_Point& pos, const SCMObj& data);
+#endif
   void add_object(ObjMapObject* obj);
   void delete_object(int id);
   int  duplicate_object(int id);

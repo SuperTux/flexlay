@@ -59,6 +59,7 @@ EditorObjMap::duplicate_object(int id)
   return newobj->get_handle();
 }
 
+#ifdef SWIGGUILE
 int
 EditorObjMap::add_object(const CL_Sprite& sprite, const CL_Point& pos, const SCMObj& data)
 {
@@ -68,6 +69,7 @@ EditorObjMap::add_object(const CL_Sprite& sprite, const CL_Point& pos, const SCM
 
   return obj->get_handle();
 }
+#endif
 
 ObjMapObject*
 EditorObjMap::find_object(const CL_Point& click_pos)

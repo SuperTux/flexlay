@@ -86,7 +86,9 @@ ObjectSelector::mouse_up(const CL_InputEvent& event)
                     ObjMapObject* obj 
                       = new ObjMapSpriteObject(objmap->get_next_object_handle(), 
                                                EditorMapComponent::current()->screen2world(target),
+#ifdef SWIGGUILE
                                                SCMObj(drag_obj.data), 
+#endif
                                                drag_obj.sprite);
                     ObjectAddCommand* command = new ObjectAddCommand(objmap, obj);
                     Editor::current()->execute(command);

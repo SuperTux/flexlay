@@ -31,6 +31,8 @@ $game_objects = [
 	proc{|data, sexpr| SimpleObject.new("rock")}],
   ["unstable_tile", "images/shared/unstable_tile.png", "sprite",
     proc{|data, sexpr| SimpleTileObject.new(data, "unstable_tile")}],
+  ["infoblock", "images/editor/infoblock.png", "sprite",
+	proc{|data, sexpr| InfoBlock.new(data, sexpr)}],
   ["secretarea", "images/editor/secretarea.png", "rect",
     proc{|data, sexpr| SecretArea.new(data, sexpr)}],
   ["sequencetrigger", "images/editor/sequencetrigger.png", "rect",
@@ -71,6 +73,7 @@ def create_gameobject(objmap, data, pos, sexpr = [])
     obj.to_object.set_metadata(make_metadata(data[3].call(obj, sexpr)))
     
   when "rect"
+	print "NewRect", pos.x, " -", pos.y, "\n"
     obj = ObjMapRectObject.new(CL_Rect.new(CL_Point.new(pos.x.to_i, pos.y.to_i), CL_Size.new(64, 64)),
                                CL_Color.new(0, 0, 255, 128), make_metadata(nil))
     obj.to_object.set_metadata(make_metadata(data[3].call(obj, sexpr)))

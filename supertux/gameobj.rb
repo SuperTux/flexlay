@@ -147,6 +147,40 @@ class SimpleTileObject<GameObj
   end  
 end
 
+class InfoBlock<GameObj
+  attr_accessor :message
+
+  def initialize(data, sexpr = [])
+	@data = data
+	@message = get_value_from_tree(["message", "_"], sexpr, "")
+	connect_v1_ObjMapObject(@data.to_object.sig_move(), method(:on_move))
+	on_move(data)
+  end
+
+  def on_move(data)
+    pos = @data.to_object.get_pos()    
+    pos.x = (((pos.x+16)/32).to_i)*32
+    pos.y = (((pos.y+16)/32).to_i)*32
+    @data.to_object.set_pos(pos)       
+  end
+
+  def save(f, obj)
+	pos = obj.get_pos()
+	f.write("      (infoblock (x %d) (y %d)\n" % [pos.x, pos.y]);
+	f.write("        (message (_ \"%s\"))\n" % [@message]);
+	f.write("      )\n");
+  end
+
+  def property_dialog()
+    dialog = GenericDialog.new("InfoBox Property Dialog" % [@type],
+			$gui.get_component())
+    dialog.add_string("Message: ", @message)
+    dialog.set_callback(proc{|message| 
+                          @message = message
+                        })
+  end
+end 
+
 class ParticleSystem<GameObj
   def initialize(type, sexpr = [])
 	@type = type

@@ -1,4 +1,4 @@
-//  $Id: scripting.cxx,v 1.3 2003/09/10 13:53:11 grumbel Exp $
+//  $Id: scripting.cxx,v 1.4 2003/09/10 18:56:03 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -76,6 +76,23 @@ void
 editor_quit()
 {
   Editor::current()->get_component()->quit();
+}
+
+int
+screen_get_width()
+{
+  return CL_Display::get_width();
+}
+
+int
+screen_get_height()
+{
+  return CL_Display::get_height();
+}
+
+void tilemap_set_active_layer(int i)
+{
+  Editor::current()->get_editor_tilemap()->set_active_layer(i);
 }
 
 /* EOF */

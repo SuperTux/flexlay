@@ -1,4 +1,4 @@
-//  $Id: tile_selector.cxx,v 1.1 2003/09/10 13:53:11 grumbel Exp $
+//  $Id: tile_selector.cxx,v 1.2 2003/09/10 18:56:03 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -109,7 +109,7 @@ TileSelector::draw()
                                           CL_Size(TILE_SIZE/2, TILE_SIZE/2)),
                                   CL_Color(0,0,255, 100));
           }
-        else if (mouse_over_tile == i)
+        else if (mouse_over_tile == i && has_mouse_over())
           {
             CL_Display::fill_rect(CL_Rect(CL_Point(x * TILE_SIZE/2, y * TILE_SIZE/2),
                                           CL_Size(TILE_SIZE/2, TILE_SIZE/2)),

@@ -1,4 +1,4 @@
-//  $Id: editor.cxx,v 1.3 2003/09/10 13:53:11 grumbel Exp $
+//  $Id: editor.cxx,v 1.4 2003/09/10 18:56:03 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -78,10 +78,12 @@ Editor::Editor()
   component = manager;
 
   tilemap = new EditorTileMap(manager);
-  tilemap->load(datadir + "levels/level1.scm");
+  tilemap->load(datadir + "levels/level1.scm", true);
 
-  CL_Window* window = new CL_Window(CL_Rect(CL_Point(100, 100), CL_Size(200, 500)), "TileSelector", manager);
-  new TileSelector(3, 10, window->get_client_area());
+  CL_Window* window = new CL_Window(CL_Rect(CL_Point(CL_Display::get_width()-264, 0),
+                                            CL_Size(264, CL_Display::get_height())),
+                                    "TileSelector", manager);
+  new TileSelector(4, 10, window->get_client_area());
   //window->find_preferred_size();
 
   popupmenu = new CL_PopupMenu(manager);

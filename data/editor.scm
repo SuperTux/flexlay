@@ -1,12 +1,20 @@
 (display "EDITOR HELLOWORLD\n")
 
-(define screen-width  800)
-(define screen-height 600)
+(define screen-width  (screen-get-width))
+(define screen-height (screen-get-height))
 (define empty (lambda () #f))
 
 (define (create-a-button)
   (editor-add-button (random 640) (random 480) 100 50 "Create a button" 
                      create-a-button))
+
+(editor-add-button 100 0
+                   100 25 "Background" 
+                   (lambda () (tilemap-set-active-layer 0)))
+
+(editor-add-button 200 0
+                   100 25 "Foreground" 
+                   (lambda () (tilemap-set-active-layer 1)))
 
 (editor-add-button 0
                    (- screen-height 25)

@@ -1,4 +1,4 @@
-//  $Id: editor_tilemap.hxx,v 1.3 2003/09/10 13:53:11 grumbel Exp $
+//  $Id: editor_tilemap.hxx,v 1.4 2003/09/10 18:56:03 grumbel Exp $
 // 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -30,7 +30,9 @@ class EditorTileMap : public CL_Component
 {
 private:
   CL_SlotContainer slots;
-  Field<EditorTile*>* field;
+  typedef std::vector<Field<EditorTile*>*> Fields;
+  Fields fields;
+  Field<EditorTile*>* current_field;
   typedef Field<EditorTile*>::iterator FieldIter;
   
   CL_Pointf trans_offset;
@@ -39,20 +41,24 @@ private:
   CL_Point click_pos;
 
   enum { NONE, SCROLLING, PAINTING } tool;
+  void cleanup();
 public:
   int brush_tile;
 
   EditorTileMap (CL_Component* parent);
-  
+  ~EditorTileMap();
+
   void draw ();
+  void draw_map(Field<EditorTile*>* field);
 
   void mouse_up(const CL_InputEvent& event);
   void mouse_down(const CL_InputEvent& event);
   void mouse_move(const CL_InputEvent& event);
 
   EditorTile* get_tile (int, int);
+  void set_active_layer(int i);
 
-  void load (const std::string& filename);
+  void load (const std::string& filename, bool background);
   void save (const std::string& filename);
 
   CL_Point screen2tile(const CL_Point& pos);

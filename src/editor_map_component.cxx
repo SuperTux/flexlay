@@ -19,7 +19,9 @@
 
 #include <iostream>
 #include <ClanLib/Core/core_iostream.h>
+#include <ClanLib/Display/keyboard.h>
 #include <ClanLib/Display/display.h>
+#include <ClanLib/Display/display_iostream.h>
 #include <ClanLib/Display/keys.h>
 #include "tileset.hxx"
 #include "editor_names.hxx"
@@ -31,29 +33,50 @@
 
 EditorMapComponent* EditorMapComponent::current_ = 0; 
 
+class EditorMapComponentImpl
+{
+public:
+  EditorMapComponent* parent;
+  Scrollbar* scrollbar_h;
+  Scrollbar* scrollbar_v;
+  CL_SlotContainer slots;
+  Workspace workspace;
+  CL_Signal_v0 key_bindings[256];
+
+  void draw();
+  void mouse_up  (const CL_InputEvent& event);
+  void mouse_down(const CL_InputEvent& event);
+  void mouse_move(const CL_InputEvent& event);
+  void on_key_down(const CL_InputEvent& event);
+};
+
 EditorMapComponent::EditorMapComponent(const CL_Rect& rect, CL_Component* parent)
   : CL_Component(rect, parent),
-    workspace(rect.get_width(), rect.get_height())
+    impl(new EditorMapComponentImpl())
 {
+  impl->parent = this;
+  impl->workspace = Workspace(rect.get_width(), rect.get_height());
+
   current_ = this;
 
-  scrollbar_v = new Scrollbar(CL_Rect(CL_Point(rect.get_width() - 14, 2), 
-                                      CL_Size(12, rect.get_height() - 4 - 14)),
-                              Scrollbar::VERTICAL,
-                              this);
+  impl->scrollbar_v = new Scrollbar(CL_Rect(CL_Point(rect.get_width() - 14, 2), 
+                                            CL_Size(12, rect.get_height() - 4 - 14)),
+                                    Scrollbar::VERTICAL,
+                                    this);
 
-  scrollbar_h = new Scrollbar(CL_Rect(CL_Point(2, rect.get_height() - 14), 
-                                      CL_Size(rect.get_width() - 4 - 14, 12)),
-                              Scrollbar::HORIZONTAL,
-                              this);
+  impl->scrollbar_h = new Scrollbar(CL_Rect(CL_Point(2, rect.get_height() - 14), 
+                                            CL_Size(rect.get_width() - 4 - 14, 12)),
+                                    Scrollbar::HORIZONTAL,
+                                    this);
 
-  slots.connect(scrollbar_h->sig_scrollbar_move(), this, &EditorMapComponent::move_to_x);
-  slots.connect(scrollbar_v->sig_scrollbar_move(), this, &EditorMapComponent::move_to_y);
+  impl->slots.connect(impl->scrollbar_h->sig_scrollbar_move(), this, &EditorMapComponent::move_to_x);
+  impl->slots.connect(impl->scrollbar_v->sig_scrollbar_move(), this, &EditorMapComponent::move_to_y);
 
-  slots.connect(sig_paint(),      this, &EditorMapComponent::draw);
-  slots.connect(sig_mouse_up(),   this, &EditorMapComponent::mouse_up);
-  slots.connect(sig_mouse_down(), this, &EditorMapComponent::mouse_down);
-  slots.connect(sig_mouse_move(), this, &EditorMapComponent::mouse_move);
+  impl->slots.connect(sig_paint(),      impl.get(), &EditorMapComponentImpl::draw);
+  impl->slots.connect(sig_mouse_up(),   impl.get(), &EditorMapComponentImpl::mouse_up);
+  impl->slots.connect(sig_mouse_down(), impl.get(), &EditorMapComponentImpl::mouse_down);
+  impl->slots.connect(sig_mouse_move(), impl.get(), &EditorMapComponentImpl::mouse_move);
+  impl->slots.connect(sig_key_down(),   impl.get(), &EditorMapComponentImpl::on_key_down);
 }
 
 EditorMapComponent::~EditorMapComponent()
@@ -64,43 +87,50 @@ EditorMapComponent::~EditorMapComponent()
 Workspace
 EditorMapComponent::get_workspace() const
 {
-  return workspace;
+  return impl->workspace;
 }
 
 void
 EditorMapComponent::set_workspace(Workspace m)
 {
-  workspace = m;
+  impl->workspace = m;
 }
 
 void
-EditorMapComponent::mouse_up(const CL_InputEvent& event)
+EditorMapComponentImpl::on_key_down(const CL_InputEvent& event)
+{
+  if (event.id >= 0 && event.id < 256)
+    key_bindings[event.id]();
+}
+
+void
+EditorMapComponentImpl::mouse_up(const CL_InputEvent& event)
 {
   workspace.mouse_up(event);
 }
 
 void
-EditorMapComponent::mouse_move(const CL_InputEvent& event)
+EditorMapComponentImpl::mouse_move(const CL_InputEvent& event)
 {
   workspace.mouse_move(event);
 }
 
 void
-EditorMapComponent::mouse_down(const CL_InputEvent& event)
+EditorMapComponentImpl::mouse_down(const CL_InputEvent& event)
 {
   workspace.mouse_down(event);
 }
   
 void
-EditorMapComponent::draw ()
+EditorMapComponentImpl::draw ()
 {
   // Update scrollbars (FIXME: move me to function)
   scrollbar_v->set_range(0, workspace.get_map().get_bounding_rect().get_height());
-  scrollbar_v->set_pagesize(get_height()/workspace.get_gc_state().get_zoom());
+  scrollbar_v->set_pagesize(parent->get_height()/workspace.get_gc_state().get_zoom());
   scrollbar_v->set_pos(workspace.get_gc_state().get_pos().y);
 
   scrollbar_h->set_range(0, workspace.get_map().get_bounding_rect().get_width());
-  scrollbar_h->set_pagesize(get_width()/workspace.get_gc_state().get_zoom());
+  scrollbar_h->set_pagesize(parent->get_width()/workspace.get_gc_state().get_zoom());
   scrollbar_h->set_pos(workspace.get_gc_state().get_pos().x);
 
   workspace.draw();
@@ -109,56 +139,76 @@ EditorMapComponent::draw ()
 CL_Point
 EditorMapComponent::screen2world(const CL_Point& pos)
 {
-  CL_Pointf p = workspace.get_gc_state().screen2world(pos);
+  CL_Pointf p = impl->workspace.get_gc_state().screen2world(pos);
   return CL_Point((int)p.x, (int)p.y);
 }
 
 void
 EditorMapComponent::set_zoom(float z)
 {
-  workspace.get_gc_state().set_zoom(z);
+  impl->workspace.get_gc_state().set_zoom(z);
 }
 
 void
 EditorMapComponent::zoom_out(CL_Point pos)
 {
-  workspace.get_gc_state().set_zoom(CL_Pointf(pos.x, pos.y), workspace.get_gc_state().get_zoom()/1.25f);
+  impl->workspace.get_gc_state().set_zoom(CL_Pointf(pos.x, pos.y),
+                                          impl->workspace.get_gc_state().get_zoom()/1.25f);
 }
 
 void
 EditorMapComponent::zoom_in(CL_Point pos)
 {
-  workspace.get_gc_state().set_zoom(CL_Pointf(pos.x, pos.y), workspace.get_gc_state().get_zoom()*1.25f);
+  impl->workspace.get_gc_state().set_zoom(CL_Pointf(pos.x, pos.y), 
+                                          impl->workspace.get_gc_state().get_zoom()*1.25f);
 }
 
 void
 EditorMapComponent::zoom_to(CL_Rect rect)
 {
-  workspace.get_gc_state().zoom_to(rect);
+  impl->workspace.get_gc_state().zoom_to(rect);
 }
 
 CL_Rect
 EditorMapComponent::get_clip_rect()
 {
-  return workspace.get_gc_state().get_clip_rect();
+  return impl->workspace.get_gc_state().get_clip_rect();
 }
 
 void
 EditorMapComponent::move_to(int x, int y)
 {
-  workspace.get_gc_state().set_pos(CL_Pointf(x, y));
+  impl->workspace.get_gc_state().set_pos(CL_Pointf(x, y));
 }
 
 void
 EditorMapComponent::move_to_x(float x)
 {
-  workspace.get_gc_state().set_pos(CL_Pointf(x, workspace.get_gc_state().get_pos().y));
+  impl->workspace.get_gc_state().set_pos(CL_Pointf(x, impl->workspace.get_gc_state().get_pos().y));
 }
 
 void
 EditorMapComponent::move_to_y(float y)
 {
-  workspace.get_gc_state().set_pos(CL_Pointf(workspace.get_gc_state().get_pos().x, y));
+  impl->workspace.get_gc_state().set_pos(CL_Pointf(impl->workspace.get_gc_state().get_pos().x, y));
+}
+
+CL_Signal_v0&
+EditorMapComponent::sig_on_key(const std::string& str)
+{
+  int id = CL_Keyboard::get_device().keyid_to_string(str);
+
+  std::cout << str << " => " << id << std::endl;
+
+  if (id > 0 && id < 256)
+    {
+      return impl->key_bindings[id];
+    }
+  else
+    {
+      std::cout << "EditorMapComponent::sig_on_key: invalid key id: " << id << std::endl;
+      return impl->key_bindings[0];
+    }
 }
 
 /* EOF */

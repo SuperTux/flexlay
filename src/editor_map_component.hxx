@@ -30,17 +30,13 @@
 #include "workspace.hxx"
 
 class Scrollbar;
+class EditorMapComponentImpl;
 
 /** Object which represents a level, quirled together with the GUI
     stuff */
 class EditorMapComponent : public CL_Component
 {
 private:
-  Scrollbar* scrollbar_h;
-  Scrollbar* scrollbar_v;
-  CL_SlotContainer slots;
-  Workspace workspace;
-
   static EditorMapComponent* current_; 
 public:
   static EditorMapComponent* current() { return current_; } 
@@ -66,15 +62,14 @@ public:
   void move_to_x(float x);
   void move_to_y(float y);
 
-  void draw();
-
-  void mouse_up  (const CL_InputEvent& event);
-  void mouse_down(const CL_InputEvent& event);
-  void mouse_move(const CL_InputEvent& event);
+  CL_Signal_v0& sig_on_key(const std::string& str);
 
   CL_Point screen2world(const CL_Point& pos);
 
   CL_Rect get_clip_rect();
+
+private:
+  SharedPtr<EditorMapComponentImpl> impl;
 };
 
 #endif

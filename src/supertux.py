@@ -26,6 +26,20 @@ import sys
 import code
 from optparse import OptionParser
 
+def get_completions(text):
+    import rlcompleter
+    comp = rlcompleter.Completer()
+    i = 0
+    ret = []
+    while True:
+        line = comp.complete(text, i)
+        if line == None:
+            break;
+        
+        ret.append(line)           
+        i += 1
+    return ret
+
 def run_python():
     repl = code.InteractiveConsole()
     repl.runsource("import readline")
@@ -505,12 +519,12 @@ grid_icon = Icon(CL_Rect(CL_Point(p.inc(32), 2), CL_Size(32, 32)),
                  make_sprite("../data/images/icons24/grid.png"), "Some tooltip", button_panel);
 grid_icon.set_callback(gui_toggle_grid)
 
-foreground_icon  = Icon(CL_Rect(CL_Point(p.inc(48), 2), CL_Size(32, 32)),
-                        make_sprite("../data/images/icons24/foreground.png"), "Some tooltip", button_panel);
+background_icon  = Icon(CL_Rect(CL_Point(p.inc(48), 2), CL_Size(32, 32)),
+                        make_sprite("../data/images/icons24/background.png"), "Some tooltip", button_panel);
 interactive_icon = Icon(CL_Rect(CL_Point(p.inc(32), 2), CL_Size(32, 32)),
                         make_sprite("../data/images/icons24/interactive.png"), "Some tooltip", button_panel);
-background_icon  = Icon(CL_Rect(CL_Point(p.inc(32), 2), CL_Size(32, 32)),
-                        make_sprite("../data/images/icons24/background.png"), "Some tooltip", button_panel);
+foreground_icon  = Icon(CL_Rect(CL_Point(p.inc(32), 2), CL_Size(32, 32)),
+                        make_sprite("../data/images/icons24/foreground.png"), "Some tooltip", button_panel);
 eye_icon         = Icon(CL_Rect(CL_Point(p.inc(32), 2), CL_Size(32, 32)),
                         make_sprite("../data/images/icons24/eye.png"), "Some tooltip", button_panel);
 
@@ -608,6 +622,17 @@ def gui_show_only_current():
     display_properties.current_only = True
     display_properties.set(workspace.get_map().get_metadata())
 
+def gui_toggle_display_props():
+    if display_properties.show_all:
+        display_properties.show_all = False
+    elif not(display_properties.current_only):
+        display_properties.current_only = True
+    else:
+         display_properties.show_all = True
+         display_properties.current_only = False
+        
+    display_properties.set(workspace.get_map().get_metadata())    
+
 def gui_resize_level():
     level = workspace.get_map().get_data()
     dialog = GenericDialog("Resize Level", gui.get_component())
@@ -698,6 +723,13 @@ gui_toggle_minimap()
 gui_show_interactive()
 gui_show_current()
 set_tilemap_paint_tool()
+
+connect(editor_map.sig_on_key("m"), lambda: gui_toggle_minimap())
+connect(editor_map.sig_on_key("g"), lambda: gui_toggle_grid())
+connect(editor_map.sig_on_key("4"), lambda: gui_toggle_display_props())
+connect(editor_map.sig_on_key("3"), lambda: gui_show_foreground())
+connect(editor_map.sig_on_key("2"), lambda: gui_show_interactive())
+connect(editor_map.sig_on_key("1"), lambda: gui_show_background())
 
 gui.run()
 

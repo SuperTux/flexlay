@@ -28,21 +28,6 @@
 (define (get-last-file)
   (car *recent-files*))
 
-(define (serialize-level)
-  `(windstille-level
-    (properties
-     (name "Hello World")
-     (width  ,(map-get-width))
-     (height ,(map-get-height)))
-    (scripts ,@(map-get-scripts))
-    (tilemap
-     (data ,@(map-get-data 1)))
-    (background-tilemap
-     (data ,@(map-get-data 0)))
-    (diamond-map
-     ,@(diamond-map-get-data)
-     )))
-
 (define (new-map width height)
   (display "Creating new level...\n")
   (editor-new width height))
@@ -57,15 +42,63 @@
            (newline)))
   (push-last-file filename))
 
-(define (save-map filename)
-  (rename-file filename (string-append filename "~"))
+(define (write-field indent width field)
+  (display indent)
+  (let ((x 0))
+    (for-each (lambda (el)
+                (cond ((>= el 10)
+                       (display el)
+                       (display " "))
+                      (else
+                       (display el)
+                       (display "  ")))
 
-  (let ((level (serialize-level)))
-    (with-output-to-file filename
-      (lambda ()
-        ;;(pretty-print level)
-        (display level)
-        (newline)))))
+                (set! x (1+ x))
+                (cond ((>= x width)
+                       (newline)
+                       (display indent)
+                       (set! x 0)
+                       )))
+              field)))
+
+(define (save-map filename)
+  (if (access? filename F_OK)
+      (rename-file filename (string-append filename "~")))
+
+  (with-output-to-file filename
+    (lambda ()
+      (display   "(windstille-level\n\n")
+
+      (display   "  (properties\n")
+      (display   "    (name \"Hello World\")\n")
+      (format #t "    (width  ~a)~%" (map-get-width))
+      (format #t "    (height ~a)~%" (map-get-height))
+      (display   "   )\n\n")
+
+      (display   "  (scripts ")
+      (for-each (lambda (file)
+                  (write file)
+                  (display " "))
+                (map-get-scripts))
+      (display   "   )\n\n")
+
+      (display     "  (tilemap (data\n")
+      (write-field "   " (map-get-width) (map-get-data 1))
+      (display     "   ))\n\n")
+
+      (display   "  (background-tilemap (data\n")
+      (write-field "   " (map-get-width) (map-get-data 0))
+      (display   "   ))\n\n")
+
+      (format #t "  (diamond-map\n")
+      (write-field "   " 
+                   (map-get-width)
+                   (diamond-map-get-data))
+      (format #t "   )\n\n")
+
+      (display   " )\n")
+      (newline)
+      (display ";; EOF ;;\n"))))
 
 (define (resize-map)
   (let ((window (gui-create-window 200 200 150 160 "Resize Map")))

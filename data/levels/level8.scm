@@ -1,0 +1,1 @@
+(windstille-level (properties (name "Hello World")) (tilemap (width 7) (height 5) (data 64 63 63 63 63 63 69 60 68 43 43 43 47 57 60 46 0 0 0 41 57 60 44 39 39 39 40 57 62 54 54 54 54 54 58)) (background-tilemap (width 7) (height 5) (data 0 0 0 0 0 0 0 0 22 22 22 22 22 0 0 22 22 22 22 22 0 0 22 22 22 22 22 0 0 0 0 0 0 0 0)))

@@ -25,21 +25,35 @@
 #include "editor/editor.hxx"
 #include "editor/tile_selector.hxx"
 #include "editor/editor_tilemap.hxx"
+#include "editor/editor_map.hxx"
 #include "editor/tile_editor.hxx"
 #include "tile_factory.hxx"
 #include "gui_manager.hxx"
 #include "editor.hxx"
 
+EditorTileMap*
+editor_get_tilemap()
+{
+  EditorTileMap* tilemap = dynamic_cast<EditorTileMap*>(Editor::current()->get_map()->get_layer_by_name(0));
+  if (tilemap)
+    return tilemap;
+  else
+    {
+      assert(!"Error: Tilemap not found");
+      return 0;
+    }
+}
+
 void
 editor_set_brush_tile(int i)
 {
-  Editor::current()->get_editor_tilemap()->brush_tile = i;
+  editor_get_tilemap()->brush_tile = i;
 }
 
 int
 editor_get_brush_tile()
 {
-  return Editor::current()->get_editor_tilemap()->brush_tile;
+  return editor_get_tilemap()->brush_tile;
 }
 
 int
@@ -56,12 +70,12 @@ screen_get_height()
 
 void tilemap_set_active_layer(int i)
 {
-  Editor::current()->get_editor_tilemap()->set_active_layer(i);
+  editor_get_tilemap()->set_active_layer(i);
 }
 
 void editor_set_tool(int i)
 {
-  Editor::current()->get_editor_tilemap()->set_tool(i);
+  Editor::current()->get_map()->set_tool(i);
 }
 
 CL_Component*
@@ -74,7 +88,7 @@ tile_selector_create(int x, int y, int w, int h, float scale)
 
 SCM diamond_map_get_data()
 {
-  Field<int>* field = Editor::current()->get_editor_tilemap()->get_diamond_map();
+  Field<int>* field = editor_get_tilemap()->get_diamond_map();
   
   if (field)
     {
@@ -92,7 +106,7 @@ SCM diamond_map_get_data()
 
 SCM map_get_data(int i)
 {
-  Field<EditorTile*>* field = Editor::current()->get_editor_tilemap()->get_map(i);
+  Field<EditorTile*>* field = editor_get_tilemap()->get_map(i);
   if (field)
     {
       std::cout << ": " << field->get_width() << "x" << field->get_height() 
@@ -114,17 +128,17 @@ SCM map_get_data(int i)
 
 int map_get_width()
 {
-  return Editor::current()->get_editor_tilemap()->get_width();
+  return editor_get_tilemap()->get_width();
 }
 
 int map_get_height()
 {
-  return Editor::current()->get_editor_tilemap()->get_height();
+  return editor_get_tilemap()->get_height();
 }
 
 void map_set_size(int w, int h)
 {
-  //return Editor::current()->get_editor_tilemap()->get_height();
+  //return editor_get_tilemap()->get_height();
 }
 
 void map_resize(int w, int h)
@@ -138,13 +152,13 @@ void map_clear()
 void
 editor_load(const char* filename)
 {
-  Editor::current()->get_editor_tilemap()->load(filename);
+  editor_get_tilemap()->load(filename);
 }
 
 void
 editor_new(int w, int h)
 {
-  Editor::current()->get_editor_tilemap()->new_level(w, h);
+  editor_get_tilemap()->new_level(w, h);
 }
 
 void
@@ -220,7 +234,7 @@ SCM map_get_scripts()
 {
   SCM lst = SCM_EOL;
 
-  std::vector<std::string> scripts = Editor::current()->get_editor_tilemap()->get_scripts();
+  std::vector<std::string> scripts = Editor::current()->get_map()->get_scripts();
   for (std::vector<std::string>::iterator i = scripts.begin(); 
        i != scripts.end(); ++i)
     {

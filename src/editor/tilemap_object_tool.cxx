@@ -17,10 +17,11 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
+#include "editor_map.hxx"
 #include "tilemap_object_tool.hxx"
 
-TileMapObjectTool::TileMapObjectTool(EditorTileMap* t)
-  : TileMapTool(t)
+TileMapObjectTool::TileMapObjectTool(EditorMap* p, EditorTileMap* t)
+  : TileMapTool(p), tilemap(t)
 {
 }
 

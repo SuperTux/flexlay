@@ -21,10 +21,11 @@
 #include <ClanLib/Display/input_event.h>
 #include "globals.hxx"
 #include "editor_tilemap.hxx"
+#include "editor_map.hxx"
 #include "tilemap_select_tool.hxx"
 
-TileMapSelectTool::TileMapSelectTool(EditorTileMap* t)
-  : TileMapTool(t)
+TileMapSelectTool::TileMapSelectTool(EditorMap* p, EditorTileMap* t)
+  : TileMapTool(p), tilemap(t)
 {
   active = false;
 }
@@ -50,8 +51,8 @@ TileMapSelectTool::on_mouse_up  (const CL_InputEvent& event)
   if (event.id == CL_MOUSE_LEFT)
     {
       active = false;
-      update_selection(tilemap->screen2tile(event.mouse_pos).x + 1,
-                       tilemap->screen2tile(event.mouse_pos).y + 1);
+      update_selection(parent->screen2tile(event.mouse_pos).x + 1,
+                       parent->screen2tile(event.mouse_pos).y + 1);
     }
 }
 
@@ -61,7 +62,7 @@ TileMapSelectTool::on_mouse_down(const CL_InputEvent& event)
   if (event.id == CL_MOUSE_LEFT)
     {
       active = true;
-      click_pos = tilemap->screen2tile(event.mouse_pos);
+      click_pos = parent->screen2tile(event.mouse_pos);
     }
   else if (event.id == CL_MOUSE_RIGHT)
     {
@@ -74,8 +75,8 @@ TileMapSelectTool::on_mouse_move(const CL_InputEvent& event)
 { 
   if (active)
     {
-      update_selection(tilemap->screen2tile(event.mouse_pos).x + 1,
-                       tilemap->screen2tile(event.mouse_pos).y + 1);
+      update_selection(parent->screen2tile(event.mouse_pos).x + 1,
+                       parent->screen2tile(event.mouse_pos).y + 1);
     }
 }
 

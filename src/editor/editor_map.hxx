@@ -24,15 +24,50 @@
 #include <ClanLib/Display/sprite.h>
 #include <ClanLib/GUI/component.h>
 #include <ClanLib/Core/Math/point.h>
+#include "../field.hxx"
 #include "editor_objmap.hxx"
+#include "editor_tilemap.hxx"
+
+class TileMapTool;
 
 /** */
 class EditorMap : public CL_Component
 {
 private:
+  CL_SlotContainer slots;
+
+  typedef std::vector<EditorMapLayer*> Layers;
+  Layers layers;
+
+  EditorTileMap* tilemap;
+  EditorObjMap*  objmap;
+
+  int zoom_factor;
+  CL_Pointf trans_offset;
+  CL_Pointf old_trans_offset;
+
+  CL_Point click_pos;
+
+  bool scrolling;
+  typedef std::vector<TileMapTool*> Tools;
+  Tools tools;
+  TileMapTool* tool;
+
+  Field<int>* diamond_map;
+  std::vector<std::string> scripts;
+
+  void cleanup();
 public:
+  int brush_tile;
+
   EditorMap(CL_Component* parent);
   ~EditorMap();
+
+  void set_tool(int i);
+
+  float get_zoom();
+  void  zoom_out();
+  void  zoom_in();
 
   void update(float delta);
   void draw();
@@ -41,9 +76,23 @@ public:
   void mouse_down(const CL_InputEvent& event);
   void mouse_move(const CL_InputEvent& event);
 
-private:
-  EditorMap (const EditorMap&);
-  EditorMap& operator= (const EditorMap&);
+  EditorMapLayer* get_layer_by_name(int i);
+  EditorMapLayer* get_layer(int i);
+  void set_active_layer(int i);
+
+  void load (const std::string& filename);
+  void save (const std::string& filename);
+  void new_level(int w, int h);
+
+  CL_Rect get_clip_rect();
+  
+  int get_width(); 
+  int get_height();
+
+  std::vector<std::string> get_scripts() { return scripts; }
+
+  CL_Point screen2tile(const CL_Point& pos);
+  CL_Point screen2world(const CL_Point& pos);
 };
 
 #endif

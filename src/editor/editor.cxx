@@ -27,8 +27,7 @@
 #include "gui_manager.hxx"
 #include "globals.hxx"
 #include "editor.hxx"
-#include "editor_tilemap.hxx"
-#include "editor_objmap.hxx"
+#include "editor_map.hxx"
 #include "tile_selector.hxx"
 #include "tile_editor.hxx"
 
@@ -40,8 +39,9 @@ Editor::Editor()
 
   manager = new GUIManager();
 
-  tilemap = new EditorTileMap(manager->get_component());
-  objmap  = new EditorObjMap(manager->get_component());
+  map_comp = new EditorMap(manager->get_component());
+  //tilemap = new EditorTileMap(manager->get_component());
+  //objmap  = new EditorObjMap(manager->get_component());
 
   gh_load ((datadir + "editor.scm").c_str());
 }
@@ -54,7 +54,8 @@ Editor::~Editor()
 void
 Editor::load(const std::string& filename)
 {
-  tilemap->load(filename);
+  // FIXME: implement me
+  //tilemap->load(filename);
 }
 
 void

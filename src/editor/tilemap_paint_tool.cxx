@@ -21,10 +21,11 @@
 #include "globals.hxx"
 #include "editor_tilemap.hxx"
 #include "tile_factory.hxx"
+#include "editor_map.hxx"
 #include "tilemap_paint_tool.hxx"
 
-TileMapPaintTool::TileMapPaintTool(EditorTileMap* t)
-  : TileMapTool(t)
+TileMapPaintTool::TileMapPaintTool(EditorMap* p, EditorTileMap* t)
+  : TileMapTool(p), tilemap(t)
 {
   painting = false;
 }
@@ -36,7 +37,7 @@ TileMapPaintTool::~TileMapPaintTool()
 void
 TileMapPaintTool::draw()
 {
-  CL_Point pos = tilemap->screen2tile(CL_Point(CL_Mouse::get_x(), CL_Mouse::get_y()));
+  CL_Point pos = parent->screen2tile(CL_Point(CL_Mouse::get_x(), CL_Mouse::get_y()));
 
   if (pos.x >= 0 && pos.y >= 0)
     {
@@ -56,7 +57,7 @@ TileMapPaintTool::draw()
 void
 TileMapPaintTool::on_mouse_down(const CL_InputEvent& event)
 {
-  CL_Point pos = tilemap->screen2tile(event.mouse_pos);
+  CL_Point pos = parent->screen2tile(event.mouse_pos);
 
   if (event.id == CL_MOUSE_LEFT)
     { 
@@ -77,7 +78,7 @@ TileMapPaintTool::on_mouse_move(const CL_InputEvent& event)
 {
   if (painting)
     {
-      CL_Point pos = tilemap->screen2tile(event.mouse_pos);
+      CL_Point pos = parent->screen2tile(event.mouse_pos);
       if (pos.x >= 0 && pos.x < tilemap->get_field()->get_width()
           && pos.y >= 0 && pos.y < tilemap->get_field()->get_height())
         tilemap->get_field()->at(pos.x, pos.y)->set_tile(tilemap->brush_tile);

@@ -20,11 +20,12 @@
 #include <iostream>
 #include <ClanLib/Display/input_event.h>
 #include "editor_tilemap.hxx"
+#include "editor_map.hxx"
 #include "globals.hxx"
 #include "tilemap_diamond_tool.hxx"
 
-TileMapDiamondTool::TileMapDiamondTool(EditorTileMap* t)
-  : TileMapTool(t),
+TileMapDiamondTool::TileMapDiamondTool(EditorMap* p, EditorTileMap* t)
+  : TileMapTool(p), tilemap(t),
     sprite("diamond", resources)
 {
   painting = false;
@@ -37,7 +38,7 @@ TileMapDiamondTool::~TileMapDiamondTool()
 void
 TileMapDiamondTool::draw()
 {
-  CL_Point pos = tilemap->screen2world(CL_Point(CL_Mouse::get_x(), CL_Mouse::get_y()));
+  CL_Point pos = parent->screen2world(CL_Point(CL_Mouse::get_x(), CL_Mouse::get_y()));
  
   sprite.set_frame(7);
   sprite.draw(pos.x/64 * 64,
@@ -79,7 +80,7 @@ TileMapDiamondTool::on_mouse_move(const CL_InputEvent& event)
 void
 TileMapDiamondTool::paint(const CL_Point& mpos)
 {
-  CL_Point pos = tilemap->screen2world(mpos);
+  CL_Point pos = parent->screen2world(mpos);
 
   tilemap->get_diamond_map()->at(int(pos.x/64), 
                                  int(pos.y/64)) = color;

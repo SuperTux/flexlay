@@ -23,8 +23,7 @@
 #include <stack>
 
 class TileEditor;
-class EditorObjMap;
-class EditorTileMap;
+class EditorMap;
 class GUIManager;
 
 /** */
@@ -32,8 +31,7 @@ class Editor
 {
 private:
   GUIManager* manager;
-  EditorTileMap* tilemap;
-  EditorObjMap*  objmap;
+  EditorMap*  map_comp;
 
   static Editor* current_;
 public:
@@ -42,7 +40,7 @@ public:
   Editor();
   ~Editor();
 
-  EditorTileMap* get_editor_tilemap() { return tilemap; }
+  EditorMap* get_map() { return map_comp; }
 
   void run();
   void load(const std::string& filename);

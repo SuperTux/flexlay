@@ -22,54 +22,35 @@
 
 #include <ClanLib/gui.h>
 #include "../field.hxx"
+#include "editor_map_layer.hxx"
 #include "editor_tile.hxx"
-
-class TileMapTool;
 
 /** Holds the tilemap data for the editor and provides functions to
     manipulate them */
-class EditorTileMap : public CL_Component
+class EditorTileMap : public EditorMapLayer
 {
 private:
-  CL_SlotContainer slots;
   typedef std::vector<Field<EditorTile*>*> Fields;
+  typedef Field<EditorTile*>::iterator FieldIter;
+
   Fields fields;
   Field<EditorTile*>* current_field;
-  typedef Field<EditorTile*>::iterator FieldIter;
-  
-  int zoom_factor;
-  CL_Pointf trans_offset;
-  CL_Pointf old_trans_offset;
-
-  CL_Point click_pos;
 
   bool scrolling;
-  typedef std::vector<TileMapTool*> Tools;
-  Tools tools;
-  TileMapTool* tool;
 
   Field<int>* diamond_map;
-  std::vector<std::string> scripts;
 
   void cleanup();
 public:
   int brush_tile;
 
-  EditorTileMap (CL_Component* parent);
+  EditorTileMap();
   ~EditorTileMap();
-
-  void set_tool(int i);
-
-  float get_zoom();
-  void  zoom_out();
-  void  zoom_in();
 
   void draw ();
   void draw_map(Field<EditorTile*>* field);
 
-  void mouse_up(const CL_InputEvent& event);
-  void mouse_down(const CL_InputEvent& event);
-  void mouse_move(const CL_InputEvent& event);
+  void update(float delta) {}
 
   /** Return the current active field */
   Field<EditorTile*>* get_field() { return current_field; }
@@ -82,17 +63,10 @@ public:
   void save (const std::string& filename);
   void new_level(int w, int h);
 
-  CL_Rect get_clip_rect();
-  
   Field<EditorTile*>* get_map(int i);
 
   int get_width()  { return current_field->get_width(); }
   int get_height() { return current_field->get_height(); }
-
-  std::vector<std::string> get_scripts() { return scripts; }
-
-  CL_Point screen2tile(const CL_Point& pos);
-  CL_Point screen2world(const CL_Point& pos);
 };
 
 #endif

@@ -22,12 +22,16 @@
 
 #include "tilemap_tool.hxx"
 
+class EditorTileMap;
+class EditorMap;
+
 /** */
 class TileMapObjectTool : public TileMapTool
 {
 private:
+  EditorTileMap* tilemap;
 public:
-  TileMapObjectTool(EditorTileMap* t);
+  TileMapObjectTool(EditorMap* p, EditorTileMap* t);
   ~TileMapObjectTool();
 
   void draw();

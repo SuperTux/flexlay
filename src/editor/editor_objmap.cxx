@@ -22,16 +22,8 @@
 
 extern CL_ResourceManager* resources;
 
-EditorObjMap::EditorObjMap(CL_Component* parent)
-  : CL_Component(CL_Rect(CL_Point(0, 0),
-                         CL_Size(CL_Display::get_width(), CL_Display::get_height())),
-                 parent)
+EditorObjMap::EditorObjMap()
 {
-  slots.connect(sig_paint(),      this, &EditorObjMap::draw);
-  slots.connect(sig_mouse_up(),   this, &EditorObjMap::mouse_up);
-  slots.connect(sig_mouse_down(), this, &EditorObjMap::mouse_down);
-  slots.connect(sig_mouse_move(), this, &EditorObjMap::mouse_move);
-
   Obj obj;
   obj.sprite = CL_Sprite("igel", resources);
   obj.pos    = CL_Point(100, 100);
@@ -58,21 +50,6 @@ EditorObjMap::draw()
     {
       (*i).sprite.draw((*i).pos.x, (*i).pos.y);
     }
-}
-
-void
-EditorObjMap::mouse_up  (const CL_InputEvent& event)
-{
-}
-
-void
-EditorObjMap::mouse_down(const CL_InputEvent& event)
-{
-}
-
-void
-EditorObjMap::mouse_move(const CL_InputEvent& event)
-{
 }
 
 /* EOF */

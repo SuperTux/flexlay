@@ -24,10 +24,11 @@
 #include <ClanLib/Display/sprite.h>
 #include <ClanLib/GUI/component.h>
 #include <ClanLib/Core/Math/point.h>
+#include "editor_map_layer.hxx"
 
 /** GUI Component that holds positioned objects, ie. objects which
     consist of a CL_Sprite and some properties */
-class EditorObjMap : public CL_Component
+class EditorObjMap : public EditorMapLayer
 {
 private:
   CL_SlotContainer slots;
@@ -40,15 +41,12 @@ private:
   typedef std::vector<Obj> Objs;
   Objs objects;
 public:
-  EditorObjMap(CL_Component* parent);
+  EditorObjMap();
   ~EditorObjMap();
 
   void update(float delta);
   void draw();
 
-  void mouse_up  (const CL_InputEvent& event);
-  void mouse_down(const CL_InputEvent& event);
-  void mouse_move(const CL_InputEvent& event);
 private:
   EditorObjMap (const EditorObjMap&);
   EditorObjMap& operator= (const EditorObjMap&);

@@ -10,7 +10,6 @@ AC_PROG_RANLIB
 AC_LANG(C++)
 
 dnl Checking for libraries
-AC_CHECK_LIB(xml, main)
 AC_CHECK_LIB(qthreads, main)
 AC_CHECK_LIB(guile, scm_boot_guile)
 AC_CHECK_HEADER(guile/gh.h)

@@ -1,4 +1,4 @@
-//  $Id: TileMap.cxx,v 1.3 2003/08/06 17:16:19 grumbel Exp $
+//  $Id: TileMap.cxx,v 1.4 2003/08/10 19:30:03 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -48,9 +48,12 @@ TileMap::TileMap ()
 }
 
 TileMap::TileMap (WindstilleLevel* data)
-  : field (data->get_field ()->get_width (),
-	   data->get_field ()->get_height ())
+  : field (data->get_field()->get_width (),
+	   data->get_field()->get_height ())
 {
+  std::cout << "Creating Tilemap: " 
+            << data->get_field()->get_width() << "x" << data->get_field()->get_height() << std::endl;
+
   for (unsigned int y = 0; y < field.get_height (); ++y) {
     for (unsigned int x = 0; x < field.get_width (); ++x)
       {

@@ -1,4 +1,4 @@
-//  $Id: WindstilleLevel.cxx,v 1.3 2003/08/06 17:16:19 grumbel Exp $
+//  $Id: WindstilleLevel.cxx,v 1.4 2003/08/10 19:30:03 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -47,6 +47,7 @@ WindstilleLevel::WindstilleLevel (const std::string& filename)
 void 
 WindstilleLevel::parse_file (const std::string& filename)
 {
+  std::cout << "Windstille Level: " << filename << std::endl;
   doc = xmlParseFile(filename.c_str());
   
   if (doc == NULL)
@@ -54,9 +55,9 @@ WindstilleLevel::parse_file (const std::string& filename)
       assert (!"Error: Levelfile not found");
     }
 
-  xmlNodePtr cur = doc->children;
-
-  if (xmlIsBlankNode(cur)) cur = cur->next;
+  xmlNodePtr cur = xmlDocGetRootElement(doc);
+  
+  //if (xmlIsBlankNode(cur)) cur = cur->next;
 
   if (cur != NULL && strcmp((const char*)cur->name, "turrican-level") == 0)
     {
@@ -82,6 +83,11 @@ WindstilleLevel::parse_file (const std::string& filename)
 	  }
 	  cur = cur->next;
 	}
+    }
+  else
+    {
+      std::cout << "Not a Windstille Level" << std::endl;
+      exit(EXIT_FAILURE);
     }
 }
 

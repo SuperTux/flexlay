@@ -1,4 +1,4 @@
-//  $Id: PlayerView.cxx,v 1.2 2003/08/06 17:16:19 grumbel Exp $
+//  $Id: PlayerView.cxx,v 1.3 2003/08/10 19:30:03 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -32,18 +32,19 @@ PlayerView::PlayerView (Player* t)
 void
 PlayerView::draw ()
 {
-  glPushMatrix ();
-  glTranslatef (-pos.x + CL_Display::get_width ()/2, -pos.y + CL_Display::get_height ()/2, 0.0);
+  //glPushMatrix ();
+  //glTranslatef (-pos.x + CL_Display::get_width ()/2, -pos.y + CL_Display::get_height ()/2, 0.0);
+  CL_Display::push_translate_offset(int(-pos.x + CL_Display::get_width ()/2),
+                                    int(-pos.y + CL_Display::get_height ()/2));
   world->draw ();
-  glPopMatrix ();
+  CL_Display::pop_translate_offset();
+  //glPopMatrix ();
 }
 
 void
 PlayerView::update (float delta)
 {
   CL_Vector tpos = player->get_pos ();
-
-  std::cout << "player pos: " << tpos.x << " " << tpos.y << std::endl;
 
   float dist = tpos.x - pos.x;
   if (dist > 150)

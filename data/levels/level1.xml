@@ -1,3 +1,4 @@
+<?xml version="1.0"?>
 <turrican-level>
   <properties>
     <levelname>Bla</levelname>
@@ -574,8 +575,8 @@
     </foobar-enemy>
 
     <guile-object name="bla">
-	<argument></argument>
-	<argument></argument>
+      <argument></argument>
+      <argument></argument>
     </guile-object>
 
     <foobar-special-region>

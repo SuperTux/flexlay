@@ -1,4 +1,4 @@
-//  $Id: EditorTileMapView.cxx,v 1.2 2002/09/01 00:05:33 grumbel Exp $
+//  $Id: EditorTileMapView.cxx,v 1.3 2003/08/10 19:30:03 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -206,7 +206,7 @@ EditorTileMapView::update ()
       tilemap->save (filename);
       std::cout << "Saving to: " << filename << std::endl;
     }
-#endif 0
+#endif
 }
 
 /* EOF */

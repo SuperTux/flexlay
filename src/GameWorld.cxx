@@ -1,4 +1,4 @@
-//  $Id: GameWorld.cxx,v 1.1 2002/03/19 17:56:51 grumbel Exp $
+//  $Id: GameWorld.cxx,v 1.2 2003/08/10 19:30:03 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -30,6 +30,7 @@ GameWorld::GameWorld (const std::string& filename)
   : passed_time (0)
 {
   WindstilleLevel level (filename);
+  std::cout << "GameWorld: Creating Tilemap" << std::endl;
   tilemap = new TileMap(&level);
 }
 

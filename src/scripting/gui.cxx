@@ -160,6 +160,14 @@ gui_window_close(CL_Component* comp)
   comp->close();
 }
 
+void
+gui_inputbox_set_text(CL_Component* comp, const char* txt)
+{
+  CL_InputBox* box = dynamic_cast<CL_InputBox*>(comp);
+  if (box)
+    box->set_text(txt);
+}
+
 const char* 
 gui_inputbox_get_text(CL_Component* comp)
 {

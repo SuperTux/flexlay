@@ -90,6 +90,7 @@ bool gui_component_is_visible(CL_Component* comp);
 
 /** Return the text that is currently in an input box */
 const char* gui_inputbox_get_text(CL_Component* comp);
+void        gui_inputbox_set_text(CL_Component* comp, const char*);
 
 /** Start a file dialog, call func once ok is pressed.
     @param filename The directory where to start the file manager in */

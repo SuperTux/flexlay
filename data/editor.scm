@@ -414,8 +414,8 @@
                                      (set! *brushes*
                                            (assoc-set! *brushes* "Fooname" *clipboard*))))
                               (display *brushes*)(newline)))
-                                     ;;(tilemap-paint-tool-set-brush *clipboard*)
-                                     ;;(set-tool 'tile)
+    ;;(tilemap-paint-tool-set-brush *clipboard*)
+    ;;(set-tool 'tile)
 
     (gui-create-button-func 0 150
                             40 25 "BG" 
@@ -590,36 +590,100 @@
     (gui-create-label    10 50 "Height: ")
     (gui-create-label    10 90 "Start: ")
 
-    (let* ((update-button (gui-create-button   10 150 50 25 "Update"))
-           (start-box     (gui-create-inputbox 10 110 50 25 "0"))
-           (height-box    (gui-create-inputbox 10 70 50 25 "10"))
-           (width-box     (gui-create-inputbox 10 30 50 25 "10"))
+    (let* ((width         8)
+           (height        6)
+           (start         0)
+           (objects       '())
+           
+           (width+-button   (gui-create-button   10 270 20 25 "W+"))
+           (width--button   (gui-create-button   40 270 20 25 "W-"))
+
+           (height+-button   (gui-create-button   10 300 20 25 "H+"))
+           (height--button   (gui-create-button   40 300 20 25 "H-"))
+
+           (update-button (gui-create-button   10 150 50 25 "Update"))
+           (dump-button   (gui-create-button   10 240 50 25 "Dump"))
+           (next-button   (gui-create-button   10 180 50 25 "Next"))
+           (previous-button   (gui-create-button   10 210 50 25 "Previous"))
+           (start-box     (gui-create-inputbox 10 110 50 25 (number->string start)))
+           (height-box    (gui-create-inputbox 10 70 50 25 (number->string height)))
+           (width-box     (gui-create-inputbox 10 30 50 25 (number->string width)))
            (map-component (editor-map-component-create 75 10 950 700))
            (levelmap      (editor-map-create))
            (tilemap       (editor-tilemap-create 10 10 32)))
+           
+
+      (define (update-from-boxes)
+        (catch #t
+               (lambda ()
+                 (set! width  (string->number (gui-inputbox-get-text width-box)))
+                 (set! height (string->number (gui-inputbox-get-text height-box)))
+                 (set! start  (string->number (gui-inputbox-get-text start-box))))
+               (lambda args
+                 (display "Error: ")
+                 (display args)
+                 (newline))))
+
+      (define (update-to-boxes)
+        (gui-inputbox-set-text width-box  (number->string width))
+        (gui-inputbox-set-text height-box (number->string height))
+        (gui-inputbox-set-text start-box  (number->string start)))
+
+      (define (do-update)
+        (update-from-boxes)
+        (update))
+
+      (define (update)
+        (update-to-boxes)
+        (tilemap-resize tilemap 0 0 width height)
+        (editor-tilemap-set-data tilemap 1 (seq start (+ start (* width height)))))
+
+      (define (do-next)
+        (set! start (+ start (* width height)))
+        (editor-tilemap-set-data tilemap 1 (seq start (+ start (* width height))))
+        (update-to-boxes))
+
+      (define (do-previous)
+        (set! start (- start (* width height)))
+        (editor-tilemap-set-data tilemap 1 (seq start (+ start (* width height))))
+        (update-to-boxes))
+
+      (define (do-dump)
+        (set! objects (cons (list start width height) 
+                            objects))
+        (format #t "Object: ~a ~ax~a~%" start width height)
+        (with-output-to-file "netpanzer-tile-objects.txt"
+          (lambda ()
+            (display ";; netPanzer Objects in tiles\n")
+            (display ";; Start Width Height\n")
+            (pretty-print objects))))
 
       (editor-map-add-layer levelmap tilemap)
       (editor-map-component-set-map map-component levelmap)
 
-      (gui-component-on-click 
-       update-button
-       (lambda ()
-         (catch #t
-                (lambda ()
-                  (let* ((width  (string->number (gui-inputbox-get-text width-box)))
-                         (height (string->number (gui-inputbox-get-text height-box)))
-                         (start  (string->number (gui-inputbox-get-text start-box))))
-                    (tilemap-resize tilemap 0 0 width height)
-                    (editor-tilemap-set-data tilemap 1 (seq start (+ start (* width height))))
-                    ))
-                (lambda args 
-                  (display "Error: ")
-                  (display args)
-                  (newline))))))
-               
-    (gui-component-on-close window (lambda ()
-                                     (gui-hide-component window)))
-    (gui-pop-component)))
+      (gui-component-on-click update-button   do-update)
+      (gui-component-on-click next-button     do-next)
+      (gui-component-on-click previous-button do-previous)
+      (gui-component-on-click dump-button     do-dump)
+
+      (gui-component-on-click width+-button  (lambda ()
+                                                (set! width (+ width 1))
+                                                (update)))
+      (gui-component-on-click width--button  (lambda ()
+                                                (set! width (- width 1))
+                                                (update)))
+
+      (gui-component-on-click height+-button  (lambda ()
+                                                (set! height (+ height 1))
+                                                (update)))
+      (gui-component-on-click height--button  (lambda ()
+                                                (set! height (- height 1))
+                                                (update)))
+      )
+  
+  (gui-component-on-close window (lambda ()
+                                   (gui-hide-component window)))
+  (gui-pop-component)))
 
 (define (on-gui-quit)
   (with-output-to-file (string-append *windstille-homedir* "editor-variables.scm")
@@ -687,42 +751,42 @@
 
 (objectmap-tool-set-popupmenu-callback 
  (lambda (menu)
-     (gui-add-menu-item menu "Print Objects" 
-                        (lambda () 
-                          (for-each (lambda (el)
-                                      (display (editor-objectmap-get-object el))
-                                      (newline))
-                                    (tilemap-object-tool-get-objects))))
+   (gui-add-menu-item menu "Print Objects" 
+                      (lambda () 
+                        (for-each (lambda (el)
+                                    (display (editor-objectmap-get-object el))
+                                    (newline))
+                                  (tilemap-object-tool-get-objects))))
 
-     (gui-add-menu-item menu "Add Object"
-                        (lambda ()
-                          (editor-objectmap-add-object "sprites/mrbomb" 100 100 '())))
+   (gui-add-menu-item menu "Add Object"
+                      (lambda ()
+                        (editor-objectmap-add-object "sprites/mrbomb" 100 100 '())))
 
-     (gui-add-menu-item menu "Print Selection"
-                        (lambda ()
-                          (display (tilemap-object-tool-get-objects))
-                          (newline)))
+   (gui-add-menu-item menu "Print Selection"
+                      (lambda ()
+                        (display (tilemap-object-tool-get-objects))
+                        (newline)))
 
-     (gui-add-menu-item menu "Delete Selection"
-                        (lambda ()
-                          (editor-objectmap-delete-objects (tilemap-object-tool-get-objects))
-                          (tilemap-object-tool-clear-selection)))
-     
-     (gui-add-menu-item menu "Duplicate Selection"
-                        (lambda ()
-                          (let ((lst (map editor-objectmap-duplicate-object
-                                          (tilemap-object-tool-get-objects))))
-                            (tilemap-object-tool-set-objects lst)
-                            (display lst)(newline)
-                            )))
+   (gui-add-menu-item menu "Delete Selection"
+                      (lambda ()
+                        (editor-objectmap-delete-objects (tilemap-object-tool-get-objects))
+                        (tilemap-object-tool-clear-selection)))
+   
+   (gui-add-menu-item menu "Duplicate Selection"
+                      (lambda ()
+                        (let ((lst (map editor-objectmap-duplicate-object
+                                        (tilemap-object-tool-get-objects))))
+                          (tilemap-object-tool-set-objects lst)
+                          (display lst)(newline)
+                          )))
 
-     (gui-add-menu-item menu "Flip Screen"
-                        (lambda ()
-                          (for-each objmap-sprite-object-flip
-                                    ;;(editor-objectmap-get-objects)
-                                    (tilemap-object-tool-get-objects)
-                                    )))
-     ))
+   (gui-add-menu-item menu "Flip Screen"
+                      (lambda ()
+                        (for-each objmap-sprite-object-flip
+                                  ;;(editor-objectmap-get-objects)
+                                  (tilemap-object-tool-get-objects)
+                                  )))
+   ))
 
 (load-variables)
 (init-recent-files)

@@ -81,13 +81,9 @@ ObjectSelector::mouse_up(const CL_InputEvent& event)
                                              EditorMapComponent::current()->screen2world(target),
                                              SCMObj(drag_obj.data), 
                                              drag_obj.sprite);
-
                   ObjectAddCommand* command = new ObjectAddCommand(editor_get_objmap(), obj);
                   Editor::current()->execute(command);
                 }
-                /*editor_get_objmap()->add_object(drag_obj.sprite,
-                  EditorMapComponent::current()->screen2world(target),
-                                                drag_obj.data);*/
               }
             drag_obj.sprite = CL_Sprite();
           }
@@ -166,30 +162,30 @@ ObjectSelector::draw()
   CL_Display::push_translate_offset(0, -offset);
   
   for(int i = 0; i < (int)brushes.size(); ++i)
-      {
-        int x = i%width;
-        int y = i/width;
+    {
+      int x = i%width;
+      int y = i/width;
 
-        CL_Rect rect(CL_Point(static_cast<int>(x * obj_width),
-                              static_cast<int>(y * obj_height)),
-                     CL_Size(static_cast<int>(obj_width),
-                             static_cast<int>(obj_height)));
+      CL_Rect rect(CL_Point(static_cast<int>(x * obj_width),
+                            static_cast<int>(y * obj_height)),
+                   CL_Size(static_cast<int>(obj_width),
+                           static_cast<int>(obj_height)));
 
-        CL_Sprite sprite = brushes[i].sprite;
-        sprite.set_alignment(origin_center, 0, 0);
-        sprite.set_scale(std::min(1.0f, (float)obj_width/(float)sprite.get_width()),
-                         std::min(1.0f, (float)obj_height/(float)sprite.get_height()));
+      CL_Sprite sprite = brushes[i].sprite;
+      sprite.set_alignment(origin_center, 0, 0);
+      sprite.set_scale(std::min(1.0f, (float)obj_width/(float)sprite.get_width()),
+                       std::min(1.0f, (float)obj_height/(float)sprite.get_height()));
         
-        sprite.draw(static_cast<int>(x * obj_width + obj_width/2), 
-                    static_cast<int>(y * obj_height + obj_height/2));
+      sprite.draw(static_cast<int>(x * obj_width + obj_width/2), 
+                  static_cast<int>(y * obj_height + obj_height/2));
         
-        //CL_Display::draw_rect(rect, CL_Color(0,0,0,128));
+      //CL_Display::draw_rect(rect, CL_Color(0,0,0,128));
         
-        if (mouse_over_tile == i && has_mouse_over())
-          {
-            CL_Display::fill_rect(rect, CL_Color(0,0,255, 20));
-          }
-      }
+      if (mouse_over_tile == i && has_mouse_over())
+        {
+          CL_Display::fill_rect(rect, CL_Color(0,0,255, 20));
+        }
+    }
   CL_Display::pop_translate_offset();
 
   if (drag_obj.sprite)

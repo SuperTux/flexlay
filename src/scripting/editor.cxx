@@ -34,7 +34,7 @@
 #include "../editor.hxx"
 #include "../tile_selector.hxx"
 #include "../objmap_select_tool.hxx"
-#include "../editor_tilemap.hxx"
+#include "../tilemap.hxx"
 #include "../object_selector.hxx"
 #include "../editor_map.hxx"
 #include "../editor_map_component.hxx"
@@ -58,7 +58,7 @@
 #include "../editor_mapsize_layer.hxx"
 #include "../editor_objmap.hxx"
 #include "../editor_grid_layer.hxx"
-#include "../editor_tilemap.hxx"
+#include "../tilemap.hxx"
 
 #include "../python_functor.hxx"
 #include "editor.hxx"
@@ -208,7 +208,7 @@ editor_grid_layer_create(int w, int h, int tile_size)
 void
 editor_toggle_grid(EditorMapLayer* layer)
 {
-  EditorTileMap* tilemap = dynamic_cast<EditorTileMap*>(layer);
+  TileMap* tilemap = dynamic_cast<TileMap*>(layer);
   if (tilemap)
     tilemap->set_draw_grid(!tilemap->get_draw_grid());
 }
@@ -216,7 +216,7 @@ editor_toggle_grid(EditorMapLayer* layer)
 void
 editor_toggle_attributes(EditorMapLayer* layer)
 {
-  EditorTileMap* tilemap = dynamic_cast<EditorTileMap*>(layer);
+  TileMap* tilemap = dynamic_cast<TileMap*>(layer);
   if (tilemap)
     tilemap->set_draw_attribute(!tilemap->get_draw_attribute());
 }
@@ -318,8 +318,8 @@ editor_objectmap_set_current(EditorMapLayer* layer)
 void
 editor_tilemap_set_current(EditorMapLayer* layer)
 {
-  EditorTileMap* tilemap = dynamic_cast<EditorTileMap*>(layer);
-  EditorTileMap::set_current(tilemap);
+  TileMap* tilemap = dynamic_cast<TileMap*>(layer);
+  TileMap::set_current(tilemap);
 }
 
 int
@@ -471,7 +471,7 @@ objmap_sprite_object_flip(EditorMapLayer* layer, int id)
 void
 editor_tilemap_resize(EditorMapLayer* m, int w, int h, int x, int y)
 {
-  EditorTileMap* tilemap = dynamic_cast<EditorTileMap*>(m);
+  TileMap* tilemap = dynamic_cast<TileMap*>(m);
   if (tilemap)
     {
       tilemap->resize(CL_Size(w, h), CL_Point(x, y));
@@ -487,7 +487,7 @@ tilemap_paint_tool_set_brush(TileBrush brush)
 void
 tilemap_paint_tool_set_tilemap(EditorMapLayer* layer)
 {
-  TileMapPaintTool::current()->set_tilemap(dynamic_cast<EditorTileMap*>(layer));
+  TileMapPaintTool::current()->set_tilemap(dynamic_cast<TileMap*>(layer));
 }
 
 #ifdef SWIGGUILE
@@ -811,13 +811,13 @@ editor_objmap_create()
 EditorMapLayer* 
 editor_tilemap_create(Tileset* tileset, int w, int h, int tile_size)
 {
-  return new EditorTileMap(tileset, w, h);
+  return new TileMap(tileset, w, h);
 }
 
 void
 editor_tilemap_save_png(EditorMapLayer* l, const char* filename)
 {
-  EditorTileMap* tilemap = dynamic_cast<EditorTileMap*>(l);
+  TileMap* tilemap = dynamic_cast<TileMap*>(l);
   CL_PixelBuffer pixelbuffer = tilemap->create_pixelbuffer();
 
   pixelbuffer.lock();
@@ -840,7 +840,7 @@ editor_tilemap_save_png(EditorMapLayer* l, const char* filename)
 int
 editor_tilemap_get_width(EditorMapLayer* l)
 {
-  EditorTileMap* tilemap = dynamic_cast<EditorTileMap*>(l);
+  TileMap* tilemap = dynamic_cast<TileMap*>(l);
   if (tilemap)
     return tilemap->get_width();
   else 
@@ -850,7 +850,7 @@ editor_tilemap_get_width(EditorMapLayer* l)
 int
 editor_tilemap_get_height(EditorMapLayer* l)
 {
-  EditorTileMap* tilemap = dynamic_cast<EditorTileMap*>(l);
+  TileMap* tilemap = dynamic_cast<TileMap*>(l);
   if (tilemap)
     return tilemap->get_height();
   else 
@@ -860,7 +860,7 @@ editor_tilemap_get_height(EditorMapLayer* l)
 void
 editor_tilemap_set_bgcolor(EditorMapLayer* l, int r, int g, int b, int a)
 {
-  EditorTileMap* tilemap = dynamic_cast<EditorTileMap*>(l);
+  TileMap* tilemap = dynamic_cast<TileMap*>(l);
   if (tilemap)
     {
       tilemap->set_background_color(CL_Color(r, g, b, a));
@@ -870,7 +870,7 @@ editor_tilemap_set_bgcolor(EditorMapLayer* l, int r, int g, int b, int a)
 void
 editor_tilemap_set_fgcolor(EditorMapLayer* l, int r, int g, int b, int a)
 {
-  EditorTileMap* tilemap = dynamic_cast<EditorTileMap*>(l);
+  TileMap* tilemap = dynamic_cast<TileMap*>(l);
   if (tilemap)
     {
       tilemap->set_foreground_color(CL_Color(r, g, b, a));
@@ -881,7 +881,7 @@ editor_tilemap_set_fgcolor(EditorMapLayer* l, int r, int g, int b, int a)
 SCM
 editor_tilemap_get_data(EditorMapLayer* l)
 {
-  EditorTileMap* tilemap = dynamic_cast<EditorTileMap*>(l);
+  TileMap* tilemap = dynamic_cast<TileMap*>(l);
   if (tilemap)
     {
       Field<int>* field = tilemap->get_map();
@@ -901,7 +901,7 @@ editor_tilemap_get_data(EditorMapLayer* l)
 void
 editor_tilemap_set_data(EditorMapLayer* l, SCM lst)
 {
-  EditorTileMap* tilemap = dynamic_cast<EditorTileMap*>(l);
+  TileMap* tilemap = dynamic_cast<TileMap*>(l);
   if (tilemap)
     {
       Field<int>* field = tilemap->get_map();

@@ -25,7 +25,7 @@
 #include "tilemap_tool.hxx"
 
 class PaintCommand;
-class EditorTileMap;
+class TileMap;
 
 /** */
 class TileMapPaintTool : public TileMapTool
@@ -40,7 +40,7 @@ private:
 
   PaintCommand* command;
 
-  EditorTileMap* tilemap;
+  TileMap* tilemap;
 
   static TileMapPaintTool* current_; 
 public:
@@ -52,7 +52,7 @@ public:
   const TileBrush& get_brush() { return brush; }
   void set_brush(const TileBrush& b);
   void draw();
-  void set_tilemap(EditorTileMap* t) { tilemap = t; }
+  void set_tilemap(TileMap* t) { tilemap = t; }
 
 private:
   void on_mouse_down(const CL_InputEvent& event);

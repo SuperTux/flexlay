@@ -22,7 +22,7 @@
 
 #include <ClanLib/Core/Math/rect.h>
 #include <ClanLib/Core/Math/point.h>
-#include "editor_tilemap.hxx"
+#include "tilemap.hxx"
 #include "tile_selection.hxx"
 #include "tilemap_tool.hxx"
 

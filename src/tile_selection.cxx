@@ -21,7 +21,7 @@
 #include <iostream>
 #include <ClanLib/Core/core_iostream.h>
 #include "math.hxx"
-#include "editor_tilemap.hxx"
+#include "tilemap.hxx"
 #include "tileset.hxx"
 #include "tile_selection.hxx"
 
@@ -35,7 +35,7 @@ TileSelection::~TileSelection()
 }
 
 void
-TileSelection::start(EditorTileMap* tilemap_, const CL_Point& pos)
+TileSelection::start(TileMap* tilemap_, const CL_Point& pos)
 {
   tilemap = tilemap_;
   active = true;

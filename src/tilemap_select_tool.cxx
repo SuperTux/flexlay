@@ -21,7 +21,7 @@
 #include <ClanLib/Display/keys.h>
 #include <ClanLib/Display/input_event.h>
 #include "globals.hxx"
-#include "editor_tilemap.hxx"
+#include "tilemap.hxx"
 #include "editor_map.hxx"
 #include "editor_map_component.hxx"
 #include "tile_brush.hxx"
@@ -57,7 +57,7 @@ TileMapSelectTool::on_mouse_up  (const CL_InputEvent& event)
       creating_selection = false;
       parent->release_mouse();
 
-      selection.update(EditorTileMap::current()->world2tile(parent->screen2world(event.mouse_pos)));
+      selection.update(TileMap::current()->world2tile(parent->screen2world(event.mouse_pos)));
       break;
     }
 }
@@ -73,7 +73,7 @@ TileMapSelectTool::on_mouse_down(const CL_InputEvent& event)
       {
         creating_selection = true;
         parent->capture_mouse();
-        EditorTileMap* tilemap = EditorTileMap::current();
+        TileMap* tilemap = TileMap::current();
         selection.start(tilemap, tilemap->world2tile(parent->screen2world(event.mouse_pos)));
       }
       break;
@@ -92,14 +92,14 @@ TileMapSelectTool::on_mouse_move(const CL_InputEvent& event)
 
   if (creating_selection)
     {
-      selection.update(EditorTileMap::current()->world2tile(parent->screen2world(event.mouse_pos)));
+      selection.update(TileMap::current()->world2tile(parent->screen2world(event.mouse_pos)));
     }
 }
 
 TileBrush
 TileMapSelectTool::get_selection() const
 {
-  EditorTileMap* tilemap = EditorTileMap::current();
+  TileMap* tilemap = TileMap::current();
   return selection.get_brush(*tilemap->get_field());
 }
 

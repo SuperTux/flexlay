@@ -23,7 +23,7 @@
 #include <ClanLib/Display/keys.h>
 #include <ClanLib/Display/display.h>
 #include "globals.hxx"
-#include "editor_tilemap.hxx"
+#include "tilemap.hxx"
 #include "tileset.hxx"
 #include "editor_map.hxx"
 #include "editor_map_component.hxx"

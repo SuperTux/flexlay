@@ -31,12 +31,12 @@
 #include "tile_brush.hxx"
 #include "editor_map_component.hxx"
 #include "editor_map_component.hxx"
-#include "editor_tilemap.hxx"
+#include "tilemap.hxx"
 #include "editor_map_component.hxx"
 
-EditorTileMap* EditorTileMap::current_ = 0;
+TileMap* TileMap::current_ = 0;
 
-EditorTileMap::EditorTileMap(Tileset* tileset_, int w, int h)
+TileMap::TileMap(Tileset* tileset_, int w, int h)
   : field(w, h)
 {
   // FIXME: Move this to the widget or to some more generic
@@ -58,12 +58,12 @@ EditorTileMap::EditorTileMap(Tileset* tileset_, int w, int h)
     tileset = tileset_;
 }
 
-EditorTileMap::~EditorTileMap()
+TileMap::~TileMap()
 {
 }
 
 void
-EditorTileMap::draw_tile(int id, int x, int y, bool attribute)
+TileMap::draw_tile(int id, int x, int y, bool attribute)
 {
   Tile* tile = tileset->create(id);
 
@@ -84,7 +84,7 @@ EditorTileMap::draw_tile(int id, int x, int y, bool attribute)
 }
 
 void
-EditorTileMap::draw(EditorMapComponent* parent)
+TileMap::draw(EditorMapComponent* parent)
 {
   int tile_size = tileset->get_tile_size();
 
@@ -131,7 +131,7 @@ EditorTileMap::draw(EditorMapComponent* parent)
 }
 
 int
-EditorTileMap::get_tile (int x, int y)
+TileMap::get_tile (int x, int y)
 {
   if (x >= 0 && x < (int)field.get_width() &&
       y >= 0 && y < (int)field.get_height())
@@ -141,13 +141,13 @@ EditorTileMap::get_tile (int x, int y)
 }
 
 void
-EditorTileMap::resize(const CL_Size& size, const CL_Point& point)
+TileMap::resize(const CL_Size& size, const CL_Point& point)
 {
   field.resize(size.width, size.height, point.x, point.y);
 }
 
 void
-EditorTileMap::draw_tile(int id, const CL_Point& pos)
+TileMap::draw_tile(int id, const CL_Point& pos)
 {
   if (pos.x >= 0 && pos.x < field.get_width()
       && pos.y >= 0 && pos.y < field.get_height())
@@ -157,13 +157,13 @@ EditorTileMap::draw_tile(int id, const CL_Point& pos)
 }
 
 void
-EditorTileMap::draw_tile(const TileBrush& brush, const CL_Point& pos)
+TileMap::draw_tile(const TileBrush& brush, const CL_Point& pos)
 {
   draw_tile(&field, brush, pos);
 }
 
 void
-EditorTileMap::draw_tile(Field<int>* field, const TileBrush& brush, const CL_Point& pos)
+TileMap::draw_tile(Field<int>* field, const TileBrush& brush, const CL_Point& pos)
 {
   int start_x = std::max(0, -pos.x);
   int start_y = std::max(0, -pos.y);
@@ -182,25 +182,25 @@ EditorTileMap::draw_tile(Field<int>* field, const TileBrush& brush, const CL_Poi
 }
 
 void
-EditorTileMap::set_draw_attribute(bool t)
+TileMap::set_draw_attribute(bool t)
 {
   draw_attribute = t;
 }
 
 bool
-EditorTileMap::get_draw_attribute() const
+TileMap::get_draw_attribute() const
 {
   return draw_attribute;
 }
 
 void
-EditorTileMap::set_draw_grid(bool t)
+TileMap::set_draw_grid(bool t)
 {
   draw_grid = t;
 }
 
 bool
-EditorTileMap::get_draw_grid() const
+TileMap::get_draw_grid() const
 {
   return draw_grid;
 }
@@ -297,7 +297,7 @@ blit(CL_PixelBuffer& target, CL_PixelBuffer& brush, int x_pos, int y_pos)
 }
 
 CL_PixelBuffer
-EditorTileMap::create_pixelbuffer()
+TileMap::create_pixelbuffer()
 {
   int tile_size = tileset->get_tile_size();
 
@@ -346,7 +346,7 @@ EditorTileMap::create_pixelbuffer()
 }
 
 CL_Rect
-EditorTileMap::get_bounding_rect()
+TileMap::get_bounding_rect()
 {
   return CL_Rect(CL_Point(0, 0),
                  CL_Size(field.get_width()  * tileset->get_tile_size(), 
@@ -354,7 +354,7 @@ EditorTileMap::get_bounding_rect()
 }
 
 CL_Point
-EditorTileMap::world2tile(const CL_Point& pos) const
+TileMap::world2tile(const CL_Point& pos) const
 {
   int x = pos.x / tileset->get_tile_size();
   int y = pos.y / tileset->get_tile_size();

@@ -26,7 +26,7 @@
 #include <ClanLib/Core/Math/point.h>
 #include "field.hxx"
 #include "editor_objmap.hxx"
-#include "editor_tilemap.hxx"
+#include "tilemap.hxx"
 #include "editor_map_layer.hxx"
 
 class EditorMapComponent;

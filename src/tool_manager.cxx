@@ -22,7 +22,7 @@
 #include "tilemap_select_tool.hxx"
 #include "objmap_select_tool.hxx"
 #include "zoom_tool.hxx"
-#include "editor_tilemap.hxx"
+#include "tilemap.hxx"
 #include "editor_map.hxx"
 #include "editor_names.hxx"
 #include "tool_manager.hxx"

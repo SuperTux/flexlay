@@ -17,8 +17,8 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-#ifndef EDITORTILEMAP_HXX
-#define EDITORTILEMAP_HXX
+#ifndef FLEXLAY_TILEMAP_HXX
+#define FLEXLAY_TILEMAP_HXX
 
 #include <ClanLib/gui.h>
 #include <ClanLib/Display/color.h>
@@ -29,12 +29,12 @@ class Tileset;
 class CL_PixelBuffer;
 class TileBrush;
 
-/** EditorTileMap holds the tilemap data for the editor and provides
+/** TileMap holds the tilemap data for the editor and provides
     functions to manipulate them. Each \a EditorTilemap is associated
     with a \a Tileset, which provides information on which ids are
     mapped to which Tiles, the tilemap itself only knows the ids of
     tiles.  */
-class EditorTileMap : public EditorMapLayer
+class TileMap : public EditorMapLayer
 {
 private:
   Tileset* tileset;
@@ -47,13 +47,13 @@ private:
   bool draw_grid;
   bool draw_attribute;
 
-  static EditorTileMap* current_;
+  static TileMap* current_;
 public:
-  static EditorTileMap* current() { return current_; }
-  static void set_current(EditorTileMap* c) { current_ = c; }
+  static TileMap* current() { return current_; }
+  static void set_current(TileMap* c) { current_ = c; }
   
-  EditorTileMap(Tileset* tileset, int w,  int h);
-  ~EditorTileMap();
+  TileMap(Tileset* tileset, int w,  int h);
+  ~TileMap();
 
   void draw (EditorMapComponent* parent);
 

@@ -22,10 +22,10 @@
 #include <sstream>
 #include <ClanLib/Core/core_iostream.h>
 #include <ClanLib/Core/Math/rect.h>
-#include "editor_tilemap.hxx"
+#include "tilemap.hxx"
 #include "paint_command.hxx"
 
-PaintCommand::PaintCommand(EditorTileMap* t, const TileBrush& b)
+PaintCommand::PaintCommand(TileMap* t, const TileBrush& b)
   : tilemap(t), field(t->get_map()), brush(b)
 {  
   undo_field = *field;
@@ -91,13 +91,13 @@ PaintCommand::execute()
 void
 PaintCommand::redo()
 {
-  EditorTileMap::draw_tile(field, *redo_brush, pos);
+  TileMap::draw_tile(field, *redo_brush, pos);
 }
 
 void
 PaintCommand::undo()
 {
-  EditorTileMap::draw_tile(field, *undo_brush, pos);
+  TileMap::draw_tile(field, *undo_brush, pos);
 }
 
 std::string

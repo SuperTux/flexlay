@@ -5,7 +5,30 @@ env = Environment(CXX = 'g++-3.3',
                   SWIGFLAGS='-c++ -python',
                   SHLIBPREFIX='')
 
-Depends('flexlay_wrap.cxx', ['flexlay.i', 'clanlib.i']) 
+Depends('flexlay_wrap.cxx', ['flexlay.i',
+                             'clanlib.i',
+                             'scripting/editor.hxx',
+                             'command.hxx',
+                             'paint_command.hxx',
+                             'object_move_command.hxx',
+                             'object_add_command.hxx',
+                             'scripting/editor.hxx',
+                             'tile.hxx',
+                             'tile_brush.hxx',
+                             'editor.hxx',
+                             'editor_map_layer.hxx',
+                             'tilemap.hxx',
+                             'editor_map.hxx',
+                             'workspace.hxx',
+                             'tileset.hxx',
+                             'editor_map_component.hxx',
+                             'flexlay.hxx',
+                             'globals.hxx',
+                             'python_functor.hxx',
+                             'gui_manager.hxx',
+                             'tile_selector.hxx',
+                             'object_brush.hxx',
+                             'object_selector.hxx']) 
 env.Command('flexlay_wrap.cxx', 'flexlay.i', "swig -python -c++ $SOURCE")
 
 env.SharedLibrary(
@@ -20,7 +43,7 @@ env.SharedLibrary(
     'editor_map_component.cxx',
     'editor_mapsize_layer.cxx',
     'editor_objmap.cxx',
-    'editor_tilemap.cxx',
+    'tilemap.cxx',
     'flexlay.cxx',
     'globals.cxx',
     'graphic_context_state.cxx',

@@ -25,7 +25,7 @@
 #include <ClanLib/Core/Math/point.h>
 #include "tile_brush.hxx"
 
-class EditorTileMap;
+class TileMap;
 
 /** The TileSelection is a little helper class to manage rectangular
     selections of tiles and provides a way to convert this selection
@@ -34,7 +34,7 @@ class EditorTileMap;
 class TileSelection
 {
 private:
-  EditorTileMap* tilemap;
+  TileMap* tilemap;
   CL_Point start_pos;
   CL_Rect  selection;
   bool active;
@@ -42,7 +42,7 @@ public:
   TileSelection();
   ~TileSelection();
 
-  void start (EditorTileMap* tilemap, const CL_Point& pos);
+  void start (TileMap* tilemap, const CL_Point& pos);
   void update(const CL_Point& pos);
 
   void clear();

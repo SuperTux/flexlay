@@ -33,7 +33,7 @@ editor_map.set_workspace(workspace)
 m = EditorMap("Foobar")
 workspace.set_current_map(m)
 tileset = Tileset(32)
-tilemap = EditorTileMap(tileset, 20, 10)
+tilemap = TileMap(tileset, 20, 10)
 m.add_layer(tilemap)
 tile = Tile("/home/ingo/cvs/supertux/supertux/data/images/tilesets/bonus1.png",
             CL_Color(255, 255, 255, 255),

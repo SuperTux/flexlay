@@ -26,19 +26,19 @@
 #include "tile_brush.hxx"
 #include "command.hxx"
 
-class EditorTileMap;
+class TileMap;
 
-/** The PaintCommand provides functionality to draw onto an
-    EditorTileMap. The user needs to supply a brush and a map to draw
-    to and the points to which should be drawn, undo, redo and the
-    internals of drawing are handled by the PaintCommand itself. */
+/** The PaintCommand provides functionality to draw onto an TileMap.
+    The user needs to supply a brush and a map to draw to and the
+    points to which should be drawn, undo, redo and the internals of
+    drawing are handled by the PaintCommand itself. */
 class PaintCommand : public Command
 {
 private: 
   typedef std::vector<CL_Point> Points;
   Points points;
   
-  EditorTileMap* tilemap;
+  TileMap* tilemap;
   Field<int>* field;
   TileBrush   brush;
   Field<int>  undo_field;
@@ -49,7 +49,7 @@ private:
   
 public:
   PaintCommand(Field<int>* f,    const TileBrush& b);
-  PaintCommand(EditorTileMap* t, const TileBrush& b);
+  PaintCommand(TileMap* t, const TileBrush& b);
   virtual ~PaintCommand();
   
   void add_point(const CL_Point& pos);

@@ -27,15 +27,22 @@ namespace Guile {
 std::string
 scm2string (SCM data)
 {
-  cl_assert(gh_string_p(data));
-
-  char* tmpstr = gh_scm2newstr(data, 0);
-  std::string str = tmpstr;
-
-#ifdef WIN32 // the free causes throuble on Win32, so we disable it
-  free (tmpstr);
-#endif
-
+  std::string str;
+  
+  if (gh_string_p(data))
+    {
+      char* tmpstr = gh_scm2newstr(data, 0);
+      str = tmpstr;
+      free(tmpstr);
+    } else {
+      SCM scmstr = scm_make_string(SCM_MAKINUM(0), SCM_UNDEFINED);
+      SCM port = scm_mkstrport(SCM_INUM0, scmstr,
+                               SCM_OPN | SCM_WRTNG, "scm_mkstrport");
+      scm_display(data, port);
+      char* tmpstr = gh_scm2newstr(scmstr, 0);
+      str = tmpstr;
+      free(tmpstr);
+    }
   return str;
 }
 

@@ -36,6 +36,7 @@
 #include "windstille_main.hxx"
 #include "windstille_menu.hxx"
 #include "fonts.hxx"
+#include "feuerkraft_error.hxx"
 #include "input/input_manager.hxx"
 #include "music_manager.hxx"
 #include "tile_factory.hxx"
@@ -225,6 +226,8 @@ WindstilleMain::main(int argc, char** argv)
 
   } catch (CL_Error& error) {
     std::cout << "CL_Error: " << error.message << std::endl;
+  } catch (FeuerkraftError& err) {
+    std::cout << "FeuerkraftError: " << err.what() << std::endl;
   } catch (std::exception& err) {
     std::cout << "std::exception: " << err.what() << std::endl;
   } catch (...) {

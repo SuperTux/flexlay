@@ -76,20 +76,22 @@ TileMapPaintTool::on_mouse_down(const CL_InputEvent& event)
 {
   CL_Point pos = parent->screen2tile(event.mouse_pos);
 
-  if (event.id == CL_MOUSE_LEFT)
-    { 
+  switch (event.id)
+    {
+    case CL_MOUSE_LEFT:
       tilemap->draw_tile(brush, parent->screen2tile(event.mouse_pos));
       last_draw = pos;
 
       painting = true;
       parent->capture_mouse();
-    }
-  else if (event.id == CL_MOUSE_RIGHT)
-    {
+      break;
+    
+    case CL_MOUSE_RIGHT:
       // FIXME: add support for larger brushes here (selecton like)
       brush = TileBrush(1, 1);
       brush.at(0, 0) = tilemap->get_field()->at(pos.x, pos.y);
       brush.set_opaque();
+      break;
     }
 }
  
@@ -111,16 +113,18 @@ TileMapPaintTool::on_mouse_move(const CL_InputEvent& event)
 void
 TileMapPaintTool::on_mouse_up  (const CL_InputEvent& event)
 {
-  if (event.id == CL_MOUSE_LEFT)
+  switch (event.id)
     {
+    case CL_MOUSE_LEFT:
       tilemap->draw_tile(brush, parent->screen2tile(event.mouse_pos));
       last_draw = CL_Point(-1, -1);
 
       painting = false;
       parent->release_mouse();
-    }
-  else if (event.id == CL_MOUSE_RIGHT)
-    {
+      break;
+    
+    case CL_MOUSE_RIGHT:
+      break;
     }
 }
 

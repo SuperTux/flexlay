@@ -1,4 +1,4 @@
-//  $Id: tilemap_select_tool.hxx,v 1.1 2003/09/23 22:10:40 grumbel Exp $
+//  $Id$
 // 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -17,38 +17,35 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-#ifndef HEADER_TILEMAP_SELECT_TOOL_HXX
-#define HEADER_TILEMAP_SELECT_TOOL_HXX
+#ifndef HEADER_TILE_SELECTION_HXX
+#define HEADER_TILE_SELECTION_HXX
 
 #include <ClanLib/Core/Math/rect.h>
 #include <ClanLib/Core/Math/point.h>
-#include "editor_tilemap.hxx"
-#include "tile_selection.hxx"
-#include "tilemap_tool.hxx"
+#include "tile_brush.hxx"
 
 /** */
-class TileMapSelectTool : public TileMapTool
+class TileSelection
 {
 private:
-  EditorTileMap* tilemap;
-  TileSelection  selection;
-  bool creating_selection;
-
+  CL_Point start_pos;
+  CL_Rect  selection;
+  bool active;
 public:
-  TileMapSelectTool(EditorMap* p, EditorTileMap* t);
-  ~TileMapSelectTool();
+  TileSelection();
+  ~TileSelection();
+
+  void start (const CL_Point& pos);
+  void update(const CL_Point& pos);
+
+  void clear();
+  bool is_active();
+
+  CL_Rect get_rect() const{ return selection; }
 
   void draw();
-  
-  void on_mouse_up  (const CL_InputEvent& event);
-  void on_mouse_down(const CL_InputEvent& event);
-  void on_mouse_move(const CL_InputEvent& event);
 
-  /** Convert the selection into a TileBrush */
-  TileBrush get_selection() const;
-private:
-  TileMapSelectTool (const TileMapSelectTool&);
-  TileMapSelectTool& operator= (const TileMapSelectTool&);
+  TileBrush get_brush(const Field<int>& field) const;
 };
 
 #endif

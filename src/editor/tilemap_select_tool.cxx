@@ -29,9 +29,7 @@
 TileMapSelectTool::TileMapSelectTool(EditorMap* p, EditorTileMap* t)
   : TileMapTool(p), tilemap(t)
 {
-  click_pos = CL_Point(0,0);
-  selection = CL_Rect(0, 0, 0, 0);
-  active = false;
+  creating_selection = false;
 }
 
 TileMapSelectTool::~TileMapSelectTool()
@@ -41,10 +39,12 @@ TileMapSelectTool::~TileMapSelectTool()
 void
 TileMapSelectTool::draw()
 {
-  if (selection.get_width() > 0 && selection.get_height() > 0)
+  if (selection.is_active())
     {
-      CL_Display::fill_rect (CL_Rect(selection.left  * TILE_SIZE, selection.top    * TILE_SIZE,
-                                     selection.right * TILE_SIZE, selection.bottom * TILE_SIZE),
+      CL_Rect rect = selection.get_rect();
+
+      CL_Display::fill_rect (CL_Rect(rect.left  * TILE_SIZE, rect.top    * TILE_SIZE,
+                                     rect.right * TILE_SIZE, rect.bottom * TILE_SIZE),
                              CL_Color(255, 255, 255, 100));
     }
 }
@@ -52,63 +52,49 @@ TileMapSelectTool::draw()
 void
 TileMapSelectTool::on_mouse_up  (const CL_InputEvent& event)
 {
-  if (event.id == CL_MOUSE_LEFT)
+  switch (event.id)
     {
-      active = false;
+    case CL_MOUSE_LEFT:
+      creating_selection = false;
       parent->release_mouse();
-      update_selection(parent->screen2tile(event.mouse_pos).x + 1,
-                       parent->screen2tile(event.mouse_pos).y + 1);
+
+      selection.update(parent->screen2tile(event.mouse_pos));
+      break;
     }
 }
 
 void
 TileMapSelectTool::on_mouse_down(const CL_InputEvent& event)
 {
-  if (event.id == CL_MOUSE_LEFT)
+  switch (event.id)
     {
-      active = true;
+    case CL_MOUSE_LEFT:
+      creating_selection = true;
       parent->capture_mouse();
-      click_pos = parent->screen2tile(event.mouse_pos);
-    }
-  else if (event.id == CL_MOUSE_RIGHT)
-    {
-      selection = CL_Rect();
+
+      selection.start(parent->screen2tile(event.mouse_pos));
+      break;
+      
+    case CL_MOUSE_RIGHT:
+      if (!creating_selection)
+        selection.clear();
+      break;
     }
 }
 
 void
 TileMapSelectTool::on_mouse_move(const CL_InputEvent& event)
 { 
-  if (active)
+  if (creating_selection)
     {
-      update_selection(parent->screen2tile(event.mouse_pos).x + 1,
-                       parent->screen2tile(event.mouse_pos).y + 1);
+      selection.update(parent->screen2tile(event.mouse_pos));
     }
-}
-
-void
-TileMapSelectTool::update_selection(int x, int y)
-{
-  selection = CL_Rect(std::min(click_pos.x, x),
-                      std::min(click_pos.y, y),
-                      std::max(click_pos.x, x),
-                      std::max(click_pos.y, y));
 }
 
 TileBrush
 TileMapSelectTool::get_selection() const
 {
-  TileBrush brush(selection.get_width(), 
-                  selection.get_height());
-
-  for(int y = selection.top; y < selection.bottom; ++y)
-    for(int x = selection.left; x < selection.right; ++x)
-      {
-        brush.at(x - selection.left, 
-                 y - selection.top) = tilemap->get_field()->at(x, y);
-      }
-
-  return brush;
+  return selection.get_brush(*tilemap->get_field());
 }
 
 /* EOF */

@@ -46,6 +46,30 @@
 (game-add-igel 8374 2454)
 (game-add-igel 7679 3355)
 
+(define (startup-dialog2)
+  (dialog-clear)
+  (dialog-add "hero/portrait"
+              "I repeat, buggy techdemo, incomplete, just one level, no guns only mines. Controlls via cursor key, drop mines with <control>-<down>.\n\n")
+  (dialog-add-answer "Ok" (lambda () #f))
+  (dialog-show))
+
+(define (startup-dialog)
+  (dialog-clear)
+  (dialog-add "hero/portrait"
+              (string-append "This is " *windstille-package-string* 
+                             ". It is a simple techdemo and thus incomplete and a bit buggy. "
+                             "The final Windstille game might also differ in quite some details. "
+                             "Anyway, this techdemo provides one simple playable level. "
+                             "Your goal is simply to collect as many diamonds as possible and "
+                             "to kill as many enemies as possible as fast as you can. "
+                             "Add the end of the level you will see how many enemies you "
+                             "destroyed and how many diamonds you collected.\n\n"
+                             "Understood everything?"))
+  (dialog-add-answer "Yes" (lambda () #f))
+  (dialog-add-answer "No"  (lambda () (startup-dialog2)))
+  (dialog-show)
+  (remove-trigger))
+
 
 (define (end-dialog)
   (dialog-clear)
@@ -63,5 +87,8 @@
 
 (add-region-trigger 7221 3744  7493 3837
                     end-dialog)
+
+(add-region-trigger 357 389 660 776
+                    startup-dialog)
 
 ;; EOF ;;

@@ -1,4 +1,4 @@
-//  $Id: dialog_manager.cxx,v 1.2 2003/09/29 19:29:17 grumbel Exp $
+//  $Id: dialog_manager.cxx,v 1.3 2003/09/30 16:42:26 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -59,8 +59,16 @@ DialogManager::draw()
     {
       Dialog& dialog = dialogs[current_dialog];
       
-      CL_Display::fill_rect(CL_Rect(CL_Point(100, 100), CL_Size(600, 250)), CL_Color(0,0,0,128));
-      CL_Display::draw_rect(CL_Rect(CL_Point(100, 100), CL_Size(600, 250)), CL_Color(255,255,255, 80));
+      CL_Rect text_rect = Fonts::dialog.bounding_rect(CL_Rect(CL_Point(260, 0), CL_Size(420, 600)),
+                                                      dialog.text);
+
+      CL_Display::fill_rect(CL_Rect(CL_Point(100, 100), CL_Size(600, text_rect.get_height() + 80)), 
+                            CL_Gradient(CL_Color(0,0,0,228),
+                                        CL_Color(0,0,0,228),
+                                        CL_Color(0,0,0,128),
+                                        CL_Color(0,0,0,128)));
+      CL_Display::draw_rect(CL_Rect(CL_Point(100, 100), CL_Size(600, text_rect.get_height() + 80)), 
+                            CL_Color(255,255,255, 80));
       CL_Display::flush();
       
       CL_Display::fill_rect(CL_Rect(CL_Point(120, 120), CL_Size(120, 120)),
@@ -86,9 +94,11 @@ DialogManager::draw()
           for(Dialogs::size_type i = 0; i < dialog.answers.size(); ++i)
             {
               if (int(i) == current_choice)
-                Fonts::dialog_h.draw(150 + i*w + w/2, 280, "[" + dialog.answers[i].first + "]");
+                Fonts::dialog_h.draw(150 + i*w + w/2, 120 + text_rect.get_height() + 20,
+                                     "[" + dialog.answers[i].first + "]");
               else
-                Fonts::dialog.draw(150 + i*w + w/2, 280, dialog.answers[i].first);
+                Fonts::dialog.draw(150 + i*w + w/2, 120 + text_rect.get_height() + 20,
+                                   dialog.answers[i].first);
             }
         }
     }
@@ -97,31 +107,39 @@ DialogManager::draw()
 void
 DialogManager::update(float delta)
 {
-  Controller::Events& events = Controller::current()->get_events();
-
-  for (Controller::Events::iterator i = events.begin();
-       i != events.end(); ++i)
+  if (current_dialog != -1)
     {
-      if ((*i).type == InputEvent::FIRE && (*i).state == true)
-        {
-          WindstilleGame::current()->set_game_state();
-          if (dialogs[current_dialog].answers.size() > 0)
-            dialogs[current_dialog].answers[current_choice].second();
-        }
-      else if ((*i).type == InputEvent::LEFT && (*i).state == true)
-        {
-          current_choice -= 1;
-        }
-      else if ((*i).type == InputEvent::RIGHT && (*i).state == true)
-        {
-          current_choice += 1;
-        }
-    }
+      Controller::Events& events = Controller::current()->get_events();
 
-  if (current_choice < 0)
-    current_choice = 0;
-  else if (current_choice >= int(dialogs[current_dialog].answers.size()))
-    current_choice = int(dialogs[current_dialog].answers.size()) - 1;
+      for (Controller::Events::iterator i = events.begin();
+           i != events.end(); ++i)
+        {
+          if ((*i).type == InputEvent::FIRE && (*i).state == true)
+            {
+              WindstilleGame::current()->set_game_state();
+              if (dialogs[current_dialog].answers.size() > 0)
+                dialogs[current_dialog].answers[current_choice].second();
+            }
+          else if ((*i).type == InputEvent::LEFT && (*i).state == true)
+            {
+              current_choice -= 1;
+            }
+          else if ((*i).type == InputEvent::RIGHT && (*i).state == true)
+            {
+              current_choice += 1;
+            }
+        }
+
+      if (current_choice < 0)
+        current_choice = 0;
+      else if (current_choice >= int(dialogs[current_dialog].answers.size()))
+        current_choice = int(dialogs[current_dialog].answers.size()) - 1;
+    }
+  else
+    {
+      std::cout << "DialogManager: No dialog available" << std::endl;
+      WindstilleGame::current()->set_game_state();
+    }
 }
 
 void

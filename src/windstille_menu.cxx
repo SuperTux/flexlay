@@ -1,4 +1,4 @@
-//  $Id: windstille_menu.cxx,v 1.4 2003/09/29 21:51:40 grumbel Exp $
+//  $Id: windstille_menu.cxx,v 1.5 2003/09/30 16:42:26 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -70,6 +70,7 @@ WindstilleMenu::update(float delta)
             }
           else if (current_choice == 0) // start game
             {
+              Controller::current()->clear();
               fadeout();
               WindstilleGame game(datadir + "levels/level9.scm");
               game.display ();
@@ -77,6 +78,7 @@ WindstilleMenu::update(float delta)
             }
           else if (current_choice == 1) // start editor
             {
+              Controller::current()->clear();
               fadeout();
               Editor editor;
               editor.run();

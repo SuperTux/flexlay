@@ -241,7 +241,7 @@ object.set_callback(set_objmap_select_tool)
 # erase  = Icon(CL_Point(2, 32+1+2), make_sprite("../data/images/tools/stock-tool-eraser-22.png"), "Some tooltip", toolbar);
 # move   = Icon(CL_Point(2, 32*2+2), make_sprite("../data/images/tools/stock-tool-move-22.png"), "Some tooltip", toolbar);
 
-def menu_show_foreground():
+def gui_show_foreground():
     display_properties.layer = SuperTuxLevel.FOREGROUND
     display_properties.set(workspace.get_map().get_metadata())
     TilemapLayer_set_current(workspace.get_map().get_metadata().foreground)
@@ -250,7 +250,7 @@ def menu_show_foreground():
     background_icon.set_up()
     minimap.update_minimap()
 
-def menu_show_background():
+def gui_show_background():
     display_properties.layer = SuperTuxLevel.BACKGROUND
     display_properties.set(workspace.get_map().get_metadata())
     TilemapLayer_set_current(workspace.get_map().get_metadata().background)
@@ -259,7 +259,7 @@ def menu_show_background():
     background_icon.set_down()
     minimap.update_minimap()
 
-def menu_show_interactive():
+def gui_show_interactive():
     display_properties.layer = SuperTuxLevel.INTERACTIVE
     display_properties.set(workspace.get_map().get_metadata())
     TilemapLayer_set_current(workspace.get_map().get_metadata().interactive)
@@ -268,24 +268,24 @@ def menu_show_interactive():
     background_icon.set_up()
     minimap.update_minimap()
 
-def menu_show_all():
+def gui_show_all():
     display_properties.show_all = True
     display_properties.current_only = False
     display_properties.set(workspace.get_map().get_metadata())
 
-def menu_show_current():
+def gui_show_current():
     display_properties.show_all = False
     display_properties.current_only = False
     display_properties.set(workspace.get_map().get_metadata())
 
-def menu_show_only_current():
+def gui_show_only_current():
     display_properties.show_all = False
     display_properties.current_only = True
     display_properties.set(workspace.get_map().get_metadata())
 
-foreground_icon.set_callback(menu_show_foreground)
-interactive_icon.set_callback(menu_show_interactive)
-background_icon.set_callback(menu_show_background)
+foreground_icon.set_callback(gui_show_foreground)
+interactive_icon.set_callback(gui_show_interactive)
+background_icon.set_callback(gui_show_background)
 eye_icon.set_callback(layer_menu.run)
 
 mysprite = make_sprite("../data/images/icons16/stock_paste-16.png")
@@ -305,9 +305,9 @@ Menu.__add_item = Menu.add_item
 Menu.add_item = Menu_add_item
 del Menu_add_item
 
-layer_menu.add_item(mysprite, "Show all", menu_show_all)
-layer_menu.add_item(mysprite, "Show current", menu_show_current)
-layer_menu.add_item(mysprite, "Show only current", menu_show_only_current)
+layer_menu.add_item(mysprite, "Show all", gui_show_all)
+layer_menu.add_item(mysprite, "Show current", gui_show_current)
+layer_menu.add_item(mysprite, "Show only current", gui_show_only_current)
 
 supertux = SuperTuxGUI(load_supertux_tiles(), gui)
 
@@ -351,6 +351,18 @@ menu.add_item("File/Save...", gui_level_save)
 # menu.add_item("File/Save Commands...", menu_file_save_commands)
 menu.add_item("File/Save As...", gui_level_save_as)
 menu.add_item("File/Quit",  do_quit)
+
+def gui_set_zoom(zoom):
+    gc = editor_map.get_workspace().get_gc_state()
+    pos = gc.get_pos()
+    gc.set_zoom(zoom)
+    gc.set_pos(pos)
+
+menu.add_item("Zoom/1:4 (25%) ",  lambda: gui_set_zoom(0.25))
+menu.add_item("Zoom/1:2 (50%) ",  lambda: gui_set_zoom(0.5))
+menu.add_item("Zoom/1:1 (100%) ", lambda: gui_set_zoom(1.0)) 
+menu.add_item("Zoom/2:1 (200%) ", lambda: gui_set_zoom(2.0))
+menu.add_item("Zoom/4:1 (400%) ", lambda: gui_set_zoom(4.0))
 
 display_properties = DisplayProperties()
 
@@ -416,6 +428,11 @@ load_dialog = FileDialog("Load SuperTux Level", "Load", "Cancel", gui.get_compon
 load_dialog.set_filename(config.datadir + "levels/")
 save_dialog = FileDialog("Save SuperTux Level as...", "Save", "Cancel", gui.get_component())
 save_dialog.set_filename(config.datadir + "levels/")
+
+# Init the GUI, so that button state is in sync with internal state
+gui_show_interactive()
+gui_show_current()
+set_tilemap_paint_tool()
 
 gui.run()
 

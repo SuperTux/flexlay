@@ -22,21 +22,15 @@
 
 #include <ClanLib/Core/Math/point.h>
 #include <ClanLib/Core/Math/rect.h>
+#include "shared_ptr.hxx"
 
-class CL_Component;
+class GraphicContextStateImpl;
 
 /** Helper class for capturing the state of a GraphicContext, with
     additional convenience functions to make handling GraphicContexts
     easier */
 class GraphicContextState
 {
-private:
-  int width;
-  int height;
-  
-  CL_Pointf offset;
-  float zoom;
-
 public:
   GraphicContextState();
   GraphicContextState(int w, int h);
@@ -50,20 +44,23 @@ public:
       visible on the screen */
   CL_Rect get_clip_rect();
 
-  int get_width()  const { return width; }
-  int get_height() const { return height; }
+  int get_width()  const;
+  int get_height() const;
 
   void      set_pos(const CL_Pointf& pos);
   CL_Pointf get_pos() const;
 
   /** Set zoom to z, while preserving the screen position pos at the same point */
-  void  set_zoom(CL_Point pos, float z);
+  void  set_zoom(CL_Pointf pos, float z);
   void  set_zoom(float z);
   float get_zoom(); 
 
   void zoom_to (const CL_Rect& rect);
 
   CL_Pointf screen2world(const CL_Point& pos);
+
+private:
+  SharedPtr<GraphicContextStateImpl> impl;
 };
 
 #endif

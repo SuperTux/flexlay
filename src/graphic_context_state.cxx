@@ -21,21 +21,39 @@
 #include <ClanLib/GUI/component.h>
 #include "graphic_context_state.hxx"
 
-GraphicContextState::GraphicContextState()
-  : width(1), height(1), offset(0,0), zoom(1.0f)
+class GraphicContextStateImpl
 {
+public:
+  int width;
+  int height;
+  
+  CL_Pointf offset;
+  float zoom;
+};
+
+GraphicContextState::GraphicContextState()
+  : impl(new GraphicContextStateImpl())
+{
+  impl->width  = 1;
+  impl->height = 1; 
+  impl->offset = CL_Pointf(0,0);
+  impl->zoom   = 1.0f;
 }
 
 GraphicContextState::GraphicContextState(int w, int h)
-  : width(w), height(h), offset(0,0), zoom(1.0f)
+  : impl(new GraphicContextStateImpl())
 {  
+  impl->width  = w;
+  impl->height = h;
+  impl->offset = CL_Pointf(0,0); 
+  impl->zoom   = 1.0f;
 }
 
 void
 GraphicContextState::set_size(int w, int h)
 {
-  width  = w;
-  height = h;
+  impl->width  = w;
+  impl->height = h;
 }
 
 void
@@ -43,7 +61,7 @@ GraphicContextState::push()
 {
   CL_Display::push_modelview();
   CL_Display::add_scale(get_zoom(), get_zoom());
-  CL_Display::add_translate(offset.x, offset.y);
+  CL_Display::add_translate(impl->offset.x, impl->offset.y);
 }
 
 void
@@ -55,45 +73,45 @@ GraphicContextState::pop()
 CL_Rect
 GraphicContextState::get_clip_rect()
 {
-  return CL_Rect(CL_Point(int(-offset.x),
-                          int(-offset.y)),
-                 CL_Size(int(get_width()  / zoom),
-                         int(get_height() / zoom)));
+  return CL_Rect(CL_Point(int(-impl->offset.x),
+                          int(-impl->offset.y)),
+                 CL_Size(int(get_width()  / impl->zoom),
+                         int(get_height() / impl->zoom)));
 }
 
 void
 GraphicContextState::set_pos(const CL_Pointf& pos)
 {
-  offset.x = -pos.x + (get_width()/2  / zoom);
-  offset.y = -pos.y + (get_height()/2 / zoom);
+  impl->offset.x = -pos.x + (get_width()/2  / impl->zoom);
+  impl->offset.y = -pos.y + (get_height()/2 / impl->zoom);
 }
 
 CL_Pointf
 GraphicContextState::get_pos() const
 {
-  return CL_Pointf(-offset.x + (get_width()/2  / zoom),
-                   -offset.y + (get_height()/2  / zoom));
+  return CL_Pointf(-impl->offset.x + (get_width()/2  / impl->zoom),
+                   -impl->offset.y + (get_height()/2  / impl->zoom));
 }
 
 void
-GraphicContextState::set_zoom(CL_Point pos, float z)
+GraphicContextState::set_zoom(CL_Pointf pos, float z)
 {
-  float old_zoom = zoom;
+  float old_zoom = impl->zoom;
   set_zoom(z);
-  offset.x = pos.x/zoom - pos.x/old_zoom + offset.x;
-  offset.y = pos.y/zoom - pos.y/old_zoom + offset.y;
+  impl->offset.x = pos.x/impl->zoom - pos.x/old_zoom + impl->offset.x;
+  impl->offset.y = pos.y/impl->zoom - pos.y/old_zoom + impl->offset.y;
 }
 
 void
 GraphicContextState::set_zoom(float z)
 {
-  zoom = z;
+  impl->zoom = z;
 }
 
 float
 GraphicContextState::get_zoom()
 {
-  return zoom;
+  return impl->zoom;
 }
 
 void
@@ -110,22 +128,34 @@ GraphicContextState::zoom_to (const CL_Rect& rect)
   //std::cout << "Screen: " << screen_relation << " Zoom: " << rect_relation << std::endl;
   if (rect_relation < screen_relation) // take width, ignore height
     {
-      zoom = get_width()/width; 
+      impl->zoom = get_width()/width; 
     }
   else // take height, ignore width
     {
-      zoom = get_height()/height;
+      impl->zoom = get_height()/height;
     }
 
-  offset.x = (get_width()  / (2*zoom)) - center_x;
-  offset.y = (get_height() / (2*zoom)) - center_y;
+  impl->offset.x = (get_width()  / (2*impl->zoom)) - center_x;
+  impl->offset.y = (get_height() / (2*impl->zoom)) - center_y;
 }
 
 CL_Pointf
 GraphicContextState::screen2world(const CL_Point& pos)
 {
-  return CL_Pointf((pos.x / zoom) - offset.x, 
-                   (pos.y / zoom) - offset.y);
+  return CL_Pointf((pos.x / impl->zoom) - impl->offset.x, 
+                   (pos.y / impl->zoom) - impl->offset.y);
+}
+
+int
+GraphicContextState::get_width()  const 
+{
+  return impl->width; 
+}
+
+int
+GraphicContextState::get_height() const 
+{ 
+  return impl->height; 
 }
 
 /* EOF */

@@ -122,13 +122,13 @@ EditorMapComponent::set_zoom(float z)
 void
 EditorMapComponent::zoom_out(CL_Point pos)
 {
-  workspace.get_gc_state().set_zoom(pos, workspace.get_gc_state().get_zoom()/1.25f);
+  workspace.get_gc_state().set_zoom(CL_Pointf(pos.x, pos.y), workspace.get_gc_state().get_zoom()/1.25f);
 }
 
 void
 EditorMapComponent::zoom_in(CL_Point pos)
 {
-  workspace.get_gc_state().set_zoom(pos, workspace.get_gc_state().get_zoom()*1.25f);
+  workspace.get_gc_state().set_zoom(CL_Pointf(pos.x, pos.y), workspace.get_gc_state().get_zoom()*1.25f);
 }
 
 void

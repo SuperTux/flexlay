@@ -196,10 +196,10 @@ class DisplayProperties:
     def set(self, map):
         if self.current_only:
             active   = CL_Color(255, 255, 255)
-            deactive = CL_Color(150, 150, 250, 150)
+            deactive = CL_Color(0, 0, 0, 10)
         else:
             active   = CL_Color(255, 255, 255)
-            deactive = CL_Color(0, 0, 0, 10)
+            deactive = CL_Color(150, 150, 250, 150)
 
         if (self.show_all):
             map.foreground.set_foreground_color(active)

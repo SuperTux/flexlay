@@ -192,9 +192,16 @@ WindstilleMain::main(int argc, char** argv)
     std::cout << "Detected " << CL_Joystick::get_device_count() << " joysticks" << std::endl;
         
     if (playback_file.empty())
-      InputManager::init(controller_file);
+      {
+        if (!controller_file.empty())
+          InputManager::init(controller_file);
+        else
+          InputManager::init(datadir + "controller/keyboard.scm");
+      }
     else
-      InputManager::init_playback(playback_file);
+      {
+        InputManager::init_playback(playback_file);
+      }
 
     if (!recorder_file.empty())
       InputManager::setup_recorder(recorder_file);

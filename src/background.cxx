@@ -18,40 +18,23 @@
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include <ClanLib/gl.h>
+#include <ClanLib/Display/display.h>
 #include "display.hxx"
 #include "background.hxx"
 
 void
 Background::draw()
 {
-  if (1) // draw background
-    {
-      Windstille::Display::begin_gl();
-      {
-        glBlendFunc(GL_ONE, GL_ZERO);
-
-        glBegin(GL_QUADS);
-        // Sky
-        glColor3f(0.0f, 0.0f, 0.2f);
-
-        glVertex2f(0, 0);
-        glVertex2f(800, 0);
-      
-        glColor3f(0.3f, 0.3f, .5f);
-        glVertex2f(800,  300);
-        glVertex2f(0, 300);
-
-        glVertex2f(0, 300);
-        glVertex2f(800,  300);
-
-        glColor3f(.0f, .0f, .0f);
-        glVertex2f(800,  600);
-        glVertex2f(0, 600);
-     
-        glEnd();
-      }
-      Windstille::Display::end_gl();
-    }
+  CL_Display::fill_rect(CL_Rect(0, 0, 800, 300),
+                        CL_Gradient(CL_Color(  0,   0,  50),
+                                    CL_Color(  0,   0,  50),
+                                    CL_Color( 50,  50, 128),
+                                    CL_Color( 50,  50, 128)));
+  CL_Display::fill_rect(CL_Rect(0, 300, 800, 600),
+                        CL_Gradient(CL_Color( 50,  50, 128),
+                                    CL_Color( 50,  50, 128),
+                                    CL_Color(  0,   0,   0),
+                                    CL_Color(  0,   0,   0)));
 }
 
 /* EOF */

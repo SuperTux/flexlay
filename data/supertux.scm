@@ -296,7 +296,21 @@
             (display "Error: background-tm missing\n"))
 
         (cond ((= version 0)
-               (let ((tilemap (get-value-from-tree '(interactive-tm) data '())))
+               (let ((tilemap (get-value-from-tree '(interactive-tm) data 
+                                                   (get-value-from-tree '(tilemap) data '()))))
+
+                 (let ((i 0))
+                   (for-each (lambda (el)
+                               (let ((x (* 32 (remainder i width)))
+                                     (y (* 32 (quotient  i width))))
+                                 (cond ((= el 48) ;; 0
+                                        (objectmap-add-object objmap "sprites/mrbomb" x y '(bsod)))
+                                       ((= el 49) ;; 1
+                                        (objectmap-add-object objmap "sprites/mriceblock" x y '(laptop)))
+                                       ((= el 50) ;; 2
+                                        (objectmap-add-object objmap "sprites/jumpy" x y '(money)))))
+                               (set! i (+ i 1)))
+                             tilemap))
                  (editor-tilemap-set-data (supertux:interactive-tm level)
                                           (map supertux:translate-v0-tiles tilemap)))))
 
@@ -306,16 +320,12 @@
                     (let ((x (get-value-from-tree '(x _) (cdr el) 0))
                           (y (get-value-from-tree '(y _) (cdr el) 0)))
                       (case (car el)
-                        ((money)
+                        ((money jumpy)
                          (objectmap-add-object objmap "sprites/jumpy" x y '(money)))
-                        ((mriceblock)
+                        ((mriceblock bsod)
                          (objectmap-add-object objmap "sprites/mriceblock" x y '(mriceblock)))
-                        ((mrbomb)
+                        ((mrbomb laptop)
                          (objectmap-add-object objmap "sprites/mrbomb" x y '(mrbomb)))
-                        ((spawnpoint)
-                         (objectmap-add-object objmap "sprites/spawnpoint" x y '(outpost)))
-                        ((outpost)
-                         (objectmap-add-object objmap "sprites/outpost"  x y '(spawnpoint)))
                         )))
                   objects)
         

@@ -1,4 +1,4 @@
-//  $Id: windstille_main.cxx,v 1.16 2003/09/13 18:01:17 grumbel Exp $
+//  $Id: windstille_main.cxx,v 1.17 2003/09/21 15:22:59 grumbel Exp $
 //
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -30,6 +30,7 @@
 #include "guile_gameobj_factory.hxx"
 #include "windstille_level.hxx"
 #include "windstille_main.hxx"
+#include "fonts.hxx"
 #include "tile_factory.hxx"
 
 extern "C" void SWIG_init(void);
@@ -112,6 +113,8 @@ WindstilleMain::inner_main(void* closure, int argc, char** argv)
                              screen_width, screen_height, fullscreen, allow_resize);
 
     resources =  new CL_ResourceManager (datadir + "windstille.xml", false);
+
+    Fonts::init();
     
     std::cout << "Loading Guile Code..." << std::endl;
 
@@ -150,6 +153,8 @@ WindstilleMain::inner_main(void* closure, int argc, char** argv)
   } catch (CL_Error& error) {
     std::cout << "CL_Error: " << error.message << std::endl;
   }
+
+  Fonts::deinit();
 
   CL_SetupDisplay::init();
   CL_SetupGL::init();

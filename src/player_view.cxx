@@ -1,4 +1,4 @@
-//  $Id: player_view.cxx,v 1.5 2003/09/20 21:53:38 grumbel Exp $
+//  $Id: player_view.cxx,v 1.6 2003/09/21 15:22:59 grumbel Exp $
 //
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -62,15 +62,15 @@ PlayerView::update (float delta)
 CL_Pointf
 PlayerView::screen2world(CL_Pointf point)
 {
-  return CL_Pointf(point.x + pos.x,
-                   point.y + pos.y);
+  return CL_Pointf(point.x + pos.x - CL_Display::get_width()/2,
+                   point.y + pos.y - CL_Display::get_height()/2);
 }
 
 CL_Pointf
 PlayerView::world2screen(CL_Pointf point)
 {
-  return CL_Pointf(point.x - pos.x,
-                   point.y - pos.y);
+  return CL_Pointf(point.x - pos.x + CL_Display::get_width()/2,
+                   point.y - pos.y + CL_Display::get_height()/2);
 }
 
 /* EOF */

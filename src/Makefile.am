@@ -19,6 +19,8 @@ windstille_SOURCES = \
   diamond_map.cxx \
   default_shoot.cxx \
   default_shoot.hxx \
+  dialog_manager.hxx \
+  dialog_manager.cxx \
   delta_manager.hxx \
   display.hxx \
   display.cxx \
@@ -27,6 +29,9 @@ windstille_SOURCES = \
   energiebar.hxx \
   energiebar.cxx \
   field.hxx \
+  fonts.hxx \
+  fonts.cxx \
+  game_delta.hxx \
   game_world.cxx \
   game_world.hxx \
   gameobj.cxx \

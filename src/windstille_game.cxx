@@ -1,4 +1,4 @@
-//  $Id: windstille_game.cxx,v 1.17 2003/09/20 21:53:38 grumbel Exp $
+//  $Id: windstille_game.cxx,v 1.18 2003/09/21 15:22:59 grumbel Exp $
 //
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -34,6 +34,7 @@
 #include "player_view.hxx"
 #include "energiebar.hxx"
 #include "background.hxx"
+#include "dialog_manager.hxx"
 
 #include "guile_gameobj_factory.hxx"
 #include "windstille_game.hxx"
@@ -45,12 +46,14 @@ WindstilleGame::WindstilleGame(const std::string& arg_filename)
 {
   current_ = this;
   world = new GameWorld(filename);
+  state = GAME;
 }
 
 WindstilleGame::WindstilleGame(GameWorld* w)
 {
   current_ = this;
   world = w;
+  state = GAME;
 }
 
 WindstilleGame::~WindstilleGame()
@@ -94,6 +97,11 @@ WindstilleGame::draw()
   // Draw HUD
   energiebar->draw();
 
+  if (state == DIALOG)
+    {
+      dialog_manager->draw();      
+    }
+
   // Draw Logo
   if (1)
     {     
@@ -102,15 +110,24 @@ WindstilleGame::draw()
       logo.draw(800 - 302, 600 - 95);
       logo_black.draw(800 - 302, 600 - 95);
     }
+
   CL_Display::flip();
 }
 
 void
 WindstilleGame::update(float delta)
 {
-  view->update (delta);
-  world->update (delta);
-  energiebar->update(delta);
+  if (state == DIALOG)
+    {
+      dialog_manager->update(delta);
+    }
+  else if (state == GAME)
+    {
+      view->update (delta);
+      world->update (delta);
+      energiebar->update(delta);
+    }
+
   blink += delta * 3.141f;
 }    
 
@@ -126,12 +143,14 @@ WindstilleGame::on_startup ()
   
   energiebar = new Energiebar();
   background = new Background();
+  dialog_manager = new DialogManager();
 
   world->add_player(player);
 
   gh_load((datadir + "game.scm").c_str());
 
   logo       = CL_Sprite("logo", resources);
+  portrait   = CL_Sprite("hero/portrait", resources);
   logo_black = CL_Sprite("logo_black", resources);
 
   slots.connect(CL_Mouse::sig_key_down(), this, &WindstilleGame::on_mouse_down);
@@ -145,6 +164,7 @@ WindstilleGame::on_shutdown ()
   delete energiebar;
   delete background;
   delete view;
+  delete dialog_manager;
 }
 
 /* EOF */

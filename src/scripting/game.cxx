@@ -1,4 +1,4 @@
-//  $Id: game.cxx,v 1.6 2003/09/20 21:53:38 grumbel Exp $
+//  $Id: game.cxx,v 1.7 2003/09/21 15:22:59 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -24,6 +24,7 @@
 #include "bomb.hxx"
 #include "windstille_game.hxx"
 #include "trigger.hxx"
+#include "dialog_manager.hxx"
 #include "player.hxx"
 
 void
@@ -132,6 +133,26 @@ bool game_get_pause()
 void game_quit()
 {
   WindstilleGame::current()->quit();
+}
+
+void dialog_add(const char* portrait, const char* text)
+{
+  DialogManager::current()->add_dialog(portrait, text);
+}
+
+void dialog_show()
+{
+  WindstilleGame::current()->set_dialog_state();
+}
+
+void dialog_hide()
+{
+  WindstilleGame::current()->set_game_state();
+}
+
+void dialog_clear()
+{
+  DialogManager::current()->clear();
 }
 
 /* EOF */

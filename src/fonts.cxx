@@ -1,5 +1,5 @@
-//  $Id: game.hxx,v 1.7 2003/09/21 15:22:59 grumbel Exp $
-// 
+//  $Id: fonts.cxx,v 1.1 2003/09/21 15:22:59 grumbel Exp $
+//
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
 //
@@ -12,42 +12,26 @@
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
-// 
+//
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-#ifndef HEADER_WORLD_HXX
-#define HEADER_WORLD_HXX
+#include "globals.hxx"
+#include "fonts.hxx"
 
-#include <guile/gh.h>
+CL_Font Fonts::dialog;
 
-class GameWorld;
+void
+Fonts::init()
+{
+  dialog = CL_Font("font", resources);
+}
 
-void game_add_water(int x, int y, int w, int h);
-void game_add_bomb(int x, int y);
-void game_add_igel(int x, int y);
-void game_set_player(float x, float y);
-
-void player_set_pos(float x, float y);
-void player_set_direction(const char* direction);
-int  player_get_x();
-int  player_get_y();
-
-GameWorld* make_game_world(int w, int h);
-void start_game(GameWorld*);
-
-void add_region_trigger(int x, int y, int w, int h, SCM func);
-
-void game_set_pause(bool p);
-bool game_get_pause();
-void game_quit();
-
-void dialog_add(const char* portrait, const char* text);
-void dialog_show();
-void dialog_hide();
-void dialog_clear();
-
-#endif
+void
+Fonts::deinit()
+{
+  dialog = CL_Font();
+}
 
 /* EOF */

@@ -1,4 +1,4 @@
-//  $Id: windstille_game.hxx,v 1.4 2003/09/20 21:53:38 grumbel Exp $
+//  $Id: windstille_game.hxx,v 1.5 2003/09/21 15:22:59 grumbel Exp $
 // 
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -22,6 +22,7 @@
 
 #include <string>
 #include <ClanLib/Display/sprite.h>
+#include <ClanLib/Display/font.h>
 #include <ClanLib/Signals/slot_container.h>
 #include "screen.hxx"
 
@@ -31,6 +32,8 @@ class CL_InputEvent;
 class GameWorld;
 class Background;
 class Player;
+class DialogManager;
+
 class WindstilleGame : public Screen
 {
 private:
@@ -44,7 +47,12 @@ private:
   PlayerView* view;
   Energiebar* energiebar;
   Background* background;
+  DialogManager* dialog_manager;
 
+  enum { DIALOG, GAME } state;
+
+  CL_Font font;
+  CL_Sprite portrait;
   CL_Sprite logo;
   CL_Sprite logo_black;
 
@@ -59,6 +67,9 @@ public:
   WindstilleGame (const std::string& arg_filename);
   WindstilleGame (GameWorld* w);
   ~WindstilleGame ();
+
+  void set_dialog_state() { state = DIALOG; }
+  void set_game_state()   { state = GAME; }
 
   void on_startup();
   void on_shutdown();

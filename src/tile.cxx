@@ -29,7 +29,7 @@
 
 extern CL_ResourceManager* resources;
 
-Tile::Tile(const std::string& filename_, 
+Tile::Tile(std::string filename_, 
            const CL_Color& color_, 
            const CL_Color& attribute_color_, 
            unsigned char* arg_colmap)

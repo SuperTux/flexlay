@@ -19,6 +19,9 @@
 
 #ifndef HEADER_SHARED_PTR_HXX
 #define HEADER_SHARED_PTR_HXX
+
+#include <iostream>
+#include <typeinfo>
  
 template<class T>
 class SharedPtrDeleter
@@ -45,7 +48,7 @@ public:
   }  
 
   void del() {
-    delete ptr;
+    //delete ptr;
     ptr = 0;
   }
 
@@ -62,28 +65,23 @@ private:
   int* ref_count;
 
   void inc() {
-    if (ref_count)
-      {
-        *ref_count += 1;
-      }
+    *ref_count += 1;
   }
   
   void dec() {
-    if (ref_count) 
-      {
-        *ref_count -= 1;
-        if (*ref_count == 0) {
-          //deleter->del();
-          delete ref_count;
-          ref_count = 0;
-        }
-      }
+    *ref_count -= 1;
+    if (*ref_count == 0) {
+      std::cout << "SharedPtr: deleting: " << typeid(deleter->ptr).name() << std::endl;
+      deleter->del();
+      delete ref_count;
+    }
   }
 public:
   template<class Base> friend class SharedPtr;
 
   SharedPtr()
-    : deleter(0), ref_count(0)
+    : deleter(new SharedPtrDeleterImpl<T>(0)), 
+      ref_count(new int(1))
   {}
 
   template<typename D>
@@ -105,7 +103,7 @@ public:
   SharedPtr<T>& operator= (const SharedPtr<Base>& copy) 
   {
     dec();
-    delete deleter;
+    //delete deleter;
     deleter   = new SharedPtrDeleterImpl<T>(copy.deleter->ptr);
     ref_count = copy.ref_count;
     inc();

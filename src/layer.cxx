@@ -23,18 +23,35 @@
 
 Layer::Layer()
 {
-  std::cout << "Layer()" << std::endl;
+  std::cout << "Layer(empty: " << impl.get() << ")" << std::endl;
+}
+
+Layer::Layer(const Layer& copy)
+  : impl(copy.impl)
+{
+  std::cout << "Layer(copy: " << impl.get() << ")" << std::endl;
+}
+
+Layer&
+Layer::operator=(const Layer& copy)
+{
+  if (this != &copy)
+    {
+      std::cout << "Layer:operator=: old: " << impl.get() << " new: " << copy.impl.get() << std::endl;
+      impl = copy.impl;
+    }
+  return *this;
 }
 
 Layer::Layer(SharedPtr<LayerImpl> i)
   : impl(i)
 {
-  std::cout << "Layer(" << this << ")" << std::endl;
+  std::cout << "Layer(#" << impl.get() << ")" << std::endl;
 }
 
 Layer::~Layer()
 {
-  std::cout << "~Layer()" << std::endl;
+  std::cout << "~Layer(" << impl.get() << ")" << std::endl;
 }
 
 void

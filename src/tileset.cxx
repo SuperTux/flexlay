@@ -35,6 +35,19 @@ typedef Tiles::iterator iterator;
 class TilesetImpl 
 {
 public:
+  TilesetImpl()
+  {
+  }
+
+  ~TilesetImpl()
+  {
+    std::cout << "Tileset: destroy" << std::endl;
+    for(Tiles::iterator i = tiles.begin(); i != tiles.end(); ++i)
+      {
+        delete *i;
+      }
+  }
+
   Tiles tiles;
   int tile_size;
 };
@@ -54,13 +67,13 @@ Tileset::Tileset(int tile_size_)
   impl->tile_size = tile_size_;
 }
 
+Tileset::Tileset(const Tileset& copy)
+  : impl(copy.impl)
+{
+}
+
 Tileset::~Tileset()
 {
-  std::cout << "Tileset: destroy" << std::endl;
-  for(Tiles::iterator i = impl->tiles.begin(); i != impl->tiles.end(); ++i)
-    {
-      delete *i;
-    }
 }
 
 void

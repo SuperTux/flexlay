@@ -36,8 +36,11 @@ class Layer
 private:
 public:
   Layer();
+  Layer(const Layer& copy);
   Layer(SharedPtr<LayerImpl> i);
   ~Layer();
+
+  Layer& operator=(const Layer& copy);
 
   void draw(EditorMapComponent* parent);
   bool has_bounding_rect() const;

@@ -45,6 +45,11 @@ TileSelector::TileSelector(int width, int height, CL_Component* parent)
   offset = 0;
 }
 
+TileSelector::~TileSelector()
+{
+  std::cout << "~TileSelector()" << std::endl;
+}
+
 void
 TileSelector::mouse_up(const CL_InputEvent& event)
 {
@@ -105,6 +110,7 @@ TileSelector::mouse_move(const CL_InputEvent& event)
 void 
 TileSelector::draw()
 {
+  std::cout << "TileSelector::draw()" << std::endl;
   CL_Display::push_modelview();
   CL_Display::add_translate(0, -offset);
 

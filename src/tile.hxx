@@ -46,7 +46,7 @@ public:
 
   /** @param filename Surface to use 
    *  @param arg_colmap a 8 char long array */
-  Tile(const std::string& filename, 
+  Tile(std::string filename, 
        const CL_Color& color, 
        const CL_Color& attribute_color, 
        unsigned char* arg_colmap = NULL);

@@ -24,4 +24,9 @@ ObjMapObject::ObjMapObject(int handle_, const CL_Point& pos_, const SCMObj& data
 {  
 }
 
+ObjMapObject::ObjMapObject(int handle_, const ObjMapObject& obj)
+  : handle(handle_), pos(obj.pos), data(obj.data)
+{  
+}
+
 /* EOF */

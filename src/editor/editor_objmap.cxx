@@ -45,6 +45,19 @@ EditorObjMap::draw(EditorMapComponent* parent)
 }
 
 int
+EditorObjMap::duplicate_object(int id)
+{
+  ObjMapObject* obj    = get_object(id);
+  ObjMapObject* newobj = obj->duplicate(++handle_count);
+  objects.push_back(newobj);  
+
+  // FIXME: Move to scripting level
+  newobj->set_pos(newobj->get_pos() + CL_Point(16, 16));
+
+  return newobj->get_handle();
+}
+
+int
 EditorObjMap::add_object(const CL_Sprite& sprite, const CL_Point& pos, const SCMObj& data)
 {
   ObjMapObject* obj = new ObjMapSpriteObject(++handle_count, pos, data, sprite);
@@ -75,7 +88,7 @@ EditorObjMap::get_bounding_rect(const CL_Sprite& sprite)
 ObjMapObject*
 EditorObjMap::find_object(const CL_Point& click_pos)
 {
-  for(Objs::iterator i = objects.begin(); i != objects.end(); ++i)
+  for(Objs::reverse_iterator i = objects.rbegin(); i != objects.rend(); ++i)
     {
       CL_Rect rect = (*i)->get_bound_rect();
      

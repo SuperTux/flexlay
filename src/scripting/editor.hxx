@@ -56,10 +56,12 @@ void tilemap_paint_tool_set_brush(const TileBrush& brush);
 void object_selector_add_brush(CL_Component* comp, const char* name, SCM brush);
 int  editor_objectmap_add_object(const char* name, int x, int y, SCM userdata);
 void editor_objectmap_delete_object(int id);
+int  editor_objectmap_duplicate_object(int id);
 SCM  editor_objectmap_get_objects();
 SCM  editor_objectmap_get_object(int id);
 void objmap_sprite_object_flip(int id);
 SCM  tilemap_object_tool_get_objects();
+void tilemap_object_tool_set_objects(SCM lst);
 void tilemap_object_tool_clear_selection();
 
 void objectmap_tool_set_popupmenu_callback(SCM callback);

@@ -28,7 +28,6 @@ PopupMenu::PopupMenu(const CL_Point& pos,  CL_Component* parent)
   menu->open();
   
   slots.push_back(CL_Mouse::sig_key_down().connect(this, &PopupMenu::on_mouse_up));
-  std::cout << "Menu open" << std::endl;
 }
 
 PopupMenu::~PopupMenu()
@@ -42,7 +41,6 @@ PopupMenu::on_mouse_up(const CL_InputEvent& event)
 {
   if (!menu->has_mouse_over() && !menu->has_mouse_in_submenus())
     {
-      std::cout << "Menu close" << std::endl;
       menu->collapse();
       // FIXME: *yuck*
       delete this;

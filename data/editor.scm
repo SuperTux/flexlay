@@ -588,33 +588,46 @@
 
 (objectmap-tool-set-popupmenu-callback 
  (lambda ()
-   (display "Callback ")
-   (display (current-popup-menu))
    (let ((menu (current-popup-menu)))
-     (gui-add-menu-item menu "Testomat/Foobar" (lambda () (display "Foobar\n")))
-     (gui-add-menu-item menu "Foobar" (lambda () (display "Foobar2\n")))
+
+     (gui-add-menu-item menu "Testomat/Foobar"
+                        (lambda () 
+                          (display "Foobar\n")))
+
+     (gui-add-menu-item menu "Foobar" 
+                        (lambda () 
+                          (display "Foobar2\n")))
+
      (gui-add-menu-item menu "Add Object"
                         (lambda ()
-                          (editor-objectmap-add-object "sprites/mrbomb" 100 100 '())
-                          ))
+                          (editor-objectmap-add-object "sprites/mrbomb" 100 100 '())))
+
      (gui-add-menu-item menu "Print Selection"
                         (lambda ()
                           (display (tilemap-object-tool-get-objects))
                           (newline)))
+
      (gui-add-menu-item menu "Delete Selection"
                         (lambda ()
                           (for-each editor-objectmap-delete-object
                                     (tilemap-object-tool-get-objects))
-                          (tilemap-object-tool-clear-selection)
-                          ))
+                          (tilemap-object-tool-clear-selection)))
+                          
+     (gui-add-menu-item menu "Duplicate Selection"
+                        (lambda ()
+                          (let ((lst (map editor-objectmap-duplicate-object
+                                          (tilemap-object-tool-get-objects))))
+                            (tilemap-object-tool-set-objects lst)
+                            (display lst)(newline)
+                          )))
+
      (gui-add-menu-item menu "Flip Screen"
                         (lambda ()
                           (for-each objmap-sprite-object-flip
                                     ;;(editor-objectmap-get-objects)
                                     (tilemap-object-tool-get-objects)
                                     )))
-     )
-   (newline)))
+     )))
 
 (load-variables)
 (init-recent-files)

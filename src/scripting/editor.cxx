@@ -176,10 +176,39 @@ scm2brush(SCM s_brush)
   return brush;
 }
 
+int
+editor_objectmap_duplicate_object(int id)
+{
+  return editor_get_objmap()->duplicate_object(id);
+}
+
 void
 editor_objectmap_delete_object(int id)
 {
   editor_get_objmap()->delete_object(id); 
+}
+
+void
+tilemap_object_tool_set_objects(SCM lst)
+{
+  TileMapObjectTool::Selection selection;
+  TileMapObjectTool* tool 
+    = dynamic_cast<TileMapObjectTool*>
+    (Editor::current()->get_tool_manager()->get_tool_by_name(OBJECT_TOOL_NAME));
+
+  while (!gh_null_p(lst))
+    {
+      ObjMapObject* obj = editor_get_objmap()->get_object(gh_scm2int(gh_car(lst)));
+
+      if (obj)
+        selection.push_back(obj);
+      else
+        std::cout << "Invalide handle: " << std::endl;
+
+      lst = gh_cdr(lst);
+    }
+  
+  tool->set_selection(selection);
 }
 
 SCM

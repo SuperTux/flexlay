@@ -36,6 +36,7 @@ protected:
 
 public:
   ObjMapObject(int handle_, const CL_Point& pos, const SCMObj& data);
+  ObjMapObject(int handle_, const ObjMapObject& obj);
   virtual ~ObjMapObject() {}
 
   CL_Point get_pos() const { return pos; }
@@ -44,8 +45,8 @@ public:
   SCMObj get_data() const { return data; }
 
   virtual void draw() =0;
-
   virtual CL_Rect get_bound_rect() const  =0;
+  virtual ObjMapObject*  duplicate(int handle_) =0;
 
   int get_handle() const { return handle; }
 };

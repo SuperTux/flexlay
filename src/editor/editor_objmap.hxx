@@ -49,9 +49,9 @@ public:
   void draw(EditorMapComponent* parent);
 
   /** Add an object to the map and return a handle to it */
-  int add_object(const CL_Sprite& sprite, const CL_Point& pos, const SCMObj& data);
-
+  int  add_object(const CL_Sprite& sprite, const CL_Point& pos, const SCMObj& data);
   void delete_object(int id);
+  int  duplicate_object(int id);
 
   CL_Rect get_bounding_rect(const CL_Sprite& sprite);
 

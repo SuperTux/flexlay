@@ -31,11 +31,15 @@ private:
 
 public:
   ObjMapSpriteObject(int handle_, const CL_Point& pos_, const SCMObj& data_, const CL_Sprite& s);
+  ObjMapSpriteObject(int handle_, const ObjMapSpriteObject& obj);
 
   void flip_horizontal();
+  void flip_vertical();
 
   void draw();
   CL_Rect get_bound_rect() const;
+
+  ObjMapObject*  duplicate(int handle_);
 };
 
 #endif

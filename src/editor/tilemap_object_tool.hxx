@@ -60,6 +60,7 @@ public:
 
   void clear_selection() { selection.clear(); }
   Selection get_selection() const { return selection; }
+  void set_selection(const Selection& sel) { selection = sel; }
 
   CL_Signal_v1<CL_Menu*>& sig_on_popup_menu_display() { return on_popup_menu_display; }
 private:

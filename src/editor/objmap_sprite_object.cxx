@@ -27,6 +27,11 @@ ObjMapSpriteObject::ObjMapSpriteObject(int handle_, const CL_Point& pos_, const 
   
 }
 
+ObjMapSpriteObject::ObjMapSpriteObject(int handle_, const ObjMapSpriteObject& obj)
+  : ObjMapObject(handle_, obj), sprite(obj.sprite)
+{
+}
+
 void
 ObjMapSpriteObject::draw()
 {
@@ -50,9 +55,25 @@ ObjMapSpriteObject::get_bound_rect() const
 }
 
 void
+ObjMapSpriteObject::flip_vertical()
+{
+  float scale_x, scale_y;
+  sprite.get_scale(scale_x, scale_y);
+  sprite.set_scale(scale_x, -scale_y);
+}
+
+void
 ObjMapSpriteObject::flip_horizontal()
 {
-  sprite.set_scale(-1, 1);
+  float scale_x, scale_y;
+  sprite.get_scale(scale_x, scale_y);
+  sprite.set_scale(-scale_x, scale_y);
+}
+
+ObjMapObject*
+ObjMapSpriteObject::duplicate(int handle_)
+{
+  return new ObjMapSpriteObject(handle_, *this);
 }
 
 /* EOF */

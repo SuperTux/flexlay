@@ -1,5 +1,5 @@
 //  -*- mode: clanlib -*-
-//  $Id: args_parse_test.cxx,v 1.5 2003/09/06 20:38:18 grumbel Exp $
+//  $Id: args_parse_test.cxx,v 1.6 2003/09/07 21:01:45 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -57,18 +57,18 @@ public:
   
 	void read_options() 
 	{
-		for(CL_ArgsParse::iterator i = argp.begin(); i != argp.end(); ++i)
+		while (argp.next())
 		{
-			switch (i->key) 
+			switch (argp.get_key()) 
 			{
 			case 'h':
 				argp.print_help();
 				break;
 			case 'f':
-				std::cout << "file: " << i->argument << std::endl;
+				std::cout << "file: " << argp.get_argument() << std::endl;
 				break;
 			case 'c':
-				std::cout << "config: " << i->argument << std::endl;
+				std::cout << "config: " << argp.get_argument() << std::endl;
 				break;
 			case 'a':
 				std::cout << "a" << std::endl;
@@ -80,10 +80,10 @@ public:
 				std::cout << "arg" << std::endl;
 				break;
 			case CL_ArgsParse::REST_ARG:
-				std::cout << "rest: " << i->argument << std::endl;
+				std::cout << "rest: " << argp.get_argument() << std::endl;
 				break;
 			default:
-				std::cout << "Got " << i->key << " " << i->argument << std::endl;
+				std::cout << "Got " << argp.get_key() << " " << argp.get_argument() << std::endl;
 				break;
 			}
 		}

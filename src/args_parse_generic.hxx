@@ -1,5 +1,5 @@
 //  -*- mode: clanlib -*-
-//  $Id: args_parse_generic.hxx,v 1.1 2003/09/06 20:38:18 grumbel Exp $
+//  $Id: args_parse_generic.hxx,v 1.2 2003/09/07 21:01:45 grumbel Exp $
 // 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -44,21 +44,20 @@ private:
 	typedef std::vector<Option> Options;
 	Options options;
 
-public:
-private:
-	typedef std::vector<CL_ArgsParse::Option> ParsedOptions;
+	struct ParsedOption {
+		int key;
+		std::string argument;
+	};
+
+	typedef std::vector<ParsedOption> ParsedOptions;
 	ParsedOptions parsed_options;
+	ParsedOptions::iterator current_option;
 
 	static const int GROUP     = -3;
 	static const int DOC       = -4;
 	static const int USAGE     = -5;
 
 public:  
-	CL_ArgsParse::iterator begin() { return parsed_options.begin(); }
-	CL_ArgsParse::iterator end()   { return parsed_options.end(); }
-
-	static const int REST_ARG  = -2;
-
 	CL_ArgsParse_Generic();
 
 	void set_help_indent(int i) { help_indent = i; }
@@ -76,6 +75,10 @@ public:
 	void parse_args(int argc, char** argv);
 	void print_help();
   
+	bool next();
+	int get_key();
+	std::string get_argument();
+
 private:
 	void read_option(int id, const std::string& argument);
 

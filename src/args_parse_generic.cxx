@@ -1,5 +1,5 @@
 //  -*- mode: clanlib -*-
-//  $Id: args_parse_generic.cxx,v 1.1 2003/09/06 20:38:18 grumbel Exp $
+//  $Id: args_parse_generic.cxx,v 1.2 2003/09/07 21:01:45 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -47,7 +47,7 @@ CL_ArgsParse_Generic::parse_args(int argc, char** argv)
 					++i;
 					while(i < argc) 
 					{
-						read_option(REST_ARG, argv[i]);
+						read_option(CL_ArgsParse::REST_ARG, argv[i]);
 						++i;
 					}
 				} 
@@ -145,15 +145,17 @@ CL_ArgsParse_Generic::parse_args(int argc, char** argv)
 				} 
 				else
 				{
-					read_option(REST_ARG, "-");
+					read_option(CL_ArgsParse::REST_ARG, "-");
 				} 
 			}
 		} 
 		else
 		{
-			read_option(REST_ARG, argv[i]);
+			read_option(CL_ArgsParse::REST_ARG, argv[i]);
 		}
 	}
+
+	current_option = parsed_options.end();
 }
 
 CL_ArgsParse_Generic::Option*
@@ -181,7 +183,7 @@ CL_ArgsParse_Generic::lookup_long_option(const std::string& long_option)
 void
 CL_ArgsParse_Generic::read_option(int key, const std::string& argument)
 {
-	CL_ArgsParse::Option parsed_option;
+	ParsedOption parsed_option;
   
 	parsed_option.key = key;
 	parsed_option.argument = argument;
@@ -302,6 +304,32 @@ CL_ArgsParse_Generic::add_option(int key,
 	option.visible      = visible;
 
 	options.push_back(option);
+}
+
+bool
+CL_ArgsParse_Generic::next()
+{
+	if (current_option == parsed_options.end()) 
+	{
+		(current_option = parsed_options.begin());
+		return current_option != parsed_options.end();
+	}
+	else
+	{
+		return (++current_option) != parsed_options.end();
+	}
+}
+
+int
+CL_ArgsParse_Generic::get_key()
+{
+	return current_option->key;
+}
+
+std::string
+CL_ArgsParse_Generic::get_argument()
+{
+	return current_option->argument;
 }
 
 /* EOF */

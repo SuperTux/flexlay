@@ -28,10 +28,15 @@ clerror_translator(CL_Error const& err)
 void flexlay_init()   { flexlay.init(); }
 void flexlay_deinit() { flexlay.deinit(); }
 
-void sig_connect(CL_Signal_v0& sig, PyObject* obj)
+void sig_connect(CL_Signal_v0& sig, boost::python::object obj)
 {
   std::cout << "Connecting functor: " << std::endl;
-  new CL_Slot(sig.connect_functor(PythonFunctor(obj)));
+  new CL_Slot(sig.connect_functor(PythonFunctor(boost::python::object(obj))));
+}
+
+void foobar(CL_Menu* menu) 
+{
+  std::cout << "Do foobar" << menu << std::endl;
 }
 
 BOOST_PYTHON_MODULE(flexlay)
@@ -80,6 +85,14 @@ BOOST_PYTHON_MODULE(flexlay)
     ("Button",  init<CL_Rect, std::string, CL_Component*>())
     .def("sig_clicked", &CL_Button::sig_clicked,
          return_value_policy<reference_existing_object>());
+
+  class_<CL_MenuNode, boost::noncopyable>("MenuNode", no_init);
+
+  class_<CL_Menu, bases<CL_Component>, CL_Menu, boost::noncopyable>
+    ("Menu", init<CL_Component*>())
+    .def("add_item", &CL_Menu::create_item,
+         return_value_policy<reference_existing_object>())
+    .def("foobar", &foobar);
 
   class_<Workspace, bases<>, Workspace, boost::noncopyable>
     ("Workspace", init<int, int>())

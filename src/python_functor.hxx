@@ -26,10 +26,10 @@
 class PythonFunctor
 {
 private:
-  PyObject* obj;
+  boost::python::object obj;
 public:
   PythonFunctor();
-  PythonFunctor(PyObject* o);
+  PythonFunctor(boost::python::object o);
   ~PythonFunctor();
 
   PythonFunctor(const PythonFunctor& copy);

@@ -1,4 +1,4 @@
-//  $Id: windstille_game.cxx,v 1.23 2003/09/29 21:26:46 grumbel Exp $
+//  $Id: windstille_game.cxx,v 1.24 2003/09/29 21:51:40 grumbel Exp $
 //
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -106,7 +106,7 @@ WindstilleGame::draw_game()
   if (1)
     {     
       //logo.set_blend_func(blend_src_alpha, blend_one);
-      logo.set_alpha(sin(blink)*0.5f + 0.5f);
+      logo.set_alpha(cos(blink)*0.5f + 0.5f);
       logo.draw(800 - 302, 600 - 95);
       logo_black.draw(800 - 302, 600 - 95);
     }

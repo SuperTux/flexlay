@@ -1,4 +1,4 @@
-//  $Id: windstille_menu.hxx,v 1.3 2003/09/29 21:26:46 grumbel Exp $
+//  $Id: windstille_menu.hxx,v 1.4 2003/09/29 21:51:40 grumbel Exp $
 // 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -21,12 +21,14 @@
 #define HEADER_WINDESTILLE_MENU_HXX
 
 #include <ClanLib/Display/sprite.h>
+#include <ClanLib/Sound/soundbuffer.h>
 #include "screen.hxx"
 
 /** */
 class WindstilleMenu : public Screen
 {
 private:
+  CL_SoundBuffer background_music;
   CL_Sprite background;
   CL_Sprite windstille;
   int current_choice;
@@ -37,6 +39,9 @@ public:
   
   void update(float delta);
   void draw();
+  
+  void on_startup();
+  void on_shutdown();
 private:
   void fadeout();
   WindstilleMenu (const WindstilleMenu&);

@@ -1,4 +1,4 @@
-//  $Id: windstille_main.cxx,v 1.22 2003/09/29 21:26:46 grumbel Exp $
+//  $Id: windstille_main.cxx,v 1.23 2003/09/29 21:51:40 grumbel Exp $
 //
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -20,6 +20,8 @@
 #include <config.h>
 //#include <ClanLib/gl.h>
 #include <ClanLib/core.h>
+#include <ClanLib/vorbis.h>
+#include <ClanLib/sound.h>
 #include <ClanLib/display.h>
 
 #include <guile/gh.h>
@@ -110,10 +112,12 @@ WindstilleMain::inner_main(void* closure, int argc, char** argv)
     CL_SetupCore::init();
     CL_SetupGL::init();
     CL_SetupDisplay::init();
+    CL_SetupSound::init();
+    CL_SetupVorbis::init();
 
     CL_DisplayWindow window (PACKAGE_STRING,
                              screen_width, screen_height, fullscreen, allow_resize);
-
+    CL_SoundOutput sound_output(44100);
     CL_Display::clear();
     CL_Display::flip();
 
@@ -165,6 +169,8 @@ WindstilleMain::inner_main(void* closure, int argc, char** argv)
   TileFactory::deinit();
   Fonts::deinit();
 
+  CL_SetupVorbis::init();
+  CL_SetupSound::init();
   CL_SetupDisplay::init();
   CL_SetupGL::init();
   CL_SetupCore::init(); 

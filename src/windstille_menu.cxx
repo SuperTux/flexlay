@@ -1,4 +1,4 @@
-//  $Id: windstille_menu.cxx,v 1.3 2003/09/29 21:26:46 grumbel Exp $
+//  $Id: windstille_menu.cxx,v 1.4 2003/09/29 21:51:40 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -31,7 +31,8 @@
 #include "editor/editor.hxx"
 
 WindstilleMenu::WindstilleMenu()
-  : background("menu_background", resources),
+  : background_music(datadir + "music/techdemo.ogg"),
+    background("menu_background", resources),
     windstille("logo_large", resources)
 {
   current_choice = 0;
@@ -86,10 +87,12 @@ WindstilleMenu::update(float delta)
                && (*i).state == true)
         {
           current_choice -= 1;
+          passed_time = 0;
         }
       else if ((*i).type == InputEvent::DOWN && (*i).state == true)
         {
           current_choice += 1;
+          passed_time = 0;
         }
     }
 
@@ -117,7 +120,7 @@ WindstilleMenu::draw()
   Fonts::menu.set_alignment(origin_bottom_center);
   Fonts::menu_h.set_alignment(origin_bottom_center);
 
-  Fonts::menu_h.set_alpha(sin(passed_time*3.141f)*.4f + .6f);
+  Fonts::menu_h.set_alpha(cos(passed_time*3.141f)*.4f + .6f);
 
   if (current_choice == 0)
     {
@@ -172,6 +175,20 @@ WindstilleMenu::fadeout()
       CL_System::sleep(50);
       alpha += 15;
     }
+}
+
+void
+WindstilleMenu::on_startup()
+{
+  background_music.play(true);
+  background_music.set_volume(1.0f);
+}
+
+void
+WindstilleMenu::on_shutdown()
+{
+  background_music.stop();
+  background_music.set_volume(0);
 }
 
 /* EOF */

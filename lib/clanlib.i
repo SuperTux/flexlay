@@ -22,6 +22,14 @@ public:
 	int height;
 };
 
+class CL_Sizef
+{
+public:
+	CL_Sizef(float w, float h);
+	float width;
+	float height;
+};
+
 class CL_Pointf
 {
 public:
@@ -55,8 +63,8 @@ class CL_Rect
 {
 public:
 	int left;
-	int right;
 	int top;
+	int right;
 	int bottom;
 
 	CL_Rect(int, int, int, int);
@@ -67,6 +75,24 @@ public:
 
 	CL_Size get_size();
 };
+
+class CL_Rectf
+{
+public:
+	float left;
+	float top;
+	float right;
+	float bottom;
+
+	CL_Rectf(float, float, float, float);
+	CL_Rectf(const CL_Pointf&, const CL_Sizef&);
+
+	float get_width() const;
+	float get_height() const;
+
+	CL_Sizef get_size();
+};
+	
 
 class CL_Colorf
 {

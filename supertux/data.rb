@@ -22,7 +22,9 @@ $game_objects = [
   ["spawnpoint", "images/editor/spawnpoint.png", "sprite",
     proc{|data, sexpr| SpawnPoint.new(data)}],
   ["door", "images/shared/door-1.png", "sprite",
-    proc{|data, sexpr| Door.new(data, sexpr)}],
+    proc{|data, sexpr| Door.new("door", data, sexpr)}],
+  ["hatch", "images/shared/hatch-1.png", "sprite",
+    proc{|data, sexpr| Door.new("hatch", data, sexpr)}],
   ["trampoline", "images/shared/trampoline-1.png", "sprite",
     proc{|data, sexpr| BadGuy.new("trampoline")}],
   ["bell", "images/shared/bell/bell-m.png", "sprite",
@@ -36,7 +38,7 @@ $game_objects = [
   ["secretarea", "images/editor/secretarea.png", "rect",
     proc{|data, sexpr| SecretArea.new(data, sexpr)}],
   ["sequencetrigger", "images/editor/sequencetrigger.png", "rect",
-    proc{|data, sexpr| SequenceTrigger.new(sexpr)}],
+    proc{|data, sexpr| SequenceTrigger.new(data, sexpr)}],
   ["background", "images/editor/background.png", "sprite",
 	proc{|data, sexpr| Background.new(sexpr)}],
   ["particles-snow", "images/editor/snow.png", "sprite",
@@ -82,7 +84,6 @@ def create_gameobject(objmap, data, pos, sexpr = [])
     raise "Error: Unknown object type droped: '#{data}'"
   end
   
-  puts "Adding object to workspace: #{obj}"
   cmd = ObjectAddCommand.new(objmap)
   cmd.add_object(obj.to_object);
   $gui.workspace.get_map().execute(cmd.to_command());

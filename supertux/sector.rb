@@ -22,6 +22,7 @@ class Sector
   
   def initialize(parent)
     @parent = parent
+    @cameramode = "normal"
   end
 
   def get_level()
@@ -84,7 +85,13 @@ class Sector
     @objects = ObjectLayer.new()
     for i in get_value_from_tree(["objects"], data, [])
       (name, odata) = i[0], i[1..-1]
-	  print "Create object: ", name, "\n"
+      # fix some old object names
+      if(name == "money")
+        name = "jumpy"
+      end
+      if(name == "laptop")
+        name = "mriceblock"
+      end
       create_gameobject_from_data(@objects, name, odata)
     end
 

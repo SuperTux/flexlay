@@ -258,7 +258,8 @@ class Door<GameObj
   attr_accessor :sector, :spawnpoint
   attr_reader   :data
 
-  def initialize(data, sexpr = [])
+  def initialize(type, data, sexpr = [])
+    @type = type
     @data = data
     @sector     = get_value_from_tree(["sector", "_"], sexpr, "main")
     @spawnpoint = get_value_from_tree(["spawnpoint", "_"], sexpr, "main")
@@ -276,7 +277,7 @@ class Door<GameObj
 
   def save(f, obj)
     pos = obj.get_pos()
-    f.write("       (door\n")
+    f.write("       (%s\n" % [@type])
     f.write("         (x %d) (y %d)" % [pos.x, pos.y])
     f.write("         (sector \"%s\")\n" % @sector)
     f.write("         (spawnpoint \"%s\")\n" % @spawnpoint)

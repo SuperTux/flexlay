@@ -49,9 +49,9 @@ def gen_i_depends(path, filename):
     f.close()
     return lst            
 
-Depends('../lib/flexlay_wrap.i', gen_i_depends(Dir("../lib").abspath, File("../lib/flexlay_wrap.i").abspath))
-env.Command('flexlay_ruby_wrap.cxx', '../lib/flexlay_wrap.i',
-            "swig -c++ -ruby -o $TARGET $SOURCE")
+#Depends('../lib/flexlay_wrap.i', gen_i_depends(Dir("../lib").abspath, File("../lib/flexlay_wrap.i").abspath))
+#env.Command('flexlay_ruby_wrap.cxx', '../lib/flexlay_wrap.i',
+#            "swig -c++ -ruby -o $TARGET $SOURCE")
 
 clanLib_env = Environment()
 clanLib_env.ParseConfig("pkg-config --cflags --libs clanCore-0.7 clanDisplay-0.7 clanGL-0.7 clanSignals-0.7 clanGUI-0.7 clanGUIStyleSilver-0.7")
@@ -60,17 +60,19 @@ libflexlay_ruby_env = env.Copy()
 flexlay_ruby_lib = libflexlay_ruby_env.SharedLibrary(
     target = 'flexlay_wrap.so',
     source = [
-    'flexlay_ruby_wrap.cxx',
+    env.CXXFile(target='flexlay_ruby_wrap.cxx', source='../lib/flexlay_wrap.i',
+      SWIGFLAGS="-ruby -c++", CXXFILESUFFIX=".cxx"),
     'ruby_functor.cxx',
     'ruby_meta_data.cxx',
     'ruby_sexpr_parser.cxx',
     'ruby_object.cxx',
     'ruby_converter.cxx'
     ],
-    CPPPATH=['$USER_CPPPATH','$RUBYDIR','../lib/'] + clanLib_env['CPPPATH'],
+    CPPPATH=[".",'$USER_CPPPATH','$RUBYDIR','../lib/'] + clanLib_env['CPPPATH'],
     LINKFLAGS = clanLib_env['LINKFLAGS'],
     LIBPATH=['../lib', '.'] + clanLib_env['LIBPATH'],
-    LIBS=['flexlay'] + clanLib_env['LIBS'])
+    LIBS=['flexlay'] + clanLib_env['LIBS'],
+    CXXFLAGS="-Wno-uninitialized")
 
 # install_ruby = env.Alias('install_headers', Install(env['DESTDIR'] + env['PREFIX'] + '/include/flexlay', flexlay_headers))
 # env.Alias('install', [install_ruby])

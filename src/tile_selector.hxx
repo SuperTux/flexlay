@@ -26,6 +26,9 @@ class Tileset;
 
 class TileSelector : public CL_Component
 {
+public:
+  typedef std::vector<int> Tiles;
+  
 private:
   CL_SlotContainer slots;
   int width;
@@ -40,7 +43,6 @@ private:
   float scale;
   
   /** set of tiles that should be available in the TileSelector */
-  typedef std::vector<int> Tiles;
   Tiles tiles;
 
   Tileset* tileset;
@@ -57,6 +59,7 @@ public:
 
   void draw();
 
+private:
   void mouse_move(const CL_InputEvent& event);
   void mouse_down(const CL_InputEvent& event);
   void mouse_up  (const CL_InputEvent& event);

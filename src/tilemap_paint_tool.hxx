@@ -52,12 +52,12 @@ public:
   const TileBrush& get_brush() { return brush; }
   void set_brush(const TileBrush& b);
   void draw();
+  void set_tilemap(EditorTileMap* t) { tilemap = t; }
 
+private:
   void on_mouse_down(const CL_InputEvent& event);
   void on_mouse_move(const CL_InputEvent& event);
   void on_mouse_up  (const CL_InputEvent& event);
-
-  void set_tilemap(EditorTileMap* t) { tilemap = t; }
 };
 
 #endif

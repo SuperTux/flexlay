@@ -72,14 +72,31 @@ gui.push_component(window)
 button1 = CL_Button(CL_Rect(50, 50, 200, 75), "Quit", gui.get_component())
 connect(button1.sig_clicked(), foo)
 
-button2 = CL_Button(CL_Rect(50, 100, 200, 125), "Draw", gui.get_component())
+button2 = CL_Button(CL_Rect(CL_Point(50, 100), CL_Size(150, 25)), "Draw", gui.get_component())
 connect(button2.sig_clicked(), draw_something)
 gui.pop_component()
 
-menu = CL_Menu(gui.get_component());
-a = menu.create_item("File/Open...", "File/Open...")
-a = menu.create_item("File/Save...", "File/Save...")
-a = menu.create_item("File/Save As...", "File/Save As...")
+class Menu(CL_Menu):
+    def __init__(self):
+        CL_Menu.__init__(self, gui.get_component())
+    
+    def add_item(self, name, func):
+        item = self.create_item(name)
+        connect(item.sig_clicked(), func)
+
+def menu_file_open():
+    print "File/Open"
+
+def menu_file_save():
+    print "File/Save"
+
+def menu_file_save_as():
+    print "File/Save As"
+
+menu = Menu()
+a = menu.add_item("File/Open...", menu_file_open)
+a = menu.add_item("File/Save...", menu_file_save)
+a = menu.add_item("File/Save As...", menu_file_save_as)
 gui.run()
 
 flexlay.deinit()

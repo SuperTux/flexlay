@@ -5,7 +5,7 @@ env = Environment(CXX = 'g++-3.3',
                   SWIGFLAGS='-c++ -python',
                   SHLIBPREFIX='')
 
-Depends('flexlay_wrap.cxx', ['flexlay.i', 'clanlib.i'])
+Depends('flexlay_wrap.cxx', ['flexlay.i', 'clanlib.i']) 
 env.Command('flexlay_wrap.cxx', 'flexlay.i', "swig -python -c++ $SOURCE")
 
 env.SharedLibrary(
@@ -38,6 +38,7 @@ env.SharedLibrary(
     'paint_command.cxx',
     'popup_menu.cxx',
     'python_functor.cxx',
+    'python_object.cxx',
     'scripting/gui.cxx',
     'tile.cxx',
     'tile_brush.cxx',

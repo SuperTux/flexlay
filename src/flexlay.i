@@ -26,6 +26,9 @@
 #include "globals.hxx"
 #include "python_functor.hxx"
 #include "gui_manager.hxx"
+#include "tile_selector.hxx"
+#include "object_brush.hxx"
+#include "object_selector.hxx"
 %}
 
 %include "std_string.i"
@@ -50,5 +53,8 @@
 %include "globals.hxx"
 %include "python_functor.hxx"
 %include "gui_manager.hxx"
+%include "tile_selector.hxx"
+%include "object_brush.hxx"
+%include "object_selector.hxx"
 
 /* EOF */

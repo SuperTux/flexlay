@@ -1,3 +1,11 @@
+class CL_Size
+{
+public:
+	CL_Size(int w, int h);
+	int width;
+	int height;
+};
+
 class CL_Point
 {
 public:
@@ -16,6 +24,7 @@ public:
   int bottom;
 
   CL_Rect(int, int, int, int);
+        CL_Rect(const CL_Point&, const CL_Size&);     
 
   int get_width() const;
   int get_height() const;
@@ -80,11 +89,19 @@ public:
           CL_StyleManager *style = NULL,
           bool vertical=false);
 
-  CL_Menu *create_menu( const std::string &path, const std::string &labels=std::string());
   CL_MenuNode *create_item( const std::string &path, const std::string &labels=std::string());
 };
 
-
+class CL_MenuNode : public CL_Component
+{
+//! Construction:
+public:
+	//: CL_MenuNode Constructor
+	CL_MenuNode(
+		CL_Menu *parent_menu,
+		CL_StyleManager *style = NULL);
+	CL_Signal_v0 &sig_clicked();
+};
 
 /* EOF */
 

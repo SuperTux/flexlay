@@ -1,6 +1,6 @@
 //  $Id$
-// 
-//  Flexlay - A Generic 2D Game Editor
+//
+//  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
 //
 //  This program is free software; you can redistribute it and/or
@@ -12,40 +12,40 @@
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
-// 
+//
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-#ifndef HEADER_ZOOM_TOOL_HXX
-#define HEADER_ZOOM_TOOL_HXX
+#include "python_object.hxx"
 
-#include <ClanLib/Core/Math/rect.h>
-#include <ClanLib/Display/input_event.h>
-#include "tilemap_tool.hxx"
-
-/** */
-class ZoomTool : public TileMapTool
+PythonObject::PythonObject(PyObject* obj_)
+  : obj(obj_)
 {
-private:
-  enum { CREATE_ZOOM_RECT, NONE } state;
+  Py_XINCREF(obj);
+}
 
-  CL_Rect zoom_rect;
-public:
-  ZoomTool();
-  ~ZoomTool();
-  
-  void draw();
+PythonObject::PythonObject (const PythonObject& copy)
+  : obj(copy.obj)
+{
+  Py_XINCREF(obj);
+}
 
-private:
-  void on_mouse_up  (const CL_InputEvent& event);
-  void on_mouse_down(const CL_InputEvent& event);
-  void on_mouse_move(const CL_InputEvent& event);
- 
-  ZoomTool (const ZoomTool&);
-  ZoomTool& operator= (const ZoomTool&);
-};
+PythonObject& 
+PythonObject::operator= (const PythonObject& copy)
+{
+  if (this != &copy)
+    {
+      Py_XDECREF(obj);
+      obj = copy.obj;
+      Py_XINCREF(obj);
+    }
+  return *this;
+}
 
-#endif
+PythonObject::~PythonObject()
+{
+  Py_XDECREF(obj);
+}
 
 /* EOF */

@@ -56,6 +56,7 @@ public:
   void draw();
   void add_brush(const ObjectBrush& brush);
 
+private:
   void mouse_move(const CL_InputEvent& event);
   void mouse_down(const CL_InputEvent& event);
   void mouse_up  (const CL_InputEvent& event); 

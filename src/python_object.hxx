@@ -1,6 +1,6 @@
 //  $Id$
 // 
-//  Flexlay - A Generic 2D Game Editor
+//  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
 //
 //  This program is free software; you can redistribute it and/or
@@ -17,33 +17,24 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-#ifndef HEADER_ZOOM_TOOL_HXX
-#define HEADER_ZOOM_TOOL_HXX
+#ifndef HEADER_PYTHON_OBJECT_HXX
+#define HEADER_PYTHON_OBJECT_HXX
 
-#include <ClanLib/Core/Math/rect.h>
-#include <ClanLib/Display/input_event.h>
-#include "tilemap_tool.hxx"
+#include "Python.h"
 
 /** */
-class ZoomTool : public TileMapTool
+class PythonObject
 {
 private:
-  enum { CREATE_ZOOM_RECT, NONE } state;
+  PyObject* obj;
 
-  CL_Rect zoom_rect;
 public:
-  ZoomTool();
-  ~ZoomTool();
-  
-  void draw();
+  PythonObject(PyObject* obj);
+  PythonObject (const PythonObject&);
+  PythonObject& operator= (const PythonObject&);
+  ~PythonObject();
 
-private:
-  void on_mouse_up  (const CL_InputEvent& event);
-  void on_mouse_down(const CL_InputEvent& event);
-  void on_mouse_move(const CL_InputEvent& event);
- 
-  ZoomTool (const ZoomTool&);
-  ZoomTool& operator= (const ZoomTool&);
+  PyObject* ptr() { return obj; }
 };
 
 #endif

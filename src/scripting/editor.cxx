@@ -31,12 +31,25 @@ void connect(CL_Signal_v0& sig, PyObject* obj)
   new CL_Slot(sig.connect_functor(PythonFunctor(obj)));
 }
 
+void connect_v1(CL_Signal_v1<int>& sig, PyObject* obj)
+{
+  sig = CL_Signal_v1<int>();
+  new CL_Slot(sig.connect_functor(PythonFunctor(obj)));
+}
+
 CL_Sprite
 make_sprite(const std::string& filename)
 {
   CL_SpriteDescription desc;
   desc.add_frame(CL_ProviderFactory::load(filename), true);
   return CL_Sprite(desc);
+}
+
+Tile
+make_tile(const char* filename, 
+          unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha)
+{
+  return Tile(filename, CL_Color(red, green, blue, alpha));
 }
 
 /* EOF */

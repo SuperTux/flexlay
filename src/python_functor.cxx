@@ -17,6 +17,7 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
+#include "Python.h"
 #include "python_functor.hxx"
 
 PythonFunctor::PythonFunctor()
@@ -67,6 +68,23 @@ PythonFunctor::operator()()
         }
       Py_DECREF(arglist);
     }
+}
+
+void
+PythonFunctor::operator()(int i)
+{
+  if (obj)
+    {
+      PyObject* arglist = Py_BuildValue("(i)", i);
+      if (PyEval_CallObject(obj,  arglist) == 0)
+        {
+          if (PyErr_Occurred())
+            {
+              PyErr_Print();
+            }
+        }
+      //Py_DECREF(arglist);
+    }  
 }
 
 /* EOF */

@@ -1,4 +1,4 @@
-%module flexlay
+%module flexlay_wrap
  
 %{
 #include <ClanLib/Display/color.h>
@@ -102,6 +102,5 @@
 %include "graphic_context_state.hxx"
 
 %include "netpanzer.hxx" 
-
 
 /* EOF */

@@ -33,6 +33,8 @@ public:
   CL_Sprite sur;
   CL_PixelBuffer pixelbuffer;
 
+  bool has_color;
+
   /** Color used for the minimap to represent this tile */
   CL_Color  color;
 
@@ -45,25 +47,13 @@ public:
   std::string filename;
 };
 
-Tile::Tile(std::string filename_, 
-           const CL_Color& color_, 
-           const CL_Color& attribute_color_, 
-           unsigned char* arg_colmap)
+Tile::Tile(const std::string& filename_, 
+           const CL_Color& attribute_color_)
   : impl(new TileImpl())
 {
-  impl->color = color_;
+  impl->has_color = false;
   impl->attribute_color = attribute_color_;
   impl->filename = filename_;
-
-  // FIXME: Kind of evil singular value
-  if (impl->color == CL_Color(254, 254, 254, 254))
-    {
-      impl->color = calc_color();
-    }
-  
-  //sur.set_alignment(origin_center, 0, 0);
-  if (arg_colmap)
-    memcpy(impl->colmap, arg_colmap, 8);
 }
 
 Tile::~Tile()
@@ -73,7 +63,16 @@ Tile::~Tile()
 CL_Color
 Tile::get_color()
 {
-  return impl->color;
+  if (impl->has_color)
+    {
+      return impl->color;
+    }
+  else
+    {
+      impl->color = calc_color();
+      impl->has_color = true;
+      return impl->color;
+    }
 }
 
 CL_Color

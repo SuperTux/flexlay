@@ -33,21 +33,6 @@ screen_h = 600
 editor = Editor()
 gui = editor.get_gui_manager()
 
-def Editor_undo(self):
-    workspace.get_map().undo()
-def Editor_redo(self):
-    workspace.get_map().redo()
-Editor.undo = Editor_undo
-Editor.redo = Editor_redo
-del Editor_redo
-del Editor_undo
-
-EditorMap.__get_metadata = EditorMap.get_metadata
-def EditorMap_get_metadata(self):
-    return get_python_object(self.__get_metadata())
-EditorMap.get_metadata = EditorMap_get_metadata
-del EditorMap_get_metadata
-
 myrect = CL_Rect(CL_Point(0, 56), CL_Size(665, 488+56))
 editor_map = EditorMapComponent(myrect, gui.get_component())
 workspace  = Workspace(myrect.get_width(), myrect.get_height())
@@ -65,43 +50,7 @@ startlevel = SuperTuxLevel(100, 50)
 # startlevel = netpanzer.Level(256, 256)
 startlevel.activate(workspace)
 
-def do_quit():
-    print "---My Callback---"
-    gui.quit()
-
-def draw_something():
-    brush = TileBrush(2, 2)
-    brush.set_opaque()
-    _ = PaintCommand(tilemap, brush)
-    _.add_point(CL_Point(1,1))
-    _.add_point(CL_Point(2,2))
-    _.add_point(CL_Point(3,3))
-    _.add_point(CL_Point(4,4))
-    workspace.get_map().execute(_.to_command())
-
-def block():
-    window = Window(CL_Rect(50, 50, 450, 400), "My Window", gui.get_component())
-    
-    gui.push_component(window.get_client_area())
-    dirview = DirectoryView(CL_Rect(CL_Point(3, 40), CL_Size(300, 200)), gui.get_component())
-    dirview.set_directory("/");
-
-    scrollbar = Scrollbar(CL_Rect(CL_Point(370, 5), CL_Size(12, 300)), Scrollbar.VERTICAL, gui.get_component())
-    scrollbar.set_range(50, 150)
-    scrollbar.set_pagesize(10)
-    scrollbar.set_pos(100)
-    
-    gui.pop_component()
-
-willow = Panel(CL_Rect(CL_Point(0, 23), CL_Size(800, 33)), gui.get_component())
-
-def Icon_set_callback(self, func):
-    connect(self.sig_clicked(), func)
-Icon.set_callback = Icon_set_callback
-del Icon_set_callback
-
-def do_something():
-    print "do_something"
+button_panel = Panel(CL_Rect(CL_Point(0, 23), CL_Size(800, 33)), gui.get_component())
 
 def gui_level_save_as():
     save_dialog.set_filename(os.path.dirname(save_dialog.get_filename()) + "/")
@@ -137,15 +86,15 @@ class Counter:
 p = Counter(2)
 
 new_icon         = Icon(CL_Rect(CL_Point(p.inc(0),  2), CL_Size(32, 32)),
-                                make_sprite("../data/images/icons24/stock_new.png"), "Some tooltip", willow);
+                                make_sprite("../data/images/icons24/stock_new.png"), "Some tooltip", button_panel);
 load_icon        = Icon(CL_Rect(CL_Point(p.inc(32), 2), CL_Size(32, 32)),
-                        make_sprite("../data/images/icons24/stock_open.png"), "Some tooltip", willow);
+                        make_sprite("../data/images/icons24/stock_open.png"), "Some tooltip", button_panel);
 load_recent_icon = Icon(CL_Rect(CL_Point(p.inc(32), 2), CL_Size(16, 32)),
-                        make_sprite("../data/images/icons24/downarrow.png"), "Some tooltip", willow);
+                        make_sprite("../data/images/icons24/downarrow.png"), "Some tooltip", button_panel);
 save_icon        = Icon(CL_Rect(CL_Point(p.inc(16), 2), CL_Size(32, 32)),
-                        make_sprite("../data/images/icons24/stock_save.png"), "Some tooltip", willow);
+                        make_sprite("../data/images/icons24/stock_save.png"), "Some tooltip", button_panel);
 save_as_icon     = Icon(CL_Rect(CL_Point(p.inc(32), 2), CL_Size(32, 32)),
-                        make_sprite("../data/images/icons24/stock_save_as.png"), "Some tooltip", willow);
+                        make_sprite("../data/images/icons24/stock_save_as.png"), "Some tooltip", button_panel);
 
 load_icon.set_callback(gui_level_load)
 load_recent_icon.set_callback(lambda: recent_files_menu.run())
@@ -153,14 +102,14 @@ save_icon.set_callback(gui_level_save)
 save_as_icon.set_callback(gui_level_save_as)
 
 copy_icon    = Icon(CL_Rect(CL_Point(p.inc(48), 2), CL_Size(32, 32)),
-                    make_sprite("../data/images/icons24/stock_copy.png"), "Some tooltip", willow);
+                    make_sprite("../data/images/icons24/stock_copy.png"), "Some tooltip", button_panel);
 paste_icon   = Icon(CL_Rect(CL_Point(p.inc(32), 2), CL_Size(32, 32)),
-                    make_sprite("../data/images/icons24/stock_paste.png"), "Some tooltip", willow);
+                    make_sprite("../data/images/icons24/stock_paste.png"), "Some tooltip", button_panel);
 
 undo_icon = Icon(CL_Rect(CL_Point(p.inc(48), 2), CL_Size(32, 32)),
-                 make_sprite("../data/images/icons24/stock_undo.png"), "Some tooltip", willow);
+                 make_sprite("../data/images/icons24/stock_undo.png"), "Some tooltip", button_panel);
 redo_icon = Icon(CL_Rect(CL_Point(p.inc(32), 2), CL_Size(32, 32)),
-                 make_sprite("../data/images/icons24/stock_redo.png"), "Some tooltip", willow);
+                 make_sprite("../data/images/icons24/stock_redo.png"), "Some tooltip", button_panel);
 
 undo_icon.set_callback(editor.undo)
 redo_icon.set_callback(editor.redo)
@@ -169,17 +118,17 @@ undo_icon.disable()
 redo_icon.disable()
 
 minimap_icon = Icon(CL_Rect(CL_Point(p.inc(48), 2), CL_Size(32, 32)),
-                    make_sprite("../data/images/icons24/minimap.png"), "Some tooltip", willow);
+                    make_sprite("../data/images/icons24/minimap.png"), "Some tooltip", button_panel);
 minimap_icon.set_callback(gui_toggle_minimap)
 
 foreground_icon  = Icon(CL_Rect(CL_Point(p.inc(48), 2), CL_Size(32, 32)),
-                        make_sprite("../data/images/icons24/foreground.png"), "Some tooltip", willow);
+                        make_sprite("../data/images/icons24/foreground.png"), "Some tooltip", button_panel);
 interactive_icon = Icon(CL_Rect(CL_Point(p.inc(32), 2), CL_Size(32, 32)),
-                        make_sprite("../data/images/icons24/interactive.png"), "Some tooltip", willow);
+                        make_sprite("../data/images/icons24/interactive.png"), "Some tooltip", button_panel);
 background_icon  = Icon(CL_Rect(CL_Point(p.inc(32), 2), CL_Size(32, 32)),
-                        make_sprite("../data/images/icons24/background.png"), "Some tooltip", willow);
+                        make_sprite("../data/images/icons24/background.png"), "Some tooltip", button_panel);
 eye_icon         = Icon(CL_Rect(CL_Point(p.inc(32), 2), CL_Size(32, 32)),
-                        make_sprite("../data/images/icons24/eye.png"), "Some tooltip", willow);
+                        make_sprite("../data/images/icons24/eye.png"), "Some tooltip", button_panel);
 
 layer_menu = Menu(CL_Point(32*11+2, 54), gui.get_component())
 
@@ -243,6 +192,7 @@ object.set_callback(set_objmap_select_tool)
 # erase  = Icon(CL_Point(2, 32+1+2), make_sprite("../data/images/tools/stock-tool-eraser-22.png"), "Some tooltip", toolbar);
 # move   = Icon(CL_Point(2, 32*2+2), make_sprite("../data/images/tools/stock-tool-move-22.png"), "Some tooltip", toolbar);
 
+# SuperTux Specific stuff
 def gui_show_foreground():
     display_properties.layer = SuperTuxLevel.FOREGROUND
     display_properties.set(workspace.get_map().get_metadata())
@@ -291,21 +241,6 @@ background_icon.set_callback(gui_show_background)
 eye_icon.set_callback(layer_menu.run)
 
 mysprite = make_sprite("../data/images/icons16/stock_paste-16.png")
-
-def block():
-    def CL_Menu_add_item(self, name, func):
-        item = self.create_item(name)
-        connect(item.sig_clicked(), func)
-    CL_Menu.add_item = CL_Menu_add_item
-block()
-
-def Menu_add_item(self, sprite, text, func):
-    i = self.__add_item(sprite, text)
-    if func != None:
-        connect(self.sig_clicked(i), func)
-Menu.__add_item = Menu.add_item
-Menu.add_item = Menu_add_item
-del Menu_add_item
 
 layer_menu.add_item(mysprite, "Show all", gui_show_all)
 layer_menu.add_item(mysprite, "Show current", gui_show_current)
@@ -356,7 +291,7 @@ menu.add_item("File/Open...", gui_level_load)
 menu.add_item("File/Save...", gui_level_save)
 # menu.add_item("File/Save Commands...", menu_file_save_commands)
 menu.add_item("File/Save As...", gui_level_save_as)
-menu.add_item("File/Quit",  do_quit)
+menu.add_item("File/Quit",  gui.quit)
 
 def gui_set_zoom(zoom):
     gc = editor_map.get_workspace().get_gc_state()
@@ -376,7 +311,6 @@ mysprite = make_sprite("../data/images/icons16/stock_paste-16.png")
 
 mymenu = Menu(CL_Point(134, 54), gui.get_component())
 mymenu.add_item(mysprite, "Foobar aeuaeu", None)
-mymenu.add_item(mysprite, "blub", do_something)
 mymenu.add_item(mysprite, "bla", None)
 mymenu.add_seperator()
 mymenu.add_item(mysprite, "Foobar", None)
@@ -391,48 +325,9 @@ paste_icon.set_callback(show_menu)
 # minimap_panel = Panel(CL_Rect(CL_Point(0, 600-56), CL_Size(800-134, 56)), gui.get_component())
 minimap = Minimap(editor_map, CL_Rect(CL_Point(3, 488+3-14), CL_Size(794-134-16, 50)), editor_map)
 
-class FileDialog:
-    window   = None
-    inputbox = None
-    ok_button     = None
-    cancel_button = None
-    callback = None
-
-    def __init__(self, title, ok, cancel, g):
-        self.window   = Window(CL_Rect(CL_Point(120, 200), CL_Size(560, 100)), title, g)
-        self.inputbox = CL_InputBox(CL_Rect(CL_Point(10, 10), CL_Size(530, 25)),
-                                    self.window.get_client_area())
-        self.ok_button     = CL_Button(CL_Rect(CL_Point(490, 35), CL_Size(50, 25)), ok,
-                                       self.window.get_client_area())
-        self.cancel_button = CL_Button(CL_Rect(CL_Point(430, 35), CL_Size(50, 25)), cancel,
-                                       self.window.get_client_area())
-        self.window.hide()
-
-    def set_filename(self, filename):
-        self.inputbox.set_text(filename)
-
-    def get_filename(self):
-        return self.inputbox.get_text()
-        
-    def run(self, func):
-        connect(self.ok_button.sig_clicked(), self.on_ok)
-        connect(self.cancel_button.sig_clicked(), self.on_cancel)
-        self.callback = func
-        self.window.show()
-        
-    def on_ok(self):
-        self.window.hide();
-        self.callback(self.inputbox.get_text())
-
-    def on_cancel(self):
-        self.window.hide();
-        
-def do_something_with_file(filename):
-    print "DoSomething: ", filename
-
-load_dialog = FileDialog("Load SuperTux Level", "Load", "Cancel", gui.get_component())
+load_dialog = SimpleFileDialog("Load SuperTux Level", "Load", "Cancel", gui.get_component())
 load_dialog.set_filename(config.datadir + "levels/")
-save_dialog = FileDialog("Save SuperTux Level as...", "Save", "Cancel", gui.get_component())
+save_dialog = SimpleFileDialog("Save SuperTux Level as...", "Save", "Cancel", gui.get_component())
 save_dialog.set_filename(config.datadir + "levels/")
 
 # Init the GUI, so that button state is in sync with internal state

@@ -19,7 +19,6 @@
 
 from flexlay import *
 from sexpr   import *
-import time
 import ConfigParser
 import os
 
@@ -62,7 +61,6 @@ def load_game_tiles(tileset, filename):
 
             tileset.add_tile(id,
                              Tile(config.datadir + 'images/tilesets/' + image,
-                                  CL_Color(254, 254, 254, 254),
                                   CL_Color(255,   0,   0, 128)))
 
 class SuperTuxLevel:
@@ -267,8 +265,320 @@ def load_supertux_tiles():
     load_game_tiles(tileset, "/home/ingo/cvs/supertux/supertux/data/images/tilesets/supertux.stgt")
     return tileset 
 
+# Begin: Main loop
+print "SUperTUX"
+flexlay = Flexlay()
+flexlay.init()
+print "..SUperTUX"
 config = Config()
 supertux_tileset = load_supertux_tiles()
+
+screen_w = 800
+screen_h = 600
+
+editor = Editor()
+gui = editor.get_gui_manager()
+
+myrect = CL_Rect(CL_Point(0, 56), CL_Size(665, 488+56))
+editor_map = EditorMapComponent(myrect, gui.get_component())
+workspace  = Workspace(myrect.get_width(), myrect.get_height())
+editor_map.set_workspace(workspace)
+
+# Tools
+tilemap_paint_tool  = TileMapPaintTool()
+tilemap_select_tool = TileMapSelectTool()
+zoom_tool           = ZoomTool()
+objmap_select_tool  = ObjMapSelectTool()
+
+workspace.set_tool(tilemap_paint_tool.to_tool());
+
+startlevel = SuperTuxLevel(100, 50)
+# startlevel = netpanzer.Level(256, 256)
+startlevel.activate(workspace)
+
+button_panel = Panel(CL_Rect(CL_Point(0, 23), CL_Size(800, 33)), gui.get_component())
+
+def gui_level_save_as():
+    save_dialog.set_filename(os.path.dirname(save_dialog.get_filename()) + "/")
+    save_dialog.run(supertux_save_level)
+
+def gui_level_save():
+    if workspace.get_map().get_metadata().filename:
+        save_dialog.set_filename(workspace.get_map().get_metadata().filename)
+    else:
+        save_dialog.set_filename(os.path.dirname(save_dialog.get_filename())  + "/")
+        
+    save_dialog.run(supertux_save_level)
+   
+def gui_level_load():
+    load_dialog.run(supertux_load_level)
+
+def gui_toggle_minimap():
+    if minimap.is_visible():
+        minimap.show(False)
+    else:
+        minimap.show(True)        
+
+class Counter:
+    counter = 0;
+    
+    def __init__(self, i):
+        self.counter = i
+        
+    def inc(self, i):
+        self.counter += i
+        return self.counter
+
+p = Counter(2)
+
+new_icon         = Icon(CL_Rect(CL_Point(p.inc(0),  2), CL_Size(32, 32)),
+                                make_sprite("../data/images/icons24/stock_new.png"), "Some tooltip", button_panel);
+load_icon        = Icon(CL_Rect(CL_Point(p.inc(32), 2), CL_Size(32, 32)),
+                        make_sprite("../data/images/icons24/stock_open.png"), "Some tooltip", button_panel);
+load_recent_icon = Icon(CL_Rect(CL_Point(p.inc(32), 2), CL_Size(16, 32)),
+                        make_sprite("../data/images/icons24/downarrow.png"), "Some tooltip", button_panel);
+save_icon        = Icon(CL_Rect(CL_Point(p.inc(16), 2), CL_Size(32, 32)),
+                        make_sprite("../data/images/icons24/stock_save.png"), "Some tooltip", button_panel);
+save_as_icon     = Icon(CL_Rect(CL_Point(p.inc(32), 2), CL_Size(32, 32)),
+                        make_sprite("../data/images/icons24/stock_save_as.png"), "Some tooltip", button_panel);
+
+load_icon.set_callback(gui_level_load)
+load_recent_icon.set_callback(lambda: recent_files_menu.run())
+save_icon.set_callback(gui_level_save)
+save_as_icon.set_callback(gui_level_save_as)
+
+copy_icon    = Icon(CL_Rect(CL_Point(p.inc(48), 2), CL_Size(32, 32)),
+                    make_sprite("../data/images/icons24/stock_copy.png"), "Some tooltip", button_panel);
+paste_icon   = Icon(CL_Rect(CL_Point(p.inc(32), 2), CL_Size(32, 32)),
+                    make_sprite("../data/images/icons24/stock_paste.png"), "Some tooltip", button_panel);
+
+undo_icon = Icon(CL_Rect(CL_Point(p.inc(48), 2), CL_Size(32, 32)),
+                 make_sprite("../data/images/icons24/stock_undo.png"), "Some tooltip", button_panel);
+redo_icon = Icon(CL_Rect(CL_Point(p.inc(32), 2), CL_Size(32, 32)),
+                 make_sprite("../data/images/icons24/stock_redo.png"), "Some tooltip", button_panel);
+
+undo_icon.set_callback(editor.undo)
+redo_icon.set_callback(editor.redo)
+
+undo_icon.disable()
+redo_icon.disable()
+
+minimap_icon = Icon(CL_Rect(CL_Point(p.inc(48), 2), CL_Size(32, 32)),
+                    make_sprite("../data/images/icons24/minimap.png"), "Some tooltip", button_panel);
+minimap_icon.set_callback(gui_toggle_minimap)
+
+foreground_icon  = Icon(CL_Rect(CL_Point(p.inc(48), 2), CL_Size(32, 32)),
+                        make_sprite("../data/images/icons24/foreground.png"), "Some tooltip", button_panel);
+interactive_icon = Icon(CL_Rect(CL_Point(p.inc(32), 2), CL_Size(32, 32)),
+                        make_sprite("../data/images/icons24/interactive.png"), "Some tooltip", button_panel);
+background_icon  = Icon(CL_Rect(CL_Point(p.inc(32), 2), CL_Size(32, 32)),
+                        make_sprite("../data/images/icons24/background.png"), "Some tooltip", button_panel);
+eye_icon         = Icon(CL_Rect(CL_Point(p.inc(32), 2), CL_Size(32, 32)),
+                        make_sprite("../data/images/icons24/eye.png"), "Some tooltip", button_panel);
+
+layer_menu = Menu(CL_Point(32*11+2, 54), gui.get_component())
+
+def on_map_change():
+    if (workspace.get_map().undo_stack_size() > 0):
+        undo_icon.enable()
+    else:
+        undo_icon.disable()
+
+    if (workspace.get_map().redo_stack_size() > 0):
+        redo_icon.enable()
+    else:
+        redo_icon.disable()        
+
+def set_tilemap_paint_tool():
+    workspace.set_tool(tilemap_paint_tool.to_tool())
+    paint.set_down()
+    select.set_up()
+    zoom.set_up()
+    object.set_up()
+    supertux.show_tiles()
+
+def set_tilemap_select_tool():
+    workspace.set_tool(tilemap_select_tool.to_tool())
+    paint.set_up()
+    select.set_down()
+    zoom.set_up()
+    object.set_up()
+    supertux.show_none()
+    
+def set_zoom_tool():
+    workspace.set_tool(zoom_tool.to_tool())
+    paint.set_up()
+    select.set_up()
+    zoom.set_down()
+    object.set_up()
+    supertux.show_none()
+    
+def set_objmap_select_tool():
+    workspace.set_tool(objmap_select_tool.to_tool())
+    paint.set_up()
+    select.set_up()
+    zoom.set_up()
+    object.set_down()
+    supertux.show_objects()
+
+toolbar = Panel(CL_Rect(CL_Point(0, 23+33), CL_Size(33, 32*4+2)), gui.get_component())
+
+paint = Icon(CL_Rect(CL_Point(2, 32*0+2), CL_Size(32, 32)), make_sprite("../data/images/tools/stock-tool-pencil-22.png"), "Some tooltip", toolbar);
+paint.set_callback(set_tilemap_paint_tool)
+
+select = Icon(CL_Rect(CL_Point(2, 32*1+2), CL_Size(32,32)), make_sprite("../data/images/tools/stock-tool-rect-select-22.png"), "Some tooltip", toolbar);
+select.set_callback(set_tilemap_select_tool)
+
+zoom = Icon(CL_Rect(CL_Point(2, 32*2+2), CL_Size(32,32)), make_sprite("../data/images/tools/stock-tool-zoom-22.png"), "Some tooltip", toolbar);
+zoom.set_callback(set_zoom_tool)
+
+object = Icon(CL_Rect(CL_Point(2, 32*3+2), CL_Size(32,32)), make_sprite("../data/images/tools/stock-tool-clone-22.png"), "Some tooltip", toolbar);
+object.set_callback(set_objmap_select_tool)
+
+# erase  = Icon(CL_Point(2, 32+1+2), make_sprite("../data/images/tools/stock-tool-eraser-22.png"), "Some tooltip", toolbar);
+# move   = Icon(CL_Point(2, 32*2+2), make_sprite("../data/images/tools/stock-tool-move-22.png"), "Some tooltip", toolbar);
+
+# SuperTux Specific stuff
+def gui_show_foreground():
+    display_properties.layer = SuperTuxLevel.FOREGROUND
+    display_properties.set(workspace.get_map().get_metadata())
+    TilemapLayer_set_current(workspace.get_map().get_metadata().foreground)
+    foreground_icon.set_down()
+    interactive_icon.set_up()
+    background_icon.set_up()
+    minimap.update_minimap()
+
+def gui_show_background():
+    display_properties.layer = SuperTuxLevel.BACKGROUND
+    display_properties.set(workspace.get_map().get_metadata())
+    TilemapLayer_set_current(workspace.get_map().get_metadata().background)
+    foreground_icon.set_up()
+    interactive_icon.set_up()
+    background_icon.set_down()
+    minimap.update_minimap()
+
+def gui_show_interactive():
+    display_properties.layer = SuperTuxLevel.INTERACTIVE
+    display_properties.set(workspace.get_map().get_metadata())
+    TilemapLayer_set_current(workspace.get_map().get_metadata().interactive)
+    foreground_icon.set_up()
+    interactive_icon.set_down()
+    background_icon.set_up()
+    minimap.update_minimap()
+
+def gui_show_all():
+    display_properties.show_all = True
+    display_properties.current_only = False
+    display_properties.set(workspace.get_map().get_metadata())
+
+def gui_show_current():
+    display_properties.show_all = False
+    display_properties.current_only = False
+    display_properties.set(workspace.get_map().get_metadata())
+
+def gui_show_only_current():
+    display_properties.show_all = False
+    display_properties.current_only = True
+    display_properties.set(workspace.get_map().get_metadata())
+
+foreground_icon.set_callback(gui_show_foreground)
+interactive_icon.set_callback(gui_show_interactive)
+background_icon.set_callback(gui_show_background)
+eye_icon.set_callback(layer_menu.run)
+
+mysprite = make_sprite("../data/images/icons16/stock_paste-16.png")
+
+layer_menu.add_item(mysprite, "Show all", gui_show_all)
+layer_menu.add_item(mysprite, "Show current", gui_show_current)
+layer_menu.add_item(mysprite, "Show only current", gui_show_only_current)
+
+supertux = SuperTuxGUI(load_supertux_tiles(), gui)
+# supertux.tileselector.set_tileset(netpanzer.tileset)
+
+level = None
+def menu_file_open():
+    print "File/Open"
+    level = SuperTuxLevel('/home/ingo/cvs/supertux/supertux/data/levels/world1/level2.stl')
+    print "Loading done"
+    level.activate(workspace)
+    connect(level.editormap.sig_change(), on_map_change)
+    print "Activation done"
+
+def supertux_save_level(filename):
+    workspace.get_map().get_metadata().save(filename)
+
+recent_files_menu = Menu(CL_Point(32*2, 54), gui.get_component())
+for filename in config.recent_files:
+    recent_files_menu.add_item(mysprite, filename, lambda: supertux_load_level(filename))
+
+def has_element(lst, el):
+    for i in lst:
+        if i == el:
+            return True
+    return False
+
+def netpanzer_load_level(filename):
+    NetPanzerFileStruct(filename)
+
+def supertux_load_level(filename):   
+    print "Loading: ", filename
+    level = SuperTuxLevel(filename)
+    level.activate(workspace)
+    connect(level.editormap.sig_change(), on_map_change)
+    
+    if not(has_element(config.recent_files, filename)):
+        config.recent_files.append(filename)
+        recent_files_menu.add_item(mysprite, filename, lambda: supertux_load_level(filename))
+
+    minimap.update_minimap()
+
+menu = CL_Menu(gui.get_component())
+menu.add_item("File/Open...", gui_level_load)
+menu.add_item("File/Save...", gui_level_save)
+# menu.add_item("File/Save Commands...", menu_file_save_commands)
+menu.add_item("File/Save As...", gui_level_save_as)
+menu.add_item("File/Quit",  gui.quit)
+
+def gui_set_zoom(zoom):
+    gc = editor_map.get_workspace().get_gc_state()
+    pos = gc.get_pos()
+    gc.set_zoom(zoom)
+    gc.set_pos(pos)
+
+menu.add_item("Zoom/1:4 (25%) ",  lambda: gui_set_zoom(0.25))
+menu.add_item("Zoom/1:2 (50%) ",  lambda: gui_set_zoom(0.5))
+menu.add_item("Zoom/1:1 (100%) ", lambda: gui_set_zoom(1.0)) 
+menu.add_item("Zoom/2:1 (200%) ", lambda: gui_set_zoom(2.0))
+menu.add_item("Zoom/4:1 (400%) ", lambda: gui_set_zoom(4.0))
+
+display_properties = DisplayProperties()
+
+mysprite = make_sprite("../data/images/icons16/stock_paste-16.png")
+
+mymenu = Menu(CL_Point(134, 54), gui.get_component())
+mymenu.add_item(mysprite, "Foobar aeuaeu", None)
+mymenu.add_item(mysprite, "bla", None)
+mymenu.add_seperator()
+mymenu.add_item(mysprite, "Foobar", None)
+mymenu.add_item(mysprite, "blubaoeuau aueau aeu", None)
+mymenu.add_item(mysprite, "bla", None)
+
+minimap = Minimap(editor_map, CL_Rect(CL_Point(3, 488+3-14), CL_Size(794-134-16, 50)), editor_map)
+
+load_dialog = SimpleFileDialog("Load SuperTux Level", "Load", "Cancel", gui.get_component())
+load_dialog.set_filename(config.datadir + "levels/")
+save_dialog = SimpleFileDialog("Save SuperTux Level as...", "Save", "Cancel", gui.get_component())
+save_dialog.set_filename(config.datadir + "levels/")
+
+# Init the GUI, so that button state is in sync with internal state
+gui_show_interactive()
+gui_show_current()
+set_tilemap_paint_tool()
+
+gui.run()
+
+flexlay.deinit()
+print "deinit done"
     
 ### End: 'Main Loop'
 

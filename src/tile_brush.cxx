@@ -91,4 +91,16 @@ TileBrush::auto_crop()
     }
 }
 
+void
+TileBrush::set_data(const std::vector<int>& data_)
+{
+  return data.set_data(data_);
+}
+
+std::vector<int>
+TileBrush::get_data()
+{
+  return data.get_data();
+}
+
 /* EOF */

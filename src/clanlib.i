@@ -140,5 +140,15 @@ public:
 		CL_StyleManager *style = NULL);
 };
 
+class CL_ListBox : public CL_Component
+{
+public:
+	CL_ListBox(     
+		const CL_Rect& pos, CL_Component* parent, CL_StyleManager* style = NULL);
+       	CL_Signal_v1<int>& sig_highlighted();   
+	int insert_item(
+		const std::string& text, int index = -1);
+};
+
 /* EOF */
 

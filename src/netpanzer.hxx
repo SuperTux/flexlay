@@ -21,7 +21,10 @@
 #define HEADER_SCRIPTING_NETPANZER_HXX
 
 #include <string>
+#include "tileset.hxx"
 #include "shared_ptr.hxx"
+
+void load_netpanzer_tiles(Tileset tileset);
 
 class NetPanzerFileStructImpl;
 

@@ -24,7 +24,7 @@ env = Environment(CXX = 'g++-3.3',
                   SWIGFLAGS='-c++ -python',
                   SHLIBPREFIX='')
 
-Depends('flexlay_wrap.cxx', ['flexlay.i',
+Depends('flexlay_wrap.cxx', ['flexlay_wrap.i',
                              'clanlib.i',
                              'scripting/editor.hxx',
                              'command.hxx',
@@ -49,7 +49,7 @@ Depends('flexlay_wrap.cxx', ['flexlay.i',
                              'object_brush.hxx',
                              'object_selector.hxx'])
 
-env.Command('flexlay_wrap.cxx', 'flexlay.i', "swig -python -c++ $SOURCE")
+env.Command('flexlay_wrap.cxx', 'flexlay_wrap.i', "swig -python -o flexlay_wrap.cxx -c++ $SOURCE")
 
 env.Program('sharedptrtest', 'sharedptrtest.cxx',
             CPPPATH=['/home/ingo/run/ClanLib-0.7-current/include/ClanLib-0.7/'])
@@ -126,7 +126,7 @@ env.SharedLibrary(
           'clanGUIStyleSilver'])
 
 env.SharedLibrary(
-    target = '_flexlay.so',
+    target = '_flexlay_wrap.so',
     source = [
     'flexlay_wrap.cxx',
     'scripting/editor.cxx',

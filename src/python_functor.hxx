@@ -37,6 +37,7 @@ public:
   ~PythonFunctor();
 
   void operator()();
+  void operator()(int i);
 };
 
 #endif

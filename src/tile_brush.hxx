@@ -42,6 +42,9 @@ public:
   int get_width() const  { return data.get_width(); }
   int get_height() const { return data.get_height(); }
 
+  void set_data(const std::vector<int>& data);
+  std::vector<int> get_data();
+
   const int& at(int x, int y) const { return data.at(x, y); }
   int& at(int x, int y) { return data.at(x, y); }
 

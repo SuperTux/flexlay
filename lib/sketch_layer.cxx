@@ -44,16 +44,18 @@ public:
   Strokes strokes;
 
   /** Used to cache drawings */
-  CL_Surface surface;
+  CL_Surface  surface;
   CL_Canvas*  canvas;
-  float     last_zoom;
-  CL_Pointf last_pos;
+  float       last_zoom;
+  float       last_rot;
+  CL_Pointf   last_pos;
   
   SketchLayerImpl() 
     : surface(new CL_PixelBuffer(CL_Display::get_width(), CL_Display::get_height(), 
                                  CL_Display::get_width()*4, CL_PixelFormat::rgba8888), true),
       canvas(0),
-      last_zoom(0.0f)
+      last_zoom(0.0f),
+      last_rot(0)
   {
     try {
       canvas = new CL_Canvas(surface);
@@ -90,7 +92,8 @@ public:
       {
         // Draw to canvas
         if (last_zoom != parent->get_workspace().get_gc_state().get_zoom() ||
-            last_pos  != parent->get_workspace().get_gc_state().get_pos())
+            last_pos  != parent->get_workspace().get_gc_state().get_pos()  ||
+            last_rot  != parent->get_workspace().get_gc_state().get_rotation())
           {
             // Rerender the image
             last_zoom   = parent->get_workspace().get_gc_state().get_zoom();

@@ -49,10 +49,19 @@ public:
   int get_width()  const;
   int get_height() const;
 
+  /** Set the current rotation angel */
+  void  set_rotation(float angle);
+
+  /** Return the current rotation angel */
+  float get_rotation();
+
+  /** Move the center of the visible area to pos */
   void      set_pos(const CL_Pointf& pos);
   CL_Pointf get_pos() const;
 
-  /** Set zoom to z, while preserving the screen position pos at the same point */
+  /** Set zoom to z, while ensuring that the screen position \a pos
+      (normaly the position of the mouse pointer) stays in the same
+      position even after zoomed in/out */
   void  set_zoom(CL_Pointf pos, float z);
   void  set_zoom(float z);
   float get_zoom(); 

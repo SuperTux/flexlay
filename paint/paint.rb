@@ -143,6 +143,13 @@ class PaintGUI
                  $image.activate($gui.workspace())
                })
 
+    connect_v2(@editor_map.sig_on_key("g"),  proc{ |x, y|
+                 $gui.workspace.get_gc_state.set_rotation($gui.workspace.get_gc_state.get_rotation() + 1)
+               })
+    connect_v2(@editor_map.sig_on_key("c"),  proc{ |x, y| 
+                 $gui.workspace.get_gc_state.set_rotation($gui.workspace.get_gc_state.get_rotation() - 1)
+               })
+
     @normal_mode = CL_Button.new(CL_Rect.new(CL_Point.new(5, 500), CL_Size.new(40, 25)), "Norm", @selector_window)
     @erase_mode  = CL_Button.new(CL_Rect.new(CL_Point.new(45, 500), CL_Size.new(40, 25)), "Erase", @selector_window)
     @add_mode    = CL_Button.new(CL_Rect.new(CL_Point.new(85, 500), CL_Size.new(40, 25)), "Add", @selector_window)

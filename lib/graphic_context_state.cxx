@@ -21,6 +21,7 @@
 #include <ClanLib/Display/display_window.h>
 #include <ClanLib/Display/graphic_context.h>
 #include <ClanLib/GUI/component.h>
+#include <math.h>
 #include "graphic_context_state.hxx"
 
 class GraphicContextStateImpl
@@ -31,6 +32,7 @@ public:
   
   CL_Pointf offset;
   float zoom;
+  float rotation;
 };
 
 GraphicContextState::GraphicContextState()
@@ -40,6 +42,7 @@ GraphicContextState::GraphicContextState()
   impl->height = 1; 
   impl->offset = CL_Pointf(0,0);
   impl->zoom   = 1.0f;
+  impl->rotation = 0;
 }
 
 GraphicContextState::GraphicContextState(int w, int h)
@@ -49,6 +52,7 @@ GraphicContextState::GraphicContextState(int w, int h)
   impl->height = h;
   impl->offset = CL_Pointf(0,0); 
   impl->zoom   = 1.0f;
+  impl->rotation = 0;
 }
 
 void
@@ -65,6 +69,11 @@ GraphicContextState::push(CL_GraphicContext* gc)
     gc = CL_Display::get_current_window()->get_gc();
   
   gc->push_modelview();
+
+  gc->add_translate(impl->width/2, impl->height/2);
+  gc->add_rotate(impl->rotation, 0, 0, 1.0);
+  gc->add_translate(-impl->width/2, -impl->height/2);
+
   gc->add_scale(get_zoom(), get_zoom());
   gc->add_translate(impl->offset.x, impl->offset.y);
 }
@@ -148,10 +157,34 @@ GraphicContextState::zoom_to (const CL_Rectf& rect)
 }
 
 CL_Pointf
-GraphicContextState::screen2world(const CL_Point& pos)
+GraphicContextState::screen2world(const CL_Point& pos_)
 {
-  return CL_Pointf((float(pos.x) / impl->zoom) - impl->offset.x, 
-                   (float(pos.y) / impl->zoom) - impl->offset.y);
+  CL_Pointf pos = pos_;
+  float sa = sin(-impl->rotation/180.0f*M_PI);
+  float ca = cos(-impl->rotation/180.0f*M_PI);
+
+  float dx = pos.x - impl->width/2;
+  float dy = pos.y - impl->height/2;
+
+  pos.x = impl->width/2  + (ca * dx - sa * dy);
+  pos.y = impl->height/2 + (sa * dx + ca * dy);
+
+  CL_Pointf p((float(pos.x) / impl->zoom) - impl->offset.x, 
+              (float(pos.y) / impl->zoom) - impl->offset.y);
+
+  return p;
+}
+
+void
+GraphicContextState::set_rotation(float angle)
+{
+  impl->rotation = angle;
+}
+
+float
+GraphicContextState::get_rotation()
+{
+  return impl->rotation;
 }
 
 int

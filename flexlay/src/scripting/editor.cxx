@@ -54,6 +54,7 @@
 
 #include "../editor_map.hxx"
 #include "../editor_map_layer.hxx"
+#include "../editor_mapsize_layer.hxx"
 #include "../editor_objmap.hxx"
 #include "../editor_grid_layer.hxx"
 #include "../editor_tilemap.hxx"
@@ -998,6 +999,19 @@ void
 tileset_set_current(Tileset* tileset)
 {
   Tileset::set_current(tileset);
+}
+
+EditorMapLayer*
+editor_mapsize_layer_create(int w, int h)
+{
+  return new EditorMapsizeLayer(CL_Rect(CL_Point(0, 0), CL_Size(w, h)));
+}
+
+void
+editor_mapsize_layer_set_size(EditorMapLayer* l, int w, int h)
+{
+  EditorMapsizeLayer* layer = dynamic_cast<EditorMapsizeLayer*>(l);
+  layer->set_bounding_rect(CL_Rect(CL_Point(0, 0), CL_Size(w, h)));
 }
 
 /* EOF */

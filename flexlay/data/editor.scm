@@ -600,11 +600,11 @@
     (gui-pop-component)))
 
 (define (create-object-inserter)
-  (let ((window (gui-create-window 600 25 200 400 "ObjectInserter")))
+  (let ((window (gui-create-window 600 25 200 500 "ObjectInserter")))
     (gui-push-component (gui-window-get-client-area window))
     
     (gui-create-label 5 5 "[Drag objects from here to the map]")
-    (set! *object-selector* (object-selector-create 0 24 3 4 64 64))
+    (set! *object-selector* (object-selector-create 0 24 4 4 48 48))
 
     (gui-component-on-close window (lambda ()
                                      (gui-hide-component window)))
@@ -880,6 +880,11 @@
   ((netpanzer)
    (tile-selector-set-tileset *tileselector* *tileset*)
    (netpanzer:new-map 20 15))
+  ((pingus)
+   (load-brushes "images/groundpieces/ground/crystal/")
+   (load-brushes "images/groundpieces/ground/snow/")
+   (load-brushes "images/groundpieces/ground/desert/")
+   (pingus:new-map 800 600))
   ((windstille)
    (tile-selector-set-tileset *tileselector* *tileset*)
    (tile-selector-set-tiles   *tileselector* (seq 1 130))

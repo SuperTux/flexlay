@@ -122,6 +122,9 @@ Tileset* tileset_create_from_file(const char* resourcefile);
 void tileset_add_tile(Tileset* tileset, SCM data);
 void tileset_set_current(Tileset* tileset);
 
+EditorMapLayer* editor_mapsize_layer_create(int w, int h);
+void editor_mapsize_layer_set_size(EditorMapLayer*, int w, int h);
+
 #endif
 
 /* EOF */

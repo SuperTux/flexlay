@@ -1,3 +1,21 @@
+(use-modules (srfi srfi-13))
+
+(define (directory->list:files-only path)
+  (filter (lambda (el)
+            (equal? (stat:type (stat (string-append path el))) 'regular))
+          (directory->list path)))
+
+(define (directory->list path)
+  (let* ((dir (opendir path))
+	 (lst '()))
+    (let loop ((fobj (readdir dir)))
+      (cond ((not (eof-object? fobj))
+	     (set! lst (cons fobj lst))
+	     (loop (readdir dir)))))
+
+    (closedir dir)
+    (reverse lst)))
+
 (define (seq start end)
   (let loop ((ret '())
              (start start)

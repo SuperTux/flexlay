@@ -10,9 +10,17 @@
   (author #:init-value #f
           #:init-keyword #:author
           #:accessor plf:author)
+  (mapsize #:init-value #f
+           #:init-keyword #:mapsize
+           #:accessor plf:mapsize)
   (objects #:init-value #f
            #:init-keyword #:objects
            #:accessor plf:objects))
+
+(define (pingus:new-map width height)
+  (let ((levelmap (pingus:create-levelmap width height)))
+    (editor-map-component-set-map *editor-map* levelmap)
+    (add-buffer levelmap)))
 
 (define-method (pingus:create-levelmap width height)
   (let* ((m      (editor-map-create))
@@ -27,15 +35,18 @@
     m))
 
 (define-method (pingus:create-levelmap-from-file filename)
-  (let* ((m      (editor-map-create))
-         (objmap (editor-objmap-create))
+  (let* ((m       (editor-map-create))
+         (objmap  (editor-objmap-create))
+         (mapsize (editor-mapsize-layer-create 1270 600))
 
          (plf (make <pingus-level>
                 #:author "Some Author"
+                #:mapsize mapsize
                 #:objects objmap))
          
          (data (load-xml filename)))
 
+    (editor-map-add-layer m mapsize)
     (editor-map-add-layer m objmap)    
     (editor-map-set-metadata m (make <pingus-level>
                                  #:author "Some Author"
@@ -66,8 +77,10 @@
       (nodeset:get-text childs  "type")
       (display "Background: \n")
       (parse-position (nodeset:get childs  "position"))
-      (parse-surface  (nodeset:get childs  "surface"))
       ))
+
+  (define (parse-hotspot lst)
+    #f)
 
   (define (parse-groundpiece lst)
     (let* ((childs (node:get-childs lst))
@@ -91,5 +104,13 @@
                        (parse-background node))
                       )))
             lst))
+
+(define (load-brushes path)
+  (let ((lst (directory->list:files-only (string-append *pingus:datadir* path))))
+    (for-each (lambda (filename)
+                (object-selector-add-brush *object-selector*
+                                           (string-append *pingus:datadir* path filename)
+                                           '(groundpiece)))
+              lst)))
 
 ;; EOF ;;

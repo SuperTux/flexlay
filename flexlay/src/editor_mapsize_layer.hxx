@@ -17,48 +17,30 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-#ifndef HEADER_OBJECTSELECTOR_HXX
-#define HEADER_OBJECTSELECTOR_HXX
+#ifndef HEADER_EDITOR_MAPSIZE_LAYER_HXX
+#define HEADER_EDITOR_MAPSIZE_LAYER_HXX
 
-#include <ClanLib/GUI/component.h>
-#include <ClanLib/GUI/component.h>
-#include "object_brush.hxx"
+#include <ClanLib/Core/Math/rect.h>
+#include "editor_map_layer.hxx"
 
-/** */
-class ObjectSelector : public CL_Component
+/** Simple layer that displays the map size, only needed in case the
+    mapsize isn't clear out of the other layers itself */
+class EditorMapsizeLayer : public EditorMapLayer
 {
 private:
-  std::vector<CL_Slot> slots;
-
-  int width;
-  int height;
-
-  int obj_width;
-  int obj_height;
-
-  int index;
-  
-  int offset;
-  int old_offset;
-  int mouse_over_tile;
-  bool scrolling;
-  CL_Point click_pos;
-  CL_Point mouse_pos;
-  float scale;
-
-  std::vector<ObjectBrush> brushes;
-  ObjectBrush drag_obj;
-  
+  CL_Rect rect;
 public:
-  ObjectSelector(const CL_Point& p, int w, int h, int obj_w, int obj_h, CL_Component* parent);
-  ~ObjectSelector();
+  EditorMapsizeLayer(const CL_Rect& r);
 
-  void draw();
-  void add_brush(const ObjectBrush& brush);
+  void draw(EditorMapComponent* parent);
 
-  void mouse_move(const CL_InputEvent& event);
-  void mouse_down(const CL_InputEvent& event);
-  void mouse_up  (const CL_InputEvent& event); 
+  bool has_bounding_rect() const { return true; }
+  CL_Rect get_bounding_rect() { return rect; }
+  void set_bounding_rect(const CL_Rect& r) { rect = r; }
+  
+private:
+  EditorMapsizeLayer (const EditorMapsizeLayer&);
+  EditorMapsizeLayer& operator= (const EditorMapsizeLayer&);
 };
 
 #endif

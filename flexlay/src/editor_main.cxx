@@ -145,7 +145,7 @@ EditorMain::main(int argc, char** argv)
           "  supertux\n"
           "  netpanzer\n"
           << std::endl;
-        exit(EXIT_SUCCESS);
+        return 1;
       }
 
     // Init the path

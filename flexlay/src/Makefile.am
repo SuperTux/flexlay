@@ -9,7 +9,6 @@ averagecolor_LDADD    = @EDITOR_LIBS@
 flexlay_CPPFLAGS = -I.. @EDITOR_CFLAGS@
 flexlay_LDADD    = scripting/libeditor_scripting.a @EDITOR_LIBS@
 flexlay_SOURCES  = \
-  averagecolor.cxx  \
   command.hxx  \
   command_group.cxx  \
   command_group.hxx  \

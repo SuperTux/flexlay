@@ -18,6 +18,7 @@
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include <iostream>
+#include <ClanLib/Core/core_iostream.h>
 #include <ClanLib/Display/display.h>
 #include <ClanLib/Display/keys.h>
 #include "tileset.hxx"
@@ -64,8 +65,8 @@ EditorMapComponent::mouse_up(const CL_InputEvent& event)
 
     case CL_MOUSE_MIDDLE:
       scrolling = false;
-      gc_state.set_pos(CL_Pointf(old_trans_offset.x - (click_pos.x - event.mouse_pos.x),
-                                 old_trans_offset.y - (click_pos.y - event.mouse_pos.y)));
+      gc_state.set_pos(CL_Pointf(old_trans_offset.x + (click_pos.x - event.mouse_pos.x) / gc_state.get_zoom(),
+                                 old_trans_offset.y + (click_pos.y - event.mouse_pos.y) / gc_state.get_zoom()));
       old_trans_offset = gc_state.get_pos();
       release_mouse();
       break;
@@ -79,8 +80,8 @@ EditorMapComponent::mouse_move(const CL_InputEvent& event)
 
   if (scrolling)
     {
-      gc_state.set_pos(CL_Pointf(old_trans_offset.x - (click_pos.x - event.mouse_pos.x),
-                                 old_trans_offset.y - (click_pos.y - event.mouse_pos.y)));
+      gc_state.set_pos(CL_Pointf(old_trans_offset.x + (click_pos.x - event.mouse_pos.x)/gc_state.get_zoom(),
+                                 old_trans_offset.y + (click_pos.y - event.mouse_pos.y)/gc_state.get_zoom()));
     }
 }
 
@@ -102,11 +103,11 @@ EditorMapComponent::mouse_down(const CL_InputEvent& event)
       break;
            
     case CL_MOUSE_WHEEL_UP:
-      zoom_in();
+      zoom_in(event.mouse_pos);
       break;
 
     case CL_MOUSE_WHEEL_DOWN:
-      zoom_out();
+      zoom_out(event.mouse_pos);
       break;
     }
 }
@@ -132,60 +133,24 @@ EditorMapComponent::draw ()
 CL_Point
 EditorMapComponent::screen2world(const CL_Point& pos)
 {
-  return gc_state.screen2world(pos);
+  CL_Pointf p = gc_state.screen2world(pos);
+  return CL_Point((int)p.x, (int)p.y);
 }
 
 void
-EditorMapComponent::zoom_out()
+EditorMapComponent::zoom_out(CL_Point pos)
 {
-  gc_state.set_zoom(gc_state.get_zoom()/1.25f);
+  gc_state.set_zoom(pos, gc_state.get_zoom()/1.25f);
   //zoom_factor -= 1;
   //std::cout << "Zoom: " << get_zoom() << std::endl;
 }
 
 void
-EditorMapComponent::zoom_in()
+EditorMapComponent::zoom_in(CL_Point pos)
 {
-  gc_state.set_zoom(gc_state.get_zoom()*1.25f);
+  gc_state.set_zoom(pos, gc_state.get_zoom()*1.25f);
   //zoom_factor += 1;
   //std::cout << "Zoom: " << get_zoom() << std::endl;
-}
-
-float
-EditorMapComponent::get_zoom()
-{
-  return gc_state.get_zoom();
-  /*
-  if (zoom_factor > 0)
-    return 1.0f * (zoom_factor + 1);
-  else if (zoom_factor < 0)
-    return 1.0f / (-zoom_factor + 1);
-  else
-    return 1.0f;
-  */
-}
-
-void
-EditorMapComponent::set_zoom(float z)
-{
-  gc_state.set_zoom(z);
-  /*
-    if (z > 0)
-    {
-    if (z == 1.0f)
-    zoom_factor = 0;
-    else if (z < 1.0f)
-    zoom_factor = int(1 - 1/z);
-    else if (z > 1.0f)
-    zoom_factor = int(z);
-
-    gc.set_zoom(z);
-    }
-    else
-    {
-    std::cout << "Illegal zoom value: " << z << std::endl;
-    }
-  */
 }
 
 CL_Rect

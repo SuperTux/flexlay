@@ -33,8 +33,9 @@ class GraphicContextState
 private:
   CL_Component* comp;
   
-  CL_Pointf trans_offset;
+  CL_Pointf offset;
   float zoom;
+
 public:
   GraphicContextState(CL_Component* c);
 
@@ -48,10 +49,14 @@ public:
   void      set_pos(const CL_Pointf& pos);
   CL_Pointf get_pos();
 
+  /** Set zoom to z, while preserving the screen position pos at the same point */
+  void  set_zoom(CL_Point pos, float z);
   void  set_zoom(float z);
   float get_zoom(); 
 
-  CL_Point screen2world(const CL_Point& pos);
+  void zoom_to (const CL_Rect& rect);
+
+  CL_Pointf screen2world(const CL_Point& pos);
 };
 
 #endif

@@ -22,7 +22,7 @@
 #include "graphic_context_state.hxx"
 
 GraphicContextState::GraphicContextState(CL_Component* c)
-  : comp(c), trans_offset(0,0), zoom(1.0f)
+  : comp(c), offset(0,0), zoom(1.0f)
 {  
 }
 
@@ -30,9 +30,8 @@ void
 GraphicContextState::push()
 {
   CL_Display::push_modelview();
-  CL_Display::add_translate(int(trans_offset.x + comp->get_width()/2), 
-                            int(trans_offset.y + comp->get_height()/2));
-  //CL_Display::add_scale(get_zoom(), get_zoom());
+  CL_Display::add_scale(get_zoom(), get_zoom());
+  CL_Display::add_translate(offset.x, offset.y);
 }
 
 void
@@ -44,22 +43,33 @@ GraphicContextState::pop()
 CL_Rect
 GraphicContextState::get_clip_rect()
 {
-  return CL_Rect(CL_Point(int(-trans_offset.x - comp->get_width()/2),
-                          int(-trans_offset.y - comp->get_height()/2)),
-                 CL_Size(comp->get_width(), comp->get_height()));
+  return CL_Rect(CL_Point(int(-offset.x),
+                          int(-offset.y)),
+                 CL_Size(int(comp->get_width()  / zoom),
+                         int(comp->get_height() / zoom)));
 }
 
 void
 GraphicContextState::set_pos(const CL_Pointf& pos)
 {
-  trans_offset.x = pos.x;
-  trans_offset.y = pos.y;
+  offset.x = -pos.x + (comp->get_width()/2  / zoom);
+  offset.y = -pos.y + (comp->get_height()/2 / zoom);
 }
 
 CL_Pointf
 GraphicContextState::get_pos()
 {
-  return trans_offset;
+  return CL_Pointf(-offset.x + (comp->get_width()/2  / zoom),
+                   -offset.y + (comp->get_height()/2  / zoom));
+}
+
+void
+GraphicContextState::set_zoom(CL_Point pos, float z)
+{
+  float old_zoom = zoom;
+  set_zoom(z);
+  offset.x = pos.x/zoom - pos.x/old_zoom + offset.x;
+  offset.y = pos.y/zoom - pos.y/old_zoom + offset.y;
 }
 
 void
@@ -74,13 +84,36 @@ GraphicContextState::get_zoom()
   return zoom;
 }
 
-CL_Point
+void
+GraphicContextState::zoom_to (const CL_Rect& rect)
+{
+  float center_x = (rect.left + rect.right) / 2.0f;
+  float center_y = (rect.top + rect.bottom) / 2.0f;
+
+  float width  = rect.right - rect.left;
+  float height = rect.bottom - rect.top;
+  float screen_relation = float(comp->get_height())/float(comp->get_width ());
+  float rect_relation   = height/width; 
+  
+  //std::cout << "Screen: " << screen_relation << " Zoom: " << rect_relation << std::endl;
+  if (rect_relation < screen_relation) // take width, ignore height
+    {
+      zoom = comp->get_width()/width; 
+    }
+  else // take height, ignore width
+    {
+      zoom = comp->get_height()/height;
+    }
+
+  offset.x = (comp->get_width()  / (2*zoom)) - center_x;
+  offset.y = (comp->get_height() / (2*zoom)) - center_y;
+}
+
+CL_Pointf
 GraphicContextState::screen2world(const CL_Point& pos)
 {
-  int x = int(pos.x - trans_offset.x - comp->get_width()/2);
-  int y = int(pos.y - trans_offset.y - comp->get_height()/2);
-
-  return CL_Point(x, y);
+  return CL_Pointf((pos.x / zoom) - offset.x, 
+                   (pos.y / zoom) - offset.y);
 }
 
 /* EOF */

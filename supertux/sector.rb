@@ -66,7 +66,7 @@ class Sector
     @gravity = 10.0
     
     @width  = get_value_from_tree(["width", "_"], data, 20)
-    @height = get_value_from_tree(["height""_"], data, 15)
+    @height = get_value_from_tree(["height", "_"], data, 15)
     
     @foreground  = TilemapLayer.new($tileset, @width, @height)
     @foreground.set_data(get_value_from_tree(["foreground-tm"], data, []))

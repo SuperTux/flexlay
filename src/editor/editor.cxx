@@ -31,6 +31,7 @@
 #include "editor_map.hxx"
 #include "tile_selector.hxx"
 #include "tile_editor.hxx"
+#include "tool_manager.hxx"
 
 Editor* Editor::current_ = 0;
 
@@ -38,8 +39,8 @@ Editor::Editor()
 {
   current_ = this;
 
-  manager = new GUIManager();
-
+  manager      = new GUIManager();
+  tool_manager = new ToolManager();
   gh_load ((datadir + "editor.scm").c_str());
 }
 

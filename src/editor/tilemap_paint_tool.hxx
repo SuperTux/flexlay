@@ -31,8 +31,6 @@ class EditorTileMap;
 class TileMapPaintTool : public TileMapTool
 {
 private:
-  EditorTileMap* tilemap;
-
   enum { PAINTING, SELECTING, NONE } mode;
 
   TileSelection selection;
@@ -46,7 +44,7 @@ private:
 public:
   static TileMapPaintTool* current() { return current_; } 
 
-  TileMapPaintTool(EditorMapComponent* p, EditorTileMap* t);
+  TileMapPaintTool();
   virtual ~TileMapPaintTool();
   
   const TileBrush& get_brush() { return brush; }

@@ -27,8 +27,7 @@
 #include "tile_brush.hxx"
 #include "tilemap_select_tool.hxx"
 
-TileMapSelectTool::TileMapSelectTool(EditorMapComponent* p, EditorTileMap* t)
-  : TileMapTool(p), tilemap(t)
+TileMapSelectTool::TileMapSelectTool()
 {
   creating_selection = false;
 }
@@ -49,6 +48,8 @@ TileMapSelectTool::draw()
 void
 TileMapSelectTool::on_mouse_up  (const CL_InputEvent& event)
 {
+  EditorMapComponent* parent = EditorMapComponent::current();
+
   switch (event.id)
     {
     case CL_MOUSE_LEFT:
@@ -63,6 +64,8 @@ TileMapSelectTool::on_mouse_up  (const CL_InputEvent& event)
 void
 TileMapSelectTool::on_mouse_down(const CL_InputEvent& event)
 {
+  EditorMapComponent* parent = EditorMapComponent::current();
+
   switch (event.id)
     {
     case CL_MOUSE_LEFT:
@@ -82,6 +85,8 @@ TileMapSelectTool::on_mouse_down(const CL_InputEvent& event)
 void
 TileMapSelectTool::on_mouse_move(const CL_InputEvent& event)
 { 
+  EditorMapComponent* parent = EditorMapComponent::current();
+
   if (creating_selection)
     {
       selection.update(parent->screen2tile(event.mouse_pos));
@@ -91,6 +96,7 @@ TileMapSelectTool::on_mouse_move(const CL_InputEvent& event)
 TileBrush
 TileMapSelectTool::get_selection() const
 {
+  EditorTileMap* tilemap = EditorTileMap::current();
   return selection.get_brush(*tilemap->get_field());
 }
 

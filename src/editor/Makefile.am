@@ -24,6 +24,7 @@ libwindstille_editor_a_SOURCES = \
   object_selector.hxx object_selector.cxx \
   tile_selection.hxx tile_selection.cxx \
   command.hxx \
-  paint_command.hxx   paint_command.cxx
+  paint_command.hxx   paint_command.cxx \
+  tool_manager.hxx tool_manager.cxx
 
 # EOF #

@@ -38,6 +38,7 @@
 #include "editor/editor_names.hxx"
 #include "tile_factory.hxx"
 #include "tile.hxx"
+#include "editor/tool_manager.hxx"
 #include "gui_manager.hxx"
 #include "editor.hxx"
 
@@ -212,7 +213,7 @@ SCM
 editor_get_tile_selection()
 {
   TileMapSelectTool* tool 
-    = dynamic_cast<TileMapSelectTool*>(EditorMapComponent::current()->get_tool_by_name(1));
+    = dynamic_cast<TileMapSelectTool*>(ToolManager::current()->get_tool_by_name(1));
 
   if (tool)
     {
@@ -277,7 +278,7 @@ void tilemap_set_active_layer(int i)
 
 void editor_set_tool(int i)
 {
-  EditorMapComponent::current()->set_tool(i);
+  ToolManager::current()->set_tool(i);
 }
 
 CL_Component*

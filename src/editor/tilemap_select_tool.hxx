@@ -30,12 +30,11 @@
 class TileMapSelectTool : public TileMapTool
 {
 private:
-  EditorTileMap* tilemap;
   TileSelection  selection;
   bool creating_selection;
 
 public:
-  TileMapSelectTool(EditorMapComponent* p, EditorTileMap* t);
+  TileMapSelectTool();
   ~TileMapSelectTool();
 
   void draw();
@@ -46,6 +45,7 @@ public:
 
   /** Convert the selection into a TileBrush */
   TileBrush get_selection() const;
+
 private:
   TileMapSelectTool (const TileMapSelectTool&);
   TileMapSelectTool& operator= (const TileMapSelectTool&);

@@ -23,12 +23,10 @@
 #include "../windstille_level.hxx"
 #include "../globals.hxx"
 #include "../tile_factory.hxx"
-#include "tilemap_paint_tool.hxx"
-#include "tilemap_select_tool.hxx"
-#include "tilemap_object_tool.hxx"
-#include "tilemap_diamond_tool.hxx"
 #include "editor_names.hxx"
 #include "editor_map.hxx"
+#include "tool_manager.hxx"
+#include "tilemap_tool.hxx"
 #include "editor_map_component.hxx"
 
 EditorMapComponent* EditorMapComponent::current_ = 0; 
@@ -54,22 +52,10 @@ EditorMapComponent::EditorMapComponent(const CL_Rect& rect, CL_Component* parent
   editor_map = new EditorMap();
 
   scrolling = false;
-
-  // FIXME: move this to scripting too
-  tools.push_back(new TileMapPaintTool  (this, EditorTileMap::current()));
-  tools.push_back(new TileMapSelectTool (this, EditorTileMap::current()));
-  tools.push_back(new TileMapDiamondTool(this, EditorTileMap::current()));
-  tools.push_back(new TileMapObjectTool (this, dynamic_cast<EditorObjMap*>(editor_map->get_layer_by_name(OBJECTMAP_NAME))));
-
-  tool = tools[0];
 }
 
 EditorMapComponent::~EditorMapComponent()
 {
-  cleanup();
-
-  for(Tools::iterator i = tools.begin(); i != tools.end(); ++i)
-    delete *i;
 }
 
 void
@@ -79,7 +65,7 @@ EditorMapComponent::mouse_up(const CL_InputEvent& event)
     {
     case CL_MOUSE_LEFT:
     case CL_MOUSE_RIGHT:
-      tool->on_mouse_up(event);
+      ToolManager::current()->current_tool()->on_mouse_up(event);
       break;
 
     case CL_MOUSE_MIDDLE:
@@ -96,7 +82,7 @@ EditorMapComponent::mouse_up(const CL_InputEvent& event)
 void
 EditorMapComponent::mouse_move(const CL_InputEvent& event)
 {
-  tool->on_mouse_move(event);
+  ToolManager::current()->current_tool()->on_mouse_move(event);
 
   if (scrolling)
     {
@@ -112,7 +98,7 @@ EditorMapComponent::mouse_down(const CL_InputEvent& event)
     {
     case CL_MOUSE_LEFT:
     case CL_MOUSE_RIGHT:
-      tool->on_mouse_down(event);
+      ToolManager::current()->current_tool()->on_mouse_down(event);
       break;
 
     case CL_MOUSE_MIDDLE:
@@ -139,8 +125,8 @@ EditorMapComponent::draw ()
 
   editor_map->draw(this);
 
-  if (1) //has_mouse_over())
-    tool->draw();
+  if (has_mouse_over())
+    ToolManager::current()->current_tool()->draw();
     
   CL_Display::flush();
 
@@ -165,23 +151,6 @@ EditorMapComponent::screen2world(const CL_Point& pos)
   int y = int(pos.y - trans_offset.y);
 
   return CL_Point(x, y);                  
-}
-
-void
-EditorMapComponent::cleanup()
-{
-  scripts.clear();
-}
-
-void
-EditorMapComponent::set_tool(int i)
-{
-  if (i >= 0 && i < int(tools.size()))
-    tool = tools[i];
-  else
-    {
-      std::cout << "Only have " << tools.size() << " tools, tool " << i << " can't be selected." << std::endl;
-    }
 }
 
 void
@@ -215,15 +184,6 @@ EditorMapComponent::get_clip_rect()
   return CL_Rect(CL_Point(int(0 - trans_offset.x), int(0 - trans_offset.y)),
                  CL_Size(get_width(), 
                          get_height()));
-}
-
-TileMapTool*
-EditorMapComponent::get_tool_by_name(int i)
-{
-  if (i >= 0 && i < static_cast<int>(tools.size()))
-    return tools[i];
-  else
-    return 0;  
 }
 
 void

@@ -30,7 +30,6 @@ class EditorMap;
 class TileMapObjectTool : public TileMapTool
 {
 private:
-  EditorObjMap* objmap;
   EditorObjMap::Obj* obj;
   enum { DRAG, SELECT, NONE } state;
 
@@ -44,7 +43,7 @@ private:
   typedef std::vector<EditorObjMap::Obj*> Selection; 
   Selection selection;
 public:
-  TileMapObjectTool(EditorMapComponent* p, EditorObjMap* t);
+  TileMapObjectTool();
   ~TileMapObjectTool();
 
   void draw();

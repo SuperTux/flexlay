@@ -21,6 +21,7 @@
 #define HEADER_TILE_SELECTION_HXX
 
 #include <ClanLib/Core/Math/rect.h>
+#include <ClanLib/Display/color.h>
 #include <ClanLib/Core/Math/point.h>
 #include "tile_brush.hxx"
 

@@ -47,14 +47,8 @@ private:
   CL_Point click_pos;
 
   bool scrolling;
-  typedef std::vector<TileMapTool*> Tools;
-  Tools tools;
-  TileMapTool* tool;
 
   Field<int>* diamond_map;
-  std::vector<std::string> scripts;
-
-  void cleanup();
 
   static EditorMapComponent* current_; 
 public:
@@ -62,11 +56,7 @@ public:
 
   EditorMapComponent(const CL_Rect& rect, CL_Component* parent);
   ~EditorMapComponent();
-
-  // random stuff
-  void set_tool(int i);
-  
-  // Component stuff
+ 
   float get_zoom();
   void  zoom_out();
   void  zoom_in();
@@ -85,12 +75,9 @@ public:
   CL_Rect get_clip_rect();
 
   // Map stuff
-  TileMapTool*    get_tool_by_name(int i);
   EditorMapLayer* get_layer_by_name(int i);
   EditorMapLayer* get_layer(int i);
   void set_active_layer(int i);
-  
-  std::vector<std::string> get_scripts() { return scripts; }
 };
 
 #endif

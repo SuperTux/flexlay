@@ -23,6 +23,7 @@
 #include <stack>
 
 class TileEditor;
+class ToolManager;
 class EditorMap;
 class GUIManager;
 class Command;
@@ -35,6 +36,8 @@ private:
 
   std::vector<Command*> undo_stack;
   std::vector<Command*> redo_stack;
+
+  ToolManager* tool_manager;
 
   static Editor* current_;
 public:

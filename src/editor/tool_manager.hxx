@@ -1,4 +1,4 @@
-//  $Id: tilemap_tool.hxx,v 1.1 2003/09/23 19:10:05 grumbel Exp $
+//  $Id$
 // 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -17,30 +17,34 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-#ifndef HEADER_TILEMAP_TOOL_HXX
-#define HEADER_TILEMAP_TOOL_HXX
+#ifndef HEADER_TOOL_MANAGER_HXX
+#define HEADER_TOOL_MANAGER_HXX
 
-class EditorMapComponent;
-class CL_InputEvent;
+#include <vector>
+
+class TileMapTool;
 
 /** */
-class TileMapTool
+class ToolManager
 {
-protected:
-
-public:
-  TileMapTool() {}
-  virtual ~TileMapTool() {}
-
-  virtual void draw() {}
-
-  virtual void on_mouse_up  (const CL_InputEvent& event) {}
-  virtual void on_mouse_down(const CL_InputEvent& event) {}
-  virtual void on_mouse_move(const CL_InputEvent& event) {}
-
 private:
-  TileMapTool (const TileMapTool&);
-  TileMapTool& operator= (const TileMapTool&);
+  typedef std::vector<TileMapTool*> Tools;
+  Tools tools;
+
+  TileMapTool* tool;
+
+  static ToolManager* current_; 
+public:
+  static ToolManager* current() { return current_; }
+
+  ToolManager();
+  ~ToolManager();
+
+  // random stuff
+  void set_tool(int i);
+  TileMapTool* get_tool_by_name(int i);
+  TileMapTool* current_tool() { return tool; }
+
 };
 
 #endif

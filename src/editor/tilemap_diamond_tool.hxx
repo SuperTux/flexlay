@@ -27,13 +27,13 @@
 class TileMapDiamondTool : public TileMapTool
 {
 private:
-  EditorTileMap* tilemap;
   CL_Sprite sprite;
   bool painting;
   bool color;
   CL_Point current_tile;
+
 public:
-  TileMapDiamondTool(EditorMapComponent* p, EditorTileMap* t);
+  TileMapDiamondTool();
   ~TileMapDiamondTool();
 
   void draw();

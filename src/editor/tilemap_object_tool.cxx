@@ -24,12 +24,12 @@
 #include "editor_map.hxx"
 #include "editor_map_component.hxx"
 #include "../scm_obj.hxx"
+#include "editor_names.hxx"
 #include "tilemap_object_tool.hxx"
 
 extern CL_ResourceManager* resources;
 
-TileMapObjectTool::TileMapObjectTool(EditorMapComponent* p, EditorObjMap* t)
-  : TileMapTool(p), objmap(t)
+TileMapObjectTool::TileMapObjectTool()
 {
   obj = 0;
   state = NONE;
@@ -72,6 +72,9 @@ TileMapObjectTool::draw()
 void
 TileMapObjectTool::on_mouse_up(const CL_InputEvent& event)
 {
+  EditorObjMap* objmap = dynamic_cast<EditorObjMap*>(EditorMap::current()->get_layer_by_name(OBJECTMAP_NAME));
+  EditorMapComponent* parent = EditorMapComponent::current();
+
   CL_Point pos = parent->screen2world(event.mouse_pos);
 
   switch (event.id)
@@ -108,6 +111,8 @@ TileMapObjectTool::on_mouse_up(const CL_InputEvent& event)
 void
 TileMapObjectTool::on_mouse_down(const CL_InputEvent& event)
 {
+  EditorObjMap* objmap = dynamic_cast<EditorObjMap*>(EditorMap::current()->get_layer_by_name(OBJECTMAP_NAME));
+  EditorMapComponent* parent = EditorMapComponent::current();
   CL_Point pos = parent->screen2world(event.mouse_pos);
       
   switch (event.id)
@@ -150,6 +155,8 @@ TileMapObjectTool::on_mouse_down(const CL_InputEvent& event)
 void
 TileMapObjectTool::on_mouse_move(const CL_InputEvent& event)
 {
+  EditorObjMap* objmap = dynamic_cast<EditorObjMap*>(EditorMap::current()->get_layer_by_name(OBJECTMAP_NAME));
+  EditorMapComponent* parent = EditorMapComponent::current();
   CL_Point pos = parent->screen2world(event.mouse_pos);
 
   switch(state)

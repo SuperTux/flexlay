@@ -27,9 +27,8 @@
 #include "globals.hxx"
 #include "tilemap_diamond_tool.hxx"
 
-TileMapDiamondTool::TileMapDiamondTool(EditorMapComponent* p, EditorTileMap* t)
-  : TileMapTool(p), tilemap(t),
-    sprite("diamond", resources)
+TileMapDiamondTool::TileMapDiamondTool()
+  : sprite("diamond", resources)
 {
   painting = false;
   current_tile = CL_Point(0, 0);
@@ -42,6 +41,7 @@ TileMapDiamondTool::~TileMapDiamondTool()
 void
 TileMapDiamondTool::draw()
 {
+  EditorMapComponent* parent = EditorMapComponent::current();
   CL_Point pos = parent->screen2world(CL_Point(CL_Mouse::get_x(), CL_Mouse::get_y()));
  
   sprite.set_frame(7);
@@ -75,6 +75,8 @@ TileMapDiamondTool::on_mouse_down(const CL_InputEvent& event)
 void
 TileMapDiamondTool::on_mouse_move(const CL_InputEvent& event)
 {
+  EditorMapComponent* parent = EditorMapComponent::current();
+
   if (painting)
     {
       paint(event.mouse_pos);
@@ -85,6 +87,8 @@ TileMapDiamondTool::on_mouse_move(const CL_InputEvent& event)
 void
 TileMapDiamondTool::paint(const CL_Point& mpos)
 {
+  EditorTileMap* tilemap = EditorTileMap::current();
+  EditorMapComponent* parent = EditorMapComponent::current();
   CL_Point pos = parent->screen2world(mpos);
 
   tilemap->get_diamond_map()->at(int(pos.x/64), 

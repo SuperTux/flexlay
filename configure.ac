@@ -1,4 +1,4 @@
-AC_INIT(Windstille, 0.1.1)
+AC_INIT(Windstille, 0.2.0)
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_SRCDIR([src/windstille_main.cxx])
 AM_INIT_AUTOMAKE(dist-bzip2)

@@ -1,4 +1,4 @@
-//  $Id: windstille_menu.hxx,v 1.2 2003/09/29 19:56:42 grumbel Exp $
+//  $Id: windstille_menu.hxx,v 1.3 2003/09/29 21:26:46 grumbel Exp $
 // 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -38,6 +38,7 @@ public:
   void update(float delta);
   void draw();
 private:
+  void fadeout();
   WindstilleMenu (const WindstilleMenu&);
   WindstilleMenu& operator= (const WindstilleMenu&);
 };

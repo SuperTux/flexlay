@@ -1,4 +1,4 @@
-//  $Id: windstille_menu.cxx,v 1.2 2003/09/29 19:56:42 grumbel Exp $
+//  $Id: windstille_menu.cxx,v 1.3 2003/09/29 21:26:46 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -63,15 +63,20 @@ WindstilleMenu::update(float delta)
       if ((*i).type == InputEvent::FIRE && (*i).state == true)
         {
           if (current_choice == 2) // QUIT
-            quit();
+            {
+              fadeout();
+              quit();
+            }
           else if (current_choice == 0) // start game
             {
+              fadeout();
               WindstilleGame game(datadir + "levels/level9.scm");
               game.display ();
               break;
             }
           else if (current_choice == 1) // start editor
             {
+              fadeout();
               Editor editor;
               editor.run();
               break;
@@ -146,6 +151,27 @@ WindstilleMenu::draw()
                         "to redistribute it under certain conditions; see the file COPYING for details.\n");
 
   CL_Display::flip();
+}
+
+void
+WindstilleMenu::fadeout()
+{
+  int alpha = 0;
+  while (alpha <= 255)
+    {
+      background.draw(0,0);
+
+      //windstille.set_alpha(sin(passed_time*3.141f)*.2f + .8f);
+      windstille.draw(CL_Display::get_width()/2,
+                      50);
+      CL_Display::fill_rect(CL_Rect(0, 0, 
+                                    CL_Display::get_width(), CL_Display::get_height()),
+                            CL_Color(0,0,0, std::min(alpha, 255)));
+      CL_Display::flip();
+      CL_System::keep_alive();
+      CL_System::sleep(50);
+      alpha += 15;
+    }
 }
 
 /* EOF */

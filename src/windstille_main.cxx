@@ -1,4 +1,4 @@
-//  $Id: windstille_main.cxx,v 1.21 2003/09/29 19:56:42 grumbel Exp $
+//  $Id: windstille_main.cxx,v 1.22 2003/09/29 21:26:46 grumbel Exp $
 //
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -113,6 +113,9 @@ WindstilleMain::inner_main(void* closure, int argc, char** argv)
 
     CL_DisplayWindow window (PACKAGE_STRING,
                              screen_width, screen_height, fullscreen, allow_resize);
+
+    CL_Display::clear();
+    CL_Display::flip();
 
     resources =  new CL_ResourceManager();
     resources->add_resources(CL_ResourceManager(datadir + "tiles.xml", false));

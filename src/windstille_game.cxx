@@ -1,4 +1,4 @@
-//  $Id: windstille_game.cxx,v 1.22 2003/09/29 19:56:42 grumbel Exp $
+//  $Id: windstille_game.cxx,v 1.23 2003/09/29 21:26:46 grumbel Exp $
 //
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -87,7 +87,7 @@ WindstilleGame::on_key_down(const CL_InputEvent& event)
 }
 
 void
-WindstilleGame::draw()
+WindstilleGame::draw_game()
 {
   background->draw();
 
@@ -110,7 +110,12 @@ WindstilleGame::draw()
       logo.draw(800 - 302, 600 - 95);
       logo_black.draw(800 - 302, 600 - 95);
     }
+}
 
+void
+WindstilleGame::draw()
+{
+  draw_game();
   CL_Display::flip();
 }
 
@@ -171,6 +176,30 @@ WindstilleGame::on_shutdown ()
   delete background;
   delete view;
   delete dialog_manager;
+}
+
+void
+WindstilleGame::quit()
+{
+  fadeout();
+  Screen::quit();
+}
+
+void
+WindstilleGame::fadeout()
+{
+  int alpha = 0;
+  while (alpha <= 255)
+    {
+      draw_game();
+      CL_Display::fill_rect(CL_Rect(0, 0, 
+                                    CL_Display::get_width(), CL_Display::get_height()),
+                            CL_Color(0,0,0, std::min(alpha, 255)));
+      CL_Display::flip();
+      CL_System::keep_alive();
+      CL_System::sleep(50);
+      alpha += 15;
+    }
 }
 
 /* EOF */

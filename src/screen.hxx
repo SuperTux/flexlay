@@ -1,4 +1,4 @@
-//  $Id: screen.hxx,v 1.1 2003/09/20 21:55:57 grumbel Exp $
+//  $Id: screen.hxx,v 1.2 2003/09/29 21:26:46 grumbel Exp $
 // 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -38,7 +38,7 @@ public:
 
   void display();
 
-  void quit() { do_quit = true; }
+  virtual void quit() { do_quit = true; }
   void set_pause(bool p) { do_pause = p; }
   bool get_pause() { return do_pause; }
 private:

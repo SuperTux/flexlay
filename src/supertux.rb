@@ -57,6 +57,10 @@ $mysprite = make_sprite("../data/images/icons16/stock_paste-16.png")
 
 $recent_files_menu = Menu.new(CL_Point.new(32*2, 54), $gui.get_component())
 
+if !$recent_files then
+  $recent_files = []
+end
+
 $recent_files.each do |filename|
   $recent_files_menu.add_item($mysprite, filename, proc{ supertux_load_level(filename) })
 end

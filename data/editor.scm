@@ -311,6 +311,8 @@
   (let ((window (gui-create-window 600 25 200 400 "ObjectInserter")))
     (gui-push-component (gui-window-get-client-area window))
     
+    (object-selector-create 0 0 3 4 64 64)
+
     (gui-create-button-func 10  5 80 25 "Igel" 
                             (lambda () (editor-objectmap-add-object "igel" 0 0 
                                                                     '(foo bar blub))))

@@ -30,6 +30,7 @@ EditorTileMap* editor_get_tilemap();
 
 CL_Component* minimap_create(CL_Component* p, int x, int y, int w, int h);
 CL_Component* tile_selector_create(int x, int y, int w, int h, float scale);
+CL_Component* object_selector_create(int x, int y, int w, int h, int obj_w, int obj_h);
 CL_Component* editor_create_map(int x, int y, int w, int h);
 
 void editor_toggle_grid();

@@ -19,6 +19,7 @@ libwindstille_editor_a_SOURCES = \
   tile_brush.hxx   tile_brush.cxx \
   minimap.hxx   minimap.cxx \
   editor_names.hxx \
-  object_brush.hxx object_brush.cxx 
+  object_brush.hxx object_brush.cxx \
+  object_selector.hxx object_selector.cxx
 
 # EOF #

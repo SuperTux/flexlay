@@ -27,6 +27,7 @@
 #include "editor/editor.hxx"
 #include "editor/tile_selector.hxx"
 #include "editor/editor_tilemap.hxx"
+#include "editor/object_selector.hxx"
 #include "editor/editor_map.hxx"
 #include "editor/tile_editor.hxx"
 #include "editor/tilemap_select_tool.hxx"
@@ -275,6 +276,14 @@ minimap_create(CL_Component* p, int x, int y, int w, int h)
   return new Minimap(parent_map, 
                      CL_Point(x, y), CL_Size(w, h), 
                      GUIManager::current()->get_component());
+}
+
+CL_Component*
+object_selector_create(int x, int y, int w, int h, int obj_w, int obj_h)
+{
+  ObjectSelector* ret = new ObjectSelector(w, h, obj_w, obj_h,
+                                           GUIManager::current()->get_component());
+  return ret;
 }
 
 CL_Component*

@@ -18,9 +18,12 @@
 ##  along with this program; if not, write to the Free Software
 ##  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
+import os
+
 opts = Options('custom.py')
 opts.Add('CXX', 'The C++ compiler.', 'g++')
 opts.Add('CXXFLAGS', 'The C++ compiler flags.', '-g -O0 -Wall')
+opts.Add('RUBYDIR', 'Ruby directory', os.popen('ruby -e "require \'rbconfig\'; puts Config::CONFIG[\'archdir\']"').read()[:-1])
 
 env = Environment(SHLIBPREFIX='',
                   options=opts)
@@ -58,8 +61,8 @@ Depends('flexlay_python_wrap.cxx', ['flexlay_wrap.i',
 env.Command('flexlay_python_wrap.cxx', 'flexlay_wrap.i', "swig -python -o flexlay_python_wrap.cxx -c++ $SOURCE")
 env.Command('flexlay_ruby_wrap.cxx',   'flexlay_wrap.i', "swig -ruby   -o flexlay_ruby_wrap.cxx -c++ $SOURCE")
 
-env.Program('sharedptrtest', 'sharedptrtest.cxx',
-            CPPPATH=['/home/ingo/run/ClanLib-0.7-current/include/ClanLib-0.7/'])
+#env.Program('sharedptrtest', 'sharedptrtest.cxx',
+#            CPPPATH=['/home/ingo/run/ClanLib-0.7-current/include/ClanLib-0.7/'])
 
 # env.Program('simpleed',
 #             ['simpleed.cxx'],
@@ -152,7 +155,7 @@ env.SharedLibrary(
 #     LIBS=['flexlay'])
 
 env.SharedLibrary(
-    target = '_flexlay_ruby_wrap.so',
+    target = 'flexlay_wrap.so',
     source = [
     'flexlay_ruby_wrap.cxx',
     'ruby_functor.cxx',
@@ -161,7 +164,7 @@ env.SharedLibrary(
     'ruby_object.cxx'
     ],
     CPPPATH=['/home/ingo/run/ClanLib-0.7-current//include/ClanLib-0.7/',
-            '/usr/lib/ruby/1.8/i386-linux/',
+             '$RUBYDIR',
             '..'],
     LIBPATH=['.', '/home/ingo/run/ClanLib-0.7-current//lib/'],
     LIBS=['flexlay'])

@@ -649,7 +649,6 @@ xml_node2scm(CL_DomNode& root)
       
       // Construct attributes
       SCM attributes = SCM_EOL;
-      std::cout << "Attributes: " << root.get_attributes().get_length() << std::endl;
       CL_DomNamedNodeMap attrs = root.get_attributes();
       for(int i = 0; i < attrs.get_length(); ++i)
         {
@@ -675,9 +674,10 @@ xml_node2scm(CL_DomNode& root)
       
       // Assemble the whole element
       return gh_cons(gh_symbol2scm("element"), 
-                     gh_cons(gh_cons(gh_str02scm(element.get_tag_name().c_str()),
-                                     attributes),
-                             children));
+                     gh_cons(gh_str02scm(element.get_tag_name().c_str()),
+                             gh_cons(gh_cons(gh_symbol2scm("attributes"), 
+                                             attributes),
+                                     children)));
     }
   else if (root.is_null())
     {

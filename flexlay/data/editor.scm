@@ -2,8 +2,8 @@
              (srfi srfi-1)
              (ice-9 pretty-print))
 
-;(use-modules (ice-9 readline))
-;(activate-readline)
+(use-modules (ice-9 readline))
+(activate-readline)
 
 (load "helper.scm")
 (debug-enable 'backtrace)
@@ -403,15 +403,15 @@
                           (lambda () (supertux:show-all-layers)))))
 
     (gui-add-menu-item menu "Zoom/1:4 (25%) " (lambda ()
-                                         (editor-map-component-set-zoom *editor-map* .25)))
+                                                (editor-map-component-set-zoom *editor-map* .25)))
     (gui-add-menu-item menu "Zoom/1:2 (50%) " (lambda ()
-                                         (editor-map-component-set-zoom *editor-map* .5)))
+                                                (editor-map-component-set-zoom *editor-map* .5)))
     (gui-add-menu-item menu "Zoom/1:1 (100%) " (lambda ()
-                                         (editor-map-component-set-zoom *editor-map* 1.0)))
+                                                 (editor-map-component-set-zoom *editor-map* 1.0)))
     (gui-add-menu-item menu "Zoom/2:1 (200%) " (lambda ()
-                                         (editor-map-component-set-zoom *editor-map* 2.0)))
+                                                 (editor-map-component-set-zoom *editor-map* 2.0)))
     (gui-add-menu-item menu "Zoom/4:1 (400%) " (lambda ()
-                                         (editor-map-component-set-zoom *editor-map* 4.0)))
+                                                 (editor-map-component-set-zoom *editor-map* 4.0)))
     ))
 
 (define (set-tool sym)
@@ -775,17 +775,17 @@
           (gui-component-set-rect *editor-map*
                                   0 22 screen-width (- screen-height 22))
 
-          (let ((width  (gui-component-get-width  *minimap*))
-                (height (gui-component-get-height *minimap*)))
-            (gui-component-set-rect *minimap*
-                                    (- screen-width  width) 
-                                    (- screen-height height)
-                                    width height))))))
+          (cond (*minimap*
+                 (let ((width  (gui-component-get-width  *minimap*))
+                       (height (gui-component-get-height *minimap*)))
+                   (gui-component-set-rect *minimap*
+                                           (- screen-width  width) 
+                                           (- screen-height height)
+                                           width height))))))))
 
 (create-menu)
 
 (create-toolbar)
-(create-tile-editor)
 (create-tile-selector)
 (create-object-inserter)
 
@@ -804,8 +804,8 @@
    (editor:add-file-plugin
     (lambda (filename) (string=? (filename:ext filename) ".spn"))
     (lambda (filename) (netpanzer:create-level-map-from-file 
-                        (string-append (filename:wo/ext filename) ".npm"))))
-   )
+                        (string-append (filename:wo/ext filename) ".npm")))))
+  
   ((supertux)
    (object-selector-add-brush *object-selector* 
                               "sprites/jumpy"
@@ -848,13 +848,21 @@
     (lambda (filename) (supertux:create-level-map-from-file filename)))
    (editor:add-file-plugin
     (lambda (filename) (string=? (filename:ext filename) ".stwm"))
-    (lambda (filename) (supertux:create-worldmap-from-file filename)))
-   )
+    (lambda (filename) (supertux:create-worldmap-from-file filename))))
+  
   ((windstille)
    (editor:add-file-plugin
     (lambda (filename) (string=? (filename:ext filename) ".scm"))
     (lambda (filename) (windstille:create-levelmap-from-file filename)))
-   (create-minimap 128 128)))
+   (create-tile-editor)
+   (create-minimap 128 128))
+
+  ((pingus)
+   (editor:add-file-plugin
+    (lambda (filename) (or (string=? (filename:ext filename) ".pingus")
+                           (string=? (filename:ext filename) ".plf")
+                           (string=? (filename:ext filename) ".xml")))
+    (lambda (filename) (pingus:create-levelmap-from-file filename)))))
 
 ;;(create-brush-selector)
 ;;(create-netpanzer-tiler)

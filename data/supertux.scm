@@ -116,7 +116,7 @@
                (format #t "  (width  ~a)~%" (editor-tilemap-get-width  (supertux:interactive-tm level)))
                (format #t "  (height ~a)~%" (editor-tilemap-get-height (supertux:interactive-tm level)))
 
-               (format #t "  (background ~s)~%" (supertux:background))
+               (format #t "  (background ~s)~%" (supertux:background level))
                (format #t "  (music ~s)~%" (supertux:music level))
 
                (format #t "  (bkgd_red    ~a)~%" (supertux:bkgd_red level))

@@ -1,4 +1,4 @@
-//  $Id: args_parse.hxx,v 1.2 2003/09/06 11:14:16 grumbel Exp $
+//  $Id: args_parse.hxx,v 1.3 2003/09/06 11:48:01 grumbel Exp $
 // 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -23,7 +23,46 @@
 #include <string>
 #include <vector>
 
-/** */
+/** The ArgsParse class helps to parse command line arguments, namely
+ *  the argc/argv pair that you get from main(). ArgsParse mimiks
+ *  getopt_long() behaviour as closly as possible, while providing a
+ *  cleaner interface and a few additional feature, like automatic
+ *  generation of '--help' output. ArgsParse can parse long arguments
+ *  in the following styles:
+ *
+ *  programm --file FILENAME
+ *  programm --file=FILENAME
+ *
+ *  Short arguments are handled like this:
+ *
+ *  programm -f FILENAME
+ *
+ *  Concatenating short arguments is also supported, so that:
+ *  
+ *  programm -f -a -b FILENAME
+ *
+ *  is equivalent to:
+ *
+ *  programm -fab FILENAME
+ *
+ *  Non-option arguments (aka rest arguments) are supported as well:
+ *
+ *  programm SOMEFILE SOMEOTHERFILE ...
+ * 
+ *  To avoid ambiguity when a filename starts with '-' ArgsParse stops
+ *  parsing arguments after the first encounter of a '--', so in
+ *
+ *  programm -f -b -- -f -b
+ *
+ *  In the above example the first '-f -b' options are treated as
+ *  normal while the ones after the '--' are treated as rest arguments
+ *  (aka filenames in most programms).
+ *
+ *  To use ArgsParse you implement a class that derives from ArgsParse
+ *  and implement the virtual read_option() function and add all
+ *  supported options to with the add_option() function.
+ *
+ */
 class ArgsParse
 {
 private:

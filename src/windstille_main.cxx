@@ -1,4 +1,4 @@
-//  $Id: windstille_main.cxx,v 1.13 2003/09/10 13:53:11 grumbel Exp $
+//  $Id: windstille_main.cxx,v 1.14 2003/09/12 09:25:48 grumbel Exp $
 //
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -134,8 +134,8 @@ WindstilleMain::inner_main(void* closure, int argc, char** argv)
       {
         TileFactory::init();
         Editor editor;
-        //if (!levelfile.empty ())
-          //editor.load (levelfile);
+        if (!levelfile.empty ())
+          editor.load (levelfile);
         editor.run();
         TileFactory::deinit();
       }

@@ -1,4 +1,4 @@
-//  $Id: editor.hxx,v 1.4 2003/09/11 18:58:19 grumbel Exp $
+//  $Id: editor.hxx,v 1.5 2003/09/12 09:25:48 grumbel Exp $
 // 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -58,6 +58,8 @@ public:
   void run();
   
   void popup_menu();
+
+  void load(const std::string& filename);
 
   void push_component(CL_Component* c) { components.push(c); }
   void pop_component() { components.pop(); }

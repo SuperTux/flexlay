@@ -1,4 +1,4 @@
-//  $Id: tile_map.cxx,v 1.12 2003/09/11 18:58:19 grumbel Exp $
+//  $Id: tile_map.cxx,v 1.13 2003/09/12 09:25:48 grumbel Exp $
 //
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -34,9 +34,9 @@ TileMap::TileMap (Field<int>* data)
   std::cout << "TileMap: Size: " 
             << data->get_width() << "x" << data->get_height() << std::endl;
 
-  for (unsigned int y = 0; y < field.get_height (); ++y) 
+  for (int y = 0; y < field.get_height (); ++y) 
     {
-      for (unsigned int x = 0; x < field.get_width (); ++x)
+      for (int x = 0; x < field.get_width (); ++x)
         {
           field(x, y) = TileFactory::current()->create((*data)(x, y));
         }
@@ -55,8 +55,8 @@ TileMap::update (float delta)
 void
 TileMap::draw ()
 {
-  for (unsigned int y = 0; y < field.get_height (); ++y)
-    for (unsigned int x = 0; x < field.get_width (); ++x)
+  for (int y = 0; y < field.get_height (); ++y)
+    for (int x = 0; x < field.get_width (); ++x)
       {
 	//field (x,y)->sur->setScale (2.0f, 2.0f);
 	if (field (x,y))
@@ -109,11 +109,11 @@ TileMap::get_pixel(int x, int y)
 bool
 TileMap::is_ground (float x, float y)
 {
-  unsigned int x_pos = int(x) / TILE_SIZE;
-  unsigned int y_pos = int(y) / TILE_SIZE;
+  int x_pos = int(x) / TILE_SIZE;
+  int y_pos = int(y) / TILE_SIZE;
 
-  unsigned int sub_tile_x = int(x) / (TILE_SIZE/8) - x_pos*8;
-  unsigned int sub_tile_y = int(y) / (TILE_SIZE/8) - y_pos*8;
+  int sub_tile_x = int(x) / (TILE_SIZE/8) - x_pos*8;
+  int sub_tile_y = int(y) / (TILE_SIZE/8) - y_pos*8;
 
   if (x < 0 || x_pos >= field.get_width())
     {

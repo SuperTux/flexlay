@@ -1,4 +1,4 @@
-//  $Id: field.hxx,v 1.3 2003/09/11 18:58:19 grumbel Exp $
+//  $Id: field.hxx,v 1.4 2003/09/12 09:25:48 grumbel Exp $
 // 
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -52,9 +52,9 @@ public:
   iterator begin () { return vec.begin (); }
   iterator end () { return vec.end (); }
 
-  unsigned int size() { return vec.size(); }
-  unsigned int get_width () const { return width; }
-  unsigned int get_height () const { return height; }
+  int size() { return vec.size(); }
+  int get_width () const { return width; }
+  int get_height () const { return height; }
 };
 
 #endif

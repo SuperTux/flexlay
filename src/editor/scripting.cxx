@@ -1,4 +1,4 @@
-//  $Id: scripting.cxx,v 1.6 2003/09/11 20:11:01 grumbel Exp $
+//  $Id: scripting.cxx,v 1.7 2003/09/12 09:25:48 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -21,6 +21,7 @@
 #include <iostream>
 #include "../scm_functor.hxx"
 #include "../globals.hxx"
+#include "../windstille_game.hxx"
 #include "editor.hxx"
 #include "tile_selector.hxx"
 #include "editor_tilemap.hxx"
@@ -230,6 +231,14 @@ void
 file_dialog()
 {
   new CL_FileDialog("File Dialog", "/", "", Editor::current()->get_component());
+}
+
+void
+game_play(const char* filename)
+{
+  std::cout << "WindstilleGame: Starting level " << filename << std::endl;
+  WindstilleGame game (filename);
+  game.display ();
 }
 
 /* EOF */

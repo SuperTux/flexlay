@@ -1,4 +1,4 @@
-//  $Id: scripting.hxx,v 1.6 2003/09/11 20:11:01 grumbel Exp $
+//  $Id: scripting.hxx,v 1.7 2003/09/12 09:25:48 grumbel Exp $
 // 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -63,6 +63,8 @@ void editor_new(int w, int h);
 void editor_load(const char* filename);
 
 void file_dialog();
+
+void game_play(const char* filename);
 
 #endif
 

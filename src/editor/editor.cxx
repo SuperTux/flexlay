@@ -1,4 +1,4 @@
-//  $Id: editor.cxx,v 1.5 2003/09/11 18:58:19 grumbel Exp $
+//  $Id: editor.cxx,v 1.6 2003/09/12 09:25:48 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -54,6 +54,12 @@ Editor::Editor()
   menu_data->insert_item("Hello World3");
 
   gh_load ((datadir + "editor.scm").c_str());
+}
+
+void
+Editor::load(const std::string& filename)
+{
+  tilemap->load(filename);
 }
 
 void

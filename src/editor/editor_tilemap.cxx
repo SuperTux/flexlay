@@ -1,4 +1,4 @@
-//  $Id: editor_tilemap.cxx,v 1.8 2003/09/11 20:11:01 grumbel Exp $
+//  $Id: editor_tilemap.cxx,v 1.9 2003/09/12 09:25:48 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -17,6 +17,7 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
+#include <math.h>
 #include <iostream>
 #include <ClanLib/Display/display.h>
 #include <ClanLib/gl.h>
@@ -42,7 +43,7 @@ EditorTileMap::EditorTileMap(CL_Component* parent)
   
   tool = NONE;
   brush_tile = 0;
-  zoom = 1.0f;
+  zoom = .5f;
 }
 
 EditorTileMap::~EditorTileMap()
@@ -56,8 +57,8 @@ EditorTileMap::new_level(int w, int h)
   cleanup();
 
   current_field = new Field<EditorTile*> (w, h);
-  for (unsigned int y = 0; y < current_field->get_height (); ++y) {
-    for (unsigned int x = 0; x < current_field->get_width (); ++x)
+  for (int y = 0; y < current_field->get_height (); ++y) {
+    for (int x = 0; x < current_field->get_width (); ++x)
       {
 	current_field->at(x, y) = new EditorTile (0);
       }
@@ -65,8 +66,8 @@ EditorTileMap::new_level(int w, int h)
   fields.push_back(current_field);
 
   current_field = new Field<EditorTile*> (w, h);
-  for (unsigned int y = 0; y < current_field->get_height (); ++y) {
-    for (unsigned int x = 0; x < current_field->get_width (); ++x)
+  for (int y = 0; y < current_field->get_height (); ++y) {
+    for (int x = 0; x < current_field->get_width (); ++x)
       {
 	current_field->at(x, y) = new EditorTile (0);
       }
@@ -112,7 +113,9 @@ EditorTileMap::mouse_move(const CL_InputEvent& event)
     case PAINTING:
       {
         CL_Point pos = screen2tile(event.mouse_pos);
-        current_field->at(pos.x, pos.y)->set_tile(brush_tile);
+        if (pos.x >= 0 && pos.x < current_field->get_width()
+            && pos.y >= 0 && pos.y < current_field->get_height())
+          current_field->at(pos.x, pos.y)->set_tile(brush_tile);
       }
       break;
       
@@ -133,9 +136,12 @@ EditorTileMap::mouse_down(const CL_InputEvent& event)
     }
   else if (event.id == CL_MOUSE_LEFT)
     {
-      std::cout << "brushtile: " << brush_tile << std::endl;
       CL_Point pos = screen2tile(event.mouse_pos);
-      current_field->at(pos.x, pos.y)->set_tile(brush_tile);
+
+      if (pos.x >= 0 && pos.x < current_field->get_width()
+          && pos.y >= 0 && pos.y < current_field->get_height())
+        current_field->at(pos.x, pos.y)->set_tile(brush_tile);
+
       tool = PAINTING;
     }
   else if (event.id == CL_MOUSE_WHEEL_UP)
@@ -157,9 +163,9 @@ EditorTileMap::draw_map(Field<EditorTile*>* field)
   else
     alpha = .5f;
 
-  for (unsigned int y = 0; y < field->get_height (); ++y)
+  for (int y = 0; y < field->get_height (); ++y)
     {
-      for (unsigned int x = 0; x < field->get_width (); ++x)
+      for (int x = 0; x < field->get_width (); ++x)
 	{
 	  field->at(x, y)->draw(x * TILE_SIZE, y * TILE_SIZE, alpha);
 	}
@@ -188,8 +194,8 @@ EditorTileMap::draw_map(Field<EditorTile*>* field)
 void
 EditorTileMap::draw ()
 {
-  glPushMatrix();
-  glScalef(zoom, zoom, 1.0f);
+  //glPushMatrix();
+  //glScalef(zoom, zoom, 1.0f);
   CL_Display::push_translate_offset(int(trans_offset.x), int(trans_offset.y));
 
   CL_Display::clear(CL_Color(100, 0, 100));
@@ -204,14 +210,18 @@ EditorTileMap::draw ()
     }
 
   CL_Display::pop_translate_offset();
-  glPopMatrix();
+  //glPopMatrix();
 }
 
 CL_Point
 EditorTileMap::screen2tile(const CL_Point& pos)
 {
-  return CL_Point(int(pos.x - trans_offset.x)/TILE_SIZE,
-                  int(pos.y - trans_offset.y)/TILE_SIZE);
+  int x = int(pos.x - trans_offset.x)/TILE_SIZE;
+  int y = int(pos.y - trans_offset.y)/TILE_SIZE;
+
+  return CL_Point(pos.x - trans_offset.x < 0 ? x-1 : x,
+                  pos.y - trans_offset.y < 0 ? y-1 : y); 
+                  
 }
 
 void
@@ -236,8 +246,8 @@ EditorTileMap::load(const std::string& filename)
 
   fields.push_back(current_field);
 
-  for (unsigned int y = 0; y < current_field->get_height (); ++y) {
-    for (unsigned int x = 0; x < current_field->get_width (); ++x)
+  for (int y = 0; y < current_field->get_height (); ++y) {
+    for (int x = 0; x < current_field->get_width (); ++x)
       {
 	int name = data.get_background_tilemap()->at(x, y);
 	current_field->at (x, y) = new EditorTile (name);
@@ -248,8 +258,8 @@ EditorTileMap::load(const std::string& filename)
                                          data.get_tilemap()->get_height ());
   fields.push_back(current_field);
 
-  for (unsigned int y = 0; y < current_field->get_height (); ++y) {
-    for (unsigned int x = 0; x < current_field->get_width (); ++x)
+  for (int y = 0; y < current_field->get_height (); ++y) {
+    for (int x = 0; x < current_field->get_width (); ++x)
       {
 	int name = data.get_tilemap()->at(x, y);
 	current_field->at (x, y) = new EditorTile (name);

@@ -1,12 +1,12 @@
 <resources>
   <section name="sprites">
     <sprite name="spawnpoint">
-      <image file="images/netpanzersprites/spawnpoint.png" />
+      <image file="netpanzersprites/spawnpoint.png" />
       <translation origin="center" />
     </sprite>
 
     <sprite name="outpost">
-      <image file="images/netpanzersprites/outpost.png" />
+      <image file="netpanzersprites/outpost.png" />
       <translation origin="center" />
     </sprite>
   </section>

@@ -26,6 +26,24 @@ include Netpanzer_wrap
 
 require "netpanzerbrushes.rb"
 
+module GameObjects
+  class GameObject
+    attr_accessor :data
+  end
+
+  class Outpost < GameObject
+    def Outpost.get_sprite()
+      return make_sprite_from_resource("sprites/outpost", $resources)
+    end
+  end
+  
+  class SpawnPoint < GameObject
+    def SpawnPoint.get_sprite()
+      return make_sprite_from_resource("sprites/spawnpoint", $resources)
+    end
+  end
+end
+
 class Config
   attr_accessor :datadir, :recent_files
 
@@ -111,13 +129,39 @@ $editor_map = EditorMapComponent.new(myrect, $gui.get_component())
 $workspace  = Workspace.new(myrect.get_width(), myrect.get_height())
 $editor_map.set_workspace($workspace)
 
-option_panel = Panel.new(CL_Rect.new(CL_Point.new(666, 56), CL_Size.new(134, 488+56)), $gui.get_component())
+$option_panel = Panel.new(CL_Rect.new(CL_Point.new(666, 56), CL_Size.new(134, 488+56)), $gui.get_component())
 
-brushbox = CL_ListBox.new(CL_Rect.new(CL_Point.new(3, 3), CL_Size.new(128, 488+56-128-9)), option_panel)
+$brushbox = CL_ListBox.new(CL_Rect.new(CL_Point.new(3, 3), CL_Size.new(128, 488+56-128-9)), $option_panel)
+$brushbox.show(false)
+
+$objectselector = ObjectSelector.new(CL_Rect.new(CL_Point.new(3, 3), CL_Size.new(128, 488+56-128-9)),
+                                     42, 42, $option_panel)
+
+$resources = CL_ResourceManager.new("netpanzersprites.xml")
+
+$objectselector.add_brush(ObjectBrush.new(GameObjects::Outpost.get_sprite(),
+                                          make_metadata(proc{GameObjects::Outpost.new()})))
+$objectselector.add_brush(ObjectBrush.new(GameObjects::SpawnPoint.get_sprite(),
+                                          make_metadata(proc{GameObjects::SpawnPoint.new()})))
+
+$objectselector.show(true)
+
+def on_object_drop(brush, pos)
+  obj = get_ruby_object(brush.get_data()).call()
+  pos = $editor_map.screen2world(pos)
+  sprite_obj = ObjMapSpriteObject.new(obj.class.get_sprite(), pos, make_metadata(obj))
+  obj.data = obj
+  
+  cmd = ObjectAddCommand.new(get_ruby_object($workspace.get_map().get_metadata()).objects)
+  cmd.add_object(sprite_obj.to_object)
+  $workspace.get_map().execute(cmd.to_command())
+end
+
+connect_v2_ObjectBrush_Point($objectselector.sig_drop(), method(:on_object_drop))
 
 $brushes.each {|i|
   (index, width, height, name) = i
-  brushbox.insert_item("%s - %sx%s" % [name, width, height])
+  $brushbox.insert_item("%s - %sx%s" % [name, width, height])
 }
 
 def brushbox_change(index)
@@ -127,7 +171,7 @@ def brushbox_change(index)
   $tilemap_paint_tool.set_brush(brush)
 end
 
-connect_v1(brushbox.sig_highlighted(), method(:brushbox_change))
+connect_v1($brushbox.sig_highlighted(), method(:brushbox_change))
 
 # Tools
 $tilemap_paint_tool  = TileMapPaintTool.new()
@@ -152,9 +196,9 @@ def on_map_change()
 #   end
 end
 
-startlevel = Level.new(256, 256)
-startlevel.activate($workspace)
-connect(startlevel.editormap.sig_change(), proc{on_map_change})
+$startlevel = Level.new(256, 256)
+$startlevel.activate($workspace)
+connect($startlevel.editormap.sig_change(), proc{on_map_change})
 
 def gui_level_save_as()
   $save_dialog.set_filename(File::dirname($save_dialog.get_filename()) + "/")
@@ -314,7 +358,7 @@ menu.add_item("Zoom/2:1 (200%) ", proc{ gui_set_zoom(2.0) })
 menu.add_item("Zoom/4:1 (400%) ", proc{ gui_set_zoom(4.0) })
 
 # minimap_panel = Panel(CL_Rect(CL_Point(0, 600-56), CL_Size(800-134, 56)), $gui.get_component())
-minimap = Minimap.new($editor_map, CL_Rect.new(CL_Point.new(3, 488+56 - 128-3), CL_Size.new(128, 128)), option_panel)
+minimap = Minimap.new($editor_map, CL_Rect.new(CL_Point.new(3, 488+56 - 128-3), CL_Size.new(128, 128)), $option_panel)
 
 $load_dialog = SimpleFileDialog.new("Load netPanzer Level", "Load", "Cancel", $gui.get_component())
 $load_dialog.set_filename($config.datadir + "maps/")

@@ -34,13 +34,11 @@ class GameWorld;
 class Background;
 class Player;
 class DialogManager;
-class GUIManager;
 
 class WindstilleGame : public Windstille::Screen
 {
 private:
   int frames;
-  GUIManager* manager;
   Player* player;
 
   float blink;

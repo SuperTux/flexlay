@@ -172,16 +172,6 @@ TileFactory::create (int id)
     }
   else
     {
-      /*Tiles::iterator i = tiles.find(id);
-        if (i != tiles.end())
-        {
-        return i->second;
-        }
-        else
-        {
-        return 0;
-        }
-      */
       if (id > 0 && id < int(tiles.size()))
         return tiles[id];
       else

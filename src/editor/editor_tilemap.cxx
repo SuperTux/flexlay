@@ -23,11 +23,11 @@
 #include <ClanLib/gl.h>
 #include "../windstille_level.hxx"
 #include "../globals.hxx"
-#include "../tile_factory.hxx"
+#include "tile.hxx"
+#include "tile_factory.hxx"
 #include "editor.hxx"
 #include "editor_map.hxx"
 #include "tile_brush.hxx"
-#include "editor_tile.hxx"
 #include "editor_map_component.hxx"
 #include "editor_map_component.hxx"
 #include "editor_tilemap.hxx"
@@ -48,6 +48,37 @@ EditorTileMap::EditorTileMap(int w, int h, int tile_size_)
 
 EditorTileMap::~EditorTileMap()
 {
+}
+
+void
+EditorTileMap::draw_tile(int id, int x, int y, bool grid, bool attribute, float alpha)
+{
+  Tile* tile = TileFactory::current()->create(id);
+
+  if (tile)
+    {
+      CL_Sprite sprite = tile->get_sprite();
+      sprite.set_alignment (origin_top_left, 0, 0);
+
+      if (alpha != 1.0f)
+        sprite.set_color(.8f, .8f, 1.0f, alpha);
+
+      sprite.draw (x, y);
+      
+      if (attribute)
+        CL_Display::fill_rect(CL_Rect(CL_Point(x, y), CL_Size(TILE_SIZE + 1, TILE_SIZE + 1)),
+                              tile->get_attribute_color());
+
+      if (grid)
+        CL_Display::draw_rect(CL_Rect(CL_Point(x, y), CL_Size(TILE_SIZE + 1, TILE_SIZE + 1)),
+                              CL_Color(128, 128, 128, 255));
+    }
+  else
+    {
+      if (grid)
+        CL_Display::draw_rect (CL_Rect(CL_Point(x, y), CL_Size(TILE_SIZE + 1, TILE_SIZE + 1)),
+                               CL_Color(128, 128, 128, 255));
+    }
 }
 
 void
@@ -72,9 +103,9 @@ EditorTileMap::draw(EditorMapComponent* parent)
   for (int y = start_y; y < end_y; ++y)
     for (int x = start_x; x < end_x; ++x)
       {
-        EditorTile::draw(field.at(x, y), 
-                         x * tile_size, y * tile_size, 
-                         draw_grid, draw_attribute, alpha);
+        draw_tile(field.at(x, y), 
+                  x * tile_size, y * tile_size, 
+                  draw_grid, draw_attribute, alpha);
       }
 
   CL_Display::flush();

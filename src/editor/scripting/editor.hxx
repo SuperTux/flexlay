@@ -31,6 +31,15 @@ class EditorMapLayer;
 class CL_Component;
 class TileBrush;
 
+/** Set the size of the tiles and there subsize */
+void game_set_tilesize(int size, int subsize);
+
+/** Load a tile definition file into the TileFactory */
+void game_load_tiles(const char* resourcefile);
+
+/** Add a ClanLib resource file to the resource manager */
+void game_load_resources(const char* resourcefile);
+
 void editor_redo();
 void editor_undo();
 
@@ -86,11 +95,6 @@ int  screen_get_height();
 SCM  map_get_scripts();
 int  map_get_width();
 int  map_get_height();
-void map_set_size(int w, int h);
-void map_resize(int w, int h);
-void map_clear();
-
-void game_play(const char* filename);
 
 SCM get_tile_def(int id);
 SCM get_tile_defs();

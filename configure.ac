@@ -59,6 +59,12 @@ dnl clanMikMod  >= $REQUIRED_CLANLIB_VERSION
 AC_SUBST(WINDSTILLE_CFLAGS)
 AC_SUBST(WINDSTILLE_LIBS)
 
+EDITOR_CFLAGS=$WINDSTILLE_CFLAGS
+EDITOR_LIBS=$WINDSTILLE_LIBS
+
+AC_SUBST(EDITOR_CFLAGS)
+AC_SUBST(EDITOR_LIBS)
+
 AC_CONFIG_FILES( 
     Makefile
     data/Makefile
@@ -69,6 +75,7 @@ AC_CONFIG_FILES(
     src/guile/Makefile
     src/guistyle/Makefile
     src/editor/Makefile
+    src/editor/scripting/Makefile
 )
 AC_OUTPUT
 

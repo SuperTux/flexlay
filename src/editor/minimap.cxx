@@ -22,7 +22,7 @@
 #include <ClanLib/Display/pixel_format.h>
 #include <ClanLib/Display/pixel_buffer.h>
 #include "../globals.hxx"
-#include "../scripting/editor.hxx"
+#include "scripting/editor.hxx"
 #include "editor.hxx"
 #include "tile.hxx"
 #include "tile_factory.hxx"

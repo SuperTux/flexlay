@@ -79,6 +79,30 @@ SCM vector2scm(const std::vector<int>& vec)
   return gh_reverse(lst);
 }
 
+void
+game_set_tilesize(int size, int subsize)
+{
+  TILE_SIZE = size;
+  SUBTILE_SIZE = subsize;
+  SUBTILE_NUM = (TILE_SIZE/SUBTILE_SIZE);
+}
+
+void
+game_load_tiles(const char* resourcefile)
+{
+  TileFactory::tile_def_file = resourcefile;
+}
+
+void
+game_load_resources(const char* resourcefile)
+{
+  try {
+    resources->add_resources(CL_ResourceManager(datadir + std::string(resourcefile), false));
+  } catch (CL_Error& err) {
+    std::cout << "CL_Error: " << err.message << std::endl;
+  }
+}
+
 void set_window_title(const char* name)
 {
   CL_Display::get_current_window()->set_title(name);
@@ -461,27 +485,6 @@ int map_get_width()
 int map_get_height()
 {
   return editor_get_tilemap()->get_height();
-}
-
-void map_set_size(int w, int h)
-{
-  //return editor_get_tilemap()->get_height();
-}
-
-void map_resize(int w, int h)
-{
-}
-
-void map_clear()
-{
-}
-
-void
-game_play(const char* filename)
-{
-  std::cout << "WindstilleGame: Starting level " << filename << std::endl;
-  WindstilleGame game (filename);
-  game.display ();
 }
 
 CL_Component*

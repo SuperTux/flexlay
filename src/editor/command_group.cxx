@@ -23,6 +23,10 @@ CommandGroup::CommandGroup()
 {
   
 }
+
+CommandGroup::~CommandGroup()
+{
+}
   
 void
 CommandGroup::add_command(Command* c)

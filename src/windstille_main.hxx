@@ -31,7 +31,6 @@ public:
   bool fullscreen;
   bool allow_resize;
 
-  bool launch_editor;
   std::string levelfile;
   std::string game_definition_file;
   std::string controller_file;

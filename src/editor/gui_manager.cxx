@@ -18,8 +18,9 @@
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include <ClanLib/gui.h>
+#include <ClanLib/guistylesilver.h>
 #include <ClanLib/core.h>
-#include "guistyle/style_manager_windstille.hxx"
+
 #include "scripting/gui.hxx"
 #include "gui_manager.hxx"
 #include "globals.hxx"
@@ -30,7 +31,7 @@ GUIManager::GUIManager()
 {
   slot_container = new CL_SlotContainer();
   resources = new CL_ResourceManager(datadir + "gui/gui.xml", false);
-  style     = new StyleManager_Windstille(resources);
+  style     = new CL_StyleManager_Silver(resources);
   manager   = new CL_GUIManager(style);
 
   current_ = this;

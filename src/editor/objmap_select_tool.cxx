@@ -24,7 +24,7 @@
 #include "editor_map_component.hxx"
 #include "editor_map.hxx"
 #include "editor_map_component.hxx"
-#include "../gui_manager.hxx"
+#include "gui_manager.hxx"
 #include "../scm_obj.hxx"
 #include "editor_names.hxx"
 #include "popup_menu.hxx"

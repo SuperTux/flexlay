@@ -50,8 +50,6 @@ windstille_SOURCES = \
   guile_gameobj.hxx \
   guile_gameobj_factory.cxx \
   guile_gameobj_factory.hxx \
-  gui_manager.hxx \
-  gui_manager.cxx \
   igel.hxx \
   igel.cxx \
   math.hxx \
@@ -108,7 +106,6 @@ windstille_SOURCES = \
 
 windstille_LDADD = \
   scripting/libwindstille_scripting.a \
-  editor/libwindstille_editor.a \
   collision/libwindstille_collision.a \
   guistyle/libwindstille_guistyle.a \
   input/libfeuerkraft_input.a \

@@ -38,7 +38,6 @@
 #include "fonts.hxx"
 #include "feuerkraft_error.hxx"
 #include "input/input_manager.hxx"
-#include "scripting/editor.hxx"
 #include "music_manager.hxx"
 #include "tile_factory.hxx"
 
@@ -57,7 +56,6 @@ WindstilleMain::WindstilleMain()
   fullscreen    = false;
 #endif
   allow_resize  = false;
-  launch_editor = false;
   game_definition_file = "windstille.scm";
 }
 
@@ -89,7 +87,6 @@ WindstilleMain::parse_command_line(int argc, char** argv)
   argp.add_option('c', "controller", "FILE", "Use controller as defined in FILE");
 
   argp.add_group("Misc Options:");
-  argp.add_option('e', "editor",     "", "Launch the level editor");
   argp.add_option(game_flag, "game", "GAME", "Load the game definition file at startup");
   argp.add_option('d', "datadir",    "DIR", "Fetch game data from DIR");
   argp.add_option(debug_flag, "debug",      "", "Turn on debug output");
@@ -130,10 +127,6 @@ WindstilleMain::parse_command_line(int argc, char** argv)
           debug = 1;
           break;
 
-        case 'e':
-          launch_editor = true;
-          break;
-		  
         case 'f':
           fullscreen = true;
           break;
@@ -223,30 +216,17 @@ WindstilleMain::main(int argc, char** argv)
       InputManager::setup_recorder(recorder_file);
 
     TileFactory::init();
-    if (!launch_editor && levelfile.empty())
+    if (levelfile.empty())
       {
         if (debug) std::cout << "Starting Menu" << std::endl;
         WindstilleMenu menu;
         menu.display();
       }
-    else if (!launch_editor) // Launch Level
+    else 
       {
         WindstilleGame game (levelfile);
         if (debug) std::cout << "WindstilleMain: entering main-loop..." << std::endl;
         game.display ();
-      }
-    else
-      {
-        Editor editor;
-
-        if (!levelfile.empty ())
-          {
-            // FIXME: a bit evil interdependency between scripting and C
-            gh_call1(gh_lookup("load-map"),
-                     gh_str02scm(levelfile.c_str()));
-          }
-
-        editor.run();
       }
     TileFactory::deinit();
     InputManager::deinit();

@@ -35,7 +35,6 @@
 #include "player_view.hxx"
 #include "energiebar.hxx"
 #include "background.hxx"
-#include "gui_manager.hxx"
 #include "view_component.hxx"
 #include "dialog_manager.hxx"
 #include "windstille_main.hxx"
@@ -59,8 +58,6 @@ WindstilleGame::WindstilleGame(const std::string& arg_filename)
   fadeout_value = 0;
 
   control_state = GAME;
-
-  manager = new GUIManager();
 }
 
 WindstilleGame::WindstilleGame(GameWorld* w)
@@ -68,13 +65,10 @@ WindstilleGame::WindstilleGame(GameWorld* w)
   current_ = this;
   world = w;
   control_state = GAME;
-
-  new GUIManager();
 }
 
 WindstilleGame::~WindstilleGame()
 {
-  delete GUIManager::current();
   delete world;
 }
 
@@ -112,9 +106,6 @@ void
 WindstilleGame::draw()
 {
   draw_game();
-
-  // Draw debug GUI
-  GUIManager::current()->draw();
 
   switch (state)
     {
@@ -191,19 +182,12 @@ WindstilleGame::update(float delta)
       break;
     }
   
-  // Debug stuff
-  if (CL_Keyboard::get_keycode(CL_KEY_F1))
-    GUIManager::current()->show();
-  else if (CL_Keyboard::get_keycode(CL_KEY_F2))
-    GUIManager::current()->hide();
-  
   if (CL_Keyboard::get_keycode(CL_KEY_ESCAPE))
     quit();
   
   InputManager::clear();
 
   blink += delta * 3.141f;
-  GUIManager::current()->update();
 }
 
 void
@@ -220,7 +204,7 @@ WindstilleGame::on_startup ()
   view   = new PlayerView(player);
   
   // FIXME: Mem leak
-  new ViewComponent(GUIManager::current()->get_component(), view);
+  //new ViewComponent(GUIManager::current()->get_component(), view);
 
   energiebar = new Energiebar();
   background = new Background();

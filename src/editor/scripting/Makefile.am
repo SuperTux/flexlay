@@ -1,6 +1,6 @@
 ##  $Id: Makefile.am,v 1.4 2003/10/10 21:06:22 grumbel Exp $
 ## 
-##  Windstille
+##  Editor
 ##  Copyright (C) 2003 Ingo Ruhnke <grumbel@gmx.de>
 ##
 ##  This program is free software; you can redistribute it and/or
@@ -18,26 +18,28 @@
 ##  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 command_source = \
-  game.hxx   game.cxx
+  editor.hxx editor.cxx \
+  gui.hxx    gui.cxx \
+  netpanzer.hxx netpanzer.cxx
 
-noinst_LIBRARIES = libwindstille_scripting.a
+noinst_LIBRARIES = libeditor_scripting.a
 
-libwindstille_scripting_a_CPPFLAGS = \
-  @WINDSTILLE_CFLAGS@
+libeditor_scripting_a_CPPFLAGS = \
+  -I.. @EDITOR_CFLAGS@
 
-libwindstille_scripting_a_SOURCES = \
-  windstille_wrap.cxx \
+libeditor_scripting_a_SOURCES = \
+  editor_wrap.cxx \
   $(command_source)
 
-# Include windstille_wrap.cxx in case the user doesn't have swig installed
-EXTRA_DIST = windstille_wrap.cxx windstille.i
+# Include editor_wrap.cxx in case the user doesn't have swig installed
+EXTRA_DIST = editor_wrap.cxx editor.i
 
-windstille_wrap.cxx: windstille.i $(command_source)
+editor_wrap.cxx: editor.i $(command_source)
 	$(SWIG) -guile -c++  -o $@ $<
 
 # We override the default compile command to skip all the warnings
 # that compiling the wrappers causes.
-libwindstille_scripting_a-windstille_wrap.o : windstille_wrap.cxx
-	$(CXX) @WINDSTILLE_CFLAGS@ -c -O2 -o $@ $<
+libeditor_scripting_a-editor_wrap.o : editor_wrap.cxx
+	$(CXX) @EDITOR_CFLAGS@ -c -O2 -o $@ $<
 
 # EOF #

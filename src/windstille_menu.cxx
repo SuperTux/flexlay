@@ -98,12 +98,14 @@ WindstilleMenu::update(float delta)
                 }
               else if (current_choice == 1) // start editor
                 {
+                  /*
                   MusicManager::current()->stop();
                   InputManager::clear();
                   fadeout();
                   Editor editor;
                   editor.run();
                   on_startup();
+                  */
                   break;
                 }
             }

@@ -63,6 +63,8 @@ public:
   /** Draw the given single tile to the map */
   void draw_tile(int id, const CL_Point& pos);
 
+  void draw_tile(int id, int x, int y, bool grid, bool attribute, float alpha);
+
   int get_width()  const { return field.get_width(); }
   int get_height() const { return field.get_height(); }
 

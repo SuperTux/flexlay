@@ -67,12 +67,17 @@
                      (editor-quit)))
 
 (editor-add-button-func 100 0
-                   100 25 "Background" 
-                   (lambda () (tilemap-set-active-layer 0)))
+                        80 25 "Background" 
+                        (lambda () (tilemap-set-active-layer 0)))
 
-(editor-add-button-func 200 0
-                   100 25 "Foreground" 
-                   (lambda () (tilemap-set-active-layer 1)))
+(editor-add-button-func 180 0
+                        80 25 "Foreground" 
+                        (lambda () (tilemap-set-active-layer 1)))
+
+(editor-add-button-func 260 0
+                        80 25 "Diamonds" 
+                        (lambda () (tilemap-set-active-layer 1)))
+
 
 (editor-add-button-func (- screen-width 80)
                    (- screen-height 25)
@@ -83,9 +88,8 @@
                    (- screen-height 25)
                    100 25 "Tile" 
                    (lambda ()
-                     (display "Tile: ")(display (editor-get-brush-tile))(newline)
-                     (editor-set-brush-tile (1+ (editor-get-brush-tile)))))
-
+                     (editor-set-tool 0)))
+                     
 (editor-add-button-func (+ 100)
                    (- screen-height 25)
                    100 25 "Tile Erase" 
@@ -98,9 +102,11 @@
                    (lambda ()
                      (editor-set-brush-tile 0)))
 
-(editor-add-button (+ 300)
+(editor-add-button-func (+ 300)
                    (- screen-height 25)
-                   100 25 "Select")
+                   100 25 "Select"
+                   (lambda ()
+                     (editor-set-tool 1)))
 
 (editor-add-button-func (+ 450)
                         (- screen-height 25)
@@ -192,5 +198,7 @@
                                (component-hide window)))
   (set! *tileselector-window* window)
   (pop-component))
+
+(component-hide *tileeditor-window*)
 
 ;; EOF ;;

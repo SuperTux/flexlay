@@ -1,4 +1,4 @@
-//  $Id: editor_tilemap.cxx,v 1.11 2003/09/23 19:10:05 grumbel Exp $
+//  $Id: editor_tilemap.cxx,v 1.12 2003/09/23 22:07:32 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -25,6 +25,7 @@
 #include "../globals.hxx"
 #include "../tile_factory.hxx"
 #include "tilemap_paint_tool.hxx"
+#include "tilemap_select_tool.hxx"
 #include "editor_tilemap.hxx"
 
 EditorTileMap::EditorTileMap(CL_Component* parent)
@@ -46,13 +47,19 @@ EditorTileMap::EditorTileMap(CL_Component* parent)
   zoom_factor = 0;
 
   scrolling = false;
-  tool = new TileMapPaintTool(this);
+
+  tools.push_back(new TileMapPaintTool(this));
+  tools.push_back(new TileMapSelectTool(this));
+
+  tool = tools[0];
 }
 
 EditorTileMap::~EditorTileMap()
 {
   cleanup();
-  delete tool;
+
+  for(Tools::iterator i = tools.begin(); i != tools.end(); ++i)
+    delete *i;
 }
 
 void
@@ -186,23 +193,9 @@ EditorTileMap::draw ()
     draw_map(*i);
   
   // Draw 'cursor'
-  if (has_mouse_over())
+  if (1) //has_mouse_over())
     {
-      CL_Point pos =  screen2tile(CL_Point(CL_Mouse::get_x(), CL_Mouse::get_y()));
-
-      if (pos.x >= 0 && pos.y >= 0)
-        {
-          Tile* tile = TileFactory::current()->create(brush_tile);
-          if (tile)
-            {
-              CL_Sprite sprite = tile->sur;
-              sprite.set_alpha(0.5f);
-              sprite.draw(pos.x * TILE_SIZE, pos.y * TILE_SIZE);
-            }
-          CL_Display::fill_rect (CL_Rect(CL_Point(pos.x * TILE_SIZE, pos.y * TILE_SIZE),
-                                         CL_Size(TILE_SIZE, TILE_SIZE)),
-                                 CL_Color(255, 255, 255, 100));
-        }
+      tool->draw();
     }
 
   CL_Display::pop_translate_offset();
@@ -319,7 +312,8 @@ EditorTileMap::set_active_layer(int i)
 void
 EditorTileMap::set_tool(int i)
 {
-  
+  if (i >= 0 && i < int(tools.size()))
+    tool = tools[i];
 }
 
 void

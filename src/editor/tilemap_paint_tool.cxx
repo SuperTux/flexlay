@@ -1,4 +1,4 @@
-//  $Id: tilemap_paint_tool.cxx,v 1.1 2003/09/23 19:10:05 grumbel Exp $
+//  $Id: tilemap_paint_tool.cxx,v 1.2 2003/09/23 22:07:32 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -18,7 +18,9 @@
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include <iostream>
+#include "globals.hxx"
 #include "editor_tilemap.hxx"
+#include "tile_factory.hxx"
 #include "tilemap_paint_tool.hxx"
 
 TileMapPaintTool::TileMapPaintTool(EditorTileMap* t)
@@ -34,18 +36,40 @@ TileMapPaintTool::~TileMapPaintTool()
 void
 TileMapPaintTool::draw()
 {
+  CL_Point pos = tilemap->screen2tile(CL_Point(CL_Mouse::get_x(), CL_Mouse::get_y()));
+
+  if (pos.x >= 0 && pos.y >= 0)
+    {
+      Tile* tile = TileFactory::current()->create(tilemap->brush_tile);
+      if (tile)
+        {
+          CL_Sprite sprite = tile->sur;
+          sprite.set_alpha(0.5f);
+          sprite.draw(pos.x * TILE_SIZE, pos.y * TILE_SIZE);
+        }
+      CL_Display::fill_rect (CL_Rect(CL_Point(pos.x * TILE_SIZE, pos.y * TILE_SIZE),
+                                     CL_Size(TILE_SIZE, TILE_SIZE)),
+                             CL_Color(255, 255, 255, 100));
+    }
 }
 
 void
 TileMapPaintTool::on_mouse_down(const CL_InputEvent& event)
 {
   CL_Point pos = tilemap->screen2tile(event.mouse_pos);
-  
-  if (pos.x >= 0 && pos.x < tilemap->get_field()->get_width()
-      && pos.y >= 0 && pos.y < tilemap->get_field()->get_height())
-    tilemap->get_field()->at(pos.x, pos.y)->set_tile(tilemap->brush_tile);
 
-  painting = true;
+  if (event.id == CL_MOUSE_LEFT)
+    { 
+      if (pos.x >= 0 && pos.x < tilemap->get_field()->get_width()
+          && pos.y >= 0 && pos.y < tilemap->get_field()->get_height())
+        tilemap->get_field()->at(pos.x, pos.y)->set_tile(tilemap->brush_tile);
+
+      painting = true;
+    }
+  else if (event.id == CL_MOUSE_RIGHT)
+    {
+      tilemap->brush_tile = tilemap->get_field()->at(pos.x, pos.y)->get_id();
+    }
 }
  
 void
@@ -63,7 +87,13 @@ TileMapPaintTool::on_mouse_move(const CL_InputEvent& event)
 void
 TileMapPaintTool::on_mouse_up  (const CL_InputEvent& event)
 {
-  painting = false;
+  if (event.id == CL_MOUSE_LEFT)
+    {
+      painting = false;
+    }
+  else if (event.id == CL_MOUSE_RIGHT)
+    {
+    }
 }
 
 /* EOF */

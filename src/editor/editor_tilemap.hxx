@@ -1,4 +1,4 @@
-//  $Id: editor_tilemap.hxx,v 1.7 2003/09/23 19:10:05 grumbel Exp $
+//  $Id: editor_tilemap.hxx,v 1.8 2003/09/23 22:07:32 grumbel Exp $
 // 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -44,6 +44,8 @@ private:
   CL_Point click_pos;
 
   bool scrolling;
+  typedef std::vector<TileMapTool*> Tools;
+  Tools tools;
   TileMapTool* tool;
 
   void cleanup();

@@ -205,7 +205,6 @@
         (colmap 255 255 255 255 254 252 248 240))
   (tile (id 69)
         (image "tiles/dbrw_dbrw_dbrw_brwn_1")
-        (colmap 255 255 255 255 254 252 248 240)
-))
+        (colmap 255 255 255 255 254 252 248 240)))
 
 ;; EOF ;;

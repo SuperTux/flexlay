@@ -1,4 +1,4 @@
-//  $Id: editor.cxx,v 1.4 2003/09/23 19:10:05 grumbel Exp $
+//  $Id: editor.cxx,v 1.5 2003/09/23 22:07:32 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -132,9 +132,9 @@ void tilemap_set_active_layer(int i)
   Editor::current()->get_editor_tilemap()->set_active_layer(i);
 }
 
-void editor_set_tool(SCM func)
+void editor_set_tool(int i)
 {
-  
+  Editor::current()->get_editor_tilemap()->set_tool(i);
 }
 
 CL_Component*

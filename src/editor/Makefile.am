@@ -10,6 +10,8 @@ libwindstille_editor_a_SOURCES = \
   editor.hxx editor.cxx \
   tile_editor.hxx  tile_editor.cxx \
   tilemap_tool.hxx tilemap_tool.cxx \
-  tilemap_paint_tool.hxx tilemap_paint_tool.cxx 
+  tilemap_paint_tool.hxx tilemap_paint_tool.cxx \
+  tilemap_object_tool.hxx tilemap_object_tool.cxx \
+  tilemap_select_tool.hxx tilemap_select_tool.cxx
 
 # EOF #

@@ -1,4 +1,4 @@
-//  $Id: editor.hxx,v 1.4 2003/09/23 19:10:05 grumbel Exp $
+//  $Id: editor.hxx,v 1.5 2003/09/23 22:07:32 grumbel Exp $
 // 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -30,7 +30,7 @@ void pop_component();
 CL_Component* tile_selector_create(int x, int y, int w, int h);
 void editor_set_brush_tile(int i);
 int  editor_get_brush_tile();
-void editor_set_tool(SCM func);
+void editor_set_tool(int i);
 void tilemap_set_active_layer(int i);
 
 CL_Component* editor_add_window(int x, int y, int w, int h, const char* title);

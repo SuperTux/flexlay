@@ -38,7 +38,13 @@
   (editor-new width height))
 
 (define (load-map filename)
-  (editor-load filename)
+  (catch #t
+         (lambda ()
+           (editor-load filename))
+         (lambda args
+           (display "Error: ")
+           (display args)
+           (newline)))
   (push-last-file filename))
 
 (define (save-map filename)
@@ -162,6 +168,7 @@
                         (lambda () 
                           (set! *clipboard* (editor-get-tile-selection))
                           (tilemap-paint-tool-set-brush *clipboard*)
+                          (editor-set-tool 0)
                           ))
 
 (gui-create-button-func 720 500
@@ -291,5 +298,10 @@
   (gui-pop-component))
 
 (gui-hide-component *tileeditor-window*)
+
+(let ((window (gui-create-window 460 490 230 110 "Minimap")))
+  (gui-push-component (gui-window-get-client-area window))
+  (minimap-create 0 0 225 85)
+  (gui-pop-component))
 
 ;; EOF ;;

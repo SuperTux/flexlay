@@ -24,7 +24,9 @@
 
 class CL_Component;
 
+CL_Component* minimap_create(int x, int y, int w, int h);
 CL_Component* tile_selector_create(int x, int y, int w, int h, float scale);
+
 void editor_resize_map(int w, int h, int x, int y);
 void editor_tilemap_draw_brush(int pos_x, int pos_y, SCM brush);
 void editor_set_brush_tile(int i);

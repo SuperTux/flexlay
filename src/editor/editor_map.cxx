@@ -261,10 +261,18 @@ EditorMap::get_width()
   return 0;
 }
 
-int get_height()
+int
+EditorMap::get_height()
 {
   assert(!"FIXME: Implement me");
   return 0; 
+}
+
+void
+EditorMap::move_to(int x, int y)
+{
+  trans_offset = CL_Pointf(-x + CL_Display::get_width()/2,
+                           -y + CL_Display::get_height()/2);
 }
 
 /* EOF */

@@ -30,6 +30,7 @@
 #include "editor/tile_editor.hxx"
 #include "editor/tilemap_select_tool.hxx"
 #include "editor/tilemap_paint_tool.hxx"
+#include "editor/minimap.hxx"
 #include "tile_factory.hxx"
 #include "tile.hxx"
 #include "gui_manager.hxx"
@@ -198,6 +199,12 @@ void tilemap_set_active_layer(int i)
 void editor_set_tool(int i)
 {
   Editor::current()->get_map()->set_tool(i);
+}
+
+CL_Component*
+minimap_create(int x, int y, int w, int h)
+{
+  return new Minimap(CL_Point(x, y), CL_Size(w, h), GUIManager::current()->get_component());
 }
 
 CL_Component*

@@ -67,6 +67,8 @@ public:
   void  zoom_out();
   void  zoom_in();
 
+  void move_to(int x, int y);
+
   void update(float delta);
   void draw();
 

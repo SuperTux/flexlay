@@ -79,17 +79,15 @@ ObjectSelector::mouse_up(const CL_InputEvent& event)
                 CL_Point target(screen.x - EditorMapComponent::current()->get_screen_rect().left,
                                 screen.y - EditorMapComponent::current()->get_screen_rect().top);
       
-                ObjectLayer* objmap = ObjectLayer::current();
-                if (objmap)
-                  {
-                    ObjMapObject* obj 
-                      = new ObjMapSpriteObject(objmap->get_next_object_handle(), 
-                                               EditorMapComponent::current()->screen2world(target),
-                                               drag_obj.data, 
-                                               drag_obj.sprite);
-                    ObjectAddCommand* command = new ObjectAddCommand(objmap, obj);
-                    Editor::current()->execute(command);
-                  }
+                ObjectLayer objmap = ObjectLayer::current();
+
+                ObjMapObject* obj 
+                  = new ObjMapSpriteObject(objmap.get_next_object_handle(), 
+                                           EditorMapComponent::current()->screen2world(target),
+                                           drag_obj.data, 
+                                           drag_obj.sprite);
+                ObjectAddCommand command(objmap, obj);
+                Editor::current()->execute(command.to_command());
               }
             drag_obj.sprite = CL_Sprite();
           }

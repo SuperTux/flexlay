@@ -19,41 +19,64 @@
 
 #include "object_layer.hxx"
 #include "objmap_object.hxx"
+#include "command_impl.hxx"
 #include "object_delete_command.hxx"
 
-ObjectDeleteCommand::ObjectDeleteCommand(ObjectLayer* o)
-  : objmap(o)
+class ObjectDeleteCommandImpl : public CommandImpl
 {
+public:
+  typedef std::vector<ObjMapObject*> Objects;
+
+  ObjectLayer object_layer;
+  Objects objects;
+  
+  ObjectDeleteCommandImpl() {}
+  virtual ~ObjectDeleteCommandImpl() {}
+
+  void execute();
+  void redo();
+  void undo();
+};
+
+ObjectDeleteCommand::ObjectDeleteCommand(const ObjectLayer& o)
+{
+  impl->object_layer = o;
 }
 
 void
 ObjectDeleteCommand::add_object(int id)
 {
-  objects.push_back(objmap->get_object(id));
+  impl->objects.push_back(impl->object_layer.get_object(id));
 }
 
 void
-ObjectDeleteCommand::execute()
+ObjectDeleteCommandImpl::execute()
 {
   for(Objects::iterator i = objects.begin(); i != objects.end(); ++i)
     {
-      objmap->delete_object((*i)->get_handle());
+      object_layer.delete_object((*i)->get_handle());
     }
 }
 
 void
-ObjectDeleteCommand::redo()
+ObjectDeleteCommandImpl::redo()
 {
   execute();
 }
 
 void
-ObjectDeleteCommand::undo()
+ObjectDeleteCommandImpl::undo()
 {
   for(Objects::iterator i = objects.begin(); i != objects.end(); ++i)
     {
-      objmap->add_object(*i);
+      object_layer.add_object(*i);
     }
+}
+
+Command
+ObjectDeleteCommand::to_command()
+{
+  return Command(impl);
 }
 
 /* EOF */

@@ -21,14 +21,23 @@
 #include "objmap_object.hxx"
 #include "object_add_command.hxx"
 
-class ObjectAddCommandImpl
+class ObjectAddCommandImpl : public CommandImpl
 {
 public:
-  ObjectLayer* objmap;
+  ObjectLayer objmap;
   ObjMapObject* obj;
+
+  ObjectAddCommandImpl() {}
+  virtual ~ObjectAddCommandImpl() {}
+
+  void execute();
+  void undo();
+  void redo();
+
+  std::string serialize();
 };
 
-ObjectAddCommand::ObjectAddCommand(ObjectLayer* objmap_, ObjMapObject* obj_)
+ObjectAddCommand::ObjectAddCommand(const ObjectLayer& objmap_, ObjMapObject* obj_)
   : impl(new ObjectAddCommandImpl())
 {
   impl->objmap = objmap_;
@@ -46,27 +55,33 @@ ObjectAddCommand::get_handle() const
 }
 
 void
-ObjectAddCommand::execute()
+ObjectAddCommandImpl::execute()
 {
-  impl->objmap->add_object(impl->obj);
+  objmap.add_object(obj);
 }
 
 void
-ObjectAddCommand::undo()
+ObjectAddCommandImpl::undo()
 {
-  impl->objmap->delete_object(impl->obj->get_handle());
+  objmap.delete_object(obj->get_handle());
 }
 
 void
-ObjectAddCommand::redo()
+ObjectAddCommandImpl::redo()
 {
   execute();
 }
 
 std::string
-ObjectAddCommand::serialize()
+ObjectAddCommandImpl::serialize()
 {
   return "";
+}
+
+Command
+ObjectAddCommand::to_command()
+{
+  return Command(impl);
 }
 
 /* EOF */

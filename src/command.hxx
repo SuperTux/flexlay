@@ -21,6 +21,8 @@
 #define HEADER_COMMAND_HXX
 
 #include <iosfwd>
+#include "shared_ptr.hxx"
+#include "command_impl.hxx"
 
 /** Command is an abstract base class for all data manipulating
     operations on EditorLayer or even EditorMap metedata. Each Command
@@ -30,17 +32,23 @@ class Command
 {
 private:
 public:
-  /** Execute the command */
-  virtual void execute() =0;
+  Command();
+  Command(const SharedPtr<CommandImpl>& impl_);
 
+  /** Execute the command */
+  void execute();
+  
   /** Execute the command a second time after the command got
       undo'ed */
-  virtual void redo() =0;
+  void redo();
 
   /** Undo the effects caused by execute() */
-  virtual void undo() =0;
+  void undo();
 
-  virtual std::string serialize() =0;
+  std::string serialize();
+
+private:
+  SharedPtr<CommandImpl> impl;
 };
 
 #endif

@@ -67,6 +67,7 @@ env.SharedLibrary(
     'blitter.cxx',
     'box.cxx',
     'command_group.cxx',
+    'command.cxx',
     'editor.cxx',
     'editor_map.cxx',
     'editor_map_component.cxx',

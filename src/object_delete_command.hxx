@@ -23,26 +23,21 @@
 #include <vector>
 #include "command.hxx"
 
-class ObjMapObject;
+class ObjectDeleteCommandImpl;
 class ObjectLayer;
 
-/** */
-class ObjectDeleteCommand : public Command
+/** Delete all objects added with add_object() on the ObjectLayer
+    given at construction time */
+class ObjectDeleteCommand
 {
-private:
-  ObjectLayer* objmap;
-  
-  typedef std::vector<ObjMapObject*> Objects;
-  Objects objects;
 public:
-  ObjectDeleteCommand(ObjectLayer* o);
-  virtual ~ObjectDeleteCommand() {}
+  ObjectDeleteCommand(const ObjectLayer& o);
 
   void add_object(int id);
 
-  void execute();
-  void redo();
-  void undo();
+  Command to_command();
+private:
+  SharedPtr<ObjectDeleteCommandImpl> impl;
 };
 
 #endif

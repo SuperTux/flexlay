@@ -26,12 +26,8 @@
 class ObjMapObject;
 
 /** */
-class ObjectTransformCommand : public Command
+class ObjectTransformCommand
 {
-private:
-  typedef std::vector<ObjMapObject*> Objects;
-  Objects objects;
-
 public:
   ObjectTransformCommand();
   virtual ~ObjectTransformCommand();

@@ -149,4 +149,16 @@ Window::get_client_area()
   return impl->client_area;
 }
 
+void
+Window::hide()
+{
+  CL_Component::show(false);
+}
+
+void
+Window::show()
+{
+  CL_Component::show(true);
+}
+
 /* EOF */

@@ -21,13 +21,13 @@
 #include "objmap_object.hxx"
 #include "object_move_command.hxx"
 
-class ObjectMoveCommandImpl
+class ObjectMoveCommandImpl : public CommandImpl
 {
 public:
   ObjectMoveCommandImpl() {}
-  ~ObjectMoveCommandImpl() {}
+  virtual ~ObjectMoveCommandImpl() {}
 
-  ObjectLayer* objmap;
+  ObjectLayer objmap;
   
   struct Obj {
     CL_Point old_pos;
@@ -37,9 +37,15 @@ public:
   
   typedef std::vector<Obj> Objects;
   Objects objects;
+
+  void execute();
+  void redo();
+  void undo();
+
+  std::string serialize();
 };
 
-ObjectMoveCommand::ObjectMoveCommand(ObjectLayer* o)
+ObjectMoveCommand::ObjectMoveCommand(const ObjectLayer& o)
   : impl(new ObjectMoveCommandImpl())
 {
   impl->objmap = o;
@@ -50,13 +56,13 @@ ObjectMoveCommand::~ObjectMoveCommand()
 }
   
 void
-ObjectMoveCommand::execute()
+ObjectMoveCommandImpl::execute()
 {
-  for(ObjectMoveCommandImpl::Objects::iterator i = impl->objects.begin(); 
-      i != impl->objects.end();
+  for(ObjectMoveCommandImpl::Objects::iterator i = objects.begin(); 
+      i != objects.end();
       ++i)
     {
-      ObjMapObject* obj = impl->objmap->get_object(i->id);
+      ObjMapObject* obj = objmap.get_object(i->id);
       if (obj) 
         {
           i->new_pos = obj->get_pos();
@@ -67,7 +73,7 @@ ObjectMoveCommand::execute()
 void
 ObjectMoveCommand::add_obj(int id)
 {
-  ObjMapObject* obj = impl->objmap->get_object(id);
+  ObjMapObject* obj = impl->objmap.get_object(id);
 
   if (obj)
     {
@@ -79,13 +85,13 @@ ObjectMoveCommand::add_obj(int id)
 }
 
 void
-ObjectMoveCommand::redo()
+ObjectMoveCommandImpl::redo()
 {
-  for(ObjectMoveCommandImpl::Objects::iterator i = impl->objects.begin(); 
-      i != impl->objects.end();
+  for(ObjectMoveCommandImpl::Objects::iterator i = objects.begin(); 
+      i != objects.end();
       ++i)
     {
-      ObjMapObject* obj = impl->objmap->get_object(i->id);
+      ObjMapObject* obj = objmap.get_object(i->id);
       if (obj)
         {
           obj->set_pos(i->new_pos);
@@ -94,13 +100,13 @@ ObjectMoveCommand::redo()
 }
 
 void
-ObjectMoveCommand::undo()
+ObjectMoveCommandImpl::undo()
 {
-  for(ObjectMoveCommandImpl::Objects::iterator i = impl->objects.begin(); 
-      i != impl->objects.end();
+  for(ObjectMoveCommandImpl::Objects::iterator i = objects.begin(); 
+      i != objects.end();
       ++i)
     {
-      ObjMapObject* obj = impl->objmap->get_object(i->id);
+      ObjMapObject* obj = objmap.get_object(i->id);
       if (obj)
         {
           obj->set_pos(i->old_pos);
@@ -109,9 +115,15 @@ ObjectMoveCommand::undo()
 }
 
 std::string
-ObjectMoveCommand::serialize()
+ObjectMoveCommandImpl::serialize()
 {
   return "";
+}
+
+Command
+ObjectMoveCommand::to_command()
+{
+  return Command(impl);
 }
 
 /* EOF */

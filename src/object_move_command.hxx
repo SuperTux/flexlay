@@ -27,20 +27,15 @@ class ObjectLayer;
 class ObjectMoveCommandImpl;
 
 /** */
-class ObjectMoveCommand : public Command
+class ObjectMoveCommand
 {
 public:
-  ObjectMoveCommand(ObjectLayer* o);
+  ObjectMoveCommand(const ObjectLayer& o);
   virtual ~ObjectMoveCommand();
 
   void add_obj(int id);
 
-  void execute();
-  void redo();
-  void undo();
-
-  std::string serialize();
-
+  Command to_command();
 private:
   SharedPtr<ObjectMoveCommandImpl> impl;
 };

@@ -32,21 +32,15 @@ class PaintCommandImpl;
     The user needs to supply a brush and a map to draw to and the
     points to which should be drawn, undo, redo and the internals of
     drawing are handled by the PaintCommand itself. */
-class PaintCommand : public Command
+class PaintCommand
 {
 public:
   PaintCommand(TilemapLayer t, const TileBrush& b);
-  virtual ~PaintCommand();
+  ~PaintCommand();
   
   void add_point(const CL_Point& pos);
-  
-  void execute();
-  
-  void redo();
-  void undo();
 
-  std::string serialize();
-
+  Command to_command();
 private:
   SharedPtr<PaintCommandImpl> impl;
 };

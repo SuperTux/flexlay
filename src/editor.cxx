@@ -59,14 +59,11 @@ Editor::run()
 }
 
 void
-Editor::execute(Command* command)
+Editor::execute(Command command)
 {
-  for(std::vector<Command*>::iterator i = redo_stack.begin(); 
-      i != redo_stack.end(); ++i)
-    delete (*i);
   redo_stack.clear();
 
-  command->execute();
+  command.execute();
 
   //std::cout << command->serialize() << std::endl;
 
@@ -78,9 +75,9 @@ Editor::undo()
 {
   if (!undo_stack.empty())
     {
-      Command* command = undo_stack.back();
+      Command command = undo_stack.back();
       undo_stack.pop_back();
-      command->undo();
+      command.undo();
       redo_stack.push_back(command);
     }
 }
@@ -90,9 +87,9 @@ Editor::redo()
 {
   if (!redo_stack.empty())
     {
-      Command* command = redo_stack.back();
+      Command command = redo_stack.back();
       redo_stack.pop_back();
-      command->redo();
+      command.redo();
       undo_stack.push_back(command);
     }
 }

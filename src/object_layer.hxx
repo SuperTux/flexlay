@@ -39,10 +39,10 @@ public:
   typedef ObjMapObject Obj;
   typedef std::vector<ObjMapObject*> Objs;
 
-  static ObjectLayer* current_;
+  static ObjectLayer current_;
 
-  static ObjectLayer* current() { return current_; }
-  static void set_current(ObjectLayer* c) { current_ = c; }
+  static ObjectLayer current() { return current_; }
+  static void set_current(ObjectLayer c) { current_ = c; }
 
   ObjectLayer();
   ~ObjectLayer();

@@ -19,6 +19,11 @@
 
 #include "command_group.hxx"
 
+class CommandGroupImpl : public CommandImpl
+{
+public:
+};
+
 CommandGroup::CommandGroup()
 {
   

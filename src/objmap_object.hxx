@@ -33,6 +33,7 @@ private:
 protected:
   CL_Point  pos;
   MetaData  data;
+
 public:
   ObjMapObject(int handle_, const CL_Point& pos, const MetaData& data);
   ObjMapObject(int handle_, const ObjMapObject& obj);

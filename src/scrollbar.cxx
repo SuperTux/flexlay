@@ -1,6 +1,6 @@
 //  $Id$
 //
-//  Pingus - A free Lemmings clone
+//  Flexlay - A Generic 2D Game Editor
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
 //
 //  This program is free software; you can redistribute it and/or
@@ -93,8 +93,6 @@ ScrollbarImpl::draw()
                                  parent->get_height()-1));
   CL_Display::fill_rect(rect,
                         CL_Color(255, 255, 255));
-  CL_Display::draw_rect(rect,
-                        CL_Color(155, 155, 155));
 
   if (orientation == Scrollbar::HORIZONTAL)
     {
@@ -112,6 +110,9 @@ ScrollbarImpl::draw()
                                             int(pagesize*scale))),
                             CL_Color(0, 0, 0));     
     }
+
+  CL_Display::draw_rect(rect,
+                        CL_Color(155, 155, 155));
 }
 
 void

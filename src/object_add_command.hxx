@@ -30,19 +30,15 @@ class ObjectAddCommandImpl;
     to supply an Object together with the \a ObjectLayer to which it
     should be added. FIXME: position should be part of the command,
     not the object */
-class ObjectAddCommand : public Command
+class ObjectAddCommand
 {
 public:
-  ObjectAddCommand(ObjectLayer* o, ObjMapObject* ob);
+  ObjectAddCommand(const ObjectLayer& o, ObjMapObject* ob);
   virtual ~ObjectAddCommand();
 
   int get_handle() const;
 
-  void execute();
-  void undo();
-  void redo();
-
-  std::string serialize();
+  Command to_command();
 
 private:
   SharedPtr<ObjectAddCommandImpl> impl;

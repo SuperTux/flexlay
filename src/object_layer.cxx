@@ -26,7 +26,7 @@
 #include "object_layer.hxx"
 
 extern CL_ResourceManager* resources;
-ObjectLayer* ObjectLayer::current_ = 0;
+ObjectLayer ObjectLayer::current_;
 
 class ObjectLayerImpl
 {

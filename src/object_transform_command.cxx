@@ -19,6 +19,16 @@
 
 #include "object_transform_command.hxx"
 
+class ObjectTransformCommandImpl : public CommandImpl
+{
+public:
+  typedef std::vector<ObjMapObject*> Objects;
+  Objects objects;
+
+  ObjectTransformCommandImpl() {}
+  virtual ~ObjectTransformCommandImpl() {}
+};
+
 ObjectTransformCommand::ObjectTransformCommand()
 {
 }

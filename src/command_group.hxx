@@ -24,7 +24,7 @@
 #include "command.hxx"
 
 /** */
-class CommandGroup : public Command
+class CommandGroup
 {
 private:
   typedef std::vector<Command*> Commands;

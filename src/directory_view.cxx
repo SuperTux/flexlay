@@ -59,6 +59,7 @@ public:
   Items items;
   int current_item;
   int column_width;
+  int num_columns;
 
   void update_items();
   void draw();
@@ -105,9 +106,10 @@ DirectoryViewImpl::draw()
 
   int horizontal_spacing = 10;
   int vertical_spacing   = 5;
-  int num_columns = 4;
   int x_pos = 0;
   int y_pos = 0;
+
+  CL_Display::clear(CL_Color(255, 255, 0));
 
   int j = 0;
   for(Items::iterator i = items.begin(); i != items.begin()+50 && i != items.end(); ++i)
@@ -153,7 +155,6 @@ DirectoryViewImpl::get_item(const CL_Point& pos)
 
   int horizontal_spacing = 10;
   int vertical_spacing   = 5;
-  int num_columns = 4;
 
   return (pos.x / (column_width + horizontal_spacing))
     + num_columns * (pos.y / (font.get_height() + vertical_spacing));    
@@ -202,6 +203,8 @@ DirectoryViewImpl::update_items()
       CL_Rect rect = font.bounding_rect(0, 0, i->name + "[]");
       column_width = std::max(column_width, rect.get_width());
     }
+
+  num_columns = parent->get_width()/column_width;
 }
 
 /* EOF */

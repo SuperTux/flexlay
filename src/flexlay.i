@@ -12,6 +12,7 @@
 #include "paint_command.hxx"
 #include "object_move_command.hxx"
 #include "object_add_command.hxx"
+#include "object_delete_command.hxx"
 #include "scripting/editor.hxx"
 #include "tile.hxx"
 #include "tile_brush.hxx"
@@ -52,6 +53,7 @@
 %include "paint_command.hxx"
 %include "object_move_command.hxx"
 %include "object_add_command.hxx"
+%include "object_delete_command.hxx"
 %include "scripting/editor.hxx"
 %include "tile.hxx"
 %include "tile_brush.hxx"
@@ -79,5 +81,5 @@
 %include "menu.hxx"
 %include "menubar.hxx"
 %include "scrollbar.hxx"
-
+ 
 /* EOF */

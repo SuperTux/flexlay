@@ -196,7 +196,7 @@ TileMapPaintTool::on_mouse_up  (const CL_InputEvent& event)
               mode = NONE;
 
               command->add_point(pos);
-              Editor::current()->execute(command);
+              Editor::current()->execute(command->to_command());
               command = 0;
 
               tilemap.draw_tile(brush, pos);

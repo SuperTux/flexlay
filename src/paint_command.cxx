@@ -27,7 +27,7 @@
 #include "tilemap_layer.hxx"
 #include "paint_command.hxx"
 
-class PaintCommandImpl
+class PaintCommandImpl : public CommandImpl
 {
 public:
   typedef std::vector<CL_Point> Points;
@@ -42,6 +42,13 @@ public:
   CL_Point     pos;
   TileBrush*   redo_brush;
   TileBrush*   undo_brush;
+
+  void execute();
+  
+  void redo();
+  void undo();
+
+  std::string serialize();
 };
 
 PaintCommand::PaintCommand(TilemapLayer t, const TileBrush& b)
@@ -70,63 +77,69 @@ PaintCommand::add_point(const CL_Point& pos)
 }
 
 void
-PaintCommand::execute()
+PaintCommandImpl::execute()
 {
-  assert(!impl->points.empty());
+  assert(!points.empty());
   
   // Calc bounding rect
-  CL_Rect rect(impl->points.front().x, 
-               impl->points.front().y, 
-               impl->points.front().x + impl->brush.get_width(),
-               impl->points.front().y + impl->brush.get_height());
+  CL_Rect rect(points.front().x, 
+               points.front().y, 
+               points.front().x + brush.get_width(),
+               points.front().y + brush.get_height());
 
-  for(PaintCommandImpl::Points::iterator i = impl->points.begin(); i != impl->points.end(); ++i)
+  for(PaintCommandImpl::Points::iterator i = points.begin(); i != points.end(); ++i)
     {
       rect.left   = std::min(rect.left,   (*i).x);
       rect.top    = std::min(rect.top,    (*i).y);
-      rect.right  = std::max(rect.right,  (*i).x + impl->brush.get_width());
-      rect.bottom = std::max(rect.bottom, (*i).y + impl->brush.get_height());
+      rect.right  = std::max(rect.right,  (*i).x + brush.get_width());
+      rect.bottom = std::max(rect.bottom, (*i).y + brush.get_height());
     }
   
-  impl->pos.x = rect.left;
-  impl->pos.y = rect.top;
+  pos.x = rect.left;
+  pos.y = rect.top;
 
-  impl->redo_brush = new TileBrush(*(impl->tilemap.get_field()), rect.get_width(), rect.get_height(),
-                                   -impl->pos.x, -impl->pos.y);
-  impl->undo_brush = new TileBrush(impl->undo_field, rect.get_width(), rect.get_height(), 
-                                   -impl->pos.x, -impl->pos.y);
+  redo_brush = new TileBrush(*(tilemap.get_field()), rect.get_width(), rect.get_height(),
+                                   -pos.x, -pos.y);
+  undo_brush = new TileBrush(undo_field, rect.get_width(), rect.get_height(), 
+                                   -pos.x, -pos.y);
   
-  impl->redo_brush->set_opaque();
-  impl->undo_brush->set_opaque();
+  redo_brush->set_opaque();
+  undo_brush->set_opaque();
 
-  impl->undo_field.clear();
+  undo_field.clear();
 }
 
 void
-PaintCommand::redo()
+PaintCommandImpl::redo()
 {
-  TilemapLayer::draw_tile(impl->tilemap.get_field(), *impl->redo_brush, impl->pos);
+  TilemapLayer::draw_tile(tilemap.get_field(), *redo_brush, pos);
 }
 
 void
-PaintCommand::undo()
+PaintCommandImpl::undo()
 {
-  TilemapLayer::draw_tile(impl->tilemap.get_field(), *impl->undo_brush, impl->pos);
+  TilemapLayer::draw_tile(tilemap.get_field(), *undo_brush, pos);
 }
 
 std::string
-PaintCommand::serialize()
+PaintCommandImpl::serialize()
 {
   std::stringstream s;
 
-  s << "_ = PaintCommand(" << &impl->tilemap << ", " << &impl->brush << ")" << std::endl;
-  for(PaintCommandImpl::Points::iterator i = impl->points.begin(); i != impl->points.end(); ++i)
+  s << "_ = PaintCommand(" << &tilemap << ", " << &brush << ")" << std::endl;
+  for(PaintCommandImpl::Points::iterator i = points.begin(); i != points.end(); ++i)
     {
       s << "_.add_paint(" << i->x << ", " << i->y << ")"  << std::endl;
     }
   s << "_ = None" << std::endl;
 
   return s.str();
+}
+
+Command
+PaintCommand::to_command()
+{
+  return Command(impl);
 }
 
 /* EOF */

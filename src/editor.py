@@ -26,7 +26,7 @@ flexlay.init()
 editor = Editor()
 gui = editor.get_gui_manager()
 
-myrect = CL_Rect(128, 128, 600, 400)
+myrect = CL_Rect(CL_Point(0, 56), CL_Size(665, 488))
 editor_map = EditorMapComponent(myrect, gui.get_component())
 workspace  = Workspace(myrect.get_width(), myrect.get_height())
 editor_map.set_workspace(workspace)
@@ -44,8 +44,6 @@ def do_quit():
     print "---My Callback---"
     gui.quit()
 
-g = None
-
 def draw_something():
     print "Draw something"
     brush = TileBrush(2, 2)
@@ -56,7 +54,6 @@ def draw_something():
     _.add_point(CL_Point(3,3))
     _.add_point(CL_Point(4,4))
     _.execute()
-    g = _
     print "Draw something done"
 
 window = Window(CL_Rect(50, 50, 450, 400), "My Window", gui.get_component())

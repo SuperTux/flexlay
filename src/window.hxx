@@ -34,6 +34,9 @@ public:
   Window(const CL_Rect& rect, const std::string& title, CL_Component* parent);
   virtual ~Window();
 
+  void hide();
+  void show();
+
   CL_Component* get_client_area();
 private:
   Window (const Window&);

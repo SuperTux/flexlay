@@ -362,7 +362,8 @@
                            )))
 
     ;; Dialog Menu
-    (gui-add-menu-item menu "Dialogs/Edit Metadata" (lambda () (create-metadata-editor)))
+    (gui-add-menu-item menu "Dialogs/Edit Metadata" (lambda ()
+                                                      (netpanzer:metadata-editor (get-current-map-data))))
 
     (gui-add-menu-item menu "Dialogs/Draw Grid" 
                        (lambda ()
@@ -400,6 +401,17 @@
 
        (gui-add-menu-item menu "Layers/Show All"
                           (lambda () (supertux:show-all-layers)))))
+
+    (gui-add-menu-item menu "Zoom/1:4 (25%) " (lambda ()
+                                         (editor-map-component-set-zoom *editor-map* .25)))
+    (gui-add-menu-item menu "Zoom/1:2 (50%) " (lambda ()
+                                         (editor-map-component-set-zoom *editor-map* .5)))
+    (gui-add-menu-item menu "Zoom/1:1 (100%) " (lambda ()
+                                         (editor-map-component-set-zoom *editor-map* 1.0)))
+    (gui-add-menu-item menu "Zoom/2:1 (200%) " (lambda ()
+                                         (editor-map-component-set-zoom *editor-map* 2.0)))
+    (gui-add-menu-item menu "Zoom/4:1 (400%) " (lambda ()
+                                         (editor-map-component-set-zoom *editor-map* 4.0)))
     ))
 
 (define (set-tool sym)

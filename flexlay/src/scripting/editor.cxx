@@ -746,6 +746,13 @@ load_xml(const char* filename)
   }
 }
 
+void 
+editor_map_component_set_zoom(CL_Component* c, float z)
+{
+  EditorMapComponent* m = dynamic_cast<EditorMapComponent*>(c);   
+  m->set_zoom(z);
+}
+
 EditorMap*
 editor_map_component_get_map(CL_Component* c)
 {

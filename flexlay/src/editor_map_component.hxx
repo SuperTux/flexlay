@@ -61,6 +61,7 @@ public:
   EditorMap* get_map() const { return editor_map; }
   void       set_map(EditorMap* m) { editor_map = m; }
 
+  void  set_zoom(float z);
   void  zoom_to(CL_Rect rect);
   void  zoom_out(CL_Point pos);
   void  zoom_in (CL_Point pos);

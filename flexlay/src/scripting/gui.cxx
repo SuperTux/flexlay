@@ -228,14 +228,14 @@ gui_window_close(CL_Component* comp)
 }
 
 void
-gui_inputbox_set_text(CL_Component* comp, const char* txt)
+gui_inputbox_set_text(CL_Component* comp, std::string txt)
 {
   CL_InputBox* box = dynamic_cast<CL_InputBox*>(comp);
   if (box)
     box->set_text(txt);
 }
 
-const char* 
+std::string 
 gui_inputbox_get_text(CL_Component* comp)
 {
   CL_InputBox* box = dynamic_cast<CL_InputBox*>(comp);

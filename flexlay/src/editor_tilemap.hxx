@@ -58,6 +58,8 @@ public:
   /** Return a pointer to the raw field representing this map */
   Field<int>* get_field() { return &field; }
 
+  Tileset* get_tileset() { return tileset; }
+
   int  get_tile (int, int);
 
   /** @param x position of the old map in the new resized one

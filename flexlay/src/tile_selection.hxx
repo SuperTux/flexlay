@@ -25,10 +25,13 @@
 #include <ClanLib/Core/Math/point.h>
 #include "tile_brush.hxx"
 
+class EditorTileMap;
+
 /** */
 class TileSelection
 {
 private:
+  EditorTileMap* tilemap;
   CL_Point start_pos;
   CL_Rect  selection;
   bool active;
@@ -36,7 +39,7 @@ public:
   TileSelection();
   ~TileSelection();
 
-  void start (const CL_Point& pos);
+  void start (EditorTileMap* tilemap, const CL_Point& pos);
   void update(const CL_Point& pos);
 
   void clear();

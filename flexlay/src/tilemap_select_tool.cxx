@@ -70,10 +70,12 @@ TileMapSelectTool::on_mouse_down(const CL_InputEvent& event)
   switch (event.id)
     {
     case CL_MOUSE_LEFT:
-      creating_selection = true;
-      parent->capture_mouse();
-
-      selection.start(EditorTileMap::current()->world2tile(parent->screen2world(event.mouse_pos)));
+      {
+        creating_selection = true;
+        parent->capture_mouse();
+        EditorTileMap* tilemap = EditorTileMap::current();
+        selection.start(tilemap, tilemap->world2tile(parent->screen2world(event.mouse_pos)));
+      }
       break;
       
     case CL_MOUSE_RIGHT:

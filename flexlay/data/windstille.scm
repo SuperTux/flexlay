@@ -1,16 +1,25 @@
+(use-modules (oop goops))
+
 (load "helper.scm")
 (display "Windstille Startup Script\n")
 
 (define *game* 'windstille)
 (define *tile-size* 128)
-;;(game-set-tilesize 128 16)
-;;(game-load-tiles     "tiles.scm")
-
+(define *windstille-datadir* "../../data/")
 (define *tileset* (tileset-create *tile-size*))
 
-(define *windstille-datadir* "../../data/")
-
 (game-load-resources (string-append *windstille-datadir* "tiles.xml"))
+
+(define-class <windstille-level> ()
+  (background #:init-value #f 
+              #:init-keyword #:background
+              #:accessor wslv:background)
+  (foreground #:init-value #f 
+              #:init-keyword #:foreground
+              #:accessor wslv:foreground)
+  (objects    #:init-value #f
+              #:init-keyword #:objects
+              #:accessor wslv:objects))
 
 (define (windstille:load-tiles filename)
   (with-input-from-file filename
@@ -44,19 +53,20 @@
 
 (define (windstille:create-levelmap width height)
   (let* ((m       (editor-map-create))
-         (tilemap (editor-tilemap-create *tileset* width height *tile-size*))
-         (objmap  (editor-objmap-create)))
+         (foreground (editor-tilemap-create *tileset* width height *tile-size*))
+         (background (editor-tilemap-create *tileset* width height *tile-size*))
+         (objmap  (editor-objmap-create))
+         (level   (make <windstille-level>
+                    #:objects    objmap
+                    #:foreground foreground
+                    #:background background)))
 
-    (set! *tilemap* tilemap)
-
-    (editor-map-add-layer m tilemap)
+    (editor-map-add-layer m background)
+    (editor-map-add-layer m foreground)
     (editor-map-add-layer m objmap)
 
-    (tilemap-paint-tool-set-tilemap tilemap)
-    (set! *tilemap* tilemap)
-    (editor-tilemap-set-current tilemap)
-    (tileset-set-current *tileset*)
-    (tile-selector-set-tileset *tileselector* *tileset*)
+    (editor-map-set-metadata m level)
+    (windstille:activate level)
 
     m))
 
@@ -72,12 +82,15 @@
       
       ;; load level file and extract tiledata and w/h
       (let* ((m       (editor-map-create))
-             (tilemap (editor-tilemap-create *tileset* width height *tile-size*))
+             (tilemap    (editor-tilemap-create *tileset* width height *tile-size*))
              (bg-tilemap (editor-tilemap-create *tileset* width height *tile-size*))
-             (objmap  (editor-objmap-create)))
+             (objmap  (editor-objmap-create))
+             (level   (make <windstille-level>
+                        #:objects    objmap
+                        #:foreground tilemap
+                        #:background bg-tilemap)))
 
-        (set! *tilemap* tilemap)
-
+        ;; FIXME: Replace this with windstille objects handling
         (for-each (lambda (el)
                     (let ((x (car  (get-value-from-tree '(pos) (cdr el) 0)))
                           (y (cadr (get-value-from-tree '(pos) (cdr el) 0))))
@@ -92,24 +105,26 @@
                          (objectmap-add-object objmap "sprites/outpost"  x y '(spawnpoint)))
                         )))
                   objects)
+
+        ;; set data to the tilemap
+        (editor-tilemap-set-data tilemap foreground)
+        (editor-tilemap-set-data bg-tilemap background)
         
         (editor-map-add-layer m bg-tilemap)
         (editor-map-add-layer m tilemap)
         (editor-map-add-layer m objmap)
         
         (editor-map-set-filename m filename)
+        (editor-map-set-metadata m level)
+        (windstille:activate level)
 
-        (tilemap-paint-tool-set-tilemap tilemap)
-        (set! *tilemap* tilemap)
-        (editor-tilemap-set-current tilemap)
-        (tileset-set-current *tileset*)
-        (tile-selector-set-tileset *tileselector* *tileset*)
-
-        ;; set data to the tilemap
-        (if (not (null? foreground))
-            (editor-tilemap-set-data tilemap foreground))
-        (if (not (null? background))
-            (editor-tilemap-set-data bg-tilemap background))
         m))))
+
+(define-method (windstille:activate (level <windstille-level>))
+  (tilemap-paint-tool-set-tilemap (wslv:foreground level))
+  (set! *tilemap*                 (wslv:foreground level))
+  (editor-tilemap-set-current     (wslv:foreground level))
+  (tileset-set-current *tileset*)
+  (tile-selector-set-tileset *tileselector* *tileset*))
 
 ;; EOF ;;

@@ -50,6 +50,7 @@ CL_Component* object_selector_create(int x, int y, int w, int h, int obj_w, int 
 CL_Component* editor_map_component_create(int x, int y, int w, int h);
 void          editor_map_component_set_map(CL_Component* c, EditorMap* m);
 EditorMap*    editor_map_component_get_map(CL_Component* c);
+void          editor_map_component_set_zoom(CL_Component* c, float z);
 
 void editor_set_brush_tile(int i);
 int  editor_get_brush_tile();

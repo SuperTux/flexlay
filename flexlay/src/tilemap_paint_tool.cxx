@@ -137,7 +137,7 @@ TileMapPaintTool::on_mouse_down(const CL_InputEvent& event)
               mode = SELECTING;
               parent->capture_mouse();
 
-              selection.start(pos);
+              selection.start(tilemap, pos);
               break;
             }
           break;

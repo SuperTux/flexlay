@@ -21,6 +21,8 @@
 #include <iostream>
 #include <ClanLib/Core/core_iostream.h>
 #include "math.hxx"
+#include "editor_tilemap.hxx"
+#include "tileset.hxx"
 #include "tile_selection.hxx"
 
 TileSelection::TileSelection()
@@ -33,8 +35,9 @@ TileSelection::~TileSelection()
 }
 
 void
-TileSelection::start(const CL_Point& pos)
+TileSelection::start(EditorTileMap* tilemap_, const CL_Point& pos)
 {
+  tilemap = tilemap_;
   active = true;
   start_pos = pos;
   update(start_pos);
@@ -65,7 +68,7 @@ TileSelection::clear()
 void
 TileSelection::draw(const CL_Color& color)
 {
-  int tile_size = 32; // FIXME: TileSize should be part of the tileset
+  int tile_size = tilemap->get_tileset()->get_tile_size();
 
   CL_Display::fill_rect(CL_Rect(selection.left  * tile_size, selection.top    * tile_size,
                                 selection.right * tile_size, selection.bottom * tile_size),

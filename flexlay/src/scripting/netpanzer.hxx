@@ -24,14 +24,28 @@
 
 class EditorMap;
 class EditorMapLayer;
+struct NetPanzerFileStruct;
 
+#ifndef SWIG
 struct NetPanzerFileStruct
 {
   std::string id_header;
   std::string name;
   std::string description;
-  EditorMapLayer* tilemap;
+
+  EditorMapLayer* tilemap; 
 };
+#endif
+
+void netpanzer_set_id_header(NetPanzerFileStruct* npm, std::string s);
+void netpanzer_set_name(NetPanzerFileStruct* npm, std::string s);
+void netpanzer_set_description(NetPanzerFileStruct* npm, std::string s);
+void netpanzer_set_tilemap(NetPanzerFileStruct* npm, EditorMapLayer* t);
+
+std::string netpanzer_get_id_header(NetPanzerFileStruct* npm);
+std::string netpanzer_get_name(NetPanzerFileStruct* npm);
+std::string netpanzer_get_description(NetPanzerFileStruct* npm);
+EditorMapLayer* netpanzer_get_tilemap(NetPanzerFileStruct* npm);
 
 NetPanzerFileStruct* load_netpanzer_map(const char* filename);
 void save_netpanzer_map(const char* filename, 

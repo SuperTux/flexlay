@@ -138,6 +138,12 @@ EditorMapComponent::screen2world(const CL_Point& pos)
 }
 
 void
+EditorMapComponent::set_zoom(float z)
+{
+  gc_state.set_zoom(z);
+}
+
+void
 EditorMapComponent::zoom_out(CL_Point pos)
 {
   gc_state.set_zoom(pos, gc_state.get_zoom()/1.25f);

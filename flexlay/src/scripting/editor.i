@@ -1,7 +1,7 @@
 %module windstille
 
 %include "std_vector.i"
-%include "std_string.i"
+//%include "std_string.i"
 %template (vector_int) std::vector<int>;
 
 %{
@@ -39,14 +39,15 @@ component2scm(CL_Component* comp) {
     $result = brush2scm($1);
 }
 
-/*
 %typemap(in) std::string {
-    $1 = scm2string($input);
+      char* tmpstr = gh_scm2newstr($input, 0);
+      $1 = tmpstr;
+      free(tmpstr);
 }
 
 %typemap(out) std::string {
-    $result = string2scm($1);
-}*/
+    $result = gh_str02scm($1.c_str());
+}
 
 %newobject tileset_create();
 

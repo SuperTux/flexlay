@@ -383,8 +383,18 @@ def gui_level_load():
 def gui_toggle_minimap():
     if minimap.is_visible():
         minimap.show(False)
+        minimap_icon.set_up()
     else:
-        minimap.show(True)        
+        minimap.show(True)
+        minimap_icon.set_down()
+
+def gui_toggle_grid():
+    tilemap = workspace.get_map().get_metadata().foreground;
+    tilemap.set_draw_grid(not(tilemap.get_draw_grid()))
+    if tilemap.get_draw_grid():
+        grid_icon.set_down()
+    else:
+        grid_icon.set_up()
 
 class Counter:
     counter = 0;
@@ -433,6 +443,10 @@ redo_icon.disable()
 minimap_icon = Icon(CL_Rect(CL_Point(p.inc(48), 2), CL_Size(32, 32)),
                     make_sprite("../data/images/icons24/minimap.png"), "Some tooltip", button_panel);
 minimap_icon.set_callback(gui_toggle_minimap)
+
+grid_icon = Icon(CL_Rect(CL_Point(p.inc(32), 2), CL_Size(32, 32)),
+                 make_sprite("../data/images/icons24/grid.png"), "Some tooltip", button_panel);
+grid_icon.set_callback(gui_toggle_grid)
 
 foreground_icon  = Icon(CL_Rect(CL_Point(p.inc(48), 2), CL_Size(32, 32)),
                         make_sprite("../data/images/icons24/foreground.png"), "Some tooltip", button_panel);
@@ -627,9 +641,20 @@ save_dialog = SimpleFileDialog("Save SuperTux Level as...", "Save", "Cancel", gu
 save_dialog.set_filename(config.datadir + "levels/")
 
 # Init the GUI, so that button state is in sync with internal state
+gui_toggle_minimap()
+gui_toggle_minimap()
 gui_show_interactive()
 gui_show_current()
 set_tilemap_paint_tool()
+
+myw = GenericDialog("Bla", gui.get_component())
+myw.add_int("Foo", 1000)
+myw.add_int("Bla")
+myw.add_string("Blu", "Foobar")
+myw.add_int("Boing")
+def foo(a, b, str, c):
+    print a, b, str, c
+myw.set_callback(foo)
 
 gui.run()
 

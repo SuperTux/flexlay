@@ -51,10 +51,8 @@ public:
 
   Field<int>* get_field();
 
-  /** @param x position of the old map in the new resized one
-      @param y position of the old map in the new resized one
-      @param w height of the new map
-      @param h height of the new map */
+  /** @param pos position of the old map in the new resized one
+      @param size height of the new map */
   void resize(const CL_Size& size, const CL_Point& point);
 
   std::vector<int> get_data();

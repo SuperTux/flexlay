@@ -57,6 +57,7 @@ public:
   void draw();
   void do_maximize();
   void do_close();
+  void on_resize(int, int);
 };
 
 Window::Window(const CL_Rect& rect, const std::string& title, CL_Component* parent)
@@ -83,6 +84,8 @@ Window::Window(const CL_Rect& rect, const std::string& title, CL_Component* pare
   impl->parent  = this;
   impl->is_maximized = false;
 
+  impl->slots.push_back(sig_resize().connect(impl.get(),      &WindowImpl::on_resize));
+
   impl->slots.push_back(sig_paint().connect(impl.get(),      &WindowImpl::draw));
   impl->slots.push_back(impl->maximize->sig_clicked().connect(impl.get(), &WindowImpl::do_maximize));
   impl->slots.push_back(impl->close->sig_clicked().connect(impl.get(), &WindowImpl::do_close));
@@ -91,6 +94,19 @@ Window::Window(const CL_Rect& rect, const std::string& title, CL_Component* pare
 Window::~Window()
 {
   delete impl->client_area;
+}
+
+void
+WindowImpl::on_resize(int, int)
+{
+  titlebar->set_position(CL_Rect(CL_Point(3+16,3), CL_Size(parent->get_width()-6-18-18-18, 12+3)));
+  close->set_position(3, 3);
+  minimize->set_position(parent->get_width()-3-18-18, 3);
+  maximize->set_position(parent->get_width()-3-18, 3);
+  CL_Rect rect = parent->get_position();
+  client_area->set_position(CL_Rect(CL_Point(4, 3+12+7), 
+                                   CL_Size(rect.get_width()-10,
+                                           rect.get_height()-28)));
 }
 
 void

@@ -183,12 +183,6 @@ def gui_level_save():
 def gui_level_load():
     load_dialog.run(netpanzer_load_level)
 
-def gui_toggle_minimap():
-    if minimap.is_visible():
-        minimap.show(False)
-    else:
-        minimap.show(True)        
-
 class Counter:
     counter = 0;
     
@@ -233,9 +227,17 @@ redo_icon.set_callback(lambda: workspace.get_map().redo())
 undo_icon.disable()
 redo_icon.disable()
 
-# minimap_icon = Icon(CL_Rect(CL_Point(p.inc(48), 2), CL_Size(32, 32)),
-#                     make_sprite("../data/images/icons24/minimap.png"), "Some tooltip", button_panel);
-#minimap_icon.set_callback(gui_toggle_minimap)
+def gui_toggle_grid():
+    tilemap = workspace.get_map().get_metadata().data.get_tilemap()
+    tilemap.set_draw_grid(not(tilemap.get_draw_grid()))
+    if tilemap.get_draw_grid():
+        grid_icon.set_down()
+    else:
+        grid_icon.set_up()
+        
+grid_icon = Icon(CL_Rect(CL_Point(p.inc(48), 2), CL_Size(32, 32)),
+                 make_sprite("../data/images/icons24/grid.png"), "Some tooltip", button_panel);
+grid_icon.set_callback(gui_toggle_grid)
 
 layer_menu = Menu(CL_Point(32*11+2, 54), gui.get_component())
 

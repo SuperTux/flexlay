@@ -1,5 +1,17 @@
 %include "std_string.i"
 
+class CL_Component
+{
+private:
+	~CL_Component();
+public:
+	CL_Component(CL_Component* parent, CL_StyleManager* style = NULL);
+        void show(bool show = true);
+       	bool is_visible(bool check_parents = true);
+	void set_size(int new_width, int new_height);
+	void set_position(int new_x, int new_y);
+};
+
 class CL_Size
 {
 public:
@@ -46,16 +58,6 @@ public:
 	unsigned int get_blue ();
 	unsigned int get_green();
 	unsigned int get_alpha();
-};
-
-class CL_Component
-{
-private:
-	~CL_Component();
-public:
-	CL_Component(CL_Component* parent, CL_StyleManager* style = NULL);
-        void show(bool show = true);
-       	bool is_visible(bool check_parents = true);
 };
 
 class CL_Window : public CL_Component

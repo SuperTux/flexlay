@@ -33,27 +33,27 @@ private:
 public:
   explicit SCMObj () {
     obj = SCM_BOOL_F;
-    scm_protect_object (obj);
+    scm_gc_protect_object (obj);
   }
 
   explicit SCMObj (SCM new_obj) {
     obj = new_obj;
-    scm_protect_object (obj);
+    scm_gc_protect_object (obj);
   }
 
   explicit SCMObj (const SCMObj& new_obj) {
     obj = new_obj.obj;
-    scm_protect_object (obj);
+    scm_gc_protect_object (obj);
   }
 
   ~SCMObj () {
-    scm_unprotect_object (obj);
+    scm_gc_unprotect_object (obj);
   }
   
   SCMObj& operator=(const SCMObj& new_obj) {
-    scm_unprotect_object (obj);
+    scm_gc_unprotect_object (obj);
     obj = new_obj.obj;
-    scm_protect_object (obj);
+    scm_gc_protect_object (obj);
     return *this;
   }
 

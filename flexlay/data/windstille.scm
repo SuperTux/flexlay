@@ -74,8 +74,10 @@
   (let ((data (with-input-from-file filename
                 (lambda () (cdr (read))))))
 
-    (let ((width      (get-value-from-tree '(properties width _)      data 20))
-          (height     (get-value-from-tree '(properties height _)     data 15))
+    (let ((width      (get-value-from-tree '(properties width _)      data 
+                                           (get-value-from-tree '(tilemap width _) data 20)))
+          (height     (get-value-from-tree '(properties height _)     data
+                                           (get-value-from-tree '(tilemap height _) data 15)))
           (foreground (get-value-from-tree '(tilemap data)            data '()))
           (background (get-value-from-tree '(background-tilemap data) data '()))
           (objects    (get-value-from-tree '(objects)                 data '())))

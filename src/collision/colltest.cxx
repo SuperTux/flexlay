@@ -1,4 +1,4 @@
-//  $Id: colltest.cxx,v 1.3 2003/09/02 22:05:02 grumbel Exp $
+//  $Id: colltest.cxx,v 1.4 2003/09/02 22:25:23 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -43,7 +43,7 @@ public:
         CL_Surface sprite1("../../data/images/colltest2.png");
         CL_Surface sprite2("../../data/images/colltest.png");
 
-        float scale = .3f;
+        float scale = 1.0f;
 
         while (!CL_Keyboard::get_keycode(CL_KEY_ESCAPE))
           {
@@ -62,7 +62,7 @@ public:
             int my = CL_Mouse::get_y();
 
             if (mask1.collides_with(mask2, 
-                                    mx - 320, my - 240,  scale))
+                                    mx - 150, my - 150,  scale))
               {
                 CL_Display::clear(CL_Color(255, 255, 255));
               }
@@ -88,7 +88,7 @@ public:
                 CL_Display::clear(CL_Color(255, 255, 0));
               }
 #endif 
-            sprite1.draw(320, 240);
+            sprite1.draw(150, 150);
             sprite2.draw(mx, my);
 
             CL_Display::flip();

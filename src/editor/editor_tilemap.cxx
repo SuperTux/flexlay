@@ -134,6 +134,7 @@ EditorTileMap::cleanup()
     delete *i;
     
   fields.clear();
+
   delete diamond_map;
   diamond_map = 0;
 }
@@ -145,8 +146,8 @@ EditorTileMap::load(const std::string& filename)
 
   WindstilleLevel data (filename);
 
-  current_field = new Field<EditorTile*>(data.get_background_tilemap()->get_width (),
-                                         data.get_background_tilemap()->get_height ());
+  current_field = new Field<EditorTile*>(data.get_background_tilemap()->get_width(),
+                                         data.get_background_tilemap()->get_height());
 
   fields.push_back(current_field);
 

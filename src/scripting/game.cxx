@@ -28,6 +28,7 @@
 #include "diamond_map.hxx"
 #include "dialog_manager.hxx"
 #include "player.hxx"
+#include "../tile_factory.hxx"
 
 void
 game_set_tilesize(int size, int subsize)
@@ -40,8 +41,14 @@ game_set_tilesize(int size, int subsize)
 void
 game_load_tiles(const char* resourcefile)
 {
+  TileFactory::tile_def_file = resourcefile;
+}
+
+void
+game_load_resources(const char* resourcefile)
+{
   try {
-  resources->add_resources(CL_ResourceManager(datadir + std::string(resourcefile), false));
+    resources->add_resources(CL_ResourceManager(datadir + std::string(resourcefile), false));
   } catch (CL_Error& err) {
     std::cout << "CL_Error: " << err.message << std::endl;
   }

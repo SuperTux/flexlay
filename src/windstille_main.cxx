@@ -57,6 +57,7 @@ WindstilleMain::WindstilleMain()
 #endif
   allow_resize  = false;
   launch_editor = false;
+  game_definition_file = "windstille.scm";
 }
 
 WindstilleMain::~WindstilleMain()
@@ -69,6 +70,7 @@ WindstilleMain::parse_command_line(int argc, char** argv)
   CL_CommandLine argp;
 
   const int debug_flag = 256;
+  const int game_flag = 257;
     
   argp.set_help_indent(22);
   argp.add_usage ("[LEVELFILE]");
@@ -87,6 +89,7 @@ WindstilleMain::parse_command_line(int argc, char** argv)
 
   argp.add_group("Misc Options:");
   argp.add_option('e', "editor",     "", "Launch the level editor");
+  argp.add_option(game_flag, "game", "GAME", "Load the game definition file at startup");
   argp.add_option('d', "datadir",    "DIR", "Fetch game data from DIR");
   argp.add_option(debug_flag, "debug",      "", "Turn on debug output");
   argp.add_option('h', "help",       "", "Print this help");
@@ -118,6 +121,10 @@ WindstilleMain::parse_command_line(int argc, char** argv)
           datadir = argp.get_argument();
           break;
 
+        case game_flag:
+          game_definition_file = argp.get_argument();
+          break;
+
         case debug_flag:
           debug = 1;
           break;
@@ -132,9 +139,9 @@ WindstilleMain::parse_command_line(int argc, char** argv)
 
         case 'g':
           if (sscanf(argp.get_argument().c_str(), "%dx%d", &screen_width, &screen_height) == 2)
-            {
-              std::cout << "Geometry: " << screen_width << "x" << screen_height << std::endl;
-            }
+            std::cout << "Geometry: " << screen_width << "x" << screen_height << std::endl;
+          else
+            throw CL_Error("Geometry option '-g' requires argument of type {WIDTH}x{HEIGHT}");
           break;
         
         case 's':
@@ -299,8 +306,8 @@ WindstilleMain::init_modules()
   //resources->add_resources(CL_ResourceManager(datadir + "tiles.xml", false));
   resources->add_resources(CL_ResourceManager(datadir + "windstille.xml", false));
 
-  std::cout << "Loading Windstille startup script... " << std::flush;
-  gh_load((datadir + "windstille.scm").c_str());
+  std::cout << "Loading Windstille startup script: " << game_definition_file << std::flush;
+  gh_load((datadir + game_definition_file).c_str());
   std::cout << "done" << std::endl;
 
   Fonts::init(); 

@@ -35,6 +35,8 @@ private:
 
   static TileFactory* current_;
 public:
+  static std::string tile_def_file;
+
   typedef Tiles::iterator iterator;
   
   iterator begin() { return tiles.begin(); }

@@ -24,9 +24,14 @@
 
 class GameWorld;
 
-
+/** Set the size of the tiles and there subsize */
 void game_set_tilesize(int size, int subsize);
+
+/** Load a tile definition file into the TileFactory */
 void game_load_tiles(const char* resourcefile);
+
+/** Add a ClanLib resource file to the resource manager */
+void game_load_resources(const char* resourcefile);
 
 void game_add_water(int x, int y, int w, int h);
 void game_add_bomb(int x, int y);

@@ -31,6 +31,8 @@ extern CL_ResourceManager* resources;
 
 TileFactory* TileFactory::current_ = 0;
 
+std::string TileFactory::tile_def_file = "tuxtiles.scm";
+
 TileFactory::TileFactory (const std::string& filename)
 {
   SCM input_stream = scm_open_file(gh_str02scm(filename.c_str()), 
@@ -164,7 +166,7 @@ void
 TileFactory::init()
 {
   assert(current_ == 0);
-  current_ = new TileFactory(datadir + "tuxtiles.scm");
+  current_ = new TileFactory(datadir + tile_def_file);
 }
 
 /** Destroy the default TileFactor*/

@@ -234,8 +234,14 @@
 (let ((window (gui-create-window 600 25 200 400 "TileSelector")))
   (gui-push-component (gui-window-get-client-area window))
   
-  ;;(tile-selector-create (- screen-width (* 3 64)) 0 3 8 .5)
-  (tile-selector-create (- screen-width (* 3 64)) 0 6 8 1.0)
+  (case *game*
+    ((windstille)
+     (tile-selector-create (- screen-width (* 3 64)) 0 3 8 .5))
+    ((supertux)
+     (tile-selector-create (- screen-width (* 3 64)) 0 6 8 1.0))
+    (else
+     (tile-selector-create (- screen-width (* 3 64)) 0 3 8 .5)))
+
   (gui-component-on-close window (lambda ()
                                    (gui-hide-component window)))
   (set! *tileselector-window* window)

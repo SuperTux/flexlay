@@ -854,6 +854,10 @@
                               (string-append *supertux:datadir* "images/shared/spiky-left-0.png")
                               '(spiky))
 
+   (object-selector-add-brush *object-selector*
+                         (string-append *supertux:datadir* "images/shared/resetpoint.png")
+                         '(resetpoint))
+
    (create-minimap screen-width 50)
    (editor:add-file-plugin
     (lambda (filename) (or (string=? (filename:ext filename) ".stl")

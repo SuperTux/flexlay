@@ -77,7 +77,7 @@ ObjMapObject::draw()
     impl->draw();
 }
 
-CL_Rect
+CL_Rectf
 ObjMapObject::get_bound_rect() const
 {
   if (impl.get())

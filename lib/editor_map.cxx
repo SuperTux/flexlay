@@ -52,6 +52,8 @@ public:
 
   CL_Signal_v0 on_change;
 
+  bool    has_bounding_rect;
+  CL_Rect bounding_rect;
 };
 
 EditorMap::EditorMap()
@@ -61,6 +63,7 @@ EditorMap::EditorMap()
   impl->foreground_color = CL_Color(255, 80, 255);
   impl->modified = false;
   impl->serial = 0;
+  impl->has_bounding_rect = 0;
 }
 
 void
@@ -137,33 +140,60 @@ EditorMap::get_metadata() const
   return impl->metadata; 
 }
 
+bool
+EditorMap::has_bounding_rect() const
+{
+  return impl->has_bounding_rect;
+}
+
+void
+EditorMap::set_bounding_rect(const CL_Rect& rect)
+{
+  if (rect != CL_Rect(0,0,0,0))
+    {
+      impl->has_bounding_rect = true;
+      impl->bounding_rect     = rect;
+    }
+  else
+    {
+      impl->has_bounding_rect = false;
+      impl->bounding_rect     = rect;
+    }
+}
+
 CL_Rect
 EditorMap::get_bounding_rect()
 {
-  bool init = false;
-  CL_Rect rect(0,0,0,0);
-
-  for(EditorMapImpl::Layers::iterator i = impl->layers.begin(); i != impl->layers.end(); ++i)
+  if (impl->has_bounding_rect)
     {
-      if (i->has_bounding_rect())
+      return impl->bounding_rect;
+    }
+  else
+    {
+      bool init = false;
+      CL_Rect rect(0,0,0,0);
+
+      for(EditorMapImpl::Layers::iterator i = impl->layers.begin(); i != impl->layers.end(); ++i)
         {
-          if (!init)
+          if (i->has_bounding_rect())
             {
-              rect = i->get_bounding_rect();
-              init = true;
-            }
-          else
-            {
-              CL_Rect other = i->get_bounding_rect();
-              rect.top    = std::min(rect.top,    other.top);
-              rect.bottom = std::max(rect.bottom, other.bottom);
-              rect.left   = std::min(rect.left,   other.left);
-              rect.right  = std::max(rect.right,  other.right);              
+              if (!init)
+                {
+                  rect = i->get_bounding_rect();
+                  init = true;
+                }
+              else
+                {
+                  CL_Rect other = i->get_bounding_rect();
+                  rect.top    = std::min(rect.top,    other.top);
+                  rect.bottom = std::max(rect.bottom, other.bottom);
+                  rect.left   = std::min(rect.left,   other.left);
+                  rect.right  = std::max(rect.right,  other.right);              
+                }
             }
         }
+      return rect;
     }
-
-  return rect;
 }
 
 void

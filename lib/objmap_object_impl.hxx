@@ -39,7 +39,7 @@ public:
   virtual ~ObjMapObjectImpl();
 
   virtual void draw() =0;
-  virtual CL_Rect get_bound_rect() const  =0;
+  virtual CL_Rectf get_bound_rect() const  =0;
 
   virtual void add_control_points();
   virtual void update_control_points();

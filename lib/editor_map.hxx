@@ -56,8 +56,9 @@ public:
   void   set_metadata(const MetaData& obj);
   MetaData get_metadata() const;
 
-  bool has_bounding_rect() const { return true; }
+  bool has_bounding_rect() const;
   CL_Rect get_bounding_rect();
+  void    set_bounding_rect(const CL_Rect& rect);
 
   void set_background_color(const CL_Color& color);
 

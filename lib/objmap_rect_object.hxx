@@ -39,7 +39,7 @@ public:
   void set_color(const CL_Color& color);
 
   void set_rect(const CL_Rect& rect);
-  CL_Rect get_rect() const;
+  CL_Rectf get_rect() const;
 
   ObjMapObject to_object();
 private:

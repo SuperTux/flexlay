@@ -122,12 +122,12 @@ public:
   }
 
   void draw();
-  CL_Rect get_bound_rect() const;
+  CL_Rectf get_bound_rect() const;
   void add_control_points();
   void update_control_points();
 };
 
-CL_Rect
+CL_Rectf
 ObjMapRectObject::get_rect() const
 {
   return impl->get_bound_rect();
@@ -219,12 +219,10 @@ ObjMapRectObjectImpl::draw()
   CL_Display::fill_rect(get_bound_rect(), color);
 }
 
-CL_Rect
+CL_Rectf
 ObjMapRectObjectImpl::get_bound_rect() const
 {
-  return CL_Rect(CL_Point(pos),
-                 CL_Size(static_cast<int>(size.width),
-                         static_cast<int>(size.height)));
+  return CL_Rectf(pos, size);
 }
 
 ObjMapObject

@@ -27,7 +27,7 @@ public:
   CL_Sprite sprite;
 
   void draw();
-  CL_Rect get_bound_rect() const;
+  CL_Rectf get_bound_rect() const;
 
   ObjMapObject*  duplicate(int handle_);
 };
@@ -49,10 +49,10 @@ ObjMapSpriteObject::ObjMapSpriteObject(const CL_Sprite& sprite_,
 void
 ObjMapSpriteObjectImpl::draw()
 {
-  sprite.draw(static_cast<int>(pos.x), static_cast<int>(pos.y));
+  sprite.draw(pos.x, pos.y);
 }
 
-CL_Rect
+CL_Rectf
 ObjMapSpriteObjectImpl::get_bound_rect() const
 {
   CL_Point  align = CL_Point(0, 0);
@@ -64,8 +64,8 @@ ObjMapSpriteObjectImpl::get_bound_rect() const
                                                   sprite.get_height()));
   align.x = -align.x;
       
-  return CL_Rect(CL_Point(pos) - origin - align,
-                 CL_Size(sprite.get_width(), sprite.get_height()));
+  return CL_Rectf(pos - origin - align,
+                  CL_Sizef(sprite.get_width(), sprite.get_height()));
 }
 
 void

@@ -165,18 +165,16 @@ ObjectSelector::draw()
       int x = i%width;
       int y = i/width;
 
-      CL_Rect rect(CL_Point(static_cast<int>(x * obj_width),
-                            static_cast<int>(y * obj_height)),
-                   CL_Size(static_cast<int>(obj_width),
-                           static_cast<int>(obj_height)));
+      CL_Rectf rect(CL_Pointf(x * obj_width, y * obj_height),
+                    CL_Sizef(obj_width, obj_height));
 
       CL_Sprite sprite = brushes[i].get_sprite();
       sprite.set_alignment(origin_center, 0, 0);
       sprite.set_scale(std::min(1.0f, (float)obj_width/(float)sprite.get_width()),
                        std::min(1.0f, (float)obj_height/(float)sprite.get_height()));
         
-      sprite.draw(static_cast<int>(x * obj_width + obj_width/2), 
-                  static_cast<int>(y * obj_height + obj_height/2));
+      sprite.draw(x * obj_width + obj_width/2, 
+                  y * obj_height + obj_height/2);
         
       //CL_Display::draw_rect(rect, CL_Color(0,0,0,128));
         
@@ -185,6 +183,8 @@ ObjectSelector::draw()
           CL_Display::fill_rect(rect, CL_Color(0,0,255, 20));
         }
     }
+
+  CL_Display::pop_modelview();
 
   // Draw drag sprite
   if (drag_obj != -1)
@@ -195,10 +195,8 @@ ObjectSelector::draw()
 
       CL_Sprite sprite = brushes[drag_obj].get_sprite();
       sprite.set_alpha(0.5f);
-      sprite.draw(mouse_pos.x, mouse_pos.y);
+      sprite.draw(mouse_pos.x + get_screen_x(), mouse_pos.y + get_screen_y());
     }
-
-  CL_Display::pop_modelview();
 }
 
 void

@@ -86,7 +86,7 @@ ObjectLayer::find_object(const CL_Pointf& click_pos)
 {
   for(Objects::reverse_iterator i = impl->objects.rbegin(); i != impl->objects.rend(); ++i)
     {
-      CL_Rect rect = (*i).get_bound_rect();
+      CL_Rectf rect = (*i).get_bound_rect();
      
       if (rect.is_inside(CL_Point(click_pos)))
         return *i;

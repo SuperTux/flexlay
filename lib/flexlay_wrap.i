@@ -126,7 +126,9 @@ VALUE CL_Point2Value(const CL_Point& arg)
 
 %include "std_string.i"
 %include "std_vector.i"
+%template(Std_vector_string) std::vector<std::string>;
 %template(Std_vector_int) std::vector<int>;
+%template(Std_vector_CL_RadioButton) std::vector<CL_RadioButton *>;
 %template(Std_vector_ObjMapObject) std::vector<ObjMapObject>;
 %template(Std_vector_CL_Pointf) std::vector<CL_Pointf>;
 %template(Std_vector_Stroke) std::vector<Stroke>;

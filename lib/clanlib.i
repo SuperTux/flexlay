@@ -29,6 +29,14 @@ public:
 	float x;
 	float y;
 };
+        
+class CL_Sprite
+{
+public:
+CL_Sprite(      
+	        	const std::string &resource_id,
+		        CL_ResourceManager *manager);
+};
 
 
 class CL_Point
@@ -55,6 +63,16 @@ public:
 	int get_height() const;
 
 	CL_Size get_size();
+};
+
+class CL_Colorf
+{
+public:
+        CL_Colorf(float r, float g, float b, float a);
+        float red;
+        float green;
+        float blue;
+        float alpha;
 };
 
 class CL_Color
@@ -168,21 +186,56 @@ public:
 class CL_ResourceManager
 {
 public:
+	CL_ResourceManager();
 	CL_ResourceManager(
 		const std::string &config_file,
 		CL_InputSourceProvider *provider = 0,
 		bool delete_inputsource_provider = false);
 	~CL_ResourceManager();
 
-	std::list<std::string> get_all_resources(const std::string &section_name);
-	std::list<std::string> get_all_sections();
+	std::vector<std::string> get_all_resources(const std::string &section_name);
+	std::vector<std::string> get_all_sections();
 
-	std::list<std::string> get_resources_of_type(const std::string &type_id);
-	std::list<std::string> get_resources_of_type(const std::string &type_id, const std::string &section_name);
+	std::vector<std::string> get_resources_of_type(const std::string &type_id);
+	std::vector<std::string> get_resources_of_type(const std::string &type_id, const std::string &section_name);
 	void add_resources(const CL_ResourceManager &additional_resources);
 	void remove_resources(const CL_ResourceManager &additional_resources);
 };
 
+
+class CL_RadioButton : public CL_Button
+{
+public:
+	CL_RadioButton(
+		const CL_Point &pos,
+		const std::string &text,
+		CL_Component *parent,
+		CL_StyleManager *style = NULL);
+	bool is_checked() const;
+	void set_checked(bool check);
+};
+
+class CL_RadioGroup
+{
+public:
+	CL_RadioGroup();
+	~CL_RadioGroup();
+
+	const std::vector<CL_RadioButton *> &get_buttons() const;
+	void add(CL_RadioButton *button, bool delete_component = false);
+};
+
+class CL_CheckBox : public CL_Button
+{
+public:
+        CL_CheckBox(
+		const CL_Point &pos,
+		const std::string &text,
+		CL_Component *parent,
+		CL_StyleManager *style = NULL);
+	bool is_checked() const;
+	void set_checked(bool check = true);
+};
 
 /* EOF */
 

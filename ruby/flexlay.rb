@@ -214,6 +214,30 @@ class GenericDialog
     update()
   end
     
+  def add_bool(name, value = false)
+    @items.push(["bool",
+                  CL_Label.new(CL_Point.new(10, 10), name,
+                               @window.get_client_area()),
+                  CL_CheckBox.new(CL_Point.new(110, 10), 
+                                  "",
+                                  @window.get_client_area())])
+    # @items[-1][2].set_text(value.to_s)
+    update()
+  end
+
+  def add_enum(name, types, value = "foo")
+    group = CL_RadioGroup.new()
+    types.each {|type| 
+      group.add(CL_RadioButton.new(CL_Point.new(0, 0),
+                         type, @window.get_client_area()))
+    }
+    @items.push(["enum",
+                  CL_Label.new(CL_Point.new(10, 10), name,
+                               @window.get_client_area()),
+                  group])
+    update()
+  end
+
   def add_int(name, value = 0)
     @items.push(["int",
                  CL_Label.new(CL_Point.new(10, 10), name,
@@ -236,19 +260,27 @@ class GenericDialog
 
   def update()
     y = 10
-    @items.each do |(type, label, comp)| 
-      if type == "int" or type == "string" or type == "float" or type == "void"
-        label.set_position(10, y)
+    @items.each { |(type, label, comp)| 
+      label.set_position(10, y)
+
+      if type == "int" or type == "string" or type == "float" or type == "void" or type == "bool" then
         if comp then
           comp.set_position(110, y)
         end
         y += 25
-
-        @cancel.set_position(200, y)
-        @ok.set_position(260, y)
-        @window.set_size(330, y + 60)
+      elsif type == "enum"
+        y += 5
+        comp.get_buttons.each {|radio|
+          radio.set_position(110, y)
+          y += 20
+        }
+        y += 5
       end
-    end
+    }
+  
+    @cancel.set_position(200, y)
+    @ok.set_position(260, y)
+    @window.set_size(330, y + 60)
   end
 end
 

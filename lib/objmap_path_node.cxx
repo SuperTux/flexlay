@@ -30,7 +30,7 @@ public:
   ObjMapPathNodeImpl();
 
   void draw();
-  CL_Rect get_bound_rect() const;
+  CL_Rectf get_bound_rect() const;
 };
 
 ObjMapPathNodeImpl::ObjMapPathNodeImpl()
@@ -59,10 +59,10 @@ ObjMapPathNodeImpl::draw()
     }
 }
 
-CL_Rect
+CL_Rectf
 ObjMapPathNodeImpl::get_bound_rect() const
 {
-  return CL_Rect(CL_Point(pos) - CL_Point(16,16), CL_Size(32, 32));
+  return CL_Rectf(pos - CL_Pointf(16,16), CL_Sizef(32, 32));
 }
 
 ObjMapPathNode::ObjMapPathNode(const CL_Pointf& pos_, 

@@ -121,7 +121,7 @@ ObjMapSelectToolImpl::draw()
     case DRAG:
       break;
     case SELECT:
-      CL_Display::draw_rect(CL_Rect(selection_rect),
+      CL_Display::draw_rect(selection_rect,
                             CL_Color(255, 255, 255));
       break;
     default:

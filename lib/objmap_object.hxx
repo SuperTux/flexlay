@@ -47,8 +47,7 @@ public:
   CL_Signal_v1<ObjMapObject>& sig_deselect();
 
   void draw();
-  // FIXME: should be CL_Rectf
-  CL_Rect get_bound_rect() const;
+  CL_Rectf get_bound_rect() const;
 
   void add_control_points();
   void update_control_points();

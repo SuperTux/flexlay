@@ -72,4 +72,28 @@ make_region_pixelbuffer(const std::string& filename, int x, int y, int w, int h)
 
 }
 
+CL_Sprite
+make_sprite_from_resource(const std::string& filename, CL_ResourceManager& resources)
+{
+  try {
+    return CL_Sprite(filename, &resources);
+  } catch (CL_Error& err) {
+    std::cout << "CL_Error: " << err.message << std::endl;
+    return CL_Sprite();
+  }  
+}
+
+CL_PixelBuffer
+make_pixelbuffer_from_resource(const std::string& filename, CL_ResourceManager& resources)
+{
+  try {
+    // FIXME: expects a sprite, won't work with 'surface'
+    CL_SpriteDescription descr(filename, &resources);
+    return CL_PixelBuffer(*(descr.get_frames().begin()->first));
+  } catch (CL_Error& err) {
+    std::cout << "CL_Error: " << err.message << std::endl;
+    return CL_PixelBuffer();
+  }
+}
+
 /* EOF */

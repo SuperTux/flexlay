@@ -155,5 +155,23 @@ public:
 		const std::string& text, int index = -1);
 };
 
+class CL_ResourceManager
+{
+public:
+	CL_ResourceManager(
+		const std::string &config_file,
+		CL_InputSourceProvider *provider = 0,
+		bool delete_inputsource_provider = false);
+	~CL_ResourceManager();
+
+	std::list<std::string> get_all_resources(const std::string &section_name);
+	std::list<std::string> get_all_sections();
+
+	std::list<std::string> get_resources_of_type(const std::string &type_id);
+	std::list<std::string> get_resources_of_type(const std::string &type_id, const std::string &section_name);
+	void add_resources(const CL_ResourceManager &additional_resources);
+	void remove_resources(const CL_ResourceManager &additional_resources);
+};
+
 /* EOF */
 

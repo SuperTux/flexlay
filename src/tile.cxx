@@ -30,7 +30,7 @@
 class TileImpl
 {
 public:
-  CL_Sprite sur;
+  CL_Sprite      sprite;
   CL_PixelBuffer pixelbuffer;
 
   bool transparent;
@@ -48,11 +48,13 @@ public:
   std::string filename;
 };
 
-Tile::Tile(const CL_PixelBuffer& pixelbuffer)
+Tile::Tile(const CL_PixelBuffer& pixelbuffer,
+           const CL_Sprite& sprite)
   : impl(new TileImpl())
 {
   impl->pixelbuffer = pixelbuffer;
-  impl->has_color = false;
+  impl->sprite      = sprite;
+  impl->has_color   = false;
 }
 
 Tile::Tile(const std::string& filename_, 
@@ -92,17 +94,17 @@ Tile::get_attribute_color()
 CL_Sprite&
 Tile::get_sprite()
 {
-  if (impl->sur)
+  if (impl->sprite)
     {
-      return impl->sur;
+      return impl->sprite;
     }
   else
     {
       CL_SpriteDescription desc;
       desc.add_frame(new CL_PixelBuffer(get_pixelbuffer()), true);
-      impl->sur = CL_Sprite(desc);
+      impl->sprite = CL_Sprite(desc);
       
-      return impl->sur;
+      return impl->sprite;
     }
 }
 

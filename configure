@@ -270,7 +270,7 @@ PACKAGE_VERSION='0.0.1'
 PACKAGE_STRING='Windstille 0.0.1'
 PACKAGE_BUGREPORT=''
 
-ac_unique_file="src/WindstilleMain.cxx"
+ac_unique_file="src/windstille_main.cxx"
 # Factoring default headers for most tests.
 ac_includes_default="\
 #include <stdio.h>

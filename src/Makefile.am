@@ -5,22 +5,22 @@ bindir=$(prefix)/games
 bin_PROGRAMS = windstille
 
 windstille_SOURCES = \
-  Controller.hxx GameObj.hxx  WindstilleMain.hxx \
-  DeltaManager.hxx  GameWorld.hxx  Player.hxx  \
-  Player.cxx  WindstilleMain.cxx GameWorld.cxx GameObj.cxx \
-  DefaultShoot.hxx   DefaultShoot.cxx \
-  KeyboardController.hxx   KeyboardController.cxx \
-  TileMap.hxx TileMap.cxx Field.hxx WindstilleGame.cxx WindstilleGame.hxx \
-  AnimationObj.hxx   AnimationObj.cxx Dog.hxx Dog.cxx \
-  PowerUp.hxx PowerUp.cxx WindstilleLevel.hxx WindstilleLevel.cxx \
-  StringConverter.hxx XMLhelper.hxx XMLhelper.cxx \
-  LaserShoot.cxx   LaserShoot.hxx PlayerView.hxx PlayerView.cxx \
-  BonusFlyer.hxx BonusFlyer.cxx GuileGameObj.hxx GuileGameObj.cxx \
-  SpriteSmob.hxx SpriteSmob.cxx GuileGameObjFactory.hxx GuileGameObjFactory.cxx \
-  TileMapSmob.hxx   TileMapSmob.cxx GameObjSmob.hxx GameObjSmob.cxx \
-  GameWorldSmob.hxx GameWorldSmob.cxx globals.hxx SCMConverter.hxx
+  controller.hxx gameobj.hxx  windstille_main.hxx \
+  delta_manager.hxx  game_world.hxx  player.hxx  \
+  player.cxx  windstille_main.cxx game_world.cxx gameobj.cxx \
+  default_shoot.hxx   default_shoot.cxx \
+  Keyboardcontroller.hxx   keyboard_controller.cxx \
+  tile_map.hxx tile_map.cxx field.hxx windstille_game.cxx windstille_game.hxx \
+  animation_obj.hxx   animation_obj.cxx dog.hxx dog.cxx \
+  power_up.hxx power_up.cxx windstille_level.hxx windstille_level.cxx \
+  string_converter.hxx xmlhelper.hxx xmlhelper.cxx \
+  laser_shoot.cxx   laser_shoot.hxx player_view.hxx player_view.cxx \
+  bonus_flyer.hxx bonus_flyer.cxx guile_gameobj.hxx guile_gameobj.cxx \
+  sprite_smob.hxx sprite_smob.cxx guile_gameobj_factory.hxx guile_gameobj_factory.cxx \
+  tile_mapsmob.hxx   tile_mapsmob.cxx gameobj_smob.hxx gameobj_smob.cxx \
+  game_worldsmob.hxx game_worldsmob.cxx globals.hxx scmconverter.hxx
 
-LDADD = editor/libturrican_editor.a
+LDADD = editor/libwindstille_editor.a
 
 
 # EOF #

@@ -1,6 +1,9 @@
-noinst_LIBRARIES = libturrican_editor.a
+noinst_LIBRARIES = libwindstille_editor.a
 
-libturrican_editor_a_SOURCES = WindstilleEditor.cxx WindstilleEditor.hxx \
-  EditorTile.hxx   EditorTile.cxx \
-  EditorTileMap.hxx   EditorTileMap.cxx \
-  EditorTileMapView.hxx   EditorTileMapView.cxx
+libwindstille_editor_a_SOURCES = \
+  editor_tile.cxx     editor_tilemapview.cxx  windstille_editor.cxx \
+  editor_tile.hxx     editor_tilemapview.hxx  windstille_editor.hxx \
+  editor_tilemap.cxx  tile_mapeditor.hxx \
+  editor_tilemap.hxx  tile_selector.hxx
+
+# EOF #

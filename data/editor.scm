@@ -334,6 +334,11 @@
                                                       (push-last-file filename)))))))
 
 (case *game*
+  ((supertux)
+    (gui-add-menu-item menu "File/Export SuperTux" 
+                       (lambda ()
+                         (simple-file-dialog "Export SuperTux level..." (get-last-file)
+                                             (lambda (filename)   (supertux:save-map filename))))))
   ((netpanzer)
     (gui-add-menu-item menu "File/Import NetPanzer.." 
                        (lambda ()
@@ -480,8 +485,10 @@
     ;;(set-tool 'tile)
 
     (gui-create-button-func 0 150
-                            40 25 "BG" 
-                            (lambda () #f));;(tilemap-set-active-layer 0)))
+                            40 25 "SavePNG" 
+                            (lambda () 
+                              (editor-tilemap-save-png *tilemap* "/tmp/foobar.pnm")))
+                            ;;(tilemap-set-active-layer 0)))
 
     (gui-create-button-func 0 175
                             40 25 "FG" 
@@ -716,10 +723,6 @@
                                     (display (editor-objectmap-get-object el))
                                     (newline))
                                   (tilemap-object-tool-get-objects))))
-
-   (gui-add-menu-item menu "Add Object"
-                      (lambda ()
-                        (editor-objectmap-add-object "sprites/mrbomb" 100 100 '())))
 
    (gui-add-menu-item menu "Print Selection"
                       (lambda ()

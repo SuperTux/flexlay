@@ -24,6 +24,7 @@
 #include "../field.hxx"
 #include "editor_map_layer.hxx"
 
+class CL_PixelBuffer;
 class TileBrush;
 
 /** Holds the tilemap data for the editor and provides functions to
@@ -73,6 +74,8 @@ public:
 
   void set_draw_grid(bool t);
   bool get_draw_grid() const;
+
+  CL_PixelBuffer* create_pixelbuffer();
 
   static void draw_tile(Field<int>* field, const TileBrush& brush, const CL_Point& pos);
 };

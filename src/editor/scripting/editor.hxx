@@ -115,6 +115,7 @@ void            editor_map_set_filename(EditorMap* m, const char* name);
 EditorMapLayer* editor_tilemap_create(int w, int h, int tile_size);
 void            editor_tilemap_set_data(EditorMapLayer* l, SCM data);
 SCM             editor_tilemap_get_data(EditorMapLayer* l);
+void            editor_tilemap_save_png(EditorMapLayer* l, const char* filename);
 
 #endif
 

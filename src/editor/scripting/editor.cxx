@@ -20,8 +20,10 @@
 #include <ClanLib/gui.h>
 #include <ClanLib/core.h>
 #include <ClanLib/Display/display.h>
+#include <ClanLib/Display/pixel_buffer.h>
 #include <ClanLib/Display/display_window.h>
 #include <iostream>
+#include <fstream>
 #include "../scm_functor.hxx"
 #include "../globals.hxx"
 #include "../windstille_game.hxx"
@@ -510,7 +512,8 @@ SCM get_tile_def(Tile* tile)
       lst = gh_cons(gh_list(scm_str2symbol("id"), SCM_MAKINUM(tile->id), (SCM_UNDEFINED)),
                     lst);
 
-      lst = gh_cons(gh_list(scm_str2symbol("image"), gh_str02scm(tile->filename.c_str()), (SCM_UNDEFINED)),
+      lst = gh_cons(gh_list(scm_str2symbol("image"),
+                            gh_str02scm(tile->get_filename().c_str()), (SCM_UNDEFINED)),
                     lst);
 
       lst = gh_cons(gh_list(scm_str2symbol("colmap"), 
@@ -711,6 +714,31 @@ EditorMapLayer*
 editor_tilemap_create(int w, int h, int tile_size)
 {
   return new EditorTileMap(w, h, tile_size);
+}
+
+void
+editor_tilemap_save_png(EditorMapLayer* l, const char* filename)
+{
+  EditorTileMap* tilemap = dynamic_cast<EditorTileMap*>(l);
+  CL_PixelBuffer* pixelbuffer = tilemap->create_pixelbuffer();
+
+  pixelbuffer->lock();
+  std::ofstream out(filename);
+
+  out << "P6\n"
+      << pixelbuffer->get_width() << " " << pixelbuffer->get_height() << "\n"
+      << "255\n";
+  char* buf = static_cast<char*>(pixelbuffer->get_data());
+  for(int i = 0; i < int(pixelbuffer->get_pitch() * pixelbuffer->get_height()); i += 4)
+    {
+      out.write(&buf[i + 3], 1);
+      out.write(&buf[i + 2], 1);
+      out.write(&buf[i + 1], 1);
+    }
+
+  pixelbuffer->unlock();
+
+  delete pixelbuffer;
 }
 
 SCM

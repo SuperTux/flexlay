@@ -31,6 +31,7 @@ class Tile
 {
 private:
   CL_Sprite sur;
+  CL_PixelBuffer* pixelbuffer;
 
   /** Color used for the minimap to represent this tile */
   CL_Color  color;
@@ -39,19 +40,26 @@ private:
       and such */
   CL_Color  attribute_color;
 
+  std::string filename;
 public:
   int id; 
   unsigned char colmap[8];
-  std::string filename;
 
   /** @param filename Surface to use 
    *  @param arg_colmap a 8 char long array */
   Tile(const std::string& filename, 
        const CL_Color& color, const CL_Color& attribute_color, unsigned char arg_colmap[]);
+  
+  ~Tile();
 
   CL_Sprite& get_sprite();
+
+  CL_PixelBuffer* get_pixelbuffer();
+
   CL_Color   get_color();
   CL_Color   get_attribute_color();
+
+  std::string get_filename() const { return filename; }
 
   inline bool get_col(unsigned char x, unsigned char  y)
   {

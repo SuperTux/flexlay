@@ -26,6 +26,43 @@
 #include "../gui_manager.hxx"
 #include "gui.hxx"
 
+template<class A>
+SCM any2scm(const A& a);
+
+template<>
+SCM any2scm<int>(const int& i){
+  return gh_int2scm(i);
+}
+
+template <class A>
+struct SCMGenericFunctor1
+{
+  SCMFunctor func;
+
+  SCMGenericFunctor1(SCM f) 
+    : func(f)
+  {}
+
+  void operator()(const A& a) {
+    func(any2scm<A>(a));
+  }
+};
+
+template <class A, class B>
+struct SCMGenericFunctor2
+{
+  SCMFunctor func;
+
+  SCMGenericFunctor2(SCM f) 
+    : func(f)
+  {}
+
+  void operator()(const A& a, const B& b) {
+    func(any2scm<A>(a),
+         any2scm<B>(b));
+  }
+};
+
 struct SCMVirtualFunctor
 {
   SCMFunctor func;
@@ -265,47 +302,20 @@ gui_listbox_add(CL_Component* box, const char* str)
     return -1;
 }
 
-struct SCMIntFunctor
-{
-  SCMFunctor func;
-
-  SCMIntFunctor(SCM f)
-    : func(f)
-  {
-  }
-
-  void operator()(int i) {
-    func(SCM_MAKINUM(i));
-  }
-};
-
 void
 gui_listbox_on_click(CL_Component* box, SCM func)
 {
   CL_ListBox* listbox = dynamic_cast<CL_ListBox*>(box);
   if (listbox)
     {
-      new CL_Slot(listbox->sig_highlighted().connect_functor(SCMIntFunctor(func)));
+      new CL_Slot(listbox->sig_highlighted().connect_functor(SCMGenericFunctor1<int>(func)));
     }
 }
 
-struct OnResizeCallback
-{
-  SCMFunctor func;
-  OnResizeCallback(const SCMFunctor& f) 
-    : func(f)
-  {
-  }
-  void operator()(int w, int h) {
-    func(SCM_MAKINUM(w), 
-         SCM_MAKINUM(h));
-  }
-};
-
-
 void gui_add_on_resize_callback(SCM func)
 {
-  new CL_Slot(CL_Display::get_current_window()->sig_resize().connect_functor(OnResizeCallback(SCMFunctor(func))));
+  new CL_Slot(CL_Display::get_current_window()->sig_resize().
+              connect_functor(SCMGenericFunctor2<int, int>(func)));
 }
 
 int gui_component_get_width(CL_Component* comp)

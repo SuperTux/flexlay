@@ -21,6 +21,7 @@
 #include <iostream>
 #include <ClanLib/core.h>
 #include <ClanLib/gl.h>
+#include <ClanLib/sdl.h>
 #include <ClanLib/display.h>
 #include <guile/gh.h>
 #include "../globals.hxx"
@@ -38,6 +39,7 @@ EditorMain::EditorMain()
   screen_height = 600;
   fullscreen   = false;
   allow_resize = true;
+  use_opengl = true;
   game_definition_file = "windstille.scm";
 }
 
@@ -50,8 +52,9 @@ EditorMain::parse_command_line(int argc, char** argv)
 {
   CL_CommandLine argp;
 
-  const int debug_flag = 256;
-  const int game_flag  = 257;
+  const int debug_flag  = 256;
+  const int game_flag   = 257;
+  const int opengl_flag = 258;
 
   argp.set_help_indent(22);
   argp.add_usage ("[LEVELFILE]");
@@ -60,6 +63,7 @@ EditorMain::parse_command_line(int argc, char** argv)
   argp.add_group("Display Options:");
   argp.add_option('g', "geometry",   "WxH", "Change window size to WIDTH and HEIGHT");
   argp.add_option('f', "fullscreen", "", "Launch the game in fullscreen");
+  argp.add_option(opengl_flag, "opengl", "", "Use OpenGL mode");
 
   argp.add_group("Misc Options:");
   argp.add_option(game_flag, "game", "GAME", "Load the game definition file at startup");
@@ -83,6 +87,10 @@ EditorMain::parse_command_line(int argc, char** argv)
 
         case game_flag:
           game_definition_file = argp.get_argument();
+          break;
+
+        case opengl_flag:
+          use_opengl = true;
           break;
 
         case 'f':
@@ -157,7 +165,10 @@ EditorMain::main(int argc, char** argv)
     std::cout << "done" << std::endl;
 
     CL_SetupCore::init();
-    CL_SetupGL::init();
+    if (use_opengl)
+      CL_SetupGL::init();
+    else
+      CL_SetupSDL::init();
     CL_SetupDisplay::init();
 
     window = new CL_DisplayWindow(PACKAGE_STRING,
@@ -184,7 +195,10 @@ EditorMain::main(int argc, char** argv)
     TileFactory::deinit();
 
     CL_SetupDisplay::deinit();
-    CL_SetupGL::deinit();
+    if (use_opengl)
+      CL_SetupGL::deinit();
+    else
+      CL_SetupSDL::init();
     CL_SetupCore::deinit();
 
   } catch (CL_Error& error) {

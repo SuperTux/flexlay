@@ -17,39 +17,35 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-#ifndef HEADER_OBJMAP_CONTROL_POINT_HXX
-#define HEADER_OBJMAP_CONTROL_POINT_HXX
+#ifndef HEADER_ONION_SKIN_LAYER_HXX
+#define HEADER_ONION_SKIN_LAYER_HXX
 
-#include <ClanLib/Display/sprite.h>
-#include <ClanLib/Core/Math/point.h>
-#include "meta_data.hxx"
-#include "shared_ptr.hxx"
+#include "editor_map.hxx"
 
-class ObjMapControlPointImpl;
+class OnionSkinLayerImpl;
 
-/** An ObjMapControlPoint is used to control a property of an object,
-    such as size, rotation or scaling. ControlPoints get drawn around
-    the object in a size which is independend of the current zoom
-    level and can be draged around with the mous. */
-class ObjMapControlPoint
+/** The OnionSkinLayer is used to render one or multiple EditorMap
+    renderings in a transparent fashion onto another EditorMap. This
+    is usefull for animation programms and the like where one might
+    need to see the previous or next frames together with the current
+    frame. Might also be usefull for games which have shadow worlds,
+    which reassamble the normal world in a darker fashion. */
+class OnionSkinLayer
 {
-private:
 public:
-  ObjMapControlPoint() : impl(0) {}
-  ObjMapControlPoint(CL_Sprite sprite_, CL_Pointf pos_, MetaData data_);
+  /** FIXME: Should probally be CL_Rect instead of just
+      width/height */
+  OnionSkinLayer(int width, int height);
+  
+  /** Adds an EditorMap to the OnionSkin */
+  void add_map(EditorMap editor_map, float transparency);
 
-  CL_Pointf get_pos() const;
-  void     set_pos(const CL_Pointf& p);
-  void     set_pos_raw(const CL_Pointf& p);
-  void     draw(CL_GraphicContext* gc);
-
-  CL_Rect get_bound_rect() const;
-
-  CL_Signal_v1<CL_Pointf>& sig_set_pos();
+  void clear();
 
   bool is_null() const { return !impl.get(); }
+  Layer to_layer();
 private:
-  SharedPtr<ObjMapControlPointImpl> impl;
+  SharedPtr<OnionSkinLayerImpl> impl;  
 };
 
 #endif

@@ -26,7 +26,7 @@ public:
   CL_Pointf  pos;
   MetaData  data;
 
-  void draw();
+  void draw(CL_GraphicContext* gc);
   CL_Rect get_bound_rect() const;
   CL_Signal_v1<CL_Pointf> on_set_pos;
 };
@@ -46,15 +46,15 @@ ObjMapControlPoint::ObjMapControlPoint(CL_Sprite sprite_, CL_Pointf pos_, MetaDa
 }
 
 void
-ObjMapControlPoint::draw()
+ObjMapControlPoint::draw(CL_GraphicContext* gc)
 {
-  impl->draw();
+  impl->draw(gc);
 }
 
 void
-ObjMapControlPointImpl::draw()
+ObjMapControlPointImpl::draw(CL_GraphicContext* gc)
 {
-  sprite.draw(static_cast<int>(pos.x), static_cast<int>(pos.y));
+  sprite.draw(static_cast<int>(pos.x), static_cast<int>(pos.y), gc);
 }
 
 void

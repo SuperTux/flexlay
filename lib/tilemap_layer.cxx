@@ -55,8 +55,8 @@ public:
 
   bool has_bounding_rect() const;
   CL_Rect get_bounding_rect();
-  void draw(EditorMapComponent* parent);
-  void draw_tile(int id, int x, int y, bool attribute);
+  void draw(EditorMapComponent* parent, CL_GraphicContext* gc);
+  void draw_tile(int id, int x, int y, bool attribute, CL_GraphicContext* gc);
 };
 
 TilemapLayer::TilemapLayer()
@@ -94,7 +94,7 @@ TilemapLayer::~TilemapLayer()
 }
 
 void
-TilemapLayer::draw_tile(int id, int x, int y, bool attribute)
+TilemapLayer::draw_tile(int id, int x, int y, bool attribute, CL_GraphicContext* gc)
 {
   Tile* tile = impl->tileset.create(id);
 
@@ -105,23 +105,23 @@ TilemapLayer::draw_tile(int id, int x, int y, bool attribute)
 
       sprite.set_color(impl->foreground_color);
 
-      sprite.draw (x, y);
+      sprite.draw(x, y, gc);
       
       if (attribute)
-        CL_Display::fill_rect(CL_Rect(CL_Point(x, y), CL_Size(impl->tileset.get_tile_size(),
-                                                              impl->tileset.get_tile_size())),
-                              tile->get_attribute_color());
+        gc->fill_rect(CL_Rect(CL_Point(x, y), CL_Size(impl->tileset.get_tile_size(),
+                                                      impl->tileset.get_tile_size())),
+                      tile->get_attribute_color());
     }
 }
 
 void
-TilemapLayer::draw(EditorMapComponent* parent)
+TilemapLayer::draw(EditorMapComponent* parent, CL_GraphicContext* gc)
 {
-  impl->draw(parent);
+  impl->draw(parent, gc);
 }
 
 void
-TilemapLayerImpl::draw_tile(int id, int x, int y, bool attribute)
+TilemapLayerImpl::draw_tile(int id, int x, int y, bool attribute, CL_GraphicContext* gc)
 {
   Tile* tile = tileset.create(id);
 
@@ -132,7 +132,7 @@ TilemapLayerImpl::draw_tile(int id, int x, int y, bool attribute)
 
       sprite.set_color(foreground_color);
 
-      sprite.draw (x, y);
+      sprite.draw(x, y, gc);
       
       if (attribute)
         CL_Display::fill_rect(CL_Rect(CL_Point(x, y), CL_Size(tileset.get_tile_size(),
@@ -142,7 +142,7 @@ TilemapLayerImpl::draw_tile(int id, int x, int y, bool attribute)
 }
 
 void
-TilemapLayerImpl::draw(EditorMapComponent* parent)
+TilemapLayerImpl::draw(EditorMapComponent* parent, CL_GraphicContext* gc)
 {
   int tile_size = this->tileset.get_tile_size();
 
@@ -165,7 +165,8 @@ TilemapLayerImpl::draw(EditorMapComponent* parent)
       {
         draw_tile(this->field.at(x, y), 
                   x * tile_size, y * tile_size,
-                  this->draw_attribute);
+                  this->draw_attribute,
+                  gc);
       }
 
   if (this->draw_grid)

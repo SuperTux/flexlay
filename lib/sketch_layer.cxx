@@ -82,7 +82,7 @@ public:
       }
   }
   
-  void draw(EditorMapComponent* parent) 
+  void draw(EditorMapComponent* parent, CL_GraphicContext* gc) 
   {
     // Nothing to draw, so we go byebye
     if (strokes.empty()) 

@@ -26,7 +26,7 @@ class ObjMapSpriteObjectImpl : public ObjMapObjectImpl
 public:
   CL_Sprite sprite;
 
-  void draw();
+  void draw(CL_GraphicContext* gc);
   CL_Rectf get_bound_rect() const;
 
   ObjMapObject*  duplicate(int handle_);
@@ -47,9 +47,9 @@ ObjMapSpriteObject::ObjMapSpriteObject(const CL_Sprite& sprite_,
 }
 
 void
-ObjMapSpriteObjectImpl::draw()
+ObjMapSpriteObjectImpl::draw(CL_GraphicContext* gc)
 {
-  sprite.draw(pos.x, pos.y);
+  sprite.draw(pos.x, pos.y, gc);
 }
 
 CL_Rectf

@@ -21,6 +21,7 @@
 #define HEADER_LAYER_IMPL_HXX
 
 #include <ClanLib/Core/Math/rect.h>
+#include <ClanLib/Display/graphic_context.h>
 #include "meta_data.hxx"
 
 class EditorMapComponent;
@@ -41,7 +42,7 @@ public:
   LayerImpl() {}
   virtual ~LayerImpl() {}
 
-  virtual void draw(EditorMapComponent* parent) =0;
+  virtual void draw(EditorMapComponent* parent, CL_GraphicContext* gc) =0;
   virtual bool has_bounding_rect() const =0;
 
   // FIXME: Should use CL_Rectf

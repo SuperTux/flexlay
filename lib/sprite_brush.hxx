@@ -17,33 +17,25 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-#ifndef HEADER_OBJMAP_OBJECT_IMPL_HXX
-#define HEADER_OBJMAP_OBJECT_IMPL_HXX
+#ifndef HEADER_SPRITE_BRUSH_HXX
+#define HEADER_SPRITE_BRUSH_HXX
 
-#include <ClanLib/Core/Math/point.h>
-#include <ClanLib/Core/Math/rect.h>
-#include "objmap_object.hxx"
-#include "meta_data.hxx"
+#include <ClanLib/Display/sprite.h>
+#include "brush.hxx"
+#include "shared_ptr.hxx"
 
-class ObjMapObjectImpl 
+class SpriteBrushImpl;
+
+class SpriteBrush
 {
 public:
-  CL_Pointf  pos;
-  MetaData  data;
+  SpriteBrush(const CL_Sprite& sprite_);
 
-  CL_Signal_v1<ObjMapObject> on_move;
-  CL_Signal_v1<ObjMapObject> on_select;
-  CL_Signal_v1<ObjMapObject> on_deselect;
-
-  ObjMapObjectImpl();
-  virtual ~ObjMapObjectImpl();
-
-  virtual void draw(CL_GraphicContext* gc) =0;
-  virtual CL_Rectf get_bound_rect() const  =0;
-
-  virtual void add_control_points();
-  virtual void update_control_points();
+  Brush to_brush();
+private:
+  SharedPtr<SpriteBrushImpl> impl;
 };
+
 
 #endif
 

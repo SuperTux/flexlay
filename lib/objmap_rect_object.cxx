@@ -121,7 +121,7 @@ public:
     }
   }
 
-  void draw();
+  void draw(CL_GraphicContext* gc);
   CL_Rectf get_bound_rect() const;
   void add_control_points();
   void update_control_points();
@@ -214,9 +214,9 @@ ObjMapRectObject::ObjMapRectObject(const CL_Rect&  rect_,
 }
 
 void
-ObjMapRectObjectImpl::draw()
+ObjMapRectObjectImpl::draw(CL_GraphicContext* gc)
 {
-  CL_Display::fill_rect(get_bound_rect(), color);
+  gc->fill_rect(get_bound_rect(), color);
 }
 
 CL_Rectf
@@ -242,7 +242,7 @@ ObjMapRectObjectImpl::add_control_points()
   objmap.add_control_point(cp_top_right);
   objmap.add_control_point(cp_bottom_left);
   objmap.add_control_point(cp_bottom_right);
-  objmap.add_control_point(  cp_top_middle);
+  objmap.add_control_point(cp_top_middle);
   objmap.add_control_point(cp_bottom_middle);
   objmap.add_control_point(cp_middle_left);
   objmap.add_control_point(cp_middle_right);

@@ -21,6 +21,7 @@
 #define HEADER_OBJMAP_OBJECT_HXX
 
 #include <ClanLib/signals.h>
+#include <ClanLib/Display/graphic_context.h>
 #include <ClanLib/Core/Math/point.h>
 #include <ClanLib/Core/Math/rect.h>
 #include "meta_data.hxx"
@@ -46,7 +47,7 @@ public:
   CL_Signal_v1<ObjMapObject>& sig_select();
   CL_Signal_v1<ObjMapObject>& sig_deselect();
 
-  void draw();
+  void draw(CL_GraphicContext* gc);
   CL_Rectf get_bound_rect() const;
 
   void add_control_points();

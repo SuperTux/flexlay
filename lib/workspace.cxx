@@ -19,6 +19,7 @@
 
 #include <iostream>
 #include <ClanLib/Display/display.h>
+#include <ClanLib/Display/display_window.h>
 #include <ClanLib/Display/keys.h>
 #include "editor.hxx"
 #include "editor_map.hxx"
@@ -61,7 +62,7 @@ Workspace::draw()
 
   CL_Display::clear(CL_Color(100, 0, 100));
 
-  impl->editor_map.draw(EditorMapComponent::current());
+  impl->editor_map.draw(EditorMapComponent::current(), CL_Display::get_current_window()->get_gc());
   
   if (1) // has_mouse_over()) FIXME: Seperate cursor and state here
     impl->tool.draw();

@@ -29,7 +29,7 @@ public:
   
   ObjMapPathNodeImpl();
 
-  void draw();
+  void draw(CL_GraphicContext* gc);
   CL_Rectf get_bound_rect() const;
 };
 
@@ -40,22 +40,22 @@ ObjMapPathNodeImpl::ObjMapPathNodeImpl()
 }
 
 void
-ObjMapPathNodeImpl::draw()
+ObjMapPathNodeImpl::draw(CL_GraphicContext* gc)
 {
-  CL_Display::fill_rect(CL_Rect(CL_Point(pos) - CL_Point(16,16), CL_Size(32, 32)), 
-                        CL_Color(200, 255, 200));
+  gc->fill_rect(CL_Rect(CL_Point(pos) - CL_Point(16,16), CL_Size(32, 32)), 
+                CL_Color(200, 255, 200));
   if (next)
     {
-      CL_Display::draw_line(static_cast<int>(pos.x), static_cast<int>(pos.y),
-                            static_cast<int>((pos.x + next->pos.x)/2),
-                            static_cast<int>((pos.y+next->pos.y)/2),
-                            CL_Color(255, 255, 0));
+      gc->draw_line(static_cast<int>(pos.x), static_cast<int>(pos.y),
+                    static_cast<int>((pos.x + next->pos.x)/2),
+                    static_cast<int>((pos.y+next->pos.y)/2),
+                    CL_Color(255, 255, 0));
 
-      CL_Display::draw_line(static_cast<int>((pos.x + next->pos.x)/2), 
-                            static_cast<int>((pos.y+next->pos.y)/2),
-                            static_cast<int>(next->pos.x),
-                            static_cast<int>(next->pos.y), 
-                            CL_Color(255, 0, 0));
+      gc->draw_line(static_cast<int>((pos.x + next->pos.x)/2), 
+                    static_cast<int>((pos.y+next->pos.y)/2),
+                    static_cast<int>(next->pos.x),
+                    static_cast<int>(next->pos.y), 
+                    CL_Color(255, 0, 0));
     }
 }
 

@@ -39,7 +39,7 @@ public:
   ObjectLayerImpl() {}
   virtual ~ObjectLayerImpl() {}
   
-  void draw(EditorMapComponent* parent);
+  void draw(EditorMapComponent* parent, CL_GraphicContext* gc);
   bool has_bounding_rect() const { return false; }
 };
 
@@ -53,16 +53,16 @@ ObjectLayer::~ObjectLayer()
 }
 
 void
-ObjectLayerImpl::draw(EditorMapComponent* parent)
+ObjectLayerImpl::draw(EditorMapComponent* parent, CL_GraphicContext* gc)
 {
   for(ObjectLayer::Objects::iterator i = objects.begin(); i != objects.end(); ++i)
     {
-      (*i).draw();
+      (*i).draw(gc);
     }
 
   for(ObjectLayer::ControlPoints::iterator i = control_points.begin(); i != control_points.end(); ++i)
     {
-      (*i).draw();
+      (*i).draw(gc);
     }
 }
 

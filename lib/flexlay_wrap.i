@@ -35,6 +35,7 @@ std::cout << "CL_Error: " << err.message << std::endl;
 #include "layer.hxx"
 #include "tilemap_layer.hxx"
 #include "object_layer.hxx"
+#include "onion_skin_layer.hxx"
 
 #include "minimap.hxx"
 #include "editor_map.hxx"
@@ -66,6 +67,7 @@ std::cout << "CL_Error: " << err.message << std::endl;
 #include "brushmask.hxx"
 #include "brush.hxx"
 #include "generated_brush.hxx"
+#include "sprite_brush.hxx"
 
 #include "colorpicker.hxx"
 #include "slider.hxx"
@@ -151,6 +153,7 @@ VALUE CL_Point2Value(const CL_Point& arg)
 %include "layer.hxx"
 %include "tilemap_layer.hxx"
 %include "object_layer.hxx"
+%include "onion_skin_layer.hxx"
 
 %include "editor_map.hxx"
 %include "workspace.hxx"
@@ -181,6 +184,7 @@ VALUE CL_Point2Value(const CL_Point& arg)
 %include "brushmask.hxx"
 %include "brush.hxx"
 %include "generated_brush.hxx"
+%include "sprite_brush.hxx"
 
 %include "colorpicker.hxx"
 %include "slider.hxx"

@@ -71,10 +71,10 @@ ObjMapObject::set_metadata(MetaData data_)
 }
 
 void
-ObjMapObject::draw()
+ObjMapObject::draw(CL_GraphicContext* gc)
 {
   if (impl.get())
-    impl->draw();
+    impl->draw(gc);
 }
 
 CL_Rectf

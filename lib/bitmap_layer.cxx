@@ -85,7 +85,7 @@ public:
     delete canvas;
   }
 
-  void draw(EditorMapComponent* parent) 
+  void draw(EditorMapComponent* parent, CL_GraphicContext* gc) 
   {
     assert(canvas);
 
@@ -94,10 +94,10 @@ public:
       return;
 
     surface.set_blend_func(blend_one, blend_one_minus_src_alpha);
-    surface.draw(0, 0);
+    surface.draw(0, 0, gc);
 
     if (BitmapLayer::current()->impl.get() == this)
-      CL_Display::draw_rect(get_bounding_rect(), CL_Color(155, 155, 155, 100));
+      gc->draw_rect(get_bounding_rect(), CL_Color(155, 155, 155, 100));
   }
 
   CL_Rect get_bounding_rect() { 

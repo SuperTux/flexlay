@@ -41,9 +41,10 @@ class EditorMap
 public:
   EditorMap();
 
-  void draw(EditorMapComponent* parent);
+  /** FIXME: EditorMapComponent parameter shouldn't really be here */
+  void draw(EditorMapComponent* parent, CL_GraphicContext* gc);
 
-  void add_layer(const Layer& layer);
+  void add_layer(const Layer& layer, int pos = -1);
 
   bool is_modified() const;
   void set_unmodified();
@@ -59,6 +60,10 @@ public:
 
   bool has_bounding_rect() const;
   CL_Rect get_bounding_rect();
+
+  /** Set the bounding rect for this map, if the given rect is
+      CL_Rect() the bounding rect will be calculated automatically
+      from the content of the map */
   void    set_bounding_rect(const CL_Rect& rect);
 
   void set_background_color(const CL_Color& color);

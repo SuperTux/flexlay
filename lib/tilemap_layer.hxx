@@ -43,7 +43,7 @@ public:
   TilemapLayer(Tileset tileset, int w,  int h);
   ~TilemapLayer();
 
-  void draw(EditorMapComponent* parent);
+  void draw(EditorMapComponent* parent, CL_GraphicContext* gc);
 
   Tileset get_tileset();
 
@@ -64,7 +64,7 @@ public:
   /** Draw the given single tile to the map */
   void draw_tile(int id, const CL_Point& pos);
 
-  void draw_tile(int id, int x, int y, bool attribute);
+  void draw_tile(int id, int x, int y, bool attribute, CL_GraphicContext* gc);
 
   int get_width()  const;
   int get_height() const;

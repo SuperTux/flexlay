@@ -18,6 +18,7 @@
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include <iostream>
+#include <assert.h>
 #include <ClanLib/Core/core_iostream.h>
 #include <ClanLib/Display/display.h>
 #include <ClanLib/Display/keys.h>
@@ -67,31 +68,37 @@ EditorMap::EditorMap()
 }
 
 void
-EditorMap::add_layer(const Layer& layer)
+EditorMap::add_layer(const Layer& layer, int pos)
 {
-  impl->layers.push_back(layer);
+  assert(pos == -1 || (pos >= 0 && pos < int(impl->layers.size())));
+
+  if (pos == -1) // insert at last pos
+    impl->layers.push_back(layer);
+  else
+    impl->layers.insert(impl->layers.begin() + pos, layer);
+
   impl->serial += 1;
 }
 
 void
-EditorMap::draw (EditorMapComponent* parent)
+EditorMap::draw (EditorMapComponent* parent, CL_GraphicContext* gc)
 {
   CL_Rect rect = get_bounding_rect();
 
   if (rect != CL_Rect(0,0,0,0))
     {
-      CL_Display::fill_rect(rect, impl->background_color);
-      CL_Display::draw_rect(rect, impl->foreground_color);
+      gc->fill_rect(rect, impl->background_color);
+      gc->draw_rect(rect, impl->foreground_color);
     }
   else
     {
-      CL_Display::clear(impl->background_color);
+      gc->clear(impl->background_color);
     }
 
   for(EditorMapImpl::Layers::iterator i = impl->layers.begin(); i != impl->layers.end(); ++i)
-    (*i).draw(parent);
+    (*i).draw(parent, gc);
   
-  CL_Display::flush();
+  gc->flush();
 }
 
 bool

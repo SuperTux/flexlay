@@ -21,6 +21,7 @@
 #define HEADER_LAYER_HXX
 
 #include <ClanLib/Core/Math/rect.h>
+#include <ClanLib/Display/graphic_context.h>
 #include "meta_data.hxx"
 #include "shared_ptr.hxx"
 
@@ -48,7 +49,7 @@ public:
       the layer itself) */
   void     set_metadata(MetaData data_);
 
-  void draw(EditorMapComponent* parent);
+  void draw(EditorMapComponent* parent, CL_GraphicContext* gc);
   bool has_bounding_rect() const;
   CL_Rect get_bounding_rect();
 

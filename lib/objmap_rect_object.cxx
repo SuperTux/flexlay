@@ -42,33 +42,83 @@ public:
   ObjMapControlPoint cp_middle_left;
   ObjMapControlPoint cp_middle_right;  
 
-  void cp_top_left_move(CL_Point pos) {
-    cp_top_left.set_pos_raw(pos);
+  void set_rect(CL_Rect rect) {
+    pos  = CL_Point(rect.left, rect.top);
+    size = CL_Size(rect.get_width(), rect.get_height());
   }
-  void cp_top_right_move(CL_Point pos) {
-    cp_top_right.set_pos_raw(pos);
+
+  void cp_top_left_move(CL_Point pos_) {
+    size.width  += pos.x - pos_.x;
+    size.height += pos.y - pos_.y;
+    pos = pos_;
+
+    normalize_rect();
+    update_control_points();
   }
-  void cp_bottom_left_move(CL_Point pos) {
-    cp_bottom_left.set_pos_raw(pos);
+
+  void cp_top_right_move(CL_Point pos_) {
+    size.width  += pos_.x - (pos.x + size.width);
+    size.height += pos.y - pos_.y;
+    
+    pos.y = pos_.y;
+
+    normalize_rect();
+    update_control_points();
   }
-  void cp_bottom_right_move(CL_Point pos) {
-    cp_bottom_right.set_pos_raw(pos);
+
+  void cp_bottom_left_move(CL_Point pos_) {
+    size.width  += pos.x - pos_.x;
+    size.height += pos_.y - (pos.y + size.height);
+    pos.x = pos_.x;
+
+    normalize_rect();
+    update_control_points();
   }
-  void cp_top_middle_move(CL_Point pos) {
-    pos.x = cp_top_middle.get_pos().x;
-    cp_top_middle.set_pos_raw(pos);
+  void cp_bottom_right_move(CL_Point pos_) {
+    size.width  += pos_.x - (pos.x + size.width);
+    size.height += pos_.y - (pos.y + size.height);
+
+    normalize_rect();
+    update_control_points();
   }
-  void cp_bottom_middle_move(CL_Point pos) {
-    pos.x = cp_bottom_middle.get_pos().x;
-    cp_bottom_middle.set_pos_raw(pos);
+
+  void cp_top_middle_move(CL_Point pos_) {
+    size.height += pos.y - pos_.y;  
+    pos.y = pos_.y;
+
+    normalize_rect();
+    update_control_points();
   }
-  void cp_middle_left_move(CL_Point pos) {
-    pos.y = cp_middle_left.get_pos().y;
-    cp_middle_left.set_pos_raw(pos);
+  void cp_bottom_middle_move(CL_Point pos_) {
+    size.height += pos_.y - (pos.y + size.height);
+
+    normalize_rect();
+    update_control_points();
   }
-  void cp_middle_right_move(CL_Point pos) {
-    pos.y = cp_middle_right.get_pos().y;
-    cp_middle_right.set_pos_raw(pos);
+  void cp_middle_left_move(CL_Point pos_) {
+    size.width  += pos.x - pos_.x;
+    pos.x = pos_.x;
+
+    normalize_rect();
+    update_control_points();
+  }
+  void cp_middle_right_move(CL_Point pos_) {
+    size.width  += pos_.x - (pos.x + size.width);
+
+    normalize_rect();
+    update_control_points();
+  }
+
+  void normalize_rect() {
+    if (size.width < 0) {
+      pos.x     += size.width;
+      size.width = -size.width;
+    }
+
+    if (size.height < 0) {
+      pos.y      += size.height;
+      size.height = -size.height;
+    }
   }
 
   void draw();

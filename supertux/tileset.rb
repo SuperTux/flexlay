@@ -28,6 +28,8 @@ class Tileset
     end
 
     tree = tree[1..-1]
+    counter = 0
+    
     tree.each do |i|
       case i[0]
         when "tile"
@@ -65,7 +67,11 @@ class Tileset
         end
         @tilegroups.push(TileGroup.new(name, tiles))
       end
+
+      counter += 1
+      print "Loading tiles: %3.2f%%\r" % [counter.to_f/tree.length.to_f]
     end
+    puts ""
   end
 
   def create_ungrouped_tiles_group()

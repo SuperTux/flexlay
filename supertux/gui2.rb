@@ -7,76 +7,55 @@ else
   supertux_load_level(args[0])
 end
 
-button_panel = Panel.new(CL_Rect.new(CL_Point.new(0, 23), CL_Size.new(800, 33)), $gui.get_component())
+# button_panel = Panel.new(CL_Rect.new(CL_Point.new(0, 23), CL_Size.new(800, 33)), $gui.get_component())
+button_panel = ButtonPanel.new(0, 23, 800, 33, true, $gui.get_component)
 
-class Counter
-  counter = 0;
-  
-  def initialize(i)
-    @counter = i
-  end
-  
-  def inc(i)
-    @counter += i
-    return @counter
-  end
-end
+# File Handling
+button_panel.add_icon("../data/images/icons24/stock_new.png")
+button_panel.add_icon("../data/images/icons24/stock_open.png", proc{ gui_level_load() })
+button_panel.add_small_icon("../data/images/icons24/downarrow.png", proc{ $recent_files_menu.run() })
+button_panel.add_icon("../data/images/icons24/stock_save.png", proc{ gui_level_save() })
+button_panel.add_icon("../data/images/icons24/stock_save_as.png", proc{ gui_level_save_as() })
 
-p = Counter.new(2)
+# Copy&Paste
+button_panel.add_seperator()
+button_panel.add_icon("../data/images/icons24/stock_copy.png")
+button_panel.add_icon("../data/images/icons24/stock_paste.png")
 
-$new_icon = Icon.new(CL_Rect.new(CL_Point.new(p.inc(0),  2), CL_Size.new(32, 32)),
-                    make_sprite("../data/images/icons24/stock_new.png"), "Some tooltip", button_panel);
-$load_icon = Icon.new(CL_Rect.new(CL_Point.new(p.inc(32), 2), CL_Size.new(32, 32)),
-                     make_sprite("../data/images/icons24/stock_open.png"), "Some tooltip", button_panel);
-$load_recent_icon = Icon.new(CL_Rect.new(CL_Point.new(p.inc(32), 2), CL_Size.new(16, 32)),
-                        make_sprite("../data/images/icons24/downarrow.png"), "Some tooltip", button_panel);
-$save_icon        = Icon.new(CL_Rect.new(CL_Point.new(p.inc(16), 2), CL_Size.new(32, 32)),
-                        make_sprite("../data/images/icons24/stock_save.png"), "Some tooltip", button_panel);
-$save_as_icon     = Icon.new(CL_Rect.new(CL_Point.new(p.inc(32), 2), CL_Size.new(32, 32)),
-                        make_sprite("../data/images/icons24/stock_save_as.png"), "Some tooltip", button_panel);
-
-$load_icon.set_callback(proc{ gui_level_load() })
-$load_recent_icon.set_callback(proc{ $recent_files_menu.run() })
-$save_icon.set_callback(proc{ gui_level_save() })
-$save_as_icon.set_callback(proc{ gui_level_save_as() })
-
-$copy_icon    = Icon.new(CL_Rect.new(CL_Point.new(p.inc(48), 2), CL_Size.new(32, 32)),
-                    make_sprite("../data/images/icons24/stock_copy.png"), "Some tooltip", button_panel);
-$paste_icon   = Icon.new(CL_Rect.new(CL_Point.new(p.inc(32), 2), CL_Size.new(32, 32)),
-                    make_sprite("../data/images/icons24/stock_paste.png"), "Some tooltip", button_panel);
-
-$undo_icon = Icon.new(CL_Rect.new(CL_Point.new(p.inc(48), 2), CL_Size.new(32, 32)),
-                 make_sprite("../data/images/icons24/stock_undo.png"), "Some tooltip", button_panel);
-$redo_icon = Icon.new(CL_Rect.new(CL_Point.new(p.inc(32), 2), CL_Size.new(32, 32)),
-                 make_sprite("../data/images/icons24/stock_redo.png"), "Some tooltip", button_panel);
-
-$undo_icon.set_callback(proc{ $workspace.get_map().undo() })
-$redo_icon.set_callback(proc{ $workspace.get_map().redo() })
+# Undo Redo
+button_panel.add_seperator()
+$undo_icon = button_panel.add_icon("../data/images/icons24/stock_undo.png", proc{ $workspace.get_map().undo() })
+$redo_icon = button_panel.add_icon("../data/images/icons24/stock_redo.png", proc{ $workspace.get_map().redo() })
 
 $undo_icon.disable()
 $redo_icon.disable()
 
-$minimap_icon = Icon.new(CL_Rect.new(CL_Point.new(p.inc(48), 2), CL_Size.new(32, 32)),
-                    make_sprite("../data/images/icons24/minimap.png"), "Some tooltip", button_panel);
-$minimap_icon.set_callback(proc{ gui_toggle_minimap() })
+# Visibility Toggles
+button_panel.add_seperator()
+$minimap_icon = button_panel.add_icon("../data/images/icons24/minimap.png", proc{ gui_toggle_minimap() })
+$grid_icon    = button_panel.add_icon("../data/images/icons24/grid.png", proc{ gui_toggle_grid() })
 
-$grid_icon = Icon.new(CL_Rect.new(CL_Point.new(p.inc(32), 2), CL_Size.new(32, 32)),
-                 make_sprite("../data/images/icons24/grid.png"), "Some tooltip", button_panel);
-$grid_icon.set_callback(proc{ gui_toggle_grid() })
+# Layers
+button_panel.add_seperator()
+$background_icon = button_panel.add_icon("../data/images/icons24/background.png", proc{ gui_show_background() })
+$interactive_icon = button_panel.add_icon("../data/images/icons24/interactive.png", proc{ gui_show_interactive() })
+$foreground_icon = button_panel.add_icon("../data/images/icons24/foreground.png", proc{ gui_show_foreground() })
+$eye_icon = button_panel.add_icon("../data/images/icons24/eye.png", proc{ $layer_menu.run() })
 
-$background_icon  = Icon.new(CL_Rect.new(CL_Point.new(p.inc(48), 2), CL_Size.new(32, 32)),
-                        make_sprite("../data/images/icons24/background.png"), "Some tooltip", button_panel);
-$interactive_icon = Icon.new(CL_Rect.new(CL_Point.new(p.inc(32), 2), CL_Size.new(32, 32)),
-                        make_sprite("../data/images/icons24/interactive.png"), "Some tooltip", button_panel);
-$foreground_icon  = Icon.new(CL_Rect.new(CL_Point.new(p.inc(32), 2), CL_Size.new(32, 32)),
-                        make_sprite("../data/images/icons24/foreground.png"), "Some tooltip", button_panel);
-$eye_icon         = Icon.new(CL_Rect.new(CL_Point.new(p.inc(32), 2), CL_Size.new(32, 32)),
-                        make_sprite("../data/images/icons24/eye.png"), "Some tooltip", button_panel);
+button_panel.add_seperator()
+$sector_icon = button_panel.add_icon("../data/images/icons24/sector.png", proc{ gui_switch_sector_menu() })
 
-$sector_icon         = Icon.new(CL_Rect.new(CL_Point.new(p.inc(48), 2), CL_Size.new(32, 32)),
-                               make_sprite("../data/images/icons24/sector.png"), "Some tooltip", button_panel);
+button_panel.add_seperator()
+$run_icon = button_panel.add_icon("../data/images/icons24/run.png", proc{ gui_run_level() })
 
-$sector_icon.set_callback(proc{ gui_switch_sector_menu() })
+button_panel.add_icon("../data/images/icons24/eye.png", proc{ $tilegroup_menu.run() })
+
+# FIXME: Having position in the Menus here is EXTREMLY ugly
+$tilegroup_menu = Menu.new(CL_Point.new(35*15+2, 54), $gui.get_component())
+$tilegroup_menu.add_item($mysprite, "All Tiles", proc{$supertux.tileselector.set_tiles($tileset.get_tiles())})
+$tileset.tilegroups.each { |tilegroup|
+  $tilegroup_menu.add_item($mysprite, tilegroup.name, proc{$supertux.tileselector.set_tiles(tilegroup.tiles)})
+}
 
 $layer_menu = Menu.new(CL_Point.new(32*15+2, 54), $gui.get_component())
 
@@ -98,12 +77,6 @@ $object.set_callback(proc{ set_objmap_select_tool() })
 # move   = Icon.new(CL_Point.new(2, 32*2+2), make_sprite("../data/images/tools/stock-tool-move-22.png"), "Some tooltip", $toolbar);
 
 # SuperTux Specific stuff
-
-$foreground_icon.set_callback(proc{ gui_show_foreground() })
-$interactive_icon.set_callback(proc{ gui_show_interactive() })
-$background_icon.set_callback(proc{ gui_show_background() })
-$eye_icon.set_callback(proc{ $layer_menu.run() })
-
 $layer_menu.add_item($mysprite, "Show all", proc{ gui_show_all() })
 $layer_menu.add_item($mysprite, "Show current", proc{ gui_show_current() })
 $layer_menu.add_item($mysprite, "Show only current", proc{ gui_show_only_current() })
@@ -125,6 +98,8 @@ $menu.add_item("Edit/Resize to selection", proc{ gui_resize_level_to_selection()
 $menu.add_item("Edit/Debug Shell", proc{ run_python()})
 $menu.add_item("Edit/Add Sector...", proc{ gui_add_sector()})
 $menu.add_item("Edit/Remove Current Sector", proc{ gui_remove_sector()})
+$menu.add_item("Edit/Sector Properties", proc{ gui_edit_sector()})
+$menu.add_item("Edit/Level Properties", proc{ gui_edit_level()})
 
 $menu.add_item("Zoom/1:4 (25%) ",  proc{ gui_set_zoom(0.25) })
 $menu.add_item("Zoom/1:2 (50%) ",  proc{ gui_set_zoom(0.5) })
@@ -188,6 +163,7 @@ def gui_show_object_properties()
   end
 end
 
+# Keyboard shortcuts
 connect_v2($editor_map.sig_on_key("f1"), proc{ |x, y| gui_toggle_minimap()})
 connect_v2($editor_map.sig_on_key("m"),  proc{ |x, y| gui_toggle_minimap()})
 connect_v2($editor_map.sig_on_key("g"),  proc{ |x, y| gui_toggle_grid()})

@@ -20,6 +20,7 @@
 
 $config_file = File.expand_path("~/.flexlay/supertux.rb")
 
+# Config file loading hack
 if File.exist?($config_file) then
   require $config_file
 end
@@ -146,9 +147,21 @@ class DisplayProperties
   end
 end
 
+class TileGroup
+  attr_accessor :name, :tiles
+  
+  def initialize(name, tiles)
+    @name  = name
+    @tiles = tiles
+  end 
+end
+
 # Load game tiles from filename into tileset
 class Tileset
+  attr_accessor :tilegroups
+
   def load(filename)
+    puts "Loading Tileset: #{filename}"
     tree = sexpr_read_from_file(filename)
     if tree == nil then
       puts "Error; Couldn't load: ", filename
@@ -157,11 +170,14 @@ class Tileset
 
     tree = tree[1..-1]
     tree.each do |i|
-      if i[0] == "tile"
+      case i[0]
+        when "tile"
         data  = i[1..-1]
         id    = get_value_from_tree(['id', '_'], data, -1)
         image = get_value_from_tree(['editor-images', '_'], data, false)
         
+        # puts "Loading tile: #{id} => #{image}"
+
         if not(image)
           image = get_value_from_tree(['images', '_'], data, "notile.png")
         end
@@ -180,13 +196,46 @@ class Tileset
         else
           add_tile(id, Tile.new(pixelbuffer))
         end
+      when "tilegroup"
+        data  = i[1..-1]
+        name  = get_value_from_tree(['name', '_'], data, "Unnamed")
+        tiles = get_value_from_tree(['tiles'], data, [])
+        
+        if not @tilegroups then
+          @tilegroups = []
+        end
+        @tilegroups.push(TileGroup.new(name, tiles))
       end
     end
+  end
+
+  def create_ungrouped_tiles_group()
+    @tilegroups.push(TileGroup.new("Ungrouped Tiles", get_ungrouped_tiles()))
+  end
+
+  def get_ungrouped_tiles()
+    # Searches for tiles which are not yet grouped and creates a group
+    # for them
+    ungrouped_tiles = []
+    
+    # Potentially quite slow
+    get_tiles().each {|tile|
+      catch :tile_is_grouped do
+        tilegroups.each {|group|
+          if group.tiles.index(tile) then
+            throw :tile_is_grouped
+          end
+        }
+        ungrouped_tiles.push(tile)
+      end
+    }
+    return ungrouped_tiles
   end
 end
 
 $tileset = Tileset.new(32)
 $tileset.load($datadir + "images/tilesets/supertux.stgt")
+$tileset.create_ungrouped_tiles_group()
 
 $game_objects = [
   ["money", "images/shared/jumpy-left-middle-0.png", proc{|data| BadGuy.new("money")}],

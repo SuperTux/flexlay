@@ -6,6 +6,8 @@ class SuperTuxGUI
   tileselector    = nil
   objectselector  = nil
 
+  attr_reader :tileselector
+
   def initialize(tileset, gui)
     @selector_window = Panel.new(CL_Rect.new(CL_Point.new(800-134, 23+33), CL_Size.new(128 + 6, 558)),
                                  $gui.get_component())
@@ -211,6 +213,15 @@ def gui_toggle_display_props()
   $display_properties.set($workspace.get_map().get_metadata())    
 end
 
+def gui_run_level()
+  puts "Run this level..."
+  # FIXME: use real tmpfile
+  tmpfile = "/tmp/tmpflexlay-supertux.stl"
+  supertux_save_level(tmpfile)
+  # FIXME: doesn't work with latest supertux...
+  fork { exec("#{$datadir}/../supertux", tmpfile) }
+end
+
 def gui_resize_level()
   level = $workspace.get_map().get_metadata()
   dialog = GenericDialog.new("Resize Level", $gui.get_component())
@@ -339,10 +350,12 @@ def gui_add_sector()
   dialog = GenericDialog.new("Add Sector", $gui.get_component())
  
   dialog.add_string("Name: ", "newsector")
+  dialog.add_string("Music: ",   "")
+  dialog.add_float("Gravity: ", "10.0")
   dialog.add_int("Width: ",   30)
   dialog.add_int("Height: ",  20)
   
-  dialog.set_callback(proc { |name, width, height|
+  dialog.set_callback(proc { |name, music, gravity, width, height|
                         uniq_name = name
                         i = 1
                         while level.get_sectors().index(uniq_name)
@@ -352,8 +365,42 @@ def gui_add_sector()
 
                         sector = Sector.new(level)
                         sector.new_from_size(uniq_name, width, height)
+
+                        sector.song    = ""
+                        sector.gravity = "10.0"
+
                         level.add_sector(sector) 
                       })
 end  
+
+def gui_edit_level()
+  level = $workspace.get_map().get_metadata().get_level()
+  dialog = GenericDialog.new("Edit Sector", $gui.get_component())
+
+  dialog.add_string("Name:", level.name)
+  dialog.add_string("Author:", level.author)
+  dialog.add_int("Time:", level.time)
+
+  dialog.set_block() { |name, author, time|
+    level.name   = name
+    level.author = author
+    level.time   = time
+  }
+end
+
+def gui_edit_sector()
+  level = $workspace.get_map().get_metadata().get_level()
+  dialog = GenericDialog.new("Edit Sector", $gui.get_component())
+ 
+  dialog.add_string("Name: ",   level.current_sector.name)
+  dialog.add_string("Music: ",   level.current_sector.song)
+  dialog.add_float("Gravity: ", level.current_sector.gravity)
+  
+  dialog.set_block() { |name, song, gravity|
+    level.current_sector.name = name
+    level.current_sector.song = song
+    level.current_sector.gravity = gravity
+  }
+end
 
 # EOF #

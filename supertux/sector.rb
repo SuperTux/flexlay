@@ -14,8 +14,8 @@ class Sector
   objects   = nil
   editormap = nil
 
-  attr_reader :name, :objects, :background, :interactive, :foreground, :parent, :width, :height
-  attr_writer :name, :song, :gravity
+  attr_reader   :objects, :background, :interactive, :foreground, :parent, :width, :height
+  attr_accessor :name, :song, :gravity
   
   def initialize(parent)
     @parent = parent

@@ -51,6 +51,7 @@ make_sprite(const std::string& filename)
   return CL_Sprite(desc);
 }
 
+
 /*
 Tile
 make_tile(const char* filename, 

@@ -125,5 +125,4 @@
 %include "ruby_sexpr_parser.hxx"
 #endif
 
-
 /* EOF */

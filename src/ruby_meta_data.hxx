@@ -20,11 +20,16 @@
 #ifndef HEADER_RUBY_META_DATA_HXX
 #define HEADER_RUBY_META_DATA_HXX
 
+#include <ClanLib/signals.h>
 #include "ruby.h"
 #include "meta_data.hxx"
 
 MetaData  make_metadata(VALUE obj);
 VALUE get_ruby_object(const MetaData& data);
+
+void connect(CL_Signal_v0& sig, VALUE obj);
+void connect_v1(CL_Signal_v1<int>& sig, VALUE obj);
+void connect_v2(CL_Signal_v2<int, int>& sig, VALUE obj);
 
 #endif
 

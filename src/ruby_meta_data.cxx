@@ -17,8 +17,10 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
+#include <ClanLib/Signals/signal_v0.h>
 #include "ruby_object.hxx"
 #include "meta_data_impl.hxx"
+#include "ruby_functor.hxx"
 #include "ruby_meta_data.hxx"
 
 typedef MetaDataGeneric<RubyObject> RubyMetaData;
@@ -41,6 +43,24 @@ VALUE get_ruby_object(const MetaData& data_obj)
         }
     }
   return Qnil;
+}
+
+void connect(CL_Signal_v0& sig, VALUE obj)
+{
+  sig = CL_Signal_v0();
+  new CL_Slot(sig.connect_functor(RubyFunctor(obj)));
+}
+
+void connect_v1(CL_Signal_v1<int>& sig, VALUE obj)
+{
+  sig = CL_Signal_v1<int>();
+  new CL_Slot(sig.connect_functor(RubyFunctor(obj)));
+}
+
+void connect_v2(CL_Signal_v2<int, int>& sig, VALUE obj)
+{
+  sig = CL_Signal_v2<int, int>();
+  new CL_Slot(sig.connect_functor(RubyFunctor(obj)));
 }
 
 /* EOF */

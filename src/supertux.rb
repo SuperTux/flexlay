@@ -1,6 +1,12 @@
+BACKGROUND_LAYER  = 1
+INTERACTIVE_LAYER = 2
+FOREGROUND_LAYER  = 3
+
 # bla
 require "flexlay_wrap"
 include Flexlay_wrap
+
+require "flexlay.rb"
 
 require "sexpr.rb"
 
@@ -13,26 +19,26 @@ require "sexpr.rb"
 flexlay = Flexlay.new()
 flexlay.init()
 
-editor = Editor.new()
-gui = editor.get_gui_manager()
+$editor = Editor.new()
+$gui = $editor.get_gui_manager()
 
 myrect     = CL_Rect.new(CL_Point.new(0, 56), CL_Size.new(665, 488+56))
-editor_map = EditorMapComponent.new(myrect, gui.get_component())
-workspace  = Workspace.new(myrect.get_width(), myrect.get_height())
-editor_map.set_workspace(workspace)
+$editor_map = EditorMapComponent.new(myrect, $gui.get_component())
+$workspace  = Workspace.new(myrect.get_width(), myrect.get_height())
+$editor_map.set_workspace($workspace)
 
 # Tools
-tilemap_paint_tool  = TileMapPaintTool.new()
-tilemap_select_tool = TileMapSelectTool.new()
-zoom_tool           = ZoomTool.new()
-objmap_select_tool  = ObjMapSelectTool.new()
+$tilemap_paint_tool  = TileMapPaintTool.new()
+$tilemap_select_tool = TileMapSelectTool.new()
+$zoom_tool           = ZoomTool.new()
+$objmap_select_tool  = ObjMapSelectTool.new()
 
-workspace.set_tool(tilemap_paint_tool.to_tool());
+$workspace.set_tool($tilemap_paint_tool.to_tool());
 
-#mysprite = make_sprite("../data/images/icons16/stock_paste-16.png")
+$minimap = Minimap.new($editor_map, CL_Rect.new(CL_Point.new(3, 488+3-14), 
+                                               CL_Size.new(794-134-16, 50)), $editor_map)
 
-minimap = Minimap.new(editor_map, CL_Rect.new(CL_Point.new(3, 488+3-14), 
-                                              CL_Size.new(794-134-16, 50)), editor_map)
+require "gui.rb"
 
 class Config
   attr_reader :datadir;
@@ -43,6 +49,49 @@ class Config
 end
 
 $datadir = "/home/ingo/cvs/supertux/supertux/data/"
+
+class DisplayProperties
+  attr_reader :layer, :show_all, :current_only
+  attr_writer :layer, :show_all, :current_only
+
+  layer    = INTERACTIVE_LAYER
+  show_all = false
+  current_only = false
+    
+  def set(map)
+    if @current_only
+      active   = CL_Color.new(255, 255, 255)
+      deactive = CL_Color.new(0, 0, 0, 10)
+    else
+      active   = CL_Color.new(255, 255, 255)
+      deactive = CL_Color.new(150, 150, 250, 150)
+    end
+    
+    if (@show_all)
+      map.foreground.set_foreground_color(active)
+      map.interactive.set_foreground_color(active)
+      map.background.set_foreground_color(active)
+    else
+      if (@layer == FOREGROUND_LAYER)
+        map.foreground.set_foreground_color(active)
+      else
+        map.foreground.set_foreground_color(deactive)
+      end
+      
+      if (@layer == INTERACTIVE_LAYER)
+        map.interactive.set_foreground_color(active)
+      else
+        map.interactive.set_foreground_color(deactive)
+      end
+      
+      if (@layer == BACKGROUND_LAYER)
+        map.background.set_foreground_color(active)
+      else
+        map.background.set_foreground_color(deactive)
+      end
+    end
+  end
+end
 
 def Tileset_load(tileset, filename)
   "Load game tiles from filename into tileset"
@@ -69,6 +118,22 @@ end
 
 $tileset = Tileset.new(32)
 Tileset_load($tileset, $datadir + "images/tilesets/supertux.stgt")
+
+$game_objects = [["money", "images/shared/jumpy-left-middle-0.png"],
+                 ["snowball", "images/shared/snowball-left-0.png"],
+                 ["mriceblock", "images/shared/mriceblock-left-0.png"],
+                 ["mrbomb", "images/shared/mrbomb-left-0.png"],
+                 ["flame", "images/shared/flame-0.png"], 
+                 ["stalactite", "images/shared/stalactite.png"],
+                 ["fish", "images/shared/fish-left-0.png"],
+                 ["flyingsnowball", "images/shared/flyingsnowball-left-0.png"],
+                 ["bouncingsnowball", "images/shared/bouncingsnowball-left-0.png"],
+                 ["spiky", "images/shared/spiky-left-0.png"],
+                 ["resetpoint", "images/shared/resetpoint.png"],
+                 ["playerspawn", "images/shared/resetpoint.png"],
+                 ["door", "images/shared/door.png"],
+                 ["trampoline", "images/shared/trampoline-1.png"]]
+
 
 class Level
   version = 2
@@ -130,17 +195,17 @@ class Level
     @author  = get_value_from_tree(["author", "_"], data, "no author")
     @time    = int(get_value_from_tree(["time", "_"], data, "999"))
     
-    self.sectors = []
+    @sectors = []
     for sec in sexpr_filter("sector", data)
       sector = Sector.new(self)
       sector.load_v2(sec)
-      self.sectors.append(sector)
+      @sectors.append(sector)
       if sector.name == "main"
-        self.current_sector = sector
+        @current_sector = sector
       end
     end
     
-    if self.current_sector == nil
+    if @current_sector == nil
       print "Error: No main sector defined: ", sectors
     end
   end
@@ -217,7 +282,7 @@ class Level
     f.write("  ))\n\n")
 
     f.write("  (objects\n")
-    for obj in self.objects.get_objects()
+    for obj in @objects.get_objects()
       badguy = get_python_object(obj.get_metadata())
       if (badguy.__class__ == BadGuy)
         pos    = obj.get_pos()
@@ -229,7 +294,7 @@ class Level
     f.write("  )\n\n")
 
     f.write("  (reset-points\n")
-    for obj in self.objects.get_objects()
+    for obj in @objects.get_objects()
       badguy = get_python_object(obj.get_metadata())
       if (badguy.__class__ == BadGuy)
         pos    = obj.get_pos()
@@ -261,19 +326,19 @@ class Level
     f.write("  (theme \"%s\")\n" % @theme)
     
     f.write("  (interactive-tm\n")
-    for i in self.interactive.get_data()
+    for i in @interactive.get_data()
       f.write("%d " % i)
     end
     f.write("  )\n\n")
 
     f.write("  (background-tm\n")
-    for i in self.background.get_data()
+    for i in @background.get_data()
       f.write("%d " % i)
     end
     f.write("  )\n\n")
 
     f.write("  (foreground-tm\n")
-    for i in self.foreground.get_data()
+    for i in @foreground.get_data()
       f.write("%d " % i)
     end
     f.write("  )\n\n")
@@ -281,7 +346,7 @@ class Level
     f.write("  (camera\n")
     f.write("    (mode \"autoscroll\")\n")
     f.write("    (path\n")
-    for obj in self.objects.get_objects()
+    for obj in @objects.get_objects()
       pathnode = get_python_object(obj.get_metadata())
       if (pathnode.__class__ == PathNode)
         f.write("     (point (x %d) (y %d) (speed 1))\n" % obj.get_pos().x, obj.get_pos().y)
@@ -290,7 +355,7 @@ class Level
     f.write("  ))\n\n")
     
     f.write("  (objects\n")
-    for obj in self.objects.get_objects()
+    for obj in @objects.get_objects()
       badguy = get_python_object(obj.get_metadata())
       if (badguy.__class__ == BadGuy)
         pos    = obj.get_pos()
@@ -302,7 +367,7 @@ class Level
     f.write("  )\n\n")
     
     f.write("  (reset-points\n")
-    for obj in self.objects.get_objects()
+    for obj in @objects.get_objects()
       badguy = get_python_object(obj.get_metadata())
       if (badguy.__class__ == BadGuy)
         pos    = obj.get_pos()
@@ -353,7 +418,10 @@ class Sector
   
   objects   = nil
   editormap = nil
-  
+
+  attr_reader :background, :interactive, :foreground
+  attr_writer :background, :interactive, :foreground
+ 
   def initialize(parent)
     @parent = parent
   end
@@ -407,9 +475,9 @@ class Sector
       type = i[0]
       x = get_value_from_tree(["x", "_"], i[1..-1], [])
       y = get_value_from_tree(["y", "_"], i[1..-1], [])
-      object = game_objects.find{|x| x[0] == type}
+      object = $game_objects.find{|x| x[0] == type}
       if object != nil
-        @objects.add_object(ObjMapSpriteObject(make_sprite(config.datadir + object[1]),
+        @objects.add_object(ObjMapSpriteObject(make_sprite($datadir + object[1]),
                                                CL_Point(x, y),
                                                make_metadata(BadGuy(object[0]))).to_object())
       else
@@ -421,8 +489,8 @@ class Sector
       type = i[0]
       x = get_value_from_tree(["x", "_"], i[1..-1], [])
       y = get_value_from_tree(["y", "_"], i[1..-1], [])
-      object = find(game_objects, "resetpoint")
-      @objects.add_object(ObjMapSpriteObject(make_sprite(config.datadir + object[1]),
+      object = find($game_objects, "resetpoint")
+      @objects.add_object(ObjMapSpriteObject(make_sprite($datadir + object[1]),
                                              CL_Point(x, y),
                                              make_metadata(BadGuy(object[0]))).to_object())
     end
@@ -473,14 +541,14 @@ class Sector
       elsif name == "background"
         print "background unhandled"
       else
-        object = game_objects.find{|x| x[0] == name}
+        object = $game_objects.find{|x| x[0] == name}
         if object != nil
           (name, image) = object
           x = get_value_from_tree(["x", "_"], data, [])
           y = get_value_from_tree(["y", "_"], data, [])
-          @objects.add_object(ObjMapSpriteObject(make_sprite(config.datadir + image),
-                                                 CL_Point(x, y),
-                                                 make_metadata(BadGuy(name))).to_object())
+          @objects.add_object(ObjMapSpriteObject.new(make_sprite($datadir + image),
+                                                     CL_Point.new(x, y),
+                                                     make_metadata(BadGuy.new(name))).to_object())
         else
           print "Error: Couldn't resolve object type: ", name
           print "Sector: Unhandled tag: ", name
@@ -518,10 +586,9 @@ class Sector
   end
 end
 
-startlevel = Level.new(100, 50)
-startlevel.activate(workspace)
+require "gui2.rb"
 
-gui.run()
+$gui.run()
 flexlay.deinit()
 
 # EOF #

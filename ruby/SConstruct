@@ -19,6 +19,7 @@
 ##  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 import os
+import re
 import glob
 
 opts = Options('custom.py')
@@ -42,7 +43,19 @@ env.Command('swigrun_wrap.cxx', 'swigrun.i',
 env.SharedLibrary(target='libswigrun.so', source='swigrun_wrap.cxx',
               CPPPATH=['$USER_CPPPATH','$RUBYDIR'])
 
-Depends('../lib/flexlay_wrap.i', ['../lib/clanlib.i'])
+def gen_i_depends(path, filename):
+    print os.getcwd()
+    lst = []
+    regex = re.compile("^%include +\"(.*)\".*")
+    f = file(filename)
+    for i in f.readlines():
+        i = i[:-1]
+        if regex.match(i):
+            lst.append(path + "/" + regex.sub("\\1", i))
+    f.close()
+    return lst            
+
+Depends('../lib/flexlay_wrap.i', gen_i_depends(Dir("../lib").abspath, File("../lib/flexlay_wrap.i").abspath))
 env.Command('flexlay_ruby_wrap.cxx', '../lib/flexlay_wrap.i',
             "swig -noruntime -ruby -o $TARGET -c++ $SOURCE")
 

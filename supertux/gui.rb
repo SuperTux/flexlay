@@ -6,26 +6,29 @@ class SuperTuxGUI
   tileselector    = nil
   objectselector  = nil
 
-  attr_reader :tileselector, :editor_map, :workspace, :minimap
+  attr_reader :tileselector, :editor_map, :workspace, :minimap, :recent_files_menu
 
-  def initialize(tileset, gui)
+  def initialize()
+    @editor = Editor.new()
+    @gui    = @editor.get_gui_manager()
+
     @display_properties = DisplayProperties.new()
 
     myrect      = CL_Rect.new(CL_Point.new(0, 56), CL_Size.new(665, 488+56))
-    @editor_map = EditorMapComponent.new(myrect, $gui.get_component())
+    @editor_map = EditorMapComponent.new(myrect, @gui.get_component())
     @workspace  = Workspace.new(myrect.get_width(), myrect.get_height())
     @editor_map.set_workspace(@workspace)
     @workspace.set_tool($tilemap_paint_tool.to_tool());
     @minimap = Minimap.new(@editor_map, CL_Rect.new(CL_Point.new(3 + myrect.left, 
                                                                  488+3-14  + myrect.top), 
                                                     CL_Size.new(794-134-16, 50)), 
-                           $gui.get_component())
+                           @gui.get_component())
 
     @selector_window = Panel.new(CL_Rect.new(CL_Point.new(800-134, 23+33), CL_Size.new(128 + 6, 558)),
-                                 $gui.get_component())
+                                 @gui.get_component())
     @tileselector = TileSelector.new(CL_Rect.new(CL_Point.new(3, 3), CL_Size.new(128, 552)), @selector_window)
-    @tileselector.set_tileset(tileset)
-    @tileselector.set_tiles(tileset.get_tiles())
+    @tileselector.set_tileset($tileset)
+    @tileselector.set_tiles($tileset.get_tiles())
     @tileselector.show(false)
     
     @objectselector = ObjectSelector.new(CL_Rect.new(0, 0, 128, 256), 42, 42, @selector_window)
@@ -41,19 +44,21 @@ class SuperTuxGUI
     create_button_panel()
 
     # FIXME: Having position in the Menus here is EXTREMLY ugly
-    @tilegroup_menu = Menu.new(CL_Point.new(35*15+2, 54), $gui.get_component())
+    @tilegroup_menu = Menu.new(CL_Point.new(35*15+2, 54), @gui.get_component())
     @tilegroup_menu.add_item($mysprite, "All Tiles", proc{@tileselector.set_tiles($tileset.get_tiles())})
     $tileset.tilegroups.each { |tilegroup|
       @tilegroup_menu.add_item($mysprite, tilegroup.name, proc{@tileselector.set_tiles(tilegroup.tiles)})
     }
 
-    @layer_menu = Menu.new(CL_Point.new(32*15+2, 54), $gui.get_component())
+    @recent_files_menu = Menu.new(CL_Point.new(32*2, 54), @gui.get_component())
+
+    @layer_menu = Menu.new(CL_Point.new(32*15+2, 54), @gui.get_component())
     @layer_menu.add_item($mysprite, "Show all", proc{ gui_show_all() })
     @layer_menu.add_item($mysprite, "Show current", proc{ gui_show_current() })
     @layer_menu.add_item($mysprite, "Show only current", proc{ gui_show_only_current() })
 
     # FIXME: Use ButtonPanel here instead
-    @toolbar = Panel.new(CL_Rect.new(CL_Point.new(0, 23+33), CL_Size.new(33, 32*4+2)), $gui.get_component())
+    @toolbar = Panel.new(CL_Rect.new(CL_Point.new(0, 23+33), CL_Size.new(33, 32*4+2)), @gui.get_component())
 
     @paint = Icon.new(CL_Rect.new(CL_Point.new(2, 32*0+2), CL_Size.new(32, 32)), make_sprite("../data/images/tools/stock-tool-pencil-22.png"), "Some tooltip", @toolbar);
     @paint.set_callback(proc{ set_tilemap_paint_tool() })
@@ -69,12 +74,29 @@ class SuperTuxGUI
 
     create_menu()
 
-    @load_dialog = SimpleFileDialog.new("Load SuperTux Level", "Load", "Cancel", $gui.get_component())
+    @load_dialog = SimpleFileDialog.new("Load SuperTux Level", "Load", "Cancel", @gui.get_component())
     @load_dialog.set_filename($datadir + "levels/")
-    @save_dialog = SimpleFileDialog.new("Save SuperTux Level as...", "Save", "Cancel", $gui.get_component())
+    @save_dialog = SimpleFileDialog.new("Save SuperTux Level as...", "Save", "Cancel", @gui.get_component())
     @save_dialog.set_filename($datadir + "levels/")
 
     register_keyboard_shortcuts()
+
+    # Popup menu
+    connect_v2($objmap_select_tool.sig_on_right_click(), proc{|x,y|
+                 puts "Launching Menu at #{x}, #{y}"
+                 menu = Menu.new(CL_Point.new(x, y), @gui.get_component())
+                 menu.add_item($mysprite, "Delete Object(s)", proc{ 
+                                 puts "Trying to delete #{@workspace.get_map().get_metadata()} #{@workspace.get_map().get_metadata().objects}"
+                                 cmd = ObjectDeleteCommand.new(@workspace.get_map().get_metadata().objects)
+                                 $objmap_select_tool.get_selection().each { |i| cmd.add_object(i) }
+                                 @workspace.get_map().execute(cmd.to_command())
+                                 $objmap_select_tool.clear_selection()
+                               })
+                 menu.add_item($mysprite, "Edit Properties", proc{
+                                 puts "Implement me"
+                               })
+                 menu.run()
+               })
   end
 
   def register_keyboard_shortcuts()
@@ -99,12 +121,12 @@ class SuperTuxGUI
   end
 
   def create_menu()
-    @menu = CL_Menu.new($gui.get_component())
+    @menu = CL_Menu.new(@gui.get_component())
     @menu.add_item("File/Open...", method(:gui_level_load))
     @menu.add_item("File/Save...", method(:gui_level_save))
     # @menu.add_item("File/Save Commands...", menu_file_save_commands)
     @menu.add_item("File/Save As...", method(:gui_level_save_as))
-    @menu.add_item("File/Quit",  proc{ $gui.quit })
+    @menu.add_item("File/Quit",  proc{ @gui.quit })
     
     @menu.add_item("Edit/Smooth Selection", method(:gui_smooth_level_struct))
     @menu.add_item("Edit/Resize", method(:gui_resize_level))
@@ -123,13 +145,13 @@ class SuperTuxGUI
   end
 
   def create_button_panel()
-    # button_panel = Panel.new(CL_Rect.new(CL_Point.new(0, 23), CL_Size.new(800, 33)), $gui.get_component())
-    button_panel = ButtonPanel.new(0, 23, 800, 33, true, $gui.get_component)
+    # button_panel = Panel.new(CL_Rect.new(CL_Point.new(0, 23), CL_Size.new(800, 33)), @gui.get_component())
+    button_panel = ButtonPanel.new(0, 23, 800, 33, true, @gui.get_component)
     
     # File Handling
     button_panel.add_icon("../data/images/icons24/stock_new.png")
     button_panel.add_icon("../data/images/icons24/stock_open.png", proc{ self.gui_level_load() })
-    button_panel.add_small_icon("../data/images/icons24/downarrow.png", proc{ $recent_files_menu.run() })
+    button_panel.add_small_icon("../data/images/icons24/downarrow.png", proc{ @recent_files_menu.run() })
     button_panel.add_icon("../data/images/icons24/stock_save.png", proc{ self.gui_level_save() })
     button_panel.add_icon("../data/images/icons24/stock_save_as.png", proc{ self.gui_level_save_as() })
 
@@ -172,6 +194,10 @@ class SuperTuxGUI
     print "on_object_drop:\n"
     metadata = get_ruby_object(cppobj.get_metadata())
     cppobj.set_metadata(make_metadata(metadata[2].call(cppobj)))
+  end
+
+  def run()
+    @gui.run()
   end
 
   def show_objects()
@@ -318,7 +344,7 @@ class SuperTuxGUI
 
   def gui_resize_level()
     level = @workspace.get_map().get_metadata()
-    dialog = GenericDialog.new("Resize Level", $gui.get_component())
+    dialog = GenericDialog.new("Resize Level", @gui.get_component())
     dialog.add_int("Width: ", level.width)
     dialog.add_int("Height: ", level.height)
     dialog.add_int("X: ", 0)
@@ -379,7 +405,7 @@ class SuperTuxGUI
 
   def gui_edit_level()
     level = @workspace.get_map().get_metadata().get_level()
-    dialog = GenericDialog.new("Edit Sector", $gui.get_component())
+    dialog = GenericDialog.new("Edit Sector", @gui.get_component())
 
     dialog.add_string("Name:", level.name)
     dialog.add_string("Author:", level.author)
@@ -394,7 +420,7 @@ class SuperTuxGUI
 
   def gui_edit_sector()
     level = @workspace.get_map().get_metadata().get_level()
-    dialog = GenericDialog.new("Edit Sector", $gui.get_component())
+    dialog = GenericDialog.new("Edit Sector", @gui.get_component())
     
     dialog.add_string("Name: ",   level.current_sector.name)
     dialog.add_string("Music: ",   level.current_sector.song)
@@ -421,7 +447,7 @@ class SuperTuxGUI
 
   def gui_add_sector()
     level = @workspace.get_map().get_metadata().get_level()
-    dialog = GenericDialog.new("Add Sector", $gui.get_component())
+    dialog = GenericDialog.new("Add Sector", @gui.get_component())
     
     dialog.add_string("Name: ", "newsector")
     dialog.add_string("Music: ",   "")
@@ -448,7 +474,7 @@ class SuperTuxGUI
   end  
 
   def gui_switch_sector_menu()
-    mymenu = Menu.new(CL_Point.new(530, 54), $gui.get_component())
+    mymenu = Menu.new(CL_Point.new(530, 54), @gui.get_component())
     sector = @workspace.get_map().get_metadata()
     sector.parent.get_sectors().each do |i|
       if sector.name == i then
@@ -551,23 +577,69 @@ class SuperTuxGUI
   end
 end
 
-# FIXME: move this stuff into some non-gui dependend config
+class DisplayProperties
+  attr_reader :layer, :show_all, :current_only
+  attr_writer :layer, :show_all, :current_only
+
+  def initialize()
+    @layer        = INTERACTIVE_LAYER
+    @show_all     = false
+    @current_only = false
+  end
+  
+  def set(map)
+
+    if @current_only
+      active   = CL_Color.new(255, 255, 255)
+      deactive = CL_Color.new(0, 0, 0, 10)
+    else
+      active   = CL_Color.new(255, 255, 255)
+      deactive = CL_Color.new(150, 150, 250, 150)
+    end
+    
+    if (@show_all)
+      map.foreground.set_foreground_color(active)
+      map.interactive.set_foreground_color(active)
+      map.background.set_foreground_color(active)
+    else
+      if (@layer == FOREGROUND_LAYER)
+        map.foreground.set_foreground_color(active)
+      else
+        map.foreground.set_foreground_color(deactive)
+      end
+      
+      if (@layer == INTERACTIVE_LAYER)
+        map.interactive.set_foreground_color(active)
+      else
+        map.interactive.set_foreground_color(deactive)
+      end
+      
+      if (@layer == BACKGROUND_LAYER)
+        map.background.set_foreground_color(active)
+      else
+        map.background.set_foreground_color(deactive)
+      end
+    end
+  end
+end
+
+
 def supertux_load_level(filename)
   print "Loading: ", filename, "\n"
   level = Level.new(filename)
-  level.activate($supertux.workspace)
+  level.activate($gui.workspace)
   
   if not($recent_files.find{|el| el == filename}) then
     $recent_files.push(filename)
-    $recent_files_menu.add_item($mysprite, filename, 
+    $supertux.recent_files_menu.add_item($mysprite, filename, 
                                 proc { supertux_load_level(filename) })
   end
   
-  $supertux.minimap.update_minimap()
+  $gui.minimap.update_minimap()
 end
 
 def supertux_save_level(filename)
-  level = $supertux.workspace.get_map().get_metadata().parent
+  level = $gui.workspace.get_map().get_metadata().parent
   # Do backup save
   if File.exists?(filename) then
     File.rename(filename, filename + "~")

@@ -203,7 +203,10 @@ MenuImpl::draw()
 
   for(int i = 0; i < int(items.size()); ++i)
     {
-      items[i]->draw(x_pos, y_pos, i == current_item);
+      if (i == current_item)
+        items[i]->draw(x_pos, y_pos, true);
+      else
+        items[i]->draw(x_pos, y_pos, false);
       y_pos += items[i]->get_height() + 6;
     }
   CL_Display::pop_modelview();
@@ -236,18 +239,25 @@ MenuImpl::on_mouse_down(const CL_InputEvent& event)
 void
 MenuImpl::on_mouse_move(const CL_InputEvent& event)
 {
-  int y_pos = 6;
-
-  for(int i = 0; i < int(items.size()); ++i)
+  if (parent->has_mouse_over())
     {
-      y_pos += items[i]->get_height() + 6;      
-      if (y_pos > event.mouse_pos.y)
+      int y_pos = 6;
+
+      for(int i = 0; i < int(items.size()); ++i)
         {
-          current_item = i;
-          return;
+          y_pos += items[i]->get_height() + 6;      
+          if (y_pos > event.mouse_pos.y)
+            {
+              current_item = i;
+              return;
+            }
         }
+      current_item = -1;
     }
-  current_item = -1;
+  else
+    {
+      current_item = -1;
+    }
 }
 
 CL_Signal_v0&

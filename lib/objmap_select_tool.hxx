@@ -40,6 +40,7 @@ public:
   Selection get_selection() const;
   void set_selection(const Selection& sel);
 
+  CL_Signal_v2<int, int>& sig_on_right_click();
   CL_Signal_v1<CL_Menu*>& sig_on_popup_menu_display();
 
   Tool to_tool();

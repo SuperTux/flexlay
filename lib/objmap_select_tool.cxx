@@ -40,6 +40,7 @@ class ObjMapSelectToolImpl : public ToolImpl
 {
 public:
   CL_Signal_v1<CL_Menu*> on_popup_menu_display;
+  CL_Signal_v2<int, int> on_right_click;
 
   enum { DRAG, SELECT, NONE } state;
 
@@ -95,6 +96,12 @@ CL_Signal_v1<CL_Menu*>&
 ObjMapSelectTool::sig_on_popup_menu_display()
 {
   return impl->on_popup_menu_display; 
+}
+
+CL_Signal_v2<int, int>&
+ObjMapSelectTool::sig_on_right_click()
+{
+  return impl->on_right_click;
 }
 
 void
@@ -159,10 +166,14 @@ ObjMapSelectToolImpl::on_mouse_up(const CL_InputEvent& event)
 
     case CL_MOUSE_RIGHT:
       {
+        on_right_click(event.mouse_pos.x + parent->get_screen_rect().left,
+                       event.mouse_pos.y + parent->get_screen_rect().top);
+        /*
         PopupMenu* menu = new PopupMenu(CL_Point(event.mouse_pos.x + parent->get_screen_rect().left,
                                                  event.mouse_pos.y + parent->get_screen_rect().top), 
                                         GUIManager::current()->get_component());
-        on_popup_menu_display(menu->get_menu());
+
+                                        on_popup_menu_display(menu->get_menu());*/
       }
       break;
     }

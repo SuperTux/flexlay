@@ -1,0 +1,17 @@
+ToDo:
+=====
+
+ - smooth selection
+ - tile editor
+ - wrapper sexpr parser into a read class, LispReader like
+ - turn proc{} into blocks
+ - get rid of 'mysprite'
+ - scrollbar in tileselector
+ - object properties
+
+Bugs
+====
+
+ - switching to the current sector resets visible properties
+
+# EOF #

@@ -36,9 +36,11 @@ public:
   void execute();
   void redo();
   void undo();
+  std::string serialize() { return ""; }
 };
 
 ObjectDeleteCommand::ObjectDeleteCommand(const ObjectLayer& o)
+  : impl(new ObjectDeleteCommandImpl())
 {
   impl->object_layer = o;
 }

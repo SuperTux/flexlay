@@ -39,9 +39,6 @@ require "sexpr.rb"
 flexlay = Flexlay.new()
 flexlay.init()
 
-$editor = Editor.new()
-$gui = $editor.get_gui_manager()
-
 # Tools
 $tilemap_paint_tool  = TileMapPaintTool.new()
 $tilemap_select_tool = TileMapSelectTool.new()
@@ -49,16 +46,6 @@ $zoom_tool           = ZoomTool.new()
 $objmap_select_tool  = ObjMapSelectTool.new()
 
 $mysprite = make_sprite("../data/images/icons16/stock_paste-16.png")
-
-$recent_files_menu = Menu.new(CL_Point.new(32*2, 54), $gui.get_component())
-
-if !$recent_files then
-  $recent_files = []
-end
-
-$recent_files.each do |filename|
-  $recent_files_menu.add_item($mysprite, filename, proc{ supertux_load_level(filename) })
-end
 
 # $console = Console.new(CL_Rect.new(CL_Point.new(50, 100), CL_Size.new(400, 200)),
 #                        $gui.get_component())
@@ -89,225 +76,38 @@ if !$datadir then
   $datadir = File.expand_path("~/cvs/supertux/supertux/data/")+"/"
 end
 
-class DisplayProperties
-  attr_reader :layer, :show_all, :current_only
-  attr_writer :layer, :show_all, :current_only
-
-  def initialize()
-    @layer        = INTERACTIVE_LAYER
-    @show_all     = false
-    @current_only = false
-  end
-  
-  def set(map)
-
-    if @current_only
-      active   = CL_Color.new(255, 255, 255)
-      deactive = CL_Color.new(0, 0, 0, 10)
-    else
-      active   = CL_Color.new(255, 255, 255)
-      deactive = CL_Color.new(150, 150, 250, 150)
-    end
-    
-    if (@show_all)
-      map.foreground.set_foreground_color(active)
-      map.interactive.set_foreground_color(active)
-      map.background.set_foreground_color(active)
-    else
-      if (@layer == FOREGROUND_LAYER)
-        map.foreground.set_foreground_color(active)
-      else
-        map.foreground.set_foreground_color(deactive)
-      end
-      
-      if (@layer == INTERACTIVE_LAYER)
-        map.interactive.set_foreground_color(active)
-      else
-        map.interactive.set_foreground_color(deactive)
-      end
-      
-      if (@layer == BACKGROUND_LAYER)
-        map.background.set_foreground_color(active)
-      else
-        map.background.set_foreground_color(deactive)
-      end
-    end
-  end
-end
-
-class TileGroup
-  attr_accessor :name, :tiles
-  
-  def initialize(name, tiles)
-    @name  = name
-    @tiles = tiles
-  end 
-end
-
-# Load game tiles from filename into tileset
-class Tileset
-  alias old_initialize initialize
-
-  attr_accessor :tilegroups
-
-  def initialize(*params)
-    old_initialize(*params)
-
-    @tilegroups = []
-  end
-
-  def load(filename)
-    puts "Loading Tileset: #{filename}"
-    tree = sexpr_read_from_file(filename)
-    if tree == nil then
-      puts "Error; Couldn't load: ", filename
-      return 
-    end
-
-    tree = tree[1..-1]
-    tree.each do |i|
-      case i[0]
-        when "tile"
-        data  = i[1..-1]
-        id    = get_value_from_tree(['id', '_'], data, -1)
-        image = get_value_from_tree(['editor-images', '_'], data, false)
-        
-        # puts "Loading tile: #{id} => #{image}"
-
-        if not(image)
-          image = get_value_from_tree(['images', '_'], data, "notile.png")
-        end
-        
-        if image.is_a?(String) then
-          pixelbuffer = make_pixelbuffer($datadir + 'images/tilesets/' + image)
-        elsif image.is_a?(Array) then
-          if image[0] == "region" then
-            pixelbuffer = make_region_pixelbuffer($datadir + 'images/tilesets/' + image[1],
-                                                  image[2], image[3], image[4], image[5])
-          end
-        end
-        
-        if id == 0 then
-          add_tile(id, nil)
-        else
-          add_tile(id, Tile.new(pixelbuffer))
-        end
-      when "tilegroup"
-        data  = i[1..-1]
-        name  = get_value_from_tree(['name', '_'], data, "Unnamed")
-        tiles = get_value_from_tree(['tiles'], data, [])
-        
-        if not @tilegroups then
-          @tilegroups = []
-        end
-        @tilegroups.push(TileGroup.new(name, tiles))
-      end
-    end
-  end
-
-  def create_ungrouped_tiles_group()
-    @tilegroups.push(TileGroup.new("Ungrouped Tiles", get_ungrouped_tiles()))
-  end
-
-  def get_ungrouped_tiles()
-    # Searches for tiles which are not yet grouped and creates a group
-    # for them   
-    # Potentially quite slow
-    ungrouped_tiles = []
-    get_tiles().each {|tile|
-      catch :tile_is_grouped do
-        tilegroups.each {|group|
-          if group.tiles.index(tile) then
-            throw :tile_is_grouped
-          end
-        }
-        ungrouped_tiles.push(tile)
-      end
-    }
-    return ungrouped_tiles
-  end
-end
+require "data.rb"
+require "level.rb"
+require "sector.rb"
+require "tileset.rb"
 
 $tileset = Tileset.new(32)
 $tileset.load($datadir + "images/tilesets/supertux.stgt")
 $tileset.create_ungrouped_tiles_group()
 
-$game_objects = [
-  ["money", "images/shared/jumpy-left-middle-0.png", proc{|data| BadGuy.new("money")}],
-  ["snowball", "images/shared/snowball-left-0.png", proc{|data| BadGuy.new("snowball")}],
-  ["mriceblock", "images/shared/mriceblock-left-0.png", proc{|data| BadGuy.new("mriceblock")}],
-  ["mrbomb", "images/shared/mrbomb-left-0.png", proc{|data| BadGuy.new("mrbomb")}],
-  ["flame", "images/shared/flame-0.png", proc{|data| BadGuy.new("flame")}], 
-  ["stalactite", "images/shared/stalactite.png", proc{|data| BadGuy.new("stalactite")}],
-  ["fish", "images/shared/fish-left-0.png", proc{|data| BadGuy.new("fish")}],
-  ["flyingsnowball", "images/shared/flyingsnowball-left-0.png", proc{|data| BadGuy.new("flyingsnowball")}],
-  ["bouncingsnowball", "images/shared/bouncingsnowball-left-0.png", proc{|data| BadGuy.new("bouncingsnowball")}],
-  ["spiky", "images/shared/spiky-left-0.png", proc{|data| BadGuy.new("spiky")}],
-  ["playerspawn", "images/shared/resetpoint.png", proc{|data| SpawnPoint.new(data)}],
-  ["door", "images/shared/door-1.png", proc{|data| Door.new(data)}],
-  ["trampoline", "images/shared/trampoline-1.png", proc{|data| BadGuy.new("trampoline")}]
-]
 
-$solid_itiles = [10, 11, 12, 13, 14, 15, 20, 21, 22, 23, 30, 31, 113, 114]
-$air_itiles   = [7, 8, 9, 16, 17, 18, 0]
+$gui = SuperTuxGUI.new()
 
-$itile_conditions = [
-  [0, 0, 0, 0, 0, 1, 0, 1, 1, 7],
-  [0, 0, 1, 0, 0, 1, 0, 1, 1, 7],
-  [0, 0, 0, 0, 0, 0, 0, 1, 1, 7],
-  [0, 0, 0, 0, 0, 0, 1, 1, 1, 8],
-  [0, 0, 0, 0, 0, 0, 1, 1, 0, 9],
-  [0, 1, 1, 0, 0, 0, 0, 0, 0, 16],
+if !$recent_files then
+  $recent_files = []
+end
 
-  [1, 1, 1, 0, 0, 0, 0, 0, 0, 17],
-  [1, 1, 1, 1, 0, 0, 0, 0, 0, 17],
-  [1, 1, 1, 0, 0, 1, 0, 0, 0, 17],
-  [1, 1, 1, 1, 0, 0, 1, 0, 0, 17],
-  [1, 1, 1, 0, 0, 1, 0, 0, 1, 17],
-
-  [1, 1, 0, 0, 0, 0, 0, 0, 0, 18],
-
-  [0, 1, 1, 0, 1, 1, 0, 0, 0, 10],
-  [1, 1, 1, 0, 1, 1, 0, 0, 0, 11],
-  [1, 1, 0, 1, 1, 0, 0, 0, 0, 12],
-
-  [0, 1, 1, 0, 1, 1, 0, 1, 1, 10],
-  [1, 1, 1, 1, 1, 1, 1, 1, 1, 11],
-  [1, 1, 0, 1, 1, 0, 1, 1, 0, 12],
-
-  [0, 0, 0, 0, 1, 1, 0, 1, 1, 13],
-  [0, 0, 0, 1, 1, 1, 1, 1, 1, 14],
-  [0, 0, 0, 1, 1, 0, 1, 1, 0, 15],
-  [1, 0, 0, 1, 1, 1, 1, 1, 1, 20],
-  [1, 1, 0, 1, 1, 0, 1, 1, 1, 21],
-  [0, 1, 1, 0, 1, 1, 1, 1, 1, 22],
-  [0, 0, 1, 1, 1, 1, 1, 1, 1, 23],
-
-  [1, 1, 1, 1, 1, 0, 1, 1, 0, 30],
-  [1, 1, 1, 0, 1, 1, 0, 1, 1, 31],
-
-  [0, 0, 0, 1, 1, 0, 1, 1, 1, 113],
-  [0, 0, 0, 0, 1, 1, 1, 1, 1, 114],
-
-]
-
-require "level.rb"
-require "sector.rb"
-
-$supertux = SuperTuxGUI.new($tileset, $gui)
+$recent_files.each do |filename|
+  $gui.recent_files_menu.add_item($mysprite, filename, proc{ supertux_load_level(filename) })
+end
 
 if ARGV == []
-  Level.new(100, 50).activate($supertux.workspace)
+  Level.new(100, 50).activate($gui.workspace)
 else
   supertux_load_level(ARGV[0])
 end
 
 # Init the GUI, so that button state is in sync with internal state
-$supertux.gui_toggle_minimap()
-$supertux.gui_toggle_minimap()
-$supertux.gui_show_interactive()
-$supertux.gui_show_current()
-$supertux.set_tilemap_paint_tool()
+$gui.gui_toggle_minimap()
+$gui.gui_toggle_minimap()
+$gui.gui_show_interactive()
+$gui.gui_show_current()
+$gui.set_tilemap_paint_tool()
 
 $gui.run()
 

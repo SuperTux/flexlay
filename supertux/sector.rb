@@ -207,7 +207,7 @@ class Sector
     workspace.set_map(@editormap)
     TilemapLayer.set_current(@interactive)
     ObjectLayer.set_current(@objects)
-    connect(@editormap.sig_change(), proc{$supertux.on_map_change()})
+    connect(@editormap.sig_change(), proc{$gui.on_map_change()})
   end
 
   def save_tilemap(f, tilemap, name, solid = nil)

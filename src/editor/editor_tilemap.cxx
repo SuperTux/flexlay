@@ -1,4 +1,4 @@
-//  $Id: editor_tilemap.cxx,v 1.12 2003/09/23 22:07:32 grumbel Exp $
+//  $Id: editor_tilemap.cxx,v 1.13 2003/09/24 18:19:13 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -37,6 +37,8 @@ EditorTileMap::EditorTileMap(CL_Component* parent)
   slots.connect(sig_mouse_down(), this, &EditorTileMap::mouse_down);
   slots.connect(sig_mouse_move(), this, &EditorTileMap::mouse_move);
 
+  diamond_map = 0;
+
   new_level(80, 30);
 
   trans_offset     = CL_Pointf(0,0);
@@ -66,6 +68,8 @@ void
 EditorTileMap::new_level(int w, int h)
 {
   cleanup();
+
+  diamond_map = new Field<int>(w*2, h*2);
 
   current_field = new Field<EditorTile*> (w, h);
   for (int y = 0; y < current_field->get_height (); ++y) {
@@ -198,6 +202,20 @@ EditorTileMap::draw ()
       tool->draw();
     }
 
+  if (diamond_map)
+    {
+      for(int y = 0; y < diamond_map->get_height(); ++y)
+        for(int x = 0; x < diamond_map->get_width(); ++x)
+          {
+            if ((*diamond_map)(x, y))
+              {
+                CL_Display::fill_rect(CL_Rect(CL_Point(x*64, y*64),
+                                              CL_Size(64, 64)),
+                                      CL_Color(255, 255, 0, 155));
+              }
+          }
+    }
+
   CL_Display::pop_translate_offset();
   // glPopMatrix();
 }
@@ -221,6 +239,8 @@ EditorTileMap::cleanup()
       delete *i;
     }
   fields.clear();
+  delete diamond_map;
+  diamond_map = 0;
 }
 
 void
@@ -235,13 +255,14 @@ EditorTileMap::load(const std::string& filename)
 
   fields.push_back(current_field);
 
-  for (int y = 0; y < current_field->get_height (); ++y) {
-    for (int x = 0; x < current_field->get_width (); ++x)
-      {
-	int name = data.get_background_tilemap()->at(x, y);
-	current_field->at (x, y) = new EditorTile (name);
-      }
-  }
+  for (int y = 0; y < current_field->get_height (); ++y) 
+    {
+      for (int x = 0; x < current_field->get_width (); ++x)
+        {
+          int name = data.get_background_tilemap()->at(x, y);
+          current_field->at (x, y) = new EditorTile (name);
+        }
+    }
 
   current_field = new Field<EditorTile*>(data.get_tilemap()->get_width (),
                                          data.get_tilemap()->get_height ());
@@ -255,6 +276,7 @@ EditorTileMap::load(const std::string& filename)
       }
   }
 
+  diamond_map = new Field<int>(*data.get_diamond_map());
 }
 
 EditorTile*

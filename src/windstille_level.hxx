@@ -1,4 +1,4 @@
-//  $Id: windstille_level.hxx,v 1.7 2003/09/20 21:53:38 grumbel Exp $
+//  $Id: windstille_level.hxx,v 1.8 2003/09/24 18:19:13 grumbel Exp $
 // 
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -24,11 +24,17 @@
 #include <string>
 #include "field.hxx"
 
+/** FIXME: Move this to the guile side */
 class WindstilleLevel
 {
 private:
+  int width;
+  int height;
+
   Field<int>* tilemap;
   Field<int>* background_tilemap;
+
+  Field<int>* diamond_map;
 
   std::vector<std::string> scripts;
 
@@ -37,6 +43,9 @@ public:
 
   Field<int>* get_tilemap() const { return tilemap; }
   Field<int>* get_background_tilemap() const { return background_tilemap; }
+
+  Field<int>* get_diamond_map() { return diamond_map; }
+
   std::vector<std::string>* get_scripts() { return &scripts; }
 private:
   void parse_file (const std::string& filename);
@@ -46,6 +55,7 @@ private:
   void parse_foreground_tilemap (SCM cur);
   void parse_background_tilemap (SCM cur);
   void parse_water(SCM cur);
+  void parse_diamond_map(SCM cur);
   void parse_backgound_tilemap (SCM cur);
   void parse_gameobjects (SCM cur);
 };

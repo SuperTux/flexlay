@@ -1,4 +1,4 @@
-//  $Id: windstille_level.cxx,v 1.10 2003/09/12 20:17:06 grumbel Exp $
+//  $Id: windstille_level.cxx,v 1.11 2003/09/24 18:19:13 grumbel Exp $
 //
 //  Windstille - A Jump'n Shoot Game
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -28,12 +28,16 @@ WindstilleLevel::WindstilleLevel (const std::string& filename)
   : tilemap(0),
     background_tilemap(0)
 {
+  width  = 50;
+  height = 50;
   parse_file (filename);
 }
 
 void 
 WindstilleLevel::parse_file (const std::string& filename)
 {
+  diamond_map = 0;
+
   std::cout << "Windstille Level: " << filename << std::endl;
   
   SCM input_stream = scm_open_file(gh_str02scm(filename.c_str()), 
@@ -67,6 +71,14 @@ WindstilleLevel::parse_file (const std::string& filename)
               else if (gh_equal_p(gh_symbol2scm("water"), name)) 
                 {
                   parse_water(data);
+                }
+              else if (gh_equal_p(gh_symbol2scm("properties"), name))
+                {
+                  parse_properties(data);
+                }
+              else if (gh_equal_p(gh_symbol2scm("diamond-map"), name)) 
+                {
+                  parse_diamond_map(data);
                 }
               else
                 {
@@ -112,24 +124,36 @@ WindstilleLevel::parse_water(SCM tree)
 }
 
 void
-WindstilleLevel::parse_properties (SCM cur)
+WindstilleLevel::parse_properties (SCM tree)
 {
-#if 0
-  std::cout << "Parsinc properties" << std::endl;
-
-  cur = cur->children;
-
-  while (cur != NULL)
+  while (!gh_null_p(tree))
     {
-      if (xmlIsBlankNode(cur)) {
-	cur = cur->next;
-	continue;
-      } else {
-	std::cout << "Error: parse_properties: Unknown tag: " << cur->name << std::endl;
-      }
-      cur = cur->next;
+      SCM current = gh_car(tree);
+
+      if (gh_pair_p(current))
+        {
+          SCM name    = gh_car(current);
+          SCM data    = gh_cadr(current);
+      
+          if (gh_equal_p(gh_symbol2scm("width"), name)) 
+            {
+              width  = gh_scm2int(data);
+            }
+          else if (gh_equal_p(gh_symbol2scm("height"), name))
+            {
+              height = gh_scm2int(data);
+            }
+          else
+            {
+              std::cout << "WindstilleLevel::parse_properties: Unknown tag: " 
+                        << std::endl;
+            }
+
+          tree = gh_cdr(tree);
+        }
     }
-#endif
+
+  std::cout << "WindstilleLevel: dimensions: " << width << "x" << height << std::endl;
 }
 
 void
@@ -147,14 +171,7 @@ WindstilleLevel::parse_foreground_tilemap (SCM cur)
 Field<int>* 
 WindstilleLevel::parse_tilemap (SCM cur)
 {
-  int width  = gh_scm2int(gh_cadar(cur));
-  int height = gh_scm2int(gh_car(gh_cdadr(cur)));
-  
-  std::cout << "WindstilleLevel: Size: " << width << "x" << height << std::endl;
-  
   Field<int>* field = new Field<int>(width, height);
-
-  cur = gh_cddr(cur);
   
   int x = 0;
   int y = 0;
@@ -187,6 +204,38 @@ WindstilleLevel::parse_tilemap (SCM cur)
       cur = gh_cdr(cur);
     }
   return field;
+}
+
+void
+WindstilleLevel::parse_diamond_map(SCM data)
+{
+  diamond_map = new Field<int>(width, height);
+
+  for(Field<int>::iterator i = diamond_map->begin(); i != diamond_map->end(); ++i)
+    {
+      *i = false;
+    }
+  
+  int x = 0;
+  int y = 0;
+
+  while (!gh_null_p(data) && y < height)
+    {
+      (*diamond_map)(x, y) = gh_scm2int(gh_car(data));
+              
+      x += 1;
+
+      if (x >= width)
+        {
+          x = 0;
+          y += 1;
+        }
+              
+      data = gh_cdr(data);
+    }
+
+  if (y != height)
+    std::cout << "WindstilleLevel: Something went wrong: y=" << y << " height=" << height << std::endl;
 }
 
 void

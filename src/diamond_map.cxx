@@ -1,4 +1,4 @@
-//  $Id: diamond_map.cxx,v 1.4 2003/09/21 18:05:21 grumbel Exp $
+//  $Id: diamond_map.cxx,v 1.5 2003/09/24 18:19:13 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -31,6 +31,14 @@ DiamondMap::DiamondMap(int w, int h)
   for(int y = 0; y < height; ++y)
     for(int x = 0; x < width; ++x)
       dmap[width * y + x] = (rand()%5 == 1);
+
+  num_diamonds = 0;
+  for(int y = 0; y < height; ++y)
+    for(int x = 0; x < width; ++x)
+      {
+        if (dmap[width * y + x])
+          num_diamonds += 1;
+      }
 }
 
 DiamondMap::~DiamondMap()
@@ -60,11 +68,17 @@ DiamondMap::update (float delta)
 {
   CL_Vector pos = Player::current()->get_pos();
 
-  dmap[width * (int(pos.y)/64) + (int(pos.x)/64)] = false;
+  dmap[width * (int(pos.y)/64) + (int(pos.x)/64)]     = false;
   dmap[width * ((int(pos.y)/64)-1) + (int(pos.x)/64)] = false;
   dmap[width * ((int(pos.y)/64)-2) + (int(pos.x)/64)] = false;
 
   sprite.update(delta);
+}
+
+int 
+DiamondMap::get_num_diamonds()
+{
+  return num_diamonds;
 }
 
 /* EOF */

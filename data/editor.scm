@@ -33,7 +33,7 @@
   (let ((level (serialize-level)))
     (with-output-to-file filename
       (lambda ()
-        (write level)
+        (pretty-print level)
         (newline)))))
 
 (editor-add-button-func 0 0

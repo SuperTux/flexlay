@@ -1,4 +1,4 @@
-//  $Id: editor_tilemap.hxx,v 1.8 2003/09/23 22:07:32 grumbel Exp $
+//  $Id: editor_tilemap.hxx,v 1.9 2003/09/24 18:19:13 grumbel Exp $
 // 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -47,6 +47,8 @@ private:
   typedef std::vector<TileMapTool*> Tools;
   Tools tools;
   TileMapTool* tool;
+
+  Field<int>* diamond_map;
 
   void cleanup();
 public:

@@ -21,7 +21,16 @@ CXXFLAGS="$CXXFLAGS -I\${top_srcdir}/src/"
 AC_MSG_CHECKING(for debug mode)
 AC_ARG_ENABLE(debug, AC_HELP_STRING([--enable-debug], [Enable debugging support (default: yes)]),, enable_debug="yes")
 if test "$enable_debug" != "no"; then
-    CXXFLAGS="$CXXFLAGS -Wall -Werror -O0 -g"
+    CXXFLAGS="$CXXFLAGS -Wall -O0 -g"
+    AC_MSG_RESULT([enabled])
+else
+    AC_MSG_RESULT([disabled])
+fi
+
+AC_MSG_CHECKING(for maintainer mode)
+AC_ARG_ENABLE(debug, AC_HELP_STRING([--enable-maintainer-mode], [Enable maintainer mode (default: no)]),, enable_maintainer_mode="no")
+if test "$enable_maintainer_mode" != "no"; then
+    CXXFLAGS="$CXXFLAGS -Werror"
     AC_MSG_RESULT([enabled])
 else
     AC_MSG_RESULT([disabled])

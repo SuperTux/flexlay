@@ -857,6 +857,8 @@ Optional Features:
   --disable-dependency-tracking Speeds up one-time builds
   --enable-dependency-tracking  Do not reject slow dependency extractors
   --enable-debug          Enable debugging support (default: yes)
+  --enable-maintainer-mode
+                          Enable maintainer mode (default: no)
 
 Some influential environment variables:
   CC          C compiler command
@@ -4045,7 +4047,25 @@ else
   enable_debug="yes"
 fi;
 if test "$enable_debug" != "no"; then
-    CXXFLAGS="$CXXFLAGS -Wall -Werror -O0 -g"
+    CXXFLAGS="$CXXFLAGS -Wall -O0 -g"
+    echo "$as_me:$LINENO: result: enabled" >&5
+echo "${ECHO_T}enabled" >&6
+else
+    echo "$as_me:$LINENO: result: disabled" >&5
+echo "${ECHO_T}disabled" >&6
+fi
+
+echo "$as_me:$LINENO: checking for maintainer mode" >&5
+echo $ECHO_N "checking for maintainer mode... $ECHO_C" >&6
+# Check whether --enable-debug or --disable-debug was given.
+if test "${enable_debug+set}" = set; then
+  enableval="$enable_debug"
+
+else
+  enable_maintainer_mode="no"
+fi;
+if test "$enable_maintainer_mode" != "no"; then
+    CXXFLAGS="$CXXFLAGS -Werror"
     echo "$as_me:$LINENO: result: enabled" >&5
 echo "${ECHO_T}enabled" >&6
 else

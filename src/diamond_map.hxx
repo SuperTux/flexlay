@@ -1,4 +1,4 @@
-//  $Id: diamond_map.hxx,v 1.3 2003/09/26 14:29:35 grumbel Exp $
+//  $Id: diamond_map.hxx,v 1.4 2003/09/27 20:57:39 grumbel Exp $
 // 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -30,6 +30,9 @@ private:
   Field<int> dmap;
   CL_Sprite sprite;
   int num_diamonds;
+  int num_max_diamonds;
+
+  void collect(const CL_Vector& pos);
 public:
   DiamondMap(Field<int>* d);
   virtual ~DiamondMap();
@@ -38,6 +41,7 @@ public:
   void update (float delta);  
 
   int get_num_diamonds();
+  int get_num_max_diamonds();
 };
 
 #endif

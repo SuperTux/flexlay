@@ -1,4 +1,4 @@
-//  $Id: bomb.cxx,v 1.1 2003/09/20 21:55:57 grumbel Exp $
+//  $Id: bomb.cxx,v 1.2 2003/09/27 20:57:39 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -25,7 +25,7 @@ Bomb::Bomb(int x, int y)
     explo("explo", resources),
     pos(x,
         (y/SUBTILE_SIZE+1)*SUBTILE_SIZE),
-    count(3.0f),
+    count(1.5f),
     state(COUNTDOWN)
 {
 }

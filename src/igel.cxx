@@ -1,4 +1,4 @@
-//  $Id: igel.cxx,v 1.1 2003/09/13 10:11:33 grumbel Exp $
+//  $Id: igel.cxx,v 1.2 2003/09/27 20:57:39 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -50,6 +50,7 @@ Igel::update(float delta)
   sprite.update(delta);
   
   CL_Pointf old_pos = pos;
+
   if (on_ground())
     {
       pos.y = int(pos.y)/SUBTILE_SIZE * SUBTILE_SIZE;
@@ -59,17 +60,19 @@ Igel::update(float delta)
       else
         pos.x += 32 * delta;      
 
-      if (!on_ground())
+      if (!on_ground() || in_wall())
         {
           direction_left = !direction_left;
           pos = old_pos;
         }
     }
   else
-    {
+    { // Fall
       pos.y += 450 * delta;
     }
 
+  // Check if the player got hit
+  // FIXME: Insert pixel perfect collision detection here
   CL_Vector player_pos = Player::current()->get_pos();
   if (pos.x - 20 < player_pos.x
       && pos.x + 20 > player_pos.x
@@ -79,14 +82,29 @@ Igel::update(float delta)
 }
 
 bool
+Igel::in_wall()
+{
+  return GameWorld::current()->get_tilemap()->is_ground((int(pos.x)/SUBTILE_SIZE)*SUBTILE_SIZE,
+                                                        (int(pos.y)/SUBTILE_SIZE - 1)*SUBTILE_SIZE)
+    || GameWorld::current()->get_tilemap()->is_ground((int(pos.x)/SUBTILE_SIZE - 1)*SUBTILE_SIZE,
+                                                        (int(pos.y)/SUBTILE_SIZE - 1)*SUBTILE_SIZE)
+    || GameWorld::current()->get_tilemap()->is_ground((int(pos.x)/SUBTILE_SIZE - 2)*SUBTILE_SIZE,
+                                                        (int(pos.y)/SUBTILE_SIZE - 1)*SUBTILE_SIZE)
+    || GameWorld::current()->get_tilemap()->is_ground((int(pos.x)/SUBTILE_SIZE + 1)*SUBTILE_SIZE,
+                                                        (int(pos.y)/SUBTILE_SIZE - 1)*SUBTILE_SIZE)
+    || GameWorld::current()->get_tilemap()->is_ground((int(pos.x)/SUBTILE_SIZE + 2)*SUBTILE_SIZE,
+                                                      (int(pos.y)/SUBTILE_SIZE - 1)*SUBTILE_SIZE);
+}
+
+bool
 Igel::on_ground()
 {
   return GameWorld::current()->get_tilemap()->is_ground((int(pos.x)/SUBTILE_SIZE)*SUBTILE_SIZE,
                                                         (int(pos.y)/SUBTILE_SIZE)*SUBTILE_SIZE)
-    && GameWorld::current()->get_tilemap()->is_ground((int(pos.x)/SUBTILE_SIZE)*SUBTILE_SIZE,
-                                                      (int(pos.y)/SUBTILE_SIZE + 1)*SUBTILE_SIZE)
-    && GameWorld::current()->get_tilemap()->is_ground((int(pos.x)/SUBTILE_SIZE)*SUBTILE_SIZE,
-                                                      (int(pos.y)/SUBTILE_SIZE + 2)*SUBTILE_SIZE)
+    && GameWorld::current()->get_tilemap()->is_ground((int(pos.x)/SUBTILE_SIZE+1)*SUBTILE_SIZE,
+                                                      (int(pos.y)/SUBTILE_SIZE)*SUBTILE_SIZE)
+    && GameWorld::current()->get_tilemap()->is_ground((int(pos.x)/SUBTILE_SIZE+2)*SUBTILE_SIZE,
+                                                      (int(pos.y)/SUBTILE_SIZE)*SUBTILE_SIZE)
     && GameWorld::current()->get_tilemap()->is_ground((int(pos.x)/SUBTILE_SIZE - 1)*SUBTILE_SIZE,
                                                       (int(pos.y)/SUBTILE_SIZE)*SUBTILE_SIZE)
     && GameWorld::current()->get_tilemap()->is_ground((int(pos.x)/SUBTILE_SIZE - 2)*SUBTILE_SIZE,

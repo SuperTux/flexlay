@@ -1,4 +1,4 @@
-//  $Id: diamond_map.cxx,v 1.6 2003/09/26 14:29:35 grumbel Exp $
+//  $Id: diamond_map.cxx,v 1.7 2003/09/27 20:57:39 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
@@ -33,6 +33,7 @@ DiamondMap::DiamondMap(Field<int>* d)
         if (dmap(x, y))
           num_diamonds += 1;
       }
+  num_max_diamonds = num_diamonds;
 }
 
 DiamondMap::~DiamondMap()
@@ -60,19 +61,38 @@ DiamondMap::draw ()
 void
 DiamondMap::update (float delta)
 {
+  sprite.update(delta);
+ 
   CL_Vector pos = Player::current()->get_pos();
 
-  dmap(int(pos.x)/64, int(pos.y)/64)   = 0;
-  dmap(int(pos.x)/64, int(pos.y)/64-1) = 0;
-  dmap(int(pos.x)/64, int(pos.y)/64-2) = 0;
+  collect(pos);
+  collect(pos + CL_Vector(0, -64));
+  collect(pos + CL_Vector(0, -128));
+}
 
-  sprite.update(delta);
+void
+DiamondMap::collect(const CL_Vector& pos)
+{
+  int x = int(pos.x)/64;
+  int y = int(pos.y)/64;
+
+  if (dmap(x, y))
+    {
+      dmap(x, y) = 0;
+      num_diamonds -= 1;
+    }
 }
 
 int 
 DiamondMap::get_num_diamonds()
 {
   return num_diamonds;
+}
+
+int 
+DiamondMap::get_num_max_diamonds()
+{
+  return num_max_diamonds;
 }
 
 /* EOF */

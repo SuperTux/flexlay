@@ -1,3 +1,13 @@
+(define (seq start end)
+  (let loop ((ret '())
+             (start start)
+             (end   end))
+    (cond ((< start end)
+           (set! ret (cons start ret))
+           (loop ret (+ start 1) end))
+          (else
+           (reverse ret)))))
+
 (cond (#f
        (catch #t
               (lambda () 

@@ -36,7 +36,11 @@ Tile::Tile(const std::string& filename_,
     attribute_color(attribute_color_),
     filename(filename_)
 {
-  color = calc_color();
+  // FIXME: Kind of evil singular value
+  if (color == CL_Color(254, 254, 254, 254))
+    {
+      color = calc_color();
+    }
   
   //sur.set_alignment(origin_center, 0, 0);
   memcpy(colmap, arg_colmap, 8);

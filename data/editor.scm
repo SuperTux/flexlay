@@ -304,6 +304,8 @@
                                   (case *game*
                                     ((supertux)
                                      (supertux:new-map width height))
+                                    ((netpanzer)
+                                     (netpanzer:new-map width height))
                                     (else
                                      (new-map width height))))
                                 (gui-hide-component window)))
@@ -689,18 +691,6 @@
               *brushes*)
     (gui-pop-component)))
 
-(define (seq start end)
-  (let loop ((ret '())
-             (start start)
-             (end   end))
-    (cond ((< start end)
-           (set! ret (cons start ret))
-           (loop ret (+ start 1) end))
-          (else
-           (reverse ret)))))
-
-
-
 (define (on-gui-quit)
   (with-output-to-file (string-append *windstille-homedir* "editor-variables.scm")
     (lambda ()
@@ -832,6 +822,9 @@
    (create-minimap 150 150)
    (object-selector-add-brush *object-selector* "sprites/spawnpoint"  '(spawnpoint))
    (object-selector-add-brush *object-selector* "sprites/outpost"     '(outpost "Unnamed"))
+   (editor:add-file-plugin
+    (lambda (filename) (string=? (filename:ext filename) ".npm"))
+    (lambda (filename) (netpanzer:create-level-map-from-file filename)))
    )
   ((supertux)
    (object-selector-add-brush *object-selector* "sprites/jumpy" '(money))
@@ -858,6 +851,8 @@
 (case *game*
   ((supertux)
    (supertux:new-map 20 15))
+  ((netpanzer)
+   (netpanzer:new-map 20 15))
   (else
    (new-map 20 15)))
 

@@ -83,7 +83,7 @@ TileFactory::add_tile(SCM data)
   // FIXME: Move this to scripting and add a TileFactory::add()
   int id;
   std::string image;
-  CL_Color color(255, 255, 255, 255);
+  CL_Color color(254, 254, 254, 254);
   CL_Color attribute_color(255, 255, 255, 100);
   unsigned char colmap[8];
   

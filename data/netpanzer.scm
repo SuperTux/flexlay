@@ -1,4 +1,5 @@
 (use-modules (srfi srfi-13)
+             (oop goops)
              (ice-9 pretty-print))
 
 (display "netPanzer Startup Script: ...\n")
@@ -14,6 +15,23 @@
 
 (display "netPanzer Startup Script: done\n")
 
+(define-class <netpanzer-map> ()
+  (id-header #:init-value "Created by Windstille Editor"
+             #:init-keyword #:id-header
+             #:accessor   npm:id-header)
+  (name      #:init-value "<unnamed>"
+             #:init-keyword #:name
+             #:accessor   npm:name)
+  (description #:init-value "<no description>"
+               #:init-keyword #:description
+               #:accessor   npm:description)
+  (objmap    #:init-value #f
+             #:init-keyword #:objmap
+             #:accessor npm:objmap)
+  (tilemap   #:init-value #f
+             #:init-keyword #:tilemap
+             #:accessor npm:tilemap))
+
 (define (tokenize-input)
   (let ((line   (read-line)))
     (cond ((eof-object? line)
@@ -23,8 +41,8 @@
              (cond ((null? tokens) ;; Ignore empty lines
                     (tokenize-input))
                    (else
-                     (cons tokens
-                           (tokenize-input)))))))))
+                    (cons tokens
+                          (tokenize-input)))))))))
 
 ;; filename -> ((x y) ...)
 (define (parse-netpanzer-spn-file filename)
@@ -68,43 +86,81 @@
          tokens)
         (reverse res)))))
 
+(define (netpanzer:new-map width height)
+  (let ((levelmap (netpanzer:create-levelmap width height)))
+    (editor-map-component-set-map *editor-map* levelmap)
+    (add-buffer levelmap)))
+
+(define (netpanzer:create-levelmap width height)
+  (let* ((levelmap (editor-map-create))
+         (objmap   (editor-objmap-create))
+         (tilemap  (editor-tilemap-create width height *tile-size*))
+         (npm    (make <netpanzer-map> 
+                   #:tilemap     tilemap
+                   #:objmap      objmap)))
+    (editor-map-set-metadata levelmap npm)
+    (editor-map-add-layer    levelmap tilemap)
+    (editor-map-add-layer    levelmap objmap)
+
+    ;; FIXME: this doesn't look all that nice here
+    (tilemap-paint-tool-set-tilemap tilemap)
+    (editor-tilemap-set-current     tilemap)
+    (editor-objectmap-set-current   objmap)
+    (set! *tilemap* tilemap)
+    (set! *objmap* objmap)
+
+    ;;(editor-map-set-filename m filename)
+    levelmap))
+
 (define (netpanzer:create-level-map-from-file filename)
   (let* ((file (load-netpanzer-map filename))
-         (m       (editor-map-create))
-         (objmap  (editor-objmap-create)))
-
-    (editor-map-set-metadata m (list
-                                (cons 'id-header   (NetPanzerFileStruct-id-header-get file))
-                                (cons 'name        (NetPanzerFileStruct-name-get file))
-                                (cons 'description (NetPanzerFileStruct-description-get file))))
-
-    (editor-map-add-layer m (NetPanzerFileStruct-tilemap-get file))
-    (editor-map-add-layer m objmap)
-
-    (cond ((equal? *game* 'netpanzer)
-           (let* ((rawname (substring filename 0 (- (string-length filename) 4)))
-                  (optname (string-append rawname ".opt"))
-                  (spnname (string-append rawname ".spn")))
-             
-             ;; Generate outposts
-             (for-each 
-              (lambda (el)
-                (objectmap-add-object objmap "sprites/outpost"
-                                      (+ (* (string->number (cadr el))  32) 16)
-                                      (+ (* (string->number (caddr el)) 32) 16)
-                                      (list 'outpost (car el))))
-              (parse-netpanzer-opt-file optname))
-             
-             ;; Generate spawnpoints
-             (for-each
-              (lambda (el)
-                (objectmap-add-object objmap "sprites/spawnpoint"
-                                      (+ (* (string->number (car el)) 32) 16)
-                                      (+ (* (string->number (cadr el)) 32) 16)
-                                      '(spawnpoint)))
-              (parse-netpanzer-spn-file spnname)))))
+         (m           (editor-map-create))
+         (objmap      (editor-objmap-create))
+         (tilemap     (NetPanzerFileStruct-tilemap-get file))
+         (id-header   (NetPanzerFileStruct-id-header-get file))
+         (name        (NetPanzerFileStruct-name-get file))
+         (description (NetPanzerFileStruct-description-get file))
+         (npm         (make <netpanzer-map> 
+                        #:id-header   id-header
+                        #:name        name
+                        #:description description
+                        #:tilemap     tilemap
+                        #:objmap      objmap)))
     
+    (editor-map-set-metadata m npm)
+    (editor-map-add-layer m tilemap)
+    (editor-map-add-layer m objmap)
     (editor-map-set-filename m filename)
+
+    ;; FIXME: this doesn't look all that nice here
+    (tilemap-paint-tool-set-tilemap tilemap)
+    (editor-tilemap-set-current     tilemap)
+    (editor-objectmap-set-current   objmap)
+    (set! *tilemap* tilemap)
+    (set! *objmap* objmap)
+
+    ;; Fill the object map with content, ie. load .opt and .spn files
+    (let* ((rawname (substring filename 0 (- (string-length filename) 4)))
+           (optname (string-append rawname ".opt"))
+           (spnname (string-append rawname ".spn")))
+      
+      ;; Generate outposts
+      (for-each 
+       (lambda (el)
+         (objectmap-add-object objmap "sprites/outpost"
+                               (+ (* (string->number (cadr el))  32) 16)
+                               (+ (* (string->number (caddr el)) 32) 16)
+                               (list 'outpost (car el))))
+       (parse-netpanzer-opt-file optname))
+      
+      ;; Generate spawnpoints
+      (for-each
+       (lambda (el)
+         (objectmap-add-object objmap "sprites/spawnpoint"
+                               (+ (* (string->number (car el)) 32) 16)
+                               (+ (* (string->number (cadr el)) 32) 16)
+                               '(spawnpoint)))
+       (parse-netpanzer-spn-file spnname)))
     m))
 
 (define (netpanzer:load-map filename)
@@ -121,13 +177,13 @@
 (define (netpanzer:save-map filename)
   ;; Save .npm
   (let* ((levelmap (editor-map-component-get-map *editor-map*))
-         (metadata (editor-map-get-metadata levelmap)))
+         (npm      (editor-map-get-metadata levelmap)))
     (save-netpanzer-map filename
                         levelmap
-                        (or (assoc-ref metadata 'id-header) "Created with Windstille Editor")
-                        (or (assoc-ref metadata 'name) "<no name>")
-                        (or (assoc-ref metadata 'description) "<no description>")))
-  
+                        (npm:id-header npm)
+                        (npm:name      npm)
+                        (npm:description npm))
+
   ;; Save .opt/.spn
   (let* ((rawname (substring filename 0 (- (string-length filename) 4)))
          (optname (string-append rawname ".opt"))
@@ -146,7 +202,7 @@
                      (display "Unknown: ")
                      (display el)
                      (newline)))))
-              (editor-objectmap-get-objects))
+              (editor-objectmap-get-objects (npm:objmap npm)))
 
     (set! spawnpoints (reverse spawnpoints))
     (set! outposts    (reverse outposts))
@@ -172,8 +228,7 @@
                     (format #t "Location: ~a ~a~%" 
                             (quotient (car el)  32)
                             (quotient (cadr el) 32)))
-                  spawnpoints)))))
-
+                  spawnpoints))))))
 
 (define (create-netpanzer-brushbox)
   (let ((window (gui-create-window (- screen-width 200) 25 200 400 "netPanzer Brushbox")))

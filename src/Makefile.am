@@ -13,12 +13,13 @@ windstille_SOURCES = \
   tile_map.hxx tile_map.cxx field.hxx windstille_game.cxx windstille_game.hxx \
   animation_obj.hxx   animation_obj.cxx dog.hxx dog.cxx \
   power_up.hxx power_up.cxx windstille_level.hxx windstille_level.cxx \
-  string_converter.hxx xmlhelper.hxx xmlhelper.cxx \
+  string_converter.hxx \
   laser_shoot.cxx   laser_shoot.hxx player_view.hxx player_view.cxx \
   bonus_flyer.hxx bonus_flyer.cxx guile_gameobj.hxx guile_gameobj.cxx \
   sprite_smob.hxx sprite_smob.cxx guile_gameobj_factory.hxx guile_gameobj_factory.cxx \
   tile_mapsmob.hxx   tile_mapsmob.cxx gameobj_smob.hxx gameobj_smob.cxx \
-  game_worldsmob.hxx game_worldsmob.cxx globals.hxx scmconverter.hxx
+  game_worldsmob.hxx game_worldsmob.cxx globals.hxx scmconverter.hxx \
+  scm_helper.hxx scm_helper.cxx
 
 LDADD = editor/libwindstille_editor.a
 

@@ -1,4 +1,4 @@
-//  $Id: windstille_level.cxx,v 1.1 2003/08/10 19:56:40 grumbel Exp $
+//  $Id: windstille_level.cxx,v 1.2 2003/08/10 22:55:50 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -21,22 +21,7 @@
 #include <iostream>
 #include "windstille_level.hxx"
 #include "string_converter.hxx"
-#include "xmlhelper.hxx"
-
-template<class T>
-T xmlGetValue (xmlNodePtr cur, const std::string& str) 
-{
-  char* value = (char*)xmlGetProp(cur, (xmlChar*)str.c_str ());
-  if (value) {
-    T int_value;
-    from_string (value, int_value);
-    free (value);
-    return int_value;
-  } else {
-    std::cout << "Error!" << std::endl;
-    return T ();
-  }
-}
+#include "scm_helper.hxx"
 
 WindstilleLevel::WindstilleLevel (const std::string& filename)
   : field (0)
@@ -48,52 +33,50 @@ void
 WindstilleLevel::parse_file (const std::string& filename)
 {
   std::cout << "Windstille Level: " << filename << std::endl;
-  doc = xmlParseFile(filename.c_str());
   
-  if (doc == NULL)
-    {
-      assert (!"Error: Levelfile not found");
-    }
-
-  xmlNodePtr cur = xmlDocGetRootElement(doc);
+  SCM input_stream = scm_open_file(gh_str02scm(filename.c_str()), 
+                                   gh_str02scm("r"));
+  SCM tree = scm_read(input_stream);
   
-  //if (xmlIsBlankNode(cur)) cur = cur->next;
-
-  if (cur != NULL && strcmp((const char*)cur->name, "turrican-level") == 0)
+  if (!(gh_symbol_p(gh_car(tree)) && gh_equal_p(gh_symbol2scm("windstille-level"), gh_car(tree))))
     {
-      if (xmlIsBlankNode(cur)) cur = cur->next;
-      
-      if (cur->children == NULL)
-	std::cout << "XMLPLF: node: " << cur->name << std::endl;
-      
-      cur = cur->children;
-      while (cur != NULL)
-	{
-	  if (xmlIsBlankNode(cur)) {
-	    cur = cur->next;
-	    continue;
-	  } else if (strcmp((char*)cur->name, "properties") == 0) {
-	    parse_properties (cur);
-	  } else if (strcmp((char*)cur->name, "tilemap") == 0) {
-	    parse_tilemap (cur);
-	  } else if (strcmp((char*)cur->name, "gameobjects") == 0) {
-	    parse_gameobjects (cur);
-	  } else {
-	    std::cout << "Error: Unknown tag: " << cur->name << std::endl;
-	  }
-	  cur = cur->next;
-	}
+      std::cout << "Not a Windstille Level file!" << std::endl;
     }
   else
     {
-      std::cout << "Not a Windstille Level" << std::endl;
-      exit(EXIT_FAILURE);
+      tree = gh_cdr(tree);
+
+      while (!gh_null_p(tree))
+        {
+          SCM current = gh_car(tree);
+          if (gh_pair_p(current))
+            {
+              SCM name    = gh_car(current);
+              SCM data    = gh_cdr(current);
+      
+              if (gh_equal_p(gh_symbol2scm("tilemap"), name)) 
+                {
+                  parse_tilemap(data);
+                }
+              else
+                {
+                  std::cout << "WindstilleLevel: Unknown tag: " << scm2string(name) << std::endl;
+                }
+            }
+          else
+            {
+              std::cout << "WindstilleLevel: Not a pair!"  << std::endl;
+            }
+          tree = gh_cdr(tree);
+        }
     }
+
 }
 
 void
-WindstilleLevel::parse_properties (xmlNodePtr cur)
+WindstilleLevel::parse_properties (SCM cur)
 {
+#if 0
   std::cout << "Parsinc properties" << std::endl;
 
   cur = cur->children;
@@ -108,80 +91,51 @@ WindstilleLevel::parse_properties (xmlNodePtr cur)
       }
       cur = cur->next;
     }
+#endif
 }
 
 
 void
-WindstilleLevel::parse_tilemap (xmlNodePtr cur)
+WindstilleLevel::parse_tilemap (SCM cur)
 {
-  int width  = xmlGetValue<int> (cur, "width");
-  int height = xmlGetValue<int> (cur, "height");
-
-  int x = 0;
-  int y = 0;
-
-  std::cout << "TileMap: " << width << "x" << height << std::endl;
+  gh_display(cur);
+  int width  = gh_scm2int(gh_cadar(cur));
+  int height = gh_scm2int(gh_car(gh_cdadr(cur)));
+  
+  std::cout << "Size: " << width << "x" << height << std::endl;
   
   field = new Field<std::string>(width, height);
 
-  cur = cur->children;
-
-  while (cur != NULL)
+  cur = gh_cddr(cur);
+  
+  int x = 0;
+  int y = 0;
+  while (!gh_null_p(cur))
     {
-      if (xmlIsBlankNode(cur)) {
-	cur = cur->next;
-	continue;
-      } else if (strcmp((char*)cur->name, "row") == 0) {
-	xmlNodePtr ccur = cur->children;
-	while (ccur != NULL)
-	  {
-	    if (xmlIsBlankNode(ccur)) {
-	      ccur = ccur->next;
-	      continue;
-	    } else if (strcmp((char*)ccur->name, "tile") == 0) {
-	      std::string str (XMLhelper::parse_string (doc, ccur));
-	      //std::cout << "str: " << str << std::endl;
-	      assert(x < width);
-	      assert(y < height);
-	      (*field)(x, y) = str;
-	      ++x;
-	    } else {
-	      std::cout << "Error: parse_properties:row Unknown tag: " << ccur->name << std::endl;	      
-	    }
-	    ccur = ccur->next;
-	  }
-	++y;
-	x = 0;
-      } else {
-	std::cout << "Error: parse_properties: Unknown tag: " << cur->name << std::endl;
-      }
-      cur = cur->next;
-    }
-
-  if (x != 0 || y != height)
-    {
-      std::cout << "Error: Tilemap incomplete" << std::endl;
+      SCM name = gh_caar(cur);
+      SCM data = gh_cdar(cur);
+      
+      if (gh_equal_p(gh_symbol2scm("row"), name))
+        {
+          x = 0;
+          while (!gh_null_p(data))
+            {
+              std::string str = scm2string(gh_cadar(data));
+              std::cout << "Tile: " << str << std::endl;
+              (*field)(x, y) = str;
+              data = gh_cdr(data);
+              x += 1;
+            }
+          y += 1;
+        }
+          
+      cur = gh_cdr(cur);
     }
 }
 
 void
-WindstilleLevel::parse_gameobjects (xmlNodePtr cur)
+WindstilleLevel::parse_gameobjects (SCM cur)
 {
-  cur = cur->children;
-  while (cur != NULL)
-    {
-      if (xmlIsBlankNode(cur)) {
-	cur = cur->next;
-	continue;
-      } else if (strcmp((char*)cur->name, "guile-object") == 0) {
-	std::string name = xmlGetValue<std::string> (cur, "name");
-	std::cout << "Parsing of guile-gameobjects not implemented" << std::endl;
-
-      } else {
-	std::cout << "Error: parse_gameobjects: Unknown tag: " << cur->name << std::endl;
-      }
-      cur = cur->next;
-    }
 }
 
 /* EOF */

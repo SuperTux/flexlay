@@ -1,4 +1,4 @@
-//  $Id: windstille_main.cxx,v 1.1 2003/08/10 19:56:40 grumbel Exp $
+//  $Id: windstille_main.cxx,v 1.2 2003/08/10 22:55:50 grumbel Exp $
 //
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -98,7 +98,7 @@ WindstilleMain::inner_main(void* closure, int argc, char** argv)
     if (!launch_editor)
       {
 	if (filename.empty ())
-	  filename = "../data/levels/level1.xml";
+	  filename = "../data/levels/level1.scm";
 	WindstilleGame game (filename);
 	std::cout << "Launching game..." << std::endl;
 	game.display ();

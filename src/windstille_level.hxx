@@ -1,4 +1,4 @@
-//  $Id: windstille_level.hxx,v 1.1 2003/08/10 19:56:40 grumbel Exp $
+//  $Id: windstille_level.hxx,v 1.2 2003/08/10 22:55:50 grumbel Exp $
 // 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
@@ -20,7 +20,7 @@
 #ifndef WINDSTILLELEVEL_HXX
 #define WINDSTILLELEVEL_HXX
 
-#include <libxml/parser.h>
+#include <guile/gh.h>
 #include <string>
 #include "field.hxx"
 
@@ -29,17 +29,15 @@ class WindstilleLevel
 private:
   Field<std::string>* field;
 
-  xmlDocPtr doc;  
-
 public:
-  WindstilleLevel (const std::string&);
+  WindstilleLevel (const std::string& filename);
 
   Field<std::string>* get_field () const { return field; }
 private:
   void parse_file (const std::string& filename);
-  void parse_properties (xmlNodePtr cur);
-  void parse_tilemap (xmlNodePtr cur);
-  void parse_gameobjects (xmlNodePtr cur);
+  void parse_properties (SCM cur);
+  void parse_tilemap (SCM cur);
+  void parse_gameobjects (SCM cur);
 };
 
 #endif

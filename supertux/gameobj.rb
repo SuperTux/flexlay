@@ -142,6 +142,41 @@ class SpawnPoint<GameObj
   end
 end
 
+class AmbientSound<GameObj
+  def initialize(data, sexpr = [])
+    @data = data
+    @factor = get_value_from_tree(["distance_factor", "_"],  sexpr, 0.1)
+    @bias = get_value_from_tree(["distance_bias", "_"],  sexpr, 200)
+    @sample = get_value_from_tree(["sample", "_"],  sexpr, "waterfall")
+    connect_v1_ObjMapObject(data.to_object.sig_move(), method(:on_move))
+    on_move(data)
+  end
+
+  def on_move(data)
+    pos = @data.to_object.get_pos()
+    pos.x = (((pos.x+16)/32).to_i)*32
+    pos.y = (((pos.y+16)/32).to_i)*32
+    @data.to_object.set_pos(pos)
+  end
+
+  def save(f, obj)
+    pos = obj.get_pos()
+    f.write("       (ambient_sound (x %d) (y %d) (distance_factor \"%s\") (distance_bias \"%s\") (sample \"%s\"))\n" % [pos.x, pos.y, @factor, @bias, @sample])
+  end
+
+  def property_dialog()
+    dialog = GenericDialog.new("AmbientSound Property Dialog", $gui.get_component())
+    dialog.add_float("Distance Factor: ", @factor)
+    dialog.add_float("Distance Bias: ", @bias)
+    dialog.add_string("Sample: ", @sample)
+    dialog.set_callback(proc{|factor, bias, sample| 
+                          @factor = factor
+			  @bias = bias
+			  @sample = sample
+                        })
+  end
+end
+
 class SimpleObject<GameObj
   def initialize(type)
     @type = type
@@ -262,9 +297,9 @@ class Background<GameObj
 
   def set_icon()
     if(@type == "image")
-      @object.set_sprite(make_sprite($datadir + "images/editor/background.png"))
+      @object.set_sprite(make_sprite($datadir + "images/engine/editor/background.png"))
     else
-      @object.set_sprite(make_sprite($datadir + "images/editor/gradient.png"))
+      @object.set_sprite(make_sprite($datadir + "images/engine/editor/gradient.png"))
     end
   end
 

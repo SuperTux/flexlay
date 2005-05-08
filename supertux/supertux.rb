@@ -23,11 +23,12 @@ $config_file = File.expand_path("~/.flexlay/supertux.rb")
 def find_supertux_datadir()
   # try to automatically detect the supertux datadir
   possible_locations = [
-    "~/cvs/supertux/supertux/data",
-    "~/cvs/supertux/data",
-    "/usr/share/games/supertux",
-    "/usr/local/share/games/supertux",
-    "/opt/supertux/data",
+    "~/cvs/supertux/supertux/data/",
+    "~/cvs/supertux/data/",
+    "/usr/share/games/supertux/",
+    "/usr/local/share/games/supertux/",
+    "/opt/supertux/data/",
+    "~projects/supertux/trunk/supertux/data/",
   ]
   # `which supertux`
 end
@@ -92,7 +93,7 @@ end
 
 $config  = Config.new()
 if !$datadir then
-  $datadir = File.expand_path("~/projects/supertux/data/")+"/"
+  $datadir = File.expand_path("~/projects/supertux/trunk/supertux/data/")+"/"
 end
 
 require "data.rb"
@@ -101,7 +102,7 @@ require "sector.rb"
 require "tileset.rb"
 
 $tileset = Tileset.new(32)
-$tileset.load($datadir + "images/tilesets/supertux.stgt")
+$tileset.load($datadir + "images/tiles.strf")
 $tileset.create_ungrouped_tiles_group()
 
 $gui = SuperTuxGUI.new(width, height)

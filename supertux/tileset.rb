@@ -45,10 +45,10 @@ class Tileset
         end
         
         if image.is_a?(String) then
-          pixelbuffer = make_pixelbuffer($datadir + 'images/tilesets/' + image)
+          pixelbuffer = make_pixelbuffer($datadir + 'images/' + image)
         elsif image.is_a?(Array) then
           if image[0] == "region" then
-            pixelbuffer = make_region_pixelbuffer($datadir + 'images/tilesets/' + image[1],
+            pixelbuffer = make_region_pixelbuffer($datadir + 'images/' + image[1],
                                                   image[2], image[3], image[4], image[5])
           end
         end

@@ -24,7 +24,7 @@
                                    (list (list 'id   
                                                (get-value-from-tree '(id _) (cdr el) -1))
                                          (list 'image 
-                                               (string-append *supertux:datadir* "images/tilesets/" 
+                                               (string-append *supertux:datadir* "images/tiles/" 
                                                               (or (get-value-from-tree '(editor-images _) (cdr el) #f)
                                                                   (get-value-from-tree '(images _) (cdr el) "notile.png"))))
                                          )))))
@@ -44,15 +44,15 @@
                                    (list (list 'id   
                                                (get-value-from-tree '(id _) (cdr el) -1))
                                          (list 'image 
-                                               (string-append *supertux:datadir* "images/worldmap/"
-                                                              (get-value-from-tree '(image _) (cdr el) "notile.png"))))
+                                               (string-append *supertux:datadir* "images/tiles/worldmap/"
+                                                              (get-value-from-tree '(image _) (cdr el) "auxiliary/notile.png"))))
                                    ))))
                          (cdr data)))
               (else
                (error "Not a supertux worldmap tileset")))))))
 
-(supertux:load-worldmap-tiles (string-append *supertux:datadir* "images/worldmap/antarctica.stwt"))
-(supertux:load-tiles (string-append *supertux:datadir* "images/tilesets/supertux.stgt"))
+(supertux:load-worldmap-tiles (string-append *supertux:datadir* "images/tiles/worldmap/antarctica.stwt"))
+(supertux:load-tiles (string-append *supertux:datadir* "images/tiles/supertux.stgt"))
 
 ;;(tileset-add-tile '((id 6)
 ;;                    (image "/home/ingo/projects/windstille/trunk/data/images/tuxsprites/mrbomb.png")
@@ -370,7 +370,7 @@
     (set! (supertux:author level)     (get-value-from-tree '(author _) data ""))
     (set! (supertux:theme level)      (get-value-from-tree '(theme _) data "antarctica"))
     (set! (supertux:music level)      (get-value-from-tree '(music _) data "Mortimers_chipdisko.mod"))
-    (set! (supertux:background level) (get-value-from-tree '(background _)   data "arctis.png"))
+    (set! (supertux:background level) (get-value-from-tree '(background _)   data "arctis.jpg"))
 
     (set! (supertux:start-pos-x level) (get-value-from-tree '(start_pos_x  _) data 100))
     (set! (supertux:start-pos-y level) (get-value-from-tree '(start_pos_y  _) data 170))

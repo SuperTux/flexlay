@@ -147,7 +147,7 @@ class Level
     f.write("    (mode \"autoscroll\")\n")
     f.write("    (path\n")
     for obj in @objects.get_objects()
-      pathnode = obj.get_metadata()
+      pathnode = obj.get_data()
       if (pathnode.class() == PathNode)
         f.write("     (point (x %d) (y %d) (speed 1))\n" % obj.get_pos().x, obj.get_pos().y)
       end
@@ -156,7 +156,7 @@ class Level
     
     f.write("  (objects\n")
     for obj in @objects.get_objects()
-      badguy = obj.get_metadata()
+      badguy = obj.get_data()
       if (badguy.class == BadGuy)
         pos    = obj.get_pos()
         if (badguy.type != "resetpoint")
@@ -168,7 +168,7 @@ class Level
     
     f.write("  (reset-points\n")
     for obj in @objects.get_objects()
-      badguy = obj.get_metadata()
+      badguy = obj.get_data()
       if (badguy.class == BadGuy)
         pos    = obj.get_pos()
         if (badguy.type == "resetpoint")

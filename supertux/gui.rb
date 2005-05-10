@@ -1,3 +1,5 @@
+require "flexlay.rb"
+
 class SuperTuxGUI
   quit_button = nil
   menu        = nil
@@ -166,12 +168,12 @@ class SuperTuxGUI
 
   def create_menu()
     @menu = CL_Menu.new(@gui.get_component())
-    @menu.add_item("Level/Open...", method(:gui_level_load))
-    @menu.add_item("Level/Save...", method(:gui_level_save))
+    @menu.add_item("File/Open...", method(:gui_level_load))
+    @menu.add_item("File/Save...", method(:gui_level_save))
     # @menu.add_item("File/Save Commands...", menu_file_save_commands)
     # @menu.add_item("File/Save As...", method(:gui_level_save_as))
-    @menu.add_item("Level/Properties...", method(:gui_edit_level))
-    @menu.add_item("Level/Quit",  proc{ @gui.quit })
+    @menu.add_item("File/Properties...", method(:gui_edit_level))
+    @menu.add_item("File/Quit",  proc{ @gui.quit })
     
     @menu.add_item("Edit/Smooth Selection", method(:gui_smooth_level_struct))
     @menu.add_item("Edit/Resize", method(:gui_resize_level))
@@ -573,7 +575,7 @@ class SuperTuxGUI
     if selection.length() > 1 then
       print "Warning: Selection to large"
     elsif selection.length() == 1 then
-      obj = get_ruby_object(selection[0].get_metadata())
+      obj = get_ruby_object(selection[0].get_data())
       obj.property_dialog()
     else
       print "Warning: Selection is empty\n"
@@ -642,7 +644,7 @@ class SuperTuxGUI
     print "Connecting path nodes"
     pathnodes = []
     for i in $objmap_select_tool.get_selection()
-      obj = i.get_metadata()
+      obj = i.get_data()
       if obj.is_a?(PathNode)
         pathnodes.push(obj.node)
       end

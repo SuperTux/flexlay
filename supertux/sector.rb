@@ -261,7 +261,7 @@ class Sector
     f.write("      (mode \"%s\")\n" % [@cameramode])
 #    f.write("      (path\n")
 #    @objects.get_objects().each {|obj|
-#      pathnode = obj.get_metadata()
+#      pathnode = obj.get_data()
 #      if (pathnode.is_a?(PathNode))
 #        f.write("       (point (x %d) (y %d) (speed 1))\n" % obj.get_pos().x, obj.get_pos().y)
 #      end
@@ -270,8 +270,7 @@ class Sector
 	f.write("    )\n\n")
 
     for obj in @objects.get_objects()
-      # FIXME: not sure why I need get_ruby_object() here
-      object = get_ruby_object(obj.get_metadata())
+      object = obj.get_data()
       object.save(f, obj)
     end
   end

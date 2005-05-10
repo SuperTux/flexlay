@@ -77,7 +77,7 @@ class WorldMap
     @tilemap.save(writer)
 
     for o in @objects.get_objects()
-      object = o.get_metadata()
+      object = o.get_data()
       object.save(writer)
     end
     writer.end_list("supertux-worldmap")

@@ -31,23 +31,12 @@ class EditorMap
 end
 
 class ObjMapObject
-  alias orig_get_metadata get_metadata
-  alias orig_set_metadata set_metadata
-
   def get_data()
-    return get_ruby_object(orig_get_metadata())
+    return get_ruby_object(get_metadata())
   end
 
   def set_data(data)
-    orig_set_metadata(make_metadata(data))
-  end
-
-  def get_metadata()
-    return get_ruby_object(orig_get_metadata())
-  end
-
-  def set_metadata(data)
-    orig_set_metadata(make_metadata(data))
+    set_metadata(make_metadata(data))
   end
 end
 

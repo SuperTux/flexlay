@@ -61,7 +61,6 @@ $game_objects = [
     proc{|data, sexpr| ParticleSystem.new("clouds", sexpr)}],
   ["particles-rain", "images/engine/editor/rain.png", "sprite",
     proc{|data, sexpr| ParticleSystem.new("rain", sexpr)}],
-	
 ]
 
 def create_gameobject_from_data(objmap, name, sexpr)
@@ -106,7 +105,6 @@ def create_gameobject(objmap, data, pos, sexpr = [])
 end
 
 $solid_itiles = [10, 11, 12, 13, 14, 15, 20, 21, 22, 23, 30, 31, 113, 114]
-$air_itiles   = [7, 8, 9, 16, 17, 18, 0]
 
 $itile_conditions = [
   [0, 0, 0, 0, 0, 1, 0, 1, 1, 7],

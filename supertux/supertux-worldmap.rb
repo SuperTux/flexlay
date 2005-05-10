@@ -18,7 +18,7 @@
 ##  along with this program; if not, write to the Free Software
 ##  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-$config_file = File.expand_path("~/.flexlay/supertux.rb")
+$config_file = File.expand_path("~/.flexlay/supertux-worldmap.rb")
 
 def find_supertux_datadir()
   # try to automatically detect the supertux datadir
@@ -28,7 +28,7 @@ def find_supertux_datadir()
     "/usr/share/games/supertux/",
     "/usr/local/share/games/supertux/",
     "/opt/supertux/data/",
-    "~/projects/supertux/data/",
+    "~/project/supertux/data/",
     "~/projects/supertux/trunk/supertux/data/",
     "~/data/projects/supertux/trunk/supertux/data",
   ]
@@ -62,8 +62,6 @@ $tilemap_select_tool = TileMapSelectTool.new()
 $zoom_tool           = ZoomTool.new()
 $objmap_select_tool  = ObjMapSelectTool.new()
 # $sketch_stroke_tool  = SketchStrokeTool.new()
-
-$mysprite = make_sprite("../data/images/icons16/stock_paste-16.png")
 
 # $console = Console.new(CL_Rect.new(CL_Point.new(50, 100), CL_Size.new(400, 200)),
 #                        $gui.get_component())
@@ -99,14 +97,19 @@ if !$datadir then
 end
 
 require "data.rb"
+require "WorldMap.rb"
+require "WorldMapObject.rb"
+require "TileMap.rb"
+require "LispWriter.rb"
+require "tileset.rb"
 require "level.rb"
 require "sector.rb"
-require "tileset.rb"
 
 $tileset = Tileset.new(32)
-$tileset.load($datadir + "images/tiles.strf")
+$tileset.load($datadir + "images/worldmap.strf")
 $tileset.create_ungrouped_tiles_group()
 
+$mysprite = make_sprite("../data/images/icons16/stock_paste-16.png")
 $gui = SuperTuxGUI.new(width, height)
 
 if !$recent_files then
@@ -118,15 +121,16 @@ $recent_files.each do |filename|
 end
 
 if ARGV == []
-  Level.new(100, 50).activate($gui.workspace)
+  WorldMap.new(70, 50).activate($gui.workspace)
+  $use_worldmap = true
 else
-  supertux_load_level(ARGV[0])
+  supertux_load_worldmap(ARGV[0])
 end
 
 # Init the GUI, so that button state is in sync with internal state
 $gui.gui_toggle_minimap()
 $gui.gui_toggle_minimap()
-$gui.gui_show_interactive()
+#$gui.gui_show_interactive()
 $gui.gui_show_current()
 $gui.set_tilemap_paint_tool()
 

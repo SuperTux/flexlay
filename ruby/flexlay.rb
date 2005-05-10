@@ -215,6 +215,8 @@ class GenericDialog
           vals.push(comp.get_text().to_f)
         elsif type == "string"
           vals.push(comp.get_text())
+        elsif type == "bool"
+          vals.push(comp.is_checked())
         end
       }
       @callback.call(*vals)
@@ -253,7 +255,9 @@ class GenericDialog
                   CL_CheckBox.new(CL_Point.new(110, 10), 
                                   "",
                                   @window.get_client_area())])
-    # @items[-1][2].set_text(value.to_s)
+    if value == true
+      @items[-1][2].set_checked()
+    end
     update()
   end
 

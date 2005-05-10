@@ -40,17 +40,29 @@ class SuperTuxGUI
                         selector_rect.get_height() - 3)), @selector_window)
     @tileselector.set_tileset($tileset)
     @tileselector.set_tiles($tileset.get_tiles())
-    @tileselector.show(false)
     
-    @objectselector = ObjectSelector.new(CL_Rect.new(0, 0, 128, 552), 42, 42, @selector_window)
-    @objectselector.show(true)
+    @objectselector = ObjectSelector.new(CL_Rect.new(CL_Point.new(3, 3),
+                CL_Size.new(selector_rect.get_width()-3,
+                            selector_rect.get_height() - 3)),
+                42, 42, @selector_window)
 
-    # connect_v1_ObjMapObject
     connect_v2_ObjectBrush_Point(@objectselector.sig_drop(), method(:on_object_drop))
 
     $game_objects.each { |object|
       @objectselector.add_brush(ObjectBrush.new(make_sprite($datadir + object[1]),
                                                 make_metadata(object)))
+    }
+
+    @worldmapobjectselector = ObjectSelector.new(CL_Rect.new(CL_Point.new(3, 3),
+            CL_Size.new(selector_rect.get_width()-3,
+                        selector_rect.get_height() - 3)),
+            42, 42, @selector_window);
+    connect_v2_ObjectBrush_Point(@worldmapobjectselector.sig_drop(),
+            method(:on_worldmap_object_drop))
+    $worldmap_objects.each { |object|
+      @worldmapobjectselector.add_brush(ObjectBrush.new(
+            make_sprite($datadir + object[1]),
+            make_metadata(object[0])))
     }
 
     create_button_panel(buttonpanel_rect)
@@ -112,8 +124,7 @@ class SuperTuxGUI
                                  $objmap_select_tool.get_selection().each {|i|
                                    puts i
                                    puts i.get_data()
-                                   # FIXME: Not sure why we need get_ruby_object() here
-                                   get_ruby_object(i.get_data()).property_dialog()
+                                   i.get_data().property_dialog()
                                  }
                                })
                  menu.run()
@@ -125,6 +136,7 @@ class SuperTuxGUI
     connect_v2(@editor_map.sig_on_key("m"),  proc{ |x, y| gui_toggle_minimap()})
     connect_v2(@editor_map.sig_on_key("g"),  proc{ |x, y| gui_toggle_grid()})
     connect_v2(@editor_map.sig_on_key("4"),  proc{ |x, y| gui_toggle_display_props()})
+
     connect_v2(@editor_map.sig_on_key("3"),  proc{ |x, y| gui_show_foreground()})
     connect_v2(@editor_map.sig_on_key("2"),  proc{ |x, y| gui_show_interactive()})
     connect_v2(@editor_map.sig_on_key("1"),  proc{ |x, y| gui_show_background()})
@@ -217,6 +229,13 @@ class SuperTuxGUI
     button_panel.add_icon("../data/images/icons24/eye.png", proc{ @tilegroup_menu.run() })
   end
 
+  def on_worldmap_object_drop(brush, pos)
+    pos = @editor_map.screen2world(pos)
+    object_type = get_ruby_object(brush.get_data())
+    create_worldmapobject_at_pos(
+            $gui.workspace.get_map().get_metadata().objects, object_type, pos)
+  end
+
   def on_object_drop(brush, pos)
     pos = @editor_map.screen2world(pos)
     data = get_ruby_object(brush.get_data())
@@ -230,24 +249,33 @@ class SuperTuxGUI
 #   def show_colorpicker()
 #     @tileselector.show(false)        
 #     @objectselector.show(false)
+#     @worldmapobjectselector.show(false)
 # #    @colorpicker.show(true)
 #   end
 
   def show_objects()
-    @tileselector.show(false)        
-    @objectselector.show(true)
+    @tileselector.show(false)
+    if $use_worldmap
+      @worldmapobjectselector.show(true)
+      @objectselector.show(false)
+    else
+      @worldmapobjectselector.show(false)
+      @objectselector.show(true)
+    end
 #    @colorpicker.show(false)
   end
 
   def show_tiles()
     @tileselector.show(true)        
     @objectselector.show(false)
+    @worldmapobjectselector.show(false)
 #    @colorpicker.show(false)
   end
 
   def show_none()
     @tileselector.show(false)        
     @objectselector.show(false)
+    @worldmapobjectselector.show(false)
 #    @colorpicker.show(false)
   end
 
@@ -380,10 +408,14 @@ class SuperTuxGUI
 
   def gui_run_level()
     puts "Run this level..."
-    # FIXME: use real tmpfile
-    tmpfile = "/tmp/tmpflexlay-supertux.stl"
-    supertux_save_level(tmpfile)
-    # FIXME: doesn't work with latest supertux...
+    if $use_worldmap
+      tmpfile = "/tmp/tmpflexlay-worldmap.stwm"
+      supertux_save_level(tmpfile)
+    else
+      # FIXME: use real tmpfile
+      tmpfile = "/tmp/tmpflexlay-supertux.stl"
+      supertux_save_level(tmpfile)
+    end
     fork { exec("#{$datadir}/../supertux", tmpfile) }
   end
 
@@ -573,7 +605,11 @@ class SuperTuxGUI
   end
 
   def gui_level_save()
-    filename = @workspace.get_map().get_metadata().parent.filename
+    if $use_worldmap
+      filename = @workspace.get_map().get_metadata().filename
+    else
+      filename = @workspace.get_map().get_metadata().parent.filename
+    end
     print "Filename: ", filename, "\n"
     if filename
       @save_dialog.set_filename(filename)
@@ -633,7 +669,10 @@ class DisplayProperties
   end
   
   def set(map)
-
+    if map == nil || !map.instance_of?(Sector)
+      return
+    end
+  
     if @current_only
       active   = CL_Color.new(255, 255, 255)
       deactive = CL_Color.new(0, 0, 0, 10)
@@ -683,8 +722,27 @@ def supertux_load_level(filename)
   $gui.minimap.update_minimap()
 end
 
+def supertux_load_worldmap(filename)
+  print "Loading: ", filename, "\n"
+  worldmap = WorldMap.new(filename)
+  worldmap.activate($gui.workspace)
+
+  if not($recent_files.find{|el| el == filename}) then
+    $recent_files.push(filename)
+    $gui.recent_files_menu.add_item($mysprite, filename,
+        proc { supertux_load_worldmap(filename) })
+  end
+  $gui.minimap.update_minimap()
+  $use_worldmap = true
+end
+
 def supertux_save_level(filename)
-  level = $gui.workspace.get_map().get_metadata().parent
+  if $use_worldmap
+    level = $gui.workspace.get_map().get_metadata()
+  else
+    level = $gui.workspace.get_map().get_metadata().parent
+  end
+  
   # Do backup save
   if File.exists?(filename) then
     File.rename(filename, filename + "~")

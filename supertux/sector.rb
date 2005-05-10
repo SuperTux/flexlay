@@ -145,7 +145,7 @@ class Sector
     @name = "<No Name>"
     @music = ""
     @gravity = 10.0
-	@cameramode = "normal"
+    @cameramode = "normal"
     
     @width  = 0
     @height = 0

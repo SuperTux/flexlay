@@ -99,9 +99,13 @@ if !$datadir then
 end
 
 require "data.rb"
+require "WorldMap.rb"
+require "WorldMapObject.rb"
+require "TileMap.rb"
+require "LispWriter.rb"
+require "tileset.rb"
 require "level.rb"
 require "sector.rb"
-require "tileset.rb"
 
 $tileset = Tileset.new(32)
 $tileset.load($datadir + "images/tiles.strf")

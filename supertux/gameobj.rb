@@ -147,7 +147,7 @@ class AmbientSound<GameObj
     @data = data
     @factor = get_value_from_tree(["distance_factor", "_"],  sexpr, 0.1)
     @bias = get_value_from_tree(["distance_bias", "_"],  sexpr, 200)
-    @sample = get_value_from_tree(["sample", "_"],  sexpr, "waterfall")
+    @sample = get_value_from_tree(["sample", "_"],  sexpr, "")
     connect_v1_ObjMapObject(data.to_object.sig_move(), method(:on_move))
     on_move(data)
   end
@@ -161,7 +161,7 @@ class AmbientSound<GameObj
 
   def save(f, obj)
     pos = obj.get_pos()
-    f.write("       (ambient_sound (x %d) (y %d) (distance_factor \"%s\") (distance_bias \"%s\") (sample \"%s\"))\n" % [pos.x, pos.y, @factor, @bias, @sample])
+    f.write("       (ambient_sound (x %d) (y %d) (distance_factor %f) (distance_bias %f) (sample \"%s\"))\n" % [pos.x, pos.y, @factor, @bias, @sample])
   end
 
   def property_dialog()

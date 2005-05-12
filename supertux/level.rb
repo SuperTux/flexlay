@@ -1,12 +1,11 @@
 class Level
-  attr_reader :version, :filename, :name, :author, :theme, :time, :objects, :sectors, :current_sector
-  attr_writer :version, :filename, :name, :author, :theme, :time, :objects, :sectors, :current_sector
+  attr_reader :version, :filename, :name, :author, :theme, :objects, :sectors, :current_sector
+  attr_writer :version, :filename, :name, :author, :theme, :objects, :sectors, :current_sector
   
   def initialize(*params)
     @name     = "No Name"
     @author   = "No Author"
     @theme    = "antarctica"
-    @time     = 999 
     @filename = nil
     @music    = ""
     @version  = 2
@@ -51,7 +50,6 @@ class Level
   def parse_v2(data)
     @name    = get_value_from_tree(["name", "_"], data, "no name")
     @author  = get_value_from_tree(["author", "_"], data, "no author")
-    @time    = get_value_from_tree(["time", "_"], data, 999)
     
     @current_sector = nil
     @sectors = []
@@ -80,7 +78,6 @@ class Level
     
     @name    = get_value_from_tree(["name", "_"], data, "no name")
     @author  = get_value_from_tree(["author", "_"], data, "no author")
-    @time    = get_value_from_tree(["time", "_"], data, 999)
   end
   
   def save(filename)
@@ -94,9 +91,6 @@ class Level
     f.write("  (version 2)\n")
     f.write("  (name   (_ \"%s\"))\n" % @name)
     f.write("  (author \"%s\")\n" % @author)
-	if(@time != 999)
-      f.write("  (time   %d)\n" % @time)
-	end
     
     for sector in @sectors
       f.write("  (sector\n")
@@ -119,7 +113,6 @@ class Level
     f.write("  (height  %d)\n" % @height)
     
     f.write("  (music  \"%s\")\n" % @music)
-    f.write("  (time   %d)\n" % @time)
     
     f.write("  (gravity %f)\n" % @gravity)
     

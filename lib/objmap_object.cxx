@@ -29,13 +29,6 @@ ObjMapObject::ObjMapObject(const SharedPtr<ObjMapObjectImpl>& impl_)
 {
 }
 
-ObjMapObject::ObjMapObject(const CL_Pointf& pos_,
-                           const MetaData& data_)
-{  
-  impl->pos  = pos_;
-  impl->data = data_;
-}
-
 CL_Pointf
 ObjMapObject::get_pos() const 
 {
@@ -64,7 +57,7 @@ ObjMapObject::get_metadata() const
 }
 
 void
-ObjMapObject::set_metadata(MetaData data_)
+ObjMapObject::set_metadata(const MetaData& data_)
 {
   if (impl.get())
     impl->data = data_;

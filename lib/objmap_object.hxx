@@ -34,14 +34,13 @@ class ObjMapObject
 public:
   ObjMapObject();
   ObjMapObject(const SharedPtr<ObjMapObjectImpl>& impl_);
-  ObjMapObject(const CL_Pointf& pos, const MetaData& data);
   virtual ~ObjMapObject() {}
 
   CL_Pointf get_pos() const;
   void     set_pos(const CL_Pointf& p);
 
   MetaData get_metadata() const;
-  void     set_metadata(MetaData data_);
+  void     set_metadata(const MetaData& data_);
 
   CL_Signal_v1<ObjMapObject>& sig_move();
   CL_Signal_v1<ObjMapObject>& sig_select();

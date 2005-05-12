@@ -711,6 +711,10 @@ end
 
 
 def supertux_load_level(filename)
+  if filename.scan(/.stwm$/) != []
+    supertux_load_worldmap(filename)
+    return
+  end
   print "Loading: ", filename, "\n"
   level = Level.new(filename)
   level.activate($gui.workspace)

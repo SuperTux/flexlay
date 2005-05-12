@@ -27,6 +27,8 @@ class TileProviderImpl
 {
 public:
   TileProviderImpl() {}
+  virtual ~TileProviderImpl()
+  { }
 
   virtual CL_Sprite      get_sprite()      const =0;
   virtual CL_PixelBuffer get_pixelbuffer() const =0;

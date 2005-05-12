@@ -358,6 +358,27 @@ class UnimplementedObject<GameObj
   end
 end
 
+class LevelTime<GameObj
+  def initialize(sexpr = [])
+    @time = get_value_from_tree(["time", "_"], sexpr, 999)
+  end
+
+  def save(f, obj)
+    f.write("       (leveltime\n");
+    f.write("         (time %f)\n" % [@time]);
+    f.write("       )\n");
+  end
+
+  def property_dialog()
+    dialog = GenericDialog.new("LevelTime Property Dialog",
+        $gui.get_component())
+    dialog.add_float("Time: ", @time)
+    dialog.set_callback(proc{|time| 
+                          @time = time
+                        })
+  end
+end
+
 class Door<GameObj
   attr_accessor :sector, :spawnpoint
   attr_reader   :data

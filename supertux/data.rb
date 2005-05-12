@@ -61,6 +61,8 @@ $game_objects = [
     proc{|data, sexpr| ParticleSystem.new("clouds", sexpr)}],
   ["particles-rain", "images/engine/editor/rain.png", "sprite",
     proc{|data, sexpr| ParticleSystem.new("rain", sexpr)}],
+  ["leveltime", "images/engine/editor/clock.png", "sprite",
+    proc{|data, sexpr| LevelTime.new(sexpr)}],
 ]
 
 def create_gameobject_from_data(objmap, name, sexpr)
@@ -86,13 +88,15 @@ def create_gameobject(objmap, data, pos, sexpr = [])
     
   when "sprite" 
     obj = ObjMapSpriteObject.new(make_sprite($datadir + data[1]), pos, make_metadata(nil))
-    obj.to_object.set_metadata(make_metadata(data[3].call(obj, sexpr)))
+    gobj = data[3].call(obj, sexpr)
+    obj.to_object.set_metadata(make_metadata(gobj))
     
   when "rect"
 	print "NewRect", pos.x, " -", pos.y, "\n"
     obj = ObjMapRectObject.new(CL_Rect.new(CL_Point.new(pos.x.to_i, pos.y.to_i), CL_Size.new(64, 64)),
                                CL_Color.new(0, 0, 255, 128), make_metadata(nil))
-    obj.to_object.set_metadata(make_metadata(data[3].call(obj, sexpr)))
+    gobj = data[3].call(obj, sexpr)
+    obj.to_object.set_metadata(make_metadata(gobj))
 
   else
     raise "Error: Unknown object type droped: '#{data}'"

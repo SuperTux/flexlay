@@ -7,6 +7,48 @@ class WorldmapObject
   end
 end
 
+class WMSpawnPoint<WorldmapObject
+  def initialize()
+    @name = ""
+    @obj = ObjMapSpriteObject.new(
+        make_sprite($datadir + "images/tiles/worldmap/tux.png"),
+        CL_Pointf.new(0, 0), make_metadata(self))
+     connect_v1_ObjMapObject(@obj.to_object.sig_move(), method(:on_move))
+  end
+
+  def on_move(data)
+    pos = @obj.to_object.get_pos()
+    pos.x = (((pos.x+16)/32).to_i)*32                               
+    pos.y = (((pos.y+16)/32).to_i)*32
+    @obj.to_object.set_pos(pos)
+  end
+
+  def parse(data)
+    x = get_value_from_tree(["x", "_"], data, 0)
+    y = get_value_from_tree(["y", "_"], data, 0)
+    @obj.to_object.set_pos(CL_Pointf.new(x * 32, y * 32))
+    @name = get_value_from_tree(["name", "_"], data, "")
+  end
+                                                                               
+  def save(writer)
+    writer.start_list("spawnpoint")
+    pos = @obj.to_object.get_pos()
+    writer.write_int("x", pos.x / 32)
+    writer.write_int("y", pos.y / 32)
+    writer.write_string("name", @name)
+    writer.end_list("level")
+  end
+
+  def property_dialog()
+    dialog = GenericDialog.new("SpawnPoint Property Dialog",
+        $gui.get_component())
+    dialog.add_string("Name", @name)
+    dialog.set_callback(proc{|name|
+          @name = name
+      })                                                          
+  end
+end
+
 class WorldmapLevel<WorldmapObject
   def initialize()
     @name = ""
@@ -145,7 +187,8 @@ end
 
 $worldmap_objects = [
   ["level", "images/tiles/worldmap/leveldot_green.png", WorldmapLevel],
-  ["special-tile", "images/tiles/worldmap/teleporterdot.png", SpecialTile]
+  ["special-tile", "images/tiles/worldmap/teleporterdot.png", SpecialTile],
+  ["spawnpoint", "images/tiles/worldmap/tux.png", WMSpawnPoint],
 ]
 
 def create_worldmapobject_at_pos(objmap, name, pos)

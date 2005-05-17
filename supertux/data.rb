@@ -49,6 +49,8 @@ $game_objects = [
     proc{|data, sexpr| SimpleTileObject.new(data, "unstable_tile")}],
   ["infoblock", "images/engine/editor/infoblock.png", "sprite",
     proc{|data, sexpr| InfoBlock.new(data, sexpr)}],
+  ["powerup", "images/engine/editor/powerup.png", "sprite",
+    proc{|data, sexpr| Powerup.new(data, sexpr)}],
   ["secretarea", "images/engine/editor/secretarea.png", "rect",
     proc{|data, sexpr| SecretArea.new(data, sexpr)}],
   ["sequencetrigger", "images/engine/editor/sequencetrigger.png", "rect",

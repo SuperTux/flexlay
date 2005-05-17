@@ -243,6 +243,40 @@ class InfoBlock<GameObj
   end
 end 
 
+class Powerup<GameObj
+  attr_accessor :type
+
+  def initialize(data, sexpr = [])
+   @data = data
+   @type = get_value_from_tree(["type", "_"], sexpr, "egg")
+   connect_v1_ObjMapObject(@data.to_object.sig_move(), method(:on_move))
+   on_move(data)
+  end
+
+  def on_move(data)
+    pos = @data.to_object.get_pos()    
+    pos.x = (((pos.x+16)/32).to_i)*32
+    pos.y = (((pos.y+16)/32).to_i)*32
+    @data.to_object.set_pos(pos)       
+  end
+
+  def save(f, obj)
+   pos = obj.get_pos()
+   f.write("      (powerup (x %d) (y %d)\n" % [pos.x, pos.y]);
+   f.write("        (type (_ \"%s\"))\n" % [@type]);
+   f.write("      )\n");
+  end
+
+  def property_dialog()
+    dialog = GenericDialog.new("Powerup Property Dialog" % [@type],
+         $gui.get_component())
+    dialog.add_string("Type: ", @type)
+    dialog.set_callback(proc{|type| 
+                          @type = type
+                        })
+  end
+end 
+
 class ParticleSystem<GameObj
   def initialize(type, sexpr = [])
     @type = type

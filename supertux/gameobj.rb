@@ -244,11 +244,11 @@ class InfoBlock<GameObj
 end 
 
 class Powerup<GameObj
-  attr_accessor :type
+  attr_accessor :sprite
 
   def initialize(data, sexpr = [])
    @data = data
-   @type = get_value_from_tree(["type", "_"], sexpr, "egg")
+   @sprite = get_value_from_tree(["sprite", "_"], sexpr, "egg")
    connect_v1_ObjMapObject(@data.to_object.sig_move(), method(:on_move))
    on_move(data)
   end
@@ -263,16 +263,16 @@ class Powerup<GameObj
   def save(f, obj)
    pos = obj.get_pos()
    f.write("      (powerup (x %d) (y %d)\n" % [pos.x, pos.y]);
-   f.write("        (type (_ \"%s\"))\n" % [@type]);
+   f.write("        (sprite (_ \"%s\"))\n" % [@sprite]);
    f.write("      )\n");
   end
 
   def property_dialog()
-    dialog = GenericDialog.new("Powerup Property Dialog" % [@type],
+    dialog = GenericDialog.new("Powerup Property Dialog" % [@sprite],
          $gui.get_component())
-    dialog.add_string("Type: ", @type)
-    dialog.set_callback(proc{|type| 
-                          @type = type
+    dialog.add_string("Sprite: ", @sprite)
+    dialog.set_callback(proc{|sprite| 
+                          @sprite = sprite
                         })
   end
 end 

@@ -40,6 +40,57 @@ class SecretArea<GameObj
   end
 end
 
+class AmbientSound<GameObj
+  attr_accessor :factor, :bias, :sample, :volume
+  
+  def initialize(data, sexpr = [])
+    @data = data
+    @data.set_color(CL_Color.new(200, 200, 200, 128))
+    @factor = get_value_from_tree(["distance_factor", "_"],  sexpr, 0.1)
+    @bias = get_value_from_tree(["distance_bias", "_"],  sexpr, 200)
+    @sample = get_value_from_tree(["sample", "_"],  sexpr, "waterfall")
+    @volume = get_value_from_tree(["volume", "_"],  sexpr, 1)
+
+    x  = get_value_from_tree(["x", "_"],  sexpr, nil)
+    y  = get_value_from_tree(["y", "_"],  sexpr, nil)
+    width  = get_value_from_tree(["width", "_"],  sexpr, 64)
+    height = get_value_from_tree(["height", "_"], sexpr, 64)
+    if x != nil and y != nil then
+      @data.set_rect(CL_Rect.new(CL_Point.new(x, y), CL_Size.new(width, height)))
+    end
+  end
+
+  def save(f, obj)
+    rect = @data.get_rect()
+    f.write("        (ambient_sound (x #{rect.left})\n" \
+            "                       (y #{rect.top})\n"  \
+            "                       (width #{rect.get_width()})\n" \
+            "                       (height #{rect.get_height()})\n" \
+            "                       (sample #{@sample.inspect})\n" \
+	    "                       (distance_factor #{@factor.inspect})\n" \
+	    "                       (distance_bias #{@bias.inspect})\n" \
+	    "                       (volume #{@volume.inspect}))\n")
+  end
+
+  def property_dialog()
+    puts @factor.inspect
+    puts @bias.inspect
+    puts @sample.inspect
+    puts @volume.inspect
+    dialog = GenericDialog.new("AmbientSound Property Dialog", $gui.get_component())
+    dialog.add_float("Distance Factor: ", @factor)
+    dialog.add_float("Distance Bias: ", @bias)
+    dialog.add_string("Sample: ", @sample)
+    dialog.add_int("Max Volume: ",@volume)
+    dialog.set_callback(proc{|factor, bias, sample, volume| 
+                          @factor = factor
+			  @bias = bias
+			  @sample = sample
+			  @volume = volume
+                        })
+  end
+end
+
 class SequenceTrigger<GameObj
   attr_accessor :sequence, :data
   
@@ -68,7 +119,7 @@ class SequenceTrigger<GameObj
 
   def property_dialog()
     puts @sequence.inspect
-    dialog = GenericDialog.new("SecretArea Property Dialog", $gui.get_component())
+    dialog = GenericDialog.new("SequenceTrigger Property Dialog", $gui.get_component())
     dialog.add_string("Sequence: ", @sequence)
     dialog.set_callback(proc{|sequence| 
                           @sequence = sequence
@@ -138,41 +189,6 @@ class SpawnPoint<GameObj
     dialog.add_string("Name: ", @name)
     dialog.set_callback(proc{|name| 
                           @name = name
-                        })
-  end
-end
-
-class AmbientSound<GameObj
-  def initialize(data, sexpr = [])
-    @data = data
-    @factor = get_value_from_tree(["distance_factor", "_"],  sexpr, 0.1)
-    @bias = get_value_from_tree(["distance_bias", "_"],  sexpr, 200)
-    @sample = get_value_from_tree(["sample", "_"],  sexpr, "")
-    connect_v1_ObjMapObject(data.to_object.sig_move(), method(:on_move))
-    on_move(data)
-  end
-
-  def on_move(data)
-    pos = @data.to_object.get_pos()
-    pos.x = (((pos.x+16)/32).to_i)*32
-    pos.y = (((pos.y+16)/32).to_i)*32
-    @data.to_object.set_pos(pos)
-  end
-
-  def save(f, obj)
-    pos = obj.get_pos()
-    f.write("       (ambient_sound (x %d) (y %d) (distance_factor %f) (distance_bias %f) (sample \"%s\"))\n" % [pos.x, pos.y, @factor, @bias, @sample])
-  end
-
-  def property_dialog()
-    dialog = GenericDialog.new("AmbientSound Property Dialog", $gui.get_component())
-    dialog.add_float("Distance Factor: ", @factor)
-    dialog.add_float("Distance Bias: ", @bias)
-    dialog.add_string("Sample: ", @sample)
-    dialog.set_callback(proc{|factor, bias, sample| 
-                          @factor = factor
-			  @bias = bias
-			  @sample = sample
                         })
   end
 end

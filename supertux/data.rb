@@ -33,7 +33,7 @@ $game_objects = [
     proc{|data, sexpr| BadGuy.new("yeti_stalactite")}],
   ["spawnpoint", "images/engine/editor/spawnpoint.png", "sprite",
     proc{|data, sexpr| SpawnPoint.new(data, sexpr)}],
-  ["ambient_sound", "images/engine/editor/ambientsound.png", "sprite",
+  ["ambient_sound", "images/engine/editor/ambientsound.png", "rect",
     proc{|data, sexpr| AmbientSound.new(data, sexpr)}],
   ["door", "images/objects/door/door-0.png", "sprite",
     proc{|data, sexpr| Door.new("door", data, sexpr)}],

@@ -66,10 +66,10 @@ class GUI
     @grid_icon = @button_panel.add_icon("../data/images/icons24/grid.png", proc{ toggle_grid() })
     @button_panel.add_separator()
 
-    @button_panel.add_icon("../data/images/icons24/background.png")
-    @button_panel.add_icon("../data/images/icons24/interactive.png")
-    @button_panel.add_icon("../data/images/icons24/foreground.png")
-    @button_panel.add_icon("../data/images/icons24/eye.png")
+    @background_icon = @button_panel.add_icon("../data/images/icons24/background.png")
+    @interactive_icon = @button_panel.add_icon("../data/images/icons24/interactive.png")
+    @foreground_icon = @button_panel.add_icon("../data/images/icons24/foreground.png")
+    @eye_icon = @button_panel.add_icon("../data/images/icons24/eye.png")
 
     @layer_menu = Menu.new(CL_Point.new(32*15+2, 54), @gui.get_component())
     
@@ -79,10 +79,10 @@ class GUI
     @zoom   = @toolbar.add_icon("../data/images/tools/stock-tool-zoom-22.png", proc{ $controller.set_zoom_tool() })
     @object = @toolbar.add_icon("../data/images/tools/stock-tool-clone-22.png", proc{ $controller.set_objmap_select_tool() })
 
-    # $foreground_icon.set_callback(proc{ show_foreground() })
-    # $interactive_icon.set_callback(proc{ show_interactive() })
-    # $background_icon.set_callback(proc{ show_background() })
-    # $eye_icon.set_callback(proc{ $layer_menu.run() })
+    @foreground_icon.set_callback(proc{ show_foreground() })
+    @interactive_icon.set_callback(proc{ show_interactive() })
+    @background_icon.set_callback(proc{ show_background() })
+    @eye_icon.set_callback(proc{ $layer_menu.run() })
 
     @layer_menu.add_item($mysprite, "Show all", proc{ show_all() })
     @layer_menu.add_item($mysprite, "Show current", proc{ show_current() })
@@ -117,10 +117,10 @@ class GUI
     # show_current()
     # set_tilemap_paint_tool()
 
-    @selector_window = Panel.new(CL_Rect.new(CL_Point.new($screen_width-134, 23+33), 
-                                             CL_Size.new(128 + 6, $screen_height - 600 + 558)),
+    @selector_window = Panel.new(CL_Rect.new(CL_Point.new($screen_width-128-64-6, 23+33), 
+                                             CL_Size.new(128 + 64 + 6, $screen_height - 600 + 558)),
                                  @gui.get_component())
-    @tileselector = TileSelector.new(CL_Rect.new(CL_Point.new(3, 3), CL_Size.new(128, $screen_height - 600 + 552)), @selector_window)
+    @tileselector = TileSelector.new(CL_Rect.new(CL_Point.new(3, 3), CL_Size.new(128+64, $screen_height - 600 + 552)), @selector_window)
     @tileselector.set_tileset($tileset)
     puts "Setting scale to 1.0"
     @tileselector.set_scale(1.0)
@@ -151,6 +151,18 @@ class GUI
     connect_v2(@editor_map.sig_on_key("1"),  proc{ |x, y| show_background()})
   end
 
+  def show_background()
+    TilemapLayer.set_current(@workspace.get_map().get_metadata().background)
+  end
+
+  def show_interactive()
+    TilemapLayer.set_current(@workspace.get_map().get_metadata().interactive)
+  end
+
+  def show_foreground()
+    TilemapLayer.set_current(@workspace.get_map().get_metadata().foreground)
+  end
+
   def level_load()
     @load_dialog.run(proc{|filename| $controller.load_level(filename) })
   end
@@ -174,7 +186,7 @@ class GUI
   end
 
   def toggle_grid()
-    tilemap = @workspace.get_map().get_metadata().layers[0];
+    tilemap = @workspace.get_map().get_data().layers[0];
     tilemap.set_draw_grid(!tilemap.get_draw_grid())
 
     if tilemap.get_draw_grid()

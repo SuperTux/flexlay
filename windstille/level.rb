@@ -44,13 +44,11 @@ class Level
 
   def initialize_new(width, height)
     # New Level
-    (@width, @height) = [width, height]
-    
     @current_layer = 1
     
-    @background  = TilemapLayer.new($tileset, @width, @height)
-    @interactive = TilemapLayer.new($tileset, @width, @height)
-    @foreground  = TilemapLayer.new($tileset, @width, @height)
+    @background  = TilemapLayer.new($tileset, width, height)
+    @interactive = TilemapLayer.new($tileset, width, height)
+    @foreground  = TilemapLayer.new($tileset, width, height)
     
     @layers = []
     @layers += [@background]
@@ -62,7 +60,7 @@ class Level
     @layers.each {|layer| @editormap.add_layer(layer.to_layer()) }
     
     # FIXME: Data might not get freed since its 'recursively' refcounted
-    @editormap.set_metadata(make_metadata(self))
+    @editormap.set_data(self)
   end
 
   def initialize_from_file(filename)
@@ -75,12 +73,10 @@ class Level
     
     @version = get_value_from_tree(["version", "_"], data, 0)
     @name    = get_value_from_tree(["name", "_"],    data, 0)
-    @width   = get_value_from_tree(["width", "_"],   data, 0)
-    @height  = get_value_from_tree(["height", "_"],  data, 0)
     @music   = get_value_from_tree(["music", "_"],   data, 0)
 
     load_tilemap = proc {|name|
-      mydata   = get_value_from_tree(["#{name}-tilemap"],  data, 0)
+      mydata   = get_value_from_tree(["tilemap"],  data, 0)
       puts mydata
       width  = get_value_from_tree(["width", "_"],  mydata, 0)
       height = get_value_from_tree(["height", "_"],  mydata, 0)
@@ -100,7 +96,7 @@ class Level
     @layers.each {|layer| @editormap.add_layer(layer.to_layer()) }
     
     # FIXME: Data might not get freed since its 'recursively' refcounted
-    @editormap.set_metadata(make_metadata(self))
+    @editormap.set_data(self)
 
     @current_layer = 1
 
@@ -124,16 +120,13 @@ class Level
     f.write("(windstille-sector\n")
     f.write("  (version 2)\n")
     f.write("  (name   \"%s\")\n" % @name)
-    f.write("  (width  %d)\n"  % @width)
-    f.write("  (height  %d)\n" % @height)
-    
     f.write("  (music  \"%s\")\n" % @music)
 
     save_tilemap = proc {|name, tilemap|
       width  = tilemap.get_width()
       height = tilemap.get_height()
-      f.write("  (%s-tilemap (width %d) (height %d)\n" % \
-              [name, width, height])
+      f.write("  (tilemap (name \"%s\") (width %d) (height %d)\n" % \
+              [name, width, height]) # FIXME: add escaping to strings
       f.write("    (data")
       tilemap.get_data().each_with_index {|item, i|
         if (i % width == 0) then

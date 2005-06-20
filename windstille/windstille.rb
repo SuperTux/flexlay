@@ -29,10 +29,6 @@ if File.exist?($config_file) then
   require $config_file
 end
 
-BACKGROUND_LAYER  = 1
-INTERACTIVE_LAYER = 2
-FOREGROUND_LAYER  = 3
-
 ## Load Flexlay library
 require "flexlay_wrap"
 include Flexlay_wrap
@@ -96,10 +92,16 @@ $mysprite = make_sprite("../data/images/icons16/stock_paste-16.png")
              
 $resources = CL_ResourceManager.new("../data/flexlay.xml")
 
-$tileset = Tileset.new(64)
-(0...16).each {|y|
-  (0...8).each {|x|
-    $tileset.add_tile(y*8+x+1, Tile.new(make_region_pixelbuffer("industrialset.png", 64*x, 64*y, 64, 64)))
+$tileset = Tileset.new(32)
+(0...6).each {|y|
+  (0...6).each {|x|
+    $tileset.add_tile(y*8+x+1, Tile.new(make_region_pixelbuffer("virtualreality.png", 32*x, 32*y, 32, 32)))
+  }
+}
+
+(0...6).each {|y|
+  (0...6).each {|x|
+    $tileset.add_tile(y*8+x+1+8*8, Tile.new(make_region_pixelbuffer("virtualreality-background.png", 32*x, 32*y, 32, 32)))
   }
 }
 
@@ -113,6 +115,6 @@ $startlevel.activate($workspace)
 
 $gui.run()
 
-flexlay.deinit()
+# flexlay.deinit()
 
 # EOF #

@@ -45,7 +45,7 @@ require "level.rb"
 
 ## Init Flexlay itself
 flexlay = Flexlay.new()
-flexlay.init()
+flexlay.init(1024, 768)
 
 ## Initialize Tools
 class Controller

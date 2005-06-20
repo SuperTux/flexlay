@@ -20,6 +20,9 @@
 ## Create some Basic GUI, this is a bit more complicated then it
 ## should be due to the lack of proper button-banel class and layout manager
 
+$screen_width  = 1024
+$screen_height = 768
+
 ## GUI class which holds all the GUI components and the state of them
 class GUI
   attr_reader :workspace, :gui, :tileselector, :objectselector
@@ -32,17 +35,18 @@ class GUI
   def initialize()
     @gui = GUIManager.new()
 
-    myrect      = CL_Rect.new(CL_Point.new(0, 56), CL_Size.new(665, 488+56))
+    myrect      = CL_Rect.new(CL_Point.new(0, 56), CL_Size.new($screen_width - 800 +  665,
+                                                               $screen_height - 600 + 488+56))
     @editor_map = EditorMapComponent.new(myrect, @gui.get_component())
     @workspace  = Workspace.new(myrect.get_width(), myrect.get_height())
     @editor_map.set_workspace(@workspace)
 
     @minimap = Minimap.new(@editor_map, CL_Rect.new(CL_Point.new(3 + myrect.left, 
-                                                                 488+3-14  + myrect.top), 
-                                                    CL_Size.new(794-134-16, 50)), 
+                                                                 $screen_height - 600 + 488+3-14  + myrect.top), 
+                                                    CL_Size.new($screen_width - 6 -134-16, 50)), 
                            @gui.get_component())
 
-    @button_panel = ButtonPanel.new(0, 23, 800, 33, true, @gui.get_component)
+    @button_panel = ButtonPanel.new(0, 23, $screen_width, 33, true, @gui.get_component)
 
     @button_panel.add_icon("../data/images/icons24/stock_new.png")
     @button_panel.add_icon("../data/images/icons24/stock_open.png", proc{ level_load() })
@@ -113,19 +117,20 @@ class GUI
     # show_current()
     # set_tilemap_paint_tool()
 
-    @selector_window = Panel.new(CL_Rect.new(CL_Point.new(800-134, 23+33), CL_Size.new(128 + 6, 558)),
+    @selector_window = Panel.new(CL_Rect.new(CL_Point.new($screen_width-134, 23+33), 
+                                             CL_Size.new(128 + 6, $screen_height - 600 + 558)),
                                  @gui.get_component())
-    @tileselector = TileSelector.new(CL_Rect.new(CL_Point.new(3, 3), CL_Size.new(128, 552)), @selector_window)
+    @tileselector = TileSelector.new(CL_Rect.new(CL_Point.new(3, 3), CL_Size.new(128, $screen_height - 600 + 552)), @selector_window)
     @tileselector.set_tileset($tileset)
     puts "Setting scale to 1.0"
     @tileselector.set_scale(1.0)
     @tileselector.set_tiles($tileset.get_tiles())
     @tileselector.show(true)
     
-    @objectselector = ObjectSelector.new(CL_Rect.new(0, 0, 128, 256), 42, 42, @selector_window)
+    @objectselector = ObjectSelector.new(CL_Rect.new(0, 0, 128, $screen_height - 600 + 552), 42, 42, @selector_window)
     @objectselector.show(false)
 
-    connect_v1_ObjMapObject(@objectselector.sig_drop(), proc{ on_object_drop() })
+    connect_v2_ObjectBrush_Point(@objectselector.sig_drop(), proc{|brush, point| on_object_drop() })
 
 #    $game_objects.each do |object|
 #     @objectselector.add_brush(ObjectBrush.new(make_sprite($datadir + object[1]),

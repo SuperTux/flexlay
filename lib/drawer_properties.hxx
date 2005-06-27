@@ -34,7 +34,6 @@ public:
   static DrawerProperties* current();
 
   DrawerProperties();
-  ~DrawerProperties();
 
   /** Set the spacing that will be between the sprites that are drawn
       along the dabs */

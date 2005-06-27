@@ -34,8 +34,6 @@ public:
                    const CL_Color& color_,
                    const MetaData& data_);
     
-  void draw(CL_GraphicContext* gc);
-
   void set_color(const CL_Color& color);
 
   void set_rect(const CL_Rect& rect);

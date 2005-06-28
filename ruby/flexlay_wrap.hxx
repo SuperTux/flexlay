@@ -40,6 +40,8 @@ VALUE convert_to_ruby_value(const C& c)
 template<> VALUE convert_to_ruby_value<ObjMapObject>(const ObjMapObject& arg);
 template<> VALUE convert_to_ruby_value<ObjectBrush>(const ObjectBrush& arg);
 template<> VALUE convert_to_ruby_value<CL_Color>(const CL_Color& arg);
+template<> VALUE convert_to_ruby_value<CL_Point>(const CL_Point& arg);
+template<> VALUE convert_to_ruby_value<CL_Pointf>(const CL_Pointf& arg);
 template<> VALUE convert_to_ruby_value<int>(const int& arg);
 template<> VALUE convert_to_ruby_value<float>(const float& arg);
 

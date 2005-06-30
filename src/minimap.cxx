@@ -147,7 +147,7 @@ Minimap::update_minimap_surface()
               }
           }
 
-      minimap_surface = CL_Surface(&buffer);
+      minimap_surface = CL_Surface(buffer);
     }
 }
 

@@ -33,8 +33,7 @@ Tile::Tile(const std::string& filename_,
            const CL_Color& color_, 
            const CL_Color& attribute_color_, 
            unsigned char arg_colmap[])
-  : pixelbuffer(0),
-    color(color_),
+  : color(color_),
     attribute_color(attribute_color_),
     filename(filename_)
 {
@@ -50,7 +49,6 @@ Tile::Tile(const std::string& filename_,
 
 Tile::~Tile()
 {
-  delete pixelbuffer;
 }
 
 CL_Color
@@ -77,7 +75,7 @@ Tile::get_sprite()
         if (has_suffix(filename, ".png") || has_suffix(filename, ".jpg"))
           {
             CL_SpriteDescription desc;
-            desc.add_frame(get_pixelbuffer(), false);
+            desc.add_frame(get_pixelbuffer());
             sur = CL_Sprite(desc);
           }
         else
@@ -92,7 +90,7 @@ Tile::get_sprite()
     }
 }
 
-CL_PixelBuffer*
+CL_PixelBuffer
 Tile::get_pixelbuffer()
 {	
   if (pixelbuffer)
@@ -105,7 +103,7 @@ Tile::get_pixelbuffer()
     else
       {
         CL_SpriteDescription descr(filename, resources);
-        pixelbuffer = new CL_PixelBuffer(*(descr.get_frames().begin()->first));
+        pixelbuffer = descr.get_frames().begin()->first;
       }
     return pixelbuffer;
   }
@@ -114,21 +112,21 @@ Tile::get_pixelbuffer()
 CL_Color
 Tile::calc_color()
 {
-  CL_PixelBuffer* buffer = get_pixelbuffer();
-  buffer->lock();
-  unsigned char* buf = static_cast<unsigned char*>(buffer->get_data());
-  int len = buffer->get_height() * buffer->get_width();
+  CL_PixelBuffer buffer = get_pixelbuffer();
+  buffer.lock();
+  unsigned char* buf = static_cast<unsigned char*>(buffer.get_data());
+  int len = buffer.get_height() * buffer.get_width();
 
   int red   = 0;
   int green = 0;
   int blue  = 0;
   int alpha = 0;
   
-  switch (buffer->get_format().get_depth())
+  switch (buffer.get_format().get_depth())
     {
     case 8:
       {
-        CL_Palette palette = buffer->get_palette();
+        CL_Palette palette = buffer.get_palette();
         for(int i = 0; i < len; ++i)
           {
             red   += palette.colors[buf[i]].get_red();
@@ -159,7 +157,7 @@ Tile::calc_color()
       break;
     }
 
-  buffer->unlock();
+  buffer.unlock();
 
   return CL_Color(static_cast<int>(red   / len),
                   static_cast<int>(green / len),

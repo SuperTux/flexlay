@@ -90,7 +90,7 @@ public:
   void set_draw_grid(bool t);
   bool get_draw_grid() const;
 
-  CL_PixelBuffer* create_pixelbuffer();
+  CL_PixelBuffer create_pixelbuffer();
 
   static void draw_tile(Field<int>* field, const TileBrush& brush, const CL_Point& pos);
 

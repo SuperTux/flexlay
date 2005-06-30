@@ -31,7 +31,7 @@ class Tile
 {
 private:
   CL_Sprite sur;
-  CL_PixelBuffer* pixelbuffer;
+  CL_PixelBuffer pixelbuffer;
 
   /** Color used for the minimap to represent this tile */
   CL_Color  color;
@@ -56,7 +56,7 @@ public:
 
   /** Return a pixelbuffer associated with this tile, caller must not
       delete the pixelbuffer, the Tile will take care of that */
-  CL_PixelBuffer* get_pixelbuffer();
+  CL_PixelBuffer get_pixelbuffer();
 
   CL_Color   get_color();
   CL_Color   get_attribute_color();

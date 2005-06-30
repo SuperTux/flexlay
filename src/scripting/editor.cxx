@@ -162,7 +162,7 @@ objectmap_add_object(EditorMapLayer* obj, const char* filename, int x, int y, SC
         if (has_suffix(filename, ".png") || has_suffix(filename, ".jpg"))
           {
             CL_SpriteDescription desc;
-            desc.add_frame(CL_ProviderFactory::load(filename), true);
+            desc.add_frame(CL_ProviderFactory::load(filename));
             sprite = CL_Sprite(desc);
             //sprite.set_alignment(origin_bottom_center, -16, -32);
           }
@@ -204,7 +204,7 @@ int editor_objectmap_add_object(EditorMapLayer* layer, const char* filename, int
         if (has_suffix(filename, ".png") || has_suffix(filename, ".jpg"))
           {
             CL_SpriteDescription desc;
-            desc.add_frame(CL_ProviderFactory::load(filename), true);
+            desc.add_frame(CL_ProviderFactory::load(filename));
             sprite = CL_Sprite(desc);
             //sprite.set_alignment(origin_bottom_center, -16, -32);
           }
@@ -283,7 +283,7 @@ object_selector_add_brush(CL_Component* comp, const char* filename, SCM data)
     if (has_suffix(filename, ".png") || has_suffix(filename, ".jpg"))
       {
         CL_SpriteDescription desc;
-        desc.add_frame(CL_ProviderFactory::load(filename), true);
+        desc.add_frame(CL_ProviderFactory::load(filename));
         sprite = CL_Sprite(desc);
         //sprite.set_alignment(origin_bottom_center, -16, -32);
       }
@@ -845,25 +845,23 @@ void
 editor_tilemap_save_png(EditorMapLayer* l, const char* filename)
 {
   EditorTileMap* tilemap = dynamic_cast<EditorTileMap*>(l);
-  CL_PixelBuffer* pixelbuffer = tilemap->create_pixelbuffer();
+  CL_PixelBuffer pixelbuffer = tilemap->create_pixelbuffer();
 
-  pixelbuffer->lock();
+  pixelbuffer.lock();
   std::ofstream out(filename);
 
   out << "P6\n"
-      << pixelbuffer->get_width() << " " << pixelbuffer->get_height() << "\n"
+      << pixelbuffer.get_width() << " " << pixelbuffer.get_height() << "\n"
       << "255\n";
-  char* buf = static_cast<char*>(pixelbuffer->get_data());
-  for(int i = 0; i < int(pixelbuffer->get_pitch() * pixelbuffer->get_height()); i += 4)
+  char* buf = static_cast<char*>(pixelbuffer.get_data());
+  for(int i = 0; i < int(pixelbuffer.get_pitch() * pixelbuffer.get_height()); i += 4)
     {
       out.write(&buf[i + 3], 1);
       out.write(&buf[i + 2], 1);
       out.write(&buf[i + 1], 1);
     }
 
-  pixelbuffer->unlock();
-
-  delete pixelbuffer;
+  pixelbuffer.unlock();
 }
 
 int

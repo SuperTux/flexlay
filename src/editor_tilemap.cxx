@@ -298,20 +298,20 @@ blit(CL_PixelBuffer& target, CL_PixelBuffer& brush, int x_pos, int y_pos)
   target.unlock();
 }
 
-CL_PixelBuffer*
+CL_PixelBuffer
 EditorTileMap::create_pixelbuffer()
 {
-  CL_PixelBuffer* pixelbuffer = new CL_PixelBuffer(get_width()  * tile_size,
-                                                   get_height() * tile_size,
-                                                   get_width()  * tile_size * 4,
-                                                   CL_PixelFormat::rgba8888);
+  CL_PixelBuffer pixelbuffer(get_width()  * tile_size,
+                             get_height() * tile_size,
+                             get_width()  * tile_size * 4,
+                             CL_PixelFormat::rgba8888);
 
   {
-    pixelbuffer->lock();
-    unsigned char* buf = static_cast<unsigned char*>(pixelbuffer->get_data());
+    pixelbuffer.lock();
+    unsigned char* buf = static_cast<unsigned char*>(pixelbuffer.get_data());
 
-    int width  = pixelbuffer->get_width();
-    int height = pixelbuffer->get_height();
+    int width  = pixelbuffer.get_width();
+    int height = pixelbuffer.get_height();
 
     // Draw a nice gradient
     for(int y = 0; y < height; ++y)
@@ -324,7 +324,7 @@ EditorTileMap::create_pixelbuffer()
             buf[4*(y*width + x) + 3] = 255*y/height;
           }
       }
-    pixelbuffer->unlock();
+    pixelbuffer.unlock();
   }
 
   for (int y = 0; y < get_height(); ++y)
@@ -334,10 +334,10 @@ EditorTileMap::create_pixelbuffer()
 
         if (tile)
           {
-            CL_PixelBuffer* buf = tile->get_pixelbuffer();
+            CL_PixelBuffer buf = tile->get_pixelbuffer();
             if (buf)
               {
-                blit(*pixelbuffer, *buf, x*tile_size, y*tile_size);
+                blit(pixelbuffer, buf, x*tile_size, y*tile_size);
               }
           }
       }

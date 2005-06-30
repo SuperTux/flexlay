@@ -10,7 +10,7 @@ AC_PROG_RANLIB
 AC_LANG(C++)
 
 AM_PATH_PYTHON
-AM_CHECK_PYTHON_HEADERS
+dnl AM_CHECK_PYTHON_HEADERS
 
 dnl Checking for libraries
 AC_CHECK_LIB(qthreads, main)

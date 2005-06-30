@@ -168,6 +168,7 @@ ObjectSelector::draw()
   // Handle scrolling in the Component
   CL_Display::push_modelview();
   CL_Display::add_translate(0, -offset);
+  CL_Display::add_translate(get_screen_x(), get_screen_y());
     
   for(int i = 0; i < (int)brushes.size(); ++i)
     {

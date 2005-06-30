@@ -109,6 +109,7 @@ void
 TileSelector::draw()
 {
   CL_Display::push_modelview();
+  CL_Display::add_translate(get_screen_x(), get_screen_y());
   CL_Display::add_translate(0, -offset);
 
   for(int i = 0; i < int(tiles.size()); ++i)

@@ -122,6 +122,7 @@ class Level
     f.write("  (name   \"%s\")\n" % @name)
     f.write("  (music  \"%s\")\n" % @music)
 
+    f.write("  (objects\n")
     save_tilemap = proc {|name, tilemap|
       width  = tilemap.get_width()
       height = tilemap.get_height()
@@ -140,7 +141,8 @@ class Level
     save_tilemap.call("background",  @background)
     save_tilemap.call("interactive", @interactive)
     save_tilemap.call("foreground",  @foreground)
-    
+    f.write("   )\n")
+
     f.write(" )\n\n")
     f.write(";; EOF ;;\n")
     f.close()

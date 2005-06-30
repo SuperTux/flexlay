@@ -53,7 +53,7 @@ $image.activate($gui.workspace)
 
 # drawer = SpriteStrokeDrawer.new($sketch_stroke_tool.get_drawer())
 
-if true then
+if false then
   DrawerProperties.current().set_brush(GeneratedBrush.new(BRUSH_SHAPE_CIRCLE, 
                                                           32,  # radius
                                                           2,   # spikes

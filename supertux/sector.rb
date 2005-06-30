@@ -38,7 +38,7 @@ class Sector
   end
 
   def new_from_size(name, width, height)
-    @name = name
+    @name  = name
     @music = ""
     @gravity = 10.0
     

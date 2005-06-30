@@ -95,13 +95,13 @@ $resources = CL_ResourceManager.new("../data/flexlay.xml")
 $tileset = Tileset.new(32)
 (0...6).each {|y|
   (0...6).each {|x|
-    $tileset.add_tile(y*8+x+1, Tile.new(make_region_pixelbuffer("virtualreality.png", 32*x, 32*y, 32, 32)))
+    $tileset.add_tile(y*6+x+1, Tile.new(make_region_pixelbuffer("virtualreality.png", 32*x, 32*y, 32, 32)))
   }
 }
 
 (0...6).each {|y|
   (0...6).each {|x|
-    $tileset.add_tile(y*8+x+1+8*8, Tile.new(make_region_pixelbuffer("virtualreality-background.png", 32*x, 32*y, 32, 32)))
+    $tileset.add_tile(y*6+x+1+6*6, Tile.new(make_region_pixelbuffer("virtualreality-background.png", 32*x, 32*y, 32, 32)))
   }
 }
 
@@ -110,7 +110,7 @@ $gui = GUI.new()
 
 $gui.workspace.set_tool($controller.tilemap_paint_tool.to_tool());
 
-$startlevel = Level.new(100, 50)
+$startlevel = Level.new(100, 30)
 $startlevel.activate($workspace)
 
 $gui.run()

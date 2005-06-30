@@ -82,6 +82,9 @@ EditorMapComponent::mouse_down(const CL_InputEvent& event)
 void
 EditorMapComponent::draw ()
 {
+  CL_Display::push_modelview();
+  CL_Display::add_translate(get_screen_x(), get_screen_y());
+
   if (workspace)
     {
       workspace->draw();
@@ -99,6 +102,8 @@ EditorMapComponent::draw ()
                                     CL_Color(50, 50, 50));
           }
     }
+
+  CL_Display::pop_modelview();
 }
 
 CL_Point

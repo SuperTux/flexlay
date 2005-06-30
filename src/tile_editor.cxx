@@ -51,6 +51,9 @@ TileEditor::~TileEditor()
 void
 TileEditor::draw()
 {
+  CL_Display::push_modelview();
+  CL_Display::add_translate(get_screen_x(), get_screen_y());
+
   no_tile.draw(0, 0);
 
   if (tile)
@@ -79,6 +82,8 @@ TileEditor::draw()
   else
     {
     }
+
+  CL_Display::pop_modelview();
 }
 
 void

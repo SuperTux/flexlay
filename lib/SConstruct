@@ -49,8 +49,8 @@ clanLib_env = Environment()
 clanLib_env.ParseConfig("pkg-config --cflags --libs clanCore-0.7 clanDisplay-0.7 clanGL-0.7 clanSignals-0.7 clanGUI-0.7 clanGUIStyleSilver-0.7")
 
 libflexlay_env = env.Copy()
-flexlay_lib = libflexlay_env.SharedLibrary(
-    target = 'libflexlay.so',
+flexlay_lib = libflexlay_env.StaticLibrary(
+    target = 'libflexlay.a',
     source = [
     'blitter.cxx',
     'box.cxx',

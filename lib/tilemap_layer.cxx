@@ -175,14 +175,14 @@ TilemapLayerImpl::draw(EditorMapComponent* parent, CL_GraphicContext* gc)
                               y       * tile_size,
                               end_x   * tile_size,
                               y       * tile_size, 
-                              y % 5 ? CL_Color(150, 150, 150) : CL_Color(255, 255, 255));
+                              y % 2 ? CL_Color(150, 150, 150) : CL_Color(255, 255, 255));
   
       for (int x = start_x; x <= end_x; ++x)
         CL_Display::draw_line(x       * tile_size,
                               start_y * tile_size,
                               x       * tile_size,
                               end_y   * tile_size, 
-                              x % 5 ? CL_Color(150, 150, 150) : CL_Color(255, 255, 255));
+                              x % 2 ? CL_Color(150, 150, 150) : CL_Color(255, 255, 255));
     }
 
   CL_Display::flush();

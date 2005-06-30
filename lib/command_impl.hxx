@@ -24,9 +24,8 @@ class CommandImpl
 {
 private:
 public:
-  virtual ~CommandImpl()
-  {}
-  
+  virtual ~CommandImpl() {}
+
   /** Execute the command */
   virtual void execute() =0;
 

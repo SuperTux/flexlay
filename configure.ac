@@ -22,8 +22,11 @@ REQUIRED_CLANLIB_VERSION="0.7.7"
 CXXFLAGS="$CXXFLAGS -I\${top_srcdir}/src/"
 
 AC_MSG_CHECKING(for debug mode)
-AC_ARG_ENABLE(debug, AC_HELP_STRING([--enable-debug], [Enable debugging support (default: yes)]),, enable_debug="yes")
-if test "$enable_debug" != "no"; then
+AC_ARG_ENABLE([debug], AC_HELP_STRING([--enable-debug],
+            [Enable debugging support (default: yes)]),
+        [enable_debug="$enableval"],
+        [enable_debug="yes"])
+if test "$enable_debug" = "yes"; then
     CXXFLAGS="$CXXFLAGS -Wall -O0 -g"
     AC_MSG_RESULT([enabled])
 else
@@ -31,8 +34,11 @@ else
 fi
 
 AC_MSG_CHECKING(for maintainer mode)
-AC_ARG_ENABLE(debug, AC_HELP_STRING([--enable-maintainer-mode], [Enable maintainer mode (default: no)]),, enable_maintainer_mode="no")
-if test "$enable_maintainer_mode" != "no"; then
+AC_ARG_ENABLE([maintainer], AC_HELP_STRING([--enable-maintainer-mode],
+            [Enable maintainer mode (default: no)]),
+        [enable_maintainer_mode="$enableval"],
+        [enable_maintainer_mode="no"])
+if test "$enable_maintainer_mode" = "yes"; then
     CXXFLAGS="$CXXFLAGS -Werror"
     AC_MSG_RESULT([enabled])
 else

@@ -23,7 +23,7 @@ import glob
 
 opts = Options('custom.py')
 opts.Add('CXX', 'The C++ compiler.', 'g++')
-opts.Add('CXXFLAGS', 'The C++ compiler flags.', '-g -O2 -Wall')
+opts.Add('CXXFLAGS', 'The C++ compiler flags.', '-g -O2 -Wall -fPIC')
 opts.Add('CPPPATH', 'additional header path', '')
 opts.Add('LIBPATH', 'additional library path', '')
 opts.Add('RUBYDIR', 'Ruby directory', os.popen('ruby -e "require \'rbconfig\'; puts Config::CONFIG[\'archdir\']"').read()[:-1])

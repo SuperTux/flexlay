@@ -234,6 +234,7 @@ void
 TileSelector::set_scale(float s)
 {
   scale = s;
+  width  = static_cast<int>(get_width()/tileset.get_tile_size() * (1.0f/scale));
 }
 
 TileSelector::Tiles
@@ -247,7 +248,7 @@ TileSelector::set_tileset(Tileset t)
 {
   tileset = t;
   // Recalc the number of tiles in a row
-  width  = get_width()/tileset.get_tile_size();
+  width  = static_cast<int>(get_width()/tileset.get_tile_size() * (1.0f/scale));
 }
 
 void

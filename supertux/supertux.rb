@@ -29,8 +29,7 @@ def find_supertux_datadir()
     "/usr/local/share/games/supertux/",
     "/opt/supertux/data/",
     "~/projects/supertux/data/",
-    "~/projects/supertux/trunk/supertux/data/",
-    "~/data/projects/supertux/trunk/supertux/data",
+    "~/projects/supertux/svn/trunk/supertux/data/",
   ]
   # `which supertux`
 end

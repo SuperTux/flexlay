@@ -161,6 +161,29 @@ class Dispenser<GameObj
   end  
 end
 
+class Platform<GameObj
+  def initialize(data, sexpr = [])
+    @data = data
+    @path = get_value_from_tree(["use_path", "_"], sexpr, "path01")
+    @type = get_value_from_tree(["type", "_"], sexpr, "flying")
+  end
+
+  def save(f, obj)
+    pos = obj.get_pos()
+    f.write("       (platform (x %d) (y %d) (use_path \"%s\") (type \"%s\"))\n" % [pos.x, pos.y, @path, @type])
+  end
+  
+  def property_dialog()
+    dialog = GenericDialog.new("Platform Property Dialog", $gui.get_component())
+    dialog.add_string("Use Path: ", @path)
+    dialog.add_string("Platform Type: ", @type)
+    dialog.set_callback(proc{|path, type| 
+                          @path = path
+                          @type = type
+                        })
+  end  
+end
+
 class SpawnPoint<GameObj
   attr_accessor :name
   attr_reader   :data

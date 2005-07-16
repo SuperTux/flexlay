@@ -65,6 +65,10 @@ $game_objects = [
     proc{|data, sexpr| ParticleSystem.new("rain", sexpr)}],
   ["leveltime", "images/engine/editor/clock.png", "sprite",
     proc{|data, sexpr| LevelTime.new(sexpr)}],
+  ["point", "images/engine/editor/point.png", "sprite",
+    proc{|data, sexpr| SimpleObject.new("point")}],
+  ["platform", "images/objects/flying_platform/flying_platform-0.png", "sprite",
+    proc{|data, sexpr| Platform.new(data, sexpr)}],
 ]
 
 def create_gameobject_from_data(objmap, name, sexpr)
@@ -101,7 +105,7 @@ def create_gameobject(objmap, data, pos, sexpr = [])
     obj.to_object.set_metadata(make_metadata(gobj))
 
   else
-    raise "Error: Unknown object type droped: '#{data}'"
+    raise "Error: Unknown object type dropped: '#{data}'"
   end
   
   cmd = ObjectAddCommand.new(objmap)

@@ -25,6 +25,8 @@ $game_objects = [
     proc{|data, sexpr| BadGuy.new("poisonivy")}],
   ["zeekling", "images/creatures/zeekling/left-0.png", "sprite",
     proc{|data, sexpr| BadGuy.new("zeekling")}],
+  ["kugelblitz", "images/creatures/kugelblitz/flying-0.png", "sprite",
+    proc{|data, sexpr| BadGuy.new("kugelblitz")}],
   ["dispenser", "images/creatures/dispenser/working.png", "sprite",
     proc{|data, sexpr| Dispenser.new(data, sexpr)}],
   ["yeti", "images/creatures/yeti/yeti.png", "sprite",

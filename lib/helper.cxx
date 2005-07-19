@@ -104,4 +104,19 @@ make_pixelbuffer(int width, int height)
   return CL_PixelBuffer(width, height, width*4, CL_PixelFormat::rgba8888);
 }
 
+CL_PixelBuffer
+make_region_pixelbuffer(const CL_PixelBuffer& buffer, int x, int y, int w, int h)
+{
+  try {
+    CL_PixelBuffer target(w, h, w * (buffer.get_format().get_depth()/8), buffer.get_format());
+    clear(target);
+    blit(target, buffer, -x, -y);
+
+    return target;
+  } catch (CL_Error& err) {
+    std::cout << "CL_Error: " << err.message << std::endl;
+    return CL_PixelBuffer();
+  }
+}
+
 /* EOF */

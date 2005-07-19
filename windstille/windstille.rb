@@ -20,7 +20,7 @@
 ## A basic tile editor that should act as example for other games, use
 ## it to fork your own code.
 
-$datadir = ""
+$datadir = "/home/ingo/projects/windstille/trunk/data/"
 
 ## First we try to read a config file to set some variables
 $config_file = File.expand_path("~/.flexlay/windstille.rb")
@@ -38,6 +38,7 @@ require "flexlay.rb"
 require "sexpr.rb"
 require "gui.rb"
 require "level.rb"
+require "tileset.rb"
 
 ## Init Flexlay itself
 flexlay = Flexlay.new()
@@ -92,18 +93,8 @@ $mysprite = make_sprite("../data/images/icons16/stock_paste-16.png")
              
 $resources = CL_ResourceManager.new("../data/flexlay.xml")
 
-$tileset = Tileset.new(32)
-(0...6).each {|y|
-  (0...6).each {|x|
-    $tileset.add_tile(y*6+x+1, Tile.new(make_region_pixelbuffer("virtualreality.png", 32*x, 32*y, 32, 32)))
-  }
-}
-
-(0...6).each {|y|
-  (0...6).each {|x|
-    $tileset.add_tile(y*6+x+1+6*6, Tile.new(make_region_pixelbuffer("virtualreality-background.png", 32*x, 32*y, 32, 32)))
-  }
-}
+$tileset = Tileset.new(64)
+$tileset.load($datadir + "tiles.scm")
 
 ## Create some basic GUI
 $gui = GUI.new()

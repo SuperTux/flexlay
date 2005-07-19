@@ -18,12 +18,13 @@
 ##  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 class Tilemap
-  attr_accessor :name, :x_offset, :y_offset
+  attr_accessor :name, :x_offset, :y_offset, :z_pos
   
   def initialize()
     name     = "empty"
     x_offset = 0
     y_offset = 0
+    z_pos = 0;
   end
 end
 
@@ -80,9 +81,10 @@ class Level
       puts mydata
       width  = get_value_from_tree(["width", "_"],  mydata, 0)
       height = get_value_from_tree(["height", "_"],  mydata, 0)
-
+      
       tilemap = TilemapLayer.new($tileset, width, height)
       tilemap.set_data(get_value_from_tree(["data"], mydata, []))
+      tilemap.z_pos = get_value_from_tree(["z-pos", "_"],  mydata, 0)
       tilemap
     }
     
@@ -126,8 +128,8 @@ class Level
     save_tilemap = proc {|name, tilemap|
       width  = tilemap.get_width()
       height = tilemap.get_height()
-      f.write("  (tilemap (name \"%s\") (width %d) (height %d)\n" % \
-              [name, width, height]) # FIXME: add escaping to strings
+      f.write("  (tilemap (name \"%s\") (width %d) (height %d) (z-pos %d)\n" % \
+              [name, width, height, tilemap.z_pos]) # FIXME: add escaping to strings
       f.write("    (data")
       tilemap.get_data().each_with_index {|item, i|
         if (i % width == 0) then

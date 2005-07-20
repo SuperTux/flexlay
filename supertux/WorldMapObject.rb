@@ -11,7 +11,7 @@ class WMSpawnPoint<WorldmapObject
   def initialize()
     @name = ""
     @obj = ObjMapSpriteObject.new(
-        make_sprite($datadir + "images/tiles/worldmap/tux.png"),
+        make_sprite($datadir + "images/worldmap/common/tux.png"),
         CL_Pointf.new(0, 0), make_metadata(self))
      connect_v1_ObjMapObject(@obj.to_object.sig_move(), method(:on_move))
   end
@@ -55,7 +55,7 @@ class WorldmapLevel<WorldmapObject
     @extro_filename = ""
     @quit_worldmap = false
     @obj = ObjMapSpriteObject.new(
-            make_sprite($datadir + "images/tiles/worldmap/leveldot_green.png"),
+            make_sprite($datadir + "images/worldmap/common/leveldot_green.png"),
             CL_Pointf.new(0, 0), make_metadata(self))
     connect_v1_ObjMapObject(@obj.to_object.sig_move(), method(:on_move))
   end
@@ -114,7 +114,7 @@ class SpecialTile<WorldmapObject
     @teleport_y = 0
     @invisible_tile = false
     @obj = ObjMapSpriteObject.new(
-            make_sprite($datadir + "images/tiles/worldmap/teleporterdot.png"),
+            make_sprite($datadir + "images/worldmap/common/teleporterdot.png"),
             CL_Pointf.new(0, 0), make_metadata(self))
     connect_v1_ObjMapObject(@obj.to_object.sig_move(), method(:on_move))
   end
@@ -186,9 +186,9 @@ class SpecialTile<WorldmapObject
 end
 
 $worldmap_objects = [
-  ["level", "images/tiles/worldmap/leveldot_green.png", WorldmapLevel],
-  ["special-tile", "images/tiles/worldmap/teleporterdot.png", SpecialTile],
-  ["spawnpoint", "images/tiles/worldmap/tux.png", WMSpawnPoint],
+  ["level", "images/worldmap/common/leveldot_green.png", WorldmapLevel],
+  ["special-tile", "images/worldmap/common/teleporterdot.png", SpecialTile],
+  ["spawnpoint", "images/worldmap/common/tux.png", WMSpawnPoint],
 ]
 
 def create_worldmapobject_at_pos(objmap, name, pos)

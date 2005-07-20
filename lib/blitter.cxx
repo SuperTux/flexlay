@@ -25,6 +25,85 @@
 #include "blitter.hxx"
 
 void 
+blit_opaque(CL_PixelBuffer target, CL_PixelBuffer brush, int x_pos, int y_pos)
+{
+  target.lock();
+  brush.lock();
+
+  int start_x = std::max(0, -x_pos);
+  int start_y = std::max(0, -y_pos);
+  
+  int end_x = std::min(brush.get_width(),  target.get_width()  - x_pos);
+  int end_y = std::min(brush.get_height(), target.get_height() - y_pos);
+
+  unsigned char* target_buf = static_cast<unsigned char*>(target.get_data());
+  unsigned char* brush_buf  = static_cast<unsigned char*>(brush.get_data());
+
+  int target_pitch = target.get_pitch();
+  int brush_pitch  = brush.get_pitch();
+
+  if (brush.get_format().get_type() == pixelformat_rgba)
+    {
+      if (brush.get_format().get_depth() == 32)
+        {
+          for (int y = start_y; y < end_y; ++y)
+            for (int x = start_x; x < end_x; ++x)
+              {
+                int target_pos = (y + y_pos) * target_pitch + 4*(x + x_pos);
+                int brush_pos  = y * brush_pitch + x*4;
+
+                target_buf[target_pos + 0] = brush_buf[brush_pos + 0];
+                target_buf[target_pos + 1] = brush_buf[brush_pos + 1];
+                target_buf[target_pos + 2] = brush_buf[brush_pos + 2];
+                target_buf[target_pos + 3] = brush_buf[brush_pos + 3];
+              } 
+        }
+      else if (brush.get_format().get_depth() == 24)
+        {
+          for (int y = start_y; y < end_y; ++y)
+            for (int x = start_x; x < end_x; ++x)
+              {
+                int target_pos = (y + y_pos) * target_pitch + 3*(x + x_pos);
+                int brush_pos  = y * brush_pitch + 3*x;
+
+                target_buf[target_pos + 0] = 255;
+                target_buf[target_pos + 1] = brush_buf[brush_pos + 0];
+                target_buf[target_pos + 2] = brush_buf[brush_pos + 1];
+                target_buf[target_pos + 3] = brush_buf[brush_pos + 2];
+              }
+        }
+      else
+        {
+          std::cout << "Unsupported bpp: " << brush.get_format().get_depth() << std::endl;
+        }
+    }
+  else if (brush.get_format().get_type() == pixelformat_index)
+    {
+      CL_Palette palette = brush.get_palette();
+      for (int y = start_y; y < end_y; ++y)
+        for (int x = start_x; x < end_x; ++x)
+          {
+            int target_pos = (y + y_pos) * target_pitch + 4*(x + x_pos);
+            int brush_pos  = y * brush_pitch + x;
+            
+            target_buf[target_pos + 0] = 255;
+            target_buf[target_pos + 1] = palette.colors[brush_buf[brush_pos]].get_blue();
+            target_buf[target_pos + 2] = palette.colors[brush_buf[brush_pos]].get_green();
+            target_buf[target_pos + 3] = palette.colors[brush_buf[brush_pos]].get_red();
+          }
+    }
+  else
+    {
+      assert(!"Unknown pixelformat type");
+    }
+    
+
+
+  brush.unlock();
+  target.unlock();
+}
+
+void 
 blit(CL_PixelBuffer target, CL_PixelBuffer brush, int x_pos, int y_pos)
 {
   target.lock();
@@ -39,6 +118,7 @@ blit(CL_PixelBuffer target, CL_PixelBuffer brush, int x_pos, int y_pos)
   unsigned char* target_buf = static_cast<unsigned char*>(target.get_data());
   unsigned char* brush_buf  = static_cast<unsigned char*>(brush.get_data());
 
+  // FIXME: This doesn't take pitch into account
   int target_width = target.get_width();
   int brush_width  = brush.get_width();
 

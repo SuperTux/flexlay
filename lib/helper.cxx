@@ -64,7 +64,7 @@ make_region_pixelbuffer(const std::string& filename, int x, int y, int w, int h)
 
     CL_PixelBuffer target(w, h, w * (buffer.get_format().get_depth()/8), buffer.get_format());
     clear(target);
-    blit(target, buffer, -x, -y);
+    blit_opaque(target, buffer, -x, -y);
 
     return target;
   } catch (CL_Error& err) {
@@ -110,7 +110,7 @@ make_region_pixelbuffer(const CL_PixelBuffer& buffer, int x, int y, int w, int h
   try {
     CL_PixelBuffer target(w, h, w * (buffer.get_format().get_depth()/8), buffer.get_format());
     clear(target);
-    blit(target, buffer, -x, -y);
+    blit_opaque(target, buffer, -x, -y);
 
     return target;
   } catch (CL_Error& err) {

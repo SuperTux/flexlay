@@ -76,26 +76,45 @@ class Level
     @name    = get_value_from_tree(["name", "_"],    data, 0)
     @music   = get_value_from_tree(["music", "_"],   data, 0)
 
-    load_tilemap = proc {|name|
-      mydata   = get_value_from_tree(["tilemap"],  data, 0)
-      puts mydata
-      width  = get_value_from_tree(["width", "_"],  mydata, 0)
-      height = get_value_from_tree(["height", "_"],  mydata, 0)
-      
-      tilemap = TilemapLayer.new($tileset, width, height)
-      tilemap.set_data(get_value_from_tree(["data"], mydata, []))
-      tilemap.z_pos = get_value_from_tree(["z-pos", "_"],  mydata, 0)
-      tilemap
+    objects = get_value_from_tree(["objects"],  data, [])
+
+    objects.each{ |object|
+      objtype = object[0]
+      objdata = object[1..-1]
+
+      case objtype
+      when "tilemap"
+        name   = get_value_from_tree(["name",  "_"],   objdata, "")
+        width  = get_value_from_tree(["width",  "_"],  objdata, 0)
+        height = get_value_from_tree(["height", "_"],  objdata, 0)
+        
+        tilemap = TilemapLayer.new($tileset, width, height)
+        tilemap.set_data(get_value_from_tree(["data"], objdata, []))
+        # tilemap.z_pos = get_value_from_tree(["z-pos", "_"],  mydata, 0)
+        
+        case name 
+        when "background"
+          @background = tilemap
+        when "interactive"
+          @interactive = tilemap
+        when "background"
+          @background = tilemap
+        else
+          puts "Unknown Tilemap: #{name}"
+        end
+      else
+        puts "Unknown object: '#{objtype}'"
+      end
     }
     
-    @background  = load_tilemap.call("background")
-    @interactive = load_tilemap.call("interactive")
-    @foreground  = load_tilemap.call("foreground")
-
     @layers = [@background, @interactive, @foreground]
 
     @editormap = EditorMap.new()
-    @layers.each {|layer| @editormap.add_layer(layer.to_layer()) }
+    @layers.each {|layer| 
+      if layer then 
+        @editormap.add_layer(layer.to_layer()) 
+      end 
+    }
     
     # FIXME: Data might not get freed since its 'recursively' refcounted
     @editormap.set_data(self)
@@ -126,23 +145,26 @@ class Level
 
     f.write("  (objects\n")
     save_tilemap = proc {|name, tilemap|
-      width  = tilemap.get_width()
-      height = tilemap.get_height()
-      f.write("  (tilemap (name \"%s\") (width %d) (height %d) (z-pos %d)\n" % \
-              [name, width, height, tilemap.z_pos]) # FIXME: add escaping to strings
-      f.write("    (data")
-      tilemap.get_data().each_with_index {|item, i|
-        if (i % width == 0) then
-          f.write("\n      ")
-        end
-        f.write("%d " % item)
-      }
-      f.write("\n     ))\n")
+      if tilemap then
+        width  = tilemap.get_width()
+        height = tilemap.get_height()
+        f.write("  (tilemap (name \"%s\") (width %d) (height %d)\n" % \
+                [name, width, height]) # FIXME: add escaping to strings
+        f.write("    (data")
+        tilemap.get_data().each_with_index {|item, i|
+          if (i % width == 0) then
+            f.write("\n      ")
+          end
+          f.write("%d " % item)
+        }
+        f.write("\n     ))\n")
+      end
     }
 
     save_tilemap.call("background",  @background)
     save_tilemap.call("interactive", @interactive)
     save_tilemap.call("foreground",  @foreground)
+
     f.write("   )\n")
 
     f.write(" )\n\n")

@@ -122,9 +122,9 @@ class GUI
                                  @gui.get_component())
     @tileselector = TileSelector.new(CL_Rect.new(CL_Point.new(3, 3), CL_Size.new(128+64, $screen_height - 600 + 552)), @selector_window)
     @tileselector.set_tileset($tileset)
-    puts "Setting scale to 1.0"
     @tileselector.set_scale(0.5)
-    @tileselector.set_tiles($tileset.get_tiles())
+    @tileselector.set_tiles($tileset.tilegroups[0].tiles)
+    # @tileselector.set_tiles($tileset.get_tiles())
     @tileselector.show(true)
     
     @objectselector = ObjectSelector.new(CL_Rect.new(0, 0, 128, $screen_height - 600 + 552), 42, 42, @selector_window)

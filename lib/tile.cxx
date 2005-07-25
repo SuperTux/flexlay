@@ -160,6 +160,7 @@ Tile::get_pixelbuffer()
               {
                 //CL_SpriteDescription descr(impl->filename, resources);
                 //impl->pixelbuffer = CL_PixelBuffer(*(descr.get_frames().begin()->first));
+                std::cout << "Error: not a png or jpg file: " << impl->filename << std::endl;
                 assert(0);
               }
             return impl->pixelbuffer;

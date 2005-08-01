@@ -90,6 +90,8 @@ class Tileset
         width  = get_value_from_tree(['width', '_'], data, 0)
         height = get_value_from_tree(['height', '_'], data, 0)
 
+        puts $datadir + image
+
         pixelbuffer = make_pixelbuffer($datadir + image);
 
         (0..width-1).each {|y|

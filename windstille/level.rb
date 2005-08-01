@@ -148,7 +148,7 @@ class Level
       if tilemap then
         width  = tilemap.get_width()
         height = tilemap.get_height()
-        f.write("  (tilemap (name \"%s\") (width %d) (height %d)\n" % \
+        f.write("  (tilemap (name \"%s\") (width %d) (height %d) (z-pos 0)\n" % \
                 [name, width, height]) # FIXME: add escaping to strings
         f.write("    (data")
         tilemap.get_data().each_with_index {|item, i|

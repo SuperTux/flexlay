@@ -120,7 +120,9 @@ class GUI
     @selector_window = Panel.new(CL_Rect.new(CL_Point.new($screen_width-128-64-6, 23+33), 
                                              CL_Size.new(128 + 64 + 6, $screen_height - 600 + 558)),
                                  @gui.get_component())
-    @tileselector = TileSelector.new(CL_Rect.new(CL_Point.new(3, 3), CL_Size.new(128+64, $screen_height - 600 + 552)), @selector_window)
+    @tileselector = TileSelector.new(CL_Rect.new(CL_Point.new(3, 3), 
+                                                 CL_Size.new(128+64, $screen_height - 600 + 552)),
+                                     @selector_window)
     @tileselector.set_tileset($tileset)
     @tileselector.set_scale(0.5)
     @tileselector.set_tiles($tileset.tilegroups[0].tiles)

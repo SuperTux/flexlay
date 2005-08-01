@@ -173,8 +173,8 @@ TileSelector::draw()
 
   const TileBrush& brush = TileMapPaintTool::current().get_brush();
 
-  int start_row = offset / tileset.get_tile_size();
-  int end_row   = start_row + (get_screen_rect().get_height() / tileset.get_tile_size());
+  int start_row = offset / int(tileset.get_tile_size() * scale);
+  int end_row   = start_row + (get_screen_rect().get_height() / int(tileset.get_tile_size() * scale));
   int end_index = std::min(end_row*width, int(tiles.size())); 
   
   // Draw tiles

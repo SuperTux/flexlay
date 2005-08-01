@@ -124,7 +124,7 @@ class GUI
                                                  CL_Size.new(128+64, $screen_height - 600 + 552)),
                                      @selector_window)
     @tileselector.set_tileset($tileset)
-    @tileselector.set_scale(0.5)
+    @tileselector.set_scale(0.375)
     @tileselector.set_tiles($tileset.tilegroups[0].tiles)
     # @tileselector.set_tiles($tileset.get_tiles())
     @tileselector.show(true)

@@ -71,6 +71,8 @@ class GUI
     @foreground_icon = @button_panel.add_icon("../data/images/icons24/foreground.png")
     @eye_icon = @button_panel.add_icon("../data/images/icons24/eye.png")
 
+    @button_panel.add_icon("../data/images/icons24/eye.png", proc{ @tilegroup_menu.run() })
+
     @layer_menu = Menu.new(CL_Point.new(32*15+2, 54), @gui.get_component())
     
     @toolbar = ButtonPanel.new(0, 23+33, 33, 32*4+2, false, @gui.get_component)
@@ -110,6 +112,13 @@ class GUI
     @save_dialog = SimpleFileDialog.new("Save SuperTux Level as...", "Save", "Cancel", @gui.get_component())
     @save_dialog.set_filename($datadir + "levels/")
 
+    # FIXME: Having position in the Menus here is EXTREMLY ugly
+    @tilegroup_menu = Menu.new(CL_Point.new(35*15+2, 54), @gui.get_component())
+    @tilegroup_menu.add_item($mysprite, "All Tiles", proc{@tileselector.set_tiles($tileset.get_tiles())})
+    $tileset.tilegroups.each { |tilegroup|
+      @tilegroup_menu.add_item($mysprite, tilegroup.name, proc{@tileselector.set_tiles(tilegroup.tiles)})
+    }
+
     toggle_minimap()
 
     # Init the GUI, so that button state is in sync with internal state
@@ -125,8 +134,8 @@ class GUI
                                      @selector_window)
     @tileselector.set_tileset($tileset)
     @tileselector.set_scale(0.375)
-    @tileselector.set_tiles($tileset.tilegroups[0].tiles)
-    # @tileselector.set_tiles($tileset.get_tiles())
+    # @tileselector.set_tiles($tileset.tilegroups[0].tiles)
+    @tileselector.set_tiles($tileset.get_tiles())
     @tileselector.show(true)
     
     @objectselector = ObjectSelector.new(CL_Rect.new(0, 0, 128, $screen_height - 600 + 552), 42, 42, @selector_window)

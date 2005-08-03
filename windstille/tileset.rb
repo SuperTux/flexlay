@@ -90,15 +90,19 @@ class Tileset
         width  = get_value_from_tree(['width', '_'], data, 0)
         height = get_value_from_tree(['height', '_'], data, 0)
 
-        puts $datadir + image
+        puts "Loading: #{width}x#{height} #{$datadir + image}"
 
         pixelbuffer = make_pixelbuffer($datadir + image);
 
-        (0..width-1).each {|y|
-          (0..height-1).each {|x|
-            $tileset.add_tile(ids[y*width + x],
-                              Tile.new(make_region_pixelbuffer(pixelbuffer,
-                                                               64*x, 64*y, 64, 64)))
+        (0..height-1).each {|y|
+          (0..width-1).each {|x|
+            if (y*width + x < ids.length) then
+              $tileset.add_tile(ids[y*width + x],
+                                Tile.new(make_region_pixelbuffer(pixelbuffer,
+                                                                 64*x, 64*y, 64, 64)))
+            else
+              puts "Id out of range: #{y*width + x} >= #{ids.length} for image #{$datadir + image}"
+            end
           }
         }
       end

@@ -51,8 +51,7 @@ end
 
 $config = Config.new()
 
-$datadir = "/home/matze/projects/netpanzer"
-
+$datadir = "/home/ingo/projects/netpanzer/netpanzer"
 $brushes.each_with_index{|(start, width, height, name), index|
   NetPanzerData::instance().register_tilegroup(start, width, height)
 }

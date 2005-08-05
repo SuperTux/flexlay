@@ -73,7 +73,7 @@ private:
   unsigned char* tiledata;
   typedef std::vector<NetPanzerTileGroup> TileGroups;
   TileGroups tilegroups;
-
+  std::vector<NetPanzerTileHeader> tile_headers;
 public:
   NetPanzerData();
 
@@ -89,15 +89,18 @@ public:
   void load_data(const std::string& datadir_);
   const CL_Palette& get_palette() const;
   const Tileset&    get_tileset() const;
+  const std::vector<NetPanzerTileHeader>& get_tile_headers() const;
   unsigned char*    get_tiledata() const;
 
   CL_Palette load_palette(const std::string& filename);
-  Tileset    load_tileset(const std::string& filename);
   CL_Sprite  get_tilegroup_sprite(int index);
 
   /** Locate the tilegroup in which the tile with \a tileindex is
       located */
   NetPanzerTileGroup& find_tilegroup(int tileindex);
+
+private:
+  void       load_tileset(const std::string& filename);
 };
 
 class NetPanzerFileStruct

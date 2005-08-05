@@ -127,7 +127,7 @@ NetPanzerData::load_data(const std::string& datadir_)
   datadir = datadir_;
   std::cout << "NetPanzerData: Loading data from '" << datadir << "'" << std::endl;
   palette = load_palette(datadir + "/" + "wads/netp.act");
-  tileset = load_tileset(datadir + "/" + "wads/summer12mb.tls");
+  load_tileset(datadir + "/" + "wads/summer12mb.tls");
 }
 
 CL_Surface
@@ -142,16 +142,54 @@ NetPanzerTileGroup::get_surface()
           {
             const CL_Palette& palette = NetPanzerData::instance()->get_palette();
             unsigned char* data = NetPanzerData::instance()->get_tiledata() + (32*32) * (start + width*y + x);
-            
+
+            NetPanzerTileHeader header = NetPanzerData::instance()->get_tile_headers()[start + width*y + x]; 
+           
             CL_PixelBuffer tile(32, 32, 32*3, CL_PixelFormat::rgb888);
+
             tile.lock();
             unsigned char* target = static_cast<unsigned char*>(tile.get_data());
 
+            float r = 1.0f;
+            float g = 1.0f;
+            float b = 1.0f;
+
+            switch (header.move_value)
+              {
+              case 0: // streets, allowing faster movement
+                r = 1.0f;
+                g = 1.0f;
+                b = 0.0f;
+                break;
+
+              case 1: // normal ground which allows to move
+                r = 1.0f;
+                g = 1.0f;
+                b = 1.0f;
+                break;
+
+              case 4: // unpassable terrain
+                r = 0.0f;
+                g = 1.0;
+                b = 0.0f;
+                break;
+
+              case 5: // water
+                r = 0.0f;
+                g = 0.0f;
+                b = 1.0f;
+                break;
+
+              default:
+                std::cout << "Unknown header value: " << int(header.move_value) << std::endl;
+                break;
+              }
+
             for(int i = 0; i < 32*32; ++i)
               {
-                target[3*i+0] = palette[data[i]].get_blue();
-                target[3*i+1] = palette[data[i]].get_green();
-                target[3*i+2] = palette[data[i]].get_red();
+                target[3*i+0] = int(palette[data[i]].get_blue()  * b);
+                target[3*i+1] = int(palette[data[i]].get_green() * g);
+                target[3*i+2] = int(palette[data[i]].get_red()   * r);
               }
             tile.unlock();
                 
@@ -211,6 +249,12 @@ NetPanzerData::get_palette() const
   return palette;
 }
 
+const std::vector<NetPanzerTileHeader>&
+NetPanzerData::get_tile_headers() const
+{
+  return tile_headers;
+}
+
 unsigned char*
 NetPanzerData::get_tiledata() const
 {
@@ -243,7 +287,7 @@ NetPanzerData::load_palette(const std::string& filename)
   return palette;
 }
 
-Tileset
+void
 NetPanzerData::load_tileset(const std::string& filename)
 {
   unsigned char	netp_id_header[64];
@@ -258,7 +302,6 @@ NetPanzerData::load_tileset(const std::string& filename)
   if (!file)
     {
       std::cout << "Couldn't load " << filename << std::endl;
-      return Tileset();
     }
   else
     {
@@ -269,9 +312,9 @@ NetPanzerData::load_tileset(const std::string& filename)
       file.read(reinterpret_cast<char*>(&tile_count), sizeof(tile_count));
       file.read(reinterpret_cast<char*>(raw_palette), sizeof(raw_palette));
 
-      NetPanzerTileHeader* tile_headers = new NetPanzerTileHeader[tile_count];
+      tile_headers.resize(tile_count);
 
-      file.read(reinterpret_cast<char*>(tile_headers), 
+      file.read(reinterpret_cast<char*>(&*tile_headers.begin()), 
                 sizeof(NetPanzerTileHeader)*tile_count);
 
       cl_uint32 tilesize = width * height;
@@ -287,14 +330,13 @@ NetPanzerData::load_tileset(const std::string& filename)
       
       NetPanzerData::instance()->tiledata = tiledata;
       
-      Tileset tileset(width);
+      tileset = Tileset(width);
 
       for(int i = 0; i < tile_count; ++i)
         {
           Tile tile(TileProvider(new NetPanzerTileProviderImpl(i)));
           tileset.add_tile(i, &tile);
         }
-      return tileset;
     }
 }
 

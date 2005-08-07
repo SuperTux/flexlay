@@ -66,9 +66,9 @@ class GUI
     @grid_icon = @button_panel.add_icon("../data/images/icons24/grid.png", proc{ toggle_grid() })
     @button_panel.add_separator()
 
-    @background_icon = @button_panel.add_icon("../data/images/icons24/background.png")
+    @background_icon  = @button_panel.add_icon("../data/images/icons24/background.png")
     @interactive_icon = @button_panel.add_icon("../data/images/icons24/interactive.png")
-    @foreground_icon = @button_panel.add_icon("../data/images/icons24/foreground.png")
+    @foreground_icon  = @button_panel.add_icon("../data/images/icons24/foreground.png")
     @eye_icon = @button_panel.add_icon("../data/images/icons24/eye.png")
 
     @button_panel.add_icon("../data/images/icons24/eye.png", proc{ @tilegroup_menu.run() })
@@ -177,14 +177,23 @@ class GUI
   end
 
   def show_background()
+    @background_icon.set_down();
+    @interactive_icon.set_up();
+    @foreground_icon.set_up();
     TilemapLayer.set_current(@workspace.get_map().get_metadata().background)
   end
 
   def show_interactive()
+    @background_icon.set_up();
+    @interactive_icon.set_down();
+    @foreground_icon.set_up();
     TilemapLayer.set_current(@workspace.get_map().get_metadata().interactive)
   end
 
   def show_foreground()
+    @background_icon.set_up();
+    @interactive_icon.set_up();
+    @foreground_icon.set_down();
     TilemapLayer.set_current(@workspace.get_map().get_metadata().foreground)
   end
 

@@ -130,6 +130,8 @@ class Level
 
     TilemapLayer.set_current(@layers[@current_layer])
     ObjectLayer.set_current(@objects)
+
+    connect(@editormap.sig_change(), proc{$gui.on_map_change()})
   end
 
   def save(filename)

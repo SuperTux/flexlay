@@ -162,6 +162,20 @@ class GUI
     connect_v2(@editor_map.sig_on_key("1"),  proc{ |x, y| show_background()})
   end
 
+  def on_map_change()
+    if (@workspace.get_map().undo_stack_size() > 0)
+      @undo_icon.enable()
+    else
+      @undo_icon.disable()
+    end
+
+    if (@workspace.get_map().redo_stack_size() > 0)
+      @redo_icon.enable()
+    else
+      @redo_icon.disable()        
+    end
+  end
+
   def show_background()
     TilemapLayer.set_current(@workspace.get_map().get_metadata().background)
   end

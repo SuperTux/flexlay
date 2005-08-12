@@ -77,6 +77,9 @@ class Level
     @music   = get_value_from_tree(["music", "_"],   data, 0)
 
     objects = get_value_from_tree(["objects"],  data, [])
+    
+    @layers = []
+    @objects = ObjectLayer.new()
 
     objects.each{ |object|
       objtype = object[0]
@@ -102,12 +105,21 @@ class Level
         else
           puts "Unknown Tilemap: #{name}"
         end
+      when "scriptable-object"
+        
       else
         puts "Unknown object: '#{objtype}'"
+        pos = get_value_from_tree(["pos"], objdata, [0,0])
+        obj = ObjMapSpriteObject.new(make_sprite($datadir + "images/streetlamp.png"), 
+                                     CL_Pointf.new(pos[0], pos[1]), make_metadata(nil))
+        # gobj = data[3].call(obj, sexpr) 
+        obj.to_object.set_metadata(make_metadata(nil))
+      
+        @objects.add_object(obj.to_object)
       end
     }
     
-    @layers = [@background, @interactive, @foreground]
+    @layers += [@background, @interactive, @foreground, @objects]
 
     @editormap = EditorMap.new()
     @layers.each {|layer| 

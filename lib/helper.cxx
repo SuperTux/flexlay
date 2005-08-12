@@ -119,4 +119,36 @@ make_region_pixelbuffer(const CL_PixelBuffer& buffer, int x, int y, int w, int h
   }
 }
 
+CL_PixelBuffer
+scale_pixelbuffer(CL_PixelBuffer buffer)
+{
+  CL_PixelBuffer target(buffer.get_width()/2, buffer.get_height()/2, (buffer.get_width()/2)*4, 
+                        CL_PixelFormat::rgba8888);
+
+  target.lock();
+  buffer.lock();
+
+  unsigned char* target_buf = static_cast<unsigned char*>(target.get_data());
+  unsigned char* buffer_buf = static_cast<unsigned char*>(buffer.get_data());
+  
+  int width  = target.get_width();
+  int height = target.get_height();
+  int target_pitch = target.get_pitch();
+  int buffer_pitch = buffer.get_pitch();
+  
+  for(int y = 0; y < height; ++y)
+    for(int x = 0; x < width; ++x)
+      {
+        target_buf[target_pitch*y + 4*x + 0] = buffer_buf[buffer_pitch * y*2 + 4*x*2 + 0];
+        target_buf[target_pitch*y + 4*x + 1] = buffer_buf[buffer_pitch * y*2 + 4*x*2 + 1];
+        target_buf[target_pitch*y + 4*x + 2] = buffer_buf[buffer_pitch * y*2 + 4*x*2 + 2];
+        target_buf[target_pitch*y + 4*x + 3] = buffer_buf[buffer_pitch * y*2 + 4*x*2 + 3];
+      }
+
+  buffer.unlock();
+  target.unlock();
+  
+  return target;
+}
+
 /* EOF */

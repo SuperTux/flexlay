@@ -21,9 +21,7 @@
 ##  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 ##  02111-1307, USA.
 
-## Create some Basic GUI, this is a bit more complicated then it
-## should be due to the lack of proper button-banel class and layout manager
-
+require "gameobjects.rb"
 require "gui_specs.rb"
 
 ## GUI class which holds all the GUI components and the state of them
@@ -55,12 +53,7 @@ class GUI
     @layer_menu.add_item($mysprite, "Show only current", proc{ show_only_current() })
     
     @toolbar = ButtonPanel.new_from_spec(0, 23+33, 33, 32*4+2, false, $toolbar_spec, @gui.get_component)
-    @paint  = @toolbar.items["paint"]
-    @select = @toolbar.items["select"]
-    @zoom   = @toolbar.items["zoom"]
-    @object = @toolbar.items["object"]
-
-    @menu = CL_Menu.new_from_spec($menu_spec, @gui.get_component)
+    @menu    = CL_Menu.new_from_spec($menu_spec, @gui.get_component)
 
     @load_dialog = SimpleFileDialog.new("Load SuperTux Level", "Load", "Cancel", @gui.get_component())
     @load_dialog.set_filename($datadir + "levels/")
@@ -75,11 +68,6 @@ class GUI
       @tilegroup_menu.add_item($mysprite, tilegroup.name, proc{@tileselector.set_tiles(tilegroup.tiles)})
     }
 
-    # Init the GUI, so that button state is in sync with internal state
-    # show_interactive()
-    # show_current()
-    # set_tilemap_paint_tool()
-
     @selector_window = Panel.new(CL_Rect.new(CL_Point.new($screen_width-128-64-6, 23+33), 
                                              CL_Size.new(128 + 64 + 6, $screen_height - 600 + 558)),
                                  @gui.get_component())
@@ -92,20 +80,20 @@ class GUI
                                                  CL_Size.new(128+64, $screen_height - 600 + 552 - 144 - 3)),
                                      @selector_window)
     @tileselector.set_tileset($tileset)
-    @tileselector.set_scale(0.375)
-    # @tileselector.set_tiles($tileset.tilegroups[0].tiles)
-    @tileselector.set_tiles($tileset.get_tiles())
+    @tileselector.set_scale(0.75)
+    @tileselector.set_tiles($tileset.tilegroups[0].tiles)
+    # @tileselector.set_tiles($tileset.get_tiles())
     @tileselector.show(true)
     
     @objectselector = ObjectSelector.new(CL_Rect.new(0, 0, 128, $screen_height - 600 + 552 - 144 - 3), 42, 42, @selector_window)
     @objectselector.show(false)
 
-    connect_v2_ObjectBrush_Point(@objectselector.sig_drop(), proc{|brush, point| on_object_drop() })
+    connect_v2_ObjectBrush_Point(@objectselector.sig_drop(), proc{|brush, pos| on_object_drop(brush, pos) })
 
-    #    $game_objects.each do |object|
-    #     @objectselector.add_brush(ObjectBrush.new(make_sprite($datadir + object[1]),
-    #                                                make_metadata(object)))
-    #    end
+    $gameobjects.each do |object|
+      @objectselector.add_brush(ObjectBrush.new(make_sprite($datadir + object[1]),
+                                                make_metadata(object)))
+    end
 
     @load_dialog = SimpleFileDialog.new("Load SuperTux Level", "Load", "Cancel", @gui.get_component())
     @load_dialog.set_filename($datadir + "levels/")
@@ -184,10 +172,18 @@ class GUI
   end
 
   def set_tool_icon(tool)
-    if tool == :tilemap_paint  then  @paint.set_down()  else @paint.set_up()  end
-    if tool == :tilemap_select then  @select.set_down() else @select.set_up() end
-    if tool == :zoom           then  @zoom.set_down()   else @zoom.set_up()   end
-    if tool == :object_select  then  @object.set_down() else @object.set_up() end
+    if tool == :tilemap_paint  then  @toolbar.items["paint"].set_down()  else @toolbar.items["paint"].set_up()  end
+    if tool == :tilemap_select then  @toolbar.items["select"].set_down() else @toolbar.items["select"].set_up() end
+    if tool == :zoom           then  @toolbar.items["zoom"].set_down()   else @toolbar.items["zoom"].set_up()   end
+    if tool == :object_select  then  @toolbar.items["object"].set_down() else @toolbar.items["object"].set_up() end
+
+    if tool == :tilemap_paint then
+      @objectselector.show(false)
+      @tileselector.show(true)
+    elsif tool == :object_select then
+      @objectselector.show(true)
+      @tileselector.show(false)
+    end
   end
   
   def set_zoom(zoom)
@@ -206,6 +202,26 @@ class GUI
     dialog.add_int("Y: ", 0)
     dialog.set_callback(proc{|w, h, x, y| 
                           level.resize(CL_Size.new(w, h), CL_Point.new(x, y))})
+  end
+
+  def on_object_drop(brush, pos)
+    pos  = @editor_map.screen2world(pos)
+    data = get_ruby_object(brush.get_data())
+    create_gameobject($gui.workspace.get_map().get_metadata().objects, data, pos)
+  end
+
+  def create_gameobject(objmap, data, pos, sexpr = [])
+    case data[2] 
+    when "sprite" 
+      obj = ObjMapSpriteObject.new(make_sprite($datadir + data[1]), pos, make_metadata(nil))
+      gobj = data[3].call(obj, sexpr) 
+      obj.to_object.set_metadata(make_metadata(gobj))
+    end
+    
+    cmd = ObjectAddCommand.new(objmap)
+    cmd.add_object(obj.to_object);
+    $gui.workspace.get_map().execute(cmd.to_command());
+    return obj
   end
 end
 

@@ -54,7 +54,7 @@ $mysprite = make_sprite("../data/images/icons16/stock_paste-16.png")
              
 $resources = CL_ResourceManager.new("../data/flexlay.xml")
 
-$tileset = Tileset.new(64)
+$tileset = Tileset.new(32)
 $tileset.load($datadir + "tiles.scm")
 
 ## Create some basic GUI

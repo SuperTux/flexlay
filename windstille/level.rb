@@ -31,7 +31,7 @@ end
 class Level
   ## Level Properties
   attr_reader :layers, :editormap
-  attr_reader :background, :interactive, :foreground
+  attr_reader :background, :interactive, :foreground, :objects
 
   attr_accessor :name
 

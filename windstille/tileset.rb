@@ -58,8 +58,8 @@ class Tileset
           pixelbuffer = make_pixelbuffer($datadir + 'images/' + image)
         elsif image.is_a?(Array) then
           if image[0] == "region" then
-            pixelbuffer = make_region_pixelbuffer($datadir + 'images/' + image[1],
-                                                  image[2], image[3], image[4], image[5])
+            pixelbuffer = scale_pixelbuffer(make_region_pixelbuffer($datadir + 'images/' + image[1],
+                                                                    image[2], image[3], image[4], image[5]))
           end
         end
         
@@ -98,8 +98,8 @@ class Tileset
           (0..width-1).each {|x|
             if (y*width + x < ids.length) then
               $tileset.add_tile(ids[y*width + x],
-                                Tile.new(make_region_pixelbuffer(pixelbuffer,
-                                                                 64*x, 64*y, 64, 64)))
+                                Tile.new(scale_pixelbuffer(make_region_pixelbuffer(pixelbuffer,
+                                                                                   64*x, 64*y, 64, 64))))
             else
               puts "Id out of range: #{y*width + x} >= #{ids.length} for image #{$datadir + image}"
             end

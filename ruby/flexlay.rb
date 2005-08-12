@@ -70,24 +70,62 @@ class CL_Menu
     item = create_item(name)
     connect(item.sig_clicked(), func)
   end
+
+  def CL_Menu.new_from_spec(menubarspec, parent)
+    menu = CL_Menu.new(parent)
+    
+    menubarspec.each { |(title, *menu_spec)|
+      menu_spec.each{ |(name, callback)|
+        menu.add_item("#{title}/#{name}", callback)
+      }
+    }
+    
+    return menu
+  end
 end
 
 class ButtonPanel
-  attr_reader :panel
+  attr_reader :panel, :items
 
-  def initialize(x, y, width, height, horizontal, parent)
+  def initialize(x, y, width, height, horizontal, parent, &block)
     @panel = Panel.new(CL_Rect.new(CL_Point.new(x, y), CL_Size.new(width, height)), parent)
     @pos   = 2
     @horizontal = horizontal
+    @items = {}
+
+    if block then
+      instance_eval(&block)
+    end
   end
 
-  def add_small_icon(filename, callback = nil, tooltip = "")
+  def ButtonPanel.new_from_spec(x, y, width, height, horizontal, spec, parent)
+    buttonpanel = ButtonPanel.new(x, y, width, height, horizontal, parent)
+
+    spec.each{ |(type, *data)|
+      case type
+      when :icon
+        buttonpanel.items[data[0]] = buttonpanel.add_icon(data[1], data[2])
+      when :toggle
+        buttonpanel.items[data[0]] = buttonpanel.add_icon(data[1], data[2])
+      when :small_icon
+        buttonpanel.items[data[0]] = buttonpanel.add_small_icon(data[1], data[2])
+      when :seperator
+        buttonpanel.add_separator()
+      else
+        raise "ButtonPanel: Unknown type #{type}"
+      end
+    }
+    
+    return buttonpanel
+  end
+
+  def add_small_icon(image = nil, callback = nil, tooltip = "")
     if (@horizontal)
       icon = Icon.new(CL_Rect.new(CL_Point.new(@pos,  2), CL_Size.new(16, 32)),
-                      make_sprite(filename), tooltip, @panel);
+                      make_sprite(image), tooltip, @panel);
     else
       icon = Icon.new(CL_Rect.new(CL_Point.new(2, @pos), CL_Size.new(16, 32)),
-                      make_sprite(filename), tooltip, @panel);
+                      make_sprite(image), tooltip, @panel);
     end
     
     @pos += 16
@@ -97,13 +135,18 @@ class ButtonPanel
     return icon
   end
 
-  def add_icon(filename, callback = nil, tooltip = "")
+  def add_icon(image = nil, callback = nil, &block)
+    tooltip = ""
+    if block then
+      callback = block
+    end
+
     if (@horizontal)
       icon = Icon.new(CL_Rect.new(CL_Point.new(@pos,  2), CL_Size.new(32, 32)),
-                      make_sprite(filename), tooltip, @panel);
+                      make_sprite(image), tooltip, @panel);
     else
       icon = Icon.new(CL_Rect.new(CL_Point.new(2, @pos), CL_Size.new(32, 32)),
-                      make_sprite(filename), tooltip, @panel);
+                      make_sprite(image), tooltip, @panel);
     end
     
     @pos += 32

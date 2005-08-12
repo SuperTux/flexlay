@@ -1,6 +1,9 @@
 ##  $Id$
-## 
-##  Flexlay - A Generic 2D Game Editor
+##   ______ __               ___
+##  |   ___|  |.-----.--.--.|   | .---.-.--.--.
+##  |   ___|  ||  -__|_   _||   |_|  _  |  |  |
+##  |__|   |__||_____|__.__||_____|___._|___  |
+##                                      |_____|
 ##  Copyright (C) 2004 Ingo Ruhnke <grumbel@gmx.de>
 ##
 ##  This program is free software; you can redistribute it and/or
@@ -15,64 +18,17 @@
 ## 
 ##  You should have received a copy of the GNU General Public License
 ##  along with this program; if not, write to the Free Software
-##  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+##  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+##  02111-1307, USA.
 
 ## Create some Basic GUI, this is a bit more complicated then it
 ## should be due to the lack of proper button-banel class and layout manager
 
-$screen_width  = 1024
-$screen_height = 768
-
-class MyButtonPanel
-end
-
-$menu_spec = [
-  ["File",
-    ["Open...",    proc{ $gui.level_load() }],
-    ["Save...",    proc{ $gui.level_save() }],
-    ["Save As...", proc{ $gui.level_save_as() }],
-    ["Quit",       proc{ $gui.gui.quit() }],
-  ],
-  ["Edit",
-    ["Resize", proc{ $gui.resize_level() }],
-    ["Resize to selection", proc{ $gui.resize_level_to_selection()}],
-    ["Debug Shell", proc{ $gui.run_python()}],
-  ],
-  ["Zoom",
-    ["1:4 (25%)",   proc{ $gui.set_zoom(0.25) }],
-    ["1:2 (50%) ",  proc{ $gui.set_zoom(0.5) }],
-    ["1:1 (100%) ", proc{ $gui.set_zoom(1.0) }],
-    ["2:1 (200%) ", proc{ $gui.set_zoom(2.0) }],
-    ["4:1 (400%) ", proc{ $gui.set_zoom(4.0) }],
-  ]
-]
-
-$toolbar_spec = [
-  [:icon,       "new",         "../data/images/icons24/stock_new.png",     proc{ $gui.new_level() }],
-  [:icon,       "open",        "../data/images/icons24/stock_open.png",    proc{ $gui.level_load() }],
-  [:small_icon, "recent",      "../data/images/icons24/downarrow.png",     proc{ $controller.recent_files_menu.run() }],
-  [:icon,       "save",        "../data/images/icons24/stock_save.png",    proc{ $gui.level_save() }],
-  [:icon,       "saveas",      "../data/images/icons24/stock_save_as.png", proc{ $gui.level_save_as() }],
-  [:seperator],
-  [:icon,       "copy",        "../data/images/icons24/stock_copy.png",    nil],
-  [:icon,       "paste",       "../data/images/icons24/stock_paste.png",   nil],
-  [:seperator],
-  [:icon,       "undo",        "../data/images/icons24/stock_undo.png",    proc{ $gui.workspace.get_map().undo() }],
-  [:icon,       "redo",        "../data/images/icons24/stock_redo.png",    proc{ $gui.workspace.get_map().redo() }],
-  [:seperator],
-  [:toggle,     "minimap",     "../data/images/icons24/minimap.png",       proc{ $gui.toggle_minimap() }],
-  [:toggle,     "grid",        "../data/images/icons24/grid.png",          proc{ $gui.toggle_grid() }],
-  [:seperator],
-  [:icon,       "background",  "../data/images/icons24/background.png",    proc{ $gui.show_background() }],
-  [:icon,       "interactive", "../data/images/icons24/interactive.png",   proc{ $gui.show_interactive() }],
-  [:icon,       "foreground",  "../data/images/icons24/foreground.png",    proc{ $gui.show_foreground() }],
-  [:icon,       "viewprops",   "../data/images/icons24/eye.png",           proc{ @layer_menu.run() }],
-  [:icon,       "tilegroups",  "../data/images/icons24/eye.png",           proc{ @tilegroup_menu.run() }],
-]
+require "gui_specs.rb"
 
 ## GUI class which holds all the GUI components and the state of them
 class GUI
-  attr_reader :workspace, :gui, :tileselector, :objectselector
+  attr_reader :workspace, :gui, :tileselector, :objectselector, :tilegroup_menu, :layer_menu
 
   def run()
     ## Enter main loop here
@@ -88,32 +44,27 @@ class GUI
     @workspace  = Workspace.new(myrect.get_width(), myrect.get_height())
     @editor_map.set_workspace(@workspace)
 
-    @minimap = Minimap.new(@editor_map, CL_Rect.new(CL_Point.new(3 + myrect.left, 
-                                                                 $screen_height - 600 + 488+3-14  + myrect.top), 
-                                                    CL_Size.new($screen_width - 6 -134-16, 50)), 
-                           @gui.get_component())
-
-    @button_panel = ButtonPanel.new_from_spec(0, 23, $screen_width, 33, true, $toolbar_spec, @gui.get_component)
+    @button_panel = ButtonPanel.new_from_spec(0, 23, $screen_width, 33, true, $buttonpanel_spec, @gui.get_component)
 
     @button_panel.items["undo"].disable()
     @button_panel.items["redo"].disable()
 
     @layer_menu = Menu.new(CL_Point.new(32*15+2, 54), @gui.get_component())
-    
-    @toolbar = ButtonPanel.new(0, 23+33, 33, 32*4+2, false, @gui.get_component)
-    @paint  = @toolbar.add_icon("../data/images/tools/stock-tool-pencil-22.png") { $controller.set_tilemap_paint_tool() }
-    @select = @toolbar.add_icon("../data/images/tools/stock-tool-rect-select-22.png") { $controller.set_tilemap_select_tool() }
-    @zoom   = @toolbar.add_icon("../data/images/tools/stock-tool-zoom-22.png") { $controller.set_zoom_tool() }
-    @object = @toolbar.add_icon("../data/images/tools/stock-tool-clone-22.png") { $controller.set_objmap_select_tool() }
-
-    @layer_menu.add_item($mysprite, "Show all", proc{ show_all() })
-    @layer_menu.add_item($mysprite, "Show current", proc{ show_current() })
+    @layer_menu.add_item($mysprite, "Show all",          proc{ show_all() })
+    @layer_menu.add_item($mysprite, "Show current",      proc{ show_current() })
     @layer_menu.add_item($mysprite, "Show only current", proc{ show_only_current() })
+    
+    @toolbar = ButtonPanel.new_from_spec(0, 23+33, 33, 32*4+2, false, $toolbar_spec, @gui.get_component)
+    @paint  = @toolbar.items["paint"]
+    @select = @toolbar.items["select"]
+    @zoom   = @toolbar.items["zoom"]
+    @object = @toolbar.items["object"]
 
     @menu = CL_Menu.new_from_spec($menu_spec, @gui.get_component)
 
     @load_dialog = SimpleFileDialog.new("Load SuperTux Level", "Load", "Cancel", @gui.get_component())
     @load_dialog.set_filename($datadir + "levels/")
+
     @save_dialog = SimpleFileDialog.new("Save SuperTux Level as...", "Save", "Cancel", @gui.get_component())
     @save_dialog.set_filename($datadir + "levels/")
 
@@ -124,8 +75,6 @@ class GUI
       @tilegroup_menu.add_item($mysprite, tilegroup.name, proc{@tileselector.set_tiles(tilegroup.tiles)})
     }
 
-    toggle_minimap()
-
     # Init the GUI, so that button state is in sync with internal state
     # show_interactive()
     # show_current()
@@ -134,8 +83,13 @@ class GUI
     @selector_window = Panel.new(CL_Rect.new(CL_Point.new($screen_width-128-64-6, 23+33), 
                                              CL_Size.new(128 + 64 + 6, $screen_height - 600 + 558)),
                                  @gui.get_component())
+
+    @minimap = Minimap.new(@editor_map, CL_Rect.new(CL_Point.new(3,  $screen_height - 600 + 552 - 144 - 12), 
+                                                    CL_Size.new(192, 144)),
+                           @selector_window)
+
     @tileselector = TileSelector.new(CL_Rect.new(CL_Point.new(3, 3), 
-                                                 CL_Size.new(128+64, $screen_height - 600 + 552)),
+                                                 CL_Size.new(128+64, $screen_height - 600 + 552 - 144 - 3)),
                                      @selector_window)
     @tileselector.set_tileset($tileset)
     @tileselector.set_scale(0.375)
@@ -143,28 +97,30 @@ class GUI
     @tileselector.set_tiles($tileset.get_tiles())
     @tileselector.show(true)
     
-    @objectselector = ObjectSelector.new(CL_Rect.new(0, 0, 128, $screen_height - 600 + 552), 42, 42, @selector_window)
+    @objectselector = ObjectSelector.new(CL_Rect.new(0, 0, 128, $screen_height - 600 + 552 - 144 - 3), 42, 42, @selector_window)
     @objectselector.show(false)
 
     connect_v2_ObjectBrush_Point(@objectselector.sig_drop(), proc{|brush, point| on_object_drop() })
 
-#    $game_objects.each do |object|
-#     @objectselector.add_brush(ObjectBrush.new(make_sprite($datadir + object[1]),
-#                                                make_metadata(object)))
-#    end
+    #    $game_objects.each do |object|
+    #     @objectselector.add_brush(ObjectBrush.new(make_sprite($datadir + object[1]),
+    #                                                make_metadata(object)))
+    #    end
 
     @load_dialog = SimpleFileDialog.new("Load SuperTux Level", "Load", "Cancel", @gui.get_component())
     @load_dialog.set_filename($datadir + "levels/")
     @save_dialog = SimpleFileDialog.new("Save SuperTux Level as...", "Save", "Cancel", @gui.get_component())
     @save_dialog.set_filename($datadir + "levels/")
+    
+    register_keybindings($keybinding_spec)
 
-    connect_v2(@editor_map.sig_on_key("f1"), proc{ |x, y| toggle_minimap()})
-    connect_v2(@editor_map.sig_on_key("m"),  proc{ |x, y| toggle_minimap()})
-    connect_v2(@editor_map.sig_on_key("g"),  proc{ |x, y| toggle_grid()})
-    connect_v2(@editor_map.sig_on_key("4"),  proc{ |x, y| toggle_display_props()})
-    connect_v2(@editor_map.sig_on_key("3"),  proc{ |x, y| show_foreground()})
-    connect_v2(@editor_map.sig_on_key("2"),  proc{ |x, y| show_interactive()})
-    connect_v2(@editor_map.sig_on_key("1"),  proc{ |x, y| show_background()})
+    set_zoom(0.5)
+  end
+
+  def register_keybindings(spec)
+    spec.each{ |(key, callback)|
+      connect_v2(@editor_map.sig_on_key(key), callback)
+    }
   end
 
   def on_map_change()
@@ -181,25 +137,27 @@ class GUI
     end
   end
 
-  def show_background()
-    @button_panel.items["background"].set_down();
-    @button_panel.items["interactive"].set_up();
-    @button_panel.items["foreground"].set_up();
-    TilemapLayer.set_current(@workspace.get_map().get_metadata().background)
-  end
+  def show_layer(layer)
+    if layer == :background then
+      @button_panel.items["background"].set_down();
+      TilemapLayer.set_current(@workspace.get_map().get_metadata().background)
+    else
+      @button_panel.items["background"].set_up();
+    end
 
-  def show_interactive()
-    @button_panel.items["background"].set_up();
-    @button_panel.items["interactive"].set_down();
-    @button_panel.items["foreground"].set_up();
-    TilemapLayer.set_current(@workspace.get_map().get_metadata().interactive)
-  end
+    if layer == :interactive then
+      @button_panel.items["interactive"].set_down();
+      TilemapLayer.set_current(@workspace.get_map().get_metadata().interactive)
+    else
+      @button_panel.items["interactive"].set_up();
+    end
 
-  def show_foreground()
-    @button_panel.items["background"].set_up();
-    @button_panel.items["interactive"].set_up();
-    @button_panel.items["foreground"].set_down();
-    TilemapLayer.set_current(@workspace.get_map().get_metadata().foreground)
+    if layer == :foreground then
+      @button_panel.items["foreground"].set_down();
+      TilemapLayer.set_current(@workspace.get_map().get_metadata().interactive)
+    else
+      @button_panel.items["foreground"].set_up();
+    end
   end
 
   def level_load()
@@ -213,16 +171,6 @@ class GUI
   def level_save_as()
     @save_dialog.run(proc{|filename| $controller.save_level(filename) })
   end
-  
-  def toggle_minimap()
-    if @minimap.is_visible()
-      @minimap.show(false)
-      @button_panel.items["minimap"].set_up()
-    else
-      @minimap.show(true)
-      @button_panel.items["minimap"].set_down()
-    end
-  end
 
   def toggle_grid()
     tilemap = @workspace.get_map().get_data().layers[0];
@@ -235,41 +183,20 @@ class GUI
     end
   end
 
-  def set_tilemap_paint_tool()
-    @paint.set_down()
-    @select.set_up()
-    @zoom.set_up()
-    @object.set_up()
+  def set_tool_icon(tool)
+    if tool == :tilemap_paint  then  @paint.set_down()  else @paint.set_up()  end
+    if tool == :tilemap_select then  @select.set_down() else @select.set_up() end
+    if tool == :zoom           then  @zoom.set_down()   else @zoom.set_up()   end
+    if tool == :object_select  then  @object.set_down() else @object.set_up() end
   end
-
-  def set_tilemap_select_tool()
-    @paint.set_up()
-    @select.set_down()
-    @zoom.set_up()
-    @object.set_up()
-  end
-
-  def set_zoom_tool()
-    @paint.set_up()
-    @select.set_up()
-    @zoom.set_down()
-    @object.set_up()
-  end
-
-  def set_objmap_select_tool()
-    @paint.set_up()
-    @select.set_up()
-    @zoom.set_up()
-    @object.set_down()
-  end
-
+  
   def set_zoom(zoom)
     gc = @editor_map.get_workspace().get_gc_state()
     pos = gc.get_pos()
     gc.set_zoom(zoom)
     gc.set_pos(pos)
   end
-  
+
   def new_level()
     level = @workspace.get_map().get_metadata()
     dialog = GenericDialog.new("Create New Level", @gui.get_component())

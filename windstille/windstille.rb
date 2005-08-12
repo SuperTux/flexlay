@@ -35,6 +35,7 @@ include Flexlay_wrap
 
 require "flexlay.rb"
 
+require "controller.rb"
 require "sexpr.rb"
 require "gui.rb"
 require "level.rb"
@@ -45,46 +46,6 @@ flexlay = Flexlay.new()
 flexlay.init(1024, 768)
 
 ## Initialize Tools
-class Controller
-  attr_reader :tilemap_paint_tool, :tilemap_select_tool, :zoom_tool, :objmap_select_tool, :recent_files
-
-  def initialize()
-    @tilemap_paint_tool  = TileMapPaintTool.new()
-    @tilemap_select_tool = TileMapSelectTool.new()
-    @zoom_tool           = ZoomTool.new()
-    @objmap_select_tool  = ObjMapSelectTool.new()
-    @recent_files        = []
-  end
-    
-  def set_tilemap_paint_tool()
-    $gui.workspace.set_tool(@tilemap_paint_tool.to_tool())
-    $gui.set_tilemap_paint_tool()
-  end
-
-  def set_tilemap_select_tool()
-    $gui.workspace.set_tool(@tilemap_select_tool.to_tool())
-    $gui.set_tilemap_select_tool()
-  end
-
-  def set_zoom_tool()
-    $gui.workspace.set_tool(@zoom_tool.to_tool())
-    $gui.set_zoom_tool()
-  end
-
-  def set_objmap_select_tool()
-    $gui.workspace.set_tool(@objmap_select_tool.to_tool())
-    $gui.set_objmap_select_tool()
-  end  
-
-  def load_level(filename)
-    $startlevel = Level.new(filename)
-    $startlevel.activate($workspace)
-  end
-
-  def save_level(filename)
-    $startlevel.save(filename)
-  end
-end
 
 $controller = Controller.new()
 

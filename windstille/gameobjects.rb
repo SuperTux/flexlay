@@ -26,4 +26,36 @@ $gameobjects = [
     proc{|data, sexpr| nil}],
 ]
 
+def write_sexpr(f, sexpr)
+  if sexpr.is_a?(Array) then
+    f.print "("
+    sexpr.each_with_index{|e, i|
+      write_sexpr(f, e)
+      if i != sexpr.length() - 1 then
+        f.print " "
+      end
+    }
+    f.print ")"
+  else
+    if sexpr.is_a?(Symbol)
+      f.print sexpr.to_s
+    else
+      f.print sexpr.inspect
+    end
+  end
+end
+
+class UnknownGameObject
+  def initialize(name, sexpr, obj)
+    @name  = name
+    @sexpr = sexpr
+    @obj   = obj
+  end
+
+  def save(f)
+    write_sexpr(f, [@name, *@sexpr])
+    f.puts
+  end
+end
+
 ## EOF ##

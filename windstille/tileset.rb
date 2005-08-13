@@ -32,6 +32,7 @@ class Tileset
   def load(filename)
     puts "Loading Tileset: #{filename}"
     tree = sexpr_read_from_file(filename)
+
     if tree == nil then
       puts "Error; Couldn't load: ", filename
       return 
@@ -42,7 +43,7 @@ class Tileset
     
     tree.each do |i|
       case i[0]
-      when "tile"
+      when :tile
         data   = i[1..-1]
         id     = get_value_from_tree(['id', '_'], data, -1)
         image  = get_value_from_tree(['editor-images', '_'], data, false)
@@ -71,7 +72,7 @@ class Tileset
           end
         end
 
-      when "tilegroup"
+      when :tilegroup
         data  = i[1..-1]
         name  = get_value_from_tree(['name', '_'], data, "Unnamed")
         tiles = get_value_from_tree(['tiles'], data, [])
@@ -81,7 +82,7 @@ class Tileset
         end
         @tilegroups.push(TileGroup.new(name, tiles))
         
-      when "tiles"
+      when :tiles
         data   = i[1..-1]
         colmap  = get_value_from_tree(['colmap'], data, [])
         ids     = get_value_from_tree(['ids'], data, [])

@@ -55,12 +55,6 @@ class GUI
     @toolbar = ButtonPanel.new_from_spec(0, 23+33, 33, 32*4+2, false, $toolbar_spec, @gui.get_component)
     @menu    = CL_Menu.new_from_spec($menu_spec, @gui.get_component)
 
-    @load_dialog = SimpleFileDialog.new("Load SuperTux Level", "Load", "Cancel", @gui.get_component())
-    @load_dialog.set_filename($datadir + "levels/")
-
-    @save_dialog = SimpleFileDialog.new("Save SuperTux Level as...", "Save", "Cancel", @gui.get_component())
-    @save_dialog.set_filename($datadir + "levels/")
-
     # FIXME: Having position in the Menus here is EXTREMLY ugly
     @tilegroup_menu = Menu.new(CL_Point.new(35*15+2, 54), @gui.get_component())
     @tilegroup_menu.add_item($mysprite, "All Tiles", proc{@tileselector.set_tiles($tileset.get_tiles())})
@@ -95,9 +89,9 @@ class GUI
                                                 make_metadata(object)))
     end
 
-    @load_dialog = SimpleFileDialog.new("Load SuperTux Level", "Load", "Cancel", @gui.get_component())
+    @load_dialog = SimpleFileDialog.new("Load Sector", "Load", "Cancel", @gui.get_component())
     @load_dialog.set_filename($datadir + "levels/")
-    @save_dialog = SimpleFileDialog.new("Save SuperTux Level as...", "Save", "Cancel", @gui.get_component())
+    @save_dialog = SimpleFileDialog.new("Save Sector as...", "Save", "Cancel", @gui.get_component())
     @save_dialog.set_filename($datadir + "levels/")
     
     register_keybindings($keybinding_spec)
@@ -195,7 +189,7 @@ class GUI
 
   def new_level()
     level = @workspace.get_map().get_metadata()
-    dialog = GenericDialog.new("Create New Level", @gui.get_component())
+    dialog = GenericDialog.new("Create New Sector", @gui.get_component())
     dialog.add_int("Width: ", level.width)
     dialog.add_int("Height: ", level.height)
     dialog.add_int("X: ", 0)

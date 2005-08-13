@@ -38,7 +38,7 @@ require "flexlay.rb"
 require "controller.rb"
 require "sexpr.rb"
 require "gui.rb"
-require "level.rb"
+require "sector.rb"
 require "tileset.rb"
 
 ## Init Flexlay itself
@@ -62,7 +62,7 @@ $gui = GUI.new()
 
 $gui.workspace.set_tool($controller.tilemap_paint_tool.to_tool());
 
-$startlevel = Level.new(100, 30)
+$startlevel = Sector.new(100, 30)
 $startlevel.activate($workspace)
 
 $gui.run()

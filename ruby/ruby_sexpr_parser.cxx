@@ -41,7 +41,7 @@ build_py_sexpr(lisp_object_t* cur)
     }
   else if (lisp_symbol_p(cur))
     {
-      return rb_str_new2(lisp_symbol(cur));
+      return ID2SYM(rb_intern(lisp_symbol(cur)));
     }
   else if (lisp_integer_p(cur))
     {

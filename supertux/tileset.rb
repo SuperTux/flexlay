@@ -32,7 +32,7 @@ class Tileset
     
     tree.each do |i|
       case i[0]
-      when "tile"
+      when :tile
         data   = i[1..-1]
         id     = get_value_from_tree(['id', '_'], data, -1)
         image  = get_value_from_tree(['editor-images', '_'], data, false)
@@ -47,7 +47,7 @@ class Tileset
         if image.is_a?(String) then
           pixelbuffer = make_pixelbuffer($datadir + 'images/' + image)
         elsif image.is_a?(Array) then
-          if image[0] == "region" then
+          if image[0] == :region then
             pixelbuffer = make_region_pixelbuffer($datadir + 'images/' + image[1],
                                                   image[2], image[3], image[4], image[5])
           end
@@ -61,7 +61,7 @@ class Tileset
           end
         end
 
-      when "tilegroup"
+      when :tilegroup
         data  = i[1..-1]
         name  = get_value_from_tree(['name', '_'], data, "Unnamed")
         tiles = get_value_from_tree(['tiles'], data, [])

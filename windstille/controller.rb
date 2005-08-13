@@ -30,7 +30,7 @@ class Controller
   end  
 
   def load_level(filename)
-    $startlevel = Level.new(filename)
+    $startlevel = Sector.new(filename)
     $startlevel.activate($workspace)
   end
 

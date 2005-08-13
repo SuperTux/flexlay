@@ -103,7 +103,7 @@ class Sector
     background = get_value_from_tree(["background", "_"], data, "")
     if(background != "")
       sexpr = [["image", background], ["speed", 0.5]]
-      create_gameobject_from_data(@objects, "background", sexpr)
+      create_gameobject_from_data(@objects, :background, sexpr)
     else
       sexpr = [["top_color",
         get_value_from_tree(["bkgd_red_top", "_"], data, 0),
@@ -114,19 +114,19 @@ class Sector
         get_value_from_tree(["bkgd_green_bottom", "_"], data, 0),
         get_value_from_tree(["bkgd_blue_bottom", "_"], data, 0)],
               ["speed", 0.5]]
-      create_gameobject_from_data(@objects, "background", sexpr)
+      create_gameobject_from_data(@objects, :background, sexpr)
     end
 
     partsys = get_value_from_tree(["particle_system", "_"], data, "")
     if(partsys == "snow")
       sexpr = []
-      create_gameobject_from_data(@objects, "particles-snow", sexpr)
+      create_gameobject_from_data(@objects, :'particles-snow', sexpr)
     elsif(partsys == "rain")
       sexpr = []
-      create_gameobject_from_data(@objects, "particles-rain", sexpr)
+      create_gameobject_from_data(@objects, :'particles-rain', sexpr)
     elsif(partsys == "clouds")
       sexpr = []
-      create_gameobject_from_data(@objects, "particles-clouds", sexpr)
+      create_gameobject_from_data(@objects, :'particles-clouds', sexpr)
     elsif(partsys == "")
     else
       print "Unknown particle system type '", partsys, "'\n"

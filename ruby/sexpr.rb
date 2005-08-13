@@ -51,7 +51,7 @@ def get_value_from_tree(spec, tree, default)
     elsif tree == []
       return default
     else
-      el = assoc_ref(tree, spec[0])
+      el = assoc_ref(tree, spec[0].to_sym)
       if el
         return get_value_from_tree(spec[1..-1], el, default)
       else

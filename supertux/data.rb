@@ -1,82 +1,82 @@
 $game_objects = [
-  ["jumpy", "images/creatures/jumpy/left-middle.png", "sprite",
+  ["jumpy", "images/creatures/jumpy/left-middle.png", :sprite,
     proc{|data, sexpr| BadGuy.new("jumpy")}],
-  ["snowball", "images/creatures/snowball/left-0.png", "sprite",
+  ["snowball", "images/creatures/snowball/left-0.png", :sprite,
     proc{|data, sexpr| BadGuy.new("snowball")}],
-  ["mriceblock", "images/creatures/mr_iceblock/left-0.png", "sprite",
+  ["mriceblock", "images/creatures/mr_iceblock/left-0.png", :sprite,
     proc{|data, sexpr| BadGuy.new("mriceblock")}],
-  ["mrbomb", "images/creatures/mr_bomb/left-0.png", "sprite",
+  ["mrbomb", "images/creatures/mr_bomb/left-0.png", :sprite,
     proc{|data, sexpr| BadGuy.new("mrbomb")}],
-  ["flame", "images/creatures/flame/flame-0.png", "sprite",
+  ["flame", "images/creatures/flame/flame-0.png", :sprite,
     proc{|data, sexpr| BadGuy.new("flame")}], 
-  ["stalactite", "images/creatures/stalactite/falling.png", "sprite",
+  ["stalactite", "images/creatures/stalactite/falling.png", :sprite,
     proc{|data, sexpr| BadGuy.new("stalactite")}],
-  ["fish", "images/creatures/fish/left-0.png", "sprite",
+  ["fish", "images/creatures/fish/left-0.png", :sprite,
     proc{|data, sexpr| BadGuy.new("fish")}],
-  ["flyingsnowball", "images/creatures/flying_snowball/left-0.png", "sprite",
+  ["flyingsnowball", "images/creatures/flying_snowball/left-0.png", :sprite,
     proc{|data, sexpr| BadGuy.new("flyingsnowball")}],
-  ["bouncingsnowball", "images/creatures/bouncing_snowball/left-0.png", "sprite",
+  ["bouncingsnowball", "images/creatures/bouncing_snowball/left-0.png", :sprite,
     proc{|data, sexpr| BadGuy.new("bouncingsnowball")}],
-  ["spiky", "images/creatures/spiky/left-0.png", "sprite",
+  ["spiky", "images/creatures/spiky/left-0.png", :sprite,
     proc{|data, sexpr| BadGuy.new("spiky")}],
-  ["mrtree", "images/creatures/mr_tree/walk-left-0.png", "sprite",
+  ["mrtree", "images/creatures/mr_tree/walk-left-0.png", :sprite,
     proc{|data, sexpr| BadGuy.new("mrtree")}],
-  ["poisonivy", "images/creatures/poison_ivy/left-0.png", "sprite",
+  ["poisonivy", "images/creatures/poison_ivy/left-0.png", :sprite,
     proc{|data, sexpr| BadGuy.new("poisonivy")}],
-  ["zeekling", "images/creatures/zeekling/left-0.png", "sprite",
+  ["zeekling", "images/creatures/zeekling/left-0.png", :sprite,
     proc{|data, sexpr| BadGuy.new("zeekling")}],
-  ["kugelblitz", "images/creatures/kugelblitz/flying-0.png", "sprite",
+  ["kugelblitz", "images/creatures/kugelblitz/flying-0.png", :sprite,
     proc{|data, sexpr| BadGuy.new("kugelblitz")}],
-  ["dispenser", "images/creatures/dispenser/working.png", "sprite",
+  ["dispenser", "images/creatures/dispenser/working.png", :sprite,
     proc{|data, sexpr| Dispenser.new(data, sexpr)}],
-  ["yeti", "images/creatures/yeti/yeti.png", "sprite",
+  ["yeti", "images/creatures/yeti/yeti.png", :sprite,
     proc{|data, sexpr| BadGuy.new("yeti")}],
-  ["stalactite_yeti", "images/engine/editor/stalactite_yeti.png", "sprite",
+  ["stalactite_yeti", "images/engine/editor/stalactite_yeti.png", :sprite,
     proc{|data, sexpr| BadGuy.new("yeti_stalactite")}],
-  ["spawnpoint", "images/engine/editor/spawnpoint.png", "sprite",
+  ["spawnpoint", "images/engine/editor/spawnpoint.png", :sprite,
     proc{|data, sexpr| SpawnPoint.new(data, sexpr)}],
-  ["ambient_sound", "images/engine/editor/ambientsound.png", "rect",
+  ["ambient_sound", "images/engine/editor/ambientsound.png", :rect,
     proc{|data, sexpr| AmbientSound.new(data, sexpr)}],
-  ["door", "images/objects/door/door-0.png", "sprite",
+  ["door", "images/objects/door/door-0.png", :sprite,
     proc{|data, sexpr| Door.new("door", data, sexpr)}],
-  ["hatch", "images/objects/hatch/hatch-0.png", "sprite",
+  ["hatch", "images/objects/hatch/hatch-0.png", :sprite,
     proc{|data, sexpr| Door.new("hatch", data, sexpr)}],
-  ["trampoline", "images/objects/trampoline/trampoline1-0.png", "sprite",
+  ["trampoline", "images/objects/trampoline/trampoline1-0.png", :sprite,
     proc{|data, sexpr| BadGuy.new("trampoline")}],
-  ["bell", "images/objects/bell/bell-m.png", "sprite",
+  ["bell", "images/objects/bell/bell-m.png", :sprite,
     proc{|data, sexpr| SimpleObject.new("bell")}],
-  ["rock", "images/tiles/blocks/block11.png", "sprite",
+  ["rock", "images/tiles/blocks/block11.png", :sprite,
     proc{|data, sexpr| SimpleObject.new("rock")}],
-  ["unstable_tile", "images/objects/unstable_tile/unstable_tile.png", "sprite",
+  ["unstable_tile", "images/objects/unstable_tile/unstable_tile.png", :sprite,
     proc{|data, sexpr| SimpleTileObject.new(data, "unstable_tile")}],
-  ["infoblock", "images/engine/editor/infoblock.png", "sprite",
+  ["infoblock", "images/engine/editor/infoblock.png", :sprite,
     proc{|data, sexpr| InfoBlock.new(data, sexpr)}],
-  ["powerup", "images/engine/editor/powerup.png", "sprite",
+  ["powerup", "images/engine/editor/powerup.png", :sprite,
     proc{|data, sexpr| Powerup.new(data, sexpr)}],
-  ["secretarea", "images/engine/editor/secretarea.png", "rect",
+  ["secretarea", "images/engine/editor/secretarea.png", :rect,
     proc{|data, sexpr| SecretArea.new(data, sexpr)}],
-  ["sequencetrigger", "images/engine/editor/sequencetrigger.png", "rect",
+  ["sequencetrigger", "images/engine/editor/sequencetrigger.png", :rect,
     proc{|data, sexpr| SequenceTrigger.new(data, sexpr)}],
-  ["background", "images/engine/editor/background.png", "sprite",
+  ["background", "images/engine/editor/background.png", :sprite,
     proc{|data, sexpr| Background.new(data, sexpr)}],
-  ["particles-snow", "images/engine/editor/snow.png", "sprite",
+  ["particles-snow", "images/engine/editor/snow.png", :sprite,
     proc{|data, sexpr| ParticleSystem.new("snow", sexpr)}],
-  ["particles-clouds", "images/engine/editor/clouds.png", "sprite",
+  ["particles-clouds", "images/engine/editor/clouds.png", :sprite,
     proc{|data, sexpr| ParticleSystem.new("clouds", sexpr)}],
-  ["particles-rain", "images/engine/editor/rain.png", "sprite",
+  ["particles-rain", "images/engine/editor/rain.png", :sprite,
     proc{|data, sexpr| ParticleSystem.new("rain", sexpr)}],
-  ["leveltime", "images/engine/editor/clock.png", "sprite",
+  ["leveltime", "images/engine/editor/clock.png", :sprite,
     proc{|data, sexpr| LevelTime.new(sexpr)}],
-  ["point", "images/engine/editor/point.png", "sprite",
+  ["point", "images/engine/editor/point.png", :sprite,
     proc{|data, sexpr| SimpleObject.new("point")}],
-  ["platform", "images/objects/flying_platform/flying_platform-0.png", "sprite",
+  ["platform", "images/objects/flying_platform/flying_platform-0.png", :sprite,
     proc{|data, sexpr| Platform.new(data, sexpr)}],
 ]
 
 def create_gameobject_from_data(objmap, name, sexpr)
   # Creates a gameobject from the given sexpr: "snowball", ((x 5) (y 5))
   
-  object = $game_objects.find {|x| x[0] == name}
+  object = $game_objects.find {|x| x[0].to_sym == name}
   if object != nil then
     (name, image, type, func) = object
     
@@ -94,12 +94,12 @@ def create_gameobject(objmap, data, pos, sexpr = [])
   # Creates a gameobject the given position, data is the entry in the $game_objects table
   case data[2] 
     
-  when "sprite" 
+  when :sprite
     obj = ObjMapSpriteObject.new(make_sprite($datadir + data[1]), pos, make_metadata(nil))
     gobj = data[3].call(obj, sexpr)
     obj.to_object.set_metadata(make_metadata(gobj))
     
-  when "rect"
+  when :rect
 	print "NewRect", pos.x, " -", pos.y, "\n"
     obj = ObjMapRectObject.new(CL_Rect.new(CL_Point.new(pos.x.to_i, pos.y.to_i), CL_Size.new(64, 64)),
                                CL_Color.new(0, 0, 255, 128), make_metadata(nil))
@@ -107,7 +107,7 @@ def create_gameobject(objmap, data, pos, sexpr = [])
     obj.to_object.set_metadata(make_metadata(gobj))
 
   else
-    raise "Error: Unknown object type dropped: '#{data}'"
+    raise "Error: Unknown object type dropped: '#{data.inspect}'"
   end
   
   cmd = ObjectAddCommand.new(objmap)

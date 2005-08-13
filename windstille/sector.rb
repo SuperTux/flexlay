@@ -178,7 +178,9 @@ class Sector
     save_tilemap.call("foreground",  @foreground)
 
     for obj in @objects.get_objects()
-      obj.get_data().save(f)
+      if obj.get_data() then
+        obj.get_data().save(f)
+      end
     end
 
     f.write("   )\n")

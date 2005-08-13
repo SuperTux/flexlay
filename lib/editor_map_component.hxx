@@ -63,6 +63,8 @@ public:
 
   CL_Rectf get_clip_rect();
 
+  GraphicContextState& get_gc_state();
+
 private:
   SharedPtr<EditorMapComponentImpl> impl;
 };

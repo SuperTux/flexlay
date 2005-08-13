@@ -31,7 +31,7 @@ class SuperTuxGUI
                         minimap_rect.get_height() - 3))
 
     @editor_map = EditorMapComponent.new(map_rect, @gui.get_component())
-    @workspace  = Workspace.new(map_rect.get_width(), map_rect.get_height())
+    @workspace  = Workspace.new()
     @editor_map.set_workspace(@workspace)
     @workspace.set_tool($tilemap_paint_tool.to_tool());
     @minimap = Minimap.new(@editor_map, minimap_rect, @gui.get_component())
@@ -513,7 +513,7 @@ class SuperTuxGUI
   end
 
   def gui_set_zoom(zoom)
-    gc = @editor_map.get_workspace().get_gc_state()
+    gc = @editor_map.get_gc_state()
     pos = gc.get_pos()
     gc.set_zoom(zoom)
     gc.set_pos(pos)

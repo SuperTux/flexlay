@@ -28,7 +28,7 @@ class WorkspaceMoveToolImpl;
 class WorkspaceMoveTool
 {
 public:
-  WorkspaceMoveTool(const Workspace& workspace_);
+  WorkspaceMoveTool();
 
   Tool to_tool();
 private:

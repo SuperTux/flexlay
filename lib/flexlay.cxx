@@ -41,11 +41,12 @@ Flexlay::Flexlay()
 }
 
 void
-Flexlay::init(int width, int height, bool fullscreen_)
+Flexlay::init(int width, int height, bool fullscreen_, bool allow_resize_)
 {
   screen_width  = width;
   screen_height = height;
   fullscreen    = fullscreen_; 
+  allow_resize  = allow_resize_;
 
   std::cout << "Flexlay::init()" << std::endl;
   try {

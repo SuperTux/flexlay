@@ -60,4 +60,23 @@ def get_value_from_tree(spec, tree, default)
     end
 end
 
+def write_sexpr(f, sexpr)
+  if sexpr.is_a?(Array) then
+    f.print "("
+    sexpr.each_with_index{|e, i|
+      write_sexpr(f, e)
+      if i != sexpr.length() - 1 then
+        f.print " "
+      end
+    }
+    f.print ")"
+  else
+    if sexpr.is_a?(Symbol)
+      f.print sexpr.to_s
+    else
+      f.print sexpr.inspect
+    end
+  end
+end
+
 # EOF #

@@ -181,7 +181,7 @@ class GUI
   end
   
   def set_zoom(zoom)
-    gc = @editor_map.get_workspace().get_gc_state()
+    gc = @editor_map.get_gc_state()
     pos = gc.get_pos()
     gc.set_zoom(zoom)
     gc.set_pos(pos)

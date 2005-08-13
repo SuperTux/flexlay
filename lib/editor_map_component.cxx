@@ -37,6 +37,7 @@ class EditorMapComponentImpl
 {
 public:
   EditorMapComponent* parent;
+  GraphicContextState gc_state;
   Scrollbar* scrollbar_h;
   Scrollbar* scrollbar_v;
   CL_SlotContainer slots;
@@ -55,7 +56,8 @@ EditorMapComponent::EditorMapComponent(const CL_Rect& rect, CL_Component* parent
     impl(new EditorMapComponentImpl())
 {
   impl->parent = this;
-  impl->workspace = Workspace(rect.get_width(), rect.get_height());
+  impl->gc_state  = GraphicContextState(rect.get_width(), rect.get_height());
+  impl->workspace = Workspace();
 
   current_ = this;
 
@@ -128,76 +130,81 @@ EditorMapComponentImpl::mouse_down(const CL_InputEvent& event)
 void
 EditorMapComponentImpl::draw ()
 {
+  CL_Display::push_cliprect(parent->get_screen_rect());
+
   CL_Display::push_translate(parent->get_screen_x(), parent->get_screen_y());
 
   // Update scrollbars (FIXME: move me to function)
   scrollbar_v->set_range(0, workspace.get_map().get_bounding_rect().get_height());
-  scrollbar_v->set_pagesize(parent->get_height()/workspace.get_gc_state().get_zoom());
-  scrollbar_v->set_pos(workspace.get_gc_state().get_pos().y);
+  scrollbar_v->set_pagesize(parent->get_height()/gc_state.get_zoom());
+  scrollbar_v->set_pos(gc_state.get_pos().y);
 
   scrollbar_h->set_range(0, workspace.get_map().get_bounding_rect().get_width());
-  scrollbar_h->set_pagesize(parent->get_width()/workspace.get_gc_state().get_zoom());
-  scrollbar_h->set_pos(workspace.get_gc_state().get_pos().x);
+  scrollbar_h->set_pagesize(parent->get_width()/gc_state.get_zoom());
+  scrollbar_h->set_pos(gc_state.get_pos().x);
 
+  gc_state.push();
   workspace.draw();
+  gc_state.pop();
 
   CL_Display::pop_modelview();
+  CL_Display::pop_cliprect();
 }
 
 CL_Pointf
 EditorMapComponent::screen2world(const CL_Point& pos)
 {
-  return impl->workspace.get_gc_state().screen2world(pos);
+  return impl->gc_state.screen2world(pos);
 }
 
 void
 EditorMapComponent::set_zoom(float z)
 {
-  impl->workspace.get_gc_state().set_zoom(z);
+  impl->gc_state.set_zoom(z);
 }
 
 void
 EditorMapComponent::zoom_out(CL_Point pos)
 {
-  impl->workspace.get_gc_state().set_zoom(CL_Pointf(pos.x, pos.y),
-                                          impl->workspace.get_gc_state().get_zoom()/1.25f);
+  impl->gc_state.set_zoom(CL_Pointf(pos.x, pos.y),
+                          impl->gc_state.get_zoom()/1.25f);
 }
 
 void
 EditorMapComponent::zoom_in(CL_Point pos)
 {
-  impl->workspace.get_gc_state().set_zoom(CL_Pointf(pos.x, pos.y), 
-                                          impl->workspace.get_gc_state().get_zoom()*1.25f);
+  impl->gc_state.set_zoom(CL_Pointf(pos.x, pos.y), 
+                                          impl->gc_state.get_zoom()*1.25f);
 }
 
 void
 EditorMapComponent::zoom_to(CL_Rectf rect)
 {
-  impl->workspace.get_gc_state().zoom_to(rect);
+  impl->gc_state.zoom_to(rect);
 }
 
 CL_Rectf
 EditorMapComponent::get_clip_rect()
 {
-  return impl->workspace.get_gc_state().get_clip_rect();
+  return impl->gc_state.get_clip_rect();
 }
 
 void
 EditorMapComponent::move_to(int x, int y)
 {
-  impl->workspace.get_gc_state().set_pos(CL_Pointf(x, y));
+  impl->gc_state.set_pos(CL_Pointf(x, y));
 }
 
 void
 EditorMapComponent::move_to_x(float x)
 {
-  impl->workspace.get_gc_state().set_pos(CL_Pointf(x, impl->workspace.get_gc_state().get_pos().y));
+  impl->gc_state.set_pos(CL_Pointf(x, impl->gc_state.get_pos().y));
 }
 
 void
 EditorMapComponent::move_to_y(float y)
 {
-  impl->workspace.get_gc_state().set_pos(CL_Pointf(impl->workspace.get_gc_state().get_pos().x, y));
+  impl->gc_state.set_pos(CL_Pointf(impl->gc_state.get_pos().x, y));
 }
 
 CL_Signal_v2<int, int>&
@@ -216,6 +223,12 @@ EditorMapComponent::sig_on_key(const std::string& str)
       std::cout << "EditorMapComponent::sig_on_key: invalid key id: " << id << std::endl;
       return impl->key_bindings[0];
     }
+}
+
+GraphicContextState&
+EditorMapComponent::get_gc_state()
+{
+  return impl->gc_state;
 }
 
 /* EOF */

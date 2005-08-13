@@ -27,8 +27,6 @@
 class WorkspaceMoveToolImpl : public ToolImpl
 {
 public:
-  Workspace workspace;
-
   bool scrolling;
   CL_Point click_pos;
 
@@ -47,7 +45,7 @@ void
 WorkspaceMoveToolImpl::on_mouse_down(const CL_InputEvent& event)
 {
   scrolling = true;
-  old_trans_offset = workspace.get_gc_state().get_pos();
+  old_trans_offset = EditorMapComponent::current()->get_gc_state().get_pos();
   click_pos = event.mouse_pos;
   EditorMapComponent::current()->capture_mouse();
 }
@@ -57,7 +55,7 @@ WorkspaceMoveToolImpl::on_mouse_up(const CL_InputEvent& event)
 {
   scrolling = false;
   update(event);
-  old_trans_offset = workspace.get_gc_state().get_pos();
+  old_trans_offset = EditorMapComponent::current()->get_gc_state().get_pos();
   EditorMapComponent::current()->release_mouse();
 }
 
@@ -73,7 +71,7 @@ WorkspaceMoveToolImpl::on_mouse_move(const CL_InputEvent& event)
 void
 WorkspaceMoveToolImpl::update(const CL_InputEvent& event)
 {
-  GraphicContextState& gc_state = workspace.get_gc_state();
+  GraphicContextState& gc_state = EditorMapComponent::current()->get_gc_state();
 
   float sa = sin(-gc_state.get_rotation()/180.0f*M_PI);
   float ca = cos(-gc_state.get_rotation()/180.0f*M_PI);
@@ -82,15 +80,14 @@ WorkspaceMoveToolImpl::update(const CL_InputEvent& event)
   float dy = sa * (click_pos.x - event.mouse_pos.x) + ca * (click_pos.y - event.mouse_pos.y);
 
   gc_state.set_pos(CL_Pointf(old_trans_offset.x
-                             + dx / workspace.get_gc_state().get_zoom(),
+                             + dx / EditorMapComponent::current()->get_gc_state().get_zoom(),
                              old_trans_offset.y
-                             + dy / workspace.get_gc_state().get_zoom()));
+                             + dy / EditorMapComponent::current()->get_gc_state().get_zoom()));
 }
 
-WorkspaceMoveTool::WorkspaceMoveTool(const Workspace& workspace_)
+WorkspaceMoveTool::WorkspaceMoveTool()
   : impl(new WorkspaceMoveToolImpl())
 {
-  impl->workspace = workspace_;
   impl->scrolling = false;
   impl->click_pos = CL_Point(0, 0);
   impl->old_trans_offset = CL_Pointf(0,0);

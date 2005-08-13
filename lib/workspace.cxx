@@ -34,7 +34,6 @@ Workspace Workspace::current_;
 class WorkspaceImpl
 {
 public:
-  GraphicContextState gc_state;
   EditorMap editor_map;
 
   Tool tool;
@@ -42,23 +41,16 @@ public:
 };
 
 Workspace::Workspace()
-{
-}
-
-Workspace::Workspace(int w, int h)
   : impl(new WorkspaceImpl())
 {
   current_ = *this;
   
-  impl->move_tool = WorkspaceMoveTool(*this).to_tool();
-  impl->gc_state  = GraphicContextState(w, h);
+  impl->move_tool = WorkspaceMoveTool().to_tool();
 }
 
 void
 Workspace::draw()
 {
-  impl->gc_state.push();
-
   CL_Display::clear(CL_Color(100, 0, 100));
 
   impl->editor_map.draw_gui(CL_Display::get_current_window()->get_gc());
@@ -68,8 +60,6 @@ Workspace::draw()
     impl->tool.draw();
     
   CL_Display::flush();
-
-  impl->gc_state.pop();
 }
 
 void
@@ -129,12 +119,6 @@ void
 Workspace::set_map(const EditorMap& m)
 {
   impl->editor_map = m;
-}
-
-GraphicContextState&
-Workspace::get_gc_state()
-{
-  return impl->gc_state;
 }
 
 void

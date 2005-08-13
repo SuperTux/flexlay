@@ -38,7 +38,6 @@ public:
   static Workspace current() { return current_; }
 
   Workspace();
-  Workspace(int w, int h);
 
   void draw();
 
@@ -48,8 +47,6 @@ public:
 
   EditorMap get_map();
   void set_map(const EditorMap& m);
-
-  GraphicContextState& get_gc_state();
 
   void set_tool(const Tool& tool);
 

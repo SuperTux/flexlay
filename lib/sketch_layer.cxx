@@ -75,9 +75,9 @@ public:
     if (canvas)
       {
         EditorMapComponent* parent = EditorMapComponent::current();
-        parent->get_workspace().get_gc_state().push(canvas->get_gc());
+        parent->get_gc_state().push(canvas->get_gc());
         stroke.draw(canvas->get_gc());
-        parent->get_workspace().get_gc_state().pop(canvas->get_gc());
+        parent->get_gc_state().pop(canvas->get_gc());
         canvas->sync_surface();
       }
   }
@@ -91,16 +91,16 @@ public:
     if (canvas)
       {
         // Draw to canvas
-        if (last_zoom != parent->get_workspace().get_gc_state().get_zoom() ||
-            last_pos  != parent->get_workspace().get_gc_state().get_pos()  ||
-            last_rot  != parent->get_workspace().get_gc_state().get_rotation())
+        if (last_zoom != parent->get_gc_state().get_zoom() ||
+            last_pos  != parent->get_gc_state().get_pos()  ||
+            last_rot  != parent->get_gc_state().get_rotation())
           {
             // Rerender the image
-            last_zoom   = parent->get_workspace().get_gc_state().get_zoom();
-            last_pos    = parent->get_workspace().get_gc_state().get_pos();
-            last_rot    = parent->get_workspace().get_gc_state().get_rotation();
+            last_zoom   = parent->get_gc_state().get_zoom();
+            last_pos    = parent->get_gc_state().get_pos();
+            last_rot    = parent->get_gc_state().get_rotation();
 
-            parent->get_workspace().get_gc_state().push(canvas->get_gc());
+            parent->get_gc_state().push(canvas->get_gc());
             canvas->get_gc()->clear(CL_Color(0, 0, 0, 0));
             //canvas->get_gc()->clear(CL_Color::white);
 
@@ -116,7 +116,7 @@ public:
                     i->draw(canvas->get_gc());
                   }
               }
-            parent->get_workspace().get_gc_state().pop(canvas->get_gc());
+            parent->get_gc_state().pop(canvas->get_gc());
 
             canvas->sync_surface();
           }

@@ -283,5 +283,6 @@ public:
 		CL_OutputSourceProvider *output_provider = 0);
 };
 
+
 /* EOF */
 

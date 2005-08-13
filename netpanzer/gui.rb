@@ -25,7 +25,7 @@ class GUI
 
     myrect = CL_Rect.new(CL_Point.new(0, 56), CL_Size.new($screen.width-134-1, ($screen.height-112)+56))
     @editor_map = EditorMapComponent.new(myrect, @gui.get_component())
-    @workspace  = Workspace.new(myrect.get_width(), myrect.get_height())
+    @workspace  = Workspace.new()
     @editor_map.set_workspace(@workspace)
 
     @option_panel = Panel.new(CL_Rect.new(CL_Point.new($screen.width-134, 56), CL_Size.new(134, $screen.height-112+56)), @gui.get_component())
@@ -276,7 +276,7 @@ class GUI
   end
 
   def gui_set_zoom(zoom)
-    gc = @editor_map.get_workspace().get_gc_state()
+    gc = @editor_map.get_gc_state()
     pos = gc.get_pos()
     gc.set_zoom(zoom)
     gc.set_pos(pos)

@@ -21,21 +21,39 @@
 ##  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 ##  02111-1307, USA.
 
-$gameobjects = [
-  ["streetlamp", "images/streetlamp.png", "sprite",
-    proc{|data, sexpr| nil}],
+$layout_spec = [
+  [:vbox,
+    [:components,
+      [:menubar,     
+        [:name,   "menubar"], 
+        [:height, 32],
+        [:spec,   $menu_spec]],
+      [:buttonpanel, 
+        [:name,   "buttonpanel"],
+        [:height, 32], 
+        [:spec,   $buttonpanel_spec]],
+      [:hbox, 
+        [:components
+          [:component, "editormap"],
+          [:component, "selectorpanel"]]
+      ],
+    ]
+  ]
 ]
 
-class UnknownGameObject
-  def initialize(name, sexpr, obj)
-    @name  = name
-    @sexpr = sexpr
-    @obj   = obj
+# Class to handle automatic layouting of GUI components and resize
+# events.
+class LayoutManager
+  def initialize(spec)
+    @spec    
   end
 
-  def save(f)
-    write_sexpr(f, [@name, *@sexpr])
-    f.puts
+  def set_size(width, height)
+    
+  end
+
+  def add(name, component)
+
   end
 end
 

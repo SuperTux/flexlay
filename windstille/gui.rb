@@ -39,7 +39,7 @@ class GUI
     myrect      = CL_Rect.new(CL_Point.new(0, 56), CL_Size.new($screen_width - 800 +  665,
                                                                $screen_height - 600 + 488+56))
     @editor_map = EditorMapComponent.new(myrect, @gui.get_component())
-    @workspace  = Workspace.new(myrect.get_width(), myrect.get_height())
+    @workspace  = Workspace.new()
     @editor_map.set_workspace(@workspace)
 
     @button_panel = ButtonPanel.new_from_spec(0, 23, $screen_width, 33, true, $buttonpanel_spec, @gui.get_component)

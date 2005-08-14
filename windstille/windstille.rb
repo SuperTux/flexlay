@@ -41,12 +41,12 @@ require "gui.rb"
 require "sector.rb"
 require "tileset.rb"
 
-$screen_width  = 1024
-$screen_height = 768
+$screen_width  = 400
+$screen_height = 300
 
 ## Init Flexlay itself
-flexlay = Flexlay.new()
-flexlay.init($screen_width, $screen_height, false, true)
+$flexlay = Flexlay.new()
+$flexlay.init($screen_width, $screen_height, false, true)
 
 ## Initialize Tools
 
@@ -70,6 +70,6 @@ $startlevel.activate($workspace)
 
 $gui.run()
 
-# flexlay.deinit()
+# $flexlay.deinit()
 
 # EOF #

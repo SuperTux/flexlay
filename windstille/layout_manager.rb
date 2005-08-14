@@ -37,8 +37,6 @@ class LayoutComponent
     @expand    = params[:expand]
     @fill      = params[:fill]
     @padding   = params[:padding]
-
-    puts "LayoutComponent.new: name=#{@name} type=#{@component}"
   end
 
   def get(name)
@@ -69,8 +67,6 @@ class LayoutComponent
   end
   
   def LayoutComponent.create(type, rect, sexpr, parent)
-    puts "Creating: '#{type}'"
-
     case type
     when :vbox
       box = LayoutBox.new(type, rect, sexpr, parent)
@@ -95,7 +91,6 @@ class LayoutComponent
     when :panel     
 
     when :editormap
-      puts sexpr.get(:name, nil)
       return EditorMapComponent.new(rect, parent)      
       
     when :menubar
@@ -172,7 +167,6 @@ class LayoutBox < LayoutComponent
     @components = []
     @homogenus  = false
 
-    puts "Box: #{sexpr}"
     sexpr.get(:components, SExpression.new()).each_pair() { |name, value|
       @components.push(LayoutComponent.create(name, CL_Rect.new(0, 0, 256, 256), value, @parent))
     }
@@ -199,7 +193,6 @@ class LayoutBox < LayoutComponent
   def set_pos(x, y)
     @x = x
     @y = y
-    layout()
   end
 
   def set_size(width, height)

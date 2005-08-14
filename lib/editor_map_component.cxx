@@ -49,6 +49,7 @@ public:
   void mouse_down(const CL_InputEvent& event);
   void mouse_move(const CL_InputEvent& event);
   void on_key_down(const CL_InputEvent& event);
+  void on_resize(int old_w, int old_h);
 };
 
 EditorMapComponent::EditorMapComponent(const CL_Rect& rect, CL_Component* parent)
@@ -79,6 +80,7 @@ EditorMapComponent::EditorMapComponent(const CL_Rect& rect, CL_Component* parent
   impl->slots.connect(sig_mouse_down(), impl.get(), &EditorMapComponentImpl::mouse_down);
   impl->slots.connect(sig_mouse_move(), impl.get(), &EditorMapComponentImpl::mouse_move);
   impl->slots.connect(sig_key_down(),   impl.get(), &EditorMapComponentImpl::on_key_down);
+  impl->slots.connect(sig_resize(),     impl.get(), &EditorMapComponentImpl::on_resize);
 }
 
 EditorMapComponent::~EditorMapComponent()
@@ -205,6 +207,18 @@ void
 EditorMapComponent::move_to_y(float y)
 {
   impl->gc_state.set_pos(CL_Pointf(impl->gc_state.get_pos().x, y));
+}
+
+void
+EditorMapComponentImpl::on_resize(int old_w, int old_h)
+{
+  CL_Rect rect = parent->get_screen_rect();
+
+  scrollbar_v->set_position(rect.get_width() - 14 + rect.left,  2 + rect.top);
+  scrollbar_v->set_size(12, rect.get_height() - 4 - 14);
+  
+  scrollbar_h->set_position(2 + rect.left, rect.get_height() - 14 + rect.top);
+  scrollbar_h->set_size(rect.get_width() - 4 - 14, 12);
 }
 
 CL_Signal_v2<int, int>&

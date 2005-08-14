@@ -40,6 +40,12 @@ Flexlay::Flexlay()
   current_ = this;
 }
 
+CL_Signal_v2<int, int>&
+Flexlay::sig_resize()
+{
+  return window->sig_resize();
+}
+
 void
 Flexlay::init(int width, int height, bool fullscreen_, bool allow_resize_)
 {

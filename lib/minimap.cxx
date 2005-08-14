@@ -54,7 +54,7 @@ Minimap::Minimap(EditorMapComponent* p, const CL_Rect& rect,
   impl->slots.push_back(sig_mouse_down().connect(this, &Minimap::mouse_down));
   impl->slots.push_back(sig_mouse_up().connect(this, &Minimap::mouse_up));
 
-  impl->parent = p;
+  impl->parent = p ? p : EditorMapComponent::current();
   impl->drag_active = false;
   impl->last_serial = -1;
 }

@@ -17,6 +17,8 @@
 ##  along with this program; if not, write to the Free Software
 ##  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
+require "stringio"
+
 def assoc_ref(lst, str)
   if lst == []
     return false
@@ -60,7 +62,7 @@ def get_value_from_tree(spec, tree, default)
     end
 end
 
-def write_sexpr(f, sexpr)
+def write_sexpr(f, sexpr, indent = 0)
   if sexpr.is_a?(Array) then
     f.print "("
     sexpr.each_with_index{|e, i|
@@ -76,6 +78,74 @@ def write_sexpr(f, sexpr)
     else
       f.print sexpr.inspect
     end
+  end
+end
+
+class SExpression
+  def initialize(sexpr = [])
+    @sexpr = sexpr
+  end
+
+  def SExpression.new_from_file(filename)
+    return SExpression.new(sexpr_read_from_file(filename))
+  end
+
+  def car()
+    return SExpression.new(@sexpr[0])
+  end
+
+  def cdr()
+    return SExpression.new((@sexpr[1..-1] or []))
+  end
+
+  def [](i)
+    return SExpression.new(@sexpr[i])
+  end
+
+  # Interprets the SExpression as a AList in the form of ((name value) ...)
+  def get(name, default)
+    v = @sexpr.find() { |el| el[0] == name }
+    if v then
+      return SExpression.new(v[1..-1])
+    else
+      return SExpression.new(default)
+    end
+  end
+
+  def value()
+    return @sexpr
+  end
+
+  def get_value(spec, default = nil)
+    return get_value_from_tree(spec, @sexpr, default)
+  end
+
+  def each_pair()
+    @sexpr.each() { |el|
+      yield(el[0], SExpression.new(el[1..-1]))
+    }
+  end
+
+  def is_atom?()
+    return @sexpr.is_a?(Array)
+  end
+
+  def is_nil?()
+    return @sexpr == []
+  end
+
+  def to_s()
+    str = StringIO.new()
+    write(str)
+    return str.string()
+  end
+
+  def to_a()
+    return @sexpr
+  end
+
+  def write(f = $stdout, indent = 0)
+    write_sexpr(f, @sexpr)
   end
 end
 

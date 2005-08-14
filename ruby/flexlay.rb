@@ -98,6 +98,14 @@ class ButtonPanel
     end
   end
 
+  def set_position(x, y)
+    @panel.set_position(x, y)
+  end
+
+  def set_size(w, h)
+    @panel.set_size(w, h)
+  end
+
   def ButtonPanel.new_from_spec(x, y, width, height, horizontal, spec, parent)
     buttonpanel = ButtonPanel.new(x, y, width, height, horizontal, parent)
 

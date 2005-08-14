@@ -82,5 +82,36 @@ $keybinding_spec = [
   ["1",  proc{ |x, y| $gui.show_layer(:background)}],
 ]
 
-## EOF ##
+$guilayout_spec = [
+  :vbox, 
+  [:homogenus, false],
+  [:components,
+    
+    [:menubar,     
+      [:name,   'menubar'], 
+      [:size, 32],
+      [:spec,   $menu_spec]],
 
+    [:buttonpanel, 
+      [:name,   'buttonpanel'],
+      [:size, 32], 
+      [:spec,   $buttonpanel_spec]],
+
+    [:hbox, 
+      [:components,
+
+        [:editormap, 
+          [:name, 'editormap']],
+
+        [:vbox,
+          [:size, 192],
+          [:components,
+            [:tileselector,
+              [:name, 'tileselector']],
+            [:objectselector,
+              [:name, 'objectselector']],
+            [:minimap, 
+              [:name, 'minimap']]]]
+      ]]]]
+
+## EOF ##

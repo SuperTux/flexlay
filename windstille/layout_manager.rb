@@ -21,39 +21,202 @@
 ##  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 ##  02111-1307, USA.
 
-$layout_spec = [
-  [:vbox,
-    [:components,
-      [:menubar,     
-        [:name,   "menubar"], 
-        [:height, 32],
-        [:spec,   $menu_spec]],
-      [:buttonpanel, 
-        [:name,   "buttonpanel"],
-        [:height, 32], 
-        [:spec,   $buttonpanel_spec]],
-      [:hbox, 
-        [:components
-          [:component, "editormap"],
-          [:component, "selectorpanel"]]
-      ],
-    ]
-  ]
-]
 
-# Class to handle automatic layouting of GUI components and resize
-# events.
-class LayoutManager
-  def initialize(spec)
-    @spec    
+# Helper class that holds all necesarry paramter to handle layouting,
+# could also extend Component instead
+class LayoutComponent
+  attr_reader :component, :name, :size,:expand, :fill, :padding
+
+  # use nil for width and height if it should be determined
+  # automatically
+  def initialize(component, params)
+    @component = component
+
+    @name      = params[:name]
+    @size      = params[:size]
+    @expand    = params[:expand]
+    @fill      = params[:fill]
+    @padding   = params[:padding]
+
+    puts "LayoutComponent.new: name=#{@name} type=#{@component}"
+  end
+
+  def get(name)
+    return nil
+  end
+  
+  def set_pos(x, y)
+    @component.set_position(x, y)
+  end
+  
+  def set_size(width, height)
+    @component.set_size(width, height)
+  end
+
+  # Rearanges the layout to fit the current size
+  def layout()
+  end
+
+  def LayoutComponent.create_from_sexpr(rect, sexpr, parent)
+    case sexpr.car()
+    when :vbox
+    when :hbox
+    when :panel
+      
+    else
+      create(sexpr.car().value(), rect, sexpr.cdr(), parent)
+    end
+  end
+  
+  def LayoutComponent.create(type, rect, sexpr, parent)
+    puts "Creating: '#{type}'"
+
+    case type
+    when :vbox
+      box = LayoutBox.new(type, rect, sexpr, parent)
+      return box
+
+    when :hbox
+      box = LayoutBox.new(type, rect, sexpr, parent)
+      return box
+      
+    else
+      return LayoutComponent.new(create_raw(type, rect, sexpr, parent), 
+                                 :name    => sexpr.get_value([:name,    '_'], nil),
+                                 :size    => sexpr.get_value([:size,    '_'], nil),
+                                 :expand  => sexpr.get_value([:expand,  '_'], true),
+                                 :fill    => sexpr.get_value([:fill,    '_'],    true),
+                                 :padding => sexpr.get_value([:padding, '_'], 0))
+    end
+  end
+
+  def LayoutComponent.create_raw(type, rect, sexpr, parent)
+    case type
+    when :panel     
+
+    when :editormap
+      puts sexpr.get(:name, nil)
+      return EditorMapComponent.new(rect, parent)      
+      
+    when :menubar
+      return CL_Menu.new_from_spec(sexpr.get_value(['spec', '_'], []),
+                                   parent)
+
+    when :button
+      return CL_Button.new(rect,
+                           sexpr.get_value(['label', '_'], []),
+                           parent)
+
+    when :label
+      return CL_Label.new(CL_Point.new(rect.top, rect.left),
+                          sexpr.get_value(['label', '_'], []),
+                          parent)
+
+    when :listbox
+      return CL_ListBox.new(rect, parent)
+      
+    when :inputbox
+      return CL_InputBox.new(rect, parent)
+
+    when :radiobutton
+      return CL_RadioButton.new(CL_Point.new(rect.left, rect.top),
+                                sexpr.get_value(['label', '_'], []),
+                                parent)
+
+    when :radiogroup
+      return CL_RadioGroup.new()
+
+    when :checkbox
+      return CL_CheckBox.new(CL_Point.new(rect.left, rect.top),
+                             sexpr.get_value(['label', '_'], []),
+                             parent)
+
+    when :buttonpanel
+      return ButtonPanel.new_from_spec(rect.left, rect.top, rect.get_width(), rect.get_height(), true,
+                                       sexpr.get_value([:spec, '_'], []), parent)
+
+    when :tileselector
+      return TileSelector.new(rect, parent)
+      
+    when :objectselector
+      return ObjectSelector.new(rect, 
+                                sexpr.get_value([:objectwidth, '_'], 42), 
+                                sexpr.get_value([:objectheight, '_'], 42),
+                                parent)
+
+    when :minimap
+      @minimap = Minimap.new(nil, rect, parent)
+      
+    else
+      raise "Unknonwn Component type '#{type.inspect}'"
+
+    end
+  end
+end
+
+class LayoutBox < LayoutComponent
+  def initialize(type, rect, sexpr, parent)
+    @type       = type # :vbox or :hbox
+    @x          = rect.left
+    @y          = rect.top
+    @width      = rect.get_width()
+    @height     = rect.get_height()
+    @parent     = parent
+    @components = []
+    @homogenus  = false
+
+    puts "Box: #{sexpr}"
+    sexpr.get(:components, SExpression.new()).each_pair() { |name, value|
+      @components.push(LayoutComponent.create(name, CL_Rect.new(0, 0, 256, 256), value, @parent))
+    }
+
+    layout()
+  end
+
+  def get(name)
+    @components.each() { |i|
+      if i.name == name then
+        return i
+      elsif i.is_a?(LayoutBox) then
+        a = i.get(name)
+        if a then return a end
+      end
+    }
+    return nil
+  end
+
+  def add(type, spec)
+    @components.push([type, spec, nil])
+  end
+  
+  def set_pos(x, y)
+    @x = x
+    @y = y
+    layout()
   end
 
   def set_size(width, height)
-    
+    @width  = width
+    @height = height
+    layout()
   end
 
-  def add(name, component)
-
+  def layout()
+    if @type == :vbox
+      len = @height / @components.length()
+      @components.each_with_index() { |component, i|
+        component.set_pos(@x, @y + len * i)
+        component.set_size(@width, len)
+      }
+    elsif @type == :hbox
+      len = @width / @components.length()
+      @components.each_with_index() { |component, i|
+        component.set_pos(@x + len * i, @y)
+        component.set_size(len, @height)
+      }
+    else
+      raise "LayoutBox: Unknown type #{type}"
+    end
   end
 end
 

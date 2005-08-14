@@ -22,6 +22,7 @@
 ##  02111-1307, USA.
 
 require "gameobjects.rb"
+require "layout_manager.rb"
 require "gui_specs.rb"
 
 ## GUI class which holds all the GUI components and the state of them
@@ -36,13 +37,16 @@ class GUI
   def initialize()
     @gui = GUIManager.new()
 
-    myrect      = CL_Rect.new(CL_Point.new(0, 56), CL_Size.new($screen_width - 800 +  665,
-                                                               $screen_height - 600 + 488+56))
-    @editor_map = EditorMapComponent.new(myrect, @gui.get_component())
+    components = LayoutComponent.create_from_sexpr(CL_Rect.new(0,0, $screen_width, $screen_height),
+                                                   SExpression.new($guilayout_spec),
+                                                   @gui.get_component())
+
+
+    @editor_map = components.get('editormap').component
     @workspace  = Workspace.new()
     @editor_map.set_workspace(@workspace)
 
-    @button_panel = ButtonPanel.new_from_spec(0, 23, $screen_width, 33, true, $buttonpanel_spec, @gui.get_component)
+    @button_panel = components.get('buttonpanel').component
 
     @button_panel.items["undo"].disable()
     @button_panel.items["redo"].disable()
@@ -53,7 +57,7 @@ class GUI
     @layer_menu.add_item($mysprite, "Show only current", proc{ show_only_current() })
     
     @toolbar = ButtonPanel.new_from_spec(0, 23+33, 33, 32*4+2, false, $toolbar_spec, @gui.get_component)
-    @menu    = CL_Menu.new_from_spec($menu_spec, @gui.get_component)
+    @menu    = components.get('menubar').component
 
     # FIXME: Having position in the Menus here is EXTREMLY ugly
     @tilegroup_menu = Menu.new(CL_Point.new(35*15+2, 54), @gui.get_component())
@@ -62,24 +66,23 @@ class GUI
       @tilegroup_menu.add_item($mysprite, tilegroup.name, proc{@tileselector.set_tiles(tilegroup.tiles)})
     }
 
-    @selector_window = Panel.new(CL_Rect.new(CL_Point.new($screen_width-128-64-6, 23+33), 
-                                             CL_Size.new(128 + 64 + 6, $screen_height - 600 + 558)),
-                                 @gui.get_component())
+    # @selector_window = Panel.new(CL_Rect.new(CL_Point.new($screen_width-128-64-6, 23+33), 
+    #                                         CL_Size.new(128 + 64 + 6, $screen_height - 600 + 558)),
+    #                             @gui.get_component())
 
-    @minimap = Minimap.new(@editor_map, CL_Rect.new(CL_Point.new(3,  $screen_height - 600 + 552 - 144 - 12), 
-                                                    CL_Size.new(192, 144)),
-                           @selector_window)
+    # @tileselector = TileSelector.new(CL_Rect.new(CL_Point.new(3, 3), 
+    #                                             CL_Size.new(128+64, $screen_height - 600 + 552 - 144 - 3)),
+    #                                 @selector_window)
 
-    @tileselector = TileSelector.new(CL_Rect.new(CL_Point.new(3, 3), 
-                                                 CL_Size.new(128+64, $screen_height - 600 + 552 - 144 - 3)),
-                                     @selector_window)
+    @tileselector = components.get('tileselector').component
     @tileselector.set_tileset($tileset)
     @tileselector.set_scale(0.75)
     @tileselector.set_tiles($tileset.tilegroups[0].tiles)
     # @tileselector.set_tiles($tileset.get_tiles())
     @tileselector.show(true)
     
-    @objectselector = ObjectSelector.new(CL_Rect.new(0, 0, 128, $screen_height - 600 + 552 - 144 - 3), 42, 42, @selector_window)
+    @objectselector = components.get('objectselector').component
+    # @objectselector = ObjectSelector.new(CL_Rect.new(0, 0, 128, $screen_height - 600 + 552 - 144 - 3), 42, 42, @selector_window)
     @objectselector.show(false)
 
     connect_v2_ObjectBrush_Point(@objectselector.sig_drop(), proc{|brush, pos| on_object_drop(brush, pos) })

@@ -41,9 +41,9 @@ class GUI
                                                    SExpression.new($guilayout_spec),
                                                    @gui.get_component())
     
-    connect_v2($flexlay.sig_resize(), proc{|w, h|
-                 components.set_size(w, h)
-               })
+    connect_v2_graceful($flexlay.sig_resize(), proc{|w, h|
+                          components.set_size(w, h)
+                        })
 
     @editor_map = components.get('editormap').component
     @workspace  = Workspace.new()

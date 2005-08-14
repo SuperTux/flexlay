@@ -29,8 +29,9 @@ class LayoutComponent
 
   # use nil for width and height if it should be determined
   # automatically
-  def initialize(component, params)
+  def initialize(component, child, params)
     @component = component
+    @child     = child
 
     @name      = params[:name]
     @size      = params[:size]
@@ -40,19 +41,34 @@ class LayoutComponent
   end
 
   def get(name)
-    return nil
+    if @child then
+      return @child.get(name)
+    else
+      return nil
+    end
   end
   
   def set_pos(x, y)
-    @component.set_position(x, y)
+    if @component then
+      @component.set_position(x, y)
+    end
   end
   
   def set_size(width, height)
-    @component.set_size(width, height)
+    if @component then
+      @component.set_size(width, height)
+    end
+
+    if @child then
+      @child.set_size(width, height)
+    end
   end
 
   # Rearanges the layout to fit the current size
   def layout()
+    if @child then
+      return @child.layout()
+    end
   end
 
   def LayoutComponent.create_from_sexpr(rect, sexpr, parent)
@@ -69,15 +85,26 @@ class LayoutComponent
   def LayoutComponent.create(type, rect, sexpr, parent)
     case type
     when :vbox
-      box = LayoutBox.new(type, rect, sexpr, parent)
-      return box
+      return LayoutBox.new(type, rect, sexpr, parent)
 
     when :hbox
-      box = LayoutBox.new(type, rect, sexpr, parent)
-      return box
-      
+      return  LayoutBox.new(type, rect, sexpr, parent)
+
+    when :panel
+      panel = Panel.new(rect, parent)
+      return LayoutComponent.new(panel, 
+                                 LayoutBox.new(sexpr.get_value([:layout, '_'], :vbox),
+                                               CL_Rect.new(0, 0, rect.get_width(), rect.get_height()), 
+                                               sexpr, panel),
+                                 :name    => sexpr.get_value([:name,    '_'], nil),
+                                 :size    => sexpr.get_value([:size,    '_'], nil),
+                                 :expand  => sexpr.get_value([:expand,  '_'], true),
+                                 :fill    => sexpr.get_value([:fill,    '_'],    true),
+                                 :padding => sexpr.get_value([:padding, '_'], 0))
+
     else
       return LayoutComponent.new(create_raw(type, rect, sexpr, parent), 
+                                 nil,
                                  :name    => sexpr.get_value([:name,    '_'], nil),
                                  :size    => sexpr.get_value([:size,    '_'], nil),
                                  :expand  => sexpr.get_value([:expand,  '_'], true),
@@ -88,7 +115,6 @@ class LayoutComponent
 
   def LayoutComponent.create_raw(type, rect, sexpr, parent)
     case type
-    when :panel     
 
     when :editormap
       return EditorMapComponent.new(rect, parent)      
@@ -151,7 +177,7 @@ end
 
 class LayoutBox < LayoutComponent
   def initialize(type, rect, sexpr, parent)
-    super(nil,
+    super(nil, nil,
           :name    => sexpr.get_value([:name,    '_'], nil),
           :size    => sexpr.get_value([:size,    '_'], nil),
           :expand  => sexpr.get_value([:expand,  '_'], true),
@@ -178,7 +204,7 @@ class LayoutBox < LayoutComponent
     @components.each() { |i|
       if i.name == name then
         return i
-      elsif i.is_a?(LayoutBox) then
+      else
         a = i.get(name)
         if a then return a end
       end
@@ -193,6 +219,7 @@ class LayoutBox < LayoutComponent
   def set_pos(x, y)
     @x = x
     @y = y
+    layout()
   end
 
   def set_size(width, height)

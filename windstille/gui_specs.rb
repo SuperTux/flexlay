@@ -103,7 +103,8 @@ $guilayout_spec = [
         [:editormap, 
           [:name, 'editormap']],
 
-        [:vbox,
+        [:panel,
+          [:layout, :vbox],
           [:size, 192],
           [:components,
             [:tileselector,

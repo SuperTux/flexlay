@@ -89,12 +89,12 @@ $guilayout_spec = [
     
     [:menubar,     
       [:name,   'menubar'], 
-      [:size, 32],
+      [:size, 23],
       [:spec,   $menu_spec]],
 
     [:buttonpanel, 
       [:name,   'buttonpanel'],
-      [:size, 32], 
+      [:size, 33], 
       [:spec,   $buttonpanel_spec]],
 
     [:hbox, 
@@ -111,7 +111,10 @@ $guilayout_spec = [
             [:objectselector,
               [:name, 'objectselector']],
             [:minimap, 
-              [:name, 'minimap']]]]
+              [:name,    'minimap'],
+              [:size,    144],
+              [:padding, 5],
+            ]]]
       ]]]]
 
 ## EOF ##

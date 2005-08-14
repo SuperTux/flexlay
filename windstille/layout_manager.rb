@@ -156,6 +156,13 @@ end
 
 class LayoutBox < LayoutComponent
   def initialize(type, rect, sexpr, parent)
+    super(nil,
+          :name    => sexpr.get_value([:name,    '_'], nil),
+          :size    => sexpr.get_value([:size,    '_'], nil),
+          :expand  => sexpr.get_value([:expand,  '_'], true),
+          :fill    => sexpr.get_value([:fill,    '_'],    true),
+          :padding => sexpr.get_value([:padding, '_'], 0))
+
     @type       = type # :vbox or :hbox
     @x          = rect.left
     @y          = rect.top
@@ -202,17 +209,46 @@ class LayoutBox < LayoutComponent
   end
 
   def layout()
-    if @type == :vbox
-      len = @height / @components.length()
-      @components.each_with_index() { |component, i|
-        component.set_pos(@x, @y + len * i)
-        component.set_size(@width, len)
+    x = @x
+    y = @y
+
+    len = 0
+    num = 0
+    @components.each() { |component|
+      if component.size then
+        len += component.size
+      else
+        num += 1
+      end
+    }
+
+    if @type == :vbox     
+      avlen = (@height - len) / num
+      
+      @components.each() { |component|
+        component.set_pos(x + component.padding, y + component.padding)
+
+        if component.size then
+          component.set_size(@width - component.padding*2, component.size - component.padding*2)
+          y += component.size
+        else
+          component.set_size(@width - component.padding*2, avlen - component.padding*2)
+          y += avlen
+        end
       }
     elsif @type == :hbox
-      len = @width / @components.length()
-      @components.each_with_index() { |component, i|
-        component.set_pos(@x + len * i, @y)
-        component.set_size(len, @height)
+      avlen = (@width - len) / num
+      
+      @components.each() { |component|
+        component.set_pos(x + component.padding, y + component.padding)
+
+        if component.size then
+          component.set_size(component.size - component.padding*2, @height - component.padding*2)
+          x += component.size
+        else
+          component.set_size(avlen - component.padding*2, @height - component.padding*2)
+          x += avlen
+        end
       }
     else
       raise "LayoutBox: Unknown type #{type}"

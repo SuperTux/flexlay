@@ -219,6 +219,8 @@ EditorMapComponentImpl::on_resize(int old_w, int old_h)
   
   scrollbar_h->set_position(2 + rect.left, rect.get_height() - 14 + rect.top);
   scrollbar_h->set_size(rect.get_width() - 4 - 14, 12);
+
+  gc_state.set_size(rect.get_width(), rect.get_height());
 }
 
 CL_Signal_v2<int, int>&

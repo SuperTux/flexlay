@@ -102,6 +102,9 @@ class LayoutComponent
                                  :fill    => sexpr.get_value([:fill,    '_'],    true),
                                  :padding => sexpr.get_value([:padding, '_'], 0))
 
+    when :tab
+      return TabComponent.new(rect, sexpr, parent)
+
     else
       return LayoutComponent.new(create_raw(type, rect, sexpr, parent), 
                                  nil,
@@ -172,6 +175,45 @@ class LayoutComponent
       raise "Unknonwn Component type '#{type.inspect}'"
 
     end
+  end
+end
+
+class TabComponent < LayoutComponent
+  def initialize(rect, sexpr, parent)
+    super(nil, nil,
+          :name    => sexpr.get_value([:name,    '_'], nil),
+          :size    => sexpr.get_value([:size,    '_'], nil),
+          :expand  => sexpr.get_value([:expand,  '_'], true),
+          :fill    => sexpr.get_value([:fill,    '_'],    true),
+          :padding => sexpr.get_value([:padding, '_'], 0))
+    
+    @childs = []
+
+    sexpr.get(:components, SExpression.new()).each_pair() { |name, value|
+      @childs.push(LayoutComponent.create(name, CL_Rect.new(0, 0, 256, 256), value, parent))
+    }
+  end
+
+  def get(name)
+    @childs.each() { |i| 
+      if i.name == name then
+        return i
+      end
+    }
+    return nil
+  end
+  
+  def set_pos(x, y)
+    @childs.each() { |i| i.set_pos(x, y) }
+  end
+  
+  def set_size(width, height)
+    @childs.each() { |i| i.set_size(width, height) }
+  end
+
+  # Rearanges the layout to fit the current size
+  def layout()
+    @childs.each() { |i| i.layout() }
   end
 end
 

@@ -17,24 +17,59 @@
 ##  along with this program; if not, write to the Free Software
 ##  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
+require "layout_component.rb"
+
+$guilayout_spec = \
+[:vbox,
+  [:components,
+    [:menubar,
+      [:name, 'menubar'],
+      [:size, 23]],
+    [:buttonpanel, 
+      [:name, 'buttonpanel'],
+      [:size, 33]],
+    [:hbox,
+      [:components,
+        [:editormap, 
+          [:name, 'editormap']],
+        [:panel,
+          [:layout, :vbox],
+          [:size, 134],
+          [:components,
+            [:tab,
+              [:padding, 3],
+              [:components,
+                [:listbox, 
+                  [:name, 'brushbox']],
+                [:objectselector,
+                  [:name, 'objectselector']]]],
+            [:minimap, 
+              [:padding, 3],
+              [:size, 134],
+              [:name, 'minimap']]]]]]]]
+
 class GUI
   attr_reader :workspace, :minimap, :editor_map
 
   def initialize()
     @gui = GUIManager.new()
 
-    myrect = CL_Rect.new(CL_Point.new(0, 56), CL_Size.new($screen.width-134-1, ($screen.height-112)+56))
-    @editor_map = EditorMapComponent.new(myrect, @gui.get_component())
+    components = LayoutComponent.create_from_sexpr(CL_Rect.new(0,0, $screen.width, $screen.height),
+                                                   SExpression.new($guilayout_spec),
+                                                   @gui.get_component())
+
+    connect_v2_graceful($flexlay.sig_resize(), proc{|w, h|
+                          components.set_size(w, h)
+                        })
+
+    @editor_map = components.get('editormap').component
     @workspace  = Workspace.new()
     @editor_map.set_workspace(@workspace)
 
-    @option_panel = Panel.new(CL_Rect.new(CL_Point.new($screen.width-134, 56), CL_Size.new(134, $screen.height-112+56)), @gui.get_component())
-
-    @brushbox = CL_ListBox.new(CL_Rect.new(CL_Point.new(3, 3), CL_Size.new(128, $screen.height-112+56-128-9)), @option_panel)
+    @brushbox = components.get('brushbox').component
     @brushbox.show(false)
 
-    @objectselector = ObjectSelector.new(CL_Rect.new(CL_Point.new(3, 3), CL_Size.new(128, $screen.height-112+56-128-9)),
-                                         64, 64, @option_panel)
+    @objectselector = components.get('objectselector').component
 
     @objectselector.add_brush(ObjectBrush.new(GameObjects::Outpost.get_sprite(),
                                               make_metadata(proc{GameObjects::Outpost.new()})))
@@ -53,7 +88,7 @@ class GUI
 
     @workspace.set_tool($tilemap_paint_tool.to_tool());
 
-    @button_panel = ButtonPanel.new(0, 23, $screen.width, 33, true, @gui.get_component)
+    @button_panel = components.get('buttonpanel').component
 
     @button_panel.add_icon("../data/images/icons24/stock_new.png",
                            proc{ gui_level_new() })
@@ -105,7 +140,7 @@ class GUI
       @brushbox.insert_item("%s - %sx%s" % [name, width, height])
     }
 
-    @menu = CL_Menu.new(@gui.get_component())
+    @menu = components.get('menubar').component
     @menu.add_item("File/New...", proc{gui_level_new})
     @menu.add_item("File/Open...", proc{gui_level_load})
     @menu.add_item("File/Save...", proc{gui_level_save})
@@ -121,8 +156,7 @@ class GUI
     @menu.add_item("Scripts/Flatten",  proc{ @workspace.get_map().get_data().flatten() })
     @menu.add_item("Scripts/Unflatten",  proc{ @workspace.get_map().get_data().unflatten() })
 
-    @minimap = Minimap.new(@editor_map, CL_Rect.new(CL_Point.new(3, ($screen.height-112)+56 - 128-3), CL_Size.new(128, 128)), 
-                           @option_panel)
+    @minimap = components.get('minimap').component
 
     @load_dialog = SimpleFileDialog.new("Load netPanzer Level", "Load", "Cancel", @gui.get_component())
     @load_dialog.set_filename($config.datadir + "maps/")

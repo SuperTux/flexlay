@@ -35,10 +35,10 @@ require "level.rb"
 require "gameobjects.rb"
 require "gui.rb"
 
-$screen  = CL_Size.new(1024, 768)
+$screen  = CL_Size.new(640, 480)
 
-flexlay = Flexlay.new()
-flexlay.init($screen.width, $screen.height)
+$flexlay = Flexlay.new()
+$flexlay.init($screen.width, $screen.height, false, true)
 
 class Config
   attr_accessor :datadir, :recent_files
@@ -89,7 +89,7 @@ end
 
 $gui = GUI.new()
 
-$gui.set_tilemap_paint_tool()
+# $gui.set_tilemap_paint_tool()
 
 $gui.gui_level_new()
 

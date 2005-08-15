@@ -181,13 +181,16 @@ Minimap::mouse_move(const CL_InputEvent& event)
 {
   // FIXME: This doesn't work all that well
   TilemapLayer tilemap = TilemapLayer::current();
-  int tile_size  = tilemap.get_tileset().get_tile_size();
-  int map_width  = tilemap.get_width()  * tile_size;
-  int map_height = tilemap.get_height() * tile_size;
+  if (!tilemap.is_null())
+    {
+      int tile_size  = tilemap.get_tileset().get_tile_size();
+      int map_width  = tilemap.get_width()  * tile_size;
+      int map_height = tilemap.get_height() * tile_size;
 
-  if (impl->drag_active)
-    impl->parent->move_to(event.mouse_pos.x * map_width / get_width(),
-                          event.mouse_pos.y * map_height / get_height());
+      if (impl->drag_active)
+        impl->parent->move_to(event.mouse_pos.x * map_width / get_width(),
+                              event.mouse_pos.y * map_height / get_height());
+    }
 }
 
 void
@@ -195,21 +198,28 @@ Minimap::mouse_down(const CL_InputEvent& event)
 {
   // FIXME: This doesn't work all that well
   TilemapLayer tilemap = TilemapLayer::current();
-  int tile_size  = tilemap.get_tileset().get_tile_size();
-  int map_width  = tilemap.get_width()  * tile_size;
-  int map_height = tilemap.get_height() * tile_size;
+  if (!tilemap.is_null())
+    {
+      int tile_size  = tilemap.get_tileset().get_tile_size();
+      int map_width  = tilemap.get_width()  * tile_size;
+      int map_height = tilemap.get_height() * tile_size;
 
-  impl->parent->move_to(event.mouse_pos.x * map_width / get_width(),
-                        event.mouse_pos.y * map_height / get_height());
-  impl->drag_active = true;
-  capture_mouse();
+      impl->parent->move_to(event.mouse_pos.x * map_width / get_width(),
+                            event.mouse_pos.y * map_height / get_height());
+      impl->drag_active = true;
+      capture_mouse();
+    }
 }
 
 void
 Minimap::mouse_up  (const CL_InputEvent& event)
 {
-  impl->drag_active = false;
-  release_mouse();
+  TilemapLayer tilemap = TilemapLayer::current();
+  if (!tilemap.is_null())
+    {
+      impl->drag_active = false;
+      release_mouse();
+    }
 }
 
 void

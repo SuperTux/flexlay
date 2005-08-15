@@ -154,6 +154,8 @@ ObjectSelector::draw()
   if (offset < 0)
     offset = 0;
 
+  CL_Display::push_cliprect(get_screen_rect());
+
   // Handle scrolling in the Component
   CL_Display::push_modelview();
   CL_Display::add_translate(0, -offset);
@@ -184,7 +186,8 @@ ObjectSelector::draw()
     }
 
   CL_Display::pop_modelview();
-
+  CL_Display::pop_cliprect();
+ 
   // Draw drag sprite
   if (drag_obj != -1)
     {

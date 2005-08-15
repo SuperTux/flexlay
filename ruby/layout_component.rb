@@ -21,6 +21,7 @@
 ##  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 ##  02111-1307, USA.
 
+require "sexpr.rb"
 
 # Helper class that holds all necesarry paramter to handle layouting,
 # could also extend Component instead
@@ -72,17 +73,11 @@ class LayoutComponent
   end
 
   def LayoutComponent.create_from_sexpr(rect, sexpr, parent)
-    case sexpr.car()
-    when :vbox
-    when :hbox
-    when :panel
-      
-    else
-      create(sexpr.car().value(), rect, sexpr.cdr(), parent)
-    end
+    create(sexpr.car().value(), rect, sexpr.cdr(), parent)
   end
   
   def LayoutComponent.create(type, rect, sexpr, parent)
+    # puts "Create: #{type}"
     case type
     when :vbox
       return LayoutBox.new(type, rect, sexpr, parent)

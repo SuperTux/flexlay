@@ -22,7 +22,7 @@
 ##  02111-1307, USA.
 
 require "gameobjects.rb"
-require "layout_manager.rb"
+require "layout_component.rb"
 require "gui_specs.rb"
 
 ## GUI class which holds all the GUI components and the state of them
@@ -69,14 +69,6 @@ class GUI
       @tilegroup_menu.add_item($mysprite, tilegroup.name, proc{@tileselector.set_tiles(tilegroup.tiles)})
     }
 
-    # @selector_window = Panel.new(CL_Rect.new(CL_Point.new($screen_width-128-64-6, 23+33), 
-    #                                         CL_Size.new(128 + 64 + 6, $screen_height - 600 + 558)),
-    #                             @gui.get_component())
-
-    # @tileselector = TileSelector.new(CL_Rect.new(CL_Point.new(3, 3), 
-    #                                             CL_Size.new(128+64, $screen_height - 600 + 552 - 144 - 3)),
-    #                                 @selector_window)
-
     @tileselector = components.get('tileselector').component
     @tileselector.set_tileset($tileset)
     @tileselector.set_scale(0.75)
@@ -85,7 +77,6 @@ class GUI
     @tileselector.show(true)
     
     @objectselector = components.get('objectselector').component
-    # @objectselector = ObjectSelector.new(CL_Rect.new(0, 0, 128, $screen_height - 600 + 552 - 144 - 3), 42, 42, @selector_window)
     @objectselector.show(false)
 
     connect_v2_ObjectBrush_Point(@objectselector.sig_drop(), proc{|brush, pos| on_object_drop(brush, pos) })

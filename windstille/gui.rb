@@ -133,7 +133,7 @@ class GUI
 
     if layer == :foreground then
       @button_panel.items["foreground"].set_down();
-      TilemapLayer.set_current(@workspace.get_map().get_metadata().interactive)
+      TilemapLayer.set_current(@workspace.get_map().get_metadata().foreground)
     else
       @button_panel.items["foreground"].set_up();
     end
@@ -213,6 +213,23 @@ class GUI
     cmd.add_object(obj.to_object);
     $gui.workspace.get_map().execute(cmd.to_command());
     return obj
+  end
+
+  def layer_properties()
+    tilemap = TilemapLayer.current()
+
+    dialog = GenericDialog.new("Edit Tilemap Properties", @gui.get_component())
+    dialog.add_string("Name: ", tilemap.get_metadata().name)
+    dialog.add_int("XOffset: ", tilemap.get_metadata().x_offset)
+    dialog.add_int("YOffset: ", tilemap.get_metadata().y_offset)
+    dialog.add_int("Z-Pos: ",   tilemap.get_metadata().z_pos)
+
+    dialog.set_callback(proc{|name, x_offset, y_offset, z_pos| 
+                          tilemap.get_metadata().name      = name
+                          tilemap.get_metadata().x_offset = x_offset 
+                          tilemap.get_metadata().y_offset = y_offset 
+                          tilemap.get_metadata().z_pos    = z_pos 
+                        })
   end
 end
 

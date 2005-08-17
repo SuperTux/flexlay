@@ -41,8 +41,8 @@ require "gui.rb"
 require "sector.rb"
 require "tileset.rb"
 
-$screen_width  = 400
-$screen_height = 300
+$screen_width  = 640
+$screen_height = 480
 
 ## Init Flexlay itself
 $flexlay = Flexlay.new()

@@ -60,6 +60,7 @@ $buttonpanel_spec = [
   [:icon,       "background",  "../data/images/icons24/background.png",    proc{ $gui.show_layer(:background) }],
   [:icon,       "interactive", "../data/images/icons24/interactive.png",   proc{ $gui.show_layer(:interactive) }],
   [:icon,       "foreground",  "../data/images/icons24/foreground.png",    proc{ $gui.show_layer(:foreground) }],
+  [:icon,       "properties",  "../data/images/icons24/stock_properties.png", proc{ $gui.layer_properties() }],
   [:icon,       "viewprops",   "../data/images/icons24/eye.png",           proc{ $gui.layer_menu.run() }],
   [:seperator],
   [:icon,       "tilegroups",  "../data/images/icons24/eye.png",           proc{ $gui.tilegroup_menu.run() }],

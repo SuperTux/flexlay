@@ -17,14 +17,14 @@
 ##  along with this program; if not, write to the Free Software
 ##  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-class Tilemap
+class TilemapMetadata
   attr_accessor :name, :x_offset, :y_offset, :z_pos
   
-  def initialize()
-    name     = "empty"
-    x_offset = 0
-    y_offset = 0
-    z_pos = 0;
+  def initialize(params = {})
+    @name     = (params[:name] or "")
+    @x_offset = (params[:x_offset] or 0)
+    @y_offset = (params[:y_offset] or 0)
+    @z_pos    = (params[:z_pos] or 0)
   end
 end
 
@@ -51,6 +51,10 @@ class Sector
     @interactive = TilemapLayer.new($tileset, width, height)
     @foreground  = TilemapLayer.new($tileset, width, height)
     
+    @background.set_metadata(TilemapMetadata.new(:name =>  'background'))
+    @foreground.set_metadata(TilemapMetadata.new(:name =>  'foreground'))
+    @interactive.set_metadata(TilemapMetadata.new(:name => 'interactive'))
+
     @layers = []
     @layers += [@background]
     @layers += [@interactive]
@@ -93,8 +97,12 @@ class Sector
         
         tilemap = TilemapLayer.new($tileset, width, height)
         tilemap.set_data(get_value_from_tree(["data"], objdata, []))
-        # tilemap.z_pos = get_value_from_tree(["z-pos", "_"],  mydata, 0)
-        
+        tilemap.set_metadata(TilemapMetadata.new(:name  => name,
+                                                 :z_pos => get_value_from_tree(["z-pos", "_"],  objdata, 0),
+                                                 :x_offset => get_value_from_tree(["x-offset", "_"],  objdata, 0),
+                                                 :y_offset => get_value_from_tree(["y-offset", "_"],  objdata, 0)
+                                                 ))
+
         case name 
         when "background"
           @background = tilemap

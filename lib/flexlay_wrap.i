@@ -205,6 +205,6 @@ VALUE CL_Point2Value(const CL_Point& arg)
 %include "../ruby/ruby_sexpr_parser.hxx"
 #endif
 
-// 1
+// 2
 
 /* EOF */

@@ -55,18 +55,18 @@ class GUI
     @button_panel.items["redo"].disable()
 
     @layer_menu = Menu.new(CL_Point.new(32*15+2, 54), @gui.get_component())
-    @layer_menu.add_item($mysprite, "Show all",          proc{ show_all() })
-    @layer_menu.add_item($mysprite, "Show current",      proc{ show_current() })
-    @layer_menu.add_item($mysprite, "Show only current", proc{ show_only_current() })
+    @layer_menu.add_item("Show all",          proc{ show_all() })
+    @layer_menu.add_item("Show current",      proc{ show_current() })
+    @layer_menu.add_item("Show only current", proc{ show_only_current() })
     
     @toolbar = ButtonPanel.new_from_spec(0, 23+33, 33, 32*4+2, false, $toolbar_spec, @gui.get_component)
     @menu    = components.get('menubar').component
 
     # FIXME: Having position in the Menus here is EXTREMLY ugly
     @tilegroup_menu = Menu.new(CL_Point.new(35*15+2, 54), @gui.get_component())
-    @tilegroup_menu.add_item($mysprite, "All Tiles", proc{@tileselector.set_tiles($tileset.get_tiles())})
+    @tilegroup_menu.add_item("All Tiles", proc{@tileselector.set_tiles($tileset.get_tiles())})
     $tileset.tilegroups.each { |tilegroup|
-      @tilegroup_menu.add_item($mysprite, tilegroup.name, proc{@tileselector.set_tiles(tilegroup.tiles)})
+      @tilegroup_menu.add_item(tilegroup.name, proc{@tileselector.set_tiles(tilegroup.tiles)})
     }
 
     @tileselector = components.get('tileselector').component

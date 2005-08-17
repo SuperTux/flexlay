@@ -39,9 +39,6 @@ TilemapLayer TilemapLayer::current_;
 class TilemapLayerImpl : public LayerImpl
 {
 public:
-  TilemapLayerImpl() {}
-  virtual ~TilemapLayerImpl() {}
-
   Tileset tileset;
   CL_Color background_color;
   CL_Color foreground_color;
@@ -51,6 +48,11 @@ public:
 
   bool draw_grid;
   bool draw_attribute;
+
+  MetaData metadata;
+
+  TilemapLayerImpl() {}
+  virtual ~TilemapLayerImpl() {}
 
   bool has_bounding_rect() const;
   CL_Rect get_bounding_rect();
@@ -412,6 +414,18 @@ Layer
 TilemapLayer::to_layer()
 {
    return Layer(impl);
+}
+
+void
+TilemapLayer::set_metadata(const MetaData& metadata)
+{
+  impl->metadata = metadata;
+}
+
+MetaData
+TilemapLayer::get_metadata() const
+{
+  return impl->metadata;
 }
 
 /* EOF */

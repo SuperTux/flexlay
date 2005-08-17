@@ -22,6 +22,7 @@
 
 #include <ClanLib/Display/pixel_buffer.h>
 #include "field.hxx"
+#include "meta_data.hxx"
 #include "shared_ptr.hxx"
 #include "layer.hxx"
 
@@ -57,6 +58,9 @@ public:
 
   const std::vector<int>& get_data();
   void set_data(std::vector<int> d);
+
+  void   set_metadata(const MetaData& obj);
+  MetaData get_metadata() const;
 
   /** Draw the gives brush to the map */
   void draw_tile(const TileBrush& brush, const CL_Point& pos);

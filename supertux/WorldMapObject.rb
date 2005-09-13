@@ -36,7 +36,7 @@ class WMSpawnPoint<WorldmapObject
     writer.write_int("x", pos.x / 32)
     writer.write_int("y", pos.y / 32)
     writer.write_string("name", @name)
-    writer.end_list("level")
+    writer.end_list("spawnpoint")
   end
 
   def property_dialog()
@@ -186,9 +186,9 @@ class SpecialTile<WorldmapObject
 end
 
 $worldmap_objects = [
-  ["level", "images/worldmap/common/leveldot_green.png", WorldmapLevel],
-  ["special-tile", "images/worldmap/common/teleporterdot.png", SpecialTile],
-  ["spawnpoint", "images/worldmap/common/tux.png", WMSpawnPoint],
+  [:level, "images/worldmap/common/leveldot_green.png", WorldmapLevel],
+  [:"special-tile", "images/worldmap/common/teleporterdot.png", SpecialTile],
+  [:spawnpoint, "images/worldmap/common/tux.png", WMSpawnPoint],
 ]
 
 def create_worldmapobject_at_pos(objmap, name, pos)

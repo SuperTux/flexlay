@@ -42,13 +42,13 @@ class WorldMap
     for i in data
       (name, data) = i[0], i[1..-1]
 
-      if name == "properties"
+      if name == :properties
         @name = get_value_from_tree(["name", "_"], data, "No Name")
         @music = get_value_from_tree(["music", "_"], data, "salcon.ogg")
         @intro_filename = get_value_from_tree(["intro-filename", "_"], data, "")
         @start_pos_x = get_value_from_tree(["start_pos_x", "_"], data, 0)
         @start_pos_y = get_value_from_tree(["start_pos_y", "_"], data, 0)
-      elsif name == "tilemap"
+      elsif name == :tilemap
         @tilemap = TileMap.new()
         @tilemap.parse(data)
       else

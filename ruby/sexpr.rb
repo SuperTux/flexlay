@@ -45,7 +45,7 @@ def get_value_from_tree(spec, tree, default)
       return tree
     elsif spec == ['_']
 	  # is it a translatable string?
-	  if(tree[0].instance_of?(Array) and tree[0][0] == "_")
+	  if(tree[0].instance_of?(Array) and tree[0][0] == :"_")
 		return tree[0][1]
 	  else
         return tree[0]

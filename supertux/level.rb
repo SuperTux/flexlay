@@ -53,7 +53,7 @@ class Level
     
     @current_sector = nil
     @sectors = []
-    for sec in sexpr_filter("sector", data)
+    for sec in sexpr_filter(:sector, data)
       sector = Sector.new(self)
       sector.load_v2(sec)
       @sectors.push(sector)

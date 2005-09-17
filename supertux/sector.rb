@@ -86,11 +86,11 @@ class Sector
     for i in get_value_from_tree(["objects"], data, [])
       (name, odata) = i[0], i[1..-1]
       # fix some old object names
-      if(name == "money")
-        name = "jumpy"
+      if(name == :money)
+        name = :jumpy
       end
-      if(name == "laptop")
-        name = "mriceblock"
+      if(name == :laptop)
+        name = :mriceblock
       end
       create_gameobject_from_data(@objects, name, odata)
     end
@@ -159,14 +159,14 @@ class Sector
 
     for i in data
       (name,data) = i[0], i[1..-1]
-      if name == "name"
+      if name == :name
         @name = data[0]
-      elsif name == "gravity"
+      elsif name == :gravity
         @gravity = data[0]
-	  elsif name == "music"
-		@music = data[0]
-      elsif name == "tilemap"
-		layer   = get_value_from_tree(["layer", "_"], data, "interactive")
+      elsif name == :music
+	@music = data[0]
+      elsif name == :tilemap
+	layer   = get_value_from_tree(["layer", "_"], data, "interactive")
         width   = get_value_from_tree(["width", "_"],  data, 20)
         height  = get_value_from_tree(["height", "_"], data, 15)
         solid   = get_value_from_tree(["solid", "_"],  data, false)
@@ -181,24 +181,23 @@ class Sector
         elsif layer == "background"
           @background = tilemap
         elsif layer == "foreground"
-		  @foreground = tilemap
+	  @foreground = tilemap
         else
           print "Flexlay doesn't handle tilemap layer '", layer, "'.\n"
         end
-	  elsif name == "camera"
-		@cameramode = "normal"
-		# TODO...
+      elsif name == :camera
+	@cameramode = "normal"
+	# TODO...
       else
-        puts "Creating #{name}..."
-		create_gameobject_from_data(@objects, name, data)
+	create_gameobject_from_data(@objects, name, data)
       end
     end
     
     print "Tileset: ", $tileset, " ", width, " ", height, "\n"
 
-	if(@interactive == nil || @width == 0 || @height == 0)
-	  throw "No interactive tilemap in sector '", @name , "'.\n"
-	end
+    if(@interactive == nil || @width == 0 || @height == 0)
+      throw "No interactive tilemap in sector '", @name , "'.\n"
+    end
 
     if (@background == nil)
       @background = TilemapLayer.new($tileset, @width, @height)

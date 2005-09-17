@@ -44,6 +44,7 @@ class WorldMap
 
       if name == :properties
         @name = get_value_from_tree(["name", "_"], data, "No Name")
+        print "Name:" + @name.to_s
         @music = get_value_from_tree(["music", "_"], data, "salcon.ogg")
         @intro_filename = get_value_from_tree(["intro-filename", "_"], data, "")
         @start_pos_x = get_value_from_tree(["start_pos_x", "_"], data, 0)

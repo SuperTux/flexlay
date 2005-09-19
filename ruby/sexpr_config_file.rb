@@ -63,8 +63,8 @@ class SExprConfigFile
   end
 
   def set(name, value)
-    if @options.has_key?(name) then
-      return @options[name]
+    if @defaults.has_key?(name) then
+      @options[name] = value
     else
       raise "Error: Options:set: don't have a #{name} option"
     end
@@ -114,7 +114,7 @@ class SExprConfigFile
     f = File.new(@filename, "w")
     f.puts("(#{@name}-config")
     @defaults.each_pair {|key, value|
-      if @options.has_key?(key) then
+      if @options.has_key?(key) and @options[key] != nil then
         f.puts("    (%-20s %s)" % [key, value2sexpr(@options[key])])
       else
         f.puts(";;  (%-20s %s)" % [key, value2sexpr(value)])

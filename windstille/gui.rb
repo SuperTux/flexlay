@@ -35,21 +35,23 @@ class GUI
   end
 
   def initialize()
-    @gui = $gui_manager
-
-    components = LayoutComponent.create_from_sexpr(CL_Rect.new(0,0, $screen_width, $screen_height),
-                                                   SExpression.new($guilayout_spec),
+    @gui = GUIManager.new()
+    
+    @components = LayoutComponent.create_from_sexpr(CL_Rect.new(0,0, $screen_width, $screen_height),
+                                                    SExpression.new($guilayout_spec),
                                                    @gui.get_component())
     
     connect_v2_graceful($flexlay.sig_resize(), proc{|w, h|
-                          components.set_size(w, h)
+                          @components.set_size(w, h)
                         })
+  end
 
-    @editor_map = components.get('editormap').component
+  def post_initalize()
+    @editor_map = @components.get('editormap').component
     @workspace  = Workspace.new()
     @editor_map.set_workspace(@workspace)
 
-    @button_panel = components.get('buttonpanel').component
+    @button_panel = @components.get('buttonpanel').component
 
     @button_panel.items["undo"].disable()
     @button_panel.items["redo"].disable()
@@ -60,7 +62,7 @@ class GUI
     @layer_menu.add_item("Show only current", proc{ show_only_current() })
     
     @toolbar = ButtonPanel.new_from_spec(0, 23+33, 33, 32*4+2, false, $toolbar_spec, @gui.get_component)
-    @menu    = components.get('menubar').component
+    @menu    = @components.get('menubar').component
 
     # FIXME: Having position in the Menus here is EXTREMLY ugly
     @tilegroup_menu = Menu.new(CL_Point.new(35*15+2, 54), @gui.get_component())
@@ -69,14 +71,14 @@ class GUI
       @tilegroup_menu.add_item(tilegroup.name, proc{@tileselector.set_tiles(tilegroup.tiles)})
     }
 
-    @tileselector = components.get('tileselector').component
+    @tileselector = @components.get('tileselector').component
     @tileselector.set_tileset($tileset)
     @tileselector.set_scale(0.75)
     @tileselector.set_tiles($tileset.tilegroups[0].tiles)
     # @tileselector.set_tiles($tileset.get_tiles())
     @tileselector.show(true)
     
-    @objectselector = components.get('objectselector').component
+    @objectselector = @components.get('objectselector').component
     @objectselector.show(false)
 
     connect_v2_ObjectBrush_Point(@objectselector.sig_drop(), proc{|brush, pos| on_object_drop(brush, pos) })
@@ -195,8 +197,8 @@ class GUI
   def new_level()
     level = @workspace.get_map().get_metadata()
     dialog = GenericDialog.new("Create New Sector", @gui.get_component())
-    dialog.add_int("Width: ", level.width)
-    dialog.add_int("Height: ", level.height)
+    dialog.add_int("Width: ",  60)
+    dialog.add_int("Height: ", 40)
     dialog.add_int("X: ", 0)
     dialog.add_int("Y: ", 0)
     dialog.set_callback(proc{|w, h, x, y| 

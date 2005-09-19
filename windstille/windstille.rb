@@ -51,36 +51,38 @@ $screen_height = $config.get("screen-height")
 ## Init Flexlay itself
 $flexlay = Flexlay.new()
 $flexlay.init($screen_width, $screen_height, false, true)
-$gui_manager = GUIManager.new()
+
+$gui = GUI.new()
+
+## Initialize Tools and stuff
+def init()
+  $controller = Controller.new()
+  
+  $tileset = Tileset.new(32)
+  $tileset.load($datadir + "tiles.scm")
+  
+  $gui.post_initalize()
+
+  $startlevel = Sector.new(100, 30)
+  $startlevel.activate($workspace)
+
+  $gui.workspace.set_tool($controller.tilemap_paint_tool.to_tool());
+end
 
 if $datadir == nil or not File.exist?($datadir) then
-  dialog = GenericDialog.new("Windstille Data Directory", $gui_manager.get_component())
+  dialog = GenericDialog.new("Windstille Data Directory", $gui.gui.get_component())
   dialog.add_label("You need to specify the datadir of Windstille is located")
   dialog.add_string("Datadir:", $datadir || "")
   
   dialog.set_block { |datadir|
     $datadir = datadir 
-    $gui_manager.quit()
+    # datadir is ready, so startup
+    init()
   }
-  $gui_manager.run()
+else
+  # datadir is ready, so startup
+  init()
 end
-
-## Initialize Tools
-$controller = Controller.new()
-
-$resources = CL_ResourceManager.new("../data/flexlay.xml")
-
-$tileset = Tileset.new(32)
-$tileset.load($datadir + "tiles.scm")
-
-## Create some basic GUI
-$gui = GUI.new()
-
-$gui.workspace.set_tool($controller.tilemap_paint_tool.to_tool());
-
-$startlevel = Sector.new(100, 30)
-$startlevel.activate($workspace)
-
 $gui.run()
 
 $config.set("datadir", $datadir)

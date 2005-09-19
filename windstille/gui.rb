@@ -35,7 +35,7 @@ class GUI
   end
 
   def initialize()
-    @gui = GUIManager.new()
+    @gui = $gui_manager
 
     components = LayoutComponent.create_from_sexpr(CL_Rect.new(0,0, $screen_width, $screen_height),
                                                    SExpression.new($guilayout_spec),

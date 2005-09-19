@@ -20,8 +20,6 @@
 ## A basic tile editor that should act as example for other games, use
 ## it to fork your own code.
 
-$datadir = "/home/ingo/projects/windstille/trunk/data/"
-
 ## First we try to read a config file to set some variables
 ## Load Flexlay library
 require "flexlay_wrap"
@@ -38,11 +36,14 @@ require "tileset.rb"
 
 
 $config = SExprConfigFile.new("windstille-editor") {
+  register("datadir",       nil)
   register("screen-width",  800)
   register("screen-height", 600)
   register("fullscreen",    false)
   register("recent-files",  [])
 }
+
+$datadir = $config.get("datadir")
 
 $screen_width  = $config.get("screen-width")
 $screen_height = $config.get("screen-height")
@@ -50,9 +51,21 @@ $screen_height = $config.get("screen-height")
 ## Init Flexlay itself
 $flexlay = Flexlay.new()
 $flexlay.init($screen_width, $screen_height, false, true)
+$gui_manager = GUIManager.new()
+
+if $datadir == nil or not File.exist?($datadir) then
+  dialog = GenericDialog.new("Windstille Data Directory", $gui_manager.get_component())
+  dialog.add_label("You need to specify the datadir of Windstille is located")
+  dialog.add_string("Datadir:", $datadir || "")
+  
+  dialog.set_block { |datadir|
+    $datadir = datadir 
+    $gui_manager.quit()
+  }
+  $gui_manager.run()
+end
 
 ## Initialize Tools
-
 $controller = Controller.new()
 
 $resources = CL_ResourceManager.new("../data/flexlay.xml")
@@ -70,6 +83,7 @@ $startlevel.activate($workspace)
 
 $gui.run()
 
+$config.set("datadir", $datadir)
 $config.write()
 
 # $flexlay.deinit()

@@ -31,7 +31,7 @@ end
 class Sector
   ## Sector Properties
   attr_reader :layers, :editormap
-  attr_reader :background, :interactive, :foreground, :objects
+  attr_reader :background, :interactive, :interactivebackground,:foreground, :objects
 
   attr_accessor :name
 
@@ -49,14 +49,17 @@ class Sector
     
     @background  = TilemapLayer.new($tileset, width, height)
     @interactive = TilemapLayer.new($tileset, width, height)
+    @interactivebackground = TilemapLayer.new($tileset, width, height)
     @foreground  = TilemapLayer.new($tileset, width, height)
     
     @background.set_metadata(TilemapMetadata.new(:name =>  'background'))
     @foreground.set_metadata(TilemapMetadata.new(:name =>  'foreground'))
     @interactive.set_metadata(TilemapMetadata.new(:name => 'interactive'))
+    @interactive.set_metadata(TilemapMetadata.new(:name => 'interactivebackground'))
 
     @layers = []
     @layers += [@background]
+    @layers += [@interactivebackground]
     @layers += [@interactive]
     @layers += [@foreground]
     @layers += [@objects = ObjectLayer.new()]
@@ -108,6 +111,8 @@ class Sector
           @background = tilemap
         when "interactive"
           @interactive = tilemap
+        when "interactivebackground"
+          @interactivebackground = tilemap
         when "background"
           @background = tilemap
         else
@@ -124,7 +129,7 @@ class Sector
       end
     }
     
-    @layers += [@background, @interactive, @foreground, @objects]
+    @layers += [@background, @interactivebackground, @interactive, @foreground, @objects]
 
     @editormap = EditorMap.new()
     @layers.each {|layer| 
@@ -147,8 +152,11 @@ class Sector
 
     TilemapLayer.set_current(@layers[@current_layer])
     ObjectLayer.set_current(@objects)
-
-    connect(@editormap.sig_change(), proc{$gui.on_map_change()})
+    
+    connect(@editormap.sig_change(), proc{
+              puts "blabl"
+              $gui.on_map_change()
+            })
   end
 
   def save(filename)
@@ -168,8 +176,8 @@ class Sector
       if tilemap then
         width  = tilemap.get_width()
         height = tilemap.get_height()
-        f.write("  (tilemap (name \"%s\") (width %d) (height %d) (z-pos 0)\n" % \
-                [name, width, height]) # FIXME: add escaping to strings
+        f.write("  (tilemap (name \"%s\") (width %d) (height %d) (z-pos %d)\n" % \
+                [name, width, height, tilemap.get_metadata().z_pos]) # FIXME: add escaping to strings
         f.write("    (data")
         tilemap.get_data().each_with_index {|item, i|
           if (i % width == 0) then
@@ -182,6 +190,7 @@ class Sector
     }
 
     save_tilemap.call("background",  @background)
+    save_tilemap.call("interactivebackground", @interactivebackground)
     save_tilemap.call("interactive", @interactive)
     save_tilemap.call("foreground",  @foreground)
 

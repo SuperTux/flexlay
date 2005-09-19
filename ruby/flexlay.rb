@@ -1,5 +1,3 @@
-puts "This line must only apear once!"
-
 class TilemapLayer
   alias orig_get_metadata get_metadata
   alias orig_set_metadata set_metadata

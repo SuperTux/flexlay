@@ -103,6 +103,7 @@ class GUI
   end
 
   def on_map_change()
+    puts "Mapchange" 
     if (@workspace.get_map().undo_stack_size() > 0)
       @button_panel.items["undo"].enable()
     else
@@ -129,6 +130,13 @@ class GUI
       TilemapLayer.set_current(@workspace.get_map().get_metadata().interactive)
     else
       @button_panel.items["interactive"].set_up();
+    end
+
+    if layer == :interactivebackground then
+      @button_panel.items["interactivebackground"].set_down();
+      TilemapLayer.set_current(@workspace.get_map().get_metadata().interactivebackground)
+    else
+      @button_panel.items["interactivebackground"].set_up();
     end
 
     if layer == :foreground then

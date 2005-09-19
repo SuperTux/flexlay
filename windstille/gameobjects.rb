@@ -34,7 +34,13 @@ class UnknownGameObject
   end
 
   def save(f)
-    write_sexpr(f, [@name, *@sexpr])
+    f.write("    (#{@name}\n")
+    @sexpr.each{|i|
+      f.write("      ")
+      write_sexpr(f, i)
+      f.write("\n")
+    }
+    f.write("    )")
     f.puts
   end
 end

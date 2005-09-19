@@ -59,6 +59,7 @@ $buttonpanel_spec = [
   [:seperator],
   [:icon,       "background",  "../data/images/icons24/background.png",    proc{ $gui.show_layer(:background) }],
   [:icon,       "interactive", "../data/images/icons24/interactive.png",   proc{ $gui.show_layer(:interactive) }],
+  [:icon,       "interactivebackground", "../data/images/icons24/interactive.png",   proc{ $gui.show_layer(:interactivebackground) }],
   [:icon,       "foreground",  "../data/images/icons24/foreground.png",    proc{ $gui.show_layer(:foreground) }],
   [:icon,       "properties",  "../data/images/icons24/stock_properties.png", proc{ $gui.layer_properties() }],
   [:icon,       "viewprops",   "../data/images/icons24/eye.png",           proc{ $gui.layer_menu.run() }],
@@ -83,8 +84,8 @@ $keybinding_spec = [
   ["1",  proc{ |x, y| $gui.show_layer(:background)}],
 ]
 
-$guilayout_spec = [
-  :vbox, 
+$guilayout_spec = \
+[:vbox, 
   [:homogenus, false],
   [:components,
     

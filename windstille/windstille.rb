@@ -23,12 +23,6 @@
 $datadir = "/home/ingo/projects/windstille/trunk/data/"
 
 ## First we try to read a config file to set some variables
-$config_file = File.expand_path("~/.flexlay/windstille.rb")
-
-if File.exist?($config_file) then
-  require $config_file
-end
-
 ## Load Flexlay library
 require "flexlay_wrap"
 include Flexlay_wrap
@@ -37,12 +31,21 @@ require "flexlay.rb"
 
 require "controller.rb"
 require "sexpr.rb"
+require "sexpr_config_file.rb"
 require "gui.rb"
 require "sector.rb"
 require "tileset.rb"
 
-$screen_width  = 640
-$screen_height = 480
+
+$config = SExprConfigFile.new("windstille-editor") {
+  register("screen-width",  800)
+  register("screen-height", 600)
+  register("fullscreen",    false)
+  register("recent-files",  [])
+}
+
+$screen_width  = $config.get("screen-width")
+$screen_height = $config.get("screen-height")
 
 ## Init Flexlay itself
 $flexlay = Flexlay.new()
@@ -66,6 +69,8 @@ $startlevel = Sector.new(100, 30)
 $startlevel.activate($workspace)
 
 $gui.run()
+
+$config.write()
 
 # $flexlay.deinit()
 

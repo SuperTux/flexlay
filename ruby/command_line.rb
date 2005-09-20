@@ -19,13 +19,17 @@
 
 # A parser for command line arguments
 class CommandLineOption
-  attr_reader :short, :long, :description
+  attr_reader :short, :long, :argument, :description
 
-  def initialize(short, long, description)
+  def initialize(short, long, argument, description)
     @short = short
     @long  = long
+    @argument = argument
     @description = description
   end
+end
+
+class CommandLineException < RuntimeError
 end
 
 class CommandLine
@@ -58,20 +62,85 @@ class CommandLine
   end
 
   def text(text)
-    @help.push(text)
+    @help.push("\n" + text)
   end
 
   def option(short, long, argument, description)
-    cmd = CommandLineOption.new(short, long, description)
+    cmd = CommandLineOption.new(short, long, argument, description)
     @options.push(cmd)
     @help.push(cmd)
   end
 
   def parse(args)
-    args = args.clone()
-    print_help()
+    args = args.reverse()
 
-    yield()
+    @stop_parsing = false
+    while not args.empty? and not @stop_parsing
+      current = args.pop
+      
+      if current == "--" then
+        while not args.empty?
+          yield(:rest, args.pop)
+        end
+        
+      elsif current == "-" then
+        yield(:rest, current)
+
+      elsif current[0] == ?- then
+        if current[1] == ?- then
+          long_option = current[2..-1]
+          cmd = @options.find {|item| item.long == long_option }
+          
+          if not cmd then
+            raise CommandLineException, "unrecoginzed option '#{current}'"
+          else
+            if cmd.argument then
+              if args.empty? then
+                raise "Error: Option '#{current}' requires argument of type '#{cmd.argument}'"
+              else
+                yield(cmd.short, args.pop())
+              end
+            else
+              yield(cmd.short, nil)
+            end
+          end
+
+        else
+          # short option
+          short_options = current[1..-1]
+          
+          while not short_options.empty? 
+            short = short_options[0]
+            short_options = short_options[1..-1]
+
+            cmd = @options.find {|item| item.short == short}
+            
+            if not cmd then
+              raise CommandLineException, "unrecoginzed option '#{current}'"
+            else
+              if cmd.argument then
+                if not short_options.empty? then
+                  yield(cmd.short, short_options)
+                  short_options = ""
+                else
+                  if args.empty? then
+                    raise CommandLineException, "Error: Option '#{current}' requires argument of type '#{cmd.argument}'"
+                  else
+                    yield(cmd.short, args.pop())
+                  end    
+                end
+              else
+                yield(cmd.short, nil)
+              end
+            end
+          end
+
+        end
+      else
+        # rest argument
+        yield(:rest, current)
+      end
+    end
   end
 
   def print_help()
@@ -88,6 +157,10 @@ class CommandLine
       end
     }
   end
+
+  def exit()
+    @stop_parsing = true
+  end
 end
 
 cmd = CommandLine.new() {
@@ -96,21 +169,38 @@ cmd = CommandLine.new() {
   description("Editor for editing Windstille map files.")
   
   group("Display")
-  option("f", "fullscreen", nil,            "Launch in fullscreen mode")
-  option("g", "geometry",   "WIDTHxHEIGHT", "Launch in the given resolution")
+  option(?f, "fullscreen", nil,            "Launch in fullscreen mode")
+  option(?g, "geometry",   "WIDTHxHEIGHT", "Launch in the given resolution")
 
-  text("If you have throuble launching, try to cleanup ~/.windstille-editor/config.scm or contact grumbel@gmx.de")
+  group("Misc")
+  option(?h, "help",       nil,            "Print this help")
+
+  text("If you have throuble launching, try to cleanup ~/.windstille-editor/config.scm" \
+       "or contact grumbel@gmx.de")
 }
 
-cmd.parse(ARGV) { |option, argument|
-  case option
-  when "f"
-    
-  when "g"
-    
-  when :rest
-    
+if false then
+  begin
+    cmd.parse(ARGV) { |option, argument|
+      case option
+      when ?f
+        puts("Fullscreen")
+
+      when ?g
+        puts("Geometry: #{argument}")
+        
+      when ?h
+        cmd.print_help()
+        cmd.exit()
+
+      when :rest
+        puts("Rest: #{argument}")
+      end
+    }
+
+  rescue CommandLineException => err
+    puts('windstille-editor:' + err)
   end
-}
+end
 
 # EOF #

@@ -100,7 +100,7 @@ class SExprConfigFile
     elsif value.is_a?(Array)
       str = ""
       value.each() {|v| 
-        str += val2sexpr(v)
+        str += value2sexpr(v)
         str += " "
       }
       return str

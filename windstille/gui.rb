@@ -27,7 +27,7 @@ require "gui_specs.rb"
 
 ## GUI class which holds all the GUI components and the state of them
 class GUI
-  attr_reader :workspace, :gui, :tileselector, :objectselector, :tilegroup_menu, :layer_menu
+  attr_reader :workspace, :gui, :tileselector, :objectselector, :tilegroup_menu, :layer_menu, :recent_files_menu
 
   def run()
     ## Enter main loop here
@@ -47,6 +47,11 @@ class GUI
   end
 
   def post_initalize()
+    @recent_files_menu = Menu.new(CL_Point.new(32*2, 54), @gui.get_component())
+    $controller.recent_files.each{ |filename|
+      @recent_files_menu.add_item(filename, proc { $controller.load_level(filename) })
+    }
+
     @editor_map = @components.get('editormap').component
     @workspace  = Workspace.new()
     @editor_map.set_workspace(@workspace)

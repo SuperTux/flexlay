@@ -29,11 +29,11 @@ require "flexlay.rb"
 
 require "controller.rb"
 require "sexpr.rb"
+require "command_line.rb"
 require "sexpr_config_file.rb"
 require "gui.rb"
 require "sector.rb"
 require "tileset.rb"
-
 
 $config = SExprConfigFile.new("windstille-editor") {
   register("datadir",       nil)
@@ -43,14 +43,60 @@ $config = SExprConfigFile.new("windstille-editor") {
   register("recent-files",  [])
 }
 
-$datadir = $config.get("datadir")
+cmd = CommandLine.new() {
+  name("Windstille Editor V0.1")
+  usage("windstille-editor [OPTION]... [FILE]...")
+  description("Editor for editing Windstille map files.")
+  
+  group("Display")
+  option(?f, "fullscreen", nil,            "Launch in fullscreen mode")
+  option(?w, "window",     nil,            "Launch in window mode")
+  option(?g, "geometry",   "WIDTHxHEIGHT", "Launch in the given resolution")
+
+  group("Misc")
+  option(?d, "datadir",    "DIR",          "Set the datadir to use")
+  option(?h, "help",       nil,            "Print this help")
+
+  text("Report bugs to <grumbel@gmx.de>.")
+}
+
+begin
+  cmd.parse(ARGV) { |option, argument|
+    case option
+    when ?w
+      $config.set("fullscreen", false)
+      
+    when ?f
+      $config.set("fullscreen", true)
+      
+    when ?g
+      (width, height) = argument.scan(/([0-9]+)x([0-9]+)/)[0]
+      $config.set("screen-width",  Integer(width))
+      $config.set("screen-height", Integer(height))
+      
+    when ?h
+      cmd.print_help()
+      cmd.exit()
+      exit()
+
+    when :rest
+      $levelfile = argument
+    end
+  }
+
+rescue CommandLineException => err
+  puts('windstille-editor:' + err)
+end
+
+$datadir    = $config.get("datadir")
+$fullscreen = $config.get("fullscreen")
 
 $screen_width  = $config.get("screen-width")
 $screen_height = $config.get("screen-height")
 
 ## Init Flexlay itself
 $flexlay = Flexlay.new()
-$flexlay.init($screen_width, $screen_height, false, true)
+$flexlay.init($screen_width, $screen_height, $fullscreen, true)
 
 $gui = GUI.new()
 
@@ -63,8 +109,11 @@ def init()
   
   $gui.post_initalize()
 
-  $startlevel = Sector.new(100, 30)
-  $startlevel.activate($workspace)
+  if not $levelfile then
+    Sector.new(100, 30).activate($workspace)
+  else
+    $controller.load_level($levelfile)
+  end
 
   $gui.workspace.set_tool($controller.tilemap_paint_tool.to_tool());
 end
@@ -86,6 +135,7 @@ end
 $gui.run()
 
 $config.set("datadir", $datadir)
+$config.set("recent-files", $controller.recent_files)
 $config.write()
 
 # $flexlay.deinit()

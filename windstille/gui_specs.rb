@@ -45,7 +45,7 @@ $menu_spec = [
 $buttonpanel_spec = [
   [:icon,       "new",         "../data/images/icons24/stock_new.png",     proc{ $gui.new_level() }],
   [:icon,       "open",        "../data/images/icons24/stock_open.png",    proc{ $gui.level_load() }],
-  [:small_icon, "recent",      "../data/images/icons24/downarrow.png",     proc{ $controller.recent_files_menu.run() }],
+  [:small_icon, "recent",      "../data/images/icons24/downarrow.png",     proc{ $gui.recent_files_menu.run() }],
   [:icon,       "save",        "../data/images/icons24/stock_save.png",    proc{ $gui.level_save() }],
   [:icon,       "saveas",      "../data/images/icons24/stock_save_as.png", proc{ $gui.level_save_as() }],
   [:seperator],

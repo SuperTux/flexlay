@@ -153,53 +153,13 @@ class CommandLine
       if item.is_a?(String)
         puts(item)
       elsif item.is_a?(CommandLineOption)
-        puts("   -#{item.short}, --#{item.long}   #{item.description}")
+        puts("  %-20s   %s" %["-#{item.short.chr}, --#{item.long}", item.description])
       end
     }
   end
 
   def exit()
     @stop_parsing = true
-  end
-end
-
-cmd = CommandLine.new() {
-  name("Windstille Editor V0.1")
-  usage("windstille-editor [OPTION]... [FILE]...")
-  description("Editor for editing Windstille map files.")
-  
-  group("Display")
-  option(?f, "fullscreen", nil,            "Launch in fullscreen mode")
-  option(?g, "geometry",   "WIDTHxHEIGHT", "Launch in the given resolution")
-
-  group("Misc")
-  option(?h, "help",       nil,            "Print this help")
-
-  text("If you have throuble launching, try to cleanup ~/.windstille-editor/config.scm" \
-       "or contact grumbel@gmx.de")
-}
-
-if false then
-  begin
-    cmd.parse(ARGV) { |option, argument|
-      case option
-      when ?f
-        puts("Fullscreen")
-
-      when ?g
-        puts("Geometry: #{argument}")
-        
-      when ?h
-        cmd.print_help()
-        cmd.exit()
-
-      when :rest
-        puts("Rest: #{argument}")
-      end
-    }
-
-  rescue CommandLineException => err
-    puts('windstille-editor:' + err)
   end
 end
 

@@ -6,7 +6,7 @@ class Controller
     @tilemap_select_tool = TileMapSelectTool.new()
     @zoom_tool           = ZoomTool.new()
     @objmap_select_tool  = ObjMapSelectTool.new()
-    @recent_files        = []
+    @recent_files        = $config.get("recent-files")
   end
     
   def set_tilemap_paint_tool()
@@ -32,10 +32,21 @@ class Controller
   def load_level(filename)
     $startlevel = Sector.new(filename)
     $startlevel.activate($workspace)
+    add_recent_file(filename)
   end
 
   def save_level(filename)
     $startlevel.save(filename)
+    add_recent_file(filename)
+  end
+
+  def add_recent_file(filename)
+    @recent_files = @recent_files.find_all {|i| i != filename }
+    @recent_files.push(filename)
+    $gui.recent_files_menu.clear()
+    $controller.recent_files.reverse.each{ |filename|
+      $gui.recent_files_menu.add_item(filename, proc { $controller.load_level(filename) })
+    }
   end
 end
 

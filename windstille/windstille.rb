@@ -82,6 +82,9 @@ def parse_command_line()
       cmd.exit()
       exit()
 
+    when :rest
+      $levelfile = argument
+
     else
       raise "Bug: Unhandled option: -#{option} #{argument}"
     end

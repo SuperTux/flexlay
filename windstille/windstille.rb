@@ -25,6 +25,7 @@
 require "flexlay_wrap"
 include Flexlay_wrap
 
+require "scanf.rb"
 require "flexlay.rb"
 
 require "controller.rb"
@@ -35,6 +36,58 @@ require "gui.rb"
 require "sector.rb"
 require "tileset.rb"
 
+def parse_command_line()
+  cmd = CommandLine.new() {
+    name("Windstille Editor V0.1")
+    usage("[OPTION]... [FILE]...")
+    description("Editor for editing Windstille map files.")
+    
+    group("Display")
+    option(?f, "fullscreen", nil,            "Launch in fullscreen mode")
+    option(?w, "window",     nil,            "Launch in window mode")
+    option(?g, "geometry",   "WIDTHxHEIGHT", "Launch in the given resolution")
+
+    group("Misc")
+    option(?d, "datadir",    "DIR",          "Set the datadir to use")
+    option(?h, "help",       nil,            "Print this help")
+
+    text("Report bugs to <grumbel@gmx.de>.")
+  }
+
+  begin
+    args = cmd.parse(ARGV)
+  rescue CommandLineException => err
+    puts('windstille-editor:' + err)
+    exit()
+  end
+
+  args.each { |option, argument|
+    case option
+    when ?w
+      $config.set("fullscreen", false)
+      
+    when ?f
+      $config.set("fullscreen", true)
+      
+    when ?d
+      $config.set("datadir", argument)
+
+    when ?g
+      (width, height) = argument.scanf("%dx%d")
+      $config.set("screen-width",  width)  if width
+      $config.set("screen-height", height) if height
+      
+    when ?h
+      cmd.print_help()
+      cmd.exit()
+      exit()
+
+    else
+      raise "Bug: Unhandled option: -#{option} #{argument}"
+    end
+  }
+end
+
 $config = SExprConfigFile.new("windstille-editor") {
   register("datadir",       nil)
   register("screen-width",  800)
@@ -43,53 +96,10 @@ $config = SExprConfigFile.new("windstille-editor") {
   register("recent-files",  [])
 }
 
-cmd = CommandLine.new() {
-  name("Windstille Editor V0.1")
-  usage("windstille-editor [OPTION]... [FILE]...")
-  description("Editor for editing Windstille map files.")
-  
-  group("Display")
-  option(?f, "fullscreen", nil,            "Launch in fullscreen mode")
-  option(?w, "window",     nil,            "Launch in window mode")
-  option(?g, "geometry",   "WIDTHxHEIGHT", "Launch in the given resolution")
+parse_command_line()
 
-  group("Misc")
-  option(?d, "datadir",    "DIR",          "Set the datadir to use")
-  option(?h, "help",       nil,            "Print this help")
-
-  text("Report bugs to <grumbel@gmx.de>.")
-}
-
-begin
-  cmd.parse(ARGV) { |option, argument|
-    case option
-    when ?w
-      $config.set("fullscreen", false)
-      
-    when ?f
-      $config.set("fullscreen", true)
-      
-    when ?g
-      (width, height) = argument.scan(/([0-9]+)x([0-9]+)/)[0]
-      $config.set("screen-width",  Integer(width))
-      $config.set("screen-height", Integer(height))
-      
-    when ?h
-      cmd.print_help()
-      cmd.exit()
-      exit()
-
-    when :rest
-      $levelfile = argument
-    end
-  }
-
-rescue CommandLineException => err
-  puts('windstille-editor:' + err)
-end
-
-$datadir    = $config.get("datadir")
-$fullscreen = $config.get("fullscreen")
+$datadir       = $config.get("datadir")
+$fullscreen    = $config.get("fullscreen")
 
 $screen_width  = $config.get("screen-width")
 $screen_height = $config.get("screen-height")
@@ -132,6 +142,20 @@ else
   # datadir is ready, so startup
   init()
 end
+
+begin # Run user code if available
+  home = ENV['HOME']
+  if home then
+    user_rb = home + "/.windstille-editor/user.rb"
+  else 
+    user_rb = "user.rb"
+  end
+
+  if File.exists?(user_rb) then
+      require user_rb
+  end
+end
+
 $gui.run()
 
 $config.set("datadir", $datadir)

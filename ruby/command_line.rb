@@ -72,6 +72,7 @@ class CommandLine
   end
 
   def parse(args)
+    result = []
     args = args.reverse()
 
     @stop_parsing = false
@@ -80,11 +81,11 @@ class CommandLine
       
       if current == "--" then
         while not args.empty?
-          yield(:rest, args.pop)
+          result.push([:rest, args.pop])
         end
         
       elsif current == "-" then
-        yield(:rest, current)
+        result.push([:rest, current])
 
       elsif current[0] == ?- then
         if current[1] == ?- then
@@ -98,10 +99,10 @@ class CommandLine
               if args.empty? then
                 raise "Error: Option '#{current}' requires argument of type '#{cmd.argument}'"
               else
-                yield(cmd.short, args.pop())
+                result.push([cmd.short, args.pop()])
               end
             else
-              yield(cmd.short, nil)
+              result.push([cmd.short, nil])
             end
           end
 
@@ -120,17 +121,17 @@ class CommandLine
             else
               if cmd.argument then
                 if not short_options.empty? then
-                  yield(cmd.short, short_options)
+                  result.push([cmd.short, short_options])
                   short_options = ""
                 else
                   if args.empty? then
                     raise CommandLineException, "Error: Option '#{current}' requires argument of type '#{cmd.argument}'"
                   else
-                    yield(cmd.short, args.pop())
+                    result.push([cmd.short, args.pop()])
                   end    
                 end
               else
-                yield(cmd.short, nil)
+                result.push([cmd.short, nil])
               end
             end
           end
@@ -138,14 +139,16 @@ class CommandLine
         end
       else
         # rest argument
-        yield(:rest, current)
+        result.push([:rest, current])
       end
     end
+
+    return result
   end
 
   def print_help()
     puts(@name) if @name
-    puts("Usage: " + @usage) if @usage
+    puts("Usage: #{$0} #{@usage}") if @usage
     puts("")
     puts(@description) if @description
 
@@ -153,7 +156,24 @@ class CommandLine
       if item.is_a?(String)
         puts(item)
       elsif item.is_a?(CommandLineOption)
-        puts("  %-20s   %s" %["-#{item.short.chr}, --#{item.long}", item.description])
+        puts("  %-30s %s" % 
+               [("%s%s %s" % [if item.short.is_a?(Fixnum) then
+                            if item.long then
+                              "-#{item.short.chr}, " 
+                            else
+                              "-#{item.short.chr}" 
+                            end
+                          else
+                            ""
+                          end,
+                            if item.long then
+                              "--#{item.long}"
+                            else
+                              ""
+                            end,
+                   if item.argument then item.argument else "" end,
+                 ]),
+               item.description])
       end
     }
   end

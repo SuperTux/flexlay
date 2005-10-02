@@ -53,6 +53,7 @@ class WorldmapLevel<WorldmapObject
   def initialize()
     @name = ""
     @extro_filename = ""
+    @sprite = "leveldot"
     @quit_worldmap = false
     @obj = ObjMapSpriteObject.new(
             make_sprite($datadir + "images/worldmap/common/leveldot_green.png"),
@@ -65,6 +66,7 @@ class WorldmapLevel<WorldmapObject
     y = get_value_from_tree(["y", "_"], data, 0)
     @obj.to_object.set_pos(CL_Pointf.new(x * 32, y * 32))
     @name = get_value_from_tree(["name", "_"], data, "")
+    @sprite = get_value_from_tree(["sprite", "_"], data, "")
     @extro_filename = get_value_from_tree(["extro-filename", "_"], data, "")
     @quit_worldmap = get_value_from_tree(["quit-worldmap", "_"], data, false)
   end
@@ -74,6 +76,9 @@ class WorldmapLevel<WorldmapObject
     pos = @obj.to_object.get_pos()
     writer.write_int("x", pos.x / 32)
     writer.write_int("y", pos.y / 32)
+    if @sprite != ""
+      writer.write_string("sprite", @sprite)
+    end
     writer.write_string("name", @name)
     if @extro_filename != ""
       writer.write_string("extro-filename", @extro_filename)
@@ -95,10 +100,12 @@ class WorldmapLevel<WorldmapObject
     dialog = GenericDialog.new("LevelTile Property Dialog",
         $gui.get_component())
     dialog.add_string("level", @name)
+    dialog.add_string("sprite", @sprite)
     dialog.add_string("extro-filename", @extro_filename)
     dialog.add_bool("quit-worldmap", @quit_worldmap)
-    dialog.set_callback(proc{|name, extro_filename, quit_worldmap|
+    dialog.set_callback(proc{|name, sprite, extro_filename, quit_worldmap|
           @name = name
+          @sprite = sprite
           @extro_filename = extro_filename
           @quit_worldmap = quit_worldmap
         })

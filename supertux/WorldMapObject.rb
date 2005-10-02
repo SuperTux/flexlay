@@ -53,7 +53,7 @@ class WorldmapLevel<WorldmapObject
   def initialize()
     @name = ""
     @extro_filename = ""
-    @sprite = "leveldot"
+    @sprite = ""
     @quit_worldmap = false
     @obj = ObjMapSpriteObject.new(
             make_sprite($datadir + "images/worldmap/common/leveldot_green.png"),

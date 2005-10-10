@@ -38,7 +38,7 @@ require "gui.rb"
 $screen  = CL_Size.new(640, 480)
 
 $flexlay = Flexlay.new()
-$flexlay.init($screen.width, $screen.height, false, true)
+$flexlay.init("netPanzer Editor", $screen.width, $screen.height, false, true)
 
 class Config
   attr_accessor :datadir, :recent_files

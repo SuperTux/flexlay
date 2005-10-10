@@ -53,7 +53,7 @@ require "sexpr.rb"
 flexlay = Flexlay.new()
 width = 1024
 height = 768
-flexlay.init(width, height)
+flexlay.init("SuperTux Editor", width, height)
 
 # Tools
 $tilemap_paint_tool  = TileMapPaintTool.new()

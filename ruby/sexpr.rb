@@ -36,30 +36,30 @@ def sexpr_filter(name, tree)
       ret.push(i[1..-1])
     end
   end
-    
+  
   return ret
 end
 
 def get_value_from_tree(spec, tree, default)
-    if spec == []
-      return tree
-    elsif spec == ['_']
-	  # is it a translatable string?
-	  if(tree[0].instance_of?(Array) and tree[0][0] == :"_")
-		return tree[0][1]
-	  else
-        return tree[0]
-	  end
-    elsif tree == []
-      return default
+  if spec == []
+    return tree
+  elsif spec == ['_']
+    # is it a translatable string?
+    if(tree[0].instance_of?(Array) and tree[0][0] == :"_")
+      return tree[0][1]
     else
-      el = assoc_ref(tree, spec[0].to_sym)
-      if el
-        return get_value_from_tree(spec[1..-1], el, default)
-      else
-        return default
-      end
+      return tree[0]
     end
+  elsif tree == []
+    return default
+  else
+    el = assoc_ref(tree, spec[0].to_sym)
+    if el
+      return get_value_from_tree(spec[1..-1], el, default)
+    else
+      return default
+    end
+  end
 end
 
 def write_sexpr(f, sexpr, indent = 0)

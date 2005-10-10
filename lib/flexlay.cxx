@@ -47,7 +47,7 @@ Flexlay::sig_resize()
 }
 
 void
-Flexlay::init(int width, int height, bool fullscreen_, bool allow_resize_)
+Flexlay::init(const std::string& title, int width, int height, bool fullscreen_, bool allow_resize_)
 {
   screen_width  = width;
   screen_height = height;
@@ -73,7 +73,7 @@ Flexlay::init(int width, int height, bool fullscreen_, bool allow_resize_)
   
     datadir = "../data/";
 
-    window = new CL_DisplayWindow(PACKAGE_STRING,
+    window = new CL_DisplayWindow(title,
                                   screen_width, screen_height, fullscreen, allow_resize);
 
     resources = CL_ResourceManager(datadir + "flexlay.xml");

@@ -1,5 +1,5 @@
 class TileMap
-  attr_reader :tilemaplayer
+  attr_accessor :tilemaplayer
 
   def initialize()
   end

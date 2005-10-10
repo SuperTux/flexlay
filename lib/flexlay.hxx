@@ -97,7 +97,8 @@ public:
 
   CL_Signal_v2<int, int>& sig_resize();
 
-  void init(int width = 800, int height = 600, bool fullscreen = false, bool allow_resize = false);
+  void init(const std::string& title = "Flexlay", int width = 800, int height = 600,
+            bool fullscreen = false, bool allow_resize = false);
   void deinit();
 };
 

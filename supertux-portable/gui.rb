@@ -63,7 +63,7 @@ class GUI
 
     @tileselector = @components.get('tileselector').component
     @tileselector.set_tileset($tileset)
-    @tileselector.set_scale(0.75)
+    @tileselector.set_scale(1)
     @tileselector.set_tiles($tileset.get_tiles)
     @tileselector.show(true)
     
@@ -102,6 +102,28 @@ class GUI
     end
   end
 
+  def set_zoom(zoom)
+    gc = @editor_map.get_gc_state()
+    pos = gc.get_pos()
+    gc.set_zoom(zoom)
+    gc.set_pos(pos)
+  end
+
+
+  def set_tool_icon(tool)
+    if tool == :tilemap_paint  then  @toolbar.items["paint"].set_down()  else @toolbar.items["paint"].set_up()  end
+    if tool == :tilemap_select then  @toolbar.items["select"].set_down() else @toolbar.items["select"].set_up() end
+    if tool == :zoom           then  @toolbar.items["zoom"].set_down()   else @toolbar.items["zoom"].set_up()   end
+    if tool == :object_select  then  @toolbar.items["object"].set_down() else @toolbar.items["object"].set_up() end
+
+    if tool == :tilemap_paint then
+      @objectselector.show(false)
+      @tileselector.show(true)
+    elsif tool == :object_select then
+      @objectselector.show(true)
+      @tileselector.show(false)
+    end
+  end
 end
 
 # EOF #

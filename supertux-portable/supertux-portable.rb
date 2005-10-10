@@ -21,8 +21,10 @@ require "flexlay_wrap"
 include Flexlay_wrap
 
 require "flexlay.rb"
+require "tileset.rb"
 require "gui.rb"
 require "level.rb"
+require "controller.rb"
 
 class SuperTuxPortableEditor
   def initialize(args)
@@ -40,9 +42,12 @@ class SuperTuxPortableEditor
     $flexlay = Flexlay.new()
     $flexlay.init("SuperTux Portable Editor V0.1", $screen_width, $screen_height, $fullscreen, true)
 
-    $tileset = Tileset.new(8)
+    $controller = Controller.new()
 
-    $datadir = "/home/ingo/projects/supertux/trunk/supertux-portable/"
+    $datadir = "/home/ingo/projects/supertux/trunk/supertux-portable/data/"
+    $tileset = Tileset.new(16)
+    $tileset.load($datadir + "antarctica.stpts")
+
     $gui = GUI.new()
 
     Level.new(100, 30).activate($gui.workspace)

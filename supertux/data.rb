@@ -71,6 +71,8 @@ $game_objects = [
     proc{|data, sexpr| SimpleObject.new("point")}],
   ["platform", "images/objects/flying_platform/flying_platform-0.png", :sprite,
     proc{|data, sexpr| Platform.new(data, sexpr)}],
+  ["scriptedobject", "images/engine/editor/scriptedobject.png", :sprite,
+    proc{|data, sexpr| ScriptedObject.new(data, sexpr)}]
 ]
 
 def create_gameobject_from_data(objmap, name, sexpr)

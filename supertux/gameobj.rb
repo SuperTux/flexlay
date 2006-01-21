@@ -504,4 +504,60 @@ class PathNode<GameObj
   end
 end
 
+class ScriptedObject<GameObj
+  def initialize(data, sexpr = [])
+    @data = data
+    @name = get_value_from_tree(["name", "_"], sexpr, "")
+    @sprite = get_value_from_tree(["sprite", "_"], sexpr, "")
+    @visible = get_value_from_tree(["visible", "_"], sexpr, true)
+    @physic_enabled = get_value_from_tree(["physic-enabled", "_"], sexpr, false)
+    @solid = get_value_from_tree(["solid", "_"], sexpr, false)
+    @layer = get_value_from_tree(["layer", "_"], sexpr, 100) 
+  end
+
+  def save(f, obj)
+    pos = obj.get_pos()
+    f.write("      (scriptedobject\n")
+    f.write("        (x %d) (y %d)\n" % [pos.x, pos.y])
+    f.write("        (name \"%s\")\n" % @name)
+    f.write("        (sprite \"%s\")\n" % @sprite)
+    f.write("        (layer %d)\n" % @layer)
+    if(@visible == true)
+      f.write("        (visible #t)\n")
+    else
+      f.write("        (visible #f)\n")
+    end
+    if(@physic_enabled == true)
+      f.write("        (physic-enabled #t)\n")
+    else
+      f.write("        (physic-enabled #f)\n")
+    end
+    if(@solid == true)
+      f.write("        (solid #t)\n")
+    else
+      f.write("        (solid #f)\n")
+    end
+    f.write("      )\n");
+  end
+
+  def property_dialog()
+    dialog = GenericDialog.new("Scripted Object Property Dialog",
+                               $gui.get_component())
+    dialog.add_string("Name: ", @name)
+    dialog.add_string("Sprite: ", @sprite)
+    dialog.add_int("Layer: ", @layer)
+    dialog.add_bool("Visible: ", @visible)
+    dialog.add_bool("Physics: ", @physic_enabled)
+    dialog.add_bool("Solid: ", @solid)
+    dialog.set_callback(proc{|name, sprite, layer, visible, physic_enabled, solid| 
+                          @name = name
+                          @sprite = sprite
+                          @layer = layer
+                          @visible = visible
+                          @physic_enabled = physic_enabled
+                          @solid = solid
+                        })
+  end
+end
+
 # EOF #

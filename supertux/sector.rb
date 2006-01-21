@@ -144,6 +144,7 @@ class Sector
   def load_v2(data)
     @name = "<No Name>"
     @music = ""
+    @init_script = ""
     @gravity = 10.0
     @cameramode = "normal"
     
@@ -165,6 +166,8 @@ class Sector
         @gravity = data[0]
       elsif name == :music
 	@music = data[0]
+      elsif name == :"init-script"
+        @init_script = data[0]
       elsif name == :tilemap
 	layer   = get_value_from_tree(["layer", "_"], data, "interactive")
         width   = get_value_from_tree(["width", "_"],  data, 20)
@@ -245,9 +248,12 @@ class Sector
   end
 
   def save(f)   
-    f.write("    (name  \"%s\")\n"  % @name)
+    f.write("    (name  \"#{@name}\")\n"  % @name)
     if(@music != "")
-        f.write("    (music  \"%s\")\n" % @music)
+      f.write("    (music  \"#{@music}\")\n" % @music)
+    end
+    if(@init_script != "")
+      f.write("    (init-script \"#{@init_script}\")\n")
     end
     f.write("    (gravity %f)\n" % @gravity)
     

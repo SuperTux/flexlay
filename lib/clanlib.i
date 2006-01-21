@@ -39,17 +39,6 @@ public:
 	float y;
 };
         
-class CL_Sprite
-{
-public:
-CL_Sprite(      
-	        	const std::string &resource_id,
-		        CL_ResourceManager *manager);
-	void set_scale(float x, float y);
-
-};
-
-
 class CL_Point
 {
 public:
@@ -118,6 +107,17 @@ public:
 	unsigned int get_blue ();
 	unsigned int get_green();
 	unsigned int get_alpha();
+};
+
+class CL_Sprite
+{
+public:
+CL_Sprite(      
+	const std::string &resource_id, CL_ResourceManager *manager);
+	void set_scale(float x, float y);
+
+        CL_Point get_frame_offset(int frame);
+        void set_frame_offset(int frame, CL_Point offset);
 };
 
 class CL_Window : public CL_Component

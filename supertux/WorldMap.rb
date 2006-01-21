@@ -26,10 +26,7 @@ class WorldMap
       # Load Level from file
       (@filename,) = params
       
-      tree = sexpr_read_from_file(@filename)
-      if tree == nil
-        raise("Couldn't load worldmap: %s" % filename)
-      end
+      tree = load_lisp(@filename, :"supertux-worldmap")
       
       data = tree[1..-1]
       parse(data)

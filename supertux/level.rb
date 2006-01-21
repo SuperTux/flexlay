@@ -26,11 +26,8 @@ class Level
       # Load Level from file
       (@filename,) = params
       
-      tree = sexpr_read_from_file(@filename)
-      if tree == nil
-        raise("Couldn't load level: %s" % filename)
-      end
-      
+      tree = load_lisp(@filename, :"supertux-level")
+
       data = tree[1..-1]
       
       @version = get_value_from_tree(["version", "_"], data, 0)

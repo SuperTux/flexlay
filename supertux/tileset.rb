@@ -21,11 +21,7 @@ class Tileset
 
   def load(filename)
     puts "Loading Tileset: #{filename}"
-    tree = sexpr_read_from_file(filename)
-    if tree == nil then
-      puts "Error; Couldn't load: ", filename
-      return 
-    end
+    tree = load_lisp(filename, :"supertux-tiles")
 
     tree = tree[1..-1]
     counter = 0

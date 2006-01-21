@@ -50,9 +50,10 @@ class SuperTuxGUI
 
     connect_v2_ObjectBrush_Point(@objectselector.sig_drop(), method(:on_object_drop))
 
-    $game_objects.each { |object|
-      @objectselector.add_brush(ObjectBrush.new(make_sprite($datadir + object[1]),
-                                                make_metadata(object)))
+    $game_objects.each { |objectdata|
+      sprite = load_cl_sprite($datadir + objectdata[1])
+      @objectselector.add_brush(ObjectBrush.new(sprite,
+                                                make_metadata(objectdata)))
     }
 
     @worldmapobjectselector = ObjectSelector.new(CL_Rect.new(CL_Point.new(3, 3),

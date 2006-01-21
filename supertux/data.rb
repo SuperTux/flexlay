@@ -43,7 +43,7 @@ $game_objects = [
     proc{|data, sexpr| Door.new("hatch", data, sexpr)}],
   ["trampoline", "images/objects/trampoline/trampoline1-0.png", :sprite,
     proc{|data, sexpr| BadGuy.new("trampoline")}],
-  ["bell", "images/objects/bell/bell-m.png", :sprite,
+  ["bell", "images/objects/bell/bell.sprite", :sprite,
     proc{|data, sexpr| SimpleObject.new("bell")}],
   ["rock", "images/tiles/blocks/block11.png", :sprite,
     proc{|data, sexpr| SimpleObject.new("rock")}],
@@ -93,23 +93,26 @@ def create_gameobject_from_data(objmap, name, sexpr)
 end
 
 def create_gameobject(objmap, data, pos, sexpr = [])
+  (name, spritefile, type, func) = data
+  
   # Creates a gameobject the given position, data is the entry in the $game_objects table
-  case data[2] 
+  case type
+    when :sprite
+      sprite = load_cl_sprite($datadir + spritefile)
+      
+      obj = ObjMapSpriteObject.new(sprite, pos, make_metadata(nil))
+      gobj = func.call(obj, sexpr)
+      obj.to_object.set_metadata(make_metadata(gobj))
     
-  when :sprite
-    obj = ObjMapSpriteObject.new(make_sprite($datadir + data[1]), pos, make_metadata(nil))
-    gobj = data[3].call(obj, sexpr)
-    obj.to_object.set_metadata(make_metadata(gobj))
-    
-  when :rect
-	print "NewRect", pos.x, " -", pos.y, "\n"
-    obj = ObjMapRectObject.new(CL_Rect.new(CL_Point.new(pos.x.to_i, pos.y.to_i), CL_Size.new(64, 64)),
-                               CL_Color.new(0, 0, 255, 128), make_metadata(nil))
-    gobj = data[3].call(obj, sexpr)
-    obj.to_object.set_metadata(make_metadata(gobj))
-
-  else
-    raise "Error: Unknown object type dropped: '#{data.inspect}'"
+    when :rect
+      print "NewRect", pos.x, " -", pos.y, "\n"
+      obj = ObjMapRectObject.new(CL_Rect.new(CL_Point.new(pos.x.to_i, pos.y.to_i), CL_Size.new(64, 64)),
+                                 CL_Color.new(0, 0, 255, 128),
+                                 make_metadata(nil))
+      gobj = data[3].call(obj, sexpr)
+      obj.to_object.set_metadata(make_metadata(gobj))
+    else
+      raise "Error: Unknown object type dropped: '#{data.inspect}'"
   end
   
   cmd = ObjectAddCommand.new(objmap)

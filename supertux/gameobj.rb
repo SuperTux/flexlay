@@ -505,14 +505,15 @@ class PathNode<GameObj
 end
 
 class ScriptedObject<GameObj
-  def initialize(data, sexpr = [])
-    @data = data
+  def initialize(object, sexpr = [])
+    @object = object
     @name = get_value_from_tree(["name", "_"], sexpr, "")
     @sprite = get_value_from_tree(["sprite", "_"], sexpr, "")
     @visible = get_value_from_tree(["visible", "_"], sexpr, true)
     @physic_enabled = get_value_from_tree(["physic-enabled", "_"], sexpr, false)
     @solid = get_value_from_tree(["solid", "_"], sexpr, false)
     @layer = get_value_from_tree(["layer", "_"], sexpr, 100) 
+    load_sprite()
   end
 
   def save(f, obj)
@@ -540,6 +541,17 @@ class ScriptedObject<GameObj
     f.write("      )\n");
   end
 
+  def load_sprite()
+    begin
+      sprite = load_cl_sprite($datadir + @sprite)
+      @object.set_sprite(sprite)
+
+    rescue
+      sprite = load_cl_sprite($datadir + "images/engine/editor/scriptedobject.png")
+    end
+    @object.set_sprite(sprite)
+  end
+
   def property_dialog()
     dialog = GenericDialog.new("Scripted Object Property Dialog",
                                $gui.get_component())
@@ -556,6 +568,7 @@ class ScriptedObject<GameObj
                           @visible = visible
                           @physic_enabled = physic_enabled
                           @solid = solid
+                          load_sprite()
                         })
   end
 end

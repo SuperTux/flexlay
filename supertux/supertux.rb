@@ -105,6 +105,8 @@ require "LispWriter.rb"
 require "tileset.rb"
 require "level.rb"
 require "sector.rb"
+require "sprite.rb"
+require "util.rb"
 
 $tileset = Tileset.new(32)
 $tileset.load($datadir + "images/tiles.strf")

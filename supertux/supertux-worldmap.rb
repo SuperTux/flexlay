@@ -49,11 +49,13 @@ include Flexlay_wrap
 require "flexlay.rb"
 require "gameobj.rb"
 require "sexpr.rb"
+require "sprite.rb"
+require "util.rb"
 
 flexlay = Flexlay.new()
 width = 1024
 height = 768
-flexlay.init(width, height)
+flexlay.init("SuperTux Worldmap Editor", width, height)
 
 # Tools
 $tilemap_paint_tool  = TileMapPaintTool.new()

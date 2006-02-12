@@ -105,7 +105,6 @@ TilemapLayer::draw_tile(int id, int x, int y, bool attribute, CL_GraphicContext*
       sprite.set_alignment (origin_top_left, 0, 0);
 
       sprite.set_color(impl->foreground_color);
-
       sprite.draw(x, y, gc);
       
       if (attribute)

@@ -37,7 +37,6 @@ require "sector.rb"
 require "tileset.rb"
 
 class WindstilleEditor
-  private
   def initialize(args)
     @levelfile = nil
 
@@ -89,7 +88,7 @@ class WindstilleEditor
     $gui.post_initalize()
     
     if not @levelfile then
-      Sector.new(100, 30).activate($workspace)
+      Sector.new(100, 30).activate($gui.workspace)
     else
       $controller.load_level(@levelfile)
     end

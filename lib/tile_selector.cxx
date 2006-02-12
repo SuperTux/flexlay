@@ -199,7 +199,8 @@ TileSelector::draw()
           sprite.draw(static_cast<int>(x * tileset.get_tile_size()*scale), 
                       static_cast<int>(y * tileset.get_tile_size()*scale));
 
-          CL_Display::draw_rect(rect, CL_Color(0,0,0,128));
+          // Use grid in the tileselector
+          //CL_Display::draw_rect(rect, CL_Color(0,0,0,128));
         }
 
       if (brush.get_width() == 1 && brush.get_height() == 1
@@ -234,7 +235,7 @@ void
 TileSelector::set_scale(float s)
 {
   scale = s;
-  width  = static_cast<int>(get_width()/tileset.get_tile_size() * (1.0f/scale));
+  width  = static_cast<int>(get_width()/(tileset.get_tile_size() * scale));
 }
 
 TileSelector::Tiles
@@ -248,7 +249,7 @@ TileSelector::set_tileset(Tileset t)
 {
   tileset = t;
   // Recalc the number of tiles in a row
-  width  = static_cast<int>(get_width()/tileset.get_tile_size() * (1.0f/scale));
+  width  = static_cast<int>(get_width()/(tileset.get_tile_size() * scale));
 }
 
 void

@@ -1,3 +1,5 @@
+require "level.rb"
+
 class Controller
   attr_reader :tilemap_paint_tool, :tilemap_select_tool, :zoom_tool, :objmap_select_tool, :recent_files
 
@@ -29,12 +31,12 @@ class Controller
   end  
 
   def load_level(filename)
-    $startlevel = Sector.new(filename)
-    $startlevel.activate($workspace)
+    level = Level.new_from_file(filename)
+    level.activate($gui.workspace)
   end
 
   def save_level(filename)
-    $startlevel.save(filename)
+    $gui.workspace.get_map().get_metadata().save(filename)
   end
 end
 

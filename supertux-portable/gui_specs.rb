@@ -107,7 +107,7 @@ $guilayout_spec = \
 
         [:panel,
           [:layout, :vbox],
-          [:size, 192],
+          [:size, 256],
           [:components,
             [:tab,
               [:components,

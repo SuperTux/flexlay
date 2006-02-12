@@ -61,7 +61,7 @@ class Tileset
             if (y*width + x < ids.length) then
               $tileset.add_tile(ids[y*width + x],
                                 Tile.new(make_region_pixelbuffer(pixelbuffer,
-                                                                 16*x, 16*y, 16, 16)))
+                                                                 8*x, 8*y, 8, 8)))
             else
               puts "Id out of range: #{y*width + x} >= #{ids.length} for image #{$datadir + image}"
             end

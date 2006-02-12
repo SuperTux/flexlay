@@ -45,12 +45,16 @@ class SuperTuxPortableEditor
     $controller = Controller.new()
 
     $datadir = "/home/ingo/projects/supertux/trunk/supertux-portable/data/"
-    $tileset = Tileset.new(16)
+    $tileset = Tileset.new(8)
     $tileset.load($datadir + "antarctica.stpts")
 
     $gui = GUI.new()
-
-    Level.new(100, 30).activate($gui.workspace)
+    
+    if ARGV.length == 0 then
+      Level.new_from_size(256, 32).activate($gui.workspace)
+    else
+      Level.new_from_file(ARGV[0]).activate($gui.workspace)
+    end
   end
 
   def run()

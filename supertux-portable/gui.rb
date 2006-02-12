@@ -111,9 +111,9 @@ class GUI
 
 
   def set_tool_icon(tool)
-    if tool == :tilemap_paint  then  @toolbar.items["paint"].set_down()  else @toolbar.items["paint"].set_up()  end
+    if tool == :tilemap_paint  then  @toolbar.items["paint" ].set_down() else @toolbar.items["paint" ].set_up() end
     if tool == :tilemap_select then  @toolbar.items["select"].set_down() else @toolbar.items["select"].set_up() end
-    if tool == :zoom           then  @toolbar.items["zoom"].set_down()   else @toolbar.items["zoom"].set_up()   end
+    if tool == :zoom           then  @toolbar.items["zoom"  ].set_down() else @toolbar.items["zoom"  ].set_up() end
     if tool == :object_select  then  @toolbar.items["object"].set_down() else @toolbar.items["object"].set_up() end
 
     if tool == :tilemap_paint then
@@ -123,6 +123,39 @@ class GUI
       @objectselector.show(true)
       @tileselector.show(false)
     end
+  end
+
+  def level_load()
+    @load_dialog.run(proc{|filename| $controller.load_level(filename) })
+  end
+
+  def level_save()
+    @save_dialog.run(proc{|filename| $controller.save_level(filename) })
+  end
+
+  def level_save_as()
+    @save_dialog.run(proc{|filename| $controller.save_level(filename) })
+  end
+
+  def toggle_grid()
+    tilemap = @workspace.get_map().get_data().layers[0];
+    tilemap.set_draw_grid(!tilemap.get_draw_grid())
+
+    if tilemap.get_draw_grid()
+      @button_panel.items["grid"].set_down()
+    else
+      @button_panel.items["grid"].set_up()
+    end
+  end
+
+  def new_level()
+    level = @workspace.get_map().get_metadata()
+    dialog = GenericDialog.new("Create New Sector", @gui.get_component())
+    dialog.add_int("Width: ",  512)
+    dialog.add_int("Height: ", 64)
+    dialog.set_callback(proc{|w, h| 
+                          Level.new_from_size(w, h).activate($gui.workspace)
+                        })
   end
 end
 

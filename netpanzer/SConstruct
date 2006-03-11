@@ -41,7 +41,7 @@ env.Command('netpanzer_wrap.cxx', 'netpanzer.i',
             "swig -c++ -ruby -o $TARGET $SOURCE")
 
 clanLib_env = Environment()
-clanLib_env.ParseConfig("pkg-config --cflags --libs clanCore-0.7 clanDisplay-0.7 clanGL-0.7 clanSignals-0.7 clanGUI-0.7 clanGUIStyleSilver-0.7")
+clanLib_env.ParseConfig("pkg-config --cflags --libs clanCore-0.8 clanDisplay-0.8 clanGL-0.8 clanSignals-0.8 clanGUI-0.8 clanGUIStyleSilver-0.8")
 
 libflexlay_ruby_env = env.Copy()
 flexlay_ruby_lib = libflexlay_ruby_env.SharedLibrary(

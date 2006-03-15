@@ -19,7 +19,7 @@ $game_objects = [
     proc{|data, sexpr| BadGuy.new("bouncingsnowball")}],
   ["spiky", "images/creatures/spiky/left-0.png", :sprite,
     proc{|data, sexpr| BadGuy.new("spiky")}],
-  ["mrtree", "images/creatures/mr_tree/walk-left-0.png", :sprite,
+  ["mrtree", "images/creatures/mr_tree/walk-left-1.png", :sprite,
     proc{|data, sexpr| BadGuy.new("mrtree")}],
   ["poisonivy", "images/creatures/poison_ivy/left-0.png", :sprite,
     proc{|data, sexpr| BadGuy.new("poisonivy")}],

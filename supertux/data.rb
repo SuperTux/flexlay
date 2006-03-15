@@ -1,4 +1,6 @@
 $game_objects = [
+  ["angrystone", "images/creatures/angrystone/angrystone.sprite", :sprite,
+    proc{|data, sexpr| BadGuy.new("angrystone")}],
   ["jumpy", "images/creatures/jumpy/left-middle.png", :sprite,
     proc{|data, sexpr| BadGuy.new("jumpy")}],
   ["snowball", "images/creatures/snowball/left-0.png", :sprite,

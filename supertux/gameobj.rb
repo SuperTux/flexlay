@@ -340,25 +340,19 @@ class ParticleSystem<GameObj
   end
 end
 
-class Background<GameObj
+class Gradient<GameObj
   def initialize(object, sexpr = [])
     @object = object
-    @image = get_value_from_tree(["image", "_"], sexpr, "")
-    @speed = get_value_from_tree(["speed", "_"], sexpr, 1.0)
     @layer = get_value_from_tree(["layer", "_"], sexpr, -1)
     @color_top = [0, 0, 0]
     @color_bottom = [0, 0, 0]
     @type = "image"
-    if(@image == "" || @type == "gradient")
-      if(get_value_from_tree(["top_color"], sexpr, []) != [])
-        @color_top = parse_color(
-            get_value_from_tree(["top_color"], sexpr, []))
-        @color_bottom = parse_color(
-            get_value_from_tree(["bottom_color"], sexpr, []))
-        @type = "gradient"
-      end
+    if(get_value_from_tree(["top_color"], sexpr, []) != [])
+       @color_top = parse_color(
+           get_value_from_tree(["top_color"], sexpr, []))
+       @color_bottom = parse_color(
+           get_value_from_tree(["bottom_color"], sexpr, []))
     end
-    set_icon()
   end
 
   def parse_color(sexpr = [])
@@ -368,22 +362,50 @@ class Background<GameObj
     return [sexpr[0], sexpr[1], sexpr[2]]
   end
 
-  def set_icon()
-    if(@type == "image")
-      @object.set_sprite(make_sprite($datadir + "images/engine/editor/background.png"))
-    else
-      @object.set_sprite(make_sprite($datadir + "images/engine/editor/gradient.png"))
+  def save(f, obj)
+    f.write("       (gradient\n")
+    f.write("         (top_color %f %f %f)\n" % [@color_top[0], @color_top[1], @color_top[2]])
+    f.write("         (bottom_color %f %f %f)\n" % [@color_bottom[0], @color_bottom[1], @color_bottom[2]])
+    if(@layer != -1)
+      f.write("         (layer %d)\n" % [@layer])
     end
+    f.write("       )\n")
+  end
+
+  def property_dialog()
+    dialog = GenericDialog.new("Background Property Dialog", $gui.get_component())
+    dialog.add_int("Layer: ", @layer)
+    dialog.add_int("Top Red: ", @color_top[0])
+    dialog.add_int("Top Green: ", @color_top[1])
+    dialog.add_int("Top Blue: ", @color_top[2])
+    dialog.add_int("Bottom Red: ", @color_bottom[0])
+    dialog.add_int("Bottom Green: ", @color_bottom[1])
+    dialog.add_int("Bottom Blue: ", @color_bottom[2])
+    dialog.set_callback(
+          proc{|layer, topred, topgreen, topblue, botred, botgreen, botblue|
+            @layer = layer
+            @color_top[0] = topred
+            @color_top[1] = topgreen
+            @color_top[2] = topblue
+            @color_bottom[0] = botred
+            @color_bottom[1] = botgreen
+            @color_bottom[2] = botblue
+            })
+  end
+end
+
+class Background<GameObj
+  def initialize(object, sexpr = [])
+    @object = object
+    @image = get_value_from_tree(["image", "_"], sexpr, "")
+    @speed = get_value_from_tree(["speed", "_"], sexpr, 1.0)
+    @layer = get_value_from_tree(["layer", "_"], sexpr, -1)
+    @type = "image"
   end
 
   def save(f, obj)
     f.write("       (background\n")
-    if(@type == "image")
-      f.write("         (image \"%s\")\n" % [@image])
-    else
-      f.write("         (top_color %d %d %d)\n" % @color_top)
-      f.write("         (bottom_color %d %d %d)\n" % @color_bottom)
-    end
+    f.write("         (image \"%s\")\n" % [@image])
     f.write("         (speed %f)\n" % [@speed])
     if(@layer != -1)
       f.write("         (layer %d)\n" % [@layer])
@@ -393,29 +415,15 @@ class Background<GameObj
 
   def property_dialog()
     dialog = GenericDialog.new("Background Property Dialog", $gui.get_component())
-    dialog.add_string("Type: ", @type)
     dialog.add_string("Image: ", @image)
     dialog.add_float("Speed: ", @speed)
     dialog.add_int("Layer: ", @layer)
-    dialog.add_int("Top Red: ", @color_top[0])
-    dialog.add_int("Top Green: ", @color_top[1])
-    dialog.add_int("Top Blue: ", @color_top[2])
-    dialog.add_int("Bottom Red: ", @color_bottom[0])
-    dialog.add_int("Bottom Green: ", @color_bottom[1])
-    dialog.add_int("Bottom Blue: ", @color_bottom[2])
     dialog.set_callback(
-          proc{|type, image, speed, layer, topred, topgreen, topblue, botred, botgreen, botblue|
+          proc{|type, image, speed, layer|
             @type = type
             @image = image
             @speed = speed
             @layer = layer
-            @color_top[0] = topred
-            @color_top[1] = topgreen
-            @color_top[2] = topblue
-            @color_bottom[0] = botred
-            @color_bottom[1] = botgreen
-            @color_bottom[2] = botblue
-            set_icon()
             })
   end
 end

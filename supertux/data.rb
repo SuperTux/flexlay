@@ -61,6 +61,8 @@ $game_objects = [
     proc{|data, sexpr| SequenceTrigger.new(data, sexpr)}],
   ["background", "images/engine/editor/background.png", :sprite,
     proc{|data, sexpr| Background.new(data, sexpr)}],
+  ["gradient", "images/engine/editor/gradient.png", :sprite,
+    proc{|data, sexpr| Gradient.new(data, sexpr)}],
   ["particles-snow", "images/engine/editor/snow.png", :sprite,
     proc{|data, sexpr| ParticleSystem.new("snow", sexpr)}],
   ["particles-clouds", "images/engine/editor/clouds.png", :sprite,

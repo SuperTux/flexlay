@@ -40,7 +40,8 @@ class Sprite
   def get_cl_sprite(action = "default")
     action = @actions[action]
     sprite = make_sprite(@basedir + action.image)
-    sprite.set_frame_offset(0, CL_Point.new(action.x_offset, action.y_offset))
+    # FIXME:
+    # sprite.set_frame_offset(0, CL_Point.new(action.x_offset, action.y_offset))
     return sprite
   end
 end

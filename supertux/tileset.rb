@@ -37,7 +37,7 @@ class Tileset
         # puts "Loading tile: #{id} => #{image}"
 
         if not(image)
-          image = get_value_from_tree(['images', '_'], data, "notile.png")
+          image = get_value_from_tree(['images', '_'], data, "tiles/auxiliary/notile.png")
         end
         
         if image.is_a?(String) then

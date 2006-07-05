@@ -21,6 +21,8 @@
 import os
 import glob
 
+Import('clanLib_env')
+
 opts = Options('custom.py')
 opts.Add('CXX', 'The C++ compiler.', 'g++')
 opts.Add('CXXFLAGS', 'The C++ compiler flags.', '-g -O2 -Wall')
@@ -49,9 +51,6 @@ env.Command('flexlay_ruby_wrap.cxx',   'flexlay_wrap.i', "swig -ruby   -o flexla
 #                     '/home/ingo/run/ClanLib-0.7-current//include/ClanLib-0.7/'],
 #            LIBPATH=['.', '/home/ingo/run/ClanLib-0.7-current//lib/'],
 #            LIBS=['flexlay'])
-
-clanLib_env = Environment()
-clanLib_env.ParseConfig("pkg-config --cflags --libs clanCore-0.7 clanDisplay-0.7 clanGL-0.7 clanSignals-0.7 clanGUI-0.7 clanGUIStyleSilver-0.7")
 
 libflexlay_env = env.Copy()
 flexlay_lib = libflexlay_env.SharedLibrary(

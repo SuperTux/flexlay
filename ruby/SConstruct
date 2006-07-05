@@ -22,6 +22,8 @@ import os
 import re
 import glob
 
+Import('clanLib_env')
+
 opts = Options('custom.py')
 opts.Add('CXX', 'The C++ compiler.', 'g++')
 opts.Add('CXXFLAGS', 'The C++ compiler flags.', '-g -O2 -Wall -fPIC')
@@ -52,14 +54,6 @@ def gen_i_depends(path, filename):
 #Depends('../lib/flexlay_wrap.i', gen_i_depends(Dir("../lib").abspath, File("../lib/flexlay_wrap.i").abspath))
 #env.Command('flexlay_ruby_wrap.cxx', '../lib/flexlay_wrap.i',
 #            "swig -c++ -ruby -o $TARGET $SOURCE")
-
-clanLib_env = Environment(CPPPATH=['../clanlib/'],
-                          LIBPATH=['../clanlib/'],
-                          LIBS=['clanCore', 'clanDisplay', 'clanGL', 'clanSignals', 'clanGUI', 'clanGUIStyleSilver'],
-                          )
-# Use this if you want to use your globally installed ClanLib
-#  clanLib_env = Environment()
-#  clanLib_env.ParseConfig("pkg-config --cflags --libs clanCore-0.8 clanDisplay-0.8 clanGL-0.8 clanSignals-0.8 clanGUI-0.8 clanGUIStyleSilver-0.8")
 
 libflexlay_ruby_env = env.Copy()
 flexlay_ruby_lib = libflexlay_ruby_env.SharedLibrary(

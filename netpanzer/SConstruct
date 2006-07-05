@@ -21,6 +21,8 @@
 import os
 import glob
 
+Import('clanLib_env')
+
 opts = Options('custom.py')
 opts.Add('CXX', 'The C++ compiler.', 'g++')
 opts.Add('CXXFLAGS', 'The C++ compiler flags.', '-g -O2 -Wall -fPIC')
@@ -39,9 +41,6 @@ Help(opts.GenerateHelpText(env))
 Depends('netpanzer.i', ['netpanzer.hxx'])
 env.Command('netpanzer_wrap.cxx', 'netpanzer.i',
             "swig -c++ -ruby -o $TARGET $SOURCE")
-
-clanLib_env = Environment()
-clanLib_env.ParseConfig("pkg-config --cflags --libs clanCore-0.8 clanDisplay-0.8 clanGL-0.8 clanSignals-0.8 clanGUI-0.8 clanGUIStyleSilver-0.8")
 
 libflexlay_ruby_env = env.Copy()
 flexlay_ruby_lib = libflexlay_ruby_env.SharedLibrary(

@@ -27,6 +27,7 @@
 **    (if your name is missing here, please add it)
 */
 
+#include <iostream>
 #include "Core/precomp.h"
 
 #ifdef WIN32
@@ -105,6 +106,7 @@ void CL_InputSource_File::open()
 		filehandle = fopen(filename.c_str(), "rb");
 		if (filehandle == NULL)
 		{
+		   std::cout << "Error: Could not open file: " <<  filename << std::endl;
 			throw CL_Error("Could not open file: " + filename);
 		}
 		fseek(filehandle, 0, SEEK_END);

@@ -1,3 +1,4 @@
+SConscript(['clanlib/SConstruct'])
 SConscript(['lib/SConstruct'])
 SConscript(['ruby/SConstruct'])
 SConscript(['supertux/SConstruct'])

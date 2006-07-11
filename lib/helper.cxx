@@ -17,12 +17,27 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
+#include <map>
+#include <string>
 #include <ClanLib/Display/sprite_description.h>
 #include <ClanLib/Display/pixel_format.h>
 #include <ClanLib/Display/Providers/provider_factory.h>
 #include <ClanLib/core.h>
 #include "blitter.hxx"
 #include "helper.hxx"
+
+typedef std::map<std::string, CL_PixelBuffer> PixelBufferCache;
+PixelBufferCache pixelbuffer_cache;
+
+CL_PixelBuffer get_pixelbuffer(const std::string& filename)
+{
+  PixelBufferCache::iterator it = pixelbuffer_cache.find(filename);
+  
+  if (it == pixelbuffer_cache.end())
+    return (pixelbuffer_cache[filename] = CL_ProviderFactory::load(filename));
+  else
+    return it->second;
+}
 
 CL_Sprite
 pixelbuffer2sprite(const CL_PixelBuffer& buffer)
@@ -37,7 +52,7 @@ make_sprite(const std::string& filename)
 {
   try {
     CL_SpriteDescription desc;
-    desc.add_frame(CL_ProviderFactory::load(filename));
+    desc.add_frame(get_pixelbuffer(filename));
     return CL_Sprite(desc);
   } catch (CL_Error& err) {
     std::cout << "CL_Error: " << err.message << std::endl;
@@ -49,7 +64,7 @@ CL_PixelBuffer
 make_pixelbuffer(const std::string& filename)
 {
   try {
-    return CL_ProviderFactory::load(filename);
+    return get_pixelbuffer(filename);
   } catch (CL_Error& err) {
     std::cout << "CL_Error: " << err.message << std::endl;
     return CL_PixelBuffer();
@@ -60,7 +75,7 @@ CL_PixelBuffer
 make_region_pixelbuffer(const std::string& filename, int x, int y, int w, int h)
 {
   try {
-    CL_PixelBuffer buffer = CL_ProviderFactory::load(filename);
+    CL_PixelBuffer buffer = get_pixelbuffer(filename);
 
     CL_PixelBuffer target(w, h, w * (buffer.get_format().get_depth()/8), buffer.get_format());
     clear(target);

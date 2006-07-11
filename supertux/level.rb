@@ -30,7 +30,7 @@ class Level
 
       data = tree[1..-1]
       
-      @version = get_value_from_tree(["version", "_"], data, 0)
+      @version = get_value_from_tree(["version", "_"], data, 0);
       
       print "VERSION: ", @filename, " ",  @version, "\n"
       

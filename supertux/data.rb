@@ -79,7 +79,7 @@ $game_objects = [
     proc{|data, sexpr| ScriptedObject.new(data, sexpr)}]
 ]
 
-def create_gameobject_from_data(objmap, name, sexpr)
+def create_gameobject_from_data(editormap, objmap, name, sexpr)
   # Creates a gameobject from the given sexpr: "snowball", ((x 5) (y 5))
   
   object = $game_objects.find {|x| x[0].to_sym == name}
@@ -89,14 +89,14 @@ def create_gameobject_from_data(objmap, name, sexpr)
     x = get_value_from_tree(["x", "_"], sexpr, 0)
     y = get_value_from_tree(["y", "_"], sexpr, 0)
     
-    create_gameobject(objmap, object, CL_Pointf.new(x, y), sexpr)
+    create_gameobject(editormap, objmap, object, CL_Pointf.new(x, y), sexpr)
   else
     print "Error: Couldn't resolve object type: ", name, "\n"
 	print "Sector: Unhandled tag: ", name, "\n"
   end
 end
 
-def create_gameobject(objmap, data, pos, sexpr = [])
+def create_gameobject(editormap, objmap, data, pos, sexpr = [])
   (name, spritefile, type, func) = data
   
   # Creates a gameobject the given position, data is the entry in the $game_objects table
@@ -121,7 +121,7 @@ def create_gameobject(objmap, data, pos, sexpr = [])
   
   cmd = ObjectAddCommand.new(objmap)
   cmd.add_object(obj.to_object);
-  $gui.workspace.get_map().execute(cmd.to_command());
+  editormap.execute(cmd.to_command());
   return obj
 end
 

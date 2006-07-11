@@ -254,7 +254,7 @@ class SuperTuxGUI
   def on_object_drop(brush, pos)
     pos = @editor_map.screen2world(pos)
     data = get_ruby_object(brush.get_data())
-    create_gameobject($gui.workspace.get_map().get_metadata().objects, data, pos)
+    create_gameobject($gui.workspace.get_map(), $gui.workspace.get_map().get_metadata().objects, data, pos)
   end
 
   def run()
@@ -735,6 +735,7 @@ def supertux_load_level(filename)
     supertux_load_worldmap(filename)
     return
   end
+
   print "Loading: ", filename, "\n"
   level = Level.new(filename)
   level.activate($gui.workspace)

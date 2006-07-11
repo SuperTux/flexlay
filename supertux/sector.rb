@@ -82,7 +82,10 @@ class Sector
 
     @cameramode = "normal"
 
+    @editormap = EditorMap.new(true)
+
     @objects = ObjectLayer.new()
+
     for i in get_value_from_tree(["objects"], data, [])
       (name, odata) = i[0], i[1..-1]
       # fix some old object names
@@ -92,18 +95,18 @@ class Sector
       if(name == :laptop)
         name = :mriceblock
       end
-      create_gameobject_from_data(@objects, name, odata)
+      create_gameobject_from_data(@editormap, @objects, name, odata)
     end
 
     start_pos_x = get_value_from_tree(["start_pos_x", "_"], data, 0)
     start_pos_y = get_value_from_tree(["start_pos_y", "_"], data, 0)
     sexpr = [["name", "main"], ["x", start_pos_x], ["y", start_pos_y]]
-    create_gameobject_from_data(@objects, "spawnpoint", sexpr)
+    create_gameobject_from_data(@editormap, @objects, "spawnpoint", sexpr)
 
     background = get_value_from_tree(["background", "_"], data, "")
     if(background != "")
       sexpr = [["image", background], ["speed", 0.5]]
-      create_gameobject_from_data(@objects, :background, sexpr)
+      create_gameobject_from_data(@editormap, @objects, :background, sexpr)
     else
       sexpr = [["top_color",
         get_value_from_tree(["bkgd_red_top", "_"], data, 0),
@@ -114,25 +117,24 @@ class Sector
         get_value_from_tree(["bkgd_green_bottom", "_"], data, 0),
         get_value_from_tree(["bkgd_blue_bottom", "_"], data, 0)],
               ["speed", 0.5]]
-      create_gameobject_from_data(@objects, :background, sexpr)
+      create_gameobject_from_data(@editormap, @objects, :background, sexpr)
     end
 
     partsys = get_value_from_tree(["particle_system", "_"], data, "")
     if(partsys == "snow")
       sexpr = []
-      create_gameobject_from_data(@objects, :'particles-snow', sexpr)
+      create_gameobject_from_data(@editormap, @objects, :'particles-snow', sexpr)
     elsif(partsys == "rain")
       sexpr = []
-      create_gameobject_from_data(@objects, :'particles-rain', sexpr)
+      create_gameobject_from_data(@editormap, @objects, :'particles-rain', sexpr)
     elsif(partsys == "clouds")
       sexpr = []
-      create_gameobject_from_data(@objects, :'particles-clouds', sexpr)
+      create_gameobject_from_data(@editormap, @objects, :'particles-clouds', sexpr)
     elsif(partsys == "")
     else
       print "Unknown particle system type '", partsys, "'\n"
     end
 	    
-    @editormap = EditorMap.new(true)
     @editormap.add_layer(@background.to_layer())
     @editormap.add_layer(@interactive.to_layer())
     @editormap.add_layer(@objects.to_layer())
@@ -154,6 +156,8 @@ class Sector
     @background  = nil
     @interactive = nil
     @foreground  = nil
+
+    @editormap = EditorMap.new(true)
     
     @objects = ObjectLayer.new()
 #    @sketch = SketchLayer.new()
@@ -192,7 +196,7 @@ class Sector
 	@cameramode = "normal"
 	# TODO...
       else
-	create_gameobject_from_data(@objects, name, data)
+	create_gameobject_from_data(@editormap, @objects, name, data)
       end
     end
     
@@ -210,7 +214,6 @@ class Sector
       @foreground = TilemapLayer.new($tileset, @width, @height)
     end
 
-    @editormap = EditorMap.new(true)
     @editormap.add_layer(@background.to_layer()) if @background
     @editormap.add_layer(@interactive.to_layer()) if @interactive
     @editormap.add_layer(@foreground.to_layer()) if @foreground

@@ -57,7 +57,6 @@ public:
   bool has_bounding_rect() const;
   CL_Rect get_bounding_rect();
   void draw(EditorMapComponent* parent, CL_GraphicContext* gc);
-  void draw_tile(int id, int x, int y, bool attribute, CL_GraphicContext* gc);
 };
 
 TilemapLayer::TilemapLayer()
@@ -95,50 +94,9 @@ TilemapLayer::~TilemapLayer()
 }
 
 void
-TilemapLayer::draw_tile(int id, int x, int y, bool attribute, CL_GraphicContext* gc)
-{
-  Tile* tile = impl->tileset.create(id);
-
-  if (tile)
-    {
-      CL_Sprite sprite = tile->get_sprite();
-      sprite.set_alignment (origin_top_left, 0, 0);
-
-      sprite.set_color(impl->foreground_color);
-      sprite.draw(x, y, gc);
-      
-      if (attribute)
-        gc->fill_rect(CL_Rect(CL_Point(x, y), CL_Size(impl->tileset.get_tile_size(),
-                                                      impl->tileset.get_tile_size())),
-                      tile->get_attribute_color());
-    }
-}
-
-void
 TilemapLayer::draw(EditorMapComponent* parent, CL_GraphicContext* gc)
 {
   impl->draw(parent, gc);
-}
-
-void
-TilemapLayerImpl::draw_tile(int id, int x, int y, bool attribute, CL_GraphicContext* gc)
-{
-  Tile* tile = tileset.create(id);
-
-  if (tile)
-    {
-      CL_Sprite sprite = tile->get_sprite();
-      sprite.set_alignment (origin_top_left, 0, 0);
-
-      sprite.set_color(foreground_color);
-
-      sprite.draw(x, y, gc);
-      
-      if (attribute)
-        CL_Display::fill_rect(CL_Rect(CL_Point(x, y), CL_Size(tileset.get_tile_size(),
-                                                              tileset.get_tile_size())),
-                              tile->get_attribute_color());
-    }
 }
 
 void
@@ -160,14 +118,50 @@ TilemapLayerImpl::draw(EditorMapComponent* parent, CL_GraphicContext* gc)
   int end_x   = std::min(this->field.get_width(),  rect.right  / tile_size + 1);
   int end_y   = std::min(this->field.get_height(), rect.bottom / tile_size + 1);
 
-  for (int y = start_y; y < end_y; ++y)
-    for (int x = start_x; x < end_x; ++x)
-      {
-        draw_tile(this->field.at(x, y), 
-                  x * tile_size, y * tile_size,
-                  this->draw_attribute,
-                  gc);
-      }
+  if (foreground_color != CL_Color(255, 255, 255, 255))
+    {
+      for (int y = start_y; y < end_y; ++y)
+        for (int x = start_x; x < end_x; ++x)
+          {
+            int tile_id = this->field.at(x, y);
+            if (tile_id)
+              {
+                Tile* tile = tileset.create(tile_id);
+                if (tile) // skip transparent tile for faster draw
+                  {           
+                    CL_Sprite sprite = tile->get_sprite();
+                    sprite.set_color(foreground_color);
+                    sprite.draw(x * tile_size, y * tile_size, gc);
+      
+                    if (draw_attribute)
+                      CL_Display::fill_rect(CL_Rect(CL_Point(x, y), CL_Size(tileset.get_tile_size(),
+                                                                            tileset.get_tile_size())),
+                                            tile->get_attribute_color());
+                  }
+              }
+          }
+    }
+  else
+    {
+      for (int y = start_y; y < end_y; ++y)
+        for (int x = start_x; x < end_x; ++x)
+          {
+            int tile_id = this->field.at(x, y);
+            if (tile_id) // skip transparent tile for faster draw
+              {
+                Tile* tile = tileset.create(this->field.at(x, y));
+                if (tile)
+                  {           
+                    tile->get_sprite().draw(x * tile_size, y * tile_size, gc);
+      
+                    if (draw_attribute)
+                      CL_Display::fill_rect(CL_Rect(CL_Point(x, y), CL_Size(tileset.get_tile_size(),
+                                                                            tileset.get_tile_size())),
+                                            tile->get_attribute_color());
+                  }
+              }
+          }
+    }
 
   if (this->draw_grid)
     {

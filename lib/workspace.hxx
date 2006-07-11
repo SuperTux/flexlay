@@ -46,6 +46,9 @@ public:
   void mouse_down(const CL_InputEvent& event);
   void mouse_move(const CL_InputEvent& event);
 
+  void key_up(const CL_InputEvent& event);
+  void key_down(const CL_InputEvent& event);
+
   EditorMap get_map();
   void set_map(const EditorMap& m);
 

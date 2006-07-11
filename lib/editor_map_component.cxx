@@ -52,6 +52,7 @@ public:
   void mouse_up  (const CL_InputEvent& event);
   void mouse_down(const CL_InputEvent& event);
   void mouse_move(const CL_InputEvent& event);
+  void on_key_up(const CL_InputEvent& event);
   void on_key_down(const CL_InputEvent& event);
   void on_resize(int old_w, int old_h);
 };
@@ -83,6 +84,7 @@ EditorMapComponent::EditorMapComponent(const CL_Rect& rect, CL_Component* parent
   impl->slots.connect(sig_mouse_down(), impl.get(), &EditorMapComponentImpl::mouse_down);
   impl->slots.connect(sig_mouse_move(), impl.get(), &EditorMapComponentImpl::mouse_move);
   impl->slots.connect(sig_key_down(),   impl.get(), &EditorMapComponentImpl::on_key_down);
+  impl->slots.connect(sig_key_up(),     impl.get(), &EditorMapComponentImpl::on_key_up);
   impl->slots.connect(sig_resize(),     impl.get(), &EditorMapComponentImpl::on_resize);
 }
 
@@ -112,6 +114,22 @@ EditorMapComponentImpl::on_key_down(const CL_InputEvent& event)
       key_bindings[event.id](CL_Mouse::get_x() - rect.left,
                              CL_Mouse::get_y() - rect.top);
     }
+
+  CL_Rect rect = parent->get_position();
+  CL_InputEvent ev2 = event;
+  ev2.mouse_pos = CL_Point(CL_Mouse::get_x() - rect.left,
+                           CL_Mouse::get_y() - rect.top);
+  workspace.key_down(ev2);
+}
+
+void
+EditorMapComponentImpl::on_key_up(const CL_InputEvent& event)
+{
+  CL_Rect rect = parent->get_position();
+  CL_InputEvent ev2 = event;
+  ev2.mouse_pos = CL_Point(CL_Mouse::get_x() - rect.left,
+                          CL_Mouse::get_y() - rect.top);
+  workspace.key_up(ev2);
 }
 
 void

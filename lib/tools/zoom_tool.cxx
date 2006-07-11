@@ -69,9 +69,8 @@ ZoomToolImpl::on_mouse_up  (const CL_InputEvent& event)
 {
   EditorMapComponent* parent = EditorMapComponent::current();
 
-  switch(event.id)
+  if (event.id != CL_MOUSE_RIGHT)
     {
-    case CL_MOUSE_LEFT:
       switch (state)
         {
         case CREATE_ZOOM_RECT:
@@ -88,11 +87,7 @@ ZoomToolImpl::on_mouse_up  (const CL_InputEvent& event)
                 parent->zoom_to(zoom_rect);
               }
           }
-          break;
-        default:
-          break;
         }
-      break;
     }
 }
 
@@ -103,7 +98,19 @@ ZoomToolImpl::on_mouse_down(const CL_InputEvent& event)
 
   switch(event.id)
     {
-    case CL_MOUSE_LEFT:
+    case CL_MOUSE_RIGHT:
+      switch (state)
+        {
+        case NONE:
+          parent->zoom_out(event.mouse_pos);
+          parent->zoom_out(event.mouse_pos);
+          break;
+        default:
+          break;
+        }
+      break;
+
+    default:
       switch (state)
         {
         case NONE:
@@ -117,18 +124,6 @@ ZoomToolImpl::on_mouse_down(const CL_InputEvent& event)
             zoom_rect.right  = pos.x;
             zoom_rect.bottom = pos.y;
           }
-          break;
-        default:
-          break;
-        }
-      break;
-
-    case CL_MOUSE_RIGHT:
-      switch (state)
-        {
-        case NONE:
-          parent->zoom_out(event.mouse_pos);
-          parent->zoom_out(event.mouse_pos);
           break;
         default:
           break;

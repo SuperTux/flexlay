@@ -12,6 +12,13 @@ public:
 	void set_size(int new_width, int new_height);
 	void set_position(int new_x, int new_y);
 	const CL_Rect& get_position();
+
+	int get_width() const;
+	int get_height() const;
+
+	int get_screen_x() const;
+	int get_screen_y() const;
+
 };
 
 class CL_Size

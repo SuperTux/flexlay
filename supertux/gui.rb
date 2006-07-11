@@ -79,14 +79,6 @@ class SuperTuxGUI
     }
 
     create_button_panel(buttonpanel_rect)
-
-    # FIXME: Having position in the Menus here is EXTREMLY ugly
-    @tilegroup_menu = Menu.new(CL_Point.new(35*15+2, 54), @gui.get_component())
-    @tilegroup_menu.add_item($mysprite, "All Tiles", proc{@tileselector.set_tiles($tileset.get_tiles())})
-    $tileset.tilegroups.each { |tilegroup|
-      @tilegroup_menu.add_item($mysprite, tilegroup.name, proc{@tileselector.set_tiles(tilegroup.tiles)})
-    }
-
     @recent_files_menu = Menu.new(CL_Point.new(32*2, 54), @gui.get_component())
 
     @layer_menu = Menu.new(CL_Point.new(32*15+2, 54), @gui.get_component())
@@ -165,7 +157,6 @@ class SuperTuxGUI
     
     connect_v2(@editor_map.sig_on_key("e"),  proc{ |x, y| gui_show_object_properties()})
 
-
     connect_v2(@editor_map.sig_on_key("a"),  proc { |x, y|
                  pos = @editor_map.screen2world(CL_Point.new(x, y))
                  rectobj = ObjMapRectObject.new(CL_Rect.new(pos,
@@ -242,7 +233,15 @@ class SuperTuxGUI
     button_panel.add_separator()
     @run_icon = button_panel.add_icon("../data/images/icons24/run.png", proc{ gui_run_level() })
 
-    button_panel.add_icon("../data/images/icons24/eye.png", proc{ @tilegroup_menu.run() })
+    @tilegroup_icon = button_panel.add_icon("../data/images/icons24/eye.png", proc{ @tilegroup_menu.run() })
+
+    @tilegroup_menu = Menu.new(CL_Point.new(@tilegroup_icon.get_screen_x(), 
+                                            @tilegroup_icon.get_screen_y() + @tilegroup_icon.get_height() - 2),
+                               @gui.get_component())
+    @tilegroup_menu.add_item($mysprite, "All Tiles", proc{@tileselector.set_tiles($tileset.get_tiles())})
+    $tileset.tilegroups.each { |tilegroup|
+      @tilegroup_menu.add_item($mysprite, tilegroup.name, proc{@tileselector.set_tiles(tilegroup.tiles)})
+    }
   end
 
   def on_worldmap_object_drop(brush, pos)

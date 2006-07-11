@@ -192,7 +192,9 @@ TileMapPaintToolImpl::on_mouse_move(const CL_InputEvent& event)
       switch (mode)
         {
         case PAINTING:
-          if (current_tile != last_draw)
+          if (CL_Keyboard::get_keycode(CL_KEY_LSHIFT) ||
+              (current_tile.x % brush.get_width()) == (last_draw.x % brush.get_width()) &&
+              (current_tile.y % brush.get_height() == (last_draw.y % brush.get_height())))
             {
               command->add_point(current_tile);
               last_draw = current_tile;
@@ -219,7 +221,7 @@ TileMapPaintToolImpl::on_mouse_up  (const CL_InputEvent& event)
       EditorMapComponent::current()->get_workspace().get_map().modify();
 
       EditorMapComponent* parent = EditorMapComponent::current();
-      CL_Point pos = tilemap.world2tile(parent->screen2world(event.mouse_pos));
+      current_tile = tilemap.world2tile(parent->screen2world(event.mouse_pos));
 
       switch (event.id)
         {
@@ -229,11 +231,17 @@ TileMapPaintToolImpl::on_mouse_up  (const CL_InputEvent& event)
               parent->release_mouse();
               mode = NONE;
 
-              command->add_point(pos);
+              if (CL_Keyboard::get_keycode(CL_KEY_LSHIFT) ||
+                  (current_tile.x % brush.get_width()) == (last_draw.x % brush.get_width()) &&
+                  (current_tile.y % brush.get_height() == (last_draw.y % brush.get_height())))
+                {
+                  command->add_point(current_tile);
+                }
+
               Workspace::current().get_map().execute(command->to_command());
               command = 0;
 
-              tilemap.draw_tile(brush, pos);
+              tilemap.draw_tile(brush, current_tile);
               last_draw = CL_Point(-1, -1);
             }
           break;
@@ -244,7 +252,7 @@ TileMapPaintToolImpl::on_mouse_up  (const CL_InputEvent& event)
               parent->release_mouse();
               mode = NONE;
 
-              selection.update(pos);
+              selection.update(current_tile);
               brush = selection.get_brush(*tilemap.get_field());
 
               if ((brush.get_width() > 1 || brush.get_height() > 1)

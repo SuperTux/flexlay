@@ -128,8 +128,6 @@ EditorMapComponentImpl::on_key_down(const CL_InputEvent& event)
 void
 EditorMapComponentImpl::on_key_up(const CL_InputEvent& event)
 {
-  std::cout << "Key up: " << event.repeat_count << std::endl;
-
   CL_Rect rect = parent->get_position();
   CL_InputEvent ev2 = event;
   ev2.mouse_pos = CL_Point(CL_Mouse::get_x() - rect.left,
@@ -152,7 +150,6 @@ EditorMapComponentImpl::mouse_move(const CL_InputEvent& event)
 void
 EditorMapComponentImpl::mouse_down(const CL_InputEvent& event)
 {
-  std::cout << "Event: " << event.id << std::endl;
   workspace.mouse_down(event);
 }
   

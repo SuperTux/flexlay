@@ -115,10 +115,11 @@ Workspace::key_up(const CL_InputEvent& event)
 void
 Workspace::key_down(const CL_InputEvent& event)
 {
-  std::cout << "Workspace: " << event.id << std::endl;
   WorkspaceImpl::Tools::iterator it = impl->tools.find(event.id);
   if (it != impl->tools.end())
     it->second.on_mouse_down(event);
+  else
+    std::cout << "Workspace: " << event.id << std::endl;
 }
 
 EditorMap

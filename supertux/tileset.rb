@@ -28,15 +28,34 @@ class Tileset
     
     tree.each do |i|
       case i[0]
+      when :tiles
+        data   = i[1..-1]
+        width  = get_value_from_tree(['width', '_'], data, 1)
+        height = get_value_from_tree(['height', '_'], data, 1)
+        ids    = get_value_from_tree(['ids'], data, [])
+        # attributes = get_value_from_tree(['attributes'], data, [])
+        image  = get_value_from_tree(['image', '_'], data, 1)
+
+        x = 0
+        y = 0
+        ids.each{|id|
+          pixelbuffer = make_region_pixelbuffer($datadir + 'images/' + image,
+                                                x * 32, y * 32, 32, 32)
+          add_tile(id, Tile.new(pixelbuffer))
+          x += 1
+          if (x == width) then
+            x = 0
+            y += 1
+          end
+        }
+        
       when :tile
         data   = i[1..-1]
         id     = get_value_from_tree(['id', '_'], data, -1)
         image  = get_value_from_tree(['editor-images', '_'], data, false)
         hidden = get_value_from_tree(['hidden', '_'], data, false)
 
-        # puts "Loading tile: #{id} => #{image}"
-
-        if not(image)
+        if not(image) then
           image = get_value_from_tree(['images', '_'], data, "tiles/auxiliary/notile.png")
         end
         
@@ -66,6 +85,7 @@ class Tileset
           @tilegroups = []
         end
         @tilegroups.push(TileGroup.new(name, tiles))
+    
       end
 
       counter += 1

@@ -590,7 +590,8 @@ class SuperTuxGUI
     if selection.length() > 1 then
       print "Warning: Selection to large"
     elsif selection.length() == 1 then
-      obj = get_ruby_object(selection[0].get_data())
+      obj = selection[0].get_data()
+      puts obj
       obj.property_dialog()
     else
       print "Warning: Selection is empty\n"

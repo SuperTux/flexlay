@@ -150,62 +150,54 @@ void CL_InputDevice_X11Mouse::on_xevent(XEvent &event)
 
 void CL_InputDevice_X11Mouse::received_mouse_input(XEvent &e)
 {
-	XButtonEvent event = (XButtonEvent&)e;
+  XButtonEvent event = (XButtonEvent&)e;
 	
-	int id = 0;
-	bool down = false;
-	int repeat_count = 0;
+  int  id = 0;
+  bool down = false;
+  int  repeat_count = 0;
 	
-	mouse_pos.x = event.x;
-	mouse_pos.y = event.y;
+  mouse_pos.x = event.x;
+  mouse_pos.y = event.y;
 
-	Time time_change = event.time - time_at_last_press;
-	
-	switch(event.button)
-	{
-		case 1: id = 0; break; // left
-		case 3: id = 1; break; // right
-		case 2: id = 2; break; // middle
-		default: id = event.button-1;
-	}
-	
-	if (event.type == ButtonPress)
-	{
-		time_at_last_press = event.time;
-		last_press_id = id;
-	}
-	
-	CL_InputEvent::Type event_type = CL_InputEvent::released;
-	
-	if (event.type == ButtonPress)
-	{
-		event_type = CL_InputEvent::pressed;
-		down = true;
-		if(time_change < 500)
-			repeat_count = 2;
-	}
-	
-	if( id >= 0 && id < 5 )
-		key_states[id] = down;
+  switch(event.button)
+    {
+    case 1: id = 0; break; // left
+    case 3: id = 1; break; // right
+    case 2: id = 2; break; // middle
+    default: id = event.button-1;
+    }
 
-	// Prepare event to be emitted:
-	CL_InputEvent key;
-	key.id        = id;
-	key.type      = event_type;
-	key.device    = owner->mouse;
-	key.mouse_pos = mouse_pos;
-	key.repeat_count = repeat_count;
-	// Emit message:
-	if(repeat_count > 1)
-	{
-		owner->mouse.sig_key_dblclk().call(key);
-	}
-	else if (down)
-	{
-		owner->mouse.sig_key_down().call(key);
-	}
-	else
-		owner->mouse.sig_key_up().call(key);
+  CL_InputEvent::Type event_type;
+  
+  if (event.type == ButtonPress)
+    {
+      down = true;
+    } 
+  else if (event.type == ButtonRelease)
+    {
+      down = false;
+    }
+	
+  if( id >= 0 && id < 5 )
+    key_states[id] = down;
+
+  // Prepare event to be emitted:
+  CL_InputEvent key;
+  key.id           = id;
+  key.type         = down ? CL_InputEvent::pressed : CL_InputEvent::released;
+  key.device       = owner->mouse;
+  key.mouse_pos    = mouse_pos;
+  key.repeat_count = repeat_count;
+
+  // Emit message:
+  if (down)
+    {
+      owner->mouse.sig_key_down().call(key);
+    }
+  else
+    {
+      owner->mouse.sig_key_up().call(key);
+    }
 }
 
 void CL_InputDevice_X11Mouse::received_mouse_move(XEvent &e)

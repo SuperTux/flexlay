@@ -152,6 +152,7 @@ EditorMapComponentImpl::mouse_move(const CL_InputEvent& event)
 void
 EditorMapComponentImpl::mouse_down(const CL_InputEvent& event)
 {
+  std::cout << "Event: " << event.id << std::endl;
   workspace.mouse_down(event);
 }
   

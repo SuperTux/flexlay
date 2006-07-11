@@ -82,6 +82,7 @@ std::cout << "CL_Error: " << err.message << std::endl;
 #include "objmap_rect_object.hxx"
 #include "objmap_object.hxx"
 #include "tools/zoom_tool.hxx"
+#include "tools/zoom2_tool.hxx"
 #include "objmap_path_node.hxx"
 
 // #include "netpanzer.hxx" 
@@ -195,6 +196,7 @@ VALUE CL_Point2Value(const CL_Point& arg)
 %include "objmap_rect_object.hxx"
 %include "objmap_object.hxx"
 %include "tools/zoom_tool.hxx" 
+%include "tools/zoom2_tool.hxx" 
 %include "graphic_context_state.hxx"
 %include "objmap_path_node.hxx"
 # %include "scripting/editor.hxx"

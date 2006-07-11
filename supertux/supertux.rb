@@ -59,6 +59,8 @@ flexlay.init("SuperTux Editor", width, height)
 $tilemap_paint_tool  = TileMapPaintTool.new()
 $tilemap_select_tool = TileMapSelectTool.new()
 $zoom_tool           = ZoomTool.new()
+$zoom2_tool          = Zoom2Tool.new()
+$workspace_move_tool = WorkspaceMoveTool.new()
 $objmap_select_tool  = ObjMapSelectTool.new()
 # $sketch_stroke_tool  = SketchStrokeTool.new()
 

@@ -123,7 +123,8 @@ flexlay_lib = libflexlay_env.StaticLibrary(
     'tools/objmap_select_tool.cxx',
     'tools/layer_move_tool.cxx',
     'tools/workspace_move_tool.cxx',
-    'tools/zoom_tool.cxx'
+    'tools/zoom_tool.cxx',
+    'tools/zoom2_tool.cxx'
     ],
     CPPPATH = ['.', '..'] + clanLib_env['CPPPATH'],
     CXXFLAGS  = env['CXXFLAGS'] + clanLib_env['CCFLAGS'],

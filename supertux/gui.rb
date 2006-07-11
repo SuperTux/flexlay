@@ -34,12 +34,15 @@ class SuperTuxGUI
     @workspace = @editor_map.get_workspace()
 
     @workspace.set_tool(0, $tilemap_paint_tool.to_tool())
-    @workspace.set_tool(2, WorkspaceMoveTool.new().to_tool())
+    @workspace.set_tool(2, $workspace_move_tool.to_tool())
     @workspace.set_tool(1, $tilemap_paint_tool.to_tool())
     # 'x' key
     @workspace.set_tool(120, $zoom_tool.to_tool())
     # 'u' key
     @workspace.set_tool(117, $objmap_select_tool.to_tool())
+
+    @workspace.set_tool(106, $workspace_move_tool.to_tool())
+    @workspace.set_tool(107, $zoom2_tool.to_tool())
 
     @minimap = Minimap.new(@editor_map, minimap_rect, @gui.get_component())
 

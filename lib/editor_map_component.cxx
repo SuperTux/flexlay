@@ -115,20 +115,25 @@ EditorMapComponentImpl::on_key_down(const CL_InputEvent& event)
                              CL_Mouse::get_y() - rect.top);
     }
 
-  CL_Rect rect = parent->get_position();
-  CL_InputEvent ev2 = event;
-  ev2.mouse_pos = CL_Point(CL_Mouse::get_x() - rect.left,
-                           CL_Mouse::get_y() - rect.top);
-  workspace.key_down(ev2);
+  if (event.repeat_count == 0)
+    {
+      CL_Rect rect = parent->get_position();
+      CL_InputEvent ev2 = event;
+      ev2.mouse_pos = CL_Point(CL_Mouse::get_x() - rect.left,
+                               CL_Mouse::get_y() - rect.top);
+      workspace.key_down(ev2);
+    }
 }
 
 void
 EditorMapComponentImpl::on_key_up(const CL_InputEvent& event)
 {
+  std::cout << "Key up: " << event.repeat_count << std::endl;
+
   CL_Rect rect = parent->get_position();
   CL_InputEvent ev2 = event;
   ev2.mouse_pos = CL_Point(CL_Mouse::get_x() - rect.left,
-                          CL_Mouse::get_y() - rect.top);
+                           CL_Mouse::get_y() - rect.top);
   workspace.key_up(ev2);
 }
 
@@ -197,7 +202,7 @@ void
 EditorMapComponent::zoom_in(CL_Point pos)
 {
   impl->gc_state.set_zoom(CL_Pointf(pos.x, pos.y), 
-                                          impl->gc_state.get_zoom()*1.25f);
+                          impl->gc_state.get_zoom()*1.25f);
 }
 
 void

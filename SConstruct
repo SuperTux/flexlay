@@ -20,8 +20,8 @@ clanLib_env = Environment(CPPPATH=['../clanlib/'],
 Export('clanLib_env')
 
 SConscript(['clanlib/SConstruct'])
-SConscript(['lib/SConstruct'])
-SConscript(['ruby/SConstruct'])
+SConscript(['lib/SConscript'])
+SConscript(['ruby/SConscript'])
 SConscript(['supertux/SConstruct'])
 SConscript(['netpanzer/SConstruct'])
 

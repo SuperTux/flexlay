@@ -51,7 +51,7 @@ class Sector
     @objects	 = ObjectLayer.new()
     # @sketch  = SketchLayer.new()
 
-    @editormap = EditorMap.new()
+    @editormap = EditorMap.new(true)
 #    @editormap.set_background_color(CL_Color.new(255, 255, 255))
     @editormap.add_layer(@background.to_layer())
     @editormap.add_layer(@interactive.to_layer())
@@ -132,7 +132,7 @@ class Sector
       print "Unknown particle system type '", partsys, "'\n"
     end
 	    
-    @editormap = EditorMap.new()
+    @editormap = EditorMap.new(true)
     @editormap.add_layer(@background.to_layer())
     @editormap.add_layer(@interactive.to_layer())
     @editormap.add_layer(@objects.to_layer())
@@ -210,7 +210,7 @@ class Sector
       @foreground = TilemapLayer.new($tileset, @width, @height)
     end
 
-    @editormap = EditorMap.new()
+    @editormap = EditorMap.new(true)
     @editormap.add_layer(@background.to_layer()) if @background
     @editormap.add_layer(@interactive.to_layer()) if @interactive
     @editormap.add_layer(@foreground.to_layer()) if @foreground

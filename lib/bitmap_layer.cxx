@@ -31,7 +31,6 @@
 #include <ClanLib/Display/display_window.h>
 #include "flexlay.hxx"
 #include "editor_map_component.hxx"
-#include "workspace.hxx"
 #include "layer_impl.hxx"
 #include "bitmap_layer.hxx"
 #include "objmap_object_impl.hxx"

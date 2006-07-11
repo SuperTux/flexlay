@@ -39,7 +39,7 @@ class EditorMapImpl;
 class EditorMap
 {
 public:
-  EditorMap();
+  EditorMap(bool create = false);
 
   /** FIXME: EditorMapComponent parameter shouldn't really be here */
   void draw(EditorMapComponent* parent, CL_GraphicContext* gc);

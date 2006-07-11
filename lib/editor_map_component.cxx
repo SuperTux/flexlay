@@ -44,6 +44,10 @@ public:
   Workspace workspace;
   CL_Signal_v2<int, int> key_bindings[256];
 
+  EditorMapComponentImpl()
+    :workspace(true) 
+  {}
+
   void draw();
   void mouse_up  (const CL_InputEvent& event);
   void mouse_down(const CL_InputEvent& event);
@@ -58,7 +62,6 @@ EditorMapComponent::EditorMapComponent(const CL_Rect& rect, CL_Component* parent
 {
   impl->parent = this;
   impl->gc_state  = GraphicContextState(rect.get_width(), rect.get_height());
-  impl->workspace = Workspace();
 
   current_ = this;
 

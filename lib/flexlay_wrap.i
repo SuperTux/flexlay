@@ -58,8 +58,9 @@ std::cout << "CL_Error: " << err.message << std::endl;
 #include "scrollbar.hxx"
 #include "graphic_context_state.hxx"
  
-#include "layer_move_tool.hxx"
-#include "sketch_stroke_tool.hxx"
+#include "tools/workspace_move_tool.hxx"
+#include "tools/layer_move_tool.hxx"
+#include "tools/sketch_stroke_tool.hxx"
 #include "sketch_layer.hxx"
 #include "bitmap_layer.hxx"
 #include "stroke.hxx"
@@ -74,13 +75,13 @@ std::cout << "CL_Error: " << err.message << std::endl;
 
 #include "colorpicker.hxx"
 #include "slider.hxx"
-#include "tilemap_paint_tool.hxx"
-#include "tilemap_select_tool.hxx"
-#include "objmap_select_tool.hxx"
+#include "tools/tilemap_paint_tool.hxx"
+#include "tools/tilemap_select_tool.hxx"
+#include "tools/objmap_select_tool.hxx"
 #include "objmap_sprite_object.hxx"
 #include "objmap_rect_object.hxx"
 #include "objmap_object.hxx"
-#include "zoom_tool.hxx"
+#include "tools/zoom_tool.hxx"
 #include "objmap_path_node.hxx"
 
 // #include "netpanzer.hxx" 
@@ -170,8 +171,9 @@ VALUE CL_Point2Value(const CL_Point& arg)
 %include "menubar.hxx"
 %include "scrollbar.hxx"
 
-%include "layer_move_tool.hxx"
-%include "sketch_stroke_tool.hxx"
+%include "tools/workspace_move_tool.hxx"
+%include "tools/layer_move_tool.hxx"
+%include "tools/sketch_stroke_tool.hxx"
 %include "sketch_layer.hxx"
 %include "bitmap_layer.hxx"
 %include "stroke.hxx"
@@ -186,13 +188,13 @@ VALUE CL_Point2Value(const CL_Point& arg)
 
 %include "colorpicker.hxx"
 %include "slider.hxx"
-%include "tilemap_paint_tool.hxx"
-%include "tilemap_select_tool.hxx"
-%include "objmap_select_tool.hxx"
+%include "tools/tilemap_paint_tool.hxx"
+%include "tools/tilemap_select_tool.hxx"
+%include "tools/objmap_select_tool.hxx"
 %include "objmap_sprite_object.hxx"
 %include "objmap_rect_object.hxx"
 %include "objmap_object.hxx"
-%include "zoom_tool.hxx" 
+%include "tools/zoom_tool.hxx" 
 %include "graphic_context_state.hxx"
 %include "objmap_path_node.hxx"
 # %include "scripting/editor.hxx"
@@ -205,6 +207,6 @@ VALUE CL_Point2Value(const CL_Point& arg)
 %include "../ruby/ruby_sexpr_parser.hxx"
 #endif
 
-// 3
+// 5
 
 /* EOF */

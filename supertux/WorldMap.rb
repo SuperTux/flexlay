@@ -83,7 +83,8 @@ class WorldMap
   end
   
   def activate(workspace)
-    @editormap = EditorMap.new()
+    # FIXME: All wrong and obsolote
+    @editormap = EditorMap.new(true)
     @editormap.add_layer(@tilemap.tilemaplayer.to_layer())
     @editormap.add_layer(@objects.to_layer())
     @editormap.set_metadata(self)

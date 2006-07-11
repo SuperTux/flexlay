@@ -17,6 +17,7 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
+#include <iostream>
 #include <ClanLib/Signals/signal_v0.h>
 #include "ruby_object.hxx"
 #include "meta_data_impl.hxx"

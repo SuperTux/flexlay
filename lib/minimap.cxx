@@ -41,6 +41,9 @@ public:
   EditorMapComponent* parent;
   CL_Surface minimap_surface;
 
+  MinimapImpl() 
+    : editor_map(false)
+  {}
   void update_minimap_surface();
 };
 

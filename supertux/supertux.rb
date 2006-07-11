@@ -150,7 +150,7 @@ $gui.run()
 $config.save($config_file)
 
 # FIXME: Can't deinit flexlay, since we would crash then
-# flexlay.deinit()
+at_exit{flexlay.deinit()}
 # puts "And now we crash"
 
 # EOF #

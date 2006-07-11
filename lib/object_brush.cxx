@@ -22,7 +22,6 @@
 #include "objmap_sprite_object.hxx"
 #include "object_brush.hxx"
 #include "editor_map.hxx"
-#include "workspace.hxx"
 
 class ObjectBrushImpl
 {

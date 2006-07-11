@@ -31,9 +31,12 @@ class SuperTuxGUI
                         minimap_rect.get_height() - 3))
 
     @editor_map = EditorMapComponent.new(map_rect, @gui.get_component())
-    @workspace  = Workspace.new()
-    @editor_map.set_workspace(@workspace)
-    @workspace.set_tool($tilemap_paint_tool.to_tool());
+    @workspace = @editor_map.get_workspace()
+
+    @workspace.set_tool(0, $tilemap_paint_tool.to_tool())
+    @workspace.set_tool(2, WorkspaceMoveTool.new().to_tool())
+    @workspace.set_tool(1, $tilemap_paint_tool.to_tool())
+
     @minimap = Minimap.new(@editor_map, minimap_rect, @gui.get_component())
 
     @selector_window = Panel.new(selector_rect, @gui.get_component())
@@ -169,6 +172,7 @@ class SuperTuxGUI
 
   def create_menu()
     @menu = CL_Menu.new(@gui.get_component())
+    @menu.add_item("File/New...", method(:gui_level_new))
     @menu.add_item("File/Open...", method(:gui_level_load))
     @menu.add_item("File/Save...", method(:gui_level_save))
     # @menu.add_item("File/Save Commands...", menu_file_save_commands)
@@ -192,7 +196,7 @@ class SuperTuxGUI
             rect.get_width(), rect.get_height(), true, @gui.get_component)
     
     # File Handling
-    button_panel.add_icon("../data/images/icons24/stock_new.png")
+    button_panel.add_icon("../data/images/icons24/stock_new.png",  proc{ self.gui_level_new() })
     button_panel.add_icon("../data/images/icons24/stock_open.png", proc{ self.gui_level_load() })
     button_panel.add_small_icon("../data/images/icons24/downarrow.png", proc{ @recent_files_menu.run() })
     button_panel.add_icon("../data/images/icons24/stock_save.png", proc{ self.gui_level_save() })
@@ -205,8 +209,10 @@ class SuperTuxGUI
 
     # Undo Redo
     button_panel.add_separator()
-    @undo_icon = button_panel.add_icon("../data/images/icons24/stock_undo.png", proc{ @workspace.get_map().undo() })
-    @redo_icon = button_panel.add_icon("../data/images/icons24/stock_redo.png", proc{ @workspace.get_map().redo() })
+    @undo_icon = button_panel.add_icon("../data/images/icons24/stock_undo.png", 
+                                       proc{ @workspace.get_map().undo() })
+    @redo_icon = button_panel.add_icon("../data/images/icons24/stock_redo.png", 
+                                       proc{ @workspace.get_map().redo() })
 
     @undo_icon.disable()
     @redo_icon.disable()
@@ -283,7 +289,8 @@ class SuperTuxGUI
   end
 
   def set_tilemap_paint_tool()
-    @workspace.set_tool($tilemap_paint_tool.to_tool())
+    @workspace.set_tool(0, $tilemap_paint_tool.to_tool())
+    @workspace.set_tool(1, $tilemap_paint_tool.to_tool())
     @paint.set_down()
     @select.set_up()
     @zoom.set_up()
@@ -292,7 +299,7 @@ class SuperTuxGUI
   end
 
   def set_tilemap_select_tool()
-    @workspace.set_tool($tilemap_select_tool.to_tool())
+    @workspace.set_tool(0, $tilemap_select_tool.to_tool())
     @paint.set_up()
     @select.set_down()
     @zoom.set_up()
@@ -301,7 +308,7 @@ class SuperTuxGUI
   end
 
   def set_zoom_tool()
-    @workspace.set_tool($zoom_tool.to_tool())
+    @workspace.set_tool(0, $zoom_tool.to_tool())
     @paint.set_up()
     @select.set_up()
     @zoom.set_down()
@@ -310,7 +317,7 @@ class SuperTuxGUI
   end
 
 #   def set_sketch_stroke_tool()
-#     @workspace.set_tool($sketch_stroke_tool.to_tool())
+#     @workspace.set_tool(0, $sketch_stroke_tool.to_tool())
 #     @paint.set_up()
 #     @select.set_up()
 #     @zoom.set_up()
@@ -319,7 +326,7 @@ class SuperTuxGUI
 #   end
 
   def set_objmap_select_tool()
-    @workspace.set_tool($objmap_select_tool.to_tool())
+    @workspace.set_tool(0, $objmap_select_tool.to_tool())
     @paint.set_up()
     @select.set_up()
     @zoom.set_up()
@@ -546,7 +553,7 @@ class SuperTuxGUI
   def gui_switch_sector_menu()
     mymenu = Menu.new(CL_Point.new(530, 54), @gui.get_component())
     sector = @workspace.get_map().get_metadata()
-    sector.parent.get_sectors().each do |i|
+    sector.parent.get_sectors().each { |i|
       if sector.name == i then
         current = " [current]"
       else
@@ -556,7 +563,8 @@ class SuperTuxGUI
                         print "Switching to %s\n" % i
                         @workspace.get_map().get_metadata().parent.activate_sector(i, @workspace) 
                       })
-    end
+    }
+
     mymenu.add_separator()
     mymenu.add_item($mysprite, "Create New Sector", proc {
         gui_add_sector()
@@ -627,6 +635,10 @@ class SuperTuxGUI
     
     @save_dialog.run(proc{|filename| supertux_save_level(filename) })
   end   
+
+  def gui_level_new()
+    puts "not implemented: gui_level_new()"
+  end
 
   def gui_level_load()
     @load_dialog.run(proc{|filename| supertux_load_level(filename) })

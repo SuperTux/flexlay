@@ -30,7 +30,6 @@
 #include <ClanLib/Display/display_window.h>
 #include "flexlay.hxx"
 #include "editor_map_component.hxx"
-#include "workspace.hxx"
 #include "layer_impl.hxx"
 #include "sketch_layer.hxx"
 #include "math.hxx"

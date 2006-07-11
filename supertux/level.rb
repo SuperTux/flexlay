@@ -182,6 +182,10 @@ class Level
     end
   end
 
+  def activate(workspace)
+    @current_sector.activate(workspace)
+  end
+
   def add_sector(sector)
     @sectors.push(sector)
   end
@@ -196,10 +200,6 @@ class Level
 
   def get_sectors()
     return @sectors.map {|sec| sec.name}
-  end
-
-  def activate(workspace)
-    @current_sector.activate(workspace)
   end
 end
 

@@ -33,11 +33,12 @@ class Workspace
 {
 private:
   static Workspace current_;
+
 public:
   static void set_current(Workspace w) { current_ = w; }
   static Workspace current() { return current_; }
 
-  Workspace();
+  Workspace(bool create = false);
 
   void draw();
 
@@ -48,7 +49,7 @@ public:
   EditorMap get_map();
   void set_map(const EditorMap& m);
 
-  void set_tool(const Tool& tool);
+  void set_tool(int button, const Tool& tool);
 
   bool is_null() const { return !impl.get(); }
 private:

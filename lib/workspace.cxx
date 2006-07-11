@@ -18,34 +18,37 @@
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include <iostream>
+#include <map>
 #include <ClanLib/Display/display.h>
 #include <ClanLib/Display/display_window.h>
 #include <ClanLib/Display/keys.h>
 #include "editor_map.hxx"
 #include "editor_map_component.hxx"
 #include "editor_names.hxx"
-#include "tool.hxx"
-#include "workspace_move_tool.hxx"
+#include "tools/tool.hxx"
 #include "tileset.hxx"
 #include "workspace.hxx"
 
-Workspace Workspace::current_;
+Workspace Workspace::current_(false);
 
 class WorkspaceImpl
 {
 public:
   EditorMap editor_map;
 
-  Tool tool;
-  Tool move_tool;
+  typedef std::map<int, Tool> Tools;
+  Tools tools;
 };
 
-Workspace::Workspace()
-  : impl(new WorkspaceImpl())
+Workspace::Workspace(bool create)
+  : impl(0)
 {
-  current_ = *this;
-  
-  impl->move_tool = WorkspaceMoveTool().to_tool();
+  if (create)
+    {
+      impl = new WorkspaceImpl();
+      current_ = *this;
+      std::cout << "Workspace()" << std::endl;
+    }
 }
 
 void
@@ -56,8 +59,10 @@ Workspace::draw()
   impl->editor_map.draw_gui(CL_Display::get_current_window()->get_gc());
   impl->editor_map.draw(EditorMapComponent::current(), CL_Display::get_current_window()->get_gc());
   
-  if (1) // has_mouse_over()) FIXME: Seperate cursor and state here
-    impl->tool.draw();
+  // FIXME: Only draw active tool?!
+  for(WorkspaceImpl::Tools::iterator it = impl->tools.begin();
+      it != impl->tools.end(); ++it)
+    it->second.draw();
     
   CL_Display::flush();
 }
@@ -65,44 +70,34 @@ Workspace::draw()
 void
 Workspace::mouse_up(const CL_InputEvent& event)
 {
-  switch (event.id)
-    {
-    case CL_MOUSE_LEFT:
-    case CL_MOUSE_RIGHT:
-      impl->tool.on_mouse_up(event);
-      break;
-
-    case CL_MOUSE_MIDDLE:
-      impl->move_tool.on_mouse_up(event);
-      break;
-    }
+  WorkspaceImpl::Tools::iterator it = impl->tools.find(event.id);
+  if (it != impl->tools.end())
+    it->second.on_mouse_up(event);
 }
 
 void
 Workspace::mouse_move(const CL_InputEvent& event)
 {
-  impl->tool.on_mouse_move(event);
-  impl->move_tool.on_mouse_move(event);
+  for(WorkspaceImpl::Tools::iterator it = impl->tools.begin();
+      it != impl->tools.end(); ++it)
+    {
+      it->second.on_mouse_move(event);
+    }
 }
 
 void
 Workspace::mouse_down(const CL_InputEvent& event)
 {
+  WorkspaceImpl::Tools::iterator it = impl->tools.find(event.id);
+  if (it != impl->tools.end())
+    it->second.on_mouse_down(event);
+
   switch (event.id)
     {
-    case CL_MOUSE_LEFT:
-    case CL_MOUSE_RIGHT:
-      impl->tool.on_mouse_down(event);
-      break;
-
-    case CL_MOUSE_MIDDLE:
-      impl->move_tool.on_mouse_down(event);
-      break;
-      
     case CL_MOUSE_WHEEL_UP:
       EditorMapComponent::current()->zoom_in(event.mouse_pos);
       break;
-
+      
     case CL_MOUSE_WHEEL_DOWN:
       EditorMapComponent::current()->zoom_out(event.mouse_pos);
       break;
@@ -122,9 +117,9 @@ Workspace::set_map(const EditorMap& m)
 }
 
 void
-Workspace::set_tool(const Tool& tool)
+Workspace::set_tool(int button, const Tool& tool)
 {
-  impl->tool = tool;
+  impl->tools[button] = tool;
 }
 
 /* EOF */

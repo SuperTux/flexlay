@@ -57,15 +57,19 @@ public:
   CL_Rect bounding_rect;
 };
 
-EditorMap::EditorMap()
-  : impl(new EditorMapImpl())
+EditorMap::EditorMap(bool create)
+  : impl(0)
 {
-  impl->background_color = CL_Color(100, 80, 100);
-  impl->foreground_color = CL_Color(255, 80, 255);
-  impl->modified = false;
-  impl->serial = 0;
-  impl->has_bounding_rect = false;
-  impl->bounding_rect = CL_Rect(0,0,0,0);
+  if (create)
+    {
+      impl = new EditorMapImpl();
+      impl->background_color = CL_Color(100, 80, 100);
+      impl->foreground_color = CL_Color(255, 80, 255);
+      impl->modified = false;
+      impl->serial = 0;
+      impl->has_bounding_rect = false;
+      impl->bounding_rect = CL_Rect(0,0,0,0);
+    }
 }
 
 void

@@ -24,7 +24,7 @@
 #include "tileset.hxx"
 #include "tile.hxx"
 #include "tile_selector.hxx"
-#include "tilemap_paint_tool.hxx"
+#include "tools/tilemap_paint_tool.hxx"
 
 TileSelector::TileSelector(const CL_Rect& rect, CL_Component* parent)
   : CL_Component(rect, parent),

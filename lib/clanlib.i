@@ -152,6 +152,7 @@ public:
 		CL_StyleManager *style = NULL);
 
 	CL_Signal_v0 &sig_clicked();
+	const std::string &get_text() const;
 };
 
 class CL_Menu : public CL_Component

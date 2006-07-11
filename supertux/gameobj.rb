@@ -2,6 +2,10 @@ class GameObj
   def property_dialog()
     print "Object ", self.class, " has no properties\n"
   end
+
+  def set_obj(obj)
+    @obj = obj
+  end
 end
 
 class SecretArea<GameObj
@@ -130,20 +134,34 @@ end
 
 class BadGuy<GameObj
   def initialize(type)
-    @type = type
+    @type      = type
+    @direction = "auto"
   end
 
   def save(f, obj)
     pos = obj.get_pos()
-    f.write("       (%s (x %d) (y %d))\n" % [@type, pos.x, pos.y])
+    f.write("       (%s (x %d) (y %d) (direction \"%s\")\n" % [@type, pos.x, pos.y, direction])
   end  
+
+  def property_dialog()
+    dialog = GenericDialog.new("BadGuy Property Dialog", $gui.get_component())
+
+    dialog.add_enum("Direction: ", ["left", "right", "auto"], @direction)
+    
+    dialog.set_callback(proc{|direction| 
+                          if (@direction != "auto" and direction != "auto" and @direction != direction)
+                            @obj.flip_horizontal()
+                          end
+                          @direction = direction
+                        })
+  end
 end
 
 class Dispenser<GameObj
   def initialize(data, sexpr = [])
     @data = data
     @badguy = get_value_from_tree(["badguy", "_"], sexpr, "snowball")
-    @cycle = get_value_from_tree(["cycle", "_"], sexpr, 2)
+    @cycle  = get_value_from_tree(["cycle", "_"], sexpr, 2)
   end
 
   def save(f, obj)

@@ -268,6 +268,13 @@ class GenericDialog
           vals.push(comp.get_text())
         elsif type == "bool"
           vals.push(comp.is_checked())
+        elsif type == "enum"
+          comp.get_buttons().each{|button|
+            if (button.is_checked()) then
+              vals.push(button.get_text())
+              break;
+            end
+          }
         end
       }
       @callback.call(*vals)
@@ -315,13 +322,15 @@ class GenericDialog
   def add_enum(name, types, value = "foo")
     group = CL_RadioGroup.new()
     types.each {|type| 
-      group.add(CL_RadioButton.new(CL_Point.new(0, 0),
-                         type, @window.get_client_area()))
+      radio = CL_RadioButton.new(CL_Point.new(0, 0),
+                                 type, @window.get_client_area())
+      radio.set_checked(type == value)
+      group.add(radio)
     }
     @items.push(["enum",
                   CL_Label.new(CL_Point.new(10, 10), name,
                                @window.get_client_area()),
-                  group])
+                 group])
     update()
   end
 

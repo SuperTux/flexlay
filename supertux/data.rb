@@ -107,6 +107,7 @@ def create_gameobject(editormap, objmap, data, pos, sexpr = [])
       obj = ObjMapSpriteObject.new(sprite, pos, make_metadata(nil))
       gobj = func.call(obj, sexpr)
       obj.to_object.set_metadata(make_metadata(gobj))
+      gobj.set_obj(obj)
     
     when :rect
       print "NewRect", pos.x, " -", pos.y, "\n"

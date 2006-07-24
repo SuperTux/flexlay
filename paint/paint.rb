@@ -35,6 +35,7 @@ $screen_rect = CL_Rect.new(CL_Point.new(0, 0), CL_Size.new(1024, 768))
 flexlay.init("Flexlay Paint", $screen_rect.get_width(), $screen_rect.get_height(), false)
 
 $sketch_stroke_tool  = SketchStrokeTool.new()
+$workspace_move_tool = WorkspaceMoveTool.new()
 $layer_move_tool     = LayerMoveTool.new()
 $zoom_tool           = ZoomTool.new()
 $objmap_select_tool  = ObjMapSelectTool.new()

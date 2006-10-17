@@ -43,6 +43,7 @@ class SuperTuxGUI
 
     @workspace.set_tool(106, $workspace_move_tool.to_tool())
     @workspace.set_tool(107, $zoom2_tool.to_tool())
+    @workspace.set_tool(65507, $zoom2_tool.to_tool())
 
     @minimap = Minimap.new(@editor_map, minimap_rect, @gui.get_component())
 

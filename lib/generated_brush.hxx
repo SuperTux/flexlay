@@ -45,8 +45,8 @@ public:
   void  set_radius(float radius);
   float get_radius();
 
-  void set_spikes(int spikes);
-  int  get_spikes();
+  void  set_spikes(int spikes);
+  int   get_spikes();
 
   void  set_hardness(float hardness);
   float get_hardness();

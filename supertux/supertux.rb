@@ -51,9 +51,11 @@ require "gameobj.rb"
 require "sexpr.rb"
 
 flexlay = Flexlay.new()
-width = 1024
+width  = 1024
 height = 768
-flexlay.init("SuperTux Editor", width, height)
+fullscreen = false
+resizeable = true
+flexlay.init("SuperTux Editor", width, height, fullscreen, resizeable)
 
 # Tools
 $tilemap_paint_tool  = TileMapPaintTool.new()

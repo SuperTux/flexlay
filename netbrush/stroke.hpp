@@ -1,0 +1,104 @@
+/*  $Id$
+**   __      __ __             ___        __   __ __   __
+**  /  \    /  \__| ____    __| _/_______/  |_|__|  | |  |   ____
+**  \   \/\/   /  |/    \  / __ |/  ___/\   __\  |  | |  | _/ __ \
+**   \        /|  |   |  \/ /_/ |\___ \  |  | |  |  |_|  |_\  ___/
+**    \__/\  / |__|___|  /\____ /____  > |__| |__|____/____/\___  >
+**         \/          \/      \/    \/                         \/
+**  Copyright (C) 2005 Ingo Ruhnke <grumbel@gmx.de>
+**
+**  This program is free software; you can redistribute it and/or
+**  modify it under the terms of the GNU General Public License
+**  as published by the Free Software Foundation; either version 2
+**  of the License, or (at your option) any later version.
+**
+**  This program is distributed in the hope that it will be useful,
+**  but WITHOUT ANY WARRANTY; without even the implied warranty of
+**  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+**  GNU General Public License for more details.
+** 
+**  You should have received a copy of the GNU General Public License
+**  along with this program; if not, write to the Free Software
+**  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+**  02111-1307, USA.
+*/
+
+#ifndef HEADER_STROKE_HPP
+#define HEADER_STROKE_HPP
+
+#include "SDL.h"
+#include <vector>
+#include "math/vector.hpp"
+#include "math/rect.hpp"
+
+/** A dab is basically an event send from the mouse to the drawing
+    canvas, it consists of time, position, tilt, pressure and possible
+    additional information that is needed */
+class Dab
+{
+public:
+  /** Time at which the dot was placed */
+  unsigned int time;
+
+  /** Position at which the dot is placed */
+  Vector pos;
+
+  /** The pressure with which the dot was drawn (can be interpreted as
+      size, opacity or similar things by the StrokeDrawer */
+  float pressure;
+
+  /** Tilting of the pen while painting the dot */
+  Vector tilt;
+
+  Dab()
+    : time(SDL_GetTicks()), pos(0, 0), pressure(1.0f), tilt(0, 0)
+  {}
+
+  Dab(float x, float y) 
+    : time(SDL_GetTicks()), pos(x, y), pressure(1.0f), tilt(0.0f, 0.0f)
+  {}
+
+  Dab(float x_, float y_, float pressure_)
+    : time(SDL_GetTicks()), pos(x_, y_), pressure(pressure_), tilt(0.0f, 0.0f)
+  {}
+};
+
+/** */
+class Stroke
+{
+public:
+  typedef std::vector<Dab> Dabs;
+
+private:
+  Stroke::Dabs dabs;
+  Rect bounding_rect;
+
+public:
+  Stroke();
+  ~Stroke();
+
+  /** Return true if the Stroke doesn't contain any dabs */
+  bool empty() const { return dabs.empty(); }
+
+  void  add_dab(const Dab& dab);
+  
+  /** Returns the real dabs as recieved by the InputDevice */
+  const Dabs&  get_dabs()  const;
+
+  /** Returns interpolated dabs, meaning the holes in get_dabs() are
+      closed with interpolated dabs so that all dabs are equally
+      spread (ie. every dab is 'spacing' away from the next) */
+  Dabs  get_interpolated_dabs(float x_spacing, float y_spacing) const;
+
+  int get_dab_count() const;
+
+  const Rect& get_bounding_rect() const;
+
+private:
+  Stroke (const Stroke&);
+  Stroke& operator= (const Stroke&);
+};
+
+#endif
+
+/* EOF */

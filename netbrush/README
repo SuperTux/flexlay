@@ -1,0 +1,40 @@
+           _   ___              _     ||
+  _ _  ___| |_| _ )_ _ _  _ _ _| |_   ||
+ | ' \/ -_)  _| _ \ '_| || (_-<|   |  ||
+ |_||_\___|\__|___/_|  \_,_/__/|_|_|  ||
+======================================'
+
+netBrush is a network based drawing programming, meaning it allows
+multiple people to draw on the same canvas at the same time. The
+current feature set of netBrush is limited to a fixed size canvas and
+a simple brush tool, changing brush size, hardness, color, opacity,
+etc. is possible. 
+
+netBrush is based on SDL and doesn't use any external widget
+libraries, so it should be very portable. In addition to the base SDL
+library netBrush also uses SDL_net and SDL_image.
+
+Latest version of netBrush can be found at, no real webside exist yet:
+
+ * http://pingus.seul.org/~grumbel/tmp/
+
+Question coments can go to the author, who is reachable at
+grumbel@gmx.de.
+
+
+Usage:
+~~~~~~
+
+netBrush is client/server based, so to take full use of it, you have
+to start the server first, a simple:
+
+./server 4711
+
+will do, 4711 being the port number.
+
+To start the client you have to give it a hostname and a port, like
+this:
+
+./client localhost 4711
+
+# EOF #

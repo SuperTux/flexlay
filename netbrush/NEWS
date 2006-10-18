@@ -1,0 +1,8 @@
+netbrush 0.0.6
+==============
+
+- Gimp-style generic brushes
+- scrolling (buggy)
+- load/save on the server side
+
+# EOF #

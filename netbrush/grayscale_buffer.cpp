@@ -29,6 +29,7 @@
 #include <iostream>
 #include <algorithm>
 #include "math/rect.hpp"
+#include "video.hpp"
 #include "grayscale_buffer.hpp"
 
 GrayscaleBuffer::GrayscaleBuffer(SDL_Surface* surface)
@@ -78,13 +79,17 @@ GrayscaleBuffer::clear(Uint8 c)
 }
   
 void
-GrayscaleBuffer::fill_rect(const Rect& rect, Uint8 c)
+GrayscaleBuffer::fill_rect(const Rect& rect_, Uint8 c)
 {
-  // FIXME: No clipping done
-  for(int y = rect.top; y < rect.bottom; ++y)
-    {
-      memset(buffer + y * width + rect.left, c, rect.get_width());
-    }
+  Rect rect = rect_;
+  clip_to(rect, Rect(0, 0, width, height));
+
+  // FIXME: Ugly way to clip
+  if (rect.left < rect.right && rect.top < rect.bottom)
+    for(int y = rect.top; y < rect.bottom; ++y)
+      {
+        memset(buffer + y * width + rect.left, c, rect.get_width());
+      }
 }
 
 void

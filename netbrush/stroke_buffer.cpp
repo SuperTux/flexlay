@@ -102,7 +102,7 @@ StrokeBuffer::draw_stroke(const Stroke& stroke, DrawingParameter* param)
     }
   else if (param->tool == DrawingParameter::TOOL_PAINTBRUSH)
     {
-      Stroke::Dabs dabs = stroke.get_interpolated_dabs(param->spacing, param->spacing);
+      Stroke::Dabs dabs = stroke.get_interpolated_dabs(param->get_spacing(), param->get_spacing());
       for(Stroke::Dabs::iterator i = dabs.begin(); i != dabs.end(); ++i)
         {
           buffer->blit(brush,

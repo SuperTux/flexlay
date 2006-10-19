@@ -6,7 +6,7 @@
 
 server_env = Environment()
 server_env.ParseConfig('sdl-config --cflags --libs')
-server_env['CXXFLAGS'] += ['-O2', '-Wall', '-g']
+server_env['CXXFLAGS'] += ['-O0', '-Wall', '-g']
 server_env['LIBS'] += ['SDL_net']
 server_env.Program('server', [
         'server.cpp'
@@ -15,7 +15,7 @@ server_env.Program('server', [
 
 client_env = Environment()
 client_env.ParseConfig('sdl-config --cflags --libs')
-client_env['CXXFLAGS'] += ['-O2', '-Wall', '-g']
+client_env['CXXFLAGS'] += ['-O0', '-Wall', '-g']
 client_env['CPPPATH'] += ['.']
 client_env['LIBS'] += ['SDL_image', 'SDL_net']
 client_env.Program('client', [

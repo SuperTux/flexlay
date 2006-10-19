@@ -50,6 +50,7 @@ public:
 public:
   DrawingParameter();
 
+  float get_spacing();
   void set_brush(const std::string& filename);
   std::string get_brush() const;
   SDL_Surface* get_brush_surface() const;

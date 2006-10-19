@@ -314,7 +314,7 @@ ScreenBuffer::move_to(int x, int y)
 {
   scroll_offset_x = get_rect().get_width()/2  - x;
   scroll_offset_y = get_rect().get_height()/2 - y;
-  std::cout << "MoveTo: " << x << " " << y << std::endl;
+  //std::cout << "MoveTo: " << x << " " << y << std::endl;
 
   Rect r(0, 0, get_rect().get_width(), get_rect().get_height());
   r.left   -= scroll_offset_x;

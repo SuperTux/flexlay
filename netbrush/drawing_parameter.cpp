@@ -27,7 +27,7 @@
 #include "drawing_parameter.hpp"
 
 DrawingParameter::DrawingParameter()
-  : tool(TOOL_AIRBRUSH),
+  : tool(TOOL_PAINTBRUSH),
     brush_surface(0), 
     brush_buffer(0), 
     color(0, 0, 0), 
@@ -80,6 +80,12 @@ int
 DrawingParameter::thickness() const
 {
   return brush_buffer->get_width();
+}
+
+float
+DrawingParameter::get_spacing()
+{
+  return brush_buffer->get_width() * spacing / 12.0f;
 }
 
 /* EOF */

@@ -23,26 +23,64 @@
 **  02111-1307, USA.
 */
 
+#include <iostream>
+#include "video.hpp"
 #include "globals.hpp"
+#include "drawing_context.hpp"
+#include "navigation.hpp"
 
-DrawingContext*   draw_ctx          = 0;
-DrawingParameter* client_draw_param = 0;
-ScreenBuffer*     screen_buffer     = 0;
-StrokeBuffer*     stroke_buffer     = 0;
-WidgetManager*    widget_manager    = 0;
+Navigation::Navigation(const Rect& rect_)
+  : Widget(rect_)
+{
+  surface = create_surface(rect_.get_width(), rect_.get_height());  
+}
 
-std::map<int, ClientState*> client_states;
+void
+Navigation::on_mouse_motion(const MouseMotionEvent& motion)
+{
+  set_dirty(true);
+}
 
-SaturationValuePicker* saturation_value_picker =0;
-HuePicker*   hue_picker =0;
-AlphaPicker*      alpha_picker = 0;
-BrushWidget*      brush_widget = 0;
-Stroke*           current_stroke = 0;
-ServerConnection* server = 0;
+void
+Navigation::on_mouse_button(const MouseButtonEvent& button)
+{
+  
+}
 
-Scrollbar* horizontal_scrollbar = 0;
-Scrollbar* vertical_scrollbar   = 0;
+void
+Navigation::draw(SDL_Surface* target)
+{
+  SDL_Rect pos;
+  pos.x = get_rect().left;
+  pos.y = get_rect().top;
 
-Navigation* navigation = 0;
+  SDL_BlitSurface(surface, 0, target, &pos);  
+}
+
+void
+Navigation::update()
+{
+  std::cout << "Navigation::update" << std::endl;
+  SDL_Surface* drawable = draw_ctx->get_surface();
+  SDL_LockSurface(drawable);
+  SDL_LockSurface(surface);
+
+  Uint8* target = static_cast<Uint8*>(surface->pixels);
+  Uint8* source = static_cast<Uint8*>(drawable->pixels);
+
+  int sx = drawable->w / surface->w;
+  int sy = drawable->h / surface->h;
+  
+  for(int y = 0; y < surface->h; ++y)
+    for(int x = 0; x < surface->pitch; ++x)
+      {
+        target[y * surface->pitch + x] = source[(y*sy) * drawable->pitch + (x*sx)];
+      }
+
+  SDL_UnlockSurface(surface);
+  SDL_UnlockSurface(drawable);
+
+  set_dirty(true);
+}
 
 /* EOF */

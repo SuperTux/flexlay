@@ -45,6 +45,7 @@ class AlphaPicker;
 class BrushWidget;
 class ServerConnection;
 class Scrollbar;
+class Navigation;
 
 extern SDLNet_SocketSet socketset;
 
@@ -63,6 +64,8 @@ extern HuePicker*   hue_picker;
 extern AlphaPicker* alpha_picker;
 extern ServerConnection* server;
 extern Stroke* current_stroke;
+
+extern Navigation* navigation;
 
 #endif
 

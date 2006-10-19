@@ -52,6 +52,8 @@ public:
 
   int get_width()  const { return drawable->w; }
   int get_height() const { return drawable->h; }
+
+  SDL_Surface* get_surface() { return drawable; }
 };
 
 #endif

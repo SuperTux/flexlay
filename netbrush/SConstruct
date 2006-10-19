@@ -47,6 +47,7 @@ client_env.Program('client', [
         'widget/slider_widget.cpp',
         'widget/widget.cpp',
         'widget/widget_manager.cpp',
+        'navigation.cpp'
 #        'widget/events.cpp',
 ])
 

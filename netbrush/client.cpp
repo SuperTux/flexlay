@@ -22,6 +22,7 @@
 #include "hue_picker.hpp"
 #include "alpha_picker.hpp"
 #include "brush_widget.hpp"
+#include "navigation.hpp"
 #include "server_connection.hpp"
 #include "widget/slider_widget.hpp"
 
@@ -119,6 +120,10 @@ void process_events()
           else if (event.key.keysym.sym == SDLK_DOWN)
             {
               client_draw_param->opacity = std::min(255, client_draw_param->opacity + 16);
+            }
+          else if (event.key.keysym.sym == SDLK_u)
+            {
+              navigation->update();
             }
           break;
 
@@ -274,6 +279,7 @@ int main(int argc, char** argv)
     }
   
   widget_manager = new WidgetManager();
+  widget_manager->add(navigation = new Navigation(Rect(screen->w - 128, screen->h - 128, screen->w, screen->h)));
   widget_manager->add(new Button(IMG_Load("data/icons/stock-tool-airbrush-22.png"), 
                                  Rect(Point(2, 2+0*34), Size(34, 34)),
                                  new ToolButtonCallback(DrawingParameter::TOOL_AIRBRUSH)));

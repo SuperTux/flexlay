@@ -23,26 +23,33 @@
 **  02111-1307, USA.
 */
 
-#include "globals.hpp"
+#ifndef HEADER_NAVIGATION_HPP
+#define HEADER_NAVIGATION_HPP
 
-DrawingContext*   draw_ctx          = 0;
-DrawingParameter* client_draw_param = 0;
-ScreenBuffer*     screen_buffer     = 0;
-StrokeBuffer*     stroke_buffer     = 0;
-WidgetManager*    widget_manager    = 0;
+#include "widget/widget.hpp"
 
-std::map<int, ClientState*> client_states;
+/** */
+class Navigation : public Widget
+{
+private:
+  SDL_Surface* surface;
 
-SaturationValuePicker* saturation_value_picker =0;
-HuePicker*   hue_picker =0;
-AlphaPicker*      alpha_picker = 0;
-BrushWidget*      brush_widget = 0;
-Stroke*           current_stroke = 0;
-ServerConnection* server = 0;
+public:
+  Navigation(const Rect& rect);
+  
+  void on_mouse_motion(const MouseMotionEvent& motion);
+  void on_mouse_button(const MouseButtonEvent& button);
 
-Scrollbar* horizontal_scrollbar = 0;
-Scrollbar* vertical_scrollbar   = 0;
+  void on_enter() {};
+  void on_leave() {}
 
-Navigation* navigation = 0;
+  void draw(SDL_Surface* target);
+  void update();
+private:
+  Navigation (const Navigation&);
+  Navigation& operator= (const Navigation&);
+};
+
+#endif
 
 /* EOF */

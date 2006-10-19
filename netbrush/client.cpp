@@ -279,7 +279,8 @@ int main(int argc, char** argv)
     }
   
   widget_manager = new WidgetManager();
-  widget_manager->add(navigation = new Navigation(Rect(screen->w - 128, screen->h - 128, screen->w, screen->h)));
+  widget_manager->add(navigation = new Navigation(Rect(Point(screen->w - 128 - 2, screen->h - 128 - 2),
+                                                       Size(128, 128))));
   widget_manager->add(new Button(IMG_Load("data/icons/stock-tool-airbrush-22.png"), 
                                  Rect(Point(2, 2+0*34), Size(34, 34)),
                                  new ToolButtonCallback(DrawingParameter::TOOL_AIRBRUSH)));

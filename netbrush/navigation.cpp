@@ -27,10 +27,11 @@
 #include "video.hpp"
 #include "globals.hpp"
 #include "drawing_context.hpp"
+#include "screen_buffer.hpp"
 #include "navigation.hpp"
 
 Navigation::Navigation(const Rect& rect_)
-  : Widget(rect_)
+  : Widget(rect_), dragging(false)
 {
   surface = create_surface(rect_.get_width(), rect_.get_height());  
 }
@@ -38,13 +39,31 @@ Navigation::Navigation(const Rect& rect_)
 void
 Navigation::on_mouse_motion(const MouseMotionEvent& motion)
 {
-  set_dirty(true);
+  if (dragging)
+    {
+      screen_buffer->move_to(draw_ctx->get_width()  * motion.x / get_rect().get_width(),
+                             draw_ctx->get_height() * motion.y / get_rect().get_height());
+    }
 }
 
 void
 Navigation::on_mouse_button(const MouseButtonEvent& button)
 {
-  
+  if (button.button == 1)
+    {
+      if (button.state == SDL_RELEASED)
+        {
+          screen_buffer->move_to(draw_ctx->get_width()  * button.x / get_rect().get_width(),
+                                 draw_ctx->get_height() * button.y / get_rect().get_height());
+          dragging = false;
+        }
+      else if (button.state == SDL_PRESSED)
+        {
+          screen_buffer->move_to(draw_ctx->get_width()  * button.x / get_rect().get_width(),
+                                 draw_ctx->get_height() * button.y / get_rect().get_height());
+          dragging = true;
+        }
+    }
 }
 
 void

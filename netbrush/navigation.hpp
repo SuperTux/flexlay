@@ -33,7 +33,7 @@ class Navigation : public Widget
 {
 private:
   SDL_Surface* surface;
-
+  bool dragging;
 public:
   Navigation(const Rect& rect);
   

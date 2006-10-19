@@ -281,4 +281,21 @@ ScreenBuffer::on_mouse_button(const MouseButtonEvent& button)
     }
 }
 
+void
+ScreenBuffer::move_to(int x, int y)
+{
+  scroll_offset_x = get_rect().get_width()/2  - x;
+  scroll_offset_y = get_rect().get_height()/2 - y;
+  std::cout << "MoveTo: " << x << " " << y << std::endl;
+
+  Rect r(0, 0, get_rect().get_width(), get_rect().get_height());
+  r.left   -= scroll_offset_x;
+  r.right  -= scroll_offset_x;
+  r.top    -= scroll_offset_y;
+  r.bottom -= scroll_offset_y;
+  mark_dirty(r);
+
+  set_dirty(true);
+}
+
 /* EOF */

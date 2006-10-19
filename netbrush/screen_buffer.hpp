@@ -63,7 +63,9 @@ public:
   void on_enter() {}
   void on_leave() {}
 
-   bool do_update() { return false; }
+  bool do_update() { return false; }
+
+  void move_to(int x, int y);
 
 private:
   ScreenBuffer (const ScreenBuffer&);

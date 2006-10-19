@@ -26,7 +26,7 @@
 #include "widget.hpp"
 
 Widget::Widget(const Rect& rect_)
-  : rect(rect_.left+1, rect_.top+1, rect_.right-1, rect_.bottom-1),  // FIXME: Cheap way to add border
+  : rect(rect_),
     dirty(false) 
 {
 }

@@ -49,6 +49,9 @@ public:
   void clear();
 
   void draw(SDL_Surface* target, const Rect& region, int x_of, int y_of);
+
+  int get_width()  const { return drawable->w; }
+  int get_height() const { return drawable->h; }
 };
 
 #endif

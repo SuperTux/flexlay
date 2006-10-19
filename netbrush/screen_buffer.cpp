@@ -44,33 +44,6 @@ ScreenBuffer::ScreenBuffer(const Rect& rect)
     click_pos_y(0),
     scrolling(false)
 {
-#if 0 
-  // Create drawable
-  Uint32 rmask, gmask, bmask, amask;
-
-  /* SDL interprets each pixel as a 32-bit number, so our masks must depend
-     on the endianness (byte order) of the machine */
-#if SDL_BYTEORDER == SDL_BIG_ENDIAN
-  rmask = 0xff000000;
-  gmask = 0x00ff0000;
-  bmask = 0x0000ff00;
-  amask = 0; //0x000000ff;
-#else
-  rmask = 0x000000ff;
-  gmask = 0x0000ff00;
-  bmask = 0x00ff0000;
-  amask = 0; //0xff000000;
-#endif
-
-  buffer = SDL_CreateRGBSurface(SDL_SWSURFACE, w, h, 24,
-                                rmask, gmask, bmask, amask);
-
-  if(buffer == NULL) 
-    {
-      fprintf(stderr, "CreateRGBSurface failed: %s\n", SDL_GetError());
-      exit(1);
-    }
-#endif 
 }
 
 ScreenBuffer::~ScreenBuffer()
@@ -108,8 +81,19 @@ ScreenBuffer::draw(SDL_Surface* target)
               << dirty_region.bottom 
               << std::endl;
 
-  draw_ctx->draw(target, dirty_region, trans_x, trans_y);
+  if (0)
+    { // FIXME: Slow, ugly and only for testing
+      SDL_Rect r;
+      r.x = get_rect().left;
+      r.y = get_rect().top;
+      r.w = get_rect().get_width();
+      r.h = get_rect().get_height();
+      std::cout << "fill rect: " << r.x << " " << r.y << " " << r.w << " " << r.h << std::endl;
+      SDL_FillRect(target, &r, SDL_MapRGB(target->format, 0, 0, 0));
+      SDL_UpdateRect(target, r.x, r.y, r.w, r.h);
+    }
 
+  draw_ctx->draw(target, dirty_region, trans_x, trans_y);
   stroke_buffer->draw(target, dirty_region, trans_x, trans_y);
   
   SDL_UpdateRect(target, 
@@ -142,11 +126,11 @@ ScreenBuffer::mark_dirty(int x, int y, int w, int h)
     y = 0;
   
   // FIXME: This must be drawable size, not screen size
-  if (x + w > screen->w)
-    w = screen->w - x;
+  if (x + w > draw_ctx->get_width())
+    w = draw_ctx->get_width() - x;
 
-  if (y + h > screen->h)
-    h = screen->h - y;
+  if (y + h > draw_ctx->get_height())
+    h = draw_ctx->get_height() - y;
 
   //std::cout << "Dirty: " << x << " " << y << " " << w << " " << h << std::endl;
 
@@ -199,8 +183,16 @@ ScreenBuffer::on_mouse_motion(const MouseMotionEvent& motion)
     {
       scroll_offset_x = old_scroll_offset_x + (motion.x - click_pos_x);
       scroll_offset_y = old_scroll_offset_y + (motion.y - click_pos_y);
-      mark_dirty(get_rect());
-      //std::cout << "Scrolling: " << scroll_offset_x << " " << scroll_offset_y << std::endl;
+
+      // FIXME: JUCK?!
+      Rect r(0, 0, get_rect().get_width(), get_rect().get_height());
+      r.left   -= scroll_offset_x;
+      r.right  -= scroll_offset_x;
+      r.top    -= scroll_offset_y;
+      r.bottom -= scroll_offset_y;
+      mark_dirty(r);
+
+      std::cout << "Scrolling: " << scroll_offset_x << " " << scroll_offset_y << std::endl;
     } 
 }
 

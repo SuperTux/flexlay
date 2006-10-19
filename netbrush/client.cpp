@@ -216,9 +216,9 @@ int main(int argc, char** argv)
     printf("SDL_SetVideoMode: %s\n", SDL_GetError());
   SDL_WM_SetCaption("netBrush", "netBrush");
 
-  screen_buffer = new ScreenBuffer(Rect(68, 0, screen->w - 128, screen->h));
-  draw_ctx      = new DrawingContext(1024, 1024);
-  stroke_buffer = new StrokeBuffer(1024, 1024);
+  screen_buffer = new ScreenBuffer(Rect(68 + 16, 0 + 16, screen->w - 128 - 16, screen->h - 16));
+  draw_ctx      = new DrawingContext(2048, 2048);
+  stroke_buffer = new StrokeBuffer(2048, 2048);
 
   std::cout << "# clear screen" << std::endl;
 

@@ -117,6 +117,9 @@ BrushWidget::set_brush(const GenericBrush& brush)
 void
 BrushWidget::update_mouse_cursor()
 {
+  if (client_draw_param->generic_brush.radius < 5.0f)
+    return ;
+
   GrayscaleBuffer* brush = client_draw_param->brush_buffer;
   
   int w     = brush->get_width();

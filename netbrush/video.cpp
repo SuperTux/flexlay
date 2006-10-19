@@ -24,6 +24,7 @@
 */
 
 #include <algorithm>
+#include "math/rect.hpp"
 #include "video.hpp"
 
 SDL_Surface* screen = 0;
@@ -41,6 +42,14 @@ void clip_to(SDL_Rect* rect, SDL_Rect* clip_rect)
 
   rect->w = x2 - x1;
   rect->h = y2 - y1;
+}
+
+void clip_to(Rect& rect, const Rect& clip_rect)
+{
+  rect.left   = std::max(rect.left,   clip_rect.left);
+  rect.right  = std::min(rect.right,  clip_rect.right);
+  rect.top    = std::max(rect.top,    clip_rect.top);
+  rect.bottom = std::min(rect.bottom, clip_rect.bottom);
 }
 
 SDL_Surface* create_surface(int w, int h)

@@ -76,6 +76,8 @@ DrawingContext::draw_stroke(const Stroke& stroke, DrawingParameter* param)
   rect.right  += param->thickness()/2;
   rect.bottom += param->thickness()/2;
 
+  clip_to(rect, Rect(0, 0, get_width(), get_height()));
+
   stroke_buffer->clear(rect);
   stroke_buffer->set_param(param);
   stroke_buffer->draw_stroke(stroke, param);
@@ -113,7 +115,7 @@ DrawingContext::clear()
 
   SDL_FillRect(drawable, &rect, SDL_MapRGB(drawable->format, 255, 255, 255));
 
-  screen_buffer->mark_dirty(&rect);
+  screen_buffer->mark_dirty(Rect(Point(0,0), Size(rect.w, rect.h)));
 }
 
 void

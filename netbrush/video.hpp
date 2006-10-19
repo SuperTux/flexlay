@@ -30,7 +30,10 @@
 
 extern SDL_Surface* screen;
 
+class Rect;
+
 void clip_to(SDL_Rect* rect, SDL_Rect* clip_rect);
+void clip_to(Rect& rect, const Rect& clip_rect);
 SDL_Surface* create_surface(int w, int h);
 
 #endif

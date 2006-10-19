@@ -74,7 +74,7 @@ ScreenBuffer::draw(SDL_Surface* target)
       dirty_region.bottom = std::min(get_rect().bottom, dirty_region.bottom);
     }
 
-  if (1)
+  if (0)
     std::cout << "Updating screen: "
               << dirty_region.left  << " "
               << dirty_region.top   << " "
@@ -108,14 +108,8 @@ ScreenBuffer::draw(SDL_Surface* target)
                      dirty_region.get_width(), dirty_region.get_height());
     }
 
-  if (1) 
+  if (0) 
     std::cout << "Updating done" << std::endl;
-}
-
-void
-ScreenBuffer::mark_dirty(SDL_Rect* region)
-{
-  mark_dirty(region->x, region->y, region->w, region->h);
 }
 
 void
@@ -184,7 +178,7 @@ ScreenBuffer::on_mouse_motion(const MouseMotionEvent& motion)
       rect.right  += client_draw_param->thickness()/2;
       rect.bottom += client_draw_param->thickness()/2;
                   
-      screen_buffer->mark_dirty(rect);
+      mark_dirty(rect);
     }
 
   if (scrolling)
@@ -192,7 +186,6 @@ ScreenBuffer::on_mouse_motion(const MouseMotionEvent& motion)
       scroll_offset_x = old_scroll_offset_x + (motion.x - click_pos_x);
       scroll_offset_y = old_scroll_offset_y + (motion.y - click_pos_y);
 
-      // FIXME: JUCK?!
       Rect r(0, 0, get_rect().get_width(), get_rect().get_height());
       r.left   -= scroll_offset_x;
       r.right  -= scroll_offset_x;
@@ -200,7 +193,7 @@ ScreenBuffer::on_mouse_motion(const MouseMotionEvent& motion)
       r.bottom -= scroll_offset_y;
       mark_dirty(r);
 
-      std::cout << "Scrolling: " << scroll_offset_x << " " << scroll_offset_y << std::endl;
+      //std::cout << "Scrolling: " << scroll_offset_x << " " << scroll_offset_y << std::endl;
     } 
 }
 

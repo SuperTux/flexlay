@@ -109,6 +109,10 @@ StrokeBuffer::draw(SDL_Surface* target, const Rect& rect, int x_of, int y_of)
   Uint8* dst = static_cast<Uint8*>(target->pixels);
   Uint8* src = buffer->get_data();
   
+  assert(rect.left >= 0);
+  std::cout << "StrokeBuffer::draw: " << rect.left << " " << rect.top << " "
+            << rect.right << " " << rect.bottom << " - " << x_of << " " << y_of << std::endl;
+
   if (target == screen) // FIXME: Ugly workaround
     {
       for(int y = rect.top; y < rect.bottom; ++y)

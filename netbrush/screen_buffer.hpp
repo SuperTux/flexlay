@@ -53,7 +53,6 @@ public:
 
   // Mark an region as dirty in canvas space, not screen space
   void mark_dirty(int x, int y, int w, int h);
-  void mark_dirty(SDL_Rect* region);
   void mark_dirty(const Rect& region);
   
   void draw(SDL_Surface* target);

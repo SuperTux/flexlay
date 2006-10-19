@@ -45,7 +45,8 @@ client_env.Program('client', [
         'widget/slider_widget.cpp',
         'brushmask.cpp',
         'brush_widget.cpp',
-        'generic_brush.cpp'
+        'generic_brush.cpp',
+        'server_connection.cpp'
 ])
 
 # EOF #

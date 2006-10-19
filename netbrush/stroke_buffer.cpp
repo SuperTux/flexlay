@@ -89,7 +89,8 @@ StrokeBuffer::draw_stroke(const Stroke& stroke, DrawingParameter* param)
 {
   GrayscaleBuffer* brush = param->get_brush_buffer();
 
-  Stroke::Dabs dabs = stroke.get_interpolated_dabs(param->spacing, param->spacing);
+  //Stroke::Dabs dabs = stroke.get_interpolated_dabs(param->spacing, param->spacing);
+  Stroke::Dabs dabs = stroke.get_dabs();
   for(Stroke::Dabs::iterator i = dabs.begin(); i != dabs.end(); ++i)
     {
       buffer->blit(brush,

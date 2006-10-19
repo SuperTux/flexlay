@@ -43,12 +43,11 @@ class SaturationValuePicker;
 class HuePicker;
 class AlphaPicker;
 class BrushWidget;
+class ServerConnection;
 
-extern TCPsocket tcpsock;
 extern SDLNet_SocketSet socketset;
 
 extern BrushWidget* brush_widget;
-extern std::string server_buffer;
 extern DrawingContext*   draw_ctx;
 extern DrawingParameter* client_draw_param;
 extern std::map<int, ClientState*> client_states;
@@ -59,7 +58,7 @@ extern WidgetManager* widget_manager;
 extern SaturationValuePicker* saturation_value_picker;
 extern HuePicker*   hue_picker;
 extern AlphaPicker* alpha_picker;
-
+extern ServerConnection* server;
 extern Stroke* current_stroke;
 
 #endif

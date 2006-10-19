@@ -31,48 +31,8 @@
 #include "stroke_buffer.hpp"
 #include "widget/widget_manager.hpp"
 #include "globals.hpp"
+#include "server_connection.hpp"
 #include "screen_buffer.hpp"
-
-void send_stroke(const Stroke& stroke, DrawingParameter* param)
-{
-  if (tcpsock)
-    {
-      const Stroke::Dabs& dabs = stroke.get_dabs();
-
-      std::stringstream str;
-      if (param->get_brush().empty())
-        str << "set_generic_brush " 
-            << param->generic_brush.shape << " "
-            << param->generic_brush.radius << " "
-            << param->generic_brush.spikes << " "
-            << param->generic_brush.hardness << " "
-            << param->generic_brush.aspect_ratio << " "
-            << param->generic_brush.angle << " "
-            << std::endl;
-      else
-          str << "set_brush " << param->get_brush() << std::endl;
-      str << "set_opacity " << int(param->opacity) << std::endl;
-      str << "set_color "
-          << int(param->color.r) << " " 
-          << int(param->color.g) << " " 
-          << int(param->color.b) << std::endl;
-      str << "stroke_begin" << std::endl;
-      for(Stroke::Dabs::const_iterator i = dabs.begin(); i != dabs.end(); ++i)
-        {
-          str << "dab " << i->time << " " << i->pos.x << " " << i->pos.y  << std::endl;
-        }
-      str << "stroke_end" << std::endl;
-      
-      std::string line = str.str();
-
-      int result = SDLNet_TCP_Send(tcpsock, const_cast<char*>(line.c_str()), line.length());
-      if(result < int(line.length()))
-        {
-          printf( "SDLNet_TCP_Send: %s\n", SDLNet_GetError() );
-          // It may be good to disconnect sock because it is likely invalid now.
-        }     
-    }
-}
 
 ScreenBuffer::ScreenBuffer(const Rect& rect)
   : Widget(rect),
@@ -255,15 +215,8 @@ ScreenBuffer::on_mouse_button(const MouseButtonEvent& button)
             {
               widget_manager->ungrab(this);
 
-              if (!tcpsock)
-                { // FIXME: Might not work, not really maintained
-                  draw_ctx->draw_stroke(*current_stroke, client_draw_param);
-                }
-              else
-                {
-                  stroke_buffer->clear();
-                  send_stroke(*current_stroke, client_draw_param);
-                }
+              stroke_buffer->clear();
+              server->send_stroke(*current_stroke, client_draw_param);
 
               current_stroke = 0;
             }

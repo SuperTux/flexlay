@@ -27,7 +27,9 @@
 #define HEADER_CLIENT_STATE_HPP
 
 #include <string>
+#include "brushmask.hpp"
 
+class Color;
 class Stroke;
 class DrawingParameter;
 

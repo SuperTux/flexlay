@@ -191,7 +191,7 @@ BrushWidget::update_mouse_cursor()
     }
 
   SDL_Cursor* cursor = SDL_CreateCursor(data, mask, pitch*8, h, 
-                                        pitch*4, h/2);
+                                        w/2, h/2);
   SDL_SetCursor(cursor);
 }
 

@@ -22,6 +22,7 @@
 #include "alpha_picker.hpp"
 #include "brush_widget.hpp"
 #include "widget/callback.hpp"
+#include "server_connection.hpp"
 #include "widget/slider_widget.hpp"
 
 SDL_Rect* make_rect(int x, int y, int w, int h)
@@ -32,246 +33,6 @@ SDL_Rect* make_rect(int x, int y, int w, int h)
   rect.w = w;
   rect.h = h;
   return &rect;
-}
-
-void connect(const char* hostname, Uint16 port)
-{
-  IPaddress ip;
-
-  if(SDLNet_ResolveHost(&ip, hostname, port) == -1) 
-    {
-      printf("SDLNet_ResolveHost: %s\n", SDLNet_GetError());
-      exit(1);
-    }
-
-  tcpsock = SDLNet_TCP_Open(&ip);
-  if(!tcpsock)
-    {
-      printf("SDLNet_TCP_Open: %s %s:%d\n", SDLNet_GetError(), hostname, port);
-      exit(2);
-    }
-  else
-    {
-      std::string line = "client_version 1\n";
-      SDLNet_TCP_Send(tcpsock, const_cast<char*>(line.c_str()), line.length());
-
-      socketset = SDLNet_AllocSocketSet(1);
-      SDLNet_TCP_AddSocket(socketset, tcpsock);
-    }
-}
-
-
-std::vector<std::string>
-tokenize(const std::string& str, char split_char)
-{
-  std::string::size_type start = 0;
-  std::string::size_type end   = 0;
-
-  std::vector<std::string> tokens;
-
-  while (start < str.size())
-    {
-      if ((end = str.find(split_char, start)) == std::string::npos)
-        {
-          tokens.push_back(str.substr(start));
-          break;
-        }
-
-      const std::string& ret = str.substr(start, end - start);
-
-      if (!ret.empty())
-        tokens.push_back(ret);
-
-      start = end + 1;
-    }
-
-  return tokens;
-}
-
-void process_command(const std::string& cmd)
-{
-  if (cmd.empty()) return;
-
-  const std::vector<std::string>& tokens = tokenize(cmd, ' ');
-  if (0)
-    for(int i = 0; i < int(tokens.size()); ++i)
-      std::cout << "Token: '" << tokens[i] << "'" << std::endl;
-
-  if (!tokens.empty())
-    {
-      if (tokens[0] == "#")
-        {
-          // comment, ignore
-        }
-      else if (tokens[0] == "clear")
-        {
-          draw_ctx->clear();
-        }
-      else if (tokens[0] == "client")
-        {
-          if (tokens.size() > 2)
-            {
-              int client_id = atoi(tokens[1].c_str());
-              // convert to stroke
-              std::map<int, ClientState*>::iterator i = client_states.find(client_id);
-              ClientState* client_state = 0;
-              if (i != client_states.end())
-                {
-                  client_state = i->second;
-                }
-              else
-                {
-                  std::cout << "# allocating new ClientState" << std::endl;
-                  client_state = new ClientState(client_id);
-                  client_states[client_id] = client_state;
-                }
-              
-              if (tokens.size() == 3 && tokens[2] == "stroke_begin")
-                {
-                  client_state->stroke_begin();
-                }
-              else if (tokens.size() == 3 && tokens[2] == "stroke_end")
-                {
-                  client_state->stroke_end();
-                }
-              else if (tokens.size() == 4 && tokens[2] == "set_brush")
-                {
-                  client_state->set_brush(tokens[3]);
-                }
-              else if (tokens.size() == 9 && tokens[2] == "set_generic_brush")
-                {
-                  client_state->set_generic_brush((BrushShape)atoi(tokens[3].c_str()),  // shape FIXME: could use name instead
-                                                  atof(tokens[4].c_str()),  // radius
-                                                  atoi(tokens[5].c_str()),  // spike
-                                                  atof(tokens[6].c_str()),  // hardness
-                                                  atof(tokens[7].c_str()),  // aspectratio
-                                                  atof(tokens[8].c_str())); // angle
-                }
-              else if (tokens.size() == 4 && tokens[2] == "set_opacity")
-                {
-                  client_state->set_opacity(atoi(tokens[3].c_str()));
-                }
-              else if (tokens.size() == 6 && tokens[2] == "set_color")
-                {
-                  client_state->set_color(Color(atoi(tokens[3].c_str()), 
-                                                atoi(tokens[4].c_str()), 
-                                                atoi(tokens[5].c_str())));
-                }
-              else if (tokens.size() == 6 && tokens[2] == "dab")
-                {
-                  client_state->dab(atoi(tokens[3].c_str()), 
-                                    atoi(tokens[4].c_str()),
-                                    atoi(tokens[5].c_str()));
-                }
-              else
-                {
-                  std::cout << "# invalid command: " << cmd << std::endl;
-                }
-            }
-          else
-            {
-              std::cout << "# invalid command: " << cmd << std::endl;
-            }
-        }
-      else if (tokens[0] == "version")
-        {
-          if (tokens.size() == 2)
-            {
-              if (atoi(tokens[1].c_str()) != 0)
-                {
-                  std::cout << "# version mismatch: " << cmd << std::endl;
-                  std::cout << "# upgrade your netbrush client" << std::endl;
-                  exit(1);
-                }
-            }
-          else
-            {
-              std::cout << "# invalid command: " << cmd << std::endl;
-            }
-        }
-      else if (tokens[0] == "your_id")
-        {
-          if (tokens.size() == 2)
-            {
-              std::cout << "# my Id: " << atoi(tokens[1].c_str()) << std::endl;
-            }
-          else
-            {
-              std::cout << "# invalid command: " << cmd << std::endl;
-            }
-        }
-      else
-        {
-          std::cout << "# invalid command: " << cmd << std::endl;
-        }
-    }
-}
-
-void update_network()
-{
-  if (tcpsock)
-    {
-      int num = 0;
-      if ((num = SDLNet_CheckSockets(socketset, 0)) == -1)
-        {
-          printf("SDLNet_CheckSockets: %s\n", SDLNet_GetError());
-          //most of the time this is a system error, where perror might help you.
-          perror("SDLNet_CheckSockets");
-        }
-  
-      if (num > 0)
-        {
-          if (SDLNet_SocketReady(tcpsock))
-            {
-              const int MAXLEN = 1024;
-              int result;
-              char msg[MAXLEN];
-
-              result = SDLNet_TCP_Recv(tcpsock, msg, MAXLEN);
-              if(result <= 0) 
-                {
-                  // TCP Connection is broken. (because of error or closure)
-                  SDLNet_TCP_Close(tcpsock);
-                  exit(1);
-                }
-              else 
-                {
-                  for(int i = 0; i < result; ++i)
-                    {
-                      if (msg[i] == '\n')
-                        {
-                          process_command(server_buffer);
-                          //std::cout << server_buffer << std::endl;
-                          server_buffer.clear();
-                        }
-                      else
-                        {
-                          server_buffer += msg[i];
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
-
-void
-draw_stroke(SDL_Surface* surface, const Stroke& stroke, DrawingParameter* param)
-{
-  SDL_Surface* brush = param->get_brush_surface();
-  
-  Stroke::Dabs dabs = stroke.get_interpolated_dabs(param->spacing, param->spacing);
-  for(Stroke::Dabs::iterator i = dabs.begin(); i != dabs.end(); ++i)
-    {
-      SDL_Rect rect;
-      rect.x = int(i->pos.x)-(brush->w/2);
-      rect.y = int(i->pos.y)-(brush->h/2);
-      rect.w = brush->w;
-      rect.h = brush->h;
-                  
-      SDL_BlitSurface(brush, 0, surface, &rect);
-    }
 }
 
 void process_events()
@@ -325,8 +86,7 @@ void process_events()
             }
           else if (event.key.keysym.sym == SDLK_c)
             {
-              std::string line = "clear\n";
-              SDLNet_TCP_Send(tcpsock, const_cast<char*>(line.c_str()), line.length());
+              server->send("clear\n");
             }
           else if (event.key.keysym.sym == SDLK_INSERT)
             {
@@ -384,7 +144,7 @@ public:
   {
     float radius = v * 100.0f + 0.1f;
     client_draw_param->generic_brush.radius = radius;
-    std::cout << "Radius: " << radius << std::endl;
+    //std::cout << "Radius: " << radius << std::endl;
     brush_widget->set_brush(client_draw_param->generic_brush);
   }
 };
@@ -395,7 +155,7 @@ public:
   void operator()(float v) 
   {
     int spikes = int(v*18) + 2;
-    std::cout << "Spike: " << spikes << std::endl;
+    //std::cout << "Spike: " << spikes << std::endl;
     client_draw_param->generic_brush.spikes = spikes;    
     brush_widget->set_brush(client_draw_param->generic_brush);
   }
@@ -407,8 +167,8 @@ public:
   void operator()(float v) 
   {
     float hardness = v;
-    client_draw_param->generic_brush.hardness = v;
-    std::cout << "Hardness: " << hardness << std::endl;
+    client_draw_param->generic_brush.hardness = hardness;
+    //std::cout << "Hardness: " << hardness << std::endl;
     brush_widget->set_brush(client_draw_param->generic_brush);
   }
 };
@@ -420,7 +180,7 @@ public:
   {
     float aspect_ratio = v*19.0f + 1.0f;
     client_draw_param->generic_brush.aspect_ratio = aspect_ratio;
-    std::cout << "Aspect_Ratio: " << aspect_ratio << std::endl;
+    //std::cout << "Aspect_Ratio: " << aspect_ratio << std::endl;
     brush_widget->set_brush(client_draw_param->generic_brush);
   }
 };
@@ -432,7 +192,7 @@ public:
   {
     float angle = v * 360.0f;
     client_draw_param->generic_brush.angle = angle;
-    std::cout << "Angle: " << angle << std::endl;
+    //std::cout << "Angle: " << angle << std::endl;
     brush_widget->set_brush(client_draw_param->generic_brush);
   }
 };
@@ -469,10 +229,11 @@ int main(int argc, char** argv)
   client_draw_param = new DrawingParameter();
   stroke_buffer->set_param(client_draw_param);
   
+  server = new ServerConnection();
   if (argc == 3)
     {
       std::cout << "# connecting to: " << argv[1] << ":" << atoi(argv[2]) << std::endl;
-      connect(argv[1], atoi(argv[2]));
+      server->connect(argv[1], atoi(argv[2]));
     }
   else
     {
@@ -538,7 +299,7 @@ int main(int argc, char** argv)
   while(true)
     {
       process_events();
-      update_network();
+      server->update();
       widget_manager->update();
       SDL_Delay(10);
     }

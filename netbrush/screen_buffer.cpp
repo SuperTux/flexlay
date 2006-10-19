@@ -100,8 +100,10 @@ ScreenBuffer::draw(SDL_Surface* target)
   // check for invalid dirty_regions (ie. canvas is completly outside of the view)
   if (dirty_region.left < dirty_region.right &&
       dirty_region.top  <  dirty_region.bottom)
-    {       draw_ctx->draw(target, dirty_region, trans_x, trans_y);
-      stroke_buffer->draw(target, dirty_region, trans_x, trans_y);
+    {
+      draw_ctx->draw(target, dirty_region, trans_x, trans_y);
+      if (!scrolling)
+        stroke_buffer->draw(target, dirty_region, trans_x, trans_y);
   
       SDL_UpdateRect(target, 
                      dirty_region.left,        dirty_region.top, 

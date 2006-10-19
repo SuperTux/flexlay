@@ -28,6 +28,7 @@
 
 #include <string>
 #include "brushmask.hpp"
+#include "drawing_parameter.hpp"
 
 class Color;
 class Stroke;
@@ -44,6 +45,7 @@ public:
   ClientState(int id_);
   ~ClientState();
 
+  void set_tool(DrawingParameter::Tool tool);
   void set_opacity(Uint8 o);
   void set_color(const Color& color);
   void set_generic_brush(BrushShape shape,

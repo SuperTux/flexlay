@@ -27,7 +27,9 @@
 #include "drawing_parameter.hpp"
 
 DrawingParameter::DrawingParameter()
-  : brush_surface(0), brush_buffer(0), 
+  : tool(TOOL_AIRBRUSH),
+    brush_surface(0), 
+    brush_buffer(0), 
     color(0, 0, 0), 
     opacity(128),
     spacing(1.0f)

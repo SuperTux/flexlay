@@ -197,6 +197,33 @@ public:
   }
 };
 
+class ToolButtonCallback : public ButtonCallback
+{
+private:
+  DrawingParameter::Tool tool;
+public:
+  ToolButtonCallback(DrawingParameter::Tool tool_)
+    : tool(tool_)
+  {
+  }
+
+  void on_press  (Button* button) 
+  {
+    std::cout << "Press: " << button << std::endl;
+  }
+
+  void on_release(Button* button) 
+  {
+    std::cout << "Release: " << button << std::endl;
+  }
+  
+  void on_click  (Button* button) 
+  {
+    std::cout << "Setting tool: " << tool << std::endl;
+    client_draw_param->tool = tool;
+  }
+};
+
 int main(int argc, char** argv)
 {
   if(SDL_Init(SDL_INIT_VIDEO)== -1) {
@@ -217,7 +244,7 @@ int main(int argc, char** argv)
   SDL_WM_SetCaption("netBrush", "netBrush");
 
   // 18 is scrollbar
-  screen_buffer = new ScreenBuffer(Rect(68 + 16, 0 + 16, screen->w - 128 - 16 - 18, screen->h - 16 - 18)); 
+  screen_buffer = new ScreenBuffer(Rect(38, 2, screen->w - 128 - 16 - 18, screen->h - 16 - 4)); 
   draw_ctx      = new DrawingContext(2048, 2048);
   stroke_buffer = new StrokeBuffer(2048, 2048);
 
@@ -247,13 +274,16 @@ int main(int argc, char** argv)
     }
   
   widget_manager = new WidgetManager();
-  {
-    for(int y = 0; y < 10; ++y)
-      for(int x = 0; x < 2; ++x)
-        {
-          widget_manager->add(new Button(Rect(Point(x*34, y*34), Size(34, 34))));
-        }
-  }
+  widget_manager->add(new Button(IMG_Load("data/icons/stock-tool-airbrush-22.png"), 
+                                 Rect(Point(2, 2+0*34), Size(34, 34)),
+                                 new ToolButtonCallback(DrawingParameter::TOOL_AIRBRUSH)));
+  widget_manager->add(new Button(IMG_Load("data/icons/stock-tool-paintbrush-22.png"), 
+                                 Rect(Point(2, 2+1*34), Size(34, 34)),
+                                 new ToolButtonCallback(DrawingParameter::TOOL_PAINTBRUSH)));
+  if (0)
+    widget_manager->add(new Button(IMG_Load("data/icons/stock-tool-zoom-22.png"), 
+                                   Rect(Point(2, 2+2*34), Size(34, 34)),
+                                   new ToolButtonCallback(DrawingParameter::TOOL_PAINTBRUSH)));
 
   {
     SDL_Rect color_rect;
@@ -270,13 +300,13 @@ int main(int argc, char** argv)
 
   widget_manager->add(vertical_scrollbar = 
                       new Scrollbar(0, 2048, screen_buffer->get_rect().get_height(), Scrollbar::VERTICAL,
-                                    Rect(screen->w - 128 - 16 - 16, 0 + 16,
-                                         screen->w - 128 - 16, screen->h - 16 - 18)));
+                                    Rect(screen->w - 128 - 16 - 16, 2,
+                                         screen->w - 128 - 16, screen->h - 16 - 4)));
 
   widget_manager->add(horizontal_scrollbar = 
                       new Scrollbar(0, 2048, screen_buffer->get_rect().get_width(), Scrollbar::HORIZONTAL,
-                                    Rect(68 + 16, screen->h - 16 - 16,
-                                         screen->w - 128 - 16 - 18, screen->h - 16)));
+                                    Rect(38, screen->h - 16 - 2,
+                                         screen->w - 128 - 16 - 18, screen->h - 2)));
 
   alpha_picker = new AlphaPicker(Rect(Point(screen->w-128, 128+24), Size(128, 24)));
   saturation_value_picker = new SaturationValuePicker(Rect(Point(screen->w-128, 0), Size(128, 128)));

@@ -28,10 +28,24 @@
 
 #include "widget.hpp"
 
+class Button;
+
+class ButtonCallback
+{
+public:
+  ButtonCallback() {}
+  virtual ~ButtonCallback() {}
+  virtual void on_press  (Button* button) =0;
+  virtual void on_release(Button* button) =0;
+  virtual void on_click  (Button* button) =0;
+};
+
 /** */
 class Button : public Widget
 {
 private:
+  ButtonCallback* callback;
+  
   enum State { UP, DOWN };
   State state;
   bool  hover;
@@ -40,8 +54,10 @@ private:
   SDL_Surface* down_surface;
   SDL_Surface* hover_surface;
 
+  SDL_Surface* icon;
+
 public:
-  Button(const Rect& rect);
+  Button(SDL_Surface* icon, const Rect& rect, ButtonCallback* callback_);
   ~Button();
 
   void on_mouse_motion(const MouseMotionEvent& motion);

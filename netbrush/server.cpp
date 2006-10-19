@@ -211,8 +211,9 @@ public:
               tokens[0] == "stroke_begin" ||
               tokens[0] == "stroke_end"   ||
               tokens[0] == "set_brush"    ||
-              tokens[0] == "set_generic_brush"    ||
+              tokens[0] == "set_generic_brush" ||
               tokens[0] == "set_color"    ||
+              tokens[0] == "set_tool"     ||
               tokens[0] == "set_opacity" 
               ))
       {

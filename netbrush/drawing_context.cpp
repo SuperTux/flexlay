@@ -83,23 +83,6 @@ DrawingContext::draw_stroke(const Stroke& stroke, DrawingParameter* param)
   stroke_buffer->draw_stroke(stroke, param);
   stroke_buffer->draw(drawable, rect, 0, 0);
 
-  if (0)
-    {
-      SDL_Surface* brush = param->get_brush_surface();
-  
-      Stroke::Dabs dabs = stroke.get_interpolated_dabs(param->spacing, param->spacing);
-      for(Stroke::Dabs::iterator i = dabs.begin(); i != dabs.end(); ++i)
-        {
-          SDL_Rect rect;
-          rect.x = int(i->pos.x)-(brush->w/2);
-          rect.y = int(i->pos.y)-(brush->h/2);
-          rect.w = brush->w;
-          rect.h = brush->h;
-                  
-          SDL_BlitSurface(brush, 0, drawable, &rect);
-        }
-    }
-
   screen_buffer->mark_dirty(rect);
 }
 

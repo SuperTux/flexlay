@@ -29,10 +29,12 @@
 #include "../globals.hpp"
 #include "button.hpp"
 
-Button::Button(const Rect& rect_)
+Button::Button(SDL_Surface* icon_, const Rect& rect_, ButtonCallback* callback_)
   : Widget(rect_),
+    callback(callback_),
     state(UP),
-    hover(false)
+    hover(false),
+    icon(icon_)
 {
   up_surface    = IMG_Load("data/icons/up.png");
   down_surface  = IMG_Load("data/icons/down.png");
@@ -73,12 +75,17 @@ Button::on_mouse_button(const MouseButtonEvent& button)
       state = DOWN;
       set_dirty(true);
       widget_manager->grab(this);
+      callback->on_press(this);
+      
     }
   else if (button.button == 1 && button.state == SDL_RELEASED)
     {
       state = UP;
       widget_manager->ungrab(this);
       set_dirty(true);
+      callback->on_release(this);
+      // FIXME: Need to check if inside button rectangle
+      callback->on_click(this);
     }
 }
 
@@ -108,6 +115,11 @@ Button::draw(SDL_Surface* target)
       SDL_BlitSurface(down_surface, NULL, target, &r);
       break;
     }
+
+  r.x = get_rect().left + 6;
+  r.y = get_rect().top  + 6;
+
+  SDL_BlitSurface(icon, NULL, target, &r);
 
   //SDL_FillRect(target, get_rect(), color);
 }

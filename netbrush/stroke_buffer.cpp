@@ -89,68 +89,82 @@ StrokeBuffer::draw_stroke(const Stroke& stroke, DrawingParameter* param)
 {
   GrayscaleBuffer* brush = param->get_brush_buffer();
 
-  //Stroke::Dabs dabs = stroke.get_interpolated_dabs(param->spacing, param->spacing);
-  Stroke::Dabs dabs = stroke.get_dabs();
-  for(Stroke::Dabs::iterator i = dabs.begin(); i != dabs.end(); ++i)
+  if (param->tool == DrawingParameter::TOOL_AIRBRUSH)
     {
-      buffer->blit(brush,
-                   static_cast<int>(i->pos.x - brush->get_width()/2), 
-                   static_cast<int>(i->pos.y - brush->get_height()/2), 
-                   GrayscaleBuffer::ALPHA);
+      Stroke::Dabs dabs = stroke.get_dabs();
+      for(Stroke::Dabs::iterator i = dabs.begin(); i != dabs.end(); ++i)
+        {
+          buffer->blit(brush,
+                       static_cast<int>(i->pos.x - brush->get_width()/2), 
+                       static_cast<int>(i->pos.y - brush->get_height()/2), 
+                       GrayscaleBuffer::ALPHA);
+        }
+    }
+  else if (param->tool == DrawingParameter::TOOL_PAINTBRUSH)
+    {
+      Stroke::Dabs dabs = stroke.get_interpolated_dabs(param->spacing, param->spacing);
+      for(Stroke::Dabs::iterator i = dabs.begin(); i != dabs.end(); ++i)
+        {
+          buffer->blit(brush,
+                       static_cast<int>(i->pos.x - brush->get_width()/2), 
+                       static_cast<int>(i->pos.y - brush->get_height()/2), 
+                       GrayscaleBuffer::ALPHA);
+        }      
     }
 }
 
-void
-StrokeBuffer::draw(SDL_Surface* target, const Rect& rect, int x_of, int y_of)
-{ 
-  // rect is in screenspace, x_of, y_of tell how to go from canvas to screenspace
-  SDL_LockSurface(target);
+  void
+    StrokeBuffer::draw(SDL_Surface* target, const Rect& rect, int x_of, int y_of)
+  { 
+    // rect is in screenspace, x_of, y_of tell how to go from canvas to screenspace
+    SDL_LockSurface(target);
 
-  Uint8* dst = static_cast<Uint8*>(target->pixels);
-  Uint8* src = buffer->get_data();
+    Uint8* dst = static_cast<Uint8*>(target->pixels);
+    Uint8* src = buffer->get_data();
   
-  assert(rect.left >= 0);
-  std::cout << "StrokeBuffer::draw: " << rect.left << " " << rect.top << " "
-            << rect.right << " " << rect.bottom << " - " << x_of << " " << y_of << std::endl;
+    assert(rect.left >= 0);
+    if (0)
+      std::cout << "StrokeBuffer::draw: " << target << " " << rect.left << " " << rect.top << " "
+                << rect.right << " " << rect.bottom << " - " << x_of << " " << y_of << std::endl;
 
-  if (target == screen) // FIXME: Ugly workaround
-    {
-      for(int y = rect.top; y < rect.bottom; ++y)
-        for(int x = rect.left; x < rect.right; ++x)
-          {
-            Uint8* d = dst + (y * target->pitch + target->format->BytesPerPixel * x);
-            Uint8  s = src[(y - y_of) * buffer->get_width() + (x - x_of)];
+    if (target == screen) // FIXME: Ugly workaround
+      {
+        for(int y = rect.top; y < rect.bottom; ++y)
+          for(int x = rect.left; x < rect.right; ++x)
+            {
+              Uint8* d = dst + (y * target->pitch + target->format->BytesPerPixel * x);
+              Uint8  s = src[(y - y_of) * buffer->get_width() + (x - x_of)];
 
-            s = (s * param->opacity)/255;
+              s = (s * param->opacity)/255;
 
-            d[0] = ((255 - s) * d[0] + (s * param->color.b))/255;
-            d[1] = ((255 - s) * d[1] + (s * param->color.g))/255;
-            d[2] = ((255 - s) * d[2] + (s * param->color.r))/255;
-          }
-    }
-  else
-    {
-      for(int y = rect.top; y < rect.bottom; ++y)
-        for(int x = rect.left; x < rect.right; ++x)
-          {
-            Uint8* d = dst + (y * target->pitch + target->format->BytesPerPixel * x);
-            Uint8  s = src[(y - y_of) * buffer->get_width() + (x - x_of)];
+              d[0] = ((255 - s) * d[0] + (s * param->color.b))/255;
+              d[1] = ((255 - s) * d[1] + (s * param->color.g))/255;
+              d[2] = ((255 - s) * d[2] + (s * param->color.r))/255;
+            }
+      }
+    else
+      {
+        for(int y = rect.top; y < rect.bottom; ++y)
+          for(int x = rect.left; x < rect.right; ++x)
+            {
+              Uint8* d = dst + (y * target->pitch + target->format->BytesPerPixel * x);
+              Uint8  s = src[(y - y_of) * buffer->get_width() + (x - x_of)];
 
-            s = (s * param->opacity)/255;
+              s = (s * param->opacity)/255;
 
-            d[0] = ((255 - s) * d[0] + (s * param->color.r))/255;
-            d[1] = ((255 - s) * d[1] + (s * param->color.g))/255;
-            d[2] = ((255 - s) * d[2] + (s * param->color.b))/255;
-          }
-    }
+              d[0] = ((255 - s) * d[0] + (s * param->color.r))/255;
+              d[1] = ((255 - s) * d[1] + (s * param->color.g))/255;
+              d[2] = ((255 - s) * d[2] + (s * param->color.b))/255;
+            }
+      }
 
-  SDL_UnlockSurface(target);
-}
+    SDL_UnlockSurface(target);
+  }
 
-void
-StrokeBuffer::set_param(DrawingParameter* param_)
-{
-  param = param_;
-}
+  void
+    StrokeBuffer::set_param(DrawingParameter* param_)
+  {
+    param = param_;
+  }
 
-/* EOF */
+  /* EOF */

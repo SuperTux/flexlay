@@ -43,6 +43,12 @@ ClientState::~ClientState()
 }
 
 void
+ClientState::set_tool(DrawingParameter::Tool tool)
+{
+  draw_param->tool = tool;
+}
+
+void
 ClientState::set_color(const Color& color)
 {
   draw_param->color = color;

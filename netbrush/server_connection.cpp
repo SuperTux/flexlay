@@ -237,6 +237,10 @@ ServerConnection::process_command(const std::string& cmd)
                 {
                   client_state->set_opacity(atoi(tokens[3].c_str()));
                 }
+              else if (tokens.size() == 4 && tokens[2] == "set_tool")
+                {
+                  client_state->set_tool(static_cast<DrawingParameter::Tool>(atoi(tokens[3].c_str())));
+                }
               else if (tokens.size() == 6 && tokens[2] == "set_color")
                 {
                   client_state->set_color(Color(atoi(tokens[3].c_str()), 
@@ -310,6 +314,7 @@ ServerConnection::send_stroke(const Stroke& stroke, DrawingParameter* param)
         << std::endl;
   else
     str << "set_brush " << param->get_brush() << std::endl;
+  str << "set_tool " << param->tool << std::endl; 
   str << "set_opacity " << int(param->opacity) << std::endl;
   str << "set_color "
       << int(param->color.r) << " " 

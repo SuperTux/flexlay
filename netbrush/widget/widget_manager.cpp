@@ -140,7 +140,17 @@ WidgetManager::update()
     {
       if ((*i)->is_dirty())
         {
+          SDL_Rect clip_rect;
+          clip_rect.x = (*i)->get_rect().left;
+          clip_rect.y = (*i)->get_rect().top;
+          clip_rect.w = (*i)->get_rect().get_width();
+          clip_rect.h = (*i)->get_rect().get_height();
+
+          SDL_SetClipRect(screen, &clip_rect);
+
           (*i)->draw(screen);
+
+          SDL_SetClipRect(screen, NULL);
 
           // FIXME: might conflict with Screenbuffers update procedure
           if ((*i)->do_update())

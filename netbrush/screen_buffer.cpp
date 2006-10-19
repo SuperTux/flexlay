@@ -43,7 +43,8 @@ ScreenBuffer::ScreenBuffer(const Rect& rect)
     old_scroll_offset_y(0),
     click_pos_x(0),
     click_pos_y(0),
-    scrolling(false)
+    scrolling(false),
+    complete_refresh(false)
 {
 }
 
@@ -82,20 +83,19 @@ ScreenBuffer::draw(SDL_Surface* target)
               << dirty_region.bottom 
               << std::endl;
 
-  if (0)
-    { // FIXME: Slow, ugly and only for testing
+  // FIXME: Should go elsewhere
+  horizontal_scrollbar->set_pos(-scroll_offset_x);
+  vertical_scrollbar->set_pos(-scroll_offset_y);
+
+  if (complete_refresh)
+    { 
       SDL_Rect r;
       r.x = get_rect().left;
       r.y = get_rect().top;
       r.w = get_rect().get_width();
       r.h = get_rect().get_height();
-      std::cout << "fill rect: " << r.x << " " << r.y << " " << r.w << " " << r.h << std::endl;
       SDL_FillRect(target, &r, SDL_MapRGB(target->format, 0, 0, 0));
-      SDL_UpdateRect(target, r.x, r.y, r.w, r.h);
     }
-
-  horizontal_scrollbar->set_pos(-scroll_offset_x);
-  vertical_scrollbar->set_pos(-scroll_offset_y);
 
   // check for invalid dirty_regions (ie. canvas is completly outside of the view)
   if (dirty_region.left < dirty_region.right &&
@@ -138,13 +138,41 @@ ScreenBuffer::draw(SDL_Surface* target)
         SDL_FillRect(target, &r, color);
       }
   
-      SDL_UpdateRect(target, 
-                     dirty_region.left,        dirty_region.top, 
-                     dirty_region.get_width(), dirty_region.get_height());
+      if (complete_refresh)
+        { 
+          SDL_Rect r;
+          r.x = get_rect().left;
+          r.y = get_rect().top;
+          r.w = get_rect().get_width();
+          r.h = get_rect().get_height();
+            
+          SDL_UpdateRect(target, r.x, r.y, r.w, r.h);
+        }
+      else
+        {
+          SDL_UpdateRect(target, 
+                         dirty_region.left,        dirty_region.top, 
+                         dirty_region.get_width(), dirty_region.get_height());
+        }
+    }
+  else 
+    {
+      if (complete_refresh)
+        { 
+          SDL_Rect r;
+          r.x = get_rect().left;
+          r.y = get_rect().top;
+          r.w = get_rect().get_width();
+          r.h = get_rect().get_height();
+            
+          SDL_UpdateRect(target, r.x, r.y, r.w, r.h);
+        }
     }
 
   if (0) 
     std::cout << "Updating done" << std::endl;
+
+  complete_refresh = false;
 }
 
 void
@@ -227,7 +255,7 @@ ScreenBuffer::on_mouse_motion(const MouseMotionEvent& motion)
       r.top    -= scroll_offset_y;
       r.bottom -= scroll_offset_y;
       mark_dirty(r);
-
+      complete_refresh = true;
       //std::cout << "Scrolling: " << scroll_offset_x << " " << scroll_offset_y << std::endl;
     } 
 }
@@ -294,7 +322,7 @@ ScreenBuffer::move_to(int x, int y)
   r.top    -= scroll_offset_y;
   r.bottom -= scroll_offset_y;
   mark_dirty(r);
-
+  complete_refresh = true;
   set_dirty(true);
 }
 

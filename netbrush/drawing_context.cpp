@@ -30,6 +30,7 @@
 #include "video.hpp"
 #include "grayscale_buffer.hpp"
 #include "stroke_buffer.hpp"
+#include "navigation.hpp"
 #include "drawing_context.hpp"
 
 DrawingContext::DrawingContext(int w, int h) 
@@ -84,6 +85,9 @@ DrawingContext::draw_stroke(const Stroke& stroke, DrawingParameter* param)
   stroke_buffer->draw(drawable, rect, 0, 0);
 
   screen_buffer->mark_dirty(rect);
+
+  // FIXME: Limit this to what changed on the buffer instead of whole screen
+  navigation->update();
 }
 
 void

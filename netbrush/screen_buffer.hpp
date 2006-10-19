@@ -46,7 +46,7 @@ private:
   int click_pos_y;
 
   bool scrolling;
-
+  bool complete_refresh;
 public:
   ScreenBuffer(const Rect& rect);
   ~ScreenBuffer();

@@ -1,3 +1,9 @@
+netbrush 0.0.7
+==============
+- fixed scrolling 
+- added thumbnail-navigation widget
+- added airbrush and paintbrush tools
+
 netbrush 0.0.6
 ==============
 

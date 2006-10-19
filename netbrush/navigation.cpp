@@ -79,7 +79,7 @@ Navigation::draw(SDL_Surface* target)
 void
 Navigation::update()
 {
-  std::cout << "Navigation::update" << std::endl;
+  //std::cout << "Navigation::update" << std::endl;
   SDL_Surface* drawable = draw_ctx->get_surface();
   SDL_LockSurface(drawable);
   SDL_LockSurface(surface);

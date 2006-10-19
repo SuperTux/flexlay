@@ -26,19 +26,31 @@
 #ifndef HEADER_SLIDER_WIDGET_HPP
 #define HEADER_SLIDER_WIDGET_HPP
 
-#include "callback.hpp"
 #include "widget.hpp"
+
+/** */
+class SliderCallback
+{
+public:
+  SliderCallback() {}
+  virtual ~SliderCallback() {}
+  virtual void operator()(float) =0;
+
+private:
+  SliderCallback (const SliderCallback&);
+  SliderCallback& operator= (const SliderCallback&);
+};
 
 /** */
 class SliderWidget : public Widget
 {
 private:
-  Callback* callback;
+  SliderCallback* callback;
   float pos;
   bool  dragging;
   
 public:
-  SliderWidget(const Rect& rect_, Callback* callback);
+  SliderWidget(const Rect& rect_, SliderCallback* callback);
   ~SliderWidget();
 
   void on_mouse_motion(const MouseMotionEvent& motion);

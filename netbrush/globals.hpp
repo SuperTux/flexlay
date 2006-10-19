@@ -44,9 +44,12 @@ class HuePicker;
 class AlphaPicker;
 class BrushWidget;
 class ServerConnection;
+class Scrollbar;
 
 extern SDLNet_SocketSet socketset;
 
+extern Scrollbar* horizontal_scrollbar;
+extern Scrollbar* vertical_scrollbar;
 extern BrushWidget* brush_widget;
 extern DrawingContext*   draw_ctx;
 extern DrawingParameter* client_draw_param;

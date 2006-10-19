@@ -23,20 +23,39 @@
 **  02111-1307, USA.
 */
 
-#ifndef HEADER_CALLBACK_HPP
-#define HEADER_CALLBACK_HPP
+#ifndef HEADER_SCROLLBAR_HPP
+#define HEADER_SCROLLBAR_HPP
+
+#include "widget.hpp"
 
 /** */
-class Callback
+class Scrollbar : public Widget
 {
 public:
-  Callback() {}
-  virtual ~Callback() {}
-  virtual void operator()(float) =0;
+  enum Orientation { HORIZONTAL, VERTICAL };
 
+private: 
+  int min;
+  int max;
+  int page_step;
+  Orientation orientation;
+  int pos; 
+
+public:
+  Scrollbar(int min, int max, int page_step, Orientation orientation, const Rect& rect);
+  
+  void on_mouse_motion(const MouseMotionEvent& motion);
+  void on_mouse_button(const MouseButtonEvent& button);;
+
+  void on_enter() {}
+  void on_leave() {}
+
+  void draw(SDL_Surface* target);
+  
+  void set_pos(int p);
 private:
-  Callback (const Callback&);
-  Callback& operator= (const Callback&);
+  Scrollbar (const Scrollbar&);
+  Scrollbar& operator= (const Scrollbar&);
 };
 
 #endif

@@ -16,12 +16,12 @@
 #include "screen_buffer.hpp"
 #include "stroke_buffer.hpp"
 #include "widget/widget_manager.hpp"
+#include "widget/scrollbar.hpp"
 #include "widget/button.hpp"
 #include "saturation_value_picker.hpp"
 #include "hue_picker.hpp"
 #include "alpha_picker.hpp"
 #include "brush_widget.hpp"
-#include "widget/callback.hpp"
 #include "server_connection.hpp"
 #include "widget/slider_widget.hpp"
 
@@ -137,7 +137,7 @@ void process_events()
     }  
 }
 
-class RadiusCallback : public Callback
+class RadiusCallback : public SliderCallback
 {
 public:
   void operator()(float v) 
@@ -149,7 +149,7 @@ public:
   }
 };
 
-class SpikeCallback : public Callback
+class SpikeCallback : public SliderCallback
 {
 public:
   void operator()(float v) 
@@ -161,7 +161,7 @@ public:
   }
 };
 
-class HardnessCallback : public Callback
+class HardnessCallback : public SliderCallback
 {
 public:
   void operator()(float v) 
@@ -173,7 +173,7 @@ public:
   }
 };
 
-class AspectRatioCallback : public Callback
+class AspectRatioCallback : public SliderCallback
 {
 public:
   void operator()(float v) 
@@ -185,7 +185,7 @@ public:
   }
 };
 
-class AngleCallback : public Callback
+class AngleCallback : public SliderCallback
 {
 public:
   void operator()(float v) 
@@ -216,7 +216,8 @@ int main(int argc, char** argv)
     printf("SDL_SetVideoMode: %s\n", SDL_GetError());
   SDL_WM_SetCaption("netBrush", "netBrush");
 
-  screen_buffer = new ScreenBuffer(Rect(68 + 16, 0 + 16, screen->w - 128 - 16, screen->h - 16));
+  // 18 is scrollbar
+  screen_buffer = new ScreenBuffer(Rect(68 + 16, 0 + 16, screen->w - 128 - 16 - 18, screen->h - 16 - 18)); 
   draw_ctx      = new DrawingContext(2048, 2048);
   stroke_buffer = new StrokeBuffer(2048, 2048);
 
@@ -266,6 +267,16 @@ int main(int argc, char** argv)
   }
 
   widget_manager->add(screen_buffer);
+
+  widget_manager->add(vertical_scrollbar = 
+                      new Scrollbar(0, 2048, screen_buffer->get_rect().get_height(), Scrollbar::VERTICAL,
+                                    Rect(screen->w - 128 - 16 - 16, 0 + 16,
+                                         screen->w - 128 - 16, screen->h - 16 - 18)));
+
+  widget_manager->add(horizontal_scrollbar = 
+                      new Scrollbar(0, 2048, screen_buffer->get_rect().get_width(), Scrollbar::HORIZONTAL,
+                                    Rect(68 + 16, screen->h - 16 - 16,
+                                         screen->w - 128 - 16 - 18, screen->h - 16)));
 
   alpha_picker = new AlphaPicker(Rect(Point(screen->w-128, 128+24), Size(128, 24)));
   saturation_value_picker = new SaturationValuePicker(Rect(Point(screen->w-128, 0), Size(128, 128)));

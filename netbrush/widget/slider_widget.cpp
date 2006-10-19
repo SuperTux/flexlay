@@ -28,7 +28,7 @@
 #include "widget_manager.hpp"
 #include "slider_widget.hpp"
 
-SliderWidget::SliderWidget(const Rect& rect_, Callback* callback_)
+SliderWidget::SliderWidget(const Rect& rect_, SliderCallback* callback_)
   : Widget(rect_), callback(callback_), pos(0.5f), dragging(false)
 {
 }

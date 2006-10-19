@@ -32,6 +32,7 @@
 #include "widget/widget_manager.hpp"
 #include "globals.hpp"
 #include "server_connection.hpp"
+#include "widget/scrollbar.hpp"
 #include "screen_buffer.hpp"
 
 ScreenBuffer::ScreenBuffer(const Rect& rect)
@@ -73,7 +74,7 @@ ScreenBuffer::draw(SDL_Surface* target)
       dirty_region.bottom = std::min(get_rect().bottom, dirty_region.bottom);
     }
 
-  if (0)
+  if (1)
     std::cout << "Updating screen: "
               << dirty_region.left  << " "
               << dirty_region.top   << " "
@@ -93,14 +94,21 @@ ScreenBuffer::draw(SDL_Surface* target)
       SDL_UpdateRect(target, r.x, r.y, r.w, r.h);
     }
 
-  draw_ctx->draw(target, dirty_region, trans_x, trans_y);
-  stroke_buffer->draw(target, dirty_region, trans_x, trans_y);
-  
-  SDL_UpdateRect(target, 
-                 dirty_region.left,        dirty_region.top, 
-                 dirty_region.get_width(), dirty_region.get_height());
+  horizontal_scrollbar->set_pos(-scroll_offset_x);
+  vertical_scrollbar->set_pos(-scroll_offset_y);
 
-  if (0) 
+  // check for invalid dirty_regions (ie. canvas is completly outside of the view)
+  if (dirty_region.left < dirty_region.right &&
+      dirty_region.top  <  dirty_region.bottom)
+    {       draw_ctx->draw(target, dirty_region, trans_x, trans_y);
+      stroke_buffer->draw(target, dirty_region, trans_x, trans_y);
+  
+      SDL_UpdateRect(target, 
+                     dirty_region.left,        dirty_region.top, 
+                     dirty_region.get_width(), dirty_region.get_height());
+    }
+
+  if (1) 
     std::cout << "Updating done" << std::endl;
 }
 

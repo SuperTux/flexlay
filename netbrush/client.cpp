@@ -214,7 +214,8 @@ int main(int argc, char** argv)
   screen = SDL_SetVideoMode(1024, 768, 32, SDL_HWSURFACE); 
   if (screen == 0)
     printf("SDL_SetVideoMode: %s\n", SDL_GetError());
-  
+  SDL_WM_SetCaption("netBrush", "netBrush");
+
   screen_buffer = new ScreenBuffer(Rect(68, 0, screen->w - 128, screen->h));
   draw_ctx      = new DrawingContext(1024, 1024);
   stroke_buffer = new StrokeBuffer(1024, 1024);
@@ -234,12 +235,15 @@ int main(int argc, char** argv)
     {
       std::cout << "# connecting to: " << argv[1] << ":" << atoi(argv[2]) << std::endl;
       server->connect(argv[1], atoi(argv[2]));
+      std::ostringstream title_line;
+      title_line << "netBrush - online: " << argv[1] << ":" << atoi(argv[2]);
+      SDL_WM_SetCaption(title_line.str().c_str(), "netBrush");
     }
   else
     {
       std::cout << "# use '" << argv[0] << " HOSTNAME PORT' to connect a networking session" << std::endl;
+      SDL_WM_SetCaption("netBrush - offline mode", "netBrush");
     }
-
   
   widget_manager = new WidgetManager();
   {

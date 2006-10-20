@@ -207,7 +207,7 @@ ServerConnection::process_command(const std::string& cmd)
                 }
               else
                 {
-                  std::cout << "# allocating new ClientState" << std::endl;
+                  //std::cout << "# allocating new ClientState" << std::endl;
                   client_state = new ClientState(client_id);
                   client_states[client_id] = client_state;
                 }
@@ -283,7 +283,7 @@ ServerConnection::process_command(const std::string& cmd)
         {
           if (tokens.size() == 2)
             {
-              std::cout << "# my Id: " << atoi(tokens[1].c_str()) << std::endl;
+              //std::cout << "# my Id: " << atoi(tokens[1].c_str()) << std::endl;
             }
           else
             {

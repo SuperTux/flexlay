@@ -1,4 +1,5 @@
 #include <iostream>
+#include <stdexcept>
 #include <sstream>
 #include <map>
 #include "math/rect.hpp"
@@ -24,6 +25,7 @@
 #include "brush_widget.hpp"
 #include "navigation.hpp"
 #include "server_connection.hpp"
+#include "command_line.hpp"
 #include "widget/slider_widget.hpp"
 
 SDL_Rect* make_rect(int x, int y, int w, int h)
@@ -45,7 +47,7 @@ void process_events()
       switch(event.type)
         {
         case SDL_QUIT:
-          puts("# quit");
+          puts("Quitting");
           exit(0);
           break;
 
@@ -100,6 +102,10 @@ void process_events()
           else if (event.key.keysym.sym == SDLK_u)
             {
               navigation->update();
+            }
+          else if (event.key.keysym.sym == SDLK_ESCAPE)
+            {
+              exit(EXIT_SUCCESS);
             }
           break;
 
@@ -190,147 +196,229 @@ public:
 
   void on_press  (Button* button) 
   {
-    std::cout << "Press: " << button << std::endl;
+    //std::cout << "Press: " << button << std::endl;
   }
 
   void on_release(Button* button) 
   {
-    std::cout << "Release: " << button << std::endl;
+    //std::cout << "Release: " << button << std::endl;
   }
   
   void on_click  (Button* button) 
   {
-    std::cout << "Setting tool: " << tool << std::endl;
+    //std::cout << "Setting tool: " << tool << std::endl;
     client_draw_param->tool = tool;
   }
 };
 
 int main(int argc, char** argv)
 {
-  if(SDL_Init(SDL_INIT_VIDEO)== -1) {
-    printf("SDL_Init: %s\n", SDL_GetError());
-    exit(1);
-  }
-  atexit(SDL_Quit);
+  try {
+    bool fullscreen = false;
+    int screen_width  = 800;
+    int screen_height = 600;
+    std::string hostname;
+    std::string port     = "4711";
+    int rest_arg_count = 0;
 
-  if(SDLNet_Init()==-1) {
-    printf("SDLNet_Init: %s\n", SDLNet_GetError());
-    exit(2);
-  }
-  atexit(SDLNet_Quit);
+    CommandLine argp;
 
-  screen = SDL_SetVideoMode(1024, 768, 32, SDL_HWSURFACE); 
-  if (screen == 0)
-    printf("SDL_SetVideoMode: %s\n", SDL_GetError());
-  SDL_WM_SetCaption("netBrush", "netBrush");
+    argp.add_usage("[OPTIONS] HOSTNAME PORT");
+    argp.add_group("Display:");
+    argp.add_option('g', "geometry",  "WIDTHxHEIGHT", "Set the windows size to WIDTHxHEIGHT");
+    argp.add_option('f', "fullscreen", "",            "Start the application in fullscreen mode");
+    argp.add_option('w', "window",     "",            "Start the application in window mode");
+    argp.add_option('v', "version",    "",            "Display the netBrush version");
+    argp.add_option('h', "help",       "",            "Show this help text");
 
-  // 18 is scrollbar
-  screen_buffer = new ScreenBuffer(Rect(38, 2, screen->w - 128 - 16 - 18, screen->h - 16 - 4)); 
-  draw_ctx      = new DrawingContext(2048, 2048);
-  stroke_buffer = new StrokeBuffer(2048, 2048);
+    argp.parse_args(argc, argv);
 
-  std::cout << "# clear screen" << std::endl;
+    while(argp.next())
+      {
+        switch(argp.get_key())
+          {
+          case 'g':
+            {
+              if (sscanf(argp.get_argument().c_str(), "%dx%d",
+                         &screen_width, &screen_height) == 2)
+                {
+                  std::cout << "Geometry: " << screen_width << "x" << screen_height << std::endl;
+                }
+              else
+                {
+                  throw std::runtime_error("Geometry option '-g' requires argument of type {WIDTH}x{HEIGHT}");
+                }
+            }
+            break;
 
-  // clear screen
-  draw_ctx->clear();
+          case 'f':
+            fullscreen = true;
+            break;
 
-  std::cout << "# clear screen done" << std::endl;
+          case 'w':
+            fullscreen = false;
+            break;
 
-  client_draw_param = new DrawingParameter();
-  stroke_buffer->set_param(client_draw_param);
-  
-  server = new ServerConnection();
-  if (argc == 3)
-    {
-      std::cout << "# connecting to: " << argv[1] << ":" << atoi(argv[2]) << std::endl;
-      server->connect(argv[1], atoi(argv[2]));
-      std::ostringstream title_line;
-      title_line << "netBrush - online: " << argv[1] << ":" << atoi(argv[2]);
-      SDL_WM_SetCaption(title_line.str().c_str(), "netBrush");
+          case 'h':
+            argp.print_help();
+            return 0;
+            break;
+
+          case 'v':
+            std::cout << "netBrush 0.1.0" << std::endl;
+            break;
+
+          case CommandLine::REST_ARG:
+            //std::cout << "Rest: " << argp.get_argument() << std::endl;
+            if (rest_arg_count == 0)
+              {
+                hostname = argp.get_argument();
+                rest_arg_count += 1;
+              }
+            else if (rest_arg_count == 1)
+              {
+                port = argp.get_argument();
+                rest_arg_count += 1;
+              }
+            else
+              {
+                std::cout << "Invalide argument " << argp.get_argument() << std::endl;
+                exit(EXIT_FAILURE);
+              }
+            break;
+          }
+      }
+
+    if(SDL_Init(SDL_INIT_VIDEO)== -1) {
+      printf("SDL_Init: %s\n", SDL_GetError());
+      exit(1);
     }
-  else
-    {
-      std::cout << "# use '" << argv[0] << " HOSTNAME PORT' to connect a networking session" << std::endl;
-      SDL_WM_SetCaption("netBrush - offline mode", "netBrush");
+    atexit(SDL_Quit);
+
+    if(SDLNet_Init()==-1) {
+      printf("SDLNet_Init: %s\n", SDLNet_GetError());
+      exit(2);
     }
+    atexit(SDLNet_Quit);
+
+    Uint32 flags = SDL_HWSURFACE;
+    if (fullscreen)
+      flags |= SDL_FULLSCREEN;
+    screen = SDL_SetVideoMode(screen_width, screen_height, 32, flags); 
+    if (screen == 0)
+      printf("SDL_SetVideoMode: %s\n", SDL_GetError());
+    SDL_WM_SetCaption("netBrush", "netBrush");
+
+    // 18 is scrollbar
+    screen_buffer = new ScreenBuffer(Rect(38, 2, screen->w - 128 - 18 - 2 - 2, screen->h - 16 - 4)); 
+    draw_ctx      = new DrawingContext(2048, 2048);
+    stroke_buffer = new StrokeBuffer(2048, 2048);
+
+    //std::cout << "# clear screen" << std::endl;
+
+    // clear screen
+    draw_ctx->clear();
+
+    //std::cout << "# clear screen done" << std::endl;
+
+    client_draw_param = new DrawingParameter();
+    stroke_buffer->set_param(client_draw_param);
   
-  widget_manager = new WidgetManager();
-  widget_manager->add(navigation = new Navigation(Rect(Point(screen->w - 128 - 2, screen->h - 128 - 2),
-                                                       Size(128, 128))));
-  widget_manager->add(new Button(IMG_Load("data/icons/stock-tool-airbrush-22.png"), 
-                                 Rect(Point(2, 2+0*34), Size(34, 34)),
-                                 new ToolButtonCallback(DrawingParameter::TOOL_AIRBRUSH)));
-  widget_manager->add(new Button(IMG_Load("data/icons/stock-tool-paintbrush-22.png"), 
-                                 Rect(Point(2, 2+1*34), Size(34, 34)),
-                                 new ToolButtonCallback(DrawingParameter::TOOL_PAINTBRUSH)));
-  if (0)
-    widget_manager->add(new Button(IMG_Load("data/icons/stock-tool-zoom-22.png"), 
-                                   Rect(Point(2, 2+2*34), Size(34, 34)),
+    server = new ServerConnection();
+    if (!hostname.empty() && !port.empty())
+      {
+        std::cout << "Connecting to: " << hostname << ":" << atoi(port.c_str()) << std::endl;
+        server->connect(hostname.c_str(), atoi(port.c_str()));
+        std::ostringstream title_line;
+        title_line << "netBrush - online: " << hostname << ":" << atoi(port.c_str());
+        SDL_WM_SetCaption(title_line.str().c_str(), "netBrush");
+      }
+    else
+      {
+        std::cout << "# use '" << argv[0] << " HOSTNAME PORT' to connect a networking session" << std::endl;
+        SDL_WM_SetCaption("netBrush - offline mode", "netBrush");
+      }
+  
+    widget_manager = new WidgetManager();
+    widget_manager->add(navigation = new Navigation(Rect(Point(screen->w - 128 - 2, screen->h - 128 - 2),
+                                                         Size(128, 128))));
+    widget_manager->add(new Button(IMG_Load("data/icons/stock-tool-airbrush-22.png"), 
+                                   Rect(Point(2, 2+0*34), Size(34, 34)),
+                                   new ToolButtonCallback(DrawingParameter::TOOL_AIRBRUSH)));
+    widget_manager->add(new Button(IMG_Load("data/icons/stock-tool-paintbrush-22.png"), 
+                                   Rect(Point(2, 2+1*34), Size(34, 34)),
                                    new ToolButtonCallback(DrawingParameter::TOOL_PAINTBRUSH)));
+    if (0)
+      widget_manager->add(new Button(IMG_Load("data/icons/stock-tool-zoom-22.png"), 
+                                     Rect(Point(2, 2+2*34), Size(34, 34)),
+                                     new ToolButtonCallback(DrawingParameter::TOOL_PAINTBRUSH)));
 
-  {
-    SDL_Rect color_rect;
-    color_rect.x = 768;
-    color_rect.y = 100;
-
-    color_rect.w = 128;
-    color_rect.h = 128;
-
-    //widget_manager->add(new ColorSelector(&color_rect));
-  }
-
-  widget_manager->add(screen_buffer);
-
-  widget_manager->add(vertical_scrollbar = 
-                      new Scrollbar(0, 2048, screen_buffer->get_rect().get_height(), Scrollbar::VERTICAL,
-                                    Rect(screen->w - 128 - 16 - 16, 2,
-                                         screen->w - 128 - 16, screen->h - 16 - 4)));
-
-  widget_manager->add(horizontal_scrollbar = 
-                      new Scrollbar(0, 2048, screen_buffer->get_rect().get_width(), Scrollbar::HORIZONTAL,
-                                    Rect(38, screen->h - 16 - 2,
-                                         screen->w - 128 - 16 - 18, screen->h - 2)));
-
-  alpha_picker = new AlphaPicker(Rect(Point(screen->w-128, 128+24), Size(128, 24)));
-  saturation_value_picker = new SaturationValuePicker(Rect(Point(screen->w-128, 0), Size(128, 128)));
-  hue_picker   = new HuePicker(Rect(Point(screen->w-128, 128), Size(128, 24)));
-
-  brush_widget = new BrushWidget(Rect(Point(screen->w-128, 128+24+24), Size(128, 128)));
-  brush_widget->set_brush(client_draw_param->generic_brush);
-
-  SliderWidget* radius_slider = new SliderWidget(Rect(Point(screen->w-128, 128+24+24+128+24*(0)), Size(128, 24)),
-                                                 new RadiusCallback());
-  widget_manager->add(radius_slider);
-
-  SliderWidget* spike_slider = new SliderWidget(Rect(Point(screen->w-128, 128+24+24+128+24*(1)), Size(128, 24)),
-                                                 new SpikeCallback());
-  widget_manager->add(spike_slider);
-
-  SliderWidget* hardness_slider = new SliderWidget(Rect(Point(screen->w-128, 128+24+24+128+24*(2)), Size(128, 24)),
-                                                 new HardnessCallback());
-  widget_manager->add(hardness_slider);
-
-  SliderWidget* aspect_ratio_slider = new SliderWidget(Rect(Point(screen->w-128, 128+24+24+128+24*(3)), Size(128, 24)),
-                                                 new AspectRatioCallback());
-  widget_manager->add(aspect_ratio_slider);
-
-  SliderWidget* angle_slider = new SliderWidget(Rect(Point(screen->w-128, 128+24+24+128+24*(4)), Size(128, 24)),
-                                                 new AngleCallback());
-  widget_manager->add(angle_slider);
-
-  widget_manager->add(saturation_value_picker);
-  widget_manager->add(hue_picker);
-  widget_manager->add(alpha_picker);
-  widget_manager->add(brush_widget);
-
-  // Main Loop
-  while(true)
     {
-      process_events();
-      server->update();
-      widget_manager->update();
-      SDL_Delay(10);
+      SDL_Rect color_rect;
+      color_rect.x = 768;
+      color_rect.y = 100;
+
+      color_rect.w = 128;
+      color_rect.h = 128;
+
+      //widget_manager->add(new ColorSelector(&color_rect));
     }
+
+    widget_manager->add(screen_buffer);
+
+    widget_manager->add(vertical_scrollbar = 
+                        new Scrollbar(0, 2048, screen_buffer->get_rect().get_height(), Scrollbar::VERTICAL,
+                                      Rect(screen->w - 128 - 16 - 2 - 2, 2,
+                                           screen->w - 128 - 2 - 2, screen->h - 16 - 4)));
+
+    widget_manager->add(horizontal_scrollbar = 
+                        new Scrollbar(0, 2048, screen_buffer->get_rect().get_width(), Scrollbar::HORIZONTAL,
+                                      Rect(38, screen->h - 16 - 2,
+                                           screen->w - 128 - 18 - 2 - 2, screen->h - 2)));
+
+    alpha_picker = new AlphaPicker(Rect(Point(screen->w-128, 128+24), Size(128, 24)));
+    saturation_value_picker = new SaturationValuePicker(Rect(Point(screen->w-128, 0), Size(128, 128)));
+    hue_picker   = new HuePicker(Rect(Point(screen->w-128, 128), Size(128, 24)));
+
+    brush_widget = new BrushWidget(Rect(Point(screen->w-128, 128+24+24), Size(128, 128)));
+    brush_widget->set_brush(client_draw_param->generic_brush);
+
+    SliderWidget* radius_slider = new SliderWidget(Rect(Point(screen->w-128, 128+24+24+128+24*(0)), Size(128, 24)),
+                                                   new RadiusCallback());
+    widget_manager->add(radius_slider);
+
+    SliderWidget* spike_slider = new SliderWidget(Rect(Point(screen->w-128, 128+24+24+128+24*(1)), Size(128, 24)),
+                                                  new SpikeCallback());
+    widget_manager->add(spike_slider);
+
+    SliderWidget* hardness_slider = new SliderWidget(Rect(Point(screen->w-128, 128+24+24+128+24*(2)), Size(128, 24)),
+                                                     new HardnessCallback());
+    widget_manager->add(hardness_slider);
+
+    SliderWidget* aspect_ratio_slider = new SliderWidget(Rect(Point(screen->w-128, 128+24+24+128+24*(3)), Size(128, 24)),
+                                                         new AspectRatioCallback());
+    widget_manager->add(aspect_ratio_slider);
+
+    SliderWidget* angle_slider = new SliderWidget(Rect(Point(screen->w-128, 128+24+24+128+24*(4)), Size(128, 24)),
+                                                  new AngleCallback());
+    widget_manager->add(angle_slider);
+
+    widget_manager->add(saturation_value_picker);
+    widget_manager->add(hue_picker);
+    widget_manager->add(alpha_picker);
+    widget_manager->add(brush_widget);
+
+    // Main Loop
+    while(true)
+      {
+        process_events();
+        server->update();
+        widget_manager->update();
+        SDL_Delay(10);
+      }
+  } catch(std::exception& err) {
+    std::cout << "Exception: " << err.what() << std::endl;
+  }
   
   return 0;
 }

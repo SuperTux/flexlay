@@ -8,7 +8,7 @@ server_env = Environment()
 server_env.ParseConfig('sdl-config --cflags --libs')
 server_env['CXXFLAGS'] += ['-O0', '-Wall', '-g']
 server_env['LIBS'] += ['SDL_net']
-server_env.Program('server', [
+server_env.Program('netbrush-server', [
         'src/server.cpp'
 ])
 
@@ -18,7 +18,7 @@ client_env.ParseConfig('sdl-config --cflags --libs')
 client_env['CXXFLAGS'] += ['-O0', '-Wall', '-g']
 client_env['CPPPATH'] += ['src/']
 client_env['LIBS'] += ['SDL_image', 'SDL_net']
-client_env.Program('client', [
+client_env.Program('netbrush-client', [
         'src/alpha_picker.cpp',
         'src/brush_widget.cpp',
         'src/brushmask.cpp',
@@ -49,6 +49,8 @@ client_env.Program('client', [
         'src/widget/widget_manager.cpp',
         'src/navigation.cpp',
         'src/graphic_context_state.cpp',
+        'src/command_line.cpp',
+        'src/command_line_generic.cpp'
 #        'src/widget/events.cpp',
 ])
 

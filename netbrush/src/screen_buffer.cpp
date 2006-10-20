@@ -116,39 +116,6 @@ ScreenBuffer::draw(SDL_Surface* target)
       draw_ctx->draw(target, dirty_region, trans_x, trans_y);
       if (!scrolling)
         stroke_buffer->draw(target, dirty_region, trans_x, trans_y);
-
-      { // draw layer boundary
-        Uint32 color = SDL_MapRGB(target->format, 0, 0, 0);
-        SDL_Rect r;
-
-        r.x = trans_x;
-        r.y = trans_y;
-        r.w = draw_ctx->get_width();
-        r.h = 1;
-
-        SDL_FillRect(target, &r, color);
-
-        r.x = trans_x;
-        r.y = draw_ctx->get_height()-1 + trans_y;
-        r.w = draw_ctx->get_width();
-        r.h = 1;
-
-        SDL_FillRect(target, &r, color);
-
-        r.x = draw_ctx->get_width()-1 + trans_x;
-        r.y = trans_y;
-        r.w = 1;
-        r.h = draw_ctx->get_height();
-
-        SDL_FillRect(target, &r, color);
-
-        r.x = trans_x;
-        r.y = trans_y;
-        r.w = 1;
-        r.h = draw_ctx->get_height();
-
-        SDL_FillRect(target, &r, color);
-      }
   
       if (complete_refresh)
         { 

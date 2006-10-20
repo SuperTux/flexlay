@@ -79,7 +79,8 @@ DrawingParameter::get_brush_buffer() const
 int
 DrawingParameter::thickness() const
 {
-  return brush_buffer->get_width();
+  return std::max(brush_buffer->get_width(),
+                  brush_buffer->get_height());
 }
 
 float

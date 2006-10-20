@@ -89,12 +89,24 @@ ScreenBuffer::draw(SDL_Surface* target)
 
   if (complete_refresh)
     { 
-      SDL_Rect r;
-      r.x = get_rect().left;
-      r.y = get_rect().top;
-      r.w = get_rect().get_width();
-      r.h = get_rect().get_height();
-      SDL_FillRect(target, &r, SDL_MapRGB(target->format, 0, 0, 0));
+      Uint32 black = SDL_MapRGB(target->format, 200, 200, 200);
+      Uint32 white = SDL_MapRGB(target->format, 100, 100, 100);
+
+      SDL_Rect r;     
+      for(int y = get_rect().top; y < get_rect().bottom; y += 32)
+        for(int x = get_rect().left; x < get_rect().right; x += 32)
+          {
+            r.x = x;
+            r.y = y;
+            
+            r.w = 32;
+            r.h = 32;
+            
+            if (((x / 32) % 2) ^ ((y / 32) % 2))
+              SDL_FillRect(target, &r, black);
+            else
+              SDL_FillRect(target, &r, white);
+          }
     }
 
   // check for invalid dirty_regions (ie. canvas is completly outside of the view)

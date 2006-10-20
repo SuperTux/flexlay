@@ -34,7 +34,7 @@ DrawingParameter::DrawingParameter()
     opacity(128),
     spacing(1.0f)
 {
-  set_brush("brush_3x3.png");
+  brush_buffer = generic_brush.generate();
 }
 
 void

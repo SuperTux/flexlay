@@ -50,31 +50,7 @@ void process_events()
           break;
 
         case SDL_KEYDOWN:
-          if (event.key.keysym.sym == SDLK_1)
-            {
-              client_draw_param->set_brush("brush_2x2.png");
-            }
-          else if (event.key.keysym.sym == SDLK_2)
-            {
-              client_draw_param->set_brush("brush_white_2x2.png");
-            }
-          else if (event.key.keysym.sym == SDLK_3)
-            {
-              client_draw_param->set_brush("brush_3x3.png");
-            }
-          else if (event.key.keysym.sym == SDLK_4)
-            {
-              client_draw_param->set_brush("brush_white_3x3.png");
-            }
-          else if (event.key.keysym.sym == SDLK_5)
-            {
-              client_draw_param->set_brush("brush_14x14.png");
-            }
-          else if (event.key.keysym.sym == SDLK_6)
-            {
-              client_draw_param->set_brush("brush_white_14x14.png");
-            }
-          else if (event.key.keysym.sym == SDLK_k)
+          if (event.key.keysym.sym == SDLK_k)
             {
               std::cout << "Forced screen clear and update" << std::endl;
               SDL_FillRect(screen, NULL, SDL_MapRGB(screen->format, 255, 0, 255));

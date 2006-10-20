@@ -106,30 +106,57 @@ DrawingContext::clear()
 }
 
 void
-DrawingContext::draw(SDL_Surface* target, const Rect& rect, int x_of, int y_of)
+DrawingContext::draw(SDL_Surface* target_surf, const Rect& rect, int x_of, int y_of)
 {
   // rect is in screenspace, x_of, y_of tell how to go from canvas to screenspace
 
-  SDL_Rect target_pos;
-  target_pos.x = rect.left;
-  target_pos.y = rect.top;
-  target_pos.w = rect.get_width();
-  target_pos.h = rect.get_height();
+  if (1) // no zoom
+    {
+      SDL_Rect target_pos;
+      target_pos.x = rect.left;
+      target_pos.y = rect.top;
+      target_pos.w = rect.get_width();
+      target_pos.h = rect.get_height();
 
-  SDL_Rect source_pos;
-  source_pos.x = rect.left - x_of;
-  source_pos.y = rect.top  - y_of;
-  source_pos.w = rect.get_width();
-  source_pos.h = rect.get_height();
+      SDL_Rect source_pos;
+      source_pos.x = rect.left - x_of;
+      source_pos.y = rect.top  - y_of;
+      source_pos.w = rect.get_width();
+      source_pos.h = rect.get_height();
 
-  SDL_Rect r;
-  r.x = 0;
-  r.y = 0;
-  r.w = drawable->w;
-  r.h = drawable->h;
+      SDL_Rect r;
+      r.x = 0;
+      r.y = 0;
+      r.w = drawable->w;
+      r.h = drawable->h;
 
-  clip_to(&source_pos, &r);
-  SDL_BlitSurface(drawable, &source_pos, target, &target_pos);
+      clip_to(&source_pos, &r);
+      SDL_BlitSurface(drawable, &source_pos, target_surf, &target_pos);
+    }
+  else
+    {
+      SDL_LockSurface(target_surf);
+      SDL_LockSurface(drawable);
+
+      Uint8* target = static_cast<Uint8*>(target_surf->pixels);
+      Uint8* source = static_cast<Uint8*>(drawable->pixels);
+
+      // FIXME: do clipping or do clipping at a higher level in the code
+      float zoom = 2.0f;
+      for(int y = rect.top; y < rect.bottom; ++y)
+        for(int x = rect.left; x < rect.right; ++x)
+          {
+            int sx = int(x * zoom);
+            int sy = int(y * zoom);
+
+            target[y * target_surf->pitch + target_surf->format->BytesPerPixel * x + 2] = source[sy * drawable->pitch + drawable->format->BytesPerPixel * sx + 0];
+            target[y * target_surf->pitch + target_surf->format->BytesPerPixel * x + 1] = source[sy * drawable->pitch + drawable->format->BytesPerPixel * sx + 1];
+            target[y * target_surf->pitch + target_surf->format->BytesPerPixel * x + 0] = source[sy * drawable->pitch + drawable->format->BytesPerPixel * sx + 2];
+          }
+
+      SDL_UnlockSurface(drawable);
+      SDL_UnlockSurface(target_surf);
+    }
 }
 
 /* EOF */

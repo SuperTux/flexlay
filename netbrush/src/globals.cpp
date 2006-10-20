@@ -33,9 +33,6 @@ WidgetManager*    widget_manager    = 0;
 
 std::map<int, ClientState*> client_states;
 
-SaturationValuePicker* saturation_value_picker =0;
-HuePicker*   hue_picker =0;
-AlphaPicker*      alpha_picker = 0;
 BrushWidget*      brush_widget = 0;
 Stroke*           current_stroke = 0;
 ServerConnection* server = 0;
@@ -44,5 +41,7 @@ Scrollbar* horizontal_scrollbar = 0;
 Scrollbar* vertical_scrollbar   = 0;
 
 Navigation* navigation = 0;
+
+Controller* controller = 0;
 
 /* EOF */

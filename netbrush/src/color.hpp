@@ -41,6 +41,32 @@ struct Color
   Uint8 r;
   Uint8 g;
   Uint8 b;
+
+  static Color from_hue(Uint8 hue)
+  {
+    static Color colors[] = { Color(255,   0,   0),
+                              Color(255,   0, 255),
+                              Color(  0,   0, 255),
+                              Color(  0, 255, 255),
+                              Color(  0, 255,   0),
+                              Color(255, 255,   0),
+                              Color(255,   0,   0) };
+  
+    int seg_len = (255/6);
+    int seg  = (hue / seg_len);
+    int prog = (hue % seg_len);
+
+    return Color((((seg_len - prog) * colors[seg].r) + (prog * colors[seg+1].r))/seg_len,
+                 (((seg_len - prog) * colors[seg].g) + (prog * colors[seg+1].g))/seg_len,
+                 (((seg_len - prog) * colors[seg].b) + (prog * colors[seg+1].b))/seg_len);
+  }
+
+  void apply_value_saturation(Uint8 value, Uint8 saturation)
+  {
+    r = (0*value + (255-value) * ((255 * saturation + r * (255 - saturation))/255))/255;
+    g = (0*value + (255-value) * ((255 * saturation + g * (255 - saturation))/255))/255;
+    b = (0*value + (255-value) * ((255 * saturation + b * (255 - saturation))/255))/255;
+  }
 };
 
 #endif

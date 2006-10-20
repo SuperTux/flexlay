@@ -47,7 +47,7 @@ public:
       angle(0.0f)
   {}
 
-  GrayscaleBuffer* generate();
+  GrayscaleBuffer* generate() const;
 };
 
 #endif

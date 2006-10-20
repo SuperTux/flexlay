@@ -5,14 +5,14 @@
 #include <vector>
 #include "SDL.h"
 #include "SDL_net.h"
+#include "client_connection.hpp"
+#include "command_line.hpp"
 
 #ifdef WIN32
 #include  <io.h>
 #define access _access
 #define F_OK   0
 #endif
-
-class ClientConnection;
 
 std::vector<ClientConnection*> clients;
 SDLNet_SocketSet socketset;
@@ -22,222 +22,6 @@ TCPsocket serversock;
 std::vector<std::string> drawing_history;
 
 std::ofstream* outfile = 0;
-
-std::vector<std::string>
-tokenize(const std::string& str, char split_char)
-{
-  std::string::size_type start = 0;
-  std::string::size_type end   = 0;
-
-  std::vector<std::string> tokens;
-
-  while (start < str.size())
-    {
-      if ((end = str.find(split_char, start)) == std::string::npos)
-        {
-          tokens.push_back(str.substr(start));
-          break;
-        }
-
-      const std::string& ret = str.substr(start, end - start);
-
-      if (!ret.empty())
-        tokens.push_back(ret);
-
-      start = end + 1;
-    }
-
-  return tokens;
-}
-
-class ClientConnection
-{
-public:
-  int id;
-  TCPsocket   tcpsock;
-  int         buffer_pos;
-  std::string buffer;
-  bool        invalid;
-  bool        full_client;
-public:
-  ClientConnection(int id_, TCPsocket socket)
-    : id(id_), 
-      tcpsock(socket),
-      invalid(false)
-  {
-    buffer_pos = 0;
-    full_client = false;
-  }
-  
-  bool is_invalid()
-  {
-    return invalid;
-  }
-
-  void update()
-  {
-    if (invalid) return;
-
-    if (SDLNet_SocketReady(tcpsock))
-      {
-        const int MAXLEN = 1024;
-        char msg[MAXLEN];
-
-        int result = SDLNet_TCP_Recv(tcpsock, msg, MAXLEN);
-        if(result <= 0) 
-          {
-            // TCP Connection is broken. (because of error or closure)
-            std::cout << "# Connection break, abort" << std::endl;
-            invalid = true;
-            return;
-          }
-        else 
-          {
-            for(int i = 0; i < result; ++i)
-              {
-                if (msg[i] == '\n')
-                  {
-                    process_line(buffer);
-                    buffer.clear();
-                    buffer_pos = 0;
-                  }
-                else
-                  {
-                    buffer += msg[i];
-                  }
-              }
-          }
-      }
-  }
-
-  void send_string(const std::string& line)
-  {
-    if (full_client)
-      {
-        if (invalid) return;
-
-        int result = SDLNet_TCP_Send(tcpsock, const_cast<char*>(line.c_str()), line.length());
-        if (result < int(line.length()))
-          {
-            // It may be good to disconnect sock because it is likely invalid now.
-            printf( "Error: SDLNet_TCP_Send: '%s'\n", SDLNet_GetError() );
-            invalid = true;
-          }
-      }
-  }
-
-  void process_line(const std::string& line)
-  {
-    if (invalid) return;
-    
-    std::vector<std::string> tokens = tokenize(line, ' ');
-    if (tokens.size() == 2 && tokens[0] == "load")
-      {
-        for(int i = 0; i < int(clients.size()); ++i)
-          {
-            if (clients[i])
-              {
-                clients[i]->send_string("clear\n");
-              }
-          }
-        std::cout << "# load unimplemented" << std::endl;
-      }
-    else if (tokens.size() == 2 && tokens[0] == "import")
-      {
-        std::cout << "# import unimplemented" << std::endl;
-      }
-    else if (tokens.size() == 2 && tokens[0] == "save")
-      {
-        for(int i = 0; i < int(tokens[1].size()); ++i)
-          {
-            if (tokens[1][i] == '/' || tokens[1][i] == '.')
-              {
-                tokens[1][i] = '.';
-              }
-          }
-        
-        std::ostringstream filename;
-        filename << "images/" << tokens[1] << ".nbr";        
-
-        int j = 1;
-        std::string fname = filename.str();
-        while (access(fname.c_str(), F_OK) == 0)
-          {
-            filename.str("");
-            filename << "images/" << tokens[1] << "-" << j << ".nbr";
-            fname = filename.str();
-            j += 1;
-          }
-
-        std::cout << "# writing log to " << filename.str() << std::endl;
-        std::ofstream out(fname.c_str());
-        for(int i = 0; i < int(drawing_history.size()); ++i)
-          out << drawing_history[i];
-        out.close();
-      }
-    else if (tokens.size() == 2 && tokens[0] == "client_version")
-      {
-        if (atoi(tokens[1].c_str()) == 1)
-          {
-            full_client = true;
-            for(int i = 0; i < int(drawing_history.size()); ++i)
-              {
-                clients.back()->send_string(drawing_history[i]);
-              }
-          }
-      }
-    else if (tokens.size() == 1 && tokens[0] == "clear")
-      {
-        std::ostringstream filename;
-        filename << "sessions/session-" << time(NULL) << ".nbr";
-        
-        std::cout << "# writing log to " << filename.str() << std::endl;
-        outfile->close();
-        delete outfile;
-        outfile = new std::ofstream(filename.str().c_str());
-
-        drawing_history.clear();
-
-        for(int i = 0; i < int(clients.size()); ++i)
-          {
-            if (clients[i])
-              {
-                clients[i]->send_string("clear\n");
-              }
-          }
-      }
-    else if (tokens.size() >= 1 && 
-             (tokens[0] == "dab" ||
-              tokens[0] == "stroke_begin" ||
-              tokens[0] == "stroke_end"   ||
-              tokens[0] == "set_brush"    ||
-              tokens[0] == "set_generic_brush" ||
-              tokens[0] == "set_color"    ||
-              tokens[0] == "set_tool"     ||
-              tokens[0] == "set_opacity" 
-              ))
-      {
-        std::ostringstream str;
-        str << "client " << id << " " << line << std::endl;
-        //std::cout << "SERVER: " << str.str();
-        drawing_history.push_back(str.str());
-        (*outfile) << str.str() << std::flush;
-
-        for(int i = 0; i < int(clients.size()); ++i)
-          {
-            if (clients[i])
-              {
-                clients[i]->send_string(str.str());
-                // FIXME: write to file
-              }
-          }
-      }
-    else
-      {
-        std::cout << "# invalid command: " << line << std::endl;
-      }
-  }
-};
 
 void accept_connections()
 {
@@ -333,37 +117,83 @@ void connect(Uint16 port)
 
 int main(int argc, char** argv)
 {
-  if(SDL_Init(0)==-1) {
-    printf("SDL_Init: %s\n", SDL_GetError());
-    exit(1);
-  }
+  try {
+    std::string port;
+    CommandLine argp;
 
-  if(SDLNet_Init()==-1) {
-    printf("SDLNet_Init: %s\n", SDLNet_GetError());
-    exit(2);
-  }
+    argp.add_usage("[OPTIONS] PORT");
+    argp.add_group("General:");
+    argp.add_option('v', "version", "", "Print the netBrush server version");
+    argp.add_option('h', "help", "", "Print this help");
 
-  atexit(SDL_Quit);
-  atexit(SDLNet_Quit);
+    argp.parse_args(argc, argv);
+    while(argp.next())
+      {
+        switch(argp.get_key())
+          {
+          case 'h':
+            argp.print_help();
+            return 0;
+            break;
+            
+          case 'v':
+            std::cout << "netBrush Server 0.1.0" << std::endl;
+            return 0;
+            break;
+            
+          case CommandLine::REST_ARG:
+            if (!port.empty())
+              {
+                std::cout << "Invalid argument: " << argp.get_argument() << std::endl;
+                return 1;
+              }
+            else
+              {
+                port = argp.get_argument();
+              }
+            break;
+          }
+      }
 
-  std::ostringstream filename;
-  filename << "sessions/session-" << time(NULL) << ".nbr";
+    if (port.empty())
+      {
+        argp.print_help();
+        return 1;
+      }
 
-  std::cout << "# writing log to " << filename.str() << std::endl;
-  outfile = new std::ofstream(filename.str().c_str());
-
-  if (argc == 2)
-    {
-      std::cout << "# listening on: " << argv[1] << std::endl;
-      connect(atoi(argv[1]));
+    if(SDL_Init(0)==-1) {
+      printf("SDL_Init: %s\n", SDL_GetError());
+      exit(1);
     }
-  else
-    {
-      std::cout << "Usage: " << argv[0] << " PORT" << std::endl;
+
+    if(SDLNet_Init()==-1) {
+      printf("SDLNet_Init: %s\n", SDLNet_GetError());
+      exit(2);
     }
 
-  outfile->close();
-  delete outfile;
+    atexit(SDL_Quit);
+    atexit(SDLNet_Quit);
 
+    std::ostringstream filename;
+    filename << "sessions/session-" << time(NULL) << ".nbr";
+
+    std::cout << "# writing log to " << filename.str() << std::endl;
+    outfile = new std::ofstream(filename.str().c_str());
+
+    if (argc == 2)
+      {
+        std::cout << "# listening on: " << port << std::endl;
+        connect(atoi(port.c_str()));
+      }
+    else
+      {
+        std::cout << "Usage: " << argv[0] << " PORT" << std::endl;
+      }
+
+    outfile->close();
+    delete outfile;
+  } catch (std::exception& err) {
+    std::cout << "Exception: " << err.what() << std::endl;
+  }
   return 0;
 }

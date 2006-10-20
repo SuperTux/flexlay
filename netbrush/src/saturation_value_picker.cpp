@@ -28,17 +28,13 @@
 #include "globals.hpp"
 #include "widget/widget_manager.hpp"
 #include "color.hpp"
-#include "alpha_picker.hpp"
+#include "controller.hpp"
 #include "saturation_value_picker.hpp"
 
 SaturationValuePicker::SaturationValuePicker(const Rect& rect_)
   : Widget(rect_), dragging(false), click_pos(64, 64)
 {
   surface = create_surface(rect_.get_width(), rect_.get_height());
-  set_color(Color(255, 0, 0));
-
-  alpha_picker->set_color(get_color(255 * click_pos.x/get_rect().get_width(),
-                                    255 * click_pos.y/get_rect().get_height()));
 }
 
 void
@@ -61,8 +57,6 @@ SaturationValuePicker::set_color(const Color& color_)
       }
   SDL_UnlockSurface(surface);
   
-  alpha_picker->set_color(get_color(255 - 255 * click_pos.x/get_rect().get_width(),
-                                    255 * click_pos.y/get_rect().get_height()));
   set_dirty(true);
 }
 
@@ -82,8 +76,8 @@ SaturationValuePicker::on_mouse_motion(const MouseMotionEvent& motion)
     {
       click_pos.x = std::min(std::max(0, motion.x), get_rect().get_width());
       click_pos.y = std::min(std::max(0, motion.y), get_rect().get_height());
-      alpha_picker->set_color(get_color(255 - 255 * click_pos.x/get_rect().get_width(),
-                                        255 * click_pos.y/get_rect().get_height()));
+      controller->set_color_value_saturation(255 - 255 * click_pos.x/get_rect().get_width(),
+                                             255 * click_pos.y/get_rect().get_height());
     }
 }
 
@@ -106,8 +100,8 @@ SaturationValuePicker::on_mouse_button(const MouseButtonEvent& button)
       
           set_dirty(true);
           widget_manager->grab(this);
-          alpha_picker->set_color(get_color(255 - 255 * click_pos.x/get_rect().get_width(),
-                                            255 * click_pos.y/get_rect().get_height()));
+          controller->set_color_value_saturation(255 - 255 * click_pos.x/get_rect().get_width(),
+                                                 255 * click_pos.y/get_rect().get_height());
         }
     }
 }

@@ -32,6 +32,7 @@
 #include <vector>
 #include <string>
 
+class Controller;
 class StrokeBuffer;
 class ScreenBuffer;
 class Stroke;
@@ -39,9 +40,6 @@ class ClientState;
 class DrawingContext;
 class DrawingParameter;
 class WidgetManager;
-class SaturationValuePicker;
-class HuePicker;
-class AlphaPicker;
 class BrushWidget;
 class ServerConnection;
 class Scrollbar;
@@ -59,13 +57,11 @@ extern ScreenBuffer*     screen_buffer;
 extern StrokeBuffer*     stroke_buffer;
 extern WidgetManager* widget_manager;
 
-extern SaturationValuePicker* saturation_value_picker;
-extern HuePicker*   hue_picker;
-extern AlphaPicker* alpha_picker;
 extern ServerConnection* server;
 extern Stroke* current_stroke;
 
 extern Navigation* navigation;
+extern Controller* controller;
 
 #endif
 

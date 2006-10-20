@@ -19,14 +19,12 @@
 #include "widget/widget_manager.hpp"
 #include "widget/scrollbar.hpp"
 #include "widget/button.hpp"
-#include "saturation_value_picker.hpp"
-#include "hue_picker.hpp"
-#include "alpha_picker.hpp"
 #include "brush_widget.hpp"
 #include "navigation.hpp"
 #include "server_connection.hpp"
 #include "command_line.hpp"
 #include "widget/slider_widget.hpp"
+#include "controller.hpp"
 
 SDL_Rect* make_rect(int x, int y, int w, int h)
 {
@@ -123,66 +121,6 @@ void process_events()
         }
     }  
 }
-
-class RadiusCallback : public SliderCallback
-{
-public:
-  void operator()(float v) 
-  {
-    float radius = v * 100.0f + 0.1f;
-    client_draw_param->generic_brush.radius = radius;
-    //std::cout << "Radius: " << radius << std::endl;
-    brush_widget->set_brush(client_draw_param->generic_brush);
-  }
-};
-
-class SpikeCallback : public SliderCallback
-{
-public:
-  void operator()(float v) 
-  {
-    int spikes = int(v*18) + 2;
-    //std::cout << "Spike: " << spikes << std::endl;
-    client_draw_param->generic_brush.spikes = spikes;    
-    brush_widget->set_brush(client_draw_param->generic_brush);
-  }
-};
-
-class HardnessCallback : public SliderCallback
-{
-public:
-  void operator()(float v) 
-  {
-    float hardness = v;
-    client_draw_param->generic_brush.hardness = hardness;
-    //std::cout << "Hardness: " << hardness << std::endl;
-    brush_widget->set_brush(client_draw_param->generic_brush);
-  }
-};
-
-class AspectRatioCallback : public SliderCallback
-{
-public:
-  void operator()(float v) 
-  {
-    float aspect_ratio = v*19.0f + 1.0f;
-    client_draw_param->generic_brush.aspect_ratio = aspect_ratio;
-    //std::cout << "Aspect_Ratio: " << aspect_ratio << std::endl;
-    brush_widget->set_brush(client_draw_param->generic_brush);
-  }
-};
-
-class AngleCallback : public SliderCallback
-{
-public:
-  void operator()(float v) 
-  {
-    float angle = v * 360.0f;
-    client_draw_param->generic_brush.angle = angle;
-    //std::cout << "Angle: " << angle << std::endl;
-    brush_widget->set_brush(client_draw_param->generic_brush);
-  }
-};
 
 class ToolButtonCallback : public ButtonCallback
 {
@@ -340,6 +278,8 @@ int main(int argc, char** argv)
       }
   
     widget_manager = new WidgetManager();
+    controller     = new Controller();
+
     widget_manager->add(navigation = new Navigation(Rect(Point(screen->w - 128 - 2, screen->h - 128 - 2),
                                                          Size(128, 128))));
     widget_manager->add(new Button(IMG_Load("data/icons/stock-tool-airbrush-22.png"), 
@@ -375,37 +315,10 @@ int main(int argc, char** argv)
                         new Scrollbar(0, 2048, screen_buffer->get_rect().get_width(), Scrollbar::HORIZONTAL,
                                       Rect(38, screen->h - 16 - 2,
                                            screen->w - 128 - 18 - 2 - 2, screen->h - 2)));
-
-    alpha_picker = new AlphaPicker(Rect(Point(screen->w-128, 128+24), Size(128, 24)));
-    saturation_value_picker = new SaturationValuePicker(Rect(Point(screen->w-128, 0), Size(128, 128)));
-    hue_picker   = new HuePicker(Rect(Point(screen->w-128, 128), Size(128, 24)));
-
+    
     brush_widget = new BrushWidget(Rect(Point(screen->w-128, 128+24+24), Size(128, 128)));
     brush_widget->set_brush(client_draw_param->generic_brush);
 
-    SliderWidget* radius_slider = new SliderWidget(Rect(Point(screen->w-128, 128+24+24+128+24*(0)), Size(128, 24)),
-                                                   new RadiusCallback());
-    widget_manager->add(radius_slider);
-
-    SliderWidget* spike_slider = new SliderWidget(Rect(Point(screen->w-128, 128+24+24+128+24*(1)), Size(128, 24)),
-                                                  new SpikeCallback());
-    widget_manager->add(spike_slider);
-
-    SliderWidget* hardness_slider = new SliderWidget(Rect(Point(screen->w-128, 128+24+24+128+24*(2)), Size(128, 24)),
-                                                     new HardnessCallback());
-    widget_manager->add(hardness_slider);
-
-    SliderWidget* aspect_ratio_slider = new SliderWidget(Rect(Point(screen->w-128, 128+24+24+128+24*(3)), Size(128, 24)),
-                                                         new AspectRatioCallback());
-    widget_manager->add(aspect_ratio_slider);
-
-    SliderWidget* angle_slider = new SliderWidget(Rect(Point(screen->w-128, 128+24+24+128+24*(4)), Size(128, 24)),
-                                                  new AngleCallback());
-    widget_manager->add(angle_slider);
-
-    widget_manager->add(saturation_value_picker);
-    widget_manager->add(hue_picker);
-    widget_manager->add(alpha_picker);
     widget_manager->add(brush_widget);
 
     // Main Loop

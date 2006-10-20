@@ -4,20 +4,27 @@
 # netbrush_env['CXXFLAGS'] += ['-O2', '-Wall', '-g']
 # netbrush_env.Program('netbrush', ['net.cpp', 'vector.cpp'])
 
+common_env = Environment()
+common_env['CXXFLAGS'] += ['-O0', '-Wall', '-g']
+libcommon = common_env.StaticLibrary('common', [
+        'src/command_line.cpp',
+        'src/command_line_generic.cpp',
+])
+
 server_env = Environment()
 server_env.ParseConfig('sdl-config --cflags --libs')
 server_env['CXXFLAGS'] += ['-O0', '-Wall', '-g']
-server_env['LIBS'] += ['SDL_net']
+server_env['LIBS'] += ['SDL_net'] + libcommon
 server_env.Program('netbrush-server', [
-        'src/server.cpp'
+        'src/server.cpp',
+        'src/client_connection.cpp',
 ])
-
 
 client_env = Environment()
 client_env.ParseConfig('sdl-config --cflags --libs')
 client_env['CXXFLAGS'] += ['-O0', '-Wall', '-g']
 client_env['CPPPATH'] += ['src/']
-client_env['LIBS'] += ['SDL_image', 'SDL_net']
+client_env['LIBS'] += ['SDL_image', 'SDL_net'] + libcommon
 client_env.Program('netbrush-client', [
         'src/alpha_picker.cpp',
         'src/brush_widget.cpp',
@@ -49,8 +56,7 @@ client_env.Program('netbrush-client', [
         'src/widget/widget_manager.cpp',
         'src/navigation.cpp',
         'src/graphic_context_state.cpp',
-        'src/command_line.cpp',
-        'src/command_line_generic.cpp'
+        'src/controller.cpp',
 #        'src/widget/events.cpp',
 ])
 

@@ -28,6 +28,8 @@
 
 #include "widget/widget.hpp"
 
+class Color;
+
 /** */
 class AlphaPicker : public Widget
 {

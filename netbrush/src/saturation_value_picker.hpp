@@ -26,6 +26,7 @@
 #ifndef HEADER_SATURATION_VALUE_PICKER_HPP
 #define HEADER_SATURATION_VALUE_PICKER_HPP
 
+#include "color.hpp"
 #include "widget/widget.hpp"
 
 /** */

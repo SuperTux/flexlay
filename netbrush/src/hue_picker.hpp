@@ -39,8 +39,6 @@ private:
 public:
   HuePicker(const Rect& rect);
 
-  Color get_color(Uint8 hue);
-
   void on_mouse_motion(const MouseMotionEvent& motion);
   void on_mouse_button(const MouseButtonEvent& button);
 

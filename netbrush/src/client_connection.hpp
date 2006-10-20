@@ -23,12 +23,31 @@
 **  02111-1307, USA.
 */
 
-#include "generic_brush.hpp"
+#ifndef HEADER_CLIENT_CONNECTION_HPP
+#define HEADER_CLIENT_CONNECTION_HPP
 
-GrayscaleBuffer*
-GenericBrush::generate() const
+#include <string>
+#include "SDL_net.h"
+
+class ClientConnection
 {
-  return generate_brushmask(shape, radius, spikes, hardness, aspect_ratio, angle);
-}
+public:
+  int id;
+  TCPsocket   tcpsock;
+  int         buffer_pos;
+  std::string buffer;
+  bool        invalid;
+  bool        full_client;
+
+public:
+  ClientConnection(int id_, TCPsocket socket);
+  
+  bool is_invalid();
+  void update();
+  void send_string(const std::string& line);
+  void process_line(const std::string& line);
+};
+
+#endif
 
 /* EOF */

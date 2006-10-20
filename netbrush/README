@@ -16,7 +16,7 @@ library netBrush also uses SDL_net and SDL_image.
 
 Latest version of netBrush can be found at, no real webside exist yet:
 
- * http://pingus.seul.org/~grumbel/tmp/
+ * svn co svn://svn.berlios.de/flexlay/trunk/netbrush/
 
 Question coments can go to the author, who is reachable at
 grumbel@gmx.de.
@@ -28,13 +28,13 @@ Usage:
 netBrush is client/server based, so to take full use of it, you have
 to start the server first, a simple:
 
-./server 4711
+./netbrush-server 4711
 
 will do, 4711 being the port number.
 
 To start the client you have to give it a hostname and a port, like
 this:
 
-./client localhost 4711
+./netbrush-client localhost 4711
 
 # EOF #

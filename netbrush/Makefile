@@ -1,0 +1,4 @@
+all:
+	scons -D
+
+# EOF #

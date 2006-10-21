@@ -64,15 +64,8 @@ BrushWidget::draw(SDL_Surface* target)
 }
 
 void 
-BrushWidget::set_brush(const GenericBrush& brush)
+BrushWidget::set_brush(GrayscaleBuffer* brushmask)
 {
-  GrayscaleBuffer* brushmask = generate_brushmask(brush.shape,
-                                                  brush.radius,
-                                                  brush.spikes,     // spikes
-                                                  brush.hardness,  // hardness
-                                                  brush.aspect_ratio,  // aspect
-                                                  brush.angle);
-  
   SDL_FillRect(surface, NULL, SDL_MapRGB(surface->format, 255, 255, 255));
   SDL_LockSurface(surface);
   Uint8* data = static_cast<Uint8*>(surface->pixels);
@@ -106,96 +99,6 @@ BrushWidget::set_brush(const GenericBrush& brush)
       
   SDL_UnlockSurface(surface); 
   set_dirty(true);
-
-  // FIXME: where is delete?!
-  client_draw_param->brush_file = "";
-  client_draw_param->brush_buffer = brushmask;
-
-  update_mouse_cursor();
-}
-
-void
-BrushWidget::update_mouse_cursor()
-{
-  if (client_draw_param->generic_brush.radius < 5.0f)
-    return ;
-
-  GrayscaleBuffer* brush = client_draw_param->brush_buffer;
-  
-  int w     = brush->get_width();
-  int pitch = brush->get_width()/8 + 1;
-  int h     = brush->get_height();
-  int len   = pitch * h;
-  Uint8 data[len];
-  Uint8 mask[len];
-
-  memset(data, 0, len);
-  memset(mask, 0, len);
-
-  for(int y = 1; y < brush->get_height()-1; ++y)
-    for(int x = 1; x < brush->get_width()-1; ++x)
-      {
-        int threshold = 64;
-
-        Uint8 check = 0;
-        if (((x / 1) % 2) ^ (y / 1) % 2)
-          check = 1;
-
-
-        if ((brush->at(x-1, y) < threshold && 
-             brush->at(x+1, y) > threshold)
-            ||
-            (brush->at(x-1, y) > threshold && 
-             brush->at(x+1, y) < threshold)
-            ||
-            (brush->at(x, y-1) < threshold && 
-             brush->at(x, y+1) > threshold)
-            ||
-            (brush->at(x, y-1) > threshold && 
-             brush->at(x, y+1) < threshold)
-            )
-          { // black
-            data[y * pitch + x/8] |= (check << (7 - (x%8)));
-            mask[y * pitch + x/8] |= (0x01 << (7 - (x%8)));
-          }
-      }
-  
-  if (w > 7 && h > 7)
-    {
-      int y = h / 2;
-      int x = 0;
-      for(x = w/2 - 3; x <= w/2 + 3; ++x)
-        {
-          data[y * pitch + x/8] |= (0x01 << (7 - (x%8)));
-          mask[y * pitch + x/8] |= (0x01 << (7 - (x%8)));
-        }
-
-      x = w / 2;
-      for(int y = h/2 - 3; y <= h/2 + 3; ++y)
-        {
-          data[y * pitch + x/8] |= (0x01 << (7 - (x%8)));
-          mask[y * pitch + x/8] |= (0x01 << (7 - (x%8)));
-        }
-
-
-      y = h / 2;
-      for(x = w/2 - 1; x <= w/2 + 1; ++x)
-        {
-          data[y * pitch + x/8] ^= (0x01 << (7 - (x%8)));
-          mask[y * pitch + x/8] |= (0x01 << (7 - (x%8)));
-        }
-      
-      x = w / 2;
-      for(int y = h/2 - 1; y <= h/2 + 1; ++y)
-        {
-          data[y * pitch + x/8] ^= (0x01 << (7 - (x%8)));
-          mask[y * pitch + x/8] |= (0x01 << (7 - (x%8)));
-        }
-    }
-
-  SDL_Cursor* cursor = SDL_CreateCursor(data, mask, pitch*8, h, 
-                                        w/2, h/2);
-  SDL_SetCursor(cursor);
 }
 
 /* EOF */

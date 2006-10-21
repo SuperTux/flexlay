@@ -317,8 +317,7 @@ int main(int argc, char** argv)
                                            screen->w - 128 - 18 - 2 - 2, screen->h - 2)));
     
     brush_widget = new BrushWidget(Rect(Point(screen->w-128, 128+24+24), Size(128, 128)));
-    brush_widget->set_brush(client_draw_param->generic_brush);
-
+    
     widget_manager->add(brush_widget);
 
     // Main Loop

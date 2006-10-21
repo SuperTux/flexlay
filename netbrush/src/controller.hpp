@@ -23,34 +23,53 @@
 **  02111-1307, USA.
 */
 
-#ifndef HEADER_BRUSH_WIDGET_HPP
-#define HEADER_BRUSH_WIDGET_HPP
+#ifndef HEADER_CONTROLLER_HPP
+#define HEADER_CONTROLLER_HPP
 
+#include "saturation_value_picker.hpp"
+#include "alpha_picker.hpp"
+#include "hue_picker.hpp"
 #include "generic_brush.hpp"
-#include "widget/widget.hpp"
+
+class SliderWidget;
 
 /** */
-class BrushWidget : public Widget
+class Controller
 {
 private:
-  SDL_Surface* surface;
+  SaturationValuePicker* saturation_value_picker;
+  HuePicker*             hue_picker;
+  AlphaPicker*           alpha_picker;
+
+  SliderWidget* radius_slider;
+  SliderWidget* spike_slider;
+  SliderWidget* hardness_slider;
+  SliderWidget* aspect_ratio_slider;
+  SliderWidget* angle_slider;
+  
+  Uint8 hue;
+  Uint8 saturation;
+  Uint8 value;
 
 public:
-  BrushWidget(const Rect& rect);
-  ~BrushWidget();
+  Controller();
+  ~Controller();
 
-  void on_mouse_motion(const MouseMotionEvent& motion);
-  void on_mouse_button(const MouseButtonEvent& button);
+  void set_color_hue(Uint8 hue);
+  void set_color_value_saturation(Uint8 value, Uint8 saturation);
 
-  void on_enter() {}
-  void on_leave() {}
+  void set_generic_brush_shape(BrushShape shape);
+  void set_generic_brush_radius(float radius);
+  void set_generic_brush_spikes(int spikes);
+  void set_generic_brush_hardness(float hardness);
+  void set_generic_brush_aspect_ratio(float aspect_ratio);
+  void set_generic_brush_angle(float angle);
+  void set_generic_brush(const GenericBrush& brush);
 
-  void draw(SDL_Surface* target);
-  void set_brush(GrayscaleBuffer* brushmask);
-
+  void update_mouse_cursor();
 private:
-  BrushWidget (const BrushWidget&);
-  BrushWidget& operator= (const BrushWidget&);
+  Controller (const Controller&);
+  Controller& operator= (const Controller&);
 };
 
 #endif

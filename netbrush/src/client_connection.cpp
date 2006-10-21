@@ -127,7 +127,7 @@ ClientConnection::send_string(const std::string& line)
           printf( "Error: SDLNet_TCP_Send: '%s'\n", SDLNet_GetError() );
           invalid = true;
         }
-      std::cout << "done" << std::endl;
+      //std::cout << "done" << std::endl;
     }
 }
 

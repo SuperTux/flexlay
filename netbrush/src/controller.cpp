@@ -195,8 +195,8 @@ Controller::update_mouse_cursor()
   int pitch = brush->get_width()/8 + 1;
   int h     = brush->get_height();
   int len   = pitch * h;
-  Uint8 data[len];
-  Uint8 mask[len];
+  Uint8* data = new Uint8[len];
+  Uint8* mask = new Uint8[len];
 
   memset(data, 0, len);
   memset(mask, 0, len);
@@ -265,6 +265,9 @@ Controller::update_mouse_cursor()
   SDL_Cursor* cursor = SDL_CreateCursor(data, mask, pitch*8, h, 
                                         w/2, h/2);
   SDL_SetCursor(cursor);
+
+  delete[] mask;
+  delete[] data;
 }
 
 /* EOF */

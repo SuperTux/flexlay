@@ -30,6 +30,7 @@
 #include "math/rect.hpp"
 #include "stroke.hpp"
 
+class Color;
 class GrayscaleBuffer;
 class DrawingParameter;
 class StrokeBuffer;
@@ -52,7 +53,7 @@ public:
 
   int get_width()  const { return drawable->w; }
   int get_height() const { return drawable->h; }
-
+  bool get_color(int x, int y, Color& color);
   SDL_Surface* get_surface() { return drawable; }
 };
 

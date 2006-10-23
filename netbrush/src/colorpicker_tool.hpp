@@ -32,6 +32,8 @@
 class ColorpickerTool : public Tool
 {
 private:
+  bool dragging;
+
 public:
   ColorpickerTool();
   ~ColorpickerTool();
@@ -39,6 +41,9 @@ public:
   void on_motion(const ToolMotionEvent& ev);
   void on_button_press(const ToolButtonEvent& ev);
   void on_button_release(const ToolButtonEvent& ev);
+
+  void pick_color(int x, int y);
+
 private:
   ColorpickerTool (const ColorpickerTool&);
   ColorpickerTool& operator= (const ColorpickerTool&);

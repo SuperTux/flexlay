@@ -24,50 +24,31 @@
 */
 
 #include <iostream>
-#include "drawing_context.hpp"
-#include "globals.hpp"
-#include "controller.hpp"
-#include "color.hpp"
-#include "colorpicker_tool.hpp"
+#include "color_display.hpp"
 
-ColorpickerTool::ColorpickerTool()
-  : dragging(false)
-{
-}
-
-ColorpickerTool::~ColorpickerTool()
+ColorDisplay::ColorDisplay(const Rect& rect)
+  : Widget(rect), m_color(255, 0, 255)
 {
 }
 
 void
-ColorpickerTool::on_motion(const ToolMotionEvent& ev)
+ColorDisplay::draw(SDL_Surface* target)
 {
-  if (dragging)
-    {
-      pick_color(ev.x, ev.y);
-    }
+  SDL_Rect r;
+  r.x = get_rect().left;
+  r.y = get_rect().top;
+  r.w = get_rect().get_width();
+  r.h = get_rect().get_height();
+
+  SDL_FillRect(target, &r, SDL_MapRGB(target->format, m_color.r, m_color.g, m_color.b));
+  if (0) std::cout << "Color: " << (int)m_color.r << " " << (int)m_color.g << " " << (int)m_color.b << std::endl;
 }
 
 void
-ColorpickerTool::on_button_press(const ToolButtonEvent& ev)
+ColorDisplay::set_color(const Color& color)
 {
-  pick_color(ev.x, ev.y);
-  dragging = true;
-}
-
-void
-ColorpickerTool::on_button_release(const ToolButtonEvent& ev)
-{
-  pick_color(ev.x, ev.y);
-  dragging = false;
-}
-
-void
-ColorpickerTool::pick_color(int x, int y)
-{
-  Color color;
-  if (draw_ctx->get_color(x, y, color))
-    controller->set_color(color);
+  m_color = color;
+  set_dirty(true);
 }
 
 /* EOF */

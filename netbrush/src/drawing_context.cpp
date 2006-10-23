@@ -159,4 +159,29 @@ DrawingContext::draw(SDL_Surface* target_surf, const Rect& rect, int x_of, int y
     }
 }
 
+bool
+DrawingContext::get_color(int x, int y, Color& color)
+{
+  if ((x >= 0 && x < drawable->w) &&
+      (y >= 0 && y < drawable->h))
+    {
+      SDL_LockSurface(drawable);
+      Uint8* source = static_cast<Uint8*>(drawable->pixels);
+
+      SDL_GetRGB(*((Uint32*)(source+(y * drawable->pitch + drawable->format->BytesPerPixel * x))),
+                 drawable->format,
+                 &color.r,
+                 &color.g,
+                 &color.b);
+
+  
+      SDL_UnlockSurface(drawable);
+      return true;
+    }
+  else
+    {
+      return false;
+    }
+}
+
 /* EOF */

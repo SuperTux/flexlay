@@ -28,6 +28,7 @@
 
 #include "saturation_value_picker.hpp"
 #include "alpha_picker.hpp"
+#include "color_display.hpp"
 #include "hue_picker.hpp"
 #include "generic_brush.hpp"
 
@@ -40,6 +41,7 @@ private:
   SaturationValuePicker* saturation_value_picker;
   HuePicker*             hue_picker;
   AlphaPicker*           alpha_picker;
+  ColorDisplay*          color_display;
 
   SliderWidget* radius_slider;
   SliderWidget* spike_slider;
@@ -55,6 +57,7 @@ public:
   Controller();
   ~Controller();
 
+  void set_color(const Color& color);
   void set_color_hue(Uint8 hue);
   void set_color_value_saturation(Uint8 value, Uint8 saturation);
 

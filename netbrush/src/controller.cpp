@@ -121,10 +121,12 @@ Controller::Controller()
   alpha_picker            = new AlphaPicker(Rect(Point(screen->w-128, 128+24), Size(128, 24)));
   saturation_value_picker = new SaturationValuePicker(Rect(Point(screen->w-128, 0), Size(128, 128)));
   hue_picker              = new HuePicker(Rect(Point(screen->w-128, 128), Size(128, 24)));
+  color_display           = new ColorDisplay(Rect(Point(0, screen->h - 34), Size(34, 34)));
 
   widget_manager->add(saturation_value_picker);
   widget_manager->add(hue_picker);
   widget_manager->add(alpha_picker);
+  widget_manager->add(color_display);
 
   // Brush Slider
   radius_slider = new SliderWidget(Rect(Point(screen->w-128, 128+24+24+128+24*(0)), Size(128, 24)),
@@ -147,6 +149,14 @@ Controller::Controller()
   widget_manager->add(aspect_ratio_slider);
   widget_manager->add(angle_slider);
 
+}
+
+
+void
+Controller::set_color(const Color& color)
+{
+  client_draw_param->color = color;
+  color_display->set_color(color);
 }
 
 void

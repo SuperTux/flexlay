@@ -23,51 +23,34 @@
 **  02111-1307, USA.
 */
 
-#include <iostream>
-#include "drawing_context.hpp"
-#include "globals.hpp"
-#include "controller.hpp"
+#ifndef HEADER_COLOR_DISPLAY_HPP
+#define HEADER_COLOR_DISPLAY_HPP
+
 #include "color.hpp"
-#include "colorpicker_tool.hpp"
+#include "widget/widget.hpp"
 
-ColorpickerTool::ColorpickerTool()
-  : dragging(false)
+/** */
+class ColorDisplay : public Widget
 {
-}
+private:
+  Color m_color;
 
-ColorpickerTool::~ColorpickerTool()
-{
-}
+public:
+  ColorDisplay(const Rect& rect);
+  
+  void on_mouse_motion(const MouseMotionEvent& motion) {}
+  void on_mouse_button(const MouseButtonEvent& button) {}
 
-void
-ColorpickerTool::on_motion(const ToolMotionEvent& ev)
-{
-  if (dragging)
-    {
-      pick_color(ev.x, ev.y);
-    }
-}
+  void on_enter() {}
+  void on_leave() {}
+  
+  void draw(SDL_Surface* target);
+  void set_color(const Color& color);
+private:
+  ColorDisplay (const ColorDisplay&);
+  ColorDisplay& operator= (const ColorDisplay&);
+};
 
-void
-ColorpickerTool::on_button_press(const ToolButtonEvent& ev)
-{
-  pick_color(ev.x, ev.y);
-  dragging = true;
-}
-
-void
-ColorpickerTool::on_button_release(const ToolButtonEvent& ev)
-{
-  pick_color(ev.x, ev.y);
-  dragging = false;
-}
-
-void
-ColorpickerTool::pick_color(int x, int y)
-{
-  Color color;
-  if (draw_ctx->get_color(x, y, color))
-    controller->set_color(color);
-}
+#endif
 
 /* EOF */

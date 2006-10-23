@@ -122,33 +122,6 @@ void process_events()
     }  
 }
 
-class ToolButtonCallback : public ButtonCallback
-{
-private:
-  DrawingParameter::Tool tool;
-public:
-  ToolButtonCallback(DrawingParameter::Tool tool_)
-    : tool(tool_)
-  {
-  }
-
-  void on_press  (Button* button) 
-  {
-    //std::cout << "Press: " << button << std::endl;
-  }
-
-  void on_release(Button* button) 
-  {
-    //std::cout << "Release: " << button << std::endl;
-  }
-  
-  void on_click  (Button* button) 
-  {
-    //std::cout << "Setting tool: " << tool << std::endl;
-    client_draw_param->tool = tool;
-  }
-};
-
 int main(int argc, char** argv)
 {
   try {
@@ -282,17 +255,6 @@ int main(int argc, char** argv)
 
     widget_manager->add(navigation = new Navigation(Rect(Point(screen->w - 128 - 2, screen->h - 128 - 2),
                                                          Size(128, 128))));
-    widget_manager->add(new Button(IMG_Load("data/icons/stock-tool-airbrush-22.png"), 
-                                   Rect(Point(2, 2+0*34), Size(34, 34)),
-                                   new ToolButtonCallback(DrawingParameter::TOOL_AIRBRUSH)));
-    widget_manager->add(new Button(IMG_Load("data/icons/stock-tool-paintbrush-22.png"), 
-                                   Rect(Point(2, 2+1*34), Size(34, 34)),
-                                   new ToolButtonCallback(DrawingParameter::TOOL_PAINTBRUSH)));
-    if (0)
-      widget_manager->add(new Button(IMG_Load("data/icons/stock-tool-zoom-22.png"), 
-                                     Rect(Point(2, 2+2*34), Size(34, 34)),
-                                     new ToolButtonCallback(DrawingParameter::TOOL_PAINTBRUSH)));
-
     {
       SDL_Rect color_rect;
       color_rect.x = 768;

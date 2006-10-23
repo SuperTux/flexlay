@@ -26,6 +26,8 @@
 #ifndef HEADER_EVENTS_HPP
 #define HEADER_EVENTS_HPP
 
+#include "SDL.h"
+
 class MouseButtonEvent
 {
 public:

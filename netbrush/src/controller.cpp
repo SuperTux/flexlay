@@ -32,6 +32,7 @@
 #include "drawing_parameter.hpp"
 #include "widget/slider_widget.hpp"
 #include "brush_widget.hpp"
+#include "widget/button.hpp"
 #include "widget/widget_manager.hpp"
 #include "controller.hpp"
 
@@ -76,8 +77,46 @@ public:
   }
 };
 
+class ToolButtonCallback : public ButtonCallback
+{
+private:
+  DrawingParameter::Tool tool;
+public:
+  ToolButtonCallback(DrawingParameter::Tool tool_)
+    : tool(tool_)
+  {
+  }
+
+  void on_press  (Button* button) 
+  {
+    //std::cout << "Press: " << button << std::endl;
+  }
+
+  void on_release(Button* button) 
+  {
+    //std::cout << "Release: " << button << std::endl;
+  }
+  
+  void on_click  (Button* button) 
+  {
+    //std::cout << "Setting tool: " << tool << std::endl;
+    client_draw_param->tool = tool;
+  }
+};
+
 Controller::Controller()
 {
+  // Toolbar
+    widget_manager->add(new Button(IMG_Load("data/icons/stock-tool-airbrush-22.png"), 
+                                   Rect(Point(2, 2+0*34), Size(34, 34)),
+                                   new ToolButtonCallback(DrawingParameter::TOOL_AIRBRUSH)));
+    widget_manager->add(new Button(IMG_Load("data/icons/stock-tool-paintbrush-22.png"), 
+                                   Rect(Point(2, 2+1*34), Size(34, 34)),
+                                   new ToolButtonCallback(DrawingParameter::TOOL_PAINTBRUSH)));
+    widget_manager->add(new Button(IMG_Load("data/icons/stock-tool-color-picker-22.png"), 
+                                     Rect(Point(2, 2+2*34), Size(34, 34)),
+                                     new ToolButtonCallback(DrawingParameter::TOOL_COLOR_PICKER)));
+
   // Color Selection
   alpha_picker            = new AlphaPicker(Rect(Point(screen->w-128, 128+24), Size(128, 24)));
   saturation_value_picker = new SaturationValuePicker(Rect(Point(screen->w-128, 0), Size(128, 128)));
@@ -107,6 +146,7 @@ Controller::Controller()
   widget_manager->add(hardness_slider);
   widget_manager->add(aspect_ratio_slider);
   widget_manager->add(angle_slider);
+
 }
 
 void

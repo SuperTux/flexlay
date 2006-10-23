@@ -37,7 +37,7 @@ class GrayscaleBuffer;
 class DrawingParameter
 {
 public:
-  enum Tool { TOOL_AIRBRUSH, TOOL_PAINTBRUSH };
+  enum Tool { TOOL_AIRBRUSH, TOOL_PAINTBRUSH, TOOL_COLOR_PICKER };
   Tool             tool;
   std::string      brush_file;
   GenericBrush     generic_brush;

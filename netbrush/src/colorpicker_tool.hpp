@@ -23,39 +23,25 @@
 **  02111-1307, USA.
 */
 
-#ifndef HEADER_STROKE_BUFFER_HPP
-#define HEADER_STROKE_BUFFER_HPP
+#ifndef HEADER_COLORPICKER_TOOL_HPP
+#define HEADER_COLORPICKER_TOOL_HPP
 
-class Rect;
-class DrawingParameter;
-class Dab;
-class GrayscaleBuffer;
+#include "tool.hpp"
 
 /** */
-class StrokeBuffer
+class ColorpickerTool : public Tool
 {
 private:
-  GrayscaleBuffer*  buffer;
-  Stroke*           stroke;
-  DrawingParameter* param;
-
 public:
-  StrokeBuffer(int w, int h);
-  ~StrokeBuffer();
+  ColorpickerTool();
+  ~ColorpickerTool();
 
-  void set_param(DrawingParameter* param);
-
-  void add_dab(const Dab& dab);
-  void clear();
-  void clear(const Rect& rect);
-
-  void draw(SDL_Surface* target, const Rect& rect, int x_of, int y_of);
-
-  void draw_stroke(const Stroke& stroke, DrawingParameter* param);
-
+  void on_motion(const ToolMotionEvent& ev);
+  void on_button_press(const ToolButtonEvent& ev);
+  void on_button_release(const ToolButtonEvent& ev);
 private:
-  StrokeBuffer (const StrokeBuffer&);
-  StrokeBuffer& operator= (const StrokeBuffer&);
+  ColorpickerTool (const ColorpickerTool&);
+  ColorpickerTool& operator= (const ColorpickerTool&);
 };
 
 #endif

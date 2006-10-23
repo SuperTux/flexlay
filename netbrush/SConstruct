@@ -57,6 +57,11 @@ client_env.Program('netbrush-client', [
         'src/navigation.cpp',
         'src/graphic_context_state.cpp',
         'src/controller.cpp',
+        'src/airbrush_tool.cpp',
+        'src/paintbrush_tool.cpp',
+        'src/scroll_tool.cpp',
+        'src/colorpicker_tool.cpp',
+        'src/color.cpp',
 #        'src/widget/events.cpp',
 ])
 

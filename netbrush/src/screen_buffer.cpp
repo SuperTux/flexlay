@@ -33,19 +33,20 @@
 #include "globals.hpp"
 #include "server_connection.hpp"
 #include "widget/scrollbar.hpp"
+#include "tool.hpp"
+#include "airbrush_tool.hpp"
+#include "scroll_tool.hpp"
 #include "screen_buffer.hpp"
 
 ScreenBuffer::ScreenBuffer(const Rect& rect)
   : Widget(rect),
+    complete_refresh(false),
     scroll_offset_x(0),
-    scroll_offset_y(0),
-    old_scroll_offset_x(0),
-    old_scroll_offset_y(0),
-    click_pos_x(0),
-    click_pos_y(0),
-    scrolling(false),
-    complete_refresh(false)
+    scroll_offset_y(0)
 {
+  tools.push_back(new AirbrushTool());
+  tools.push_back(new ScrollTool());
+  tools.push_back(new AirbrushTool());
 }
 
 ScreenBuffer::~ScreenBuffer()
@@ -204,105 +205,64 @@ ScreenBuffer::mark_dirty(int x, int y, int w, int h)
 void
 ScreenBuffer::on_mouse_motion(const MouseMotionEvent& motion)
 {
-  //satd::cout << motion.x << " " << motion.y << std::endl;
-  if (current_stroke)
-    {
-      current_stroke->add_dab(Dab(motion.x - scroll_offset_x, motion.y - scroll_offset_y));
-      stroke_buffer->add_dab(Dab(motion.x - scroll_offset_x, motion.y - scroll_offset_y));
+  ToolMotionEvent tool_motion;
 
-      // sync
-      Rect rect = current_stroke->get_bounding_rect(); 
-              
-      // calculate bounding rectangle by taking brush thickness into account
-      rect.left -= client_draw_param->thickness()/2;
-      rect.top  -= client_draw_param->thickness()/2;
+  tool_motion.x = motion.x - scroll_offset_x;
+  tool_motion.y = motion.y - scroll_offset_y;
 
-      rect.right  += client_draw_param->thickness()/2;
-      rect.bottom += client_draw_param->thickness()/2;
-                  
-      mark_dirty(rect);
-    }
-
-  if (scrolling)
-    {
-      scroll_offset_x = old_scroll_offset_x + (motion.x - click_pos_x);
-      scroll_offset_y = old_scroll_offset_y + (motion.y - click_pos_y);
-
-      Rect r(0, 0, get_rect().get_width(), get_rect().get_height());
-      r.left   -= scroll_offset_x;
-      r.right  -= scroll_offset_x;
-      r.top    -= scroll_offset_y;
-      r.bottom -= scroll_offset_y;
-      mark_dirty(r);
-      complete_refresh = true;
-      //std::cout << "Scrolling: " << scroll_offset_x << " " << scroll_offset_y << std::endl;
-    } 
+  tool_motion.screen = Point(motion.x, motion.y);
+  
+  for(Tools::iterator i = tools.begin(); i != tools.end(); ++i)
+    (*i)->on_motion(tool_motion);
 }
 
 void
 ScreenBuffer::on_mouse_button(const MouseButtonEvent& button)
 {
-  if (button.state == SDL_RELEASED)
+  ToolButtonEvent tool_button;
+
+  tool_button.screen = Point(button.x, button.y);
+
+  tool_button.x = button.x - scroll_offset_x;
+  tool_button.y = button.y - scroll_offset_y;
+  
+  if (button.button >= 1 && button.button <= int(tools.size()))
     {
-      if (button.button == 1)
-        {
-          if (current_stroke)
-            {
-              widget_manager->ungrab(this);
-
-              stroke_buffer->clear();
-              server->send_stroke(*current_stroke, client_draw_param);
-
-              current_stroke = 0;
-            }
-        }
-      else if (button.button == 2)
-        {
-          scroll_offset_x = old_scroll_offset_x + (button.x - click_pos_x);
-          scroll_offset_y = old_scroll_offset_y + (button.y - click_pos_y);
-          scrolling = false;
-        }
-    }  
-  else if (button.state == SDL_PRESSED)
-    {
-      if (button.button == 1)
-        {
-          widget_manager->grab(this);
-          current_stroke = new Stroke();
-
-          current_stroke->add_dab(Dab(button.x - scroll_offset_x, button.y - scroll_offset_y));
-          stroke_buffer->add_dab(Dab(button.x - scroll_offset_x, button.y - scroll_offset_y));
-
-          // FIXME: First dab is lost
-        }
-      else if (button.button == 2)
-        {
-          click_pos_x = button.x;
-          click_pos_y = button.y;
-
-          old_scroll_offset_x = scroll_offset_x;
-          old_scroll_offset_y = scroll_offset_y;
-
-          scrolling = true;
-        }
+      if (button.state == SDL_PRESSED)
+        tools[button.button-1]->on_button_press(tool_button);
+      else if (button.state == SDL_RELEASED)
+        tools[button.button-1]->on_button_release(tool_button);
     }
 }
 
 void
-ScreenBuffer::move_to(int x, int y)
+ScreenBuffer::force_full_refresh()
 {
-  scroll_offset_x = get_rect().get_width()/2  - x;
-  scroll_offset_y = get_rect().get_height()/2 - y;
-  //std::cout << "MoveTo: " << x << " " << y << std::endl;
-
-  Rect r(0, 0, get_rect().get_width(), get_rect().get_height());
+  // FIXME: Ugly! Add function for fullscreen refresh in screenbuffer
+  Rect r(0, 0, screen_buffer->get_rect().get_width(), screen_buffer->get_rect().get_height());
   r.left   -= scroll_offset_x;
   r.right  -= scroll_offset_x;
   r.top    -= scroll_offset_y;
   r.bottom -= scroll_offset_y;
-  mark_dirty(r);
+  screen_buffer->mark_dirty(r);
   complete_refresh = true;
   set_dirty(true);
+}
+
+void
+ScreenBuffer::move_to(const Point& p)
+{
+  scroll_offset_x = get_rect().get_width()/2  - p.x;
+  scroll_offset_y = get_rect().get_height()/2 - p.y;
+
+  force_full_refresh();
+}
+
+Point
+ScreenBuffer::get_pos()
+{
+  return Point(get_rect().get_width()/2  - scroll_offset_x,
+               get_rect().get_height()/2 - scroll_offset_y);
 }
 
 /* EOF */

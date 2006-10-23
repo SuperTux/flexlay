@@ -29,6 +29,8 @@
 #include "SDL.h"
 #include "widget/widget.hpp"
 
+class Tool;
+
 /** */
 class ScreenBuffer : public Widget
 {
@@ -36,17 +38,14 @@ private:
   //SDL_Surface* buffer;
   Rect dirty_region;
 
+  bool scrolling;
+  bool complete_refresh;
+
   int scroll_offset_x;
   int scroll_offset_y;
 
-  int old_scroll_offset_x;
-  int old_scroll_offset_y;
-
-  int click_pos_x;
-  int click_pos_y;
-
-  bool scrolling;
-  bool complete_refresh;
+  typedef std::vector<Tool*> Tools;
+  Tools tools;
 public:
   ScreenBuffer(const Rect& rect);
   ~ScreenBuffer();
@@ -54,6 +53,7 @@ public:
   // Mark an region as dirty in canvas space, not screen space
   void mark_dirty(int x, int y, int w, int h);
   void mark_dirty(const Rect& region);
+  void force_full_refresh();
   
   void draw(SDL_Surface* target);
 
@@ -65,8 +65,8 @@ public:
 
   bool do_update() { return false; }
 
-  void move_to(int x, int y);
-
+  void move_to(const Point& p);
+  Point get_pos();
 private:
   ScreenBuffer (const ScreenBuffer&);
   ScreenBuffer& operator= (const ScreenBuffer&);

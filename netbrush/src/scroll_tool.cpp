@@ -23,41 +23,51 @@
 **  02111-1307, USA.
 */
 
-#ifndef HEADER_STROKE_BUFFER_HPP
-#define HEADER_STROKE_BUFFER_HPP
+#include "globals.hpp"
+#include "screen_buffer.hpp"
+#include "math/rect.hpp"
+#include "scroll_tool.hpp"
 
-class Rect;
-class DrawingParameter;
-class Dab;
-class GrayscaleBuffer;
-
-/** */
-class StrokeBuffer
+ScrollTool::ScrollTool()
+  : scrolling(false),
+    old_pos(0,0),
+    click_pos(0,0)
 {
-private:
-  GrayscaleBuffer*  buffer;
-  Stroke*           stroke;
-  DrawingParameter* param;
+}
 
-public:
-  StrokeBuffer(int w, int h);
-  ~StrokeBuffer();
+ScrollTool::~ScrollTool()
+{
+}
 
-  void set_param(DrawingParameter* param);
+void
+ScrollTool::on_motion(const ToolMotionEvent& ev)
+{
+  if (scrolling)
+    {
+      screen_buffer->move_to(Point(old_pos.x - (ev.screen.x - click_pos.x),
+                                   old_pos.y - (ev.screen.y - click_pos.y)));
+    }
+}
 
-  void add_dab(const Dab& dab);
-  void clear();
-  void clear(const Rect& rect);
+void
+ScrollTool::on_button_press(const ToolButtonEvent& ev)
+{
+  click_pos.x = ev.screen.x;
+  click_pos.y = ev.screen.y;
 
-  void draw(SDL_Surface* target, const Rect& rect, int x_of, int y_of);
+  old_pos = screen_buffer->get_pos();
 
-  void draw_stroke(const Stroke& stroke, DrawingParameter* param);
+  scrolling = true;
+}
 
-private:
-  StrokeBuffer (const StrokeBuffer&);
-  StrokeBuffer& operator= (const StrokeBuffer&);
-};
+void
+ScrollTool::on_button_release(const ToolButtonEvent& ev)
+{ 
+  // FIXME: grab
+  screen_buffer->move_to(Point(old_pos.x - (ev.screen.x - click_pos.x),
+                               old_pos.y - (ev.screen.y - click_pos.y)));
 
-#endif
+  scrolling = false;
+}
 
 /* EOF */

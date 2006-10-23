@@ -41,8 +41,8 @@ Navigation::on_mouse_motion(const MouseMotionEvent& motion)
 {
   if (dragging)
     {
-      screen_buffer->move_to(draw_ctx->get_width()  * motion.x / get_rect().get_width(),
-                             draw_ctx->get_height() * motion.y / get_rect().get_height());
+      screen_buffer->move_to(Point(draw_ctx->get_width()  * motion.x / get_rect().get_width(),
+                                   draw_ctx->get_height() * motion.y / get_rect().get_height()));
     }
 }
 
@@ -53,14 +53,14 @@ Navigation::on_mouse_button(const MouseButtonEvent& button)
     {
       if (button.state == SDL_RELEASED)
         {
-          screen_buffer->move_to(draw_ctx->get_width()  * button.x / get_rect().get_width(),
-                                 draw_ctx->get_height() * button.y / get_rect().get_height());
+          screen_buffer->move_to(Point(draw_ctx->get_width()  * button.x / get_rect().get_width(),
+                                       draw_ctx->get_height() * button.y / get_rect().get_height()));
           dragging = false;
         }
       else if (button.state == SDL_PRESSED)
         {
-          screen_buffer->move_to(draw_ctx->get_width()  * button.x / get_rect().get_width(),
-                                 draw_ctx->get_height() * button.y / get_rect().get_height());
+          screen_buffer->move_to(Point(draw_ctx->get_width()  * button.x / get_rect().get_width(),
+                                       draw_ctx->get_height() * button.y / get_rect().get_height()));
           dragging = true;
         }
     }

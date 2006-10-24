@@ -23,33 +23,36 @@
 **  02111-1307, USA.
 */
 
-#ifndef HEADER_COLOR_DISPLAY_HPP
-#define HEADER_COLOR_DISPLAY_HPP
+#ifndef HEADER_TEXT_VIEW_HPP
+#define HEADER_TEXT_VIEW_HPP
 
-#include "color.hpp"
 #include "widget/widget.hpp"
 
+struct TTY;
+struct TTY_Font;
+
 /** */
-class ColorDisplay : public Widget
+class TextView : public Widget
 {
 private:
-  Color foreground;
-  Color background;
+  TTY_Font* font;
+  TTY*      tty;
 
 public:
-  ColorDisplay(const Rect& rect);
+  TextView(const Rect& rect);
+  ~TextView();
   
-  void on_mouse_motion(const MouseMotionEvent& motion) {}
+  void on_mouse_motion(const MouseMotionEvent& motion);
   void on_mouse_button(const MouseButtonEvent& button);
 
   void on_enter() {}
   void on_leave() {}
-  
+
   void draw(SDL_Surface* target);
-  void set_color(const Color& color);
+  
 private:
-  ColorDisplay (const ColorDisplay&);
-  ColorDisplay& operator= (const ColorDisplay&);
+  TextView (const TextView&);
+  TextView& operator= (const TextView&);
 };
 
 #endif

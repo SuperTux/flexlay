@@ -46,11 +46,11 @@ HSVColor::from_rgb(const Color& color)
   else
     {
       if (max == color.r)
-        hsvcolor.hue = (0 + (color.g - color.b) / (max - min)) * 43;
+        hsvcolor.hue = (0 + (color.g - color.b) / (max - min)) * 255 / 6;
       else if (max == color.g)
-        hsvcolor.hue = (2 + (color.b - color.r) / (max - min)) * 43;
+        hsvcolor.hue = (2 + (color.b - color.r) / (max - min)) * 255 / 6;
       else if (max == color.b)
-        hsvcolor.hue = (4 + (color.r - color.g) / (max - min)) * 43;
+        hsvcolor.hue = (4 + (color.r - color.g) / (max - min)) * 255 / 6;
     }
 
   if (max == 0)

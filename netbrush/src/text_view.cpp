@@ -23,35 +23,54 @@
 **  02111-1307, USA.
 */
 
-#ifndef HEADER_COLOR_DISPLAY_HPP
-#define HEADER_COLOR_DISPLAY_HPP
+#include <iostream>
+#include "SDL_tty.h"
+#include "SDL_image.h"
+#include "text_view.hpp"
 
-#include "color.hpp"
-#include "widget/widget.hpp"
-
-/** */
-class ColorDisplay : public Widget
+TextView::TextView(const Rect& rect)
+  : Widget(rect)
 {
-private:
-  Color foreground;
-  Color background;
+  SDL_Surface* temp = IMG_Load("data/fonts/8x8font.png");
+  font = TTY_CreateFont(temp, 8, 8, 
+                    "\x7f                                !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                    "[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~");
+  tty = TTY_Create(rect.get_width()/8, rect.get_height()/8, font);
+  TTY_Clear(tty);
+  TTY_printf(tty, "netBrush Version 0.0.1");
+}
+ 
+TextView::~TextView()
+{
+  TTY_Free(tty);
+  TTY_FreeFont(font);
+}
+ 
+void
+TextView::on_mouse_motion(const MouseMotionEvent& motion)
+{
+  set_dirty(true);
+}
 
-public:
-  ColorDisplay(const Rect& rect);
-  
-  void on_mouse_motion(const MouseMotionEvent& motion) {}
-  void on_mouse_button(const MouseButtonEvent& button);
+void
+TextView::on_mouse_button(const MouseButtonEvent& button)
+{
+}
 
-  void on_enter() {}
-  void on_leave() {}
-  
-  void draw(SDL_Surface* target);
-  void set_color(const Color& color);
-private:
-  ColorDisplay (const ColorDisplay&);
-  ColorDisplay& operator= (const ColorDisplay&);
-};
+void
+TextView::draw(SDL_Surface* target)
+{
+  if (0)
+    {
+      SDL_Rect r;
+      r.x = get_rect().left;
+      r.y = get_rect().top;
+      r.w = get_rect().get_width();
+      r.h = get_rect().get_height();
 
-#endif
+      SDL_FillRect(target, &r, SDL_MapRGB(target->format, 255, 255, 255));
+    }
+  TTY_Blit(tty, target, get_rect().left, get_rect().top);
+}
 
 /* EOF */

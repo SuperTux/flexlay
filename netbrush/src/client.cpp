@@ -23,6 +23,7 @@
 #include "navigation.hpp"
 #include "server_connection.hpp"
 #include "command_line.hpp"
+#include "text_view.hpp"
 #include "widget/slider_widget.hpp"
 #include "controller.hpp"
 
@@ -97,6 +98,13 @@ void process_events()
             {
               client_draw_param->opacity = std::min(255, client_draw_param->opacity + 16);
             }
+          else if (event.key.keysym.sym == SDLK_F11)
+            {
+              if (SDL_WM_ToggleFullScreen(screen) == 0) {
+                std::cout << "Failed to toggle fullscreen mode: " << SDL_GetError() << std::endl;
+                //quit(1);
+              }
+            }
           else if (event.key.keysym.sym == SDLK_u)
             {
               navigation->update();
@@ -128,6 +136,8 @@ int main(int argc, char** argv)
     bool fullscreen = false;
     int screen_width  = 800;
     int screen_height = 600;
+    int canvas_width  = 2048;
+    int canvas_height = 2048;
     std::string hostname;
     std::string port     = "4711";
     int rest_arg_count = 0;
@@ -137,6 +147,7 @@ int main(int argc, char** argv)
     argp.add_usage("[OPTIONS] HOSTNAME PORT");
     argp.add_group("Display:");
     argp.add_option('g', "geometry",  "WIDTHxHEIGHT", "Set the windows size to WIDTHxHEIGHT");
+    argp.add_option('c', "canvas",    "WIDTHxHEIGHT", "Set the size of the paintable canvas to WIDTHxHEIGHT");
     argp.add_option('f', "fullscreen", "",            "Start the application in fullscreen mode");
     argp.add_option('w', "window",     "",            "Start the application in window mode");
     argp.add_option('v', "version",    "",            "Display the netBrush version");
@@ -158,6 +169,20 @@ int main(int argc, char** argv)
               else
                 {
                   throw std::runtime_error("Geometry option '-g' requires argument of type {WIDTH}x{HEIGHT}");
+                }
+            }
+            break;
+
+          case 'c':
+            {
+              if (sscanf(argp.get_argument().c_str(), "%dx%d",
+                         &canvas_width, &canvas_height) == 2)
+                {
+                  std::cout << "Geometry: " << canvas_width << "x" << canvas_height << std::endl;
+                }
+              else
+                {
+                  throw std::runtime_error("Canvas option '-c' requires argument of type {WIDTH}x{HEIGHT}");
                 }
             }
             break;
@@ -221,9 +246,10 @@ int main(int argc, char** argv)
     SDL_WM_SetCaption("netBrush", "netBrush");
 
     // 18 is scrollbar
-    screen_buffer = new ScreenBuffer(Rect(38, 2, screen->w - 128 - 18 - 2 - 2, screen->h - 16 - 4)); 
-    draw_ctx      = new DrawingContext(2048, 2048);
-    stroke_buffer = new StrokeBuffer(2048, 2048);
+    screen_buffer = new ScreenBuffer(Rect(38, 2, screen->w - 128 - 18 - 2 - 2, screen->h - 16 - 4 - 38)); 
+    draw_ctx      = new DrawingContext(canvas_width, canvas_height);
+    stroke_buffer = new StrokeBuffer(canvas_width, canvas_height);
+
 
     //std::cout << "# clear screen" << std::endl;
 
@@ -253,6 +279,9 @@ int main(int argc, char** argv)
     widget_manager = new WidgetManager();
     controller     = new Controller();
 
+    widget_manager->add(new TextView(Rect(38, screen->h - 38,
+                                          screen->w - 128 - 18 - 2 - 2, screen->h)));
+
     widget_manager->add(navigation = new Navigation(Rect(Point(screen->w - 128 - 2, screen->h - 128 - 2),
                                                          Size(128, 128))));
     {
@@ -269,14 +298,14 @@ int main(int argc, char** argv)
     widget_manager->add(screen_buffer);
 
     widget_manager->add(vertical_scrollbar = 
-                        new Scrollbar(0, 2048, screen_buffer->get_rect().get_height(), Scrollbar::VERTICAL,
+                        new Scrollbar(0, canvas_height, screen_buffer->get_rect().get_height(), Scrollbar::VERTICAL,
                                       Rect(screen->w - 128 - 16 - 2 - 2, 2,
-                                           screen->w - 128 - 2 - 2, screen->h - 16 - 4)));
+                                           screen->w - 128 - 2 - 2, screen->h - 16 - 4 - 38)));
 
     widget_manager->add(horizontal_scrollbar = 
-                        new Scrollbar(0, 2048, screen_buffer->get_rect().get_width(), Scrollbar::HORIZONTAL,
-                                      Rect(38, screen->h - 16 - 2,
-                                           screen->w - 128 - 18 - 2 - 2, screen->h - 2)));
+                        new Scrollbar(0, canvas_width, screen_buffer->get_rect().get_width(), Scrollbar::HORIZONTAL,
+                                      Rect(38, screen->h - 16 - 2 - 38,
+                                           screen->w - 128 - 18 - 2 - 2, screen->h - 2 - 38)));
     
     brush_widget = new BrushWidget(Rect(Point(screen->w-128, 128+24+24), Size(128, 128)));
     

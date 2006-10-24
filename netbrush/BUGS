@@ -1,0 +1,5 @@
+- color format isn't handled correctly at some points in the code (Navigator) 
+- some parts of code should probally enforce a specific color format
+
+# EOF #
+ 

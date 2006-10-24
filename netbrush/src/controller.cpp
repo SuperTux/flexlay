@@ -163,7 +163,7 @@ void
 Controller::set_color_hue(Uint8 hue_)
 {
   hue = hue_;
-  client_draw_param->color = Color::from_hue(hue);
+  set_color(Color::from_hue(hue));
   saturation_value_picker->set_color(client_draw_param->color);
   alpha_picker->set_color(client_draw_param->color);
 }
@@ -177,7 +177,7 @@ Controller::set_color_value_saturation(Uint8 value_, Uint8 saturation_)
   Color color = Color::from_hue(hue);
   color.apply_value_saturation(value, saturation);
   alpha_picker->set_color(color);
-  client_draw_param->color = color;
+  set_color(color);
 }
 
 void

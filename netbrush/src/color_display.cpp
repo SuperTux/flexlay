@@ -24,30 +24,69 @@
 */
 
 #include <iostream>
+#include "globals.hpp"
+#include "controller.hpp"
 #include "color_display.hpp"
 
 ColorDisplay::ColorDisplay(const Rect& rect)
-  : Widget(rect), m_color(255, 0, 255)
+  : Widget(rect), 
+    foreground(255, 0, 255),
+    background(100, 100, 0)
 {
+}
+
+void
+ColorDisplay::on_mouse_button(const MouseButtonEvent& button) 
+{
+  if (button.state == SDL_PRESSED)
+    {
+      std::swap(background, foreground);
+      controller->set_color(foreground);
+      set_dirty(true);
+    }
 }
 
 void
 ColorDisplay::draw(SDL_Surface* target)
 {
   SDL_Rect r;
+ 
+  r.x = get_rect().left + get_rect().get_width()/3;
+  r.y = get_rect().top  + get_rect().get_height()/3;
+  r.w = 2*get_rect().get_width()/3;
+  r.h = 2*get_rect().get_height()/3;
+
+  SDL_FillRect(target, &r, SDL_MapRGB(target->format, 128, 128, 128));
+
   r.x = get_rect().left;
   r.y = get_rect().top;
-  r.w = get_rect().get_width();
-  r.h = get_rect().get_height();
+  r.w = 2*get_rect().get_width()/3;
+  r.h = 2*get_rect().get_height()/3;
 
-  SDL_FillRect(target, &r, SDL_MapRGB(target->format, m_color.r, m_color.g, m_color.b));
-  if (0) std::cout << "Color: " << (int)m_color.r << " " << (int)m_color.g << " " << (int)m_color.b << std::endl;
+  SDL_FillRect(target, &r, SDL_MapRGB(target->format, 128, 128, 128));
+
+  
+  r.x = get_rect().left + get_rect().get_width()/3+1;
+  r.y = get_rect().top  + get_rect().get_height()/3+1;
+  r.w = 2*get_rect().get_width()/3-2;
+  r.h = 2*get_rect().get_height()/3-2;
+
+  SDL_FillRect(target, &r, SDL_MapRGB(target->format, background.r, background.g, background.b));
+
+  r.x = get_rect().left+1;
+  r.y = get_rect().top+1;
+  r.w = 2*get_rect().get_width()/3-2;
+  r.h = 2*get_rect().get_height()/3-2;
+
+  SDL_FillRect(target, &r, SDL_MapRGB(target->format, foreground.r, foreground.g, foreground.b));
+
+  if (0) std::cout << "Color: " << (int)foreground.r << " " << (int)foreground.g << " " << (int)foreground.b << std::endl;
 }
 
 void
 ColorDisplay::set_color(const Color& color)
 {
-  m_color = color;
+  foreground = color;
   set_dirty(true);
 }
 

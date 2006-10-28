@@ -15,6 +15,7 @@ server_env = Environment()
 server_env.ParseConfig('sdl-config --cflags --libs')
 server_env['CXXFLAGS'] += ['-O0', '-Wall', '-g']
 server_env['LIBS'] += ['SDL_net'] + libcommon
+server_env['LIBPATH'] += ['.']
 server_env.Program('netbrush-server', [
         'src/server.cpp',
         'src/client_connection.cpp',
@@ -24,6 +25,7 @@ client_env = Environment()
 client_env.ParseConfig('sdl-config --cflags --libs')
 client_env['CXXFLAGS'] += ['-O0', '-Wall', '-g']
 client_env['CPPPATH'] += ['src/']
+client_env['LIBPATH'] += ['.']
 client_env['LIBS'] += ['SDL_image', 'SDL_net'] + libcommon
 client_env.Program('netbrush-client', [
         'src/alpha_picker.cpp',

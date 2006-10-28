@@ -43,6 +43,7 @@ ColorDisplay::on_mouse_button(const MouseButtonEvent& button)
       std::swap(background, foreground);
       controller->set_color(foreground);
       set_dirty(true);
+      controller->puts("Colors swapped");
     }
 }
 

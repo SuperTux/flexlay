@@ -33,6 +33,8 @@
 #include "generic_brush.hpp"
 
 class SliderWidget;
+class TextView;
+class BrushWidget;
 
 /** */
 class Controller
@@ -42,6 +44,9 @@ private:
   HuePicker*             hue_picker;
   AlphaPicker*           alpha_picker;
   ColorDisplay*          color_display;
+
+  BrushWidget* brush_widget;
+  TextView* text_view;
 
   SliderWidget* radius_slider;
   SliderWidget* spike_slider;
@@ -68,6 +73,8 @@ public:
   void set_generic_brush_aspect_ratio(float aspect_ratio);
   void set_generic_brush_angle(float angle);
   void set_generic_brush(const GenericBrush& brush);
+
+  void puts(const std::string& str);
 
   void update_mouse_cursor();
 private:

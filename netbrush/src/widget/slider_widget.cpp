@@ -28,8 +28,14 @@
 #include "widget_manager.hpp"
 #include "slider_widget.hpp"
 
-SliderWidget::SliderWidget(const Rect& rect_, SliderCallback* callback_)
-  : Widget(rect_), callback(callback_), pos(0.5f), dragging(false)
+SliderWidget::SliderWidget(int min_, int max_, int page_step_, const Rect& rect_, SliderCallback* callback_)
+  : Widget(rect_), 
+    min(min_),
+    max(max_),
+    page_step(page_step_),
+    pos(min_),
+    callback(callback_), 
+    dragging(false)
 {
 }
 
@@ -44,8 +50,8 @@ SliderWidget::on_mouse_motion(const MouseMotionEvent& motion)
   set_dirty(true);
   if (dragging)
     {
-      pos = float(motion.x) / get_rect().get_width();
-      pos = std::max(0.0f, std::min(pos, 1.0f));
+      pos = min + motion.x * (max - min) / get_rect().get_width();
+      pos = std::max(min, std::min(pos, max));
       (*callback)(pos);
     }
 
@@ -65,8 +71,8 @@ SliderWidget::on_mouse_button(const MouseButtonEvent& button)
         {
           dragging = true;
 
-          pos = float(button.x) / get_rect().get_width();
-          pos = std::max(0.0f, std::min(pos, 1.0f));
+          pos = min + button.x * (max - min) / get_rect().get_width();
+          pos = std::max(min, std::min(pos, max));
 
           (*callback)(pos);
 
@@ -105,12 +111,22 @@ SliderWidget::draw(SDL_Surface* target)
   SDL_FillRect(target, &rect, SDL_MapRGB(target->format, 100, 100, 100));
 
   SDL_Rect slider;
-  slider.x = int(get_rect().get_width() * pos) + get_rect().left - 4;
+  slider.x = int(get_rect().get_width() * (pos - min)/(max - min)) + get_rect().left - 4;
   slider.y = 2 + get_rect().top;
   slider.w = 8;
   slider.h = get_rect().get_height() - 4;
 
   SDL_FillRect(target, &slider, SDL_MapRGB(target->format, 0, 0, 0));
+}
+
+void
+SliderWidget::set_pos(int v)
+{
+  if (pos != v)
+    {
+      pos = v;
+      set_dirty(true);
+    }
 }
 
 /* EOF */

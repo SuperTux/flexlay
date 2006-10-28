@@ -19,7 +19,6 @@
 #include "widget/widget_manager.hpp"
 #include "widget/scrollbar.hpp"
 #include "widget/button.hpp"
-#include "brush_widget.hpp"
 #include "navigation.hpp"
 #include "server_connection.hpp"
 #include "command_line.hpp"
@@ -104,10 +103,6 @@ void process_events()
                 std::cout << "Failed to toggle fullscreen mode: " << SDL_GetError() << std::endl;
                 //quit(1);
               }
-            }
-          else if (event.key.keysym.sym == SDLK_u)
-            {
-              navigation->update();
             }
           else if (event.key.keysym.sym == SDLK_ESCAPE)
             {
@@ -279,9 +274,6 @@ int main(int argc, char** argv)
     widget_manager = new WidgetManager();
     controller     = new Controller();
 
-    widget_manager->add(new TextView(Rect(38, screen->h - 38,
-                                          screen->w - 128 - 18 - 2 - 2, screen->h)));
-
     widget_manager->add(navigation = new Navigation(Rect(Point(screen->w - 128 - 2, screen->h - 128 - 2),
                                                          Size(128, 128))));
     {
@@ -306,10 +298,6 @@ int main(int argc, char** argv)
                         new Scrollbar(0, canvas_width, screen_buffer->get_rect().get_width(), Scrollbar::HORIZONTAL,
                                       Rect(38, screen->h - 16 - 2 - 38,
                                            screen->w - 128 - 18 - 2 - 2, screen->h - 2 - 38)));
-    
-    brush_widget = new BrushWidget(Rect(Point(screen->w-128, 128+24+24), Size(128, 128)));
-    
-    widget_manager->add(brush_widget);
 
     // Main Loop
     while(true)

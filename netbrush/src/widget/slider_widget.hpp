@@ -34,7 +34,7 @@ class SliderCallback
 public:
   SliderCallback() {}
   virtual ~SliderCallback() {}
-  virtual void operator()(float) =0;
+  virtual void operator()(int) =0;
 
 private:
   SliderCallback (const SliderCallback&);
@@ -45,12 +45,16 @@ private:
 class SliderWidget : public Widget
 {
 private:
+  int min;
+  int max;
+  int page_step;
+  int pos;
+
   SliderCallback* callback;
-  float pos;
   bool  dragging;
   
 public:
-  SliderWidget(const Rect& rect_, SliderCallback* callback);
+  SliderWidget(int min, int max, int page_step, const Rect& rect_, SliderCallback* callback);
   ~SliderWidget();
 
   void on_mouse_motion(const MouseMotionEvent& motion);
@@ -60,6 +64,8 @@ public:
   void on_leave();
 
   void draw(SDL_Surface* target);
+
+  void set_pos(int v);
 
 private:
   SliderWidget (const SliderWidget&);

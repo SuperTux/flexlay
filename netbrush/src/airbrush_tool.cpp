@@ -33,6 +33,7 @@
 #include "airbrush_tool.hpp"
 
 AirbrushTool::AirbrushTool()
+  : current_stroke(0)
 {
 }
 

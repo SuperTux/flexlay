@@ -33,11 +33,10 @@ TextView::TextView(const Rect& rect)
 {
   SDL_Surface* temp = IMG_Load("data/fonts/8x8font.png");
   font = TTY_CreateFont(temp, 8, 8, 
-                    "\x7f                                !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-                    "[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~");
-  tty = TTY_Create(rect.get_width()/8, rect.get_height()/8, font);
-  TTY_Clear(tty);
-  TTY_printf(tty, "netBrush Version 0.0.1");
+                        "\x7f                                "
+                        "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                        "[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~");
+  tty = TTY_Create(rect.get_width()/8, rect.get_height()/8+1, font);
 }
  
 TextView::~TextView()
@@ -60,7 +59,7 @@ TextView::on_mouse_button(const MouseButtonEvent& button)
 void
 TextView::draw(SDL_Surface* target)
 {
-  if (0)
+  if (1)
     {
       SDL_Rect r;
       r.x = get_rect().left;
@@ -68,9 +67,16 @@ TextView::draw(SDL_Surface* target)
       r.w = get_rect().get_width();
       r.h = get_rect().get_height();
 
-      SDL_FillRect(target, &r, SDL_MapRGB(target->format, 255, 255, 255));
+      SDL_FillRect(target, &r, SDL_MapRGB(target->format, 64, 64, 64));
     }
   TTY_Blit(tty, target, get_rect().left, get_rect().top);
+}
+
+void
+TextView::put(const std::string& str)
+{
+  TTY_write(tty, str.c_str(), str.size());
+  set_dirty(true);
 }
 
 /* EOF */

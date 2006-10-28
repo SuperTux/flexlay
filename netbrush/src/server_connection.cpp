@@ -28,6 +28,7 @@
 #include "globals.hpp"
 #include "client_state.hpp"
 #include "color.hpp"
+#include "controller.hpp"
 #include "drawing_context.hpp"
 #include "drawing_parameter.hpp"
 #include "server_connection.hpp"
@@ -246,6 +247,13 @@ ServerConnection::process_command(const std::string& cmd)
                   client_state->set_color(Color(atoi(tokens[3].c_str()), 
                                                 atoi(tokens[4].c_str()), 
                                                 atoi(tokens[5].c_str())));
+                }
+              else if (tokens.size() >= 3 && tokens[2] == "message")
+                {
+                  std::string str;
+                  for(int i = 3; i < int(tokens.size()); ++i)
+                    str += tokens[i] + " ";
+                  controller->puts(str);
                 }
               else if (tokens.size() == 6 && tokens[2] == "dab")
                 {

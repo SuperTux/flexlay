@@ -79,8 +79,11 @@ Scrollbar::draw(SDL_Surface* target)
 void
 Scrollbar::set_pos(int p)
 {
-  pos = p;
-  set_dirty(true);
+  if (p != pos)
+    {
+      pos = p;
+      set_dirty(true);
+    }
 }
 
 /* EOF */

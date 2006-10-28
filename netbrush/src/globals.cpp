@@ -33,8 +33,6 @@ WidgetManager*    widget_manager    = 0;
 
 std::map<int, ClientState*> client_states;
 
-BrushWidget*      brush_widget = 0;
-Stroke*           current_stroke = 0;
 ServerConnection* server = 0;
 
 Scrollbar* horizontal_scrollbar = 0;

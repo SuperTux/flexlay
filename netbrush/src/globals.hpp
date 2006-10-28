@@ -40,7 +40,6 @@ class ClientState;
 class DrawingContext;
 class DrawingParameter;
 class WidgetManager;
-class BrushWidget;
 class ServerConnection;
 class Scrollbar;
 class Navigation;
@@ -49,7 +48,6 @@ extern SDLNet_SocketSet socketset;
 
 extern Scrollbar* horizontal_scrollbar;
 extern Scrollbar* vertical_scrollbar;
-extern BrushWidget* brush_widget;
 extern DrawingContext*   draw_ctx;
 extern DrawingParameter* client_draw_param;
 extern std::map<int, ClientState*> client_states;
@@ -58,7 +56,6 @@ extern StrokeBuffer*     stroke_buffer;
 extern WidgetManager* widget_manager;
 
 extern ServerConnection* server;
-extern Stroke* current_stroke;
 
 extern Navigation* navigation;
 extern Controller* controller;

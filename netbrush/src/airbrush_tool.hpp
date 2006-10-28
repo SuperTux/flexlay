@@ -32,6 +32,7 @@
 class AirbrushTool : public Tool
 {
 private:
+  Stroke* current_stroke;
 
 public:
   AirbrushTool();

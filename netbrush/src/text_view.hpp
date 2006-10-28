@@ -49,7 +49,8 @@ public:
   void on_leave() {}
 
   void draw(SDL_Surface* target);
-  
+  void put(const std::string& str);
+
 private:
   TextView (const TextView&);
   TextView& operator= (const TextView&);

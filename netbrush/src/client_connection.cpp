@@ -215,6 +215,7 @@ ClientConnection::process_line(const std::string& line)
   else if (tokens.size() >= 1 && 
            (tokens[0] == "dab" ||
             tokens[0] == "stroke_begin" ||
+            tokens[0] == "message"      ||
             tokens[0] == "stroke_end"   ||
             tokens[0] == "set_brush"    ||
             tokens[0] == "set_generic_brush" ||

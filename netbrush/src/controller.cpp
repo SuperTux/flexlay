@@ -33,47 +33,48 @@
 #include "widget/slider_widget.hpp"
 #include "brush_widget.hpp"
 #include "widget/button.hpp"
+#include "text_view.hpp"
 #include "widget/widget_manager.hpp"
 #include "controller.hpp"
 
 class RadiusCallback : public SliderCallback
 {
 public:
-  void operator()(float v) {
-    controller->set_generic_brush_radius(v * 100.0f + 0.1f);
+  void operator()(int v) {
+    controller->set_generic_brush_radius(v/1000.0f);
   }
 };
 
 class SpikeCallback : public SliderCallback
 {
 public:
-  void operator()(float v) {
-    controller->set_generic_brush_spikes(int(v*18) + 2);
+  void operator()(int v) {
+    controller->set_generic_brush_spikes(v);
   }
 };
 
 class HardnessCallback : public SliderCallback
 {
 public:
-  void operator()(float v) {
-    controller->set_generic_brush_hardness(v);
+  void operator()(int v) {
+    controller->set_generic_brush_hardness(v/1000.0f);
   }
 };
 
 class AspectRatioCallback : public SliderCallback
 {
 public:
-  void operator()(float v) {
-    controller->set_generic_brush_aspect_ratio(v*19.0f + 1.0f);
+  void operator()(int v) {
+    controller->set_generic_brush_aspect_ratio(v/1000.0f);
   }
 };
 
 class AngleCallback : public SliderCallback
 {
 public:
-  void operator()(float v) 
+  void operator()(int v) 
   {
-    controller->set_generic_brush_angle(v * 180.0f);
+    controller->set_generic_brush_angle(v/1000.0f);
   }
 };
 
@@ -117,6 +118,9 @@ Controller::Controller()
                                      Rect(Point(2, 2+2*34), Size(34, 34)),
                                      new ToolButtonCallback(DrawingParameter::TOOL_COLOR_PICKER)));
 
+    widget_manager->add(text_view = new TextView(Rect(38, screen->h - 38,
+                                                      screen->w - 128 - 18 - 2 - 2, screen->h)));
+
   // Color Selection
   alpha_picker            = new AlphaPicker(Rect(Point(screen->w-128, 128+24), Size(128, 24)));
   saturation_value_picker = new SaturationValuePicker(Rect(Point(screen->w-128, 0), Size(128, 128)));
@@ -129,19 +133,20 @@ Controller::Controller()
   widget_manager->add(color_display);
 
   // Brush Slider
-  radius_slider = new SliderWidget(Rect(Point(screen->w-128, 128+24+24+128+24*(0)), Size(128, 24)),
+  radius_slider = new SliderWidget(100, 48*1000, 1, 
+                                   Rect(Point(screen->w-128, 128+24+24+128+24*(0)), Size(128, 24)),
                                    new RadiusCallback());
   
-  spike_slider = new SliderWidget(Rect(Point(screen->w-128, 128+24+24+128+24*(1)), Size(128, 24)),
+  spike_slider = new SliderWidget(2, 20, 1, Rect(Point(screen->w-128, 128+24+24+128+24*(1)), Size(128, 24)),
                                   new SpikeCallback());
   
-  hardness_slider = new SliderWidget(Rect(Point(screen->w-128, 128+24+24+128+24*(2)), Size(128, 24)),
+  hardness_slider = new SliderWidget(0, 1000, 1, Rect(Point(screen->w-128, 128+24+24+128+24*(2)), Size(128, 24)),
                                      new HardnessCallback());
   
-  aspect_ratio_slider = new SliderWidget(Rect(Point(screen->w-128, 128+24+24+128+24*(3)), Size(128, 24)),
+  aspect_ratio_slider = new SliderWidget(1 * 1000, 20 * 1000, 1, Rect(Point(screen->w-128, 128+24+24+128+24*(3)), Size(128, 24)),
                                          new AspectRatioCallback());
   
-  angle_slider = new SliderWidget(Rect(Point(screen->w-128, 128+24+24+128+24*(4)), Size(128, 24)),
+  angle_slider = new SliderWidget(0, 180 * 1000, 1, Rect(Point(screen->w-128, 128+24+24+128+24*(4)), Size(128, 24)),
                                   new AngleCallback());
   widget_manager->add(radius_slider);
   widget_manager->add(spike_slider);
@@ -149,6 +154,11 @@ Controller::Controller()
   widget_manager->add(aspect_ratio_slider);
   widget_manager->add(angle_slider);
 
+  brush_widget = new BrushWidget(Rect(Point(screen->w-128, 128+24+24), Size(128, 128)));
+  widget_manager->add(brush_widget);
+
+  text_view->put("netBrush Version 0.0.1\n");
+  set_generic_brush(client_draw_param->generic_brush);
 }
 
 
@@ -185,6 +195,14 @@ Controller::set_generic_brush_shape(BrushShape shape)
 {
   client_draw_param->generic_brush.shape = shape;
   set_generic_brush(client_draw_param->generic_brush);
+  
+  /*
+    radius_slider->set_pos();
+  spike_slider->set_pos();;
+  hardness_slider->set_pos();
+  aspect_ratio_slider->set_pos();
+  angle_slider->set_pos();
+  */
 }
 
 void
@@ -229,6 +247,12 @@ Controller::set_generic_brush(const GenericBrush& brush)
   delete client_draw_param->brush_buffer;
   client_draw_param->brush_buffer = brush.generate();
   brush_widget->set_brush(client_draw_param->brush_buffer);
+  
+  radius_slider->set_pos(int(client_draw_param->generic_brush.radius * 1000));
+  spike_slider->set_pos(client_draw_param->generic_brush.spikes);
+  hardness_slider->set_pos(int(client_draw_param->generic_brush.hardness * 1000));
+  aspect_ratio_slider->set_pos(int(client_draw_param->generic_brush.aspect_ratio * 1000));
+  angle_slider->set_pos(int(client_draw_param->generic_brush.angle * 1000));
 
   update_mouse_cursor();
 }
@@ -318,6 +342,12 @@ Controller::update_mouse_cursor()
 
   delete[] mask;
   delete[] data;
+}
+
+void
+Controller::puts(const std::string& str)
+{
+  text_view->put(str+"\n");
 }
 
 /* EOF */

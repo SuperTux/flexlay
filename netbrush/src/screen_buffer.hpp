@@ -38,7 +38,6 @@ private:
   //SDL_Surface* buffer;
   Rect dirty_region;
 
-  bool scrolling;
   bool complete_refresh;
 
   int scroll_offset_x;

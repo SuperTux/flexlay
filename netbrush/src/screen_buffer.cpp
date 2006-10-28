@@ -116,7 +116,7 @@ ScreenBuffer::draw(SDL_Surface* target)
       dirty_region.top  <  dirty_region.bottom)
     {
       draw_ctx->draw(target, dirty_region, trans_x, trans_y);
-      if (!scrolling)
+      if (!complete_refresh)
         stroke_buffer->draw(target, dirty_region, trans_x, trans_y);
   
       if (complete_refresh)
@@ -239,7 +239,6 @@ ScreenBuffer::on_mouse_button(const MouseButtonEvent& button)
 void
 ScreenBuffer::force_full_refresh()
 {
-  // FIXME: Ugly! Add function for fullscreen refresh in screenbuffer
   Rect r(0, 0, screen_buffer->get_rect().get_width(), screen_buffer->get_rect().get_height());
   r.left   -= scroll_offset_x;
   r.right  -= scroll_offset_x;

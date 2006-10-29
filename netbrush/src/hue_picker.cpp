@@ -108,4 +108,11 @@ HuePicker::draw(SDL_Surface* target)
   SDL_FillRect(target, &vline, SDL_MapRGB(target->format, 0, 0, 0));
 }
 
+void
+HuePicker::set_hue(Uint8 hue)
+{
+  click_pos.x = (hue * get_rect().get_width()) / 255;
+  set_dirty(true);
+}
+
 /* EOF */

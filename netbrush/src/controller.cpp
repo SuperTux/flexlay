@@ -115,9 +115,9 @@ Controller::Controller()
     widget_manager->add(new Button(IMG_Load("data/icons/stock-tool-paintbrush-22.png"), 
                                    Rect(Point(2, 2+1*34), Size(34, 34)),
                                    new ToolButtonCallback(DrawingParameter::TOOL_PAINTBRUSH)));
-    widget_manager->add(new Button(IMG_Load("data/icons/stock-tool-color-picker-22.png"), 
-                                     Rect(Point(2, 2+2*34), Size(34, 34)),
-                                     new ToolButtonCallback(DrawingParameter::TOOL_COLOR_PICKER)));
+    //widget_manager->add(new Button(IMG_Load("data/icons/stock-tool-color-picker-22.png"), 
+    //                               Rect(Point(2, 2+2*34), Size(34, 34)),
+    //                               new ToolButtonCallback(DrawingParameter::TOOL_COLOR_PICKER)));
 
     widget_manager->add(text_view = new TextView(Rect(38, screen->h - 38,
                                                       screen->w - 128 - 18 - 2 - 2, screen->h)));
@@ -160,14 +160,28 @@ Controller::Controller()
 
   text_view->put("netBrush Version 0.0.1\n");
   set_generic_brush(client_draw_param->generic_brush);
-}
 
+  set_color(Color(0, 0, 0));
+
+  saturation_value_picker->set_color(Color(1, 0, 0));
+}
 
 void
 Controller::set_color(const Color& color)
 {
   client_draw_param->color = color;
   color_display->set_color(color);
+  
+  //alpha_picker->set_color(color);
+  
+  //saturation_value_picker->set_color(color); // FIXME: Should use hue instead of color
+
+  if (0) 
+    { // FIXME: all buggy
+      HSVColor hsv = HSVColor::from_rgb(color);
+      saturation_value_picker->set_color(Color::from_hue(hsv.hue));
+      hue_picker->set_hue(hsv.hue);
+    }
 }
 
 void

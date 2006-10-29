@@ -1,17 +1,28 @@
+netbrush 0.1.0
+==============
+- fixed airbrush and paintbrush
+- added PNG save (press F5)
+- added color picker (press right mouse button)
+- added text widget for log messages
+- added color swap widget
+
+
 netbrush 0.0.7
 ==============
 - fixed scrolling 
 - added thumbnail-navigation widget
 - added airbrush and paintbrush tools
 
+
 netbrush 0.0.6
 ==============
-
 - Gimp-style generic brushes
 - scrolling (buggy)
 - load/save on the server side
 
+
 netbrush 0.0.0 (Oct 12 2006)
 ============================
+- initial version
 
 # EOF #

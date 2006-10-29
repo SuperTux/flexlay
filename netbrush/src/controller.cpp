@@ -158,7 +158,7 @@ Controller::Controller()
   brush_widget = new BrushWidget(Rect(Point(screen->w-128, 128+24+24), Size(128, 128)));
   widget_manager->add(brush_widget);
 
-  text_view->put("netBrush Version 0.0.1\n");
+  text_view->put("netBrush Version 0.1.0\n");
   set_generic_brush(client_draw_param->generic_brush);
 
   set_color(Color(0, 0, 0));

@@ -26,6 +26,65 @@
 #include <math.h>
 #include "stroke.hpp"
 
+DabInterpolater::DabInterpolater(float x_spacing_, float y_spacing_)
+  : x_spacing(x_spacing_),
+    y_spacing(y_spacing_),
+    overspace(0.0f)
+{
+  
+}
+
+const Stroke::Dabs&
+DabInterpolater::get_interpolated_dabs() const
+{
+  return interpolated_dabs;
+}
+
+void
+DabInterpolater::add_dab(const Dab& dab)
+{
+  if (dabs.empty())
+    { // First dab
+      interpolated_dabs.push_back(dab);
+      dabs.push_back(dab);
+    }
+  else
+    {
+      // The following code basically takes all the event dabs as recieved
+      // by from the InputDevice and interpolates new dabs inbetween to
+      // give them an equal spacing (ie. every dab is only 'spacing' away
+      // from the next)
+      
+      const Dab& prev_dab = dabs.back();
+      const Dab& next_dab = dab;
+
+      Vector dist  = next_dab.pos - prev_dab.pos;
+      float length = sqrt(dist.x * dist.x + dist.y * dist.y);
+      int n = 1;
+    
+      // Spacing is keep relative to the brush size
+      // FIXME: This is specific to a Sprite based drawer, might not work for others
+      // FIXME: y_spacing isn't taken into account either
+      float local_spacing = x_spacing * prev_dab.pressure;
+
+      while (length + overspace > (local_spacing * n))
+        {
+          float factor = (local_spacing/length) * n - (overspace/length);
+          
+          // FIXME: Interpolate tilting, pressure, etc. along the line
+          interpolated_dabs.push_back(Dab(prev_dab.pos.x + dist.x * factor,
+                                          prev_dab.pos.y + dist.y * factor,
+                                          prev_dab.pressure));
+          n += 1;
+        }
+
+      // calculate the space that wasn't used in the last iteration
+      overspace = (length + overspace) - (local_spacing * (n-1));
+
+      dabs.push_back(dab);
+    }
+}
+
 Stroke::Stroke()
 {
   

@@ -23,6 +23,7 @@
 **  02111-1307, USA.
 */
 
+#include <png.h>
 #include <iostream>
 #include "globals.hpp"
 #include "screen_buffer.hpp"
@@ -182,6 +183,63 @@ DrawingContext::get_color(int x, int y, Color& color)
     {
       return false;
     }
+}
+
+void
+DrawingContext::save_png(const std::string& filename)
+{
+  SDL_LockSurface(drawable);
+
+  // FIXME: could/should check the right drawable format
+
+  FILE* fp;
+  fp = fopen(filename.c_str (), "wb");
+  if (fp == NULL)
+    {
+      std::cout << "Error: Couldn't write " << filename << std::endl;
+      return;
+    }
+
+  png_structp png_ptr;
+  png_infop info_ptr;
+
+  png_ptr  = png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
+  info_ptr = png_create_info_struct(png_ptr);
+
+  png_init_io(png_ptr, fp);
+
+  png_set_IHDR(png_ptr, info_ptr, 
+               drawable->w, drawable->h, 8 /* bitdepth */,
+               PNG_COLOR_TYPE_RGB,
+               PNG_INTERLACE_NONE, 
+               PNG_COMPRESSION_TYPE_BASE, 
+               PNG_FILTER_TYPE_BASE);
+
+  png_write_info(png_ptr, info_ptr);
+
+  png_uint_32 height    = drawable->h;
+  png_uint_32 row_bytes = drawable->w * 3;
+
+  png_byte* image = new png_byte[height * row_bytes];
+  png_bytep* row_pointers = new png_bytep[height];
+
+  // fill the image with data
+  for (int i = 0; i < drawable->w*drawable->h*3; ++i)
+    image[i] = static_cast<unsigned char*>(drawable->pixels)[i];
+
+  // generate row pointers
+  for (unsigned int k = 0; k < height; k++)
+    row_pointers[k] = image + (k * row_bytes);
+
+  png_write_image(png_ptr, row_pointers);
+
+  png_write_end(png_ptr, info_ptr);
+
+  delete image;
+  delete row_pointers;
+
+  fclose(fp);
+  SDL_UnlockSurface(drawable);
 }
 
 /* EOF */

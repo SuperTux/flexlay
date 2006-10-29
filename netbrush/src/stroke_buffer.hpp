@@ -30,6 +30,7 @@ class Rect;
 class DrawingParameter;
 class Dab;
 class GrayscaleBuffer;
+class DabInterpolater;
 
 /** */
 class StrokeBuffer
@@ -38,6 +39,7 @@ private:
   GrayscaleBuffer*  buffer;
   Stroke*           stroke;
   DrawingParameter* param;
+  DabInterpolater*  interpolater;
 
 public:
   StrokeBuffer(int w, int h);

@@ -55,6 +55,8 @@ public:
   int get_height() const { return drawable->h; }
   bool get_color(int x, int y, Color& color);
   SDL_Surface* get_surface() { return drawable; }
+
+  void save_png(const std::string& filename);
 };
 
 #endif

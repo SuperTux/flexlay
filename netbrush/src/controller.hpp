@@ -77,6 +77,7 @@ public:
   void puts(const std::string& str);
 
   void update_mouse_cursor();
+  void save_png(const std::string& filename);
 private:
   Controller (const Controller&);
   Controller& operator= (const Controller&);

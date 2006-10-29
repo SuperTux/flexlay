@@ -99,6 +99,23 @@ private:
   Stroke& operator= (const Stroke&);
 };
 
+class DabInterpolater
+{
+private:
+  float x_spacing;
+  float y_spacing;
+  float overspace;
+
+  Stroke::Dabs interpolated_dabs;
+  Stroke::Dabs dabs;
+
+public: 
+  DabInterpolater(float x_spacing_, float y_spacing_);
+
+  void add_dab(const Dab& dab);
+  const Stroke::Dabs& get_interpolated_dabs() const;
+};
+
 #endif
 
 /* EOF */

@@ -28,6 +28,7 @@
 #include "alpha_picker.hpp"
 #include "hue_picker.hpp"
 #include "saturation_value_picker.hpp"
+#include "drawing_context.hpp"
 #include "globals.hpp"
 #include "drawing_parameter.hpp"
 #include "widget/slider_widget.hpp"
@@ -348,6 +349,13 @@ void
 Controller::puts(const std::string& str)
 {
   text_view->put(str+"\n");
+}
+
+void
+Controller::save_png(const std::string& filename)
+{
+  draw_ctx->save_png(filename);
+  puts("Wrote PNG: " + filename);
 }
 
 /* EOF */

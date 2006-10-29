@@ -26,6 +26,12 @@
 #include "widget/slider_widget.hpp"
 #include "controller.hpp"
 
+#ifdef WIN32
+#include  <io.h>
+#define access _access
+#define F_OK   0
+#endif
+
 SDL_Rect* make_rect(int x, int y, int w, int h)
 {
   static SDL_Rect rect;
@@ -96,6 +102,23 @@ void process_events()
           else if (event.key.keysym.sym == SDLK_DOWN)
             {
               client_draw_param->opacity = std::min(255, client_draw_param->opacity + 16);
+            }
+          else if (event.key.keysym.sym == SDLK_F5)
+            {
+              int j = 1;
+              std::string fname;
+              std::ostringstream filename;
+              do 
+                {
+                  filename.str("");
+                  filename << "images/canvas-" << j << ".png";
+                  fname = filename.str();
+                  j += 1;
+              }
+              while (access(fname.c_str(), F_OK) == 0);
+              
+              controller->save_png(fname);
+
             }
           else if (event.key.keysym.sym == SDLK_F11)
             {
@@ -244,8 +267,7 @@ int main(int argc, char** argv)
     screen_buffer = new ScreenBuffer(Rect(38, 2, screen->w - 128 - 18 - 2 - 2, screen->h - 16 - 4 - 38)); 
     draw_ctx      = new DrawingContext(canvas_width, canvas_height);
     stroke_buffer = new StrokeBuffer(canvas_width, canvas_height);
-
-
+    
     //std::cout << "# clear screen" << std::endl;
 
     // clear screen

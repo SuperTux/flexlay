@@ -23,47 +23,64 @@
 **  02111-1307, USA.
 */
 
-#ifndef HEADER_TOOL_HPP
-#define HEADER_TOOL_HPP
+#include <sstream>
+#include "globals.hpp"
+#include "server_connection.hpp"
+#include "controller.hpp"
+#include "region_tool.hpp"
 
-#include "math/point.hpp"
-#include "widget/events.hpp"
-
-enum ToolName { PAINTBRUSH_TOOL, RECT_TOOL, REGION_TOOL, COLOR_PICKER_TOOL };
-
-struct ToolMotionEvent
+RegionTool::RegionTool()
+  : have_region(false)
 {
-  int x;
-  int y;
+}
 
-  Point screen;
-};
-
-struct ToolButtonEvent
+RegionTool::~RegionTool()
 {
-  int x;
-  int y;
 
-  Point screen;
-};
+}
 
-/** */
-class Tool
+void
+RegionTool::on_motion(const ToolMotionEvent& ev)
 {
-private:
-public:
-  Tool() {}
-  virtual ~Tool() {}
+}
 
-  virtual void on_motion(const ToolMotionEvent& ev) =0;
-  virtual void on_button_press(const ToolButtonEvent& ev) =0;
-  virtual void on_button_release(const ToolButtonEvent& ev) =0;
+void
+RegionTool::on_button_press(const ToolButtonEvent& ev)
+{
+  if (have_region)
+    {
+      controller->puts("region dropped");     
+      std::ostringstream str;
+      str << "copy_region "
+          << rect.left  << " " << rect.top << " " 
+          << rect.right << " " << rect.bottom << " "
+          << ev.x << " " << ev.y << std::endl;
+      server->send(str.str());
+    }
+  else
+    {
+      rect.left = ev.x;
+      rect.top  = ev.y;
+      controller->puts("region select started");
+    }
+}
 
-private:
-  Tool (const Tool&);
-  Tool& operator= (const Tool&);
-};
+void
+RegionTool::on_button_release(const ToolButtonEvent& ev)
+{
+  if (!have_region)
+    {
+      rect.right  = ev.x;
+      rect.bottom = ev.y;
 
-#endif
+      rect.normalize();
+      controller->puts("region selected");
+      have_region = true;
+    }
+  else
+    {
+      have_region = false;
+    }
+}
 
 /* EOF */

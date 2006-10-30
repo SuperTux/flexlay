@@ -33,8 +33,10 @@
 #include "drawing_parameter.hpp"
 #include "widget/slider_widget.hpp"
 #include "brush_widget.hpp"
+#include "screen_buffer.hpp"
 #include "widget/button.hpp"
 #include "text_view.hpp"
+#include "tool.hpp"
 #include "widget/widget_manager.hpp"
 #include "controller.hpp"
 
@@ -79,12 +81,13 @@ public:
   }
 };
 
-class ToolButtonCallback : public ButtonCallback
+class ToolParameterButtonCallback : public ButtonCallback
 {
 private:
   DrawingParameter::Tool tool;
+
 public:
-  ToolButtonCallback(DrawingParameter::Tool tool_)
+  ToolParameterButtonCallback(DrawingParameter::Tool tool_)
     : tool(tool_)
   {
   }
@@ -103,6 +106,27 @@ public:
   {
     //std::cout << "Setting tool: " << tool << std::endl;
     client_draw_param->tool = tool;
+    screen_buffer->set_tool(PAINTBRUSH_TOOL);
+  }
+};
+
+class ToolButtonCallback : public ButtonCallback
+{
+private:
+  ToolName tool;
+
+public:
+  ToolButtonCallback(ToolName tool_)
+    : tool(tool_)
+  {
+  }
+
+  void on_press  (Button* button) {}
+  void on_release(Button* button) {}
+  
+  void on_click  (Button* button) 
+  {
+    screen_buffer->set_tool(tool);
   }
 };
 
@@ -111,14 +135,19 @@ Controller::Controller()
   // Toolbar
     widget_manager->add(new Button(IMG_Load("data/icons/stock-tool-airbrush-22.png"), 
                                    Rect(Point(2, 2+0*34), Size(34, 34)),
-                                   new ToolButtonCallback(DrawingParameter::TOOL_AIRBRUSH)));
+                                   new ToolParameterButtonCallback(DrawingParameter::TOOL_AIRBRUSH)));
     widget_manager->add(new Button(IMG_Load("data/icons/stock-tool-paintbrush-22.png"), 
                                    Rect(Point(2, 2+1*34), Size(34, 34)),
-                                   new ToolButtonCallback(DrawingParameter::TOOL_PAINTBRUSH)));
-    //widget_manager->add(new Button(IMG_Load("data/icons/stock-tool-color-picker-22.png"), 
-    //                               Rect(Point(2, 2+2*34), Size(34, 34)),
-    //                               new ToolButtonCallback(DrawingParameter::TOOL_COLOR_PICKER)));
-
+                                   new ToolParameterButtonCallback(DrawingParameter::TOOL_PAINTBRUSH)));
+    widget_manager->add(new Button(IMG_Load("data/icons/stock-tool-color-picker-22.png"), 
+                                   Rect(Point(2, 2+2*34), Size(34, 34)),
+                                   new ToolButtonCallback(COLOR_PICKER_TOOL)));
+    widget_manager->add(new Button(IMG_Load("data/icons/stock-tool-rect-22.png"), 
+                                   Rect(Point(2, 2+3*34), Size(34, 34)),
+                                   new ToolButtonCallback(RECT_TOOL)));
+    widget_manager->add(new Button(IMG_Load("data/icons/stock-tool-rect-select-22.png"), 
+                                   Rect(Point(2, 2+4*34), Size(34, 34)),
+                                   new ToolButtonCallback(REGION_TOOL)));
     widget_manager->add(text_view = new TextView(Rect(38, screen->h - 38,
                                                       screen->w - 128 - 18 - 2 - 2, screen->h)));
 
@@ -274,7 +303,7 @@ Controller::set_generic_brush(const GenericBrush& brush)
 
 void
 Controller::update_mouse_cursor()
-{
+{ // FIXME: This could need some cleanup/feature enhancements
   if (client_draw_param->generic_brush.radius < 5.0f)
     return ;
 

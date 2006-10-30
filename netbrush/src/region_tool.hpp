@@ -23,66 +23,29 @@
 **  02111-1307, USA.
 */
 
-#ifndef HEADER_SCREEN_BUFFER_HPP
-#define HEADER_SCREEN_BUFFER_HPP
+#ifndef HEADER_REGION_TOOL_HPP
+#define HEADER_REGION_TOOL_HPP
 
-#include "SDL.h"
 #include "tool.hpp"
-#include "widget/widget.hpp"
-
-class Tool;
-
-class ColorpickerTool;
-class ScrollTool;
-class RegionTool;
-class RectTool;
-class AirbrushTool;
 
 /** */
-class ScreenBuffer : public Widget
+class RegionTool : public Tool
 {
 private:
-  //SDL_Surface* buffer;
-  Rect dirty_region;
+  Rect rect;
+  bool have_region;
 
-  bool complete_refresh;
-
-  int scroll_offset_x;
-  int scroll_offset_y;
-
-  ColorpickerTool* colorpicker_tool;
-  RegionTool*      region_tool;
-  RectTool*        rect_tool;
-  ScrollTool*      scroll_tool;
-  AirbrushTool*    airbrush_tool;
-
-  typedef std::vector<Tool*> Tools;
-  Tools tools;
 public:
-  ScreenBuffer(const Rect& rect);
-  ~ScreenBuffer();
+  RegionTool();
+  ~RegionTool();
 
-  // Mark an region as dirty in canvas space, not screen space
-  void mark_dirty(int x, int y, int w, int h);
-  void mark_dirty(const Rect& region);
-  void force_full_refresh();
+  void on_motion(const ToolMotionEvent& ev);
+  void on_button_press(const ToolButtonEvent& ev);
+  void on_button_release(const ToolButtonEvent& ev);
   
-  void draw(SDL_Surface* target);
-
-  void on_mouse_motion(const MouseMotionEvent& motion);
-  void on_mouse_button(const MouseButtonEvent& button);
-  
-  void on_enter() {}
-  void on_leave() {}
-
-  bool do_update() { return false; }
-
-  void  move_to(const Point& p);
-  Point get_pos();
-  void  set_tool(ToolName tool);
 private:
-  ScreenBuffer (const ScreenBuffer&);
-  ScreenBuffer& operator= (const ScreenBuffer&);
+  RegionTool (const RegionTool&);
+  RegionTool& operator= (const RegionTool&);
 };
 
 #endif

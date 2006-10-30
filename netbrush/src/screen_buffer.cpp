@@ -47,16 +47,20 @@ ScreenBuffer::ScreenBuffer(const Rect& rect)
     scroll_offset_x(0),
     scroll_offset_y(0)
 {
-  tools.push_back(new AirbrushTool());
-  tools.push_back(new ScrollTool());
-  tools.push_back(new ColorpickerTool());
-  tools.push_back(new RectTool());
-  tools.push_back(new RegionTool());
+  tools.push_back(airbrush_tool    = new AirbrushTool());
+  tools.push_back(scroll_tool      = new ScrollTool());
+  tools.push_back(colorpicker_tool = new ColorpickerTool());
+  tools.push_back(rect_tool        = new RectTool());
+  tools.push_back(region_tool      = new RegionTool());
 }
 
 ScreenBuffer::~ScreenBuffer()
 {
-  //  SDL_FreeSurface(buffer);
+  delete colorpicker_tool;
+  delete region_tool;
+  delete rect_tool;
+  delete scroll_tool;
+  delete airbrush_tool;
 }
 
 void
@@ -267,6 +271,29 @@ ScreenBuffer::get_pos()
 {
   return Point(get_rect().get_width()/2  - scroll_offset_x,
                get_rect().get_height()/2 - scroll_offset_y);
+}
+
+void
+ScreenBuffer::set_tool(ToolName tool)
+{
+  switch(tool)
+    {
+    case PAINTBRUSH_TOOL:
+      tools[0] = airbrush_tool;
+      break;
+
+    case COLOR_PICKER_TOOL:
+      tools[0] = colorpicker_tool;
+      break;
+
+    case RECT_TOOL:
+      tools[0] = rect_tool;
+      break;
+
+    case REGION_TOOL:
+      tools[0] = region_tool;
+      break;
+    }
 }
 
 /* EOF */

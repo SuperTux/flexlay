@@ -39,6 +39,7 @@
 #include "colorpicker_tool.hpp"
 #include "region_tool.hpp"
 #include "rect_tool.hpp"
+#include "circle_tool.hpp"
 #include "screen_buffer.hpp"
 
 ScreenBuffer::ScreenBuffer(const Rect& rect)
@@ -52,6 +53,7 @@ ScreenBuffer::ScreenBuffer(const Rect& rect)
   tools.push_back(colorpicker_tool = new ColorpickerTool());
   tools.push_back(rect_tool        = new RectTool());
   tools.push_back(region_tool      = new RegionTool());
+  tools.push_back(circle_tool      = new CircleTool());
 }
 
 ScreenBuffer::~ScreenBuffer()
@@ -61,6 +63,7 @@ ScreenBuffer::~ScreenBuffer()
   delete rect_tool;
   delete scroll_tool;
   delete airbrush_tool;
+  delete circle_tool;
 }
 
 void
@@ -280,6 +283,10 @@ ScreenBuffer::set_tool(ToolName tool)
     {
     case PAINTBRUSH_TOOL:
       tools[0] = airbrush_tool;
+      break;
+
+    case CIRCLE_TOOL:
+      tools[0] = circle_tool;
       break;
 
     case COLOR_PICKER_TOOL:

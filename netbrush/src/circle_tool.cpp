@@ -23,47 +23,48 @@
 **  02111-1307, USA.
 */
 
-#ifndef HEADER_TOOL_HPP
-#define HEADER_TOOL_HPP
+#include <sstream>
+#include "globals.hpp"
+#include "drawing_parameter.hpp"
+#include "server_connection.hpp"
+#include "circle_tool.hpp"
 
-#include "math/point.hpp"
-#include "widget/events.hpp"
-
-enum ToolName { PAINTBRUSH_TOOL, RECT_TOOL, REGION_TOOL, COLOR_PICKER_TOOL, CIRCLE_TOOL };
-
-struct ToolMotionEvent
+CircleTool::CircleTool()
 {
-  int x;
-  int y;
+}
 
-  Point screen;
-};
-
-struct ToolButtonEvent
+void
+CircleTool::on_motion(const ToolMotionEvent& ev)
 {
-  int x;
-  int y;
+}
 
-  Point screen;
-};
-
-/** */
-class Tool
+void
+CircleTool::on_button_press(const ToolButtonEvent& ev)
 {
-private:
-public:
-  Tool() {}
-  virtual ~Tool() {}
+  click_pos.x = ev.x;
+  click_pos.y = ev.y;
+}
 
-  virtual void on_motion(const ToolMotionEvent& ev) =0;
-  virtual void on_button_press(const ToolButtonEvent& ev) =0;
-  virtual void on_button_release(const ToolButtonEvent& ev) =0;
+void
+CircleTool::on_button_release(const ToolButtonEvent& ev)
+{
+  Vector pos(ev.x, ev.y);
+  float radius = (click_pos - pos).length();
 
-private:
-  Tool (const Tool&);
-  Tool& operator= (const Tool&);
-};
+  std::ostringstream str;
+  str << "set_color "
+      << int(client_draw_param->color.r) << " " 
+      << int(client_draw_param->color.g) << " " 
+      << int(client_draw_param->color.b) << std::endl;
 
-#endif
+  str << "set_opacity " << int(client_draw_param->opacity) << std::endl;
+
+  str << "fill_circle "
+      << int(click_pos.x) << " " << int(click_pos.y) << " "
+      << int(radius)
+      << std::endl;
+
+  server->send(str.str());
+}
 
 /* EOF */

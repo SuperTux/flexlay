@@ -62,6 +62,7 @@ public:
 
   void copy_region(const Rect& rect, const Point& target);
   void fill_rect(const Rect& rect);
+  void fill_circle(const Point& pos, int radius);
 
   void dab(unsigned int time, int x, int y);
 };

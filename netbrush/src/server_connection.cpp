@@ -233,6 +233,12 @@ ServerConnection::process_command(const std::string& cmd)
                                                atoi(tokens[5].c_str()),
                                                atoi(tokens[6].c_str())));
                 }
+              else if (tokens.size() == 6 && tokens[2] == "fill_circle")
+                { // fill_circle X Y RADIUS
+                  client_state->fill_circle(Point(atoi(tokens[3].c_str()),
+                                                  atoi(tokens[4].c_str())),
+                                            atoi(tokens[5].c_str()));
+                }
               else if (tokens.size() == 3 && tokens[2] == "stroke_end")
                 {
                   client_state->stroke_end();

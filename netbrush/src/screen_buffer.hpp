@@ -36,6 +36,7 @@ class ColorpickerTool;
 class ScrollTool;
 class RegionTool;
 class RectTool;
+class CircleTool;
 class AirbrushTool;
 
 /** */
@@ -53,6 +54,7 @@ private:
   ColorpickerTool* colorpicker_tool;
   RegionTool*      region_tool;
   RectTool*        rect_tool;
+  CircleTool*      circle_tool;
   ScrollTool*      scroll_tool;
   AirbrushTool*    airbrush_tool;
 

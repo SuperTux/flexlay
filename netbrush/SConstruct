@@ -69,6 +69,7 @@ client_env.Program('netbrush-client', [
         'src/SDL_tty.c',
         'src/text_view.cpp',
         'src/rect_tool.cpp',
+        'src/circle_tool.cpp',
         'src/SDL_gfx/SDL_gfxPrimitives.c',
 #        'src/widget/events.cpp',
 ])

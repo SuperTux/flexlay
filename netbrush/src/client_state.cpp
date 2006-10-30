@@ -141,4 +141,15 @@ ClientState::fill_rect(const Rect& rect)
   screen_buffer->mark_dirty(rect);
 }
 
+void
+ClientState::fill_circle(const Point& pos, int radius)
+{
+  filledCircleRGBA(draw_ctx->get_surface(),
+             pos.x, pos.y, radius,
+             draw_param->color.r, draw_param->color.g, draw_param->color.b, 
+             draw_param->opacity);
+  screen_buffer->mark_dirty(Rect(pos.x - radius,   pos.y - radius, 
+                                 pos.x + radius+1, pos.y + radius+1));  
+}
+
 /* EOF */

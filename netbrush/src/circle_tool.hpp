@@ -23,45 +23,28 @@
 **  02111-1307, USA.
 */
 
-#ifndef HEADER_TOOL_HPP
-#define HEADER_TOOL_HPP
+#ifndef HEADER_CIRCLE_TOOL_HPP
+#define HEADER_CIRCLE_TOOL_HPP
 
-#include "math/point.hpp"
-#include "widget/events.hpp"
-
-enum ToolName { PAINTBRUSH_TOOL, RECT_TOOL, REGION_TOOL, COLOR_PICKER_TOOL, CIRCLE_TOOL };
-
-struct ToolMotionEvent
-{
-  int x;
-  int y;
-
-  Point screen;
-};
-
-struct ToolButtonEvent
-{
-  int x;
-  int y;
-
-  Point screen;
-};
+#include "tool.hpp"
 
 /** */
-class Tool
+class CircleTool : public Tool
 {
 private:
-public:
-  Tool() {}
-  virtual ~Tool() {}
+  Vector click_pos;
 
-  virtual void on_motion(const ToolMotionEvent& ev) =0;
-  virtual void on_button_press(const ToolButtonEvent& ev) =0;
-  virtual void on_button_release(const ToolButtonEvent& ev) =0;
+public:
+  CircleTool();
+  virtual ~CircleTool() {}
+
+  void on_motion(const ToolMotionEvent& ev);
+  void on_button_press(const ToolButtonEvent& ev);
+  void on_button_release(const ToolButtonEvent& ev);
 
 private:
-  Tool (const Tool&);
-  Tool& operator= (const Tool&);
+  CircleTool (const CircleTool&);
+  CircleTool& operator= (const CircleTool&);
 };
 
 #endif

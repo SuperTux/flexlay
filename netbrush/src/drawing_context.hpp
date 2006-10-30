@@ -51,10 +51,16 @@ public:
 
   void draw(SDL_Surface* target, const Rect& region, int x_of, int y_of);
 
+  /** Blits \a source onto \a drawable at position \a pos */
+  void blit(SDL_Surface* source, const Point& pos);
+
   int get_width()  const { return drawable->w; }
   int get_height() const { return drawable->h; }
   bool get_color(int x, int y, Color& color);
   SDL_Surface* get_surface() { return drawable; }
+
+  /** Creates a surface of the given region */
+  SDL_Surface* get_surface(const Rect& rect);
 
   void save_png(const std::string& filename);
 };

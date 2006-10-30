@@ -221,6 +221,7 @@ ClientConnection::process_line(const std::string& line)
             tokens[0] == "set_generic_brush" ||
             tokens[0] == "set_color"    ||
             tokens[0] == "set_tool"     ||
+            tokens[0] == "copy_region"  ||
             tokens[0] == "set_opacity" 
             ))
     {

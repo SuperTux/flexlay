@@ -30,6 +30,8 @@
 #include "brushmask.hpp"
 #include "drawing_parameter.hpp"
 
+class Rect;
+class Point;
 class Color;
 class Stroke;
 class DrawingParameter;
@@ -57,6 +59,8 @@ public:
   void set_brush(const std::string& filename);
   void stroke_begin();
   void stroke_end();
+
+  void copy_region(const Rect& rect, const Point& target);
 
   void dab(unsigned int time, int x, int y);
 };

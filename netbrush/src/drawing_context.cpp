@@ -36,29 +36,7 @@
 
 DrawingContext::DrawingContext(int w, int h) 
 {
-  Uint32 rmask, gmask, bmask, amask;
-
-  /* SDL interprets each pixel as a 32-bit number, so our masks must depend
-     on the endianness (byte order) of the machine */
-#if SDL_BYTEORDER == SDL_BIG_ENDIAN
-  rmask = 0xff000000;
-  gmask = 0x00ff0000;
-  bmask = 0x0000ff00;
-  amask = 0; //0x000000ff;
-#else
-  rmask = 0x000000ff;
-  gmask = 0x0000ff00;
-  bmask = 0x00ff0000;
-  amask = 0; //0xff000000;
-#endif
-
-  drawable = SDL_CreateRGBSurface(SDL_SWSURFACE, w, h, 24,
-                                  rmask, gmask, bmask, amask);
-  if(drawable == NULL) {
-    fprintf(stderr, "CreateRGBSurface failed: %s\n", SDL_GetError());
-    exit(1);
-  }
-
+  drawable = create_surface(w, h);
   stroke_buffer = new StrokeBuffer(w, h);
 }
 
@@ -240,6 +218,39 @@ DrawingContext::save_png(const std::string& filename)
 
   fclose(fp);
   SDL_UnlockSurface(drawable);
+}
+
+SDL_Surface*
+DrawingContext::get_surface(const Rect& rect)
+{
+  SDL_Surface* region = create_surface(rect.get_width(), rect.get_height());
+  // Fill with white (FIXME: should be alpha or background color)
+  SDL_FillRect(region, NULL, SDL_MapRGB(region->format, 255, 255, 255));
+  
+  SDL_Rect source_pos;
+  // FIXME: Do we need to clip those?
+  source_pos.x = rect.left;
+  source_pos.y = rect.top;
+  source_pos.w = rect.get_width();
+  source_pos.h = rect.get_height();
+
+  SDL_Rect target_pos;
+  target_pos.x = 0;
+  target_pos.y = 0;
+
+  SDL_BlitSurface(drawable, &source_pos, region, &target_pos);  
+
+  return region;
+}
+
+void
+DrawingContext::blit(SDL_Surface* source, const Point& pos)
+{
+  SDL_Rect target_pos;
+  target_pos.x = pos.x;
+  target_pos.y = pos.y;
+
+  SDL_BlitSurface(source, NULL, drawable, &target_pos);
 }
 
 /* EOF */

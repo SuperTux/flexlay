@@ -217,6 +217,15 @@ ServerConnection::process_command(const std::string& cmd)
                 {
                   client_state->stroke_begin();
                 }
+              else if (tokens.size() == 9 && tokens[2] == "copy_region")
+                { // copy_region X1 Y2 X2 Y2 TARGET_X TARGET_Y
+                  client_state->copy_region(Rect(atoi(tokens[3].c_str()),
+                                                 atoi(tokens[4].c_str()),
+                                                 atoi(tokens[5].c_str()),
+                                                 atoi(tokens[6].c_str())),
+                                            Point(atoi(tokens[7].c_str()),
+                                                  atoi(tokens[8].c_str())));
+                }
               else if (tokens.size() == 3 && tokens[2] == "stroke_end")
                 {
                   client_state->stroke_end();

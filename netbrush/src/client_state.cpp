@@ -119,4 +119,12 @@ ClientState::dab(unsigned int time, int x, int y)
     }
 }
 
+void
+ClientState::copy_region(const Rect& rect, const Point& target)
+{ // FIXME: use float position here instead of int
+  SDL_Surface* surface = draw_ctx->get_surface(rect);
+  draw_ctx->blit(surface, target);
+  SDL_FreeSurface(surface);
+}
+
 /* EOF */

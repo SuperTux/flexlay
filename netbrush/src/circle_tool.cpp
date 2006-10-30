@@ -24,23 +24,36 @@
 */
 
 #include <sstream>
+#include <iostream>
+#include "SDL_gfx/SDL_gfxPrimitives.h"
 #include "globals.hpp"
+#include "screen_buffer.hpp"
 #include "drawing_parameter.hpp"
 #include "server_connection.hpp"
 #include "circle_tool.hpp"
 
 CircleTool::CircleTool()
+  : radius(0.0f), dragging(false)
 {
 }
 
 void
 CircleTool::on_motion(const ToolMotionEvent& ev)
 {
+  Vector pos(ev.x, ev.y);
+  radius = (click_pos - pos).length();
+
+  if (dragging)
+    screen_buffer->force_full_refresh();
+  
+  //std::cout << "drawing: " << click_pos.x << " " << click_pos.y << " " << radius << std::endl;
 }
 
 void
 CircleTool::on_button_press(const ToolButtonEvent& ev)
 {
+  dragging = true;
+
   click_pos.x = ev.x;
   click_pos.y = ev.y;
 }
@@ -48,8 +61,10 @@ CircleTool::on_button_press(const ToolButtonEvent& ev)
 void
 CircleTool::on_button_release(const ToolButtonEvent& ev)
 {
+  dragging = false;
+
   Vector pos(ev.x, ev.y);
-  float radius = (click_pos - pos).length();
+  radius = (click_pos - pos).length();
 
   std::ostringstream str;
   str << "set_color "
@@ -65,6 +80,20 @@ CircleTool::on_button_release(const ToolButtonEvent& ev)
       << std::endl;
 
   server->send(str.str());
+}
+
+void
+CircleTool::draw(SDL_Surface* target, const Rect& rect, int x_of, int y_of)
+{
+  if (dragging)
+    filledCircleRGBA(target,
+                     int(click_pos.x + x_of), 
+                     int(click_pos.y + y_of),
+                     int(radius),
+                     client_draw_param->color.r,
+                     client_draw_param->color.g,
+                     client_draw_param->color.b,
+                     client_draw_param->opacity);
 }
 
 /* EOF */

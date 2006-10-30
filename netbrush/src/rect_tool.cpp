@@ -24,13 +24,16 @@
 */
 
 #include <sstream>
+#include "SDL_gfx/SDL_gfxPrimitives.h"
 #include "globals.hpp"
 #include "server_connection.hpp"
 #include "controller.hpp"
+#include "screen_buffer.hpp"
 #include "drawing_parameter.hpp"
 #include "rect_tool.hpp"
 
 RectTool::RectTool()
+  : dragging(false)
 {
 }
 
@@ -42,27 +45,32 @@ RectTool::~RectTool()
 void
 RectTool::on_motion(const ToolMotionEvent& ev)
 {
+  if (dragging)
+    {
+      rect.right  = ev.x;
+      rect.bottom = ev.y;
+     
+      screen_buffer->force_full_refresh();
+    }
 }
 
 void
 RectTool::on_button_press(const ToolButtonEvent& ev)
 {
+  dragging = true;
   rect.left = ev.x;
   rect.top  = ev.y;
-  controller->puts("RectTool: press");
 }
 
 void
 RectTool::on_button_release(const ToolButtonEvent& ev)
 {
-  controller->puts("RectTool: release");
-
+  dragging = false;
   rect.right  = ev.x;
   rect.bottom = ev.y;
   
   rect.normalize();
   
-  controller->puts("rect dropped");     
   std::ostringstream str;
   str << "set_color "
       << int(client_draw_param->color.r) << " " 
@@ -76,6 +84,25 @@ RectTool::on_button_release(const ToolButtonEvent& ev)
       << rect.right << " " << rect.bottom << " "
       << std::endl;
   server->send(str.str());
+}
+
+void
+RectTool::draw(SDL_Surface* target, const Rect& rect__, int x_of, int y_of)
+{
+  Rect rect_ = rect;
+  rect_.normalize();
+  if (dragging)
+    boxRGBA(target,
+            int(rect_.left   + x_of), 
+            int(rect_.top    + y_of), 
+            int(rect_.right  + x_of), 
+            int(rect_.bottom + y_of), 
+                   
+            client_draw_param->color.r,
+            client_draw_param->color.g,
+            client_draw_param->color.b,
+            client_draw_param->opacity);
+
 }
 
 /* EOF */

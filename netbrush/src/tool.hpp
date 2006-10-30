@@ -26,7 +26,9 @@
 #ifndef HEADER_TOOL_HPP
 #define HEADER_TOOL_HPP
 
+#include "SDL.h"
 #include "math/point.hpp"
+#include "math/rect.hpp"
 #include "widget/events.hpp"
 
 enum ToolName { PAINTBRUSH_TOOL, RECT_TOOL, REGION_TOOL, COLOR_PICKER_TOOL, CIRCLE_TOOL };
@@ -58,6 +60,13 @@ public:
   virtual void on_motion(const ToolMotionEvent& ev) =0;
   virtual void on_button_press(const ToolButtonEvent& ev) =0;
   virtual void on_button_release(const ToolButtonEvent& ev) =0;
+
+  /** @param target SDL_Surface to which should be drawn 
+      @param rect   rectangle in screenspace which should be redrawn
+      @param x_of   scroll factor used to translate from screenspace to worldspace
+      @param y_of   scroll factor used to translate from screenspace to worldspace
+   */
+  virtual void draw(SDL_Surface* target, const Rect& rect, int x_of, int y_of) =0;
 
 private:
   Tool (const Tool&);

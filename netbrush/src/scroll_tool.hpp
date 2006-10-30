@@ -44,7 +44,7 @@ public:
   void on_motion(const ToolMotionEvent& ev);
   void on_button_press(const ToolButtonEvent& ev);
   void on_button_release(const ToolButtonEvent& ev);
-  
+  void draw(SDL_Surface* target, const Rect& rect, int x_of, int y_of) {}  
 private:
   ScrollTool (const ScrollTool&);
   ScrollTool& operator= (const ScrollTool&);

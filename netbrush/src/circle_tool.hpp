@@ -33,7 +33,8 @@ class CircleTool : public Tool
 {
 private:
   Vector click_pos;
-
+  float  radius;
+  bool   dragging;
 public:
   CircleTool();
   virtual ~CircleTool() {}
@@ -41,7 +42,7 @@ public:
   void on_motion(const ToolMotionEvent& ev);
   void on_button_press(const ToolButtonEvent& ev);
   void on_button_release(const ToolButtonEvent& ev);
-
+  void draw(SDL_Surface* target, const Rect& rect, int x_of, int y_of);
 private:
   CircleTool (const CircleTool&);
   CircleTool& operator= (const CircleTool&);

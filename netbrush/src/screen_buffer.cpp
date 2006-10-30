@@ -101,7 +101,7 @@ ScreenBuffer::draw(SDL_Surface* target)
   vertical_scrollbar->set_pos(-scroll_offset_y);
 
   if (complete_refresh)
-    { 
+    { // draw checkboard pattern for the background
       Uint32 black = SDL_MapRGB(target->format, 200, 200, 200);
       Uint32 white = SDL_MapRGB(target->format, 100, 100, 100);
 
@@ -138,6 +138,9 @@ ScreenBuffer::draw(SDL_Surface* target)
           r.w = get_rect().get_width();
           r.h = get_rect().get_height();
             
+          // FIXME: Dirty
+          tools[0]->draw(target, get_rect(), trans_x, trans_y);
+
           SDL_UpdateRect(target, r.x, r.y, r.w, r.h);
         }
       else
@@ -157,6 +160,9 @@ ScreenBuffer::draw(SDL_Surface* target)
           r.w = get_rect().get_width();
           r.h = get_rect().get_height();
             
+          // FIXME: Dirty
+          tools[0]->draw(target, get_rect(), trans_x, trans_y);
+
           SDL_UpdateRect(target, r.x, r.y, r.w, r.h);
         }
     }

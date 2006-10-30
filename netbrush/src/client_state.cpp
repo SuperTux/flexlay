@@ -24,9 +24,12 @@
 */
 
 #include <iostream>
+#include "SDL_gfx/SDL_gfxPrimitives.h"
+
 #include "drawing_parameter.hpp"
 #include "drawing_context.hpp"
 #include "stroke.hpp"
+#include "screen_buffer.hpp"
 #include "globals.hpp"
 #include "client_state.hpp"
 
@@ -125,6 +128,17 @@ ClientState::copy_region(const Rect& rect, const Point& target)
   SDL_Surface* surface = draw_ctx->get_surface(rect);
   draw_ctx->blit(surface, target);
   SDL_FreeSurface(surface);
+}
+
+void
+ClientState::fill_rect(const Rect& rect)
+{
+  // FIXME: Should move this into DrawingContext
+  boxRGBA(draw_ctx->get_surface(),
+          rect.left, rect.top, rect.right, rect.bottom,
+          draw_param->color.r, draw_param->color.g, draw_param->color.b, 
+          draw_param->opacity);
+  screen_buffer->mark_dirty(rect);
 }
 
 /* EOF */

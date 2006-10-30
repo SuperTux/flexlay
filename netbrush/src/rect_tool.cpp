@@ -23,49 +23,59 @@
 **  02111-1307, USA.
 */
 
-#ifndef HEADER_CLIENT_STATE_HPP
-#define HEADER_CLIENT_STATE_HPP
-
-#include <string>
-#include "brushmask.hpp"
+#include <sstream>
+#include "globals.hpp"
+#include "server_connection.hpp"
+#include "controller.hpp"
 #include "drawing_parameter.hpp"
+#include "rect_tool.hpp"
 
-class Rect;
-class Point;
-class Color;
-class Stroke;
-class DrawingParameter;
-
-class ClientState
+RectTool::RectTool()
 {
-private:
-  int id;
-  Stroke* current_stroke;
-  DrawingParameter* draw_param;
+}
 
-public:
-  ClientState(int id_);
-  ~ClientState();
+RectTool::~RectTool()
+{
 
-  void set_tool(DrawingParameter::Tool tool);
-  void set_opacity(Uint8 o);
-  void set_color(const Color& color);
-  void set_generic_brush(BrushShape shape,
-                         float  radius,
-                         int    spikes,        /* 2 - 20     */
-                         float  hardness,      /* 0.0 - 1.0  */
-                         float  aspect_ratio,  /* y/x (1.0f - 20.0f)       */
-                         float  angle);
-  void set_brush(const std::string& filename);
-  void stroke_begin();
-  void stroke_end();
+}
 
-  void copy_region(const Rect& rect, const Point& target);
-  void fill_rect(const Rect& rect);
+void
+RectTool::on_motion(const ToolMotionEvent& ev)
+{
+}
 
-  void dab(unsigned int time, int x, int y);
-};
+void
+RectTool::on_button_press(const ToolButtonEvent& ev)
+{
+  rect.left = ev.x;
+  rect.top  = ev.y;
+  controller->puts("RectTool: press");
+}
 
-#endif
+void
+RectTool::on_button_release(const ToolButtonEvent& ev)
+{
+  controller->puts("RectTool: release");
+
+  rect.right  = ev.x;
+  rect.bottom = ev.y;
+  
+  rect.normalize();
+  
+  controller->puts("rect dropped");     
+  std::ostringstream str;
+  str << "set_color "
+      << int(client_draw_param->color.r) << " " 
+      << int(client_draw_param->color.g) << " " 
+      << int(client_draw_param->color.b) << std::endl;
+
+  str << "set_opacity " << int(client_draw_param->opacity) << std::endl;
+
+  str << "fill_rect "
+      << rect.left  << " " << rect.top << " " 
+      << rect.right << " " << rect.bottom << " "
+      << std::endl;
+  server->send(str.str());
+}
 
 /* EOF */

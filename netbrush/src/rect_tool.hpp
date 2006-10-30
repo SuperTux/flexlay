@@ -23,47 +23,28 @@
 **  02111-1307, USA.
 */
 
-#ifndef HEADER_CLIENT_STATE_HPP
-#define HEADER_CLIENT_STATE_HPP
+#ifndef HEADER_RECT_TOOL_HPP
+#define HEADER_RECT_TOOL_HPP
 
-#include <string>
-#include "brushmask.hpp"
-#include "drawing_parameter.hpp"
+#include "tool.hpp"
 
-class Rect;
-class Point;
-class Color;
-class Stroke;
-class DrawingParameter;
-
-class ClientState
+/** */
+class RectTool : public Tool
 {
 private:
-  int id;
-  Stroke* current_stroke;
-  DrawingParameter* draw_param;
+  Rect rect;
 
 public:
-  ClientState(int id_);
-  ~ClientState();
+  RectTool();
+  ~RectTool();
 
-  void set_tool(DrawingParameter::Tool tool);
-  void set_opacity(Uint8 o);
-  void set_color(const Color& color);
-  void set_generic_brush(BrushShape shape,
-                         float  radius,
-                         int    spikes,        /* 2 - 20     */
-                         float  hardness,      /* 0.0 - 1.0  */
-                         float  aspect_ratio,  /* y/x (1.0f - 20.0f)       */
-                         float  angle);
-  void set_brush(const std::string& filename);
-  void stroke_begin();
-  void stroke_end();
-
-  void copy_region(const Rect& rect, const Point& target);
-  void fill_rect(const Rect& rect);
-
-  void dab(unsigned int time, int x, int y);
+  void on_motion(const ToolMotionEvent& ev);
+  void on_button_press(const ToolButtonEvent& ev);
+  void on_button_release(const ToolButtonEvent& ev);
+  
+private:
+  RectTool (const RectTool&);
+  RectTool& operator= (const RectTool&);
 };
 
 #endif

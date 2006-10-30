@@ -226,6 +226,13 @@ ServerConnection::process_command(const std::string& cmd)
                                             Point(atoi(tokens[7].c_str()),
                                                   atoi(tokens[8].c_str())));
                 }
+              else if (tokens.size() == 7 && tokens[2] == "fill_rect")
+                { // fill_rect X1 Y2 X2 Y2
+                  client_state->fill_rect(Rect(atoi(tokens[3].c_str()),
+                                               atoi(tokens[4].c_str()),
+                                               atoi(tokens[5].c_str()),
+                                               atoi(tokens[6].c_str())));
+                }
               else if (tokens.size() == 3 && tokens[2] == "stroke_end")
                 {
                   client_state->stroke_end();

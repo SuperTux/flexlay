@@ -37,6 +37,7 @@
 #include "airbrush_tool.hpp"
 #include "scroll_tool.hpp"
 #include "colorpicker_tool.hpp"
+#include "region_tool.hpp"
 #include "screen_buffer.hpp"
 
 ScreenBuffer::ScreenBuffer(const Rect& rect)
@@ -48,6 +49,7 @@ ScreenBuffer::ScreenBuffer(const Rect& rect)
   tools.push_back(new AirbrushTool());
   tools.push_back(new ScrollTool());
   tools.push_back(new ColorpickerTool());
+  tools.push_back(new RegionTool());
 }
 
 ScreenBuffer::~ScreenBuffer()

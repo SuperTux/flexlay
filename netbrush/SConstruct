@@ -63,6 +63,7 @@ client_env.Program('netbrush-client', [
         'src/paintbrush_tool.cpp',
         'src/scroll_tool.cpp',
         'src/colorpicker_tool.cpp',
+        'src/region_tool.cpp',
         'src/color_display.cpp',
         'src/color.cpp',
         'src/SDL_tty.c',

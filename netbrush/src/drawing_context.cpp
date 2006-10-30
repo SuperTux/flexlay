@@ -251,6 +251,8 @@ DrawingContext::blit(SDL_Surface* source, const Point& pos)
   target_pos.y = pos.y;
 
   SDL_BlitSurface(source, NULL, drawable, &target_pos);
+
+  screen_buffer->mark_dirty(Rect(pos, Size(source->w, source->h)));
 }
 
 /* EOF */

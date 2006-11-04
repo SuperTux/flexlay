@@ -148,121 +148,121 @@ InputDevice_XInput::get_info(XDeviceInfo* info)
     }
 }
 
-      XDeviceInfo*
-        InputDevice_XInput::find_device_info(Display	*display,
-                                             const char	*name,
-                                             Bool	only_extended)
+XDeviceInfo*
+InputDevice_XInput::find_device_info(Display	*display,
+                                     const char	*name,
+                                     Bool	only_extended)
+{
+  // FIXME: Not really needed could simply pass XDeviceInfo to the
+  // constructor, might however make a nicer interface
+  XDeviceInfo	*devices;
+  int		loop;
+  int		num_devices;
+  int		len = strlen(name);
+  Bool     is_id = True;
+  XID		id = 0;
+
+  for(loop=0; loop<len; loop++) {
+    if (!isdigit(name[loop])) {
+      is_id = False;
+      break;
+    }
+  }
+
+  if (is_id) {
+    id = atoi(name);
+  }
+
+  devices = XListInputDevices(display, &num_devices);
+
+  for(loop=0; loop<num_devices; loop++) {
+    if ((!only_extended || (devices[loop].use == IsXExtensionDevice)) &&
+        ((!is_id && strcmp(devices[loop].name, name) == 0) ||
+         (is_id && devices[loop].id == id))) {
+      return &devices[loop];
+    }
+  }
+  return NULL;
+}
+
+int
+InputDevice_XInput::register_events(Display		*dpy,
+                                    XDeviceInfo	*info,
+                                    const char		*dev_name,
+                                    Bool		handle_proximity)
+{
+  int             number = 0;	/* number of events registered */
+  XEventClass     event_list[7];
+  int             i;
+  XDevice         *device;
+  Window          root_win;
+  unsigned long   screen;
+  XInputClassInfo *ip;
+
+  screen   = DefaultScreen(dpy);
+  root_win = RootWindow(dpy, screen);
+
+  device = XOpenDevice(dpy, info->id);
+
+  if (!device) {
+    fprintf(stderr, "unable to open device %s\n", dev_name);
+    return 0;
+  }
+
+  if (device->num_classes > 0)
+    {
+      for (ip = device->classes, i = 0; i<info->num_classes; ip++, ++i)
         {
-          // FIXME: Not really needed could simply pass XDeviceInfo to the
-          // constructor, might however make a nicer interface
-          XDeviceInfo	*devices;
-          int		loop;
-          int		num_devices;
-          int		len = strlen(name);
-          Bool     is_id = True;
-          XID		id = 0;
+          switch (ip->input_class) {
+          case KeyClass:
+            DeviceKeyPress  (device, key_press_type,   event_list[number]); number++;
+            DeviceKeyRelease(device, key_release_type, event_list[number]); number++;
+            break;
 
-          for(loop=0; loop<len; loop++) {
-            if (!isdigit(name[loop])) {
-              is_id = False;
-              break;
+          case ButtonClass:
+            DeviceButtonPress  (device, button_press_type,   event_list[number]); number++;
+            DeviceButtonRelease(device, button_release_type, event_list[number]); number++;
+            break;
+
+          case ValuatorClass:
+            DeviceMotionNotify(device, motion_type, event_list[number]); number++;
+            if (handle_proximity) {
+              ProximityIn (device, proximity_in_type,  event_list[number]); number++;
+              ProximityOut(device, proximity_out_type, event_list[number]); number++;
             }
+            break;
+		
+          default:
+            fprintf(stderr, "unknown class\n");
+            break;
           }
-
-          if (is_id) {
-            id = atoi(name);
-          }
-
-          devices = XListInputDevices(display, &num_devices);
-
-          for(loop=0; loop<num_devices; loop++) {
-            if ((!only_extended || (devices[loop].use == IsXExtensionDevice)) &&
-                ((!is_id && strcmp(devices[loop].name, name) == 0) ||
-                 (is_id && devices[loop].id == id))) {
-              return &devices[loop];
-            }
-          }
-          return NULL;
         }
 
-      int
-        InputDevice_XInput::register_events(Display		*dpy,
-                                            XDeviceInfo	*info,
-                                            const char		*dev_name,
-                                            Bool		handle_proximity)
-      {
-        int             number = 0;	/* number of events registered */
-        XEventClass     event_list[7];
-        int             i;
-        XDevice         *device;
-        Window          root_win;
-        unsigned long   screen;
-        XInputClassInfo *ip;
-
-        screen   = DefaultScreen(dpy);
-        root_win = RootWindow(dpy, screen);
-
-        device = XOpenDevice(dpy, info->id);
-
-        if (!device) {
-          fprintf(stderr, "unable to open device %s\n", dev_name);
+      if (XSelectExtensionEvent(dpy, root_win, event_list, number))
+        {
+          fprintf(stderr, "error selecting extended events\n");
           return 0;
         }
+    }
 
-        if (device->num_classes > 0)
-          {
-            for (ip = device->classes, i = 0; i<info->num_classes; ip++, ++i)
-              {
-                switch (ip->input_class) {
-                case KeyClass:
-                  DeviceKeyPress  (device, key_press_type,   event_list[number]); number++;
-                  DeviceKeyRelease(device, key_release_type, event_list[number]); number++;
-                  break;
+  //std::cout << "### Registered events: " << number << std::endl;
+  return number;
+}
 
-                case ButtonClass:
-                  DeviceButtonPress  (device, button_press_type,   event_list[number]); number++;
-                  DeviceButtonRelease(device, button_release_type, event_list[number]); number++;
-                  break;
-
-                case ValuatorClass:
-                  DeviceMotionNotify(device, motion_type, event_list[number]); number++;
-                  if (handle_proximity) {
-                    ProximityIn (device, proximity_in_type,  event_list[number]); number++;
-                    ProximityOut(device, proximity_out_type, event_list[number]); number++;
-                  }
-                  break;
-		
-                default:
-                  fprintf(stderr, "unknown class\n");
-                  break;
-                }
-              }
-
-            if (XSelectExtensionEvent(dpy, root_win, event_list, number))
-              {
-                fprintf(stderr, "error selecting extended events\n");
-                return 0;
-              }
-          }
-
-        //std::cout << "### Registered events: " << number << std::endl;
-        return number;
-      }
-
-      void
-        InputDevice_XInput::on_xevent(XEvent &event)
-      {
-        if (0)
-          std::cout << this << " event: "
-                    << event.type << " Defs: "
-                    << motion_type << " "
-                    << button_press_type << " "
-                    << button_release_type << " "
-                    << key_press_type << " "
-                    << key_release_type << " "
-                    << proximity_out_type << " "
-                    << proximity_in_type << " "
-                    << std::endl;
+void
+InputDevice_XInput::on_xevent(XEvent &event)
+{
+  if (0)
+    std::cout << this << " event: "
+              << event.type << " Defs: "
+              << motion_type << " "
+              << button_press_type << " "
+              << button_release_type << " "
+              << key_press_type << " "
+              << key_release_type << " "
+              << proximity_out_type << " "
+              << proximity_in_type << " "
+              << std::endl;
 
   if (event.type == motion_type)
     {

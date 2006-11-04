@@ -37,7 +37,7 @@ int main()
     }
 
   syswm.info.x11.lock_func();
-  CL_InputDevice_XInput xinput;
+  InputDevice_XInput xinput(syswm.info.x11.display, "gstylus");
   syswm.info.x11.unlock_func();
 
   SDL_EventState(SDL_SYSWMEVENT, SDL_ENABLE);
@@ -69,7 +69,7 @@ int main()
               break;
 
             case SDL_SYSWMEVENT:
-              std::cout << "Sysevent" << std::endl;
+              //std::cout << "Sysevent" << std::endl;
               xinput.on_xevent(event.syswm.msg->event.xevent);
               break;
             }

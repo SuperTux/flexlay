@@ -1,34 +1,28 @@
-/*
-**  ClanLib SDK
-**  Copyright (c) 1997-2005 The ClanLib Team
+/*  $Id$
+**            _   ___              _   
+**   _ _  ___| |_| _ )_ _ _  _ _ _| |_ 
+**  | ' \/ -_)  _| _ \ '_| || (_-<|   |
+**  |_||_\___|\__|___/_|  \_,_/__/|_|_|
+**  Copyright (C) 2006 Ingo Ruhnke <grumbel@gmx.de>
 **
-**  This software is provided 'as-is', without any express or implied
-**  warranty.  In no event will the authors be held liable for any damages
-**  arising from the use of this software.
+**  This program is free software; you can redistribute it and/or
+**  modify it under the terms of the GNU General Public License
+**  as published by the Free Software Foundation; either version 2
+**  of the License, or (at your option) any later version.
 **
-**  Permission is granted to anyone to use this software for any purpose,
-**  including commercial applications, and to alter it and redistribute it
-**  freely, subject to the following restrictions:
-**
-**  1. The origin of this software must not be misrepresented; you must not
-**     claim that you wrote the original software. If you use this software
-**     in a product, an acknowledgment in the product documentation would be
-**     appreciated but is not required.
-**  2. Altered source versions must be plainly marked as such, and must not be
-**     misrepresented as being the original software.
-**  3. This notice may not be removed or altered from any source distribution.
-**
-**  Note: Some of the libraries ClanLib may link to may have additional
-**  requirements or restrictions.
-**
-**  File Author(s):
-**
-**    Magnus Norddahl
-**    (if your name is missing here, please add it)
+**  This program is distributed in the hope that it will be useful,
+**  but WITHOUT ANY WARRANTY; without even the implied warranty of
+**  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+**  GNU General Public License for more details.
+** 
+**  You should have received a copy of the GNU General Public License
+**  along with this program; if not, write to the Free Software
+**  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+**  02111-1307, USA.
 */
 
-#ifndef header_input_device_xinput
-#define header_input_device_xinput
+#ifndef HEADER_INPUT_DEVICE_XINPUT_HPP
+#define HEADER_INPUT_DEVICE_XINPUT_HPP
 
 #include <vector>
 #include "../src/math/point.hpp"
@@ -36,109 +30,99 @@
 #include <X11/Xutil.h>
 #include <X11/extensions/XInput.h>
 
-class CL_DisplayWindow_OpenGL;
-
-class CL_InputDevice_XInput
+class InputDevice_XInput
 {
-	//!Construction:
+  //!Construction:
 public:
-	CL_InputDevice_XInput();
+  InputDevice_XInput(Display* dpy, const std::string& name);
 
-	virtual ~CL_InputDevice_XInput();
+  virtual ~InputDevice_XInput();
 
-	//!Attributes:
+  //!Attributes:
 public:
-	//: Returns the x position of the device.
-	virtual int get_x() const;
+  //: Returns true if the passed key code is down for this device.
+  virtual bool get_keycode(int keycode) const;
 
-	//: Returns the y position of the device.
-	virtual int get_y() const;
+  //: Returns the the current position of a joystick axis.
+  virtual float get_axis(int index) const;
 
-	//: Returns true if the passed key code is down for this device.
-	virtual bool get_keycode(int keycode) const;
+  //: Returns the number of axes available on this device.
+  virtual int get_axis_count() const;
 
-	//: Key name for specified identifier (A, B, C, Space, Enter, Backspace).
-	virtual std::string get_key_name(int id) const;
+  //: Returns the name of the device (i.e. 'Microsoft Sidewinder 3D').
+  virtual std::string get_name() const;
 
-	//: Returns the the current position of a joystick axis.
-	virtual float get_axis(int index) const;
+  //: Return the hardware id/device for this device (i.e. '/dev/input/js0')
+  virtual std::string get_device_name() const;
 
-	//: Returns the number of axes available on this device.
-	virtual int get_axis_count() const;
+  //: Returns the number of buttons available on this device.
+  //- <p>If used on a keyboard, this function returns -1.</p>
+  virtual int get_button_count() const;
 
-	//: Returns the name of the device (i.e. 'Microsoft Sidewinder 3D').
-	virtual std::string get_name() const;
-
-	//: Return the hardware id/device for this device (i.e. '/dev/input/js0')
-	virtual std::string get_device_name() const;
-
-	//: Returns the number of buttons available on this device.
-	//- <p>If used on a keyboard, this function returns -1.</p>
-	virtual int get_button_count() const;
-
-	//!Operations:
+  //!Operations:
 public:
 
-	//!Implementation:
+  //!Implementation:
 private:
-	int register_events(Display		*dpy,
-							  XDeviceInfo	*info,
-							  const char		*dev_name,
-							  Bool		handle_proximity);
+  int register_events(Display		*dpy,
+                      XDeviceInfo	*info,
+                      const char		*dev_name,
+                      Bool		handle_proximity);
 
-	XDeviceInfo* find_device_info(Display	*display,
-											const char		*name,
-											Bool		only_extended);
+  XDeviceInfo* find_device_info(Display	*display,
+                                const char		*name,
+                                Bool		only_extended);
 
-	void get_info(XDeviceInfo	*info);
+  void get_info(XDeviceInfo	*info);
 public:
-	void on_xevent(XEvent &event);
+  void on_xevent(XEvent &event);
+
 private:
-	void received_mouse_input(XEvent &event);
-	void received_mouse_move(XEvent &event);
+  void on_device_button_event(XDeviceButtonEvent *button);
+  void on_device_key_event(XDeviceKeyEvent* key);
+  void on_device_motion_event(XDeviceMotionEvent* motion);
+  void on_proximity_notify_event(XProximityNotifyEvent* prox);
+
+private:
+  void received_mouse_input(XEvent &event);
+  void received_mouse_move(XEvent &event);
 	
-	CL_DisplayWindow_OpenGL *owner;
-	std::string name;
-	//CL_Slot slot_xevent;
+  std::string name;
 
-	//: true: Device is a absolute pointing device, false: relative
-	bool absolute;
+  struct AxisInfo
+  {
+    int min_value;
+    int max_value;
+    int resolution;
+    int pos;
 
-	struct AxisInfo
-	{
-		int min_value;
-		int max_value;
-		int resolution;
-		int pos;
+    AxisInfo(int min_value_, int max_value_, int resolution_)
+      : min_value(min_value_), max_value(max_value_), resolution(resolution_), pos(0)
+    {}
+  };
 
-		AxisInfo(int min_value_, int max_value_, int resolution_)
-			: min_value(min_value_), max_value(max_value_), resolution(resolution_), pos(0)
-		{}
-	};
+  std::vector<bool> buttons;
 
-	std::vector<bool> buttons;
+  std::vector<AxisInfo> axis;
 
-	std::vector<AxisInfo> axis;
-
-	int num_keys;	
+  bool absolute;
+  int num_keys;	
 	
-	Point mouse_pos;
-	Time time_at_last_press;
-	int last_press_id;
+  Point mouse_pos;
+  Time time_at_last_press;
+  int last_press_id;
 
-	bool key_states[5];
+  bool key_states[5];
 
-	int           motion_type;
-	int           button_press_type;
-	int           button_release_type;
-	int           key_press_type;
-	int           key_release_type;
-	int           proximity_in_type;
-	int           proximity_out_type;
+  int           motion_type;
+  int           button_press_type;
+  int           button_release_type;
+  int           key_press_type;
+  int           key_release_type;
+  int           proximity_in_type;
+  int           proximity_out_type;
 };
 
 #endif
 
-// Local Variables: ***
-// mode: clanlib ***
-// End: ***
+/* EOF */

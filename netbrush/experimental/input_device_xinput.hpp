@@ -91,9 +91,9 @@ private:
 											Bool		only_extended);
 
 	void get_info(XDeviceInfo	*info);
-
+public:
 	void on_xevent(XEvent &event);
-	
+private:
 	void received_mouse_input(XEvent &event);
 	void received_mouse_move(XEvent &event);
 	

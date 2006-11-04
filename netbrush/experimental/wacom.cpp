@@ -40,10 +40,12 @@ int main()
   CL_InputDevice_XInput xinput;
   syswm.info.x11.unlock_func();
 
+  SDL_EventState(SDL_SYSWMEVENT, SDL_ENABLE);
+
   while(true)
     {
       SDL_Event event;
-  
+      
       while(SDL_PollEvent(&event))
         {
           switch(event.type)
@@ -64,6 +66,11 @@ int main()
 
             case SDL_MOUSEMOTION:
               //std::cout << "Mouse motion: " << event.motion.x << " " << event.motion.y << std::endl;
+              break;
+
+            case SDL_SYSWMEVENT:
+              std::cout << "Sysevent" << std::endl;
+              xinput.on_xevent(event.syswm.msg->event.xevent);
               break;
             }
         }

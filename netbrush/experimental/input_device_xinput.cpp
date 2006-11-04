@@ -256,10 +256,10 @@ CL_InputDevice_XInput::on_xevent(XEvent &event)
 	{
 		XDeviceMotionEvent *motion = (XDeviceMotionEvent *) &event;
 
-		//printf("motion ");
+		printf("motion ");
 	    
 		for(int loop=0; loop<motion->axes_count; loop++) {
-			//printf("a[%d]=%d ", motion->first_axis + loop, motion->axis_data[loop]);
+			printf("a[%d]=%d ", motion->first_axis + loop, motion->axis_data[loop]);
 			axis[loop + motion->first_axis].pos = motion->axis_data[loop];
 		}
 		//printf("\n");
@@ -270,29 +270,29 @@ CL_InputDevice_XInput::on_xevent(XEvent &event)
 		int	loop;
 		XDeviceButtonEvent *button = (XDeviceButtonEvent *) &event;
 	    
-		//printf("button %s %d ", (event.type == button_release_type) ? "release" : "press  ", button->button);
+		printf("button %s %d ", (event.type == button_release_type) ? "release" : "press  ", button->button);
 
 		buttons[button->button] = (event.type == button_press_type);
 	    
 		for(loop=0; loop<button->axes_count; loop++) {
-			//printf("a[%d]=%d ", button->first_axis + loop, button->axis_data[loop]);
+			printf("a[%d]=%d ", button->first_axis + loop, button->axis_data[loop]);
 			axis[loop + button->first_axis].pos = button->axis_data[loop];
 		}
-		//printf("\n");
+		printf("\n");
 	} 
 	else if ((event.type == key_press_type) ||
 				(event.type == key_release_type)) 
 	{
 		int	loop;
 		XDeviceKeyEvent *key = (XDeviceKeyEvent *) &event;
-	    
-		//printf("key %s %d ", (event.type == key_release_type) ? "release" : "press  ", key->keycode);
+	   
+		printf("key %s %d ", (event.type == key_release_type) ? "release" : "press  ", key->keycode);
 	    
 		for(loop=0; loop<key->axes_count; loop++) {
-			//printf("a[%d]=%d ", key->first_axis + loop, key->axis_data[loop]);
+			printf("a[%d]=%d ", key->first_axis + loop, key->axis_data[loop]);
 			axis[loop + key->first_axis].pos = key->axis_data[loop];
 		}
-		//printf("\n");
+		printf("\n");
 	}
 	else if ((event.type == proximity_out_type) ||
 				(event.type == proximity_in_type))
@@ -300,17 +300,17 @@ CL_InputDevice_XInput::on_xevent(XEvent &event)
 		int	loop;
 		XProximityNotifyEvent *prox = (XProximityNotifyEvent *) &event;
 	    
-		//printf("proximity %s ", (event.type == proximity_in_type) ? "in " : "out");
+		printf("proximity %s ", (event.type == proximity_in_type) ? "in " : "out");
 	    
 		for(loop=0; loop<prox->axes_count; loop++) {
-			//printf("a[%d]=%d ", prox->first_axis + loop, prox->axis_data[loop]);
+			printf("a[%d]=%d ", prox->first_axis + loop, prox->axis_data[loop]);
 			axis[loop + prox->first_axis].pos = prox->axis_data[loop];
 		}
-		//printf("\n");
+		printf("\n");
 	}
 	else 
 	{
-		//printf("CL_InputDevice_XInput: what's that %d\n", event.type);
+		printf("CL_InputDevice_XInput: what's that %d\n", event.type);
 	}
 
 

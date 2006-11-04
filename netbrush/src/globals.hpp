@@ -43,6 +43,7 @@ class WidgetManager;
 class ServerConnection;
 class Scrollbar;
 class Navigation;
+class InputDevice_XInput;
 
 extern SDLNet_SocketSet socketset;
 
@@ -59,6 +60,7 @@ extern ServerConnection* server;
 
 extern Navigation* navigation;
 extern Controller* controller;
+extern InputDevice_XInput* xinput;
 
 #endif
 

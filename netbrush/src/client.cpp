@@ -8,6 +8,8 @@
 #include "SDL_main.h"
 #include "SDL_image.h"
 #include "SDL_net.h"
+#include "SDL_syswm.h"
+#include "input_device_xinput.hpp"
 #include "drawing_context.hpp"
 #include "drawing_parameter.hpp"
 #include "debug.hpp"
@@ -24,6 +26,7 @@
 #include "command_line.hpp"
 #include "text_view.hpp"
 #include "widget/slider_widget.hpp"
+#include "input_device_xinput.hpp"
 #include "controller.hpp"
 
 #ifdef WIN32
@@ -134,15 +137,23 @@ void process_events()
           break;
 
         case SDL_MOUSEBUTTONDOWN:
-          widget_manager->on_mouse_button(event.button);
+          if (!(xinput && xinput->in_proximity()))
+            widget_manager->on_mouse_button(event.button);
           break;
 
         case SDL_MOUSEBUTTONUP:
-          widget_manager->on_mouse_button(event.button);
+          if (!(xinput && xinput->in_proximity()))
+            widget_manager->on_mouse_button(event.button);
           break;
 
         case SDL_MOUSEMOTION:
-          widget_manager->on_mouse_motion(event.motion);
+          if (!(xinput && xinput->in_proximity()))
+            widget_manager->on_mouse_motion(event.motion);
+          break;
+
+        case SDL_SYSWMEVENT:
+          if (xinput)
+            xinput->on_xevent(event.syswm.msg->event.xevent);
           break;
         }
     }  
@@ -262,6 +273,23 @@ int main(int argc, char** argv)
     if (screen == 0)
       printf("SDL_SetVideoMode: %s\n", SDL_GetError());
     SDL_WM_SetCaption("netBrush", "netBrush");
+
+    if (1) // enable tablet support
+      {
+        SDL_SysWMinfo syswm;
+
+        SDL_VERSION(&syswm.version); // this is important!
+        if (SDL_GetWMInfo(&syswm) == -1)
+          {
+            std::cout << "Couldn't get WM info " << std::endl;
+          }
+
+        syswm.info.x11.lock_func();
+        xinput = new InputDevice_XInput(syswm.info.x11.display, "gstylus");
+        syswm.info.x11.unlock_func();
+
+        SDL_EventState(SDL_SYSWMEVENT, SDL_ENABLE);
+      }
 
     // 18 is scrollbar
     screen_buffer = new ScreenBuffer(Rect(38, 2, screen->w - 128 - 18 - 2 - 2, screen->h - 16 - 4 - 38)); 

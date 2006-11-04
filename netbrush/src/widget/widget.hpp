@@ -51,6 +51,8 @@ public:
   virtual void on_mouse_motion(const MouseMotionEvent& motion) =0;
   virtual void on_mouse_button(const MouseButtonEvent& button) =0;
 
+  virtual void on_pen_motion(const PenEvent& button) {}
+
   virtual void on_enter() = 0;
   virtual void on_leave() = 0;
 

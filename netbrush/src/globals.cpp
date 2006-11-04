@@ -42,4 +42,6 @@ Navigation* navigation = 0;
 
 Controller* controller = 0;
 
+InputDevice_XInput* xinput = 0;
+
 /* EOF */

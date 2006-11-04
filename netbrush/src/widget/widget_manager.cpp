@@ -28,6 +28,8 @@
 #include "../video.hpp"
 #include "widget.hpp"
 #include "events.hpp"
+#include "../globals.hpp"
+#include "../screen_buffer.hpp"
 #include "widget_manager.hpp"
 
 WidgetManager::WidgetManager()
@@ -131,6 +133,13 @@ WidgetManager::on_mouse_button(const MouseButtonEvent& button)
             }
         }  
     }
+}
+
+void
+WidgetManager::on_pen_motion(const PenEvent& pen)
+{
+  // FIXME: Hack, should to normal widget handling instead
+  screen_buffer->on_pen_motion(pen);
 }
 
 void

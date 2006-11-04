@@ -227,11 +227,18 @@ ServerConnection::process_command(const std::string& cmd)
                                                   atoi(tokens[8].c_str())));
                 }
               else if (tokens.size() == 7 && tokens[2] == "fill_rect")
-                { // fill_rect X1 Y2 X2 Y2
+                { // fill_rect X1 Y1 X2 Y2
                   client_state->fill_rect(Rect(atoi(tokens[3].c_str()),
                                                atoi(tokens[4].c_str()),
                                                atoi(tokens[5].c_str()),
                                                atoi(tokens[6].c_str())));
+                }
+              else if (tokens.size() == 7 && tokens[2] == "draw_line")
+                { // draw_line X1 Y1 X2 Y2
+                  client_state->draw_line(Point(atoi(tokens[3].c_str()),
+                                                atoi(tokens[4].c_str())),
+                                          Point(atoi(tokens[5].c_str()),
+                                                atoi(tokens[6].c_str())));
                 }
               else if (tokens.size() == 6 && tokens[2] == "fill_circle")
                 { // fill_circle X Y RADIUS

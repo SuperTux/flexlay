@@ -148,8 +148,11 @@ Controller::Controller()
     widget_manager->add(new Button(IMG_Load("data/icons/stock-tool-circle-22.png"), 
                                    Rect(Point(2, 2+4*34), Size(34, 34)),
                                    new ToolButtonCallback(CIRCLE_TOOL)));
-    widget_manager->add(new Button(IMG_Load("data/icons/stock-tool-rect-select-22.png"), 
+    widget_manager->add(new Button(IMG_Load("data/icons/stock-tool-line-22.png"), 
                                    Rect(Point(2, 2+5*34), Size(34, 34)),
+                                   new ToolButtonCallback(LINE_TOOL)));
+    widget_manager->add(new Button(IMG_Load("data/icons/stock-tool-rect-select-22.png"), 
+                                   Rect(Point(2, 2+6*34), Size(34, 34)),
                                    new ToolButtonCallback(REGION_TOOL)));
     widget_manager->add(text_view = new TextView(Rect(38, screen->h - 38,
                                                       screen->w - 128 - 18 - 2 - 2, screen->h)));

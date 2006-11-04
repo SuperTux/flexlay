@@ -26,7 +26,7 @@ client_env.ParseConfig('sdl-config --cflags --libs')
 client_env['CXXFLAGS'] += ['-O0', '-Wall', '-g']
 client_env['CPPPATH'] += ['src/']
 client_env['LIBPATH'] += ['.']
-client_env['LIBS'] += ['SDL_image', 'SDL_net'] + libcommon
+client_env['LIBS'] += ['SDL_image', 'SDL_net', 'Xi'] + libcommon
 client_env.Program('netbrush-client', [
         'src/alpha_picker.cpp',
         'src/brush_widget.cpp',
@@ -70,7 +70,9 @@ client_env.Program('netbrush-client', [
         'src/text_view.cpp',
         'src/rect_tool.cpp',
         'src/circle_tool.cpp',
+        'src/line_tool.cpp',
         'src/SDL_gfx/SDL_gfxPrimitives.c',
+        'src/input_device_xinput.cpp'
 #        'src/widget/events.cpp',
 ])
 

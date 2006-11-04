@@ -152,4 +152,15 @@ ClientState::fill_circle(const Point& pos, int radius)
                                  pos.x + radius+1, pos.y + radius+1));  
 }
 
+void
+ClientState::draw_line(const Point& p1, const Point& p2)
+{
+  aalineRGBA(draw_ctx->get_surface(),
+             p1.x, p1.y, p2.x, p2.y,
+             draw_param->color.r, draw_param->color.g, draw_param->color.b, 
+             draw_param->opacity);
+  screen_buffer->mark_dirty(Rect(p1.x, p1.y,
+                                 p2.x, p2.y));
+}
+
 /* EOF */

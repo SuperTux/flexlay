@@ -28,6 +28,20 @@
 
 #include "SDL.h"
 
+class PenEvent
+{
+public:
+  float x;
+  float y;
+  float pressure;
+  float x_tilt;
+  float y_tilt;
+
+  PenEvent(float x, float y, float pressure, float x_tilt, float y_tilt)
+    : x(x), y(y), pressure(pressure), x_tilt(x_tilt), y_tilt(y_tilt)
+  {}
+};
+
 class MouseButtonEvent
 {
 public:

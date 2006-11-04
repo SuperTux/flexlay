@@ -31,7 +31,7 @@
 #include "math/rect.hpp"
 #include "widget/events.hpp"
 
-enum ToolName { PAINTBRUSH_TOOL, RECT_TOOL, REGION_TOOL, COLOR_PICKER_TOOL, CIRCLE_TOOL };
+enum ToolName { PAINTBRUSH_TOOL, RECT_TOOL, REGION_TOOL, COLOR_PICKER_TOOL, CIRCLE_TOOL, LINE_TOOL };
 
 struct ToolMotionEvent
 {

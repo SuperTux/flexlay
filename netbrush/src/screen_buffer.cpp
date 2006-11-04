@@ -40,13 +40,15 @@
 #include "region_tool.hpp"
 #include "rect_tool.hpp"
 #include "circle_tool.hpp"
+#include "line_tool.hpp"
 #include "screen_buffer.hpp"
 
 ScreenBuffer::ScreenBuffer(const Rect& rect)
   : Widget(rect),
     complete_refresh(false),
     scroll_offset_x(0),
-    scroll_offset_y(0)
+    scroll_offset_y(0),
+    pen_active(false)
 {
   tools.push_back(airbrush_tool    = new AirbrushTool());
   tools.push_back(scroll_tool      = new ScrollTool());
@@ -54,6 +56,7 @@ ScreenBuffer::ScreenBuffer(const Rect& rect)
   tools.push_back(rect_tool        = new RectTool());
   tools.push_back(region_tool      = new RegionTool());
   tools.push_back(circle_tool      = new CircleTool());
+  tools.push_back(line_tool        = new LineTool());
 }
 
 ScreenBuffer::~ScreenBuffer()
@@ -64,6 +67,7 @@ ScreenBuffer::~ScreenBuffer()
   delete scroll_tool;
   delete airbrush_tool;
   delete circle_tool;
+  delete line_tool;
 }
 
 void
@@ -221,6 +225,21 @@ ScreenBuffer::mark_dirty(int x, int y, int w, int h)
 }
 
 void
+ScreenBuffer::on_pen_motion(const PenEvent& pen)
+{
+  printf("x: %1.5f y: %1.5f pressure: %1.5f x_tilt: %2.5f y_tilt: %2.5f\n",
+         pen.x, pen.y, pen.pressure, pen.x_tilt, pen.y_tilt);
+  if (pen.pressure > 0)
+    {
+      pen_active = true;
+    }
+  else
+    {
+      
+    }
+}
+
+void
 ScreenBuffer::on_mouse_motion(const MouseMotionEvent& motion)
 {
   ToolMotionEvent tool_motion;
@@ -287,6 +306,10 @@ ScreenBuffer::set_tool(ToolName tool)
 {
   switch(tool)
     {
+    case LINE_TOOL:
+      tools[0] = line_tool;
+      break;
+
     case PAINTBRUSH_TOOL:
       tools[0] = airbrush_tool;
       break;

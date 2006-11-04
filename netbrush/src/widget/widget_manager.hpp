@@ -31,6 +31,7 @@
 
 class MouseMotionEvent;
 class MouseButtonEvent;
+class PenEvent;
 
 class Widget;
 
@@ -48,6 +49,7 @@ public:
   
   void on_mouse_motion(const MouseMotionEvent& motion);
   void on_mouse_button(const MouseButtonEvent& button);
+  void on_pen_motion(const PenEvent& pen);
 
   void grab(Widget* widget);
   void ungrab(Widget* widget);

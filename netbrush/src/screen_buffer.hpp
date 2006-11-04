@@ -37,6 +37,7 @@ class ScrollTool;
 class RegionTool;
 class RectTool;
 class CircleTool;
+class LineTool;
 class AirbrushTool;
 
 /** */
@@ -57,6 +58,9 @@ private:
   CircleTool*      circle_tool;
   ScrollTool*      scroll_tool;
   AirbrushTool*    airbrush_tool;
+  LineTool*    line_tool;
+
+  bool pen_active;
 
   typedef std::vector<Tool*> Tools;
   Tools tools;
@@ -73,6 +77,7 @@ public:
 
   void on_mouse_motion(const MouseMotionEvent& motion);
   void on_mouse_button(const MouseButtonEvent& button);
+  void on_pen_motion(const PenEvent& pen);
   
   void on_enter() {}
   void on_leave() {}

@@ -23,6 +23,7 @@
 **  02111-1307, USA.
 */
 
+#include <iostream>
 #include "globals.hpp"
 #include "stroke.hpp"
 #include "stroke_buffer.hpp"
@@ -70,7 +71,7 @@ AirbrushTool::on_motion(const ToolMotionEvent& ev)
 void
 AirbrushTool::on_pen_motion(const PenEvent& pen)
 {
-  if (0)
+  if (0 && pen_active)
     printf("x: %1.5f y: %1.5f pressure: %1.5f x_tilt: %2.5f y_tilt: %2.5f\n",
            pen.x, pen.y, pen.pressure, pen.x_tilt, pen.y_tilt);
 
@@ -78,6 +79,7 @@ AirbrushTool::on_pen_motion(const PenEvent& pen)
     {
       if (!current_stroke)
         {
+          std::cout << "Motian start" << std::endl;
           current_stroke = new Stroke();
           pen_active = true;
         }      
@@ -103,6 +105,7 @@ AirbrushTool::on_pen_motion(const PenEvent& pen)
     }
   else if (current_stroke)
     {
+      std::cout << "Motian End" << std::endl;
       stroke_buffer->clear();
       server->send_stroke(*current_stroke, client_draw_param);
 

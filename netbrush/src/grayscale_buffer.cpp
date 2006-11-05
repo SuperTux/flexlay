@@ -101,7 +101,7 @@ GrayscaleBuffer::blit(GrayscaleBuffer* source, SDL_Rect* srcrect, int of_x, int 
 void
 GrayscaleBuffer::blit(GrayscaleBuffer* source, int of_x, int of_y, Uint8 alpha, BlendMode mode)
 {
-  std::cout << "alpha: " << int(alpha) << std::endl;
+  std::cout << "alpha: " << mode << " " << int(alpha) << std::endl;
   int start_x = std::max(of_x, 0);
   int start_y = std::max(of_y, 0);
 
@@ -153,7 +153,7 @@ GrayscaleBuffer::blit(GrayscaleBuffer* source, int of_x, int of_y, Uint8 alpha, 
             Uint8& p = source->buffer[(y - of_y) * source->width + (x - of_x)];
             
             // Works, but not exactly alpha
-            f = std::max(std::min(f + (alpha * p / 255)/4, 255), 0);
+            f = std::max(std::min(f + (alpha * p/255), 255), 0);
             //f = alpha;
 
             //f = (((255 - p) * f) + (p * p))/255; 

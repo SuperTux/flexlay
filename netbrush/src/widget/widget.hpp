@@ -29,6 +29,7 @@
 #include "SDL.h"
 #include "math/rect.hpp"
 #include "events.hpp"
+#include "../graphic_context.hpp"
 
 /** */
 class Widget
@@ -56,7 +57,7 @@ public:
   virtual void on_enter() = 0;
   virtual void on_leave() = 0;
 
-  virtual void draw(SDL_Surface* target) =0;
+  virtual void draw(GraphicContext& target) =0;
 
 private:
   Widget (const Widget&);

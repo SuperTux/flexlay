@@ -30,15 +30,23 @@
 #include "math/point.hpp"
 #include "math/rect.hpp"
 #include "color.hpp"
+#include "graphic_context.hpp"
 
 /** */
-class SurfaceGraphicContext
+class SurfaceGraphicContext : public GraphicContext
 {
 private:
+  /** the SDL_Surface onto which all drawing command will land */
   SDL_Surface* target;
+
+  /** The region into which all drawing commands will land, drawing to
+      (0, 0) will land on (region.left, region.top)  */
+  Rect region;
+
   bool anti_aliasing;
+
 public:
-  SurfaceGraphicContext(SDL_Surface* surface);
+  SurfaceGraphicContext(SDL_Surface* surface, const Rect& region);
   ~SurfaceGraphicContext();
   
   void set_anti_aliasing(bool t);
@@ -54,6 +62,7 @@ public:
   void blit(SDL_Surface* source, const Point& pos);
   void blit(SDL_Surface* source, const Rect& src_rect, const Point& pos);
 
+  SDL_Surface* get_surface() { return target; }
 private:
   SurfaceGraphicContext (const SurfaceGraphicContext&);
   SurfaceGraphicContext& operator= (const SurfaceGraphicContext&);

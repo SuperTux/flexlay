@@ -92,20 +92,12 @@ HuePicker::on_mouse_button(const MouseButtonEvent& button)
 }
 
 void
-HuePicker::draw(SDL_Surface* target)
+HuePicker::draw(GraphicContext& gc)
 {
-  SDL_Rect pos;
-  pos.x = get_rect().left;
-  pos.y = get_rect().top;
-
-  SDL_Rect vline;
-  vline.x = click_pos.x + get_rect().left;
-  vline.y = 0 + get_rect().top;
-  vline.w = 1;
-  vline.h = get_rect().get_height();
-
-  SDL_BlitSurface(surface, 0, target, &pos);
-  SDL_FillRect(target, &vline, SDL_MapRGB(target->format, 0, 0, 0));
+  gc.blit(surface, Point(0,0));
+  gc.draw_line(Point(click_pos.x, 0),
+               Point(click_pos.x, get_rect().get_height()),
+               Color(0,0,0));
 }
 
 void

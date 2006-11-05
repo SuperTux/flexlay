@@ -73,7 +73,7 @@ public:
   void mark_dirty(const Rect& region);
   void force_full_refresh();
   
-  void draw(SDL_Surface* target);
+  void draw(GraphicContext& gc);
 
   void on_mouse_motion(const MouseMotionEvent& motion);
   void on_mouse_button(const MouseButtonEvent& button);

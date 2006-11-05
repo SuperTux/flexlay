@@ -107,28 +107,15 @@ SaturationValuePicker::on_mouse_button(const MouseButtonEvent& button)
 }
 
 void
-SaturationValuePicker::draw(SDL_Surface* target)
+SaturationValuePicker::draw(GraphicContext& gc)
 {
-  SDL_Rect pos;
-  pos.x = get_rect().left;
-  pos.y = get_rect().top;
-
-  SDL_Rect hline;
-  hline.x = 0  + get_rect().left;;
-  hline.y = click_pos.y  + get_rect().top;
-  hline.w = get_rect().get_width();
-  hline.h = 1;
-
-  SDL_Rect vline;
-  vline.x = click_pos.x + get_rect().left;
-  vline.y = 0 + get_rect().top;
-  vline.w = 1;
-  vline.h = get_rect().get_height();
-
-  SDL_BlitSurface(surface, 0, target, &pos);
-
-  SDL_FillRect(target, &hline, SDL_MapRGB(target->format, 0, 0, 0));
-  SDL_FillRect(target, &vline, SDL_MapRGB(target->format, 0, 0, 0));
+  gc.blit(surface, Point(0, 0));
+  gc.draw_line(Point(click_pos.x, 0),
+               Point(click_pos.x, get_rect().get_height()),
+               Color(0, 0, 0));
+  gc.draw_line(Point(0, click_pos.y),
+               Point(get_rect().get_width(), click_pos.y),
+               Color(0, 0, 0));
 }
 
 /* EOF */

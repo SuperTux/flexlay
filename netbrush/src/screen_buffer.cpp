@@ -71,8 +71,9 @@ ScreenBuffer::~ScreenBuffer()
 }
 
 void
-ScreenBuffer::draw(SDL_Surface* target)
+ScreenBuffer::draw(GraphicContext& gc)
 {
+  SDL_Surface* target = gc.get_surface();
   //SDL_SetClipRect(target, &rect);
 
   int trans_x = get_rect().left + scroll_offset_x;

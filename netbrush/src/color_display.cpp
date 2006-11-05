@@ -48,8 +48,9 @@ ColorDisplay::on_mouse_button(const MouseButtonEvent& button)
 }
 
 void
-ColorDisplay::draw(SDL_Surface* target)
+ColorDisplay::draw(GraphicContext& gc)
 {
+#if 0
   SDL_Rect r;
  
   r.x = get_rect().left + get_rect().get_width()/3;
@@ -82,6 +83,7 @@ ColorDisplay::draw(SDL_Surface* target)
   SDL_FillRect(target, &r, SDL_MapRGB(target->format, foreground.r, foreground.g, foreground.b));
 
   if (0) std::cout << "Color: " << (int)foreground.r << " " << (int)foreground.g << " " << (int)foreground.b << std::endl;
+#endif 
 }
 
 void

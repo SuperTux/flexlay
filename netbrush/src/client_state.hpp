@@ -65,7 +65,7 @@ public:
   void fill_circle(const Point& pos, int radius);
   void draw_line(const Point& p1, const Point& p2);
 
-  void dab(unsigned int time, int x, int y);
+  void dab(unsigned int time, int x, int y, float pressure);
 };
 
 #endif

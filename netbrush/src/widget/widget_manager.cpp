@@ -30,6 +30,7 @@
 #include "events.hpp"
 #include "../globals.hpp"
 #include "../screen_buffer.hpp"
+#include "surface_graphic_context.hpp"
 #include "widget_manager.hpp"
 
 WidgetManager::WidgetManager()
@@ -157,7 +158,8 @@ WidgetManager::update()
 
           SDL_SetClipRect(screen, &clip_rect);
 
-          (*i)->draw(screen);
+          SurfaceGraphicContext gc(screen, (*i)->get_rect());
+          (*i)->draw(gc);
 
           SDL_SetClipRect(screen, NULL);
 

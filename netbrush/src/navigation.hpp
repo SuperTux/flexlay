@@ -34,6 +34,7 @@ class Navigation : public Widget
 private:
   SDL_Surface* surface;
   bool dragging;
+
 public:
   Navigation(const Rect& rect);
   
@@ -43,7 +44,7 @@ public:
   void on_enter() {};
   void on_leave() {}
 
-  void draw(SDL_Surface* target);
+  void draw(GraphicContext& gc);
   void update();
 private:
   Navigation (const Navigation&);

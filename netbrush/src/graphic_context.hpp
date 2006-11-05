@@ -26,11 +26,18 @@
 #ifndef HEADER_GRAPHIC_CONTEXT_HPP
 #define HEADER_GRAPHIC_CONTEXT_HPP
 
+#include "math/rect.hpp"
+#include "math/point.hpp"
+#include "color.hpp"
+
 /** */
 class GraphicContext
 {
 private:
 public:
+  GraphicContext() {}
+  virtual ~GraphicContext() {}
+
   virtual void fill_rect(const Rect& rect, const Color& color) =0;
   virtual void draw_rect(const Rect& rect, const Color& color) =0;
 
@@ -40,6 +47,9 @@ public:
   virtual void blit(SDL_Surface* source, const Point& pos) =0;
   virtual void blit(SDL_Surface* source, const Rect& src_rect, const Point& pos) =0;
 
+  virtual void draw_line(const Point& p1, const Point& p2, const Color& color) =0;
+
+  virtual SDL_Surface* get_surface() =0;
 private:
   GraphicContext (const GraphicContext&);
   GraphicContext& operator= (const GraphicContext&);

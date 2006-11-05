@@ -25,6 +25,7 @@
 
 #include <iostream>
 #include <sstream>
+#include <stdlib.h>
 #include "globals.hpp"
 #include "client_state.hpp"
 #include "color.hpp"
@@ -288,7 +289,15 @@ ServerConnection::process_command(const std::string& cmd)
                 {
                   client_state->dab(atoi(tokens[3].c_str()), 
                                     atoi(tokens[4].c_str()),
-                                    atoi(tokens[5].c_str()));
+                                    atoi(tokens[5].c_str()),
+                                    1.0f);
+                }
+              else if (tokens.size() == 7 && tokens[2] == "dab")
+                {
+                  client_state->dab(atoi(tokens[3].c_str()), 
+                                    atoi(tokens[4].c_str()),
+                                    atoi(tokens[5].c_str()),
+                                    atof(tokens[6].c_str()));
                 }
               else
                 {
@@ -360,7 +369,7 @@ ServerConnection::send_stroke(const Stroke& stroke, DrawingParameter* param)
   str << "stroke_begin" << std::endl;
   for(Stroke::Dabs::const_iterator i = dabs.begin(); i != dabs.end(); ++i)
     {
-      str << "dab " << i->time << " " << i->pos.x << " " << i->pos.y  << std::endl;
+      str << "dab " << i->time << " " << i->pos.x << " " << i->pos.y << " " << i->pressure << std::endl;
     }
   str << "stroke_end" << std::endl;
       

@@ -37,6 +37,7 @@ private:
   SDL_Surface* surface;
   bool  dragging;
   Point click_pos;
+
 public:
   SaturationValuePicker(const Rect& rect);
 
@@ -46,7 +47,7 @@ public:
   void on_enter() {};
   void on_leave() {}
 
-  void draw(SDL_Surface* target);
+  void draw(GraphicContext& gc);
   void set_color(const Color& color);
 
   Color get_color(Uint8 value, Uint8 saturation) const;

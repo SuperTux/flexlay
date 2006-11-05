@@ -43,6 +43,7 @@ private:
   Widgets widgets;
   Widget* grabbed_widget;
   Widget* focused_widget;
+
 public:
   WidgetManager();
   ~WidgetManager();

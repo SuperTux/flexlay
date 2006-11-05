@@ -113,12 +113,12 @@ ClientState::stroke_end() {
 }
 
 void
-ClientState::dab(unsigned int time, int x, int y) 
+ClientState::dab(unsigned int time, int x, int y, float pressure) 
 {
   //std::cout << "CL" << id << " dab " << time << " " << x << " " << y << std::endl;
   if (current_stroke)
     {
-      current_stroke->add_dab(Dab(x, y));
+      current_stroke->add_dab(Dab(x, y, pressure));
     }
 }
 

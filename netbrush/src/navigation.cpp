@@ -67,13 +67,9 @@ Navigation::on_mouse_button(const MouseButtonEvent& button)
 }
 
 void
-Navigation::draw(SDL_Surface* target)
+Navigation::draw(GraphicContext& gc)
 {
-  SDL_Rect pos;
-  pos.x = get_rect().left;
-  pos.y = get_rect().top;
-
-  SDL_BlitSurface(surface, 0, target, &pos);  
+  gc.blit(surface, Point(0, 0));
 }
 
 void

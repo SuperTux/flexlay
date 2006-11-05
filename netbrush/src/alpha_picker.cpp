@@ -86,27 +86,12 @@ AlphaPicker::on_mouse_button(const MouseButtonEvent& button)
 }
 
 void
-AlphaPicker::draw(SDL_Surface* target)
+AlphaPicker::draw(GraphicContext& gc)
 {
-  SDL_Rect pos;
-  pos.x = get_rect().left;
-  pos.y = get_rect().top;
-
-  SDL_BlitSurface(surface, 0, target, &pos);
-
-
-  SDL_Rect vline;
-  vline.x = click_pos.x + get_rect().left - 1;
-  vline.y = 0 + get_rect().top;
-  vline.w = 3;
-  vline.h = get_rect().get_height();
-
-  SDL_FillRect(target, &vline, SDL_MapRGB(target->format, 0, 0, 0));
-
-  vline.x += 1;
-  vline.w = 1;
-
-  SDL_FillRect(target, &vline, SDL_MapRGB(target->format, 255, 255, 255));
+  gc.blit(surface, Point(0, 0));
+  gc.draw_line(Point(click_pos.x, 0),
+               Point(click_pos.x, get_rect().get_height()),
+               Color(0, 0, 0));
 }
 
 void

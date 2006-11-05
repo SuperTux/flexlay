@@ -47,32 +47,25 @@ Scrollbar::on_mouse_button(const MouseButtonEvent& button)
 }
 
 void
-Scrollbar::draw(SDL_Surface* target)
+Scrollbar::draw(GraphicContext& gc)
 {
-  SDL_Rect r;
-  r.x = get_rect().left;
-  r.y = get_rect().top;
-  r.w = get_rect().get_width();
-  r.h = get_rect().get_height();
-  SDL_FillRect(target, &r, SDL_MapRGB(target->format, 200, 200, 200));
+  gc.fill_rect(get_rect(), Color(200, 200, 200));
 
   if (orientation == HORIZONTAL)
     {
-      r.x = get_rect().left + 2 + ((pos-min) * (get_rect().get_width()-4) / (max - min));
-      r.y = get_rect().top + 2;
-      r.w = page_step * (get_rect().get_width()-4) / (max - min);
-      r.h = get_rect().get_height()-4;
-
-      SDL_FillRect(target, &r, SDL_MapRGB(target->format, 0, 0, 0));
+      gc.fill_rect(Rect(Point(2 + ((pos-min) * (get_rect().get_width()-4) / (max - min)),
+                              2),
+                        Size(page_step * (get_rect().get_width()-4) / (max - min),
+                             get_rect().get_height()-4)),
+                   Color(0, 0, 0));
     }
   else // VERSION
     {
-      r.x = get_rect().left + 2;
-      r.y = get_rect().top  + 2 + ((pos-min) * (get_rect().get_height()-4) / (max - min));
-      r.w = get_rect().get_width()-4;
-      r.h = page_step * (get_rect().get_height()-4) / (max - min);
-
-      SDL_FillRect(target, &r, SDL_MapRGB(target->format, 0, 0, 0));
+      gc.fill_rect(Rect(Point(2,
+                              2 + ((pos-min) * (get_rect().get_height()-4) / (max - min))),
+                        Size(get_rect().get_width()-4,
+                             page_step * (get_rect().get_height()-4) / (max - min))),
+                   Color(0, 0, 0));
     }
 }
 

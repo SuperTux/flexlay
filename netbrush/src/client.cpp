@@ -170,6 +170,7 @@ int main(int argc, char** argv)
     std::string hostname;
     std::string port     = "4711";
     int rest_arg_count = 0;
+    std::string stylus;
 
     CommandLine argp;
 
@@ -180,6 +181,7 @@ int main(int argc, char** argv)
     argp.add_option('f', "fullscreen", "",            "Start the application in fullscreen mode");
     argp.add_option('w', "window",     "",            "Start the application in window mode");
     argp.add_option('v', "version",    "",            "Display the netBrush version");
+    argp.add_option('i', "input",      "NAME",        "Use XInput device NAME for drawing (tablet support)");
     argp.add_option('h', "help",       "",            "Show this help text");
 
     argp.parse_args(argc, argv);
@@ -199,6 +201,12 @@ int main(int argc, char** argv)
                 {
                   throw std::runtime_error("Geometry option '-g' requires argument of type {WIDTH}x{HEIGHT}");
                 }
+            }
+            break;
+
+          case 'i':
+            {
+              stylus = argp.get_argument();
             }
             break;
 
@@ -274,7 +282,7 @@ int main(int argc, char** argv)
       printf("SDL_SetVideoMode: %s\n", SDL_GetError());
     SDL_WM_SetCaption("netBrush", "netBrush");
 
-    if (1) // enable tablet support
+    if (!stylus.empty()) // enable tablet support
       {
         SDL_SysWMinfo syswm;
 
@@ -285,7 +293,7 @@ int main(int argc, char** argv)
           }
 
         syswm.info.x11.lock_func();
-        xinput = new InputDevice_XInput(syswm.info.x11.display, "gstylus");
+        xinput = new InputDevice_XInput(syswm.info.x11.display, stylus);
         syswm.info.x11.unlock_func();
 
         SDL_EventState(SDL_SYSWMEVENT, SDL_ENABLE);

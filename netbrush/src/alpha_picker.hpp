@@ -47,7 +47,7 @@ public:
   void on_enter() {}
   void on_leave() {}
 
-  void draw(SDL_Surface* target);
+  void draw(GraphicContext& gc);
 
   void set_color(const Color& color);
 private:

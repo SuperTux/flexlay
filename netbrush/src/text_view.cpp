@@ -57,19 +57,13 @@ TextView::on_mouse_button(const MouseButtonEvent& button)
 }
 
 void
-TextView::draw(SDL_Surface* target)
+TextView::draw(GraphicContext& gc)
 {
   if (1)
-    {
-      SDL_Rect r;
-      r.x = get_rect().left;
-      r.y = get_rect().top;
-      r.w = get_rect().get_width();
-      r.h = get_rect().get_height();
-
-      SDL_FillRect(target, &r, SDL_MapRGB(target->format, 64, 64, 64));
-    }
-  TTY_Blit(tty, target, get_rect().left, get_rect().top);
+    gc.fill_rect(get_rect(), Color(64, 64, 64));
+  
+  // FIXME: move font handling in GraphicContext
+  TTY_Blit(tty, gc.get_surface(), get_rect().left, get_rect().top);
 }
 
 void

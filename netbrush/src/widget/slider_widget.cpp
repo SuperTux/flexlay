@@ -93,30 +93,25 @@ SliderWidget::on_leave()
 }
 
 void
-SliderWidget::draw(SDL_Surface* target)
+SliderWidget::draw(GraphicContext& gc)
 {
-  SDL_Rect rect;
-  rect.x = get_rect().left;
-  rect.y = get_rect().top;
-  rect.w = get_rect().get_width();
-  rect.h = get_rect().get_height();
+  Rect rect(0, 0, 
+            get_rect().get_width(), get_rect().get_height());
+  
+  gc.fill_rect(rect,
+               Color(200, 200, 200));
+  
+  rect.left   += 2;
+  rect.top    += 10;
+  rect.right  -= 2;
+  rect.bottom -= 10;
 
-  SDL_FillRect(target, &rect, SDL_MapRGB(target->format, 200, 200, 200));
+  gc.fill_rect(rect, Color(100, 100, 100));
 
-  rect.x += 2;
-  rect.y += 10;
-  rect.w -= 4;
-  rect.h -= 20;
-
-  SDL_FillRect(target, &rect, SDL_MapRGB(target->format, 100, 100, 100));
-
-  SDL_Rect slider;
-  slider.x = int(get_rect().get_width() * (pos - min)/(max - min)) + get_rect().left - 4;
-  slider.y = 2 + get_rect().top;
-  slider.w = 8;
-  slider.h = get_rect().get_height() - 4;
-
-  SDL_FillRect(target, &slider, SDL_MapRGB(target->format, 0, 0, 0));
+  gc.fill_rect(Rect(Point(int(get_rect().get_width() * (pos - min)/(max - min)) - 4,
+                          2),
+                    Size(8, get_rect().get_height() - 4)),
+               Color(0, 0, 0));
 }
 
 void

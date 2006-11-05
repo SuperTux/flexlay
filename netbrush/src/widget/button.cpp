@@ -90,38 +90,23 @@ Button::on_mouse_button(const MouseButtonEvent& button)
 }
 
 void
-Button::draw(SDL_Surface* target)
+Button::draw(GraphicContext& gc)
 {
-  //Uint32 color = SDL_MapRGB(target->format, 255, 0, 0);
-
-  SDL_Rect r;
-
-  r.x = get_rect().left;
-  r.y = get_rect().top;
-
-  r.w = get_rect().get_width();
-  r.h = get_rect().get_height();
-
   switch(state)
     {
     case UP:
       if (hover)
-        SDL_BlitSurface(hover_surface, NULL, target, &r);
+        gc.blit(hover_surface, Point(0, 0));
       else
-        SDL_BlitSurface(up_surface, NULL, target, &r);
+        gc.blit(up_surface, Point(0, 0));
       break;
 
     case DOWN:
-      SDL_BlitSurface(down_surface, NULL, target, &r);
+      gc.blit(up_surface, Point(0, 0));
       break;
     }
 
-  r.x = get_rect().left + 6;
-  r.y = get_rect().top  + 6;
-
-  SDL_BlitSurface(icon, NULL, target, &r);
-
-  //SDL_FillRect(target, get_rect(), color);
+  gc.blit(icon, Point(6, 6));
 }
 
 /* EOF */

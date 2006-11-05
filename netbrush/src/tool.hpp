@@ -41,6 +41,7 @@ struct ToolMotionEvent
   Point screen;
 };
 
+
 struct ToolButtonEvent
 {
   int x;
@@ -60,6 +61,7 @@ public:
   virtual void on_motion(const ToolMotionEvent& ev) =0;
   virtual void on_button_press(const ToolButtonEvent& ev) =0;
   virtual void on_button_release(const ToolButtonEvent& ev) =0;
+  virtual void on_pen_motion(const PenEvent& pen) {}
 
   /** @param target SDL_Surface to which should be drawn 
       @param rect   rectangle in screenspace which should be redrawn

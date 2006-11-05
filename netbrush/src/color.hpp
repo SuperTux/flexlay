@@ -46,9 +46,10 @@ struct Color
   Uint8 r;
   Uint8 g;
   Uint8 b;
+  Uint8 a;
 
   Color();
-  Color(Uint8 r_, Uint8 g_, Uint8 b_);
+  Color(Uint8 r_, Uint8 g_, Uint8 b_, Uint8 a_ = 255);
   static Color from_hsv(Uint8 hue, Uint8 saturation, Uint8 value);
   static Color from_hue(Uint8 hue);
   void apply_value_saturation(Uint8 value, Uint8 saturation);

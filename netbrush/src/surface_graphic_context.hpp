@@ -23,29 +23,40 @@
 **  02111-1307, USA.
 */
 
-#ifndef HEADER_AIRBRUSH_TOOL_HPP
-#define HEADER_AIRBRUSH_TOOL_HPP
+#ifndef HEADER_SURFACE_GRAPHIC_CONTEXT_HPP
+#define HEADER_SURFACE_GRAPHIC_CONTEXT_HPP
 
-#include "tool.hpp"
+#include "SDL.h"
+#include "math/point.hpp"
+#include "math/rect.hpp"
+#include "color.hpp"
 
 /** */
-class AirbrushTool : public Tool
+class SurfaceGraphicContext
 {
 private:
-  Stroke* current_stroke;
-  bool pen_active;
+  SDL_Surface* target;
+  bool anti_aliasing;
 public:
-  AirbrushTool();
-  ~AirbrushTool();
+  SurfaceGraphicContext(SDL_Surface* surface);
+  ~SurfaceGraphicContext();
+  
+  void set_anti_aliasing(bool t);
 
-  void on_motion(const ToolMotionEvent& ev);
-  void on_button_press(const ToolButtonEvent& ev);
-  void on_button_release(const ToolButtonEvent& ev);
-  void on_pen_motion(const PenEvent& pen);
-  void draw(SDL_Surface* target, const Rect& rect, int x_of, int y_of) {}
+  void fill_rect(const Rect& rect, const Color& color);
+  void draw_rect(const Rect& rect, const Color& color);
+  
+  void fill_circle(const Point& pos, int radius, const Color& color);
+  void draw_circle(const Point& pos, int radius, const Color& color);
+
+  void draw_line(const Point& p1, const Point& p2, const Color& color);
+  
+  void blit(SDL_Surface* source, const Point& pos);
+  void blit(SDL_Surface* source, const Rect& src_rect, const Point& pos);
+
 private:
-  AirbrushTool (const AirbrushTool&);
-  AirbrushTool& operator= (const AirbrushTool&);
+  SurfaceGraphicContext (const SurfaceGraphicContext&);
+  SurfaceGraphicContext& operator= (const SurfaceGraphicContext&);
 };
 
 #endif

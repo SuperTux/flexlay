@@ -227,8 +227,6 @@ ScreenBuffer::mark_dirty(int x, int y, int w, int h)
 void
 ScreenBuffer::on_pen_motion(const PenEvent& pen)
 {
-  printf("x: %1.5f y: %1.5f pressure: %1.5f x_tilt: %2.5f y_tilt: %2.5f\n",
-         pen.x, pen.y, pen.pressure, pen.x_tilt, pen.y_tilt);
   if (pen.pressure > 0)
     {
       pen_active = true;
@@ -237,6 +235,8 @@ ScreenBuffer::on_pen_motion(const PenEvent& pen)
     {
       
     }
+
+  tools.front()->on_pen_motion(pen);
 }
 
 void

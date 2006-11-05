@@ -71,6 +71,7 @@ client_env.Program('netbrush-client', [
         'src/rect_tool.cpp',
         'src/circle_tool.cpp',
         'src/line_tool.cpp',
+        'src/surface_graphic_context.cpp',
         'src/SDL_gfx/SDL_gfxPrimitives.c',
         'src/input_device_xinput.cpp'
 #        'src/widget/events.cpp',

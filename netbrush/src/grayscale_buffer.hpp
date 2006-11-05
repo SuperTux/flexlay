@@ -46,7 +46,7 @@ public:
   ~GrayscaleBuffer();
   
   void blit(GrayscaleBuffer* source, SDL_Rect* srcrect, int of_x, int of_y);
-  void blit(GrayscaleBuffer* source, int of_x, int of_y, BlendMode mode);
+  void blit(GrayscaleBuffer* source, int of_x, int of_y, Uint8 alpha, BlendMode mode);
 
   inline Uint8& at(int x, int y) 
   { 

@@ -67,8 +67,8 @@ Color::Color()
   : r(0), g(0), b(0)
 {}
 
-Color::Color(Uint8 r_, Uint8 g_, Uint8 b_)
-  : r(r_), g(g_), b(b_)
+Color::Color(Uint8 r_, Uint8 g_, Uint8 b_, Uint8 a_)
+  : r(r_), g(g_), b(b_), a(a_)
 {}
 
 Color

@@ -92,6 +92,7 @@ StrokeBuffer::add_dab(const Dab& dab)
               buffer->blit(brush,
                            static_cast<int>(i->pos.x - brush->get_width()/2), 
                            static_cast<int>(i->pos.y - brush->get_height()/2), 
+                           (Uint8)(255 * dab.pressure),
                            GrayscaleBuffer::ALPHA);
             }
         }
@@ -101,6 +102,7 @@ StrokeBuffer::add_dab(const Dab& dab)
       buffer->blit(brush,
                    static_cast<int>(dab.pos.x - brush->get_width()/2), 
                    static_cast<int>(dab.pos.y - brush->get_height()/2), 
+                   (Uint8)(255 * dab.pressure),
                    GrayscaleBuffer::ALPHA);
     }
 }
@@ -118,6 +120,7 @@ StrokeBuffer::draw_stroke(const Stroke& stroke, DrawingParameter* param)
           buffer->blit(brush,
                        static_cast<int>(i->pos.x - brush->get_width()/2), 
                        static_cast<int>(i->pos.y - brush->get_height()/2), 
+                       (Uint8)(255 * i->pressure),
                        GrayscaleBuffer::ALPHA);
         }
     }
@@ -128,7 +131,8 @@ StrokeBuffer::draw_stroke(const Stroke& stroke, DrawingParameter* param)
         {
           buffer->blit(brush,
                        static_cast<int>(i->pos.x - brush->get_width()/2), 
-                       static_cast<int>(i->pos.y - brush->get_height()/2), 
+                       static_cast<int>(i->pos.y - brush->get_height()/2),
+                       (Uint8)(255 * i->pressure), 
                        GrayscaleBuffer::ALPHA);
         }      
     }

@@ -23,29 +23,26 @@
 **  02111-1307, USA.
 */
 
-#ifndef HEADER_AIRBRUSH_TOOL_HPP
-#define HEADER_AIRBRUSH_TOOL_HPP
-
-#include "tool.hpp"
+#ifndef HEADER_GRAPHIC_CONTEXT_HPP
+#define HEADER_GRAPHIC_CONTEXT_HPP
 
 /** */
-class AirbrushTool : public Tool
+class GraphicContext
 {
 private:
-  Stroke* current_stroke;
-  bool pen_active;
 public:
-  AirbrushTool();
-  ~AirbrushTool();
+  virtual void fill_rect(const Rect& rect, const Color& color) =0;
+  virtual void draw_rect(const Rect& rect, const Color& color) =0;
 
-  void on_motion(const ToolMotionEvent& ev);
-  void on_button_press(const ToolButtonEvent& ev);
-  void on_button_release(const ToolButtonEvent& ev);
-  void on_pen_motion(const PenEvent& pen);
-  void draw(SDL_Surface* target, const Rect& rect, int x_of, int y_of) {}
+  virtual void fill_circle(const Point& pos, int radius, const Color& color) =0;
+  virtual void draw_circle(const Point& pos, int radius, const Color& color) =0;
+  
+  virtual void blit(SDL_Surface* source, const Point& pos) =0;
+  virtual void blit(SDL_Surface* source, const Rect& src_rect, const Point& pos) =0;
+
 private:
-  AirbrushTool (const AirbrushTool&);
-  AirbrushTool& operator= (const AirbrushTool&);
+  GraphicContext (const GraphicContext&);
+  GraphicContext& operator= (const GraphicContext&);
 };
 
 #endif

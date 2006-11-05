@@ -26,6 +26,7 @@
 #ifndef HEADER_COLOR_HPP
 #define HEADER_COLOR_HPP
 
+#include <iosfwd>
 #include "SDL.h"
 
 struct Color;
@@ -54,6 +55,9 @@ struct Color
   static Color from_hue(Uint8 hue);
   void apply_value_saturation(Uint8 value, Uint8 saturation);
 };
+
+std::ostream& operator<<(std::ostream& s, const Color&    rgba);
+std::ostream& operator<<(std::ostream& s, const HSVColor& hsv);
 
 #endif
 

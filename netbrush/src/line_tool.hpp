@@ -1,4 +1,5 @@
-/*   __      __ __             ___        __   __ __   __
+/*  $Id$
+**   __      __ __             ___        __   __ __   __
 **  /  \    /  \__| ____    __| _/_______/  |_|__|  | |  |   ____
 **  \   \/\/   /  |/    \  / __ |/  ___/\   __\  |  | |  | _/ __ \
 **   \        /|  |   |  \/ /_/ |\___ \  |  | |  |  |_|  |_\  ___/
@@ -22,29 +23,31 @@
 **  02111-1307, USA.
 */
 
-#ifndef HEADER_AIRBRUSH_TOOL_HPP
-#define HEADER_AIRBRUSH_TOOL_HPP
+#ifndef HEADER_LINE_TOOL_HPP
+#define HEADER_LINE_TOOL_HPP
 
 #include "tool.hpp"
 
 /** */
-class AirbrushTool : public Tool
+class LineTool : public Tool
 {
 private:
-  Stroke* current_stroke;
-  bool pen_active;
+  bool  dragging;
+  Point p1;
+  Point p2;
+
 public:
-  AirbrushTool();
-  ~AirbrushTool();
+  LineTool();
+  ~LineTool();
 
   void on_motion(const ToolMotionEvent& ev);
   void on_button_press(const ToolButtonEvent& ev);
   void on_button_release(const ToolButtonEvent& ev);
-  void on_pen_motion(const PenEvent& pen);
-  void draw(SDL_Surface* target, const Rect& rect, int x_of, int y_of) {}
+  void draw(SDL_Surface* target, const Rect& rect, int x_of, int y_of);
+ 
 private:
-  AirbrushTool (const AirbrushTool&);
-  AirbrushTool& operator= (const AirbrushTool&);
+  LineTool (const LineTool&);
+  LineTool& operator= (const LineTool&);
 };
 
 #endif

@@ -72,7 +72,8 @@ ColorDisplay::draw(GraphicContext& gc)
                          2*get_rect().get_height()/3-2)),
                Color(foreground.r, foreground.g, foreground.b));
 
-  if (0) std::cout << "Color: " << (int)foreground.r << " " << (int)foreground.g << " " << (int)foreground.b << std::endl;
+  if (0)
+    std::cout << "Color: " << (int)foreground.r << " " << (int)foreground.g << " " << (int)foreground.b << std::endl;
 }
 
 void

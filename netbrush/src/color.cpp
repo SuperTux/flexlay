@@ -24,6 +24,7 @@
 */
 
 #include <algorithm>
+#include <iostream>
 #include "color.hpp"
 
 HSVColor::HSVColor()
@@ -107,6 +108,20 @@ Color::apply_value_saturation(Uint8 value, Uint8 saturation)
   r = (0*value + (255-value) * ((255 * saturation + r * (255 - saturation))/255))/255;
   g = (0*value + (255-value) * ((255 * saturation + g * (255 - saturation))/255))/255;
   b = (0*value + (255-value) * ((255 * saturation + b * (255 - saturation))/255))/255;
+}
+
+std::ostream& operator<<(std::ostream& s, const Color& color)
+{
+  return (s << "RGBA("
+          << int(color.r) << ", " << int(color.g) << ", " << int(color.b) << ", " << int(color.a) 
+          << ")");
+}
+
+std::ostream& operator<<(std::ostream& s, const HSVColor& hsv)
+{
+  return (s << "HSV("
+          << int(hsv.hue) << ", " << int(hsv.saturation) << ", " << int(hsv.value)
+          << ")");
 }
 
 /* EOF */

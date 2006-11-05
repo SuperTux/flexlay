@@ -50,40 +50,29 @@ ColorDisplay::on_mouse_button(const MouseButtonEvent& button)
 void
 ColorDisplay::draw(GraphicContext& gc)
 {
-#if 0
-  SDL_Rect r;
- 
-  r.x = get_rect().left + get_rect().get_width()/3;
-  r.y = get_rect().top  + get_rect().get_height()/3;
-  r.w = 2*get_rect().get_width()/3;
-  r.h = 2*get_rect().get_height()/3;
+  gc.fill_rect(Rect(Point(get_rect().get_width()/3,
+                          get_rect().get_height()/3),
+                    Size(2*get_rect().get_width()/3,
+                         2*get_rect().get_height()/3)),
+               Color(128, 128, 128));
 
-  SDL_FillRect(target, &r, SDL_MapRGB(target->format, 128, 128, 128));
+  gc.fill_rect(Rect(Point(get_rect().get_width()/3+1,
+                          get_rect().get_height()/3+1),
+                    Size(2*get_rect().get_width()/3-2,
+                         2*get_rect().get_height()/3-2)),
+               Color(background.r, background.g, background.b));
 
-  r.x = get_rect().left;
-  r.y = get_rect().top;
-  r.w = 2*get_rect().get_width()/3;
-  r.h = 2*get_rect().get_height()/3;
-
-  SDL_FillRect(target, &r, SDL_MapRGB(target->format, 128, 128, 128));
-
-  
-  r.x = get_rect().left + get_rect().get_width()/3+1;
-  r.y = get_rect().top  + get_rect().get_height()/3+1;
-  r.w = 2*get_rect().get_width()/3-2;
-  r.h = 2*get_rect().get_height()/3-2;
-
-  SDL_FillRect(target, &r, SDL_MapRGB(target->format, background.r, background.g, background.b));
-
-  r.x = get_rect().left+1;
-  r.y = get_rect().top+1;
-  r.w = 2*get_rect().get_width()/3-2;
-  r.h = 2*get_rect().get_height()/3-2;
-
-  SDL_FillRect(target, &r, SDL_MapRGB(target->format, foreground.r, foreground.g, foreground.b));
+  gc.fill_rect(Rect(Point(0, 0),
+                    Size(2*get_rect().get_width()/3,
+                         2*get_rect().get_height()/3)),
+               Color(128, 128, 128));
+                 
+  gc.fill_rect(Rect(Point(1, 1),
+                    Size(2*get_rect().get_width()/3-2,
+                         2*get_rect().get_height()/3-2)),
+               Color(foreground.r, foreground.g, foreground.b));
 
   if (0) std::cout << "Color: " << (int)foreground.r << " " << (int)foreground.g << " " << (int)foreground.b << std::endl;
-#endif 
 }
 
 void

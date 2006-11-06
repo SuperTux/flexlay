@@ -35,6 +35,8 @@
 #define F_OK   0
 #endif
 
+SDL_SysWMinfo syswm;
+
 SDL_Rect* make_rect(int x, int y, int w, int h)
 {
   static SDL_Rect rect;
@@ -153,7 +155,16 @@ void process_events()
 
         case SDL_SYSWMEVENT:
           if (xinput)
-            xinput->on_xevent(event.syswm.msg->event.xevent);
+            {
+              syswm.info.x11.lock_func();
+              xinput->on_xevent(syswm.info.x11.display, syswm.info.x11.window, 
+                                event.syswm.msg->event.xevent);
+              syswm.info.x11.unlock_func();
+            }
+          break;
+
+        default: 
+          std::cout << "Unknown event" << std::endl;
           break;
         }
     }  
@@ -284,8 +295,6 @@ int main(int argc, char** argv)
 
     if (!stylus.empty()) // enable tablet support
       {
-        SDL_SysWMinfo syswm;
-
         SDL_VERSION(&syswm.version); // this is important!
         if (SDL_GetWMInfo(&syswm) == -1)
           {
@@ -293,7 +302,7 @@ int main(int argc, char** argv)
           }
 
         syswm.info.x11.lock_func();
-        xinput = new InputDevice_XInput(syswm.info.x11.display, stylus);
+        xinput = new InputDevice_XInput(syswm.info.x11.display, syswm.info.x11.window, stylus);
         syswm.info.x11.unlock_func();
 
         SDL_EventState(SDL_SYSWMEVENT, SDL_ENABLE);

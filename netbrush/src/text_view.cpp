@@ -1,11 +1,8 @@
-/*  $Id$
-**   __      __ __             ___        __   __ __   __
-**  /  \    /  \__| ____    __| _/_______/  |_|__|  | |  |   ____
-**  \   \/\/   /  |/    \  / __ |/  ___/\   __\  |  | |  | _/ __ \
-**   \        /|  |   |  \/ /_/ |\___ \  |  | |  |  |_|  |_\  ___/
-**    \__/\  / |__|___|  /\____ /____  > |__| |__|____/____/\___  >
-**         \/          \/      \/    \/                         \/
-**  Copyright (C) 2005 Ingo Ruhnke <grumbel@gmx.de>
+/*            _   ___              _   
+**   _ _  ___| |_| _ )_ _ _  _ _ _| |_ 
+**  | ' \/ -_)  _| _ \ '_| || (_-<|   |
+**  |_||_\___|\__|___/_|  \_,_/__/|_|_|
+**  netBrush - Copyright (C) 2006 Ingo Ruhnke <grumbel@gmx.de>
 **
 **  This program is free software; you can redistribute it and/or
 **  modify it under the terms of the GNU General Public License
@@ -60,7 +57,8 @@ void
 TextView::draw(GraphicContext& gc)
 {
   if (1)
-    gc.fill_rect(get_rect(), Color(64, 64, 64));
+    gc.fill_rect(Rect(0, 0, get_rect().get_width(), get_rect().get_height()),
+                 Color(64, 64, 64));
   
   // FIXME: move font handling in GraphicContext
   TTY_Blit(tty, gc.get_surface(), get_rect().left, get_rect().top);

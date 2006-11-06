@@ -1,11 +1,8 @@
-/*  $Id$
-**   __      __ __             ___        __   __ __   __
-**  /  \    /  \__| ____    __| _/_______/  |_|__|  | |  |   ____
-**  \   \/\/   /  |/    \  / __ |/  ___/\   __\  |  | |  | _/ __ \
-**   \        /|  |   |  \/ /_/ |\___ \  |  | |  |  |_|  |_\  ___/
-**    \__/\  / |__|___|  /\____ /____  > |__| |__|____/____/\___  >
-**         \/          \/      \/    \/                         \/
-**  Copyright (C) 2005 Ingo Ruhnke <grumbel@gmx.de>
+/*            _   ___              _   
+**   _ _  ___| |_| _ )_ _ _  _ _ _| |_ 
+**  | ' \/ -_)  _| _ \ '_| || (_-<|   |
+**  |_||_\___|\__|___/_|  \_,_/__/|_|_|
+**  netBrush - Copyright (C) 2006 Ingo Ruhnke <grumbel@gmx.de>
 **
 **  This program is free software; you can redistribute it and/or
 **  modify it under the terms of the GNU General Public License
@@ -46,6 +43,8 @@ public:
   void set_dirty(bool d) { dirty = d; }
 
   const Rect& get_rect() { return rect; }
+  int get_width() { return rect.get_width(); }
+  int get_height() { return rect.get_height(); }
 
   virtual bool do_update() { return true; }
   

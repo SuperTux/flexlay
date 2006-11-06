@@ -26,6 +26,7 @@
 
 #include <vector>
 #include "../src/math/point.hpp"
+#include "../src/math/rect.hpp"
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <X11/extensions/XInput.h>
@@ -34,7 +35,7 @@ class InputDevice_XInput
 {
   //!Construction:
 public:
-  InputDevice_XInput(Display* dpy, const std::string& name);
+  InputDevice_XInput(Display* dpy, Window w, const std::string& name);
 
   virtual ~InputDevice_XInput();
 
@@ -75,7 +76,7 @@ private:
 
   void get_info(XDeviceInfo	*info);
 public:
-  void on_xevent(XEvent &event);
+  void on_xevent(Display* dpy, Window w, XEvent &event);
   bool in_proximity() const { return proximity; }
 private:
   void on_device_button_event(XDeviceButtonEvent *button);
@@ -83,9 +84,17 @@ private:
   void on_device_motion_event(XDeviceMotionEvent* motion);
   void on_proximity_notify_event(XProximityNotifyEvent* prox);
 
+  Rect get_window_rect(Display* dpy, Window w);
 private:
   void received_mouse_input(XEvent &event);
   void received_mouse_move(XEvent &event);
+
+  // Window size and stuff used to translate coordinates
+  Rect window_rect;
+  // window x/y coordinates, border included!
+  int  window_x, window_y;
+  int  display_width;
+  int  display_height;
 	
   std::string name;
 

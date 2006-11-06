@@ -1,11 +1,8 @@
-/*  $Id$
-**   __      __ __             ___        __   __ __   __
-**  /  \    /  \__| ____    __| _/_______/  |_|__|  | |  |   ____
-**  \   \/\/   /  |/    \  / __ |/  ___/\   __\  |  | |  | _/ __ \
-**   \        /|  |   |  \/ /_/ |\___ \  |  | |  |  |_|  |_\  ___/
-**    \__/\  / |__|___|  /\____ /____  > |__| |__|____/____/\___  >
-**         \/          \/      \/    \/                         \/
-**  Copyright (C) 2005 Ingo Ruhnke <grumbel@gmx.de>
+/*            _   ___              _   
+**   _ _  ___| |_| _ )_ _ _  _ _ _| |_ 
+**  | ' \/ -_)  _| _ \ '_| || (_-<|   |
+**  |_||_\___|\__|___/_|  \_,_/__/|_|_|
+**  netBrush - Copyright (C) 2006 Ingo Ruhnke <grumbel@gmx.de>
 **
 **  This program is free software; you can redistribute it and/or
 **  modify it under the terms of the GNU General Public License
@@ -193,7 +190,12 @@ Controller::Controller()
   brush_widget = new BrushWidget(Rect(Point(screen->w-128, 128+24+24), Size(128, 128)));
   widget_manager->add(brush_widget);
 
-  text_view->put("netBrush Version 0.1.0\n");
+  text_view->put("          _   ___              _\n"
+                 " _ _  ___| |_| _ )_ _ _  _ _ _| |_\n"
+                 "| ' \\/ -_)  _| _ \\ '_| || (_-<|   |\n"
+                 "|_||_\\___|\\__|___/_|  \\_,_/__/|_|_|\n"
+                 "netBrush 0.1.0 - Copyright (C) 2006 Ingo Ruhnke <grumbel@gmx.de>\n");
+
   set_generic_brush(client_draw_param->generic_brush);
 
   set_color(Color(0, 0, 0));

@@ -1,11 +1,8 @@
-/*  $Id$
-**   __      __ __             ___        __   __ __   __
-**  /  \    /  \__| ____    __| _/_______/  |_|__|  | |  |   ____
-**  \   \/\/   /  |/    \  / __ |/  ___/\   __\  |  | |  | _/ __ \
-**   \        /|  |   |  \/ /_/ |\___ \  |  | |  |  |_|  |_\  ___/
-**    \__/\  / |__|___|  /\____ /____  > |__| |__|____/____/\___  >
-**         \/          \/      \/    \/                         \/
-**  Copyright (C) 2005 Ingo Ruhnke <grumbel@gmx.de>
+/*            _   ___              _   
+**   _ _  ___| |_| _ )_ _ _  _ _ _| |_ 
+**  | ' \/ -_)  _| _ \ '_| || (_-<|   |
+**  |_||_\___|\__|___/_|  \_,_/__/|_|_|
+**  netBrush - Copyright (C) 2006 Ingo Ruhnke <grumbel@gmx.de>
 **
 **  This program is free software; you can redistribute it and/or
 **  modify it under the terms of the GNU General Public License
@@ -140,7 +137,10 @@ void
 WidgetManager::on_pen_motion(const PenEvent& pen)
 {
   // FIXME: Hack, should to normal widget handling instead
-  screen_buffer->on_pen_motion(pen);
+  PenEvent new_pen = pen;
+  new_pen.x -= screen_buffer->get_rect().left;
+  new_pen.y -= screen_buffer->get_rect().top;
+  screen_buffer->on_pen_motion(new_pen);
 }
 
 void

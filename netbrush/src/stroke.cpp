@@ -1,11 +1,8 @@
-/*  $Id$
-**   __      __ __             ___        __   __ __   __
-**  /  \    /  \__| ____    __| _/_______/  |_|__|  | |  |   ____
-**  \   \/\/   /  |/    \  / __ |/  ___/\   __\  |  | |  | _/ __ \
-**   \        /|  |   |  \/ /_/ |\___ \  |  | |  |  |_|  |_\  ___/
-**    \__/\  / |__|___|  /\____ /____  > |__| |__|____/____/\___  >
-**         \/          \/      \/    \/                         \/
-**  Copyright (C) 2005 Ingo Ruhnke <grumbel@gmx.de>
+/*            _   ___              _   
+**   _ _  ___| |_| _ )_ _ _  _ _ _| |_ 
+**  | ' \/ -_)  _| _ \ '_| || (_-<|   |
+**  |_||_\___|\__|___/_|  \_,_/__/|_|_|
+**  netBrush - Copyright (C) 2006 Ingo Ruhnke <grumbel@gmx.de>
 **
 **  This program is free software; you can redistribute it and/or
 **  modify it under the terms of the GNU General Public License
@@ -54,18 +51,15 @@ DabInterpolater::add_dab(const Dab& dab)
       // by from the InputDevice and interpolates new dabs inbetween to
       // give them an equal spacing (ie. every dab is only 'spacing' away
       // from the next)
-      
       const Dab& prev_dab = dabs.back();
       const Dab& next_dab = dab;
 
       Vector dist  = next_dab.pos - prev_dab.pos;
-      float length = sqrt(dist.x * dist.x + dist.y * dist.y);
+      float length = dist.length();
       int n = 1;
     
-      // Spacing is keep relative to the brush size
-      // FIXME: This is specific to a Sprite based drawer, might not work for others
       // FIXME: y_spacing isn't taken into account either
-      float local_spacing = x_spacing * prev_dab.pressure;
+      float local_spacing = x_spacing;
 
       while (length + overspace > (local_spacing * n))
         {
@@ -118,7 +112,7 @@ Stroke::get_interpolated_dabs(float x_spacing, float y_spacing) const
           // Spacing is keep relative to the brush size
           // FIXME: This is specific to a Sprite based drawer, might not work for others
           // FIXME: y_spacing isn't taken into account either
-          float local_spacing = x_spacing * dabs[j].pressure;
+          float local_spacing = x_spacing;
 
           while (length + overspace > (local_spacing * n))
             {

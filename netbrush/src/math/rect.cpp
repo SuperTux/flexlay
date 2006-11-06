@@ -29,7 +29,7 @@
 
 
 #include <cmath>
-
+#include <iostream>
 #include "rect.hpp"
 
 #define cl_min(a,b) ((a < b) ? a : b)
@@ -60,3 +60,10 @@ Rect Rect::get_rot_bounds(Origin origin, int x, int y, float angle) const
 		angle);
 }
 
+std::ostream& operator<<(std::ostream& s, const Rect& rect)
+{
+  return (s << rect.left  << ", " << rect.top << ", "
+          << rect.right << ", " << rect.bottom);
+}
+
+/* EOF */

@@ -224,7 +224,12 @@ ScreenBuffer::mark_dirty(int x, int y, int w, int h)
 void
 ScreenBuffer::on_pen_motion(const PenEvent& pen)
 {
-  tools.front()->on_pen_motion(pen);
+  PenEvent new_pen = pen;
+  
+  new_pen.x -= scroll_offset_x;
+  new_pen.y -= scroll_offset_y;
+
+  tools.front()->on_pen_motion(new_pen);
 }
 
 void

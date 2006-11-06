@@ -45,6 +45,8 @@ public:
   void blit(GrayscaleBuffer* source, SDL_Rect* srcrect, int of_x, int of_y);
   void blit(GrayscaleBuffer* source, int of_x, int of_y, Uint8 alpha, BlendMode mode);
 
+  Uint8 interpolated_at(float x, float y) const;
+
   inline Uint8& at(int x, int y) 
   { 
     assert(x >= 0 && x < width && y >= 0 && y < height);

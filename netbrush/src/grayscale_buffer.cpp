@@ -164,6 +164,12 @@ GrayscaleBuffer::blit(GrayscaleBuffer* source, int of_x, int of_y, Uint8 alpha, 
     }
 }
 
+Uint8
+GrayscaleBuffer::interpolated_at(float x, float y) const
+{
+  return 0; //at(x, y)
+}
+
 #ifdef __TEST__
 #include <stdio.h>
 

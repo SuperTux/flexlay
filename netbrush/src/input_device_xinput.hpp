@@ -81,20 +81,12 @@ public:
 private:
   void on_device_button_event(XDeviceButtonEvent *button);
   void on_device_key_event(XDeviceKeyEvent* key);
-  void on_device_motion_event(XDeviceMotionEvent* motion);
+  void on_device_motion_event(Display* dpy, Window w, XDeviceMotionEvent* motion);
   void on_proximity_notify_event(XProximityNotifyEvent* prox);
 
-  Rect get_window_rect(Display* dpy, Window w);
 private:
   void received_mouse_input(XEvent &event);
   void received_mouse_move(XEvent &event);
-
-  // Window size and stuff used to translate coordinates
-  Rect window_rect;
-  // window x/y coordinates, border included!
-  int  window_x, window_y;
-  int  display_width;
-  int  display_height;
 	
   std::string name;
 

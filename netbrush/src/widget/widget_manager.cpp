@@ -133,14 +133,31 @@ WidgetManager::on_mouse_button(const MouseButtonEvent& button)
     }
 }
 
+Widget*
+WidgetManager::get_widget(const Point& p) const
+{
+  for(Widgets::const_iterator i = widgets.begin(); i != widgets.end(); ++i)
+    {
+      if ((*i)->get_rect().is_inside(Point(p.x, p.y)))
+        return (*i);
+    }
+  return 0;
+}
+
 void
 WidgetManager::on_pen_motion(const PenEvent& pen)
 {
   // FIXME: Hack, should to normal widget handling instead
   PenEvent new_pen = pen;
-  new_pen.x -= screen_buffer->get_rect().left;
-  new_pen.y -= screen_buffer->get_rect().top;
-  screen_buffer->on_pen_motion(new_pen);
+
+  Widget* widget = get_widget(Point(int(new_pen.x), int(new_pen.y)));
+  if (widget)
+    {
+      new_pen.x -= screen_buffer->get_rect().left;
+      new_pen.y -= widget->get_rect().top;
+
+      widget->on_pen_motion(new_pen);
+    }
 }
 
 void

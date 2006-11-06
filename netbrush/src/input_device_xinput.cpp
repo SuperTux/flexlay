@@ -67,11 +67,6 @@ InputDevice_XInput::InputDevice_XInput(Display* dpy, Window w, const std::string
     proximity_out_type (INVALID_EVENT_TYPE)
 
 {
-  window_rect = get_window_rect(dpy, w);
-
-  display_width  = DisplayWidth(dpy, DefaultScreen(dpy));
-  display_height = DisplayHeight(dpy, DefaultScreen(dpy));
-
   //std::cout << "WindowRect: " << window_rect << std::endl;
 
   XDeviceInfo* info = find_device_info(dpy, name.c_str(), True);
@@ -92,51 +87,6 @@ InputDevice_XInput::InputDevice_XInput(Display* dpy, Window w, const std::string
 InputDevice_XInput::~InputDevice_XInput()
 {
 	
-}
-
-Rect
-InputDevice_XInput::get_window_rect(Display* dpy, Window w)
-{ // Calculate the exact positon of the window
-  Window root_win = RootWindow(dpy, DefaultScreen(dpy)); 
-  Window current_window = w;
-
-  int w_x, w_y, w_w, w_h;
-
-  int x, y;
-  unsigned int width, height;
-  unsigned int border, depth;
-  Window root;
-  XGetGeometry(dpy, w,
-               &root, &x, &y, &width, &height, &border, &depth);
-  
-  window_x = x;
-  window_y = y;
-  w_x = x;
-  w_y = y;
-  w_w = width;
-  w_h = height;
-
-  while(current_window != root_win)
-    {
-      Window  parent;
-      Window* children;
-      unsigned int num_children;
-      XQueryTree(dpy, current_window, &root, &parent, &children, &num_children);
-
-      XGetGeometry(dpy, parent,
-                   &root, &x, &y, &width, &height, &border, &depth);
-
-      w_x += x;
-      w_y += y;
-
-      if (children)
-        XFree(children);
-      
-      current_window = parent;
-    }
-
-  return Rect(Point(w_x, w_y),
-              Size(w_w, w_h));
 }
 
 void
@@ -320,17 +270,9 @@ InputDevice_XInput::on_xevent(Display* dpy, Window w, XEvent &event)
               << proximity_in_type << " "
               << std::endl;
 
-  if (event.type == ConfigureNotify) //Resize or Move
-    { // FIXME: Due to the way SDL works, this one is never ever reached
-      //window_x = x;
-      //window_y = y;
-      std::cout 
-        << event.xconfigure.x     << " " << event.xconfigure.y << " " 
-        << event.xconfigure.width << " " << event.xconfigure.height << std::endl;
-    }
   if (event.type == motion_type)
     {
-      on_device_motion_event((XDeviceMotionEvent *)&event);
+      on_device_motion_event(dpy, w, (XDeviceMotionEvent *)&event);
     }
   else if ((event.type == button_press_type) ||
            (event.type == button_release_type))
@@ -345,14 +287,12 @@ InputDevice_XInput::on_xevent(Display* dpy, Window w, XEvent &event)
   else if ((event.type == proximity_out_type) ||
            (event.type == proximity_in_type))
     {
-      // FIXME: This shouldn't be here
-      window_rect = get_window_rect(dpy, w);
-
       on_proximity_notify_event((XProximityNotifyEvent*)&event);
     }
   else
     {  // Events that aren't XInput events lang here (focus and stuff)
-      printf("InputDevice_XInput: what's that %d\n", event.type);
+      if (verbose)
+        printf("InputDevice_XInput: what's that %d\n", event.type);
     }
 }
 
@@ -385,7 +325,7 @@ InputDevice_XInput::on_device_key_event(XDeviceKeyEvent* key)
 }
 
 void
-InputDevice_XInput::on_device_motion_event(XDeviceMotionEvent* motion)
+InputDevice_XInput::on_device_motion_event(Display* dpy, Window w, XDeviceMotionEvent* motion)
 {
   if (verbose) printf("motion ");
   float x;
@@ -435,11 +375,17 @@ InputDevice_XInput::on_device_motion_event(XDeviceMotionEvent* motion)
 
   if (0) 
     printf("x: %1.5f y: %1.5f pressure: %1.5f x_tilt: %2.5f y_tilt: %2.5f\n", x, y, pressure, x_tilt, y_tilt);
+  
+  // Translate tablet coordinates into window coordinates
+  Window child_return;
+  int x_origin, y_origin;
+  XTranslateCoordinates(dpy, w, RootWindow(dpy, DefaultScreen(dpy)), 0, 0, &x_origin, &y_origin, &child_return);
 
-  // translate the pen coordinates into window space and send them to
-  // the WidgetManager
-  widget_manager->on_pen_motion(PenEvent(x * display_width  - window_rect.left,
-                                         y * display_height - window_rect.top, 
+  int display_width  = DisplayWidth(dpy, DefaultScreen(dpy));
+  int display_height = DisplayHeight(dpy, DefaultScreen(dpy));
+
+  widget_manager->on_pen_motion(PenEvent(x * display_width  - x_origin,
+                                         y * display_height - y_origin,
                                          pressure, 
                                          x_tilt, y_tilt));
 }

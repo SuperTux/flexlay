@@ -57,8 +57,6 @@ private:
   AirbrushTool*    airbrush_tool;
   LineTool*    line_tool;
 
-  bool pen_active;
-
   typedef std::vector<Tool*> Tools;
   Tools tools;
 public:

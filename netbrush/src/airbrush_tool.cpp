@@ -76,7 +76,6 @@ AirbrushTool::on_pen_motion(const PenEvent& pen)
     {
       if (!current_stroke)
         {
-          std::cout << "Motian start" << std::endl;
           current_stroke = new Stroke();
           pen_active = true;
         }      
@@ -102,7 +101,6 @@ AirbrushTool::on_pen_motion(const PenEvent& pen)
     }
   else if (current_stroke)
     {
-      std::cout << "Motian End" << std::endl;
       stroke_buffer->clear();
       server->send_stroke(*current_stroke, client_draw_param);
 

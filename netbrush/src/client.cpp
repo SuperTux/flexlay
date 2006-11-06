@@ -139,18 +139,15 @@ void process_events()
           break;
 
         case SDL_MOUSEBUTTONDOWN:
-          if (!(xinput && xinput->in_proximity()))
-            widget_manager->on_mouse_button(event.button);
+          widget_manager->on_mouse_button(event.button);
           break;
 
         case SDL_MOUSEBUTTONUP:
-          if (!(xinput && xinput->in_proximity()))
-            widget_manager->on_mouse_button(event.button);
+          widget_manager->on_mouse_button(event.button);
           break;
 
         case SDL_MOUSEMOTION:
-          if (!(xinput && xinput->in_proximity()))
-            widget_manager->on_mouse_motion(event.motion);
+          widget_manager->on_mouse_motion(event.motion);
           break;
 
         case SDL_SYSWMEVENT:
@@ -164,7 +161,7 @@ void process_events()
           break;
 
         default: 
-          std::cout << "Unknown event" << std::endl;
+          std::cout << "Unhandled SDL event: " << int(event.type) << std::endl;
           break;
         }
     }  

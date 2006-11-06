@@ -44,8 +44,7 @@ ScreenBuffer::ScreenBuffer(const Rect& rect)
   : Widget(rect),
     complete_refresh(false),
     scroll_offset_x(0),
-    scroll_offset_y(0),
-    pen_active(false)
+    scroll_offset_y(0)
 {
   tools.push_back(airbrush_tool    = new AirbrushTool());
   tools.push_back(scroll_tool      = new ScrollTool());
@@ -225,15 +224,6 @@ ScreenBuffer::mark_dirty(int x, int y, int w, int h)
 void
 ScreenBuffer::on_pen_motion(const PenEvent& pen)
 {
-  if (pen.pressure > 0)
-    {
-      pen_active = true;
-    }
-  else
-    {
-      
-    }
-
   tools.front()->on_pen_motion(pen);
 }
 

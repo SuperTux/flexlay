@@ -26,6 +26,7 @@
 #include <list>
 #include "SDL.h"
 
+class Point;
 class MouseMotionEvent;
 class MouseButtonEvent;
 class PenEvent;
@@ -57,6 +58,8 @@ public:
   void update();
 
 private:
+  Widget* get_widget(const Point& p) const;
+
   WidgetManager (const WidgetManager&);
   WidgetManager& operator= (const WidgetManager&);
 };

@@ -318,8 +318,8 @@ class GUI
   end
 
   def gui_level_save_as()
-    $save_dialog.set_filename(File::dirname($save_dialog.get_filename()) + "/")
-    $save_dialog.run(method(:netpanzer_save_level))
+    @save_dialog.set_filename(File::dirname(@save_dialog.get_filename()) + "/")
+    @save_dialog.run(method(:netpanzer_save_level))
   end
 
   def gui_toggle_grid()

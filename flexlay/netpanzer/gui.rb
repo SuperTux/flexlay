@@ -86,7 +86,7 @@ class GUI
     connect_v2_ObjectBrush_Point(@objectselector.sig_drop(), method(:on_object_drop))
     connect_v1(@brushbox.sig_highlighted(), method(:brushbox_change))
 
-    @workspace.set_tool($tilemap_paint_tool.to_tool());
+    @workspace.set_tool(0, $tilemap_paint_tool.to_tool());
 
     @button_panel = components.get('buttonpanel').component
 
@@ -229,7 +229,7 @@ class GUI
   end
 
   def set_tilemap_paint_tool()
-    @workspace.set_tool($tilemap_paint_tool.to_tool())
+    @workspace.set_tool(0, $tilemap_paint_tool.to_tool())
     @paint.set_down()
     @select.set_up()
     @zoom.set_up()
@@ -242,7 +242,7 @@ class GUI
   end
 
   def set_tilemap_select_tool()
-    @workspace.set_tool($tilemap_select_tool.to_tool())
+    @workspace.set_tool(0, $tilemap_select_tool.to_tool())
     @paint.set_up()
     @select.set_down()
     @zoom.set_up()
@@ -255,7 +255,7 @@ class GUI
   end
 
   def set_zoom_tool()
-    @workspace.set_tool($zoom_tool.to_tool())
+    @workspace.set_tool(0, $zoom_tool.to_tool())
     @paint.set_up()
     @select.set_up()
     @zoom.set_down()
@@ -268,7 +268,7 @@ class GUI
   end
 
   def set_objmap_select_tool()
-    @workspace.set_tool($objmap_select_tool.to_tool())
+    @workspace.set_tool(0, $objmap_select_tool.to_tool())
     @paint.set_up()
     @select.set_up()
     @zoom.set_up()

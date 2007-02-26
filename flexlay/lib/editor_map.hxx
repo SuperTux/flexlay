@@ -87,6 +87,8 @@ public:
   int redo_stack_size();
 
   CL_Signal_v0& sig_change();
+
+  bool is_null() const { return !impl.get(); }
 private:
   CL_SharedPtr<EditorMapImpl> impl;
 };

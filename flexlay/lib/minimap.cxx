@@ -65,6 +65,8 @@ Minimap::Minimap(EditorMapComponent* p, const CL_Rect& rect,
 void
 Minimap::draw()
 {
+  if (impl->parent->get_workspace().get_map().is_null()) return;
+
   if (!impl->parent || impl->parent->get_workspace().is_null())
     return;
 

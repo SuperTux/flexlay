@@ -63,8 +63,7 @@ class GUI
                         })
 
     @editor_map = components.get('editormap').component
-    @workspace  = Workspace.new()
-    @editor_map.set_workspace(@workspace)
+    @workspace = @editor_map.get_workspace()
 
     @brushbox = components.get('brushbox').component
     @brushbox.show(false)
@@ -87,6 +86,8 @@ class GUI
     connect_v1(@brushbox.sig_highlighted(), method(:brushbox_change))
 
     @workspace.set_tool(0, $tilemap_paint_tool.to_tool());
+    @workspace.set_tool(2, $workspace_move_tool.to_tool());
+
 
     @button_panel = components.get('buttonpanel').component
 

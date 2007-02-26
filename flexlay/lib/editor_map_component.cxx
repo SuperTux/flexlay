@@ -156,6 +156,8 @@ EditorMapComponentImpl::mouse_down(const CL_InputEvent& event)
 void
 EditorMapComponentImpl::draw ()
 {
+  if (workspace.get_map().is_null()) return;
+
   CL_Display::push_cliprect(parent->get_screen_rect());
 
   CL_Display::push_translate(parent->get_screen_x(), parent->get_screen_y());

@@ -54,6 +54,8 @@ Workspace::Workspace(bool create)
 void
 Workspace::draw()
 {
+  assert(impl.get());
+
   CL_Display::clear(CL_Color(100, 0, 100));
 
   impl->editor_map.draw_gui(CL_Display::get_current_window()->get_gc());
@@ -70,6 +72,8 @@ Workspace::draw()
 void
 Workspace::mouse_up(const CL_InputEvent& event)
 {
+  assert(impl.get());
+
   WorkspaceImpl::Tools::iterator it = impl->tools.find(event.id);
   if (it != impl->tools.end())
     it->second.on_mouse_up(event);
@@ -78,6 +82,8 @@ Workspace::mouse_up(const CL_InputEvent& event)
 void
 Workspace::mouse_move(const CL_InputEvent& event)
 {
+  assert(impl.get());
+
   for(WorkspaceImpl::Tools::iterator it = impl->tools.begin();
       it != impl->tools.end(); ++it)
     {
@@ -88,6 +94,8 @@ Workspace::mouse_move(const CL_InputEvent& event)
 void
 Workspace::mouse_down(const CL_InputEvent& event)
 {
+  assert(impl.get());
+
   WorkspaceImpl::Tools::iterator it = impl->tools.find(event.id);
   if (it != impl->tools.end())
     it->second.on_mouse_down(event);
@@ -107,6 +115,8 @@ Workspace::mouse_down(const CL_InputEvent& event)
 void
 Workspace::key_up(const CL_InputEvent& event)
 {
+  assert(impl.get());
+
   WorkspaceImpl::Tools::iterator it = impl->tools.find(event.id);
   if (it != impl->tools.end())
     it->second.on_mouse_up(event);
@@ -115,6 +125,8 @@ Workspace::key_up(const CL_InputEvent& event)
 void
 Workspace::key_down(const CL_InputEvent& event)
 {
+  assert(impl.get());
+
   WorkspaceImpl::Tools::iterator it = impl->tools.find(event.id);
   if (it != impl->tools.end())
     it->second.on_mouse_down(event);
@@ -125,18 +137,25 @@ Workspace::key_down(const CL_InputEvent& event)
 EditorMap
 Workspace::get_map()
 {
+  assert(impl.get());
+
   return impl->editor_map;
 }
 
 void
 Workspace::set_map(const EditorMap& m)
 {
+  assert(impl.get());
+
   impl->editor_map = m;
+  std::cout << "Workspace:set_map" << std::endl;
 }
 
 void
 Workspace::set_tool(int button, const Tool& tool)
 {
+  assert(impl.get());
+
   impl->tools[button] = tool;
 }
 

@@ -65,6 +65,7 @@ $resources = CL_ResourceManager.new("netpanzersprites.xml")
 # Tools
 $tilemap_paint_tool  = TileMapPaintTool.new()
 $tilemap_select_tool = TileMapSelectTool.new()
+$workspace_move_tool = WorkspaceMoveTool.new()
 $zoom_tool           = ZoomTool.new()
 $objmap_select_tool  = ObjMapSelectTool.new()
 

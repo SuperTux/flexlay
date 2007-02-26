@@ -33,8 +33,8 @@ class Level
       @data = NetPanzerFileStruct.new($tileset, @filename)
     end      
 
+    @editormap = EditorMap.new(true)
     @objects   = ObjectLayer.new()
-    @editormap = EditorMap.new()
     @editormap.add_layer(@data.get_tilemap().to_layer())
     @editormap.add_layer(@objects.to_layer())
     @tilemap = @data.get_tilemap()
@@ -134,6 +134,7 @@ class Level
   end
 
   def activate(workspace)
+    puts "Level activate"
     workspace.set_map(@editormap)
     TilemapLayer.set_current(@data.get_tilemap())
     ObjectLayer.set_current(@objects)

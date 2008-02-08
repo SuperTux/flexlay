@@ -63,13 +63,15 @@ class Tileset
           pixelbuffer = make_pixelbuffer($datadir + 'images/' + image)
         elsif image.is_a?(Array) then
           if image[0] == :region then
-            pixelbuffer = make_region_pixelbuffer($datadir + 'images/' + image[1],
-                                                  image[2], image[3], image[4], image[5])
+            # FIXME: Doesn't work, causes memory corruption
+            # pixelbuffer = make_region_pixelbuffer($datadir + 'images/' + image[1],
+            #                                       image[2], image[3], image[4], image[5])
+            pixelbuffer = nil
           end
         end
         
         if not hidden then
-          if id == 0 then
+          if id == 0 or not(pixelbuffer) then
             add_tile(id, nil)
           else
             add_tile(id, Tile.new(pixelbuffer))

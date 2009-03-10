@@ -27,6 +27,7 @@
 **    (if your name is missing here, please add it)
 */
 
+#include <string.h>
 #include "Core/precomp.h"
 #include "API/Core/Math/matrix4x4.h"
 

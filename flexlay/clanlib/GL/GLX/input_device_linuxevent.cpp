@@ -28,6 +28,7 @@
 */
 
 #include <assert.h>
+#include <string.h>
 #include <linux/input.h>
 #include <sys/ioctl.h>
 #include <fcntl.h>

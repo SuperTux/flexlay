@@ -31,6 +31,7 @@
 #ifdef HAVE_LIBGEN_H
 #include <libgen.h>
 #endif
+#include <string.h>
 #include <fnmatch.h>
 #include <unistd.h>
 #include "directory_scanner_unix.h"

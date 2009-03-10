@@ -41,6 +41,7 @@
 #include <GL/glu.h>
 #endif
 
+#include <string.h>
 #include <map>
 
 #define cl_pixelcenter_constant 0.375

@@ -75,6 +75,7 @@ PaintCommand::~PaintCommand()
 void
 PaintCommand::add_point(const CL_Point& pos)
 {
+  // FIXME: undo_field is unneeded, should just record the overwritten color
   impl->points.push_back(pos);
   impl->tilemap.draw_tile(impl->brush, pos);
 }
@@ -102,9 +103,10 @@ PaintCommandImpl::execute()
   pos.y = rect.top;
 
   redo_brush = new TileBrush(*(tilemap.get_field()), rect.get_width(), rect.get_height(),
-                                   -pos.x, -pos.y);
+                             -pos.x, -pos.y);
+  // FIXME: undo_field is unneeded, should just record the overwritten color
   undo_brush = new TileBrush(undo_field, rect.get_width(), rect.get_height(), 
-                                   -pos.x, -pos.y);
+                             -pos.x, -pos.y);
   
   redo_brush->set_opaque();
   undo_brush->set_opaque();

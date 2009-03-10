@@ -27,6 +27,7 @@
 **    (if your name is missing here, please add it)
 */
 
+#include <string.h>
 #include "Display/display_precomp.h"
 #include "Display/surface_target.h"
 #include "Display/triangle_params.h"

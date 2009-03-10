@@ -27,6 +27,7 @@
 **    (if your name is missing here, please add it)
 */
 
+#include <string.h>
 #include "Core/precomp.h"
 #include "datafile_inputprovider.h"
 #include "API/Core/System/cl_assert.h"

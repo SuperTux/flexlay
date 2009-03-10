@@ -27,6 +27,7 @@
 **    (if your name is missing here, please add it)
 */
 
+#include <string.h>
 #include "Display/display_precomp.h"
 #include "canvas_opengl.h"
 #include "API/Core/System/error.h"

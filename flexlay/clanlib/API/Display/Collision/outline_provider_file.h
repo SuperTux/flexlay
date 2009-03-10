@@ -48,6 +48,7 @@
 #pragma once
 #endif
 
+#include <string>
 #include "outline_provider.h"
 
 class CL_OutlineProviderFile_Generic;

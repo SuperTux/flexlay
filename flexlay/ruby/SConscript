@@ -55,7 +55,7 @@ def gen_i_depends(path, filename):
 #env.Command('flexlay_ruby_wrap.cxx', '../lib/flexlay_wrap.i',
 #            "swig -c++ -ruby -o $TARGET $SOURCE")
 
-libflexlay_ruby_env = env.Copy()
+libflexlay_ruby_env = env.Clone()
 flexlay_ruby_lib = libflexlay_ruby_env.SharedLibrary(
     target = 'flexlay_wrap.so',
     source = [

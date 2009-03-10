@@ -47,7 +47,7 @@ Help(opts.GenerateHelpText(env))
 #            LIBPATH=['.', '/home/ingo/run/ClanLib-0.8-current//lib/'],
 #            LIBS=['flexlay'])
 
-libflexlay_env = env.Copy()
+libflexlay_env = env.Clone()
 flexlay_lib = libflexlay_env.StaticLibrary(
     target = 'libflexlay.a',
     source = [

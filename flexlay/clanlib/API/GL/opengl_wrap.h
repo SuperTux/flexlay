@@ -2527,10 +2527,10 @@ public:
 	typedef CLvoid (CL_GLFUNC *ptr_glDeleteObjectARB)(CLuint obj);
 	typedef CLuint (CL_GLFUNC *ptr_glGetHandleARB)(CLenum pname);
 	typedef CLvoid (CL_GLFUNC *ptr_glDetachObjectARB)(CLuint containerObj, CLuint attachedObj);
-	typedef CLuint (CL_GLFUNC *ptr_glCreateShaderObjectARB )(CLenum shaderType);
+	typedef CLuint (CL_GLFUNC *ptr_glCreateShaderObjectARB)(CLenum shaderType);
 	typedef CLvoid (CL_GLFUNC *ptr_glShaderSourceARB)(CLuint shaderObj, CLsizei count, const CLchar* *string, const CLint *length);
 	typedef CLvoid (CL_GLFUNC *ptr_glCompileShaderARB)(CLuint shaderObj);
-	typedef CLuint (CL_GLFUNC *ptr_glCreateProgramObjectARB)(CLvoid);
+	typedef CLuint (CL_GLFUNC *ptr_glCreateProgramObjectARB)();
 	typedef CLvoid (CL_GLFUNC *ptr_glAttachObjectARB)(CLuint containerObj, CLuint attachedObj);
 	typedef CLvoid (CL_GLFUNC *ptr_glLinkProgramARB)(CLuint programObj);
 	typedef CLvoid (CL_GLFUNC *ptr_glUseProgramObjectARB)(CLuint programObj);

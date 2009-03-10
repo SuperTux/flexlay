@@ -27,6 +27,7 @@
 **    (if your name is missing here, please add it)
 */
 
+#include <string.h>
 #include "API/Display/font.h"
 #include "API/Display/display.h"
 #include "API/Core/System/system.h"

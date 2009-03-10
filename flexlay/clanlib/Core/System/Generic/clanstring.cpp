@@ -28,6 +28,7 @@
 */
 
 #include "Core/precomp.h"
+#include <string.h>
 #include "API/Core/System/clanstring.h"
 #include "API/Core/Resources/resourcetype_string.h"
 #include "API/Core/Resources/resource_manager.h"

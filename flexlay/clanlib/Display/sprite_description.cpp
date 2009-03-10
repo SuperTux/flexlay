@@ -27,6 +27,7 @@
 **    (if your name is missing here, please add it)
 */
 
+#include <string.h>
 #include "Display/display_precomp.h"
 #include "API/Display/sprite_description.h"
 #include "API/Display/pixel_buffer.h"

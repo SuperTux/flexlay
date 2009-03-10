@@ -28,6 +28,7 @@
 */
 
 #include <cstdio>
+#include <string.h>
 #include <errno.h>
 
 #include "display_window_opengl.h"

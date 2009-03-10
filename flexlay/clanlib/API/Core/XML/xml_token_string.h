@@ -38,6 +38,7 @@
 #endif
 
 #include <string>
+#include <string.h>
 #include <algorithm>
 
 //: String class for XML Tokens.

@@ -45,6 +45,7 @@
 #include "API/Core/XML/xml_token.h"
 #include "dom_document_generic.h"
 #include <stack>
+#include <string.h>
 
 #include "API/Core/XML/xml_token_load.h"
 #include "API/Core/XML/xml_token_save.h"

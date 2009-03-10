@@ -28,6 +28,8 @@
 */
 
 #include <cstdio>
+#include <string.h>
+#include <string>
 #include "API/Display/input_device.h"
 #include "API/Display/input_event.h"
 #include "API/Display/keys.h"

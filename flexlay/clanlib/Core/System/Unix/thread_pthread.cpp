@@ -28,7 +28,7 @@
 */
 
 #include "Core/precomp.h"
-
+#include <string.h>
 #include <pthread.h>
 #include "API/Core/System/cl_assert.h"
 #include "API/Core/System/log.h"

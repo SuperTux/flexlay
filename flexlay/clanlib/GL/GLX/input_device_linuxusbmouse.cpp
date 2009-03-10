@@ -27,6 +27,7 @@
 **    (if your name is missing here, please add it)
 */
 
+#include <string.h>
 #include <sys/ioctl.h>
 #include <fcntl.h>
 #include <unistd.h>

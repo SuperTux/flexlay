@@ -93,7 +93,7 @@ class WindstilleEditor
       $controller.load_level(@levelfile)
     end
 
-    $gui.workspace.set_tool($controller.tilemap_paint_tool.to_tool());   
+    $gui.workspace.set_tool(0, $controller.tilemap_paint_tool.to_tool());
   end
 
   def run()

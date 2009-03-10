@@ -53,7 +53,7 @@ class GUI
     }
 
     @editor_map = @components.get('editormap').component
-    @workspace  = Workspace.new()
+    @workspace  = Workspace.new(true)
     @editor_map.set_workspace(@workspace)
 
     @button_panel = @components.get('buttonpanel').component
@@ -72,6 +72,7 @@ class GUI
     # FIXME: Having position in the Menus here is EXTREMLY ugly
     @tilegroup_menu = Menu.new(CL_Point.new(35*15+2, 54), @gui.get_component())
     @tilegroup_menu.add_item("All Tiles", proc{@tileselector.set_tiles($tileset.get_tiles())})
+
     $tileset.tilegroups.each { |tilegroup|
       @tilegroup_menu.add_item(tilegroup.name, proc{@tileselector.set_tiles(tilegroup.tiles)})
     }
@@ -94,9 +95,9 @@ class GUI
     end
 
     @load_dialog = SimpleFileDialog.new("Load Sector", "Load", "Cancel", @gui.get_component())
-    @load_dialog.set_filename($datadir + "levels/")
+    @load_dialog.set_filename($datadir + "sectors/")
     @save_dialog = SimpleFileDialog.new("Save Sector as...", "Save", "Cancel", @gui.get_component())
-    @save_dialog.set_filename($datadir + "levels/")
+    @save_dialog.set_filename($datadir + "sectors/")
     
     register_keybindings($keybinding_spec)
 

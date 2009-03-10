@@ -10,22 +10,22 @@ class Controller
   end
     
   def set_tilemap_paint_tool()
-    $gui.workspace.set_tool(@tilemap_paint_tool.to_tool())
+    $gui.workspace.set_tool(0, @tilemap_paint_tool.to_tool())
     $gui.set_tool_icon(:tilemap_paint)
   end
 
   def set_tilemap_select_tool()
-    $gui.workspace.set_tool(@tilemap_select_tool.to_tool())
+    $gui.workspace.set_tool(0, @tilemap_select_tool.to_tool())
     $gui.set_tool_icon(:tilemap_select)
   end
 
   def set_zoom_tool()
-    $gui.workspace.set_tool(@zoom_tool.to_tool())
+    $gui.workspace.set_tool(0, @zoom_tool.to_tool())
     $gui.set_tool_icon(:zoom)
   end
 
   def set_objmap_select_tool()
-    $gui.workspace.set_tool(@objmap_select_tool.to_tool())
+    $gui.workspace.set_tool(0, @objmap_select_tool.to_tool())
     $gui.set_tool_icon(:object_select)
   end  
 

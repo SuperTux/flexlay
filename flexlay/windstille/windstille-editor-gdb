@@ -6,6 +6,6 @@ export LD_LIBRARY_PATH
 RUBYLIB=.:$RUBYLIB:../ruby
 export RUBYLIB
 
-exec gdb --args ruby ./windstille.rb "$@"
+exec gdb --args ruby ./main.rb "$@"
 
 # EOF #

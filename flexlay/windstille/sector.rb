@@ -64,7 +64,8 @@ class Sector
     @layers += [@foreground]
     @layers += [@objects = ObjectLayer.new()]
 
-    @editormap = EditorMap.new()
+    @editormap = EditorMap.new(true)
+
     @layers.each {|layer| @editormap.add_layer(layer.to_layer()) }
     
     # FIXME: Data might not get freed since its 'recursively' refcounted
@@ -131,7 +132,7 @@ class Sector
     
     @layers += [@background, @interactivebackground, @interactive, @foreground, @objects]
 
-    @editormap = EditorMap.new()
+    @editormap = EditorMap.new(true)
     @layers.each {|layer| 
       if layer then 
         @editormap.add_layer(layer.to_layer()) 

@@ -21,6 +21,6 @@
 import os
 import glob
 
-opts = Options('custom.py')
+opts = Variables('custom.py')
 
 # EOF #

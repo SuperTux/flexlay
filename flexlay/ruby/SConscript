@@ -24,7 +24,7 @@ import glob
 
 Import('clanLib_env')
 
-opts = Options('custom.py')
+opts = Variables('custom.py')
 opts.Add('CXX', 'The C++ compiler.', 'g++')
 opts.Add('CXXFLAGS', 'The C++ compiler flags.', '-g -O2 -Wall -fPIC')
 opts.Add('CPPPATH', 'additional header path', '')

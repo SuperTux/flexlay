@@ -4,20 +4,18 @@
 **  |_||_\___|\__|___/_|  \_,_/__/|_|_|
 **  netBrush - Copyright (C) 2006 Ingo Ruhnke <grumbel@gmx.de>
 **
-**  This program is free software; you can redistribute it and/or
-**  modify it under the terms of the GNU General Public License
-**  as published by the Free Software Foundation; either version 2
-**  of the License, or (at your option) any later version.
-**
+**  This program is free software: you can redistribute it and/or modify
+**  it under the terms of the GNU General Public License as published by
+**  the Free Software Foundation, either version 3 of the License, or
+**  (at your option) any later version.
+**  
 **  This program is distributed in the hope that it will be useful,
 **  but WITHOUT ANY WARRANTY; without even the implied warranty of
 **  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 **  GNU General Public License for more details.
-** 
+**  
 **  You should have received a copy of the GNU General Public License
-**  along with this program; if not, write to the Free Software
-**  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
-**  02111-1307, USA.
+**  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include <iostream>
@@ -83,24 +81,32 @@ StrokeBuffer::add_dab(const Dab& dab)
       
       if (last_dabs_size < interpolater->get_interpolated_dabs().size())
         {
+          GrayscaleBuffer* blit_brush = brush->scale(dab.pressure, dab.pressure);
+
           const Stroke::Dabs& dabs = interpolater->get_interpolated_dabs();
           for(Stroke::Dabs::const_iterator i = dabs.begin() + last_dabs_size; i != dabs.end(); ++i)
             {
-              buffer->blit(brush,
-                           static_cast<int>(i->pos.x - brush->get_width()/2), 
-                           static_cast<int>(i->pos.y - brush->get_height()/2), 
+              buffer->blit(blit_brush,
+                           static_cast<int>(i->pos.x - blit_brush->get_width()/2), 
+                           static_cast<int>(i->pos.y - blit_brush->get_height()/2), 
                            (Uint8)(255 * dab.pressure),
                            GrayscaleBuffer::ALPHA);
             }
+
+          delete blit_brush;
         }
     }
   else if (param->tool == DrawingParameter::TOOL_AIRBRUSH)
     {
-      buffer->blit(brush,
-                   static_cast<int>(dab.pos.x - brush->get_width()/2), 
-                   static_cast<int>(dab.pos.y - brush->get_height()/2), 
+      GrayscaleBuffer* blit_brush = brush->scale(dab.pressure, dab.pressure);
+
+      buffer->blit(blit_brush,
+                   static_cast<int>(dab.pos.x - blit_brush->get_width()/2), 
+                   static_cast<int>(dab.pos.y - blit_brush->get_height()/2), 
                    (Uint8)(255 * dab.pressure),
                    GrayscaleBuffer::ALPHA);
+
+      delete blit_brush;
     }
 }
 
@@ -114,11 +120,15 @@ StrokeBuffer::draw_stroke(const Stroke& stroke, DrawingParameter* param)
       Stroke::Dabs dabs = stroke.get_dabs();
       for(Stroke::Dabs::iterator i = dabs.begin(); i != dabs.end(); ++i)
         {
-          buffer->blit(brush,
-                       static_cast<int>(i->pos.x - brush->get_width()/2), 
-                       static_cast<int>(i->pos.y - brush->get_height()/2), 
+          GrayscaleBuffer* blit_brush = brush->scale(i->pressure, i->pressure);
+
+          buffer->blit(blit_brush,
+                       static_cast<int>(i->pos.x - blit_brush->get_width()/2), 
+                       static_cast<int>(i->pos.y - blit_brush->get_height()/2), 
                        (Uint8)(255 * i->pressure),
                        GrayscaleBuffer::ALPHA);
+
+          delete blit_brush;
         }
     }
   else if (param->tool == DrawingParameter::TOOL_PAINTBRUSH)
@@ -126,11 +136,15 @@ StrokeBuffer::draw_stroke(const Stroke& stroke, DrawingParameter* param)
       Stroke::Dabs dabs = stroke.get_interpolated_dabs(param->get_spacing(), param->get_spacing());
       for(Stroke::Dabs::iterator i = dabs.begin(); i != dabs.end(); ++i)
         {
-          buffer->blit(brush,
-                       static_cast<int>(i->pos.x - brush->get_width()/2), 
-                       static_cast<int>(i->pos.y - brush->get_height()/2),
+          GrayscaleBuffer* blit_brush = brush->scale(i->pressure, i->pressure);
+
+          buffer->blit(blit_brush,
+                       static_cast<int>(i->pos.x - blit_brush->get_width()/2), 
+                       static_cast<int>(i->pos.y - blit_brush->get_height()/2),
                        (Uint8)(255 * i->pressure), 
                        GrayscaleBuffer::ALPHA);
+          
+          delete blit_brush;
         }      
     }
 }

@@ -4,20 +4,18 @@
 **  |_||_\___|\__|___/_|  \_,_/__/|_|_|
 **  netBrush - Copyright (C) 2006 Ingo Ruhnke <grumbel@gmx.de>
 **
-**  This program is free software; you can redistribute it and/or
-**  modify it under the terms of the GNU General Public License
-**  as published by the Free Software Foundation; either version 2
-**  of the License, or (at your option) any later version.
-**
+**  This program is free software: you can redistribute it and/or modify
+**  it under the terms of the GNU General Public License as published by
+**  the Free Software Foundation, either version 3 of the License, or
+**  (at your option) any later version.
+**  
 **  This program is distributed in the hope that it will be useful,
 **  but WITHOUT ANY WARRANTY; without even the implied warranty of
 **  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 **  GNU General Public License for more details.
-** 
+**  
 **  You should have received a copy of the GNU General Public License
-**  along with this program; if not, write to the Free Software
-**  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
-**  02111-1307, USA.
+**  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include <assert.h>
@@ -63,6 +61,12 @@ GrayscaleBuffer::GrayscaleBuffer(int w, int h, Uint8 c)
 {
   buffer = new unsigned char[w*h];
   memset(buffer, c, w*h);
+}
+
+GrayscaleBuffer::GrayscaleBuffer(int w, int h)
+  : width(w), height(h)
+{
+  buffer = new unsigned char[w*h];
 }
 
 GrayscaleBuffer::~GrayscaleBuffer()
@@ -167,7 +171,33 @@ GrayscaleBuffer::blit(GrayscaleBuffer* source, int of_x, int of_y, Uint8 alpha, 
 Uint8
 GrayscaleBuffer::interpolated_at(float x, float y) const
 {
-  return 0; //at(x, y)
+  // FIXME: implement some clever interpolation here
+  if (x < 0)
+    x = 0;
+  else if (x > width-1)
+    x = width - 1;
+
+  if (y < 0)
+    y = 0;
+  else if (y > height-1)
+    y = height - 1;
+
+  return at(int(x), int(y));
+}
+
+GrayscaleBuffer*
+GrayscaleBuffer::scale(float sx, float sy)
+{
+  // FIXME: Optimize me
+  GrayscaleBuffer* gray = new GrayscaleBuffer(int(width * sx), int(height * sy));
+
+  for(int y = 0; y < gray->height; ++y)
+    for(int x = 0; x < gray->width; ++x)
+      {
+        gray->buffer[gray->height * y + x] = interpolated_at(x / sx, y / sy);
+      }
+
+  return gray;
 }
 
 #ifdef __TEST__

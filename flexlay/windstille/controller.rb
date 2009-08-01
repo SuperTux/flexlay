@@ -31,7 +31,7 @@ class Controller
 
   def load_level(filename)
     $startlevel = Sector.new(filename)
-    $startlevel.activate($workspace)
+    $startlevel.activate($gui.workspace)
     add_recent_file(filename)
   end
 

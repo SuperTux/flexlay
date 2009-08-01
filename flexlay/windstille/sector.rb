@@ -142,7 +142,7 @@ class Sector
     # FIXME: Data might not get freed since its 'recursively' refcounted
     @editormap.set_data(self)
 
-    @current_layer = 1
+    @current_layer = 2
 
     puts @editormap
     puts @layers
@@ -150,7 +150,7 @@ class Sector
 
   def activate(workspace)
     $gui.workspace.set_map(@editormap)
-
+    puts "Activate: #{@current_layer} #{@layers.inspect}"
     TilemapLayer.set_current(@layers[@current_layer])
     ObjectLayer.set_current(@objects)
     

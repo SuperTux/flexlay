@@ -77,10 +77,10 @@ class Tileset
         name  = get_value_from_tree(['name', '_'], data, "Unnamed")
         tiles = get_value_from_tree(['tiles'], data, [])
         
-        if not @tilegroups then
-          @tilegroups = []
+        if not $tileset.tilegroups then
+          $tileset.tilegroups = []
         end
-        @tilegroups.push(TileGroup.new(name, tiles))
+        $tileset.tilegroups.push(TileGroup.new(name, tiles))
         
       when :tiles
         data   = i[1..-1]

@@ -126,6 +126,8 @@ class GUI
   end
 
   def show_layer(layer)
+    puts @workspace.get_map().get_metadata().layers
+
     if layer == :background then
       @button_panel.items["background"].set_down();
       TilemapLayer.set_current(@workspace.get_map().get_metadata().background)

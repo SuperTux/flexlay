@@ -42,7 +42,7 @@ Depends('netpanzer.i', ['netpanzer.hxx'])
 env.Command('netpanzer_wrap.cxx', 'netpanzer.i',
             "swig -c++ -ruby -o $TARGET $SOURCE")
 
-libflexlay_ruby_env = env.Copy()
+libflexlay_ruby_env = env.Clone()
 flexlay_ruby_lib = libflexlay_ruby_env.SharedLibrary(
     target = 'netpanzer_wrap.so',
     source = [

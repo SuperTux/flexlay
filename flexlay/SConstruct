@@ -23,7 +23,7 @@ SConscript(['clanlib/SConstruct'])
 SConscript(['lib/SConscript'])
 SConscript(['ruby/SConscript'])
 SConscript(['supertux/SConstruct'])
-SConscript(['netpanzer/SConstruct'])
+SConscript(['netpanzer/SConscript'])
 
 # EOF #
 

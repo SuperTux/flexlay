@@ -19,7 +19,6 @@
 
 class CL_InputEvent;
 
-/** */
 class ToolImpl
 {
 protected:

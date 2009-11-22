@@ -22,7 +22,6 @@
 class Stroke;
 class SpriteStrokeDrawerImpl;
 
-/** */
 class SpriteStrokeDrawer
 {
 public:

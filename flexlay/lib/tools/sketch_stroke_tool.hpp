@@ -23,7 +23,6 @@
 
 class SketchStrokeToolImpl;
 
-/** */
 class SketchStrokeTool
 {
 private:

@@ -17,13 +17,12 @@
 #ifndef HEADER_FLEXLAY_TOOLS_ZOOM2_TOOL_HPP
 #define HEADER_FLEXLAY_TOOLS_ZOOM2_TOOL_HPP
 
-#include <ClanLib/Core/Math/rect.h>
-#include <ClanLib/Display/input_event.h>
+//#include <ClanLib/Core/Math/rect.h>
+//#include <ClanLib/Display/input_event.h>
 #include "tool.hpp"
 
 class Zoom2ToolImpl;
 
-/** */
 class Zoom2Tool
 {
 public:

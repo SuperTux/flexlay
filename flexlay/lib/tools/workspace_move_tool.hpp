@@ -21,7 +21,6 @@
 
 class WorkspaceMoveToolImpl;
 
-/** */
 class WorkspaceMoveTool
 {
 public:

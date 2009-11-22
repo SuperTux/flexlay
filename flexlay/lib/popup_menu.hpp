@@ -19,7 +19,6 @@
 
 #include <ClanLib/GUI/menu.h>
 
-/** */
 class PopupMenu
 {
 private:

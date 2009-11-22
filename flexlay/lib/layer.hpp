@@ -24,6 +24,7 @@
 class CL_Rect;
 class EditorMapComponent;
 class LayerImpl;
+class CL_Pointf;
 class CL_GraphicContext;
 
 /** Each \a EditorMap consists out of one or more \a Layer,

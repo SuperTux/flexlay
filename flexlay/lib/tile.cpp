@@ -14,6 +14,8 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+#include "tile.hpp"
+
 #include <ClanLib/Core/System/error.h>
 #include <ClanLib/Display/sprite_description.h>
 #include <ClanLib/Display/sprite.h>
@@ -21,9 +23,9 @@
 #include <ClanLib/Display/palette.h>
 #include <ClanLib/Display/Providers/provider_factory.h>
 #include <iostream>
+
 #include "string_converter.hpp"
 #include "tile_provider.hpp"
-#include "tile.hpp"
 
 class TileImpl
 {

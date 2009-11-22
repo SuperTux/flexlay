@@ -19,7 +19,6 @@
 
 #include <ClanLib/Display/font.h>
 
-/** */
 class Fonts
 {
 public:

@@ -20,7 +20,6 @@
 
 class WindowImpl;
 
-/** */
 class Window : public CL_Component
 {
 protected:

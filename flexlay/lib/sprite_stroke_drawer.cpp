@@ -14,18 +14,12 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include <iostream>
-#include <assert.h>
-#include <ClanLib/Display/blend_func.h>
 #include <ClanLib/Display/canvas.h>
 #include <ClanLib/gl.h>
-#include <ClanLib/GL/opengl_wrap.h>
-#include "stroke.hpp"
 #include "stroke_drawer_impl.hpp"
 #include "sprite_stroke_drawer.hpp"
 #include "drawer_properties.hpp"
 #include "bitmap_layer.hpp"
-#include "sketch_layer.hpp"
 
 CL_ProgramObject* program = 0;
 

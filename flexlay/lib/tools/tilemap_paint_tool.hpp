@@ -18,12 +18,10 @@
 #define HEADER_FLEXLAY_TOOLS_TILEMAP_PAINT_TOOL_HPP
 
 #include "tool.hpp"
-#include "tile_brush.hpp"
-#include "tilemap_layer.hpp"
 
 class TileMapPaintToolImpl;
+class TileBrush;
 
-/** */
 class TileMapPaintTool
 {
 private:

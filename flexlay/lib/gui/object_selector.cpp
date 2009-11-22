@@ -17,7 +17,7 @@
 #include <iostream>
 #include <ClanLib/Core/core_iostream.h>
 #include <ClanLib/display.h>
-#include "editor_map.hpp"
+//#include "editor_map.hpp"
 #include "editor_map_component.hpp"
 #include "object_selector.hpp"
 #include "object_add_command.hpp"

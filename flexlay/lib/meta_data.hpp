@@ -21,7 +21,6 @@
 
 class MetaDataImpl;
 
-/** */
 class MetaData
 {
 private:

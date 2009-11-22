@@ -25,7 +25,6 @@
 class MinimapImpl;
 class EditorMapComponent;
 
-/** */
 class Minimap : public CL_Component
 {
 protected:

@@ -25,7 +25,6 @@ class CL_Sprite;
 
 typedef int MenuItemHandle;
 
-/** */
 class Menu : public CL_Component
 {
 protected:

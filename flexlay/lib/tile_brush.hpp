@@ -19,7 +19,6 @@
 
 #include "field.hpp"
 
-/** */
 class TileBrush
 {
 private:

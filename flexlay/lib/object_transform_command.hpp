@@ -22,7 +22,6 @@
 
 class ObjMapObject;
 
-/** */
 class ObjectTransformCommand
 {
 public:

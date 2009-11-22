@@ -14,8 +14,9 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include <ClanLib/Display/sprite_description.h>
 #include "generated_brush.hpp"
+
+#include <ClanLib/Display/sprite_description.h>
 
 class GeneratedBrushImpl : public BrushImpl
 {

@@ -20,11 +20,9 @@
 #include <ClanLib/Display/sprite.h>
 #include "objmap_object.hpp"
 
-#include "meta_data.hpp"
 
 class ObjMapSpriteObjectImpl;
 
-/** */
 class ObjMapSpriteObject
 {
 public:

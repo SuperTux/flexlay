@@ -21,7 +21,6 @@
 
 class LayerMoveToolImpl;
 
-/** */
 class LayerMoveTool : public Tool
 {
 public:

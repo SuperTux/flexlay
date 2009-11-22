@@ -21,7 +21,6 @@
 
 class DrawerPropertiesImpl;
 
-/** */
 class DrawerProperties
 {
 private:

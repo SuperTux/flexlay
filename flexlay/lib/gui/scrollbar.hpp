@@ -22,7 +22,6 @@
 
 class ScrollbarImpl;
 
-/** */
 class Scrollbar : public CL_Component
 {
 protected:

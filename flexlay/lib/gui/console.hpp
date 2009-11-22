@@ -24,7 +24,6 @@ class CL_Font;
 class CL_Size;
 class ConsoleImpl;
 
-/** */
 class Console : public CL_Component
 {
 protected:

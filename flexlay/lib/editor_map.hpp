@@ -18,11 +18,9 @@
 #define HEADER_FLEXLAY_EDITOR_MAP_HPP
 
 #include <ClanLib/Core/Math/rect.h>
-#include <ClanLib/Core/System/sharedptr.h>
 #include <ClanLib/Display/color.h>
 
 #include "layer.hpp"
-#include "meta_data.hpp"
 #include "command.hpp"
 
 class CL_GraphicContext;

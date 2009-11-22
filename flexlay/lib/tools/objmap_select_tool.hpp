@@ -24,7 +24,6 @@
 class CL_Menu;
 class ObjMapSelectToolImpl;
 
-/** */
 class ObjMapSelectTool
 {
 public:

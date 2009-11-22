@@ -14,24 +14,13 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include <iostream>
-#include <assert.h>
-#include <ClanLib/gl.h>
-#include <ClanLib/Core/core_iostream.h>
-#include <ClanLib/Core/System/error.h>
-#include <ClanLib/Display/display.h>
-#include <ClanLib/Display/sprite.h>
-#include <ClanLib/Display/pixel_buffer.h>
-#include <ClanLib/Display/canvas.h>
-#include <ClanLib/Display/blend_func.h>
-#include <ClanLib/Display/graphic_context.h>
-#include <ClanLib/Display/display_window.h>
-
-#include "flexlay.hpp"
-#include "layer_impl.hpp"
 #include "bitmap_layer.hpp"
+
+#include <ClanLib/gl.h>
+#include <ClanLib/Core/System/error.h>
+#include <ClanLib/Display/canvas.h>
+
 #include "objmap_object_impl.hpp"
-#include "math.hpp"
 
 BitmapLayer* BitmapLayer::current_ = 0;
 

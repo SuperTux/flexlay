@@ -19,7 +19,6 @@
 
 #include <ClanLib/Display/sprite.h>
 
-/** */
 class BrushImpl
 {
 public:

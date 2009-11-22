@@ -20,7 +20,6 @@
 #include <vector>
 #include "command.hpp"
 
-/** */
 class CommandGroup
 {
 private:

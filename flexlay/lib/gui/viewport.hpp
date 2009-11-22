@@ -18,12 +18,9 @@
 #define HEADER_FLEXLAY_VIEWPORT_HPP
 
 #include <ClanLib/GUI/component.h>
-#include <ClanLib/Core/Math/rect.h>
-#include <boost/shared_ptr.hpp>
 
 class ViewportImpl;
 
-/** */
 class Viewport : public CL_Component
 {
 protected:

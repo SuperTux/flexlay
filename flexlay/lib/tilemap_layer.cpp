@@ -16,17 +16,12 @@
 
 #include "tilemap_layer.hpp"
 
-#include <math.h>
 #include <ClanLib/Display/display.h>
-#include <ClanLib/Display/pixel_buffer.h>
 #include <ClanLib/Display/pixel_format.h>
-#include <ClanLib/Display/palette.h>
 #include <ClanLib/Display/sprite.h>
-#include <ClanLib/gl.h>
 
 #include "tile.hpp"
 #include "tileset.hpp"
-#include "editor_map.hpp"
 #include "tile_brush.hpp"
 #include "gui/editor_map_component.hpp"
 #include "blitter.hpp"

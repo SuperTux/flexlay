@@ -14,12 +14,7 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include <iostream>
-#include <ClanLib/Core/core_iostream.h>
-#include <ClanLib/Display/display.h>
-#include <ClanLib/Display/sprite.h>
 #include "object_layer.hpp"
-#include "objmap_control_point.hpp"
 #include "objmap_rect_object.hpp"
 #include "flexlay.hpp"
 

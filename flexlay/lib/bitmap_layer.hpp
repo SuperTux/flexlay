@@ -17,14 +17,11 @@
 #ifndef HEADER_FLEXLAY_BITMAP_LAYER_HPP
 #define HEADER_FLEXLAY_BITMAP_LAYER_HPP
 
-#include <vector>
-#include <ClanLib/Core/Math/point.h>
-#include <ClanLib/Display/color.h>
 #include "objmap_object.hpp"
-#include "layer.hpp"
 #include "stroke.hpp"
 
 class BitmapLayerImpl;
+class CL_Canvas;
 
 /** This layer holds a simple bitmap, size and color format are
     configurable, it works similar to the SketchLayer, however it

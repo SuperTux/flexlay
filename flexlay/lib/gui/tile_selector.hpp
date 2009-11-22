@@ -18,6 +18,7 @@
 #define HEADER_FLEXLAY_TILE_SELECTOR_HPP
 
 #include <ClanLib/gui.h>
+
 #include "tileset.hpp"
 
 class Tileset;

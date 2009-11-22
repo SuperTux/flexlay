@@ -21,7 +21,6 @@
 
 class Tile;
 
-/** */
 class TileEditor : public CL_Component
 {
 private:

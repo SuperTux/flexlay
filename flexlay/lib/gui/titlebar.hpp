@@ -22,7 +22,6 @@
 
 class TitlebarImpl;
 
-/** */
 class Titlebar : public CL_Component
 {
 protected:

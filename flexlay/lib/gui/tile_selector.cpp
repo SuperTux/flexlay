@@ -18,11 +18,10 @@
 
 #include <iostream>
 #include <ClanLib/display.h>
-#include <ClanLib/core.h>
 
 #include "math.hpp"
-#include "tileset.hpp"
 #include "tile.hpp"
+#include "tile_brush.hpp"
 #include "tools/tilemap_paint_tool.hpp"
 
 TileSelector::TileSelector(const CL_Rect& rect, CL_Component* parent) :

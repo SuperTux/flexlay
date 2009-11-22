@@ -18,7 +18,6 @@
 #define HEADER_FLEXLAY_OBJMAP_CONTROL_POINT_HPP
 
 #include <ClanLib/Display/sprite.h>
-#include <boost/shared_ptr.hpp>
 
 #include "meta_data.hpp"
 

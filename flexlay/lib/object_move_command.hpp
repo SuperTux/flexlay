@@ -24,7 +24,6 @@ class ObjectLayer;
 
 class ObjectMoveCommandImpl;
 
-/** */
 class ObjectMoveCommand
 {
 public:

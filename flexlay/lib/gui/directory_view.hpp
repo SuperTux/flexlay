@@ -22,7 +22,6 @@
 
 class DirectoryViewImpl;
 
-/** */
 class DirectoryView : public CL_Component
 {
 private:

@@ -23,7 +23,6 @@
 class Menu;
 class MenubarImpl;
 
-/** */
 class Menubar : public CL_Component
 {
 protected:

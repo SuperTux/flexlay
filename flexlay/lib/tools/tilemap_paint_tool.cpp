@@ -13,27 +13,23 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-#include <iostream>
-#include <ClanLib/Display/mouse.h>
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+#include "tilemap_paint_tool.hpp"
+
 #include <ClanLib/Display/keyboard.h>
 #include <ClanLib/Display/keys.h>
 #include <ClanLib/Display/display.h>
 #include <ClanLib/Display/sprite.h>
 
-#include "globals.hpp"
 #include "tilemap_layer.hpp"
 #include "tileset.hpp"
 #include "editor_map.hpp"
 #include "gui/editor_map_component.hpp"
 #include "tile.hpp"
-#include "workspace.hpp"
 #include "paint_command.hpp"
-#include "editor_names.hpp"
 #include "gui/tile_selection.hpp"
 #include "tool_impl.hpp"
-#include "tilemap_paint_tool.hpp"
 
 TileMapPaintTool TileMapPaintTool::current_;
 

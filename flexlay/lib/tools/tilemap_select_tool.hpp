@@ -25,7 +25,6 @@
 
 class TileMapSelectToolImpl;
 
-/** */
 class TileMapSelectTool
 {
 public:

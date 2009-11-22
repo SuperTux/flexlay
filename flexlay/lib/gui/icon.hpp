@@ -23,7 +23,6 @@
 
 class IconImpl;
 
-/** */
 class Icon : public CL_Component
 {
 protected:

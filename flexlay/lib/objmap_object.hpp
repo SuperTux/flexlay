@@ -22,7 +22,6 @@
 
 class ObjMapObjectImpl;
 
-/** */
 class ObjMapObject
 {
 public:

@@ -23,7 +23,6 @@ class ColorPickerHue;
 class ColorPickerAlpha;
 class ColorPickerBrightness;
 
-/** */
 class ColorPicker : public CL_Component
 {
 protected:

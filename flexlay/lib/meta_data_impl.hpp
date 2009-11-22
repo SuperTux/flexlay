@@ -17,7 +17,6 @@
 #ifndef HEADER_FLEXLAY_META_DATA_IMPL_HPP
 #define HEADER_FLEXLAY_META_DATA_IMPL_HPP
 
-/** */
 class MetaDataImpl
 {
 private:

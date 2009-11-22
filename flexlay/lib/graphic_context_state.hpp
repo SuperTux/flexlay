@@ -17,7 +17,6 @@
 #ifndef HEADER_FLEXLAY_GRAPHIC_CONTEXT_STATE_HPP
 #define HEADER_FLEXLAY_GRAPHIC_CONTEXT_STATE_HPP
 
-#include <ClanLib/Core/Math/point.h>
 #include <ClanLib/Core/Math/rect.h>
 #include <boost/shared_ptr.hpp>
 

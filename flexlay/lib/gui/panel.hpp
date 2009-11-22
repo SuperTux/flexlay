@@ -22,7 +22,6 @@
 
 class PanelImpl;
 
-/** */
 class Panel : public CL_Component
 {
 public:

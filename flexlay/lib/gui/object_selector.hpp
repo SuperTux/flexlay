@@ -17,11 +17,8 @@
 #ifndef HEADER_FLEXLAY_OBJECT_SELECTOR_HPP
 #define HEADER_FLEXLAY_OBJECT_SELECTOR_HPP
 
-#include <ClanLib/GUI/component.h>
-#include <ClanLib/GUI/component.h>
 #include "object_brush.hpp"
 
-/** */
 class ObjectSelector : public CL_Component
 {
 private:

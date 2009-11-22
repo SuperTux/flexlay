@@ -17,9 +17,9 @@
 #include "editor_map.hpp"
 
 #include <iostream>
-#include <ClanLib/Display/color.h>
 #include <ClanLib/Display/graphic_context.h>
-#include <ClanLib/signals.h>
+
+#include "meta_data.hpp"
 
 class EditorMapImpl
 {

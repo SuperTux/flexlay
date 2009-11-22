@@ -25,7 +25,6 @@ class WorkspaceImpl;
 class EditorMap;
 class Tool;
 
-/** */
 class Workspace
 {
 private:

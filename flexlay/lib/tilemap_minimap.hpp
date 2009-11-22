@@ -17,7 +17,6 @@
 #ifndef HEADER_FLEXLAY_TILEMAP_MINIMAP_HPP
 #define HEADER_FLEXLAY_TILEMAP_MINIMAP_HPP
 
-/** */
 class TilemapMinimap
 {
 private:

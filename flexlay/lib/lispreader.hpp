@@ -175,7 +175,6 @@ void lisp_dump (lisp_object_t *obj, FILE *out);
 #define lisp_cons_p(obj)     (lisp_type((obj)) == LISP_TYPE_CONS)
 #define lisp_boolean_p(obj)  (lisp_type((obj)) == LISP_TYPE_BOOLEAN)
 
-/** */
 class LispReader
 {
 private:
@@ -196,7 +195,6 @@ public:
   bool read_lisp (const char* name, lisp_object_t** b);
 };
 
-/** */
 class LispWriter
 {
 private:

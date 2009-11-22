@@ -21,7 +21,6 @@
 
 class GUIManagerImpl;
 
-/** */
 class GUIManager
 {
 private:

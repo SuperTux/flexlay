@@ -21,7 +21,6 @@
 
 class MarkerStrokeDrawerImpl;
 
-/** */
 class MarkerStrokeDrawer
 {
 private:

@@ -20,7 +20,6 @@
 
 class ObjMapPathNodeImpl;
 
-/** */
 class ObjMapPathNode
 {
 public:

@@ -22,7 +22,6 @@
 
 class GeneratedBrushImpl;
 
-/** */
 class GeneratedBrush
 {
 private:

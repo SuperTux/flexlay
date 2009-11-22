@@ -17,8 +17,6 @@
 #ifndef HEADER_FLEXLAY_OBJECT_LAYER_HPP
 #define HEADER_FLEXLAY_OBJECT_LAYER_HPP
 
-#include <ClanLib/Display/sprite.h>
-#include <ClanLib/GUI/component.h>
 #include "meta_data.hpp"
 #include "layer.hpp"
 #include "objmap_object.hpp"

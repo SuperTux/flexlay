@@ -39,8 +39,8 @@ class Tileset
         x = 0
         y = 0
         ids.each{|id|
-          pixelbuffer = make_region_pixelbuffer($datadir + 'images/' + image,
-                                                x * 32, y * 32, 32, 32)
+          pixelbuffer = make_region_pixelbuffer_from_resource($datadir + 'images/' + image,
+                                                              x * 32, y * 32, 32, 32)
           add_tile(id, Tile.new(pixelbuffer))
           x += 1
           if (x == width) then
@@ -63,10 +63,8 @@ class Tileset
           pixelbuffer = make_pixelbuffer($datadir + 'images/' + image)
         elsif image.is_a?(Array) then
           if image[0] == :region then
-            # FIXME: Doesn't work, causes memory corruption
-            # pixelbuffer = make_region_pixelbuffer($datadir + 'images/' + image[1],
-            #                                       image[2], image[3], image[4], image[5])
-            pixelbuffer = nil
+            pixelbuffer = make_region_pixelbuffer_from_resource($datadir + 'images/' + image[1],
+                                                                image[2], image[3], image[4], image[5])
           end
         end
         
@@ -87,7 +85,7 @@ class Tileset
           @tilegroups = []
         end
         @tilegroups.push(TileGroup.new(name, tiles))
-    
+        
       end
 
       counter += 1

@@ -18,6 +18,7 @@
 #include <ClanLib/Display/pixel_format.h>
 #include <ClanLib/Display/Providers/provider_factory.h>
 #include <ClanLib/core.h>
+
 #include "blitter.hpp"
 #include "helper.hpp"
 
@@ -67,21 +68,22 @@ make_pixelbuffer(const std::string& filename)
 }
 
 CL_PixelBuffer
-make_region_pixelbuffer(const std::string& filename, int x, int y, int w, int h)
+make_region_pixelbuffer_from_resource(const std::string& filename, int x, int y, int w, int h)
 {
-  try {
+  try 
+  {
     CL_PixelBuffer buffer = get_pixelbuffer(filename);
-
-    CL_PixelBuffer target(w, h, w * (buffer.get_format().get_depth()/8), buffer.get_format());
+    CL_PixelBuffer target(w, h, w * 4, CL_PixelFormat::rgba8888);
     clear(target);
     blit_opaque(target, buffer, -x, -y);
 
     return target;
-  } catch (CL_Error& err) {
+  } 
+  catch (CL_Error& err) 
+  {
     std::cout << "CL_Error: " << err.message << std::endl;
     return CL_PixelBuffer();
   }
-
 }
 
 CL_Sprite
@@ -118,7 +120,7 @@ CL_PixelBuffer
 make_region_pixelbuffer(const CL_PixelBuffer& buffer, int x, int y, int w, int h)
 {
   try {
-    CL_PixelBuffer target(w, h, w * (buffer.get_format().get_depth()/8), buffer.get_format());
+    CL_PixelBuffer target(w, h, w * 4, CL_PixelFormat::rgba8888);
     clear(target);
     blit_opaque(target, buffer, -x, -y);
 

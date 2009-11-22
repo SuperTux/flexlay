@@ -14,18 +14,20 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+#include "tile_selector.hpp"
+
 #include <iostream>
 #include <ClanLib/display.h>
 #include <ClanLib/core.h>
+
 #include "math.hpp"
 #include "tileset.hpp"
 #include "tile.hpp"
-#include "tile_selector.hpp"
 #include "tools/tilemap_paint_tool.hpp"
 
-TileSelector::TileSelector(const CL_Rect& rect, CL_Component* parent)
-  : CL_Component(rect, parent),
-    width(1)
+TileSelector::TileSelector(const CL_Rect& rect, CL_Component* parent) :
+  CL_Component(rect, parent),
+  width(1)
 {
   index = 0;
 

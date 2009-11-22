@@ -17,8 +17,9 @@
 #ifndef HEADER_FLEXLAY_FLEXLAY_HPP
 #define HEADER_FLEXLAY_FLEXLAY_HPP
 
-#include <ClanLib/Display/display_window.h>
 #include <ClanLib/Core/Resources/resource_manager.h>
+
+class CL_DisplayWindow;
 
 /*! \mainpage Flexlay - A Flexible Layered 2D Editor
   

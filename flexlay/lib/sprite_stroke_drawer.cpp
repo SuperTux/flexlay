@@ -21,7 +21,6 @@
 #include <ClanLib/gl.h>
 #include <ClanLib/GL/opengl_wrap.h>
 #include "stroke.hpp"
-#include "flexlay.hpp"
 #include "stroke_drawer_impl.hpp"
 #include "sprite_stroke_drawer.hpp"
 #include "drawer_properties.hpp"

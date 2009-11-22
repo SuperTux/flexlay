@@ -15,8 +15,6 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <ClanLib/Core/Math/rect.h>
-#include <iostream>
-#include <ClanLib/Core/core_iostream.h>
 #include "tile_brush.hpp"
 
 TileBrush::TileBrush()

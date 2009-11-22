@@ -18,9 +18,7 @@
 #define HEADER_FLEXLAY_OBJMAP_CONTROL_POINT_HPP
 
 #include <ClanLib/Display/sprite.h>
-#include <ClanLib/Core/Math/point.h>
 #include "meta_data.hpp"
-#include "shared_ptr.hpp"
 
 class ObjMapControlPointImpl;
 

@@ -17,10 +17,7 @@
 #ifndef HEADER_FLEXLAY_OBJMAP_OBJECT_HPP
 #define HEADER_FLEXLAY_OBJMAP_OBJECT_HPP
 
-#include <ClanLib/signals.h>
 #include <ClanLib/Display/graphic_context.h>
-#include <ClanLib/Core/Math/point.h>
-#include <ClanLib/Core/Math/rect.h>
 #include "meta_data.hpp"
 
 class ObjMapObjectImpl;

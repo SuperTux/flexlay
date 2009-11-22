@@ -17,15 +17,12 @@
 #ifndef HEADER_FLEXLAY_OBJECT_LAYER_HPP
 #define HEADER_FLEXLAY_OBJECT_LAYER_HPP
 
-#include <vector>
 #include <ClanLib/Display/sprite.h>
 #include <ClanLib/GUI/component.h>
-#include <ClanLib/Core/Math/point.h>
 #include "meta_data.hpp"
 #include "layer.hpp"
 #include "objmap_object.hpp"
 #include "objmap_control_point.hpp"
-#include "shared_ptr.hpp"
 
 class ObjectLayerImpl;
 

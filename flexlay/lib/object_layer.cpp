@@ -14,13 +14,6 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include <iostream>
-#include <ClanLib/Display/display.h>
-#include <ClanLib/Core/Math/origin.h>
-#include <ClanLib/Core/System/error.h>
-#include "objmap_object.hpp"
-#include "objmap_sprite_object.hpp"
-#include "objmap_control_point.hpp"
 #include "object_layer.hpp"
 #include "editor_map_component.hpp"
 #include "layer_impl.hpp"

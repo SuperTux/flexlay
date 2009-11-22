@@ -17,10 +17,7 @@
 #ifndef HEADER_FLEXLAY_SPRITE_STROKE_DRAWER_HPP
 #define HEADER_FLEXLAY_SPRITE_STROKE_DRAWER_HPP
 
-#include <ClanLib/Display/color.h>
-#include <ClanLib/Display/sprite.h>
 #include "stroke_drawer.hpp"
-#include "brush.hpp"
 
 class Stroke;
 class SpriteStrokeDrawerImpl;

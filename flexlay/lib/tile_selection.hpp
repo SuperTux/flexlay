@@ -17,9 +17,6 @@
 #ifndef HEADER_FLEXLAY_TILE_SELECTION_HPP
 #define HEADER_FLEXLAY_TILE_SELECTION_HPP
 
-#include <ClanLib/Core/Math/rect.h>
-#include <ClanLib/Display/color.h>
-#include <ClanLib/Core/Math/point.h>
 #include "tile_brush.hpp"
 #include "tilemap_layer.hpp"
 

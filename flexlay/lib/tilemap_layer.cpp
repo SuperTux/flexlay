@@ -14,12 +14,16 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+#include "tilemap_layer.hpp"
+
 #include <math.h>
 #include <ClanLib/Display/display.h>
 #include <ClanLib/Display/pixel_buffer.h>
 #include <ClanLib/Display/pixel_format.h>
 #include <ClanLib/Display/palette.h>
+#include <ClanLib/Display/sprite.h>
 #include <ClanLib/gl.h>
+
 #include "tile.hpp"
 #include "tileset.hpp"
 #include "editor_map.hpp"
@@ -29,7 +33,6 @@
 #include "blitter.hpp"
 #include "layer_impl.hpp"
 #include "editor_map_component.hpp"
-#include "tilemap_layer.hpp"
 
 TilemapLayer TilemapLayer::current_;
 

@@ -18,7 +18,6 @@
 #define HEADER_FLEXLAY_HELPER_HPP
 
 #include <ClanLib/Display/sprite.h>
-#include <ClanLib/Display/pixel_buffer.h>
 
 CL_Sprite      pixelbuffer2sprite(const CL_PixelBuffer& buffer);
 CL_Sprite      make_sprite(const std::string& filename);

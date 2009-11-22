@@ -17,7 +17,6 @@
 #ifndef HEADER_FLEXLAY_OBJMAP_PATH_NODE_HPP
 #define HEADER_FLEXLAY_OBJMAP_PATH_NODE_HPP
 
-#include "objmap_object.hpp"
 
 class ObjMapPathNodeImpl;
 

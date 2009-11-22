@@ -15,7 +15,6 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "object_layer.hpp"
-#include "objmap_object.hpp"
 #include "object_move_command.hpp"
 
 class ObjectMoveCommandImpl : public CommandImpl

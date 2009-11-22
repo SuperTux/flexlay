@@ -15,7 +15,6 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <ClanLib/Display/sprite_description.h>
-#include "brush_impl.hpp"
 #include "generated_brush.hpp"
 
 class GeneratedBrushImpl : public BrushImpl

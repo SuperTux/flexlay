@@ -15,14 +15,8 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <iostream>
-#include <ClanLib/Core/core_iostream.h>
 #include <ClanLib/Display/display.h>
-#include <ClanLib/Display/keys.h>
-#include <ClanLib/Display/sprite_description.h>
-#include <ClanLib/Display/Providers/provider_factory.h>
-#include <ClanLib/GUI/gui_manager.h>
 #include "box.hpp"
-#include "fonts.hpp"
 #include "icon.hpp"
 #include "helper.hpp"
 #include "titlebar.hpp"

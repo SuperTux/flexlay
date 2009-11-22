@@ -1,5 +1,3 @@
-//  $Id: tile_editor.hpp,v 1.1 2003/09/22 18:37:05 grumbel Exp $
-// 
 //  Flexlay - A Generic 2D Game Editor
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
 //
@@ -20,8 +18,6 @@
 #define HEADER_FLEXLAY_TILE_EDITOR_HPP
 
 #include <ClanLib/GUI/component.h>
-#include <ClanLib/Signals/slot_container.h>
-#include <ClanLib/Core/Math/point.h>
 
 class Tile;
 

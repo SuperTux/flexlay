@@ -14,17 +14,20 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+#include "minimap.hpp"
+
 #include <iostream>
 #include <ClanLib/Display/display.h>
+#include <ClanLib/Display/surface.h>
 #include <ClanLib/Display/pixel_format.h>
 #include <ClanLib/Display/pixel_buffer.h>
+
 #include "tile.hpp"
 #include "tileset.hpp"
 #include "editor_map.hpp"
 #include "editor_map_component.hpp"
 #include "tilemap_layer.hpp"
 #include "workspace.hpp"
-#include "minimap.hpp"
 
 class MinimapImpl
 {

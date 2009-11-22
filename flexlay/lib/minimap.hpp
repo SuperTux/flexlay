@@ -18,8 +18,12 @@
 #define HEADER_FLEXLAY_MINIMAP_HPP
 
 #include <ClanLib/GUI/component.h>
+#include <ClanLib/Core/System/sharedptr.h>
+
+#include "shared_ptr.hpp"
 
 class MinimapImpl;
+class EditorMapComponent;
 
 /** */
 class Minimap : public CL_Component

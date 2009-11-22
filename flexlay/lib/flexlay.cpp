@@ -14,15 +14,14 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+#include "flexlay.hpp"
+
 #include <ClanLib/core.h>
 #include <ClanLib/display.h>
 #include <ClanLib/gui.h>
-#include <ClanLib/guistylesilver.h>
 #include <ClanLib/gl.h>
-#include "config.h"
 #include "globals.hpp"
 #include "fonts.hpp"
-#include "flexlay.hpp"
 
 Flexlay* Flexlay::current_ = 0;
 

@@ -15,13 +15,10 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <iostream>
-#include <assert.h>
-#include <ClanLib/Core/core_iostream.h>
-#include <ClanLib/Display/display.h>
-#include <ClanLib/Display/keys.h>
-#include "editor_names.hpp"
+#include <ClanLib/Display/color.h>
+#include <ClanLib/Display/graphic_context.h>
+#include <ClanLib/signals.h>
 #include "editor_map.hpp"
-#include "editor_map_component.hpp"
 
 class EditorMapImpl
 {

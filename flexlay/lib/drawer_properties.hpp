@@ -17,7 +17,6 @@
 #ifndef HEADER_FLEXLAY_DRAWER_PROPERTIES_HPP
 #define HEADER_FLEXLAY_DRAWER_PROPERTIES_HPP
 
-#include <ClanLib/Display/color.h>
 #include "brush.hpp"
 
 class DrawerPropertiesImpl;

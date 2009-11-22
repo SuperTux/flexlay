@@ -17,13 +17,13 @@
 #ifndef HEADER_FLEXLAY_LAYER_HPP
 #define HEADER_FLEXLAY_LAYER_HPP
 
-#include <ClanLib/Core/Math/rect.h>
-#include <ClanLib/Display/graphic_context.h>
+
 #include "meta_data.hpp"
 #include "shared_ptr.hpp"
 
 class EditorMapComponent;
 class LayerImpl;
+class CL_GraphicContext;
 
 /** Each \a EditorMap consists out of one or more \a Layer,
     The \a Layer is an abstract base class from which the

@@ -16,9 +16,7 @@
 
 #include <ClanLib/Display/display.h>
 #include <iostream>
-#include <ClanLib/Core/core_iostream.h>
 #include "math.hpp"
-#include "tilemap_layer.hpp"
 #include "tileset.hpp"
 #include "tile_selection.hpp"
 

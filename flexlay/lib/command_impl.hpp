@@ -13,10 +13,12 @@
 //  
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 #ifndef HEADER_FLEXLAY_COMMAND_IMPL_HPP
 #define HEADER_FLEXLAY_COMMAND_IMPL_HPP
 
-/** */
+#include <string>
+
 class CommandImpl
 {
 private:

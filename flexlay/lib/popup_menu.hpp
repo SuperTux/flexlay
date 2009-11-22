@@ -17,9 +17,6 @@
 #ifndef HEADER_FLEXLAY_POPUP_MENU_HPP
 #define HEADER_FLEXLAY_POPUP_MENU_HPP
 
-#include <vector>
-#include <ClanLib/Signals/slot.h>
-#include <ClanLib/GUI/component.h>
 #include <ClanLib/GUI/menu.h>
 
 /** */

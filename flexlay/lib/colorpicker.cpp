@@ -14,14 +14,8 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include <vector>
 #include <iostream>
-#include <ClanLib/Display/display_iostream.h>
-#include <ClanLib/Display/color.h>
-#include <ClanLib/Display/display.h>
 #include <ClanLib/Display/keys.h>
-#include <ClanLib/Core/Math/rect.h>
-#include <ClanLib/Core/Math/point.h>
 #include <ClanLib/GUI/component.h>
 #include "colorpicker.hpp"
 #include "math.hpp"

@@ -15,7 +15,6 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <iostream>
-#include <ClanLib/Display/font.h>
 #include "fonts.hpp"
 #include "field.hpp"
 #include "console.hpp"

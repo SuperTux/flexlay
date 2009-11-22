@@ -14,10 +14,7 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include <assert.h>
-#include <ClanLib/Core/Math/rect.h>
 #include <ClanLib/Core/IOData/directory_scanner.h>
-#include <ClanLib/Display/font.h>
 #include <ClanLib/Display/display.h>
 #include "fonts.hpp"
 #include "directory_view.hpp"

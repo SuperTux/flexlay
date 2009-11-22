@@ -1,5 +1,3 @@
-//  $Id: string_converter.hpp,v 1.3 2003/11/04 22:48:51 grumbel Exp $
-// 
 //  Flexlay - A Generic 2D Game Editor
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
 //

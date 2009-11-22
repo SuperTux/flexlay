@@ -17,11 +17,11 @@
 #ifndef HEADER_FLEXLAY_OBJECT_ADD_COMMAND_HPP
 #define HEADER_FLEXLAY_OBJECT_ADD_COMMAND_HPP
 
-#include "objmap_object.hpp"
 #include "command.hpp"
 
-class ObjectLayer;
+class ObjMapObject;
 class ObjectAddCommandImpl;
+class ObjectLayer;
 
 /** ObjectAddCommand adds on object to an ObjectLayer, the user needs
     to supply an Object together with the \a ObjectLayer to which it

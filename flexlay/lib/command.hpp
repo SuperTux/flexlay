@@ -17,7 +17,6 @@
 #ifndef HEADER_FLEXLAY_COMMAND_HPP
 #define HEADER_FLEXLAY_COMMAND_HPP
 
-#include <iosfwd>
 #include "shared_ptr.hpp"
 #include "command_impl.hpp"
 

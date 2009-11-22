@@ -1,5 +1,3 @@
-//  $Id: tile_factory.hpp,v 1.8 2003/09/22 18:37:05 grumbel Exp $
-// 
 //  Flexlay - A Generic 2D Game Editor
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
 //

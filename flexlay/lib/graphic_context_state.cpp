@@ -14,12 +14,11 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+#include "graphic_context_state.hpp"
+
 #include <ClanLib/Display/display.h>
 #include <ClanLib/Display/display_window.h>
 #include <ClanLib/Display/graphic_context.h>
-#include <ClanLib/GUI/component.h>
-#include <math.h>
-#include "graphic_context_state.hpp"
 
 class GraphicContextStateImpl
 {

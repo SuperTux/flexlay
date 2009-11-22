@@ -18,10 +18,9 @@
 #define HEADER_FLEXLAY_OBJMAP_SPRITE_OBJECT_HPP
 
 #include <ClanLib/Display/sprite.h>
-#include <ClanLib/Core/Math/point.h>
-#include "shared_ptr.hpp"
-#include "meta_data.hpp"
 #include "objmap_object.hpp"
+
+#include "meta_data.hpp"
 
 class ObjMapSpriteObjectImpl;
 

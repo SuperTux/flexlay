@@ -17,9 +17,7 @@
 #ifndef HEADER_FLEXLAY_MENU_HPP
 #define HEADER_FLEXLAY_MENU_HPP
 
-#include <string>
 #include <ClanLib/GUI/component.h>
-#include <ClanLib/Core/Math/rect.h>
 #include "shared_ptr.hpp"
 
 class MenuImpl;

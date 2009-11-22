@@ -15,8 +15,6 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "object_layer.hpp"
-#include "objmap_object.hpp"
-#include "command_impl.hpp"
 #include "object_delete_command.hpp"
 
 class ObjectDeleteCommandImpl : public CommandImpl

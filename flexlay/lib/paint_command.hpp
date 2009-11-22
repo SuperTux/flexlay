@@ -17,9 +17,7 @@
 #ifndef HEADER_FLEXLAY_PAINT_COMMAND_HPP
 #define HEADER_FLEXLAY_PAINT_COMMAND_HPP
 
-#include <ClanLib/Core/Math/point.h>
 #include "tile_brush.hpp"
-#include "shared_ptr.hpp"
 #include "tilemap_layer.hpp"
 #include "command.hpp"
 

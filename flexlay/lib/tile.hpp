@@ -1,5 +1,3 @@
-//  $Id: tile.hpp,v 1.6 2003/09/22 18:37:05 grumbel Exp $
-// 
 //  Flexlay - A Generic 2D Game Editor
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
 //
@@ -19,13 +17,13 @@
 #ifndef HEADER_FLEXLAY_TILE_HPP
 #define HEADER_FLEXLAY_TILE_HPP
 
-#include <assert.h>
-#include <ClanLib/Display/sprite.h>
-#include <ClanLib/Display/pixel_buffer.h>
+#include <ClanLib/Display/color.h>
 #include "shared_ptr.hpp"
 
 class TileImpl;
 class TileProvider;
+class CL_PixelBuffer;
+class CL_Sprite;
 
 /** A Tile is a surface or sprite together with meta information for
     collision (aka colmap), walkability or such. */

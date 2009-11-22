@@ -17,12 +17,9 @@
 #ifndef HEADER_FLEXLAY_OBJECT_BRUSH_HPP
 #define HEADER_FLEXLAY_OBJECT_BRUSH_HPP
 
-#include <ClanLib/Display/sprite.h>
-#include <ClanLib/Core/Math/point.h>
-#include "object_layer.hpp"
-#include "objmap_object.hpp"
 #include "objmap_sprite_object.hpp"
-#include "meta_data.hpp"
+
+class MetaData;
 
 class ObjectBrushImpl;
 

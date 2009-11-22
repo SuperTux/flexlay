@@ -17,9 +17,7 @@
 #ifndef HEADER_FLEXLAY_SPRITE_BRUSH_HPP
 #define HEADER_FLEXLAY_SPRITE_BRUSH_HPP
 
-#include <ClanLib/Display/sprite.h>
 #include "brush.hpp"
-#include "shared_ptr.hpp"
 
 class SpriteBrushImpl;
 

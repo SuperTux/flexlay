@@ -15,7 +15,6 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "object_layer.hpp"
-#include "objmap_object.hpp"
 #include "object_add_command.hpp"
 
 class ObjectAddCommandImpl : public CommandImpl

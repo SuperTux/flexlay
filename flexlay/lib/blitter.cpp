@@ -16,7 +16,6 @@
 
 #include <assert.h>
 #include <iostream>
-#include <algorithm>
 #include <ClanLib/Display/pixel_format.h>
 #include <ClanLib/Display/palette.h>
 #include "blitter.hpp"

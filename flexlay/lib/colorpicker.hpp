@@ -18,8 +18,6 @@
 #define HEADER_FLEXLAY_COLORPICKER_HPP
 
 #include <ClanLib/Display/display.h>
-#include <ClanLib/Display/color.h>
-#include <ClanLib/Display/gradient.h>
 
 class ColorPickerHue;
 class ColorPickerAlpha;

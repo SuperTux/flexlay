@@ -18,7 +18,6 @@
 #define HEADER_FLEXLAY_ICON_HPP
 
 #include <ClanLib/GUI/component.h>
-#include <ClanLib/Core/Math/point.h>
 #include <ClanLib/Display/sprite.h>
 #include "shared_ptr.hpp"
 

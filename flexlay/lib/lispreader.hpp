@@ -28,7 +28,6 @@
 #include <zlib.h>
 #include <string>
 #include <vector>
-#include <exception>
 
 #define LISP_STREAM_FILE       1
 #define LISP_STREAM_STRING     2

@@ -17,9 +17,7 @@
 #ifndef HEADER_FLEXLAY_SLIDER_HPP
 #define HEADER_FLEXLAY_SLIDER_HPP
 
-#include <vector>
 #include <ClanLib/GUI/component.h>
-#include <ClanLib/Core/Math/rect.h>
 
 /** Little Slider GUI component */
 class Slider : public CL_Component

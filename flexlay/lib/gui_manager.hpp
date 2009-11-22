@@ -1,5 +1,3 @@
-//  $Id: gui_manager.hpp,v 1.2 2003/10/12 11:58:09 grumbel Exp $
-// 
 //  Flexlay - A Generic 2D Game Editor
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
 //

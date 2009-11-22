@@ -17,8 +17,6 @@
 #ifndef HEADER_FLEXLAY_TILE_PROVIDER_HPP
 #define HEADER_FLEXLAY_TILE_PROVIDER_HPP
 
-#include <ClanLib/Display/sprite.h>
-#include <ClanLib/Display/pixel_buffer.h>
 #include "shared_ptr.hpp"
 
 class TileProviderImpl;

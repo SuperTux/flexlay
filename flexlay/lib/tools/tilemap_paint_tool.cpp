@@ -20,6 +20,7 @@
 #include <ClanLib/Display/keyboard.h>
 #include <ClanLib/Display/keys.h>
 #include <ClanLib/Display/display.h>
+#include <ClanLib/Display/sprite.h>
 
 #include "globals.hpp"
 #include "tilemap_layer.hpp"

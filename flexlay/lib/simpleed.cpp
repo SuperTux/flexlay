@@ -16,18 +16,6 @@
 
 #if 0
 
-#include <iostream>
-#include <string>
-#include <ClanLib/core.h>
-#include <ClanLib/gui.h>
-#include "workspace.hpp"
-#include "tileset.hpp"
-#include "editor_map_component.hpp"
-#include "gui_manager.hpp"
-#include "layer.hpp"
-#include "tilemap_layer.hpp"
-#include "flexlay.hpp"
-#include "editor_map.hpp"
 
 int main()
 {

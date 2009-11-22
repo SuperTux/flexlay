@@ -15,16 +15,10 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <iostream>
-#include <ClanLib/Core/core_iostream.h>
 #include <ClanLib/Display/keyboard.h>
 #include <ClanLib/Display/mouse.h>
 #include <ClanLib/Display/display.h>
-#include <ClanLib/Display/display_iostream.h>
-#include <ClanLib/Display/keys.h>
-#include "tileset.hpp"
-#include "editor_names.hpp"
 #include "editor_map.hpp"
-#include "workspace.hpp"
 #include "scrollbar.hpp"
 #include "editor_map_component.hpp"
 

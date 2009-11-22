@@ -17,19 +17,18 @@
 #ifndef HEADER_FLEXLAY_EDITOR_MAP_HPP
 #define HEADER_FLEXLAY_EDITOR_MAP_HPP
 
-#include <vector>
-#include <ClanLib/Display/sprite.h>
-#include <ClanLib/GUI/component.h>
-#include <ClanLib/Core/Math/point.h>
-#include "field.hpp"
-#include "object_layer.hpp"
-#include "tilemap_layer.hpp"
+#include <ClanLib/Core/Math/rect.h>
+#include <ClanLib/Core/System/sharedptr.h>
 #include "layer.hpp"
+#include "meta_data.hpp"
 #include "command.hpp"
 
-class Command;
+class CL_GraphicContext;
 class EditorMapComponent;
 class EditorMapImpl;
+class Layer;
+class MetaData;
+class CL_Signal_v0;
 
 /** Object which represents a level, quirled together with the GUI
     stuff */
@@ -86,6 +85,7 @@ public:
   CL_Signal_v0& sig_change();
 
   bool is_null() const { return !impl.get(); }
+
 private:
   CL_SharedPtr<EditorMapImpl> impl;
 };

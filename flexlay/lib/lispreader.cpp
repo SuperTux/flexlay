@@ -21,9 +21,6 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#include <iostream>
-#include <string>
-#include <ctype.h>
 #include <stdlib.h>
 #include <string.h>
 #include "lispreader.hpp"

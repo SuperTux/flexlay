@@ -15,9 +15,7 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <iostream>
-#include <ClanLib/Core/System/sharedptr.h>
 #include <boost/shared_ptr.hpp>
-#include "sharedptrtest.hpp"
 
 #define SharedPtr boost::shared_ptr
 

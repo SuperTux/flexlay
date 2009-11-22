@@ -17,7 +17,6 @@
 #ifndef HEADER_FLEXLAY_GENERATED_BRUSH_HPP
 #define HEADER_FLEXLAY_GENERATED_BRUSH_HPP
 
-#include "shared_ptr.hpp"
 #include "brushmask.hpp"
 #include "brush.hpp"
 

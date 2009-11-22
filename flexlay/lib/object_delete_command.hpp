@@ -17,8 +17,6 @@
 #ifndef HEADER_FLEXLAY_OBJECT_DELETE_COMMAND_HPP
 #define HEADER_FLEXLAY_OBJECT_DELETE_COMMAND_HPP
 
-#include <vector>
-#include "objmap_object.hpp"
 #include "command.hpp"
 
 class ObjectDeleteCommandImpl;

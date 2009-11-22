@@ -14,14 +14,7 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include <assert.h>
-#include <iostream>
 #include <sstream>
-#include <vector>
-#include <ClanLib/Core/core_iostream.h>
-#include <ClanLib/Core/Math/rect.h>
-#include "field.hpp"
-#include "tilemap_layer.hpp"
 #include "paint_command.hpp"
 
 class PaintCommandImpl : public CommandImpl

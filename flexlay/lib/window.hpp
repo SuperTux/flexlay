@@ -17,9 +17,6 @@
 #ifndef HEADER_FLEXLAY_WINDOW_HPP
 #define HEADER_FLEXLAY_WINDOW_HPP
 
-#include <ClanLib/GUI/component.h>
-#include <ClanLib/Core/Math/rect.h>
-#include "shared_ptr.hpp"
 
 class WindowImpl;
 

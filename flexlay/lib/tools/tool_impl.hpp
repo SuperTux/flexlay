@@ -1,5 +1,3 @@
-//  $Id: tilemap_tool.hpp,v 1.1 2003/09/23 19:10:05 grumbel Exp $
-// 
 //  Flexlay - A Generic 2D Game Editor
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
 //

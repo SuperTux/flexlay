@@ -17,7 +17,6 @@
 #ifndef HEADER_FLEXLAY_BOX_HPP
 #define HEADER_FLEXLAY_BOX_HPP
 
-#include <ClanLib/Core/Math/rect.h>
 
 /** Little helper class to draw boxes and stuff in the GUI */
 class Box

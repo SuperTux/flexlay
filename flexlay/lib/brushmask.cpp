@@ -19,7 +19,6 @@
 */
 
 #include <iostream>
-#include <math.h>
 #include <string.h>
 #include <ClanLib/Display/pixel_format.h>
 #include "brushmask.hpp"

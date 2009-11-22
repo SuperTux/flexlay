@@ -1,5 +1,3 @@
-//  $Id: globals.hpp,v 1.11 2003/11/07 13:00:39 grumbel Exp $
-// 
 //  Flexlay - A Generic 2D Game Editor
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
 //
@@ -20,7 +18,6 @@
 #define HEADER_FLEXLAY_GLOBALS_HPP
 
 #include <string>
-#include <ClanLib/Core/Resources/resource_manager.h>
 
 /** datadir => /usr/local/share/games/windstille/ */
 extern std::string datadir;

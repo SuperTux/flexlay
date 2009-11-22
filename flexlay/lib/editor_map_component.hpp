@@ -17,13 +17,7 @@
 #ifndef HEADER_FLEXLAY_EDITOR_MAP_COMPONENT_HPP
 #define HEADER_FLEXLAY_EDITOR_MAP_COMPONENT_HPP
 
-#include <vector>
-#include <ClanLib/Display/sprite.h>
 #include <ClanLib/GUI/component.h>
-#include <ClanLib/Core/Math/point.h>
-#include "field.hpp"
-#include "object_layer.hpp"
-#include "graphic_context_state.hpp"
 #include "workspace.hpp"
 
 class Scrollbar;

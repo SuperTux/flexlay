@@ -15,10 +15,7 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "objmap_sprite_object.hpp"
-#include "object_add_command.hpp"
-#include "objmap_sprite_object.hpp"
 #include "object_brush.hpp"
-#include "editor_map.hpp"
 
 class ObjectBrushImpl
 {

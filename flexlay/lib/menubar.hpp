@@ -18,7 +18,6 @@
 #define HEADER_FLEXLAY_MENUBAR_HPP
 
 #include <ClanLib/GUI/component.h>
-#include <ClanLib/Core/Math/rect.h>
 #include "shared_ptr.hpp"
 
 class Menu;

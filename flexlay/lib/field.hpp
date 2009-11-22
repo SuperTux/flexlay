@@ -1,5 +1,3 @@
-//  $Id: field.hpp,v 1.4 2003/09/12 09:25:48 grumbel Exp $
-// 
 //  Flexlay - A Generic 2D Game Editor
 //  Copyright (C) 2000 Ingo Ruhnke <grumbel@gmx.de>
 //

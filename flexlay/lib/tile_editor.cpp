@@ -14,14 +14,13 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include <iostream>
-#include <ClanLib/gui.h>
+#include "tile_editor.hpp"
+
 #include <ClanLib/Display/display.h>
 #include <ClanLib/Display/keys.h>
+#include <ClanLib/Display/sprite.h>
 #include <ClanLib/Display/mouse.h>
 #include "tile.hpp"
-#include "globals.hpp"
-#include "tile_editor.hpp"
 
 TileEditor::TileEditor(int x, int y, int w, int h, CL_Component* parent)
   : CL_Component(CL_Rect(CL_Rect(CL_Point(x, y), 

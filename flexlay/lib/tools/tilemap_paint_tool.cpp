@@ -1,5 +1,3 @@
-//  $Id: tilemap_paint_tool.cxx,v 1.2 2003/09/23 22:07:32 grumbel Exp $
-//
 //  Flexlay - A Generic 2D Game Editor
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
 //
@@ -193,7 +191,7 @@ TileMapPaintToolImpl::on_mouse_move(const CL_InputEvent& event)
         {
         case PAINTING:
           if (CL_Keyboard::get_keycode(CL_KEY_LSHIFT) ||
-              (current_tile.x % brush.get_width()) == (last_draw.x % brush.get_width()) &&
+              (current_tile.x % brush.get_width())  == (last_draw.x % brush.get_width()) &&
               (current_tile.y % brush.get_height() == (last_draw.y % brush.get_height())))
             {
               command->add_point(current_tile);

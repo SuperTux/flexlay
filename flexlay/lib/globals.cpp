@@ -1,5 +1,3 @@
-//  $Id: globals.cxx,v 1.6 2003/11/07 22:41:18 grumbel Exp $
-//
 //  Flexlay - A Generic 2D Game Editor
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
 //

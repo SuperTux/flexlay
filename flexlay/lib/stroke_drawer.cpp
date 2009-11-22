@@ -21,7 +21,7 @@ StrokeDrawer::StrokeDrawer()
 {
 }
 
-StrokeDrawer::StrokeDrawer(SharedPtr<StrokeDrawerImpl> impl_)
+StrokeDrawer::StrokeDrawer(boost::shared_ptr<StrokeDrawerImpl> impl_)
   :impl(impl_)
 {
   
@@ -37,7 +37,7 @@ StrokeDrawer::draw(const Stroke& stroke, CL_GraphicContext* gc)
 StrokeDrawer
 StrokeDrawer::clone() const
 {
-  return StrokeDrawer(impl->clone());
+  return StrokeDrawer(boost::shared_ptr<StrokeDrawerImpl>(impl->clone()));
 }
 
 /* EOF */

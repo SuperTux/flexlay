@@ -22,7 +22,7 @@ Tool::Tool()
 {
 }
 
-Tool::Tool(SharedPtr<ToolImpl> impl_)
+Tool::Tool(boost::shared_ptr<ToolImpl> impl_)
   : impl(impl_)
 {
 }

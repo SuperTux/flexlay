@@ -23,9 +23,9 @@
 #include <ClanLib/Display/palette.h>
 #include <ClanLib/Display/surface.h>
 #include <ClanLib/Display/sprite.h>
+
 #include "../lib/tileset.hpp"
 #include "../lib/tilemap_layer.hpp"
-#include "../lib/shared_ptr.hpp"
 
 void load_netpanzer_tileset(Tileset tileset, const char* filename);
 
@@ -119,8 +119,9 @@ public:
   void set_tilemap(TilemapLayer l); 
 
   void save(const std::string& filename);
+
 private:
-  SharedPtr<NetPanzerFileStructImpl> impl;
+  boost::shared_ptr<NetPanzerFileStructImpl> impl;
 };
 
 #endif

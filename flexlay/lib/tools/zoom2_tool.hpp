@@ -33,7 +33,7 @@ public:
 
   Tool to_tool();
 private:
-  SharedPtr<Zoom2ToolImpl> impl;
+  boost::shared_ptr<Zoom2ToolImpl> impl;
 };
 
 #endif

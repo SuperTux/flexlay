@@ -43,7 +43,7 @@ public:
 
   Tool to_tool();
 private:
-  SharedPtr<ObjMapSelectToolImpl> impl;
+  boost::shared_ptr<ObjMapSelectToolImpl> impl;
 };
 
 #endif

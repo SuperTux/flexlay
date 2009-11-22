@@ -18,7 +18,7 @@
 #define HEADER_FLEXLAY_CONSOLE_HPP
 
 #include <ClanLib/GUI/component.h>
-#include "shared_ptr.hpp"
+#include <boost/shared_ptr.hpp>
 
 class CL_Font;
 class CL_Size;
@@ -36,7 +36,7 @@ public:
   void write(const std::string& );
   void clearscr();
 private:
-  SharedPtr<ConsoleImpl> impl;
+  boost::shared_ptr<ConsoleImpl> impl;
 };
 
 #endif

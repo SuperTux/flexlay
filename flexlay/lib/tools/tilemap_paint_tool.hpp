@@ -40,7 +40,7 @@ public:
 
   Tool to_tool();
 private:
-  SharedPtr<TileMapPaintToolImpl> impl;
+  boost::shared_ptr<TileMapPaintToolImpl> impl;
 };
 
 #endif

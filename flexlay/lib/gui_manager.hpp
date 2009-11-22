@@ -17,7 +17,7 @@
 #ifndef HEADER_FLEXLAY_GUI_MANAGER_HPP
 #define HEADER_FLEXLAY_GUI_MANAGER_HPP
 
-#include "shared_ptr.hpp"
+#include <boost/shared_ptr.hpp>
 
 class GUIManagerImpl;
 
@@ -50,7 +50,7 @@ public:
   CL_SlotContainer* get_slot_container();
 
 private:
-  SharedPtr<GUIManagerImpl> impl;
+  boost::shared_ptr<GUIManagerImpl> impl;
 };
 
 #endif

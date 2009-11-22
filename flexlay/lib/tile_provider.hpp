@@ -17,7 +17,7 @@
 #ifndef HEADER_FLEXLAY_TILE_PROVIDER_HPP
 #define HEADER_FLEXLAY_TILE_PROVIDER_HPP
 
-#include "shared_ptr.hpp"
+#include <boost/shared_ptr.hpp>
 
 class TileProviderImpl;
 
@@ -33,7 +33,7 @@ public:
 
   operator bool() const { return impl.get(); }
 private:
-  SharedPtr<TileProviderImpl> impl;
+  boost::shared_ptr<TileProviderImpl> impl;
 };
 
 #endif

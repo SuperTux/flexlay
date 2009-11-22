@@ -17,9 +17,9 @@
 #ifndef HEADER_FLEXLAY_LAYER_HPP
 #define HEADER_FLEXLAY_LAYER_HPP
 
+#include <boost/shared_ptr.hpp>
 
 #include "meta_data.hpp"
-#include "shared_ptr.hpp"
 
 class EditorMapComponent;
 class LayerImpl;
@@ -35,7 +35,7 @@ class Layer
 private:
 public:
   Layer();
-  Layer(SharedPtr<LayerImpl> i);
+  Layer(boost::shared_ptr<LayerImpl> i);
   ~Layer();
 
   MetaData get_metadata() const;
@@ -56,8 +56,9 @@ public:
   /** Returns the current position of the layer */
   CL_Pointf get_pos() const;
   bool is_null() const;
+
 public:
-  SharedPtr<LayerImpl> impl;
+  boost::shared_ptr<LayerImpl> impl;
 };
 
 #endif

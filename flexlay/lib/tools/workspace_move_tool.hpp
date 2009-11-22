@@ -30,7 +30,7 @@ public:
 
   Tool to_tool();
 private:
-  SharedPtr<WorkspaceMoveToolImpl> impl;
+  boost::shared_ptr<WorkspaceMoveToolImpl> impl;
 };
 
 #endif

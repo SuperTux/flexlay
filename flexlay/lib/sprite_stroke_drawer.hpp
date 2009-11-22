@@ -37,7 +37,7 @@ public:
 
   StrokeDrawer to_drawer();
 private:
-  SharedPtr<SpriteStrokeDrawerImpl> impl;
+  boost::shared_ptr<SpriteStrokeDrawerImpl> impl;
 };
 
 #endif

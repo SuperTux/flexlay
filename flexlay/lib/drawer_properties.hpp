@@ -53,7 +53,7 @@ public:
   Brush get_brush() const;
 
 private:
-  SharedPtr<DrawerPropertiesImpl> impl;
+  boost::shared_ptr<DrawerPropertiesImpl> impl;
 };
 
 #endif

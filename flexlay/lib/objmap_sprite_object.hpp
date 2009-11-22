@@ -40,7 +40,7 @@ public:
   
   ObjMapObject to_object();
 private:
-  SharedPtr<ObjMapSpriteObjectImpl> impl;
+  boost::shared_ptr<ObjMapSpriteObjectImpl> impl;
 };
 
 #endif

@@ -57,7 +57,7 @@ public:
   GraphicContextState& get_gc_state();
 
 private:
-  SharedPtr<EditorMapComponentImpl> impl;
+  boost::shared_ptr<EditorMapComponentImpl> impl;
 };
 
 #endif

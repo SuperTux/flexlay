@@ -37,7 +37,7 @@ public:
 
   Command to_command();
 private:
-  SharedPtr<PaintCommandImpl> impl;
+  boost::shared_ptr<PaintCommandImpl> impl;
 };
 
 #endif

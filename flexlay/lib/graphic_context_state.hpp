@@ -19,7 +19,7 @@
 
 #include <ClanLib/Core/Math/point.h>
 #include <ClanLib/Core/Math/rect.h>
-#include "shared_ptr.hpp"
+#include <boost/shared_ptr.hpp>
 
 class CL_GraphicContext;
 
@@ -68,7 +68,7 @@ public:
   CL_Pointf screen2world(const CL_Point& pos);
 
 private:
-  SharedPtr<GraphicContextStateImpl> impl;
+  boost::shared_ptr<GraphicContextStateImpl> impl;
 };
 
 #endif

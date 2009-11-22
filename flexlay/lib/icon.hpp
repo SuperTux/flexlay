@@ -19,7 +19,7 @@
 
 #include <ClanLib/GUI/component.h>
 #include <ClanLib/Display/sprite.h>
-#include "shared_ptr.hpp"
+#include <boost/shared_ptr.hpp>
 
 class IconImpl;
 
@@ -43,7 +43,7 @@ private:
   Icon (const Icon&);
   Icon& operator= (const Icon&);
 
-  SharedPtr<IconImpl> impl;
+  boost::shared_ptr<IconImpl> impl;
 };
 
 #endif

@@ -17,12 +17,12 @@
 #include "layer_impl.hpp"
 #include "layer.hpp"
 
-Layer::Layer()
-  : impl(0)
+Layer::Layer() :
+  impl()
 {
 }
 
-Layer::Layer(SharedPtr<LayerImpl> i)
+Layer::Layer(boost::shared_ptr<LayerImpl> i)
   : impl(i)
 {
 }

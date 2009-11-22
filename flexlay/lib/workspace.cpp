@@ -37,12 +37,12 @@ public:
   Tools tools;
 };
 
-Workspace::Workspace(bool create)
-  : impl(0)
+Workspace::Workspace(bool create) :
+  impl()
 {
   if (create)
   {
-    impl = new WorkspaceImpl();
+    impl.reset(new WorkspaceImpl());
     current_ = *this;
     std::cout << "Workspace()" << std::endl;
   }

@@ -20,7 +20,7 @@
 #include <ClanLib/GUI/component.h>
 #include <ClanLib/Core/System/sharedptr.h>
 
-#include "shared_ptr.hpp"
+#include <boost/shared_ptr.hpp>
 
 class MinimapImpl;
 class EditorMapComponent;
@@ -41,7 +41,7 @@ public:
   void mouse_up  (const CL_InputEvent& event);
   
 private:
-  SharedPtr<MinimapImpl> impl;
+  boost::shared_ptr<MinimapImpl> impl;
 };
 
 #endif

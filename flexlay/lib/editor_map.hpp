@@ -19,6 +19,8 @@
 
 #include <ClanLib/Core/Math/rect.h>
 #include <ClanLib/Core/System/sharedptr.h>
+#include <ClanLib/Display/color.h>
+
 #include "layer.hpp"
 #include "meta_data.hpp"
 #include "command.hpp"
@@ -87,7 +89,7 @@ public:
   bool is_null() const { return !impl.get(); }
 
 private:
-  CL_SharedPtr<EditorMapImpl> impl;
+  boost::shared_ptr<EditorMapImpl> impl;
 };
 
 #endif

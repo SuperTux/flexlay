@@ -32,7 +32,7 @@ public:
 
   ObjMapObject to_object();
 private:
-  SharedPtr<ObjMapPathNodeImpl> impl;
+  boost::shared_ptr<ObjMapPathNodeImpl> impl;
 };
 
 #endif

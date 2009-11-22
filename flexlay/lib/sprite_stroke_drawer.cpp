@@ -43,8 +43,7 @@ public:
 
 SpriteStrokeDrawer::SpriteStrokeDrawer(StrokeDrawer drawer)
 {
-  // FIXME: THIS WON'T WORK WITH A REAL SMARTPTR!!!!
-  impl = dynamic_cast<SpriteStrokeDrawerImpl*>(drawer.impl.get());
+  impl = boost::dynamic_pointer_cast<SpriteStrokeDrawerImpl>(drawer.impl);
   assert(impl.get());
 }
 

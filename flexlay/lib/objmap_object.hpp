@@ -27,7 +27,7 @@ class ObjMapObject
 {
 public:
   ObjMapObject();
-  ObjMapObject(const SharedPtr<ObjMapObjectImpl>& impl_);
+  ObjMapObject(const boost::shared_ptr<ObjMapObjectImpl>& impl_);
   virtual ~ObjMapObject() {}
 
   CL_Pointf get_pos() const;
@@ -51,7 +51,7 @@ public:
   bool operator==(const ObjMapObject& obj) const;
   bool operator<(const ObjMapObject& obj) const;
 private:
-  SharedPtr<ObjMapObjectImpl> impl;
+  boost::shared_ptr<ObjMapObjectImpl> impl;
 };
 
 #endif

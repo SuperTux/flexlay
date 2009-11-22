@@ -18,7 +18,7 @@
 #define HEADER_FLEXLAY_MENUBAR_HPP
 
 #include <ClanLib/GUI/component.h>
-#include "shared_ptr.hpp"
+#include <boost/shared_ptr.hpp>
 
 class Menu;
 class MenubarImpl;
@@ -33,7 +33,7 @@ public:
 
   void add_submenu(const std::string& name, Menu* menu);
 private:
-  SharedPtr<MenubarImpl> impl;
+  boost::shared_ptr<MenubarImpl> impl;
 };
 
 #endif

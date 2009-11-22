@@ -53,7 +53,7 @@ public:
 
   bool is_null() const { return !impl.get(); }
 private:
-  CL_SharedPtr<WorkspaceImpl> impl;
+  boost::shared_ptr<WorkspaceImpl> impl;
 };
 
 #endif

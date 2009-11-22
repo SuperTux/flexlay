@@ -20,6 +20,7 @@
 #include <vector>
 #include <string>
 #include <ClanLib/Core/System/sharedptr.h>
+#include <boost/shared_ptr.hpp>
 
 class Tile;
 class TilesetImpl;
@@ -54,7 +55,7 @@ public:
   std::vector<int> get_tiles() const;
 
 private:
-  CL_SharedPtr<TilesetImpl> impl;
+  boost::shared_ptr<TilesetImpl> impl;
 };
 
 #endif

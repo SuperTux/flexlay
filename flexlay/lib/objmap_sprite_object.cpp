@@ -119,7 +119,7 @@ ObjMapSpriteObject::set_rotate(float angle)
 ObjMapObject
 ObjMapSpriteObject::to_object()
 {
-  return ObjMapObject(SharedPtr<ObjMapObjectImpl>(impl));
+  return ObjMapObject(boost::shared_ptr<ObjMapObjectImpl>(impl));
 }
 
 /* EOF */

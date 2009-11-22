@@ -17,7 +17,7 @@
 #ifndef HEADER_FLEXLAY_META_DATA_HPP
 #define HEADER_FLEXLAY_META_DATA_HPP
 
-#include "shared_ptr.hpp"
+#include <boost/shared_ptr.hpp>
 
 class MetaDataImpl;
 
@@ -27,12 +27,12 @@ class MetaData
 private:
 public:
   MetaData();
-  MetaData(SharedPtr<MetaDataImpl> impl_);
+  MetaData(boost::shared_ptr<MetaDataImpl> impl_);
   ~MetaData();
   
-  SharedPtr<MetaDataImpl> get_impl() const;
+  boost::shared_ptr<MetaDataImpl> get_impl() const;
 private:
-  SharedPtr<MetaDataImpl> impl;
+  boost::shared_ptr<MetaDataImpl> impl;
 };
 
 #endif

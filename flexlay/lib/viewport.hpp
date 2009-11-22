@@ -19,7 +19,7 @@
 
 #include <ClanLib/GUI/component.h>
 #include <ClanLib/Core/Math/rect.h>
-#include "shared_ptr.hpp"
+#include <boost/shared_ptr.hpp>
 
 class ViewportImpl;
 
@@ -34,7 +34,7 @@ public:
   void set_pos(const CL_Pointf& pos);
   CL_Pointf get_pos() const;
 private:
-  SharedPtr<ViewportImpl> impl;
+  boost::shared_ptr<ViewportImpl> impl;
 };
 
 #endif

@@ -17,7 +17,7 @@
 #ifndef HEADER_FLEXLAY_COMMAND_HPP
 #define HEADER_FLEXLAY_COMMAND_HPP
 
-#include "shared_ptr.hpp"
+#include <boost/shared_ptr.hpp>
 #include "command_impl.hpp"
 
 /** Command is an abstract base class for all data manipulating
@@ -29,7 +29,7 @@ class Command
 private:
 public:
   Command();
-  Command(const SharedPtr<CommandImpl>& impl_);
+  Command(const boost::shared_ptr<CommandImpl>& impl_);
 
   /** Execute the command */
   void execute();
@@ -44,7 +44,7 @@ public:
   std::string serialize();
 
 private:
-  SharedPtr<CommandImpl> impl;
+  boost::shared_ptr<CommandImpl> impl;
 };
 
 #endif

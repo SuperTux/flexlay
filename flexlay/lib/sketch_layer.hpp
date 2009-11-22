@@ -48,7 +48,7 @@ public:
   Layer to_layer();
 
 private:
-  SharedPtr<SketchLayerImpl> impl;  
+  boost::shared_ptr<SketchLayerImpl> impl;  
 };
 
 #endif

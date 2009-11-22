@@ -20,7 +20,7 @@
 #include <ClanLib/Display/pixel_buffer.h>
 #include "field.hpp"
 #include "meta_data.hpp"
-#include "shared_ptr.hpp"
+#include <boost/shared_ptr.hpp>
 #include "layer.hpp"
 
 class Tileset;
@@ -93,7 +93,7 @@ public:
   Layer to_layer();
 
 private:
-  SharedPtr<TilemapLayerImpl> impl;
+  boost::shared_ptr<TilemapLayerImpl> impl;
 };
 
 #endif

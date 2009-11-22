@@ -20,7 +20,7 @@ Brush::Brush()
 {
 }
 
-Brush::Brush(SharedPtr<BrushImpl> impl_)
+Brush::Brush(boost::shared_ptr<BrushImpl> impl_)
   : impl(impl_)
 {
   
@@ -29,7 +29,7 @@ Brush::Brush(SharedPtr<BrushImpl> impl_)
 Brush
 Brush::clone() const
 {
-  return Brush(impl->clone());
+  return Brush(boost::shared_ptr<BrushImpl>(impl->clone()));
 }
 
 CL_Sprite

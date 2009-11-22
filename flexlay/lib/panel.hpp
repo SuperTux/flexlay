@@ -18,7 +18,7 @@
 #define HEADER_FLEXLAY_PANEL_HPP
 
 #include <ClanLib/GUI/component.h>
-#include "shared_ptr.hpp"
+#include <boost/shared_ptr.hpp>
 
 class PanelImpl;
 
@@ -28,7 +28,7 @@ class Panel : public CL_Component
 public:
   Panel(const CL_Rect& rect, CL_Component* parent);
 private:
-  SharedPtr<PanelImpl> impl;
+  boost::shared_ptr<PanelImpl> impl;
 };
 
 #endif

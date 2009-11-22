@@ -33,7 +33,7 @@ public:
 
   Command to_command();
 private:
-  SharedPtr<ObjectDeleteCommandImpl> impl;
+  boost::shared_ptr<ObjectDeleteCommandImpl> impl;
 };
 
 #endif

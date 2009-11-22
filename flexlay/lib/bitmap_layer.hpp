@@ -57,7 +57,7 @@ public:
   ObjMapObject to_object();
 
 private:
-  SharedPtr<BitmapLayerImpl> impl;
+  boost::shared_ptr<BitmapLayerImpl> impl;
 };
 
 #endif

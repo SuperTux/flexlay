@@ -28,7 +28,7 @@ public:
 
   Brush to_brush();
 private:
-  SharedPtr<SpriteBrushImpl> impl;
+  boost::shared_ptr<SpriteBrushImpl> impl;
 };
 
 

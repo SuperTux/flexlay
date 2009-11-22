@@ -14,11 +14,12 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+#include "editor_map.hpp"
+
 #include <iostream>
 #include <ClanLib/Display/color.h>
 #include <ClanLib/Display/graphic_context.h>
 #include <ClanLib/signals.h>
-#include "editor_map.hpp"
 
 class EditorMapImpl
 {
@@ -51,12 +52,12 @@ public:
   CL_Rect bounding_rect;
 };
 
-EditorMap::EditorMap(bool create)
-  : impl(0)
+EditorMap::EditorMap(bool create) :
+  impl()
 {
   if (create)
   {
-    impl = new EditorMapImpl();
+    impl.reset(new EditorMapImpl());
     impl->background_color = CL_Color(100, 80, 100);
     impl->foreground_color = CL_Color(255, 80, 255);
     impl->modified = false;

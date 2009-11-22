@@ -36,7 +36,7 @@ private:
   Window (const Window&);
   Window& operator= (const Window&);
 
-  SharedPtr<WindowImpl> impl;
+  boost::shared_ptr<WindowImpl> impl;
 };
 
 #endif

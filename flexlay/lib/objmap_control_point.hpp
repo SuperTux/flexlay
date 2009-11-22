@@ -18,6 +18,8 @@
 #define HEADER_FLEXLAY_OBJMAP_CONTROL_POINT_HPP
 
 #include <ClanLib/Display/sprite.h>
+#include <boost/shared_ptr.hpp>
+
 #include "meta_data.hpp"
 
 class ObjMapControlPointImpl;
@@ -30,7 +32,7 @@ class ObjMapControlPoint
 {
 private:
 public:
-  ObjMapControlPoint() : impl(0) {}
+  ObjMapControlPoint() : impl() {}
   ObjMapControlPoint(CL_Sprite sprite_, CL_Pointf pos_, MetaData data_);
 
   CL_Pointf get_pos() const;
@@ -43,8 +45,9 @@ public:
   CL_Signal_v1<CL_Pointf>& sig_set_pos();
 
   bool is_null() const { return !impl.get(); }
+
 private:
-  SharedPtr<ObjMapControlPointImpl> impl;
+  boost::shared_ptr<ObjMapControlPointImpl> impl;
 };
 
 #endif

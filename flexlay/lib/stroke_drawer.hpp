@@ -17,7 +17,7 @@
 #ifndef HEADER_FLEXLAY_STROKE_DRAWER_HPP
 #define HEADER_FLEXLAY_STROKE_DRAWER_HPP
 
-#include "shared_ptr.hpp"
+#include <boost/shared_ptr.hpp>
 
 class Stroke;
 class StrokeDrawerImpl;
@@ -30,14 +30,15 @@ class StrokeDrawer
 private:
 public:
   StrokeDrawer();
-  StrokeDrawer(SharedPtr<StrokeDrawerImpl> impl);
+  StrokeDrawer(boost::shared_ptr<StrokeDrawerImpl> impl);
   
   void draw(const Stroke& stroke, CL_GraphicContext* gc);
 
   bool is_null() const { return !impl.get(); }
   StrokeDrawer clone() const;
+
 public:
-  SharedPtr<StrokeDrawerImpl> impl;
+  boost::shared_ptr<StrokeDrawerImpl> impl;
 };
 
 #endif

@@ -18,7 +18,7 @@
 #define HEADER_FLEXLAY_TILE_HPP
 
 #include <ClanLib/Display/color.h>
-#include "shared_ptr.hpp"
+#include <boost/shared_ptr.hpp>
 
 class TileImpl;
 class TileProvider;
@@ -61,7 +61,7 @@ public:
   CL_Color calc_color();
 
 private:
-  SharedPtr<TileImpl> impl;
+  boost::shared_ptr<TileImpl> impl;
 };
 
 #endif

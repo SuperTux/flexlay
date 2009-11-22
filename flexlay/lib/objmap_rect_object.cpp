@@ -225,7 +225,7 @@ ObjMapRectObjectImpl::get_bound_rect() const
 ObjMapObject
 ObjMapRectObject::to_object()
 {
-  return ObjMapObject(SharedPtr<ObjMapObjectImpl>(impl));
+  return ObjMapObject(boost::shared_ptr<ObjMapObjectImpl>(impl));
 }
 
 void

@@ -14,8 +14,9 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "object_layer.hpp"
 #include "object_add_command.hpp"
+
+#include "object_layer.hpp"
 
 class ObjectAddCommandImpl : public CommandImpl
 {

@@ -16,18 +16,20 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+#include "ruby_meta_data.hpp"
+
 #include <iostream>
 #include <ClanLib/Signals/signal_v0.h>
+
 #include "ruby_object.hpp"
 #include "meta_data_impl.hpp"
 #include "ruby_functor.hpp"
-#include "ruby_meta_data.hpp"
 
 typedef MetaDataGeneric<RubyObject> RubyMetaData;
 
 MetaData  make_metadata(VALUE obj)
 {
-  return MetaData(SharedPtr<MetaDataImpl>(new RubyMetaData(RubyObject(obj))));
+  return MetaData(boost::shared_ptr<MetaDataImpl>(new RubyMetaData(RubyObject(obj))));
 }
 
 VALUE get_ruby_object(const MetaData& data_obj)

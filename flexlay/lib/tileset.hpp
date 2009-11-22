@@ -16,8 +16,8 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef TILESET_HXX
-#define TILESET_HXX
+#ifndef HEADER_FLEXLAY_TILESET_HPP
+#define HEADER_FLEXLAY_TILESET_HPP
 
 #include <vector>
 #include <string>

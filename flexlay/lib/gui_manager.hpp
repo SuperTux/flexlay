@@ -16,8 +16,8 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef HEADER_GUI_MANAGER_HXX
-#define HEADER_GUI_MANAGER_HXX
+#ifndef HEADER_FLEXLAY_GUI_MANAGER_HPP
+#define HEADER_FLEXLAY_GUI_MANAGER_HPP
 
 #include "shared_ptr.hpp"
 

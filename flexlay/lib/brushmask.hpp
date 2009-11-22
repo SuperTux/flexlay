@@ -1,5 +1,3 @@
-//  $Id$
-// 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2004 Ingo Ruhnke <grumbel@gmx.de>
 //
@@ -16,8 +14,8 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef HEADER_BRUSHMASK_HXX
-#define HEADER_BRUSHMASK_HXX
+#ifndef HEADER_FLEXLAY_BRUSHMASK_HPP
+#define HEADER_FLEXLAY_BRUSHMASK_HPP
 
 #include <ClanLib/Display/pixel_buffer.h>
 

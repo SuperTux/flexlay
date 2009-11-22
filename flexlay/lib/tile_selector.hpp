@@ -16,8 +16,8 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef TILESELECTOR_HXX
-#define TILESELECTOR_HXX
+#ifndef HEADER_FLEXLAY_TILE_SELECTOR_HPP
+#define HEADER_FLEXLAY_TILE_SELECTOR_HPP
 
 #include <ClanLib/gui.h>
 #include "tileset.hpp"

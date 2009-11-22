@@ -16,8 +16,8 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef STRINGCONVERTER_HXX
-#define STRINGCONVERTER_HXX
+#ifndef HEADER_FLEXLAY_STRING_CONVERTER_HPP
+#define HEADER_FLEXLAY_STRING_CONVERTER_HPP
 
 #include <stdexcept>
 #include <sstream>

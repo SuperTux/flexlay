@@ -16,8 +16,8 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef HEADER_TILE_EDITOR_HXX
-#define HEADER_TILE_EDITOR_HXX
+#ifndef HEADER_FLEXLAY_TILE_EDITOR_HPP
+#define HEADER_FLEXLAY_TILE_EDITOR_HPP
 
 #include <ClanLib/GUI/component.h>
 #include <ClanLib/Signals/slot_container.h>

@@ -17,8 +17,8 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-#ifndef HEADER_TILEMAP_TOOL_HXX
-#define HEADER_TILEMAP_TOOL_HXX
+#ifndef HEADER_FLEXLAY_TOOLS_TOOL_HPP
+#define HEADER_FLEXLAY_TOOLS_TOOL_HPP
 
 class EditorMapComponent;
 class CL_InputEvent;

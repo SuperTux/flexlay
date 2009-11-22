@@ -1,5 +1,3 @@
-//  $Id$
-// 
 //  Flexlay - A Generic 2D Game Editor
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
 //
@@ -16,8 +14,8 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef HEADER_LAYER_HXX
-#define HEADER_LAYER_HXX
+#ifndef HEADER_FLEXLAY_LAYER_HPP
+#define HEADER_FLEXLAY_LAYER_HPP
 
 #include <ClanLib/Core/Math/rect.h>
 #include <ClanLib/Display/graphic_context.h>

@@ -1,5 +1,3 @@
-//  $Id$
-// 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
 //
@@ -16,8 +14,8 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef HEADER_MARKER_STROKE_DRAWER_HXX
-#define HEADER_MARKER_STROKE_DRAWER_HXX
+#ifndef HEADER_FLEXLAY_MARKER_STROKE_DRAWER_HPP
+#define HEADER_FLEXLAY_MARKER_STROKE_DRAWER_HPP
 
 #include "stroke_drawer.hpp"
 

@@ -1,6 +1,4 @@
-//  $Id$
-// 
-//  Pingus - A free Lemmings clone
+//  Flexlay - A Generic 2D Game Editor
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
 //
 //  This program is free software; you can redistribute it and/or
@@ -17,8 +15,8 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-#ifndef HEADER_SKETCH_STROKE_TOOL_HXX
-#define HEADER_SKETCH_STROKE_TOOL_HXX
+#ifndef HEADER_FLEXLAY_TOOLS_SKETCH_STROKE_TOOL_HPP
+#define HEADER_FLEXLAY_TOOLS_SKETCH_STROKE_TOOL_HPP
 
 #include "tool_impl.hpp"
 #include "stroke_drawer.hpp"

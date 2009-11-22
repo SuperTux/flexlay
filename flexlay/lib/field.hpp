@@ -16,8 +16,8 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef FIELD_HXX
-#define FIELD_HXX
+#ifndef HEADER_FLEXLAY_FIELD_HPP
+#define HEADER_FLEXLAY_FIELD_HPP
 
 #include <vector>
 #include <assert.h>

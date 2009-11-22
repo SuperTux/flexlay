@@ -16,8 +16,8 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef GLOBALS_HXX
-#define GLOBALS_HXX
+#ifndef HEADER_FLEXLAY_GLOBALS_HPP
+#define HEADER_FLEXLAY_GLOBALS_HPP
 
 #include <string>
 #include <ClanLib/Core/Resources/resource_manager.h>

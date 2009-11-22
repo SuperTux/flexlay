@@ -1,5 +1,3 @@
-//  $Id$
-// 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
 //
@@ -16,8 +14,8 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef HEADER_OBJMAP_OBJECT_IMPL_HXX
-#define HEADER_OBJMAP_OBJECT_IMPL_HXX
+#ifndef HEADER_FLEXLAY_OBJMAP_OBJECT_IMPL_HPP
+#define HEADER_FLEXLAY_OBJMAP_OBJECT_IMPL_HPP
 
 #include <ClanLib/Core/Math/point.h>
 #include <ClanLib/Core/Math/rect.h>

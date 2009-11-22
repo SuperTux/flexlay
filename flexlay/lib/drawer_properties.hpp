@@ -1,5 +1,3 @@
-//  $Id$
-// 
 //  Pingus - A free Lemmings clone
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
 //
@@ -16,8 +14,8 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef HEADER_DRAWER_PROPERTIES_HXX
-#define HEADER_DRAWER_PROPERTIES_HXX
+#ifndef HEADER_FLEXLAY_DRAWER_PROPERTIES_HPP
+#define HEADER_FLEXLAY_DRAWER_PROPERTIES_HPP
 
 #include <ClanLib/Display/color.h>
 #include "brush.hpp"

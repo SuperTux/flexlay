@@ -15,6 +15,8 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
+#include "sketch_stroke_tool.hpp"
+
 #include <iostream>
 #include <assert.h>
 #include <ClanLib/gl.h>
@@ -23,10 +25,10 @@
 #include <ClanLib/Display/mouse.h>
 #include <ClanLib/Display/display.h>
 #include <ClanLib/Display/input_context.h>
-#include "editor_map_component.hpp"
+
+#include "gui/editor_map_component.hpp"
 #include "tool.hpp"
 #include "bitmap_layer.hpp"
-#include "sketch_stroke_tool.hpp"
 #include "sprite_stroke_drawer.hpp"
 #include "marker_stroke_drawer.hpp"
 #include "stroke.hpp"

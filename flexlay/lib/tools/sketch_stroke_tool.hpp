@@ -19,6 +19,7 @@
 #define HEADER_FLEXLAY_TOOLS_SKETCH_STROKE_TOOL_HPP
 
 #include "tool_impl.hpp"
+#include "tool.hpp"
 #include "stroke_drawer.hpp"
 
 class SketchStrokeToolImpl;

@@ -15,17 +15,19 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
+#include "tilemap_select_tool.hpp"
+
 #include <ClanLib/Display/display.h>
 #include <ClanLib/Display/keys.h>
 #include <ClanLib/Display/input_event.h>
+
 #include "globals.hpp"
 #include "tilemap_layer.hpp"
 #include "tool_impl.hpp"
 #include "editor_map.hpp"
-#include "editor_map_component.hpp"
+#include "gui/editor_map_component.hpp"
 #include "tile_brush.hpp"
 #include "editor_names.hpp"
-#include "tilemap_select_tool.hpp"
 
 class TileMapSelectToolImpl : public ToolImpl
 {

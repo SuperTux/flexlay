@@ -26,8 +26,8 @@
 #include <ClanLib/Display/blend_func.h>
 #include <ClanLib/Display/graphic_context.h>
 #include <ClanLib/Display/display_window.h>
+
 #include "flexlay.hpp"
-#include "editor_map_component.hpp"
 #include "layer_impl.hpp"
 #include "bitmap_layer.hpp"
 #include "objmap_object_impl.hpp"

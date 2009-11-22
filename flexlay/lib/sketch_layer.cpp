@@ -14,6 +14,8 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+#include "sketch_layer.hpp"
+
 #include <iostream>
 #include <ClanLib/gl.h>
 #include <ClanLib/Core/core_iostream.h>
@@ -25,10 +27,10 @@
 #include <ClanLib/Display/blend_func.h>
 #include <ClanLib/Display/graphic_context.h>
 #include <ClanLib/Display/display_window.h>
+
 #include "flexlay.hpp"
-#include "editor_map_component.hpp"
+#include "gui/editor_map_component.hpp"
 #include "layer_impl.hpp"
-#include "sketch_layer.hpp"
 #include "math.hpp"
 
 SketchLayer* SketchLayer::current_ = 0;

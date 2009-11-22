@@ -15,12 +15,14 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
+#include "workspace_move_tool.hpp"
+
 #include <ClanLib/Core/Math/point.h>
 #include <ClanLib/Core/Math/rect.h>
 #include "tool_impl.hpp"
-#include "editor_map_component.hpp"
+
+#include "gui/editor_map_component.hpp"
 #include "workspace.hpp"
-#include "workspace_move_tool.hpp"
 
 class WorkspaceMoveToolImpl : public ToolImpl
 {

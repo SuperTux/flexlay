@@ -15,22 +15,24 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
+#include "objmap_select_tool.hpp"
+
 #include <algorithm>
 #include <ClanLib/Display/keys.h>
 #include <ClanLib/Display/keyboard.h>
 #include <ClanLib/Display/display.h>
-#include "editor_map_component.hpp"
+
 #include "editor_map.hpp"
-#include "editor_map_component.hpp"
-#include "gui_manager.hpp"
+#include "gui/editor_map_component.hpp"
 #include "editor_names.hpp"
-#include "popup_menu.hpp"
-#include "objmap_object.hpp"
-#include "objmap_control_point.hpp"
-#include "object_move_command.hpp"
+#include "gui/editor_map_component.hpp"
+#include "gui_manager.hpp"
 #include "object_delete_command.hpp"
+#include "object_move_command.hpp"
+#include "objmap_control_point.hpp"
+#include "objmap_object.hpp"
+#include "popup_menu.hpp"
 #include "tool_impl.hpp"
-#include "objmap_select_tool.hpp"
 
 class ObjMapSelectToolImpl : public ToolImpl
 {

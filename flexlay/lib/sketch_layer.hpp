@@ -20,6 +20,7 @@
 #include <vector>
 #include <ClanLib/Core/Math/point.h>
 #include <ClanLib/Display/color.h>
+#include <ClanLib/Display/surface.h>
 #include "layer.hpp"
 #include "stroke.hpp"
 

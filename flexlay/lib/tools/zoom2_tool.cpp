@@ -17,7 +17,8 @@
 
 #include <ClanLib/Display/keys.h>
 #include <ClanLib/Display/display.h>
-#include "editor_map_component.hpp"
+
+#include "gui/editor_map_component.hpp"
 #include "tool_impl.hpp"
 #include "zoom2_tool.hpp"
 

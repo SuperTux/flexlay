@@ -15,7 +15,8 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "object_layer.hpp"
-#include "editor_map_component.hpp"
+
+#include "gui/editor_map_component.hpp"
 #include "layer_impl.hpp"
 
 ObjectLayer ObjectLayer::current_;

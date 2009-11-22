@@ -15,14 +15,16 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
+#include "layer_move_tool.hpp"
+
 #include <ClanLib/Core/Math/point.h>
 #include <ClanLib/Display/display.h>
+
 #include "workspace.hpp"
 #include "tool_impl.hpp"
-#include "editor_map_component.hpp"
+#include "gui/editor_map_component.hpp"
 #include "editor_map.hpp"
 #include "layer.hpp"
-#include "layer_move_tool.hpp"
 
 class LayerMoveToolImpl : public ToolImpl
 {

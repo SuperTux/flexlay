@@ -21,6 +21,7 @@
 
 #include "meta_data.hpp"
 
+class CL_Rect;
 class EditorMapComponent;
 class LayerImpl;
 class CL_GraphicContext;

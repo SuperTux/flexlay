@@ -14,17 +14,19 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+#include "workspace.hpp"
+
 #include <iostream>
 #include <map>
 #include <ClanLib/Display/display.h>
 #include <ClanLib/Display/display_window.h>
 #include <ClanLib/Display/keys.h>
+
 #include "editor_map.hpp"
-#include "editor_map_component.hpp"
+#include "gui/editor_map_component.hpp"
 #include "editor_names.hpp"
 #include "tools/tool.hpp"
 #include "tileset.hpp"
-#include "workspace.hpp"
 
 Workspace Workspace::current_(false);
 

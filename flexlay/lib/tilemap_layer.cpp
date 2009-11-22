@@ -28,11 +28,9 @@
 #include "tileset.hpp"
 #include "editor_map.hpp"
 #include "tile_brush.hpp"
-#include "editor_map_component.hpp"
-#include "editor_map_component.hpp"
+#include "gui/editor_map_component.hpp"
 #include "blitter.hpp"
 #include "layer_impl.hpp"
-#include "editor_map_component.hpp"
 
 TilemapLayer TilemapLayer::current_;
 

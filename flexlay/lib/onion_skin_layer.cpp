@@ -14,6 +14,8 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+#include "onion_skin_layer.hpp"
+
 #include <iostream>
 #include <vector>
 #include <ClanLib/Core/System/error.h>
@@ -21,9 +23,9 @@
 #include <ClanLib/Display/pixel_format.h>
 #include <ClanLib/Display/surface.h>
 #include <ClanLib/Display/canvas.h>
-#include "editor_map_component.hpp"
+
+#include "gui/editor_map_component.hpp"
 #include "layer_impl.hpp"
-#include "onion_skin_layer.hpp"
 
 #define SCALE 4
 

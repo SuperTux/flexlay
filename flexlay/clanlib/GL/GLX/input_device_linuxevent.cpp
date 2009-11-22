@@ -34,6 +34,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <iostream>
+#include <stdio.h>
 #include <errno.h>
 
 #include "API/Core/System/error.h"

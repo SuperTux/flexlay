@@ -28,6 +28,7 @@
 */
 
 #include <string.h>
+#include <stdio.h>
 #include "Display/display_precomp.h"
 #include "canvas_opengl.h"
 #include "API/Core/System/error.h"

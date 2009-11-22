@@ -5,11 +5,11 @@
 #include <iostream>
 #include <ClanLib/Core/System/error.h>
 #include <ClanLib/Display/sprite.h>
-#include "netpanzer.hxx"
+#include "netpanzer.hpp"
 %}
 
 %import  "../lib/flexlay_wrap.i"
-%include "netpanzer.hxx"
+%include "netpanzer.hpp"
 
 
 // EOF //

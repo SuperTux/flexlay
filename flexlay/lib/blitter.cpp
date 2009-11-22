@@ -23,6 +23,9 @@
 void 
 blit_opaque(CL_PixelBuffer target, CL_PixelBuffer brush, int x_pos, int y_pos)
 {
+  assert(target.get_format().get_type() == pixelformat_rgba);
+  assert(target.get_format().get_depth() == 32);
+  
   target.lock();
   brush.lock();
 
@@ -59,7 +62,7 @@ blit_opaque(CL_PixelBuffer target, CL_PixelBuffer brush, int x_pos, int y_pos)
       for (int y = start_y; y < end_y; ++y)
         for (int x = start_x; x < end_x; ++x)
         {
-          int target_pos = (y + y_pos) * target_pitch + 3*(x + x_pos);
+          int target_pos = (y + y_pos) * target_pitch + 4*(x + x_pos);
           int brush_pos  = y * brush_pitch + 3*x;
 
           target_buf[target_pos + 0] = 255;

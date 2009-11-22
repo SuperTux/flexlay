@@ -37,19 +37,19 @@ void
 Layer::draw(EditorMapComponent* parent, CL_GraphicContext* gc) 
 { 
   if (impl.get())
+  {
+    if (impl->pos.x != 0 || impl->pos.y != 0)
     {
-      if (impl->pos.x != 0 || impl->pos.y != 0)
-        {
-          gc->push_modelview();
-          gc->add_translate(impl->pos.x, impl->pos.y);
-          impl->draw(parent, gc);
-          gc->pop_modelview();
-        }
-      else
-        {
-          impl->draw(parent, gc);
-        }
+      gc->push_modelview();
+      gc->add_translate(impl->pos.x, impl->pos.y);
+      impl->draw(parent, gc);
+      gc->pop_modelview();
     }
+    else
+    {
+      impl->draw(parent, gc);
+    }
+  }
 }
   
 bool
@@ -67,13 +67,13 @@ Layer::get_bounding_rect()
   CL_Rect rect;
   
   if (impl.get())
-    {
-      rect = impl->get_bounding_rect();
-      rect.left   += static_cast<int>(impl->pos.x);
-      rect.top    += static_cast<int>(impl->pos.y);
-      rect.right  += static_cast<int>(impl->pos.x);
-      rect.bottom += static_cast<int>(impl->pos.y);
-    }
+  {
+    rect = impl->get_bounding_rect();
+    rect.left   += static_cast<int>(impl->pos.x);
+    rect.top    += static_cast<int>(impl->pos.y);
+    rect.right  += static_cast<int>(impl->pos.x);
+    rect.bottom += static_cast<int>(impl->pos.y);
+  }
   
   return rect;
 }

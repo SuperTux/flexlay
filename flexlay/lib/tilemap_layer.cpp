@@ -62,8 +62,8 @@ TilemapLayer::TilemapLayer()
 
 /*TilemapLayer::TilemapLayer(const SharedPtr<TilemapLayerImpl>& i)
   : impl(i)
-{
-}*/
+  {
+  }*/
 
 TilemapLayer::TilemapLayer(Tileset tileset_, int w,  int h)
   : impl(new TilemapLayerImpl())
@@ -116,66 +116,66 @@ TilemapLayerImpl::draw(EditorMapComponent* parent, CL_GraphicContext* gc)
   int end_y   = std::min(this->field.get_height(), rect.bottom / tile_size + 1);
 
   if (foreground_color != CL_Color(255, 255, 255, 255))
-    {
-      for (int y = start_y; y < end_y; ++y)
-        for (int x = start_x; x < end_x; ++x)
-          {
-            int tile_id = this->field.at(x, y);
-            if (tile_id)
-              {
-                Tile* tile = tileset.create(tile_id);
-                if (tile) // skip transparent tile for faster draw
-                  {           
-                    CL_Sprite sprite = tile->get_sprite();
-                    sprite.set_color(foreground_color);
-                    sprite.draw(x * tile_size, y * tile_size, gc);
+  {
+    for (int y = start_y; y < end_y; ++y)
+      for (int x = start_x; x < end_x; ++x)
+      {
+        int tile_id = this->field.at(x, y);
+        if (tile_id)
+        {
+          Tile* tile = tileset.create(tile_id);
+          if (tile) // skip transparent tile for faster draw
+          {           
+            CL_Sprite sprite = tile->get_sprite();
+            sprite.set_color(foreground_color);
+            sprite.draw(x * tile_size, y * tile_size, gc);
       
-                    if (draw_attribute)
-                      CL_Display::fill_rect(CL_Rect(CL_Point(x, y), CL_Size(tileset.get_tile_size(),
-                                                                            tileset.get_tile_size())),
-                                            tile->get_attribute_color());
-                  }
-              }
+            if (draw_attribute)
+              CL_Display::fill_rect(CL_Rect(CL_Point(x, y), CL_Size(tileset.get_tile_size(),
+                                                                    tileset.get_tile_size())),
+                                    tile->get_attribute_color());
           }
-    }
+        }
+      }
+  }
   else
-    {
-      for (int y = start_y; y < end_y; ++y)
-        for (int x = start_x; x < end_x; ++x)
-          {
-            int tile_id = this->field.at(x, y);
-            if (tile_id) // skip transparent tile for faster draw
-              {
-                Tile* tile = tileset.create(this->field.at(x, y));
-                if (tile)
-                  {           
-                    tile->get_sprite().draw(x * tile_size, y * tile_size, gc);
+  {
+    for (int y = start_y; y < end_y; ++y)
+      for (int x = start_x; x < end_x; ++x)
+      {
+        int tile_id = this->field.at(x, y);
+        if (tile_id) // skip transparent tile for faster draw
+        {
+          Tile* tile = tileset.create(this->field.at(x, y));
+          if (tile)
+          {           
+            tile->get_sprite().draw(x * tile_size, y * tile_size, gc);
       
-                    if (draw_attribute)
-                      CL_Display::fill_rect(CL_Rect(CL_Point(x, y), CL_Size(tileset.get_tile_size(),
-                                                                            tileset.get_tile_size())),
-                                            tile->get_attribute_color());
-                  }
-              }
+            if (draw_attribute)
+              CL_Display::fill_rect(CL_Rect(CL_Point(x, y), CL_Size(tileset.get_tile_size(),
+                                                                    tileset.get_tile_size())),
+                                    tile->get_attribute_color());
           }
-    }
+        }
+      }
+  }
 
   if (this->draw_grid)
-    {
-      for (int y = start_y; y <= end_y; ++y)
-        CL_Display::draw_line(start_x * tile_size,
-                              y       * tile_size,
-                              end_x   * tile_size,
-                              y       * tile_size, 
-                              y % 2 ? CL_Color(150, 150, 150) : CL_Color(255, 255, 255));
+  {
+    for (int y = start_y; y <= end_y; ++y)
+      CL_Display::draw_line(start_x * tile_size,
+                            y       * tile_size,
+                            end_x   * tile_size,
+                            y       * tile_size, 
+                            y % 2 ? CL_Color(150, 150, 150) : CL_Color(255, 255, 255));
   
-      for (int x = start_x; x <= end_x; ++x)
-        CL_Display::draw_line(x       * tile_size,
-                              start_y * tile_size,
-                              x       * tile_size,
-                              end_y   * tile_size, 
-                              x % 2 ? CL_Color(150, 150, 150) : CL_Color(255, 255, 255));
-    }
+    for (int x = start_x; x <= end_x; ++x)
+      CL_Display::draw_line(x       * tile_size,
+                            start_y * tile_size,
+                            x       * tile_size,
+                            end_y   * tile_size, 
+                            x % 2 ? CL_Color(150, 150, 150) : CL_Color(255, 255, 255));
+  }
 
   CL_Display::flush();
 }
@@ -201,9 +201,9 @@ TilemapLayer::draw_tile(int id, const CL_Point& pos)
 {
   if (pos.x >= 0 && pos.x < impl->field.get_width()
       && pos.y >= 0 && pos.y < impl->field.get_height())
-    {
-      impl->field.at(pos.x, pos.y) = id;
-    }
+  {
+    impl->field.at(pos.x, pos.y) = id;
+  }
 }
 
 void
@@ -223,12 +223,12 @@ TilemapLayer::draw_tiles(Field<int>* field, const TileBrush& brush, const CL_Poi
 
   for (int y = start_y; y < end_y; ++y)
     for (int x = start_x; x < end_x; ++x)
+    {
+      if (brush.is_opaque() || brush.at(x, y) != 0)
       {
-        if (brush.is_opaque() || brush.at(x, y) != 0)
-          {
-            field->at(pos.x + x, pos.y + y) = brush.at(x, y);
-          }
+        field->at(pos.x + x, pos.y + y) = brush.at(x, y);
       }
+    }
 }
 
 void
@@ -274,32 +274,32 @@ TilemapLayer::create_pixelbuffer()
 
     // Draw a nice gradient
     for(int y = 0; y < height; ++y)
+    {
+      for (int x = 0; x < width; ++x)
       {
-        for (int x = 0; x < width; ++x)
-          {
-            buf[4*(y*width + x) + 0] = 255;
-            buf[4*(y*width + x) + 1] = 255;
-            buf[4*(y*width + x) + 2] = 255*y/height;
-            buf[4*(y*width + x) + 3] = 255*y/height;
-          }
+        buf[4*(y*width + x) + 0] = 255;
+        buf[4*(y*width + x) + 1] = 255;
+        buf[4*(y*width + x) + 2] = 255*y/height;
+        buf[4*(y*width + x) + 3] = 255*y/height;
       }
+    }
     pixelbuffer.unlock();
   }
 
   for (int y = 0; y < get_height(); ++y)
     for (int x = 0; x < get_width(); ++x)
-      {
-        Tile* tile = impl->tileset.create(impl->field.at(x, y));
+    {
+      Tile* tile = impl->tileset.create(impl->field.at(x, y));
 
-        if (tile)
-          {
-            CL_PixelBuffer buf = tile->get_pixelbuffer();
-            if (buf)
-              {
-                blit(pixelbuffer, buf, x*tile_size, y*tile_size);
-              }
-          }
+      if (tile)
+      {
+        CL_PixelBuffer buf = tile->get_pixelbuffer();
+        if (buf)
+        {
+          blit(pixelbuffer, buf, x*tile_size, y*tile_size);
+        }
       }
+    }
 
   return pixelbuffer;
 }
@@ -403,7 +403,7 @@ TilemapLayerImpl::has_bounding_rect() const
 Layer
 TilemapLayer::to_layer()
 {
-   return Layer(impl);
+  return Layer(impl);
 }
 
 void

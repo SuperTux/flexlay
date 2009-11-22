@@ -58,19 +58,19 @@
 
 class LispReaderException : public std::exception
 {
-  public:
-    LispReaderException(const char* _message, const char* _file = "", const unsigned int _line = 0)
-      : message(_message), file(_file), line(_line) { };
-    virtual ~LispReaderException() throw() { };
+public:
+  LispReaderException(const char* _message, const char* _file = "", const unsigned int _line = 0)
+    : message(_message), file(_file), line(_line) { };
+  virtual ~LispReaderException() throw() { };
 
-    const char* what() const throw() { return message; };
-    const char* what_file() const throw() { return file; };
-    const unsigned int what_line() const throw() { return line; };
+  const char* what() const throw() { return message; };
+  const char* what_file() const throw() { return file; };
+  const unsigned int what_line() const throw() { return line; };
     
-  private:
-    const char* message;
-    const char* file;
-    const unsigned int line;
+private:
+  const char* message;
+  const char* file;
+  const unsigned int line;
 };
 
 typedef struct
@@ -85,17 +85,17 @@ typedef struct
       char *buf;
       int pos;
     }
-    string;
+      string;
     struct
     {
       void *data;
       int (*next_char) (void *data);
       void (*unget_char) (char c, void *data);
     }
-    any;
+      any;
   } v;
 }
-lisp_stream_t;
+  lisp_stream_t;
 
 typedef struct _lisp_object_t lisp_object_t;
 struct _lisp_object_t
@@ -109,7 +109,7 @@ struct _lisp_object_t
       struct _lisp_object_t *car;
       struct _lisp_object_t *cdr;
     }
-    cons;
+      cons;
 
     char *string;
     int integer;
@@ -121,7 +121,7 @@ struct _lisp_object_t
       int index;
       struct _lisp_object_t *sub;
     }
-    pattern;
+      pattern;
   } v;
 };
 

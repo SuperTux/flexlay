@@ -44,48 +44,48 @@ TileBrush::auto_crop()
   for(int y = 0; y < get_height(); ++y)
     for(int x = 0; x < get_width(); ++x)
       if (at(x, y) != 0)
-        {
-          rect.top = y;
-          goto bottom;
-        }
+      {
+        rect.top = y;
+        goto bottom;
+      }
 
- bottom:
+bottom:
   for(int y = get_height()-1; y >= 0; --y)
     for(int x = 0; x < get_width(); ++x)
       if (at(x, y) != 0)
-        {
-          rect.bottom = y + 1;
-          goto left;
-        }
+      {
+        rect.bottom = y + 1;
+        goto left;
+      }
 
- left:
+left:
   for(int x = 0; x < get_width(); ++x)
     for(int y = 0; y < get_height(); ++y)
       if (at(x, y) != 0)
-        {
-          rect.left = x;
-          goto right;
-        }
+      {
+        rect.left = x;
+        goto right;
+      }
 
- right:
+right:
   for(int x = get_width() - 1; x >= 0; --x)
     for(int y = 0; y < get_height(); ++y)
       if (at(x, y) != 0)
-        {
-          rect.right = x + 1;
-          goto end;
-        }
+      {
+        rect.right = x + 1;
+        goto end;
+      }
 
- end:
+end:
   if (rect.get_width() != 0)
     resize(rect.get_width(), rect.get_height(), 
            -rect.left, -rect.top);
   else
-    {
-      (*this) = TileBrush(1, 1);
-      at(0, 0) = 0;
-      set_opaque();
-    }
+  {
+    (*this) = TileBrush(1, 1);
+    at(0, 0) = 0;
+    set_opaque();
+  }
 }
 
 void

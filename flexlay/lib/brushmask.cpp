@@ -18,7 +18,7 @@
 
 /* Most of the code below is taken from Gimp2.2:
    gimp_brush_generated module Copyright 1998 Jay Cox <jaycox@earthlink.net> 
- */
+*/
 
 #include <iostream>
 #include <math.h>
@@ -54,11 +54,11 @@ temp_buf_data (TempBuf *temp_buf)
 
 TempBuf *
 temp_buf_new (gint    width,
-	      gint    height,
-	      gint    bytes,
-	      gint    x,
-	      gint    y,
-	      guchar *col)
+              gint    height,
+              gint    bytes,
+              gint    x,
+              gint    y,
+              guchar *col)
 {
   TempBuf* buf = new TempBuf;
 
@@ -79,10 +79,10 @@ gauss (double f)
 {
   /* this aint' a real gauss function */
   if (f < -0.5)
-    {
-      f = -1.0 - f;
-      return (2.0 * f*f);
-    }
+  {
+    f = -1.0 - f;
+    return (2.0 * f*f);
+  }
 
   if (f < 0.5)
     return (1.0 - 2.0 * f*f);
@@ -143,7 +143,7 @@ gimp_brush_generated_dirty (GimpBrushGenerated *brush)
   brush->y_axis.y =        c * short_radius;
 
   switch (brush->shape)
-    {
+  {
     case BRUSH_SHAPE_CIRCLE:
       width  = static_cast<int>(ceil (sqrt (brush->x_axis.x * brush->x_axis.x +
                                             brush->y_axis.x * brush->y_axis.x)));
@@ -163,16 +163,16 @@ gimp_brush_generated_dirty (GimpBrushGenerated *brush)
 
     default:
       return;
-    }
+  }
 
   if (brush->spikes > 2)
-    {
-      /* could be optimized by respecting the angle */
-      width = height = static_cast<int>(ceil (sqrt (brush->radius * brush->radius +
-                                                    short_radius * short_radius)));
-      brush->y_axis.x =        s * brush->radius;
-      brush->y_axis.y =        c * brush->radius;
-    }
+  {
+    /* could be optimized by respecting the angle */
+    width = height = static_cast<int>(ceil (sqrt (brush->radius * brush->radius +
+                                                  short_radius * short_radius)));
+    brush->y_axis.x =        s * brush->radius;
+    brush->y_axis.y =        c * brush->radius;
+  }
 
   brush->mask = temp_buf_new (width  * 2 + 1,
                               height * 2 + 1,
@@ -194,88 +194,88 @@ gimp_brush_generated_dirty (GimpBrushGenerated *brush)
   sum = 0.0;
 
   for (x = 0; x < OVERSAMPLING; x++)
-    {
-      d = fabs ((x + 0.5) / OVERSAMPLING - 0.5);
+  {
+    d = fabs ((x + 0.5) / OVERSAMPLING - 0.5);
 
-      if (d > brush->radius)
-        buffer[x] = 0.0;
-      else
-        buffer[x] = gauss (pow (d / brush->radius, exponent));
+    if (d > brush->radius)
+      buffer[x] = 0.0;
+    else
+      buffer[x] = gauss (pow (d / brush->radius, exponent));
 
-      sum += buffer[x];
-    }
+    sum += buffer[x];
+  }
 
   for (x = 0; d < brush->radius || sum > 0.00001; d += 1.0 / OVERSAMPLING)
-    {
-      sum -= buffer[x % OVERSAMPLING];
+  {
+    sum -= buffer[x % OVERSAMPLING];
 
-      if (d > brush->radius)
-        buffer[x % OVERSAMPLING] = 0.0;
-      else
-        buffer[x % OVERSAMPLING] = gauss (pow (d / brush->radius, exponent));
+    if (d > brush->radius)
+      buffer[x % OVERSAMPLING] = 0.0;
+    else
+      buffer[x % OVERSAMPLING] = gauss (pow (d / brush->radius, exponent));
 
-      sum += buffer[x % OVERSAMPLING];
-      lookup[x++] = static_cast<int>(rint(sum * (255.0 / OVERSAMPLING)));
-    }
+    sum += buffer[x % OVERSAMPLING];
+    lookup[x++] = static_cast<int>(rint(sum * (255.0 / OVERSAMPLING)));
+  }
 
   while (x < length)
-    {
-      lookup[x++] = 0;
-    }
+  {
+    lookup[x++] = 0;
+  }
 
   cs = cos (- 2 * M_PI / brush->spikes);
   ss = sin (- 2 * M_PI / brush->spikes);
 
   /* for an even number of spikes compute one half and mirror it */
   for (y = (brush->spikes % 2 ? -height : 0); y <= height; y++)
+  {
+    for (x = -width; x <= width; x++)
     {
-      for (x = -width; x <= width; x++)
+      double tx, ty, angle;
+
+      tx = c*x - s*y;
+      ty = fabs (s*x + c*y);
+
+      if (brush->spikes > 2)
+      {
+        angle = atan2 (ty, tx);
+
+        while (angle > M_PI / brush->spikes)
         {
-          double tx, ty, angle;
+          double sx = tx, sy = ty;
 
-          tx = c*x - s*y;
-          ty = fabs (s*x + c*y);
+          tx = cs * sx - ss * sy;
+          ty = ss * sx + cs * sy;
 
-          if (brush->spikes > 2)
-            {
-              angle = atan2 (ty, tx);
-
-              while (angle > M_PI / brush->spikes)
-                {
-                  double sx = tx, sy = ty;
-
-                  tx = cs * sx - ss * sy;
-                  ty = ss * sx + cs * sy;
-
-                  angle -= 2 * M_PI / brush->spikes;
-                }
-            }
-
-          ty *= brush->aspect_ratio;
-          switch (brush->shape)
-            {
-            case BRUSH_SHAPE_CIRCLE:
-              d = sqrt (tx*tx + ty*ty);
-              break;
-            case BRUSH_SHAPE_SQUARE:
-              d = std::max (fabs (tx), fabs (ty));
-              break;
-            case BRUSH_SHAPE_DIAMOND:
-              d = fabs (tx) + fabs (ty);
-              break;
-            }
-
-          if (d < brush->radius + 1)
-            a = lookup[(gint) rint (d * OVERSAMPLING)];
-          else
-            a = 0;
-
-          centerp[ y * brush->mask->width + x] = a;
-
-          if (brush->spikes % 2 == 0)
-            centerp[-1 * y * brush->mask->width - x] = a;
+          angle -= 2 * M_PI / brush->spikes;
         }
+      }
+
+      ty *= brush->aspect_ratio;
+      switch (brush->shape)
+      {
+        case BRUSH_SHAPE_CIRCLE:
+          d = sqrt (tx*tx + ty*ty);
+          break;
+        case BRUSH_SHAPE_SQUARE:
+          d = std::max (fabs (tx), fabs (ty));
+          break;
+        case BRUSH_SHAPE_DIAMOND:
+          d = fabs (tx) + fabs (ty);
+          break;
+      }
+
+      if (d < brush->radius + 1)
+        a = lookup[(gint) rint (d * OVERSAMPLING)];
+      else
+        a = 0;
+
+      centerp[ y * brush->mask->width + x] = a;
+
+      if (brush->spikes % 2 == 0)
+        centerp[-1 * y * brush->mask->width - x] = a;
     }
+  }
 
   delete lookup;
 }
@@ -308,12 +308,12 @@ CL_PixelBuffer generate_brushmask(BrushShape shape,
   // FIXME: Leaving out the right/bottom border, since thats full of
   // random spots... more a workaround than a fix really
   for (int i = 0; i < brush.mask->height * brush.mask->width; ++i)
-    {
-      buf[i*4+0] = brush.mask->data[i];
-      buf[i*4+1] = 255;
-      buf[i*4+2] = 255;
-      buf[i*4+3] = 255;
-    }
+  {
+    buf[i*4+0] = brush.mask->data[i];
+    buf[i*4+1] = 255;
+    buf[i*4+2] = 255;
+    buf[i*4+3] = 255;
+  }
   buffer.unlock();
 
   return buffer;

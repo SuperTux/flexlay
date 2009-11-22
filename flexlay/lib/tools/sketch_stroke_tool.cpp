@@ -51,52 +51,52 @@ public:
   void draw() 
   {
     if (drawing)
-      {
-        // FIXME: This translation is a bit ugly, layer position should be handled somewhat different
-        CL_Display::push_modelview();
-        CL_Display::add_translate(BitmapLayer::current()->to_object().get_pos().x,
-                                  BitmapLayer::current()->to_object().get_pos().y);
-        stroke.draw(0);
-        CL_Display::pop_modelview();
-      }
+    {
+      // FIXME: This translation is a bit ugly, layer position should be handled somewhat different
+      CL_Display::push_modelview();
+      CL_Display::add_translate(BitmapLayer::current()->to_object().get_pos().x,
+                                BitmapLayer::current()->to_object().get_pos().y);
+      stroke.draw(0);
+      CL_Display::pop_modelview();
+    }
     else
-      {
-        EditorMapComponent* parent = EditorMapComponent::current();
-        CL_Pointf p = parent->screen2world(CL_Point(CL_Mouse::get_x() - parent->get_screen_x(), 
-                                                    CL_Mouse::get_y() - parent->get_screen_y()));
-        CL_Sprite s = DrawerProperties::current()->get_brush().get_sprite();
-        s.set_color(DrawerProperties::current()->get_color());
-        // FIXME: when using mouse 1.0, when tablet .5f
-        s.set_scale(DrawerProperties::current()->get_size()*0.5f, DrawerProperties::current()->get_size()*0.5f);
-        s.set_alpha(0.5);
-        s.draw(p.x, p.y);
-      }
+    {
+      EditorMapComponent* parent = EditorMapComponent::current();
+      CL_Pointf p = parent->screen2world(CL_Point(CL_Mouse::get_x() - parent->get_screen_x(), 
+                                                  CL_Mouse::get_y() - parent->get_screen_y()));
+      CL_Sprite s = DrawerProperties::current()->get_brush().get_sprite();
+      s.set_color(DrawerProperties::current()->get_color());
+      // FIXME: when using mouse 1.0, when tablet .5f
+      s.set_scale(DrawerProperties::current()->get_size()*0.5f, DrawerProperties::current()->get_size()*0.5f);
+      s.set_alpha(0.5);
+      s.draw(p.x, p.y);
+    }
   }
 
   void on_mouse_up  (const CL_InputEvent& event) 
   {
     if (event.id == CL_MOUSE_LEFT && drawing)
-      {
-        drawing = false;
-        EditorMapComponent* parent = EditorMapComponent::current();
-        parent->release_mouse();
+    {
+      drawing = false;
+      EditorMapComponent* parent = EditorMapComponent::current();
+      parent->release_mouse();
         
-        add_dab(event);
+      add_dab(event);
 
-        BitmapLayer::current()->add_stroke(stroke);
-      }    
+      BitmapLayer::current()->add_stroke(stroke);
+    }    
   }
 
   void on_mouse_down(const CL_InputEvent& event) {
     if (event.id == CL_MOUSE_LEFT)
-      {
-        drawing = true;
-        EditorMapComponent* parent = EditorMapComponent::current();
-        parent->capture_mouse();
-        stroke = Stroke();
-        stroke.set_drawer(drawer.clone());
-        add_dab(event);
-      }
+    {
+      drawing = true;
+      EditorMapComponent* parent = EditorMapComponent::current();
+      parent->capture_mouse();
+      stroke = Stroke();
+      stroke.set_drawer(drawer.clone());
+      add_dab(event);
+    }
   }
 
   void add_dab(const CL_InputEvent& event)
@@ -110,22 +110,22 @@ public:
 
     // FIXME: Make tablet configurable
     if (CL_Display::get_current_window()->get_ic()->get_mouse_count() >= 4)
+    {
+      CL_InputDevice tablet = CL_Display::get_current_window()->get_ic()->get_mouse(5);
+
+      if (0)
       {
-        CL_InputDevice tablet = CL_Display::get_current_window()->get_ic()->get_mouse(5);
-
-        if (0)
-          {
-            std::cout << "Mouse Count: " << CL_Display::get_current_window()->get_ic()->get_mouse_count() << std::endl;
-            std::cout << tablet.get_name() << ": ";
-            for(int i = 0; i < tablet.get_axis_count(); ++i)
-              std::cout << tablet.get_axis(i) << " ";
-            std::cout << std::endl;
-          }
-
-        dab.pressure = tablet.get_axis(2);
-        dab.tilt.x   = tablet.get_axis(3);
-        dab.tilt.y   = tablet.get_axis(4);
+        std::cout << "Mouse Count: " << CL_Display::get_current_window()->get_ic()->get_mouse_count() << std::endl;
+        std::cout << tablet.get_name() << ": ";
+        for(int i = 0; i < tablet.get_axis_count(); ++i)
+          std::cout << tablet.get_axis(i) << " ";
+        std::cout << std::endl;
       }
+
+      dab.pressure = tablet.get_axis(2);
+      dab.tilt.x   = tablet.get_axis(3);
+      dab.tilt.y   = tablet.get_axis(4);
+    }
 
     //std::cout << dab.pressure << " " << dab.tilt.x << " " << dab.tilt.y << std::endl;
 
@@ -138,9 +138,9 @@ public:
   void on_mouse_move(const CL_InputEvent& event) 
   {
     if (drawing)
-      {
-        add_dab(event);
-      }
+    {
+      add_dab(event);
+    }
   }
 };
 

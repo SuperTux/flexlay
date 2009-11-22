@@ -89,15 +89,15 @@ CL_Color
 Tile::get_color()
 {
   if (impl->has_color)
-    {
-      return impl->color;
-    }
+  {
+    return impl->color;
+  }
   else
-    {
-      impl->color = calc_color();
-      impl->has_color = true;
-      return impl->color;
-    }
+  {
+    impl->color = calc_color();
+    impl->has_color = true;
+    return impl->color;
+  }
 }
 
 CL_Color
@@ -110,65 +110,65 @@ CL_Sprite&
 Tile::get_sprite()
 {
   if (impl->sprite)
-    {
-      return impl->sprite;
-    }
+  {
+    return impl->sprite;
+  }
   else
+  {
+    if (impl->provider)
     {
-      if (impl->provider)
-        {
-          impl->sprite = impl->provider.get_sprite();
-        }
-      else
-        {
-          CL_SpriteDescription desc;
-          desc.add_frame(CL_PixelBuffer(get_pixelbuffer()));
-          impl->sprite = CL_Sprite(desc);
-        }
-
-      return impl->sprite;
+      impl->sprite = impl->provider.get_sprite();
     }
+    else
+    {
+      CL_SpriteDescription desc;
+      desc.add_frame(CL_PixelBuffer(get_pixelbuffer()));
+      impl->sprite = CL_Sprite(desc);
+    }
+
+    return impl->sprite;
+  }
 }
 
 CL_PixelBuffer
 Tile::get_pixelbuffer()
 {
   if (impl->pixelbuffer)
+  {
+    return impl->pixelbuffer;
+  }
+  else 
+  {
+    if (impl->provider)
     {
+      impl->pixelbuffer = impl->provider.get_pixelbuffer();
       return impl->pixelbuffer;
     }
-  else 
+    else
     {
-      if (impl->provider)
-        {
-          impl->pixelbuffer = impl->provider.get_pixelbuffer();
-          return impl->pixelbuffer;
-        }
-      else
-        {
-          // FIXME: Move all this into a special provider
+      // FIXME: Move all this into a special provider
 
-          try {
-            if (has_suffix(impl->filename, ".png") || has_suffix(impl->filename, ".jpg"))
-              {
-                impl->pixelbuffer = CL_PixelBuffer(CL_ProviderFactory::load(impl->filename));
-              }
-            else
-              {
-                //CL_SpriteDescription descr(impl->filename, resources);
-                //impl->pixelbuffer = CL_PixelBuffer(*(descr.get_frames().begin()->first));
-                std::cout << "Error: not a png or jpg file: " << impl->filename << std::endl;
-                assert(0);
-              }
-            return impl->pixelbuffer;
-          
-          } catch(CL_Error& err) {
-            std::cout << "CL_Error: " << err.message << std::endl;
-            std::cout << "          filename = " << impl->filename << std::endl;
-            return CL_PixelBuffer();
-          }
+      try {
+        if (has_suffix(impl->filename, ".png") || has_suffix(impl->filename, ".jpg"))
+        {
+          impl->pixelbuffer = CL_PixelBuffer(CL_ProviderFactory::load(impl->filename));
         }
+        else
+        {
+          //CL_SpriteDescription descr(impl->filename, resources);
+          //impl->pixelbuffer = CL_PixelBuffer(*(descr.get_frames().begin()->first));
+          std::cout << "Error: not a png or jpg file: " << impl->filename << std::endl;
+          assert(0);
+        }
+        return impl->pixelbuffer;
+          
+      } catch(CL_Error& err) {
+        std::cout << "CL_Error: " << err.message << std::endl;
+        std::cout << "          filename = " << impl->filename << std::endl;
+        return CL_PixelBuffer();
+      }
     }
+  }
 }
 
 CL_Color
@@ -185,39 +185,39 @@ Tile::calc_color()
   int alpha = 0;
   
   switch (buffer.get_format().get_depth())
-    {
+  {
     case 8:
+    {
+      CL_Palette palette = buffer.get_palette();
+      for(int i = 0; i < len; ++i)
       {
-        CL_Palette palette = buffer.get_palette();
-        for(int i = 0; i < len; ++i)
-          {
-            red   += palette.colors[buf[i]].get_red();
-            green += palette.colors[buf[i]].get_green();
-            blue  += palette.colors[buf[i]].get_blue();
-            alpha += 255;
-          }
+        red   += palette.colors[buf[i]].get_red();
+        green += palette.colors[buf[i]].get_green();
+        blue  += palette.colors[buf[i]].get_blue();
+        alpha += 255;
       }
-      break;
+    }
+    break;
     case 24:
       for(int i = 0; i < len; ++i)
-        {
-          red   += buf[3*i + 0];
-          green += buf[3*i + 1];
-          blue  += buf[3*i + 2];
-          alpha += 255;
-        }
+      {
+        red   += buf[3*i + 0];
+        green += buf[3*i + 1];
+        blue  += buf[3*i + 2];
+        alpha += 255;
+      }
       break;
     case 32:
       for(int i = 0; i < len; ++i)
-        {
-          int a = buf[4*i + 0];
-          alpha += a;
-          red   += buf[4*i + 3]*a/255;;
-          green += buf[4*i + 2]*a/255;;
-          blue  += buf[4*i + 1]*a/255;;
-        }
+      {
+        int a = buf[4*i + 0];
+        alpha += a;
+        red   += buf[4*i + 3]*a/255;;
+        green += buf[4*i + 2]*a/255;;
+        blue  += buf[4*i + 1]*a/255;;
+      }
       break;
-    }
+  }
 
   buffer.unlock();
 

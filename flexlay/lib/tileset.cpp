@@ -37,9 +37,9 @@ public:
   ~TilesetImpl()
   {
     for(Tiles::iterator i = tiles.begin(); i != tiles.end(); ++i)
-      {
-        delete *i;
-      }
+    {
+      delete *i;
+    }
   }
 
   TileIds tile_ids;

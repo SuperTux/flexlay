@@ -52,9 +52,9 @@ void
 ObjectDeleteCommandImpl::execute()
 {
   for(Objects::iterator i = objects.begin(); i != objects.end(); ++i)
-    {
-      object_layer.delete_object(*i);
-    }
+  {
+    object_layer.delete_object(*i);
+  }
 }
 
 void
@@ -67,9 +67,9 @@ void
 ObjectDeleteCommandImpl::undo()
 {
   for(Objects::iterator i = objects.begin(); i != objects.end(); ++i)
-    {
-      object_layer.add_object(*i);
-    }
+  {
+    object_layer.add_object(*i);
+  }
 }
 
 Command

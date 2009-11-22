@@ -40,7 +40,7 @@ public:
 };
 
 GeneratedBrush::GeneratedBrush(const Brush& brush)
-: impl(dynamic_cast<GeneratedBrushImpl*>(brush.impl.get())) // FIXME: WANT WORK WITH REAL SMARTPTR!!!
+  : impl(dynamic_cast<GeneratedBrushImpl*>(brush.impl.get())) // FIXME: WANT WORK WITH REAL SMARTPTR!!!
 {
 }
 
@@ -65,18 +65,18 @@ void
 GeneratedBrushImpl::update()
 {
   if (dirty)
-    {
-      CL_SpriteDescription desc;
-      desc.add_frame(generate_brushmask(shape,
-                                        radius, 
-                                        spikes,
-                                        hardness, 
-                                        aspect_ratio, 
-                                        angle));
-      sprite = CL_Sprite(desc);
-      sprite.set_alignment(origin_center);
-      dirty = false;
-    }
+  {
+    CL_SpriteDescription desc;
+    desc.add_frame(generate_brushmask(shape,
+                                      radius, 
+                                      spikes,
+                                      hardness, 
+                                      aspect_ratio, 
+                                      angle));
+    sprite = CL_Sprite(desc);
+    sprite.set_alignment(origin_center);
+    dirty = false;
+  }
 }
 
 void

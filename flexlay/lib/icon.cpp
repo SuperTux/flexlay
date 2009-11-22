@@ -80,30 +80,30 @@ IconImpl::draw()
   sprite.set_alignment(origin_center);
 
   if (is_enabled)
+  {
+    if (is_down)
     {
-      if (is_down)
-        {
+      Box::draw_button_down(rect);
+    }
+    else
+    {
+      if (parent->has_mouse_over())
+      {
+        if (down)
           Box::draw_button_down(rect);
-        }
+        else
+          Box::draw_button_up(rect);
+      }
       else
-        {
-          if (parent->has_mouse_over())
-            {
-              if (down)
-                Box::draw_button_down(rect);
-              else
-                Box::draw_button_up(rect);
-            }
-          else
-            Box::draw_button_neutral(rect);
-        }
-      sprite.set_alpha(1.0f);
+        Box::draw_button_neutral(rect);
     }
+    sprite.set_alpha(1.0f);
+  }
   else
-    {
-      Box::draw_button_neutral(rect);
-      sprite.set_alpha(0.3f);
-    }
+  {
+    Box::draw_button_neutral(rect);
+    sprite.set_alpha(0.3f);
+  }
   sprite.draw((rect.get_width()+1)/2, (rect.get_height()+1)/2);
   CL_Display::pop_modelview();
 }
@@ -112,25 +112,25 @@ void
 IconImpl::mouse_up  (const CL_InputEvent& event)
 {
   if (is_enabled)
-    {
-      down         = false;
-      parent->release_mouse();  
+  {
+    down         = false;
+    parent->release_mouse();  
 
-      if (parent->has_mouse_over())
-        {
-          sig_on_click();
-        }
+    if (parent->has_mouse_over())
+    {
+      sig_on_click();
     }
+  }
 }
 
 void
 IconImpl::mouse_down(const CL_InputEvent& event)
 {
   if (is_enabled)
-    {
-      down         = true;
-      parent->capture_mouse();
-    }
+  {
+    down         = true;
+    parent->capture_mouse();
+  }
 }
 
 void 

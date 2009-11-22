@@ -68,11 +68,11 @@ public:
   Field<T>& operator=(const Field<T>& copy)
   {
     if (this != &copy)
-      {
-        width  = copy.width;
-        height = copy.height;
-        vec    = copy.vec;
-      }
+    {
+      width  = copy.width;
+      height = copy.height;
+      vec    = copy.vec;
+    }
     return *this;
   }
 

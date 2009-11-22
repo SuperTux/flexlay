@@ -54,16 +54,16 @@ void
 ObjectLayerImpl::draw(EditorMapComponent* parent, CL_GraphicContext* gc)
 {
   for(ObjectLayer::Objects::iterator i = objects.begin(); i != objects.end(); ++i)
-    {
-      // FIXME: Add clipping here
-      if (parent->get_clip_rect().is_overlapped((*i).get_bound_rect()))
-        (*i).draw(gc);
-    }
+  {
+    // FIXME: Add clipping here
+    if (parent->get_clip_rect().is_overlapped((*i).get_bound_rect()))
+      (*i).draw(gc);
+  }
 
   for(ObjectLayer::ControlPoints::iterator i = control_points.begin(); i != control_points.end(); ++i)
-    {
-      (*i).draw(gc);
-    }
+  {
+    (*i).draw(gc);
+  }
 }
 
 ObjMapControlPoint
@@ -72,12 +72,12 @@ ObjectLayer::find_control_point(const CL_Pointf& click_pos)
   for(ControlPoints::reverse_iterator i = impl->control_points.rbegin(); 
       i != impl->control_points.rend(); 
       ++i)
-    {
-      CL_Rect rect = (*i).get_bound_rect();
+  {
+    CL_Rect rect = (*i).get_bound_rect();
      
-      if (rect.is_inside(CL_Point(click_pos)))
-        return *i;
-    }
+    if (rect.is_inside(CL_Point(click_pos)))
+      return *i;
+  }
   return ObjMapControlPoint(); 
 }
 
@@ -85,12 +85,12 @@ ObjMapObject
 ObjectLayer::find_object(const CL_Pointf& click_pos)
 {
   for(Objects::reverse_iterator i = impl->objects.rbegin(); i != impl->objects.rend(); ++i)
-    {
-      CL_Rectf rect = (*i).get_bound_rect();
+  {
+    CL_Rectf rect = (*i).get_bound_rect();
      
-      if (rect.is_inside(CL_Point(click_pos)))
-        return *i;
-    }
+    if (rect.is_inside(CL_Point(click_pos)))
+      return *i;
+  }
   return ObjMapObject();
 }
 
@@ -98,13 +98,13 @@ void
 ObjectLayer::delete_object(const ObjMapObject& obj)
 {
   for(Objects::iterator i = impl->objects.begin(); i != impl->objects.end(); ++i)
+  {
+    if (obj == (*i))
     {
-      if (obj == (*i))
-        {
-          impl->objects.erase(i);
-          break;
-        }
+      impl->objects.erase(i);
+      break;
     }
+  }
 }
 
 ObjectLayer::Objects
@@ -113,13 +113,13 @@ ObjectLayer::get_selection(const CL_Rectf& rect)
   Objects selection;
 
   for(Objects::iterator i = impl->objects.begin(); i != impl->objects.end(); ++i)
+  {
+    // FIXME:
+    if (rect.is_inside((*i).get_pos()))
     {
-      // FIXME:
-      if (rect.is_inside((*i).get_pos()))
-        {
-          selection.push_back(*i);
-        }
+      selection.push_back(*i);
     }
+  }
   
   return selection;
 }
@@ -159,12 +159,12 @@ ObjectLayer::get_object_index(const ObjMapObject& obj)
 {
   Objects::size_type i;
   for(i = 0; i < impl->objects.size(); ++i)
+  {
+    if (impl->objects[i] == obj)
     {
-      if (impl->objects[i] == obj)
-        {
-          return i;
-        }
+      return i;
     }
+  }
   return -1;
 }
 
@@ -179,9 +179,9 @@ ObjectLayer::raise(const ObjMapObject& obj)
 {
   int i = get_object_index(obj);
   if (i != -1 && impl->objects.size() > 1 && i < int(impl->objects.size())-1)
-    {
-      std::swap(impl->objects[i], impl->objects[i+1]);
-    }
+  {
+    std::swap(impl->objects[i], impl->objects[i+1]);
+  }
 }
 
 void
@@ -189,9 +189,9 @@ ObjectLayer::lower(const ObjMapObject& obj)
 {
   int i = get_object_index(obj);
   if (i != -1 && i > 0)
-    {
-      std::swap(impl->objects[i], impl->objects[i-1]);
-    }
+  {
+    std::swap(impl->objects[i], impl->objects[i-1]);
+  }
 }
 
 /* EOF */

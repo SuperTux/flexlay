@@ -64,9 +64,9 @@ private:
     std::cout << "SharedPtr: inc: " << (ref_count ? *ref_count : -45) << std::endl;
 #endif
     if (ref_count)
-      {
-        *ref_count += 1;
-      }
+    {
+      *ref_count += 1;
+    }
   }
   
   void dec() {
@@ -74,27 +74,27 @@ private:
     std::cout << "SharedPtr: dec: " << (ref_count ? *ref_count : -45) << std::endl;
 #endif
     if (ref_count)
-      {
-        *ref_count -= 1;
-        if (*ref_count == 0) {
+    {
+      *ref_count -= 1;
+      if (*ref_count == 0) {
 #ifdef DEBUG
-          std::cout << "SharedPtr: deleting: type: "
-                    << typeid(deleter->ptr).name()
-                    << " ptr: " << deleter->ptr
-                    << std::endl;
+        std::cout << "SharedPtr: deleting: type: "
+                  << typeid(deleter->ptr).name()
+                  << " ptr: " << deleter->ptr
+                  << std::endl;
 #endif
-          deleter->del();
+        deleter->del();
           
-          delete ref_count; ref_count = 0;
-          delete deleter;   deleter   = 0;
-        }
+        delete ref_count; ref_count = 0;
+        delete deleter;   deleter   = 0;
       }
+    }
     else
-      {
+    {
 #ifdef DEBUG
-        std::cout << "SharedPtr: null delete" << std::endl;
+      std::cout << "SharedPtr: null delete" << std::endl;
 #endif
-      }
+    }
   }
 public:
   template<class Base> friend class SharedPtr;
@@ -127,24 +127,24 @@ public:
     : deleter(0), ref_count(0)
   {
     if (copy.deleter)
-      {
-        deleter   = new SharedPtrDeleterImpl<T>(copy.deleter->ptr);
-        ref_count = copy.ref_count;
-        inc();
-      }
+    {
+      deleter   = new SharedPtrDeleterImpl<T>(copy.deleter->ptr);
+      ref_count = copy.ref_count;
+      inc();
+    }
 
 #ifdef DEBUG
     if (deleter)
-      {
-        std::cout << "SharedPtr: copy-ctor template: type: "
-                  << typeid(deleter->ptr).name()
-                  << " ptr: " << deleter->ptr
-                  << std::endl;
-      }
+    {
+      std::cout << "SharedPtr: copy-ctor template: type: "
+                << typeid(deleter->ptr).name()
+                << " ptr: " << deleter->ptr
+                << std::endl;
+    }
     else
-      {
-        std::cout << "SharedPtr: copy-ctor template null" << std::endl;
-      }
+    {
+      std::cout << "SharedPtr: copy-ctor template null" << std::endl;
+    }
 #endif
   }
 
@@ -156,30 +156,30 @@ public:
     std::cout << "SharedPtr<T>& operator= (const SharedPtr<Base>& copy)" << std::endl;
 #endif
     if (ref_count != copy.ref_count)
-      {
-        dec();
+    {
+      dec();
 
-        if (copy.deleter)
-          {
-            deleter   = new SharedPtrDeleterImpl<T>(copy.deleter->ptr);
-            ref_count = copy.ref_count;
-            inc();
-          }
+      if (copy.deleter)
+      {
+        deleter   = new SharedPtrDeleterImpl<T>(copy.deleter->ptr);
+        ref_count = copy.ref_count;
+        inc();
+      }
 
 #ifdef DEBUG
-        if (deleter)
-          {
-            std::cout << "SharedPtr: assign template: type: "
-                      << typeid(deleter->ptr).name()
-                      << " ptr: " << deleter->ptr
-                      << std::endl;
-          }
-        else
-          {
-            std::cout << "SharedPtr: assign template: null: " << std::endl;
-          }
-#endif
+      if (deleter)
+      {
+        std::cout << "SharedPtr: assign template: type: "
+                  << typeid(deleter->ptr).name()
+                  << " ptr: " << deleter->ptr
+                  << std::endl;
       }
+      else
+      {
+        std::cout << "SharedPtr: assign template: null: " << std::endl;
+      }
+#endif
+    }
 
     return *this;
   }
@@ -187,46 +187,46 @@ public:
   SharedPtr<T>& operator= (const SharedPtr<T>& copy) 
   {
     if (this != &copy)
-      {
-        dec();
+    {
+      dec();
 
-        if (copy.deleter)
-          {
-            deleter   = new SharedPtrDeleterImpl<T>(copy.deleter->ptr);
-            ref_count = copy.ref_count;
-            inc();
-          }
+      if (copy.deleter)
+      {
+        deleter   = new SharedPtrDeleterImpl<T>(copy.deleter->ptr);
+        ref_count = copy.ref_count;
+        inc();
+      }
 
 #ifdef DEBUG
-        if (deleter)
-          {
-            std::cout << "SharedPtr: assign normal: type: "
-                      << typeid(deleter->ptr).name()
-                      << " ptr: " << deleter->ptr
-                      << std::endl;
-          }
-        else
-          {
-            std::cout << "SharedPtr: assign normal null" << std::endl;
-          }
-#endif
+      if (deleter)
+      {
+        std::cout << "SharedPtr: assign normal: type: "
+                  << typeid(deleter->ptr).name()
+                  << " ptr: " << deleter->ptr
+                  << std::endl;
       }
+      else
+      {
+        std::cout << "SharedPtr: assign normal null" << std::endl;
+      }
+#endif
+    }
     else
-      {
+    {
 #ifdef DEBUG
-        if (deleter)
-          {
-            std::cout << "SharedPtr: self assin: type: "
-                      << typeid(deleter->ptr).name()
-                      << " ptr: " << deleter->ptr
-                      << std::endl;
-          }
-        else
-          {
-            std::cout << "SharedPtr: assign normal null" << std::endl;
-          }
-#endif
+      if (deleter)
+      {
+        std::cout << "SharedPtr: self assin: type: "
+                  << typeid(deleter->ptr).name()
+                  << " ptr: " << deleter->ptr
+                  << std::endl;
       }
+      else
+      {
+        std::cout << "SharedPtr: assign normal null" << std::endl;
+      }
+#endif
+    }
 
     return *this;
   }
@@ -240,7 +240,7 @@ public:
   T& operator*() { return *deleter->ptr; }
 
   T const& operator*() const { return *deleter->ptr; }
-	
+        
   //: Indirect member access operator.
   T* operator->() { return deleter->ptr; }
 

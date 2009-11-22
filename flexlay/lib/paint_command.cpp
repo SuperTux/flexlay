@@ -89,12 +89,12 @@ PaintCommandImpl::execute()
                points.front().y + brush.get_height());
 
   for(PaintCommandImpl::Points::iterator i = points.begin(); i != points.end(); ++i)
-    {
-      rect.left   = std::min(rect.left,   (*i).x);
-      rect.top    = std::min(rect.top,    (*i).y);
-      rect.right  = std::max(rect.right,  (*i).x + brush.get_width());
-      rect.bottom = std::max(rect.bottom, (*i).y + brush.get_height());
-    }
+  {
+    rect.left   = std::min(rect.left,   (*i).x);
+    rect.top    = std::min(rect.top,    (*i).y);
+    rect.right  = std::max(rect.right,  (*i).x + brush.get_width());
+    rect.bottom = std::max(rect.bottom, (*i).y + brush.get_height());
+  }
   
   pos.x = rect.left;
   pos.y = rect.top;
@@ -130,9 +130,9 @@ PaintCommandImpl::serialize()
 
   s << "_ = PaintCommand(" << &tilemap << ", " << &brush << ")" << std::endl;
   for(PaintCommandImpl::Points::iterator i = points.begin(); i != points.end(); ++i)
-    {
-      s << "_.add_paint(" << i->x << ", " << i->y << ")"  << std::endl;
-    }
+  {
+    s << "_.add_paint(" << i->x << ", " << i->y << ")"  << std::endl;
+  }
   s << "_ = None" << std::endl;
 
   return s.str();

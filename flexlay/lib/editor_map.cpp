@@ -58,15 +58,15 @@ EditorMap::EditorMap(bool create)
   : impl(0)
 {
   if (create)
-    {
-      impl = new EditorMapImpl();
-      impl->background_color = CL_Color(100, 80, 100);
-      impl->foreground_color = CL_Color(255, 80, 255);
-      impl->modified = false;
-      impl->serial = 0;
-      impl->has_bounding_rect = false;
-      impl->bounding_rect = CL_Rect(0,0,0,0);
-    }
+  {
+    impl = new EditorMapImpl();
+    impl->background_color = CL_Color(100, 80, 100);
+    impl->foreground_color = CL_Color(255, 80, 255);
+    impl->modified = false;
+    impl->serial = 0;
+    impl->has_bounding_rect = false;
+    impl->bounding_rect = CL_Rect(0,0,0,0);
+  }
 }
 
 void
@@ -90,14 +90,14 @@ EditorMap::draw_gui(CL_GraphicContext* gc)
   CL_Rect rect = get_bounding_rect();
 
   if (rect != CL_Rect(0,0,0,0))
-    {
-      gc->fill_rect(rect, impl->background_color);
-      gc->draw_rect(rect, impl->foreground_color);
-    }
+  {
+    gc->fill_rect(rect, impl->background_color);
+    gc->draw_rect(rect, impl->foreground_color);
+  }
   else
-    {
-      gc->clear(impl->background_color);
-    }
+  {
+    gc->clear(impl->background_color);
+  }
 }
 
 void
@@ -171,50 +171,50 @@ void
 EditorMap::set_bounding_rect(const CL_Rect& rect)
 {
   if (rect != CL_Rect(0,0,0,0))
-    {
-      impl->has_bounding_rect = true;
-      impl->bounding_rect     = rect;
-    }
+  {
+    impl->has_bounding_rect = true;
+    impl->bounding_rect     = rect;
+  }
   else
-    {
-      impl->has_bounding_rect = false;
-      impl->bounding_rect     = rect;
-    }
+  {
+    impl->has_bounding_rect = false;
+    impl->bounding_rect     = rect;
+  }
 }
 
 CL_Rect
 EditorMap::get_bounding_rect()
 {
   if (impl->has_bounding_rect)
-    {
-      return impl->bounding_rect;
-    }
+  {
+    return impl->bounding_rect;
+  }
   else
-    {
-      bool init = false;
-      CL_Rect rect(0,0,0,0);
+  {
+    bool init = false;
+    CL_Rect rect(0,0,0,0);
 
-      for(EditorMapImpl::Layers::iterator i = impl->layers.begin(); i != impl->layers.end(); ++i)
+    for(EditorMapImpl::Layers::iterator i = impl->layers.begin(); i != impl->layers.end(); ++i)
+    {
+      if (i->has_bounding_rect())
+      {
+        if (!init)
         {
-          if (i->has_bounding_rect())
-            {
-              if (!init)
-                {
-                  rect = i->get_bounding_rect();
-                  init = true;
-                }
-              else
-                {
-                  CL_Rect other = i->get_bounding_rect();
-                  rect.top    = std::min(rect.top,    other.top);
-                  rect.bottom = std::max(rect.bottom, other.bottom);
-                  rect.left   = std::min(rect.left,   other.left);
-                  rect.right  = std::max(rect.right,  other.right);              
-                }
-            }
+          rect = i->get_bounding_rect();
+          init = true;
         }
-      return rect;
+        else
+        {
+          CL_Rect other = i->get_bounding_rect();
+          rect.top    = std::min(rect.top,    other.top);
+          rect.bottom = std::max(rect.bottom, other.bottom);
+          rect.left   = std::min(rect.left,   other.left);
+          rect.right  = std::max(rect.right,  other.right);              
+        }
+      }
     }
+    return rect;
+  }
 }
 
 void
@@ -236,26 +236,26 @@ void
 EditorMap::undo()
 {
   if (!impl->undo_stack.empty())
-    {
-      Command command = impl->undo_stack.back();
-      impl->undo_stack.pop_back();
-      command.undo();
-      impl->redo_stack.push_back(command);
-      impl->on_change();
-    }
+  {
+    Command command = impl->undo_stack.back();
+    impl->undo_stack.pop_back();
+    command.undo();
+    impl->redo_stack.push_back(command);
+    impl->on_change();
+  }
 }
 
 void
 EditorMap::redo()
 {
   if (!impl->redo_stack.empty())
-    {
-      Command command = impl->redo_stack.back();
-      impl->redo_stack.pop_back();
-      command.redo();
-      impl->undo_stack.push_back(command);
-      impl->on_change();
-    }
+  {
+    Command command = impl->redo_stack.back();
+    impl->redo_stack.pop_back();
+    command.redo();
+    impl->undo_stack.push_back(command);
+    impl->on_change();
+  }
 }
 
 int

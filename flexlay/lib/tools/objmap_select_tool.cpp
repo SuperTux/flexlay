@@ -108,13 +108,13 @@ void
 ObjMapSelectToolImpl::draw()
 {
   for (ObjMapSelectTool::Selection::iterator i = selection.begin(); i != selection.end(); ++i)
-    {
-      //      (*i).draw();
-      CL_Display::draw_rect((*i).get_bound_rect(), CL_Color(255, 0, 0));
-    }
+  {
+    //      (*i).draw();
+    CL_Display::draw_rect((*i).get_bound_rect(), CL_Color(255, 0, 0));
+  }
 
   switch(state)
-    {
+  {
     case DRAG:
       break;
     case SELECT:
@@ -123,7 +123,7 @@ ObjMapSelectToolImpl::draw()
       break;
     default:
       break;
-    }
+  }
 }
 
 void
@@ -136,16 +136,16 @@ ObjMapSelectToolImpl::on_mouse_up(const CL_InputEvent& event)
   CL_Pointf pos = parent->screen2world(event.mouse_pos);
 
   switch (event.id)
-    {
+  {
     case CL_MOUSE_LEFT:
       switch(state)
-        {
+      {
         case DRAG:
           if (move_command)
-            {
-              Workspace::current().get_map().execute(move_command->to_command());
-              move_command = 0;
-            }
+          {
+            Workspace::current().get_map().execute(move_command->to_command());
+            move_command = 0;
+          }
           state = NONE;
           parent->release_mouse();
           break;
@@ -164,22 +164,22 @@ ObjMapSelectToolImpl::on_mouse_up(const CL_InputEvent& event)
 
         default:
           break;
-        }
+      }
       break;
 
     case CL_MOUSE_RIGHT:
-      {
-        on_right_click(event.mouse_pos.x + parent->get_screen_rect().left,
-                       event.mouse_pos.y + parent->get_screen_rect().top);
-        /*
+    {
+      on_right_click(event.mouse_pos.x + parent->get_screen_rect().left,
+                     event.mouse_pos.y + parent->get_screen_rect().top);
+      /*
         PopupMenu* menu = new PopupMenu(CL_Point(event.mouse_pos.x + parent->get_screen_rect().left,
-                                                 event.mouse_pos.y + parent->get_screen_rect().top), 
-                                        GUIManager::current()->get_component());
+        event.mouse_pos.y + parent->get_screen_rect().top), 
+        GUIManager::current()->get_component());
 
-                                        on_popup_menu_display(menu->get_menu());*/
-      }
-      break;
+        on_popup_menu_display(menu->get_menu());*/
     }
+    break;
+  }
 }
 
 void
@@ -191,74 +191,74 @@ ObjMapSelectToolImpl::on_mouse_down(const CL_InputEvent& event)
   CL_Pointf pos = parent->screen2world(event.mouse_pos);
       
   switch (event.id)
-    {
+  {
     case CL_MOUSE_LEFT:
       switch(state)
-        {
+      {
         default:
           control_point = objmap.find_control_point(pos);
 
           if (!control_point.is_null())
-            {
-              state = DRAG;
-              parent->capture_mouse();
-              offset = pos - control_point.get_pos();
-              drag_start = pos;
-            }
+          {
+            state = DRAG;
+            parent->capture_mouse();
+            offset = pos - control_point.get_pos();
+            drag_start = pos;
+          }
           else
+          {
+            ObjMapObject obj = objmap.find_object(pos);
+
+            if (!obj.is_null())
             {
-              ObjMapObject obj = objmap.find_object(pos);
+              if (CL_Keyboard::get_keycode(CL_KEY_LSHIFT))
+              {
+                ObjMapSelectTool::Selection::iterator i
+                  = std::find(selection.begin(), selection.end(), obj);
+                if (i == selection.end())
+                  selection.push_back(obj);
+                else
+                  selection.erase(i);
 
-              if (!obj.is_null())
-                {
-                  if (CL_Keyboard::get_keycode(CL_KEY_LSHIFT))
-                    {
-                      ObjMapSelectTool::Selection::iterator i
-                        = std::find(selection.begin(), selection.end(), obj);
-                      if (i == selection.end())
-                        selection.push_back(obj);
-                      else
-                        selection.erase(i);
-
-                      on_selection_change();
-                    }
-                  else
-                    {
-                      state = DRAG;
-                      parent->capture_mouse();
-                      offset = pos - obj.get_pos();
-                      drag_start = pos;
-
-                      if (std::find(selection.begin(), selection.end(), obj) == selection.end())
-                        { // Clicked object is not in the selection, so we add it
-                          selection.clear();
-                          objmap.delete_control_points();
-                          selection.push_back(obj);
-                          on_selection_change();
-                        }
-
-                      move_command = new ObjectMoveCommand(objmap);
-                      for (ObjMapSelectTool::Selection::iterator i = selection.begin();
-                           i != selection.end(); ++i)
-                        {
-                          move_command->add_obj(*i);
-                        }
-                    }
-                }
+                on_selection_change();
+              }
               else
-                {
-                  state = SELECT;
-                  selection_rect = CL_Rectf(pos.x, pos.y, pos.x, pos.y);
-                  parent->capture_mouse();
+              {
+                state = DRAG;
+                parent->capture_mouse();
+                offset = pos - obj.get_pos();
+                drag_start = pos;
+
+                if (std::find(selection.begin(), selection.end(), obj) == selection.end())
+                { // Clicked object is not in the selection, so we add it
+                  selection.clear();
+                  objmap.delete_control_points();
+                  selection.push_back(obj);
+                  on_selection_change();
                 }
+
+                move_command = new ObjectMoveCommand(objmap);
+                for (ObjMapSelectTool::Selection::iterator i = selection.begin();
+                     i != selection.end(); ++i)
+                {
+                  move_command->add_obj(*i);
+                }
+              }
             }
+            else
+            {
+              state = SELECT;
+              selection_rect = CL_Rectf(pos.x, pos.y, pos.x, pos.y);
+              parent->capture_mouse();
+            }
+          }
           break;
-        }
+      }
       break;
 
     case CL_MOUSE_RIGHT:
       break;
-    }
+  }
 }
 
 void
@@ -268,25 +268,25 @@ ObjMapSelectToolImpl::on_mouse_move(const CL_InputEvent& event)
   CL_Pointf pos = parent->screen2world(event.mouse_pos);
 
   switch(state)
-    {
+  {
     case DRAG:
       if (!control_point.is_null())
-        {
-          control_point.set_pos(pos - offset);
-        }
+      {
+        control_point.set_pos(pos - offset);
+      }
       else
-        {
-          move_command->move_by(pos - drag_start);
-          if (selection.size() == 1)
-            selection.front().update_control_points();
-        }
+      {
+        move_command->move_by(pos - drag_start);
+        if (selection.size() == 1)
+          selection.front().update_control_points();
+      }
       /*
-      for (ObjMapSelectTool::Selection::iterator i = selection.begin(); 
-           i != selection.end(); ++i)
+        for (ObjMapSelectTool::Selection::iterator i = selection.begin(); 
+        i != selection.end(); ++i)
         {
-          (*i).set_pos((*i).get_pos() + (pos - drag_start));
-          // FIXME: Move this into ObjMapObject
-          (*i).sig_move()(*i);
+        (*i).set_pos((*i).get_pos() + (pos - drag_start));
+        // FIXME: Move this into ObjMapObject
+        (*i).sig_move()(*i);
         }*/
       //drag_start = pos;
       break;
@@ -299,7 +299,7 @@ ObjMapSelectToolImpl::on_mouse_move(const CL_InputEvent& event)
     default:
       // FIXME: Add some kind of highlighting here if mouse is over an object
       break;
-    }
+  }
 }
 
 Tool
@@ -315,9 +315,9 @@ ObjMapSelectToolImpl::on_selection_change()
   objmap.delete_control_points();
 
   if (selection.size() == 1)
-    {
-      selection.front().add_control_points();
-    } 
+  {
+    selection.front().add_control_points();
+  } 
 }
 
 /* EOF */

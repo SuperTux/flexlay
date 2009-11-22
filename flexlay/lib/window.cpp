@@ -59,8 +59,8 @@ Window::Window(const CL_Rect& rect, const std::string& title, CL_Component* pare
   //Fonts::verdana11.draw(8+15, 3, title);
 
   impl->close = new Icon(CL_Rect(CL_Point(3, 3), CL_Size(18,18)), 
-                        make_sprite("../data/images/window/close.png"),
-                        "", this);
+                         make_sprite("../data/images/window/close.png"),
+                         "", this);
   impl->minimize = new Icon(CL_Rect(CL_Point(get_width()-3-18-18, 3), CL_Size(18,18)), 
                             make_sprite("../data/images/window/minimize.png"),
                             "", this);
@@ -95,8 +95,8 @@ WindowImpl::on_resize(int, int)
   maximize->set_position(parent->get_width()-3-18, 3);
   CL_Rect rect = parent->get_position();
   client_area->set_position(CL_Rect(CL_Point(4, 3+12+7), 
-                                   CL_Size(rect.get_width()-10,
-                                           rect.get_height()-28)));
+                                    CL_Size(rect.get_width()-10,
+                                            rect.get_height()-28)));
 }
 
 void
@@ -141,16 +141,16 @@ WindowImpl::do_maximize()
 {
   // FIXME: Move this to scripting language
   if (!is_maximized)
-    {
-      is_maximized = true;
-      old_position = parent->get_position();
-      parent->set_position(parent->get_parent()->get_position());
-    }
+  {
+    is_maximized = true;
+    old_position = parent->get_position();
+    parent->set_position(parent->get_parent()->get_position());
+  }
   else
-    {
-      is_maximized = false;
-      parent->set_position(old_position);
-    }
+  {
+    is_maximized = false;
+    parent->set_position(old_position);
+  }
 }
 
 CL_Component*

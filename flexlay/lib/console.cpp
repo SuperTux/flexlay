@@ -59,9 +59,9 @@ ConsoleImpl::draw()
 
   for(int y = 0; y < size.height; ++y)
     for(int x = 0; x < size.width; ++x)
-      {
-        font.draw_character(x * font_w, y * font_h, screen.at(x, y));
-      }
+    {
+      font.draw_character(x * font_w, y * font_h, screen.at(x, y));
+    }
 }
 
 Console::Console(/*const CL_Font& font,*/ const CL_Rect& rect, CL_Component* parent)
@@ -91,19 +91,19 @@ ConsoleImpl::putchar(char c)
   full_buffer += c; 
 
   if (c == '\n')
-    {
-      cursor_pos.x = 0;
-      cursor_pos.y += 1;
-    }
+  {
+    cursor_pos.x = 0;
+    cursor_pos.y += 1;
+  }
   else
-    {
-      screen.at(cursor_pos.x, cursor_pos.y) = c;
+  {
+    screen.at(cursor_pos.x, cursor_pos.y) = c;
 
-      cursor_pos.x += 1;
+    cursor_pos.x += 1;
 
-      if (cursor_pos.x >= size.width)
-        cursor_pos.x = 0;
-    }
+    if (cursor_pos.x >= size.width)
+      cursor_pos.x = 0;
+  }
 
   // Move all content one line up
   if (cursor_pos.y >= size.height)
@@ -116,10 +116,10 @@ Console::write(const std::string& str)
   std::cout << str << std::flush;
 
   for(std::string::const_iterator i = str.begin(); i != str.end(); ++i)
-    {
-      if (*i != 0)
-        impl->putchar(*i);
-    }
+  {
+    if (*i != 0)
+      impl->putchar(*i);
+  }
 }
 
 /* EOF */

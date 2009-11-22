@@ -69,13 +69,13 @@ public:
     strokes.push_back(stroke);
 
     if (canvas)
-      {
-        EditorMapComponent* parent = EditorMapComponent::current();
-        parent->get_gc_state().push(canvas->get_gc());
-        stroke.draw(canvas->get_gc());
-        parent->get_gc_state().pop(canvas->get_gc());
-        canvas->sync_surface();
-      }
+    {
+      EditorMapComponent* parent = EditorMapComponent::current();
+      parent->get_gc_state().push(canvas->get_gc());
+      stroke.draw(canvas->get_gc());
+      parent->get_gc_state().pop(canvas->get_gc());
+      canvas->sync_surface();
+    }
   }
   
   void draw(EditorMapComponent* parent, CL_GraphicContext* gc) 
@@ -85,57 +85,57 @@ public:
       return;
 
     if (canvas)
+    {
+      // Draw to canvas
+      if (last_zoom != parent->get_gc_state().get_zoom() ||
+          last_pos  != parent->get_gc_state().get_pos()  ||
+          last_rot  != parent->get_gc_state().get_rotation())
       {
-        // Draw to canvas
-        if (last_zoom != parent->get_gc_state().get_zoom() ||
-            last_pos  != parent->get_gc_state().get_pos()  ||
-            last_rot  != parent->get_gc_state().get_rotation())
-          {
-            // Rerender the image
-            last_zoom   = parent->get_gc_state().get_zoom();
-            last_pos    = parent->get_gc_state().get_pos();
-            last_rot    = parent->get_gc_state().get_rotation();
+        // Rerender the image
+        last_zoom   = parent->get_gc_state().get_zoom();
+        last_pos    = parent->get_gc_state().get_pos();
+        last_rot    = parent->get_gc_state().get_rotation();
 
-            parent->get_gc_state().push(canvas->get_gc());
-            canvas->get_gc()->clear(CL_Color(0, 0, 0, 0));
-            //canvas->get_gc()->clear(CL_Color::white);
+        parent->get_gc_state().push(canvas->get_gc());
+        canvas->get_gc()->clear(CL_Color(0, 0, 0, 0));
+        //canvas->get_gc()->clear(CL_Color::white);
 
-            CL_Rectf visible_area = parent->get_clip_rect();
+        CL_Rectf visible_area = parent->get_clip_rect();
 
-            for(Strokes::iterator i = strokes.begin(); i != strokes.end(); ++i)
-              {
-                // canvas->get_gc()->draw_rect(i->get_bounding_rect(), CL_Color(0, 255, 0));
-                // canvas->get_gc()->flush();
-
-                if (visible_area.is_overlapped(i->get_bounding_rect()))
-                  {
-                    i->draw(canvas->get_gc());
-                  }
-              }
-            parent->get_gc_state().pop(canvas->get_gc());
-
-            canvas->sync_surface();
-          }
-        
-        surface.set_blend_func(blend_one, blend_one_minus_src_alpha);
-
-        CL_Matrix4x4 matrix = CL_Display::get_modelview();
-        CL_Display::pop_modelview();
-        surface.draw();
-        CL_Display::set_modelview(matrix);
-        // FIXME: I think we need the line below, however with it it
-        //doesn't work, without it, it does, ClanLib bug or just
-        //consfusing function names?
-        //CL_Display::push_modelview();
-      }
-    else
-      { 
-        // Direct Drawing, slow
         for(Strokes::iterator i = strokes.begin(); i != strokes.end(); ++i)
+        {
+          // canvas->get_gc()->draw_rect(i->get_bounding_rect(), CL_Color(0, 255, 0));
+          // canvas->get_gc()->flush();
+
+          if (visible_area.is_overlapped(i->get_bounding_rect()))
           {
-            i->draw(0);
+            i->draw(canvas->get_gc());
           }
+        }
+        parent->get_gc_state().pop(canvas->get_gc());
+
+        canvas->sync_surface();
       }
+        
+      surface.set_blend_func(blend_one, blend_one_minus_src_alpha);
+
+      CL_Matrix4x4 matrix = CL_Display::get_modelview();
+      CL_Display::pop_modelview();
+      surface.draw();
+      CL_Display::set_modelview(matrix);
+      // FIXME: I think we need the line below, however with it it
+      //doesn't work, without it, it does, ClanLib bug or just
+      //consfusing function names?
+      //CL_Display::push_modelview();
+    }
+    else
+    { 
+      // Direct Drawing, slow
+      for(Strokes::iterator i = strokes.begin(); i != strokes.end(); ++i)
+      {
+        i->draw(0);
+      }
+    }
   }
 
   bool has_bounding_rect() const { 
@@ -159,7 +159,7 @@ SketchLayer::add_stroke(const Stroke& stroke)
 Layer
 SketchLayer::to_layer()
 {
-   return Layer(impl);
+  return Layer(impl);
 }
 
 std::vector<Stroke>

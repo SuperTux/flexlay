@@ -43,10 +43,10 @@ public:
     EditorMap parent = EditorMapComponent::current()->get_workspace().get_map();
 
     for(int i = 0; i < parent.get_layer_count(); ++i)
-      {
-        if (parent.get_layer(i).get_bounding_rect().is_inside(CL_Point(pos)))
-          layer = parent.get_layer(i);
-      }
+    {
+      if (parent.get_layer(i).get_bounding_rect().is_inside(CL_Point(pos)))
+        layer = parent.get_layer(i);
+    }
 
     return layer;
   }
@@ -54,28 +54,28 @@ public:
   void draw() 
   {
     for(int i = 0; i < EditorMapComponent::current()->get_workspace().get_map().get_layer_count(); ++i)
+    {
+      Layer layer = EditorMapComponent::current()->get_workspace().get_map().get_layer(i);
+      if (layer.has_bounding_rect())
       {
-        Layer layer = EditorMapComponent::current()->get_workspace().get_map().get_layer(i);
-        if (layer.has_bounding_rect())
-          {
-            CL_Rect rect = layer.get_bounding_rect();
-            CL_Display::draw_line(rect.left, rect.top, rect.right, rect.bottom,
-                                  CL_Color(0, 255, 255));
-            CL_Display::draw_line(rect.left, rect.bottom, rect.right, rect.top,
-                                  CL_Color(0, 255, 255));
-          }
+        CL_Rect rect = layer.get_bounding_rect();
+        CL_Display::draw_line(rect.left, rect.top, rect.right, rect.bottom,
+                              CL_Color(0, 255, 255));
+        CL_Display::draw_line(rect.left, rect.bottom, rect.right, rect.top,
+                              CL_Color(0, 255, 255));
       }
+    }
   }
 
   void on_mouse_up  (const CL_InputEvent& event) 
   {
     if (!layer.is_null())
-      {
-        scrolling = false;
-        update(event);
-        EditorMapComponent::current()->release_mouse();
-        layer = Layer();
-      }
+    {
+      scrolling = false;
+      update(event);
+      EditorMapComponent::current()->release_mouse();
+      layer = Layer();
+    }
   }
 
   void on_mouse_down(const CL_InputEvent& event)
@@ -85,33 +85,33 @@ public:
 
     layer = find_closed_layer(pos);
     if (!layer.is_null())
-      {
-        scrolling = true;
-        old_trans_offset = layer.get_pos();
-        click_pos = pos;
-        EditorMapComponent::current()->capture_mouse();
-      }
+    {
+      scrolling = true;
+      old_trans_offset = layer.get_pos();
+      click_pos = pos;
+      EditorMapComponent::current()->capture_mouse();
+    }
   }
 
   void on_mouse_move(const CL_InputEvent& event)
   {
     if (!layer.is_null())
+    {
+      if (scrolling)
       {
-        if (scrolling)
-          {
-            update(event);
-          }
-      }    
+        update(event);
+      }
+    }    
   }
 
   void update(const CL_InputEvent& event)
   {
     if (!layer.is_null())
-      {
-        EditorMapComponent* parent = EditorMapComponent::current();
-        CL_Pointf pos = parent->screen2world(event.mouse_pos);
-        layer.set_pos(old_trans_offset + (pos - click_pos));
-      }
+    {
+      EditorMapComponent* parent = EditorMapComponent::current();
+      CL_Pointf pos = parent->screen2world(event.mouse_pos);
+      layer.set_pos(old_trans_offset + (pos - click_pos));
+    }
   }
 };
 

@@ -42,18 +42,18 @@ ObjMapPathNodeImpl::draw(CL_GraphicContext* gc)
   gc->fill_rect(CL_Rect(CL_Point(pos) - CL_Point(16,16), CL_Size(32, 32)), 
                 CL_Color(200, 255, 200));
   if (next)
-    {
-      gc->draw_line(static_cast<int>(pos.x), static_cast<int>(pos.y),
-                    static_cast<int>((pos.x + next->pos.x)/2),
-                    static_cast<int>((pos.y+next->pos.y)/2),
-                    CL_Color(255, 255, 0));
+  {
+    gc->draw_line(static_cast<int>(pos.x), static_cast<int>(pos.y),
+                  static_cast<int>((pos.x + next->pos.x)/2),
+                  static_cast<int>((pos.y+next->pos.y)/2),
+                  CL_Color(255, 255, 0));
 
-      gc->draw_line(static_cast<int>((pos.x + next->pos.x)/2), 
-                    static_cast<int>((pos.y+next->pos.y)/2),
-                    static_cast<int>(next->pos.x),
-                    static_cast<int>(next->pos.y), 
-                    CL_Color(255, 0, 0));
-    }
+    gc->draw_line(static_cast<int>((pos.x + next->pos.x)/2), 
+                  static_cast<int>((pos.y+next->pos.y)/2),
+                  static_cast<int>(next->pos.x),
+                  static_cast<int>(next->pos.y), 
+                  CL_Color(255, 0, 0));
+  }
 }
 
 CL_Rectf
@@ -84,16 +84,16 @@ void
 ObjMapPathNode::connect(ObjMapPathNode next)
 {
   if (next.impl->next != impl.get()) // avoid circular link between two nodes
+  {
+    if (next.impl->prev) // ensure that each node links exactly to one prev and one next node 
     {
-      if (next.impl->prev) // ensure that each node links exactly to one prev and one next node 
-        {
-          next.impl->prev->next = 0;
-          next.impl->prev = 0;
-        }
-
-      impl->next = next.impl.get();
-      next.impl->prev = impl.get();
+      next.impl->prev->next = 0;
+      next.impl->prev = 0;
     }
+
+    impl->next = next.impl.get();
+    next.impl->prev = impl.get();
+  }
 }
 
 ObjMapObject

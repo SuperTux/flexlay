@@ -145,13 +145,13 @@ void
 BitmapLayer::add_stroke(const Stroke& stroke)
 {
   if (stroke.get_dab_count() > 0)
-    {
-      impl->strokes.push_back(stroke);
-      stroke.draw(impl->canvas->get_gc());
-      // FIXME: doesn't sync when manually manipulating the canvas
-      impl->canvas->get_gc()->flush();
-      impl->canvas->sync_surface();
-    }
+  {
+    impl->strokes.push_back(stroke);
+    stroke.draw(impl->canvas->get_gc());
+    // FIXME: doesn't sync when manually manipulating the canvas
+    impl->canvas->get_gc()->flush();
+    impl->canvas->sync_surface();
+  }
 }
 
 std::vector<Stroke>

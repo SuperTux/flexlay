@@ -41,11 +41,11 @@ Workspace::Workspace(bool create)
   : impl(0)
 {
   if (create)
-    {
-      impl = new WorkspaceImpl();
-      current_ = *this;
-      std::cout << "Workspace()" << std::endl;
-    }
+  {
+    impl = new WorkspaceImpl();
+    current_ = *this;
+    std::cout << "Workspace()" << std::endl;
+  }
 }
 
 void
@@ -83,9 +83,9 @@ Workspace::mouse_move(const CL_InputEvent& event)
 
   for(WorkspaceImpl::Tools::iterator it = impl->tools.begin();
       it != impl->tools.end(); ++it)
-    {
-      it->second.on_mouse_move(event);
-    }
+  {
+    it->second.on_mouse_move(event);
+  }
 }
 
 void
@@ -98,7 +98,7 @@ Workspace::mouse_down(const CL_InputEvent& event)
     it->second.on_mouse_down(event);
 
   switch (event.id)
-    {
+  {
     case CL_MOUSE_WHEEL_UP:
       EditorMapComponent::current()->zoom_in(event.mouse_pos);
       break;
@@ -106,7 +106,7 @@ Workspace::mouse_down(const CL_InputEvent& event)
     case CL_MOUSE_WHEEL_DOWN:
       EditorMapComponent::current()->zoom_out(event.mouse_pos);
       break;
-    }
+  }
 }
 
 void

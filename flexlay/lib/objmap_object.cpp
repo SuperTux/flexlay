@@ -39,9 +39,9 @@ void
 ObjMapObject::set_pos(const CL_Pointf& p) 
 {
   if (impl.get())
-    {
-      impl->pos = p; 
-    }
+  {
+    impl->pos = p; 
+  }
 }
 
 MetaData

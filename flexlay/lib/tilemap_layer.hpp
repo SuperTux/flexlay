@@ -53,7 +53,7 @@ public:
 
   /** @param pos position of the old map in the new resized one
       @param size height of the new map */
- void resize(const CL_Size& size, const CL_Point& point);
+  void resize(const CL_Size& size, const CL_Point& point);
 
   const std::vector<int>& get_data();
   void set_data(std::vector<int> d);

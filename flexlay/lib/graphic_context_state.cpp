@@ -141,13 +141,13 @@ GraphicContextState::zoom_to (const CL_Rectf& rect)
   
   //std::cout << "Screen: " << screen_relation << " Zoom: " << rect_relation << std::endl;
   if (rect_relation < screen_relation) // take width, ignore height
-    {
-      impl->zoom = get_width()/width; 
-    }
+  {
+    impl->zoom = get_width()/width; 
+  }
   else // take height, ignore width
-    {
-      impl->zoom = get_height()/height;
-    }
+  {
+    impl->zoom = get_height()/height;
+  }
 
   impl->offset.x = (get_width()  / (2*impl->zoom)) - center_x;
   impl->offset.y = (get_height() / (2*impl->zoom)) - center_y;

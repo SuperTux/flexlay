@@ -61,9 +61,9 @@ void
 WorkspaceMoveToolImpl::on_mouse_move(const CL_InputEvent& event)
 {
   if (scrolling)
-    {
-      update(event);
-    } 
+  {
+    update(event);
+  } 
 }
 
 void

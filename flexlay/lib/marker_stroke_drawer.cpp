@@ -38,75 +38,75 @@ public:
                                                             DrawerProperties::current()->get_spacing());
 
     if (dabs.size() >= 2)
-      {
-        std::vector<CL_Pointf> normals;
+    {
+      std::vector<CL_Pointf> normals;
         
-        if (stroke.get_dab_count() == 2)
-          {
-            normals.push_back(CL_Pointf(1.0f, 1.0f));
-            normals.push_back(CL_Pointf(1.0f, 1.0f));
-          }
-        else if (stroke.get_dab_count() >= 3)
-          {
-            for(Stroke::Dabs::size_type i = 0; i < dabs.size()-1; ++i)
-              {
-                CL_Pointf normal((dabs[i].pos.y - dabs[i+1].pos.y),
-                                 -(dabs[i].pos.x - dabs[i+1].pos.x));
-
-                float length = sqrt(normal.x * normal.x + normal.y * normal.y);
-
-                normal.x /= length;
-                normal.y /= length;
-          
-                normals.push_back(normal);
-              }
-      
-            normals.push_back(CL_Pointf(1.0f, 1.0f));
-          }
-
-        float len  = DrawerProperties::current()->get_size() * 8.0f;
-        float len2 = DrawerProperties::current()->get_size() * 16.0f;
-            
-        glEnable(GL_BLEND);
-        glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
-
-        glBegin(GL_QUAD_STRIP);
-        for(unsigned int j = 0; j < dabs.size()-2; ++j)
-          {
-            glColor4ub(color.get_red(), color.get_green(), color.get_blue(), color.get_alpha());
-            glVertex2f(dabs[j].pos.x + normals[j].x * len,
-                       dabs[j].pos.y + normals[j].y * len);
-
-            glColor4ub(color.get_red(), color.get_green(), color.get_blue(), 0);
-            glVertex2f(dabs[j].pos.x + normals[j].x * len2,
-                       dabs[j].pos.y + normals[j].y * len2);
-          }
-        glEnd();
-
-        glBegin(GL_QUAD_STRIP);
-        for(unsigned int j = 0; j < dabs.size()-2; ++j)
-          {
-            glColor4ub(color.get_red(), color.get_green(), color.get_blue(), 0);
-            glVertex2f(dabs[j].pos.x - normals[j].x * len2,
-                       dabs[j].pos.y - normals[j].y * len2);
-
-            glColor4ub(color.get_red(), color.get_green(), color.get_blue(), color.get_alpha());
-            glVertex2f(dabs[j].pos.x - normals[j].x * len,
-                       dabs[j].pos.y - normals[j].y * len);
-          }
-        glEnd();
-
-        glBegin(GL_QUAD_STRIP);
-        glColor4ub(color.get_red(), color.get_green(), color.get_blue(), color.get_alpha());
-        for(unsigned int j = 0; j < dabs.size()-2; ++j)
-          {
-            glVertex2f(dabs[j].pos.x + normals[j].x * len,
-                       dabs[j].pos.y + normals[j].y * len);
-            glVertex2f(dabs[j].pos.x - normals[j].x * len,
-                       dabs[j].pos.y - normals[j].y * len);
-          }
-        glEnd();
+      if (stroke.get_dab_count() == 2)
+      {
+        normals.push_back(CL_Pointf(1.0f, 1.0f));
+        normals.push_back(CL_Pointf(1.0f, 1.0f));
       }
+      else if (stroke.get_dab_count() >= 3)
+      {
+        for(Stroke::Dabs::size_type i = 0; i < dabs.size()-1; ++i)
+        {
+          CL_Pointf normal((dabs[i].pos.y - dabs[i+1].pos.y),
+                           -(dabs[i].pos.x - dabs[i+1].pos.x));
+
+          float length = sqrt(normal.x * normal.x + normal.y * normal.y);
+
+          normal.x /= length;
+          normal.y /= length;
+          
+          normals.push_back(normal);
+        }
+      
+        normals.push_back(CL_Pointf(1.0f, 1.0f));
+      }
+
+      float len  = DrawerProperties::current()->get_size() * 8.0f;
+      float len2 = DrawerProperties::current()->get_size() * 16.0f;
+            
+      glEnable(GL_BLEND);
+      glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+
+      glBegin(GL_QUAD_STRIP);
+      for(unsigned int j = 0; j < dabs.size()-2; ++j)
+      {
+        glColor4ub(color.get_red(), color.get_green(), color.get_blue(), color.get_alpha());
+        glVertex2f(dabs[j].pos.x + normals[j].x * len,
+                   dabs[j].pos.y + normals[j].y * len);
+
+        glColor4ub(color.get_red(), color.get_green(), color.get_blue(), 0);
+        glVertex2f(dabs[j].pos.x + normals[j].x * len2,
+                   dabs[j].pos.y + normals[j].y * len2);
+      }
+      glEnd();
+
+      glBegin(GL_QUAD_STRIP);
+      for(unsigned int j = 0; j < dabs.size()-2; ++j)
+      {
+        glColor4ub(color.get_red(), color.get_green(), color.get_blue(), 0);
+        glVertex2f(dabs[j].pos.x - normals[j].x * len2,
+                   dabs[j].pos.y - normals[j].y * len2);
+
+        glColor4ub(color.get_red(), color.get_green(), color.get_blue(), color.get_alpha());
+        glVertex2f(dabs[j].pos.x - normals[j].x * len,
+                   dabs[j].pos.y - normals[j].y * len);
+      }
+      glEnd();
+
+      glBegin(GL_QUAD_STRIP);
+      glColor4ub(color.get_red(), color.get_green(), color.get_blue(), color.get_alpha());
+      for(unsigned int j = 0; j < dabs.size()-2; ++j)
+      {
+        glVertex2f(dabs[j].pos.x + normals[j].x * len,
+                   dabs[j].pos.y + normals[j].y * len);
+        glVertex2f(dabs[j].pos.x - normals[j].x * len,
+                   dabs[j].pos.y - normals[j].y * len);
+      }
+      glEnd();
+    }
   }
 
   StrokeDrawerImpl* clone() const 

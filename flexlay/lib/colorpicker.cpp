@@ -61,68 +61,68 @@ public:
     CL_Color new_color; 
 
     if (event.mouse_pos.y >= get_height() || event.mouse_pos.y < 0)
+    {
+      new_color = colors[0];
+    }
+    else
+    {
+      float factor  = (float(event.mouse_pos.y) / get_height()) * (colors.size()-1);
+      int   prevcol = int(factor);
+      int   nextcol = prevcol+1;
+
+      float val  = factor - prevcol;
+      float ival = 1.0f - val;
+
+
+      if (val >= 0 && val < 1.0f)
       {
+        new_color = CL_Color(int(val * colors[nextcol].get_red()   + ival * colors[prevcol].get_red()),
+                             int(val * colors[nextcol].get_green() + ival * colors[prevcol].get_green()),
+                             int(val * colors[nextcol].get_blue()  + ival * colors[prevcol].get_blue()),
+                             int(val * colors[nextcol].get_alpha() + ival * colors[prevcol].get_alpha()));
+      }
+      else
+      {
+        std::cout << "Out of range" << std::endl;
         new_color = colors[0];
       }
-    else
-      {
-        float factor  = (float(event.mouse_pos.y) / get_height()) * (colors.size()-1);
-        int   prevcol = int(factor);
-        int   nextcol = prevcol+1;
-
-        float val  = factor - prevcol;
-        float ival = 1.0f - val;
-
-
-        if (val >= 0 && val < 1.0f)
-          {
-            new_color = CL_Color(int(val * colors[nextcol].get_red()   + ival * colors[prevcol].get_red()),
-                                 int(val * colors[nextcol].get_green() + ival * colors[prevcol].get_green()),
-                                 int(val * colors[nextcol].get_blue()  + ival * colors[prevcol].get_blue()),
-                                 int(val * colors[nextcol].get_alpha() + ival * colors[prevcol].get_alpha()));
-          }
-        else
-          {
-            std::cout << "Out of range" << std::endl;
-            new_color = colors[0];
-          }
-      }
+    }
     on_color_change(new_color);
 
     /*
-    std::cout << new_color.get_red() << ", "
-              << new_color.get_green() << ", "
-              << new_color.get_blue() << ", "
-              << new_color.get_alpha()
-              << std::endl;*/
+      std::cout << new_color.get_red() << ", "
+      << new_color.get_green() << ", "
+      << new_color.get_blue() << ", "
+      << new_color.get_alpha()
+      << std::endl;*/
   }
   
   void on_mouse_up(const CL_InputEvent& event)
   {
     if (event.id == CL_MOUSE_LEFT)
-      {
-        pressed = false;
-        release_mouse();
-        update_pointer(event);
-      }
+    {
+      pressed = false;
+      release_mouse();
+      update_pointer(event);
+    }
   }
 
   void on_mouse_down(const CL_InputEvent& event)
   {
     if (event.id == CL_MOUSE_LEFT)
-      {
-        pressed = true;
-        capture_mouse();
-        update_pointer(event);
-      }  
+    {
+      pressed = true;
+      capture_mouse();
+      update_pointer(event);
+    }  
   }
   
   void on_mouse_move(const CL_InputEvent& event)
   {
     if (pressed)
-      {
-        update_pointer(event);
-      }
+    {
+      update_pointer(event);
+    }
   }
 
   void draw()
@@ -133,14 +133,14 @@ public:
     int psize = get_height()/6;
     
     for(Colors::size_type i = 0; i < colors.size()-1; ++i)
-      {
-        CL_Display::fill_rect(CL_Rect(CL_Point(0, i*psize),
-                                      CL_Size(get_width(), psize)),
-                              CL_Gradient(colors[i],
-                                          colors[i],
-                                          colors[i+1],
-                                          colors[i+1]));
-      }
+    {
+      CL_Display::fill_rect(CL_Rect(CL_Point(0, i*psize),
+                                    CL_Size(get_width(), psize)),
+                            CL_Gradient(colors[i],
+                                        colors[i],
+                                        colors[i+1],
+                                        colors[i+1]));
+    }
 
     CL_Display::pop_modelview();    
   }
@@ -196,29 +196,29 @@ public:
   void on_mouse_up(const CL_InputEvent& event)
   {
     if (event.id == CL_MOUSE_LEFT)
-      {
-        pressed = false;
-        release_mouse();
-        update_pointer(event);
-      }
+    {
+      pressed = false;
+      release_mouse();
+      update_pointer(event);
+    }
   }
 
   void on_mouse_down(const CL_InputEvent& event)
   {
     if (event.id == CL_MOUSE_LEFT)
-      {
-        pressed = true;
-        capture_mouse();
-        update_pointer(event);
-      }
+    {
+      pressed = true;
+      capture_mouse();
+      update_pointer(event);
+    }
   }
 
   void on_mouse_move(const CL_InputEvent& event)
   {
     if (pressed)
-      {
-        update_pointer(event);    
-      }
+    {
+      update_pointer(event);    
+    }
   }
 };
 
@@ -285,11 +285,11 @@ public:
                        color.get_alpha());
     on_color_change(new_color);
     /*
-    std::cout << new_color.get_red() << ", "
-              << new_color.get_green() << ", "
-              << new_color.get_blue() << ", "
-              << new_color.get_alpha()
-              << std::endl;
+      std::cout << new_color.get_red() << ", "
+      << new_color.get_green() << ", "
+      << new_color.get_blue() << ", "
+      << new_color.get_alpha()
+      << std::endl;
     */
   }
 
@@ -304,29 +304,29 @@ public:
   void on_mouse_up(const CL_InputEvent& event)
   {
     if (event.id == CL_MOUSE_LEFT)
-      {
-        pressed = false;
-        release_mouse();
-        update_pointer(event);
-      }    
+    {
+      pressed = false;
+      release_mouse();
+      update_pointer(event);
+    }    
   }
 
   void on_mouse_down(const CL_InputEvent& event)
   {
     if (event.id == CL_MOUSE_LEFT)
-      {
-        pressed = true;
-        capture_mouse();
-        update_pointer(event);
-      }
+    {
+      pressed = true;
+      capture_mouse();
+      update_pointer(event);
+    }
   }
 
   void on_mouse_move(const CL_InputEvent& event)
   {
     if (pressed)
-      {
-        update_pointer(event);
-      }
+    {
+      update_pointer(event);
+    }
   }
 };
 

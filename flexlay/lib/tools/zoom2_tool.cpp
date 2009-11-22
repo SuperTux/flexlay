@@ -69,20 +69,20 @@ void
 Zoom2ToolImpl::on_mouse_move(const CL_InputEvent& event)
 {
   if (active)
-    {
-      GraphicContextState& gc = EditorMapComponent::current()->get_gc_state();
+  {
+    GraphicContextState& gc = EditorMapComponent::current()->get_gc_state();
 
-      CL_Point zoom_pos(gc.get_width()/2,
-                        gc.get_height()/2);
+    CL_Point zoom_pos(gc.get_width()/2,
+                      gc.get_height()/2);
       
-      float factor = (event.mouse_pos.y - click_pos.y) / 20.0f;
-      if (factor > 0)
-        gc.set_zoom(zoom_pos, old_zoom * pow(1.25f, factor));
-      else if (factor < 0)
-        gc.set_zoom(zoom_pos, old_zoom / pow(1.25f, -factor));
-      else
-        gc.set_zoom(zoom_pos, old_zoom);
-    }
+    float factor = (event.mouse_pos.y - click_pos.y) / 20.0f;
+    if (factor > 0)
+      gc.set_zoom(zoom_pos, old_zoom * pow(1.25f, factor));
+    else if (factor < 0)
+      gc.set_zoom(zoom_pos, old_zoom / pow(1.25f, -factor));
+    else
+      gc.set_zoom(zoom_pos, old_zoom);
+  }
 }
 
 Tool

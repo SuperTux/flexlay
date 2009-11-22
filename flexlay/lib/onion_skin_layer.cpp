@@ -67,22 +67,22 @@ OnionSkinLayer::OnionSkinLayer(int width, int height)
   impl->surface2 = CL_Surface(CL_PixelBuffer(width/SCALE, height/SCALE, width*4/SCALE, CL_PixelFormat::rgba8888));
 
   try
-    {
-      impl->canvas = new CL_Canvas(impl->surface);
-      impl->canvas->get_gc()->clear(CL_Color(0, 0, 0, 0));
-      impl->canvas->get_gc()->flush();
-      impl->canvas->sync_surface();
+  {
+    impl->canvas = new CL_Canvas(impl->surface);
+    impl->canvas->get_gc()->clear(CL_Color(0, 0, 0, 0));
+    impl->canvas->get_gc()->flush();
+    impl->canvas->sync_surface();
 
-      impl->canvas2 = new CL_Canvas(impl->surface2);
-      impl->canvas2->get_gc()->clear(CL_Color(0, 0, 0, 0));
-      impl->canvas2->get_gc()->flush();
-      impl->canvas2->sync_surface();
-    }
+    impl->canvas2 = new CL_Canvas(impl->surface2);
+    impl->canvas2->get_gc()->clear(CL_Color(0, 0, 0, 0));
+    impl->canvas2->get_gc()->flush();
+    impl->canvas2->sync_surface();
+  }
   catch(CL_Error& err) 
-    {
-      std::cout << "CL_Error: " << err.message << std::endl;
-      throw err;
-    }
+  {
+    std::cout << "CL_Error: " << err.message << std::endl;
+    throw err;
+  }
 }
 
 void
@@ -104,21 +104,21 @@ OnionSkinLayer::update()
 {
   impl->canvas->get_gc()->clear(CL_Color(0, 0, 0, 0));
   for (std::vector<EditorMap>::size_type i = 0; i < impl->editormaps.size(); ++i)
-    {
-      impl->canvas2->get_gc()->clear(CL_Color(0, 0, 0, 0));
-      impl->canvas2->get_gc()->push_modelview();
-      impl->canvas2->get_gc()->add_scale(1.0f/SCALE, 1.0f/SCALE);
+  {
+    impl->canvas2->get_gc()->clear(CL_Color(0, 0, 0, 0));
+    impl->canvas2->get_gc()->push_modelview();
+    impl->canvas2->get_gc()->add_scale(1.0f/SCALE, 1.0f/SCALE);
 
-      impl->editormaps[i].draw(EditorMapComponent::current(), impl->canvas2->get_gc());
+    impl->editormaps[i].draw(EditorMapComponent::current(), impl->canvas2->get_gc());
 
-      impl->canvas2->get_gc()->pop_modelview();
+    impl->canvas2->get_gc()->pop_modelview();
 
-      impl->canvas2->sync_surface();
+    impl->canvas2->sync_surface();
 
-      impl->surface2.set_color(impl->color[i]);
-      impl->surface2.draw(0, 0, impl->canvas->get_gc());
-      impl->canvas->sync_surface();
-    }
+    impl->surface2.set_color(impl->color[i]);
+    impl->surface2.draw(0, 0, impl->canvas->get_gc());
+    impl->canvas->sync_surface();
+  }
 }
 
 Layer

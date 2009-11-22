@@ -106,20 +106,20 @@ void
 EditorMapComponentImpl::on_key_down(const CL_InputEvent& event)
 {
   if (event.id >= 0 && event.id < 256)
-    { 
-      CL_Rect rect = parent->get_position();
-      key_bindings[event.id](CL_Mouse::get_x() - rect.left,
-                             CL_Mouse::get_y() - rect.top);
-    }
+  { 
+    CL_Rect rect = parent->get_position();
+    key_bindings[event.id](CL_Mouse::get_x() - rect.left,
+                           CL_Mouse::get_y() - rect.top);
+  }
 
   if (event.repeat_count == 0)
-    {
-      CL_Rect rect = parent->get_position();
-      CL_InputEvent ev2 = event;
-      ev2.mouse_pos = CL_Point(CL_Mouse::get_x() - rect.left,
-                               CL_Mouse::get_y() - rect.top);
-      workspace.key_down(ev2);
-    }
+  {
+    CL_Rect rect = parent->get_position();
+    CL_InputEvent ev2 = event;
+    ev2.mouse_pos = CL_Point(CL_Mouse::get_x() - rect.left,
+                             CL_Mouse::get_y() - rect.top);
+    workspace.key_down(ev2);
+  }
 }
 
 void
@@ -254,14 +254,14 @@ EditorMapComponent::sig_on_key(const std::string& str)
   //std::cout << str << " => " << id << std::endl;
 
   if (id > 0 && id < 256)
-    {
-      return impl->key_bindings[id];
-    }
+  {
+    return impl->key_bindings[id];
+  }
   else
-    {
-      std::cout << "EditorMapComponent::sig_on_key: invalid key id: " << id << std::endl;
-      return impl->key_bindings[0];
-    }
+  {
+    std::cout << "EditorMapComponent::sig_on_key: invalid key id: " << id << std::endl;
+    return impl->key_bindings[0];
+  }
 }
 
 GraphicContextState&

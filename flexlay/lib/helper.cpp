@@ -150,12 +150,12 @@ scale_pixelbuffer(CL_PixelBuffer buffer)
   
   for(int y = 0; y < height; ++y)
     for(int x = 0; x < width; ++x)
-      {
-        target_buf[target_pitch*y + 4*x + 0] = buffer_buf[buffer_pitch * y*2 + 4*x*2 + 0];
-        target_buf[target_pitch*y + 4*x + 1] = buffer_buf[buffer_pitch * y*2 + 4*x*2 + 1];
-        target_buf[target_pitch*y + 4*x + 2] = buffer_buf[buffer_pitch * y*2 + 4*x*2 + 2];
-        target_buf[target_pitch*y + 4*x + 3] = buffer_buf[buffer_pitch * y*2 + 4*x*2 + 3];
-      }
+    {
+      target_buf[target_pitch*y + 4*x + 0] = buffer_buf[buffer_pitch * y*2 + 4*x*2 + 0];
+      target_buf[target_pitch*y + 4*x + 1] = buffer_buf[buffer_pitch * y*2 + 4*x*2 + 1];
+      target_buf[target_pitch*y + 4*x + 2] = buffer_buf[buffer_pitch * y*2 + 4*x*2 + 2];
+      target_buf[target_pitch*y + 4*x + 3] = buffer_buf[buffer_pitch * y*2 + 4*x*2 + 3];
+    }
 
   buffer.unlock();
   target.unlock();

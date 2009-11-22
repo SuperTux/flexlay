@@ -45,10 +45,10 @@ ObjectAddCommand::~ObjectAddCommand()
 }
 
 /*int
-ObjectAddCommand::get_handle() const
-{ 
+  ObjectAddCommand::get_handle() const
+  { 
   return impl->obj->get_handle(); 
-}*/
+  }*/
 
 void
 ObjectAddCommand::add_object(const ObjMapObject& obj)

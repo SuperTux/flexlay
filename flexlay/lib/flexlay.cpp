@@ -53,9 +53,9 @@ Flexlay::init(const std::string& title, int width, int height, bool fullscreen_,
 
   std::cout << "Flexlay::init()" << std::endl;
   try {
-    #ifdef WIN32
+#ifdef WIN32
     CL_SetupCore::set_instance(GetModuleHandle("flexlay_wrap.dll"));
-    #endif
+#endif
     CL_SetupCore::init();
 #ifdef HAVE_LIBSDL
     if (use_opengl)

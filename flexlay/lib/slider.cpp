@@ -84,31 +84,31 @@ void
 Slider::on_mouse_down(const CL_InputEvent& event)
 {
   if (event.id == CL_MOUSE_LEFT)
-    {
-      pressed = true;
-      capture_mouse();
-      update_mouse(event);
-    }
+  {
+    pressed = true;
+    capture_mouse();
+    update_mouse(event);
+  }
 }
 
 void
 Slider::on_mouse_up  (const CL_InputEvent& event)
 {
   if (event.id == CL_MOUSE_LEFT)
-    {
-      pressed = false;
-      release_mouse();
-      update_mouse(event);
-    }
+  {
+    pressed = false;
+    release_mouse();
+    update_mouse(event);
+  }
 }
 
 void
 Slider::on_mouse_move(const CL_InputEvent& event)
 {
   if (pressed)
-    {
-      update_mouse(event);
-    }
+  {
+    update_mouse(event);
+  }
 }
 
 /* EOF */

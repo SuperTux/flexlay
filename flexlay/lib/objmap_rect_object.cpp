@@ -177,12 +177,12 @@ ObjMapRectObject::ObjMapRectObject(const CL_Rect&  rect_,
                                              MetaData());
  
   impl->cp_top_right = ObjMapControlPoint(CL_Sprite("resize2", &(Flexlay::current()->resources)), 
-                                             CL_Pointf(),
+                                          CL_Pointf(),
                                           MetaData());
   
   impl->cp_bottom_left = ObjMapControlPoint(CL_Sprite("resize2", &(Flexlay::current()->resources)), 
-                                                   CL_Pointf(),
-                                                   MetaData());
+                                            CL_Pointf(),
+                                            MetaData());
   
   impl->cp_middle_left = ObjMapControlPoint(CL_Sprite("resize_horz", &(Flexlay::current()->resources)), 
                                             CL_Pointf(),

@@ -74,7 +74,7 @@ ObjMapSpriteObjectImpl::get_bound_rect() const
   //  if (scale_x > 1.0f && scale_y > 1.0f)
   //    return CL_Rectf(pos - origin - align,
   //                   CL_Sizef(sprite.get_width() * scale_x, sprite.get_height() * scale_y));
-//  else
+  //  else
   return CL_Rectf(pos - origin - align,
                   CL_Sizef(sprite.get_width(), sprite.get_height()));  
 }

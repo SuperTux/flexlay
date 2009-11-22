@@ -37,17 +37,17 @@ void
 PopupMenu::on_mouse_up(const CL_InputEvent& event)
 {
   if (!menu->has_mouse_over() && !menu->has_mouse_in_submenus())
-    {
-      menu->collapse();
-      // FIXME: *yuck*
-      delete this;
-    }
+  {
+    menu->collapse();
+    // FIXME: *yuck*
+    delete this;
+  }
   else
-    {
-      // FIXME: this should be in the constructor, but doesn't work
-      // there since the menu collapses then instantly
-      menu->set_root_collapsing(true); 
-    }
+  {
+    // FIXME: this should be in the constructor, but doesn't work
+    // there since the menu collapses then instantly
+    menu->set_root_collapsing(true); 
+  }
 }
 
 /* EOF */

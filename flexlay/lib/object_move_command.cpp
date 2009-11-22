@@ -72,11 +72,11 @@ ObjectMoveCommand::move_by(const CL_Pointf& delta)
   for(ObjectMoveCommandImpl::Objects::iterator i = impl->objects.begin(); 
       i != impl->objects.end();
       ++i)
-    {
-      i->new_pos = i->old_pos + delta;
-      i->obj.set_pos(i->new_pos);
-      i->obj.sig_move()(i->obj);
-    }
+  {
+    i->new_pos = i->old_pos + delta;
+    i->obj.set_pos(i->new_pos);
+    i->obj.sig_move()(i->obj);
+  }
 }
 
 void
@@ -85,9 +85,9 @@ ObjectMoveCommandImpl::redo()
   for(ObjectMoveCommandImpl::Objects::iterator i = objects.begin(); 
       i != objects.end();
       ++i)
-    {
-      i->obj.set_pos(i->new_pos);
-    }  
+  {
+    i->obj.set_pos(i->new_pos);
+  }  
 }
 
 void
@@ -96,9 +96,9 @@ ObjectMoveCommandImpl::undo()
   for(ObjectMoveCommandImpl::Objects::iterator i = objects.begin(); 
       i != objects.end();
       ++i)
-    {
-      i->obj.set_pos(i->old_pos);
-    }
+  {
+    i->obj.set_pos(i->old_pos);
+  }
 }
 
 std::string

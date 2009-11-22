@@ -110,39 +110,39 @@ DirectoryViewImpl::draw()
 
   int j = 0;
   for(Items::iterator i = items.begin(); i != items.begin()+50 && i != items.end(); ++i)
+  {
+    if (current_item && current_item < int(items.size()) && j == current_item)
     {
-      if (current_item && current_item < int(items.size()) && j == current_item)
-        {
-          CL_Rect rect = font.bounding_rect(x_pos * (column_width + horizontal_spacing) + 1, 
-                                            y_pos * (font.get_height() + vertical_spacing) + 1,
-                                            i->name);
-          CL_Display::fill_rect(CL_Rect(rect.left-5, rect.top-3,
-                                        rect.left+5+column_width, rect.bottom+3),
-                                CL_Color(250, 200, 0));
-        }
-
-      // draw item
-      if (!i->directory)
-        {
-          font.draw(x_pos * (column_width + horizontal_spacing), 
-                    y_pos * (font.get_height() + vertical_spacing),
-                    i->name);
-        }
-      else
-        {
-          font.draw(x_pos * (column_width + horizontal_spacing), 
-                    y_pos * (font.get_height() + vertical_spacing),
-                    "[" + i->name + "]");
-        }
-
-      x_pos += 1;
-      if (x_pos >= num_columns)
-        {
-          x_pos = 0;
-          y_pos += 1;
-        }
-      ++j;
+      CL_Rect rect = font.bounding_rect(x_pos * (column_width + horizontal_spacing) + 1, 
+                                        y_pos * (font.get_height() + vertical_spacing) + 1,
+                                        i->name);
+      CL_Display::fill_rect(CL_Rect(rect.left-5, rect.top-3,
+                                    rect.left+5+column_width, rect.bottom+3),
+                            CL_Color(250, 200, 0));
     }
+
+    // draw item
+    if (!i->directory)
+    {
+      font.draw(x_pos * (column_width + horizontal_spacing), 
+                y_pos * (font.get_height() + vertical_spacing),
+                i->name);
+    }
+    else
+    {
+      font.draw(x_pos * (column_width + horizontal_spacing), 
+                y_pos * (font.get_height() + vertical_spacing),
+                "[" + i->name + "]");
+    }
+
+    x_pos += 1;
+    if (x_pos >= num_columns)
+    {
+      x_pos = 0;
+      y_pos += 1;
+    }
+    ++j;
+  }
 }
 
 int
@@ -162,10 +162,10 @@ DirectoryViewImpl::on_mouse_down(const CL_InputEvent& event)
 {
   current_item = get_item(event.mouse_pos);
   if (current_item >= 0 && current_item < int(items.size()))
-    {
-      if (items[current_item].directory)
+  {
+    if (items[current_item].directory)
       parent->set_directory(path + "/" + items[current_item].name);
-    }
+  }
 }
 
 void 
@@ -182,13 +182,13 @@ DirectoryViewImpl::update_items()
 
   scanner.scan(path);
   while(scanner.next())
-    {
-      DirectoryViewEntry entry;
-      entry.name = scanner.get_name();
-      entry.hidden = (scanner.get_name()[0] == '.');
-      entry.directory = scanner.is_directory();
-      items.push_back(entry);
-    }
+  {
+    DirectoryViewEntry entry;
+    entry.name = scanner.get_name();
+    entry.hidden = (scanner.get_name()[0] == '.');
+    entry.directory = scanner.is_directory();
+    items.push_back(entry);
+  }
 
   std::sort(items.begin(), items.end(), DirectoryViewSorter());
 
@@ -196,10 +196,10 @@ DirectoryViewImpl::update_items()
 
   column_width = 60; // min_colum_width
   for(Items::iterator i = items.begin(); i != items.end(); ++i)
-    {
-      CL_Rect rect = font.bounding_rect(0, 0, i->name + "[]");
-      column_width = std::max(column_width, rect.get_width());
-    }
+  {
+    CL_Rect rect = font.bounding_rect(0, 0, i->name + "[]");
+    column_width = std::max(column_width, rect.get_width());
+  }
 
   num_columns = parent->get_width()/column_width;
 }

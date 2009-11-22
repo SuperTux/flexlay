@@ -58,40 +58,40 @@ void
 TitlebarImpl::on_mouse_up(const CL_InputEvent& event)
 {
   if (event.id == CL_MOUSE_LEFT)
-    {
-      pressed = false;
-      parent->release_mouse();
-    }
+  {
+    pressed = false;
+    parent->release_mouse();
+  }
 }
 
 void
 TitlebarImpl::on_mouse_down(const CL_InputEvent& event)
 {
   if (event.id == CL_MOUSE_LEFT)
-    {
-      pressed   = true;
-      click_pos = event.mouse_pos;
-      parent->capture_mouse();
-      window->raise();
+  {
+    pressed   = true;
+    click_pos = event.mouse_pos;
+    parent->capture_mouse();
+    window->raise();
 
-      old_pos = window->get_position();
-      click_pos.x += old_pos.left;
-      click_pos.y += old_pos.top;
-    } 
+    old_pos = window->get_position();
+    click_pos.x += old_pos.left;
+    click_pos.y += old_pos.top;
+  } 
 }
 
 void
 TitlebarImpl::on_mouse_move(const CL_InputEvent& event)
 {
   if(pressed)
-    {
-      CL_Rect rect = window->get_position();
+  {
+    CL_Rect rect = window->get_position();
 
-      CL_Point move(old_pos.left - (click_pos.x - (rect.left + event.mouse_pos.x)), 
-                    old_pos.top  - (click_pos.y - (rect.top  + event.mouse_pos.y)));
+    CL_Point move(old_pos.left - (click_pos.x - (rect.left + event.mouse_pos.x)), 
+                  old_pos.top  - (click_pos.y - (rect.top  + event.mouse_pos.y)));
 
-      window->set_position(move.x, move.y);
-    }
+    window->set_position(move.x, move.y);
+  }
 }
 
 void
@@ -102,18 +102,18 @@ TitlebarImpl::draw()
   // FIXME: Hack should be done via has_mouse_over(), but that doesn't include child components
   if (parent->get_parent()->get_position().is_inside(CL_Point(CL_Mouse::get_x(), 
                                                               CL_Mouse::get_y())))
-      //parent->get_parent()->has_mouse_over())
-    {
-      CL_Display::fill_rect(CL_Rect(CL_Point(0, 0),
-                                    CL_Size(parent->get_width()-1, parent->get_height())), 
-                            CL_Color(250, 250, 250));
-    }
+    //parent->get_parent()->has_mouse_over())
+  {
+    CL_Display::fill_rect(CL_Rect(CL_Point(0, 0),
+                                  CL_Size(parent->get_width()-1, parent->get_height())), 
+                          CL_Color(250, 250, 250));
+  }
   else
-    {
-      CL_Display::fill_rect(CL_Rect(CL_Point(0, 0),
-                                    CL_Size(parent->get_width()-1, parent->get_height())), 
-                            CL_Color(240, 240, 240));
-    }
+  {
+    CL_Display::fill_rect(CL_Rect(CL_Point(0, 0),
+                                  CL_Size(parent->get_width()-1, parent->get_height())), 
+                          CL_Color(240, 240, 240));
+  }
 
   Fonts::verdana11.draw(4, 0, title);
 

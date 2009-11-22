@@ -51,38 +51,38 @@ void
 ObjectSelector::mouse_up(const CL_InputEvent& event)
 {
   switch(event.id)
-    {
+  {
     case CL_MOUSE_LEFT:
+    {
+      if (drag_obj != -1)
       {
-        if (drag_obj != -1)
-          {
-            release_mouse();
+        release_mouse();
       
-            if (!has_mouse_over())
-              {
-                CL_Point screen(event.mouse_pos.x + get_screen_rect().left,
-                                event.mouse_pos.y + get_screen_rect().top);
+        if (!has_mouse_over())
+        {
+          CL_Point screen(event.mouse_pos.x + get_screen_rect().left,
+                          event.mouse_pos.y + get_screen_rect().top);
 
-                CL_Point target(screen.x - EditorMapComponent::current()->get_screen_rect().left,
-                                screen.y - EditorMapComponent::current()->get_screen_rect().top);
+          CL_Point target(screen.x - EditorMapComponent::current()->get_screen_rect().left,
+                          screen.y - EditorMapComponent::current()->get_screen_rect().top);
       
-                // FIXME: Move this to the scripting layer
-                //ObjectAddCommand command(ObjectLayer::current());
+          // FIXME: Move this to the scripting layer
+          //ObjectAddCommand command(ObjectLayer::current());
 
-                //ObjMapObject obj = brushes[drag_obj].to_sprite_object
-                //(EditorMapComponent::current()->screen2world(target)).to_object();
+          //ObjMapObject obj = brushes[drag_obj].to_sprite_object
+          //(EditorMapComponent::current()->screen2world(target)).to_object();
 
-                //command.add_object(obj);
-                //Workspace::current().get_map().execute(command.to_command());
+          //command.add_object(obj);
+          //Workspace::current().get_map().execute(command.to_command());
                 
-                //std::cout << "C++: Calling on_drop" << std::endl;
-                on_drop(brushes[drag_obj], target);
-                //std::cout << "C++: Calling on_drop: done" << std::endl;
-              }
-            drag_obj = -1;
-          }
+          //std::cout << "C++: Calling on_drop" << std::endl;
+          on_drop(brushes[drag_obj], target);
+          //std::cout << "C++: Calling on_drop: done" << std::endl;
+        }
+        drag_obj = -1;
       }
-      break;
+    }
+    break;
 
     case CL_MOUSE_MIDDLE:
       scrolling = false;
@@ -91,23 +91,23 @@ ObjectSelector::mouse_up(const CL_InputEvent& event)
 
     default:
       break;
-    }
+  }
 }
 
 void
 ObjectSelector::mouse_down(const CL_InputEvent& event)
 {
   switch(event.id)
-    {
+  {
     case CL_MOUSE_LEFT:
+    {
+      if (mouse_over_tile != -1)
       {
-        if (mouse_over_tile != -1)
-          {
-            drag_obj = mouse_over_tile;
-            capture_mouse();
-          }
+        drag_obj = mouse_over_tile;
+        capture_mouse();
       }
-      break;
+    }
+    break;
       
     case CL_MOUSE_MIDDLE:
       scrolling = true;
@@ -123,16 +123,16 @@ ObjectSelector::mouse_down(const CL_InputEvent& event)
     case CL_MOUSE_WHEEL_DOWN:
       offset += static_cast<int>(obj_height*scale); 
       break;
-    }
+  }
 }
 
 void
 ObjectSelector::mouse_move(const CL_InputEvent& event)
 {
   if (scrolling)
-    {
-      offset = old_offset + (click_pos.y - event.mouse_pos.y);
-    }
+  {
+    offset = old_offset + (click_pos.y - event.mouse_pos.y);
+  }
 
   mouse_pos = event.mouse_pos;
 
@@ -159,43 +159,43 @@ ObjectSelector::draw()
   CL_Display::add_translate(get_screen_x(), get_screen_y());
     
   for(int i = 0; i < (int)brushes.size(); ++i)
+  {
+    int x = i%width;
+    int y = i/width;
+
+    CL_Rectf rect(CL_Pointf(x * obj_width, y * obj_height),
+                  CL_Sizef(obj_width, obj_height));
+
+    CL_Sprite sprite = brushes[i].get_sprite();
+    sprite.set_alignment(origin_center, 0, 0);
+    sprite.set_scale(std::min(1.0f, (float)obj_width/(float)sprite.get_width()),
+                     std::min(1.0f, (float)obj_height/(float)sprite.get_height()));
+        
+    sprite.draw(x * obj_width + obj_width/2, 
+                y * obj_height + obj_height/2);
+        
+    //CL_Display::draw_rect(rect, CL_Color(0,0,0,128));
+        
+    if (mouse_over_tile == i && has_mouse_over())
     {
-      int x = i%width;
-      int y = i/width;
-
-      CL_Rectf rect(CL_Pointf(x * obj_width, y * obj_height),
-                    CL_Sizef(obj_width, obj_height));
-
-      CL_Sprite sprite = brushes[i].get_sprite();
-      sprite.set_alignment(origin_center, 0, 0);
-      sprite.set_scale(std::min(1.0f, (float)obj_width/(float)sprite.get_width()),
-                       std::min(1.0f, (float)obj_height/(float)sprite.get_height()));
-        
-      sprite.draw(x * obj_width + obj_width/2, 
-                  y * obj_height + obj_height/2);
-        
-      //CL_Display::draw_rect(rect, CL_Color(0,0,0,128));
-        
-      if (mouse_over_tile == i && has_mouse_over())
-        {
-          CL_Display::fill_rect(rect, CL_Color(0,0,255, 20));
-        }
+      CL_Display::fill_rect(rect, CL_Color(0,0,255, 20));
     }
+  }
 
   CL_Display::pop_modelview();
   CL_Display::pop_cliprect();
  
   // Draw drag sprite
   if (drag_obj != -1)
-    {
-      CL_Display::set_cliprect(CL_Rect(CL_Point(0, 0), 
-                                       CL_Size(CL_Display::get_width(),
-                                               CL_Display::get_height())));
+  {
+    CL_Display::set_cliprect(CL_Rect(CL_Point(0, 0), 
+                                     CL_Size(CL_Display::get_width(),
+                                             CL_Display::get_height())));
 
-      CL_Sprite sprite = brushes[drag_obj].get_sprite();
-      sprite.set_alpha(0.5f);
-      sprite.draw(mouse_pos.x + get_screen_x(), mouse_pos.y + get_screen_y());
-    }
+    CL_Sprite sprite = brushes[drag_obj].get_sprite();
+    sprite.set_alpha(0.5f);
+    sprite.draw(mouse_pos.x + get_screen_x(), mouse_pos.y + get_screen_y());
+  }
 }
 
 void

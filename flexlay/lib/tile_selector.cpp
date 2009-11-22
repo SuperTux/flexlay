@@ -68,74 +68,74 @@ void
 TileSelector::mouse_up(const CL_InputEvent& event)
 {
   if (event.id == CL_MOUSE_MIDDLE)
-    {
-      scrolling = false;
-      release_mouse();
-    }
+  {
+    scrolling = false;
+    release_mouse();
+  }
   else if (event.id == CL_MOUSE_RIGHT)
-    {
-      release_mouse();
-      region_select = false;
+  {
+    release_mouse();
+    region_select = false;
 
-      CL_Rect selection = get_selection();
-      //selection.bottom = Math::mid(0, selection.right, width);
+    CL_Rect selection = get_selection();
+    //selection.bottom = Math::mid(0, selection.right, width);
 
-      TileBrush brush(selection.get_width(), selection.get_height());
-      brush.set_transparent();
+    TileBrush brush(selection.get_width(), selection.get_height());
+    brush.set_transparent();
 
-      for(int y = 0; y < selection.get_height(); ++y)
-        for(int x = 0; x < selection.get_width(); ++x)
-          {
-            int tile = (selection.top + y) * width + (selection.left + x);
+    for(int y = 0; y < selection.get_height(); ++y)
+      for(int x = 0; x < selection.get_width(); ++x)
+      {
+        int tile = (selection.top + y) * width + (selection.left + x);
 
-            if (tile >= 0 && tile < int(tiles.size()))
-              brush.at(x, y) = tiles[tile];
-            else
-              brush.at(x, y) = 0;
-          }
+        if (tile >= 0 && tile < int(tiles.size()))
+          brush.at(x, y) = tiles[tile];
+        else
+          brush.at(x, y) = 0;
+      }
 
-      TileMapPaintTool::current().set_brush(brush);
-    }
+    TileMapPaintTool::current().set_brush(brush);
+  }
 }
 
 void
 TileSelector::mouse_down(const CL_InputEvent& event)
 {
   if (event.id == CL_MOUSE_LEFT)
-    {
-      TileBrush brush(1, 1);
+  {
+    TileBrush brush(1, 1);
 
-      brush.set_opaque();
-      if (mouse_over_tile >= 0 && mouse_over_tile < int(tiles.size()))
-        brush.at(0, 0) = tiles[mouse_over_tile];
-      else
-        brush.at(0, 0) = 0;
+    brush.set_opaque();
+    if (mouse_over_tile >= 0 && mouse_over_tile < int(tiles.size()))
+      brush.at(0, 0) = tiles[mouse_over_tile];
+    else
+      brush.at(0, 0) = 0;
 
-      TileMapPaintTool::current().set_brush(brush);
-    }
+    TileMapPaintTool::current().set_brush(brush);
+  }
   else if (event.id == CL_MOUSE_RIGHT) 
-    {
-      region_select = true;
-      region_select_start = current_pos;
-      capture_mouse();
-    }
+  {
+    region_select = true;
+    region_select_start = current_pos;
+    capture_mouse();
+  }
   else if (event.id == CL_MOUSE_MIDDLE)
-    {
-      scrolling = true;
-      mouse_pos = event.mouse_pos;
-      old_offset = offset;
-      capture_mouse();
-    }
+  {
+    scrolling = true;
+    mouse_pos = event.mouse_pos;
+    old_offset = offset;
+    capture_mouse();
+  }
   else if (event.id == CL_MOUSE_WHEEL_UP)
-    {
-      offset -= static_cast<int>(tileset.get_tile_size()*scale);
-      if (offset < 0)
-        offset = 0;
-    }
+  {
+    offset -= static_cast<int>(tileset.get_tile_size()*scale);
+    if (offset < 0)
+      offset = 0;
+  }
   else if (event.id == CL_MOUSE_WHEEL_DOWN)
-    {
-      offset += static_cast<int>(tileset.get_tile_size()*scale);
-    }
+  {
+    offset += static_cast<int>(tileset.get_tile_size()*scale);
+  }
 }
 
 CL_Point
@@ -153,11 +153,11 @@ TileSelector::mouse_move(const CL_InputEvent& event)
   mouse_over_tile = pos.y * width + pos.x;
 
   if (scrolling)
-    {
-      offset = old_offset + (mouse_pos.y - event.mouse_pos.y);
-      if (offset < 0)
-        offset = 0;
-    }
+  {
+    offset = old_offset + (mouse_pos.y - event.mouse_pos.y);
+    if (offset < 0)
+      offset = 0;
+  }
 }
 
 void 
@@ -176,53 +176,53 @@ TileSelector::draw()
   
   // Draw tiles
   for(int i = (start_row*width); i < end_index; ++i)
+  {
+    int x = i % width;
+    int y = i / width;
+
+    Tile* tile = tileset.create(tiles[i]);
+
+    CL_Rect rect(CL_Point(static_cast<int>(x * tileset.get_tile_size()*scale),
+                          static_cast<int>(y * tileset.get_tile_size()*scale)),
+                 CL_Size(static_cast<int>(tileset.get_tile_size()*scale),
+                         static_cast<int>(tileset.get_tile_size()*scale)));
+
+    if (tile)
     {
-      int x = i % width;
-      int y = i / width;
+      CL_Sprite sprite = tile->get_sprite();
 
-      Tile* tile = tileset.create(tiles[i]);
+      sprite.set_scale(scale, scale);
 
-      CL_Rect rect(CL_Point(static_cast<int>(x * tileset.get_tile_size()*scale),
-                            static_cast<int>(y * tileset.get_tile_size()*scale)),
-                   CL_Size(static_cast<int>(tileset.get_tile_size()*scale),
-                           static_cast<int>(tileset.get_tile_size()*scale)));
+      sprite.draw(static_cast<int>(x * tileset.get_tile_size()*scale), 
+                  static_cast<int>(y * tileset.get_tile_size()*scale));
 
-      if (tile)
-        {
-          CL_Sprite sprite = tile->get_sprite();
-
-          sprite.set_scale(scale, scale);
-
-          sprite.draw(static_cast<int>(x * tileset.get_tile_size()*scale), 
-                      static_cast<int>(y * tileset.get_tile_size()*scale));
-
-          // Use grid in the tileselector
-          //CL_Display::draw_rect(rect, CL_Color(0,0,0,128));
-        }
-
-      if (brush.get_width() == 1 && brush.get_height() == 1
-          && brush.at(0, 0) == tiles[i])
-        {
-          CL_Display::fill_rect(rect,
-                                CL_Color(0,0,255, 100));
-        }
-      else if (mouse_over_tile == int(i) && has_mouse_over())
-        {
-          CL_Display::fill_rect(rect, CL_Color(0,0,255, 20));
-        }
+      // Use grid in the tileselector
+      //CL_Display::draw_rect(rect, CL_Color(0,0,0,128));
     }
+
+    if (brush.get_width() == 1 && brush.get_height() == 1
+        && brush.at(0, 0) == tiles[i])
+    {
+      CL_Display::fill_rect(rect,
+                            CL_Color(0,0,255, 100));
+    }
+    else if (mouse_over_tile == int(i) && has_mouse_over())
+    {
+      CL_Display::fill_rect(rect, CL_Color(0,0,255, 20));
+    }
+  }
 
   if (region_select)
-    {
-      CL_Rect rect = get_selection();
+  {
+    CL_Rect rect = get_selection();
 
-      rect.top    *= static_cast<int>(tileset.get_tile_size()*scale);
-      rect.bottom *= static_cast<int>(tileset.get_tile_size()*scale);
-      rect.left   *= static_cast<int>(tileset.get_tile_size()*scale);
-      rect.right  *= static_cast<int>(tileset.get_tile_size()*scale);
+    rect.top    *= static_cast<int>(tileset.get_tile_size()*scale);
+    rect.bottom *= static_cast<int>(tileset.get_tile_size()*scale);
+    rect.left   *= static_cast<int>(tileset.get_tile_size()*scale);
+    rect.right  *= static_cast<int>(tileset.get_tile_size()*scale);
 
-      CL_Display::fill_rect(rect, CL_Color(0,0,255, 100));
-    }
+    CL_Display::fill_rect(rect, CL_Color(0,0,255, 100));
+  }
   
   CL_Display::pop_modelview();
   CL_Display::pop_cliprect();

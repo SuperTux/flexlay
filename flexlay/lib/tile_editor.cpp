@@ -48,31 +48,31 @@ TileEditor::draw()
   CL_Display::fill_rect(CL_Rect(0, 0, 32, 32), CL_Color(155, 0, 155));
 
   if (tile)
-    {
-      tile->get_sprite().draw(0, 0);
-      CL_Display::flush();
-      for(int tile_y = 0; tile_y < 8; ++tile_y)
-        for(int tile_x = 0; tile_x < 8; ++tile_x)
-          {
-            if (tile->get_col(tile_x, tile_y))
-              {
-                CL_Display::fill_rect(CL_Rect(tile_x*16, tile_y*16,
-                                              tile_x*16 + 16, tile_y*16 + 16),
-                                      CL_Color(255, 0, 0, 128));
-              }
-          }
-      CL_Display::flush();
-      if (has_mouse_over())
+  {
+    tile->get_sprite().draw(0, 0);
+    CL_Display::flush();
+    for(int tile_y = 0; tile_y < 8; ++tile_y)
+      for(int tile_x = 0; tile_x < 8; ++tile_x)
+      {
+        if (tile->get_col(tile_x, tile_y))
         {
-          CL_Display::fill_rect(CL_Rect(CL_Point(int(mouse_pos.x)/16 * 16, 
-                                                 int(mouse_pos.y)/16 * 16),
-                                        CL_Size(16, 16)),
-                                CL_Color(255, 255, 255, 128));
+          CL_Display::fill_rect(CL_Rect(tile_x*16, tile_y*16,
+                                        tile_x*16 + 16, tile_y*16 + 16),
+                                CL_Color(255, 0, 0, 128));
         }
-    }
-  else
+      }
+    CL_Display::flush();
+    if (has_mouse_over())
     {
+      CL_Display::fill_rect(CL_Rect(CL_Point(int(mouse_pos.x)/16 * 16, 
+                                             int(mouse_pos.y)/16 * 16),
+                                    CL_Size(16, 16)),
+                            CL_Color(255, 255, 255, 128));
     }
+  }
+  else
+  {
+  }
 
   CL_Display::pop_modelview();
 }
@@ -92,35 +92,35 @@ void
 TileEditor::mouse_down(const CL_InputEvent& event)
 {
   if (tile)
+  {
+    switch (event.id)
     {
-      switch (event.id)
-        {
-        case CL_MOUSE_LEFT:
-          paint(event.mouse_pos, true);
-          break;
+      case CL_MOUSE_LEFT:
+        paint(event.mouse_pos, true);
+        break;
               
-        case CL_MOUSE_RIGHT:
-          paint(event.mouse_pos, false);
-          break;
+      case CL_MOUSE_RIGHT:
+        paint(event.mouse_pos, false);
+        break;
         
-        }
     }
+  }
 }
 
 void
 TileEditor::paint(CL_Point pos, bool val)
 {
   if (tile)
-    {
-      int x = int(pos.x) / 16;
-      int y = int(pos.y) / 16;
+  {
+    int x = int(pos.x) / 16;
+    int y = int(pos.y) / 16;
 
-      if (x >= 0 && y >= 0
-          && x < 8 && y < 8)
-        {
-          tile->set_col(x, y, val);
-        }
+    if (x >= 0 && y >= 0
+        && x < 8 && y < 8)
+    {
+      tile->set_col(x, y, val);
     }
+  }
 }
 
 void

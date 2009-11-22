@@ -35,7 +35,6 @@ public:
   Tileset tileset;
   CL_Color background_color;
   CL_Color foreground_color;
-  bool hex_mode;
 
   Field<int> field;
 
@@ -70,7 +69,6 @@ TilemapLayer::TilemapLayer(Tileset tileset_, int w,  int h)
   // map-properties thingy
   impl->draw_grid      = false;
   impl->draw_attribute = false;
-  impl->hex_mode = false;
 
   for (int y = 0; y < impl->field.get_height(); ++y) 
     for (int x = 0; x < impl->field.get_width(); ++x)

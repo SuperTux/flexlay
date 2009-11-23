@@ -18,6 +18,8 @@
 #include <ClanLib/Display/keyboard.h>
 #include <ClanLib/Display/mouse.h>
 #include <ClanLib/Display/display.h>
+#include <ClanLib/Display/display_window.h>
+
 #include "editor_map.hpp"
 #include "scrollbar.hpp"
 #include "editor_map_component.hpp"
@@ -163,7 +165,7 @@ EditorMapComponentImpl::draw ()
   scrollbar_h->set_pos(gc_state.get_pos().x);
 
   gc_state.push();
-  workspace.draw();
+  workspace.draw(gc_state, CL_Display::get_current_window()->get_gc());
   gc_state.pop();
 
   CL_Display::pop_modelview();

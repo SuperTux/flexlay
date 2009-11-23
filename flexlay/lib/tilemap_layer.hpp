@@ -27,7 +27,6 @@
 class Tileset;
 class TileBrush;
 class TilemapLayerImpl;
-class EditorMapComponent;
 
 class TilemapLayer
 {

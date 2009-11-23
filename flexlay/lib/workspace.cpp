@@ -51,7 +51,7 @@ Workspace::Workspace(bool create) :
 }
 
 void
-Workspace::draw()
+Workspace::draw(const GraphicContextState& state, CL_GraphicContext* gc)
 {
   assert(impl.get());
 

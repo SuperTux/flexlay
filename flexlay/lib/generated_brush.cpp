@@ -39,8 +39,8 @@ public:
   BrushImpl* clone() const;
 };
 
-GeneratedBrush::GeneratedBrush(const Brush& brush)
-  : impl(dynamic_cast<GeneratedBrushImpl*>(brush.impl.get())) // FIXME: WANT WORK WITH REAL SMARTPTR!!!
+GeneratedBrush::GeneratedBrush(const Brush& brush) :
+  impl(boost::dynamic_pointer_cast<GeneratedBrushImpl>(brush.impl))
 {
 }
 
@@ -49,8 +49,8 @@ GeneratedBrush::GeneratedBrush(BrushShape shape,
                                int    spikes,        /* 2 - 20     */
                                float  hardness,      /* 0.0 - 1.0  */
                                float  aspect_ratio,  /* y/x        */
-                               float  angle)
-  : impl(new GeneratedBrushImpl())
+                               float  angle) :
+  impl(new GeneratedBrushImpl())
 {
   impl->shape        = shape;
   impl->radius       = radius;

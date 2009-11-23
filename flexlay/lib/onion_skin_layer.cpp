@@ -55,8 +55,8 @@ public:
   }
 };
 
-OnionSkinLayer::OnionSkinLayer(Layer layer)
-  : impl(dynamic_cast<OnionSkinLayerImpl*>(layer.impl.get())) // FIXME: WONT WORK WITH REAL SMARTPTR!!!
+OnionSkinLayer::OnionSkinLayer(Layer layer) :
+  impl(boost::dynamic_pointer_cast<OnionSkinLayerImpl>(layer.impl))
 {
 }
 

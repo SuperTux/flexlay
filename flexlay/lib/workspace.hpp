@@ -36,7 +36,7 @@ public:
 
   Workspace(bool create = false);
 
-  void draw();
+  void draw(const GraphicContextState& state, CL_GraphicContext* gc);
 
   void mouse_up  (const CL_InputEvent& event);
   void mouse_down(const CL_InputEvent& event);

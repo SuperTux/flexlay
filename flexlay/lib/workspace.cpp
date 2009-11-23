@@ -22,8 +22,8 @@
 #include <ClanLib/Display/display_window.h>
 #include <ClanLib/Display/keys.h>
 
-#include "editor_map.hpp"
 #include "gui/editor_map_component.hpp"
+#include "editor_map.hpp"
 #include "editor_names.hpp"
 #include "tools/tool.hpp"
 #include "tileset.hpp"

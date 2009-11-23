@@ -16,8 +16,8 @@
 
 #include "object_layer.hpp"
 
-#include "gui/editor_map_component.hpp"
 #include "layer_impl.hpp"
+#include "graphic_context_state.hpp"
 
 ObjectLayer ObjectLayer::current_;
 

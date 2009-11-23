@@ -28,8 +28,8 @@
 #include <ClanLib/Display/graphic_context.h>
 #include <ClanLib/Display/display_window.h>
 
-#include "flexlay.hpp"
 #include "gui/editor_map_component.hpp"
+#include "flexlay.hpp"
 #include "layer_impl.hpp"
 #include "math.hpp"
 

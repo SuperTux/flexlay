@@ -20,10 +20,10 @@
 #include <ClanLib/Display/pixel_format.h>
 #include <ClanLib/Display/sprite.h>
 
+#include "gui/editor_map_component.hpp"
 #include "tile.hpp"
 #include "tileset.hpp"
 #include "tile_brush.hpp"
-#include "gui/editor_map_component.hpp"
 #include "blitter.hpp"
 #include "layer_impl.hpp"
 

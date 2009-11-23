@@ -24,7 +24,6 @@
 #include "command.hpp"
 
 class CL_GraphicContext;
-class EditorMapComponent;
 class EditorMapImpl;
 class Layer;
 class MetaData;
@@ -37,8 +36,7 @@ class EditorMap
 public:
   EditorMap(bool create = false);
 
-  /** FIXME: EditorMapComponent parameter shouldn't really be here */
-  void draw(EditorMapComponent* parent, CL_GraphicContext* gc);
+  void draw(const GraphicContextState& state, CL_GraphicContext* gc);
   
   /** Draw stuff that is only relevant on the GUI (bounding rects and such) */
   void draw_gui(CL_GraphicContext* gc);

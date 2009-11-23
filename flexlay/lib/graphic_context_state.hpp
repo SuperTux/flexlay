@@ -35,12 +35,12 @@ public:
 
   void set_size(int w, int h);
 
-  void push(CL_GraphicContext* gc = 0);
-  void pop (CL_GraphicContext* gc = 0);
+  void push(CL_GraphicContext* gc = 0) const;
+  void pop (CL_GraphicContext* gc = 0) const;
 
   /** Return a rectangle in world coordinates that represents the area
       visible on the screen */
-  CL_Rectf get_clip_rect();
+  CL_Rectf get_clip_rect() const;
 
   int get_width()  const;
   int get_height() const;
@@ -49,7 +49,7 @@ public:
   void  set_rotation(float angle);
 
   /** Return the current rotation angel */
-  float get_rotation();
+  float get_rotation() const;
 
   /** Move the center of the visible area to pos */
   void      set_pos(const CL_Pointf& pos);
@@ -60,7 +60,7 @@ public:
       position even after zoomed in/out */
   void  set_zoom(CL_Pointf pos, float z);
   void  set_zoom(float z);
-  float get_zoom(); 
+  float get_zoom() const; 
 
   void zoom_to (const CL_Rectf& rect);
 

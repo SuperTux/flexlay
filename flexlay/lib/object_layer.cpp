@@ -31,7 +31,7 @@ public:
   ObjectLayerImpl() {}
   virtual ~ObjectLayerImpl() {}
   
-  void draw(EditorMapComponent* parent, CL_GraphicContext* gc);
+  void draw(const GraphicContextState& state, CL_GraphicContext* gc);
   bool has_bounding_rect() const { return false; }
 };
 
@@ -45,12 +45,12 @@ ObjectLayer::~ObjectLayer()
 }
 
 void
-ObjectLayerImpl::draw(EditorMapComponent* parent, CL_GraphicContext* gc)
+ObjectLayerImpl::draw(const GraphicContextState& state, CL_GraphicContext* gc)
 {
   for(ObjectLayer::Objects::iterator i = objects.begin(); i != objects.end(); ++i)
   {
     // FIXME: Add clipping here
-    if (parent->get_clip_rect().is_overlapped((*i).get_bound_rect()))
+    if (state.get_clip_rect().is_overlapped((*i).get_bound_rect()))
       (*i).draw(gc);
   }
 

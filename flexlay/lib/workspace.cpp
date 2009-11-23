@@ -58,7 +58,7 @@ Workspace::draw()
   CL_Display::clear(CL_Color(100, 0, 100));
 
   impl->editor_map.draw_gui(CL_Display::get_current_window()->get_gc());
-  impl->editor_map.draw(EditorMapComponent::current(), CL_Display::get_current_window()->get_gc());
+  impl->editor_map.draw(EditorMapComponent::current()->get_gc_state(), CL_Display::get_current_window()->get_gc());
   
   // FIXME: Only draw active tool?!
   for(WorkspaceImpl::Tools::iterator it = impl->tools.begin();

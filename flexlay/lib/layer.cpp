@@ -33,7 +33,7 @@ Layer::~Layer()
 }
 
 void
-Layer::draw(EditorMapComponent* parent, CL_GraphicContext* gc) 
+Layer::draw(const GraphicContextState& state, CL_GraphicContext* gc) 
 { 
   if (impl.get())
   {
@@ -41,12 +41,12 @@ Layer::draw(EditorMapComponent* parent, CL_GraphicContext* gc)
     {
       gc->push_modelview();
       gc->add_translate(impl->pos.x, impl->pos.y);
-      impl->draw(parent, gc);
+      impl->draw(state, gc);
       gc->pop_modelview();
     }
     else
     {
-      impl->draw(parent, gc);
+      impl->draw(state, gc);
     }
   }
 }

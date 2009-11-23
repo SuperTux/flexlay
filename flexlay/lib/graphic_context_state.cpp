@@ -59,7 +59,7 @@ GraphicContextState::set_size(int w, int h)
 }
 
 void
-GraphicContextState::push(CL_GraphicContext* gc)
+GraphicContextState::push(CL_GraphicContext* gc) const
 {
   if (gc == 0)
     gc = CL_Display::get_current_window()->get_gc();
@@ -75,7 +75,7 @@ GraphicContextState::push(CL_GraphicContext* gc)
 }
 
 void
-GraphicContextState::pop(CL_GraphicContext* gc)
+GraphicContextState::pop(CL_GraphicContext* gc) const
 {
   if (gc == 0)
     gc = CL_Display::get_current_window()->get_gc();
@@ -84,7 +84,7 @@ GraphicContextState::pop(CL_GraphicContext* gc)
 }
 
 CL_Rectf
-GraphicContextState::get_clip_rect()
+GraphicContextState::get_clip_rect() const
 {
   return CL_Rectf(CL_Pointf(-impl->offset.x,
                             -impl->offset.y),
@@ -122,7 +122,7 @@ GraphicContextState::set_zoom(float z)
 }
 
 float
-GraphicContextState::get_zoom()
+GraphicContextState::get_zoom() const
 {
   return impl->zoom;
 }
@@ -178,7 +178,7 @@ GraphicContextState::set_rotation(float angle)
 }
 
 float
-GraphicContextState::get_rotation()
+GraphicContextState::get_rotation() const
 {
   return impl->rotation;
 }

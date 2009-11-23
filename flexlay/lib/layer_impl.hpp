@@ -21,7 +21,7 @@
 #include <ClanLib/Display/graphic_context.h>
 #include "meta_data.hpp"
 
-class EditorMapComponent;
+class GraphicContextState;
 
 class LayerImpl
 {
@@ -41,7 +41,7 @@ public:
   {}
   virtual ~LayerImpl() {}
 
-  virtual void draw(EditorMapComponent* parent, CL_GraphicContext* gc) =0;
+  virtual void draw(const GraphicContextState& state, CL_GraphicContext* gc) =0;
   virtual bool has_bounding_rect() const =0;
 
   // FIXME: Should use CL_Rectf

@@ -22,10 +22,10 @@
 #include "meta_data.hpp"
 
 class CL_Rect;
-class EditorMapComponent;
 class LayerImpl;
 class CL_Pointf;
 class CL_GraphicContext;
+class GraphicContextState;
 
 /** Each \a EditorMap consists out of one or more \a Layer,
     The \a Layer is an abstract base class from which the
@@ -48,7 +48,7 @@ public:
       the layer itself) */
   void     set_metadata(MetaData data_);
 
-  void draw(EditorMapComponent* parent, CL_GraphicContext* gc);
+  void draw(const GraphicContextState& state, CL_GraphicContext* gc);
   bool has_bounding_rect() const;
   CL_Rect get_bounding_rect();
 

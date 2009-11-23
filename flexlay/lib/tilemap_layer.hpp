@@ -18,9 +18,10 @@
 #define HEADER_FLEXLAY_TILEMAP_LAYER_HPP
 
 #include <ClanLib/Display/pixel_buffer.h>
+#include <boost/shared_ptr.hpp>
+
 #include "field.hpp"
 #include "meta_data.hpp"
-#include <boost/shared_ptr.hpp>
 #include "layer.hpp"
 
 class Tileset;
@@ -40,7 +41,7 @@ public:
   TilemapLayer(Tileset tileset, int w,  int h);
   ~TilemapLayer();
 
-  void draw(EditorMapComponent* parent, CL_GraphicContext* gc);
+  void draw(const GraphicContextState& state, CL_GraphicContext* gc);
 
   Tileset get_tileset();
 

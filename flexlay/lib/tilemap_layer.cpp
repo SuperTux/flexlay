@@ -48,7 +48,7 @@ public:
 
   bool has_bounding_rect() const;
   CL_Rect get_bounding_rect();
-  void draw(EditorMapComponent* parent, CL_GraphicContext* gc);
+  void draw(const GraphicContextState& state, CL_GraphicContext* gc);
 };
 
 TilemapLayer::TilemapLayer()
@@ -85,13 +85,13 @@ TilemapLayer::~TilemapLayer()
 }
 
 void
-TilemapLayer::draw(EditorMapComponent* parent, CL_GraphicContext* gc)
+TilemapLayer::draw(const GraphicContextState& state, CL_GraphicContext* gc)
 {
-  impl->draw(parent, gc);
+  impl->draw(state, gc);
 }
 
 void
-TilemapLayerImpl::draw(EditorMapComponent* parent, CL_GraphicContext* gc)
+TilemapLayerImpl::draw(const GraphicContextState& state, CL_GraphicContext* gc)
 {
   int tile_size = this->tileset.get_tile_size();
 
@@ -102,7 +102,7 @@ TilemapLayerImpl::draw(EditorMapComponent* parent, CL_GraphicContext* gc)
                           this->background_color);
   CL_Display::flush();
 
-  CL_Rect rect(parent->get_clip_rect());
+  CL_Rect rect(state.get_clip_rect());
 
   int start_x = std::max(0, rect.left / tile_size);
   int start_y = std::max(0, rect.top  / tile_size);

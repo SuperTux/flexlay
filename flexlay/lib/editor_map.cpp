@@ -99,10 +99,10 @@ EditorMap::draw_gui(CL_GraphicContext* gc)
 }
 
 void
-EditorMap::draw (EditorMapComponent* parent, CL_GraphicContext* gc)
+EditorMap::draw(const GraphicContextState& state, CL_GraphicContext* gc)
 {
   for(EditorMapImpl::Layers::iterator i = impl->layers.begin(); i != impl->layers.end(); ++i)
-    (*i).draw(parent, gc);
+    (*i).draw(state, gc);
   
   gc->flush();
 }

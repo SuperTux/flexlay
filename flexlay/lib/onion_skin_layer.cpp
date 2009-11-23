@@ -41,7 +41,7 @@ public:
   std::vector<EditorMap> editormaps;
   std::vector<CL_Color>  color;
 
-  void draw(EditorMapComponent* parent, CL_GraphicContext* gc) 
+  void draw(const GraphicContextState& state, CL_GraphicContext* gc) 
   {
     // FIXME: We need to stop onion layer to draw onto itself
     surface.set_blend_func(blend_one, blend_one_minus_src_alpha);
@@ -60,8 +60,8 @@ OnionSkinLayer::OnionSkinLayer(Layer layer)
 {
 }
 
-OnionSkinLayer::OnionSkinLayer(int width, int height)
-  : impl(new OnionSkinLayerImpl())
+OnionSkinLayer::OnionSkinLayer(int width, int height) :
+  impl(new OnionSkinLayerImpl())
 {
   impl->surface  = CL_Surface(CL_PixelBuffer(width/SCALE, height/SCALE, width*4/SCALE, CL_PixelFormat::rgba8888));
   impl->surface2 = CL_Surface(CL_PixelBuffer(width/SCALE, height/SCALE, width*4/SCALE, CL_PixelFormat::rgba8888));
@@ -109,7 +109,7 @@ OnionSkinLayer::update()
     impl->canvas2->get_gc()->push_modelview();
     impl->canvas2->get_gc()->add_scale(1.0f/SCALE, 1.0f/SCALE);
 
-    impl->editormaps[i].draw(EditorMapComponent::current(), impl->canvas2->get_gc());
+    impl->editormaps[i].draw(EditorMapComponent::current()->get_gc_state(), impl->canvas2->get_gc());
 
     impl->canvas2->get_gc()->pop_modelview();
 

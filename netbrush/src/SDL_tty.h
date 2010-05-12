@@ -132,7 +132,7 @@ typedef struct TTY
  *  @param glyph_height The height of a glyph
  *  @param letters      The letters that are present in the font
  */
-TTY_Font* TTY_CreateFont(SDL_Surface* surface, int glyph_width, int glyph_height, char* letters);
+TTY_Font* TTY_CreateFont(SDL_Surface* surface, int glyph_width, int glyph_height, const char* letters);
 void      TTY_FreeFont(TTY_Font* font);
 
 /**

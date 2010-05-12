@@ -79,7 +79,7 @@ make_message(const char *fmt, va_list ap)
 }
 
 TTY_Font*
-TTY_CreateFont(SDL_Surface* surface, int glyph_width, int glyph_height, char* letters)
+TTY_CreateFont(SDL_Surface* surface, int glyph_width, int glyph_height, const char* letters)
 {
   int i;
   TTY_Font* font = (TTY_Font*)malloc(sizeof(TTY_Font));

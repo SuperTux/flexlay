@@ -4,8 +4,15 @@
 # netbrush_env['CXXFLAGS'] += ['-O2', '-Wall', '-g']
 # netbrush_env.Program('netbrush', ['net.cpp', 'vector.cpp'])
 
+if ARGUMENTS.has_key('DATADIR'):
+    g_datadir = '"\\"' + ARGUMENTS['DATADIR'] + '\\""'
+else:
+    g_datadir = '\\"data\\"'
+    
+
 common_env = Environment()
-common_env['CXXFLAGS'] += ['-O0', '-Wall', '-g']
+common_env['CXXFLAGS'] += ['-O3', '-Wall', '-g']
+common_env['CPPDEFINES'] = { 'DATADIR': g_datadir }
 libcommon = common_env.StaticLibrary('common', [
         'src/command_line.cpp',
         'src/command_line_generic.cpp',
@@ -13,7 +20,8 @@ libcommon = common_env.StaticLibrary('common', [
 
 server_env = Environment()
 server_env.ParseConfig('sdl-config --cflags --libs')
-server_env['CXXFLAGS'] += ['-O0', '-Wall', '-g']
+server_env['CPPDEFINES'] = { 'DATADIR': g_datadir }
+server_env['CXXFLAGS'] += ['-O3', '-Wall', '-g']
 server_env['LIBS'] += ['SDL_net'] + libcommon
 server_env['LIBPATH'] += ['.']
 server_env.Program('netbrush-server', [
@@ -23,10 +31,11 @@ server_env.Program('netbrush-server', [
 
 client_env = Environment()
 client_env.ParseConfig('sdl-config --cflags --libs')
-client_env['CXXFLAGS'] += ['-O0', '-Wall', '-g']
+client_env['CPPDEFINES'] = { 'DATADIR': g_datadir }
+client_env['CXXFLAGS'] += ['-O3', '-Wall', '-g']
 client_env['CPPPATH'] += ['src/']
 client_env['LIBPATH'] += ['.']
-client_env['LIBS'] += ['SDL_image', 'SDL_net', 'Xi'] + libcommon
+client_env['LIBS'] += ['SDL_image', 'SDL_net', 'Xi', 'png'] + libcommon
 client_env.Program('netbrush-client', [
         'src/alpha_picker.cpp',
         'src/brush_widget.cpp',

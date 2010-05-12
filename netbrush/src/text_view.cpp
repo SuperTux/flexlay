@@ -19,6 +19,9 @@
 */
 
 #include <iostream>
+#include <stdexcept>
+#include <sstream>
+
 #include "SDL_tty.h"
 #include "SDL_image.h"
 #include "text_view.hpp"
@@ -26,7 +29,14 @@
 TextView::TextView(const Rect& rect)
   : Widget(rect)
 {
-  SDL_Surface* temp = IMG_Load("data/fonts/8x8font.png");
+  SDL_Surface* temp = IMG_Load(DATADIR "/fonts/8x8font.png");
+  if (!temp)
+  {
+    std::ostringstream out;
+    out << "Couldn't open " << DATADIR "/fonts/8x8font.png";
+    throw std::runtime_error(out.str());
+  }
+
   font = TTY_CreateFont(temp, 8, 8, 
                         "\x7f                                "
                         "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ"

@@ -31,9 +31,9 @@ Button::Button(SDL_Surface* icon_, const Rect& rect_, ButtonCallback* callback_)
     hover(false),
     icon(icon_)
 {
-  up_surface    = IMG_Load("data/icons/up.png");
-  down_surface  = IMG_Load("data/icons/down.png");
-  hover_surface = IMG_Load("data/icons/hover.png");
+  up_surface    = IMG_Load(DATADIR "/icons/up.png");
+  down_surface  = IMG_Load(DATADIR "/icons/down.png");
+  hover_surface = IMG_Load(DATADIR "/icons/hover.png");
 }
 
 Button::~Button()

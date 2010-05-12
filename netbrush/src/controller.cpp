@@ -128,25 +128,25 @@ public:
 Controller::Controller()
 {
   // Toolbar
-    widget_manager->add(new Button(IMG_Load("data/icons/stock-tool-airbrush-22.png"), 
+    widget_manager->add(new Button(IMG_Load(DATADIR "/icons/stock-tool-airbrush-22.png"), 
                                    Rect(Point(2, 2+0*34), Size(34, 34)),
                                    new ToolParameterButtonCallback(DrawingParameter::TOOL_AIRBRUSH)));
-    widget_manager->add(new Button(IMG_Load("data/icons/stock-tool-paintbrush-22.png"), 
+    widget_manager->add(new Button(IMG_Load(DATADIR "/icons/stock-tool-paintbrush-22.png"), 
                                    Rect(Point(2, 2+1*34), Size(34, 34)),
                                    new ToolParameterButtonCallback(DrawingParameter::TOOL_PAINTBRUSH)));
-    widget_manager->add(new Button(IMG_Load("data/icons/stock-tool-color-picker-22.png"), 
+    widget_manager->add(new Button(IMG_Load(DATADIR "/icons/stock-tool-color-picker-22.png"), 
                                    Rect(Point(2, 2+2*34), Size(34, 34)),
                                    new ToolButtonCallback(COLOR_PICKER_TOOL)));
-    widget_manager->add(new Button(IMG_Load("data/icons/stock-tool-rect-22.png"), 
+    widget_manager->add(new Button(IMG_Load(DATADIR "/icons/stock-tool-rect-22.png"), 
                                    Rect(Point(2, 2+3*34), Size(34, 34)),
                                    new ToolButtonCallback(RECT_TOOL)));
-    widget_manager->add(new Button(IMG_Load("data/icons/stock-tool-circle-22.png"), 
+    widget_manager->add(new Button(IMG_Load(DATADIR "/icons/stock-tool-circle-22.png"), 
                                    Rect(Point(2, 2+4*34), Size(34, 34)),
                                    new ToolButtonCallback(CIRCLE_TOOL)));
-    widget_manager->add(new Button(IMG_Load("data/icons/stock-tool-line-22.png"), 
+    widget_manager->add(new Button(IMG_Load(DATADIR "/icons/stock-tool-line-22.png"), 
                                    Rect(Point(2, 2+5*34), Size(34, 34)),
                                    new ToolButtonCallback(LINE_TOOL)));
-    widget_manager->add(new Button(IMG_Load("data/icons/stock-tool-rect-select-22.png"), 
+    widget_manager->add(new Button(IMG_Load(DATADIR "/icons/stock-tool-rect-select-22.png"), 
                                    Rect(Point(2, 2+6*34), Size(34, 34)),
                                    new ToolButtonCallback(REGION_TOOL)));
     widget_manager->add(text_view = new TextView(Rect(38, screen->h - 38,

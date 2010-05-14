@@ -16,7 +16,7 @@
 
 #include "globals.hpp"
 
-std::string datadir;
+std::string datadir = "../data/";
 std::string bindir;
 std::string homedir;
 

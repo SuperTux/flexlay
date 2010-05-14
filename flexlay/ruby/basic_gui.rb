@@ -28,7 +28,9 @@ class GUI
     @gui.run()
   end
 
-  def initialize()
+  def initialize(datadir = "../data")
+    @datadir = datadir
+
     ## Init the GUI manager
     @editor = Editor.new()
     @gui = @editor.get_gui_manager()
@@ -45,36 +47,36 @@ class GUI
 
     @button_panel = ButtonPanel.new(0, 23, 800, 33, true, @gui.get_component)
 
-    @button_panel.add_icon("../data/images/icons24/stock_new.png")
-    @button_panel.add_icon("../data/images/icons24/stock_open.png", proc{ level_load() })
-    @button_panel.add_small_icon("../data/images/icons24/downarrow.png", proc{ $controller.recent_files_menu.run() })
-    @button_panel.add_icon("../data/images/icons24/stock_save.png", proc{ level_save() })
-    @button_panel.add_icon("../data/images/icons24/stock_save_as.png", proc{ level_save_as() })
+    @button_panel.add_icon(@datadir + "/images/icons24/stock_new.png")
+    @button_panel.add_icon(@datadir + "/images/icons24/stock_open.png", proc{ level_load() })
+    @button_panel.add_small_icon(@datadir + "/images/icons24/downarrow.png", proc{ $controller.recent_files_menu.run() })
+    @button_panel.add_icon(@datadir + "/images/icons24/stock_save.png", proc{ level_save() })
+    @button_panel.add_icon(@datadir + "/images/icons24/stock_save_as.png", proc{ level_save_as() })
     @button_panel.add_separator()
-    @button_panel.add_icon("../data/images/icons24/stock_copy.png")
-    @button_panel.add_icon("../data/images/icons24/stock_paste.png")
+    @button_panel.add_icon(@datadir + "/images/icons24/stock_copy.png")
+    @button_panel.add_icon(@datadir + "/images/icons24/stock_paste.png")
     @button_panel.add_separator()
-    @undo_icon = @button_panel.add_icon("../data/images/icons24/stock_undo.png", proc{ @workspace.get_map().undo() })
-    @redo_icon = @button_panel.add_icon("../data/images/icons24/stock_redo.png", proc{ @workspace.get_map().redo() })
+    @undo_icon = @button_panel.add_icon(@datadir + "/images/icons24/stock_undo.png", proc{ @workspace.get_map().undo() })
+    @redo_icon = @button_panel.add_icon(@datadir + "/images/icons24/stock_redo.png", proc{ @workspace.get_map().redo() })
     @undo_icon.disable()
     @redo_icon.disable()
     @button_panel.add_separator()
-    @minimap_icon = @button_panel.add_icon("../data/images/icons24/minimap.png", proc{ toggle_minimap() })
-    @grid_icon = @button_panel.add_icon("../data/images/icons24/grid.png", proc{ toggle_grid() })
+    @minimap_icon = @button_panel.add_icon(@datadir + "/images/icons24/minimap.png", proc{ toggle_minimap() })
+    @grid_icon = @button_panel.add_icon(@datadir + "/images/icons24/grid.png", proc{ toggle_grid() })
     @button_panel.add_separator()
 
-    @button_panel.add_icon("../data/images/icons24/background.png")
-    @button_panel.add_icon("../data/images/icons24/interactive.png")
-    @button_panel.add_icon("../data/images/icons24/foreground.png")
-    @button_panel.add_icon("../data/images/icons24/eye.png")
+    @button_panel.add_icon(@datadir + "/images/icons24/background.png")
+    @button_panel.add_icon(@datadir + "/images/icons24/interactive.png")
+    @button_panel.add_icon(@datadir + "/images/icons24/foreground.png")
+    @button_panel.add_icon(@datadir + "/images/icons24/eye.png")
 
     @layer_menu = Menu.new(CL_Point.new(32*15+2, 54), @gui.get_component())
     
     @toolbar = ButtonPanel.new(0, 23+33, 33, 32*4+2, false, @gui.get_component)
-    @paint  = @toolbar.add_icon("../data/images/tools/stock-tool-pencil-22.png", proc{ $controller.set_tilemap_paint_tool() })
-    @select = @toolbar.add_icon("../data/images/tools/stock-tool-rect-select-22.png", proc{ $controller.set_tilemap_select_tool() })
-    @zoom   = @toolbar.add_icon("../data/images/tools/stock-tool-zoom-22.png", proc{ $controller.set_zoom_tool() })
-    @object = @toolbar.add_icon("../data/images/tools/stock-tool-clone-22.png", proc{ $controller.set_objmap_select_tool() })
+    @paint  = @toolbar.add_icon(@datadir + "/images/tools/stock-tool-pencil-22.png", proc{ $controller.set_tilemap_paint_tool() })
+    @select = @toolbar.add_icon(@datadir + "/images/tools/stock-tool-rect-select-22.png", proc{ $controller.set_tilemap_select_tool() })
+    @zoom   = @toolbar.add_icon(@datadir + "/images/tools/stock-tool-zoom-22.png", proc{ $controller.set_zoom_tool() })
+    @object = @toolbar.add_icon(@datadir + "/images/tools/stock-tool-clone-22.png", proc{ $controller.set_objmap_select_tool() })
 
     # $foreground_icon.set_callback(proc{ show_foreground() })
     # $interactive_icon.set_callback(proc{ show_interactive() })

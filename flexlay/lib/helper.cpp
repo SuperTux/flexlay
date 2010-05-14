@@ -20,6 +20,7 @@
 #include <ClanLib/core.h>
 
 #include "blitter.hpp"
+#include "globals.hpp"
 #include "helper.hpp"
 
 typedef std::map<std::string, CL_PixelBuffer> PixelBufferCache;

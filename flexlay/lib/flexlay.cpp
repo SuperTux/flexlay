@@ -67,12 +67,10 @@ Flexlay::init(const std::string& title, int width, int height, bool fullscreen_,
     CL_SetupDisplay::init();
     CL_SetupGUI::init();
   
-    datadir = "../data/";
-
     window = new CL_DisplayWindow(title,
                                   screen_width, screen_height, fullscreen, allow_resize);
 
-    resources = CL_ResourceManager(datadir + "flexlay.xml");
+    resources = CL_ResourceManager(datadir + "/flexlay.xml");
     Fonts::verdana11        = CL_Font("verdana11_black", &resources);
     Fonts::verdana11_yellow = CL_Font("verdana11_yellow", &resources);
   } catch (CL_Error& err) {
@@ -97,6 +95,12 @@ Flexlay::deinit()
 #endif
 
   CL_SetupCore::deinit();
+}
+
+void
+Flexlay::set_datadir(const std::string& datadir_)
+{
+  datadir = datadir_;
 }
 
 /* EOF */

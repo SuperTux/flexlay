@@ -16,6 +16,7 @@
 
 #include <iostream>
 #include <ClanLib/Display/display.h>
+#include "globals.hpp"
 #include "box.hpp"
 #include "icon.hpp"
 #include "helper.hpp"
@@ -53,13 +54,13 @@ Window::Window(const CL_Rect& rect, const std::string& title, CL_Component* pare
   //Fonts::verdana11.draw(8+15, 3, title);
 
   impl->close = new Icon(CL_Rect(CL_Point(3, 3), CL_Size(18,18)), 
-                         make_sprite("../data/images/window/close.png"),
+                         make_sprite(datadir + "/images/window/close.png"),
                          "", this);
   impl->minimize = new Icon(CL_Rect(CL_Point(get_width()-3-18-18, 3), CL_Size(18,18)), 
-                            make_sprite("../data/images/window/minimize.png"),
+                            make_sprite(datadir + "/images/window/minimize.png"),
                             "", this);
   impl->maximize = new Icon(CL_Rect(CL_Point(get_width()-3-18, 3), CL_Size(18,18)), 
-                            make_sprite("../data/images/window/maximize.png"),
+                            make_sprite(datadir + "/images/window/maximize.png"),
                             "", this);
 
   impl->client_area = new CL_Component(CL_Rect(CL_Point(4, 3+12+7), 

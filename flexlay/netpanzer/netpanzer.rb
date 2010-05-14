@@ -37,29 +37,43 @@ require "gui.rb"
 $screen  = CL_Size.new(640, 480)
 
 $flexlay = Flexlay.new()
+if ENV["FLEXLAY_DATADIR"] then
+  $flexlay.set_datadir(ENV["FLEXLAY_DATADIR"])
+  $flexlay_datadir = ENV["FLEXLAY_DATADIR"]
+end
 $flexlay.init("netPanzer Editor", $screen.width, $screen.height, false, true)
 
 class Config
   attr_accessor :datadir, :recent_files
 
   def initialize()
-    @datadir      = "./"
+    @datadir      = "."
     @recent_files = []
   end
 end
 
 $config = Config.new()
 
-$datadir = "/home/ingo/projects/netpanzer/netpanzer"
+if ENV["NETPANZER_DATADIR"] then
+  $netpanzer_datadir = ENV["NETPANZER_DATADIR"]
+else
+  $netpanzer_datadir = "/home/ingo/projects/netpanzer/netpanzer"
+end
+
 $brushes.each_with_index{|(start, width, height, name), index|
   NetPanzerData::instance().register_tilegroup(start, width, height)
 }
 
-NetPanzerData::instance().load_data($datadir)
+NetPanzerData::instance().load_data($netpanzer_datadir)
 
 $tileset = NetPanzerData::instance().get_tileset()
 
-$resources = CL_ResourceManager.new("netpanzersprites.xml")
+if ENV["NETPANZER_EDITOR_DATADIR"] then
+  $config.datadir = ENV["NETPANZER_EDITOR_DATADIR"]
+  $resources = CL_ResourceManager.new(ENV["NETPANZER_EDITOR_DATADIR"] + "/netpanzersprites.xml")
+else
+  $resources = CL_ResourceManager.new("netpanzersprites.xml")
+end
 
 # Tools
 $tilemap_paint_tool  = TileMapPaintTool.new()

@@ -4,7 +4,7 @@
 if True:
     clanLib_env = Environment(LIBPATH=[])
     clanLib_env.ParseConfig("pkg-config --cflags --libs " +
-                            "clanCore-0.8 clanDisplay-0.8 clanGL-0.8 clanSignals-0.8 clanGUI-0.8 clanGUIStyleSilver-0.8")
+                            "clanCore-1.0 clanDisplay-1.0 clanGL-1.0 clanSignals-1.0 clanGUI-1.0 clanGUIStyleSilver-1.0")
 else:
     # FIXME: replace the X11 stuff with a proper X11 configure check and
     # make them somehow part of the clanlib libraries themself

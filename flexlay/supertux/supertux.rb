@@ -63,7 +63,7 @@ $zoom_tool           = ZoomTool.new()
 $zoom2_tool          = Zoom2Tool.new()
 $workspace_move_tool = WorkspaceMoveTool.new()
 $objmap_select_tool  = ObjMapSelectTool.new()
-# $sketch_stroke_tool  = SketchStrokeTool.new()
+# $sketch_stroke_tool = SketchStrokeTool.new()
 
 $mysprite = make_sprite("../data/images/icons16/stock_paste-16.png")
 
@@ -151,6 +151,23 @@ end
 $gui.run()
 
 $config.save($config_file)
+
+# Try to cleanup
+puts "Cleanup"
+$gui = nil 
+$config = nil
+$tilemap_paint_tool  = nil
+$tilemap_select_tool = nil
+$zoom_tool           = nil
+$zoom2_tool          = nil
+$workspace_move_tool = nil
+$objmap_select_tool  = nil
+$game_objects = nil
+GC.start
+GC.start
+GC.start
+GC.start
+puts "Cleanup done"
 
 # FIXME: Can't deinit flexlay, since we would crash then
 at_exit{flexlay.deinit()}

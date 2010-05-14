@@ -25,7 +25,7 @@ install: install-exec install-data install-man
 	'FLEXLAY_DATADIR="'${DATADIR}'"\n'\
 	'export FLEXLAY_DATADIR\n'\
 	'\n'\
-	'NETPANZER_DATADIR="/home/ingo/projects/netpanzer/netpanzer"\n'\
+	'NETPANZER_DATADIR="/usr/share/games/netpanzer/\n"\
 	'export NETPANZER_DATADIR\n'\
 	'\n'\
 	'NETPANZER_EDITOR_DATADIR="'${DATADIR}'"\n'\

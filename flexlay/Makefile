@@ -9,14 +9,16 @@ FLEXLAY_DATADIR          = ${DATADIR}/flexlay
 NETPANZER_EDITOR_DATADIR = ${DATADIR}/netpanzer-editor
 FLEXLAY_PAINT_DATADIR    = ${DATADIR}/flexlay-paint
 
-build:
+build-stamp:
 	scons
+	touch build-stamp
 
 clean:
 	scons -c
 	rm -rf .sconf_temp/
 	rm -f .sconsign.dblite
 	rm -f config.log
+	rm -f build-stamp
 
 install: build install-exec install-data
 
@@ -27,7 +29,7 @@ install-flexlay: install-flexlay-exec install-flexlay-data
 install-flexlay-paint: install-flexlay-paint-exec install-flexlay-paint-data
 install-netpanzer-editor: install-netpanzer-editor-exec install-netpanzer-editor-data
 
-install-flexlay-exec:
+install-flexlay-exec: build-stamp
 	install -D ruby/flexlay_wrap.so ${DESTDIR}${LIBDIR}/flexlay_wrap.so
 
 install-flexlay-data:
@@ -46,7 +48,7 @@ install-flexlay-data:
 	-name "*.xml" \) \
 	-exec install -m 644 -D {} ${DESTDIR}${FLEXLAY_DATADIR}/{} \;
 
-install-netpanzer-editor-exec:
+install-netpanzer-editor-exec: build-stamp
 	install -D netpanzer/netpanzer_wrap.so ${DESTDIR}${LIBDIR}/netpanzer_wrap.so 
 
 	install -d ${DESTDIR}${BINDIR}

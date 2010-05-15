@@ -90,34 +90,34 @@ class GUI
 
     @button_panel = components.get('buttonpanel').component
 
-    @button_panel.add_icon($config.datadir + "/images/icons24/stock_new.png",
+    @button_panel.add_icon($flexlay_datadir + "/images/icons24/stock_new.png",
                            proc{ gui_level_new() })
-    @button_panel.add_icon($config.datadir + "/images/icons24/stock_open.png", 
+    @button_panel.add_icon($flexlay_datadir + "/images/icons24/stock_open.png", 
                            proc{ gui_level_load() })
-    @button_panel.add_small_icon($config.datadir + "/images/icons24/downarrow.png", 
+    @button_panel.add_small_icon($flexlay_datadir + "/images/icons24/downarrow.png", 
                                  proc{ gui_level_load() })
-    @button_panel.add_icon($config.datadir + "/images/icons24/stock_save.png",
+    @button_panel.add_icon($flexlay_datadir + "/images/icons24/stock_save.png",
                            proc{ gui_level_save() })
-    @button_panel.add_icon($config.datadir + "/images/icons24/stock_save_as.png", 
+    @button_panel.add_icon($flexlay_datadir + "/images/icons24/stock_save_as.png", 
                            proc{ gui_level_save_as() })
 
     @button_panel.add_separator()
-    @button_panel.add_icon($config.datadir + "/images/icons24/stock_copy.png", proc{})
-    @button_panel.add_icon($config.datadir + "/images/icons24/stock_paste.png", proc{})
+    @button_panel.add_icon($flexlay_datadir + "/images/icons24/stock_copy.png", proc{})
+    @button_panel.add_icon($flexlay_datadir + "/images/icons24/stock_paste.png", proc{})
     @button_panel.add_separator()
-    @undo_icon = @button_panel.add_icon($config.datadir + "/images/icons24/stock_undo.png", proc{@workspace.get_map().undo()})
-    @redo_icon = @button_panel.add_icon($config.datadir + "/images/icons24/stock_redo.png", proc{@workspace.get_map().redo()})
+    @undo_icon = @button_panel.add_icon($flexlay_datadir + "/images/icons24/stock_undo.png", proc{@workspace.get_map().undo()})
+    @redo_icon = @button_panel.add_icon($flexlay_datadir + "/images/icons24/stock_redo.png", proc{@workspace.get_map().redo()})
     @button_panel.add_separator()
 
 
     @tool_button_panel = ButtonPanel.new(320, 23, $screen.width, 33, true, @gui.get_component)
     @tool_button_panel.add_separator()
-    @tool_button_panel.add_icon($config.datadir + "/images/icons24/object_raise.png", proc{
+    @tool_button_panel.add_icon($flexlay_datadir + "/images/icons24/object_raise.png", proc{
                                   $objmap_select_tool.get_selection().each {|obj|
                                     @workspace.get_map().get_data().objects.raise(obj)
                                   }
                                 })
-    @tool_button_panel.add_icon($config.datadir + "/images/icons24/object_lower.png", proc{
+    @tool_button_panel.add_icon($flexlay_datadir + "/images/icons24/object_lower.png", proc{
                                   $objmap_select_tool.get_selection().each {|obj|
                                     @workspace.get_map().get_data().objects.lower(obj)
                                   }
@@ -126,13 +126,13 @@ class GUI
 
 
     @toolbar = ButtonPanel.new(0, 23+33, 33, 32*4+2, false, @gui.get_component())
-    @paint = @toolbar.add_icon($config.datadir + "/images/tools/stock-tool-pencil-22.png",
+    @paint = @toolbar.add_icon($flexlay_datadir + "/images/tools/stock-tool-pencil-22.png",
                                method(:set_tilemap_paint_tool))
-    @select = @toolbar.add_icon($config.datadir + "/images/tools/stock-tool-rect-select-22.png",
+    @select = @toolbar.add_icon($flexlay_datadir + "/images/tools/stock-tool-rect-select-22.png",
                                 method(:set_tilemap_select_tool))
-    @zoom = @toolbar.add_icon($config.datadir + "/images/tools/stock-tool-zoom-22.png",
+    @zoom = @toolbar.add_icon($flexlay_datadir + "/images/tools/stock-tool-zoom-22.png",
                               method(:set_zoom_tool))
-    @object = @toolbar.add_icon($config.datadir + "/images/tools/stock-tool-clone-22.png",
+    @object = @toolbar.add_icon($flexlay_datadir + "/images/tools/stock-tool-clone-22.png",
                                 method(:set_objmap_select_tool))
 
     $brushes.each {|i|
@@ -194,13 +194,13 @@ class GUI
                                  $objmap_select_tool.clear_selection()
                                })
                  menu.add_separator()
-                 menu.add_item(make_sprite($config.datadir + "/images/icons16/object_raise.png"), 
+                 menu.add_item(make_sprite($flexlay_datadir + "/images/icons16/object_raise.png"), 
                                "Raise Selection", proc{
                                  $objmap_select_tool.get_selection().each {|obj|
                                    @workspace.get_map().get_data().objects.raise(obj)
                                  }
                                })
-                 menu.add_item(make_sprite($config.datadir + "/images/icons16/object_lower.png"), 
+                 menu.add_item(make_sprite($flexlay_datadir + "/images/icons16/object_lower.png"), 
                                "Lower Selection", proc{
                                  $objmap_select_tool.get_selection().each {|obj|
                                    @workspace.get_map().get_data().objects.lower(obj)
@@ -333,7 +333,7 @@ class GUI
       grid_icon.set_up()
       
       grid_icon = Icon(CL_Rect(CL_Point(p.inc(48), 2), CL_Size(32, 32)),
-                       make_sprite($config.datadir + "/images/icons24/grid.png"), "Some tooltip", button_panel);
+                       make_sprite($flexlay_datadir + "/images/icons24/grid.png"), "Some tooltip", button_panel);
       grid_icon.set_callback(proc{gui_toggle_grid})
 
       layer_menu = Menu(CL_Point(32*11+2, 54), $gui.get_component())

@@ -48,6 +48,7 @@ class Config
 
   def initialize()
     @datadir      = "."
+    @flexlay_datadir = "."
     @recent_files = []
   end
 end

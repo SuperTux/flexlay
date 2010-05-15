@@ -163,37 +163,37 @@ class PaintGUI
             })
 
     button_panel = ButtonPanel.new(0, 0, 33, 33*4, false, @gui.get_component)
-    button_panel.add_icon("../data/images/tools/stock-tool-pencil-22.png", proc{ 
+    button_panel.add_icon($flexlay_datadir + "/images/tools/stock-tool-pencil-22.png", proc{ 
                             @workspace.set_tool($sketch_stroke_tool.to_tool())
                           })
-    button_panel.add_icon("../data/images/tools/stock-tool-zoom-22.png", proc{ 
+    button_panel.add_icon($flexlay_datadir + "/images/tools/stock-tool-zoom-22.png", proc{ 
                             @workspace.set_tool($zoom_tool.to_tool())
                           })
-    button_panel.add_icon("../data/images/tools/stock-tool-move-22.png", proc{ 
+    button_panel.add_icon($flexlay_datadir + "/images/tools/stock-tool-move-22.png", proc{ 
                             @workspace.set_tool($layer_move_tool.to_tool())
                           })
 
-    button_panel.add_icon("../data/images/tools/stock-tool-clone-22.png", proc{ 
+    button_panel.add_icon($flexlay_datadir + "/images/tools/stock-tool-clone-22.png", proc{ 
                             @workspace.set_tool($objmap_select_tool.to_tool())
                           })
 
     anim_panel = ButtonPanel.new($screen_rect.get_width()/2 - (32*3)/2-16-32, 0, 32*3+1+16, 33,
                                  true, @gui.get_component)
-    anim_panel.add_icon("../data/images/icons24/stock_new.png",
+    anim_panel.add_icon($flexlay_datadir + "/images/icons24/stock_new.png",
                         proc{ $animation.add_frame() })
     anim_panel.add_separator()
-    #anim_panel.add_icon("../data/images/icons24/anim_skipbackward.png")
-    #anim_panel.add_icon("../data/images/icons24/anim_fastbackward.png")
-    #anim_panel.add_icon("../data/images/icons24/anim_playbackward.png")
-    #anim_panel.add_icon("../data/images/icons24/anim_slowmotionbackward.png")
-    anim_panel.add_icon("../data/images/icons24/anim_previous.png",
+    #anim_panel.add_icon($flexlay_datadir + "/images/icons24/anim_skipbackward.png")
+    #anim_panel.add_icon($flexlay_datadir + "/images/icons24/anim_fastbackward.png")
+    #anim_panel.add_icon($flexlay_datadir + "/images/icons24/anim_playbackward.png")
+    #anim_panel.add_icon($flexlay_datadir + "/images/icons24/anim_slowmotionbackward.png")
+    anim_panel.add_icon($flexlay_datadir + "/images/icons24/anim_previous.png",
                         proc{ $animation.previous_frame()})
-    anim_panel.add_icon("../data/images/icons24/anim_next.png",
+    anim_panel.add_icon($flexlay_datadir + "/images/icons24/anim_next.png",
                         proc{ $animation.next_frame()})
-    #anim_panel.add_icon("../data/images/icons24/anim_slowmotion.png")
-    #anim_panel.add_icon("../data/images/icons24/anim_play.png")
-    #anim_panel.add_icon("../data/images/icons24/anim_fastforward.png")
-    #anim_panel.add_icon("../data/images/icons24/anim_skipforward.png")
+    #anim_panel.add_icon($flexlay_datadir + "/images/icons24/anim_slowmotion.png")
+    #anim_panel.add_icon($flexlay_datadir + "/images/icons24/anim_play.png")
+    #anim_panel.add_icon($flexlay_datadir + "/images/icons24/anim_fastforward.png")
+    #anim_panel.add_icon($flexlay_datadir + "/images/icons24/anim_skipforward.png")
   end
 
   def quit()

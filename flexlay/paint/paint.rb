@@ -26,7 +26,14 @@ require "animation.rb"
 require "image.rb"
 require "gui.rb"
 
+$flexlay_datadir = "../data"
+
 flexlay = Flexlay.new()
+
+if ENV["FLEXLAY_DATADIR"] then
+  $flexlay_datadir = ENV["FLEXLAY_DATADIR"]
+  flexlay.set_datadir($flexlay_datadir)
+end
 
 # $screen_rect = CL_Rect.new(CL_Point.new(0, 0), CL_Size.new(800, 600))
 $screen_rect = CL_Rect.new(CL_Point.new(0, 0), CL_Size.new(1024, 768))
@@ -61,7 +68,7 @@ if false then
                                                           1.0, # aspect
                                                           0).to_brush()) # angle
 else
-  DrawerProperties.current().set_brush(SpriteBrush.new(make_sprite("../data/images/brush/brush8.png")).to_brush)
+  DrawerProperties.current().set_brush(SpriteBrush.new(make_sprite($flexlay_datadir + "/images/brush/brush8.png")).to_brush)
 end
 
 $image.layers_count.times {|i|

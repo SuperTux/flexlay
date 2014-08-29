@@ -188,8 +188,8 @@ TileMapPaintToolImpl::on_mouse_move(const CL_InputEvent& event)
     {
       case PAINTING:
         if (CL_Keyboard::get_keycode(CL_KEY_LSHIFT) ||
-            (current_tile.x % brush.get_width())  == (last_draw.x % brush.get_width()) &&
-            (current_tile.y % brush.get_height() == (last_draw.y % brush.get_height())))
+            ((current_tile.x % brush.get_width()) == (last_draw.x % brush.get_width()) &&
+             (current_tile.y % brush.get_height() == (last_draw.y % brush.get_height()))))
         {
           command->add_point(current_tile);
           last_draw = current_tile;
@@ -227,8 +227,8 @@ TileMapPaintToolImpl::on_mouse_up  (const CL_InputEvent& event)
           mode = NONE;
 
           if (CL_Keyboard::get_keycode(CL_KEY_LSHIFT) ||
-              (current_tile.x % brush.get_width()) == (last_draw.x % brush.get_width()) &&
-              (current_tile.y % brush.get_height() == (last_draw.y % brush.get_height())))
+              ((current_tile.x % brush.get_width()) == (last_draw.x % brush.get_width()) &&
+               (current_tile.y % brush.get_height() == (last_draw.y % brush.get_height()))))
           {
             command->add_point(current_tile);
           }

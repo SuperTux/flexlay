@@ -22,9 +22,9 @@
 #include <ClanLib/signals.h>
 #include <ClanLib/Display/color.h>
 #include "ruby.h"
-#include "meta_data.hpp"
-#include "objmap_object.hpp"
-#include "object_brush.hpp"
+#include "../lib/meta_data.hpp"
+#include "../lib/objmap_object.hpp"
+#include "../lib/object_brush.hpp"
 
 MetaData  make_metadata(VALUE obj);
 VALUE get_ruby_object(const MetaData& data);

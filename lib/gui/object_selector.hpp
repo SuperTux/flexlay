@@ -17,7 +17,7 @@
 #ifndef HEADER_FLEXLAY_OBJECT_SELECTOR_HPP
 #define HEADER_FLEXLAY_OBJECT_SELECTOR_HPP
 
-#include "object_brush.hpp"
+#include "../object_brush.hpp"
 
 class ObjectSelector : public CL_Component
 {

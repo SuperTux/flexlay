@@ -18,7 +18,7 @@
 #define HEADER_FLEXLAY_EDITOR_MAP_COMPONENT_HPP
 
 #include <ClanLib/GUI/component.h>
-#include "workspace.hpp"
+#include "../workspace.hpp"
 
 class Scrollbar;
 class EditorMapComponentImpl;

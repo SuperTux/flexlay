@@ -28,7 +28,6 @@ opts.Add('CXX', 'The C++ compiler.', 'g++')
 opts.Add('CXXFLAGS', 'The C++ compiler flags.', '-g -O2 -Wall -fPIC')
 opts.Add('CPPPATH', 'additional header path', '')
 opts.Add('LIBPATH', 'additional library path', '')
-opts.Add('RUBYDIR', 'Ruby directory', os.popen('ruby -e "require \'rbconfig\'; puts Config::CONFIG[\'archdir\']"').read()[:-1])
 
 opts.Add('DESTDIR', 'destination directory which gets appended to PREFIX', '')
 opts.Add('PREFIX',  'PREFIX, ie. /usr/local', '/usr/local')
@@ -39,12 +38,10 @@ env = Environment(SHLIBPREFIX='',
 Help(opts.GenerateHelpText(env))
 
 Depends('netpanzer.i', ['netpanzer.hpp'])
-env.Command('netpanzer_wrap.tmp.cpp', 'netpanzer.i',
+env.Command('netpanzer_wrap.cpp', 'netpanzer.i',
             "swig -c++ -ruby -o $TARGET $SOURCE")
-# FIXME: Temporary ugly workaround for missing definition of GC_VALUE
-env.Command('netpanzer_wrap.cpp', 'netpanzer_wrap.tmp.cpp',
-            'sed "s/GC_VALUE/VALUE/" $SOURCE > $TARGET')
 
+env.ParseConfig("pkg-config --cflags --libs ruby-1.9")
 libflexlay_ruby_env = env.Clone()
 flexlay_ruby_lib = libflexlay_ruby_env.SharedLibrary(
     target = 'netpanzer_wrap.so',
@@ -52,7 +49,7 @@ flexlay_ruby_lib = libflexlay_ruby_env.SharedLibrary(
     'netpanzer_wrap.cpp',
     'netpanzer.cpp'
     ],
-    CPPPATH=['$USER_CPPPATH','$RUBYDIR','../lib/'] + clanLib_env['CPPPATH'],
+    CPPPATH=['$USER_CPPPATH', '../lib/'] + clanLib_env['CPPPATH'] + env['CPPPATH'],
     LINKFLAGS = clanLib_env['LINKFLAGS'],
     LIBPATH=['../lib', '../ruby'] + clanLib_env['LIBPATH'],
     LIBS=['flexlay'] + clanLib_env['LIBS'])

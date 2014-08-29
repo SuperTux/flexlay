@@ -19,7 +19,7 @@
 
 #include "tool_impl.hpp"
 #include "tool.hpp"
-#include "stroke_drawer.hpp"
+#include "../stroke_drawer.hpp"
 
 class SketchStrokeToolImpl;
 

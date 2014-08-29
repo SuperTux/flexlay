@@ -21,7 +21,7 @@
 #include <ClanLib/Core/Math/point.h>
 
 #include "tool.hpp"
-#include "gui/tile_selection.hpp"
+#include "../gui/tile_selection.hpp"
 
 class TileMapSelectToolImpl;
 

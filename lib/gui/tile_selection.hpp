@@ -19,8 +19,8 @@
 
 #include <ClanLib/Display/color.h>
 
-#include "tile_brush.hpp"
-#include "tilemap_layer.hpp"
+#include "../tile_brush.hpp"
+#include "../tilemap_layer.hpp"
 
 class TileSelectionImpl;
 

@@ -27,7 +27,7 @@
 #include "editor_map.hpp"
 #include "editor_map_component.hpp"
 #include "tilemap_layer.hpp"
-#include "workspace.hpp"
+#include "lib/workspace.hpp"
 
 class MinimapImpl
 {

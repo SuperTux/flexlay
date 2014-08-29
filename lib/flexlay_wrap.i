@@ -89,9 +89,9 @@ std::cout << "CL_Error: " << err.message << std::endl;
 #include "helper.hpp"
 
 #ifdef SWIGRUBY
-#include "ruby_sexpr_parser.hpp"
-#include "ruby_meta_data.hpp"
-#include "ruby_functor.hpp"
+#include "../ruby/ruby_sexpr_parser.hpp"
+#include "../ruby/ruby_meta_data.hpp"
+#include "../ruby/ruby_functor.hpp"
 
 VALUE ObjMapObject2Value(const ObjMapObject& arg)
 {

@@ -19,7 +19,7 @@
 
 #include <ClanLib/gui.h>
 
-#include "tileset.hpp"
+#include "../tileset.hpp"
 
 class Tileset;
 

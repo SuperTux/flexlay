@@ -26,14 +26,13 @@ RubyFunctor::print_error()
   // FIXME: Potential memory leak
   std::cout << "######################################################" << std::endl;
   std::cout << "RubyException: " 
-            << rb_str2cstr(rb_inspect(ruby_errinfo), 0) 
+            << RSTRING(rb_inspect(rb_errinfo()))->as.heap.ptr
             << std::endl;
 
-  VALUE trace = rb_funcall(ruby_errinfo, rb_intern("backtrace"), 0);
-  for (int i = 0; i < RARRAY(trace)->len; ++i)
-    std::cout << rb_str2cstr(rb_ary_entry(trace, i), 0) << std::endl;
+  VALUE trace = rb_funcall(rb_errinfo(), rb_intern("backtrace"), 0);
+  for (int i = 0; i < RARRAY(trace)->as.heap.len; ++i)
+    std::cout << RSTRING(rb_ary_entry(trace, i))->as.heap.ptr << std::endl;
   std::cout << "######################################################" << std::endl;
-  ruby_errinfo = Qnil;
 }
 
 VALUE

@@ -39,7 +39,7 @@ GUIManager::GUIManager()
 {
   std::cout << "Creating GUIManager: " << datadir + "/gui/gui.xml" << std::endl;
   impl->slot_container = new CL_SlotContainer();
-  impl->resources = new CL_ResourceManager(datadir + "/gui/gui.xml", false);
+  impl->resources = new CL_ResourceManager(datadir + "/gui/gui.xml");
   impl->style     = new CL_StyleManager_Silver(impl->resources);
   impl->manager   = new CL_GUIManager(impl->style);
   current_  = this;

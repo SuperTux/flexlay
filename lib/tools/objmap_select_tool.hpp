@@ -17,8 +17,8 @@
 #ifndef HEADER_FLEXLAY_TOOLS_OBJMAP_SELECT_TOOL_HPP
 #define HEADER_FLEXLAY_TOOLS_OBJMAP_SELECT_TOOL_HPP
 
-#include "object_layer.hpp"
-#include "object_brush.hpp"
+#include "../object_layer.hpp"
+#include "../object_brush.hpp"
 #include "tool.hpp"
 
 class CL_Menu;

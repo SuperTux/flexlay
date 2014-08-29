@@ -1,0 +1,6 @@
+*.o
+*.os
+*.a
+*~
+.sconsign.dblite
+semantic.cache

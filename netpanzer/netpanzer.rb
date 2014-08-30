@@ -40,6 +40,9 @@ $flexlay = Flexlay.new()
 if ENV["FLEXLAY_DATADIR"] then
   $flexlay.set_datadir(ENV["FLEXLAY_DATADIR"])
   $flexlay_datadir = ENV["FLEXLAY_DATADIR"]
+else
+  $flexlay.set_datadir("../data/")
+  $flexlay_datadir = "../data/"
 end
 $flexlay.init("netPanzer Editor", $screen.width, $screen.height, false, true)
 

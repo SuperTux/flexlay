@@ -34,7 +34,15 @@ class Tileset
         height = get_value_from_tree(['height', '_'], data, 1)
         ids    = get_value_from_tree(['ids'], data, [])
         # attributes = get_value_from_tree(['attributes'], data, [])
-        image  = get_value_from_tree(['image', '_'], data, 1)
+        image  = get_value_from_tree(['image', '_'], data, nil)
+
+        if not image then
+          image  = get_value_from_tree(['images', '_'], data, nil)
+        end
+
+        if not image then
+          image  = get_value_from_tree(['editor-images', '_'], data, "tiles/auxiliary/notile.png")
+        end
 
         x = 0
         y = 0

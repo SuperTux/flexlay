@@ -282,7 +282,7 @@ class GUI
 
 
   def gui_level_save()
-    if @workspace.get_map().get_metadata().filename:
+    if @workspace.get_map().get_metadata().filename
         @save_dialog.set_filename(@workspace.get_map().get_metadata().filename)
     else
       @save_dialog.set_filename(File::dirname(@save_dialog.get_filename())  + "/")

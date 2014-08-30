@@ -673,7 +673,7 @@ class SuperTuxGUI
 
     last = nil
     for i in pathnodes
-      if last != nil:
+      if last != nil
           last.connect(i)
       end
       last = i

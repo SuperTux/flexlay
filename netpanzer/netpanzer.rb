@@ -26,13 +26,13 @@ require "flexlay_wrap"
 include Flexlay_wrap
 
 require "flexlay.rb"
-require "netpanzer_wrap"
+require_relative "netpanzer_wrap"
 include Netpanzer_wrap
 
-require "netpanzerbrushes.rb"
-require "level.rb"
-require "gameobjects.rb"
-require "gui.rb"
+require_relative "netpanzerbrushes.rb"
+require_relative "level.rb"
+require_relative "gameobjects.rb"
+require_relative "gui.rb"
 
 $screen  = CL_Size.new(640, 480)
 
@@ -43,7 +43,7 @@ if ENV["FLEXLAY_DATADIR"] then
 end
 $flexlay.init("netPanzer Editor", $screen.width, $screen.height, false, true)
 
-class Config
+class NetPanzerConfig
   attr_accessor :datadir, :recent_files
 
   def initialize()
@@ -53,7 +53,7 @@ class Config
   end
 end
 
-$config = Config.new()
+$config = NetPanzerConfig.new()
 
 if ENV["NETPANZER_DATADIR"] then
   $netpanzer_datadir = ENV["NETPANZER_DATADIR"]

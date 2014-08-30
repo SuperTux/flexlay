@@ -22,9 +22,10 @@ include Flexlay_wrap
 
 require "flexlay.rb"
 require "sexpr.rb"
-require "animation.rb"
-require "image.rb"
-require "gui.rb"
+
+require_relative "animation.rb"
+require_relative "gui.rb"
+require_relative "image.rb"
 
 $flexlay_datadir = "../data"
 

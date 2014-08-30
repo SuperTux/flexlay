@@ -16,7 +16,7 @@
 ##  You should have received a copy of the GNU General Public License
 ##  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-require "gameobjects.rb"
+require_relative "gameobjects.rb"
 
 class Level
   attr_accessor :filename, :data, :editormap, :objects, :tilemap

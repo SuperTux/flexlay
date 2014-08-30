@@ -15,7 +15,7 @@ class Sprite
           action = Action.new()
           action.parse(i[1..-1])
           @actions[action.name] = action
-          if @actions.default == nil || action.name == "default":
+          if @actions.default == nil || action.name == "default"
             @actions.default = action
           end
         else

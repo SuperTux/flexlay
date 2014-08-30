@@ -46,8 +46,9 @@ require "flexlay_wrap"
 include Flexlay_wrap
 
 require "flexlay.rb"
-require "gameobj.rb"
 require "sexpr.rb"
+
+require_relative "gameobj.rb"
 
 flexlay = Flexlay.new()
 width  = 1024
@@ -73,9 +74,9 @@ $mysprite = make_sprite("../data/images/icons16/stock_paste-16.png")
 # $console.write("blabl\n");
 # $console.write("blabl\naoeuau\naeouau");
 
-require "gui.rb"
+require_relative "gui.rb"
 
-class Config
+class SuperTuxConfig
   attr_accessor :datadir, :recent_files
 
   def initialize()
@@ -95,21 +96,21 @@ class Config
   end
 end
 
-$config  = Config.new()
+$config  = SuperTuxConfig.new()
 if !$datadir then
   $datadir = File.expand_path("~/projects/supertux/trunk/supertux/data/")+"/"
 end
 
-require "data.rb"
-require "WorldMap.rb"
-require "WorldMapObject.rb"
-require "TileMap.rb"
-require "LispWriter.rb"
-require "tileset.rb"
-require "level.rb"
-require "sector.rb"
-require "sprite.rb"
-require "util.rb"
+require_relative "data.rb"
+require_relative "WorldMap.rb"
+require_relative "WorldMapObject.rb"
+require_relative "TileMap.rb"
+require_relative "LispWriter.rb"
+require_relative "tileset.rb"
+require_relative "level.rb"
+require_relative "sector.rb"
+require_relative "sprite.rb"
+require_relative "util.rb"
 
 $tileset = Tileset.new(32)
 $tileset.load($datadir + "images/tiles.strf")

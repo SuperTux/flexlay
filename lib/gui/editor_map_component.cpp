@@ -14,15 +14,17 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include <iostream>
-#include <ClanLib/Display/keyboard.h>
-#include <ClanLib/Display/mouse.h>
+#include "editor_map_component.hpp"
+
 #include <ClanLib/Display/display.h>
 #include <ClanLib/Display/display_window.h>
+#include <ClanLib/Display/keyboard.h>
+#include <ClanLib/Display/mouse.h>
+#include <functional>
+#include <iostream>
 
 #include "editor_map.hpp"
 #include "scrollbar.hpp"
-#include "editor_map_component.hpp"
 
 EditorMapComponent* EditorMapComponent::current_ = 0;
 
@@ -35,10 +37,10 @@ public:
   Scrollbar* scrollbar_v;
   CL_SlotContainer slots;
   Workspace workspace;
-  CL_Signal_v2<int, int> key_bindings[256];
+  boost::signals2::signal<void (int, int)> key_bindings[256];
 
-  EditorMapComponentImpl()
-    :workspace(true)
+  EditorMapComponentImpl() :
+    workspace(true)
   {}
 
   void draw();
@@ -69,8 +71,8 @@ EditorMapComponent::EditorMapComponent(const CL_Rect& rect, CL_Component* parent
                                     Scrollbar::HORIZONTAL,
                                     parent);
 
-  impl->slots.connect(impl->scrollbar_h->sig_scrollbar_move(), this, &EditorMapComponent::move_to_x);
-  impl->slots.connect(impl->scrollbar_v->sig_scrollbar_move(), this, &EditorMapComponent::move_to_y);
+  impl->scrollbar_h->sig_scrollbar_move().connect(std::bind(&EditorMapComponent::move_to_x, this, std::placeholders::_1));
+  impl->scrollbar_v->sig_scrollbar_move().connect(std::bind(&EditorMapComponent::move_to_y, this, std::placeholders::_1));
 
   impl->slots.connect(sig_paint(),      impl.get(), &EditorMapComponentImpl::draw);
   impl->slots.connect(sig_mouse_up(),   impl.get(), &EditorMapComponentImpl::mouse_up);
@@ -242,7 +244,7 @@ EditorMapComponentImpl::on_resize(int old_w, int old_h)
   gc_state.set_size(rect.get_width(), rect.get_height());
 }
 
-CL_Signal_v2<int, int>&
+boost::signals2::signal<void (int, int)>&
 EditorMapComponent::sig_on_key(const std::string& str)
 {
   int id = CL_Keyboard::get_device().string_to_keyid(str);

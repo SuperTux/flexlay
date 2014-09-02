@@ -93,19 +93,19 @@ ObjMapObject::operator<(const ObjMapObject& obj) const
   return impl.get() < obj.impl.get();
 }
 
-CL_Signal_v1<ObjMapObject>&
+boost::signals2::signal<void (ObjMapObject)>&
 ObjMapObject::sig_select()
 {
   return impl->on_select;
 }
 
-CL_Signal_v1<ObjMapObject>&
+boost::signals2::signal<void (ObjMapObject)>&
 ObjMapObject::sig_deselect()
 {
   return impl->on_deselect;
 }
 
-CL_Signal_v1<ObjMapObject>&
+boost::signals2::signal<void (ObjMapObject)>&
 ObjMapObject::sig_move()
 {
   return impl->on_move;

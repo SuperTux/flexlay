@@ -20,6 +20,8 @@
 #include <ClanLib/Core/Math/rect.h>
 #include <ClanLib/Display/color.h>
 
+#include <boost/signals2.hpp>
+
 #include "layer.hpp"
 #include "command.hpp"
 
@@ -27,7 +29,6 @@ class CL_GraphicContext;
 class EditorMapImpl;
 class Layer;
 class MetaData;
-class CL_Signal_v0;
 
 /** Object which represents a level, quirled together with the GUI
     stuff */
@@ -80,7 +81,7 @@ public:
 
   int redo_stack_size();
 
-  CL_Signal_v0& sig_change();
+  boost::signals2::signal<void ()>& sig_change();
 
   bool is_null() const { return !impl.get(); }
 

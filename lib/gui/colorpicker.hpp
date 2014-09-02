@@ -18,6 +18,7 @@
 #define HEADER_FLEXLAY_COLORPICKER_HPP
 
 #include <ClanLib/Display/display.h>
+#include <boost/signals2.hpp>
 
 class ColorPickerHue;
 class ColorPickerAlpha;
@@ -28,7 +29,7 @@ class ColorPicker : public CL_Component
 protected:
   ~ColorPicker() {}
 private:
-  CL_Signal_v1<CL_Color> on_color_change;
+  boost::signals2::signal<void (CL_Color)> on_color_change;
   std::vector<CL_Slot> slots;
   CL_Color color;
 
@@ -43,7 +44,7 @@ public:
 
   void draw();
 
-  CL_Signal_v1<CL_Color>& sig_color_change();
+  boost::signals2::signal<void (CL_Color)>& sig_color_change();
 
   CL_Color get_color();
   void set_color(const CL_Color& color);

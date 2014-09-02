@@ -32,7 +32,7 @@ public:
   float pos;
   Scrollbar::Orientation orientation;
 
-  CL_Signal_v1<float> on_scrollbar_move;
+  boost::signals2::signal<void (float)> on_scrollbar_move;
 
   float old_pos;
 
@@ -169,7 +169,7 @@ ScrollbarImpl::on_mouse_move(const CL_InputEvent& event)
   }
 }
 
-CL_Signal_v1<float>&
+boost::signals2::signal<void (float)>&
 Scrollbar::sig_scrollbar_move()
 {
   return impl->on_scrollbar_move;

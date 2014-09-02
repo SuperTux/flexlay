@@ -43,7 +43,7 @@ private:
   std::vector<ObjectBrush> brushes;
   int drag_obj;
 
-  CL_Signal_v2<ObjectBrush, CL_Point> on_drop;
+  boost::signals2::signal<void (ObjectBrush, CL_Point)> on_drop;
 
 protected:
   virtual ~ObjectSelector();
@@ -54,7 +54,7 @@ public:
   void draw();
   void add_brush(const ObjectBrush& brush);
 
-  CL_Signal_v2<ObjectBrush, CL_Point>& sig_drop();
+  boost::signals2::signal<void (ObjectBrush, CL_Point)>& sig_drop();
 private:
   void mouse_move(const CL_InputEvent& event);
   void mouse_down(const CL_InputEvent& event);

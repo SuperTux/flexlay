@@ -18,6 +18,8 @@
 #define HEADER_FLEXLAY_OBJMAP_OBJECT_HPP
 
 #include <ClanLib/Display/graphic_context.h>
+#include <boost/signals2.hpp>
+
 #include "meta_data.hpp"
 
 class ObjMapObjectImpl;
@@ -35,9 +37,9 @@ public:
   MetaData get_metadata() const;
   void     set_metadata(const MetaData& data_);
 
-  CL_Signal_v1<ObjMapObject>& sig_move();
-  CL_Signal_v1<ObjMapObject>& sig_select();
-  CL_Signal_v1<ObjMapObject>& sig_deselect();
+  boost::signals2::signal<void (ObjMapObject)>& sig_move();
+  boost::signals2::signal<void (ObjMapObject)>& sig_select();
+  boost::signals2::signal<void (ObjMapObject)>& sig_deselect();
 
   void draw(CL_GraphicContext* gc);
   CL_Rectf get_bound_rect() const;
@@ -49,6 +51,7 @@ public:
 
   bool operator==(const ObjMapObject& obj) const;
   bool operator<(const ObjMapObject& obj) const;
+
 private:
   std::shared_ptr<ObjMapObjectImpl> impl;
 };

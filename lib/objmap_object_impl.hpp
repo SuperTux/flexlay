@@ -25,9 +25,9 @@ public:
   CL_Pointf  pos;
   MetaData  data;
 
-  CL_Signal_v1<ObjMapObject> on_move;
-  CL_Signal_v1<ObjMapObject> on_select;
-  CL_Signal_v1<ObjMapObject> on_deselect;
+  boost::signals2::signal<void (ObjMapObject)> on_move;
+  boost::signals2::signal<void (ObjMapObject)> on_select;
+  boost::signals2::signal<void (ObjMapObject)> on_deselect;
 
   ObjMapObjectImpl();
   virtual ~ObjMapObjectImpl();

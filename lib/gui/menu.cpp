@@ -53,7 +53,7 @@ class MenuItem
 {
 protected:
   MenuImpl* parent;
-  CL_Signal_v0 on_clicked;
+  boost::signals2::signal<void ()> on_clicked;
 
 public:
   MenuItem(MenuImpl* parent_)
@@ -65,7 +65,7 @@ public:
   virtual int get_width() =0;
   virtual int get_height() =0;
 
-  CL_Signal_v0& sig_clicked() { return on_clicked; }
+  boost::signals2::signal<void ()>& sig_clicked() { return on_clicked; }
 };
 
 class SeparatorMenuItem : public MenuItem
@@ -267,7 +267,7 @@ MenuImpl::on_mouse_move(const CL_InputEvent& event)
   }
 }
 
-CL_Signal_v0&
+boost::signals2::signal<void ()>&
 Menu::sig_clicked(MenuItemHandle item)
 {
   return impl->items[item]->sig_clicked();

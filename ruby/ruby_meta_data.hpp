@@ -19,6 +19,7 @@
 
 #include <ClanLib/signals.h>
 #include <ClanLib/Display/color.h>
+#include <ClanLib/Signals/signal_v0.h>
 #include "ruby.h"
 #include "../lib/meta_data.hpp"
 #include "../lib/objmap_object.hpp"
@@ -27,15 +28,16 @@
 MetaData  make_metadata(VALUE obj);
 VALUE get_ruby_object(const MetaData& data);
 
-void connect(CL_Signal_v0& sig, VALUE obj);
-void connect_v1(CL_Signal_v1<int>& sig, VALUE obj);
-void connect_v1_float(CL_Signal_v1<float>& sig, VALUE obj);
-void connect_v2(CL_Signal_v2<int, int>& sig, VALUE obj);
-void connect_v2_graceful(CL_Signal_v2<int, int>& sig, VALUE obj);
+void connect(boost::signals2::signal<void ()>& sig, VALUE obj);
+void connect_cl(CL_Signal_v0& sig, VALUE obj);
+void connect_v1(boost::signals2::signal<void (int)>& sig, VALUE obj);
+void connect_v1_float(boost::signals2::signal<void (float)>& sig, VALUE obj);
+void connect_v2(boost::signals2::signal<void (int, int)>& sig, VALUE obj);
+void connect_v2_graceful(boost::signals2::signal<void (int, int)>& sig, VALUE obj);
 
-void connect_v1_Color(CL_Signal_v1<CL_Color>& sig, VALUE func);
-void connect_v1_ObjMapObject(CL_Signal_v1<ObjMapObject>& sig, VALUE func);
-void connect_v2_ObjectBrush_Point(CL_Signal_v2<ObjectBrush, CL_Point>& sig, VALUE func);
+void connect_v1_Color(boost::signals2::signal<void (CL_Color)>& sig, VALUE func);
+void connect_v1_ObjMapObject(boost::signals2::signal<void (ObjMapObject)>& sig, VALUE func);
+void connect_v2_ObjectBrush_Point(boost::signals2::signal<void (ObjectBrush, CL_Point)>& sig, VALUE func);
 
 #endif
 

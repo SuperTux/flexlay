@@ -27,7 +27,7 @@ public:
   typedef std::vector<CL_Color> Colors;
   Colors  colors;
   bool pressed;
-  CL_Signal_v1<CL_Color> on_color_change;
+  boost::signals2::signal<void (CL_Color)> on_color_change;
 
   ColorPickerHue(const CL_Rect& rect, CL_Component* parent)
     : CL_Component(rect, parent),
@@ -143,7 +143,7 @@ class ColorPickerAlpha : public CL_Component
 public:
   std::vector<CL_Slot> slots;
   bool pressed;
-  CL_Signal_v1<float> on_color_change;
+  boost::signals2::signal<void (float)> on_color_change;
   float alpha;
 
   ColorPickerAlpha(const CL_Rect& rect, CL_Component* parent)
@@ -220,7 +220,7 @@ public:
   std::vector<CL_Slot> slots;
   CL_Color color;
   bool pressed;
-  CL_Signal_v1<CL_Color> on_color_change;
+  boost::signals2::signal<void (CL_Color)> on_color_change;
   float factor_x;
   float factor_y;
   ColorPickerBrightness(const CL_Rect& rect, CL_Component* parent)
@@ -332,17 +332,18 @@ ColorPicker::ColorPicker(const CL_Rect& rect, CL_Component* parent)
                                                  CL_Size(int(pwidth*10), int(pheight*10))),
                                          this);
 
-  hue        = new ColorPickerHue(CL_Rect(CL_Point(int(pwidth*10), 0),
+  hue = new ColorPickerHue(CL_Rect(CL_Point(int(pwidth*10), 0),
                                           CL_Size(int(pwidth*1), int(pheight*10))),
                                   this);
 
-  alpha      = new ColorPickerAlpha(CL_Rect(CL_Point(0, int(pheight*10)),
+  alpha = new ColorPickerAlpha(CL_Rect(CL_Point(0, int(pheight*10)),
                                             CL_Size(int(pwidth*10), int(pheight*1))),
                                     this);
 
-  slots.push_back(hue->on_color_change.connect(brightness, &ColorPickerBrightness::set_color));
-  slots.push_back(brightness->on_color_change.connect(this, &ColorPicker::update_brightness_color));
-  slots.push_back(alpha->on_color_change.connect(this, &ColorPicker::update_alpha_color));
+  hue->on_color_change.connect([this](const CL_Color& c){ set_color(c); });
+  brightness->on_color_change.connect([this](const CL_Color& c){ update_brightness_color(c); });
+  alpha->on_color_change.connect([this](float v){ update_alpha_color(v); });
+
   slots.push_back(sig_paint().connect(this, &ColorPicker::draw));
 
   brightness->set_color(CL_Color(255, 0, 0));
@@ -380,7 +381,7 @@ ColorPicker::draw()
   CL_Display::pop_modelview();
 }
 
-CL_Signal_v1<CL_Color>&
+  boost::signals2::signal<void (CL_Color)>&
 ColorPicker::sig_color_change()
 {
   return on_color_change;

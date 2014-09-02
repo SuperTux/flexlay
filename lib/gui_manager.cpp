@@ -14,9 +14,9 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+#include <ClanLib/core.h>
 #include <ClanLib/gui.h>
 #include <ClanLib/guistylesilver.h>
-#include <ClanLib/core.h>
 
 #include "globals.hpp"
 #include "gui_manager.hpp"

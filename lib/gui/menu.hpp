@@ -18,6 +18,7 @@
 #define HEADER_FLEXLAY_MENU_HPP
 
 #include <ClanLib/GUI/component.h>
+#include <boost/signals2.hpp>
 #include <memory>
 
 class MenuImpl;
@@ -40,7 +41,7 @@ public:
   MenuItemHandle add_submenu(const std::string& name, const Menu& submenu);
   MenuItemHandle add_separator();
 
-  CL_Signal_v0& sig_clicked(MenuItemHandle item);
+  boost::signals2::signal<void ()>& sig_clicked(MenuItemHandle item);
 
   void run();
 private:

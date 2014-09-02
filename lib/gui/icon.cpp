@@ -36,7 +36,7 @@ public:
   bool is_down;
 
   bool is_enabled;
-  CL_Signal_v0 sig_on_click;
+  boost::signals2::signal<void ()> sig_on_click;
 
   void draw();
 
@@ -62,7 +62,7 @@ Icon::Icon(const CL_Rect& rect, const CL_Sprite& sprite, const std::string& tool
   impl->slots.push_back(sig_mouse_up().connect(impl.get(),   &IconImpl::mouse_up));
 }
 
-CL_Signal_v0&
+boost::signals2::signal<void ()>&
 Icon::sig_clicked()
 {
   return impl->sig_on_click;

@@ -69,11 +69,11 @@ Window::Window(const CL_Rect& rect, const std::string& title, CL_Component* pare
   impl->parent  = this;
   impl->is_maximized = false;
 
-  impl->slots.push_back(sig_resize().connect(impl.get(),      &WindowImpl::on_resize));
+  impl->slots.push_back(sig_resize().connect(impl.get(), &WindowImpl::on_resize));
 
-  impl->slots.push_back(sig_paint().connect(impl.get(),      &WindowImpl::draw));
-  impl->slots.push_back(impl->maximize->sig_clicked().connect(impl.get(), &WindowImpl::do_maximize));
-  impl->slots.push_back(impl->close->sig_clicked().connect(impl.get(), &WindowImpl::do_close));
+  impl->slots.push_back(sig_paint().connect(impl.get(), &WindowImpl::draw));
+  impl->maximize->sig_clicked().connect(std::bind(&WindowImpl::do_maximize, impl.get()));
+  impl->close->sig_clicked().connect(std::bind(&WindowImpl::do_close, impl.get()));
 }
 
 Window::~Window()

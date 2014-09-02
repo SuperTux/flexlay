@@ -47,7 +47,7 @@ public:
   Commands undo_stack;
   Commands redo_stack;
 
-  CL_Signal_v0 on_change;
+  boost::signals2::signal<void ()> on_change;
 
   bool    has_bounding_rect;
   CL_Rect bounding_rect;
@@ -269,7 +269,7 @@ EditorMap::redo_stack_size()
   return impl->redo_stack.size();
 }
 
-CL_Signal_v0&
+boost::signals2::signal<void ()>&
 EditorMap::sig_change()
 {
   return impl->on_change;

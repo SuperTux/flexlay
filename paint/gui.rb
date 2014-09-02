@@ -84,13 +84,13 @@ class PaintGUI
     @brush_shape_rect    = CL_Button.new(CL_Rect.new(CL_Point.new(45, 250), CL_Size.new(40, 25)), "Squa", @selector_window)
     @brush_shape_diamond = CL_Button.new(CL_Rect.new(CL_Point.new(85, 250), CL_Size.new(40, 25)), "Diam", @selector_window)
 
-    connect(@brush_shape_circle.sig_clicked(), proc{ 
+    connect_cl(@brush_shape_circle.sig_clicked(), proc{ 
               GeneratedBrush.new(DrawerProperties.current().get_brush()).set_shape(BRUSH_SHAPE_CIRCLE)
             })
-    connect(@brush_shape_rect.sig_clicked(), proc{ 
+    connect_cl(@brush_shape_rect.sig_clicked(), proc{ 
               GeneratedBrush.new(DrawerProperties.current().get_brush()).set_shape(BRUSH_SHAPE_SQUARE)
             })
-    connect(@brush_shape_diamond.sig_clicked(), proc{ 
+    connect_cl(@brush_shape_diamond.sig_clicked(), proc{ 
               GeneratedBrush.new(DrawerProperties.current().get_brush()).set_shape(BRUSH_SHAPE_DIAMOND)
             })
 
@@ -141,23 +141,23 @@ class PaintGUI
     @shader_mode = CL_Button.new(CL_Rect.new(CL_Point.new(5, 525), CL_Size.new(40, 25)), "Shad", @selector_window)
     @smudge_mode = CL_Button.new(CL_Rect.new(CL_Point.new(45, 525), CL_Size.new(40, 25)), "Smudge", @selector_window)
 
-    connect(@normal_mode.sig_clicked(), proc{ 
+    connect_cl(@normal_mode.sig_clicked(), proc{ 
               drawer = SpriteStrokeDrawer.new($sketch_stroke_tool.get_drawer())
               drawer.set_mode(SpriteStrokeDrawer::DM_NORMAL)
             })
-    connect(@erase_mode.sig_clicked(),  proc{ 
+    connect_cl(@erase_mode.sig_clicked(),  proc{ 
               drawer = SpriteStrokeDrawer.new($sketch_stroke_tool.get_drawer())
               drawer.set_mode(SpriteStrokeDrawer::DM_ERASE)
             })
-    connect(@add_mode.sig_clicked(),    proc{
+    connect_cl(@add_mode.sig_clicked(),    proc{
               drawer = SpriteStrokeDrawer.new($sketch_stroke_tool.get_drawer())
               drawer.set_mode(SpriteStrokeDrawer::DM_ADDITION)
             })
-    connect(@shader_mode.sig_clicked(),    proc{
+    connect_cl(@shader_mode.sig_clicked(),    proc{
               drawer = SpriteStrokeDrawer.new($sketch_stroke_tool.get_drawer())
               drawer.set_mode(SpriteStrokeDrawer::DM_SHADER)
             })
-    connect(@smudge_mode.sig_clicked(),    proc{
+    connect_cl(@smudge_mode.sig_clicked(),    proc{
               drawer = SpriteStrokeDrawer.new($sketch_stroke_tool.get_drawer())
               drawer.set_mode(SpriteStrokeDrawer::DM_SMUDGE)
             })

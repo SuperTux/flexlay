@@ -18,7 +18,7 @@
 #define HEADER_FLEXLAY_OBJMAP_CONTROL_POINT_HPP
 
 #include <ClanLib/Display/sprite.h>
-
+#include <boost/signals2.hpp>
 #include "meta_data.hpp"
 
 class ObjMapControlPointImpl;
@@ -41,7 +41,7 @@ public:
 
   CL_Rect get_bound_rect() const;
 
-  CL_Signal_v1<CL_Pointf>& sig_set_pos();
+  boost::signals2::signal<void (CL_Pointf)>& sig_set_pos();
 
   bool is_null() const { return !impl.get(); }
 

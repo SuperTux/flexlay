@@ -17,8 +17,9 @@
 #ifndef HEADER_FLEXLAY_ICON_HPP
 #define HEADER_FLEXLAY_ICON_HPP
 
-#include <ClanLib/GUI/component.h>
 #include <ClanLib/Display/sprite.h>
+#include <ClanLib/GUI/component.h>
+#include <boost/signals2.hpp>
 #include <memory>
 
 class IconImpl;
@@ -36,7 +37,7 @@ public:
   void set_up();
   void set_down();
 
-  CL_Signal_v0& sig_clicked();
+  boost::signals2::signal<void ()>& sig_clicked();
 
 private:
   Icon (const Icon&);

@@ -18,6 +18,7 @@
 #define HEADER_FLEXLAY_EDITOR_MAP_COMPONENT_HPP
 
 #include <ClanLib/GUI/component.h>
+#include <boost/signals2.hpp>
 #include "../workspace.hpp"
 
 class Scrollbar;
@@ -48,7 +49,7 @@ public:
   void move_to_x(float x);
   void move_to_y(float y);
 
-  CL_Signal_v2<int, int>& sig_on_key(const std::string& str);
+  boost::signals2::signal<void (int, int)>& sig_on_key(const std::string& str);
 
   CL_Pointf screen2world(const CL_Point& pos);
 

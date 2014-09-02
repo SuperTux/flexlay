@@ -18,6 +18,7 @@
 #define HEADER_FLEXLAY_FLEXLAY_HPP
 
 #include <ClanLib/Core/Resources/resource_manager.h>
+#include <boost/signals2.hpp>
 
 class CL_DisplayWindow;
 
@@ -87,13 +88,17 @@ public:
 
   CL_ResourceManager resources;
 
+#ifndef SWIG
+  boost::signals2::signal<void (int, int)> m_sig_resize;
+#endif
+
   static Flexlay* current() { return current_; }
 public:
   static Flexlay* current_;
 
   Flexlay();
 
-  CL_Signal_v2<int, int>& sig_resize();
+  boost::signals2::signal<void (int, int)>& sig_resize();
 
   void set_datadir(const std::string& datadir_);
 

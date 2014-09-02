@@ -75,7 +75,7 @@ end
 $image.layers_count.times {|i|
   button = CL_Button.new(CL_Rect.new(CL_Point.new(25*i+6, 450), CL_Size.new(25, 25)), "#{i}",
                          $gui.selector_window)
-  connect(button.sig_clicked(), proc{ $image.set_active_layer(i) })
+  connect_cl(button.sig_clicked(), proc{ $image.set_active_layer(i) })
 }
 
 $gui.run()

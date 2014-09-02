@@ -14,14 +14,17 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "object_layer.hpp"
 #include "objmap_rect_object.hpp"
+
+#include <functional>
+
+#include "object_layer.hpp"
 #include "flexlay.hpp"
 
 class ObjMapRectObjectImpl : public ObjMapObjectImpl
 {
 public:
-  std::vector<CL_Slot> slots;
+  std::vector<boost::signals2::connection> slots;
   CL_Sizef size;
   CL_Color color;
 
@@ -191,18 +194,17 @@ ObjMapRectObject::ObjMapRectObject(const CL_Rect&  rect_,
                                               CL_Pointf(),
                                               MetaData());
 
+  impl->slots.push_back(impl->cp_top_right.sig_set_pos().connect(std::bind(&ObjMapRectObjectImpl::cp_top_right_move, impl.get(), std::placeholders::_1)));
+  impl->slots.push_back(impl->cp_bottom_right.sig_set_pos().connect(std::bind(&ObjMapRectObjectImpl::cp_bottom_right_move, impl.get(), std::placeholders::_1)));
 
-  impl->slots.push_back(impl->cp_top_right.sig_set_pos().connect(impl.get(), &ObjMapRectObjectImpl::cp_top_right_move));
-  impl->slots.push_back(impl->cp_bottom_right.sig_set_pos().connect(impl.get(), &ObjMapRectObjectImpl::cp_bottom_right_move));
+  impl->slots.push_back(impl->cp_top_left.sig_set_pos().connect(std::bind(&ObjMapRectObjectImpl::cp_top_left_move, impl.get(), std::placeholders::_1)));
+  impl->slots.push_back(impl->cp_bottom_left.sig_set_pos().connect(std::bind(&ObjMapRectObjectImpl::cp_bottom_left_move, impl.get(), std::placeholders::_1)));
 
-  impl->slots.push_back(impl->cp_top_left.sig_set_pos().connect(impl.get(), &ObjMapRectObjectImpl::cp_top_left_move));
-  impl->slots.push_back(impl->cp_bottom_left.sig_set_pos().connect(impl.get(), &ObjMapRectObjectImpl::cp_bottom_left_move));
+  impl->slots.push_back(impl->cp_middle_left.sig_set_pos().connect(std::bind(&ObjMapRectObjectImpl::cp_middle_left_move, impl.get(), std::placeholders::_1)));
+  impl->slots.push_back(impl->cp_middle_right.sig_set_pos().connect(std::bind(&ObjMapRectObjectImpl::cp_middle_right_move, impl.get(), std::placeholders::_1)));
 
-  impl->slots.push_back(impl->cp_middle_left.sig_set_pos().connect(impl.get(), &ObjMapRectObjectImpl::cp_middle_left_move));
-  impl->slots.push_back(impl->cp_middle_right.sig_set_pos().connect(impl.get(), &ObjMapRectObjectImpl::cp_middle_right_move));
-
-  impl->slots.push_back(impl->cp_top_middle.sig_set_pos().connect(impl.get(), &ObjMapRectObjectImpl::cp_top_middle_move));
-  impl->slots.push_back(impl->cp_bottom_middle.sig_set_pos().connect(impl.get(), &ObjMapRectObjectImpl::cp_bottom_middle_move));
+  impl->slots.push_back(impl->cp_top_middle.sig_set_pos().connect(std::bind(&ObjMapRectObjectImpl::cp_top_middle_move, impl.get(), std::placeholders::_1)));
+  impl->slots.push_back(impl->cp_bottom_middle.sig_set_pos().connect(std::bind(&ObjMapRectObjectImpl::cp_bottom_middle_move, impl.get(), std::placeholders::_1)));
 }
 
 void

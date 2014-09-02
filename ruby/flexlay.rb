@@ -79,7 +79,7 @@ end
 class CL_Menu
   def add_item(name, func)
     item = create_item(name)
-    connect(item.sig_clicked(), func)
+    connect_cl(item.sig_clicked(), func)
   end
 
   def CL_Menu.new_from_spec(menubarspec, parent)

@@ -36,8 +36,8 @@
 class ObjMapSelectToolImpl : public ToolImpl
 {
 public:
-  CL_Signal_v1<CL_Menu*> on_popup_menu_display;
-  CL_Signal_v2<int, int> on_right_click;
+  boost::signals2::signal<void (CL_Menu*)> on_popup_menu_display;
+  boost::signals2::signal<void (int, int)> on_right_click;
 
   enum { DRAG, SELECT, NONE } state;
 
@@ -93,13 +93,13 @@ ObjMapSelectTool::set_selection(const Selection& sel)
   impl->selection = sel;
 }
 
-CL_Signal_v1<CL_Menu*>&
+boost::signals2::signal<void (CL_Menu*)>&
 ObjMapSelectTool::sig_on_popup_menu_display()
 {
   return impl->on_popup_menu_display;
 }
 
-CL_Signal_v2<int, int>&
+boost::signals2::signal<void (int, int)>&
 ObjMapSelectTool::sig_on_right_click()
 {
   return impl->on_right_click;

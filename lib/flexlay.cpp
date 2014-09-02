@@ -36,10 +36,10 @@ Flexlay::Flexlay()
   current_ = this;
 }
 
-CL_Signal_v2<int, int>&
+boost::signals2::signal<void (int, int)>&
 Flexlay::sig_resize()
 {
-  return window->sig_resize();
+  return m_sig_resize;
 }
 
 void
@@ -69,6 +69,10 @@ Flexlay::init(const std::string& title, int width, int height, bool fullscreen_,
 
     window = new CL_DisplayWindow(title,
                                   screen_width, screen_height, fullscreen, allow_resize);
+
+    window->sig_resize().connect_functor([this](int w, int h){
+        m_sig_resize(w, h);
+        });
 
     resources = CL_ResourceManager(datadir + "/flexlay.xml");
     Fonts::verdana11        = CL_Font("verdana11_black", &resources);

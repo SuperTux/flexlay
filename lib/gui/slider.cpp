@@ -61,7 +61,7 @@ Slider::set_range(float start_, float end_)
   end   = end_;
 }
 
-CL_Signal_v1<float>&
+boost::signals2::signal<void (float)>&
 Slider::sig_on_change()
 {
   return on_change;

@@ -14,10 +14,12 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+#include "directory_view.hpp"
+
 #include <ClanLib/Core/IOData/directory_scanner.h>
 #include <ClanLib/Display/display.h>
+
 #include "fonts.hpp"
-#include "directory_view.hpp"
 
 class DirectoryViewEntry
 {
@@ -48,7 +50,7 @@ public:
   std::vector<CL_Slot> slots;
 
   std::string path;
-  CL_Signal_v1<std::string> sig_on_click;
+  boost::signals2::signal<void (std::string)> sig_on_click;
   typedef std::vector<DirectoryViewEntry> Items;
   Items items;
   int current_item;
@@ -87,7 +89,7 @@ DirectoryView::set_directory(const std::string& path_)
   impl->update_items();
 }
 
-CL_Signal_v1<std::string>&
+boost::signals2::signal<void (std::string)>&
 DirectoryView::sig_on_click()
 {
   return impl->sig_on_click;

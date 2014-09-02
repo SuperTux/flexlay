@@ -25,10 +25,10 @@ public:
 
   void draw(CL_GraphicContext* gc);
   CL_Rect get_bound_rect() const;
-  CL_Signal_v1<CL_Pointf> on_set_pos;
+  boost::signals2::signal<void (CL_Pointf)> on_set_pos;
 };
 
-CL_Signal_v1<CL_Pointf>&
+boost::signals2::signal<void (CL_Pointf)>&
 ObjMapControlPoint::sig_set_pos()
 {
   return impl->on_set_pos;

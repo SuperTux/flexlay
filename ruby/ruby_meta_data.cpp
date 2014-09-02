@@ -17,7 +17,6 @@
 #include "ruby_meta_data.hpp"
 
 #include <iostream>
-#include <ClanLib/Signals/signal_v0.h>
 
 #include "ruby_object.hpp"
 #include "meta_data_impl.hpp"
@@ -45,51 +44,51 @@ VALUE get_ruby_object(const MetaData& data_obj)
   return Qnil;
 }
 
-void connect(CL_Signal_v0& sig, VALUE obj)
+void connect(boost::signals2::signal<void ()>& sig, VALUE obj)
+{
+  sig.connect(RubyFunctor(obj));
+}
+
+void connect_cl(CL_Signal_v0& sig, VALUE obj)
 {
   sig = CL_Signal_v0();
   new CL_Slot(sig.connect_functor(RubyFunctor(obj)));
+  sig.connect_functor(RubyFunctor(obj));
 }
 
-void connect_v1_float(CL_Signal_v1<float>& sig, VALUE obj)
+void connect_v1_float(boost::signals2::signal<void (float)>& sig, VALUE obj)
 {
-  sig = CL_Signal_v1<float>();
-  new CL_Slot(sig.connect_functor(RubyFunctor(obj)));
+  sig.connect(RubyFunctor(obj));
 }
 
-void connect_v1(CL_Signal_v1<int>& sig, VALUE obj)
+void connect_v1(boost::signals2::signal<void (int)>& sig, VALUE obj)
 {
-  sig = CL_Signal_v1<int>();
-  new CL_Slot(sig.connect_functor(RubyFunctor(obj)));
+  sig.connect(RubyFunctor(obj));
 }
 
-void connect_v2(CL_Signal_v2<int, int>& sig, VALUE obj)
+void connect_v2(boost::signals2::signal<void (int, int)>& sig, VALUE obj)
 {
-  sig = CL_Signal_v2<int, int>();
-  new CL_Slot(sig.connect_functor(RubyFunctor(obj)));
+  sig.connect(RubyFunctor(obj));
 }
 
-void connect_v2_graceful(CL_Signal_v2<int, int>& sig, VALUE obj)
+void connect_v2_graceful(boost::signals2::signal<void (int, int)>& sig, VALUE obj)
 {
-  new CL_Slot(sig.connect_functor(RubyFunctor(obj)));
+  sig.connect(RubyFunctor(obj));
 }
 
-void connect_v1_Color(CL_Signal_v1<CL_Color>& sig, VALUE func)
+void connect_v1_Color(boost::signals2::signal<void (CL_Color)>& sig, VALUE func)
 {
-  sig = CL_Signal_v1<CL_Color>();
-  new CL_Slot(sig.connect_functor(RubyFunctor(func)));
+  sig.connect(RubyFunctor(func));
 }
 
-void connect_v1_ObjMapObject(CL_Signal_v1<ObjMapObject>& sig, VALUE func)
+void connect_v1_ObjMapObject(boost::signals2::signal<void (ObjMapObject)>& sig, VALUE func)
 {
-  sig = CL_Signal_v1<ObjMapObject>();
-  new CL_Slot(sig.connect_functor(RubyFunctor(func)));
+  sig.connect(RubyFunctor(func));
 }
 
-void connect_v2_ObjectBrush_Point(CL_Signal_v2<ObjectBrush, CL_Point>& sig, VALUE func)
+void connect_v2_ObjectBrush_Point(boost::signals2::signal<void (ObjectBrush, CL_Point)>& sig, VALUE func)
 {
-  sig = CL_Signal_v2<ObjectBrush, CL_Point>();
-  new CL_Slot(sig.connect_functor(RubyFunctor(func)));
+  sig.connect(RubyFunctor(func));
 }
 
 /* EOF */

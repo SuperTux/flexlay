@@ -18,6 +18,7 @@
 #define HEADER_FLEXLAY_SLIDER_HPP
 
 #include <ClanLib/GUI/component.h>
+#include <boost/signals2.hpp>
 
 /** Little Slider GUI component */
 class Slider : public CL_Component
@@ -31,13 +32,13 @@ private:
   float value;
   bool pressed;
 
-  CL_Signal_v1<float> on_change;
+  boost::signals2::signal<void (float)> on_change;
 
   void update_mouse(const CL_InputEvent& event);
 public:
   Slider(const CL_Rect& rect, CL_Component* parent);
 
-  CL_Signal_v1<float>& sig_on_change();
+  boost::signals2::signal<void (float)>& sig_on_change();
 
   void set_range(float start, float end);
   void set_value(float value);

@@ -18,6 +18,7 @@
 #define HEADER_FLEXLAY_SCROLLBAR_HPP
 
 #include <ClanLib/GUI/component.h>
+#include <boost/signals2.hpp>
 #include <memory>
 
 class ScrollbarImpl;
@@ -35,7 +36,7 @@ public:
   void set_pagesize(float size);
   void set_pos(float pos);
 
-  CL_Signal_v1<float>& sig_scrollbar_move();
+  boost::signals2::signal<void (float)>& sig_scrollbar_move();
 private:
   std::shared_ptr<ScrollbarImpl> impl;
 };

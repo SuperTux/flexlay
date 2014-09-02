@@ -17,7 +17,6 @@
 #ifndef HEADER_FLEXLAY_WINDOW_HPP
 #define HEADER_FLEXLAY_WINDOW_HPP
 
-
 class WindowImpl;
 
 class Window : public CL_Component

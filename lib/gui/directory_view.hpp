@@ -18,6 +18,7 @@
 #define HEADER_FLEXLAY_DIRECTORY_VIEW_HPP
 
 #include <ClanLib/GUI/component.h>
+#include <boost/signals2.hpp>
 #include <memory>
 
 class DirectoryViewImpl;
@@ -34,7 +35,7 @@ public:
   void set_directory(const std::string& path_);
 
   /** Call the callback on click on a directory item */
-  CL_Signal_v1<std::string>& sig_on_click();
+  boost::signals2::signal<void (std::string)>& sig_on_click();
 
 private:
   std::shared_ptr<DirectoryViewImpl> impl;

@@ -19,18 +19,17 @@ class SuperTuxGUI
 
     @display_properties = DisplayProperties.new()
 
-    buttonpanel_rect = CL_Rect.new(CL_Point.new(0, 23), CL_Size.new(width, 33))
-    selector_rect = CL_Rect.new(
-            CL_Point.new(width - 134, buttonpanel_rect.bottom),
-            CL_Size.new(134, height-buttonpanel_rect.bottom))
-    minimap_rect = CL_Rect.new(CL_Point.new(3, height-53),
-            CL_Size.new(width - selector_rect.get_width() - 4, 50))
-    map_rect = CL_Rect.new(CL_Point.new(0, buttonpanel_rect.bottom),
-            CL_Size.new(width - selector_rect.get_width() - 1,
-                        height - buttonpanel_rect.bottom -
-                        minimap_rect.get_height() - 3))
+    buttonpanel_rect = Rect.new(Point.new(0, 23), Size.new(width, 33))
+    selector_rect = Rect.new(Point.new(width - 134, buttonpanel_rect.bottom),
+                             Size.new(134, height-buttonpanel_rect.bottom))
+    minimap_rect = Rect.new(Point.new(3, height-53),
+                            Size.new(width - selector_rect.get_width() - 4, 50))
+    map_rect = Rect.new(Point.new(0, buttonpanel_rect.bottom),
+                        Size.new(width - selector_rect.get_width() - 1,
+                                 height - buttonpanel_rect.bottom -
+                                 minimap_rect.get_height() - 3))
 
-    @editor_map = EditorMapComponent.new(map_rect, @gui.get_component())
+    @editor_map = EditorMapComponent.new(map_rect.to_cl(), @gui.get_component())
     @workspace = @editor_map.get_workspace()
 
     @workspace.set_tool(0, $tilemap_paint_tool.to_tool())
@@ -45,9 +44,9 @@ class SuperTuxGUI
     @workspace.set_tool(107, $zoom2_tool.to_tool())
     @workspace.set_tool(65507, $zoom2_tool.to_tool())
 
-    @minimap = Minimap.new(@editor_map, minimap_rect, @gui.get_component())
+    @minimap = Minimap.new(@editor_map, minimap_rect.to_cl(), @gui.get_component())
 
-    @selector_window = Panel.new(selector_rect, @gui.get_component())
+    @selector_window = Panel.new(selector_rect.to_cl(), @gui.get_component())
     @tileselector = TileSelector.new(CL_Rect.new(CL_Point.new(3, 3),
             CL_Size.new(selector_rect.get_width() -3 ,
                         selector_rect.get_height() - 3)), @selector_window)
@@ -159,9 +158,9 @@ class SuperTuxGUI
     connect_v2(@editor_map.sig_on_key("e"),  proc{ |x, y| gui_show_object_properties()})
 
     connect_v2(@editor_map.sig_on_key("a"),  proc { |x, y|
-                 pos = @editor_map.screen2world(CL_Point.new(x, y))
-                 rectobj = ObjMapRectObject.new(CL_Rect.new(pos,
-                                                            CL_Size.new(128, 64)),
+                 pos = @editor_map.screen2world(Point.new(x, y))
+                 rectobj = ObjMapRectObject.new(Rect.new(pos,
+                                                         Size.new(128, 64)),
                                                 CL_Color.new(0, 255, 255, 155),
                                                 make_metadata(nil))
                  # rectobj.set_metadata(metadata)

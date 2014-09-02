@@ -21,8 +21,8 @@ class SecretArea<GameObj
     width  = get_value_from_tree(["width", "_"],  sexpr, 64)
     height = get_value_from_tree(["height", "_"], sexpr, 64)
     if x != nil and y != nil then
-      @data.set_rect(CL_Rect.new(CL_Point.new(x.to_i, y.to_i),
-                                 CL_Size.new(width.to_i, height.to_i)))
+      @data.set_rect(Rect.new(Point.new(x.to_i, y.to_i),
+                              Size.new(width.to_i, height.to_i)))
     end
   end
 
@@ -61,7 +61,7 @@ class AmbientSound<GameObj
     width  = get_value_from_tree(["width", "_"],  sexpr, 64)
     height = get_value_from_tree(["height", "_"], sexpr, 64)
     if x != nil and y != nil then
-      @data.set_rect(CL_Rect.new(CL_Point.new(x, y), CL_Size.new(width, height)))
+      @data.set_rect(Rect.new(Point.new(x, y), Size.new(width, height)))
     end
   end
 
@@ -109,7 +109,7 @@ class SequenceTrigger<GameObj
     width  = get_value_from_tree(["width", "_"],  sexpr, 64)
     height = get_value_from_tree(["height", "_"], sexpr, 64)
     if x != nil and y != nil then
-      @data.set_rect(CL_Rect.new(CL_Point.new(x, y), CL_Size.new(width, height)))
+      @data.set_rect(Rect.new(Point.new(x, y), Size.new(width, height)))
     end
   end
 

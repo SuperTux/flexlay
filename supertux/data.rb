@@ -89,7 +89,7 @@ def create_gameobject_from_data(editormap, objmap, name, sexpr)
     x = get_value_from_tree(["x", "_"], sexpr, 0)
     y = get_value_from_tree(["y", "_"], sexpr, 0)
     
-    create_gameobject(editormap, objmap, object, CL_Pointf.new(x, y), sexpr)
+    create_gameobject(editormap, objmap, object, Pointf.new(x, y), sexpr)
   else
     print "Error: Couldn't resolve object type: ", name, "\n"
 	print "Sector: Unhandled tag: ", name, "\n"
@@ -111,7 +111,7 @@ def create_gameobject(editormap, objmap, data, pos, sexpr = [])
     
     when :rect
       print "NewRect", pos.x, " -", pos.y, "\n"
-      obj = ObjMapRectObject.new(CL_Rect.new(CL_Point.new(pos.x.to_i, pos.y.to_i), CL_Size.new(64, 64)),
+      obj = ObjMapRectObject.new(Rect.new(Point.new(pos.x.to_i, pos.y.to_i), Size.new(64, 64)),
                                  CL_Color.new(0, 0, 255, 128),
                                  make_metadata(nil))
       gobj = data[3].call(obj, sexpr)

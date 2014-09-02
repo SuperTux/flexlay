@@ -15,9 +15,11 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <ClanLib/Display/mouse.h>
+
+#include "math/point.hpp"
 #include "popup_menu.hpp"
 
-PopupMenu::PopupMenu(const CL_Point& pos,  CL_Component* parent)
+PopupMenu::PopupMenu(const Point& pos,  CL_Component* parent)
 {
   menu = new CL_Menu(CL_Point(pos.x, pos.y), parent, NULL, true);
 

@@ -22,7 +22,7 @@
 class ObjMapObjectImpl
 {
 public:
-  CL_Pointf  pos;
+  Pointf  pos;
   MetaData  data;
 
   boost::signals2::signal<void (ObjMapObject)> on_move;
@@ -33,7 +33,7 @@ public:
   virtual ~ObjMapObjectImpl();
 
   virtual void draw(CL_GraphicContext* gc) =0;
-  virtual CL_Rectf get_bound_rect() const  =0;
+  virtual Rectf get_bound_rect() const  =0;
 
   virtual void add_control_points();
   virtual void update_control_points();

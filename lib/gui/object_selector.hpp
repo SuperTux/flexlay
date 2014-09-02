@@ -36,14 +36,14 @@ private:
   int old_offset;
   int mouse_over_tile;
   bool scrolling;
-  CL_Point click_pos;
-  CL_Point mouse_pos;
+  Point click_pos;
+  Point mouse_pos;
   float scale;
 
   std::vector<ObjectBrush> brushes;
   int drag_obj;
 
-  boost::signals2::signal<void (ObjectBrush, CL_Point)> on_drop;
+  boost::signals2::signal<void (ObjectBrush, Point)> on_drop;
 
 protected:
   virtual ~ObjectSelector();
@@ -54,7 +54,7 @@ public:
   void draw();
   void add_brush(const ObjectBrush& brush);
 
-  boost::signals2::signal<void (ObjectBrush, CL_Point)>& sig_drop();
+  boost::signals2::signal<void (ObjectBrush, Point)>& sig_drop();
 private:
   void mouse_move(const CL_InputEvent& event);
   void mouse_down(const CL_InputEvent& event);

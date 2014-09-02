@@ -22,6 +22,8 @@
 #include <typeinfo>
 #include "ruby.h"
 
+class Point;
+class Pointf;
 class CL_Point;
 class CL_Pointf;
 class ObjectBrush;
@@ -39,6 +41,8 @@ template<> VALUE convert_to_ruby_value<ObjectBrush>(const ObjectBrush& arg);
 template<> VALUE convert_to_ruby_value<CL_Color>(const CL_Color& arg);
 template<> VALUE convert_to_ruby_value<CL_Point>(const CL_Point& arg);
 template<> VALUE convert_to_ruby_value<CL_Pointf>(const CL_Pointf& arg);
+template<> VALUE convert_to_ruby_value<Point>(const Point& arg);
+template<> VALUE convert_to_ruby_value<Pointf>(const Pointf& arg);
 template<> VALUE convert_to_ruby_value<int>(const int& arg);
 template<> VALUE convert_to_ruby_value<float>(const float& arg);
 

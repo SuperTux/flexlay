@@ -62,9 +62,9 @@ public:
   void add_control_point(const ObjMapControlPoint& obj);
   void delete_control_points();
 
-  ObjMapObject find_object(const CL_Pointf& pos);
-  ObjMapControlPoint find_control_point(const CL_Pointf& pos);
-  std::vector<ObjMapObject> get_selection(const CL_Rectf& rect);
+  ObjMapObject find_object(const Pointf& pos);
+  ObjMapControlPoint find_control_point(const Pointf& pos);
+  std::vector<ObjMapObject> get_selection(const Rectf& rect);
   std::vector<ObjMapObject> get_objects();
 
   Layer to_layer();

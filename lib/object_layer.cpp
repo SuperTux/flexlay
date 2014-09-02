@@ -61,28 +61,28 @@ ObjectLayerImpl::draw(const GraphicContextState& state, CL_GraphicContext* gc)
 }
 
 ObjMapControlPoint
-ObjectLayer::find_control_point(const CL_Pointf& click_pos)
+ObjectLayer::find_control_point(const Pointf& click_pos)
 {
   for(ControlPoints::reverse_iterator i = impl->control_points.rbegin();
       i != impl->control_points.rend();
       ++i)
   {
-    CL_Rect rect = (*i).get_bound_rect();
+    Rect rect = (*i).get_bound_rect();
 
-    if (rect.is_inside(CL_Point(click_pos)))
+    if (rect.is_inside(Point(click_pos)))
       return *i;
   }
   return ObjMapControlPoint();
 }
 
 ObjMapObject
-ObjectLayer::find_object(const CL_Pointf& click_pos)
+ObjectLayer::find_object(const Pointf& click_pos)
 {
   for(Objects::reverse_iterator i = impl->objects.rbegin(); i != impl->objects.rend(); ++i)
   {
-    CL_Rectf rect = (*i).get_bound_rect();
+    Rectf rect = (*i).get_bound_rect();
 
-    if (rect.is_inside(CL_Point(click_pos)))
+    if (rect.is_inside(Point(click_pos)))
       return *i;
   }
   return ObjMapObject();
@@ -102,7 +102,7 @@ ObjectLayer::delete_object(const ObjMapObject& obj)
 }
 
 ObjectLayer::Objects
-ObjectLayer::get_selection(const CL_Rectf& rect)
+ObjectLayer::get_selection(const Rectf& rect)
 {
   Objects selection;
 

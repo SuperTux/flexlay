@@ -27,14 +27,14 @@ class ObjMapRectObjectImpl;
 class ObjMapRectObject
 {
 public:
-  ObjMapRectObject(const CL_Rect&  rect_,
+  ObjMapRectObject(const Rect&  rect_,
                    const CL_Color& color_,
                    const MetaData& data_);
 
   void set_color(const CL_Color& color);
 
-  void set_rect(const CL_Rect& rect);
-  CL_Rectf get_rect() const;
+  void set_rect(const Rect& rect);
+  Rectf get_rect() const;
 
   ObjMapObject to_object();
 private:

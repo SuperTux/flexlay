@@ -17,8 +17,10 @@
 #include <iostream>
 #include <ClanLib/Display/keys.h>
 #include <ClanLib/GUI/component.h>
+
 #include "colorpicker.hpp"
 #include "math.hpp"
+#include "math/rect.hpp"
 
 class ColorPickerHue : public CL_Component
 {
@@ -126,8 +128,8 @@ public:
 
     for(Colors::size_type i = 0; i < colors.size()-1; ++i)
     {
-      CL_Display::fill_rect(CL_Rect(CL_Point(0, i*psize),
-                                    CL_Size(get_width(), psize)),
+      CL_Display::fill_rect(Rect(Point(0, i*psize),
+                                 Size(get_width(), psize)).to_cl(),
                             CL_Gradient(colors[i],
                                         colors[i],
                                         colors[i+1],
@@ -169,8 +171,8 @@ public:
     CL_Display::push_modelview();
     CL_Display::add_translate(get_screen_x(), get_screen_y());
 
-    CL_Display::fill_rect(CL_Rect(CL_Point(0, 0),
-                                  CL_Size(get_width(), get_height())),
+    CL_Display::fill_rect(Rect(Point(0, 0),
+                               Size(get_width(), get_height())).to_cl(),
                           CL_Gradient(CL_Color(0, 0, 0),
                                       CL_Color(255, 255, 255),
                                       CL_Color(0, 0, 0),

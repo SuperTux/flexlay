@@ -133,9 +133,9 @@ SpriteStrokeDrawerImpl::draw(const Stroke& stroke, CL_GraphicContext* gc)
           if (i != dabs.begin())
           {
             CL_Canvas* canvas = BitmapLayer::current()->get_canvas();
-            CL_PixelBuffer buffer = canvas->get_pixeldata(CL_Rect(CL_Point(static_cast<int>((i-1)->pos.x) - sprite.get_width()/2,
-                                                                           static_cast<int>((i-1)->pos.y) - sprite.get_height()/2),
-                                                                  CL_Size(sprite.get_width(), sprite.get_height())));
+            CL_PixelBuffer buffer = canvas->get_pixeldata(Rect(Point(static_cast<int>((i-1)->pos.x) - sprite.get_width()/2,
+                                                                     static_cast<int>((i-1)->pos.y) - sprite.get_height()/2),
+                                                               Size(sprite.get_width(), sprite.get_height())).to_cl());
             CL_Surface surface(buffer);
             //surface.set_blend_func_separate(blend_src_alpha, blend_one_minus_src_alpha,
             //                                blend_one, blend_zero);

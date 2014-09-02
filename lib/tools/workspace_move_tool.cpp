@@ -27,10 +27,10 @@ class WorkspaceMoveToolImpl : public ToolImpl
 {
 public:
   bool scrolling;
-  CL_Point click_pos;
+  Point click_pos;
 
   /** Position of the center */
-  CL_Pointf old_trans_offset;
+  Pointf old_trans_offset;
 
   virtual void draw() {}
 
@@ -78,7 +78,7 @@ WorkspaceMoveToolImpl::update(const CL_InputEvent& event)
   float dx = ca * (click_pos.x - event.mouse_pos.x) - sa * (click_pos.y - event.mouse_pos.y);
   float dy = sa * (click_pos.x - event.mouse_pos.x) + ca * (click_pos.y - event.mouse_pos.y);
 
-  gc_state.set_pos(CL_Pointf(old_trans_offset.x
+  gc_state.set_pos(Pointf(old_trans_offset.x
                              + dx / EditorMapComponent::current()->get_gc_state().get_zoom(),
                              old_trans_offset.y
                              + dy / EditorMapComponent::current()->get_gc_state().get_zoom()));
@@ -88,8 +88,8 @@ WorkspaceMoveTool::WorkspaceMoveTool()
   : impl(new WorkspaceMoveToolImpl())
 {
   impl->scrolling = false;
-  impl->click_pos = CL_Point(0, 0);
-  impl->old_trans_offset = CL_Pointf(0,0);
+  impl->click_pos = Point(0, 0);
+  impl->old_trans_offset = Pointf(0,0);
 }
 
 Tool

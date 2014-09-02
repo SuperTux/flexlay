@@ -17,18 +17,18 @@
 #ifndef HEADER_FLEXLAY_BOX_HPP
 #define HEADER_FLEXLAY_BOX_HPP
 
-class CL_Rect;
+class Rect;
 
 /** Little helper class to draw boxes and stuff in the GUI */
 class Box
 {
 public:
-  static void draw_button_up(const CL_Rect& rect);
-  static void draw_button_down(const CL_Rect& rect);
-  static void draw_button_neutral(const CL_Rect& rect);
-  static void draw_panel(const CL_Rect& rect);
-  static void draw_panel_down(const CL_Rect& rect);
-  static void draw_window(const CL_Rect& rect);
+  static void draw_button_up(const Rect& rect);
+  static void draw_button_down(const Rect& rect);
+  static void draw_button_neutral(const Rect& rect);
+  static void draw_panel(const Rect& rect);
+  static void draw_panel_down(const Rect& rect);
+  static void draw_window(const Rect& rect);
 };
 
 #endif

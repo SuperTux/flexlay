@@ -16,10 +16,14 @@
 
 #include <iostream>
 #include <ClanLib/Display/display.h>
-#include "globals.hpp"
+
 #include "box.hpp"
-#include "icon.hpp"
+#include "globals.hpp"
 #include "helper.hpp"
+#include "icon.hpp"
+#include "math/point.hpp"
+#include "math/size.hpp"
+#include "math/rect.hpp"
 #include "titlebar.hpp"
 #include "window.hpp"
 
@@ -104,12 +108,12 @@ WindowImpl::draw()
 
   CL_Rect rect = parent->get_position() ;
 
-  Box::draw_window(CL_Rect(CL_Point(0, 0), CL_Size(rect.get_width()-1, rect.get_height()-1)));
-  Box::draw_panel_down(client_area->get_position());
+  Box::draw_window(Rect(Point(0, 0), Size(rect.get_width()-1, rect.get_height()-1)));
+  Box::draw_panel_down(Rect(client_area->get_position()));
 
   /*
-    CL_Display::fill_rect(CL_Rect(CL_Point(0, 0), rect.get_size()), CL_Color(220, 220, 220));
-    CL_Display::draw_rect(CL_Rect(CL_Point(0, 0), rect.get_size()), CL_Color(0, 0, 0));
+    CL_Display::fill_rect(Rect(Point(0, 0), rect.get_size()), CL_Color(220, 220, 220));
+    CL_Display::draw_rect(Rect(Point(0, 0), rect.get_size()), CL_Color(0, 0, 0));
 
     CL_Display::draw_line(1, rect.get_height()-2,
     rect.get_width()-2, rect.get_height()-2, midtone);

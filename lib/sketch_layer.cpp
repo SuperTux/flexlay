@@ -46,7 +46,7 @@ public:
   CL_Canvas*  canvas;
   float       last_zoom;
   float       last_rot;
-  CL_Pointf   last_pos;
+  Pointf   last_pos;
 
   SketchLayerImpl()
     : surface(CL_PixelBuffer(CL_Display::get_width(), CL_Display::get_height(),
@@ -102,7 +102,7 @@ public:
         canvas->get_gc()->clear(CL_Color(0, 0, 0, 0));
         //canvas->get_gc()->clear(CL_Color::white);
 
-        CL_Rectf visible_area = state.get_clip_rect();
+        Rectf visible_area = state.get_clip_rect();
 
         for(Strokes::iterator i = strokes.begin(); i != strokes.end(); ++i)
         {

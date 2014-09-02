@@ -34,13 +34,13 @@ public:
   TileSelection();
   ~TileSelection();
 
-  void start (TilemapLayer tilemap, const CL_Point& pos);
-  void update(const CL_Point& pos);
+  void start (TilemapLayer tilemap, const Point& pos);
+  void update(const Point& pos);
 
   void clear();
   bool is_active();
 
-  CL_Rect get_rect() const;
+  Rect get_rect() const;
 
   void draw(const CL_Color& color = CL_Color(255, 255, 255, 100));
 

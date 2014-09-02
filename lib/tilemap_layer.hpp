@@ -21,12 +21,14 @@
 #include <memory>
 
 #include "field.hpp"
-#include "meta_data.hpp"
 #include "layer.hpp"
+#include "math/point.hpp"
+#include "math/size.hpp"
+#include "meta_data.hpp"
 
-class Tileset;
 class TileBrush;
 class TilemapLayerImpl;
+class Tileset;
 
 class TilemapLayer
 {
@@ -50,7 +52,7 @@ public:
 
   /** @param pos position of the old map in the new resized one
       @param size height of the new map */
-  void resize(const CL_Size& size, const CL_Point& point);
+  void resize(const Size& size, const Point& point);
 
   const std::vector<int>& get_data();
   void set_data(std::vector<int> d);
@@ -59,10 +61,10 @@ public:
   MetaData get_metadata() const;
 
   /** Draw the gives brush to the map */
-  void draw_tile(const TileBrush& brush, const CL_Point& pos);
+  void draw_tile(const TileBrush& brush, const Point& pos);
 
   /** Draw the given single tile to the map */
-  void draw_tile(int id, const CL_Point& pos);
+  void draw_tile(int id, const Point& pos);
 
   int get_width()  const;
   int get_height() const;
@@ -78,14 +80,14 @@ public:
 
   CL_PixelBuffer create_pixelbuffer();
 
-  static void draw_tiles(Field<int>* field, const TileBrush& brush, const CL_Point& pos);
+  static void draw_tiles(Field<int>* field, const TileBrush& brush, const Point& pos);
 
   bool has_bounding_rect() const;
-  CL_Rect get_bounding_rect();
+  Rect get_bounding_rect() const;
 
   /** Convert a coordinate given in world position into a tile
       coordinate */
-  CL_Point world2tile(const CL_Pointf& pos) const;
+  Point world2tile(const Pointf& pos) const;
 
   bool is_null() const { return !impl.get(); }
 

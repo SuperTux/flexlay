@@ -17,6 +17,8 @@
 #ifndef HEADER_FLEXLAY_VIEWPORT_HPP
 #define HEADER_FLEXLAY_VIEWPORT_HPP
 
+#include <ClanLib/Core/Math/rect.h>
+#include <ClanLib/Core/Math/point.h>
 #include <ClanLib/GUI/component.h>
 
 class ViewportImpl;
@@ -28,8 +30,8 @@ protected:
 public:
   Viewport(CL_Component* child, const CL_Rect& rect, CL_Component* parent);
 
-  void set_pos(const CL_Pointf& pos);
-  CL_Pointf get_pos() const;
+  void set_pos(const Pointf& pos);
+  Pointf get_pos() const;
 private:
   std::shared_ptr<ViewportImpl> impl;
 };

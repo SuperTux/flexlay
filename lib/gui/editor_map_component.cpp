@@ -174,8 +174,8 @@ EditorMapComponentImpl::draw ()
   CL_Display::pop_cliprect();
 }
 
-CL_Pointf
-EditorMapComponent::screen2world(const CL_Point& pos)
+Pointf
+EditorMapComponent::screen2world(const Point& pos)
 {
   return impl->gc_state.screen2world(pos);
 }
@@ -187,27 +187,27 @@ EditorMapComponent::set_zoom(float z)
 }
 
 void
-EditorMapComponent::zoom_out(CL_Point pos)
+EditorMapComponent::zoom_out(Point pos)
 {
-  impl->gc_state.set_zoom(CL_Pointf(pos.x, pos.y),
+  impl->gc_state.set_zoom(Pointf(pos.x, pos.y),
                           impl->gc_state.get_zoom()/1.25f);
 }
 
 void
-EditorMapComponent::zoom_in(CL_Point pos)
+EditorMapComponent::zoom_in(Point pos)
 {
-  impl->gc_state.set_zoom(CL_Pointf(pos.x, pos.y),
+  impl->gc_state.set_zoom(Pointf(pos.x, pos.y),
                           impl->gc_state.get_zoom()*1.25f);
 }
 
 void
-EditorMapComponent::zoom_to(CL_Rectf rect)
+EditorMapComponent::zoom_to(Rectf rect)
 {
   impl->gc_state.zoom_to(rect);
 }
 
-CL_Rectf
-EditorMapComponent::get_clip_rect()
+Rectf
+EditorMapComponent::get_clip_rect() const
 {
   return impl->gc_state.get_clip_rect();
 }
@@ -215,25 +215,25 @@ EditorMapComponent::get_clip_rect()
 void
 EditorMapComponent::move_to(int x, int y)
 {
-  impl->gc_state.set_pos(CL_Pointf(x, y));
+  impl->gc_state.set_pos(Pointf(x, y));
 }
 
 void
 EditorMapComponent::move_to_x(float x)
 {
-  impl->gc_state.set_pos(CL_Pointf(x, impl->gc_state.get_pos().y));
+  impl->gc_state.set_pos(Pointf(x, impl->gc_state.get_pos().y));
 }
 
 void
 EditorMapComponent::move_to_y(float y)
 {
-  impl->gc_state.set_pos(CL_Pointf(impl->gc_state.get_pos().x, y));
+  impl->gc_state.set_pos(Pointf(impl->gc_state.get_pos().x, y));
 }
 
 void
 EditorMapComponentImpl::on_resize(int old_w, int old_h)
 {
-  CL_Rect rect = parent->get_screen_rect();
+  Rect rect = parent->get_screen_rect();
 
   scrollbar_v->set_position(rect.get_width() - 14 + rect.left,  2 + rect.top);
   scrollbar_v->set_size(12, rect.get_height() - 4 - 14);

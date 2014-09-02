@@ -19,6 +19,8 @@
 
 #include <ClanLib/Display/sprite.h>
 #include <boost/signals2.hpp>
+
+#include "math/rect.hpp"
 #include "meta_data.hpp"
 
 class ObjMapControlPointImpl;
@@ -32,16 +34,16 @@ class ObjMapControlPoint
 private:
 public:
   ObjMapControlPoint() : impl() {}
-  ObjMapControlPoint(CL_Sprite sprite_, CL_Pointf pos_, MetaData data_);
+  ObjMapControlPoint(CL_Sprite sprite_, Pointf pos_, MetaData data_);
 
-  CL_Pointf get_pos() const;
-  void     set_pos(const CL_Pointf& p);
-  void     set_pos_raw(const CL_Pointf& p);
-  void     draw(CL_GraphicContext* gc);
+  Pointf get_pos() const;
+  void set_pos(const Pointf& p);
+  void set_pos_raw(const Pointf& p);
+  void draw(CL_GraphicContext* gc);
 
-  CL_Rect get_bound_rect() const;
+  Rect get_bound_rect() const;
 
-  boost::signals2::signal<void (CL_Pointf)>& sig_set_pos();
+  boost::signals2::signal<void (Pointf)>& sig_set_pos();
 
   bool is_null() const { return !impl.get(); }
 

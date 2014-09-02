@@ -16,9 +16,13 @@
 
 #include <ClanLib/Display/display.h>
 #include <ClanLib/Display/sprite.h>
+
 #include "fonts.hpp"
 #include "box.hpp"
 #include "menu.hpp"
+#include "math/point.hpp"
+#include "math/size.hpp"
+#include "math/rect.hpp"
 
 class MenuItem;
 
@@ -203,9 +207,9 @@ MenuImpl::draw()
 {
   CL_Display::push_translate(parent->get_screen_x(), parent->get_screen_y());
 
-  Box::draw_window(CL_Rect(CL_Point(0, 0),
-                           CL_Size(parent->get_width(),
-                                   parent->get_height())));
+  Box::draw_window(Rect(Point(0, 0),
+                        Size(parent->get_width(),
+                             parent->get_height())));
   int x_pos = 3;
   int y_pos = 6;
 

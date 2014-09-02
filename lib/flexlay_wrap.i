@@ -116,6 +116,17 @@ VALUE CL_Color2Value(const CL_Color& arg)
  return SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_CL_Color, 1);
 }
 
+VALUE Pointf2Value(const Pointf& arg)
+{
+ Pointf* resultptr = new Pointf(arg);
+ return SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_Pointf, 1);
+}
+
+VALUE Point2Value(const Point& arg)
+{
+ Point* resultptr = new Point(arg);
+ return SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_Point, 1);
+}
 
 VALUE CL_Pointf2Value(const CL_Pointf& arg)
 {
@@ -205,6 +216,11 @@ VALUE CL_Point2Value(const CL_Point& arg)
 %include "graphic_context_state.hpp"
 %include "objmap_path_node.hpp"
 # %include "scripting/editor.hpp"
+
+%include "math/rect.hpp"
+%include "math/size.hpp"
+%include "math/point.hpp"
+%include "math/origin.hpp"
 
 // %include "netpanzer.hpp" 
 %include "helper.hpp"

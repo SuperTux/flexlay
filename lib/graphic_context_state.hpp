@@ -17,8 +17,10 @@
 #ifndef HEADER_FLEXLAY_GRAPHIC_CONTEXT_STATE_HPP
 #define HEADER_FLEXLAY_GRAPHIC_CONTEXT_STATE_HPP
 
-#include <ClanLib/Core/Math/rect.h>
 #include <memory>
+
+#include "math/rect.hpp"
+#include "math/point.hpp"
 
 class CL_GraphicContext;
 
@@ -40,7 +42,7 @@ public:
 
   /** Return a rectangle in world coordinates that represents the area
       visible on the screen */
-  CL_Rectf get_clip_rect() const;
+  Rectf get_clip_rect() const;
 
   int get_width()  const;
   int get_height() const;
@@ -52,19 +54,19 @@ public:
   float get_rotation() const;
 
   /** Move the center of the visible area to pos */
-  void      set_pos(const CL_Pointf& pos);
-  CL_Pointf get_pos() const;
+  void      set_pos(const Pointf& pos);
+  Pointf get_pos() const;
 
   /** Set zoom to z, while ensuring that the screen position \a pos
       (normaly the position of the mouse pointer) stays in the same
       position even after zoomed in/out */
-  void  set_zoom(CL_Pointf pos, float z);
+  void  set_zoom(Pointf pos, float z);
   void  set_zoom(float z);
   float get_zoom() const;
 
-  void zoom_to (const CL_Rectf& rect);
+  void zoom_to (const Rectf& rect);
 
-  CL_Pointf screen2world(const CL_Point& pos);
+  Pointf screen2world(const Point& pos);
 
 private:
   std::shared_ptr<GraphicContextStateImpl> impl;

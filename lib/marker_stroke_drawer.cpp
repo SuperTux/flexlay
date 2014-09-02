@@ -39,18 +39,18 @@ public:
 
     if (dabs.size() >= 2)
     {
-      std::vector<CL_Pointf> normals;
+      std::vector<Pointf> normals;
 
       if (stroke.get_dab_count() == 2)
       {
-        normals.push_back(CL_Pointf(1.0f, 1.0f));
-        normals.push_back(CL_Pointf(1.0f, 1.0f));
+        normals.push_back(Pointf(1.0f, 1.0f));
+        normals.push_back(Pointf(1.0f, 1.0f));
       }
       else if (stroke.get_dab_count() >= 3)
       {
         for(Stroke::Dabs::size_type i = 0; i < dabs.size()-1; ++i)
         {
-          CL_Pointf normal((dabs[i].pos.y - dabs[i+1].pos.y),
+          Pointf normal((dabs[i].pos.y - dabs[i+1].pos.y),
                            -(dabs[i].pos.x - dabs[i+1].pos.x));
 
           float length = sqrt(normal.x * normal.x + normal.y * normal.y);
@@ -61,7 +61,7 @@ public:
           normals.push_back(normal);
         }
 
-        normals.push_back(CL_Pointf(1.0f, 1.0f));
+        normals.push_back(Pointf(1.0f, 1.0f));
       }
 
       float len  = DrawerProperties::current()->get_size() * 8.0f;

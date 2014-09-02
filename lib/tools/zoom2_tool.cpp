@@ -25,7 +25,7 @@ class Zoom2ToolImpl : public ToolImpl
 {
 public:
   bool active;
-  CL_Point click_pos;
+  Point click_pos;
   float old_zoom;
   void draw();
 
@@ -72,7 +72,7 @@ Zoom2ToolImpl::on_mouse_move(const CL_InputEvent& event)
   {
     GraphicContextState& gc = EditorMapComponent::current()->get_gc_state();
 
-    CL_Point zoom_pos(gc.get_width()/2,
+    Point zoom_pos(gc.get_width()/2,
                       gc.get_height()/2);
 
     float factor = (event.mouse_pos.y - click_pos.y) / 20.0f;

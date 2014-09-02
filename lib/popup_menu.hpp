@@ -25,7 +25,7 @@ private:
   std::vector<CL_Slot> slots;
   CL_Menu* menu;
 public:
-  PopupMenu(const CL_Point& pos, CL_Component* parent);
+  PopupMenu(const Point& pos, CL_Component* parent);
   ~PopupMenu();
 
   CL_Menu* get_menu() { return menu; }

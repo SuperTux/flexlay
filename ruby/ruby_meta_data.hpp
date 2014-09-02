@@ -38,7 +38,7 @@ void connect_v2_graceful(boost::signals2::signal<void (int, int)>& sig, VALUE ob
 
 void connect_v1_Color(boost::signals2::signal<void (CL_Color)>& sig, VALUE func);
 void connect_v1_ObjMapObject(boost::signals2::signal<void (ObjMapObject)>& sig, VALUE func);
-void connect_v2_ObjectBrush_Point(boost::signals2::signal<void (ObjectBrush, CL_Point)>& sig, VALUE func);
+void connect_v2_ObjectBrush_Point(boost::signals2::signal<void (ObjectBrush, Point)>& sig, VALUE func);
 
 #endif
 

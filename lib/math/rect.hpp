@@ -69,6 +69,9 @@ public:
 	Rect(const Rect &rect)
 	{ left = rect.left; top = rect.top; right = rect.right; bottom = rect.bottom; }
 
+	Rect(const CL_Rect &rect)
+	{ left = rect.left; top = rect.top; right = rect.right; bottom = rect.bottom; }
+
 	//: Rect += Rect operator.
 	Rect &operator+=(const Rect &r)
 	{ left += r.left; top += r.top; right += r.right; bottom += r.bottom; return *this; }

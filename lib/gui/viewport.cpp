@@ -33,12 +33,12 @@ Viewport::Viewport(CL_Component* child, const CL_Rect& rect, CL_Component* paren
 }
 
 void
-Viewport::set_pos(const CL_Pointf& pos)
+Viewport::set_pos(const Pointf& pos)
 {
   impl->gc_state.set_pos(pos);
 }
 
-CL_Pointf
+Pointf
 Viewport::get_pos() const
 {
   return impl->gc_state.get_pos();

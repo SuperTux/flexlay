@@ -19,7 +19,10 @@
 
 #include <ClanLib/Core/Math/rect.h>
 #include <ClanLib/Display/graphic_context.h>
+
 #include "meta_data.hpp"
+#include "math/point.hpp"
+#include "math/rect.hpp"
 
 class GraphicContextState;
 
@@ -34,7 +37,7 @@ public:
   MetaData  data;
 
   /** The position of the layer */
-  CL_Pointf pos;
+  Pointf pos;
 
   LayerImpl()
     : pos(0, 0)
@@ -44,8 +47,8 @@ public:
   virtual void draw(const GraphicContextState& state, CL_GraphicContext* gc) =0;
   virtual bool has_bounding_rect() const =0;
 
-  // FIXME: Should use CL_Rectf
-  virtual CL_Rect get_bounding_rect() { return CL_Rect(); }
+  // FIXME: Should use Rectf
+  virtual Rect get_bounding_rect() { return Rect(); }
 };
 
 #endif

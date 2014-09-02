@@ -33,7 +33,7 @@ public:
   PaintCommand(TilemapLayer t, const TileBrush& b);
   ~PaintCommand();
 
-  void add_point(const CL_Point& pos);
+  void add_point(const Point& pos);
 
   Command to_command();
 private:

@@ -25,17 +25,17 @@ ObjMapObject::ObjMapObject(const std::shared_ptr<ObjMapObjectImpl>& impl_)
 {
 }
 
-CL_Pointf
+Pointf
 ObjMapObject::get_pos() const
 {
   if (impl.get())
     return impl->pos;
   else
-    return CL_Pointf();
+    return Pointf();
 }
 
 void
-ObjMapObject::set_pos(const CL_Pointf& p)
+ObjMapObject::set_pos(const Pointf& p)
 {
   if (impl.get())
   {
@@ -66,13 +66,13 @@ ObjMapObject::draw(CL_GraphicContext* gc)
     impl->draw(gc);
 }
 
-CL_Rectf
+Rectf
 ObjMapObject::get_bound_rect() const
 {
   if (impl.get())
     return impl->get_bound_rect();
   else
-    return CL_Rect();
+    return Rectf();
 }
 
 bool

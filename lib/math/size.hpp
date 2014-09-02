@@ -33,6 +33,8 @@
 #ifndef header_flexlay_size
 #define header_flexlay_size
 
+#include <ClanLib/Core/Math/size.h>
+
 class Sizef;
 
 //: 2D (width,height) size structure.
@@ -52,6 +54,9 @@ public:
 	: width(width), height(height) { }
 
 	Size(const Size &s)
+	{ width = s.width; height = s.height; }
+
+	Size(const CL_Size &s)
 	{ width = s.width; height = s.height; }
 
 	explicit Size(const Sizef& s);
@@ -89,6 +94,9 @@ public:
 	//: Size != Size operator (deep compare).
 	bool operator!=(const Size &s) const
 	{ return (width != s.width) || (height != s.height); }
+
+  CL_Size to_cl() const
+  { return CL_Size(width, height); }
 };
 
 //: 2D (width,height) floating point size structure.
@@ -111,6 +119,9 @@ public:
 	: width(width), height(height) { }
 
 	Sizef(const Sizef &s)
+	{ width = s.width; height = s.height; }
+
+	Sizef(const CL_Size &s)
 	{ width = s.width; height = s.height; }
 
 //! Attributes:
@@ -146,6 +157,9 @@ public:
 	//: Size != Size operator (deep compare).
 	bool operator!=(const Size &s) const
 	{ return (width != s.width) || (height != s.height); }
+
+  CL_Sizef to_cl() const
+  { return CL_Sizef(width, height); }
 };
 
 inline Size::Size(const Sizef& s)

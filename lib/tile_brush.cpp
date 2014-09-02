@@ -14,8 +14,11 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include <ClanLib/Core/Math/rect.h>
 #include "tile_brush.hpp"
+
+#include <ClanLib/Core/Math/rect.h>
+
+#include "math/rect.hpp"
 
 TileBrush::TileBrush()
 {
@@ -37,7 +40,7 @@ TileBrush::TileBrush(int w, int h)
 void
 TileBrush::auto_crop()
 {
-  CL_Rect rect(CL_Point(0, 0), CL_Size(0, 0));
+  Rect rect(Point(0, 0), Size(0, 0));
 
   for(int y = 0; y < get_height(); ++y)
     for(int x = 0; x < get_width(); ++x)

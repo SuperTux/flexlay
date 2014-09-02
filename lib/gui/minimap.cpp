@@ -113,9 +113,9 @@ Minimap::draw()
         {
           Tile* tile = tilemap.get_tileset().create(field->at(x, y));
           if (tile)
-            CL_Display::fill_rect(CL_Rect(CL_Point((x * tile_size) * get_width() / map_width,
-                                                   (y * tile_size) * get_height() / map_height),
-                                          small_tile),
+            CL_Display::fill_rect(Rect(Point((x * tile_size) * get_width() / map_width,
+                                             (y * tile_size) * get_height() / map_height),
+                                       Size(small_tile)).to_cl(),
                                   tile->get_color());
           CL_Display::flush();
         }
@@ -124,14 +124,14 @@ Minimap::draw()
                                        CL_Size(get_width(), get_height())));
 
     // Draw cursor
-    CL_Rect rect(impl->parent->get_clip_rect());
-    CL_Rect screen_rect(CL_Point(rect.left  * get_width()  / map_width,
-                                 rect.top   * get_height() / map_height),
-                        CL_Size(rect.get_width() * get_width() /map_width,
-                                rect.get_height()* get_height()/map_height));
-    CL_Display::fill_rect(screen_rect,
+    Rect rect(impl->parent->get_clip_rect());
+    Rect screen_rect(Point(rect.left  * get_width()  / map_width,
+                           rect.top   * get_height() / map_height),
+                     Size(rect.get_width() * get_width() /map_width,
+                          rect.get_height()* get_height()/map_height));
+    CL_Display::fill_rect(screen_rect.to_cl(),
                           CL_Color(255, 255, 0, 50));
-    CL_Display::draw_rect(screen_rect,
+    CL_Display::draw_rect(screen_rect.to_cl(),
                           CL_Color(0, 0, 0));
   }
 

@@ -47,7 +47,7 @@ public:
   virtual ~TilemapLayerImpl() {}
 
   bool has_bounding_rect() const;
-  CL_Rect get_bounding_rect();
+  Rect get_bounding_rect() const;
   void draw(const GraphicContextState& state, CL_GraphicContext* gc);
 };
 
@@ -96,13 +96,13 @@ TilemapLayerImpl::draw(const GraphicContextState& state, CL_GraphicContext* gc)
   int tile_size = this->tileset.get_tile_size();
 
   if (this->background_color.get_alpha() != 0)
-    CL_Display::fill_rect(CL_Rect(CL_Point(0,0),
-                                  CL_Size(this->field.get_width()  * tile_size,
-                                          this->field.get_height() * tile_size)),
+    CL_Display::fill_rect(Rect(Point(0,0),
+                               Size(this->field.get_width()  * tile_size,
+                                    this->field.get_height() * tile_size)).to_cl(),
                           this->background_color);
   CL_Display::flush();
 
-  CL_Rect rect(state.get_clip_rect());
+  Rect rect(state.get_clip_rect());
 
   int start_x = std::max(0, rect.left / tile_size);
   int start_y = std::max(0, rect.top  / tile_size);
@@ -125,8 +125,8 @@ TilemapLayerImpl::draw(const GraphicContextState& state, CL_GraphicContext* gc)
             sprite.draw(x * tile_size, y * tile_size, gc);
 
             if (draw_attribute)
-              CL_Display::fill_rect(CL_Rect(CL_Point(x, y), CL_Size(tileset.get_tile_size(),
-                                                                    tileset.get_tile_size())),
+              CL_Display::fill_rect(Rect(Point(x, y), Size(tileset.get_tile_size(),
+                                                           tileset.get_tile_size())).to_cl(),
                                     tile->get_attribute_color());
           }
         }
@@ -146,8 +146,8 @@ TilemapLayerImpl::draw(const GraphicContextState& state, CL_GraphicContext* gc)
             tile->get_sprite().draw(x * tile_size, y * tile_size, gc);
 
             if (draw_attribute)
-              CL_Display::fill_rect(CL_Rect(CL_Point(x, y), CL_Size(tileset.get_tile_size(),
-                                                                    tileset.get_tile_size())),
+              CL_Display::fill_rect(Rect(Point(x, y), Size(tileset.get_tile_size(),
+                                                           tileset.get_tile_size())).to_cl(),
                                     tile->get_attribute_color());
           }
         }
@@ -185,13 +185,13 @@ TilemapLayer::get_tile (int x, int y)
 }
 
 void
-TilemapLayer::resize(const CL_Size& size, const CL_Point& point)
+TilemapLayer::resize(const Size& size, const Point& point)
 {
   impl->field.resize(size.width, size.height, point.x, point.y);
 }
 
 void
-TilemapLayer::draw_tile(int id, const CL_Point& pos)
+TilemapLayer::draw_tile(int id, const Point& pos)
 {
   if (pos.x >= 0 && pos.x < impl->field.get_width()
       && pos.y >= 0 && pos.y < impl->field.get_height())
@@ -201,13 +201,13 @@ TilemapLayer::draw_tile(int id, const CL_Point& pos)
 }
 
 void
-TilemapLayer::draw_tile(const TileBrush& brush, const CL_Point& pos)
+TilemapLayer::draw_tile(const TileBrush& brush, const Point& pos)
 {
   draw_tiles(&impl->field, brush, pos);
 }
 
 void
-TilemapLayer::draw_tiles(Field<int>* field, const TileBrush& brush, const CL_Point& pos)
+TilemapLayer::draw_tiles(Field<int>* field, const TileBrush& brush, const Point& pos)
 {
   int start_x = std::max(0, -pos.x);
   int start_y = std::max(0, -pos.y);
@@ -298,27 +298,27 @@ TilemapLayer::create_pixelbuffer()
   return pixelbuffer;
 }
 
-CL_Rect
-TilemapLayer::get_bounding_rect()
+Rect
+TilemapLayer::get_bounding_rect() const
 {
   return impl->get_bounding_rect();
 }
 
-CL_Rect
-TilemapLayerImpl::get_bounding_rect()
+Rect
+TilemapLayerImpl::get_bounding_rect() const
 {
-  return CL_Rect(CL_Point(0, 0),
-                 CL_Size(field.get_width()  * tileset.get_tile_size(),
+  return Rect(Point(0, 0),
+                 Size(field.get_width()  * tileset.get_tile_size(),
                          field.get_height() * tileset.get_tile_size()));
 }
 
-CL_Point
-TilemapLayer::world2tile(const CL_Pointf& pos) const
+Point
+TilemapLayer::world2tile(const Pointf& pos) const
 {
   int x = static_cast<int>(pos.x / impl->tileset.get_tile_size());
   int y = static_cast<int>(pos.y / impl->tileset.get_tile_size());
 
-  return CL_Point(pos.x < 0 ? x-1 : x,
+  return Point(pos.x < 0 ? x-1 : x,
                   pos.y < 0 ? y-1 : y);
 }
 
@@ -371,7 +371,7 @@ TilemapLayer::set_foreground_color(const CL_Color& color)
 }
 
 int
-TilemapLayer::get_width()  const
+TilemapLayer::get_width() const
 {
   return impl->field.get_width();
 }

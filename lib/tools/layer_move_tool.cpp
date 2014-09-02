@@ -29,13 +29,13 @@ class LayerMoveToolImpl : public ToolImpl
 {
 public:
   bool scrolling;
-  CL_Pointf click_pos;
+  Pointf click_pos;
 
   /** Position of the center */
-  CL_Pointf old_trans_offset;
+  Pointf old_trans_offset;
   Layer layer;
 
-  Layer find_closed_layer(const CL_Pointf& pos)
+  Layer find_closed_layer(const Pointf& pos)
   {
     Layer layer;
 
@@ -43,7 +43,7 @@ public:
 
     for(int i = 0; i < parent.get_layer_count(); ++i)
     {
-      if (parent.get_layer(i).get_bounding_rect().is_inside(CL_Point(pos)))
+      if (parent.get_layer(i).get_bounding_rect().is_inside(Point(pos)))
         layer = parent.get_layer(i);
     }
 
@@ -57,7 +57,7 @@ public:
       Layer layer = EditorMapComponent::current()->get_workspace().get_map().get_layer(i);
       if (layer.has_bounding_rect())
       {
-        CL_Rect rect = layer.get_bounding_rect();
+        Rect rect = layer.get_bounding_rect();
         CL_Display::draw_line(rect.left, rect.top, rect.right, rect.bottom,
                               CL_Color(0, 255, 255));
         CL_Display::draw_line(rect.left, rect.bottom, rect.right, rect.top,
@@ -80,7 +80,7 @@ public:
   void on_mouse_down(const CL_InputEvent& event)
   {
     EditorMapComponent* parent = EditorMapComponent::current();
-    CL_Pointf pos = parent->screen2world(event.mouse_pos);
+    Pointf pos = parent->screen2world(event.mouse_pos);
 
     layer = find_closed_layer(pos);
     if (!layer.is_null())
@@ -108,7 +108,7 @@ public:
     if (!layer.is_null())
     {
       EditorMapComponent* parent = EditorMapComponent::current();
-      CL_Pointf pos = parent->screen2world(event.mouse_pos);
+      Pointf pos = parent->screen2world(event.mouse_pos);
       layer.set_pos(old_trans_offset + (pos - click_pos));
     }
   }
@@ -118,8 +118,8 @@ LayerMoveTool::LayerMoveTool()
   : impl(new LayerMoveToolImpl())
 {
   impl->scrolling = false;
-  impl->click_pos = CL_Point(0, 0);
-  impl->old_trans_offset = CL_Pointf(0,0);
+  impl->click_pos = Point(0, 0);
+  impl->old_trans_offset = Pointf(0,0);
 }
 
 Tool

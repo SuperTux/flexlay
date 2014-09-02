@@ -15,6 +15,8 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <iostream>
+
+#include "math/rect.hpp"
 #include "stroke.hpp"
 #include "stroke_drawer.hpp"
 
@@ -26,15 +28,15 @@ public:
 
   // Additional data which should be moved to the StrokeDrawer, since
   // its for caching only and can be generated
-  //typedef std::vector<CL_Pointf> Normals;
+  //typedef std::vector<Pointf> Normals;
   //Normals normals;
 
   mutable bool bounding_rect_needs_recalc;
-  mutable CL_Rectf bounding_rect;
+  mutable Rectf bounding_rect;
 
-  CL_Rectf calc_bounding_rect() const
+  Rectf calc_bounding_rect() const
   {
-    CL_Rectf rect;
+    Rectf rect;
 
     // FIXME: Keep the drawer into account (ie. brushsize)
     if (dabs.size() > 0)
@@ -95,7 +97,7 @@ Stroke::get_interpolated_dabs(float x_spacing, float y_spacing) const
     const Stroke::Dabs& dabs = impl->dabs;
     for(unsigned int j = 0; j < dabs.size()-1; ++j)
     {
-      CL_Pointf dist = dabs[j+1].pos - dabs[j].pos;
+      Pointf dist = dabs[j+1].pos - dabs[j].pos;
       float length = sqrt(dist.x * dist.x + dist.y * dist.y);
       int n = 1;
 
@@ -163,18 +165,18 @@ Stroke::add_dab(const Dab& dab)
 
    if (points.size() == 1)
    {
-   normals.push_back(CL_Pointf(1.0f, 1.0f));
+   normals.push_back(Pointf(1.0f, 1.0f));
    }
    else if (points.size() == 2)
    {
-   normals.push_back(CL_Pointf(1.0f, 1.0f));
-   normals.push_back(CL_Pointf(1.0f, 1.0f));
+   normals.push_back(Pointf(1.0f, 1.0f));
+   normals.push_back(Pointf(1.0f, 1.0f));
    }
    else if (points.size() >= 3)
    {
    for(Points::size_type i = 0; i < int(points.size())-1; ++i)
    {
-   CL_Pointf normal((points[i].y - points[i+1].y),
+   Pointf normal((points[i].y - points[i+1].y),
    -(points[i].x - points[i+1].x));
 
    float length = sqrt(normal.x * normal.x + normal.y * normal.y);
@@ -185,7 +187,7 @@ Stroke::add_dab(const Dab& dab)
    normals.push_back(normal);
    }
 
-   normals.push_back(CL_Pointf(1.0f, 1.0f));
+   normals.push_back(Pointf(1.0f, 1.0f));
    }
 
    //std::cout << normals.size() << " == " <<  points.size() << std::endl;
@@ -212,7 +214,7 @@ bounding_rect.bottom = Math::min(bounding_rect.bottom, i->y);
 }
 */
 
-CL_Rectf
+Rectf
 Stroke::get_bounding_rect() const
 {
   if (impl->bounding_rect_needs_recalc)

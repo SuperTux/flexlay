@@ -28,7 +28,7 @@ class ObjMapSpriteObject
 public:
   ObjMapSpriteObject();
   ObjMapSpriteObject(const CL_Sprite& s,
-                     const CL_Pointf& pos_,
+                     const Pointf& pos_,
                      const MetaData& data_);
 
   void set_rotate(float angle);

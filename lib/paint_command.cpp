@@ -14,13 +14,16 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include <sstream>
 #include "paint_command.hpp"
+
+#include <sstream>
+
+#include "math/rect.hpp"
 
 class PaintCommandImpl : public CommandImpl
 {
 public:
-  typedef std::vector<CL_Point> Points;
+  typedef std::vector<Point> Points;
   Points points;
 
   TilemapLayer tilemap;
@@ -29,7 +32,7 @@ public:
   /** Copy of the field used to generate undo informations */
   Field<int>   undo_field;
 
-  CL_Point     pos;
+  Point     pos;
   TileBrush*   redo_brush;
   TileBrush*   undo_brush;
 
@@ -63,7 +66,7 @@ PaintCommand::~PaintCommand()
 }
 
 void
-PaintCommand::add_point(const CL_Point& pos)
+PaintCommand::add_point(const Point& pos)
 {
   // FIXME: undo_field is unneeded, should just record the overwritten color
   impl->points.push_back(pos);
@@ -76,7 +79,7 @@ PaintCommandImpl::execute()
   assert(!points.empty());
 
   // Calc bounding rect
-  CL_Rect rect(points.front().x,
+  Rect rect(points.front().x,
                points.front().y,
                points.front().x + brush.get_width(),
                points.front().y + brush.get_height());

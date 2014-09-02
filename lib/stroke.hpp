@@ -22,6 +22,9 @@
 #include <ClanLib/Core/System/system.h>
 #include <memory>
 
+#include "math/point.hpp"
+#include "math/rect.hpp"
+
 class StrokeImpl;
 class StrokeDrawer;
 class CL_GraphicContext;
@@ -36,14 +39,14 @@ public:
   unsigned int time;
 
   /** Position at which the dot is placed */
-  CL_Pointf pos;
+  Pointf pos;
 
   /** The pressure with which the dot was drawn (can be interpreted as
       size, opacity or similar things by the StrokeDrawer */
   float pressure;
 
   /** Tilting of the pen while painting the dot */
-  CL_Pointf tilt;
+  Pointf tilt;
 
   Dab()
     : time(CL_System::get_time()), pos(0, 0), pressure(1.0f), tilt(0, 0)
@@ -85,7 +88,7 @@ public:
 
   int get_dab_count() const;
 
-  CL_Rectf get_bounding_rect() const;
+  Rectf get_bounding_rect() const;
 private:
   std::shared_ptr<StrokeImpl> impl;
 };

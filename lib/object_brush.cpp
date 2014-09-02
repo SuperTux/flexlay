@@ -49,7 +49,7 @@ ObjectBrush::get_data()
 }
 
 ObjMapSpriteObject
-ObjectBrush::to_sprite_object(const CL_Pointf& pos)
+ObjectBrush::to_sprite_object(const Pointf& pos)
 {
   ObjMapSpriteObject obj(impl->sprite, pos, impl->data);
   return obj;

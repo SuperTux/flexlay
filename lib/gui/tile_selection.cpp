@@ -20,14 +20,15 @@
 #include <iostream>
 
 #include "math.hpp"
+#include "math/rect.hpp"
 #include "tileset.hpp"
 
 class TileSelectionImpl
 {
 public:
   TilemapLayer tilemap;
-  CL_Point start_pos;
-  CL_Rect  selection;
+  Point start_pos;
+  Rect  selection;
   bool active;
 };
 
@@ -42,7 +43,7 @@ TileSelection::~TileSelection()
 }
 
 void
-TileSelection::start(TilemapLayer tilemap_, const CL_Point& pos)
+TileSelection::start(TilemapLayer tilemap_, const Point& pos)
 {
   impl->tilemap = tilemap_;
   impl->active = true;
@@ -51,12 +52,12 @@ TileSelection::start(TilemapLayer tilemap_, const CL_Point& pos)
 }
 
 void
-TileSelection::update(const CL_Point& pos)
+TileSelection::update(const Point& pos)
 {
-  impl->selection = CL_Rect(std::min(impl->start_pos.x, pos.x),
-                            std::min(impl->start_pos.y, pos.y),
-                            std::max(impl->start_pos.x, pos.x) + 1,
-                            std::max(impl->start_pos.y, pos.y) + 1);
+  impl->selection = Rect(std::min(impl->start_pos.x, pos.x),
+                         std::min(impl->start_pos.y, pos.y),
+                         std::max(impl->start_pos.x, pos.x) + 1,
+                         std::max(impl->start_pos.y, pos.y) + 1);
 }
 
 bool
@@ -87,7 +88,7 @@ TileSelection::draw(const CL_Color& color)
 TileBrush
 TileSelection::get_brush(const Field<int>& field) const
 {
-  CL_Rect sel = impl->selection;
+  Rect sel = impl->selection;
 
   sel.normalize();
 
@@ -125,10 +126,10 @@ TileSelection::get_brush(const Field<int>& field) const
   }
 }
 
-CL_Rect
+Rect
 TileSelection::get_rect() const
 {
-  CL_Rect sel = impl->selection;
+  Rect sel = impl->selection;
   sel.normalize();
   return sel;
 }

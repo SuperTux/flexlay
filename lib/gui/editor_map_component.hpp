@@ -41,9 +41,9 @@ public:
   void      set_workspace(Workspace m);
 
   void  set_zoom(float z);
-  void  zoom_to(CL_Rectf rect);
-  void  zoom_out(CL_Point pos);
-  void  zoom_in (CL_Point pos);
+  void  zoom_to(Rectf rect);
+  void  zoom_out(Point pos);
+  void  zoom_in (Point pos);
 
   void move_to(int x, int y);
   void move_to_x(float x);
@@ -51,9 +51,9 @@ public:
 
   boost::signals2::signal<void (int, int)>& sig_on_key(const std::string& str);
 
-  CL_Pointf screen2world(const CL_Point& pos);
+  Pointf screen2world(const Point& pos);
 
-  CL_Rectf get_clip_rect();
+  Rectf get_clip_rect() const;
 
   GraphicContextState& get_gc_state();
 

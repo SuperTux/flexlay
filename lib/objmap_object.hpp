@@ -20,6 +20,7 @@
 #include <ClanLib/Display/graphic_context.h>
 #include <boost/signals2.hpp>
 
+#include "math/rect.hpp"
 #include "meta_data.hpp"
 
 class ObjMapObjectImpl;
@@ -31,8 +32,8 @@ public:
   ObjMapObject(const std::shared_ptr<ObjMapObjectImpl>& impl_);
   virtual ~ObjMapObject() {}
 
-  CL_Pointf get_pos() const;
-  void     set_pos(const CL_Pointf& p);
+  Pointf get_pos() const;
+  void     set_pos(const Pointf& p);
 
   MetaData get_metadata() const;
   void     set_metadata(const MetaData& data_);
@@ -42,7 +43,7 @@ public:
   boost::signals2::signal<void (ObjMapObject)>& sig_deselect();
 
   void draw(CL_GraphicContext* gc);
-  CL_Rectf get_bound_rect() const;
+  Rectf get_bound_rect() const;
 
   void add_control_points();
   void update_control_points();

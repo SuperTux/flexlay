@@ -63,7 +63,7 @@ public:
     else
     {
       EditorMapComponent* parent = EditorMapComponent::current();
-      CL_Pointf p = parent->screen2world(CL_Point(CL_Mouse::get_x() - parent->get_screen_x(),
+      Pointf p = parent->screen2world(Point(CL_Mouse::get_x() - parent->get_screen_x(),
                                                   CL_Mouse::get_y() - parent->get_screen_y()));
       CL_Sprite s = DrawerProperties::current()->get_brush().get_sprite();
       s.set_color(DrawerProperties::current()->get_color());
@@ -103,7 +103,7 @@ public:
   void add_dab(const CL_InputEvent& event)
   {
     EditorMapComponent* parent = EditorMapComponent::current();
-    CL_Pointf p = parent->screen2world(event.mouse_pos);
+    Pointf p = parent->screen2world(event.mouse_pos);
 
     // FIXME: This is ugly, events relative to the layer should be handled somewhat differently
     Dab dab(p.x - BitmapLayer::current()->to_object().get_pos().x,

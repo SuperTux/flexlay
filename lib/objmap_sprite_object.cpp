@@ -24,7 +24,7 @@ public:
   CL_Sprite sprite;
 
   void draw(CL_GraphicContext* gc);
-  CL_Rectf get_bound_rect() const;
+  Rectf get_bound_rect() const;
 
   ObjMapObject*  duplicate(int handle_);
 };
@@ -34,7 +34,7 @@ ObjMapSpriteObject::ObjMapSpriteObject()
 }
 
 ObjMapSpriteObject::ObjMapSpriteObject(const CL_Sprite& sprite_,
-                                       const CL_Pointf& pos_,
+                                       const Pointf& pos_,
                                        const MetaData& data_)
   : impl(new ObjMapSpriteObjectImpl())
 {
@@ -49,16 +49,17 @@ ObjMapSpriteObjectImpl::draw(CL_GraphicContext* gc)
   sprite.draw(pos.x, pos.y, gc);
 }
 
-CL_Rectf
+Rectf
 ObjMapSpriteObjectImpl::get_bound_rect() const
 {
-  CL_Point  align = CL_Point(0, 0);
+  Point  align = Point(0, 0);
   CL_Origin origin_e;
 
   sprite.get_alignment(origin_e, align.x, align.y);
 
-  CL_Point origin = calc_origin(origin_e, CL_Size(sprite.get_width(),
-                                                  sprite.get_height()));
+  Point origin = calc_origin(static_cast<Origin>(origin_e),
+                             Size(sprite.get_width(),
+                                  sprite.get_height()));
   align.x = -align.x;
 
   // FIXME: This looks a bit hacky
@@ -72,11 +73,11 @@ ObjMapSpriteObjectImpl::get_bound_rect() const
     align.y += sprite.get_height();
 
   //  if (scale_x > 1.0f && scale_y > 1.0f)
-  //    return CL_Rectf(pos - origin - align,
-  //                   CL_Sizef(sprite.get_width() * scale_x, sprite.get_height() * scale_y));
+  //    return Rectf(pos - origin - align,
+  //                   Sizef(sprite.get_width() * scale_x, sprite.get_height() * scale_y));
   //  else
-  return CL_Rectf(pos - origin - align,
-                  CL_Sizef(sprite.get_width(), sprite.get_height()));
+  return Rectf(pos - origin - align,
+                  Sizef(sprite.get_width(), sprite.get_height()));
 }
 
 void

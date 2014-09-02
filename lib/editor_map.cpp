@@ -20,6 +20,7 @@
 #include <assert.h>
 #include <iostream>
 
+#include "math/rect.hpp"
 #include "meta_data.hpp"
 
 class EditorMapImpl
@@ -50,7 +51,7 @@ public:
   boost::signals2::signal<void ()> on_change;
 
   bool    has_bounding_rect;
-  CL_Rect bounding_rect;
+  Rect bounding_rect;
 };
 
 EditorMap::EditorMap(bool create) :
@@ -64,7 +65,7 @@ EditorMap::EditorMap(bool create) :
     impl->modified = false;
     impl->serial = 0;
     impl->has_bounding_rect = false;
-    impl->bounding_rect = CL_Rect(0,0,0,0);
+    impl->bounding_rect = Rect(0,0,0,0);
   }
 }
 
@@ -86,12 +87,12 @@ EditorMap::add_layer(const Layer& layer, int pos)
 void
 EditorMap::draw_gui(CL_GraphicContext* gc)
 {
-  CL_Rect rect = get_bounding_rect();
+  Rect rect = get_bounding_rect();
 
-  if (rect != CL_Rect(0,0,0,0))
+  if (rect != Rect(0,0,0,0))
   {
-    gc->fill_rect(rect, impl->background_color);
-    gc->draw_rect(rect, impl->foreground_color);
+    gc->fill_rect(rect.to_cl(), impl->background_color);
+    gc->draw_rect(rect.to_cl(), impl->foreground_color);
   }
   else
   {
@@ -167,21 +168,21 @@ EditorMap::has_bounding_rect() const
 }
 
 void
-EditorMap::set_bounding_rect(const CL_Rect& rect)
+EditorMap::set_bounding_rect(const Rect& rect)
 {
-  if (rect != CL_Rect(0,0,0,0))
+  if (rect != Rect(0,0,0,0))
   {
     impl->has_bounding_rect = true;
-    impl->bounding_rect     = rect;
+    impl->bounding_rect = rect;
   }
   else
   {
     impl->has_bounding_rect = false;
-    impl->bounding_rect     = rect;
+    impl->bounding_rect = rect;
   }
 }
 
-CL_Rect
+Rect
 EditorMap::get_bounding_rect()
 {
   if (impl->has_bounding_rect)
@@ -191,7 +192,7 @@ EditorMap::get_bounding_rect()
   else
   {
     bool init = false;
-    CL_Rect rect(0,0,0,0);
+    Rect rect(0,0,0,0);
 
     for(EditorMapImpl::Layers::iterator i = impl->layers.begin(); i != impl->layers.end(); ++i)
     {
@@ -204,7 +205,7 @@ EditorMap::get_bounding_rect()
         }
         else
         {
-          CL_Rect other = i->get_bounding_rect();
+          Rect other = i->get_bounding_rect();
           rect.top    = std::min(rect.top,    other.top);
           rect.bottom = std::max(rect.bottom, other.bottom);
           rect.left   = std::min(rect.left,   other.left);
@@ -219,7 +220,7 @@ EditorMap::get_bounding_rect()
 void
 EditorMap::set_background_color(const CL_Color& color)
 {
-  impl-> background_color = color;
+  impl->background_color = color;
 }
 
 void

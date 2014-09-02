@@ -60,10 +60,10 @@ Layer::has_bounding_rect() const
     return false;
 }
 
-CL_Rect
+Rect
 Layer::get_bounding_rect()
 {
-  CL_Rect rect;
+  Rect rect;
 
   if (impl.get())
   {
@@ -94,12 +94,12 @@ Layer::set_metadata(MetaData data_)
 }
 
 void
-Layer::set_pos(const CL_Pointf& pos)
+Layer::set_pos(const Pointf& pos)
 {
   impl->pos = pos;
 }
 
-CL_Pointf
+Pointf
 Layer::get_pos() const
 {
   return impl->pos;

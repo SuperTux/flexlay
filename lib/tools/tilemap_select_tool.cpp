@@ -117,7 +117,7 @@ TileMapSelectTool::get_selection() const
   return impl->selection.get_brush(*tilemap.get_field());
 }
 
-CL_Rect
+Rect
 TileMapSelectTool::get_selection_rect() const
 {
   return impl->selection.get_rect();

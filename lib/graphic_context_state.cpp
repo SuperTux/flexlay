@@ -26,7 +26,7 @@ public:
   int width;
   int height;
 
-  CL_Pointf offset;
+  Pointf offset;
   float zoom;
   float rotation;
 };
@@ -36,7 +36,7 @@ GraphicContextState::GraphicContextState()
 {
   impl->width  = 1;
   impl->height = 1;
-  impl->offset = CL_Pointf(0,0);
+  impl->offset = Pointf(0,0);
   impl->zoom   = 1.0f;
   impl->rotation = 0;
 }
@@ -46,7 +46,7 @@ GraphicContextState::GraphicContextState(int w, int h)
 {
   impl->width  = w;
   impl->height = h;
-  impl->offset = CL_Pointf(0,0);
+  impl->offset = Pointf(0,0);
   impl->zoom   = 1.0f;
   impl->rotation = 0;
 }
@@ -83,31 +83,31 @@ GraphicContextState::pop(CL_GraphicContext* gc) const
   gc->pop_modelview();
 }
 
-CL_Rectf
+Rectf
 GraphicContextState::get_clip_rect() const
 {
-  return CL_Rectf(CL_Pointf(-impl->offset.x,
+  return Rectf(Pointf(-impl->offset.x,
                             -impl->offset.y),
-                  CL_Sizef(get_width()  / impl->zoom,
+                  Sizef(get_width()  / impl->zoom,
                            get_height() / impl->zoom));
 }
 
 void
-GraphicContextState::set_pos(const CL_Pointf& pos)
+GraphicContextState::set_pos(const Pointf& pos)
 {
   impl->offset.x = -pos.x + (get_width()/2  / impl->zoom);
   impl->offset.y = -pos.y + (get_height()/2 / impl->zoom);
 }
 
-CL_Pointf
+Pointf
 GraphicContextState::get_pos() const
 {
-  return CL_Pointf(-impl->offset.x + (get_width()/2  / impl->zoom),
+  return Pointf(-impl->offset.x + (get_width()/2  / impl->zoom),
                    -impl->offset.y + (get_height()/2  / impl->zoom));
 }
 
 void
-GraphicContextState::set_zoom(CL_Pointf pos, float z)
+GraphicContextState::set_zoom(Pointf pos, float z)
 {
   float old_zoom = impl->zoom;
   set_zoom(z);
@@ -128,7 +128,7 @@ GraphicContextState::get_zoom() const
 }
 
 void
-GraphicContextState::zoom_to (const CL_Rectf& rect)
+GraphicContextState::zoom_to (const Rectf& rect)
 {
   float center_x = (rect.left + rect.right) / 2.0f;
   float center_y = (rect.top + rect.bottom) / 2.0f;
@@ -152,10 +152,10 @@ GraphicContextState::zoom_to (const CL_Rectf& rect)
   impl->offset.y = (get_height() / (2*impl->zoom)) - center_y;
 }
 
-CL_Pointf
-GraphicContextState::screen2world(const CL_Point& pos_)
+Pointf
+GraphicContextState::screen2world(const Point& pos_)
 {
-  CL_Pointf pos = pos_;
+  Pointf pos = pos_;
   float sa = sin(-impl->rotation/180.0f*M_PI);
   float ca = cos(-impl->rotation/180.0f*M_PI);
 
@@ -165,7 +165,7 @@ GraphicContextState::screen2world(const CL_Point& pos_)
   pos.x = impl->width/2  + (ca * dx - sa * dy);
   pos.y = impl->height/2 + (sa * dx + ca * dy);
 
-  CL_Pointf p((float(pos.x) / impl->zoom) - impl->offset.x,
+  Pointf p((float(pos.x) / impl->zoom) - impl->offset.x,
               (float(pos.y) / impl->zoom) - impl->offset.y);
 
   return p;

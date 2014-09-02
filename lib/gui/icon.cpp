@@ -14,9 +14,12 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include <ClanLib/Display/display.h>
-#include "box.hpp"
 #include "icon.hpp"
+
+#include <ClanLib/Display/display.h>
+
+#include "math/rect.hpp"
+#include "box.hpp"
 
 class IconImpl
 {
@@ -72,7 +75,7 @@ void
 IconImpl::draw()
 {
   CL_Display::push_translate(parent->get_screen_x(), parent->get_screen_y());
-  CL_Rect rect(CL_Point(0, 0), CL_Size(parent->get_width()-4, parent->get_height()-4));
+  Rect rect(Point(0, 0), Size(parent->get_width()-4, parent->get_height()-4));
 
   sprite.set_alignment(origin_center);
 

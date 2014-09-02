@@ -20,21 +20,21 @@ class ObjMapControlPointImpl
 {
 public:
   CL_Sprite sprite;
-  CL_Pointf  pos;
+  Pointf  pos;
   MetaData  data;
 
   void draw(CL_GraphicContext* gc);
-  CL_Rect get_bound_rect() const;
-  boost::signals2::signal<void (CL_Pointf)> on_set_pos;
+  Rect get_bound_rect() const;
+  boost::signals2::signal<void (Pointf)> on_set_pos;
 };
 
-boost::signals2::signal<void (CL_Pointf)>&
+boost::signals2::signal<void (Pointf)>&
 ObjMapControlPoint::sig_set_pos()
 {
   return impl->on_set_pos;
 }
 
-ObjMapControlPoint::ObjMapControlPoint(CL_Sprite sprite_, CL_Pointf pos_, MetaData data_)
+ObjMapControlPoint::ObjMapControlPoint(CL_Sprite sprite_, Pointf pos_, MetaData data_)
   : impl(new ObjMapControlPointImpl)
 {
   impl->sprite = sprite_;
@@ -55,43 +55,44 @@ ObjMapControlPointImpl::draw(CL_GraphicContext* gc)
 }
 
 void
-ObjMapControlPoint::set_pos_raw(const CL_Pointf& p)
+ObjMapControlPoint::set_pos_raw(const Pointf& p)
 {
   impl->pos = p;
 }
 
 void
-ObjMapControlPoint::set_pos(const CL_Pointf& p)
+ObjMapControlPoint::set_pos(const Pointf& p)
 {
   impl->on_set_pos(p);
 }
 
-CL_Pointf
+Pointf
 ObjMapControlPoint::get_pos() const
 {
   return impl->pos;
 }
 
-CL_Rect
+Rect
 ObjMapControlPoint::get_bound_rect() const
 {
   return impl->get_bound_rect();
 }
 
-CL_Rect
+Rect
 ObjMapControlPointImpl::get_bound_rect() const
 {
-  CL_Point  align = CL_Point(0, 0);
+  Point  align = Point(0, 0);
   CL_Origin origin_e;
 
   sprite.get_alignment(origin_e, align.x, align.y);
 
-  CL_Point origin = calc_origin(origin_e, CL_Size(sprite.get_width(),
-                                                  sprite.get_height()));
+  Point origin = calc_origin(static_cast<Origin>(origin_e), 
+                             Size(sprite.get_width(),
+                                  sprite.get_height()));
   align.x = -align.x;
 
-  return CL_Rect(CL_Point(pos) - origin - align,
-                 CL_Size(sprite.get_width(), sprite.get_height()));
+  return Rect(Point(pos) - origin - align,
+              Size(sprite.get_width(), sprite.get_height()));
 }
 
 /* EOF */

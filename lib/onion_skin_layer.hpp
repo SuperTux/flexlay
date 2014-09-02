@@ -30,7 +30,7 @@ class OnionSkinLayerImpl;
 class OnionSkinLayer
 {
 public:
-  /** FIXME: Should probally be CL_Rect instead of just
+  /** FIXME: Should probally be Rect instead of just
       width/height */
   OnionSkinLayer(int width, int height);
   OnionSkinLayer(Layer layer);

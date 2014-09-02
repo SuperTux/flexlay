@@ -16,7 +16,9 @@
 
 #include <ClanLib/Display/display.h>
 #include <ClanLib/Display/keys.h>
+
 #include "scrollbar.hpp"
+#include "math/rect.hpp"
 
 class ScrollbarImpl
 {
@@ -37,7 +39,7 @@ public:
   float old_pos;
 
   bool pressed;
-  CL_Point click_pos;
+  Point click_pos;
 
   void draw();
   void on_mouse_up(const CL_InputEvent& event);
@@ -88,30 +90,29 @@ ScrollbarImpl::draw()
   CL_Display::push_cliprect(parent->get_screen_rect());
   CL_Display::push_translate(parent->get_screen_x(), parent->get_screen_y());
 
-  CL_Rect rect = CL_Rect(CL_Point(0, 0),
-                         CL_Size(parent->get_width()-1,
-                                 parent->get_height()-1));
-  CL_Display::fill_rect(rect,
-                        CL_Color(255, 255, 255));
+  Rect rect(Point(0, 0),
+            Size(parent->get_width()-1,
+                 parent->get_height()-1));
+  CL_Display::fill_rect(rect.to_cl(), CL_Color(255, 255, 255));
 
   if (orientation == Scrollbar::HORIZONTAL)
   {
     float scale = parent->get_width()/(max - min);
-    CL_Display::fill_rect(CL_Rect(CL_Point(int((pos-min-(pagesize/2)) * scale), 2),
-                                  CL_Size(int(pagesize*scale),
-                                          parent->get_height()-5)),
+    CL_Display::fill_rect(Rect(Point(int((pos-min-(pagesize/2)) * scale), 2),
+                               Size(int(pagesize*scale),
+                                    parent->get_height()-5)).to_cl(),
                           CL_Color(0, 0, 0));
   }
   else if (orientation == Scrollbar::VERTICAL)
   {
     float scale = parent->get_height()/(max - min);
-    CL_Display::fill_rect(CL_Rect(CL_Point(2, int((pos-min-(pagesize/2)) * scale)),
-                                  CL_Size(parent->get_width()-5,
-                                          int(pagesize*scale))),
+    CL_Display::fill_rect(Rect(Point(2, int((pos-min-(pagesize/2)) * scale)),
+                               Size(parent->get_width()-5,
+                                    int(pagesize*scale))).to_cl(),
                           CL_Color(0, 0, 0));
   }
 
-  CL_Display::draw_rect(rect,
+  CL_Display::draw_rect(rect.to_cl(),
                         CL_Color(155, 155, 155));
 
   CL_Display::pop_modelview();
@@ -152,7 +153,7 @@ ScrollbarImpl::on_mouse_move(const CL_InputEvent& event)
 {
   if(pressed)
   {
-    CL_Rect rect = parent->get_position();
+    Rect rect = parent->get_position();
 
     float scale = ((orientation == Scrollbar::VERTICAL)
                    ? parent->get_height() : parent->get_width())/(max - min);

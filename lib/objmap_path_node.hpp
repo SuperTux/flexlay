@@ -23,7 +23,7 @@ class ObjMapPathNodeImpl;
 class ObjMapPathNode
 {
 public:
-  ObjMapPathNode(const CL_Pointf& pos_,
+  ObjMapPathNode(const Pointf& pos_,
                  const MetaData& data_);
 
   void connect(ObjMapPathNode next);

@@ -37,7 +37,7 @@ public:
   /** Used to cache drawings */
   CL_Surface  surface;
   CL_Canvas*  canvas;
-  CL_Pointf   last_pos;
+  Pointf   last_pos;
 
   BitmapLayerImpl(CL_Surface surface_)
     : surface(surface_),
@@ -95,18 +95,18 @@ public:
     surface.set_blend_func(blend_one, blend_one_minus_src_alpha);
     surface.draw(pos.x, pos.y, gc);
 
-    gc->draw_rect(get_bounding_rect(), CL_Color(155, 155, 155, 100));
+    gc->draw_rect(get_bounding_rect().to_cl(), CL_Color(155, 155, 155, 100));
   }
 
-  CL_Rectf get_bound_rect() const
+  Rectf get_bound_rect() const
   {
-    return CL_Rectf(CL_Pointf(ObjMapObjectImpl::pos), CL_Sizef(surface.get_width(), surface.get_height()));
+    return Rectf(Pointf(ObjMapObjectImpl::pos), Sizef(surface.get_width(), surface.get_height()));
   }
 
-  CL_Rect get_bounding_rect() {
+  Rect get_bounding_rect() {
     // FIXME: Do we need to handle its position here or does the Layer keep care of that?
-    return CL_Rect(CL_Point(0, 0),
-                   CL_Size(surface.get_width(), surface.get_height()));
+    return Rect(Point(0, 0),
+                Size(surface.get_width(), surface.get_height()));
   }
 
   bool has_bounding_rect() const {

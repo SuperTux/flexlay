@@ -26,8 +26,8 @@ public:
   ObjectLayer objmap;
 
   struct Obj {
-    CL_Pointf old_pos;
-    CL_Pointf new_pos;
+    Pointf old_pos;
+    Pointf new_pos;
     ObjMapObject obj;
   };
 
@@ -66,7 +66,7 @@ ObjectMoveCommand::add_obj(const ObjMapObject& obj)
 }
 
 void
-ObjectMoveCommand::move_by(const CL_Pointf& delta)
+ObjectMoveCommand::move_by(const Pointf& delta)
 {
   for(auto it = impl->objects.begin(); it != impl->objects.end(); ++it)
   {

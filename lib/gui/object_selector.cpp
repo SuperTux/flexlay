@@ -204,7 +204,7 @@ ObjectSelector::add_brush(const ObjectBrush& brush)
   brushes.push_back(brush);
 }
 
-boost::signals2::signal<void (ObjectBrush, CL_Point)>&
+boost::signals2::signal<void (ObjectBrush, Point)>&
 ObjectSelector::sig_drop()
 {
   return on_drop;

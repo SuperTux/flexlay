@@ -57,12 +57,12 @@ public:
   MetaData get_metadata() const;
 
   bool has_bounding_rect() const;
-  CL_Rect get_bounding_rect();
+  Rect get_bounding_rect();
 
   /** Set the bounding rect for this map, if the given rect is
-      CL_Rect() the bounding rect will be calculated automatically
+      Rect() the bounding rect will be calculated automatically
       from the content of the map */
-  void    set_bounding_rect(const CL_Rect& rect);
+  void    set_bounding_rect(const Rect& rect);
 
   void set_background_color(const CL_Color& color);
 

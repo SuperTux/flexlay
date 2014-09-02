@@ -43,10 +43,10 @@ public:
 
   /** the position on which the object was clicked, relative to the
       object */
-  CL_Pointf offset;
+  Pointf offset;
 
-  CL_Pointf drag_start;
-  CL_Rectf selection_rect;
+  Pointf drag_start;
+  Rectf selection_rect;
 
   ObjMapControlPoint control_point;
   ObjMapSelectTool::Selection selection;
@@ -66,7 +66,7 @@ ObjMapSelectTool::ObjMapSelectTool()
   : impl(new ObjMapSelectToolImpl())
 {
   impl->state = ObjMapSelectToolImpl::NONE;
-  impl->offset = CL_Pointf(0, 0);
+  impl->offset = Pointf(0, 0);
   impl->move_command = 0;
 }
 
@@ -111,7 +111,7 @@ ObjMapSelectToolImpl::draw()
   for (ObjMapSelectTool::Selection::iterator i = selection.begin(); i != selection.end(); ++i)
   {
     //      (*i).draw();
-    CL_Display::draw_rect((*i).get_bound_rect(), CL_Color(255, 0, 0));
+    CL_Display::draw_rect((*i).get_bound_rect().to_cl(), CL_Color(255, 0, 0));
   }
 
   switch(state)
@@ -119,7 +119,7 @@ ObjMapSelectToolImpl::draw()
     case DRAG:
       break;
     case SELECT:
-      CL_Display::draw_rect(selection_rect,
+      CL_Display::draw_rect(selection_rect.to_cl(),
                             CL_Color(255, 255, 255));
       break;
     default:
@@ -134,7 +134,7 @@ ObjMapSelectToolImpl::on_mouse_up(const CL_InputEvent& event)
 
   EditorMapComponent* parent = EditorMapComponent::current();
 
-  CL_Pointf pos = parent->screen2world(event.mouse_pos);
+  Pointf pos = parent->screen2world(event.mouse_pos);
 
   switch (event.id)
   {
@@ -173,7 +173,7 @@ ObjMapSelectToolImpl::on_mouse_up(const CL_InputEvent& event)
       on_right_click(event.mouse_pos.x + parent->get_screen_rect().left,
                      event.mouse_pos.y + parent->get_screen_rect().top);
       /*
-        PopupMenu* menu = new PopupMenu(CL_Point(event.mouse_pos.x + parent->get_screen_rect().left,
+        PopupMenu* menu = new PopupMenu(Point(event.mouse_pos.x + parent->get_screen_rect().left,
         event.mouse_pos.y + parent->get_screen_rect().top),
         GUIManager::current()->get_component());
 
@@ -189,7 +189,7 @@ ObjMapSelectToolImpl::on_mouse_down(const CL_InputEvent& event)
   ObjectLayer objmap = ObjectLayer::current();
 
   EditorMapComponent* parent = EditorMapComponent::current();
-  CL_Pointf pos = parent->screen2world(event.mouse_pos);
+  Pointf pos = parent->screen2world(event.mouse_pos);
 
   switch (event.id)
   {
@@ -249,7 +249,7 @@ ObjMapSelectToolImpl::on_mouse_down(const CL_InputEvent& event)
             else
             {
               state = SELECT;
-              selection_rect = CL_Rectf(pos.x, pos.y, pos.x, pos.y);
+              selection_rect = Rectf(pos.x, pos.y, pos.x, pos.y);
               parent->capture_mouse();
             }
           }
@@ -266,7 +266,7 @@ void
 ObjMapSelectToolImpl::on_mouse_move(const CL_InputEvent& event)
 {
   EditorMapComponent* parent = EditorMapComponent::current();
-  CL_Pointf pos = parent->screen2world(event.mouse_pos);
+  Pointf pos = parent->screen2world(event.mouse_pos);
 
   switch(state)
   {

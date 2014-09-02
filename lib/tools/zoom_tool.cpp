@@ -26,11 +26,11 @@ class ZoomToolImpl : public ToolImpl
 public:
   enum { CREATE_ZOOM_RECT, NONE } state;
 
-  CL_Rectf zoom_rect;
+  Rectf zoom_rect;
 
   void draw();
 
-  void on_mouse_up  (const CL_InputEvent& event);
+  void on_mouse_up(const CL_InputEvent& event);
   void on_mouse_down(const CL_InputEvent& event);
   void on_mouse_move(const CL_InputEvent& event);
 };
@@ -52,10 +52,10 @@ ZoomToolImpl::draw()
   {
     case CREATE_ZOOM_RECT:
     {
-      CL_Rectf tmp(zoom_rect);
+      Rectf tmp(zoom_rect);
       tmp.normalize();
-      CL_Display::fill_rect(tmp, CL_Color(255, 255, 0, 50));
-      CL_Display::draw_rect(tmp, CL_Color(255, 255, 0, 200));
+      CL_Display::fill_rect(tmp.to_cl(), CL_Color(255, 255, 0, 50));
+      CL_Display::draw_rect(tmp.to_cl(), CL_Color(255, 255, 0, 200));
     }
     case NONE:
       break;
@@ -63,7 +63,7 @@ ZoomToolImpl::draw()
 }
 
 void
-ZoomToolImpl::on_mouse_up  (const CL_InputEvent& event)
+ZoomToolImpl::on_mouse_up(const CL_InputEvent& event)
 {
   EditorMapComponent* parent = EditorMapComponent::current();
 
@@ -76,7 +76,7 @@ ZoomToolImpl::on_mouse_up  (const CL_InputEvent& event)
         state = NONE;
         parent->release_mouse();
 
-        CL_Pointf pos = parent->screen2world(event.mouse_pos);
+        Pointf pos = parent->screen2world(event.mouse_pos);
         zoom_rect.right  = pos.x;
         zoom_rect.bottom = pos.y;
         zoom_rect.normalize();
@@ -116,7 +116,7 @@ ZoomToolImpl::on_mouse_down(const CL_InputEvent& event)
           state = CREATE_ZOOM_RECT;
           parent->capture_mouse();
 
-          CL_Pointf pos = parent->screen2world(event.mouse_pos);
+          Pointf pos = parent->screen2world(event.mouse_pos);
           zoom_rect.left   = pos.x;
           zoom_rect.top    = pos.y;
           zoom_rect.right  = pos.x;
@@ -139,7 +139,7 @@ ZoomToolImpl::on_mouse_move(const CL_InputEvent& event)
   {
     case CREATE_ZOOM_RECT:
     {
-      CL_Pointf pos = parent->screen2world(event.mouse_pos);
+      Pointf pos = parent->screen2world(event.mouse_pos);
       zoom_rect.right  = pos.x;
       zoom_rect.bottom = pos.y;
     }

@@ -21,9 +21,9 @@
 
 #include "meta_data.hpp"
 
-class CL_Rect;
+class Rect;
 class LayerImpl;
-class CL_Pointf;
+class Pointf;
 class CL_GraphicContext;
 class GraphicContextState;
 
@@ -50,13 +50,13 @@ public:
 
   void draw(const GraphicContextState& state, CL_GraphicContext* gc);
   bool has_bounding_rect() const;
-  CL_Rect get_bounding_rect();
+  Rect get_bounding_rect();
 
   /** Moves the layer to the given position */
-  void set_pos(const CL_Pointf& pos);
+  void set_pos(const Pointf& pos);
 
   /** Returns the current position of the layer */
-  CL_Pointf get_pos() const;
+  Pointf get_pos() const;
   bool is_null() const;
 
 public:

@@ -68,42 +68,36 @@ ObjectMoveCommand::add_obj(const ObjMapObject& obj)
 void
 ObjectMoveCommand::move_by(const CL_Pointf& delta)
 {
-  for(ObjectMoveCommandImpl::Objects::iterator i = impl->objects.begin();
-      i != impl->objects.end();
-      ++i)
+  for(auto it = impl->objects.begin(); it != impl->objects.end(); ++it)
   {
-    i->new_pos = i->old_pos + delta;
-    i->obj.set_pos(i->new_pos);
-    i->obj.sig_move()(i->obj);
+    it->new_pos = it->old_pos + delta;
+    it->obj.set_pos(it->new_pos);
+    it->obj.sig_move()(it->obj);
   }
 }
 
 void
 ObjectMoveCommandImpl::redo()
 {
-  for(ObjectMoveCommandImpl::Objects::iterator i = objects.begin();
-      i != objects.end();
-      ++i)
+  for(auto it = objects.begin(); it != objects.end(); ++it)
   {
-    i->obj.set_pos(i->new_pos);
+    it->obj.set_pos(it->new_pos);
   }
 }
 
 void
 ObjectMoveCommandImpl::undo()
 {
-  for(ObjectMoveCommandImpl::Objects::iterator i = objects.begin();
-      i != objects.end();
-      ++i)
+  for(auto it = objects.begin(); it != objects.end(); ++it)
   {
-    i->obj.set_pos(i->old_pos);
+    it->obj.set_pos(it->old_pos);
   }
 }
 
 std::string
 ObjectMoveCommandImpl::serialize()
 {
-  return "";
+  return std::string();
 }
 
 Command

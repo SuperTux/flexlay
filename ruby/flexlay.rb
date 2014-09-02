@@ -212,9 +212,9 @@ class SimpleFileDialog
   end
   
   def run(func)
-    connect(@ok_button.sig_clicked(), method(:on_ok))
-    connect(@inputbox.sig_return_pressed(), method(:on_ok))
-    connect(@cancel_button.sig_clicked(), method(:on_cancel))
+    connect_cl(@ok_button.sig_clicked(), method(:on_ok))
+    connect_cl(@inputbox.sig_return_pressed(), method(:on_ok))
+    connect_cl(@cancel_button.sig_clicked(), method(:on_cancel))
     @callback = func
     @inputbox.set_focus()
     @window.show()
@@ -246,8 +246,8 @@ class GenericDialog
                     @window.get_client_area())
     @cancel = CL_Button.new(CL_Rect.new(CL_Point.new(230, 35), CL_Size.new(50, 25)), "Cancel",
                             @window.get_client_area())
-    connect(@cancel.sig_clicked(), method(:on_cancel))
-    connect(@ok.sig_clicked(), method(:on_ok))
+    connect_cl(@cancel.sig_clicked(), method(:on_cancel))
+    connect_cl(@ok.sig_clicked(), method(:on_ok))
   end
 
   def on_cancel()

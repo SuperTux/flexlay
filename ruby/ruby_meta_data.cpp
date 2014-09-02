@@ -46,6 +46,7 @@ VALUE get_ruby_object(const MetaData& data_obj)
 
 void connect(boost::signals2::signal<void ()>& sig, VALUE obj)
 {
+  sig.disconnect_all_slots();
   sig.connect(RubyFunctor(obj));
 }
 
@@ -56,18 +57,28 @@ void connect_cl(CL_Signal_v0& sig, VALUE obj)
   sig.connect_functor(RubyFunctor(obj));
 }
 
+void connect_v1_cl(CL_Signal_v1<int>& sig, VALUE obj)
+{
+  sig = CL_Signal_v1<int>();
+  new CL_Slot(sig.connect_functor(RubyFunctor(obj)));
+  sig.connect_functor(RubyFunctor(obj));
+}
+
 void connect_v1_float(boost::signals2::signal<void (float)>& sig, VALUE obj)
 {
+  sig.disconnect_all_slots();
   sig.connect(RubyFunctor(obj));
 }
 
 void connect_v1(boost::signals2::signal<void (int)>& sig, VALUE obj)
 {
+  sig.disconnect_all_slots();
   sig.connect(RubyFunctor(obj));
 }
 
 void connect_v2(boost::signals2::signal<void (int, int)>& sig, VALUE obj)
 {
+  sig.disconnect_all_slots();
   sig.connect(RubyFunctor(obj));
 }
 
@@ -78,16 +89,19 @@ void connect_v2_graceful(boost::signals2::signal<void (int, int)>& sig, VALUE ob
 
 void connect_v1_Color(boost::signals2::signal<void (CL_Color)>& sig, VALUE func)
 {
+  sig.disconnect_all_slots();
   sig.connect(RubyFunctor(func));
 }
 
 void connect_v1_ObjMapObject(boost::signals2::signal<void (ObjMapObject)>& sig, VALUE func)
 {
+  sig.disconnect_all_slots();
   sig.connect(RubyFunctor(func));
 }
 
 void connect_v2_ObjectBrush_Point(boost::signals2::signal<void (ObjectBrush, CL_Point)>& sig, VALUE func)
 {
+  sig.disconnect_all_slots();
   sig.connect(RubyFunctor(func));
 }
 

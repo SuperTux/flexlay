@@ -30,6 +30,7 @@ VALUE get_ruby_object(const MetaData& data);
 
 void connect(boost::signals2::signal<void ()>& sig, VALUE obj);
 void connect_cl(CL_Signal_v0& sig, VALUE obj);
+void connect_v1_cl(CL_Signal_v1<int>& sig, VALUE obj);
 void connect_v1(boost::signals2::signal<void (int)>& sig, VALUE obj);
 void connect_v1_float(boost::signals2::signal<void (float)>& sig, VALUE obj);
 void connect_v2(boost::signals2::signal<void (int, int)>& sig, VALUE obj);

@@ -82,7 +82,7 @@ class GUI
     @objectselector.show(true)
 
     connect_v2_ObjectBrush_Point(@objectselector.sig_drop(), method(:on_object_drop))
-    connect_v1(@brushbox.sig_highlighted(), method(:brushbox_change))
+    connect_v1_cl(@brushbox.sig_highlighted(), method(:brushbox_change))
 
     @workspace.set_tool(0, $tilemap_paint_tool.to_tool());
     @workspace.set_tool(2, $workspace_move_tool.to_tool());

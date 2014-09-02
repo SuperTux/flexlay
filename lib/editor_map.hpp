@@ -85,7 +85,7 @@ public:
   bool is_null() const { return !impl.get(); }
 
 private:
-  boost::shared_ptr<EditorMapImpl> impl;
+  std::shared_ptr<EditorMapImpl> impl;
 };
 
 #endif

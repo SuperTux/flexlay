@@ -40,7 +40,7 @@ public:
   Command to_command();
 
 private:
-  boost::shared_ptr<ObjectAddCommandImpl> impl;
+  std::shared_ptr<ObjectAddCommandImpl> impl;
 };
 
 #endif

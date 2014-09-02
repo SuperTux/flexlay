@@ -40,7 +40,7 @@ public:
 };
 
 GeneratedBrush::GeneratedBrush(const Brush& brush) :
-  impl(boost::dynamic_pointer_cast<GeneratedBrushImpl>(brush.impl))
+  impl(std::dynamic_pointer_cast<GeneratedBrushImpl>(brush.impl))
 {
 }
 

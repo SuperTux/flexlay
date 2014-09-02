@@ -27,7 +27,7 @@ typedef MetaDataGeneric<RubyObject> RubyMetaData;
 
 MetaData  make_metadata(VALUE obj)
 {
-  return MetaData(boost::shared_ptr<MetaDataImpl>(new RubyMetaData(RubyObject(obj))));
+  return MetaData(std::shared_ptr<MetaDataImpl>(new RubyMetaData(RubyObject(obj))));
 }
 
 VALUE get_ruby_object(const MetaData& data_obj)

@@ -28,7 +28,7 @@ public:
 
   Tool to_tool();
 private:
-  boost::shared_ptr<WorkspaceMoveToolImpl> impl;
+  std::shared_ptr<WorkspaceMoveToolImpl> impl;
 };
 
 #endif

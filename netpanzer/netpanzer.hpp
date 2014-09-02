@@ -119,7 +119,7 @@ public:
   void save(const std::string& filename);
 
 private:
-  boost::shared_ptr<NetPanzerFileStructImpl> impl;
+  std::shared_ptr<NetPanzerFileStructImpl> impl;
 };
 
 #endif

@@ -18,7 +18,7 @@
 #define HEADER_FLEXLAY_DIRECTORY_VIEW_HPP
 
 #include <ClanLib/GUI/component.h>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 class DirectoryViewImpl;
 
@@ -37,7 +37,7 @@ public:
   CL_Signal_v1<std::string>& sig_on_click();
 
 private:
-  boost::shared_ptr<DirectoryViewImpl> impl;
+  std::shared_ptr<DirectoryViewImpl> impl;
 };
 
 #endif

@@ -18,7 +18,7 @@
 #define HEADER_FLEXLAY_TILEMAP_LAYER_HPP
 
 #include <ClanLib/Display/pixel_buffer.h>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 #include "field.hpp"
 #include "meta_data.hpp"
@@ -92,7 +92,7 @@ public:
   Layer to_layer();
 
 private:
-  boost::shared_ptr<TilemapLayerImpl> impl;
+  std::shared_ptr<TilemapLayerImpl> impl;
 };
 
 #endif

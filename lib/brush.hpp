@@ -17,7 +17,7 @@
 #ifndef HEADER_FLEXLAY_BRUSH_HPP
 #define HEADER_FLEXLAY_BRUSH_HPP
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 #include "brush_impl.hpp"
 
@@ -25,14 +25,14 @@ class Brush
 {
 public:
   Brush();
-  Brush(boost::shared_ptr<BrushImpl> impl);
+  Brush(std::shared_ptr<BrushImpl> impl);
 
   CL_Sprite get_sprite();
   Brush clone() const;
   bool is_null() const { return !impl.get(); }
 
 public:
-  boost::shared_ptr<BrushImpl> impl;
+  std::shared_ptr<BrushImpl> impl;
 };
 
 #endif

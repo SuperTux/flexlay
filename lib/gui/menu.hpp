@@ -18,7 +18,7 @@
 #define HEADER_FLEXLAY_MENU_HPP
 
 #include <ClanLib/GUI/component.h>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 class MenuImpl;
 class CL_Sprite;
@@ -44,7 +44,7 @@ public:
 
   void run();
 private:
-  boost::shared_ptr<MenuImpl> impl;
+  std::shared_ptr<MenuImpl> impl;
 };
 
 #endif

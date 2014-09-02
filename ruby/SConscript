@@ -26,7 +26,7 @@ Import('clanLib_env')
 
 opts = Variables('custom.py')
 opts.Add('CXX', 'The C++ compiler.', 'g++')
-opts.Add('CXXFLAGS', 'The C++ compiler flags.', '-g -O2 -Wall -fPIC')
+opts.Add('CXXFLAGS', 'The C++ compiler flags.', ["-g", "-O2", "-Wall", "-fPIC"])
 opts.Add('CPPPATH', 'additional header path', '')
 opts.Add('LIBPATH', 'additional library path', '')
 
@@ -56,6 +56,7 @@ def gen_i_depends(path, filename):
 
 env.ParseConfig("pkg-config --cflags --libs ruby-1.9")
 libflexlay_ruby_env = env.Clone()
+libflexlay_ruby_env.Append(CXXFLAGS=["-std=c++11", "-Wno-uninitialized", "-Wno-unused-variable", "-Wno-unused-but-set-variable"])
 flexlay_ruby_lib = libflexlay_ruby_env.SharedLibrary(
     target = "flexlay_wrap.so",
     source = [
@@ -70,7 +71,6 @@ flexlay_ruby_lib = libflexlay_ruby_env.SharedLibrary(
     LINKFLAGS = clanLib_env['LINKFLAGS'],
     LIBPATH=['../lib', '.'] + clanLib_env['LIBPATH'],
     LIBS=['flexlay'] + clanLib_env['LIBS'],
-    CXXFLAGS=["-Wno-uninitialized"],
     SWIGFLAGS="-ruby -c++")
 
 # install_ruby = env.Alias('install_headers', Install(env['DESTDIR'] + env['PREFIX'] + '/include/flexlay', flexlay_headers))

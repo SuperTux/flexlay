@@ -33,7 +33,7 @@ public:
 
   Tool to_tool();
 private:
-  boost::shared_ptr<SketchStrokeToolImpl> impl;
+  std::shared_ptr<SketchStrokeToolImpl> impl;
 };
 
 #endif

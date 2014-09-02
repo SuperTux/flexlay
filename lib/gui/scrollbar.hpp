@@ -18,7 +18,7 @@
 #define HEADER_FLEXLAY_SCROLLBAR_HPP
 
 #include <ClanLib/GUI/component.h>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 class ScrollbarImpl;
 
@@ -37,7 +37,7 @@ public:
   
   CL_Signal_v1<float>& sig_scrollbar_move();
 private:
-  boost::shared_ptr<ScrollbarImpl> impl;
+  std::shared_ptr<ScrollbarImpl> impl;
 };
 
 #endif

@@ -55,7 +55,7 @@ TilemapLayer::TilemapLayer()
 {
 }
 
-/*TilemapLayer::TilemapLayer(const boost::shared_ptr<TilemapLayerImpl>& i)
+/*TilemapLayer::TilemapLayer(const std::shared_ptr<TilemapLayerImpl>& i)
   : impl(i)
   {
   }*/

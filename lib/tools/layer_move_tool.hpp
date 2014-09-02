@@ -28,7 +28,7 @@ public:
 
   Tool to_tool();
 private:
-  boost::shared_ptr<LayerMoveToolImpl> impl;
+  std::shared_ptr<LayerMoveToolImpl> impl;
 };
 
 #endif

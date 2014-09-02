@@ -20,7 +20,7 @@ Command::Command()
 {
 }
 
-Command::Command(const boost::shared_ptr<CommandImpl>& impl_)
+Command::Command(const std::shared_ptr<CommandImpl>& impl_)
   : impl(impl_)
 {
 }

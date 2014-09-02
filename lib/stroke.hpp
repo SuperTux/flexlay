@@ -20,7 +20,7 @@
 #include <vector>
 #include <ClanLib/Core/Math/rect.h>
 #include <ClanLib/Core/System/system.h>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 class StrokeImpl;
 class StrokeDrawer;
@@ -87,7 +87,7 @@ public:
 
   CL_Rectf get_bounding_rect() const;
 private:
-  boost::shared_ptr<StrokeImpl> impl;
+  std::shared_ptr<StrokeImpl> impl;
 };
 
 

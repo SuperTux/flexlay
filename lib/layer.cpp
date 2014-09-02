@@ -23,7 +23,7 @@ Layer::Layer() :
 {
 }
 
-Layer::Layer(boost::shared_ptr<LayerImpl> i)
+Layer::Layer(std::shared_ptr<LayerImpl> i)
   : impl(i)
 {
 }

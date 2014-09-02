@@ -20,7 +20,7 @@ ObjMapObject::ObjMapObject()
 {
 }
 
-ObjMapObject::ObjMapObject(const boost::shared_ptr<ObjMapObjectImpl>& impl_)
+ObjMapObject::ObjMapObject(const std::shared_ptr<ObjMapObjectImpl>& impl_)
   : impl(impl_)
 {
 }

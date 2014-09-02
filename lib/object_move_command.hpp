@@ -35,7 +35,7 @@ public:
 
   Command to_command();
 private:
-  boost::shared_ptr<ObjectMoveCommandImpl> impl;
+  std::shared_ptr<ObjectMoveCommandImpl> impl;
 };
 
 #endif

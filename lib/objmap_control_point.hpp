@@ -46,7 +46,7 @@ public:
   bool is_null() const { return !impl.get(); }
 
 private:
-  boost::shared_ptr<ObjMapControlPointImpl> impl;
+  std::shared_ptr<ObjMapControlPointImpl> impl;
 };
 
 #endif

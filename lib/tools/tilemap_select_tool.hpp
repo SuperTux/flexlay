@@ -38,7 +38,7 @@ public:
 
   Tool to_tool();
 private:
-  boost::shared_ptr<TileMapSelectToolImpl> impl;
+  std::shared_ptr<TileMapSelectToolImpl> impl;
 };
 
 #endif

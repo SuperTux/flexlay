@@ -31,7 +31,7 @@ public:
   void set_pos(const CL_Pointf& pos);
   CL_Pointf get_pos() const;
 private:
-  boost::shared_ptr<ViewportImpl> impl;
+  std::shared_ptr<ViewportImpl> impl;
 };
 
 #endif

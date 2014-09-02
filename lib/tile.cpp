@@ -17,11 +17,12 @@
 #include "tile.hpp"
 
 #include <ClanLib/Core/System/error.h>
-#include <ClanLib/Display/sprite_description.h>
-#include <ClanLib/Display/sprite.h>
-#include <ClanLib/Display/pixel_format.h>
-#include <ClanLib/Display/palette.h>
 #include <ClanLib/Display/Providers/provider_factory.h>
+#include <ClanLib/Display/palette.h>
+#include <ClanLib/Display/pixel_format.h>
+#include <ClanLib/Display/sprite.h>
+#include <ClanLib/Display/sprite_description.h>
+#include <assert.h>
 #include <iostream>
 
 #include "string_converter.hpp"

@@ -54,7 +54,7 @@ public:
 
   Brush to_brush();
 private:
-  boost::shared_ptr<GeneratedBrushImpl> impl;
+  std::shared_ptr<GeneratedBrushImpl> impl;
 };
 
 #endif

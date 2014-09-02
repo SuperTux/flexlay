@@ -38,7 +38,7 @@ public:
   
   ObjMapObject to_object();
 private:
-  boost::shared_ptr<ObjMapSpriteObjectImpl> impl;
+  std::shared_ptr<ObjMapSpriteObjectImpl> impl;
 };
 
 #endif

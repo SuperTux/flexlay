@@ -14,10 +14,13 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+#include "sprite_stroke_drawer.hpp"
+
 #include <ClanLib/Display/canvas.h>
 #include <ClanLib/gl.h>
+#include <assert.h>
+
 #include "stroke_drawer_impl.hpp"
-#include "sprite_stroke_drawer.hpp"
 #include "drawer_properties.hpp"
 #include "bitmap_layer.hpp"
 
@@ -37,7 +40,7 @@ public:
 
 SpriteStrokeDrawer::SpriteStrokeDrawer(StrokeDrawer drawer)
 {
-  impl = boost::dynamic_pointer_cast<SpriteStrokeDrawerImpl>(drawer.impl);
+  impl = std::dynamic_pointer_cast<SpriteStrokeDrawerImpl>(drawer.impl);
   assert(impl.get());
 }
 

@@ -18,7 +18,7 @@
 #define HEADER_FLEXLAY_TITLEBAR_HPP
 
 #include <ClanLib/GUI/component.h>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 class TitlebarImpl;
 
@@ -30,7 +30,7 @@ public:
   Titlebar(const CL_Rect& rect, const std::string& title, CL_Component* parent);
 
 private:
-  boost::shared_ptr<TitlebarImpl> impl;
+  std::shared_ptr<TitlebarImpl> impl;
 };
 
 #endif

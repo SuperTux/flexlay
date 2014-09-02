@@ -56,7 +56,7 @@ public:
 };
 
 OnionSkinLayer::OnionSkinLayer(Layer layer) :
-  impl(boost::dynamic_pointer_cast<OnionSkinLayerImpl>(layer.impl))
+  impl(std::dynamic_pointer_cast<OnionSkinLayerImpl>(layer.impl))
 {
 }
 

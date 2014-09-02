@@ -31,7 +31,7 @@ public:
 
   ObjMapObject to_object();
 private:
-  boost::shared_ptr<ObjMapPathNodeImpl> impl;
+  std::shared_ptr<ObjMapPathNodeImpl> impl;
 };
 
 #endif

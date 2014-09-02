@@ -46,7 +46,7 @@ public:
 
   TileBrush get_brush(const Field<int>& field) const;
 private:
-  boost::shared_ptr<TileSelectionImpl> impl;
+  std::shared_ptr<TileSelectionImpl> impl;
 };
 
 #endif

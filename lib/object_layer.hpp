@@ -70,7 +70,7 @@ public:
   Layer to_layer();
 
 private:
-  boost::shared_ptr<ObjectLayerImpl> impl;
+  std::shared_ptr<ObjectLayerImpl> impl;
 };
 
 #endif

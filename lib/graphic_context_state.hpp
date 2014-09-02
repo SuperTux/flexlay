@@ -18,7 +18,7 @@
 #define HEADER_FLEXLAY_GRAPHIC_CONTEXT_STATE_HPP
 
 #include <ClanLib/Core/Math/rect.h>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 class CL_GraphicContext;
 
@@ -67,7 +67,7 @@ public:
   CL_Pointf screen2world(const CL_Point& pos);
 
 private:
-  boost::shared_ptr<GraphicContextStateImpl> impl;
+  std::shared_ptr<GraphicContextStateImpl> impl;
 };
 
 #endif

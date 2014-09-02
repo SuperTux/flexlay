@@ -20,7 +20,7 @@
 class EditorMapComponent;
 class CL_InputEvent;
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 class ToolImpl;
 
@@ -30,7 +30,7 @@ protected:
 
 public:
   Tool();
-  Tool(boost::shared_ptr<ToolImpl> impl_);
+  Tool(std::shared_ptr<ToolImpl> impl_);
   ~Tool();
 
   void draw();
@@ -40,7 +40,7 @@ public:
   void on_mouse_move(const CL_InputEvent& event);
 
 private:
-  boost::shared_ptr<ToolImpl> impl;
+  std::shared_ptr<ToolImpl> impl;
 };
 
 #endif

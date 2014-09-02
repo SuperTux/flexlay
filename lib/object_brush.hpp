@@ -35,7 +35,7 @@ public:
 
   ObjMapSpriteObject to_sprite_object(const CL_Pointf& pos);
 private:
-  boost::shared_ptr<ObjectBrushImpl> impl;
+  std::shared_ptr<ObjectBrushImpl> impl;
 };
 
 #endif

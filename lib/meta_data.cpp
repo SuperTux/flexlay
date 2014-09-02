@@ -20,7 +20,7 @@ MetaData::MetaData()
 {
 }
 
-MetaData::MetaData(boost::shared_ptr<MetaDataImpl> impl_)
+MetaData::MetaData(std::shared_ptr<MetaDataImpl> impl_)
   : impl(impl_)
 {
 }
@@ -29,7 +29,7 @@ MetaData::~MetaData()
 {
 }
 
-boost::shared_ptr<MetaDataImpl>
+std::shared_ptr<MetaDataImpl>
 MetaData::get_impl() const
 {
   return impl;

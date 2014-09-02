@@ -16,11 +16,12 @@
 
 #include "workspace.hpp"
 
-#include <iostream>
-#include <map>
 #include <ClanLib/Display/display.h>
 #include <ClanLib/Display/display_window.h>
 #include <ClanLib/Display/keys.h>
+#include <assert.h>
+#include <iostream>
+#include <map>
 
 #include "gui/editor_map_component.hpp"
 #include "editor_map.hpp"

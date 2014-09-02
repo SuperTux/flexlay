@@ -16,8 +16,9 @@
 
 #include "editor_map.hpp"
 
-#include <iostream>
 #include <ClanLib/Display/graphic_context.h>
+#include <assert.h>
+#include <iostream>
 
 #include "meta_data.hpp"
 

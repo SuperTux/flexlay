@@ -46,7 +46,7 @@ public:
   bool is_null() const { return !impl.get(); }
   Layer to_layer();
 private:
-  boost::shared_ptr<OnionSkinLayerImpl> impl;  
+  std::shared_ptr<OnionSkinLayerImpl> impl;  
 };
 
 #endif

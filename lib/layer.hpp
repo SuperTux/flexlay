@@ -17,7 +17,7 @@
 #ifndef HEADER_FLEXLAY_LAYER_HPP
 #define HEADER_FLEXLAY_LAYER_HPP
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 #include "meta_data.hpp"
 
@@ -37,7 +37,7 @@ class Layer
 private:
 public:
   Layer();
-  Layer(boost::shared_ptr<LayerImpl> i);
+  Layer(std::shared_ptr<LayerImpl> i);
   ~Layer();
 
   MetaData get_metadata() const;
@@ -60,7 +60,7 @@ public:
   bool is_null() const;
 
 public:
-  boost::shared_ptr<LayerImpl> impl;
+  std::shared_ptr<LayerImpl> impl;
 };
 
 #endif

@@ -5,12 +5,12 @@
 //  it under the terms of the GNU General Public License as published by
 //  the Free Software Foundation, either version 3 of the License, or
 //  (at your option) any later version.
-//  
+//
 //  This program is distributed in the hope that it will be useful,
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
-//  
+//
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -27,12 +27,12 @@ class TileSelector : public CL_Component
 {
 public:
   typedef std::vector<int> Tiles;
-  
+
 private:
   CL_SlotContainer slots;
   int width;
   int index;
-  
+
   int offset;
   int old_offset;
   int mouse_over_tile;
@@ -42,7 +42,7 @@ private:
   CL_Point region_select_start;
   CL_Point mouse_pos;
   float scale;
-  
+
   /** set of tiles that should be available in the TileSelector */
   Tiles tiles;
 
@@ -53,11 +53,11 @@ protected:
 public:
   /** width and height in number of tiles */
   TileSelector(const CL_Rect& rect, CL_Component* parent);
-  
+
   void set_tileset(Tileset t);
   void set_tiles(const Tiles& t);
   Tiles get_tiles() const;
-  
+
   /** Set the factor by which tiles are scaled down in the selector
       widged (ie. for better overview) */
   void set_scale(float s);

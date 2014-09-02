@@ -5,12 +5,12 @@
 //  it under the terms of the GNU General Public License as published by
 //  the Free Software Foundation, either version 3 of the License, or
 //  (at your option) any later version.
-//  
+//
 //  This program is distributed in the hope that it will be useful,
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
-//  
+//
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -51,7 +51,7 @@ public:
       throw err;
     }
   }
-  
+
   BitmapLayerImpl(CL_PixelBuffer buffer)
     : surface(buffer),
       canvas(0)
@@ -65,7 +65,7 @@ public:
     }
   }
 
-  BitmapLayerImpl(int width, int height) 
+  BitmapLayerImpl(int width, int height)
     : surface(CL_PixelBuffer(width, height, width*4, CL_PixelFormat::rgba8888)),
       canvas(0)
   {
@@ -89,7 +89,7 @@ public:
     assert(canvas);
 
     // Nothing to draw, so we go byebye
-    if (strokes.empty()) 
+    if (strokes.empty())
       return;
 
     surface.set_blend_func(blend_one, blend_one_minus_src_alpha);
@@ -98,18 +98,18 @@ public:
     gc->draw_rect(get_bounding_rect(), CL_Color(155, 155, 155, 100));
   }
 
-  CL_Rectf get_bound_rect() const  
+  CL_Rectf get_bound_rect() const
   {
     return CL_Rectf(CL_Pointf(ObjMapObjectImpl::pos), CL_Sizef(surface.get_width(), surface.get_height()));
   }
 
-  CL_Rect get_bounding_rect() { 
+  CL_Rect get_bounding_rect() {
     // FIXME: Do we need to handle its position here or does the Layer keep care of that?
     return CL_Rect(CL_Point(0, 0),
-                   CL_Size(surface.get_width(), surface.get_height())); 
+                   CL_Size(surface.get_width(), surface.get_height()));
   }
 
-  bool has_bounding_rect() const { 
+  bool has_bounding_rect() const {
     return true;
   }
 };

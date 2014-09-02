@@ -5,12 +5,12 @@
 //  it under the terms of the GNU General Public License as published by
 //  the Free Software Foundation, either version 3 of the License, or
 //  (at your option) any later version.
-//  
+//
 //  This program is distributed in the hope that it will be useful,
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
-//  
+//
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -48,22 +48,22 @@ public:
 Window::Window(const CL_Rect& rect, const std::string& title, CL_Component* parent)
   : CL_Component(rect, parent), impl(new WindowImpl())
 {
-  impl->titlebar = new Titlebar(CL_Rect(CL_Point(3+16,3), 
+  impl->titlebar = new Titlebar(CL_Rect(CL_Point(3+16,3),
                                         CL_Size(get_width()-6-18-18-18, 12+3)), title,
                                 this);
   //Fonts::verdana11.draw(8+15, 3, title);
 
-  impl->close = new Icon(CL_Rect(CL_Point(3, 3), CL_Size(18,18)), 
+  impl->close = new Icon(CL_Rect(CL_Point(3, 3), CL_Size(18,18)),
                          make_sprite(datadir + "/images/window/close.png"),
                          "", this);
-  impl->minimize = new Icon(CL_Rect(CL_Point(get_width()-3-18-18, 3), CL_Size(18,18)), 
+  impl->minimize = new Icon(CL_Rect(CL_Point(get_width()-3-18-18, 3), CL_Size(18,18)),
                             make_sprite(datadir + "/images/window/minimize.png"),
                             "", this);
-  impl->maximize = new Icon(CL_Rect(CL_Point(get_width()-3-18, 3), CL_Size(18,18)), 
+  impl->maximize = new Icon(CL_Rect(CL_Point(get_width()-3-18, 3), CL_Size(18,18)),
                             make_sprite(datadir + "/images/window/maximize.png"),
                             "", this);
 
-  impl->client_area = new CL_Component(CL_Rect(CL_Point(4, 3+12+7), 
+  impl->client_area = new CL_Component(CL_Rect(CL_Point(4, 3+12+7),
                                                CL_Size(rect.get_width()-10,
                                                        rect.get_height()-28)), this);
   impl->parent  = this;
@@ -89,7 +89,7 @@ WindowImpl::on_resize(int, int)
   minimize->set_position(parent->get_width()-3-18-18, 3);
   maximize->set_position(parent->get_width()-3-18, 3);
   CL_Rect rect = parent->get_position();
-  client_area->set_position(CL_Rect(CL_Point(4, 3+12+7), 
+  client_area->set_position(CL_Rect(CL_Point(4, 3+12+7),
                                     CL_Size(rect.get_width()-10,
                                             rect.get_height()-28)));
 }
@@ -110,7 +110,7 @@ WindowImpl::draw()
   /*
     CL_Display::fill_rect(CL_Rect(CL_Point(0, 0), rect.get_size()), CL_Color(220, 220, 220));
     CL_Display::draw_rect(CL_Rect(CL_Point(0, 0), rect.get_size()), CL_Color(0, 0, 0));
- 
+
     CL_Display::draw_line(1, rect.get_height()-2,
     rect.get_width()-2, rect.get_height()-2, midtone);
     CL_Display::draw_line(rect.get_width()-2, 1,

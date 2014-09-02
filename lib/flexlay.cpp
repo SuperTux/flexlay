@@ -5,12 +5,12 @@
 //  it under the terms of the GNU General Public License as published by
 //  the Free Software Foundation, either version 3 of the License, or
 //  (at your option) any later version.
-//  
+//
 //  This program is distributed in the hope that it will be useful,
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
-//  
+//
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -32,7 +32,7 @@ Flexlay::Flexlay()
   fullscreen    = false;
   allow_resize  = false;
   use_opengl    = true;
-  
+
   current_ = this;
 }
 
@@ -47,7 +47,7 @@ Flexlay::init(const std::string& title, int width, int height, bool fullscreen_,
 {
   screen_width  = width;
   screen_height = height;
-  fullscreen    = fullscreen_; 
+  fullscreen    = fullscreen_;
   allow_resize  = allow_resize_;
 
   std::cout << "Flexlay::init()" << std::endl;
@@ -66,7 +66,7 @@ Flexlay::init(const std::string& title, int width, int height, bool fullscreen_,
 #endif
     CL_SetupDisplay::init();
     CL_SetupGUI::init();
-  
+
     window = new CL_DisplayWindow(title,
                                   screen_width, screen_height, fullscreen, allow_resize);
 

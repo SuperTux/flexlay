@@ -5,12 +5,12 @@
 //  it under the terms of the GNU General Public License as published by
 //  the Free Software Foundation, either version 3 of the License, or
 //  (at your option) any later version.
-//  
+//
 //  This program is distributed in the hope that it will be useful,
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
-//  
+//
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -56,7 +56,7 @@ Tile::Tile(const TileProvider& provider)
   : impl(new TileImpl())
 {
   impl->provider  = provider;
-  impl->has_color = false; 
+  impl->has_color = false;
 }
 
 Tile::Tile(const CL_PixelBuffer& pixelbuffer,
@@ -75,7 +75,7 @@ Tile::Tile(const CL_PixelBuffer& pixelbuffer)
   impl->has_color   = false;
 }
 
-Tile::Tile(const std::string& filename_, 
+Tile::Tile(const std::string& filename_,
            const CL_Color& attribute_color_)
   : impl(new TileImpl())
 {
@@ -140,7 +140,7 @@ Tile::get_pixelbuffer()
   {
     return impl->pixelbuffer;
   }
-  else 
+  else
   {
     if (impl->provider)
     {
@@ -164,7 +164,7 @@ Tile::get_pixelbuffer()
           assert(0);
         }
         return impl->pixelbuffer;
-          
+
       } catch(CL_Error& err) {
         std::cout << "CL_Error: " << err.message << std::endl;
         std::cout << "          filename = " << impl->filename << std::endl;
@@ -186,7 +186,7 @@ Tile::calc_color()
   int green = 0;
   int blue  = 0;
   int alpha = 0;
-  
+
   switch (buffer.get_format().get_depth())
   {
     case 8:
@@ -252,7 +252,7 @@ Tile::set_col(unsigned char x, unsigned char  y, bool val)
 std::string
 Tile::get_filename() const
 {
-  return impl->filename; 
+  return impl->filename;
 }
 
 /* EOF */

@@ -5,12 +5,12 @@
 //  it under the terms of the GNU General Public License as published by
 //  the Free Software Foundation, either version 3 of the License, or
 //  (at your option) any later version.
-//  
+//
 //  This program is distributed in the hope that it will be useful,
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
-//  
+//
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -51,17 +51,17 @@ public:
         rect.bottom = std::max(i->pos.y, rect.bottom);
       }
     }
-    
+
     return rect;
   }
 
-  StrokeImpl() 
+  StrokeImpl()
     : bounding_rect_needs_recalc(true)
   {
   }
 };
 
-Stroke::Stroke() 
+Stroke::Stroke()
   : impl(new StrokeImpl())
 {
 }
@@ -98,7 +98,7 @@ Stroke::get_interpolated_dabs(float x_spacing, float y_spacing) const
       CL_Pointf dist = dabs[j+1].pos - dabs[j].pos;
       float length = sqrt(dist.x * dist.x + dist.y * dist.y);
       int n = 1;
-    
+
       // Spacing is keep relative to the brush size
       // FIXME: This is specific to a Sprite based drawer, might not work for others
       // FIXME: y_spacing isn't taken into account either
@@ -107,7 +107,7 @@ Stroke::get_interpolated_dabs(float x_spacing, float y_spacing) const
       while (length + overspace > (local_spacing * n))
       {
         float factor = (local_spacing/length) * n - (overspace/length);
-          
+
         // FIXME: Interpolate tilting, pressure, etc. along the line
         interpolated_dabs.push_back(Dab(dabs[j].pos.x + dist.x * factor,
                                         dabs[j].pos.y + dist.y * factor,
@@ -130,7 +130,7 @@ Stroke::get_interpolated_dabs(float x_spacing, float y_spacing) const
 Stroke::Dabs
 Stroke::get_dabs() const
 {
-  return impl->dabs; 
+  return impl->dabs;
 }
 
 int
@@ -139,7 +139,7 @@ Stroke::get_dab_count() const
   return impl->dabs.size();
 }
 
-void 
+void
 Stroke::draw(CL_GraphicContext* gc) const
 {
   if (!impl->drawer.is_null())
@@ -153,7 +153,7 @@ Stroke::draw(CL_GraphicContext* gc) const
 }
 
 void
-Stroke::add_dab(const Dab& dab) 
+Stroke::add_dab(const Dab& dab)
 {
   impl->dabs.push_back(dab);
 }
@@ -181,10 +181,10 @@ Stroke::add_dab(const Dab& dab)
 
    normal.x /= length;
    normal.y /= length;
-          
+
    normals.push_back(normal);
    }
-      
+
    normals.push_back(CL_Pointf(1.0f, 1.0f));
    }
 
@@ -220,7 +220,7 @@ Stroke::get_bounding_rect() const
     impl->bounding_rect = impl->calc_bounding_rect();
     impl->bounding_rect_needs_recalc = false;
   }
-  
+
   return impl->bounding_rect;
 }
 

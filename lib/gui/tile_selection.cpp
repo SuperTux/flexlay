@@ -5,12 +5,12 @@
 //  it under the terms of the GNU General Public License as published by
 //  the Free Software Foundation, either version 3 of the License, or
 //  (at your option) any later version.
-//  
+//
 //  This program is distributed in the hope that it will be useful,
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
-//  
+//
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -77,9 +77,9 @@ TileSelection::draw(const CL_Color& color)
 {
   int tile_size = impl->tilemap.get_tileset().get_tile_size();
 
-  CL_Display::fill_rect(CL_Rect(impl->selection.left   * tile_size, 
+  CL_Display::fill_rect(CL_Rect(impl->selection.left   * tile_size,
                                 impl->selection.top    * tile_size,
-                                impl->selection.right  * tile_size, 
+                                impl->selection.right  * tile_size,
                                 impl->selection.bottom * tile_size),
                         color);
 }
@@ -108,16 +108,16 @@ TileSelection::get_brush(const Field<int>& field) const
     sel.left = Math::max(0, sel.left);
     sel.top  = Math::max(0, sel.top);
 
-    sel.right  = Math::min(sel.right,  field.get_width()); 
-    sel.bottom = Math::min(sel.bottom, field.get_height()); 
+    sel.right  = Math::min(sel.right,  field.get_width());
+    sel.bottom = Math::min(sel.bottom, field.get_height());
 
-    TileBrush brush(sel.get_width(), 
+    TileBrush brush(sel.get_width(),
                     sel.get_height());
 
     for(int y = sel.top; y < sel.bottom; ++y)
       for(int x = sel.left; x < sel.right; ++x)
       {
-        brush.at(x - sel.left, 
+        brush.at(x - sel.left,
                  y - sel.top) = field.at(x, y);
       }
 

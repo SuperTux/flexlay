@@ -5,12 +5,12 @@
 //  it under the terms of the GNU General Public License as published by
 //  the Free Software Foundation, either version 3 of the License, or
 //  (at your option) any later version.
-//  
+//
 //  This program is distributed in the hope that it will be useful,
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
-//  
+//
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -20,18 +20,18 @@
 #include <ClanLib/Display/palette.h>
 #include "blitter.hpp"
 
-void 
+void
 blit_opaque(CL_PixelBuffer target, CL_PixelBuffer brush, int x_pos, int y_pos)
 {
   assert(target.get_format().get_type() == pixelformat_rgba);
   assert(target.get_format().get_depth() == 32);
-  
+
   target.lock();
   brush.lock();
 
   int start_x = std::max(0, -x_pos);
   int start_y = std::max(0, -y_pos);
-  
+
   int end_x = std::min(brush.get_width(),  target.get_width()  - x_pos);
   int end_y = std::min(brush.get_height(), target.get_height() - y_pos);
 
@@ -55,7 +55,7 @@ blit_opaque(CL_PixelBuffer target, CL_PixelBuffer brush, int x_pos, int y_pos)
           target_buf[target_pos + 1] = brush_buf[brush_pos + 1];
           target_buf[target_pos + 2] = brush_buf[brush_pos + 2];
           target_buf[target_pos + 3] = brush_buf[brush_pos + 3];
-        } 
+        }
     }
     else if (brush.get_format().get_depth() == 24)
     {
@@ -84,7 +84,7 @@ blit_opaque(CL_PixelBuffer target, CL_PixelBuffer brush, int x_pos, int y_pos)
       {
         int target_pos = (y + y_pos) * target_pitch + 4*(x + x_pos);
         int brush_pos  = y * brush_pitch + x;
-            
+
         target_buf[target_pos + 0] = 255;
         target_buf[target_pos + 1] = palette.colors[brush_buf[brush_pos]].get_blue();
         target_buf[target_pos + 2] = palette.colors[brush_buf[brush_pos]].get_green();
@@ -95,14 +95,14 @@ blit_opaque(CL_PixelBuffer target, CL_PixelBuffer brush, int x_pos, int y_pos)
   {
     assert(!"Unknown pixelformat type");
   }
-    
+
 
 
   brush.unlock();
   target.unlock();
 }
 
-void 
+void
 blit(CL_PixelBuffer target, CL_PixelBuffer brush, int x_pos, int y_pos)
 {
   target.lock();
@@ -110,7 +110,7 @@ blit(CL_PixelBuffer target, CL_PixelBuffer brush, int x_pos, int y_pos)
 
   int start_x = std::max(0, -x_pos);
   int start_y = std::max(0, -y_pos);
-  
+
   int end_x = std::min(brush.get_width(),  target.get_width()  - x_pos);
   int end_y = std::min(brush.get_height(), target.get_height() - y_pos);
 
@@ -142,7 +142,7 @@ blit(CL_PixelBuffer target, CL_PixelBuffer brush, int x_pos, int y_pos)
           unsigned char tb = target_buf[4*target_pos + 3];
 
           float alpha  = a/255.0f;
-        
+
           target_buf[4*target_pos + 0] = std::min(255, ta + a);
           target_buf[4*target_pos + 1] = std::min(255, int((1-alpha)*tr + alpha*r));
           target_buf[4*target_pos + 2] = std::min(255, int((1-alpha)*tg + alpha*g));
@@ -176,7 +176,7 @@ blit(CL_PixelBuffer target, CL_PixelBuffer brush, int x_pos, int y_pos)
       {
         int target_pos = (y + y_pos) * target_width + x + x_pos;
         int brush_pos  = y * brush_width + x;
-            
+
         target_buf[4*target_pos + 0] = 255;
         target_buf[4*target_pos + 1] = palette.colors[brush_buf[brush_pos]].get_blue();
         target_buf[4*target_pos + 2] = palette.colors[brush_buf[brush_pos]].get_green();
@@ -187,7 +187,7 @@ blit(CL_PixelBuffer target, CL_PixelBuffer brush, int x_pos, int y_pos)
   {
     assert(!"Unknown pixelformat type");
   }
-    
+
 
 
   brush.unlock();

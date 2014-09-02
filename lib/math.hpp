@@ -5,12 +5,12 @@
 //  it under the terms of the GNU General Public License as published by
 //  the Free Software Foundation, either version 3 of the License, or
 //  (at your option) any later version.
-//  
+//
 //  This program is distributed in the hope that it will be useful,
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
-//  
+//
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -19,8 +19,8 @@
 
 namespace Math {
 
-template<class T> 
-T min (const T& a, const T& b) 
+template<class T>
+T min (const T& a, const T& b)
 {
   if (a < b)
     return a;
@@ -28,8 +28,8 @@ T min (const T& a, const T& b)
     return b;
 }
 
-template<class T> 
-T max (const T& a, const T& b) 
+template<class T>
+T max (const T& a, const T& b)
 {
   if (a > b)
     return a;
@@ -37,8 +37,8 @@ T max (const T& a, const T& b)
     return b;
 }
 
-template<class T> 
-T mid (const T& a, const T& b, const T& c) 
+template<class T>
+T mid (const T& a, const T& b, const T& c)
 {
   return max<T>((a), min<T>((b), (c)));
 }

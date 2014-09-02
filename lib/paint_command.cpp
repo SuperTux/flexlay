@@ -5,12 +5,12 @@
 //  it under the terms of the GNU General Public License as published by
 //  the Free Software Foundation, either version 3 of the License, or
 //  (at your option) any later version.
-//  
+//
 //  This program is distributed in the hope that it will be useful,
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
-//  
+//
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -22,7 +22,7 @@ class PaintCommandImpl : public CommandImpl
 public:
   typedef std::vector<CL_Point> Points;
   Points points;
-  
+
   TilemapLayer tilemap;
   TileBrush    brush;
 
@@ -37,7 +37,7 @@ public:
   virtual ~PaintCommandImpl() {}
 
   void execute();
-  
+
   void redo();
   void undo();
 
@@ -46,7 +46,7 @@ public:
 
 PaintCommand::PaintCommand(TilemapLayer t, const TileBrush& b)
   : impl(new PaintCommandImpl())
-{  
+{
   impl->tilemap = t;
   impl->brush   = b;
 
@@ -74,10 +74,10 @@ void
 PaintCommandImpl::execute()
 {
   assert(!points.empty());
-  
+
   // Calc bounding rect
-  CL_Rect rect(points.front().x, 
-               points.front().y, 
+  CL_Rect rect(points.front().x,
+               points.front().y,
                points.front().x + brush.get_width(),
                points.front().y + brush.get_height());
 
@@ -88,16 +88,16 @@ PaintCommandImpl::execute()
     rect.right  = std::max(rect.right,  (*i).x + brush.get_width());
     rect.bottom = std::max(rect.bottom, (*i).y + brush.get_height());
   }
-  
+
   pos.x = rect.left;
   pos.y = rect.top;
 
   redo_brush = new TileBrush(*(tilemap.get_field()), rect.get_width(), rect.get_height(),
                              -pos.x, -pos.y);
   // FIXME: undo_field is unneeded, should just record the overwritten color
-  undo_brush = new TileBrush(undo_field, rect.get_width(), rect.get_height(), 
+  undo_brush = new TileBrush(undo_field, rect.get_width(), rect.get_height(),
                              -pos.x, -pos.y);
-  
+
   redo_brush->set_opaque();
   undo_brush->set_opaque();
 

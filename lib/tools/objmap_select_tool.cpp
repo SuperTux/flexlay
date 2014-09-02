@@ -5,12 +5,12 @@
 //  it under the terms of the GNU General Public License as published by
 //  the Free Software Foundation, either version 3 of the License, or
 //  (at your option) any later version.
-//  
+//
 //  This program is distributed in the hope that it will be useful,
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
-//  
+//
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -73,30 +73,30 @@ ObjMapSelectTool::ObjMapSelectTool()
 ObjMapSelectTool::~ObjMapSelectTool()
 {
 }
- 
+
 void
 ObjMapSelectTool::clear_selection()
 {
-  impl->selection.clear(); 
+  impl->selection.clear();
   impl->on_selection_change();
 }
 
 ObjMapSelectTool::Selection
-ObjMapSelectTool::get_selection() const 
-{ 
+ObjMapSelectTool::get_selection() const
+{
   return impl->selection;
 }
 
 void
-ObjMapSelectTool::set_selection(const Selection& sel) 
-{ 
-  impl->selection = sel; 
+ObjMapSelectTool::set_selection(const Selection& sel)
+{
+  impl->selection = sel;
 }
 
-CL_Signal_v1<CL_Menu*>& 
+CL_Signal_v1<CL_Menu*>&
 ObjMapSelectTool::sig_on_popup_menu_display()
 {
-  return impl->on_popup_menu_display; 
+  return impl->on_popup_menu_display;
 }
 
 CL_Signal_v2<int, int>&
@@ -153,7 +153,7 @@ ObjMapSelectToolImpl::on_mouse_up(const CL_InputEvent& event)
 
         case SELECT:
           state = NONE;
-          
+
           selection_rect.right  = pos.x;
           selection_rect.bottom = pos.y;
           selection_rect.normalize();
@@ -174,7 +174,7 @@ ObjMapSelectToolImpl::on_mouse_up(const CL_InputEvent& event)
                      event.mouse_pos.y + parent->get_screen_rect().top);
       /*
         PopupMenu* menu = new PopupMenu(CL_Point(event.mouse_pos.x + parent->get_screen_rect().left,
-        event.mouse_pos.y + parent->get_screen_rect().top), 
+        event.mouse_pos.y + parent->get_screen_rect().top),
         GUIManager::current()->get_component());
 
         on_popup_menu_display(menu->get_menu());*/
@@ -190,7 +190,7 @@ ObjMapSelectToolImpl::on_mouse_down(const CL_InputEvent& event)
 
   EditorMapComponent* parent = EditorMapComponent::current();
   CL_Pointf pos = parent->screen2world(event.mouse_pos);
-      
+
   switch (event.id)
   {
     case CL_MOUSE_LEFT:
@@ -282,7 +282,7 @@ ObjMapSelectToolImpl::on_mouse_move(const CL_InputEvent& event)
           selection.front().update_control_points();
       }
       /*
-        for (ObjMapSelectTool::Selection::iterator i = selection.begin(); 
+        for (ObjMapSelectTool::Selection::iterator i = selection.begin();
         i != selection.end(); ++i)
         {
         (*i).set_pos((*i).get_pos() + (pos - drag_start));
@@ -306,7 +306,7 @@ ObjMapSelectToolImpl::on_mouse_move(const CL_InputEvent& event)
 Tool
 ObjMapSelectTool::to_tool()
 {
-  return Tool(impl); 
+  return Tool(impl);
 }
 
 void
@@ -318,7 +318,7 @@ ObjMapSelectToolImpl::on_selection_change()
   if (selection.size() == 1)
   {
     selection.front().add_control_points();
-  } 
+  }
 }
 
 /* EOF */

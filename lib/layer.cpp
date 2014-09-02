@@ -5,12 +5,12 @@
 //  it under the terms of the GNU General Public License as published by
 //  the Free Software Foundation, either version 3 of the License, or
 //  (at your option) any later version.
-//  
+//
 //  This program is distributed in the hope that it will be useful,
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
-//  
+//
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -33,8 +33,8 @@ Layer::~Layer()
 }
 
 void
-Layer::draw(const GraphicContextState& state, CL_GraphicContext* gc) 
-{ 
+Layer::draw(const GraphicContextState& state, CL_GraphicContext* gc)
+{
   if (impl.get())
   {
     if (impl->pos.x != 0 || impl->pos.y != 0)
@@ -50,21 +50,21 @@ Layer::draw(const GraphicContextState& state, CL_GraphicContext* gc)
     }
   }
 }
-  
+
 bool
-Layer::has_bounding_rect() const 
+Layer::has_bounding_rect() const
 {
   if (impl.get())
-    return impl->has_bounding_rect(); 
+    return impl->has_bounding_rect();
   else
     return false;
-} 
+}
 
 CL_Rect
-Layer::get_bounding_rect() 
-{ 
+Layer::get_bounding_rect()
+{
   CL_Rect rect;
-  
+
   if (impl.get())
   {
     rect = impl->get_bounding_rect();
@@ -73,7 +73,7 @@ Layer::get_bounding_rect()
     rect.right  += static_cast<int>(impl->pos.x);
     rect.bottom += static_cast<int>(impl->pos.y);
   }
-  
+
   return rect;
 }
 
@@ -81,7 +81,7 @@ MetaData
 Layer::get_metadata() const
 {
   if (impl.get())
-    return impl->data; 
+    return impl->data;
   else
     return MetaData();
 }

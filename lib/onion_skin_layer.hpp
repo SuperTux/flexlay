@@ -5,12 +5,12 @@
 //  it under the terms of the GNU General Public License as published by
 //  the Free Software Foundation, either version 3 of the License, or
 //  (at your option) any later version.
-//  
+//
 //  This program is distributed in the hope that it will be useful,
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
-//  
+//
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -34,7 +34,7 @@ public:
       width/height */
   OnionSkinLayer(int width, int height);
   OnionSkinLayer(Layer layer);
-  
+
   /** Adds an EditorMap to the OnionSkin */
   void add_map(EditorMap editor_map, const CL_Color& color);
 
@@ -42,11 +42,11 @@ public:
 
   /** Refreshes the content of the OnionSkin */
   void update();
-  
+
   bool is_null() const { return !impl.get(); }
   Layer to_layer();
 private:
-  std::shared_ptr<OnionSkinLayerImpl> impl;  
+  std::shared_ptr<OnionSkinLayerImpl> impl;
 };
 
 #endif

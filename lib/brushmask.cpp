@@ -5,17 +5,17 @@
 //  it under the terms of the GNU General Public License as published by
 //  the Free Software Foundation, either version 3 of the License, or
 //  (at your option) any later version.
-//  
+//
 //  This program is distributed in the hope that it will be useful,
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
-//  
+//
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 /* Most of the code below is taken from Gimp2.2:
-   gimp_brush_generated module Copyright 1998 Jay Cox <jaycox@earthlink.net> 
+   gimp_brush_generated module Copyright 1998 Jay Cox <jaycox@earthlink.net>
 */
 
 #include <iostream>
@@ -61,7 +61,7 @@ temp_buf_new (gint    width,
 
   buf->data   = new guchar[width*height];
   memset(buf->data, 0, width*height*sizeof(guchar));
- 
+
   buf->width  = width;
   buf->height = height;
 
@@ -285,7 +285,7 @@ CL_PixelBuffer generate_brushmask(BrushShape shape,
                                   float  angle)         /* in degrees */
 {
   GimpBrushGenerated brush;
-  
+
   brush.mask         = 0;
   brush.shape        = shape;
   brush.radius       = radius;
@@ -298,7 +298,7 @@ CL_PixelBuffer generate_brushmask(BrushShape shape,
 
   CL_PixelBuffer buffer(brush.mask->width, brush.mask->height, brush.mask->width*4,
                         CL_PixelFormat::rgba8888);
-  
+
   buffer.lock();
   unsigned char* buf = static_cast<unsigned char*>(buffer.get_data());
 
@@ -320,7 +320,7 @@ CL_PixelBuffer generate_brushmask(BrushShape shape,
 int main()
 {
   GimpBrushGenerated brush;
-  
+
   brush.mask         = 0;
   brush.shape        = BRUSH_SHAPE_DIAMOND;
   brush.radius       = 512;
@@ -340,7 +340,7 @@ int main()
     std::cout << int(brush.mask->data[i]) << " ";
 
   temp_buf_free(brush.mask);
-  
+
   std::cout << std::endl;
 
   return 0;

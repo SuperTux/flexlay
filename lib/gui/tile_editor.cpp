@@ -5,12 +5,12 @@
 //  it under the terms of the GNU General Public License as published by
 //  the Free Software Foundation, either version 3 of the License, or
 //  (at your option) any later version.
-//  
+//
 //  This program is distributed in the hope that it will be useful,
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
-//  
+//
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -23,7 +23,7 @@
 #include "tile.hpp"
 
 TileEditor::TileEditor(int x, int y, int w, int h, CL_Component* parent)
-  : CL_Component(CL_Rect(CL_Rect(CL_Point(x, y), 
+  : CL_Component(CL_Rect(CL_Rect(CL_Point(x, y),
                                  CL_Size(w, h))), // FIXME: make this editable via script
                  parent)
 {
@@ -37,7 +37,7 @@ TileEditor::TileEditor(int x, int y, int w, int h, CL_Component* parent)
 TileEditor::~TileEditor()
 {
 }
-  
+
 void
 TileEditor::draw()
 {
@@ -63,7 +63,7 @@ TileEditor::draw()
     CL_Display::flush();
     if (has_mouse_over())
     {
-      CL_Display::fill_rect(CL_Rect(CL_Point(int(mouse_pos.x)/16 * 16, 
+      CL_Display::fill_rect(CL_Rect(CL_Point(int(mouse_pos.x)/16 * 16,
                                              int(mouse_pos.y)/16 * 16),
                                     CL_Size(16, 16)),
                             CL_Color(255, 255, 255, 128));
@@ -80,7 +80,7 @@ void
 TileEditor::mouse_move(const CL_InputEvent& event)
 {
   mouse_pos = event.mouse_pos;
-  
+
   if (CL_Mouse::get_keycode(CL_MOUSE_LEFT))
     paint(event.mouse_pos, true);
   else if (CL_Mouse::get_keycode(CL_MOUSE_RIGHT))
@@ -97,11 +97,11 @@ TileEditor::mouse_down(const CL_InputEvent& event)
       case CL_MOUSE_LEFT:
         paint(event.mouse_pos, true);
         break;
-              
+
       case CL_MOUSE_RIGHT:
         paint(event.mouse_pos, false);
         break;
-        
+
     }
   }
 }

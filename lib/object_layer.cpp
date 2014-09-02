@@ -5,12 +5,12 @@
 //  it under the terms of the GNU General Public License as published by
 //  the Free Software Foundation, either version 3 of the License, or
 //  (at your option) any later version.
-//  
+//
 //  This program is distributed in the hope that it will be useful,
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
-//  
+//
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -30,7 +30,7 @@ public:
 
   ObjectLayerImpl() {}
   virtual ~ObjectLayerImpl() {}
-  
+
   void draw(const GraphicContextState& state, CL_GraphicContext* gc);
   bool has_bounding_rect() const { return false; }
 };
@@ -63,16 +63,16 @@ ObjectLayerImpl::draw(const GraphicContextState& state, CL_GraphicContext* gc)
 ObjMapControlPoint
 ObjectLayer::find_control_point(const CL_Pointf& click_pos)
 {
-  for(ControlPoints::reverse_iterator i = impl->control_points.rbegin(); 
-      i != impl->control_points.rend(); 
+  for(ControlPoints::reverse_iterator i = impl->control_points.rbegin();
+      i != impl->control_points.rend();
       ++i)
   {
     CL_Rect rect = (*i).get_bound_rect();
-     
+
     if (rect.is_inside(CL_Point(click_pos)))
       return *i;
   }
-  return ObjMapControlPoint(); 
+  return ObjMapControlPoint();
 }
 
 ObjMapObject
@@ -81,7 +81,7 @@ ObjectLayer::find_object(const CL_Pointf& click_pos)
   for(Objects::reverse_iterator i = impl->objects.rbegin(); i != impl->objects.rend(); ++i)
   {
     CL_Rectf rect = (*i).get_bound_rect();
-     
+
     if (rect.is_inside(CL_Point(click_pos)))
       return *i;
   }
@@ -114,7 +114,7 @@ ObjectLayer::get_selection(const CL_Rectf& rect)
       selection.push_back(*i);
     }
   }
-  
+
   return selection;
 }
 

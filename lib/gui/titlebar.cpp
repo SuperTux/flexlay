@@ -5,12 +5,12 @@
 //  it under the terms of the GNU General Public License as published by
 //  the Free Software Foundation, either version 3 of the License, or
 //  (at your option) any later version.
-//  
+//
 //  This program is distributed in the hope that it will be useful,
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
-//  
+//
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -76,7 +76,7 @@ TitlebarImpl::on_mouse_down(const CL_InputEvent& event)
     old_pos = window->get_position();
     click_pos.x += old_pos.left;
     click_pos.y += old_pos.top;
-  } 
+  }
 }
 
 void
@@ -86,7 +86,7 @@ TitlebarImpl::on_mouse_move(const CL_InputEvent& event)
   {
     CL_Rect rect = window->get_position();
 
-    CL_Point move(old_pos.left - (click_pos.x - (rect.left + event.mouse_pos.x)), 
+    CL_Point move(old_pos.left - (click_pos.x - (rect.left + event.mouse_pos.x)),
                   old_pos.top  - (click_pos.y - (rect.top  + event.mouse_pos.y)));
 
     window->set_position(move.x, move.y);
@@ -99,18 +99,18 @@ TitlebarImpl::draw()
   CL_Display::push_translate(parent->get_screen_x(), parent->get_screen_y());
 
   // FIXME: Hack should be done via has_mouse_over(), but that doesn't include child components
-  if (parent->get_parent()->get_position().is_inside(CL_Point(CL_Mouse::get_x(), 
+  if (parent->get_parent()->get_position().is_inside(CL_Point(CL_Mouse::get_x(),
                                                               CL_Mouse::get_y())))
     //parent->get_parent()->has_mouse_over())
   {
     CL_Display::fill_rect(CL_Rect(CL_Point(0, 0),
-                                  CL_Size(parent->get_width()-1, parent->get_height())), 
+                                  CL_Size(parent->get_width()-1, parent->get_height())),
                           CL_Color(250, 250, 250));
   }
   else
   {
     CL_Display::fill_rect(CL_Rect(CL_Point(0, 0),
-                                  CL_Size(parent->get_width()-1, parent->get_height())), 
+                                  CL_Size(parent->get_width()-1, parent->get_height())),
                           CL_Color(240, 240, 240));
   }
 
@@ -118,5 +118,5 @@ TitlebarImpl::draw()
 
   CL_Display::pop_modelview();
 }
-                  
+
 /* EOF */

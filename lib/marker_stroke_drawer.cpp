@@ -5,12 +5,12 @@
 //  it under the terms of the GNU General Public License as published by
 //  the Free Software Foundation, either version 3 of the License, or
 //  (at your option) any later version.
-//  
+//
 //  This program is distributed in the hope that it will be useful,
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
-//  
+//
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -40,7 +40,7 @@ public:
     if (dabs.size() >= 2)
     {
       std::vector<CL_Pointf> normals;
-        
+
       if (stroke.get_dab_count() == 2)
       {
         normals.push_back(CL_Pointf(1.0f, 1.0f));
@@ -57,16 +57,16 @@ public:
 
           normal.x /= length;
           normal.y /= length;
-          
+
           normals.push_back(normal);
         }
-      
+
         normals.push_back(CL_Pointf(1.0f, 1.0f));
       }
 
       float len  = DrawerProperties::current()->get_size() * 8.0f;
       float len2 = DrawerProperties::current()->get_size() * 16.0f;
-            
+
       glEnable(GL_BLEND);
       glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
 
@@ -109,12 +109,12 @@ public:
     }
   }
 
-  StrokeDrawerImpl* clone() const 
+  StrokeDrawerImpl* clone() const
   {
     MarkerStrokeDrawerImpl* drawer = new MarkerStrokeDrawerImpl();
-  
+
     *drawer = *this;
-    
+
     return drawer;
   }
 };

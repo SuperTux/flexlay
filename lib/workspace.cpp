@@ -5,12 +5,12 @@
 //  it under the terms of the GNU General Public License as published by
 //  the Free Software Foundation, either version 3 of the License, or
 //  (at your option) any later version.
-//  
+//
 //  This program is distributed in the hope that it will be useful,
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
-//  
+//
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -60,12 +60,12 @@ Workspace::draw(const GraphicContextState& state, CL_GraphicContext* gc)
 
   impl->editor_map.draw_gui(CL_Display::get_current_window()->get_gc());
   impl->editor_map.draw(EditorMapComponent::current()->get_gc_state(), CL_Display::get_current_window()->get_gc());
-  
+
   // FIXME: Only draw active tool?!
   for(WorkspaceImpl::Tools::iterator it = impl->tools.begin();
       it != impl->tools.end(); ++it)
     it->second.draw();
-    
+
   CL_Display::flush();
 }
 
@@ -105,7 +105,7 @@ Workspace::mouse_down(const CL_InputEvent& event)
     case CL_MOUSE_WHEEL_UP:
       EditorMapComponent::current()->zoom_in(event.mouse_pos);
       break;
-      
+
     case CL_MOUSE_WHEEL_DOWN:
       EditorMapComponent::current()->zoom_out(event.mouse_pos);
       break;

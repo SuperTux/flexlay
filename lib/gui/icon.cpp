@@ -5,12 +5,12 @@
 //  it under the terms of the GNU General Public License as published by
 //  the Free Software Foundation, either version 3 of the License, or
 //  (at your option) any later version.
-//  
+//
 //  This program is distributed in the hope that it will be useful,
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
-//  
+//
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -45,7 +45,7 @@ public:
   void mouse_move(const CL_InputEvent& event);
 };
 
-Icon::Icon(const CL_Rect& rect, const CL_Sprite& sprite, const std::string& tooltip, 
+Icon::Icon(const CL_Rect& rect, const CL_Sprite& sprite, const std::string& tooltip,
            CL_Component* parent)
   : CL_Component(rect, parent),
     impl(new IconImpl(this))
@@ -67,7 +67,7 @@ Icon::sig_clicked()
 {
   return impl->sig_on_click;
 }
-  
+
 void
 IconImpl::draw()
 {
@@ -111,7 +111,7 @@ IconImpl::mouse_up  (const CL_InputEvent& event)
   if (is_enabled)
   {
     down         = false;
-    parent->release_mouse();  
+    parent->release_mouse();
 
     if (parent->has_mouse_over())
     {
@@ -130,7 +130,7 @@ IconImpl::mouse_down(const CL_InputEvent& event)
   }
 }
 
-void 
+void
 IconImpl::mouse_move(const CL_InputEvent& event)
 {
   //std::cout << "icon: mouse_move: " << event << std::endl;

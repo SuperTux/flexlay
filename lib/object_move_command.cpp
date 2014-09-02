@@ -5,12 +5,12 @@
 //  it under the terms of the GNU General Public License as published by
 //  the Free Software Foundation, either version 3 of the License, or
 //  (at your option) any later version.
-//  
+//
 //  This program is distributed in the hope that it will be useful,
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
-//  
+//
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -24,13 +24,13 @@ public:
   virtual ~ObjectMoveCommandImpl() {}
 
   ObjectLayer objmap;
-  
+
   struct Obj {
     CL_Pointf old_pos;
     CL_Pointf new_pos;
     ObjMapObject obj;
   };
-  
+
   typedef std::vector<Obj> Objects;
   Objects objects;
 
@@ -50,7 +50,7 @@ ObjectMoveCommand::ObjectMoveCommand(const ObjectLayer& o)
 ObjectMoveCommand::~ObjectMoveCommand()
 {
 }
-  
+
 void
 ObjectMoveCommandImpl::execute()
 {
@@ -68,7 +68,7 @@ ObjectMoveCommand::add_obj(const ObjMapObject& obj)
 void
 ObjectMoveCommand::move_by(const CL_Pointf& delta)
 {
-  for(ObjectMoveCommandImpl::Objects::iterator i = impl->objects.begin(); 
+  for(ObjectMoveCommandImpl::Objects::iterator i = impl->objects.begin();
       i != impl->objects.end();
       ++i)
   {
@@ -81,18 +81,18 @@ ObjectMoveCommand::move_by(const CL_Pointf& delta)
 void
 ObjectMoveCommandImpl::redo()
 {
-  for(ObjectMoveCommandImpl::Objects::iterator i = objects.begin(); 
+  for(ObjectMoveCommandImpl::Objects::iterator i = objects.begin();
       i != objects.end();
       ++i)
   {
     i->obj.set_pos(i->new_pos);
-  }  
+  }
 }
 
 void
 ObjectMoveCommandImpl::undo()
 {
-  for(ObjectMoveCommandImpl::Objects::iterator i = objects.begin(); 
+  for(ObjectMoveCommandImpl::Objects::iterator i = objects.begin();
       i != objects.end();
       ++i)
   {

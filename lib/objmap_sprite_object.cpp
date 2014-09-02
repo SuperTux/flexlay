@@ -5,12 +5,12 @@
 //  it under the terms of the GNU General Public License as published by
 //  the Free Software Foundation, either version 3 of the License, or
 //  (at your option) any later version.
-//  
+//
 //  This program is distributed in the hope that it will be useful,
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
-//  
+//
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -34,7 +34,7 @@ ObjMapSpriteObject::ObjMapSpriteObject()
 }
 
 ObjMapSpriteObject::ObjMapSpriteObject(const CL_Sprite& sprite_,
-                                       const CL_Pointf& pos_, 
+                                       const CL_Pointf& pos_,
                                        const MetaData& data_)
   : impl(new ObjMapSpriteObjectImpl())
 {
@@ -54,7 +54,7 @@ ObjMapSpriteObjectImpl::get_bound_rect() const
 {
   CL_Point  align = CL_Point(0, 0);
   CL_Origin origin_e;
-  
+
   sprite.get_alignment(origin_e, align.x, align.y);
 
   CL_Point origin = calc_origin(origin_e, CL_Size(sprite.get_width(),
@@ -67,16 +67,16 @@ ObjMapSpriteObjectImpl::get_bound_rect() const
 
   if (scale_x < 0)
     align.x += sprite.get_width();
-  
+
   if (scale_y < 0)
     align.y += sprite.get_height();
-      
+
   //  if (scale_x > 1.0f && scale_y > 1.0f)
   //    return CL_Rectf(pos - origin - align,
   //                   CL_Sizef(sprite.get_width() * scale_x, sprite.get_height() * scale_y));
   //  else
   return CL_Rectf(pos - origin - align,
-                  CL_Sizef(sprite.get_width(), sprite.get_height()));  
+                  CL_Sizef(sprite.get_width(), sprite.get_height()));
 }
 
 void

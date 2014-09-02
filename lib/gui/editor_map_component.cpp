@@ -5,12 +5,12 @@
 //  it under the terms of the GNU General Public License as published by
 //  the Free Software Foundation, either version 3 of the License, or
 //  (at your option) any later version.
-//  
+//
 //  This program is distributed in the hope that it will be useful,
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
-//  
+//
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -24,7 +24,7 @@
 #include "scrollbar.hpp"
 #include "editor_map_component.hpp"
 
-EditorMapComponent* EditorMapComponent::current_ = 0; 
+EditorMapComponent* EditorMapComponent::current_ = 0;
 
 class EditorMapComponentImpl
 {
@@ -38,7 +38,7 @@ public:
   CL_Signal_v2<int, int> key_bindings[256];
 
   EditorMapComponentImpl()
-    :workspace(true) 
+    :workspace(true)
   {}
 
   void draw();
@@ -59,12 +59,12 @@ EditorMapComponent::EditorMapComponent(const CL_Rect& rect, CL_Component* parent
 
   current_ = this;
 
-  impl->scrollbar_v = new Scrollbar(CL_Rect(CL_Point(rect.get_width() - 14, 2) + CL_Point(rect.left, rect.top), 
+  impl->scrollbar_v = new Scrollbar(CL_Rect(CL_Point(rect.get_width() - 14, 2) + CL_Point(rect.left, rect.top),
                                             CL_Size(12, rect.get_height() - 4 - 14)),
                                     Scrollbar::VERTICAL,
                                     parent);
 
-  impl->scrollbar_h = new Scrollbar(CL_Rect(CL_Point(2, rect.get_height() - 14) + CL_Point(rect.left, rect.top), 
+  impl->scrollbar_h = new Scrollbar(CL_Rect(CL_Point(2, rect.get_height() - 14) + CL_Point(rect.left, rect.top),
                                             CL_Size(rect.get_width() - 4 - 14, 12)),
                                     Scrollbar::HORIZONTAL,
                                     parent);
@@ -102,7 +102,7 @@ void
 EditorMapComponentImpl::on_key_down(const CL_InputEvent& event)
 {
   if (event.id >= 0 && event.id < 256)
-  { 
+  {
     CL_Rect rect = parent->get_position();
     key_bindings[event.id](CL_Mouse::get_x() - rect.left,
                            CL_Mouse::get_y() - rect.top);
@@ -145,7 +145,7 @@ EditorMapComponentImpl::mouse_down(const CL_InputEvent& event)
 {
   workspace.mouse_down(event);
 }
-  
+
 void
 EditorMapComponentImpl::draw ()
 {
@@ -194,7 +194,7 @@ EditorMapComponent::zoom_out(CL_Point pos)
 void
 EditorMapComponent::zoom_in(CL_Point pos)
 {
-  impl->gc_state.set_zoom(CL_Pointf(pos.x, pos.y), 
+  impl->gc_state.set_zoom(CL_Pointf(pos.x, pos.y),
                           impl->gc_state.get_zoom()*1.25f);
 }
 
@@ -235,7 +235,7 @@ EditorMapComponentImpl::on_resize(int old_w, int old_h)
 
   scrollbar_v->set_position(rect.get_width() - 14 + rect.left,  2 + rect.top);
   scrollbar_v->set_size(12, rect.get_height() - 4 - 14);
-  
+
   scrollbar_h->set_position(2 + rect.left, rect.get_height() - 14 + rect.top);
   scrollbar_h->set_size(rect.get_width() - 4 - 14, 12);
 

@@ -5,12 +5,12 @@
 //  it under the terms of the GNU General Public License as published by
 //  the Free Software Foundation, either version 3 of the License, or
 //  (at your option) any later version.
-//  
+//
 //  This program is distributed in the hope that it will be useful,
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
-//  
+//
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -47,9 +47,9 @@ public:
   float       last_zoom;
   float       last_rot;
   CL_Pointf   last_pos;
-  
-  SketchLayerImpl() 
-    : surface(CL_PixelBuffer(CL_Display::get_width(), CL_Display::get_height(), 
+
+  SketchLayerImpl()
+    : surface(CL_PixelBuffer(CL_Display::get_width(), CL_Display::get_height(),
                              CL_Display::get_width()*4, CL_PixelFormat::rgba8888)),
       canvas(0),
       last_zoom(0.0f),
@@ -79,11 +79,11 @@ public:
       canvas->sync_surface();
     }
   }
-  
-  void draw(const GraphicContextState& state, CL_GraphicContext* gc) 
+
+  void draw(const GraphicContextState& state, CL_GraphicContext* gc)
   {
     // Nothing to draw, so we go byebye
-    if (strokes.empty()) 
+    if (strokes.empty())
       return;
 
     if (canvas)
@@ -118,7 +118,7 @@ public:
 
         canvas->sync_surface();
       }
-        
+
       surface.set_blend_func(blend_one, blend_one_minus_src_alpha);
 
       CL_Matrix4x4 matrix = CL_Display::get_modelview();
@@ -131,7 +131,7 @@ public:
       //CL_Display::push_modelview();
     }
     else
-    { 
+    {
       // Direct Drawing, slow
       for(Strokes::iterator i = strokes.begin(); i != strokes.end(); ++i)
       {
@@ -140,7 +140,7 @@ public:
     }
   }
 
-  bool has_bounding_rect() const { 
+  bool has_bounding_rect() const {
     return false;
   }
 };

@@ -5,12 +5,12 @@
 //  it under the terms of the GNU General Public License as published by
 //  the Free Software Foundation, either version 3 of the License, or
 //  (at your option) any later version.
-//  
+//
 //  This program is distributed in the hope that it will be useful,
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
-//  
+//
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -34,10 +34,10 @@ public:
   /** Position of the center */
   CL_Pointf old_trans_offset;
   Layer layer;
-  
+
   Layer find_closed_layer(const CL_Pointf& pos)
   {
-    Layer layer; 
+    Layer layer;
 
     EditorMap parent = EditorMapComponent::current()->get_workspace().get_map();
 
@@ -50,7 +50,7 @@ public:
     return layer;
   }
 
-  void draw() 
+  void draw()
   {
     for(int i = 0; i < EditorMapComponent::current()->get_workspace().get_map().get_layer_count(); ++i)
     {
@@ -66,7 +66,7 @@ public:
     }
   }
 
-  void on_mouse_up  (const CL_InputEvent& event) 
+  void on_mouse_up  (const CL_InputEvent& event)
   {
     if (!layer.is_null())
     {
@@ -100,7 +100,7 @@ public:
       {
         update(event);
       }
-    }    
+    }
   }
 
   void update(const CL_InputEvent& event)

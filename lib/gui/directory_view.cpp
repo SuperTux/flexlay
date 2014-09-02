@@ -5,12 +5,12 @@
 //  it under the terms of the GNU General Public License as published by
 //  the Free Software Foundation, either version 3 of the License, or
 //  (at your option) any later version.
-//  
+//
 //  This program is distributed in the hope that it will be useful,
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
-//  
+//
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -65,7 +65,7 @@ public:
 DirectoryView::DirectoryView(const CL_Rect& rect, CL_Component* parent)
   : CL_Component(rect, parent),
     impl(new DirectoryViewImpl())
-{ 
+{
   impl->parent = this;
 
   //  impl->slots.push_back(sig_mouse_down().connect(impl.get(), &DirectoryViewImpl::draw));
@@ -93,10 +93,10 @@ DirectoryView::sig_on_click()
   return impl->sig_on_click;
 }
 
-void 
+void
 DirectoryViewImpl::draw()
 {
-  CL_Font font = Fonts::verdana11; 
+  CL_Font font = Fonts::verdana11;
 
   int horizontal_spacing = 10;
   int vertical_spacing   = 5;
@@ -110,7 +110,7 @@ DirectoryViewImpl::draw()
   {
     if (current_item && current_item < int(items.size()) && j == current_item)
     {
-      CL_Rect rect = font.bounding_rect(x_pos * (column_width + horizontal_spacing) + 1, 
+      CL_Rect rect = font.bounding_rect(x_pos * (column_width + horizontal_spacing) + 1,
                                         y_pos * (font.get_height() + vertical_spacing) + 1,
                                         i->name);
       CL_Display::fill_rect(CL_Rect(rect.left-5, rect.top-3,
@@ -121,13 +121,13 @@ DirectoryViewImpl::draw()
     // draw item
     if (!i->directory)
     {
-      font.draw(x_pos * (column_width + horizontal_spacing), 
+      font.draw(x_pos * (column_width + horizontal_spacing),
                 y_pos * (font.get_height() + vertical_spacing),
                 i->name);
     }
     else
     {
-      font.draw(x_pos * (column_width + horizontal_spacing), 
+      font.draw(x_pos * (column_width + horizontal_spacing),
                 y_pos * (font.get_height() + vertical_spacing),
                 "[" + i->name + "]");
     }
@@ -145,16 +145,16 @@ DirectoryViewImpl::draw()
 int
 DirectoryViewImpl::get_item(const CL_Point& pos)
 {
-  CL_Font font = Fonts::verdana11; 
+  CL_Font font = Fonts::verdana11;
 
   int horizontal_spacing = 10;
   int vertical_spacing   = 5;
 
   return (pos.x / (column_width + horizontal_spacing))
-    + num_columns * (pos.y / (font.get_height() + vertical_spacing));    
+    + num_columns * (pos.y / (font.get_height() + vertical_spacing));
 }
 
-void 
+void
 DirectoryViewImpl::on_mouse_down(const CL_InputEvent& event)
 {
   current_item = get_item(event.mouse_pos);
@@ -165,7 +165,7 @@ DirectoryViewImpl::on_mouse_down(const CL_InputEvent& event)
   }
 }
 
-void 
+void
 DirectoryViewImpl::on_mouse_move(const CL_InputEvent& event)
 {
   current_item = get_item(event.mouse_pos);
@@ -189,7 +189,7 @@ DirectoryViewImpl::update_items()
 
   std::sort(items.begin(), items.end(), DirectoryViewSorter());
 
-  CL_Font font = Fonts::verdana11; 
+  CL_Font font = Fonts::verdana11;
 
   column_width = 60; // min_colum_width
   for(Items::iterator i = items.begin(); i != items.end(); ++i)

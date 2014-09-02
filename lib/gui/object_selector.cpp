@@ -5,12 +5,12 @@
 //  it under the terms of the GNU General Public License as published by
 //  the Free Software Foundation, either version 3 of the License, or
 //  (at your option) any later version.
-//  
+//
 //  This program is distributed in the hope that it will be useful,
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
-//  
+//
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -22,7 +22,7 @@
 #include "object_selector.hpp"
 #include "object_add_command.hpp"
 
-ObjectSelector::ObjectSelector(const CL_Rect& rect, 
+ObjectSelector::ObjectSelector(const CL_Rect& rect,
                                int obj_w, int obj_h,
                                CL_Component* parent)
   : CL_Component(rect, parent),
@@ -35,7 +35,7 @@ ObjectSelector::ObjectSelector(const CL_Rect& rect,
   slots.push_back(sig_mouse_move().connect(this, &ObjectSelector::mouse_move));
   slots.push_back(sig_mouse_down().connect(this, &ObjectSelector::mouse_down));
   slots.push_back(sig_mouse_up().connect(this, &ObjectSelector::mouse_up));
- 
+
   mouse_over_tile = -1;
   scrolling = false;
   offset = 0;
@@ -57,7 +57,7 @@ ObjectSelector::mouse_up(const CL_InputEvent& event)
       if (drag_obj != -1)
       {
         release_mouse();
-      
+
         if (!has_mouse_over())
         {
           CL_Point screen(event.mouse_pos.x + get_screen_rect().left,
@@ -65,7 +65,7 @@ ObjectSelector::mouse_up(const CL_InputEvent& event)
 
           CL_Point target(screen.x - EditorMapComponent::current()->get_screen_rect().left,
                           screen.y - EditorMapComponent::current()->get_screen_rect().top);
-      
+
           // FIXME: Move this to the scripting layer
           //ObjectAddCommand command(ObjectLayer::current());
 
@@ -74,7 +74,7 @@ ObjectSelector::mouse_up(const CL_InputEvent& event)
 
           //command.add_object(obj);
           //Workspace::current().get_map().execute(command.to_command());
-                
+
           //std::cout << "C++: Calling on_drop" << std::endl;
           on_drop(brushes[drag_obj], target);
           //std::cout << "C++: Calling on_drop: done" << std::endl;
@@ -108,20 +108,20 @@ ObjectSelector::mouse_down(const CL_InputEvent& event)
       }
     }
     break;
-      
+
     case CL_MOUSE_MIDDLE:
       scrolling = true;
       click_pos = event.mouse_pos;
       old_offset = offset;
       capture_mouse();
       break;
-      
+
     case CL_MOUSE_WHEEL_UP:
-      offset -= static_cast<int>(obj_height*scale); 
+      offset -= static_cast<int>(obj_height*scale);
       break;
 
     case CL_MOUSE_WHEEL_DOWN:
-      offset += static_cast<int>(obj_height*scale); 
+      offset += static_cast<int>(obj_height*scale);
       break;
   }
 }
@@ -145,7 +145,7 @@ ObjectSelector::mouse_move(const CL_InputEvent& event)
     mouse_over_tile = -1;
 }
 
-void 
+void
 ObjectSelector::draw()
 {
   if (offset < 0)
@@ -157,7 +157,7 @@ ObjectSelector::draw()
   CL_Display::push_modelview();
   CL_Display::add_translate(0, -offset);
   CL_Display::add_translate(get_screen_x(), get_screen_y());
-    
+
   for(int i = 0; i < (int)brushes.size(); ++i)
   {
     int x = i%width;
@@ -170,12 +170,12 @@ ObjectSelector::draw()
     sprite.set_alignment(origin_center, 0, 0);
     sprite.set_scale(std::min(1.0f, (float)obj_width/(float)sprite.get_width()),
                      std::min(1.0f, (float)obj_height/(float)sprite.get_height()));
-        
-    sprite.draw(x * obj_width + obj_width/2, 
+
+    sprite.draw(x * obj_width + obj_width/2,
                 y * obj_height + obj_height/2);
-        
+
     //CL_Display::draw_rect(rect, CL_Color(0,0,0,128));
-        
+
     if (mouse_over_tile == i && has_mouse_over())
     {
       CL_Display::fill_rect(rect, CL_Color(0,0,255, 20));
@@ -184,11 +184,11 @@ ObjectSelector::draw()
 
   CL_Display::pop_modelview();
   CL_Display::pop_cliprect();
- 
+
   // Draw drag sprite
   if (drag_obj != -1)
   {
-    CL_Display::set_cliprect(CL_Rect(CL_Point(0, 0), 
+    CL_Display::set_cliprect(CL_Rect(CL_Point(0, 0),
                                      CL_Size(CL_Display::get_width(),
                                              CL_Display::get_height())));
 

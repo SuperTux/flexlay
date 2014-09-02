@@ -5,12 +5,12 @@
 //  it under the terms of the GNU General Public License as published by
 //  the Free Software Foundation, either version 3 of the License, or
 //  (at your option) any later version.
-//  
+//
 //  This program is distributed in the hope that it will be useful,
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
-//  
+//
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -70,13 +70,13 @@ TilemapLayer::TilemapLayer(Tileset tileset_, int w,  int h)
   impl->draw_grid      = false;
   impl->draw_attribute = false;
 
-  for (int y = 0; y < impl->field.get_height(); ++y) 
+  for (int y = 0; y < impl->field.get_height(); ++y)
     for (int x = 0; x < impl->field.get_width(); ++x)
       impl->field.at(x, y) = 0;
 
   impl->background_color = CL_Color(0, 0, 0, 0);
   impl->foreground_color = CL_Color(255, 255, 255, 255);
-  
+
   impl->tileset = tileset_;
 }
 
@@ -119,11 +119,11 @@ TilemapLayerImpl::draw(const GraphicContextState& state, CL_GraphicContext* gc)
         {
           Tile* tile = tileset.create(tile_id);
           if (tile) // skip transparent tile for faster draw
-          {           
+          {
             CL_Sprite sprite = tile->get_sprite();
             sprite.set_color(foreground_color);
             sprite.draw(x * tile_size, y * tile_size, gc);
-      
+
             if (draw_attribute)
               CL_Display::fill_rect(CL_Rect(CL_Point(x, y), CL_Size(tileset.get_tile_size(),
                                                                     tileset.get_tile_size())),
@@ -142,9 +142,9 @@ TilemapLayerImpl::draw(const GraphicContextState& state, CL_GraphicContext* gc)
         {
           Tile* tile = tileset.create(this->field.at(x, y));
           if (tile)
-          {           
+          {
             tile->get_sprite().draw(x * tile_size, y * tile_size, gc);
-      
+
             if (draw_attribute)
               CL_Display::fill_rect(CL_Rect(CL_Point(x, y), CL_Size(tileset.get_tile_size(),
                                                                     tileset.get_tile_size())),
@@ -160,14 +160,14 @@ TilemapLayerImpl::draw(const GraphicContextState& state, CL_GraphicContext* gc)
       CL_Display::draw_line(start_x * tile_size,
                             y       * tile_size,
                             end_x   * tile_size,
-                            y       * tile_size, 
+                            y       * tile_size,
                             y % 2 ? CL_Color(150, 150, 150) : CL_Color(255, 255, 255));
-  
+
     for (int x = start_x; x <= end_x; ++x)
       CL_Display::draw_line(x       * tile_size,
                             start_y * tile_size,
                             x       * tile_size,
-                            end_y   * tile_size, 
+                            end_y   * tile_size,
                             x % 2 ? CL_Color(150, 150, 150) : CL_Color(255, 255, 255));
   }
 
@@ -308,7 +308,7 @@ CL_Rect
 TilemapLayerImpl::get_bounding_rect()
 {
   return CL_Rect(CL_Point(0, 0),
-                 CL_Size(field.get_width()  * tileset.get_tile_size(), 
+                 CL_Size(field.get_width()  * tileset.get_tile_size(),
                          field.get_height() * tileset.get_tile_size()));
 }
 
@@ -325,17 +325,17 @@ TilemapLayer::world2tile(const CL_Pointf& pos) const
 Field<int>*
 TilemapLayer::get_field()
 {
-  return &impl->field; 
+  return &impl->field;
 }
 
 TilemapLayer
 TilemapLayer::current()
 {
-  return current_; 
+  return current_;
 }
 
 void
-TilemapLayer::set_current(TilemapLayer t) 
+TilemapLayer::set_current(TilemapLayer t)
 {
   current_ = t;
 }
@@ -358,13 +358,13 @@ TilemapLayer::set_data(std::vector<int> d)
   impl->field.set_data(d);
 }
 
-void 
+void
 TilemapLayer::set_background_color(const CL_Color& color)
 {
   impl->background_color = color;
 }
 
-void 
+void
 TilemapLayer::set_foreground_color(const CL_Color& color)
 {
   impl->foreground_color = color;

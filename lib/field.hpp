@@ -5,12 +5,12 @@
 //  it under the terms of the GNU General Public License as published by
 //  the Free Software Foundation, either version 3 of the License, or
 //  (at your option) any later version.
-//  
+//
 //  This program is distributed in the hope that it will be useful,
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
-//  
+//
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -36,7 +36,7 @@ public:
   {
   }
 
-  Field (int w, int h) 
+  Field (int w, int h)
     : width (w), height (h), vec (width * height)
   {
   }
@@ -46,7 +46,7 @@ public:
   {
   }
 
-  /** Creates a new field out of a subsection from an already excisting one 
+  /** Creates a new field out of a subsection from an already excisting one
    *  @param pos_x The position of the old field in the new resized one
    *  @param pos_y The position of the old field in the new resized one */
   Field(const Field<T>& arg_field, int w, int h, int pos_x, int pos_y)
@@ -82,7 +82,7 @@ public:
     return vec[i];
   }
 
-  T& operator() (int x, int y) 
+  T& operator() (int x, int y)
   {
     assert (x >= 0 || x < (int) width || y >= 0 || y < (int) height);
     return vec [width*y + x];
@@ -93,7 +93,7 @@ public:
     assert (x >= 0 || x < (int) width || y >= 0 || y < (int) height);
     return vec [width*y + x];
   }
-  
+
   inline const T& at (int x, int y) const {
     return vec [width*y + x];
   }
@@ -106,7 +106,7 @@ public:
    *  @param pos_x The position of the old field in the new resized one
    *  @param pos_y The position of the old field in the new resized one
    **/
-  void resize(int w, int h, int pos_x = 0, int pos_y = 0) 
+  void resize(int w, int h, int pos_x = 0, int pos_y = 0)
   {
     *this = Field<T>(*this, w, h, pos_x, pos_y);
   }
@@ -119,9 +119,9 @@ public:
   }
 
   std::vector<T>& get_data() { return vec; }
-  void set_data(const std::vector<T>& d) { 
+  void set_data(const std::vector<T>& d) {
     for(typename std::vector<T>::size_type i = 0; i < vec.size() && i < d.size(); ++i)
-      vec[i] = d[i]; 
+      vec[i] = d[i];
   }
 
   iterator begin () { return vec.begin (); }

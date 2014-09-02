@@ -5,12 +5,12 @@
 //  it under the terms of the GNU General Public License as published by
 //  the Free Software Foundation, either version 3 of the License, or
 //  (at your option) any later version.
-//  
+//
 //  This program is distributed in the hope that it will be useful,
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
-//  
+//
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -40,7 +40,7 @@ public:
   ~Tileset();
 
   /** Check if the tile is already loaded and return it. If it is not
-   *  already loaded, load it 
+   *  already loaded, load it
    *
    *  @param id The id of the tile to create as defined in the def. file
    *
@@ -48,7 +48,7 @@ public:
   Tile* create(int id);
 
   int get_tile_size() const;
-  
+
   void add_tile(int id, Tile* tile);
 
   /** Return the tiles which are available in this tileset */

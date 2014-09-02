@@ -65,7 +65,7 @@ public:
   const char* what() const throw() { return message; };
   const char* what_file() const throw() { return file; };
   const unsigned int what_line() const throw() { return line; };
-    
+
 private:
   const char* message;
   const char* file;

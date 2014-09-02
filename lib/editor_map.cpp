@@ -5,12 +5,12 @@
 //  it under the terms of the GNU General Public License as published by
 //  the Free Software Foundation, either version 3 of the License, or
 //  (at your option) any later version.
-//  
+//
 //  This program is distributed in the hope that it will be useful,
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
-//  
+//
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -83,7 +83,7 @@ EditorMap::add_layer(const Layer& layer, int pos)
   impl->serial += 1;
 }
 
-void 
+void
 EditorMap::draw_gui(CL_GraphicContext* gc)
 {
   CL_Rect rect = get_bounding_rect();
@@ -104,7 +104,7 @@ EditorMap::draw(const GraphicContextState& state, CL_GraphicContext* gc)
 {
   for(EditorMapImpl::Layers::iterator i = impl->layers.begin(); i != impl->layers.end(); ++i)
     (*i).draw(state, gc);
-  
+
   gc->flush();
 }
 
@@ -115,22 +115,22 @@ EditorMap::is_modified() const
 }
 
 void
-EditorMap::set_unmodified() 
+EditorMap::set_unmodified()
 {
-  impl->modified = false; 
+  impl->modified = false;
 }
 
 void
 EditorMap::modify()
 {
-  impl->modified = true; 
-  impl->serial += 1; 
+  impl->modified = true;
+  impl->serial += 1;
 }
 
 int
-EditorMap::get_serial() const 
-{ 
-  return impl->serial; 
+EditorMap::get_serial() const
+{
+  return impl->serial;
 }
 
 int
@@ -151,13 +151,13 @@ EditorMap::get_layer(int i)
 void
 EditorMap::set_metadata(const MetaData& obj)
 {
-  impl->metadata = obj; 
+  impl->metadata = obj;
 }
 
 MetaData
 EditorMap::get_metadata() const
 {
-  return impl->metadata; 
+  return impl->metadata;
 }
 
 bool
@@ -208,7 +208,7 @@ EditorMap::get_bounding_rect()
           rect.top    = std::min(rect.top,    other.top);
           rect.bottom = std::max(rect.bottom, other.bottom);
           rect.left   = std::min(rect.left,   other.left);
-          rect.right  = std::max(rect.right,  other.right);              
+          rect.right  = std::max(rect.right,  other.right);
         }
       }
     }

@@ -5,12 +5,12 @@
 //  it under the terms of the GNU General Public License as published by
 //  the Free Software Foundation, either version 3 of the License, or
 //  (at your option) any later version.
-//  
+//
 //  This program is distributed in the hope that it will be useful,
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
-//  
+//
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -32,7 +32,7 @@ private:
   bool pressed;
 
   CL_Signal_v1<float> on_change;
-  
+
   void update_mouse(const CL_InputEvent& event);
 public:
   Slider(const CL_Rect& rect, CL_Component* parent);
@@ -43,7 +43,7 @@ public:
   void set_value(float value);
 
   void draw();
-  
+
   void on_mouse_down(const CL_InputEvent& event);
   void on_mouse_up  (const CL_InputEvent& event);
   void on_mouse_move(const CL_InputEvent& event);

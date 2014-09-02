@@ -5,12 +5,12 @@
 //  it under the terms of the GNU General Public License as published by
 //  the Free Software Foundation, either version 3 of the License, or
 //  (at your option) any later version.
-//  
+//
 //  This program is distributed in the hope that it will be useful,
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
-//  
+//
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -41,7 +41,7 @@ public:
   std::vector<EditorMap> editormaps;
   std::vector<CL_Color>  color;
 
-  void draw(const GraphicContextState& state, CL_GraphicContext* gc) 
+  void draw(const GraphicContextState& state, CL_GraphicContext* gc)
   {
     // FIXME: We need to stop onion layer to draw onto itself
     surface.set_blend_func(blend_one, blend_one_minus_src_alpha);
@@ -78,7 +78,7 @@ OnionSkinLayer::OnionSkinLayer(int width, int height) :
     impl->canvas2->get_gc()->flush();
     impl->canvas2->sync_surface();
   }
-  catch(CL_Error& err) 
+  catch(CL_Error& err)
   {
     std::cout << "CL_Error: " << err.message << std::endl;
     throw err;

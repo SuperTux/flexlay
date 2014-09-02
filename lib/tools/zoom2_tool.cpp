@@ -5,12 +5,12 @@
 //  it under the terms of the GNU General Public License as published by
 //  the Free Software Foundation, either version 3 of the License, or
 //  (at your option) any later version.
-//  
+//
 //  This program is distributed in the hope that it will be useful,
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
-//  
+//
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -28,7 +28,7 @@ public:
   CL_Point click_pos;
   float old_zoom;
   void draw();
-  
+
   void on_mouse_up  (const CL_InputEvent& event);
   void on_mouse_down(const CL_InputEvent& event);
   void on_mouse_move(const CL_InputEvent& event);
@@ -74,7 +74,7 @@ Zoom2ToolImpl::on_mouse_move(const CL_InputEvent& event)
 
     CL_Point zoom_pos(gc.get_width()/2,
                       gc.get_height()/2);
-      
+
     float factor = (event.mouse_pos.y - click_pos.y) / 20.0f;
     if (factor > 0)
       gc.set_zoom(zoom_pos, old_zoom * pow(1.25f, factor));
@@ -88,7 +88,7 @@ Zoom2ToolImpl::on_mouse_move(const CL_InputEvent& event)
 Tool
 Zoom2Tool::to_tool()
 {
-  return Tool(impl); 
-}  
+  return Tool(impl);
+}
 
 /* EOF */

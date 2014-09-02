@@ -5,12 +5,12 @@
 //  it under the terms of the GNU General Public License as published by
 //  the Free Software Foundation, either version 3 of the License, or
 //  (at your option) any later version.
-//  
+//
 //  This program is distributed in the hope that it will be useful,
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
-//  
+//
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -34,7 +34,7 @@ TileSelector::TileSelector(const CL_Rect& rect, CL_Component* parent) :
   slots.connect(sig_mouse_move(), this, &TileSelector::mouse_move);
   slots.connect(sig_mouse_down(), this, &TileSelector::mouse_down);
   slots.connect(sig_mouse_up  (), this, &TileSelector::mouse_up);
- 
+
   scale = 1.0f;
   mouse_over_tile = -1;
   scrolling = false;
@@ -47,10 +47,10 @@ TileSelector::~TileSelector()
   std::cout << "~TileSelector()" << std::endl;
 }
 
-CL_Rect 
+CL_Rect
 TileSelector::get_selection()
 {
-  CL_Rect selection(current_pos.x, current_pos.y, 
+  CL_Rect selection(current_pos.x, current_pos.y,
                     region_select_start.x, region_select_start.y);
 
   selection.normalize();
@@ -61,7 +61,7 @@ TileSelector::get_selection()
   selection.right = Math::mid(0, selection.right, width);
 
   selection.top    = Math::max(0, selection.top);
-  
+
   return selection;
 }
 
@@ -114,7 +114,7 @@ TileSelector::mouse_down(const CL_InputEvent& event)
 
     TileMapPaintTool::current().set_brush(brush);
   }
-  else if (event.id == CL_MOUSE_RIGHT) 
+  else if (event.id == CL_MOUSE_RIGHT)
   {
     region_select = true;
     region_select_start = current_pos;
@@ -161,7 +161,7 @@ TileSelector::mouse_move(const CL_InputEvent& event)
   }
 }
 
-void 
+void
 TileSelector::draw()
 {
   CL_Display::push_cliprect(get_screen_rect());
@@ -173,8 +173,8 @@ TileSelector::draw()
 
   int start_row = offset / int(tileset.get_tile_size() * scale);
   int end_row   = start_row + (get_screen_rect().get_height() / int(tileset.get_tile_size() * scale));
-  int end_index = std::min(end_row*width, int(tiles.size())); 
-  
+  int end_index = std::min(end_row*width, int(tiles.size()));
+
   // Draw tiles
   for(int i = (start_row*width); i < end_index; ++i)
   {
@@ -194,7 +194,7 @@ TileSelector::draw()
 
       sprite.set_scale(scale, scale);
 
-      sprite.draw(static_cast<int>(x * tileset.get_tile_size()*scale), 
+      sprite.draw(static_cast<int>(x * tileset.get_tile_size()*scale),
                   static_cast<int>(y * tileset.get_tile_size()*scale));
 
       // Use grid in the tileselector
@@ -224,7 +224,7 @@ TileSelector::draw()
 
     CL_Display::fill_rect(rect, CL_Color(0,0,255, 100));
   }
-  
+
   CL_Display::pop_modelview();
   CL_Display::pop_cliprect();
 }

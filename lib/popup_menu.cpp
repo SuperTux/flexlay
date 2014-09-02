@@ -5,12 +5,12 @@
 //  it under the terms of the GNU General Public License as published by
 //  the Free Software Foundation, either version 3 of the License, or
 //  (at your option) any later version.
-//  
+//
 //  This program is distributed in the hope that it will be useful,
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
-//  
+//
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -20,9 +20,9 @@
 PopupMenu::PopupMenu(const CL_Point& pos,  CL_Component* parent)
 {
   menu = new CL_Menu(CL_Point(pos.x, pos.y), parent, NULL, true);
-  
+
   menu->open();
-  
+
   slots.push_back(CL_Mouse::sig_key_down().connect(this, &PopupMenu::on_mouse_up));
 }
 
@@ -45,7 +45,7 @@ PopupMenu::on_mouse_up(const CL_InputEvent& event)
   {
     // FIXME: this should be in the constructor, but doesn't work
     // there since the menu collapses then instantly
-    menu->set_root_collapsing(true); 
+    menu->set_root_collapsing(true);
   }
 }
 

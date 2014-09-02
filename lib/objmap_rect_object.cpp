@@ -5,12 +5,12 @@
 //  it under the terms of the GNU General Public License as published by
 //  the Free Software Foundation, either version 3 of the License, or
 //  (at your option) any later version.
-//  
+//
 //  This program is distributed in the hope that it will be useful,
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
-//  
+//
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -30,9 +30,9 @@ public:
   ObjMapControlPoint cp_bottom_left;
   ObjMapControlPoint cp_bottom_right;
   ObjMapControlPoint cp_top_middle;
-  ObjMapControlPoint cp_bottom_middle;  
+  ObjMapControlPoint cp_bottom_middle;
   ObjMapControlPoint cp_middle_left;
-  ObjMapControlPoint cp_middle_right;  
+  ObjMapControlPoint cp_middle_right;
 
   void set_rect(CL_Rect rect) {
     pos  = CL_Pointf(rect.left, rect.top);
@@ -51,7 +51,7 @@ public:
   void cp_top_right_move(CL_Pointf pos_) {
     size.width  += pos_.x - (pos.x + size.width);
     size.height += pos.y - pos_.y;
-    
+
     pos.y = pos_.y;
 
     normalize_rect();
@@ -75,7 +75,7 @@ public:
   }
 
   void cp_top_middle_move(CL_Pointf pos_) {
-    size.height += pos.y - pos_.y;  
+    size.height += pos.y - pos_.y;
     pos.y = pos_.y;
 
     normalize_rect();
@@ -153,7 +153,7 @@ ObjMapRectObjectImpl::update_control_points()
 
 ObjMapRectObject::ObjMapRectObject(const CL_Rect&  rect_,
                                    const CL_Color& color_,
-                                   const MetaData& data_)  
+                                   const MetaData& data_)
   : impl(new ObjMapRectObjectImpl)
 {
   impl->pos   = CL_Pointf(rect_.left, rect_.top);
@@ -161,33 +161,33 @@ ObjMapRectObject::ObjMapRectObject(const CL_Rect&  rect_,
   impl->color = color_;
   impl->data  = data_;
 
-  impl->cp_top_left = ObjMapControlPoint(CL_Sprite("resize1", &(Flexlay::current()->resources)), 
+  impl->cp_top_left = ObjMapControlPoint(CL_Sprite("resize1", &(Flexlay::current()->resources)),
                                          CL_Pointf(),
                                          MetaData());
-  
-  impl->cp_bottom_right = ObjMapControlPoint(CL_Sprite("resize1", &(Flexlay::current()->resources)), 
+
+  impl->cp_bottom_right = ObjMapControlPoint(CL_Sprite("resize1", &(Flexlay::current()->resources)),
                                              CL_Pointf(),
                                              MetaData());
- 
-  impl->cp_top_right = ObjMapControlPoint(CL_Sprite("resize2", &(Flexlay::current()->resources)), 
+
+  impl->cp_top_right = ObjMapControlPoint(CL_Sprite("resize2", &(Flexlay::current()->resources)),
                                           CL_Pointf(),
                                           MetaData());
-  
-  impl->cp_bottom_left = ObjMapControlPoint(CL_Sprite("resize2", &(Flexlay::current()->resources)), 
+
+  impl->cp_bottom_left = ObjMapControlPoint(CL_Sprite("resize2", &(Flexlay::current()->resources)),
                                             CL_Pointf(),
                                             MetaData());
-  
-  impl->cp_middle_left = ObjMapControlPoint(CL_Sprite("resize_horz", &(Flexlay::current()->resources)), 
+
+  impl->cp_middle_left = ObjMapControlPoint(CL_Sprite("resize_horz", &(Flexlay::current()->resources)),
                                             CL_Pointf(),
                                             MetaData());
-  impl->cp_middle_right  = ObjMapControlPoint(CL_Sprite("resize_horz", &(Flexlay::current()->resources)), 
+  impl->cp_middle_right  = ObjMapControlPoint(CL_Sprite("resize_horz", &(Flexlay::current()->resources)),
                                               CL_Pointf(),
                                               MetaData());
-  impl->cp_top_middle = ObjMapControlPoint(CL_Sprite("resize_vert", &(Flexlay::current()->resources)), 
+  impl->cp_top_middle = ObjMapControlPoint(CL_Sprite("resize_vert", &(Flexlay::current()->resources)),
                                            CL_Pointf(),
                                            MetaData());
-  
-  impl->cp_bottom_middle = ObjMapControlPoint(CL_Sprite("resize_vert", &(Flexlay::current()->resources)), 
+
+  impl->cp_bottom_middle = ObjMapControlPoint(CL_Sprite("resize_vert", &(Flexlay::current()->resources)),
                                               CL_Pointf(),
                                               MetaData());
 

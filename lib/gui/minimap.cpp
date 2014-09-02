@@ -5,12 +5,12 @@
 //  it under the terms of the GNU General Public License as published by
 //  the Free Software Foundation, either version 3 of the License, or
 //  (at your option) any later version.
-//  
+//
 //  This program is distributed in the hope that it will be useful,
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
-//  
+//
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -34,14 +34,14 @@ class MinimapImpl
 public:
   std::vector<CL_Slot> slots;
   bool drag_active;
-  
+
   int last_serial;
   EditorMap editor_map;
 
   EditorMapComponent* parent;
   CL_Surface minimap_surface;
 
-  MinimapImpl() 
+  MinimapImpl()
     : editor_map(false)
   {}
   void update_minimap_surface();
@@ -49,7 +49,7 @@ public:
 
 Minimap::Minimap(EditorMapComponent* p, const CL_Rect& rect,
                  CL_Component* parent)
-  : CL_Component(rect, parent), 
+  : CL_Component(rect, parent),
     impl(new MinimapImpl())
 {
   impl->slots.push_back(sig_paint().connect(this, &Minimap::draw));
@@ -144,14 +144,14 @@ MinimapImpl::update_minimap_surface()
 {
   // FIXME: This doesn't work all that well
   TilemapLayer tilemap = TilemapLayer::current();
-  
+
   if (!tilemap.is_null())
   {
     Field<int>* field = tilemap.get_field();
 
-    CL_PixelBuffer buffer(tilemap.get_width(), tilemap.get_height(), 
+    CL_PixelBuffer buffer(tilemap.get_width(), tilemap.get_height(),
                           tilemap.get_width()*4, CL_PixelFormat::rgba8888);
-  
+
     int map_width  = tilemap.get_width();
     int map_height = tilemap.get_height();
 
@@ -167,7 +167,7 @@ MinimapImpl::update_minimap_surface()
           buf[4*(x + y * map_width) + 2] = tile->get_color().get_green();
           buf[4*(x + y * map_width) + 1] = tile->get_color().get_blue();
           buf[4*(x + y * map_width) + 0] = tile->get_color().get_alpha();
-        } 
+        }
         else
         {
           buf[4*(x + y * map_width) + 0] = 0;

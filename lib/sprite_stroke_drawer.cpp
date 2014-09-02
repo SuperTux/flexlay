@@ -5,12 +5,12 @@
 //  it under the terms of the GNU General Public License as published by
 //  the Free Software Foundation, either version 3 of the License, or
 //  (at your option) any later version.
-//  
+//
 //  This program is distributed in the hope that it will be useful,
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
-//  
+//
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -30,7 +30,7 @@ class SpriteStrokeDrawerImpl : public StrokeDrawerImpl
 {
 public:
   SpriteStrokeDrawer::DrawMode mode;
-  
+
   SpriteStrokeDrawerImpl() {}
 
   void draw(const Stroke& stroke, CL_GraphicContext* gc);
@@ -55,7 +55,7 @@ SpriteStrokeDrawerImpl::draw(const Stroke& stroke, CL_GraphicContext* gc)
 {
   if (DrawerProperties::current()->get_brush().is_null() || stroke.get_dab_count() == 0)
     return;
-  
+
   Stroke::Dabs dabs = stroke.get_interpolated_dabs(DrawerProperties::current()->get_spacing()
                                                    * DrawerProperties::current()->get_size(),
                                                    DrawerProperties::current()->get_spacing()
@@ -78,22 +78,22 @@ SpriteStrokeDrawerImpl::draw(const Stroke& stroke, CL_GraphicContext* gc)
       /* Correct function:
          1: dest
          2: src
-             
+
          R = R1 A1 (1 - A2) + R2 A2
          G = G1 A1 (1 - A2) + G2 A2
          B = B1 A1 (1 - A2) + B2 A2
          A = A1 (1 - A2) + A2
 
          // This is currently used, leads to premultiplied alpha
-         Aout  = Afgd + (1 - Afgd) * Abkg 
-         Cout' = Cfgd' + (1 - Afgd) * Cbkg' 
+         Aout  = Afgd + (1 - Afgd) * Abkg
+         Cout' = Cfgd' + (1 - Afgd) * Cbkg'
          where
          Cfgd' = Cfgd * Afgd
          Cbkg' = Cbkg * Abkg
          Cout' = Cout * Aout
 
-         Aout = (1 - (1 - Afgd) * (1 - Abkg)) 
-         Cout = (Cfgd * Afgd) + (1 - Afgd * Cbkg * Abkg) / Aout 
+         Aout = (1 - (1 - Afgd) * (1 - Abkg))
+         Cout = (Cfgd * Afgd) + (1 - Afgd * Cbkg * Abkg) / Aout
          where
          Cfgd = red, green, blue of foreground
          Cbkg = red, green, blue of background
@@ -107,7 +107,7 @@ SpriteStrokeDrawerImpl::draw(const Stroke& stroke, CL_GraphicContext* gc)
       /*brush.set_blend_func_separate(blend_zero, blend_dst_alpha,
         blend_zero, blend_one);
         brush.draw(dab.pos.x, dab.pos.y, gc);*/
-          
+
       switch (mode)
       {
         case SpriteStrokeDrawer::DM_NORMAL:
@@ -122,12 +122,12 @@ SpriteStrokeDrawerImpl::draw(const Stroke& stroke, CL_GraphicContext* gc)
           //blend_one, blend_one_minus_src_alpha);
           sprite.draw(dab.pos.x, dab.pos.y, gc);
           break;
-              
+
         case SpriteStrokeDrawer::DM_ERASE:
           sprite.set_blend_func(blend_zero, blend_one_minus_src_alpha);
           sprite.draw(dab.pos.x, dab.pos.y, gc);
           break;
-          
+
         case SpriteStrokeDrawer::DM_SMUDGE:
         {
           if (i != dabs.begin())
@@ -150,7 +150,7 @@ SpriteStrokeDrawerImpl::draw(const Stroke& stroke, CL_GraphicContext* gc)
 
         case SpriteStrokeDrawer::DM_SHADER:
         {
-#if 0 
+#if 0
           CL_OpenGLState state(gc);
           state.set_active();
           state.setup_2d();
@@ -158,7 +158,7 @@ SpriteStrokeDrawerImpl::draw(const Stroke& stroke, CL_GraphicContext* gc)
           if (program == 0)
           {
             program = new CL_ProgramObject();
-                
+
             CL_ShaderObject shader("shader", &(Flexlay::current()->resources));
             std::cout << "Shader status: " << (shader.get_compile_status() ? "true" : "false") << std::endl;
             std::cout << "Shader log: " << shader.get_info_log() << std::endl;
@@ -176,7 +176,7 @@ SpriteStrokeDrawerImpl::draw(const Stroke& stroke, CL_GraphicContext* gc)
           {
             clUseProgram(program->get_handle());
           }
-            
+
           CL_OpenGLSurface glsurface(sprite.get_frame_surface(0));
           glActiveTexture(GL_TEXTURE0);
           glsurface.bind();
@@ -186,7 +186,7 @@ SpriteStrokeDrawerImpl::draw(const Stroke& stroke, CL_GraphicContext* gc)
             glActiveTexture(GL_TEXTURE1);
             glsurface2.bind();
             glEnable(GL_TEXTURE_2D);*/
-            
+
           clUniform1i(program->get_attribute_location("mytex"), 0);
           //clUniform1i(program->get_attribute_location("background"), 1);
           //program->validate();
@@ -205,13 +205,13 @@ SpriteStrokeDrawerImpl::draw(const Stroke& stroke, CL_GraphicContext* gc)
           clVertex2f((dab.pos.x - sprite.get_width()/2) * size, (dab.pos.y + sprite.get_height()/2) * size);
           clTexCoord2d(0.0, 1.0);
           clEnd();
-            
+
           state.set_active();
           clUseProgram(0);
 #endif
         }
         break;
-              
+
         default:
           std::cout << "Error: SpriteStrokeDrawer: Unknown draw mode: " << mode << std::endl;
           break;
@@ -221,24 +221,24 @@ SpriteStrokeDrawerImpl::draw(const Stroke& stroke, CL_GraphicContext* gc)
     {
       switch (mode)
       {
-        case SpriteStrokeDrawer::DM_NORMAL:  
+        case SpriteStrokeDrawer::DM_NORMAL:
           sprite.set_blend_func(blend_src_alpha, blend_one_minus_src_alpha);
           sprite.draw(dab.pos.x, dab.pos.y, gc);
           break;
-              
+
         case SpriteStrokeDrawer::DM_ADDITION:
           sprite.set_blend_func(blend_src_alpha, blend_one);
-          sprite.draw(dab.pos.x, dab.pos.y, gc); 
+          sprite.draw(dab.pos.x, dab.pos.y, gc);
           break;
-            
+
         case SpriteStrokeDrawer::DM_ERASE:
           sprite.set_blend_func(blend_zero, blend_one_minus_src_alpha);
           sprite.draw(dab.pos.x, dab.pos.y, gc);
-          break; 
-          
+          break;
+
         case SpriteStrokeDrawer::DM_SMUDGE:
           sprite.set_blend_func(blend_src_alpha, blend_one_minus_src_alpha);
-          sprite.draw(dab.pos.x, dab.pos.y, gc);          
+          sprite.draw(dab.pos.x, dab.pos.y, gc);
           break;
 
         default:
@@ -265,9 +265,9 @@ StrokeDrawerImpl*
 SpriteStrokeDrawerImpl::clone() const
 {
   SpriteStrokeDrawerImpl* drawer = new SpriteStrokeDrawerImpl();
-  
+
   *drawer = *this;
-    
+
   return drawer;
 }
 

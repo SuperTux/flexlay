@@ -568,7 +568,7 @@ _compile_pattern (lisp_object_t **obj, int *index)
       int i;
       lisp_object_t *pattern;
       type = -1;
-        
+
       if (lisp_type(lisp_car(*obj)) != LISP_TYPE_SYMBOL)
         return 0;
 
@@ -1107,7 +1107,7 @@ LispReader::read_string_vector (const char* name, std::vector<std::string>* vec)
     }
     return true;
   }
-  return false;    
+  return false;
 }
 
 bool
@@ -1125,7 +1125,7 @@ LispReader::read_int_vector (const char* name, std::vector<int>* vec)
     }
     return true;
   }
-  return false;    
+  return false;
 }
 
 bool
@@ -1141,7 +1141,7 @@ LispReader::read_char_vector (const char* name, std::vector<char>* vec)
     }
     return true;
   }
-  return false;    
+  return false;
 }
 
 bool
@@ -1155,7 +1155,7 @@ LispReader::read_string (const char* name, std::string* str)
     *str = lisp_string(lisp_car(obj));
     return true;
   }
-  return false;  
+  return false;
 }
 
 bool
@@ -1294,17 +1294,17 @@ lisp_object_t* lisp_read_from_gzfile(const char* filename)
       if (!buf)
         throw LispReaderException("lisp_read_from_gzfile()", __FILE__, __LINE__);
     }
-    else 
+    else
     {
-      // everything fine, encountered EOF 
+      // everything fine, encountered EOF
       done = true;
     }
   }
-      
+
   lisp_stream_t stream;
   lisp_stream_init_string (&stream, buf);
   root_obj = lisp_read (&stream);
-      
+
   free(buf);
   gzclose(in);
 
@@ -1315,7 +1315,7 @@ bool has_suffix(const char* data, const char* suffix)
 {
   int suffix_len = strlen(suffix);
   int data_len   = strlen(data);
-  
+
   const char* data_suffix = (data + data_len - suffix_len);
 
   if (data_suffix >= data)

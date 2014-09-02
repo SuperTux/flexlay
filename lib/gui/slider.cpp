@@ -5,12 +5,12 @@
 //  it under the terms of the GNU General Public License as published by
 //  the Free Software Foundation, either version 3 of the License, or
 //  (at your option) any later version.
-//  
+//
 //  This program is distributed in the hope that it will be useful,
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
-//  
+//
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -42,7 +42,7 @@ Slider::draw()
 {
   CL_Display::push_modelview();
   CL_Display::add_translate(get_screen_x(), get_screen_y());
-    
+
   CL_Display::fill_rect(CL_Rect(CL_Point(0, get_height()/2 - 2),
                                 CL_Size(get_width(), 5)),
                         CL_Color(255, 255, 255, 255));
@@ -51,7 +51,7 @@ Slider::draw()
                                 CL_Size(5, get_height())),
                         CL_Color(0, 0, 0, 255));
 
-  CL_Display::pop_modelview();    
+  CL_Display::pop_modelview();
 }
 
 void

@@ -5,12 +5,12 @@
 //  it under the terms of the GNU General Public License as published by
 //  the Free Software Foundation, either version 3 of the License, or
 //  (at your option) any later version.
-//  
+//
 //  This program is distributed in the hope that it will be useful,
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
-//  
+//
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -30,7 +30,7 @@ public:
 
   typedef std::vector<MenuItem*> Items;
   Items items;
-  
+
   int current_item;
 
   int width;
@@ -56,7 +56,7 @@ protected:
   CL_Signal_v0 on_clicked;
 
 public:
-  MenuItem(MenuImpl* parent_) 
+  MenuItem(MenuImpl* parent_)
     : parent(parent_) {}
 
   virtual ~MenuItem() {}
@@ -71,14 +71,14 @@ public:
 class SeparatorMenuItem : public MenuItem
 {
 public:
-  SeparatorMenuItem(MenuImpl* parent_) 
+  SeparatorMenuItem(MenuImpl* parent_)
     : MenuItem(parent_)
   {}
   virtual ~SeparatorMenuItem() {}
 
-  void draw(int x, int y, bool active) 
+  void draw(int x, int y, bool active)
   {
-    CL_Display::fill_rect(CL_Rect(CL_Point(x, y), CL_Size(parent->get_width()-7, 2)), 
+    CL_Display::fill_rect(CL_Rect(CL_Point(x, y), CL_Size(parent->get_width()-7, 2)),
                           CL_Color(150, 150, 150));
     CL_Display::fill_rect(CL_Rect(CL_Point(x, y+1), CL_Size(parent->get_width()-7, 1)),
                           CL_Color(255, 255, 255));
@@ -98,7 +98,7 @@ public:
   TextMenuItem(const CL_Sprite& sprite_, const std::string& text_, MenuImpl* parent_)
     : MenuItem(parent_),
       sprite(sprite_),
-      text(text_) 
+      text(text_)
   {
     if (sprite)
       sprite.set_alignment(origin_center);
@@ -108,7 +108,7 @@ public:
 
   void draw(int x, int y, bool active) {
     if (active)
-      CL_Display::fill_rect(CL_Rect(CL_Point(x, y-2), CL_Size(parent->get_width() - 7, 18)), 
+      CL_Display::fill_rect(CL_Rect(CL_Point(x, y-2), CL_Size(parent->get_width() - 7, 18)),
                             CL_Color(255, 255, 255));
     if (sprite)
     {
@@ -191,7 +191,7 @@ MenuImpl::recalc_size()
 
   for(Items::iterator i = items.begin(); i != items.end(); ++i)
     height += (*i)->get_height() + 6;
-  
+
   width  += 12 + 24;
   height += 8;
 
@@ -203,7 +203,7 @@ MenuImpl::draw()
 {
   CL_Display::push_translate(parent->get_screen_x(), parent->get_screen_y());
 
-  Box::draw_window(CL_Rect(CL_Point(0, 0), 
+  Box::draw_window(CL_Rect(CL_Point(0, 0),
                            CL_Size(parent->get_width(),
                                    parent->get_height())));
   int x_pos = 3;
@@ -252,7 +252,7 @@ MenuImpl::on_mouse_move(const CL_InputEvent& event)
 
     for(int i = 0; i < int(items.size()); ++i)
     {
-      y_pos += items[i]->get_height() + 6;      
+      y_pos += items[i]->get_height() + 6;
       if (y_pos > event.mouse_pos.y)
       {
         current_item = i;

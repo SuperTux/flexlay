@@ -5,12 +5,12 @@
 //  it under the terms of the GNU General Public License as published by
 //  the Free Software Foundation, either version 3 of the License, or
 //  (at your option) any later version.
-//  
+//
 //  This program is distributed in the hope that it will be useful,
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
-//  
+//
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -41,7 +41,7 @@ public:
   bool drawing;
   Stroke   stroke;
   StrokeDrawer   drawer;
-  
+
   SketchStrokeToolImpl()
     : drawing(false)
   {
@@ -49,7 +49,7 @@ public:
     //drawer = MarkerStrokeDrawer().to_drawer();
   }
 
-  void draw() 
+  void draw()
   {
     if (drawing)
     {
@@ -63,7 +63,7 @@ public:
     else
     {
       EditorMapComponent* parent = EditorMapComponent::current();
-      CL_Pointf p = parent->screen2world(CL_Point(CL_Mouse::get_x() - parent->get_screen_x(), 
+      CL_Pointf p = parent->screen2world(CL_Point(CL_Mouse::get_x() - parent->get_screen_x(),
                                                   CL_Mouse::get_y() - parent->get_screen_y()));
       CL_Sprite s = DrawerProperties::current()->get_brush().get_sprite();
       s.set_color(DrawerProperties::current()->get_color());
@@ -74,18 +74,18 @@ public:
     }
   }
 
-  void on_mouse_up  (const CL_InputEvent& event) 
+  void on_mouse_up  (const CL_InputEvent& event)
   {
     if (event.id == CL_MOUSE_LEFT && drawing)
     {
       drawing = false;
       EditorMapComponent* parent = EditorMapComponent::current();
       parent->release_mouse();
-        
+
       add_dab(event);
 
       BitmapLayer::current()->add_stroke(stroke);
-    }    
+    }
   }
 
   void on_mouse_down(const CL_InputEvent& event) {
@@ -103,8 +103,8 @@ public:
   void add_dab(const CL_InputEvent& event)
   {
     EditorMapComponent* parent = EditorMapComponent::current();
-    CL_Pointf p = parent->screen2world(event.mouse_pos);    
-    
+    CL_Pointf p = parent->screen2world(event.mouse_pos);
+
     // FIXME: This is ugly, events relative to the layer should be handled somewhat differently
     Dab dab(p.x - BitmapLayer::current()->to_object().get_pos().x,
             p.y - BitmapLayer::current()->to_object().get_pos().y);
@@ -136,7 +136,7 @@ public:
     stroke.add_dab(dab);
   }
 
-  void on_mouse_move(const CL_InputEvent& event) 
+  void on_mouse_move(const CL_InputEvent& event)
   {
     if (drawing)
     {
@@ -146,7 +146,7 @@ public:
 };
 
 SketchStrokeTool::SketchStrokeTool()
-  : impl(new SketchStrokeToolImpl()) 
+  : impl(new SketchStrokeToolImpl())
 {
 }
 

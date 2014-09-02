@@ -51,7 +51,7 @@ make_sprite(const std::string& filename)
     CL_SpriteDescription desc;
     desc.add_frame(get_pixelbuffer(filename));
     return CL_Sprite(desc);
-  } catch (CL_Error& err) {
+  } catch (const CL_Error& err) {
     std::cout << "CL_Error: " << err.message << std::endl;
     return CL_Sprite();
   }
@@ -62,7 +62,7 @@ make_pixelbuffer(const std::string& filename)
 {
   try {
     return get_pixelbuffer(filename);
-  } catch (CL_Error& err) {
+  } catch (const CL_Error& err) {
     std::cout << "CL_Error: " << err.message << std::endl;
     return CL_PixelBuffer();
   }
@@ -80,7 +80,7 @@ make_region_pixelbuffer_from_resource(const std::string& filename, int x, int y,
 
     return target;
   }
-  catch (CL_Error& err)
+  catch (const CL_Error& err)
   {
     std::cout << "CL_Error: " << err.message << std::endl;
     return CL_PixelBuffer();
@@ -92,7 +92,7 @@ make_sprite_from_resource(const std::string& filename, CL_ResourceManager& resou
 {
   try {
     return CL_Sprite(filename, &resources);
-  } catch (CL_Error& err) {
+  } catch (const CL_Error& err) {
     std::cout << "CL_Error: " << err.message << std::endl;
     return CL_Sprite();
   }
@@ -105,7 +105,7 @@ make_pixelbuffer_from_resource(const std::string& filename, CL_ResourceManager& 
     // FIXME: expects a sprite, won't work with 'surface'
     CL_SpriteDescription descr(filename, &resources);
     return CL_PixelBuffer(descr.get_frames().begin()->first);
-  } catch (CL_Error& err) {
+  } catch (const CL_Error& err) {
     std::cout << "CL_Error: " << err.message << std::endl;
     return CL_PixelBuffer();
   }
@@ -126,7 +126,7 @@ make_region_pixelbuffer(const CL_PixelBuffer& buffer, int x, int y, int w, int h
     blit_opaque(target, buffer, -x, -y);
 
     return target;
-  } catch (CL_Error& err) {
+  } catch (const CL_Error& err) {
     std::cout << "CL_Error: " << err.message << std::endl;
     return CL_PixelBuffer();
   }

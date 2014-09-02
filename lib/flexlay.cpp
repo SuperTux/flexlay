@@ -77,7 +77,7 @@ Flexlay::init(const std::string& title, int width, int height, bool fullscreen_,
     resources = CL_ResourceManager(datadir + "/flexlay.xml");
     Fonts::verdana11        = CL_Font("verdana11_black", &resources);
     Fonts::verdana11_yellow = CL_Font("verdana11_yellow", &resources);
-  } catch (CL_Error& err) {
+  } catch (const CL_Error& err) {
     std::cout << "CL_Error: " << err.message << std::endl;
   }
 }

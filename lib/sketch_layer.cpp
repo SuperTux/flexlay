@@ -57,7 +57,7 @@ public:
   {
     try {
       canvas = new CL_Canvas(surface);
-    } catch(CL_Error& err) {
+    } catch(const CL_Error& err) {
       std::cout << "CL_Error: " << err.message << std::endl;
     }
   }

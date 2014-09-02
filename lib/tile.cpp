@@ -165,7 +165,7 @@ Tile::get_pixelbuffer()
         }
         return impl->pixelbuffer;
 
-      } catch(CL_Error& err) {
+      } catch(const CL_Error& err) {
         std::cout << "CL_Error: " << err.message << std::endl;
         std::cout << "          filename = " << impl->filename << std::endl;
         return CL_PixelBuffer();

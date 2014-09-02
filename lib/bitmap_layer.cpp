@@ -46,7 +46,7 @@ public:
     try {
       canvas = new CL_Canvas(surface);
       canvas->sync_surface();
-    } catch(CL_Error& err) {
+    } catch(const CL_Error& err) {
       std::cout << "CL_Error: " << err.message << std::endl;
       throw err;
     }
@@ -59,7 +59,7 @@ public:
     try {
       canvas = new CL_Canvas(surface);
       canvas->sync_surface();
-    } catch(CL_Error& err) {
+    } catch(const CL_Error& err) {
       std::cout << "CL_Error: " << err.message << std::endl;
       throw err;
     }
@@ -74,7 +74,7 @@ public:
       canvas->get_gc()->clear(CL_Color(0, 0, 0, 0));
       canvas->get_gc()->flush();
       canvas->sync_surface();
-    } catch(CL_Error& err) {
+    } catch(const CL_Error& err) {
       std::cout << "CL_Error: " << err.message << std::endl;
       throw err;
     }

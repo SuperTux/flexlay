@@ -55,9 +55,11 @@ std::cout << "CL_Error: " << err.message << std::endl;
 #include "gui/directory_view.hpp"
 #include "gui/menu.hpp"
 #include "gui/menubar.hpp"
-#include "gui/scrollbar.hpp"
 #include "graphic_context_state.hpp"
- 
+#include "gui/button_panel.hpp"
+#include "gui/file_dialog.hpp"
+#include "gui/generic_dialog.hpp"
+
 #include "tools/workspace_move_tool.hpp"
 #include "tools/layer_move_tool.hpp"
 #include "tools/sketch_stroke_tool.hpp"
@@ -186,7 +188,10 @@ VALUE CL_Point2Value(const CL_Point& arg)
 %include "gui/directory_view.hpp"
 %include "gui/menu.hpp"
 %include "gui/menubar.hpp"
-%include "gui/scrollbar.hpp"
+
+%include "gui/button_panel.hpp"
+%include "gui/file_dialog.hpp"
+%include "gui/generic_dialog.hpp"
 
 %include "tools/workspace_move_tool.hpp"
 %include "tools/layer_move_tool.hpp"

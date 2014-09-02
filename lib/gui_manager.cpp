@@ -19,6 +19,12 @@
 #include <ClanLib/guistylesilver.h>
 
 #include "globals.hpp"
+#include "gui/button_panel.hpp"
+#include "gui/editor_map_component.hpp"
+#include "gui/file_dialog.hpp"
+#include "gui/generic_dialog.hpp"
+#include "gui/menubar.hpp"
+#include "gui/minimap.hpp"
 #include "gui_manager.hpp"
 
 GUIManager* GUIManager::current_ = 0;
@@ -31,14 +37,12 @@ public:
   CL_GUIManager*      manager;
   CL_StyleManager*    style;
   CL_ResourceManager* resources;
-  CL_SlotContainer*   slot_container;
 };
 
 GUIManager::GUIManager()
   : impl(new GUIManagerImpl())
 {
   std::cout << "Creating GUIManager: " << datadir + "/gui/gui.xml" << std::endl;
-  impl->slot_container = new CL_SlotContainer();
   impl->resources = new CL_ResourceManager(datadir + "/gui/gui.xml");
   impl->style     = new CL_StyleManager_Silver(impl->resources);
   impl->manager   = new CL_GUIManager(impl->style);
@@ -55,7 +59,6 @@ GUIManager::~GUIManager()
   delete impl->manager;
   //delete style; FIXME: Memory hole?!
   //delete resources;  FIXME: Memory hole?!
-  delete impl->slot_container;
 }
 
 void
@@ -81,12 +84,6 @@ CL_Component*
 GUIManager::get_component()
 {
   return impl->components.top();
-}
-
-CL_SlotContainer*
-GUIManager::get_slot_container()
-{
-  return impl->slot_container;
 }
 
 void
@@ -125,6 +122,43 @@ void
 GUIManager::pop_component()
 {
   impl->components.pop();
+}
+
+Menubar*
+GUIManager::create_menubar()
+{
+  return new Menubar(CL_Point(0, 0), get_component());
+}
+
+ButtonPanel*
+GUIManager::create_button_panel(const Rect& rect, bool horizontal)
+{
+  return new ButtonPanel(rect, horizontal, get_component());
+}
+
+GenericDialog*
+GUIManager::create_generic_dialog(const std::string& title)
+{
+  return new GenericDialog(title, get_component());
+}
+
+EditorMapComponent*
+GUIManager::create_editor_map_component(const Rect& rect)
+{
+  return new EditorMapComponent(rect.to_cl(), get_component());
+}
+
+Minimap*
+GUIManager::create_minimap(EditorMapComponent* parent, const Rect& rect)
+{
+  return new Minimap(parent, rect.to_cl(), get_component());
+}
+
+FileDialog*
+GUIManager::create_filedialog(const std::string& titel,
+                              const std::string& ok_label, const std::string& cancel_label)
+{
+  return new FileDialog(titel, ok_label, cancel_label);
 }
 
 /* EOF */

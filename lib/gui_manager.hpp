@@ -19,7 +19,14 @@
 
 #include <memory>
 
+class ButtonPanel;
+class CL_Menu;
+class EditorMapComponent;
+class FileDialog;
 class GUIManagerImpl;
+class GenericDialog;
+class Menubar;
+class Minimap;
 
 class GUIManager
 {
@@ -46,7 +53,14 @@ public:
   bool is_visible();
 
   CL_Component* get_component();
-  CL_SlotContainer* get_slot_container();
+
+  Menubar* create_menubar();
+  ButtonPanel* create_button_panel(const Rect& rect, bool horizontal);
+  GenericDialog* create_generic_dialog(const std::string& title);
+  EditorMapComponent* create_editor_map_component(const Rect& rect);
+  Minimap* create_minimap(EditorMapComponent* parent, const Rect& rect);
+  FileDialog* create_filedialog(const std::string& titel, 
+                                const std::string& ok_label, const std::string& cancel_label);
 
 private:
   std::shared_ptr<GUIManagerImpl> impl;

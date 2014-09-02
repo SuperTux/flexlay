@@ -45,14 +45,14 @@ Help(opts.GenerateHelpText(env))
 #            LIBS=['flexlay'])
 
 libflexlay_env = env.Clone()
+libflexlay_env.Append(CPPPATH = ['.', '..'] + clanLib_env['CPPPATH'])
+libflexlay_env.Append(CXXFLAGS  = clanLib_env['CCFLAGS'])
+libflexlay_env.Append(LINKFLAGS = clanLib_env['LINKFLAGS'])
+libflexlay_env.Append(LIBPATH = ['$USER_LIBPATH'] + clanLib_env['LIBPATH'])
+libflexlay_env.Append(LIBS = clanLib_env['LIBS'])
 flexlay_lib = libflexlay_env.StaticLibrary(
     target = 'libflexlay.a',
-    source = Glob('*.cpp') + Glob('*/*.cpp'),
-    CPPPATH = ['.', '..'] + clanLib_env['CPPPATH'],
-    CXXFLAGS  = env['CXXFLAGS'] + clanLib_env['CCFLAGS'],
-    LINKFLAGS = clanLib_env['LINKFLAGS'],
-    LIBPATH=['$USER_LIBPATH'] + clanLib_env['LIBPATH'],
-    LIBS = clanLib_env['LIBS'])
+    source = Glob('*.cpp') + Glob('*/*.cpp'))
 
 flexlay_data = \
              glob.glob('../data/images/files/*.png') + \

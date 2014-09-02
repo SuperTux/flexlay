@@ -15,7 +15,7 @@ class SuperTuxGUI
   end
 
   def initialize(width, height)
-    @gui    = GUIManager.new()
+    @gui = GUIManager.new()
 
     @display_properties = DisplayProperties.new()
 
@@ -88,7 +88,7 @@ class SuperTuxGUI
 
     # FIXME: Use ButtonPanel here instead
     @toolbar = Panel.new(CL_Rect.new(CL_Point.new(0, 23+33),
-                CL_Size.new(33, 32*4+2)), @gui.get_component())
+                                     CL_Size.new(33, 32*4+2)), @gui.get_component())
 
     @paint = Icon.new(CL_Rect.new(CL_Point.new(2, 32*0+2), CL_Size.new(32, 32)), make_sprite("../data/images/tools/stock-tool-pencil-22.png"), "Some tooltip", @toolbar);
     @paint.set_callback(proc{ set_tilemap_paint_tool() })
@@ -107,9 +107,9 @@ class SuperTuxGUI
 
     create_menu()
 
-    @load_dialog = SimpleFileDialog.new("Load SuperTux Level", "Load", "Cancel", @gui.get_component())
+    @load_dialog = FileDialog.new("Load SuperTux Level", "Load", "Cancel", @gui.get_component())
     @load_dialog.set_filename($datadir + "levels/")
-    @save_dialog = SimpleFileDialog.new("Save SuperTux Level as...", "Save", "Cancel", @gui.get_component())
+    @save_dialog = FileDialog.new("Save SuperTux Level as...", "Save", "Cancel", @gui.get_component())
     @save_dialog.set_filename($datadir + "levels/")
 
     register_keyboard_shortcuts()
@@ -169,6 +169,7 @@ class SuperTuxGUI
   end
 
   def create_menu()
+    # @menu = @gui.create_menubar()
     @menu = CL_Menu.new(@gui.get_component())
     @menu.add_item("File/New...", method(:gui_level_new))
     @menu.add_item("File/Open...", method(:gui_level_load))
@@ -190,8 +191,8 @@ class SuperTuxGUI
   end
 
   def create_button_panel(rect)
-    button_panel = ButtonPanel.new(rect.left, rect.top,
-            rect.get_width(), rect.get_height(), true, @gui.get_component)
+    button_panel = @gui.create_button_panel(rect, true)
+    button_panel.init(rect.left, rect.top, rect.get_width(), rect.get_height(), true, @gui.get_component())
     
     # File Handling
     button_panel.add_icon("../data/images/icons24/stock_new.png",  proc{ self.gui_level_new() })
@@ -437,7 +438,7 @@ class SuperTuxGUI
 
   def gui_resize_level()
     level = @workspace.get_map().get_metadata()
-    dialog = GenericDialog.new("Resize Level", @gui.get_component())
+    dialog = $gui.create_generic_dialog("Resize Level")
     dialog.add_int("Width: ", level.width)
     dialog.add_int("Height: ", level.height)
     dialog.add_int("X: ", 0)
@@ -498,7 +499,7 @@ class SuperTuxGUI
 
   def gui_edit_level()
     level = @workspace.get_map().get_metadata().get_level()
-    dialog = GenericDialog.new("Edit Level", @gui.get_component())
+    dialog = $gui.create_generic_dialog("Edit Level")
 
     dialog.add_string("Name:", level.name)
     dialog.add_string("Author:", level.author)
@@ -513,7 +514,7 @@ class SuperTuxGUI
 
   def gui_edit_sector()
     level = @workspace.get_map().get_metadata().get_level()
-    dialog = GenericDialog.new("Edit Sector", @gui.get_component())
+    dialog = $gui.create_generic_dialog("Edit Sector")
     
     dialog.add_string("Name: ",   level.current_sector.name)
     dialog.add_string("Music: ",   level.current_sector.music)

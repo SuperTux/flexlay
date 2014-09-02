@@ -98,7 +98,8 @@ end
 class ButtonPanel
   attr_reader :panel, :items
 
-  def initialize(x, y, width, height, horizontal, parent, &block)
+  def init(x, y, width, height, horizontal, parent, &block)
+    puts "ButtonPanel in Ruby"
     @panel = Panel.new(CL_Rect.new(CL_Point.new(x, y), CL_Size.new(width, height)), parent)
     @pos   = 2
     @horizontal = horizontal
@@ -185,7 +186,7 @@ class ButtonPanel
 end
 
 # Very simple FileDialog, mainly a placeholder until the real thing gets ready.
-class SimpleFileDialog
+class FileDialog
   @window   = nil
   @inputbox = nil
   @ok_button     = nil

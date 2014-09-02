@@ -76,26 +76,24 @@ class CL_DisplayWindow;
     Flexlay 'batchable' so that it can run without a GUI */
 class Flexlay
 {
+public:
+  static Flexlay* current() { return current_; }
+private:
+  static Flexlay* current_;
+
 private:
   CL_DisplayWindow* window;
-
-public:
   int  screen_width;
   int  screen_height;
   bool fullscreen;
   bool allow_resize;
   bool use_opengl;
+  boost::signals2::signal<void (int, int)> m_sig_resize;
 
+public:
   CL_ResourceManager resources;
 
-#ifndef SWIG
-  boost::signals2::signal<void (int, int)> m_sig_resize;
-#endif
-
-  static Flexlay* current() { return current_; }
 public:
-  static Flexlay* current_;
-
   Flexlay();
 
   boost::signals2::signal<void (int, int)>& sig_resize();

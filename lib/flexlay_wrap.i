@@ -85,6 +85,11 @@ std::cout << "CL_Error: " << err.message << std::endl;
 #include "tools/zoom2_tool.hpp"
 #include "objmap_path_node.hpp"
 
+#include "math/rect.hpp"
+#include "math/size.hpp"
+#include "math/point.hpp"
+#include "math/origin.hpp"
+
 // #include "netpanzer.hpp" 
 #include "helper.hpp"
 

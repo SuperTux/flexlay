@@ -104,12 +104,12 @@ class PaintGUI
 
     connect_v2(@editor_map.sig_on_key("a"), proc{ |x,y|
                  gc = @editor_map.get_workspace().get_gc_state()
-                 gc.set_zoom(CL_Pointf.new(x, y), gc.get_zoom() * 1.25)
+                 gc.set_zoom(Pointf.new(x, y), gc.get_zoom() * 1.25)
                })
 
     connect_v2(@editor_map.sig_on_key("o"), proc{ |x,y|
                  gc = @editor_map.get_workspace().get_gc_state()
-                 gc.set_zoom(CL_Pointf.new(x, y), gc.get_zoom() / 1.25)
+                 gc.set_zoom(Pointf.new(x, y), gc.get_zoom() / 1.25)
                })
 
     connect_v2(@editor_map.sig_on_key("escape"),  proc{ |x, y| puts "bye, bye"})

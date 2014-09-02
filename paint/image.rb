@@ -4,7 +4,7 @@ class Image
 
   def initialize(filename = nil)
     @editormap = EditorMap.new(true)
-    @editormap.set_bounding_rect(CL_Rect.new(0, 0, 1024, 768))
+    @editormap.set_bounding_rect(Rect.new(0, 0, 1024, 768))
     @editormap.set_background_color(CL_Color.new(255, 255, 255))
 
     @objectmap = ObjectLayer.new()

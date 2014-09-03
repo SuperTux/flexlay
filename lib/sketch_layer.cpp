@@ -25,7 +25,6 @@
 #include <ClanLib/Display/pixel_format.h>
 #include <ClanLib/Display/canvas.h>
 #include <ClanLib/Display/blend_func.h>
-#include <ClanLib/Display/graphic_context.h>
 #include <ClanLib/Display/display_window.h>
 
 #include "color.hpp"

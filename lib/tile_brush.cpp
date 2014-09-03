@@ -16,8 +16,6 @@
 
 #include "tile_brush.hpp"
 
-#include <ClanLib/Core/Math/rect.h>
-
 #include "math/rect.hpp"
 
 TileBrush::TileBrush()

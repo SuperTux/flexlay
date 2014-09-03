@@ -17,9 +17,6 @@
 #ifndef HEADER_FLEXLAY_EDITOR_MAP_HPP
 #define HEADER_FLEXLAY_EDITOR_MAP_HPP
 
-#include <ClanLib/Core/Math/rect.h>
-#include <ClanLib/Display/color.h>
-
 #include <boost/signals2.hpp>
 
 #include "layer.hpp"

@@ -17,8 +17,8 @@
 #ifndef HEADER_FLEXLAY_TILE_HPP
 #define HEADER_FLEXLAY_TILE_HPP
 
-#include <ClanLib/Display/color.h>
 #include <memory>
+
 #include "color.hpp"
 
 class TileImpl;

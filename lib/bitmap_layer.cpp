@@ -18,9 +18,10 @@
 
 #include <assert.h>
 
-#include <ClanLib/gl.h>
 #include <ClanLib/Core/System/error.h>
 #include <ClanLib/Display/canvas.h>
+#include <ClanLib/Display/graphic_context.h>
+#include <ClanLib/Display/pixel_format.h>
 
 #include "color.hpp"
 #include "graphic_context.hpp"

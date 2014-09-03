@@ -17,9 +17,6 @@
 #ifndef HEADER_FLEXLAY_OBJMAP_RECT_OBJECT_HPP
 #define HEADER_FLEXLAY_OBJMAP_RECT_OBJECT_HPP
 
-#include <ClanLib/Core/Math/rect.h>
-#include <ClanLib/Display/color.h>
-
 #include "objmap_object.hpp"
 #include "objmap_object_impl.hpp"
 

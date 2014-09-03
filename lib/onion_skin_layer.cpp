@@ -23,6 +23,7 @@
 #include <ClanLib/Display/pixel_format.h>
 #include <ClanLib/Display/surface.h>
 #include <ClanLib/Display/canvas.h>
+#include <ClanLib/Display/graphic_context.h>
 
 #include "gui/editor_map_component.hpp"
 #include "layer_impl.hpp"

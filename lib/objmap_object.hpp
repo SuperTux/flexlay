@@ -17,7 +17,6 @@
 #ifndef HEADER_FLEXLAY_OBJMAP_OBJECT_HPP
 #define HEADER_FLEXLAY_OBJMAP_OBJECT_HPP
 
-#include <ClanLib/Display/graphic_context.h>
 #include <boost/signals2.hpp>
 
 #include "math/rect.hpp"

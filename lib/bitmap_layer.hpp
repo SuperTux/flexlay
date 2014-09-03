@@ -17,6 +17,9 @@
 #ifndef HEADER_FLEXLAY_BITMAP_LAYER_HPP
 #define HEADER_FLEXLAY_BITMAP_LAYER_HPP
 
+#include <ClanLib/Display/surface.h>
+#include <ClanLib/Display/pixel_buffer.h>
+
 #include "objmap_object.hpp"
 #include "stroke.hpp"
 

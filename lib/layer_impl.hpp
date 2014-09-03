@@ -17,9 +17,6 @@
 #ifndef HEADER_FLEXLAY_LAYER_IMPL_HPP
 #define HEADER_FLEXLAY_LAYER_IMPL_HPP
 
-#include <ClanLib/Core/Math/rect.h>
-#include <ClanLib/Display/graphic_context.h>
-
 #include "meta_data.hpp"
 #include "math/point.hpp"
 #include "math/rect.hpp"

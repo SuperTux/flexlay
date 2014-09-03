@@ -18,7 +18,6 @@
 #define HEADER_FLEXLAY_STROKE_HPP
 
 #include <vector>
-#include <ClanLib/Core/Math/rect.h>
 #include <ClanLib/Core/System/system.h>
 #include <memory>
 

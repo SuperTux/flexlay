@@ -17,8 +17,6 @@
 #ifndef HEADER_FLEXLAY_VIEWPORT_HPP
 #define HEADER_FLEXLAY_VIEWPORT_HPP
 
-#include <ClanLib/Core/Math/rect.h>
-#include <ClanLib/Core/Math/point.h>
 #include <ClanLib/GUI/component.h>
 
 class ViewportImpl;

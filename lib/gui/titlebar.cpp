@@ -100,7 +100,8 @@ TitlebarImpl::on_mouse_move(const CL_InputEvent& event)
 void
 TitlebarImpl::draw()
 {
-  CL_Display::push_translate(parent->get_screen_x(), parent->get_screen_y());
+  Display::push_modelview();
+  Display::add_translate(parent->get_screen_x(), parent->get_screen_y());
 
   // FIXME: Hack should be done via has_mouse_over(), but that doesn't include child components
   if (parent->get_parent()->get_position().is_inside(Point(CL_Mouse::get_x(),

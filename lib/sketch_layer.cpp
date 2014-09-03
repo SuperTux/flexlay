@@ -50,7 +50,7 @@ public:
   Pointf   last_pos;
 
   SketchLayerImpl() :
-    surface(PixelBuffer(CL_Display::get_width(), CL_Display::get_height())),
+    surface(PixelBuffer(Display::get_width(), Display::get_height())),
     canvas(0),
     last_zoom(0.0f),
     last_rot(0)

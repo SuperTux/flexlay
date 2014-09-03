@@ -75,7 +75,8 @@ Icon::sig_clicked()
 void
 IconImpl::draw()
 {
-  CL_Display::push_translate(parent->get_screen_x(), parent->get_screen_y());
+  Display::push_modelview();
+  Display::add_translate(parent->get_screen_x(), parent->get_screen_y());
   Rect rect(Point(0, 0), Size(parent->get_width()-4, parent->get_height()-4));
 
   sprite.set_alignment(origin_center);

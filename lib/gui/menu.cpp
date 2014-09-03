@@ -207,7 +207,8 @@ MenuImpl::recalc_size()
 void
 MenuImpl::draw()
 {
-  CL_Display::push_translate(parent->get_screen_x(), parent->get_screen_y());
+  Display::push_modelview();
+  Display::add_translate(parent->get_screen_x(), parent->get_screen_y());
 
   Box::draw_window(Rect(Point(0, 0),
                         Size(parent->get_width(),

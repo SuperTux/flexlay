@@ -89,8 +89,9 @@ Scrollbar::set_pos(float pos)
 void
 ScrollbarImpl::draw()
 {
-  CL_Display::push_cliprect(parent->get_screen_rect());
-  CL_Display::push_translate(parent->get_screen_x(), parent->get_screen_y());
+  Display::push_cliprect(parent->get_screen_rect());
+  Display::push_modelview();
+  Display::add_translate(parent->get_screen_x(), parent->get_screen_y());
 
   Rect rect(Point(0, 0),
             Size(parent->get_width()-1,

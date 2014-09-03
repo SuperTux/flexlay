@@ -70,8 +70,9 @@ Minimap::draw()
   if (!impl->parent || impl->parent->get_workspace().is_null())
     return;
 
-  CL_Display::push_cliprect(get_screen_rect());
-  CL_Display::push_translate(get_screen_x(), get_screen_y());
+  Display::push_cliprect(get_screen_rect());
+  Display::push_modelview();
+  Display::add_translate(get_screen_x(), get_screen_y());
 
   // FIXME: Do this only on map changes
   if (impl->last_serial != impl->parent->get_workspace().get_map().get_serial())

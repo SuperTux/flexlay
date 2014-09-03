@@ -42,7 +42,8 @@ Panel::Panel(const Rect& rect, CL_Component* parent) :
 void
 PanelImpl::draw()
 {
-  CL_Display::push_translate(parent->get_screen_x(), parent->get_screen_y());
+  Display::push_modelview();
+  Display::add_translate(parent->get_screen_x(), parent->get_screen_y());
   Rect rect = parent->get_position();
   Box::draw_panel(Rect(Point(0, 0), Size(rect.get_width()-1, rect.get_height()-1)));
   Display::pop_modelview();

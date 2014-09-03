@@ -156,9 +156,10 @@ EditorMapComponentImpl::draw ()
 {
   if (workspace.get_map().is_null()) return;
 
-  CL_Display::push_cliprect(parent->get_screen_rect());
+  Display::push_cliprect(parent->get_screen_rect());
 
-  CL_Display::push_translate(parent->get_screen_x(), parent->get_screen_y());
+  Display::push_modelview();
+  Display::add_translate(parent->get_screen_x(), parent->get_screen_y());
 
   // Update scrollbars (FIXME: move me to function)
   scrollbar_v->set_range(0, workspace.get_map().get_bounding_rect().get_height());

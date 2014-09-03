@@ -37,6 +37,9 @@ public:
   static void push_cliprect(const Rect& rect);
   static void pop_cliprect();
 
+  static int get_width();
+  static int get_height();
+
   static void flush();
 
 private:

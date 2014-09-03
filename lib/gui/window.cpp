@@ -103,7 +103,8 @@ WindowImpl::on_resize(int, int)
 void
 WindowImpl::draw()
 {
-  CL_Display::push_translate(parent->get_screen_x(), parent->get_screen_y());
+  Display::push_modelview();
+  Display::add_translate(parent->get_screen_x(), parent->get_screen_y());
 
   Color highlight(255, 255, 255);
   Color midtone(150, 150, 150);

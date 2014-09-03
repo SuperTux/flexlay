@@ -69,6 +69,18 @@ Display::pop_cliprect()
   CL_Display::pop_cliprect();
 }
 
+int
+Display::get_width()
+{
+  return CL_Display::get_width();
+}
+
+int
+Display::get_height()
+{
+  return CL_Display::get_height();
+}
+
 void
 Display::flush()
 {

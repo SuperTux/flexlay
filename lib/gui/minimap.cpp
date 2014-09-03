@@ -85,8 +85,8 @@ Minimap::draw()
 
   if (1)
   { // Draw background color
-    Display::fill_rect(Rect(Point(0, 0), Size(get_width(), get_height())).to_cl(),
-                          Color(200, 200, 200, 225).to_cl());
+    Display::fill_rect(Rect(Point(0, 0), Size(get_width(), get_height())),
+                          Color(200, 200, 200, 225));
   }
 
   // FIXME: This doesn't work all that well
@@ -114,8 +114,8 @@ Minimap::draw()
           if (tile)
             Display::fill_rect(Rect(Point((x * tile_size) * get_width() / map_width,
                                              (y * tile_size) * get_height() / map_height),
-                                       Size(small_tile)).to_cl(),
-                                  tile->get_color().to_cl());
+                                       Size(small_tile)),
+                                  tile->get_color());
           CL_Display::flush();
         }
     }
@@ -128,10 +128,10 @@ Minimap::draw()
                            rect.top   * get_height() / map_height),
                      Size(rect.get_width() * get_width() /map_width,
                           rect.get_height()* get_height()/map_height));
-    Display::fill_rect(screen_rect.to_cl(),
-                          Color(255, 255, 0, 50).to_cl());
-    Display::draw_rect(screen_rect.to_cl(),
-                          Color(0, 0, 0).to_cl());
+    Display::fill_rect(screen_rect,
+                          Color(255, 255, 0, 50));
+    Display::draw_rect(screen_rect,
+                          Color(0, 0, 0));
   }
 
   Display::pop_modelview();

@@ -48,12 +48,12 @@ Slider::draw()
   Display::add_translate(get_screen_x(), get_screen_y());
 
   Display::fill_rect(Rect(Point(0, get_height()/2 - 2),
-                                Size(get_width(), 5)).to_cl(),
-                        Color(255, 255, 255, 255).to_cl());
+                                Size(get_width(), 5)),
+                        Color(255, 255, 255, 255));
 
   Display::fill_rect(Rect(Point(int(-2 + (value/(end-start)) * get_width()), 0),
-                                Size(5, get_height())).to_cl(),
-                        Color(0, 0, 0, 255).to_cl());
+                                Size(5, get_height())),
+                        Color(0, 0, 0, 255));
 
   Display::pop_modelview();
 }

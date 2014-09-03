@@ -18,14 +18,15 @@
 #define HEADER_DISPLAY_HPP
 
 class Rect;
+class Rectf;
 class Color;
 
 class Display
 {
 private:
 public:
-  static void draw_rect(const Rect& rect, const Color& color);
-  static void fill_rect(const Rect& rect, const Color& color);
+  static void draw_rect(const Rectf& rect, const Color& color);
+  static void fill_rect(const Rectf& rect, const Color& color);
 
   static void draw_line(float x1, float y1, float x2, float y2, const Color& color);
 

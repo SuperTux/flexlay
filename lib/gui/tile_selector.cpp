@@ -206,11 +206,11 @@ TileSelector::draw()
     if (brush.get_width() == 1 && brush.get_height() == 1
         && brush.at(0, 0) == tiles[i])
     {
-      Display::fill_rect(rect.to_cl(), Color(0,0,255, 100).to_cl());
+      Display::fill_rect(rect, Color(0,0,255, 100));
     }
     else if (mouse_over_tile == int(i) && has_mouse_over())
     {
-      Display::fill_rect(rect.to_cl(), Color(0,0,255, 20).to_cl());
+      Display::fill_rect(rect, Color(0,0,255, 20));
     }
   }
 
@@ -223,7 +223,7 @@ TileSelector::draw()
     rect.left   *= static_cast<int>(tileset.get_tile_size()*scale);
     rect.right  *= static_cast<int>(tileset.get_tile_size()*scale);
 
-    Display::fill_rect(rect.to_cl(), Color(0,0,255, 100).to_cl());
+    Display::fill_rect(rect, Color(0,0,255, 100));
   }
 
   Display::pop_modelview();

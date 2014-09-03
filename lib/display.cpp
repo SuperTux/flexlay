@@ -22,13 +22,13 @@
 #include "math/rect.hpp"
 
 void
-Display::draw_rect(const Rect& rect, const Color& color)
+Display::draw_rect(const Rectf& rect, const Color& color)
 {
   CL_Display::draw_rect(rect.to_cl(), color.to_cl());
 }
 
 void
-Display::fill_rect(const Rect& rect, const Color& color)
+Display::fill_rect(const Rectf& rect, const Color& color)
 {
   CL_Display::fill_rect(rect.to_cl(), color.to_cl());
 }

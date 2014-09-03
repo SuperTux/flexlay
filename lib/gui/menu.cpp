@@ -84,10 +84,10 @@ public:
 
   void draw(int x, int y, bool active)
   {
-    Display::fill_rect(Rect(Point(x, y), Size(parent->get_width()-7, 2)).to_cl(),
-                          Color(150, 150, 150).to_cl());
-    Display::fill_rect(Rect(Point(x, y+1), Size(parent->get_width()-7, 1)).to_cl(),
-                          Color(255, 255, 255).to_cl());
+    Display::fill_rect(Rect(Point(x, y), Size(parent->get_width()-7, 2)),
+                          Color(150, 150, 150));
+    Display::fill_rect(Rect(Point(x, y+1), Size(parent->get_width()-7, 1)),
+                          Color(255, 255, 255));
   }
 
   int get_width()  { return 10; }
@@ -114,8 +114,8 @@ public:
 
   void draw(int x, int y, bool active) {
     if (active)
-      Display::fill_rect(Rect(Point(x, y-2), Size(parent->get_width() - 7, 18)).to_cl(),
-                            Color(255, 255, 255).to_cl());
+      Display::fill_rect(Rect(Point(x, y-2), Size(parent->get_width() - 7, 18)),
+                            Color(255, 255, 255));
     if (sprite)
     {
       sprite.draw(x+10, y+7);

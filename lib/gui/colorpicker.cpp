@@ -130,7 +130,7 @@ public:
     for(Colors::size_type i = 0; i < colors.size()-1; ++i)
     {
       Display::fill_rect(Rect(Point(0, i*psize),
-                              Size(get_width(), psize)).to_cl(),
+                              Size(get_width(), psize)),
                          CL_Gradient(colors[i].to_cl(),
                                      colors[i].to_cl(),
                                      colors[i+1].to_cl(),
@@ -382,8 +382,8 @@ ColorPicker::draw()
   float pwidth  = get_width()/11.0;
   float pheight = get_height()/11.0;
   Display::fill_rect(Rect(Point(int(pwidth*10), int(pheight*10)),
-                             Size(int(pwidth), int(pheight))).to_cl(),
-                        color.to_cl());
+                             Size(int(pwidth), int(pheight))),
+                        color);
 
   Display::pop_modelview();
 }

@@ -109,22 +109,22 @@ TileMapPaintToolImpl::draw()
 
             Display::fill_rect(Rect(Point((current_tile.x + x) * tile_size,
                                              (current_tile.y + y) * tile_size),
-                                       Size(tile_size, tile_size)).to_cl(),
-                                  Color(255, 255, 255, 100).to_cl());
+                                       Size(tile_size, tile_size)),
+                                  Color(255, 255, 255, 100));
           }
           else if (brush.is_opaque())
           {
             Display::fill_rect(Rect(Point((current_tile.x + x) * tile_size,
                                              (current_tile.y + y) * tile_size),
-                                       Size(tile_size, tile_size)).to_cl(),
-                                  Color(255, 255, 255, 100).to_cl());
+                                       Size(tile_size, tile_size)),
+                                  Color(255, 255, 255, 100));
           }
           else
           {
             Display::fill_rect(Rect(Point((current_tile.x + x) * tile_size,
                                                 (current_tile.y + y) * tile_size),
-                                       Size(tile_size, tile_size)).to_cl(),
-                                  Color(255, 255, 255, 50).to_cl());
+                                       Size(tile_size, tile_size)),
+                                  Color(255, 255, 255, 50));
           }
         }
       break;

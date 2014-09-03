@@ -100,8 +100,8 @@ TilemapLayerImpl::draw(GraphicContext& gc)
   if (this->background_color.get_alpha() != 0)
     Display::fill_rect(Rect(Point(0,0),
                             Size(this->field.get_width()  * tile_size,
-                                 this->field.get_height() * tile_size)).to_cl(),
-                       this->background_color.to_cl());
+                                 this->field.get_height() * tile_size)),
+                       this->background_color);
   CL_Display::flush();
 
   Rect rect(gc.state.get_clip_rect());
@@ -128,8 +128,8 @@ TilemapLayerImpl::draw(GraphicContext& gc)
 
             if (draw_attribute)
               Display::fill_rect(Rect(Point(x, y), Size(tileset.get_tile_size(),
-                                                        tileset.get_tile_size())).to_cl(),
-                                 tile->get_attribute_color().to_cl());
+                                                        tileset.get_tile_size())),
+                                 tile->get_attribute_color());
           }
         }
       }
@@ -149,8 +149,8 @@ TilemapLayerImpl::draw(GraphicContext& gc)
 
             if (draw_attribute)
               Display::fill_rect(Rect(Point(x, y), Size(tileset.get_tile_size(),
-                                                        tileset.get_tile_size())).to_cl(),
-                                 tile->get_attribute_color().to_cl());
+                                                        tileset.get_tile_size())),
+                                 tile->get_attribute_color());
           }
         }
       }
@@ -163,14 +163,14 @@ TilemapLayerImpl::draw(GraphicContext& gc)
                          y       * tile_size,
                          end_x   * tile_size,
                          y       * tile_size,
-                         y % 2 ? Color(150, 150, 150).to_cl() : Color(255, 255, 255).to_cl());
+                         y % 2 ? Color(150, 150, 150) : Color(255, 255, 255));
 
     for (int x = start_x; x <= end_x; ++x)
       Display::draw_line(x       * tile_size,
                          start_y * tile_size,
                          x       * tile_size,
                          end_y   * tile_size,
-                         x % 2 ? Color(150, 150, 150).to_cl() : Color(255, 255, 255).to_cl());
+                         x % 2 ? Color(150, 150, 150) : Color(255, 255, 255));
   }
 
   CL_Display::flush();

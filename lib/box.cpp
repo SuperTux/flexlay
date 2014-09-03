@@ -30,75 +30,75 @@ Color shadow       (100, 100, 100);
 void
 Box::draw_button_up(const Rect& rect)
 {
-  Display::fill_rect(rect.to_cl(), background_hl.to_cl());
+  Display::fill_rect(rect, background_hl);
   Display::draw_line(rect.left, rect.top,
-                        rect.right, rect.top, highlight.to_cl());
+                     rect.right, rect.top, highlight);
   Display::draw_line(rect.left, rect.top,
-                        rect.left, rect.bottom, highlight.to_cl());
+                     rect.left, rect.bottom, highlight);
 
   Display::draw_line(rect.left, rect.bottom,
-                        rect.right, rect.bottom, shadow.to_cl());
+                     rect.right, rect.bottom, shadow);
   Display::draw_line(rect.right, rect.top,
-                        rect.right, rect.bottom, shadow.to_cl());
+                     rect.right, rect.bottom, shadow);
 }
 
 void
 Box::draw_button_down(const Rect& rect)
 {
-  Display::fill_rect(rect.to_cl(), background_sw.to_cl());
+  Display::fill_rect(rect, background_sw);
 
   Display::draw_line(rect.left, rect.bottom,
-                          rect.right, rect.bottom, highlight.to_cl());
+                     rect.right, rect.bottom, highlight);
   Display::draw_line(rect.right, rect.top,
-                        rect.right, rect.bottom, highlight.to_cl());
+                     rect.right, rect.bottom, highlight);
 
   Display::draw_line(rect.left, rect.top,
-                        rect.right, rect.top, shadow.to_cl());
+                     rect.right, rect.top, shadow);
   Display::draw_line(rect.left, rect.top,
-                        rect.left, rect.bottom, shadow.to_cl());
+                     rect.left, rect.bottom, shadow);
 }
 
 void
 Box::draw_button_neutral(const Rect& rect)
 {
-  Display::fill_rect(rect.to_cl(), background.to_cl());
+  Display::fill_rect(rect, background);
 }
 
 void
 Box::draw_panel(const Rect& rect)
 {
-  Display::fill_rect(rect.to_cl(), background.to_cl());
+  Display::fill_rect(rect, background);
   Display::draw_line(rect.left, rect.top,
-                        rect.right, rect.top, highlight.to_cl());
+                     rect.right, rect.top, highlight);
   Display::draw_line(rect.left, rect.top,
-                        rect.left, rect.bottom, highlight.to_cl());
+                     rect.left, rect.bottom, highlight);
 
   Display::draw_line(rect.left, rect.bottom,
-                        rect.right, rect.bottom, shadow.to_cl());
+                     rect.right, rect.bottom, shadow);
   Display::draw_line(rect.right, rect.top,
-                        rect.right, rect.bottom, shadow.to_cl());
+                     rect.right, rect.bottom, shadow);
 }
 
 void
 Box::draw_panel_down(const Rect& rect)
 {
-  Display::fill_rect(rect.to_cl(), background.to_cl());
+  Display::fill_rect(rect, background);
   Display::draw_line(rect.left, rect.top,
-                        rect.right, rect.top, shadow.to_cl());
+                     rect.right, rect.top, shadow);
   Display::draw_line(rect.left, rect.top,
-                        rect.left, rect.bottom, shadow.to_cl());
+                     rect.left, rect.bottom, shadow);
 
   Display::draw_line(rect.left, rect.bottom,
-                        rect.right, rect.bottom, highlight.to_cl());
+                     rect.right, rect.bottom, highlight);
   Display::draw_line(rect.right, rect.top,
-                        rect.right, rect.bottom, highlight.to_cl());
+                     rect.right, rect.bottom, highlight);
 }
 
 void
 Box::draw_window(const Rect& rect)
 {
   draw_panel(Rect(rect.left+1, rect.top+1, rect.right-2, rect.bottom-2));
-  Display::draw_rect(rect.to_cl(), Color(0, 0, 0).to_cl());
+  Display::draw_rect(rect, Color(0, 0, 0));
 }
 
 /* EOF */

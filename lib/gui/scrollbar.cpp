@@ -101,21 +101,20 @@ ScrollbarImpl::draw()
   {
     float scale = parent->get_width()/(max - min);
     Display::fill_rect(Rect(Point(int((pos-min-(pagesize/2)) * scale), 2),
-                               Size(int(pagesize*scale),
-                                    parent->get_height()-5)).to_cl(),
-                          Color(0, 0, 0).to_cl());
+                            Size(int(pagesize*scale),
+                                 parent->get_height()-5)),
+                       Color(0, 0, 0));
   }
   else if (orientation == Scrollbar::VERTICAL)
   {
     float scale = parent->get_height()/(max - min);
     Display::fill_rect(Rect(Point(2, int((pos-min-(pagesize/2)) * scale)),
-                               Size(parent->get_width()-5,
-                                    int(pagesize*scale))).to_cl(),
-                          Color(0, 0, 0).to_cl());
+                            Size(parent->get_width()-5,
+                                 int(pagesize*scale))),
+                       Color(0, 0, 0));
   }
 
-  Display::draw_rect(rect.to_cl(),
-                        Color(155, 155, 155).to_cl());
+  Display::draw_rect(rect, Color(155, 155, 155));
 
   Display::pop_modelview();
   CL_Display::pop_cliprect();

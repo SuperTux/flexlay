@@ -159,7 +159,7 @@ public:
 	Pointf()
 	{ return; }
 	
-	Pointf(const Point& p) 
+	Pointf(const Point& p)
 		: x((float)p.x), y((float)p.y)
 	{}
 

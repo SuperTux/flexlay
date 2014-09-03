@@ -25,7 +25,7 @@
 class ColorPickerAlpha;
 class ColorPickerBrightness;
 class ColorPickerHue;
-class Rect; 
+class Rect;
 
 class ColorPicker : public CL_Component
 {

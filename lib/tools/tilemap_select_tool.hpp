@@ -17,11 +17,8 @@
 #ifndef HEADER_FLEXLAY_TOOLS_TILEMAP_SELECT_TOOL_HPP
 #define HEADER_FLEXLAY_TOOLS_TILEMAP_SELECT_TOOL_HPP
 
-#include <ClanLib/Core/Math/rect.h>
-#include <ClanLib/Core/Math/point.h>
-
 #include "tool.hpp"
-#include "../gui/tile_selection.hpp"
+#include "gui/tile_selection.hpp"
 
 class TileMapSelectToolImpl;
 

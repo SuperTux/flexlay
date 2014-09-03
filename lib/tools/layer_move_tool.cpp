@@ -16,12 +16,10 @@
 
 #include "layer_move_tool.hpp"
 
-#include <ClanLib/Core/Math/point.h>
-#include <ClanLib/Display/display.h>
-
 #include "display.hpp"
 #include "editor_map.hpp"
 #include "gui/editor_map_component.hpp"
+#include "input_event.hpp"
 #include "layer.hpp"
 #include "tool_impl.hpp"
 #include "workspace.hpp"
@@ -67,7 +65,7 @@ public:
     }
   }
 
-  void on_mouse_up  (const CL_InputEvent& event)
+  void on_mouse_up  (const InputEvent& event)
   {
     if (!layer.is_null())
     {
@@ -78,7 +76,7 @@ public:
     }
   }
 
-  void on_mouse_down(const CL_InputEvent& event)
+  void on_mouse_down(const InputEvent& event)
   {
     EditorMapComponent* parent = EditorMapComponent::current();
     Pointf pos = parent->screen2world(event.mouse_pos);
@@ -93,7 +91,7 @@ public:
     }
   }
 
-  void on_mouse_move(const CL_InputEvent& event)
+  void on_mouse_move(const InputEvent& event)
   {
     if (!layer.is_null())
     {
@@ -104,7 +102,7 @@ public:
     }
   }
 
-  void update(const CL_InputEvent& event)
+  void update(const InputEvent& event)
   {
     if (!layer.is_null())
     {

@@ -14,21 +14,32 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef HEADER_FILE_DIALOG_HPP
-#define HEADER_FILE_DIALOG_HPP
+#ifndef HEADER_INPUT_EVENT_HPP
+#define HEADER_INPUT_EVENT_HPP
 
-#include <string>
+#include <ClanLib/Display/input_event.h>
+#include <ClanLib/Display/keys.h>
 
-class FileDialog
+#include "math/point.hpp"
+
+class CL_InputEvent;
+
+class InputEvent
 {
 private:
 public:
-  FileDialog(const std::string& titel,
-             const std::string& ok_label, const std::string& cancel_label);
+  enum Type {
+    MOUSE_LEFT = CL_MOUSE_LEFT,
+    MOUSE_MIDDLE = CL_MOUSE_MIDDLE,
+    MOUSE_RIGHT = CL_MOUSE_RIGHT,
+    MOUSE_WHEEL_UP = CL_MOUSE_WHEEL_UP,
+    MOUSE_WHEEL_DOWN = CL_MOUSE_WHEEL_DOWN
+  };
 
-private:
-  FileDialog(const FileDialog&);
-  FileDialog& operator=(const FileDialog&);
+  InputEvent(const CL_InputEvent& ev);
+
+  Type id;
+  Point mouse_pos;
 };
 
 #endif

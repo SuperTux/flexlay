@@ -21,9 +21,10 @@
 #include <ClanLib/Display/input_event.h>
 #include "graphic_context_state.hpp"
 
-class WorkspaceImpl;
 class EditorMap;
+class InputEvent;
 class Tool;
+class WorkspaceImpl;
 
 class Workspace
 {
@@ -38,12 +39,12 @@ public:
 
   void draw(const GraphicContextState& state, CL_GraphicContext* gc);
 
-  void mouse_up  (const CL_InputEvent& event);
-  void mouse_down(const CL_InputEvent& event);
-  void mouse_move(const CL_InputEvent& event);
+  void mouse_up(const InputEvent& event);
+  void mouse_down(const InputEvent& event);
+  void mouse_move(const InputEvent& event);
 
-  void key_up(const CL_InputEvent& event);
-  void key_down(const CL_InputEvent& event);
+  void key_up(const InputEvent& event);
+  void key_down(const InputEvent& event);
 
   EditorMap get_map();
   void set_map(const EditorMap& m);

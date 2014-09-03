@@ -16,7 +16,7 @@
 
 #include "file_dialog.hpp"
 
-FileDialog::FileDialog(const std::string& titel, 
+FileDialog::FileDialog(const std::string& titel,
                        const std::string& ok_label, const std::string& cancel_label)
 {
 }

@@ -14,12 +14,10 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include <ClanLib/Display/keys.h>
-#include <ClanLib/Display/display.h>
-
 #include "color.hpp"
 #include "display.hpp"
 #include "gui/editor_map_component.hpp"
+#include "input_event.hpp"
 #include "tool_impl.hpp"
 #include "zoom_tool.hpp"
 
@@ -32,9 +30,9 @@ public:
 
   void draw();
 
-  void on_mouse_up(const CL_InputEvent& event);
-  void on_mouse_down(const CL_InputEvent& event);
-  void on_mouse_move(const CL_InputEvent& event);
+  void on_mouse_up(const InputEvent& event);
+  void on_mouse_down(const InputEvent& event);
+  void on_mouse_move(const InputEvent& event);
 };
 
 ZoomTool::ZoomTool()
@@ -65,11 +63,11 @@ ZoomToolImpl::draw()
 }
 
 void
-ZoomToolImpl::on_mouse_up(const CL_InputEvent& event)
+ZoomToolImpl::on_mouse_up(const InputEvent& event)
 {
   EditorMapComponent* parent = EditorMapComponent::current();
 
-  if (event.id != CL_MOUSE_RIGHT)
+  if (event.id != InputEvent::MOUSE_RIGHT)
   {
     switch (state)
     {
@@ -92,13 +90,13 @@ ZoomToolImpl::on_mouse_up(const CL_InputEvent& event)
 }
 
 void
-ZoomToolImpl::on_mouse_down(const CL_InputEvent& event)
+ZoomToolImpl::on_mouse_down(const InputEvent& event)
 {
   EditorMapComponent* parent = EditorMapComponent::current();
 
   switch(event.id)
   {
-    case CL_MOUSE_RIGHT:
+    case InputEvent::MOUSE_RIGHT:
       switch (state)
       {
         case NONE:
@@ -133,7 +131,7 @@ ZoomToolImpl::on_mouse_down(const CL_InputEvent& event)
 }
 
 void
-ZoomToolImpl::on_mouse_move(const CL_InputEvent& event)
+ZoomToolImpl::on_mouse_move(const InputEvent& event)
 {
   EditorMapComponent* parent = EditorMapComponent::current();
 

@@ -25,6 +25,7 @@
 
 #include "display.hpp"
 #include "editor_map.hpp"
+#include "input_event.hpp"
 #include "scrollbar.hpp"
 
 EditorMapComponent* EditorMapComponent::current_ = 0;
@@ -117,7 +118,7 @@ EditorMapComponentImpl::on_key_down(const CL_InputEvent& event)
     CL_InputEvent ev2 = event;
     ev2.mouse_pos = Point(CL_Mouse::get_x() - rect.left,
                           CL_Mouse::get_y() - rect.top).to_cl();
-    workspace.key_down(ev2);
+    workspace.key_down(InputEvent(ev2));
   }
 }
 
@@ -128,7 +129,7 @@ EditorMapComponentImpl::on_key_up(const CL_InputEvent& event)
   CL_InputEvent ev2 = event;
   ev2.mouse_pos = Point(CL_Mouse::get_x() - rect.left,
                         CL_Mouse::get_y() - rect.top).to_cl();
-  workspace.key_up(ev2);
+  workspace.key_up(InputEvent(ev2));
 }
 
 void

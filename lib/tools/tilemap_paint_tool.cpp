@@ -15,17 +15,17 @@
 //  along with this program; if not, write to the Free Software
 
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+
 #include "tilemap_paint_tool.hpp"
 
 #include <ClanLib/Display/keyboard.h>
-#include <ClanLib/Display/keys.h>
-#include <ClanLib/Display/display.h>
 #include <ClanLib/Display/sprite.h>
 
 #include "display.hpp"
 #include "editor_map.hpp"
 #include "gui/editor_map_component.hpp"
 #include "gui/tile_selection.hpp"
+#include "input_event.hpp"
 #include "paint_command.hpp"
 #include "tile.hpp"
 #include "tilemap_layer.hpp"
@@ -48,9 +48,9 @@ public:
 
   void draw();
 
-  void on_mouse_down(const CL_InputEvent& event);
-  void on_mouse_move(const CL_InputEvent& event);
-  void on_mouse_up  (const CL_InputEvent& event);
+  void on_mouse_down(const InputEvent& event);
+  void on_mouse_move(const InputEvent& event);
+  void on_mouse_up  (const InputEvent& event);
 };
 
 TileMapPaintTool::TileMapPaintTool()
@@ -138,7 +138,7 @@ TileMapPaintTool::get_brush()
 }
 
 void
-TileMapPaintToolImpl::on_mouse_down(const CL_InputEvent& event)
+TileMapPaintToolImpl::on_mouse_down(const InputEvent& event)
 {
   TilemapLayer tilemap = TilemapLayer::current();
 
@@ -152,7 +152,7 @@ TileMapPaintToolImpl::on_mouse_down(const CL_InputEvent& event)
       case TileMapPaintToolImpl::NONE:
         switch (event.id)
         {
-          case CL_MOUSE_LEFT:
+          case InputEvent::MOUSE_LEFT:
             mode = TileMapPaintToolImpl::PAINTING;
             parent->capture_mouse();
             command = new PaintCommand(tilemap, brush);
@@ -160,11 +160,14 @@ TileMapPaintToolImpl::on_mouse_down(const CL_InputEvent& event)
             last_draw = pos;
             break;
 
-          case CL_MOUSE_RIGHT:
+          case InputEvent::MOUSE_RIGHT:
             mode = TileMapPaintToolImpl::SELECTING;
             parent->capture_mouse();
 
             selection.start(tilemap, pos);
+            break;
+
+          default:
             break;
         }
         break;
@@ -176,7 +179,7 @@ TileMapPaintToolImpl::on_mouse_down(const CL_InputEvent& event)
 }
 
 void
-TileMapPaintToolImpl::on_mouse_move(const CL_InputEvent& event)
+TileMapPaintToolImpl::on_mouse_move(const InputEvent& event)
 {
   TilemapLayer tilemap = TilemapLayer::current();
 
@@ -208,7 +211,7 @@ TileMapPaintToolImpl::on_mouse_move(const CL_InputEvent& event)
 }
 
 void
-TileMapPaintToolImpl::on_mouse_up  (const CL_InputEvent& event)
+TileMapPaintToolImpl::on_mouse_up  (const InputEvent& event)
 {
   TilemapLayer tilemap = TilemapLayer::current();
 
@@ -221,7 +224,7 @@ TileMapPaintToolImpl::on_mouse_up  (const CL_InputEvent& event)
 
     switch (event.id)
     {
-      case CL_MOUSE_LEFT:
+      case InputEvent::MOUSE_LEFT:
         if (mode == PAINTING)
         {
           parent->release_mouse();
@@ -242,7 +245,7 @@ TileMapPaintToolImpl::on_mouse_up  (const CL_InputEvent& event)
         }
         break;
 
-      case CL_MOUSE_RIGHT:
+      case InputEvent::MOUSE_RIGHT:
         if (mode == SELECTING)
         {
           parent->release_mouse();
@@ -264,6 +267,9 @@ TileMapPaintToolImpl::on_mouse_up  (const CL_InputEvent& event)
 
           selection.clear();
         }
+        break;
+
+      default:
         break;
     }
   }

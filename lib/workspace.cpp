@@ -23,11 +23,12 @@
 #include <iostream>
 #include <map>
 
-#include "gui/editor_map_component.hpp"
 #include "editor_map.hpp"
 #include "editor_names.hpp"
-#include "tools/tool.hpp"
+#include "gui/editor_map_component.hpp"
+#include "input_event.hpp"
 #include "tileset.hpp"
+#include "tools/tool.hpp"
 
 Workspace Workspace::current_(false);
 
@@ -70,7 +71,7 @@ Workspace::draw(const GraphicContextState& state, CL_GraphicContext* gc)
 }
 
 void
-Workspace::mouse_up(const CL_InputEvent& event)
+Workspace::mouse_up(const InputEvent& event)
 {
   assert(impl.get());
 
@@ -80,7 +81,7 @@ Workspace::mouse_up(const CL_InputEvent& event)
 }
 
 void
-Workspace::mouse_move(const CL_InputEvent& event)
+Workspace::mouse_move(const InputEvent& event)
 {
   assert(impl.get());
 
@@ -92,7 +93,7 @@ Workspace::mouse_move(const CL_InputEvent& event)
 }
 
 void
-Workspace::mouse_down(const CL_InputEvent& event)
+Workspace::mouse_down(const InputEvent& event)
 {
   assert(impl.get());
 
@@ -102,18 +103,21 @@ Workspace::mouse_down(const CL_InputEvent& event)
 
   switch (event.id)
   {
-    case CL_MOUSE_WHEEL_UP:
+    case InputEvent::MOUSE_WHEEL_UP:
       EditorMapComponent::current()->zoom_in(event.mouse_pos);
       break;
 
-    case CL_MOUSE_WHEEL_DOWN:
+    case InputEvent::MOUSE_WHEEL_DOWN:
       EditorMapComponent::current()->zoom_out(event.mouse_pos);
+      break;
+
+   default:
       break;
   }
 }
 
 void
-Workspace::key_up(const CL_InputEvent& event)
+Workspace::key_up(const InputEvent& event)
 {
   assert(impl.get());
 
@@ -123,7 +127,7 @@ Workspace::key_up(const CL_InputEvent& event)
 }
 
 void
-Workspace::key_down(const CL_InputEvent& event)
+Workspace::key_down(const InputEvent& event)
 {
   assert(impl.get());
 

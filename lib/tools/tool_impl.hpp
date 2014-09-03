@@ -17,7 +17,7 @@
 #ifndef HEADER_FLEXLAY_TOOLS_TOOL_IMPL_HPP
 #define HEADER_FLEXLAY_TOOLS_TOOL_IMPL_HPP
 
-class CL_InputEvent;
+class InputEvent;
 
 class ToolImpl
 {
@@ -29,9 +29,9 @@ public:
 
   virtual void draw() {}
 
-  virtual void on_mouse_up  (const CL_InputEvent& event) {}
-  virtual void on_mouse_down(const CL_InputEvent& event) {}
-  virtual void on_mouse_move(const CL_InputEvent& event) {}
+  virtual void on_mouse_up  (const InputEvent& event) {}
+  virtual void on_mouse_down(const InputEvent& event) {}
+  virtual void on_mouse_move(const InputEvent& event) {}
 };
 
 #endif

@@ -125,7 +125,7 @@ public:
     Display::push_modelview();
     Display::add_translate(get_screen_x(), get_screen_y());
 
-#ifdef GRUMBEL      
+#ifdef GRUMBEL
     int psize = get_height()/6;
     for(Colors::size_type i = 0; i < colors.size()-1; ++i)
     {

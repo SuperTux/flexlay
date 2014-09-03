@@ -59,7 +59,7 @@ public:
   GenericDialog* create_generic_dialog(const std::string& title);
   EditorMapComponent* create_editor_map_component(const Rect& rect);
   Minimap* create_minimap(EditorMapComponent* parent, const Rect& rect);
-  FileDialog* create_filedialog(const std::string& titel, 
+  FileDialog* create_filedialog(const std::string& titel,
                                 const std::string& ok_label, const std::string& cancel_label);
 
 private:

@@ -14,10 +14,8 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-//#include <ClanLib/Display/keys.h>
-//#include <ClanLib/Display/display.h>
-
 #include "gui/editor_map_component.hpp"
+#include "input_event.hpp"
 #include "tool_impl.hpp"
 #include "zoom2_tool.hpp"
 
@@ -29,9 +27,9 @@ public:
   float old_zoom;
   void draw();
 
-  void on_mouse_up  (const CL_InputEvent& event);
-  void on_mouse_down(const CL_InputEvent& event);
-  void on_mouse_move(const CL_InputEvent& event);
+  void on_mouse_up  (const InputEvent& event);
+  void on_mouse_down(const InputEvent& event);
+  void on_mouse_move(const InputEvent& event);
 };
 
 Zoom2Tool::Zoom2Tool()
@@ -50,13 +48,13 @@ Zoom2ToolImpl::draw()
 }
 
 void
-Zoom2ToolImpl::on_mouse_up  (const CL_InputEvent& event)
+Zoom2ToolImpl::on_mouse_up  (const InputEvent& event)
 {
   active = false;
 }
 
 void
-Zoom2ToolImpl::on_mouse_down(const CL_InputEvent& event)
+Zoom2ToolImpl::on_mouse_down(const InputEvent& event)
 {
   active = true;
   click_pos = event.mouse_pos;
@@ -66,7 +64,7 @@ Zoom2ToolImpl::on_mouse_down(const CL_InputEvent& event)
 }
 
 void
-Zoom2ToolImpl::on_mouse_move(const CL_InputEvent& event)
+Zoom2ToolImpl::on_mouse_move(const InputEvent& event)
 {
   if (active)
   {

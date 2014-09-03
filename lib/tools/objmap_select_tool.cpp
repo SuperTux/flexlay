@@ -17,9 +17,7 @@
 #include "objmap_select_tool.hpp"
 
 #include <algorithm>
-#include <ClanLib/Display/keys.h>
 #include <ClanLib/Display/keyboard.h>
-#include <ClanLib/Display/display.h>
 
 #include "display.hpp"
 #include "editor_map.hpp"
@@ -27,6 +25,7 @@
 #include "gui/editor_map_component.hpp"
 #include "gui/editor_map_component.hpp"
 #include "gui_manager.hpp"
+#include "input_event.hpp"
 #include "object_delete_command.hpp"
 #include "object_move_command.hpp"
 #include "objmap_control_point.hpp"
@@ -56,9 +55,9 @@ public:
 
   void draw();
 
-  void on_mouse_up  (const CL_InputEvent& event);
-  void on_mouse_down(const CL_InputEvent& event);
-  void on_mouse_move(const CL_InputEvent& event);
+  void on_mouse_up  (const InputEvent& event);
+  void on_mouse_down(const InputEvent& event);
+  void on_mouse_move(const InputEvent& event);
 
   void on_selection_change();
 };
@@ -129,7 +128,7 @@ ObjMapSelectToolImpl::draw()
 }
 
 void
-ObjMapSelectToolImpl::on_mouse_up(const CL_InputEvent& event)
+ObjMapSelectToolImpl::on_mouse_up(const InputEvent& event)
 {
   ObjectLayer objmap = ObjectLayer::current();
 
@@ -139,7 +138,7 @@ ObjMapSelectToolImpl::on_mouse_up(const CL_InputEvent& event)
 
   switch (event.id)
   {
-    case CL_MOUSE_LEFT:
+    case InputEvent::MOUSE_LEFT:
       switch(state)
       {
         case DRAG:
@@ -169,7 +168,7 @@ ObjMapSelectToolImpl::on_mouse_up(const CL_InputEvent& event)
       }
       break;
 
-    case CL_MOUSE_RIGHT:
+    case InputEvent::MOUSE_RIGHT:
     {
       on_right_click(event.mouse_pos.x + parent->get_screen_rect().left,
                      event.mouse_pos.y + parent->get_screen_rect().top);
@@ -181,11 +180,14 @@ ObjMapSelectToolImpl::on_mouse_up(const CL_InputEvent& event)
         on_popup_menu_display(menu->get_menu());*/
     }
     break;
+
+    default:
+      break;
   }
 }
 
 void
-ObjMapSelectToolImpl::on_mouse_down(const CL_InputEvent& event)
+ObjMapSelectToolImpl::on_mouse_down(const InputEvent& event)
 {
   ObjectLayer objmap = ObjectLayer::current();
 
@@ -194,7 +196,7 @@ ObjMapSelectToolImpl::on_mouse_down(const CL_InputEvent& event)
 
   switch (event.id)
   {
-    case CL_MOUSE_LEFT:
+    case InputEvent::MOUSE_LEFT:
       switch(state)
       {
         default:
@@ -258,13 +260,16 @@ ObjMapSelectToolImpl::on_mouse_down(const CL_InputEvent& event)
       }
       break;
 
-    case CL_MOUSE_RIGHT:
+    case InputEvent::MOUSE_RIGHT:
+      break;
+
+   default:
       break;
   }
 }
 
 void
-ObjMapSelectToolImpl::on_mouse_move(const CL_InputEvent& event)
+ObjMapSelectToolImpl::on_mouse_move(const InputEvent& event)
 {
   EditorMapComponent* parent = EditorMapComponent::current();
   Pointf pos = parent->screen2world(event.mouse_pos);

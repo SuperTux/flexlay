@@ -18,7 +18,7 @@
 #define HEADER_FLEXLAY_TOOLS_TOOL_HPP
 
 class EditorMapComponent;
-class CL_InputEvent;
+class InputEvent;
 
 #include <memory>
 
@@ -35,9 +35,9 @@ public:
 
   void draw();
 
-  void on_mouse_up  (const CL_InputEvent& event);
-  void on_mouse_down(const CL_InputEvent& event);
-  void on_mouse_move(const CL_InputEvent& event);
+  void on_mouse_up  (const InputEvent& event);
+  void on_mouse_down(const InputEvent& event);
+  void on_mouse_move(const InputEvent& event);
 
 private:
   std::shared_ptr<ToolImpl> impl;

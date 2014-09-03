@@ -14,23 +14,12 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef HEADER_FILE_DIALOG_HPP
-#define HEADER_FILE_DIALOG_HPP
+#include "input_event.hpp"
 
-#include <string>
-
-class FileDialog
+InputEvent::InputEvent(const CL_InputEvent& ev) :
+  id(static_cast<Type>(ev.id)),
+  mouse_pos(ev.mouse_pos)
 {
-private:
-public:
-  FileDialog(const std::string& titel,
-             const std::string& ok_label, const std::string& cancel_label);
-
-private:
-  FileDialog(const FileDialog&);
-  FileDialog& operator=(const FileDialog&);
-};
-
-#endif
+}
 
 /* EOF */

@@ -16,17 +16,14 @@
 
 #include "tilemap_select_tool.hpp"
 
-#include <ClanLib/Display/display.h>
-#include <ClanLib/Display/keys.h>
-#include <ClanLib/Display/input_event.h>
-
+#include "editor_map.hpp"
+#include "editor_names.hpp"
 #include "globals.hpp"
+#include "gui/editor_map_component.hpp"
+#include "input_event.hpp"
+#include "tile_brush.hpp"
 #include "tilemap_layer.hpp"
 #include "tool_impl.hpp"
-#include "editor_map.hpp"
-#include "gui/editor_map_component.hpp"
-#include "tile_brush.hpp"
-#include "editor_names.hpp"
 
 class TileMapSelectToolImpl : public ToolImpl
 {
@@ -36,9 +33,9 @@ public:
 
   void draw();
 
-  void on_mouse_up  (const CL_InputEvent& event);
-  void on_mouse_down(const CL_InputEvent& event);
-  void on_mouse_move(const CL_InputEvent& event);
+  void on_mouse_up  (const InputEvent& event);
+  void on_mouse_down(const InputEvent& event);
+  void on_mouse_move(const InputEvent& event);
 };
 
 TileMapSelectTool::TileMapSelectTool()
@@ -61,13 +58,13 @@ TileMapSelectToolImpl::draw()
 }
 
 void
-TileMapSelectToolImpl::on_mouse_up  (const CL_InputEvent& event)
+TileMapSelectToolImpl::on_mouse_up  (const InputEvent& event)
 {
   EditorMapComponent* parent = EditorMapComponent::current();
 
   switch (event.id)
   {
-    case CL_MOUSE_LEFT:
+    case InputEvent::MOUSE_LEFT:
       creating_selection = false;
       parent->release_mouse();
 
@@ -77,13 +74,13 @@ TileMapSelectToolImpl::on_mouse_up  (const CL_InputEvent& event)
 }
 
 void
-TileMapSelectToolImpl::on_mouse_down(const CL_InputEvent& event)
+TileMapSelectToolImpl::on_mouse_down(const InputEvent& event)
 {
   EditorMapComponent* parent = EditorMapComponent::current();
 
   switch (event.id)
   {
-    case CL_MOUSE_LEFT:
+    case InputEvent::MOUSE_LEFT:
     {
       creating_selection = true;
       parent->capture_mouse();
@@ -92,7 +89,7 @@ TileMapSelectToolImpl::on_mouse_down(const CL_InputEvent& event)
     }
     break;
 
-    case CL_MOUSE_RIGHT:
+    case InputEvent::MOUSE_RIGHT:
       if (!creating_selection)
         selection.clear();
       break;
@@ -100,7 +97,7 @@ TileMapSelectToolImpl::on_mouse_down(const CL_InputEvent& event)
 }
 
 void
-TileMapSelectToolImpl::on_mouse_move(const CL_InputEvent& event)
+TileMapSelectToolImpl::on_mouse_move(const InputEvent& event)
 {
   EditorMapComponent* parent = EditorMapComponent::current();
 

@@ -86,7 +86,7 @@ ObjMapControlPointImpl::get_bound_rect() const
 
   sprite.get_alignment(origin_e, align.x, align.y);
 
-  Point origin = calc_origin(static_cast<Origin>(origin_e), 
+  Point origin = calc_origin(static_cast<Origin>(origin_e),
                              Size(sprite.get_width(),
                                   sprite.get_height()));
   align.x = -align.x;

@@ -38,21 +38,21 @@ Tool::draw()
 }
 
 void
-Tool::on_mouse_up  (const CL_InputEvent& event)
+Tool::on_mouse_up  (const InputEvent& event)
 {
   if (impl.get())
     impl->on_mouse_up(event);
 }
 
 void
-Tool::on_mouse_down(const CL_InputEvent& event)
+Tool::on_mouse_down(const InputEvent& event)
 {
   if (impl.get())
     impl->on_mouse_down(event);
 }
 
 void
-Tool::on_mouse_move(const CL_InputEvent& event)
+Tool::on_mouse_move(const InputEvent& event)
 {
   if (impl.get())
     impl->on_mouse_move(event);

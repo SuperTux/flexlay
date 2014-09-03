@@ -110,7 +110,7 @@ public:
 	//param size: Size structure to construct this one from.
 	Sizef() { return; }
 
-	Sizef(const Size& s) 
+	Sizef(const Size& s)
 		: width((float)s.width),
 		  height((float)s.height)
 	{}

@@ -139,7 +139,7 @@ public:
 	bool is_inside(const Point &p) const { return (p.x >= left && p.y >= top && p.x <= right && p.y <= bottom); }
 
 	//: Returns true if rectangle passed is overlapping or inside this rectangle.
-	bool is_overlapped(const Rect &r) const 
+	bool is_overlapped(const Rect &r) const
 	{
 		return (r.left < right && r.right > left && r.top < bottom && r.bottom > top);
 	}
@@ -228,9 +228,9 @@ public:
 	Rectf() { left = right = top = bottom = 0.0f; }
 
 	Rectf(const Rect& rect)
-		: left((float)rect.left), 
-		  top((float)rect.top), 
-		  right((float)rect.right), 
+		: left((float)rect.left),
+		  top((float)rect.top),
+		  right((float)rect.right),
 		  bottom((float)rect.bottom)
 	{}
 
@@ -310,7 +310,7 @@ public:
 	bool is_inside(const Pointf &p) const { return (p.x >= left && p.y >= top && p.x <= right && p.y <= bottom); }
 	
 	//: Returns true if rectangle passed is overlapping or inside this rectangle.
-	bool is_overlapped(const Rectf &r) const 
+	bool is_overlapped(const Rectf &r) const
 	{
 		return (r.left < right && r.right > left && r.top < bottom && r.bottom > top);
 	}
@@ -383,9 +383,9 @@ public:
 };
 
 inline Rect::Rect(const Rectf& rect)
-	: left(static_cast<int>(rect.left)), 
-	  top(static_cast<int>(rect.top)), 
-	  right(static_cast<int>(rect.right)), 
+	: left(static_cast<int>(rect.left)),
+	  top(static_cast<int>(rect.top)),
+	  right(static_cast<int>(rect.right)),
 	  bottom(static_cast<int>(rect.bottom))
 {}
 

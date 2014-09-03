@@ -38,7 +38,7 @@ Display::draw_line(float x1, float y1, float x2, float y2, const Color& color)
 {
   CL_Display::draw_line(x1, y1, x2, y2, color.to_cl());
 }
- 
+
 void
 Display::push_modelview()
 {
@@ -50,7 +50,7 @@ Display::pop_modelview()
 {
   CL_Display::pop_modelview();
 }
-  
+
 void
 Display::add_translate(float x, float y)
 {

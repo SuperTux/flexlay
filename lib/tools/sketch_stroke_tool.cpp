@@ -16,7 +16,6 @@
 
 #include "sketch_stroke_tool.hpp"
 
-#include <ClanLib/Display/keys.h>
 #include <ClanLib/Display/mouse.h>
 #include <ClanLib/Display/display.h>
 #include <ClanLib/Display/display_window.h>
@@ -26,6 +25,7 @@
 #include "display.hpp"
 #include "drawer_properties.hpp"
 #include "gui/editor_map_component.hpp"
+#include "input_event.hpp"
 #include "sprite_stroke_drawer.hpp"
 
 class SketchStrokeToolImpl : public ToolImpl
@@ -67,9 +67,9 @@ public:
     }
   }
 
-  void on_mouse_up  (const CL_InputEvent& event)
+  void on_mouse_up  (const InputEvent& event)
   {
-    if (event.id == CL_MOUSE_LEFT && drawing)
+    if (event.id == InputEvent::MOUSE_LEFT && drawing)
     {
       drawing = false;
       EditorMapComponent* parent = EditorMapComponent::current();
@@ -81,8 +81,8 @@ public:
     }
   }
 
-  void on_mouse_down(const CL_InputEvent& event) {
-    if (event.id == CL_MOUSE_LEFT)
+  void on_mouse_down(const InputEvent& event) {
+    if (event.id == InputEvent::MOUSE_LEFT)
     {
       drawing = true;
       EditorMapComponent* parent = EditorMapComponent::current();
@@ -93,7 +93,7 @@ public:
     }
   }
 
-  void add_dab(const CL_InputEvent& event)
+  void add_dab(const InputEvent& event)
   {
     EditorMapComponent* parent = EditorMapComponent::current();
     Pointf p = parent->screen2world(event.mouse_pos);
@@ -129,7 +129,7 @@ public:
     stroke.add_dab(dab);
   }
 
-  void on_mouse_move(const CL_InputEvent& event)
+  void on_mouse_move(const InputEvent& event)
   {
     if (drawing)
     {

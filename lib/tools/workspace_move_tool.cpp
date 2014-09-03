@@ -16,12 +16,9 @@
 
 #include "workspace_move_tool.hpp"
 
-//#include <ClanLib/Core/Math/point.h>
-//#include <ClanLib/Core/Math/rect.h>
-#include "tool_impl.hpp"
-
 #include "gui/editor_map_component.hpp"
-//#include "workspace.hpp"
+#include "input_event.hpp"
+#include "tool_impl.hpp"
 
 class WorkspaceMoveToolImpl : public ToolImpl
 {
@@ -34,14 +31,14 @@ public:
 
   virtual void draw() {}
 
-  void on_mouse_up  (const CL_InputEvent& event);
-  void on_mouse_down(const CL_InputEvent& event);
-  void on_mouse_move(const CL_InputEvent& event);
-  void update(const CL_InputEvent& event);
+  void on_mouse_up  (const InputEvent& event);
+  void on_mouse_down(const InputEvent& event);
+  void on_mouse_move(const InputEvent& event);
+  void update(const InputEvent& event);
 };
 
 void
-WorkspaceMoveToolImpl::on_mouse_down(const CL_InputEvent& event)
+WorkspaceMoveToolImpl::on_mouse_down(const InputEvent& event)
 {
   scrolling = true;
   old_trans_offset = EditorMapComponent::current()->get_gc_state().get_pos();
@@ -50,7 +47,7 @@ WorkspaceMoveToolImpl::on_mouse_down(const CL_InputEvent& event)
 }
 
 void
-WorkspaceMoveToolImpl::on_mouse_up(const CL_InputEvent& event)
+WorkspaceMoveToolImpl::on_mouse_up(const InputEvent& event)
 {
   scrolling = false;
   update(event);
@@ -59,7 +56,7 @@ WorkspaceMoveToolImpl::on_mouse_up(const CL_InputEvent& event)
 }
 
 void
-WorkspaceMoveToolImpl::on_mouse_move(const CL_InputEvent& event)
+WorkspaceMoveToolImpl::on_mouse_move(const InputEvent& event)
 {
   if (scrolling)
   {
@@ -68,7 +65,7 @@ WorkspaceMoveToolImpl::on_mouse_move(const CL_InputEvent& event)
 }
 
 void
-WorkspaceMoveToolImpl::update(const CL_InputEvent& event)
+WorkspaceMoveToolImpl::update(const InputEvent& event)
 {
   GraphicContextState& gc_state = EditorMapComponent::current()->get_gc_state();
 

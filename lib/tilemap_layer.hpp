@@ -43,7 +43,7 @@ public:
   TilemapLayer(Tileset tileset, int w,  int h);
   ~TilemapLayer();
 
-  void draw(const GraphicContextState& state, CL_GraphicContext* gc);
+  void draw(GraphicContext& gc);
 
   Tileset get_tileset();
 

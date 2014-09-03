@@ -87,9 +87,9 @@ Rectf
 GraphicContextState::get_clip_rect() const
 {
   return Rectf(Pointf(-impl->offset.x,
-                            -impl->offset.y),
-                  Sizef(get_width()  / impl->zoom,
-                           get_height() / impl->zoom));
+                      -impl->offset.y),
+               Sizef(get_width()  / impl->zoom,
+                     get_height() / impl->zoom));
 }
 
 void

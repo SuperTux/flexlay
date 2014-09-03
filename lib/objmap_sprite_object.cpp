@@ -16,6 +16,7 @@
 
 #include "objmap_sprite_object.hpp"
 
+#include "graphic_context.hpp"
 #include "objmap_object_impl.hpp"
 
 class ObjMapSpriteObjectImpl : public ObjMapObjectImpl
@@ -23,7 +24,7 @@ class ObjMapSpriteObjectImpl : public ObjMapObjectImpl
 public:
   CL_Sprite sprite;
 
-  void draw(CL_GraphicContext* gc);
+  void draw(GraphicContext& gc);
   Rectf get_bound_rect() const;
 
   ObjMapObject*  duplicate(int handle_);
@@ -44,9 +45,9 @@ ObjMapSpriteObject::ObjMapSpriteObject(const CL_Sprite& sprite_,
 }
 
 void
-ObjMapSpriteObjectImpl::draw(CL_GraphicContext* gc)
+ObjMapSpriteObjectImpl::draw(GraphicContext& gc)
 {
-  sprite.draw(pos.x, pos.y, gc);
+  sprite.draw(pos.x, pos.y, gc.gc);
 }
 
 Rectf

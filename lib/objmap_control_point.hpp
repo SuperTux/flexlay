@@ -23,6 +23,7 @@
 #include "math/rect.hpp"
 #include "meta_data.hpp"
 
+class GraphicContext;
 class ObjMapControlPointImpl;
 
 /** An ObjMapControlPoint is used to control a property of an object,
@@ -39,7 +40,7 @@ public:
   Pointf get_pos() const;
   void set_pos(const Pointf& p);
   void set_pos_raw(const Pointf& p);
-  void draw(CL_GraphicContext* gc);
+  void draw(GraphicContext& gc);
 
   Rect get_bound_rect() const;
 

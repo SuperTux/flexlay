@@ -60,7 +60,7 @@ ObjMapObject::set_metadata(const MetaData& data_)
 }
 
 void
-ObjMapObject::draw(CL_GraphicContext* gc)
+ObjMapObject::draw(GraphicContext& gc)
 {
   if (impl.get())
     impl->draw(gc);

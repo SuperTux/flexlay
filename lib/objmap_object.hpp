@@ -23,6 +23,7 @@
 #include "math/rect.hpp"
 #include "meta_data.hpp"
 
+class GraphicContext;
 class ObjMapObjectImpl;
 
 class ObjMapObject
@@ -42,7 +43,7 @@ public:
   boost::signals2::signal<void (ObjMapObject)>& sig_select();
   boost::signals2::signal<void (ObjMapObject)>& sig_deselect();
 
-  void draw(CL_GraphicContext* gc);
+  void draw(GraphicContext& gc);
   Rectf get_bound_rect() const;
 
   void add_control_points();

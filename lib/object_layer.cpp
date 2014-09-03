@@ -17,6 +17,7 @@
 #include "object_layer.hpp"
 
 #include "layer_impl.hpp"
+#include "graphic_context.hpp"
 #include "graphic_context_state.hpp"
 
 ObjectLayer ObjectLayer::current_;
@@ -31,12 +32,12 @@ public:
   ObjectLayerImpl() {}
   virtual ~ObjectLayerImpl() {}
 
-  void draw(const GraphicContextState& state, CL_GraphicContext* gc);
+  void draw(GraphicContext& gc);
   bool has_bounding_rect() const { return false; }
 };
 
 ObjectLayer::ObjectLayer()
-  : impl(new ObjectLayerImpl())
+  : impl(new ObjectLayerImpl)
 {
 }
 
@@ -45,13 +46,15 @@ ObjectLayer::~ObjectLayer()
 }
 
 void
-ObjectLayerImpl::draw(const GraphicContextState& state, CL_GraphicContext* gc)
+ObjectLayerImpl::draw(GraphicContext& gc)
 {
   for(ObjectLayer::Objects::iterator i = objects.begin(); i != objects.end(); ++i)
   {
     // FIXME: Add clipping here
-    if (state.get_clip_rect().is_overlapped((*i).get_bound_rect()))
+    if (gc.state.get_clip_rect().is_overlapped((*i).get_bound_rect()))
+    {
       (*i).draw(gc);
+    }
   }
 
   for(ObjectLayer::ControlPoints::iterator i = control_points.begin(); i != control_points.end(); ++i)

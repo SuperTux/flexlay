@@ -17,7 +17,7 @@
 #ifndef HEADER_FLEXLAY_STROKE_DRAWER_IMPL_HPP
 #define HEADER_FLEXLAY_STROKE_DRAWER_IMPL_HPP
 
-class CL_GraphicContext;
+class GraphicContext;
 class Stroke;
 
 /** Abstract class which handles the drawing of a Stroke
@@ -28,7 +28,7 @@ private:
 public:
   virtual ~StrokeDrawerImpl() {}
 
-  virtual void draw(const Stroke& stroke, CL_GraphicContext* gc) =0;
+  virtual void draw(const Stroke& stroke, GraphicContext& gc) =0;
   virtual StrokeDrawerImpl* clone() const =0;
 };
 

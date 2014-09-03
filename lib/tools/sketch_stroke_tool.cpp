@@ -50,7 +50,9 @@ public:
       Display::push_modelview();
       Display::add_translate(BitmapLayer::current()->to_object().get_pos().x,
                                 BitmapLayer::current()->to_object().get_pos().y);
+#ifdef GRUMBEL
       stroke.draw(0);
+#endif
       Display::pop_modelview();
     }
     else

@@ -20,6 +20,7 @@
 #include <assert.h>
 #include <iostream>
 
+#include "graphic_context.hpp"
 #include "math/rect.hpp"
 #include "meta_data.hpp"
 
@@ -85,28 +86,30 @@ EditorMap::add_layer(const Layer& layer, int pos)
 }
 
 void
-EditorMap::draw_gui(CL_GraphicContext* gc)
+EditorMap::draw_gui(GraphicContext& gc)
 {
   Rect rect = get_bounding_rect();
 
   if (rect != Rect(0,0,0,0))
   {
-    gc->fill_rect(rect.to_cl(), impl->background_color.to_cl());
-    gc->draw_rect(rect.to_cl(), impl->foreground_color.to_cl());
+    gc.fill_rect(rect, impl->background_color);
+    gc.draw_rect(rect, impl->foreground_color);
   }
   else
   {
-    gc->clear(impl->background_color.to_cl());
+    gc.clear(impl->background_color);
   }
 }
 
 void
-EditorMap::draw(const GraphicContextState& state, CL_GraphicContext* gc)
+EditorMap::draw(GraphicContext& gc)
 {
   for(EditorMapImpl::Layers::iterator i = impl->layers.begin(); i != impl->layers.end(); ++i)
-    (*i).draw(state, gc);
+  {
+    (*i).draw(gc);
+  }
 
-  gc->flush();
+  gc.flush();
 }
 
 bool

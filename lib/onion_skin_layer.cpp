@@ -41,7 +41,7 @@ public:
   std::vector<EditorMap> editormaps;
   std::vector<Color>  color;
 
-  void draw(const GraphicContextState& state, CL_GraphicContext* gc)
+  void draw(GraphicContext& gc)
   {
     // FIXME: We need to stop onion layer to draw onto itself
     surface.set_blend_func(blend_one, blend_one_minus_src_alpha);
@@ -102,6 +102,7 @@ OnionSkinLayer::add_map(EditorMap editor_map, const Color& color)
 void
 OnionSkinLayer::update()
 {
+#ifdef GRUMBEL
   impl->canvas->get_gc()->clear(Color(0, 0, 0, 0).to_cl());
   for (std::vector<EditorMap>::size_type i = 0; i < impl->editormaps.size(); ++i)
   {
@@ -119,6 +120,7 @@ OnionSkinLayer::update()
     impl->surface2.draw(0, 0, impl->canvas->get_gc());
     impl->canvas->sync_surface();
   }
+#endif
 }
 
 Layer

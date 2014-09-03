@@ -25,6 +25,7 @@
 
 #include "editor_map.hpp"
 #include "editor_names.hpp"
+#include "graphic_context.hpp"
 #include "gui/editor_map_component.hpp"
 #include "input_event.hpp"
 #include "tileset.hpp"
@@ -53,21 +54,23 @@ Workspace::Workspace(bool create) :
 }
 
 void
-Workspace::draw(const GraphicContextState& state, CL_GraphicContext* gc)
+Workspace::draw(GraphicContext& gc)
 {
   assert(impl.get());
 
-  CL_Display::clear(Color(100, 0, 100).to_cl());
+  gc.clear(Color(100, 0, 100));
 
-  impl->editor_map.draw_gui(CL_Display::get_current_window()->get_gc());
-  impl->editor_map.draw(EditorMapComponent::current()->get_gc_state(), CL_Display::get_current_window()->get_gc());
+  impl->editor_map.draw_gui(gc);
+  impl->editor_map.draw(gc);
 
   // FIXME: Only draw active tool?!
   for(WorkspaceImpl::Tools::iterator it = impl->tools.begin();
       it != impl->tools.end(); ++it)
+  {
     it->second.draw();
+  }
 
-  CL_Display::flush();
+  gc.flush();
 }
 
 void

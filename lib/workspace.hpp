@@ -17,11 +17,10 @@
 #ifndef HEADER_FLEXLAY_WORKSPACE_HPP
 #define HEADER_FLEXLAY_WORKSPACE_HPP
 
-#include <ClanLib/Core/System/sharedptr.h>
-#include <ClanLib/Display/input_event.h>
 #include "graphic_context_state.hpp"
 
 class EditorMap;
+class GraphicContext;
 class InputEvent;
 class Tool;
 class WorkspaceImpl;
@@ -37,7 +36,7 @@ public:
 
   Workspace(bool create = false);
 
-  void draw(const GraphicContextState& state, CL_GraphicContext* gc);
+  void draw(GraphicContext& gc);
 
   void mouse_up(const InputEvent& event);
   void mouse_down(const InputEvent& event);

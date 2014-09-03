@@ -32,7 +32,7 @@ public:
   ObjMapObjectImpl();
   virtual ~ObjMapObjectImpl();
 
-  virtual void draw(CL_GraphicContext* gc) =0;
+  virtual void draw(GraphicContext& gc) =0;
   virtual Rectf get_bound_rect() const  =0;
 
   virtual void add_control_points();

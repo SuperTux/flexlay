@@ -19,9 +19,10 @@
 #include <functional>
 
 #include "color.hpp"
+#include "flexlay.hpp"
+#include "graphic_context.hpp"
 #include "math/size.hpp"
 #include "object_layer.hpp"
-#include "flexlay.hpp"
 
 class ObjMapRectObjectImpl : public ObjMapObjectImpl
 {
@@ -118,7 +119,7 @@ public:
     }
   }
 
-  void draw(CL_GraphicContext* gc);
+  void draw(GraphicContext& gc);
   Rectf get_bound_rect() const;
   void add_control_points();
   void update_control_points();
@@ -210,9 +211,9 @@ ObjMapRectObject::ObjMapRectObject(const Rect&  rect_,
 }
 
 void
-ObjMapRectObjectImpl::draw(CL_GraphicContext* gc)
+ObjMapRectObjectImpl::draw(GraphicContext& gc)
 {
-  gc->fill_rect(get_bound_rect().to_cl(), color.to_cl());
+  gc.fill_rect(Rect(get_bound_rect()), color);
 }
 
 Rectf

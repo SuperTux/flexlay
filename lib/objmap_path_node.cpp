@@ -17,6 +17,7 @@
 #include "objmap_path_node.hpp"
 
 #include "color.hpp"
+#include "graphic_context.hpp"
 #include "objmap_object_impl.hpp"
 
 class ObjMapPathNodeImpl : public ObjMapObjectImpl
@@ -27,7 +28,7 @@ public:
 
   ObjMapPathNodeImpl();
 
-  void draw(CL_GraphicContext* gc);
+  void draw(GraphicContext& gc);
   Rectf get_bound_rect() const override;
 };
 
@@ -38,22 +39,22 @@ ObjMapPathNodeImpl::ObjMapPathNodeImpl()
 }
 
 void
-ObjMapPathNodeImpl::draw(CL_GraphicContext* gc)
+ObjMapPathNodeImpl::draw(GraphicContext& gc)
 {
-  gc->fill_rect(Rect(Point(pos) - Point(16,16), Size(32, 32)).to_cl(),
-                Color(200, 255, 200).to_cl());
+  gc.fill_rect(Rect(Point(pos) - Point(16,16), Size(32, 32)),
+               Color(200, 255, 200));
   if (next)
   {
-    gc->draw_line(static_cast<int>(pos.x), static_cast<int>(pos.y),
-                  static_cast<int>((pos.x + next->pos.x)/2),
-                  static_cast<int>((pos.y+next->pos.y)/2),
-                  Color(255, 255, 0).to_cl());
+    gc.draw_line(static_cast<int>(pos.x), static_cast<int>(pos.y),
+                 static_cast<int>((pos.x + next->pos.x)/2),
+                 static_cast<int>((pos.y+next->pos.y)/2),
+                 Color(255, 255, 0).to_cl());
 
-    gc->draw_line(static_cast<int>((pos.x + next->pos.x)/2),
-                  static_cast<int>((pos.y+next->pos.y)/2),
-                  static_cast<int>(next->pos.x),
-                  static_cast<int>(next->pos.y),
-                  Color(255, 0, 0).to_cl());
+    gc.draw_line(static_cast<int>((pos.x + next->pos.x)/2),
+                 static_cast<int>((pos.y+next->pos.y)/2),
+                 static_cast<int>(next->pos.x),
+                 static_cast<int>(next->pos.y),
+                 Color(255, 0, 0).to_cl());
   }
 }
 

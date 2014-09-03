@@ -142,7 +142,7 @@ Stroke::get_dab_count() const
 }
 
 void
-Stroke::draw(CL_GraphicContext* gc) const
+Stroke::draw(GraphicContext& gc) const
 {
   if (!impl->drawer.is_null())
   {

@@ -20,9 +20,10 @@
 #include <ClanLib/gl.h>
 #include <assert.h>
 
-#include "stroke_drawer_impl.hpp"
-#include "drawer_properties.hpp"
 #include "bitmap_layer.hpp"
+#include "drawer_properties.hpp"
+#include "graphic_context.hpp"
+#include "stroke_drawer_impl.hpp"
 
 CL_ProgramObject* program = 0;
 
@@ -33,7 +34,7 @@ public:
 
   SpriteStrokeDrawerImpl() {}
 
-  void draw(const Stroke& stroke, CL_GraphicContext* gc);
+  void draw(const Stroke& stroke, GraphicContext& gc);
 
   StrokeDrawerImpl* clone() const;
 };
@@ -51,7 +52,7 @@ SpriteStrokeDrawer::SpriteStrokeDrawer()
 }
 
 void
-SpriteStrokeDrawerImpl::draw(const Stroke& stroke, CL_GraphicContext* gc)
+SpriteStrokeDrawerImpl::draw(const Stroke& stroke, GraphicContext& gc)
 {
   if (DrawerProperties::current()->get_brush().is_null() || stroke.get_dab_count() == 0)
     return;
@@ -73,7 +74,10 @@ SpriteStrokeDrawerImpl::draw(const Stroke& stroke, CL_GraphicContext* gc)
     sprite.set_scale(DrawerProperties::current()->get_size() * dab.pressure,
                      DrawerProperties::current()->get_size() * dab.pressure);
 
+#ifdef GRUMBEL
     if (gc != 0)
+#endif
+    if (true)
     {
       /* Correct function:
          1: dest
@@ -113,19 +117,19 @@ SpriteStrokeDrawerImpl::draw(const Stroke& stroke, CL_GraphicContext* gc)
         case SpriteStrokeDrawer::DM_NORMAL:
           sprite.set_blend_func_separate(blend_src_alpha, blend_one_minus_src_alpha,
                                          blend_one, blend_one_minus_src_alpha);
-          sprite.draw(dab.pos.x, dab.pos.y, gc);
+          sprite.draw(dab.pos.x, dab.pos.y, gc.gc);
           break;
 
         case SpriteStrokeDrawer::DM_ADDITION:
           sprite.set_blend_func_separate(blend_src_alpha, blend_one,
                                          blend_zero, blend_one);
           //blend_one, blend_one_minus_src_alpha);
-          sprite.draw(dab.pos.x, dab.pos.y, gc);
+          sprite.draw(dab.pos.x, dab.pos.y, gc.gc);
           break;
 
         case SpriteStrokeDrawer::DM_ERASE:
           sprite.set_blend_func(blend_zero, blend_one_minus_src_alpha);
-          sprite.draw(dab.pos.x, dab.pos.y, gc);
+          sprite.draw(dab.pos.x, dab.pos.y, gc.gc);
           break;
 
         case SpriteStrokeDrawer::DM_SMUDGE:
@@ -143,7 +147,7 @@ SpriteStrokeDrawerImpl::draw(const Stroke& stroke, CL_GraphicContext* gc)
             surface.set_alpha(0.5);
             //surface.set_scale(DrawerProperties::current()->get_size(),
             //                 DrawerProperties::current()->get_size());
-            surface.draw(dab.pos.x, dab.pos.y, gc);
+            surface.draw(dab.pos.x, dab.pos.y, gc.gc);
           }
         }
         break;
@@ -223,22 +227,22 @@ SpriteStrokeDrawerImpl::draw(const Stroke& stroke, CL_GraphicContext* gc)
       {
         case SpriteStrokeDrawer::DM_NORMAL:
           sprite.set_blend_func(blend_src_alpha, blend_one_minus_src_alpha);
-          sprite.draw(dab.pos.x, dab.pos.y, gc);
+          sprite.draw(dab.pos.x, dab.pos.y, gc.gc);
           break;
 
         case SpriteStrokeDrawer::DM_ADDITION:
           sprite.set_blend_func(blend_src_alpha, blend_one);
-          sprite.draw(dab.pos.x, dab.pos.y, gc);
+          sprite.draw(dab.pos.x, dab.pos.y, gc.gc);
           break;
 
         case SpriteStrokeDrawer::DM_ERASE:
           sprite.set_blend_func(blend_zero, blend_one_minus_src_alpha);
-          sprite.draw(dab.pos.x, dab.pos.y, gc);
+          sprite.draw(dab.pos.x, dab.pos.y, gc.gc);
           break;
 
         case SpriteStrokeDrawer::DM_SMUDGE:
           sprite.set_blend_func(blend_src_alpha, blend_one_minus_src_alpha);
-          sprite.draw(dab.pos.x, dab.pos.y, gc);
+          sprite.draw(dab.pos.x, dab.pos.y, gc.gc);
           break;
 
         default:

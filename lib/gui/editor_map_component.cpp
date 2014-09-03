@@ -25,6 +25,7 @@
 
 #include "display.hpp"
 #include "editor_map.hpp"
+#include "graphic_context.hpp"
 #include "input_event.hpp"
 #include "scrollbar.hpp"
 
@@ -169,7 +170,10 @@ EditorMapComponentImpl::draw ()
   scrollbar_h->set_pos(gc_state.get_pos().x);
 
   gc_state.push();
-  workspace.draw(gc_state, CL_Display::get_current_window()->get_gc());
+  {
+    GraphicContext gc(gc_state, CL_Display::get_current_window()->get_gc());
+    workspace.draw(gc);
+  }
   gc_state.pop();
 
   Display::pop_modelview();

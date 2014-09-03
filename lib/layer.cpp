@@ -16,6 +16,7 @@
 
 #include "layer.hpp"
 
+#include "graphic_context.hpp"
 #include "layer_impl.hpp"
 
 Layer::Layer() :
@@ -33,20 +34,20 @@ Layer::~Layer()
 }
 
 void
-Layer::draw(const GraphicContextState& state, CL_GraphicContext* gc)
+Layer::draw(GraphicContext& gc)
 {
   if (impl.get())
   {
     if (impl->pos.x != 0 || impl->pos.y != 0)
     {
-      gc->push_modelview();
-      gc->add_translate(impl->pos.x, impl->pos.y);
-      impl->draw(state, gc);
-      gc->pop_modelview();
+      gc.push_modelview();
+      gc.add_translate(impl->pos.x, impl->pos.y);
+      impl->draw(gc);
+      gc.pop_modelview();
     }
     else
     {
-      impl->draw(state, gc);
+      impl->draw(gc);
     }
   }
 }

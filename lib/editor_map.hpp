@@ -26,7 +26,7 @@
 #include "command.hpp"
 #include "color.hpp"
 
-class CL_GraphicContext;
+class GraphicContext;
 class EditorMapImpl;
 class Layer;
 class MetaData;
@@ -38,10 +38,10 @@ class EditorMap
 public:
   EditorMap(bool create = false);
 
-  void draw(const GraphicContextState& state, CL_GraphicContext* gc);
+  void draw(GraphicContext& gc);
 
   /** Draw stuff that is only relevant on the GUI (bounding rects and such) */
-  void draw_gui(CL_GraphicContext* gc);
+  void draw_gui(GraphicContext& gc);
 
   void add_layer(const Layer& layer, int pos = -1);
 
@@ -63,7 +63,7 @@ public:
   /** Set the bounding rect for this map, if the given rect is
       Rect() the bounding rect will be calculated automatically
       from the content of the map */
-  void    set_bounding_rect(const Rect& rect);
+  void set_bounding_rect(const Rect& rect);
 
   void set_background_color(const Color& color);
 

@@ -21,11 +21,12 @@
 
 #include "meta_data.hpp"
 
-class Rect;
+class CL_GraphicContext;
+class GraphicContext;
+class GraphicContextState;
 class LayerImpl;
 class Pointf;
-class CL_GraphicContext;
-class GraphicContextState;
+class Rect;
 
 /** Each \a EditorMap consists out of one or more \a Layer,
     The \a Layer is an abstract base class from which the
@@ -46,9 +47,9 @@ public:
       supplied piece of data that is associated with a layer (ie. the
       name of the layer or similar properties which aren't handled by
       the layer itself) */
-  void     set_metadata(MetaData data_);
+  void set_metadata(MetaData data_);
 
-  void draw(const GraphicContextState& state, CL_GraphicContext* gc);
+  void draw(GraphicContext& gc);
   bool has_bounding_rect() const;
   Rect get_bounding_rect();
 

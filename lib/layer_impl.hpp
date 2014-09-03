@@ -44,7 +44,7 @@ public:
   {}
   virtual ~LayerImpl() {}
 
-  virtual void draw(const GraphicContextState& state, CL_GraphicContext* gc) =0;
+  virtual void draw(GraphicContext& gc) =0;
   virtual bool has_bounding_rect() const =0;
 
   // FIXME: Should use Rectf

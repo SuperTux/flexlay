@@ -25,6 +25,7 @@
 #include "math/point.hpp"
 #include "math/rect.hpp"
 
+class GraphicContext;
 class StrokeImpl;
 class StrokeDrawer;
 class CL_GraphicContext;
@@ -72,7 +73,7 @@ public:
   /** Return true if the Stroke doesn't contain any dabs */
   bool empty() const;
 
-  void draw(CL_GraphicContext* gc) const;
+  void draw(GraphicContext& gc) const;
 
   void  set_drawer(const StrokeDrawer& drawer_);
   StrokeDrawer get_drawer();

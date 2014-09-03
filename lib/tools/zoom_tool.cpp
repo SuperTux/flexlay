@@ -72,19 +72,23 @@ ZoomToolImpl::on_mouse_up(const InputEvent& event)
     switch (state)
     {
       case CREATE_ZOOM_RECT:
-      {
-        state = NONE;
-        parent->release_mouse();
-
-        Pointf pos = parent->screen2world(event.mouse_pos);
-        zoom_rect.right  = pos.x;
-        zoom_rect.bottom = pos.y;
-        zoom_rect.normalize();
-        if (zoom_rect.get_width() > 10 && zoom_rect.get_height() > 10)
         {
-          parent->zoom_to(zoom_rect);
+          state = NONE;
+          parent->release_mouse();
+
+          Pointf pos = parent->screen2world(event.mouse_pos);
+          zoom_rect.right  = pos.x;
+          zoom_rect.bottom = pos.y;
+          zoom_rect.normalize();
+          if (zoom_rect.get_width() > 10 && zoom_rect.get_height() > 10)
+          {
+            parent->zoom_to(zoom_rect);
+          }
         }
-      }
+        break;
+
+      default:
+        break;
     }
   }
 }

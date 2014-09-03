@@ -23,6 +23,7 @@
 #include <ClanLib/Display/canvas.h>
 
 #include "color.hpp"
+#include "graphic_context.hpp"
 #include "objmap_object_impl.hpp"
 
 BitmapLayer* BitmapLayer::current_ = 0;
@@ -85,7 +86,7 @@ public:
     delete canvas;
   }
 
-  void draw(CL_GraphicContext* gc)
+  void draw(GraphicContext& gc)
   {
     assert(canvas);
 
@@ -94,9 +95,9 @@ public:
       return;
 
     surface.set_blend_func(blend_one, blend_one_minus_src_alpha);
-    surface.draw(pos.x, pos.y, gc);
+    surface.draw(pos.x, pos.y, gc.gc);
 
-    gc->draw_rect(get_bounding_rect().to_cl(), Color(155, 155, 155, 100).to_cl());
+    gc.draw_rect(get_bounding_rect(), Color(155, 155, 155, 100));
   }
 
   Rectf get_bound_rect() const
@@ -136,6 +137,7 @@ BitmapLayer::BitmapLayer(CL_PixelBuffer buffer)
 void
 BitmapLayer::add_stroke(const Stroke& stroke)
 {
+#ifdef GRUMBEL
   if (stroke.get_dab_count() > 0)
   {
     impl->strokes.push_back(stroke);
@@ -144,6 +146,7 @@ BitmapLayer::add_stroke(const Stroke& stroke)
     impl->canvas->get_gc()->flush();
     impl->canvas->sync_surface();
   }
+#endif
 }
 
 std::vector<Stroke>

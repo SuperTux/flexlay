@@ -22,6 +22,7 @@
 
 #include "blitter.hpp"
 #include "display.hpp"
+#include "graphic_context.hpp"
 #include "gui/editor_map_component.hpp"
 #include "layer_impl.hpp"
 #include "tile.hpp"
@@ -49,7 +50,7 @@ public:
 
   bool has_bounding_rect() const;
   Rect get_bounding_rect() const;
-  void draw(const GraphicContextState& state, CL_GraphicContext* gc);
+  void draw(GraphicContext& gc);
 };
 
 TilemapLayer::TilemapLayer()
@@ -86,24 +87,24 @@ TilemapLayer::~TilemapLayer()
 }
 
 void
-TilemapLayer::draw(const GraphicContextState& state, CL_GraphicContext* gc)
+TilemapLayer::draw(GraphicContext& gc)
 {
-  impl->draw(state, gc);
+  impl->draw(gc);
 }
 
 void
-TilemapLayerImpl::draw(const GraphicContextState& state, CL_GraphicContext* gc)
+TilemapLayerImpl::draw(GraphicContext& gc)
 {
   int tile_size = this->tileset.get_tile_size();
 
   if (this->background_color.get_alpha() != 0)
     Display::fill_rect(Rect(Point(0,0),
-                               Size(this->field.get_width()  * tile_size,
-                                    this->field.get_height() * tile_size)).to_cl(),
-                          this->background_color.to_cl());
+                            Size(this->field.get_width()  * tile_size,
+                                 this->field.get_height() * tile_size)).to_cl(),
+                       this->background_color.to_cl());
   CL_Display::flush();
 
-  Rect rect(state.get_clip_rect());
+  Rect rect(gc.state.get_clip_rect());
 
   int start_x = std::max(0, rect.left / tile_size);
   int start_y = std::max(0, rect.top  / tile_size);
@@ -123,12 +124,12 @@ TilemapLayerImpl::draw(const GraphicContextState& state, CL_GraphicContext* gc)
           {
             CL_Sprite sprite = tile->get_sprite();
             sprite.set_color(foreground_color.to_cl());
-            sprite.draw(x * tile_size, y * tile_size, gc);
+            sprite.draw(x * tile_size, y * tile_size, gc.gc);
 
             if (draw_attribute)
               Display::fill_rect(Rect(Point(x, y), Size(tileset.get_tile_size(),
-                                                           tileset.get_tile_size())).to_cl(),
-                                    tile->get_attribute_color().to_cl());
+                                                        tileset.get_tile_size())).to_cl(),
+                                 tile->get_attribute_color().to_cl());
           }
         }
       }
@@ -144,12 +145,12 @@ TilemapLayerImpl::draw(const GraphicContextState& state, CL_GraphicContext* gc)
           Tile* tile = tileset.create(this->field.at(x, y));
           if (tile)
           {
-            tile->get_sprite().draw(x * tile_size, y * tile_size, gc);
+            tile->get_sprite().draw(x * tile_size, y * tile_size, gc.gc);
 
             if (draw_attribute)
               Display::fill_rect(Rect(Point(x, y), Size(tileset.get_tile_size(),
-                                                           tileset.get_tile_size())).to_cl(),
-                                    tile->get_attribute_color().to_cl());
+                                                        tileset.get_tile_size())).to_cl(),
+                                 tile->get_attribute_color().to_cl());
           }
         }
       }
@@ -159,17 +160,17 @@ TilemapLayerImpl::draw(const GraphicContextState& state, CL_GraphicContext* gc)
   {
     for (int y = start_y; y <= end_y; ++y)
       Display::draw_line(start_x * tile_size,
-                            y       * tile_size,
-                            end_x   * tile_size,
-                            y       * tile_size,
-                            y % 2 ? Color(150, 150, 150).to_cl() : Color(255, 255, 255).to_cl());
+                         y       * tile_size,
+                         end_x   * tile_size,
+                         y       * tile_size,
+                         y % 2 ? Color(150, 150, 150).to_cl() : Color(255, 255, 255).to_cl());
 
     for (int x = start_x; x <= end_x; ++x)
       Display::draw_line(x       * tile_size,
-                            start_y * tile_size,
-                            x       * tile_size,
-                            end_y   * tile_size,
-                            x % 2 ? Color(150, 150, 150).to_cl() : Color(255, 255, 255).to_cl());
+                         start_y * tile_size,
+                         x       * tile_size,
+                         end_y   * tile_size,
+                         x % 2 ? Color(150, 150, 150).to_cl() : Color(255, 255, 255).to_cl());
   }
 
   CL_Display::flush();

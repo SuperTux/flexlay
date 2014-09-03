@@ -28,7 +28,7 @@ StrokeDrawer::StrokeDrawer(std::shared_ptr<StrokeDrawerImpl> impl_)
 }
 
 void
-StrokeDrawer::draw(const Stroke& stroke, CL_GraphicContext* gc)
+StrokeDrawer::draw(const Stroke& stroke, GraphicContext& gc)
 {
   if (impl.get() != 0)
     impl->draw(stroke, gc);

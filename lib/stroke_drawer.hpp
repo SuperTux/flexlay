@@ -21,7 +21,7 @@
 
 class Stroke;
 class StrokeDrawerImpl;
-class CL_GraphicContext;
+class GraphicContext;
 
 /** Abstract class which handles the drawing of a Stroke
  */
@@ -32,7 +32,7 @@ public:
   StrokeDrawer();
   StrokeDrawer(std::shared_ptr<StrokeDrawerImpl> impl);
 
-  void draw(const Stroke& stroke, CL_GraphicContext* gc);
+  void draw(const Stroke& stroke, GraphicContext& gc);
 
   bool is_null() const { return !impl.get(); }
   StrokeDrawer clone() const;

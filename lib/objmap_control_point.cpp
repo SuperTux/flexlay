@@ -16,6 +16,8 @@
 
 #include "objmap_control_point.hpp"
 
+#include "graphic_context.hpp"
+
 class ObjMapControlPointImpl
 {
 public:
@@ -23,7 +25,7 @@ public:
   Pointf  pos;
   MetaData  data;
 
-  void draw(CL_GraphicContext* gc);
+  void draw(GraphicContext& gc);
   Rect get_bound_rect() const;
   boost::signals2::signal<void (Pointf)> on_set_pos;
 };
@@ -43,15 +45,15 @@ ObjMapControlPoint::ObjMapControlPoint(CL_Sprite sprite_, Pointf pos_, MetaData 
 }
 
 void
-ObjMapControlPoint::draw(CL_GraphicContext* gc)
+ObjMapControlPoint::draw(GraphicContext& gc)
 {
   impl->draw(gc);
 }
 
 void
-ObjMapControlPointImpl::draw(CL_GraphicContext* gc)
+ObjMapControlPointImpl::draw(GraphicContext& gc)
 {
-  sprite.draw(static_cast<int>(pos.x), static_cast<int>(pos.y), gc);
+  sprite.draw(static_cast<int>(pos.x), static_cast<int>(pos.y), gc.gc);
 }
 
 void

@@ -31,6 +31,7 @@
 #include "color.hpp"
 #include "display.hpp"
 #include "flexlay.hpp"
+#include "graphic_context.hpp"
 #include "gui/editor_map_component.hpp"
 #include "layer_impl.hpp"
 #include "math.hpp"
@@ -72,6 +73,7 @@ public:
   {
     strokes.push_back(stroke);
 
+#ifdef GRUMBEL
     if (canvas)
     {
       EditorMapComponent* parent = EditorMapComponent::current();
@@ -80,9 +82,10 @@ public:
       parent->get_gc_state().pop(canvas->get_gc());
       canvas->sync_surface();
     }
+#endif
   }
 
-  void draw(const GraphicContextState& state, CL_GraphicContext* gc)
+  void draw(GraphicContext& gc)
   {
     // Nothing to draw, so we go byebye
     if (strokes.empty())
@@ -91,16 +94,17 @@ public:
     if (canvas)
     {
       // Draw to canvas
-      if (last_zoom != state.get_zoom() ||
-          last_pos  != state.get_pos()  ||
-          last_rot  != state.get_rotation())
+      if (last_zoom != gc.state.get_zoom() ||
+          last_pos  != gc.state.get_pos()  ||
+          last_rot  != gc.state.get_rotation())
       {
         // Rerender the image
-        last_zoom   = state.get_zoom();
-        last_pos    = state.get_pos();
-        last_rot    = state.get_rotation();
+        last_zoom   = gc.state.get_zoom();
+        last_pos    = gc.state.get_pos();
+        last_rot    = gc.state.get_rotation();
 
-        state.push(canvas->get_gc());
+#ifdef GRUMBEL
+        gc.state.push(canvas->get_gc());
         canvas->get_gc()->clear(Color(0, 0, 0, 0).to_cl());
         //canvas->get_gc()->clear(Color::white);
 
@@ -117,6 +121,7 @@ public:
           }
         }
         state.pop(canvas->get_gc());
+#endif
 
         canvas->sync_surface();
       }
@@ -134,11 +139,13 @@ public:
     }
     else
     {
+#ifdef GRUMBEL
       // Direct Drawing, slow
       for(Strokes::iterator i = strokes.begin(); i != strokes.end(); ++i)
       {
         i->draw(0);
       }
+#endif
     }
   }
 

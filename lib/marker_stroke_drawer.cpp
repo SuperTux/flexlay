@@ -26,7 +26,7 @@ class MarkerStrokeDrawerImpl : public StrokeDrawerImpl
 public:
   MarkerStrokeDrawerImpl() {}
 
-  void draw(const Stroke& stroke, CL_GraphicContext* gc)
+  void draw(const Stroke& stroke, GraphicContext& gc)
   {
     CL_OpenGLState state(CL_Display::get_current_window()->get_gc());
     state.set_active();

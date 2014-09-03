@@ -58,7 +58,7 @@ TileMapSelectToolImpl::draw()
 }
 
 void
-TileMapSelectToolImpl::on_mouse_up  (const InputEvent& event)
+TileMapSelectToolImpl::on_mouse_up(const InputEvent& event)
 {
   EditorMapComponent* parent = EditorMapComponent::current();
 
@@ -69,6 +69,9 @@ TileMapSelectToolImpl::on_mouse_up  (const InputEvent& event)
       parent->release_mouse();
 
       selection.update(TilemapLayer::current().world2tile(parent->screen2world(event.mouse_pos)));
+      break;
+
+   default:
       break;
   }
 }
@@ -92,6 +95,9 @@ TileMapSelectToolImpl::on_mouse_down(const InputEvent& event)
     case InputEvent::MOUSE_RIGHT:
       if (!creating_selection)
         selection.clear();
+      break;
+
+    default:
       break;
   }
 }

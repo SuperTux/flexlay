@@ -186,14 +186,14 @@ ObjectSelector::draw()
   }
 
   Display::pop_modelview();
-  CL_Display::pop_cliprect();
+  Display::pop_cliprect();
 
   // Draw drag sprite
   if (drag_obj != -1)
   {
-    CL_Display::set_cliprect(Rect(Point(0, 0),
-                                  Size(CL_Display::get_width(),
-                                       CL_Display::get_height())).to_cl());
+    Display::set_cliprect(Rect(Point(0, 0),
+                               Size(Display::get_width(),
+                                    Display::get_height())));
 
     Sprite sprite = brushes[drag_obj].get_sprite();
     sprite.set_alpha(0.5f);

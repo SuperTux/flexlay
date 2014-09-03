@@ -228,7 +228,7 @@ TileSelector::draw()
   }
 
   Display::pop_modelview();
-  CL_Display::pop_cliprect();
+  Display::pop_cliprect();
 }
 
 void

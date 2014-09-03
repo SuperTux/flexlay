@@ -116,7 +116,7 @@ Minimap::draw()
                                              (y * tile_size) * get_height() / map_height),
                                        Size(small_tile)),
                                   tile->get_color());
-          CL_Display::flush();
+          Display::flush();
         }
     }
     impl->minimap_surface.draw(Rect(Point(0, 0),
@@ -135,7 +135,7 @@ Minimap::draw()
   }
 
   Display::pop_modelview();
-  CL_Display::pop_cliprect();
+  Display::pop_cliprect();
 }
 
 void

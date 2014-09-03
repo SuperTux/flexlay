@@ -52,24 +52,24 @@ TileEditor::draw()
   if (tile)
   {
     tile->get_sprite().draw(0, 0);
-    CL_Display::flush();
+    Display::flush();
     for(int tile_y = 0; tile_y < 8; ++tile_y)
       for(int tile_x = 0; tile_x < 8; ++tile_x)
       {
         if (tile->get_col(tile_x, tile_y))
         {
           Display::fill_rect(Rect(tile_x*16, tile_y*16,
-                                     tile_x*16 + 16, tile_y*16 + 16),
-                                Color(255, 0, 0, 128));
+                                  tile_x*16 + 16, tile_y*16 + 16),
+                             Color(255, 0, 0, 128));
         }
       }
-    CL_Display::flush();
+    Display::flush();
     if (has_mouse_over())
     {
       Display::fill_rect(Rect(Point(int(mouse_pos.x)/16 * 16,
-                                             int(mouse_pos.y)/16 * 16),
-                                 Size(16, 16)),
-                            Color(255, 255, 255, 128));
+                                    int(mouse_pos.y)/16 * 16),
+                              Size(16, 16)),
+                         Color(255, 255, 255, 128));
     }
   }
   else

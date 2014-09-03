@@ -25,6 +25,8 @@ class Display
 {
 private:
 public:
+  static void clear(const Color& color);
+
   static void draw_rect(const Rectf& rect, const Color& color);
   static void fill_rect(const Rectf& rect, const Color& color);
 
@@ -34,6 +36,7 @@ public:
   static void pop_modelview();
   static void add_translate(float x, float y);
 
+  static void set_cliprect(const Rect& rect);
   static void push_cliprect(const Rect& rect);
   static void pop_cliprect();
 

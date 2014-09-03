@@ -22,6 +22,12 @@
 #include "math/rect.hpp"
 
 void
+Display::clear(const Color& color)
+{
+  CL_Display::clear(color.to_cl());
+}
+
+void
 Display::draw_rect(const Rectf& rect, const Color& color)
 {
   CL_Display::draw_rect(rect.to_cl(), color.to_cl());
@@ -55,6 +61,12 @@ void
 Display::add_translate(float x, float y)
 {
   CL_Display::add_translate(x, y);
+}
+
+void
+Display::set_cliprect(const Rect& rect)
+{
+  CL_Display::set_cliprect(rect.to_cl());
 }
 
 void

@@ -108,7 +108,7 @@ DirectoryViewImpl::draw()
   int x_pos = 0;
   int y_pos = 0;
 
-  CL_Display::clear(Color(255, 255, 0).to_cl());
+  Display::clear(Color(255, 255, 0));
 
   int j = 0;
   for(Items::iterator i = items.begin(); i != items.begin()+50 && i != items.end(); ++i)

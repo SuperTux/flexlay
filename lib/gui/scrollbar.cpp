@@ -118,7 +118,7 @@ ScrollbarImpl::draw()
   Display::draw_rect(rect, Color(155, 155, 155));
 
   Display::pop_modelview();
-  CL_Display::pop_cliprect();
+  Display::pop_cliprect();
 }
 
 void

@@ -22,12 +22,13 @@
 #include <ClanLib/Display/pixel_format.h>
 #include <ClanLib/Display/pixel_buffer.h>
 
-#include "tile.hpp"
-#include "tileset.hpp"
+#include "display.hpp"
 #include "editor_map.hpp"
 #include "editor_map_component.hpp"
-#include "tilemap_layer.hpp"
 #include "lib/workspace.hpp"
+#include "tile.hpp"
+#include "tilemap_layer.hpp"
+#include "tileset.hpp"
 
 class MinimapImpl
 {
@@ -84,7 +85,7 @@ Minimap::draw()
 
   if (1)
   { // Draw background color
-    CL_Display::fill_rect(Rect(Point(0, 0), Size(get_width(), get_height())).to_cl(),
+    Display::fill_rect(Rect(Point(0, 0), Size(get_width(), get_height())).to_cl(),
                           Color(200, 200, 200, 225).to_cl());
   }
 
@@ -111,7 +112,7 @@ Minimap::draw()
         {
           Tile* tile = tilemap.get_tileset().create(field->at(x, y));
           if (tile)
-            CL_Display::fill_rect(Rect(Point((x * tile_size) * get_width() / map_width,
+            Display::fill_rect(Rect(Point((x * tile_size) * get_width() / map_width,
                                              (y * tile_size) * get_height() / map_height),
                                        Size(small_tile)).to_cl(),
                                   tile->get_color().to_cl());
@@ -127,13 +128,13 @@ Minimap::draw()
                            rect.top   * get_height() / map_height),
                      Size(rect.get_width() * get_width() /map_width,
                           rect.get_height()* get_height()/map_height));
-    CL_Display::fill_rect(screen_rect.to_cl(),
+    Display::fill_rect(screen_rect.to_cl(),
                           Color(255, 255, 0, 50).to_cl());
-    CL_Display::draw_rect(screen_rect.to_cl(),
+    Display::draw_rect(screen_rect.to_cl(),
                           Color(0, 0, 0).to_cl());
   }
 
-  CL_Display::pop_modelview();
+  Display::pop_modelview();
   CL_Display::pop_cliprect();
 }
 

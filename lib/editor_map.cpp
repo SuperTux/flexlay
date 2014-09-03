@@ -50,7 +50,7 @@ public:
 
   boost::signals2::signal<void ()> on_change;
 
-  bool    has_bounding_rect;
+  bool has_bounding_rect;
   Rect bounding_rect;
 };
 
@@ -213,6 +213,7 @@ EditorMap::get_bounding_rect()
         }
       }
     }
+
     return rect;
   }
 }

@@ -20,10 +20,10 @@
 #include <ClanLib/Core/core_iostream.h>
 #include <ClanLib/display.h>
 
-//#include "editor_map.hpp"
+#include "color.hpp"
+#include "display.hpp"
 #include "editor_map_component.hpp"
 #include "object_add_command.hpp"
-#include "color.hpp"
 
 ObjectSelector::ObjectSelector(const Rect& rect,
                                int obj_w, int obj_h,
@@ -157,9 +157,9 @@ ObjectSelector::draw()
   CL_Display::push_cliprect(get_screen_rect());
 
   // Handle scrolling in the Component
-  CL_Display::push_modelview();
-  CL_Display::add_translate(0, -offset);
-  CL_Display::add_translate(get_screen_x(), get_screen_y());
+  Display::push_modelview();
+  Display::add_translate(0, -offset);
+  Display::add_translate(get_screen_x(), get_screen_y());
 
   for(int i = 0; i < (int)brushes.size(); ++i)
   {
@@ -177,15 +177,15 @@ ObjectSelector::draw()
     sprite.draw(x * obj_width + obj_width/2,
                 y * obj_height + obj_height/2);
 
-    //CL_Display::draw_rect(rect.to_cl(), Color(0,0,0,128));
+    //Display::draw_rect(rect.to_cl(), Color(0,0,0,128));
 
     if (mouse_over_tile == i && has_mouse_over())
     {
-      CL_Display::fill_rect(rect.to_cl(), Color(0,0,255, 20).to_cl());
+      Display::fill_rect(Rect(rect), Color(0, 0, 255, 20));
     }
   }
 
-  CL_Display::pop_modelview();
+  Display::pop_modelview();
   CL_Display::pop_cliprect();
 
   // Draw drag sprite

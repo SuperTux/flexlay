@@ -19,12 +19,13 @@
 
 #include "box.hpp"
 #include "color.hpp"
+#include "display.hpp"
 #include "globals.hpp"
 #include "helper.hpp"
 #include "icon.hpp"
 #include "math/point.hpp"
-#include "math/size.hpp"
 #include "math/rect.hpp"
+#include "math/size.hpp"
 #include "titlebar.hpp"
 #include "window.hpp"
 
@@ -102,7 +103,7 @@ WindowImpl::on_resize(int, int)
 void
 WindowImpl::draw()
 {
-  CL_Display::push_translate (parent->get_screen_x(), parent->get_screen_y());
+  CL_Display::push_translate(parent->get_screen_x(), parent->get_screen_y());
 
   Color highlight(255, 255, 255);
   Color midtone(150, 150, 150);
@@ -113,21 +114,21 @@ WindowImpl::draw()
   Box::draw_panel_down(Rect(client_area->get_position()));
 
   /*
-    CL_Display::fill_rect(Rect(Point(0, 0), rect.get_size()).to_cl(), Color(220, 220, 220));
-    CL_Display::draw_rect(Rect(Point(0, 0), rect.get_size()).to_cl(), Color(0, 0, 0));
+    Display::fill_rect(Rect(Point(0, 0), rect.get_size()).to_cl(), Color(220, 220, 220));
+    Display::draw_rect(Rect(Point(0, 0), rect.get_size()).to_cl(), Color(0, 0, 0));
 
-    CL_Display::draw_line(1, rect.get_height()-2,
+    Display::draw_line(1, rect.get_height()-2,
     rect.get_width()-2, rect.get_height()-2, midtone);
-    CL_Display::draw_line(rect.get_width()-2, 1,
+    Display::draw_line(rect.get_width()-2, 1,
     rect.get_width()-2, rect.get_height()-2, midtone);
 
-    CL_Display::draw_line(1, 1,
+    Display::draw_line(1, 1,
     rect.get_width()-2, 1, highlight);
-    CL_Display::draw_line(1, 1,
+    Display::draw_line(1, 1,
     1, rect.get_height()-2, highlight);
   */
 
-  CL_Display::pop_modelview();
+  Display::pop_modelview();
 }
 
 void

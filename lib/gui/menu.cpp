@@ -17,13 +17,14 @@
 #include <ClanLib/Display/display.h>
 #include <ClanLib/Display/sprite.h>
 
-#include "fonts.hpp"
 #include "box.hpp"
 #include "color.hpp"
-#include "menu.hpp"
+#include "display.hpp"
+#include "fonts.hpp"
 #include "math/point.hpp"
-#include "math/size.hpp"
 #include "math/rect.hpp"
+#include "math/size.hpp"
+#include "menu.hpp"
 
 class MenuItem;
 
@@ -83,9 +84,9 @@ public:
 
   void draw(int x, int y, bool active)
   {
-    CL_Display::fill_rect(Rect(Point(x, y), Size(parent->get_width()-7, 2)).to_cl(),
+    Display::fill_rect(Rect(Point(x, y), Size(parent->get_width()-7, 2)).to_cl(),
                           Color(150, 150, 150).to_cl());
-    CL_Display::fill_rect(Rect(Point(x, y+1), Size(parent->get_width()-7, 1)).to_cl(),
+    Display::fill_rect(Rect(Point(x, y+1), Size(parent->get_width()-7, 1)).to_cl(),
                           Color(255, 255, 255).to_cl());
   }
 
@@ -113,7 +114,7 @@ public:
 
   void draw(int x, int y, bool active) {
     if (active)
-      CL_Display::fill_rect(Rect(Point(x, y-2), Size(parent->get_width() - 7, 18)).to_cl(),
+      Display::fill_rect(Rect(Point(x, y-2), Size(parent->get_width() - 7, 18)).to_cl(),
                             Color(255, 255, 255).to_cl());
     if (sprite)
     {
@@ -222,7 +223,7 @@ MenuImpl::draw()
       items[i]->draw(x_pos, y_pos, false);
     y_pos += items[i]->get_height() + 6;
   }
-  CL_Display::pop_modelview();
+  Display::pop_modelview();
 }
 
 int

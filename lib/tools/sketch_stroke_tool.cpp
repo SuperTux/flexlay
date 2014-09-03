@@ -16,31 +16,24 @@
 
 #include "sketch_stroke_tool.hpp"
 
-//#include <iostream>
-//#include <assert.h>
-#include <ClanLib/gl.h>
-//#include <ClanLib/Display/input_event.h>
 #include <ClanLib/Display/keys.h>
 #include <ClanLib/Display/mouse.h>
 #include <ClanLib/Display/display.h>
+#include <ClanLib/Display/display_window.h>
 #include <ClanLib/Display/input_context.h>
 
-#include "gui/editor_map_component.hpp"
-//#include "tool.hpp"
 #include "bitmap_layer.hpp"
-#include "sprite_stroke_drawer.hpp"
-//#include "marker_stroke_drawer.hpp"
-//#include "stroke.hpp"
-//#include "stroke_drawer.hpp"
+#include "display.hpp"
 #include "drawer_properties.hpp"
-//#include "flexlay.hpp"
+#include "gui/editor_map_component.hpp"
+#include "sprite_stroke_drawer.hpp"
 
 class SketchStrokeToolImpl : public ToolImpl
 {
 public:
   bool drawing;
-  Stroke   stroke;
-  StrokeDrawer   drawer;
+  Stroke stroke;
+  StrokeDrawer drawer;
 
   SketchStrokeToolImpl()
     : drawing(false)
@@ -54,11 +47,11 @@ public:
     if (drawing)
     {
       // FIXME: This translation is a bit ugly, layer position should be handled somewhat different
-      CL_Display::push_modelview();
-      CL_Display::add_translate(BitmapLayer::current()->to_object().get_pos().x,
+      Display::push_modelview();
+      Display::add_translate(BitmapLayer::current()->to_object().get_pos().x,
                                 BitmapLayer::current()->to_object().get_pos().y);
       stroke.draw(0);
-      CL_Display::pop_modelview();
+      Display::pop_modelview();
     }
     else
     {

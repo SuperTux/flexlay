@@ -19,6 +19,7 @@
 #include <ClanLib/Display/mouse.h>
 
 #include "color.hpp"
+#include "display.hpp"
 #include "fonts.hpp"
 #include "math/rect.hpp"
 #include "titlebar.hpp"
@@ -106,20 +107,20 @@ TitlebarImpl::draw()
                                                            CL_Mouse::get_y()).to_cl()))
     //parent->get_parent()->has_mouse_over())
   {
-    CL_Display::fill_rect(Rect(Point(0, 0),
+    Display::fill_rect(Rect(Point(0, 0),
                                Size(parent->get_width()-1, parent->get_height())).to_cl(),
                           Color(250, 250, 250).to_cl());
   }
   else
   {
-    CL_Display::fill_rect(Rect(Point(0, 0),
+    Display::fill_rect(Rect(Point(0, 0),
                                Size(parent->get_width()-1, parent->get_height())).to_cl(),
                           Color(240, 240, 240).to_cl());
   }
 
   Fonts::verdana11.draw(4, 0, title);
 
-  CL_Display::pop_modelview();
+  Display::pop_modelview();
 }
 
 /* EOF */

@@ -21,6 +21,7 @@
 #include <ClanLib/Display/sprite.h>
 
 #include "blitter.hpp"
+#include "display.hpp"
 #include "gui/editor_map_component.hpp"
 #include "layer_impl.hpp"
 #include "tile.hpp"
@@ -96,7 +97,7 @@ TilemapLayerImpl::draw(const GraphicContextState& state, CL_GraphicContext* gc)
   int tile_size = this->tileset.get_tile_size();
 
   if (this->background_color.get_alpha() != 0)
-    CL_Display::fill_rect(Rect(Point(0,0),
+    Display::fill_rect(Rect(Point(0,0),
                                Size(this->field.get_width()  * tile_size,
                                     this->field.get_height() * tile_size)).to_cl(),
                           this->background_color.to_cl());
@@ -125,7 +126,7 @@ TilemapLayerImpl::draw(const GraphicContextState& state, CL_GraphicContext* gc)
             sprite.draw(x * tile_size, y * tile_size, gc);
 
             if (draw_attribute)
-              CL_Display::fill_rect(Rect(Point(x, y), Size(tileset.get_tile_size(),
+              Display::fill_rect(Rect(Point(x, y), Size(tileset.get_tile_size(),
                                                            tileset.get_tile_size())).to_cl(),
                                     tile->get_attribute_color().to_cl());
           }
@@ -146,7 +147,7 @@ TilemapLayerImpl::draw(const GraphicContextState& state, CL_GraphicContext* gc)
             tile->get_sprite().draw(x * tile_size, y * tile_size, gc);
 
             if (draw_attribute)
-              CL_Display::fill_rect(Rect(Point(x, y), Size(tileset.get_tile_size(),
+              Display::fill_rect(Rect(Point(x, y), Size(tileset.get_tile_size(),
                                                            tileset.get_tile_size())).to_cl(),
                                     tile->get_attribute_color().to_cl());
           }
@@ -157,14 +158,14 @@ TilemapLayerImpl::draw(const GraphicContextState& state, CL_GraphicContext* gc)
   if (this->draw_grid)
   {
     for (int y = start_y; y <= end_y; ++y)
-      CL_Display::draw_line(start_x * tile_size,
+      Display::draw_line(start_x * tile_size,
                             y       * tile_size,
                             end_x   * tile_size,
                             y       * tile_size,
                             y % 2 ? Color(150, 150, 150).to_cl() : Color(255, 255, 255).to_cl());
 
     for (int x = start_x; x <= end_x; ++x)
-      CL_Display::draw_line(x       * tile_size,
+      Display::draw_line(x       * tile_size,
                             start_y * tile_size,
                             x       * tile_size,
                             end_y   * tile_size,

@@ -18,6 +18,7 @@
 #include <ClanLib/Display/keys.h>
 
 #include "color.hpp"
+#include "display.hpp"
 #include "math.hpp"
 #include "math/rect.hpp"
 #include "slider.hpp"
@@ -43,18 +44,18 @@ Slider::~Slider()
 void
 Slider::draw()
 {
-  CL_Display::push_modelview();
-  CL_Display::add_translate(get_screen_x(), get_screen_y());
+  Display::push_modelview();
+  Display::add_translate(get_screen_x(), get_screen_y());
 
-  CL_Display::fill_rect(Rect(Point(0, get_height()/2 - 2),
+  Display::fill_rect(Rect(Point(0, get_height()/2 - 2),
                                 Size(get_width(), 5)).to_cl(),
                         Color(255, 255, 255, 255).to_cl());
 
-  CL_Display::fill_rect(Rect(Point(int(-2 + (value/(end-start)) * get_width()), 0),
+  Display::fill_rect(Rect(Point(int(-2 + (value/(end-start)) * get_width()), 0),
                                 Size(5, get_height())).to_cl(),
                         Color(0, 0, 0, 255).to_cl());
 
-  CL_Display::pop_modelview();
+  Display::pop_modelview();
 }
 
 void

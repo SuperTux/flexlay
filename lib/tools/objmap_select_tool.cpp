@@ -21,9 +21,10 @@
 #include <ClanLib/Display/keyboard.h>
 #include <ClanLib/Display/display.h>
 
+#include "display.hpp"
 #include "editor_map.hpp"
-#include "gui/editor_map_component.hpp"
 #include "editor_names.hpp"
+#include "gui/editor_map_component.hpp"
 #include "gui/editor_map_component.hpp"
 #include "gui_manager.hpp"
 #include "object_delete_command.hpp"
@@ -111,7 +112,7 @@ ObjMapSelectToolImpl::draw()
   for (ObjMapSelectTool::Selection::iterator i = selection.begin(); i != selection.end(); ++i)
   {
     //      (*i).draw();
-    CL_Display::draw_rect((*i).get_bound_rect().to_cl(), Color(255, 0, 0).to_cl());
+    Display::draw_rect(Rect((*i).get_bound_rect()), Color(255, 0, 0));
   }
 
   switch(state)
@@ -119,8 +120,8 @@ ObjMapSelectToolImpl::draw()
     case DRAG:
       break;
     case SELECT:
-      CL_Display::draw_rect(selection_rect.to_cl(),
-                            Color(255, 255, 255).to_cl());
+      Display::draw_rect(Rect(selection_rect),
+                         Color(255, 255, 255));
       break;
     default:
       break;

@@ -22,13 +22,14 @@
 #include <ClanLib/Display/display.h>
 #include <ClanLib/Display/sprite.h>
 
-#include "tilemap_layer.hpp"
-#include "tileset.hpp"
+#include "display.hpp"
 #include "editor_map.hpp"
 #include "gui/editor_map_component.hpp"
-#include "tile.hpp"
-#include "paint_command.hpp"
 #include "gui/tile_selection.hpp"
+#include "paint_command.hpp"
+#include "tile.hpp"
+#include "tilemap_layer.hpp"
+#include "tileset.hpp"
 #include "tool_impl.hpp"
 
 TileMapPaintTool TileMapPaintTool::current_;
@@ -106,21 +107,21 @@ TileMapPaintToolImpl::draw()
             sprite.draw((current_tile.x + x) * tile_size,
                         (current_tile.y + y) * tile_size);
 
-            CL_Display::fill_rect(Rect(Point((current_tile.x + x) * tile_size,
+            Display::fill_rect(Rect(Point((current_tile.x + x) * tile_size,
                                              (current_tile.y + y) * tile_size),
                                        Size(tile_size, tile_size)).to_cl(),
                                   Color(255, 255, 255, 100).to_cl());
           }
           else if (brush.is_opaque())
           {
-            CL_Display::fill_rect(Rect(Point((current_tile.x + x) * tile_size,
+            Display::fill_rect(Rect(Point((current_tile.x + x) * tile_size,
                                              (current_tile.y + y) * tile_size),
                                        Size(tile_size, tile_size)).to_cl(),
                                   Color(255, 255, 255, 100).to_cl());
           }
           else
           {
-            CL_Display::fill_rect(Rect(Point((current_tile.x + x) * tile_size,
+            Display::fill_rect(Rect(Point((current_tile.x + x) * tile_size,
                                                 (current_tile.y + y) * tile_size),
                                        Size(tile_size, tile_size)).to_cl(),
                                   Color(255, 255, 255, 50).to_cl());

@@ -23,6 +23,7 @@
 #include <functional>
 #include <iostream>
 
+#include "display.hpp"
 #include "editor_map.hpp"
 #include "scrollbar.hpp"
 
@@ -170,8 +171,8 @@ EditorMapComponentImpl::draw ()
   workspace.draw(gc_state, CL_Display::get_current_window()->get_gc());
   gc_state.pop();
 
-  CL_Display::pop_modelview();
-  CL_Display::pop_cliprect();
+  Display::pop_modelview();
+  Display::pop_cliprect();
 }
 
 Pointf

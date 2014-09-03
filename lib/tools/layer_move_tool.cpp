@@ -19,11 +19,12 @@
 #include <ClanLib/Core/Math/point.h>
 #include <ClanLib/Display/display.h>
 
-#include "workspace.hpp"
-#include "tool_impl.hpp"
-#include "gui/editor_map_component.hpp"
+#include "display.hpp"
 #include "editor_map.hpp"
+#include "gui/editor_map_component.hpp"
 #include "layer.hpp"
+#include "tool_impl.hpp"
+#include "workspace.hpp"
 
 class LayerMoveToolImpl : public ToolImpl
 {
@@ -58,9 +59,9 @@ public:
       if (layer.has_bounding_rect())
       {
         Rect rect = layer.get_bounding_rect();
-        CL_Display::draw_line(rect.left, rect.top, rect.right, rect.bottom,
+        Display::draw_line(rect.left, rect.top, rect.right, rect.bottom,
                               Color(0, 255, 255).to_cl());
-        CL_Display::draw_line(rect.left, rect.bottom, rect.right, rect.top,
+        Display::draw_line(rect.left, rect.bottom, rect.right, rect.top,
                               Color(0, 255, 255).to_cl());
       }
     }

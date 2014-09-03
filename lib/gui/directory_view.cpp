@@ -20,6 +20,7 @@
 #include <ClanLib/Display/display.h>
 
 #include "color.hpp"
+#include "display.hpp"
 #include "math/rect.hpp"
 #include "fonts.hpp"
 
@@ -117,9 +118,9 @@ DirectoryViewImpl::draw()
       Rect rect = font.bounding_rect(x_pos * (column_width + horizontal_spacing) + 1,
                                         y_pos * (font.get_height() + vertical_spacing) + 1,
                                         i->name);
-      CL_Display::fill_rect(Rect(rect.left-5, rect.top-3,
-                                   rect.left+5+column_width, rect.bottom+3).to_cl(),
-                            Color(250, 200, 0).to_cl());
+      Display::fill_rect(Rect(rect.left-5, rect.top-3,
+                              rect.left+5+column_width, rect.bottom+3),
+                            Color(250, 200, 0));
     }
 
     // draw item

@@ -19,6 +19,7 @@
 #include <ClanLib/GUI/component.h>
 
 #include "colorpicker.hpp"
+#include "display.hpp"
 #include "math.hpp"
 #include "math/rect.hpp"
 
@@ -121,22 +122,23 @@ public:
 
   void draw()
   {
-    CL_Display::push_modelview();
-    CL_Display::add_translate(get_screen_x(), get_screen_y());
+    Display::push_modelview();
+    Display::add_translate(get_screen_x(), get_screen_y());
 
+#ifdef GRUMBEL      
     int psize = get_height()/6;
-
     for(Colors::size_type i = 0; i < colors.size()-1; ++i)
     {
-      CL_Display::fill_rect(Rect(Point(0, i*psize),
-                                 Size(get_width(), psize)).to_cl(),
-                            CL_Gradient(colors[i].to_cl(),
-                                        colors[i].to_cl(),
-                                        colors[i+1].to_cl(),
-                                        colors[i+1].to_cl()));
+      Display::fill_rect(Rect(Point(0, i*psize),
+                              Size(get_width(), psize)).to_cl(),
+                         CL_Gradient(colors[i].to_cl(),
+                                     colors[i].to_cl(),
+                                     colors[i+1].to_cl(),
+                                     colors[i+1].to_cl()));
     }
+#endif
 
-    CL_Display::pop_modelview();
+    Display::pop_modelview();
   }
 };
 
@@ -168,17 +170,19 @@ public:
 
   void draw()
   {
-    CL_Display::push_modelview();
-    CL_Display::add_translate(get_screen_x(), get_screen_y());
+    Display::push_modelview();
+    Display::add_translate(get_screen_x(), get_screen_y());
 
-    CL_Display::fill_rect(Rect(Point(0, 0),
+#ifdef GRUMBEL
+    Display::fill_rect(Rect(Point(0, 0),
                                Size(get_width(), get_height())).to_cl(),
                           CL_Gradient(Color(0, 0, 0).to_cl(),
                                       Color(255, 255, 255).to_cl(),
                                       Color(0, 0, 0).to_cl(),
                                       Color(255, 255, 255).to_cl()));
+#endif
 
-    CL_Display::pop_modelview();
+    Display::pop_modelview();
   }
 
   void update_pointer(const CL_InputEvent& event)
@@ -241,28 +245,30 @@ public:
 
   void draw()
   {
-    CL_Display::push_modelview();
-    CL_Display::add_translate(get_screen_x(), get_screen_y());
+    Display::push_modelview();
+    Display::add_translate(get_screen_x(), get_screen_y());
 
-    CL_Display::fill_rect(Rect(Point(0, 0), Size(get_width(), get_height())).to_cl(),
+#ifdef GRUMBEL
+    Display::fill_rect(Rect(Point(0, 0), Size(get_width(), get_height())).to_cl(),
                           CL_Gradient(Color(0, 0, 0).to_cl(),
                                       color.to_cl(),
                                       Color(0, 0, 0).to_cl(),
                                       Color(255, 255, 255).to_cl()));
+#endif
 
-    CL_Display::draw_line(factor_x * get_width(),
+    Display::draw_line(factor_x * get_width(),
                           0,
                           factor_x * get_width(),
                           get_height(),
                           Color(255, 255, 255).to_cl());
 
-    CL_Display::draw_line(0,
+    Display::draw_line(0,
                           factor_y * get_height(),
                           get_width(),
                           factor_y * get_height(),
                           Color(255, 255, 255).to_cl());
 
-    CL_Display::pop_modelview();
+    Display::pop_modelview();
   }
 
   void set_color(Color color_) {
@@ -370,16 +376,16 @@ ColorPicker::update_brightness_color(Color color_)
 void
 ColorPicker::draw()
 {
-  CL_Display::push_modelview();
-  CL_Display::add_translate(get_screen_x(), get_screen_y());
+  Display::push_modelview();
+  Display::add_translate(get_screen_x(), get_screen_y());
 
   float pwidth  = get_width()/11.0;
   float pheight = get_height()/11.0;
-  CL_Display::fill_rect(Rect(Point(int(pwidth*10), int(pheight*10)),
+  Display::fill_rect(Rect(Point(int(pwidth*10), int(pheight*10)),
                              Size(int(pwidth), int(pheight))).to_cl(),
                         color.to_cl());
 
-  CL_Display::pop_modelview();
+  Display::pop_modelview();
 }
 
   boost::signals2::signal<void (Color)>&

@@ -19,6 +19,7 @@
 #include <iostream>
 #include <ClanLib/display.h>
 
+#include "display.hpp"
 #include "math/rect.hpp"
 #include "math.hpp"
 #include "tile.hpp"
@@ -165,10 +166,10 @@ TileSelector::mouse_move(const CL_InputEvent& event)
 void
 TileSelector::draw()
 {
-  CL_Display::push_cliprect(get_screen_rect());
-  CL_Display::push_modelview();
-  CL_Display::add_translate(get_screen_x(), get_screen_y());
-  CL_Display::add_translate(0, -offset);
+  Display::push_cliprect(get_screen_rect());
+  Display::push_modelview();
+  Display::add_translate(get_screen_x(), get_screen_y());
+  Display::add_translate(0, -offset);
 
   const TileBrush& brush = TileMapPaintTool::current().get_brush();
 
@@ -199,17 +200,17 @@ TileSelector::draw()
                   static_cast<int>(y * tileset.get_tile_size()*scale));
 
       // Use grid in the tileselector
-      //CL_Display::draw_rect(rect.to_cl(), Color(0,0,0,128));
+      //Display::draw_rect(rect.to_cl(), Color(0,0,0,128));
     }
 
     if (brush.get_width() == 1 && brush.get_height() == 1
         && brush.at(0, 0) == tiles[i])
     {
-      CL_Display::fill_rect(rect.to_cl(), Color(0,0,255, 100).to_cl());
+      Display::fill_rect(rect.to_cl(), Color(0,0,255, 100).to_cl());
     }
     else if (mouse_over_tile == int(i) && has_mouse_over())
     {
-      CL_Display::fill_rect(rect.to_cl(), Color(0,0,255, 20).to_cl());
+      Display::fill_rect(rect.to_cl(), Color(0,0,255, 20).to_cl());
     }
   }
 
@@ -222,10 +223,10 @@ TileSelector::draw()
     rect.left   *= static_cast<int>(tileset.get_tile_size()*scale);
     rect.right  *= static_cast<int>(tileset.get_tile_size()*scale);
 
-    CL_Display::fill_rect(rect.to_cl(), Color(0,0,255, 100).to_cl());
+    Display::fill_rect(rect.to_cl(), Color(0,0,255, 100).to_cl());
   }
 
-  CL_Display::pop_modelview();
+  Display::pop_modelview();
   CL_Display::pop_cliprect();
 }
 

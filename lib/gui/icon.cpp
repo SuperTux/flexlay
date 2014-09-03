@@ -18,6 +18,7 @@
 
 #include <ClanLib/Display/display.h>
 
+#include "display.hpp"
 #include "math/rect.hpp"
 #include "box.hpp"
 
@@ -105,7 +106,7 @@ IconImpl::draw()
     sprite.set_alpha(0.3f);
   }
   sprite.draw((rect.get_width()+1)/2, (rect.get_height()+1)/2);
-  CL_Display::pop_modelview();
+  Display::pop_modelview();
 }
 
 void

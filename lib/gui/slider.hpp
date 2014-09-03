@@ -36,7 +36,7 @@ private:
 
   void update_mouse(const CL_InputEvent& event);
 public:
-  Slider(const CL_Rect& rect, CL_Component* parent);
+  Slider(const Rect& rect, CL_Component* parent);
 
   boost::signals2::signal<void (float)>& sig_on_change();
 

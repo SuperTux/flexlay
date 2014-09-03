@@ -21,6 +21,7 @@
 #include <boost/signals2.hpp>
 #include <memory>
 
+class Rect;
 class ScrollbarImpl;
 
 class Scrollbar : public CL_Component
@@ -30,7 +31,7 @@ protected:
 public:
   enum Orientation { HORIZONTAL, VERTICAL };
 
-  Scrollbar(const CL_Rect& rect, Orientation orientation, CL_Component* parent);
+  Scrollbar(const Rect& rect, Orientation orientation, CL_Component* parent);
 
   void set_range(float min, float max);
   void set_pagesize(float size);

@@ -31,8 +31,8 @@ public:
   void draw();
 };
 
-Panel::Panel(const CL_Rect& rect, CL_Component* parent)
-  : CL_Component(rect, parent), impl(new PanelImpl())
+Panel::Panel(const Rect& rect, CL_Component* parent) :
+  CL_Component(rect.to_cl(), parent), impl(new PanelImpl())
 {
   impl->parent = this;
   impl->slots.push_back(sig_paint().connect(impl.get(), &PanelImpl::draw));

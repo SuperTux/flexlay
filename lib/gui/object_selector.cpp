@@ -22,12 +22,12 @@
 #include "object_selector.hpp"
 #include "object_add_command.hpp"
 
-ObjectSelector::ObjectSelector(const CL_Rect& rect,
+ObjectSelector::ObjectSelector(const Rect& rect,
                                int obj_w, int obj_h,
-                               CL_Component* parent)
-  : CL_Component(rect, parent),
-    width(rect.get_width()/obj_w), height(rect.get_height()/obj_h),
-    obj_width(obj_w), obj_height(obj_h)
+                               CL_Component* parent) :
+  CL_Component(rect.to_cl(), parent),
+  width(rect.get_width()/obj_w), height(rect.get_height()/obj_h),
+  obj_width(obj_w), obj_height(obj_h)
 {
   index = 0;
 
@@ -60,10 +60,10 @@ ObjectSelector::mouse_up(const CL_InputEvent& event)
 
         if (!has_mouse_over())
         {
-          CL_Point screen(event.mouse_pos.x + get_screen_rect().left,
+          Point screen(event.mouse_pos.x + get_screen_rect().left,
                           event.mouse_pos.y + get_screen_rect().top);
 
-          CL_Point target(screen.x - EditorMapComponent::current()->get_screen_rect().left,
+          Point target(screen.x - EditorMapComponent::current()->get_screen_rect().left,
                           screen.y - EditorMapComponent::current()->get_screen_rect().top);
 
           // FIXME: Move this to the scripting layer
@@ -163,8 +163,8 @@ ObjectSelector::draw()
     int x = i%width;
     int y = i/width;
 
-    CL_Rectf rect(CL_Pointf(x * obj_width, y * obj_height),
-                  CL_Sizef(obj_width, obj_height));
+    Rectf rect(Pointf(x * obj_width, y * obj_height),
+               Sizef(obj_width, obj_height));
 
     CL_Sprite sprite = brushes[i].get_sprite();
     sprite.set_alignment(origin_center, 0, 0);
@@ -174,11 +174,11 @@ ObjectSelector::draw()
     sprite.draw(x * obj_width + obj_width/2,
                 y * obj_height + obj_height/2);
 
-    //CL_Display::draw_rect(rect, CL_Color(0,0,0,128));
+    //CL_Display::draw_rect(rect.to_cl(), CL_Color(0,0,0,128));
 
     if (mouse_over_tile == i && has_mouse_over())
     {
-      CL_Display::fill_rect(rect, CL_Color(0,0,255, 20));
+      CL_Display::fill_rect(rect.to_cl(), CL_Color(0,0,255, 20));
     }
   }
 
@@ -188,9 +188,9 @@ ObjectSelector::draw()
   // Draw drag sprite
   if (drag_obj != -1)
   {
-    CL_Display::set_cliprect(CL_Rect(CL_Point(0, 0),
-                                     CL_Size(CL_Display::get_width(),
-                                             CL_Display::get_height())));
+    CL_Display::set_cliprect(Rect(Point(0, 0),
+                                  Size(CL_Display::get_width(),
+                                       CL_Display::get_height())).to_cl());
 
     CL_Sprite sprite = brushes[drag_obj].get_sprite();
     sprite.set_alpha(0.5f);

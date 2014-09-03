@@ -22,6 +22,7 @@
 
 #include <memory>
 
+class Rect;
 class MinimapImpl;
 class EditorMapComponent;
 
@@ -31,7 +32,7 @@ protected:
   virtual ~Minimap() {}
 
 public:
-  Minimap(EditorMapComponent* p, const CL_Rect& rect, CL_Component* parent);
+  Minimap(EditorMapComponent* p, const Rect& rect, CL_Component* parent);
 
   void draw();
   void update_minimap();

@@ -100,7 +100,7 @@ class ButtonPanel
 
   def init(x, y, width, height, horizontal, parent, &block)
     puts "ButtonPanel in Ruby"
-    @panel = Panel.new(CL_Rect.new(CL_Point.new(x, y), CL_Size.new(width, height)), parent)
+    @panel = Panel.new(Rect.new(Point.new(x, y), Size.new(width, height)), parent)
     @pos   = 2
     @horizontal = horizontal
     @items = {}
@@ -141,10 +141,10 @@ class ButtonPanel
 
   def add_small_icon(image = nil, callback = nil, tooltip = "")
     if (@horizontal)
-      icon = Icon.new(CL_Rect.new(CL_Point.new(@pos,  2), CL_Size.new(16, 32)),
+      icon = Icon.new(Rect.new(Point.new(@pos,  2), Size.new(16, 32)),
                       make_sprite(image), tooltip, @panel);
     else
-      icon = Icon.new(CL_Rect.new(CL_Point.new(2, @pos), CL_Size.new(16, 32)),
+      icon = Icon.new(Rect.new(Point.new(2, @pos), Size.new(16, 32)),
                       make_sprite(image), tooltip, @panel);
     end
     
@@ -162,10 +162,10 @@ class ButtonPanel
     end
 
     if (@horizontal)
-      icon = Icon.new(CL_Rect.new(CL_Point.new(@pos,  2), CL_Size.new(32, 32)),
+      icon = Icon.new(Rect.new(Point.new(@pos,  2), Size.new(32, 32)),
                       make_sprite(image), tooltip, @panel);
     else
-      icon = Icon.new(CL_Rect.new(CL_Point.new(2, @pos), CL_Size.new(32, 32)),
+      icon = Icon.new(Rect.new(Point.new(2, @pos), Size.new(32, 32)),
                       make_sprite(image), tooltip, @panel);
     end
     
@@ -194,13 +194,13 @@ class FileDialog
   @callback = nil
   
   def initialize(title, ok, cancel, g)
-    @window   = Window.new(CL_Rect.new(CL_Point.new(120, 200), CL_Size.new(560, 100)), title, g)
-    @inputbox = CL_InputBox.new(CL_Rect.new(CL_Point.new(10, 10), CL_Size.new(530, 25)),
-                            @window.get_client_area())
-    @ok_button     = CL_Button.new(CL_Rect.new(CL_Point.new(490, 35), CL_Size.new(50, 25)), ok,
-                               @window.get_client_area())
-    @cancel_button = CL_Button.new(CL_Rect.new(CL_Point.new(430, 35), CL_Size.new(50, 25)), cancel,
-                               @window.get_client_area())
+    @window   = Window.new(Rect.new(Point.new(120, 200), Size.new(560, 100)), title, g)
+    @inputbox = CL_InputBox.new(Rect.new(Point.new(10, 10), Size.new(530, 25)).to_cl(),
+                                @window.get_client_area())
+    @ok_button     = CL_Button.new(Rect.new(Point.new(490, 35), Size.new(50, 25)).to_cl(), ok,
+                                   @window.get_client_area())
+    @cancel_button = CL_Button.new(Rect.new(Point.new(430, 35), Size.new(50, 25)).to_cl(), cancel,
+                                   @window.get_client_area())
     @window.hide()
   end
   
@@ -242,10 +242,10 @@ class GenericDialog
   
   def initialize(title, gui)
     @items = []
-    @window = Window.new(CL_Rect.new(CL_Point.new(100, 100), CL_Size.new(400, 100)), title, gui)
-    @ok = CL_Button.new(CL_Rect.new(CL_Point.new(290, 35), CL_Size.new(50, 25)), "Ok",
+    @window = Window.new(Rect.new(Point.new(100, 100), Size.new(400, 100)), title, gui)
+    @ok = CL_Button.new(Rect.new(Point.new(290, 35), Size.new(50, 25)), "Ok",
                     @window.get_client_area())
-    @cancel = CL_Button.new(CL_Rect.new(CL_Point.new(230, 35), CL_Size.new(50, 25)), "Cancel",
+    @cancel = CL_Button.new(Rect.new(Point.new(230, 35), Size.new(50, 25)), "Cancel",
                             @window.get_client_area())
     connect_cl(@cancel.sig_clicked(), method(:on_cancel))
     connect_cl(@ok.sig_clicked(), method(:on_ok))
@@ -292,16 +292,16 @@ class GenericDialog
 
   def add_label(text)
     @items.push(["void", 
-                  CL_Label.new(CL_Point.new(10, 10), text, @window.get_client_area()),
+                  CL_Label.new(Point.new(10, 10), text, @window.get_client_area()),
                   nil])
     update()
   end
 
   def add_float(name, value = 0)
     @items.push(["float",
-                 CL_Label.new(CL_Point.new(10, 10), name,
+                 CL_Label.new(Point.new(10, 10), name,
                               @window.get_client_area()),
-                 CL_InputBox.new(CL_Rect.new(CL_Point.new(110, 10), CL_Size.new(200, 25)),
+                 CL_InputBox.new(Rect.new(Point.new(110, 10), Size.new(200, 25)),
                                  @window.get_client_area())])
     @items[-1][2].set_text(value.to_s)
     update()
@@ -309,9 +309,9 @@ class GenericDialog
     
   def add_bool(name, value = false)
     @items.push(["bool",
-                  CL_Label.new(CL_Point.new(10, 10), name,
+                  CL_Label.new(Point.new(10, 10), name,
                                @window.get_client_area()),
-                  CL_CheckBox.new(CL_Point.new(110, 10), 
+                  CL_CheckBox.new(Point.new(110, 10), 
                                   "",
                                   @window.get_client_area())])
     if value == true
@@ -323,13 +323,13 @@ class GenericDialog
   def add_enum(name, types, value = "foo")
     group = CL_RadioGroup.new()
     types.each {|type| 
-      radio = CL_RadioButton.new(CL_Point.new(0, 0),
+      radio = CL_RadioButton.new(Point.new(0, 0),
                                  type, @window.get_client_area())
       radio.set_checked(type == value)
       group.add(radio)
     }
     @items.push(["enum",
-                  CL_Label.new(CL_Point.new(10, 10), name,
+                  CL_Label.new(Point.new(10, 10), name,
                                @window.get_client_area()),
                  group])
     update()
@@ -337,9 +337,9 @@ class GenericDialog
 
   def add_int(name, value = 0)
     @items.push(["int",
-                 CL_Label.new(CL_Point.new(10, 10), name,
+                 CL_Label.new(Point.new(10, 10), name,
                               @window.get_client_area()),
-                 CL_InputBox.new(CL_Rect.new(CL_Point.new(110, 10), CL_Size.new(200, 25)),
+                 CL_InputBox.new(Rect.new(Point.new(110, 10), Size.new(200, 25)),
                                  @window.get_client_area())])
     @items[-1][2].set_text(value.to_s)
     update()
@@ -347,9 +347,9 @@ class GenericDialog
   
   def add_string(name, value = "")
     @items.push(["string",
-                 CL_Label.new(CL_Point.new(10, 10), name,
+                 CL_Label.new(Point.new(10, 10), name,
                               @window.get_client_area()),
-                 CL_InputBox.new(CL_Rect.new(CL_Point.new(110, 10), CL_Size.new(200, 25)),
+                 CL_InputBox.new(Rect.new(Point.new(110, 10), Size.new(200, 25)),
                                  @window.get_client_area())])
     @items[-1][2].set_text(value)
     update()    

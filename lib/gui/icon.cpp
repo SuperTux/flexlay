@@ -48,10 +48,10 @@ public:
   void mouse_move(const CL_InputEvent& event);
 };
 
-Icon::Icon(const CL_Rect& rect, const CL_Sprite& sprite, const std::string& tooltip,
-           CL_Component* parent)
-  : CL_Component(rect, parent),
-    impl(new IconImpl(this))
+Icon::Icon(const Rect& rect, const CL_Sprite& sprite, const std::string& tooltip,
+           CL_Component* parent) :
+  CL_Component(rect.to_cl(), parent),
+  impl(new IconImpl(this))
 {
   impl->sprite       = sprite;
   impl->tooltip      = tooltip;

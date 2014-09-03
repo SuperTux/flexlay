@@ -27,7 +27,7 @@ class Titlebar : public CL_Component
 protected:
   virtual ~Titlebar() {}
 public:
-  Titlebar(const CL_Rect& rect, const std::string& title, CL_Component* parent);
+  Titlebar(const Rect& rect, const std::string& title, CL_Component* parent);
 
 private:
   std::shared_ptr<TitlebarImpl> impl;

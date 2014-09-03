@@ -63,7 +63,7 @@ $zoom_tool           = ZoomTool.new()
 $objmap_select_tool  = ObjMapSelectTool.new()
 # $sketch_stroke_tool  = SketchStrokeTool.new()
 
-# $console = Console.new(CL_Rect.new(CL_Point.new(50, 100), CL_Size.new(400, 200)),
+# $console = Console.new(Rect.new(Point.new(50, 100), Size.new(400, 200)),
 #                        $gui.get_component())
 # $console.write("Hello World\n");
 # $console.write("blabl\n");

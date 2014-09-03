@@ -33,32 +33,32 @@ Point calc_origin(Origin origin, const Size &size)
 {
 	switch(origin)
 	{
-	case flexlay_origin_top_left:
+	case Flexlay_origin_top_left:
 	default:
 		return Point(0, 0);
 		break;
-	case flexlay_origin_top_center:
+	case Flexlay_origin_top_center:
 		return Point(size.width / 2, 0);
 		break;
-	case flexlay_origin_top_right:
+	case Flexlay_origin_top_right:
 		return Point(size.width, 0);
 		break;
-	case flexlay_origin_center_left:
+	case Flexlay_origin_center_left:
 		return Point(0, size.height / 2);
 		break;
-	case flexlay_origin_center:
+	case Flexlay_origin_center:
 		return Point(size.width / 2, size.height / 2);
 		break;
-	case flexlay_origin_center_right:
+	case Flexlay_origin_center_right:
 		return Point(size.width, size.height / 2);
 		break;
-	case flexlay_origin_bottom_left:
+	case Flexlay_origin_bottom_left:
 		return Point(0, size.height);
 		break;
-	case flexlay_origin_bottom_center:
+	case Flexlay_origin_bottom_center:
 		return Point(size.width / 2, size.height);
 		break;
-	case flexlay_origin_bottom_right:
+	case Flexlay_origin_bottom_right:
 		return Point(size.width, size.height);
 		break;
 	}
@@ -68,32 +68,32 @@ Pointf calc_origin(Origin origin, const Sizef &size)
 {
 	switch(origin)
 	{
-	case flexlay_origin_top_left:
+	case Flexlay_origin_top_left:
 	default:
 		return Pointf(0, 0);
 		break;
-	case flexlay_origin_top_center:
+	case Flexlay_origin_top_center:
 		return Pointf(size.width / 2, 0);
 		break;
-	case flexlay_origin_top_right:
+	case Flexlay_origin_top_right:
 		return Pointf(size.width, 0);
 		break;
-	case flexlay_origin_center_left:
+	case Flexlay_origin_center_left:
 		return Pointf(0, size.height / 2);
 		break;
-	case flexlay_origin_center:
+	case Flexlay_origin_center:
 		return Pointf(size.width / 2, size.height / 2);
 		break;
-	case flexlay_origin_center_right:
+	case Flexlay_origin_center_right:
 		return Pointf(size.width, size.height / 2);
 		break;
-	case flexlay_origin_bottom_left:
+	case Flexlay_origin_bottom_left:
 		return Pointf(0, size.height);
 		break;
-	case flexlay_origin_bottom_center:
+	case Flexlay_origin_bottom_center:
 		return Pointf(size.width / 2, size.height);
 		break;
-	case flexlay_origin_bottom_right:
+	case Flexlay_origin_bottom_right:
 		return Pointf(size.width, size.height);
 		break;
 	}

@@ -24,7 +24,7 @@ class Window : public CL_Component
 protected:
   virtual ~Window();
 public:
-  Window(const CL_Rect& rect, const std::string& title, CL_Component* parent);
+  Window(const Rect& rect, const std::string& title, CL_Component* parent);
 
   void hide();
   void show();

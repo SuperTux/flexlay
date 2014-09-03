@@ -22,6 +22,7 @@
 #include <boost/signals2.hpp>
 #include <memory>
 
+class Rect;
 class IconImpl;
 
 class Icon : public CL_Component
@@ -29,7 +30,7 @@ class Icon : public CL_Component
 protected:
   virtual ~Icon() {}
 public:
-  Icon(const CL_Rect& rect, const CL_Sprite& sprite, const std::string& tooltip, CL_Component* parent);
+  Icon(const Rect& rect, const CL_Sprite& sprite, const std::string& tooltip, CL_Component* parent);
 
   void disable();
   void enable();

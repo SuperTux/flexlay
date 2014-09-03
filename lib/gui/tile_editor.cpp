@@ -20,12 +20,13 @@
 #include <ClanLib/Display/keys.h>
 #include <ClanLib/Display/sprite.h>
 #include <ClanLib/Display/mouse.h>
+
+#include "math/rect.hpp"
 #include "tile.hpp"
 
-TileEditor::TileEditor(int x, int y, int w, int h, CL_Component* parent)
-  : CL_Component(CL_Rect(CL_Rect(CL_Point(x, y),
-                                 CL_Size(w, h))), // FIXME: make this editable via script
-                 parent)
+TileEditor::TileEditor(int x, int y, int w, int h, CL_Component* parent) :
+  CL_Component(Rect(Point(x, y), Size(w, h)).to_cl(), // FIXME: make this editable via script
+               parent)
 {
   tile = 0;
   slots.connect(sig_paint(),      this, &TileEditor::draw);
@@ -44,7 +45,7 @@ TileEditor::draw()
   CL_Display::push_translate(get_screen_x(), get_screen_x());
 
   //no_tile.draw(0, 0);
-  CL_Display::fill_rect(CL_Rect(0, 0, 32, 32), CL_Color(155, 0, 155));
+  CL_Display::fill_rect(Rect(0, 0, 32, 32).to_cl(), CL_Color(155, 0, 155));
 
   if (tile)
   {
@@ -55,17 +56,17 @@ TileEditor::draw()
       {
         if (tile->get_col(tile_x, tile_y))
         {
-          CL_Display::fill_rect(CL_Rect(tile_x*16, tile_y*16,
-                                        tile_x*16 + 16, tile_y*16 + 16),
+          CL_Display::fill_rect(Rect(tile_x*16, tile_y*16,
+                                     tile_x*16 + 16, tile_y*16 + 16).to_cl(),
                                 CL_Color(255, 0, 0, 128));
         }
       }
     CL_Display::flush();
     if (has_mouse_over())
     {
-      CL_Display::fill_rect(CL_Rect(CL_Point(int(mouse_pos.x)/16 * 16,
+      CL_Display::fill_rect(Rect(Point(int(mouse_pos.x)/16 * 16,
                                              int(mouse_pos.y)/16 * 16),
-                                    CL_Size(16, 16)),
+                                 Size(16, 16)).to_cl(),
                             CL_Color(255, 255, 255, 128));
     }
   }
@@ -107,7 +108,7 @@ TileEditor::mouse_down(const CL_InputEvent& event)
 }
 
 void
-TileEditor::paint(CL_Point pos, bool val)
+TileEditor::paint(Point pos, bool val)
 {
   if (tile)
   {

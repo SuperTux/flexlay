@@ -19,6 +19,8 @@
 
 #include <ClanLib/GUI/component.h>
 
+#include "math/point.hpp"
+
 class Tile;
 
 class TileEditor : public CL_Component
@@ -26,7 +28,7 @@ class TileEditor : public CL_Component
 private:
   Tile* tile;
   CL_SlotContainer slots;
-  CL_Point mouse_pos;
+  Point mouse_pos;
 protected:
   virtual ~TileEditor();
 public:
@@ -39,7 +41,7 @@ public:
 
   void set_tile(Tile* tile);
 private:
-  void paint(CL_Point pos, bool val);
+  void paint(Point pos, bool val);
 
   TileEditor (const TileEditor&);
   TileEditor& operator= (const TileEditor&);

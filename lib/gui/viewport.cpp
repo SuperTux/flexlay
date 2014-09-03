@@ -24,8 +24,8 @@ public:
   GraphicContextState gc_state;
 };
 
-Viewport::Viewport(CL_Component* child, const CL_Rect& rect, CL_Component* parent)
-  : CL_Component(rect, parent),
+Viewport::Viewport(CL_Component* child, const Rect& rect, CL_Component* parent)
+  : CL_Component(rect.to_cl(), parent),
     impl(new ViewportImpl())
 {
   impl->child = child;

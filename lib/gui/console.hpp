@@ -21,15 +21,16 @@
 #include <memory>
 
 class CL_Font;
-class CL_Size;
 class ConsoleImpl;
+class Rect;
+class Size;
 
 class Console : public CL_Component
 {
 protected:
   virtual ~Console();
 public:
-  Console(/*const CL_Font& font, */const CL_Rect& rect, CL_Component* parent);
+  Console(/*const CL_Font& font, */const Rect& rect, CL_Component* parent);
 
   /** Write something to the console */
   void write(const std::string& );

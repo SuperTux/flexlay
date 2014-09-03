@@ -20,6 +20,8 @@
 #include <ClanLib/gui.h>
 
 #include "../tileset.hpp"
+#include "math/point.hpp"
+#include "math/rect.hpp"
 
 class Tileset;
 
@@ -38,9 +40,9 @@ private:
   int mouse_over_tile;
   bool scrolling;
   bool region_select;
-  CL_Point current_pos;
-  CL_Point region_select_start;
-  CL_Point mouse_pos;
+  Point current_pos;
+  Point region_select_start;
+  Point mouse_pos;
   float scale;
 
   /** set of tiles that should be available in the TileSelector */
@@ -52,7 +54,7 @@ protected:
   virtual ~TileSelector();
 public:
   /** width and height in number of tiles */
-  TileSelector(const CL_Rect& rect, CL_Component* parent);
+  TileSelector(const Rect& rect, CL_Component* parent);
 
   void set_tileset(Tileset t);
   void set_tiles(const Tiles& t);
@@ -65,10 +67,10 @@ public:
   void draw();
 
   /** Return the position of the mouse in x/y in tilesize */
-  CL_Point get_mouse_tile_pos(const CL_InputEvent& event);
+  Point get_mouse_tile_pos(const CL_InputEvent& event);
 
 private:
-  CL_Rect get_selection();
+  Rect get_selection();
 
   void mouse_move(const CL_InputEvent& event);
   void mouse_down(const CL_InputEvent& event);

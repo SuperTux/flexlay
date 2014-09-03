@@ -47,9 +47,9 @@ public:
   void on_mouse_move(const CL_InputEvent& event);
 };
 
-Scrollbar::Scrollbar(const CL_Rect& rect, Orientation orientation, CL_Component* parent)
-  : CL_Component(rect, parent),
-    impl(new ScrollbarImpl(this))
+Scrollbar::Scrollbar(const Rect& rect, Orientation orientation, CL_Component* parent) :
+  CL_Component(rect.to_cl(), parent),
+  impl(new ScrollbarImpl(this))
 {
   impl->min = 0;
   impl->max = 100;

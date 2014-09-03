@@ -25,7 +25,7 @@ class PanelImpl;
 class Panel : public CL_Component
 {
 public:
-  Panel(const CL_Rect& rect, CL_Component* parent);
+  Panel(const Rect& rect, CL_Component* parent);
 private:
   std::shared_ptr<PanelImpl> impl;
 };

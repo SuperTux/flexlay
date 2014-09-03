@@ -82,9 +82,9 @@ public:
 
   void draw(int x, int y, bool active)
   {
-    CL_Display::fill_rect(CL_Rect(CL_Point(x, y), CL_Size(parent->get_width()-7, 2)),
+    CL_Display::fill_rect(Rect(Point(x, y), Size(parent->get_width()-7, 2)).to_cl(),
                           CL_Color(150, 150, 150));
-    CL_Display::fill_rect(CL_Rect(CL_Point(x, y+1), CL_Size(parent->get_width()-7, 1)),
+    CL_Display::fill_rect(Rect(Point(x, y+1), Size(parent->get_width()-7, 1)).to_cl(),
                           CL_Color(255, 255, 255));
   }
 
@@ -112,7 +112,7 @@ public:
 
   void draw(int x, int y, bool active) {
     if (active)
-      CL_Display::fill_rect(CL_Rect(CL_Point(x, y-2), CL_Size(parent->get_width() - 7, 18)),
+      CL_Display::fill_rect(Rect(Point(x, y-2), Size(parent->get_width() - 7, 18)).to_cl(),
                             CL_Color(255, 255, 255));
     if (sprite)
     {
@@ -124,9 +124,9 @@ public:
   int get_height() { return Fonts::verdana11.get_height(); }
 };
 
-Menu::Menu(const CL_Point& pos, CL_Component* parent)
-  : CL_Component(CL_Rect(pos, CL_Size(1,1)), parent),
-    impl(new MenuImpl())
+Menu::Menu(const Point& pos, CL_Component* parent) :
+  CL_Component(Rect(pos, Size(1,1)).to_cl(), parent),
+  impl(new MenuImpl())
 {
   impl->parent = this;
 

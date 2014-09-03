@@ -70,6 +70,9 @@ public:
 	explicit Point(const Pointf& p);
 	explicit Point(const CL_Pointf& p);
 
+  CL_Point to_cl() const
+  { return CL_Point(x, y); }
+
 // Operations:
 public:
 	//: Return a rotated version of this point.
@@ -169,6 +172,9 @@ public:
 	Pointf(const CL_Pointf& p)
 	{ x = p.x; y = p.y; }
 	
+  CL_Pointf to_cl() const
+  { return CL_Pointf(x, y); }
+
 // Operations:
 public:
 	//: Return a rotated version of this point.

@@ -22,13 +22,14 @@
 
 class Menu;
 class MenubarImpl;
+class Point;
 
 class Menubar : public CL_Component
 {
 protected:
   virtual ~Menubar() {}
 public:
-  Menubar(const CL_Point& pos, CL_Component* parent);
+  Menubar(const Point& pos, CL_Component* parent);
 
   void add_submenu(const std::string& name, Menu* menu);
 private:

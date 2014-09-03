@@ -41,7 +41,7 @@ class Sprite
     action = @actions[action]
     sprite = make_sprite(@basedir + action.image)
     # FIXME:
-    # sprite.set_frame_offset(0, CL_Point.new(action.x_offset, action.y_offset))
+    # sprite.set_frame_offset(0, Point.new(action.x_offset, action.y_offset))
     return sprite
   end
 end

@@ -19,6 +19,7 @@
 #include <ClanLib/Core/IOData/directory_scanner.h>
 #include <ClanLib/Display/display.h>
 
+#include "math/rect.hpp"
 #include "fonts.hpp"
 
 class DirectoryViewEntry
@@ -59,14 +60,14 @@ public:
 
   void update_items();
   void draw();
-  int get_item(const CL_Point& pos);
+  int get_item(const Point& pos);
   void on_mouse_move(const CL_InputEvent& event);
   void on_mouse_down(const CL_InputEvent& event);
 };
 
-DirectoryView::DirectoryView(const CL_Rect& rect, CL_Component* parent)
-  : CL_Component(rect, parent),
-    impl(new DirectoryViewImpl())
+DirectoryView::DirectoryView(const Rect& rect, CL_Component* parent) :
+  CL_Component(rect.to_cl(), parent),
+  impl(new DirectoryViewImpl())
 {
   impl->parent = this;
 
@@ -112,11 +113,11 @@ DirectoryViewImpl::draw()
   {
     if (current_item && current_item < int(items.size()) && j == current_item)
     {
-      CL_Rect rect = font.bounding_rect(x_pos * (column_width + horizontal_spacing) + 1,
+      Rect rect = font.bounding_rect(x_pos * (column_width + horizontal_spacing) + 1,
                                         y_pos * (font.get_height() + vertical_spacing) + 1,
                                         i->name);
-      CL_Display::fill_rect(CL_Rect(rect.left-5, rect.top-3,
-                                    rect.left+5+column_width, rect.bottom+3),
+      CL_Display::fill_rect(Rect(rect.left-5, rect.top-3,
+                                   rect.left+5+column_width, rect.bottom+3).to_cl(),
                             CL_Color(250, 200, 0));
     }
 
@@ -145,7 +146,7 @@ DirectoryViewImpl::draw()
 }
 
 int
-DirectoryViewImpl::get_item(const CL_Point& pos)
+DirectoryViewImpl::get_item(const Point& pos)
 {
   CL_Font font = Fonts::verdana11;
 
@@ -159,7 +160,7 @@ DirectoryViewImpl::get_item(const CL_Point& pos)
 void
 DirectoryViewImpl::on_mouse_down(const CL_InputEvent& event)
 {
-  current_item = get_item(event.mouse_pos);
+  current_item = get_item(Point(event.mouse_pos));
   if (current_item >= 0 && current_item < int(items.size()))
   {
     if (items[current_item].directory)
@@ -170,7 +171,7 @@ DirectoryViewImpl::on_mouse_down(const CL_InputEvent& event)
 void
 DirectoryViewImpl::on_mouse_move(const CL_InputEvent& event)
 {
-  current_item = get_item(event.mouse_pos);
+  current_item = get_item(Point(event.mouse_pos));
 }
 
 void
@@ -196,7 +197,7 @@ DirectoryViewImpl::update_items()
   column_width = 60; // min_colum_width
   for(Items::iterator i = items.begin(); i != items.end(); ++i)
   {
-    CL_Rect rect = font.bounding_rect(0, 0, i->name + "[]");
+    Rect rect = font.bounding_rect(0, 0, i->name + "[]");
     column_width = std::max(column_width, rect.get_width());
   }
 

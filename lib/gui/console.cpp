@@ -14,17 +14,20 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+#include "console.hpp"
+
 #include <iostream>
+
 #include "fonts.hpp"
 #include "field.hpp"
-#include "console.hpp"
+#include "math/rect.hpp"
 
 class ConsoleImpl
 {
 public:
   std::vector<CL_Slot> slots;
 
-  CL_Size size;
+  Size size;
 
   /** Complete log of everything that got written to the console */
   std::string full_buffer;
@@ -32,7 +35,7 @@ public:
   /** Buffer of the stuff currently visible on the screen */
   Field<char> screen;
 
-  CL_Point cursor_pos;
+  Point cursor_pos;
 
   CL_Font font;
 
@@ -41,10 +44,10 @@ public:
   void draw();
 };
 
-ConsoleImpl::ConsoleImpl(int w, int h)
-  : size(w, h),
-    screen(w, h),
-    cursor_pos(0, 0)
+ConsoleImpl::ConsoleImpl(int w, int h) :
+  size(w, h),
+  screen(w, h),
+  cursor_pos(0, 0)
 {
 }
 
@@ -63,9 +66,9 @@ ConsoleImpl::draw()
     }
 }
 
-Console::Console(/*const CL_Font& font,*/ const CL_Rect& rect, CL_Component* parent)
-  : CL_Component(rect, parent),
-    impl(new ConsoleImpl(40, 24))
+Console::Console(/*const CL_Font& font,*/ const Rect& rect, CL_Component* parent) :
+  CL_Component(rect.to_cl(), parent),
+  impl(new ConsoleImpl(40, 24))
 {
   impl->font = Fonts::verdana11_yellow;
   impl->slots.push_back(sig_paint().connect(impl.get(), &ConsoleImpl::draw));

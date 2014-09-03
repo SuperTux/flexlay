@@ -21,7 +21,7 @@
 
 PopupMenu::PopupMenu(const Point& pos,  CL_Component* parent)
 {
-  menu = new CL_Menu(CL_Point(pos.x, pos.y), parent, NULL, true);
+  menu = new CL_Menu(pos.to_cl(), parent, NULL, true);
 
   menu->open();
 

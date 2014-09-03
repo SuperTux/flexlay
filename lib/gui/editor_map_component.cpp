@@ -52,8 +52,8 @@ public:
   void on_resize(int old_w, int old_h);
 };
 
-EditorMapComponent::EditorMapComponent(const CL_Rect& rect, CL_Component* parent)
-  : CL_Component(rect, parent),
+EditorMapComponent::EditorMapComponent(const Rect& rect, CL_Component* parent)
+  : CL_Component(rect.to_cl(), parent),
     impl(new EditorMapComponentImpl())
 {
   impl->parent = this;
@@ -61,13 +61,13 @@ EditorMapComponent::EditorMapComponent(const CL_Rect& rect, CL_Component* parent
 
   current_ = this;
 
-  impl->scrollbar_v = new Scrollbar(CL_Rect(CL_Point(rect.get_width() - 14, 2) + CL_Point(rect.left, rect.top),
-                                            CL_Size(12, rect.get_height() - 4 - 14)),
+  impl->scrollbar_v = new Scrollbar(Rect(Point(rect.get_width() - 14, 2) + Point(rect.left, rect.top),
+                                         Size(12, rect.get_height() - 4 - 14)),
                                     Scrollbar::VERTICAL,
                                     parent);
 
-  impl->scrollbar_h = new Scrollbar(CL_Rect(CL_Point(2, rect.get_height() - 14) + CL_Point(rect.left, rect.top),
-                                            CL_Size(rect.get_width() - 4 - 14, 12)),
+  impl->scrollbar_h = new Scrollbar(Rect(Point(2, rect.get_height() - 14) + Point(rect.left, rect.top),
+                                         Size(rect.get_width() - 4 - 14, 12)),
                                     Scrollbar::HORIZONTAL,
                                     parent);
 
@@ -105,17 +105,17 @@ EditorMapComponentImpl::on_key_down(const CL_InputEvent& event)
 {
   if (event.id >= 0 && event.id < 256)
   {
-    CL_Rect rect = parent->get_position();
+    Rect rect = parent->get_position();
     key_bindings[event.id](CL_Mouse::get_x() - rect.left,
                            CL_Mouse::get_y() - rect.top);
   }
 
   if (event.repeat_count == 0)
   {
-    CL_Rect rect = parent->get_position();
+    Rect rect = parent->get_position();
     CL_InputEvent ev2 = event;
-    ev2.mouse_pos = CL_Point(CL_Mouse::get_x() - rect.left,
-                             CL_Mouse::get_y() - rect.top);
+    ev2.mouse_pos = Point(CL_Mouse::get_x() - rect.left,
+                          CL_Mouse::get_y() - rect.top).to_cl();
     workspace.key_down(ev2);
   }
 }
@@ -123,10 +123,10 @@ EditorMapComponentImpl::on_key_down(const CL_InputEvent& event)
 void
 EditorMapComponentImpl::on_key_up(const CL_InputEvent& event)
 {
-  CL_Rect rect = parent->get_position();
+  Rect rect = parent->get_position();
   CL_InputEvent ev2 = event;
-  ev2.mouse_pos = CL_Point(CL_Mouse::get_x() - rect.left,
-                           CL_Mouse::get_y() - rect.top);
+  ev2.mouse_pos = Point(CL_Mouse::get_x() - rect.left,
+                        CL_Mouse::get_y() - rect.top).to_cl();
   workspace.key_up(ev2);
 }
 

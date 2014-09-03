@@ -127,7 +127,7 @@ GUIManager::pop_component()
 Menubar*
 GUIManager::create_menubar()
 {
-  return new Menubar(CL_Point(0, 0), get_component());
+  return new Menubar(Point(0, 0), get_component());
 }
 
 ButtonPanel*

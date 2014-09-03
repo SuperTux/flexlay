@@ -14,7 +14,9 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "menubar.hpp"
+#include "gui/menubar.hpp"
+
+#include "math/rect.hpp"
 
 class MenubarItem
 {
@@ -33,9 +35,9 @@ public:
   Items items;
 };
 
-Menubar::Menubar(const CL_Point& pos, CL_Component* parent)
-  : CL_Component(CL_Rect(pos, CL_Size(1, 1)), parent),
-    impl(new MenubarImpl())
+Menubar::Menubar(const Point& pos, CL_Component* parent) :
+  CL_Component(Rect(pos, Size(1, 1)).to_cl(), parent),
+  impl(new MenubarImpl())
 {
 
 }

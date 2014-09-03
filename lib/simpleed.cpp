@@ -26,8 +26,8 @@ int main()
 
   GUIManager* gui = editor.get_gui_manager();
 
-  new CL_Button(CL_Rect(CL_Point(50, 50),
-                        CL_Size(100, 25)),
+  new CL_Button(Rect(Point(50, 50),
+                     Size(100, 25)).to_cl(),
                 "Hello World", gui->get_component());
 
   EditorMap m;
@@ -38,13 +38,12 @@ int main()
 
   TilemapLayer::set_current(tilemap);
 
-  EditorMapComponent editor_map(CL_Rect(0, 0, 799, 599), gui->get_component());
+  EditorMapComponent editor_map(Rect(0, 0, 799, 599).to_cl(), gui->get_component());
   Workspace workspace(799, 599);
   editor_map.set_workspace(workspace);
   workspace.set_map(m);
 
-  new CL_Button(CL_Rect(CL_Point(50, 150),
-                        CL_Size(100, 25)),
+  new CL_Button(Rect(Point(50, 150), Size(100, 25)).to_cl(),
                 "Quit", gui->get_component());
 
   gui->run();

@@ -41,15 +41,15 @@
 //- !header=core.h!
 enum Origin
 {
-	flexlay_origin_top_left,
-	flexlay_origin_top_center,
-	flexlay_origin_top_right,
-	flexlay_origin_center_left,
-	flexlay_origin_center,
-	flexlay_origin_center_right,
-	flexlay_origin_bottom_left,
-	flexlay_origin_bottom_center,
-	flexlay_origin_bottom_right
+	Flexlay_origin_top_left,
+	Flexlay_origin_top_center,
+	Flexlay_origin_top_right,
+	Flexlay_origin_center_left,
+	Flexlay_origin_center,
+	Flexlay_origin_center_right,
+	Flexlay_origin_bottom_left,
+	Flexlay_origin_bottom_center,
+	Flexlay_origin_bottom_right
 };
 
 //: Returns the anchor point for the origin within the dimensions of the size structure.

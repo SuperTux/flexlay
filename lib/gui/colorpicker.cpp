@@ -31,9 +31,9 @@ public:
   bool pressed;
   boost::signals2::signal<void (CL_Color)> on_color_change;
 
-  ColorPickerHue(const CL_Rect& rect, CL_Component* parent)
-    : CL_Component(rect, parent),
-      pressed(false)
+  ColorPickerHue(const Rect& rect, CL_Component* parent) :
+    CL_Component(rect.to_cl(), parent),
+    pressed(false)
   {
     colors.push_back(CL_Color(255,   0,   0));
     colors.push_back(CL_Color(255,   0, 255));
@@ -148,10 +148,10 @@ public:
   boost::signals2::signal<void (float)> on_color_change;
   float alpha;
 
-  ColorPickerAlpha(const CL_Rect& rect, CL_Component* parent)
-    : CL_Component(rect, parent),
-      pressed(false),
-      alpha(0.5f)
+  ColorPickerAlpha(const Rect& rect, CL_Component* parent) :
+    CL_Component(rect.to_cl(), parent),
+    pressed(false),
+    alpha(0.5f)
   {
     slots.push_back(sig_paint().connect(this, &ColorPickerAlpha::draw));
 
@@ -225,8 +225,8 @@ public:
   boost::signals2::signal<void (CL_Color)> on_color_change;
   float factor_x;
   float factor_y;
-  ColorPickerBrightness(const CL_Rect& rect, CL_Component* parent)
-    : CL_Component(rect, parent),
+  ColorPickerBrightness(const Rect& rect, CL_Component* parent) :
+    CL_Component(rect.to_cl(), parent),
       pressed(false),
       factor_x(1.0f),
       factor_y(1.0f)
@@ -244,8 +244,7 @@ public:
     CL_Display::push_modelview();
     CL_Display::add_translate(get_screen_x(), get_screen_y());
 
-    CL_Display::fill_rect(CL_Rect(CL_Point(0, 0),
-                                  CL_Size(get_width(), get_height())),
+    CL_Display::fill_rect(Rect(Point(0, 0), Size(get_width(), get_height())).to_cl(),
                           CL_Gradient(CL_Color(0, 0, 0),
                                       color,
                                       CL_Color(0, 0, 0),
@@ -324,22 +323,22 @@ public:
   }
 };
 
-ColorPicker::ColorPicker(const CL_Rect& rect, CL_Component* parent)
-  : CL_Component(rect, parent)
+ColorPicker::ColorPicker(const Rect& rect, CL_Component* parent) :
+  CL_Component(rect.to_cl(), parent)
 {
   float pwidth  = rect.get_width()/11.0;
   float pheight = rect.get_height()/11.0;
 
-  brightness = new ColorPickerBrightness(CL_Rect(CL_Point(0, 0),
-                                                 CL_Size(int(pwidth*10), int(pheight*10))),
+  brightness = new ColorPickerBrightness(Rect(Point(0, 0),
+                                                 Size(int(pwidth*10), int(pheight*10))),
                                          this);
 
-  hue = new ColorPickerHue(CL_Rect(CL_Point(int(pwidth*10), 0),
-                                          CL_Size(int(pwidth*1), int(pheight*10))),
+  hue = new ColorPickerHue(Rect(Point(int(pwidth*10), 0),
+                                          Size(int(pwidth*1), int(pheight*10))),
                                   this);
 
-  alpha = new ColorPickerAlpha(CL_Rect(CL_Point(0, int(pheight*10)),
-                                            CL_Size(int(pwidth*10), int(pheight*1))),
+  alpha = new ColorPickerAlpha(Rect(Point(0, int(pheight*10)),
+                                            Size(int(pwidth*10), int(pheight*1))),
                                     this);
 
   hue->on_color_change.connect([this](const CL_Color& c){ set_color(c); });
@@ -376,8 +375,8 @@ ColorPicker::draw()
 
   float pwidth  = get_width()/11.0;
   float pheight = get_height()/11.0;
-  CL_Display::fill_rect(CL_Rect(CL_Point(int(pwidth*10), int(pheight*10)),
-                                CL_Size(int(pwidth), int(pheight))),
+  CL_Display::fill_rect(Rect(Point(int(pwidth*10), int(pheight*10)),
+                             Size(int(pwidth), int(pheight))).to_cl(),
                         color);
 
   CL_Display::pop_modelview();

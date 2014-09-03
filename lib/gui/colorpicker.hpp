@@ -20,9 +20,10 @@
 #include <ClanLib/Display/display.h>
 #include <boost/signals2.hpp>
 
-class ColorPickerHue;
 class ColorPickerAlpha;
 class ColorPickerBrightness;
+class ColorPickerHue;
+class Rect; 
 
 class ColorPicker : public CL_Component
 {
@@ -40,7 +41,7 @@ private:
   void update_brightness_color(CL_Color color);
   void update_alpha_color(float alpha);
 public:
-  ColorPicker(const CL_Rect& rect, CL_Component* parent);
+  ColorPicker(const Rect& rect, CL_Component* parent);
 
   void draw();
 

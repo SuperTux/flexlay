@@ -17,7 +17,9 @@
 #include <ClanLib/Display/display.h>
 #include <ClanLib/Display/keys.h>
 #include <ClanLib/Display/mouse.h>
+
 #include "fonts.hpp"
+#include "math/rect.hpp"
 #include "titlebar.hpp"
 
 class TitlebarImpl
@@ -25,8 +27,8 @@ class TitlebarImpl
 public:
   CL_Component* window;
   Titlebar* parent;
-  CL_Point click_pos;
-  CL_Rect old_pos;
+  Point click_pos;
+  Rect old_pos;
   std::string title;
   std::vector<CL_Slot> slots;
   bool pressed;
@@ -39,9 +41,9 @@ public:
   void draw();
 };
 
-Titlebar::Titlebar(const CL_Rect& rect, const std::string& title, CL_Component* parent)
-  : CL_Component(rect, parent),
-    impl(new TitlebarImpl(this))
+Titlebar::Titlebar(const Rect& rect, const std::string& title, CL_Component* parent) :
+  CL_Component(rect.to_cl(), parent),
+  impl(new TitlebarImpl(this))
 {
   impl->title = title;
   impl->pressed = false;
@@ -84,9 +86,9 @@ TitlebarImpl::on_mouse_move(const CL_InputEvent& event)
 {
   if(pressed)
   {
-    CL_Rect rect = window->get_position();
+    Rect rect = window->get_position();
 
-    CL_Point move(old_pos.left - (click_pos.x - (rect.left + event.mouse_pos.x)),
+    Point move(old_pos.left - (click_pos.x - (rect.left + event.mouse_pos.x)),
                   old_pos.top  - (click_pos.y - (rect.top  + event.mouse_pos.y)));
 
     window->set_position(move.x, move.y);
@@ -99,18 +101,18 @@ TitlebarImpl::draw()
   CL_Display::push_translate(parent->get_screen_x(), parent->get_screen_y());
 
   // FIXME: Hack should be done via has_mouse_over(), but that doesn't include child components
-  if (parent->get_parent()->get_position().is_inside(CL_Point(CL_Mouse::get_x(),
-                                                              CL_Mouse::get_y())))
+  if (parent->get_parent()->get_position().is_inside(Point(CL_Mouse::get_x(),
+                                                           CL_Mouse::get_y()).to_cl()))
     //parent->get_parent()->has_mouse_over())
   {
-    CL_Display::fill_rect(CL_Rect(CL_Point(0, 0),
-                                  CL_Size(parent->get_width()-1, parent->get_height())),
+    CL_Display::fill_rect(Rect(Point(0, 0),
+                               Size(parent->get_width()-1, parent->get_height())).to_cl(),
                           CL_Color(250, 250, 250));
   }
   else
   {
-    CL_Display::fill_rect(CL_Rect(CL_Point(0, 0),
-                                  CL_Size(parent->get_width()-1, parent->get_height())),
+    CL_Display::fill_rect(Rect(Point(0, 0),
+                               Size(parent->get_width()-1, parent->get_height())).to_cl(),
                           CL_Color(240, 240, 240));
   }
 

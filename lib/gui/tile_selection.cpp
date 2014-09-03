@@ -69,7 +69,7 @@ TileSelection::is_active()
 void
 TileSelection::clear()
 {
-  impl->selection = CL_Rect();
+  impl->selection = Rect();
   impl->active = false;
 }
 
@@ -78,10 +78,10 @@ TileSelection::draw(const CL_Color& color)
 {
   int tile_size = impl->tilemap.get_tileset().get_tile_size();
 
-  CL_Display::fill_rect(CL_Rect(impl->selection.left   * tile_size,
+  CL_Display::fill_rect(Rect(impl->selection.left   * tile_size,
                                 impl->selection.top    * tile_size,
                                 impl->selection.right  * tile_size,
-                                impl->selection.bottom * tile_size),
+                                impl->selection.bottom * tile_size).to_cl(),
                         color);
 }
 

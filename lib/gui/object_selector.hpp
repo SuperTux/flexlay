@@ -49,7 +49,7 @@ protected:
   virtual ~ObjectSelector();
 
 public:
-  ObjectSelector(const CL_Rect& rect, int obj_w, int obj_h, CL_Component* parent);
+  ObjectSelector(const Rect& rect, int obj_w, int obj_h, CL_Component* parent);
 
   void draw();
   void add_brush(const ObjectBrush& brush);

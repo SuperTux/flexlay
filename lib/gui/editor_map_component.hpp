@@ -35,7 +35,7 @@ protected:
 public:
   static EditorMapComponent* current() { return current_; }
 
-  EditorMapComponent(const CL_Rect& rect, CL_Component* parent);
+  EditorMapComponent(const Rect& rect, CL_Component* parent);
 
   Workspace get_workspace() const;
   void      set_workspace(Workspace m);

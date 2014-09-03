@@ -28,7 +28,7 @@ class Viewport : public CL_Component
 protected:
   virtual ~Viewport() {}
 public:
-  Viewport(CL_Component* child, const CL_Rect& rect, CL_Component* parent);
+  Viewport(CL_Component* child, const Rect& rect, CL_Component* parent);
 
   void set_pos(const Pointf& pos);
   Pointf get_pos() const;

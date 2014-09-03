@@ -21,8 +21,9 @@
 #include <boost/signals2.hpp>
 #include <memory>
 
-class MenuImpl;
 class CL_Sprite;
+class MenuImpl;
+class Point;
 
 typedef int MenuItemHandle;
 
@@ -32,7 +33,7 @@ protected:
   virtual ~Menu();
 
 public:
-  Menu(const CL_Point& pos, CL_Component* parent);
+  Menu(const Point& pos, CL_Component* parent);
 
   void clear();
 

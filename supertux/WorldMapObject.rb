@@ -12,7 +12,7 @@ class WMSpawnPoint<WorldmapObject
     @name = ""
     @obj = ObjMapSpriteObject.new(
         make_sprite($datadir + "images/worldmap/common/tux.png"),
-        CL_Pointf.new(0, 0), make_metadata(self))
+        Pointf.new(0, 0), make_metadata(self))
      connect_v1_ObjMapObject(@obj.to_object.sig_move(), method(:on_move))
   end
 
@@ -26,7 +26,7 @@ class WMSpawnPoint<WorldmapObject
   def parse(data)
     x = get_value_from_tree(["x", "_"], data, 0)
     y = get_value_from_tree(["y", "_"], data, 0)
-    @obj.to_object.set_pos(CL_Pointf.new(x * 32, y * 32))
+    @obj.to_object.set_pos(Pointf.new(x * 32, y * 32))
     @name = get_value_from_tree(["name", "_"], data, "")
   end
                                                                                
@@ -56,14 +56,14 @@ class WorldmapLevel<WorldmapObject
     @quit_worldmap = false
     @obj = ObjMapSpriteObject.new(
             make_sprite($datadir + "images/worldmap/common/leveldot_green.png"),
-            CL_Pointf.new(0, 0), make_metadata(self))
+            Pointf.new(0, 0), make_metadata(self))
     connect_v1_ObjMapObject(@obj.to_object.sig_move(), method(:on_move))
   end
 
   def parse(data)
     x = get_value_from_tree(["x", "_"], data, 0)
     y = get_value_from_tree(["y", "_"], data, 0)
-    @obj.to_object.set_pos(CL_Pointf.new(x * 32, y * 32))
+    @obj.to_object.set_pos(Pointf.new(x * 32, y * 32))
     @name = get_value_from_tree(["name", "_"], data, "")
     @sprite = get_value_from_tree(["sprite", "_"], data, "")
     @extro_filename = get_value_from_tree(["extro-filename", "_"], data, "")
@@ -120,14 +120,14 @@ class SpecialTile<WorldmapObject
     @invisible_tile = false
     @obj = ObjMapSpriteObject.new(
             make_sprite($datadir + "images/worldmap/common/teleporterdot.png"),
-            CL_Pointf.new(0, 0), make_metadata(self))
+            Pointf.new(0, 0), make_metadata(self))
     connect_v1_ObjMapObject(@obj.to_object.sig_move(), method(:on_move))
   end
 
   def parse(data)
     x = get_value_from_tree(["x", "_"], data, 0)
     y = get_value_from_tree(["y", "_"], data, 0)
-    @obj.to_object.set_pos(CL_Pointf.new(x * 32, y * 32))
+    @obj.to_object.set_pos(Pointf.new(x * 32, y * 32))
     @map_message = get_value_from_tree(["map-message", "_"], data, "")
     @passive_message = get_value_from_tree(["passive-message", "_"], data, false)
     @teleport_x = get_value_from_tree(["teleport-to-x", "_"], data, -1)

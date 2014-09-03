@@ -29,7 +29,7 @@ class SuperTuxGUI
                                  height - buttonpanel_rect.bottom -
                                  minimap_rect.get_height() - 3))
 
-    @editor_map = EditorMapComponent.new(map_rect.to_cl(), @gui.get_component())
+    @editor_map = EditorMapComponent.new(map_rect, @gui.get_component())
     @workspace = @editor_map.get_workspace()
 
     @workspace.set_tool(0, $tilemap_paint_tool.to_tool())
@@ -44,17 +44,17 @@ class SuperTuxGUI
     @workspace.set_tool(107, $zoom2_tool.to_tool())
     @workspace.set_tool(65507, $zoom2_tool.to_tool())
 
-    @minimap = Minimap.new(@editor_map, minimap_rect.to_cl(), @gui.get_component())
+    @minimap = Minimap.new(@editor_map, minimap_rect, @gui.get_component())
 
-    @selector_window = Panel.new(selector_rect.to_cl(), @gui.get_component())
-    @tileselector = TileSelector.new(CL_Rect.new(CL_Point.new(3, 3),
-            CL_Size.new(selector_rect.get_width() -3 ,
+    @selector_window = Panel.new(selector_rect, @gui.get_component())
+    @tileselector = TileSelector.new(Rect.new(Point.new(3, 3),
+            Size.new(selector_rect.get_width() -3 ,
                         selector_rect.get_height() - 3)), @selector_window)
     @tileselector.set_tileset($tileset)
     @tileselector.set_tiles($tileset.get_tiles())
     
-    @objectselector = ObjectSelector.new(CL_Rect.new(CL_Point.new(3, 3),
-                CL_Size.new(selector_rect.get_width()-3,
+    @objectselector = ObjectSelector.new(Rect.new(Point.new(3, 3),
+                Size.new(selector_rect.get_width()-3,
                             selector_rect.get_height() - 3)),
                 42, 42, @selector_window)
 
@@ -66,8 +66,8 @@ class SuperTuxGUI
                                                 make_metadata(objectdata)))
     }
 
-    @worldmapobjectselector = ObjectSelector.new(CL_Rect.new(CL_Point.new(3, 3),
-            CL_Size.new(selector_rect.get_width()-3,
+    @worldmapobjectselector = ObjectSelector.new(Rect.new(Point.new(3, 3),
+            Size.new(selector_rect.get_width()-3,
                         selector_rect.get_height() - 3)),
             42, 42, @selector_window);
     connect_v2_ObjectBrush_Point(@worldmapobjectselector.sig_drop(),
@@ -79,30 +79,30 @@ class SuperTuxGUI
     }
 
     create_button_panel(buttonpanel_rect)
-    @recent_files_menu = Menu.new(CL_Point.new(32*2, 54), @gui.get_component())
+    @recent_files_menu = Menu.new(Point.new(32*2, 54), @gui.get_component())
 
-    @layer_menu = Menu.new(CL_Point.new(32*15+2, 54), @gui.get_component())
+    @layer_menu = Menu.new(Point.new(32*15+2, 54), @gui.get_component())
     @layer_menu.add_item($mysprite, "Show all", proc{ gui_show_all() })
     @layer_menu.add_item($mysprite, "Show current", proc{ gui_show_current() })
     @layer_menu.add_item($mysprite, "Show only current", proc{ gui_show_only_current() })
 
     # FIXME: Use ButtonPanel here instead
-    @toolbar = Panel.new(CL_Rect.new(CL_Point.new(0, 23+33),
-                                     CL_Size.new(33, 32*4+2)), @gui.get_component())
+    @toolbar = Panel.new(Rect.new(Point.new(0, 23+33),
+                                     Size.new(33, 32*4+2)), @gui.get_component())
 
-    @paint = Icon.new(CL_Rect.new(CL_Point.new(2, 32*0+2), CL_Size.new(32, 32)), make_sprite("../data/images/tools/stock-tool-pencil-22.png"), "Some tooltip", @toolbar);
+    @paint = Icon.new(Rect.new(Point.new(2, 32*0+2), Size.new(32, 32)), make_sprite("../data/images/tools/stock-tool-pencil-22.png"), "Some tooltip", @toolbar);
     @paint.set_callback(proc{ set_tilemap_paint_tool() })
 
-    @select = Icon.new(CL_Rect.new(CL_Point.new(2, 32*1+2), CL_Size.new(32,32)), make_sprite("../data/images/tools/stock-tool-rect-select-22.png"), "Some tooltip", @toolbar);
+    @select = Icon.new(Rect.new(Point.new(2, 32*1+2), Size.new(32,32)), make_sprite("../data/images/tools/stock-tool-rect-select-22.png"), "Some tooltip", @toolbar);
     @select.set_callback(proc{ set_tilemap_select_tool() })
 
-    @zoom = Icon.new(CL_Rect.new(CL_Point.new(2, 32*2+2), CL_Size.new(32,32)), make_sprite("../data/images/tools/stock-tool-zoom-22.png"), "Some tooltip", @toolbar);
+    @zoom = Icon.new(Rect.new(Point.new(2, 32*2+2), Size.new(32,32)), make_sprite("../data/images/tools/stock-tool-zoom-22.png"), "Some tooltip", @toolbar);
     @zoom.set_callback(proc{ set_zoom_tool() })
 
-    @object = Icon.new(CL_Rect.new(CL_Point.new(2, 32*3+2), CL_Size.new(32,32)), make_sprite("../data/images/tools/stock-tool-clone-22.png"), "Some tooltip", @toolbar);
+    @object = Icon.new(Rect.new(Point.new(2, 32*3+2), Size.new(32,32)), make_sprite("../data/images/tools/stock-tool-clone-22.png"), "Some tooltip", @toolbar);
     @object.set_callback(proc{ set_objmap_select_tool() })
 
-#     @stroke = Icon.new(CL_Rect.new(CL_Point.new(2, 32*4+2), CL_Size.new(32,32)), make_sprite("../data/images/tools/stock-tool-pencil-22.png"), "Some tooltip", @toolbar);
+#     @stroke = Icon.new(Rect.new(Point.new(2, 32*4+2), Size.new(32,32)), make_sprite("../data/images/tools/stock-tool-pencil-22.png"), "Some tooltip", @toolbar);
 #     @stroke.set_callback(proc{ set_sketch_stroke_tool() })
 
     create_menu()
@@ -117,7 +117,7 @@ class SuperTuxGUI
     # Popup menu
     connect_v2($objmap_select_tool.sig_on_right_click(), proc{|x,y|
                  puts "Launching Menu at #{x}, #{y}"
-                 menu = Menu.new(CL_Point.new(x, y), @gui.get_component())
+                 menu = Menu.new(Point.new(x, y), @gui.get_component())
                  menu.add_item($mysprite, "Delete Object(s)", proc{ 
                                  puts "Trying to delete #{@workspace.get_map().get_metadata()} #{@workspace.get_map().get_metadata().objects}"
                                  cmd = ObjectDeleteCommand.new(@workspace.get_map().get_metadata().objects)
@@ -146,8 +146,8 @@ class SuperTuxGUI
     connect_v2(@editor_map.sig_on_key("2"),  proc{ |x, y| gui_show_interactive()})
     connect_v2(@editor_map.sig_on_key("1"),  proc{ |x, y| gui_show_background()})
     
-    connect_v2(@editor_map.sig_on_key("5"),  proc{ |x, y| @editor_map.zoom_in(CL_Point.new(x, y))})
-    connect_v2(@editor_map.sig_on_key("6"),  proc{ |x, y| @editor_map.zoom_out(CL_Point.new(x, y))})
+    connect_v2(@editor_map.sig_on_key("5"),  proc{ |x, y| @editor_map.zoom_in(Point.new(x, y))})
+    connect_v2(@editor_map.sig_on_key("6"),  proc{ |x, y| @editor_map.zoom_out(Point.new(x, y))})
     
     connect_v2(@editor_map.sig_on_key("i"),  proc{ |x, y| insert_path_node(x,y)})
     connect_v2(@editor_map.sig_on_key("c"),  proc{ |x, y| connect_path_nodes()})
@@ -236,7 +236,7 @@ class SuperTuxGUI
 
     @tilegroup_icon = button_panel.add_icon("../data/images/icons24/eye.png", proc{ @tilegroup_menu.run() })
 
-    @tilegroup_menu = Menu.new(CL_Point.new(@tilegroup_icon.get_screen_x(), 
+    @tilegroup_menu = Menu.new(Point.new(@tilegroup_icon.get_screen_x(), 
                                             @tilegroup_icon.get_screen_y() + @tilegroup_icon.get_height() - 2),
                                @gui.get_component())
     @tilegroup_menu.add_item($mysprite, "All Tiles", proc{@tileselector.set_tiles($tileset.get_tiles())})
@@ -444,7 +444,7 @@ class SuperTuxGUI
     dialog.add_int("X: ", 0)
     dialog.add_int("Y: ", 0)
     dialog.set_callback(proc{|w, h, x, y| 
-                          level.resize(CL_Size.new(w, h), CL_Point.new(x, y))})
+                          level.resize(Size.new(w, h), Point.new(x, y))})
   end
 
   def gui_smooth_level_struct()
@@ -493,7 +493,7 @@ class SuperTuxGUI
     level = @workspace.get_map().get_metadata()
     rect  = $tilemap_select_tool.get_selection_rect()
     if (rect.get_width() > 2 and rect.get_height() > 2)
-      level.resize(rect.get_size(), CL_Point.new(-rect.left, -rect.top))
+      level.resize(rect.get_size(), Point.new(-rect.left, -rect.top))
     end
   end
 
@@ -558,7 +558,7 @@ class SuperTuxGUI
   end  
 
   def gui_switch_sector_menu()
-    mymenu = Menu.new(CL_Point.new(530, 54), @gui.get_component())
+    mymenu = Menu.new(Point.new(530, 54), @gui.get_component())
     sector = @workspace.get_map().get_metadata()
     sector.parent.get_sectors().each { |i|
       if sector.name == i then
@@ -655,7 +655,7 @@ class SuperTuxGUI
   def insert_path_node(x,y)
     print "Insert path Node"
     m = @workspace.get_map().get_metadata()
-    pathnode = ObjMapPathNode.new(@editor_map.screen2world(CL_Point.new(x, y)),
+    pathnode = ObjMapPathNode.new(@editor_map.screen2world(Point.new(x, y)),
                                   make_metadata("PathNode"))
     pathnode.to_object().set_metadata(make_metadata(PathNode.new(pathnode)))
     m.objects.add_object(pathnode.to_object())

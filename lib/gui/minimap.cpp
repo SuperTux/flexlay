@@ -47,9 +47,9 @@ public:
   void update_minimap_surface();
 };
 
-Minimap::Minimap(EditorMapComponent* p, const CL_Rect& rect,
-                 CL_Component* parent)
-  : CL_Component(rect, parent),
+Minimap::Minimap(EditorMapComponent* p, const Rect& rect,
+                 CL_Component* parent) :
+  CL_Component(rect.to_cl(), parent),
     impl(new MinimapImpl())
 {
   impl->slots.push_back(sig_paint().connect(this, &Minimap::draw));
@@ -84,9 +84,7 @@ Minimap::draw()
 
   if (1)
   { // Draw background color
-    CL_Display::fill_rect(CL_Rect(CL_Point(0, 0),
-                                  CL_Size(get_width(),
-                                          get_height())),
+    CL_Display::fill_rect(Rect(Point(0, 0), Size(get_width(), get_height())).to_cl(),
                           CL_Color(200, 200, 200, 225));
   }
 
@@ -100,7 +98,7 @@ Minimap::draw()
     int map_width  = tilemap.get_width()  * tile_size;
     int map_height = tilemap.get_height() * tile_size;
 
-    CL_Size small_tile(tile_size * get_width() / map_width + 1,
+    Size small_tile(tile_size * get_width() / map_width + 1,
                        tile_size * get_height() / map_height + 1);
 
     Field<int>* field = tilemap.get_field();
@@ -120,8 +118,8 @@ Minimap::draw()
           CL_Display::flush();
         }
     }
-    impl->minimap_surface.draw(CL_Rect(CL_Point(0, 0),
-                                       CL_Size(get_width(), get_height())));
+    impl->minimap_surface.draw(Rect(Point(0, 0),
+                                    Size(get_width(), get_height())).to_cl());
 
     // Draw cursor
     Rect rect(impl->parent->get_clip_rect());

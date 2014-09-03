@@ -16,11 +16,13 @@
 
 #include <ClanLib/Display/display.h>
 #include <ClanLib/Display/keys.h>
+
 #include "math.hpp"
+#include "math/rect.hpp"
 #include "slider.hpp"
 
-Slider::Slider(const CL_Rect& rect, CL_Component* parent)
-  : CL_Component(rect, parent)
+Slider::Slider(const Rect& rect, CL_Component* parent) :
+  CL_Component(rect.to_cl(), parent)
 {
   start = 0.0f;
   end   = 100.0f;
@@ -43,12 +45,12 @@ Slider::draw()
   CL_Display::push_modelview();
   CL_Display::add_translate(get_screen_x(), get_screen_y());
 
-  CL_Display::fill_rect(CL_Rect(CL_Point(0, get_height()/2 - 2),
-                                CL_Size(get_width(), 5)),
+  CL_Display::fill_rect(Rect(Point(0, get_height()/2 - 2),
+                                Size(get_width(), 5)).to_cl(),
                         CL_Color(255, 255, 255, 255));
 
-  CL_Display::fill_rect(CL_Rect(CL_Point(int(-2 + (value/(end-start)) * get_width()), 0),
-                                CL_Size(5, get_height())),
+  CL_Display::fill_rect(Rect(Point(int(-2 + (value/(end-start)) * get_width()), 0),
+                                Size(5, get_height())).to_cl(),
                         CL_Color(0, 0, 0, 255));
 
   CL_Display::pop_modelview();

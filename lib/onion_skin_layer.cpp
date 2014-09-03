@@ -19,24 +19,23 @@
 #include <iostream>
 #include <vector>
 #include <ClanLib/Core/System/error.h>
-#include <ClanLib/Display/pixel_buffer.h>
-#include <ClanLib/Display/pixel_format.h>
-#include <ClanLib/Display/surface.h>
 #include <ClanLib/Display/canvas.h>
 #include <ClanLib/Display/graphic_context.h>
 
 #include "gui/editor_map_component.hpp"
 #include "layer_impl.hpp"
+#include "pixel_buffer.hpp"
+#include "surface.hpp"
 
 #define SCALE 4
 
 class OnionSkinLayerImpl : public LayerImpl
 {
 public:
-  CL_Surface  surface;
+  Surface  surface;
   CL_Canvas*  canvas;
 
-  CL_Surface  surface2;
+  Surface  surface2;
   CL_Canvas*  canvas2;
 
   std::vector<EditorMap> editormaps;
@@ -64,17 +63,17 @@ OnionSkinLayer::OnionSkinLayer(Layer layer) :
 OnionSkinLayer::OnionSkinLayer(int width, int height) :
   impl(new OnionSkinLayerImpl())
 {
-  impl->surface  = CL_Surface(CL_PixelBuffer(width/SCALE, height/SCALE, width*4/SCALE, CL_PixelFormat::rgba8888));
-  impl->surface2 = CL_Surface(CL_PixelBuffer(width/SCALE, height/SCALE, width*4/SCALE, CL_PixelFormat::rgba8888));
+  impl->surface  = Surface(PixelBuffer(width/SCALE, height/SCALE));
+  impl->surface2 = Surface(PixelBuffer(width/SCALE, height/SCALE));
 
   try
   {
-    impl->canvas = new CL_Canvas(impl->surface);
+    impl->canvas = new CL_Canvas(impl->surface.to_cl());
     impl->canvas->get_gc()->clear(Color(0, 0, 0, 0).to_cl());
     impl->canvas->get_gc()->flush();
     impl->canvas->sync_surface();
 
-    impl->canvas2 = new CL_Canvas(impl->surface2);
+    impl->canvas2 = new CL_Canvas(impl->surface2.to_cl());
     impl->canvas2->get_gc()->clear(Color(0, 0, 0, 0).to_cl());
     impl->canvas2->get_gc()->flush();
     impl->canvas2->sync_surface();

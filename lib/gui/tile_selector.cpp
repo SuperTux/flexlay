@@ -20,8 +20,9 @@
 #include <ClanLib/display.h>
 
 #include "display.hpp"
-#include "math/rect.hpp"
 #include "math.hpp"
+#include "math/rect.hpp"
+#include "sprite.hpp"
 #include "tile.hpp"
 #include "tile_brush.hpp"
 #include "tools/tilemap_paint_tool.hpp"
@@ -192,7 +193,7 @@ TileSelector::draw()
 
     if (tile)
     {
-      CL_Sprite sprite = tile->get_sprite();
+      Sprite sprite = tile->get_sprite();
 
       sprite.set_scale(scale, scale);
 

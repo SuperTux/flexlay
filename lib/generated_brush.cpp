@@ -31,10 +31,10 @@ public:
   /** When set surface is out of date and needs updating */
   bool dirty;
 
-  CL_Sprite sprite;
+  Sprite sprite;
 
   virtual ~GeneratedBrushImpl() {}
-  CL_Sprite get_sprite();
+  Sprite get_sprite();
   void update();
   BrushImpl* clone() const;
 };
@@ -72,8 +72,8 @@ GeneratedBrushImpl::update()
                                       spikes,
                                       hardness,
                                       aspect_ratio,
-                                      angle));
-    sprite = CL_Sprite(desc);
+                                      angle).to_cl());
+    sprite = Sprite(desc);
     sprite.set_alignment(origin_center);
     dirty = false;
   }
@@ -157,7 +157,7 @@ GeneratedBrush::get_angle()
   return impl->angle;
 }
 
-CL_Sprite
+Sprite
 GeneratedBrushImpl::get_sprite()
 {
   update();
@@ -168,7 +168,7 @@ BrushImpl*
 GeneratedBrushImpl::clone() const
 {
   // FIXME: Make this Copy-On-Write cloning, else it might get a
-  // little bit expensive with all the CL_Sprite's per stroke
+  // little bit expensive with all the Sprite's per stroke
   GeneratedBrushImpl* c = new GeneratedBrushImpl();
   *c = *this;
   return c;

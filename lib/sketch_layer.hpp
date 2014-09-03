@@ -18,7 +18,8 @@
 #define HEADER_FLEXLAY_SKETCH_LAYER_HPP
 
 #include <vector>
-#include <ClanLib/Display/surface.h>
+
+#include "surface.hpp"
 #include "layer.hpp"
 #include "stroke.hpp"
 
@@ -41,7 +42,7 @@ public:
 
   std::vector<Stroke> get_strokes();
 
-  CL_Surface get_background_surface();
+  Surface get_background_surface();
 
   bool is_null() const { return !impl.get(); }
   Layer to_layer();

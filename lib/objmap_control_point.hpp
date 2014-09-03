@@ -17,11 +17,11 @@
 #ifndef HEADER_FLEXLAY_OBJMAP_CONTROL_POINT_HPP
 #define HEADER_FLEXLAY_OBJMAP_CONTROL_POINT_HPP
 
-#include <ClanLib/Display/sprite.h>
 #include <boost/signals2.hpp>
 
 #include "math/rect.hpp"
 #include "meta_data.hpp"
+#include "sprite.hpp"
 
 class GraphicContext;
 class ObjMapControlPointImpl;
@@ -35,7 +35,7 @@ class ObjMapControlPoint
 private:
 public:
   ObjMapControlPoint() : impl() {}
-  ObjMapControlPoint(CL_Sprite sprite_, Pointf pos_, MetaData data_);
+  ObjMapControlPoint(Sprite sprite_, Pointf pos_, MetaData data_);
 
   Pointf get_pos() const;
   void set_pos(const Pointf& p);

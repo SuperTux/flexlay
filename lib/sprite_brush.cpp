@@ -19,9 +19,9 @@
 class SpriteBrushImpl : public BrushImpl
 {
 public:
-  CL_Sprite sprite;
+  Sprite sprite;
 
-  SpriteBrushImpl(const CL_Sprite& sprite_)
+  SpriteBrushImpl(const Sprite& sprite_)
     : sprite(sprite_)
   {
     sprite.set_alignment (origin_center, 0, 0);
@@ -31,7 +31,7 @@ public:
   {
   }
 
-  CL_Sprite get_sprite()
+  Sprite get_sprite()
   {
     return sprite;
   }
@@ -42,7 +42,7 @@ public:
   }
 };
 
-SpriteBrush::SpriteBrush(const CL_Sprite& sprite_)
+SpriteBrush::SpriteBrush(const Sprite& sprite_)
   : impl(new SpriteBrushImpl(sprite_))
 {
 }

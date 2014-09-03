@@ -22,6 +22,7 @@
 #include <ClanLib/Display/surface.h>
 #include <ClanLib/Display/sprite.h>
 
+#include "../lib/surface.hpp"
 #include "../lib/tileset.hpp"
 #include "../lib/tilemap_layer.hpp"
 
@@ -43,11 +44,11 @@ struct NetPanzerTileGroup
   int width;
   int height;
   
-  CL_Surface get_surface(); 
+  Surface get_surface(); 
 
 private:
   /** Surface holding the tilegroups image */
-  CL_Surface surface;
+  Surface surface;
 };
 
 class NetPanzerData
@@ -71,6 +72,7 @@ private:
   typedef std::vector<NetPanzerTileGroup> TileGroups;
   TileGroups tilegroups;
   std::vector<NetPanzerTileHeader> tile_headers;
+
 public:
   NetPanzerData();
 

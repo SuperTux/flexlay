@@ -17,11 +17,11 @@
 #ifndef HEADER_FLEXLAY_BLITTER_HPP
 #define HEADER_FLEXLAY_BLITTER_HPP
 
-#include <ClanLib/Display/pixel_buffer.h>
+#include "pixel_buffer.hpp"
 
-void blit(CL_PixelBuffer target, CL_PixelBuffer brush, int x_pos, int y_pos);
-void blit_opaque(CL_PixelBuffer target, CL_PixelBuffer brush, int x_pos, int y_pos);
-void clear(CL_PixelBuffer target);
+void blit(PixelBuffer target, PixelBuffer brush, int x_pos, int y_pos);
+void blit_opaque(PixelBuffer target, PixelBuffer brush, int x_pos, int y_pos);
+void clear(PixelBuffer target);
 
 #endif
 

@@ -25,7 +25,7 @@
 class ObjectLayerImpl;
 
 /** The ObjectLayer provides a simple Layer for holding positioned
-    objects. Objects can consist of a CL_Sprite and some properties
+    objects. Objects can consist of a Sprite and some properties
     accessible from scripting languages or any other thing that is a
     ObjMapObject. */
 class ObjectLayer

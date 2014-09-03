@@ -17,11 +17,10 @@
 #ifndef HEADER_FLEXLAY_BITMAP_LAYER_HPP
 #define HEADER_FLEXLAY_BITMAP_LAYER_HPP
 
-#include <ClanLib/Display/surface.h>
-#include <ClanLib/Display/pixel_buffer.h>
-
 #include "objmap_object.hpp"
+#include "pixel_buffer.hpp"
 #include "stroke.hpp"
+#include "surface.hpp"
 
 class BitmapLayerImpl;
 class CL_Canvas;
@@ -39,18 +38,18 @@ public:
   static BitmapLayer* current() { return current_; }
   static void set_current(BitmapLayer* c) { current_ = c; }
 
-  BitmapLayer(CL_Surface surface);
-  BitmapLayer(CL_PixelBuffer buffer);
+  BitmapLayer(Surface surface);
+  BitmapLayer(PixelBuffer buffer);
   BitmapLayer(int width, int height);
 
   void add_stroke(const Stroke&);
 
   std::vector<Stroke> get_strokes();
 
-  CL_Surface get_background_surface();
+  Surface get_background_surface();
 
-  void set_pixeldata(CL_PixelBuffer buffer);
-  CL_PixelBuffer get_pixeldata() const;
+  void set_pixeldata(PixelBuffer buffer);
+  PixelBuffer get_pixeldata() const;
   CL_Canvas*     get_canvas() const;
 
   bool is_null() const { return !impl.get(); }

@@ -17,9 +17,9 @@
 #ifndef HEADER_FLEXLAY_OBJMAP_SPRITE_OBJECT_HPP
 #define HEADER_FLEXLAY_OBJMAP_SPRITE_OBJECT_HPP
 
-#include <ClanLib/Display/sprite.h>
 #include "objmap_object.hpp"
 
+#include "sprite.hpp"
 
 class ObjMapSpriteObjectImpl;
 
@@ -27,14 +27,14 @@ class ObjMapSpriteObject
 {
 public:
   ObjMapSpriteObject();
-  ObjMapSpriteObject(const CL_Sprite& s,
+  ObjMapSpriteObject(const Sprite& s,
                      const Pointf& pos_,
                      const MetaData& data_);
 
   void set_rotate(float angle);
   void flip_horizontal();
   void flip_vertical();
-  void set_sprite(const CL_Sprite& s);
+  void set_sprite(const Sprite& s);
 
   ObjMapObject to_object();
 private:

@@ -60,7 +60,7 @@ public:
       EditorMapComponent* parent = EditorMapComponent::current();
       Pointf p = parent->screen2world(Point(CL_Mouse::get_x() - parent->get_screen_x(),
                                                   CL_Mouse::get_y() - parent->get_screen_y()));
-      CL_Sprite s = DrawerProperties::current()->get_brush().get_sprite();
+      Sprite s = DrawerProperties::current()->get_brush().get_sprite();
       s.set_color(DrawerProperties::current()->get_color().to_cl());
       // FIXME: when using mouse 1.0, when tablet .5f
       s.set_scale(DrawerProperties::current()->get_size()*0.5f, DrawerProperties::current()->get_size()*0.5f);

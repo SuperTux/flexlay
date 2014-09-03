@@ -1,6 +1,4 @@
-//  $Id$
-//
-//  Pingus - A free Lemmings clone
+//  Flexlay - A Generic 2D Game Editor
 //  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
 //
 //  This program is free software: you can redistribute it and/or modify
@@ -55,52 +53,52 @@ public:
   {
   }
 
-  CL_Sprite get_sprite() const
+  Sprite get_sprite() const
   {
     if (sprite)
-      {
-        return sprite;
-      }
+    {
+      return sprite;
+    }
     else
-      {
-        NetPanzerTileGroup& tilegroup = NetPanzerData::instance()->find_tilegroup(id);
-        int dist = id - tilegroup.start;
+    {
+      NetPanzerTileGroup& tilegroup = NetPanzerData::instance()->find_tilegroup(id);
+      int dist = id - tilegroup.start;
 
-        CL_Rect rect(CL_Point((dist % tilegroup.width) * 32,
-                              (dist / tilegroup.width) * 32),
-                     CL_Size(32, 32));
-        sprite.add_frame(tilegroup.get_surface(), rect);
-        return sprite;
-      }
+      CL_Rect rect(CL_Point((dist % tilegroup.width) * 32,
+                            (dist / tilegroup.width) * 32),
+                   CL_Size(32, 32));
+      sprite.add_frame(tilegroup.get_surface(), rect);
+      return sprite;
+    }
   }
 
   CL_PixelBuffer get_pixelbuffer() const
   {
     if (buffer)
-      {
-        return buffer;
-      }
+    {
+      return buffer;
+    }
     else
+    {
+      // FIXME: ClanLibs indexed handling seems broken, so we do
+      // the conversion ourself
+      const CL_Palette& palette = NetPanzerData::instance()->get_palette();
+      unsigned char* data = NetPanzerData::instance()->get_tiledata() + (32*32) * id;
+      buffer = CL_PixelBuffer(32, 32, 32*3, CL_PixelFormat::rgb888);
+
+      buffer.lock();
+      unsigned char* target = static_cast<unsigned char*>(buffer.get_data());
+
+      for(int i = 0; i < 32*32; ++i)
       {
-        // FIXME: ClanLibs indexed handling seems broken, so we do
-        // the conversion ourself
-        const CL_Palette& palette = NetPanzerData::instance()->get_palette();
-        unsigned char* data = NetPanzerData::instance()->get_tiledata() + (32*32) * id;
-        buffer = CL_PixelBuffer(32, 32, 32*3, CL_PixelFormat::rgb888);
-
-        buffer.lock();
-        unsigned char* target = static_cast<unsigned char*>(buffer.get_data());
-
-        for(int i = 0; i < 32*32; ++i)
-          {
-            target[3*i+0] = palette[data[i]].get_blue();
-            target[3*i+1] = palette[data[i]].get_green();
-            target[3*i+2] = palette[data[i]].get_red();
-          }
-        buffer.unlock();
-                
-        return buffer;
+        target[3*i+0] = palette[data[i]].get_blue();
+        target[3*i+1] = palette[data[i]].get_green();
+        target[3*i+2] = palette[data[i]].get_red();
       }
+      buffer.unlock();
+                
+      return buffer;
+    }
   }
 };
 
@@ -133,70 +131,70 @@ CL_Surface
 NetPanzerTileGroup::get_surface()
 {
   if (!surface)
-    {
-      CL_PixelBuffer buffer(width*32, height*32, width*32*4, CL_PixelFormat::rgba8888);
+  {
+    CL_PixelBuffer buffer(width*32, height*32, width*32*4, CL_PixelFormat::rgba8888);
 
-      for(int y = 0; y < height; ++y)
-        for(int x = 0; x < width; ++x)
-          {
-            const CL_Palette& palette = NetPanzerData::instance()->get_palette();
-            unsigned char* data = NetPanzerData::instance()->get_tiledata() + (32*32) * (start + width*y + x);
+    for(int y = 0; y < height; ++y)
+      for(int x = 0; x < width; ++x)
+      {
+        const CL_Palette& palette = NetPanzerData::instance()->get_palette();
+        unsigned char* data = NetPanzerData::instance()->get_tiledata() + (32*32) * (start + width*y + x);
 
-            NetPanzerTileHeader header = NetPanzerData::instance()->get_tile_headers()[start + width*y + x]; 
+        NetPanzerTileHeader header = NetPanzerData::instance()->get_tile_headers()[start + width*y + x]; 
            
-            CL_PixelBuffer tile(32, 32, 32*3, CL_PixelFormat::rgb888);
+        CL_PixelBuffer tile(32, 32, 32*3, CL_PixelFormat::rgb888);
 
-            tile.lock();
-            unsigned char* target = static_cast<unsigned char*>(tile.get_data());
+        tile.lock();
+        unsigned char* target = static_cast<unsigned char*>(tile.get_data());
 
-            float r = 1.0f;
-            float g = 1.0f;
-            float b = 1.0f;
+        float r = 1.0f;
+        float g = 1.0f;
+        float b = 1.0f;
 
-            switch (header.move_value)
-              {
-              case 0: // streets, allowing faster movement
-                r = 1.0f;
-                g = 1.0f;
-                b = 0.0f;
-                break;
+        switch (header.move_value)
+        {
+          case 0: // streets, allowing faster movement
+            r = 1.0f;
+            g = 1.0f;
+            b = 0.0f;
+            break;
 
-              case 1: // normal ground which allows to move
-                r = 1.0f;
-                g = 1.0f;
-                b = 1.0f;
-                break;
+          case 1: // normal ground which allows to move
+            r = 1.0f;
+            g = 1.0f;
+            b = 1.0f;
+            break;
 
-              case 4: // unpassable terrain
-                r = 0.0f;
-                g = 1.0;
-                b = 0.0f;
-                break;
+          case 4: // unpassable terrain
+            r = 0.0f;
+            g = 1.0;
+            b = 0.0f;
+            break;
 
-              case 5: // water
-                r = 0.0f;
-                g = 0.0f;
-                b = 1.0f;
-                break;
+          case 5: // water
+            r = 0.0f;
+            g = 0.0f;
+            b = 1.0f;
+            break;
 
-              default:
-                std::cout << "Unknown header value: " << int(header.move_value) << std::endl;
-                break;
-              }
+          default:
+            std::cout << "Unknown header value: " << int(header.move_value) << std::endl;
+            break;
+        }
 
-            for(int i = 0; i < 32*32; ++i)
-              {
-                target[3*i+0] = int(palette[data[i]].get_blue()  * b);
-                target[3*i+1] = int(palette[data[i]].get_green() * g);
-                target[3*i+2] = int(palette[data[i]].get_red()   * r);
-              }
-            tile.unlock();
+        for(int i = 0; i < 32*32; ++i)
+        {
+          target[3*i+0] = int(palette[data[i]].get_blue()  * b);
+          target[3*i+1] = int(palette[data[i]].get_green() * g);
+          target[3*i+2] = int(palette[data[i]].get_red()   * r);
+        }
+        tile.unlock();
                 
-            blit(buffer, tile, x * 32, y * 32);
-          }
+        blit(buffer, tile, x * 32, y * 32);
+      }
       
-      surface = CL_Surface(buffer);
-    }
+    surface = CL_Surface(buffer);
+  }
 
   return surface;
 }
@@ -205,16 +203,16 @@ CL_Sprite
 NetPanzerData::get_tilegroup_sprite(int index)
 {
   for(TileGroups::iterator i = tilegroups.begin(); i != tilegroups.end(); ++i)
+  {
+    if (index == i->start)
     {
-      if (index == i->start)
-        {
-          CL_Sprite sprite;
-          sprite.add_frame(i->get_surface(), CL_Rect(CL_Point(0, 0),
-                                                     CL_Size(i->get_surface().get_width(),
-                                                             i->get_surface().get_height())));
-          return sprite;
-        }
+      CL_Sprite sprite;
+      sprite.add_frame(i->get_surface(), CL_Rect(CL_Point(0, 0),
+                                                 CL_Size(i->get_surface().get_width(),
+                                                         i->get_surface().get_height())));
+      return sprite;
     }
+  }
 
   std::cout << "NetPanzerData: Couldn't get tilegroup_sprite for '" << index << "'" << std::endl;
   return CL_Sprite();
@@ -224,12 +222,12 @@ NetPanzerTileGroup&
 NetPanzerData::find_tilegroup(int index)
 {
   for(TileGroups::iterator i = tilegroups.begin(); i != tilegroups.end(); ++i)
+  {
+    if (i->start <= index && index < i->start + (i->width*i->height))
     {
-      if (i->start <= index && index < i->start + (i->width*i->height))
-        {
-          return *i;
-        }
+      return *i;
     }
+  }
 
   std::cout << "NetPanzerData: Couldn't find tilegroup for '" << index << "'" << std::endl;
   // return some junk just to keep it running
@@ -269,19 +267,19 @@ NetPanzerData::load_palette(const std::string& filename)
   std::ifstream in(filename.c_str());
   
   if (!in)
-    {
-      std::cout << "Couldn't load palette" << std::endl;
-      return palette;
-    }
+  {
+    std::cout << "Couldn't load palette" << std::endl;
+    return palette;
+  }
 
   in.read(reinterpret_cast<char*>(color_array), sizeof(color_array));
 
   for(int i = 0; i < 256; ++i)
-    {
-      palette.colors[i].set_red  (color_array[3*i + 0]);
-      palette.colors[i].set_green(color_array[3*i + 1]);
-      palette.colors[i].set_blue (color_array[3*i + 2]);
-    }
+  {
+    palette.colors[i].set_red  (color_array[3*i + 0]);
+    palette.colors[i].set_green(color_array[3*i + 1]);
+    palette.colors[i].set_blue (color_array[3*i + 2]);
+  }
 
   return palette;
 }
@@ -299,44 +297,44 @@ NetPanzerData::load_tileset(const std::string& filename)
   std::ifstream file(filename.c_str());  
 
   if (!file)
-    {
-      std::cout << "Couldn't load " << filename << std::endl;
-    }
+  {
+    std::cout << "Couldn't load " << filename << std::endl;
+  }
   else
+  {
+    file.read(reinterpret_cast<char*>(netp_id_header), sizeof(netp_id_header));
+    file.read(reinterpret_cast<char*>(&version), sizeof(version));
+    file.read(reinterpret_cast<char*>(&width), sizeof(width));
+    file.read(reinterpret_cast<char*>(&height), sizeof(height));
+    file.read(reinterpret_cast<char*>(&tile_count), sizeof(tile_count));
+    file.read(reinterpret_cast<char*>(raw_palette), sizeof(raw_palette));
+
+    tile_headers.resize(tile_count);
+
+    file.read(reinterpret_cast<char*>(&*tile_headers.begin()), 
+              sizeof(NetPanzerTileHeader)*tile_count);
+
+    cl_uint32 tilesize = width * height;
+    // FIXME: Delete this somewhere!
+    unsigned char* tiledata = new unsigned char[tilesize*tile_count];
+    file.read(reinterpret_cast<char*>(tiledata), tilesize*tile_count);
+    file.close();
+
+    // FIXME: The palette in the netpanzer 'summer12mb.tls' file
+    // is either broken or otherwise corrupt, so we ignore it
+    // and use the seperate palette file 'netp.act' which works
+    // fine.
+      
+    NetPanzerData::instance()->tiledata = tiledata;
+      
+    tileset = Tileset(width);
+
+    for(int i = 0; i < tile_count; ++i)
     {
-      file.read(reinterpret_cast<char*>(netp_id_header), sizeof(netp_id_header));
-      file.read(reinterpret_cast<char*>(&version), sizeof(version));
-      file.read(reinterpret_cast<char*>(&width), sizeof(width));
-      file.read(reinterpret_cast<char*>(&height), sizeof(height));
-      file.read(reinterpret_cast<char*>(&tile_count), sizeof(tile_count));
-      file.read(reinterpret_cast<char*>(raw_palette), sizeof(raw_palette));
-
-      tile_headers.resize(tile_count);
-
-      file.read(reinterpret_cast<char*>(&*tile_headers.begin()), 
-                sizeof(NetPanzerTileHeader)*tile_count);
-
-      cl_uint32 tilesize = width * height;
-      // FIXME: Delete this somewhere!
-      unsigned char* tiledata = new unsigned char[tilesize*tile_count];
-      file.read(reinterpret_cast<char*>(tiledata), tilesize*tile_count);
-      file.close();
-
-      // FIXME: The palette in the netpanzer 'summer12mb.tls' file
-      // is either broken or otherwise corrupt, so we ignore it
-      // and use the seperate palette file 'netp.act' which works
-      // fine.
-      
-      NetPanzerData::instance()->tiledata = tiledata;
-      
-      tileset = Tileset(width);
-
-      for(int i = 0; i < tile_count; ++i)
-        {
-          Tile tile(TileProvider(new NetPanzerTileProviderImpl(i)));
-          tileset.add_tile(i, &tile);
-        }
+      Tile tile(TileProvider(new NetPanzerTileProviderImpl(i)));
+      tileset.add_tile(i, &tile);
     }
+  }
 }
 
 unsigned char find_nearest_color(const CL_Palette& palette, const Color& rgb)
@@ -465,24 +463,24 @@ NetPanzerFileStruct::save(const std::string& filename)
   int tile_count = impl->tilemap.get_tileset().get_tiles().size();
   Field<int>* field = impl->tilemap.get_field();
   for(int i = 0; i < x_size * y_size; ++i)
-    {
-      // Fill everything that isn't a valid tile with grass
-      if ((*field)[i] >= 0 && (*field)[i] < tile_count)
-        vec[i] = (*field)[i];
-      else
-        vec[i] = 8097 + rand()%16;
-    }
+  {
+    // Fill everything that isn't a valid tile with grass
+    if ((*field)[i] >= 0 && (*field)[i] < tile_count)
+      vec[i] = (*field)[i];
+    else
+      vec[i] = 8097 + rand()%16;
+  }
   out.write(reinterpret_cast<char*>(&(*vec.begin())), 
             sizeof(unsigned short)*vec.size());
 
   // Generate thumbnail
   std::vector<unsigned char> thumbnail(x_size * y_size);
   for(int i = 0; i < int(thumbnail.size()); ++i)
-    {
-      Tile* tile = impl->tileset.create((*field)[i]);
-      if (tile)
-        thumbnail[i] = find_nearest_color(NetPanzerData::instance()->get_palette(), tile->get_color());
-    }
+  {
+    Tile* tile = impl->tileset.create((*field)[i]);
+    if (tile)
+      thumbnail[i] = find_nearest_color(NetPanzerData::instance()->get_palette(), tile->get_color());
+  }
 
   out.write(reinterpret_cast<char*>(&(*thumbnail.begin())), 
             sizeof(unsigned char)*thumbnail.size());
@@ -518,9 +516,9 @@ NetPanzerFileStruct::NetPanzerFileStruct(Tileset tileset, const std::string& fil
   std::ifstream file(filename.c_str());
 
   if (!file)
-    {
-      std::cout << "NetPanzerFileStructImpl: Error: " << filename << std::endl;
-    }
+  {
+    std::cout << "NetPanzerFileStructImpl: Error: " << filename << std::endl;
+  }
 
   file.read(reinterpret_cast<char*>(&netp_id_header), sizeof(netp_id_header));
   file.read(reinterpret_cast<char*>(&id), sizeof(short));

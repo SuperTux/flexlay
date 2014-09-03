@@ -18,13 +18,11 @@
 
 #include <ClanLib/Core/System/error.h>
 #include <ClanLib/Display/Providers/provider_factory.h>
-#include <ClanLib/Display/palette.h>
-#include <ClanLib/Display/pixel_format.h>
-#include <ClanLib/Display/sprite.h>
-#include <ClanLib/Display/sprite_description.h>
 #include <assert.h>
 #include <iostream>
 
+#include "pixel_buffer.hpp"
+#include "sprite.hpp"
 #include "string_converter.hpp"
 #include "tile_provider.hpp"
 
@@ -33,8 +31,8 @@ class TileImpl
 public:
   TileProvider   provider;
 
-  CL_Sprite      sprite;
-  CL_PixelBuffer pixelbuffer;
+  Sprite      sprite;
+  PixelBuffer pixelbuffer;
 
   bool transparent;
   bool has_color;
@@ -59,8 +57,8 @@ Tile::Tile(const TileProvider& provider)
   impl->has_color = false;
 }
 
-Tile::Tile(const CL_PixelBuffer& pixelbuffer,
-           const CL_Sprite& sprite)
+Tile::Tile(const PixelBuffer& pixelbuffer,
+           const Sprite& sprite)
   : impl(new TileImpl())
 {
   impl->pixelbuffer = pixelbuffer;
@@ -68,7 +66,7 @@ Tile::Tile(const CL_PixelBuffer& pixelbuffer,
   impl->has_color   = false;
 }
 
-Tile::Tile(const CL_PixelBuffer& pixelbuffer)
+Tile::Tile(const PixelBuffer& pixelbuffer)
   : impl(new TileImpl())
 {
   impl->pixelbuffer = pixelbuffer;
@@ -109,7 +107,7 @@ Tile::get_attribute_color()
   return impl->attribute_color;
 }
 
-CL_Sprite&
+Sprite&
 Tile::get_sprite()
 {
   if (impl->sprite)
@@ -125,15 +123,15 @@ Tile::get_sprite()
     else
     {
       CL_SpriteDescription desc;
-      desc.add_frame(CL_PixelBuffer(get_pixelbuffer()));
-      impl->sprite = CL_Sprite(desc);
+      desc.add_frame(PixelBuffer(get_pixelbuffer()).to_cl());
+      impl->sprite = Sprite(desc);
     }
 
     return impl->sprite;
   }
 }
 
-CL_PixelBuffer
+PixelBuffer
 Tile::get_pixelbuffer()
 {
   if (impl->pixelbuffer)
@@ -154,12 +152,12 @@ Tile::get_pixelbuffer()
       try {
         if (has_suffix(impl->filename, ".png") || has_suffix(impl->filename, ".jpg"))
         {
-          impl->pixelbuffer = CL_PixelBuffer(CL_ProviderFactory::load(impl->filename));
+          impl->pixelbuffer = PixelBuffer(CL_ProviderFactory::load(impl->filename));
         }
         else
         {
-          //CL_SpriteDescription descr(impl->filename, resources);
-          //impl->pixelbuffer = CL_PixelBuffer(*(descr.get_frames().begin()->first));
+          //SpriteDescription descr(impl->filename, resources);
+          //impl->pixelbuffer = PixelBuffer(*(descr.get_frames().begin()->first));
           std::cout << "Error: not a png or jpg file: " << impl->filename << std::endl;
           assert(0);
         }
@@ -168,7 +166,7 @@ Tile::get_pixelbuffer()
       } catch(const CL_Error& err) {
         std::cout << "CL_Error: " << err.message << std::endl;
         std::cout << "          filename = " << impl->filename << std::endl;
-        return CL_PixelBuffer();
+        return PixelBuffer();
       }
     }
   }
@@ -177,7 +175,7 @@ Tile::get_pixelbuffer()
 Color
 Tile::calc_color()
 {
-  CL_PixelBuffer buffer = get_pixelbuffer();
+  PixelBuffer buffer = get_pixelbuffer();
   buffer.lock();
   unsigned char* buf = static_cast<unsigned char*>(buffer.get_data());
   int len = buffer.get_height() * buffer.get_width();

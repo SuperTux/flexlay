@@ -22,13 +22,13 @@ TileProvider::TileProvider(TileProviderImpl* impl_)
 {
 }
 
-CL_Sprite
+Sprite
 TileProvider::get_sprite() const
 {
   return impl->get_sprite();
 }
 
-CL_PixelBuffer
+PixelBuffer
 TileProvider::get_pixelbuffer() const
 {
   return impl->get_pixelbuffer();

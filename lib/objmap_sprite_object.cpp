@@ -22,7 +22,7 @@
 class ObjMapSpriteObjectImpl : public ObjMapObjectImpl
 {
 public:
-  CL_Sprite sprite;
+  Sprite sprite;
 
   void draw(GraphicContext& gc);
   Rectf get_bound_rect() const;
@@ -34,7 +34,7 @@ ObjMapSpriteObject::ObjMapSpriteObject()
 {
 }
 
-ObjMapSpriteObject::ObjMapSpriteObject(const CL_Sprite& sprite_,
+ObjMapSpriteObject::ObjMapSpriteObject(const Sprite& sprite_,
                                        const Pointf& pos_,
                                        const MetaData& data_)
   : impl(new ObjMapSpriteObjectImpl())
@@ -107,7 +107,7 @@ ObjMapSpriteObject::flip_horizontal()
 }
 
 void
-ObjMapSpriteObject::set_sprite(const CL_Sprite& sprite)
+ObjMapSpriteObject::set_sprite(const Sprite& sprite)
 {
   impl->sprite = sprite;
 }

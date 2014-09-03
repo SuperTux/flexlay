@@ -19,7 +19,6 @@
 #include "tilemap_paint_tool.hpp"
 
 #include <ClanLib/Display/keyboard.h>
-#include <ClanLib/Display/sprite.h>
 
 #include "display.hpp"
 #include "editor_map.hpp"
@@ -27,6 +26,7 @@
 #include "gui/tile_selection.hpp"
 #include "input_event.hpp"
 #include "paint_command.hpp"
+#include "sprite.hpp"
 #include "tile.hpp"
 #include "tilemap_layer.hpp"
 #include "tileset.hpp"
@@ -102,7 +102,7 @@ TileMapPaintToolImpl::draw()
 
           if (tile)
           {
-            CL_Sprite sprite = tile->get_sprite();
+            Sprite sprite = tile->get_sprite();
             sprite.set_alpha(0.5f);
             sprite.draw((current_tile.x + x) * tile_size,
                         (current_tile.y + y) * tile_size);

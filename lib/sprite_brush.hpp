@@ -24,7 +24,7 @@ class SpriteBrushImpl;
 class SpriteBrush
 {
 public:
-  SpriteBrush(const CL_Sprite& sprite_);
+  SpriteBrush(const Sprite& sprite_);
 
   Brush to_brush();
 private:

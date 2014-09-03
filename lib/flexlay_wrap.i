@@ -15,13 +15,11 @@ std::cout << "CL_Error: " << err.message << std::endl;
 }
  
 %{
-#include <ClanLib/Display/color.h>
 #include <ClanLib/Display/Providers/provider_factory.h>
 #include <ClanLib/GUI/component.h>
 #include <ClanLib/GUI/button.h>
 #include <ClanLib/GUI/window.h>
-#include <ClanLib/Core/Math/rect.h>
-#include <ClanLib/Core/Math/point.h>
+
 #include "command.hpp"
 #include "paint_command.hpp"
 #include "object_move_command.hpp"

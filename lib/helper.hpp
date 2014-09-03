@@ -17,18 +17,19 @@
 #ifndef HEADER_FLEXLAY_HELPER_HPP
 #define HEADER_FLEXLAY_HELPER_HPP
 
-#include <ClanLib/Display/sprite.h>
+#include "sprite.hpp"
+#include "pixel_buffer.hpp"
 
-CL_Sprite      pixelbuffer2sprite(const CL_PixelBuffer& buffer);
-CL_Sprite      make_sprite(const std::string& filename);
-CL_PixelBuffer make_pixelbuffer(const std::string& filename);
-CL_PixelBuffer make_region_pixelbuffer_from_resource(const std::string& filename, int x, int y, int w, int h);
-CL_PixelBuffer make_region_pixelbuffer(const CL_PixelBuffer& buffer, int x, int y, int w, int h);
-CL_PixelBuffer make_pixelbuffer(int width, int height);
-CL_PixelBuffer scale_pixelbuffer(CL_PixelBuffer buffer);
+Sprite pixelbuffer2sprite(const PixelBuffer& buffer);
+Sprite make_sprite(const std::string& filename);
+PixelBuffer make_pixelbuffer(const std::string& filename);
+PixelBuffer make_region_pixelbuffer_from_resource(const std::string& filename, int x, int y, int w, int h);
+PixelBuffer make_region_pixelbuffer(const PixelBuffer& buffer, int x, int y, int w, int h);
+PixelBuffer make_pixelbuffer(int width, int height);
+PixelBuffer scale_pixelbuffer(PixelBuffer buffer);
 
-CL_Sprite      make_sprite_from_resource(const std::string& filename, CL_ResourceManager& resources);
-CL_PixelBuffer make_pixelbuffer_from_resource(const std::string& filename, CL_ResourceManager& resources);
+Sprite make_sprite_from_resource(const std::string& filename, CL_ResourceManager& resources);
+PixelBuffer make_pixelbuffer_from_resource(const std::string& filename, CL_ResourceManager& resources);
 #endif
 
 /* EOF */

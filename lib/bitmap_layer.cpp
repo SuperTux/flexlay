@@ -21,11 +21,13 @@
 #include <ClanLib/Core/System/error.h>
 #include <ClanLib/Display/canvas.h>
 #include <ClanLib/Display/graphic_context.h>
-#include <ClanLib/Display/pixel_format.h>
 
 #include "color.hpp"
 #include "graphic_context.hpp"
 #include "objmap_object_impl.hpp"
+#include "pixel_buffer.hpp"
+#include "pixel_buffer.hpp"
+#include "surface.hpp"
 
 BitmapLayer* BitmapLayer::current_ = 0;
 
@@ -38,16 +40,16 @@ public:
   Strokes strokes;
 
   /** Used to cache drawings */
-  CL_Surface  surface;
+  Surface  surface;
   CL_Canvas*  canvas;
   Pointf   last_pos;
 
-  BitmapLayerImpl(CL_Surface surface_)
-    : surface(surface_),
-      canvas(0)
+  BitmapLayerImpl(Surface surface_) :
+    surface(surface_),
+    canvas(0)
   {
     try {
-      canvas = new CL_Canvas(surface);
+      canvas = new CL_Canvas(surface.to_cl());
       canvas->sync_surface();
     } catch(const CL_Error& err) {
       std::cout << "CL_Error: " << err.message << std::endl;
@@ -55,12 +57,12 @@ public:
     }
   }
 
-  BitmapLayerImpl(CL_PixelBuffer buffer)
+  BitmapLayerImpl(PixelBuffer buffer)
     : surface(buffer),
       canvas(0)
   {
     try {
-      canvas = new CL_Canvas(surface);
+      canvas = new CL_Canvas(surface.to_cl());
       canvas->sync_surface();
     } catch(const CL_Error& err) {
       std::cout << "CL_Error: " << err.message << std::endl;
@@ -69,11 +71,11 @@ public:
   }
 
   BitmapLayerImpl(int width, int height)
-    : surface(CL_PixelBuffer(width, height, width*4, CL_PixelFormat::rgba8888)),
+    : surface(PixelBuffer(width, height)),
       canvas(0)
   {
     try {
-      canvas = new CL_Canvas(surface);
+      canvas = new CL_Canvas(surface.to_cl());
       canvas->get_gc()->clear(Color(0, 0, 0, 0).to_cl());
       canvas->get_gc()->flush();
       canvas->sync_surface();
@@ -117,7 +119,7 @@ public:
   }
 };
 
-BitmapLayer::BitmapLayer(CL_Surface surface)
+BitmapLayer::BitmapLayer(Surface surface)
   : impl(new BitmapLayerImpl(surface))
 {
   current_ = this;
@@ -129,7 +131,7 @@ BitmapLayer::BitmapLayer(int width, int height)
   current_ = this;
 }
 
-BitmapLayer::BitmapLayer(CL_PixelBuffer buffer)
+BitmapLayer::BitmapLayer(PixelBuffer buffer)
   : impl(new BitmapLayerImpl(buffer))
 {
   current_ = this;
@@ -156,7 +158,7 @@ BitmapLayer::get_strokes()
   return impl->strokes;
 }
 
-CL_Surface
+Surface
 BitmapLayer::get_background_surface()
 {
   return impl->surface;
@@ -169,15 +171,15 @@ BitmapLayer::get_canvas() const
 }
 
 void
-BitmapLayer::set_pixeldata(CL_PixelBuffer buffer)
+BitmapLayer::set_pixeldata(PixelBuffer buffer)
 {
   //impl->canvas->set_pixeldata(buffer);
-  CL_Surface(buffer).draw(0, 0, impl->canvas->get_gc());
+  Surface(buffer).draw(0, 0, impl->canvas->get_gc());
   impl->canvas->get_gc()->flush();
   impl->canvas->sync_surface();
 }
 
-CL_PixelBuffer
+PixelBuffer
 BitmapLayer::get_pixeldata() const
 {
   return impl->canvas->get_pixeldata();

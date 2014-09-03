@@ -27,7 +27,7 @@ public:
   Brush();
   Brush(std::shared_ptr<BrushImpl> impl);
 
-  CL_Sprite get_sprite();
+  Sprite get_sprite();
   Brush clone() const;
   bool is_null() const { return !impl.get(); }
 

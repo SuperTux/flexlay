@@ -32,7 +32,7 @@ Brush::clone() const
   return Brush(std::shared_ptr<BrushImpl>(impl->clone()));
 }
 
-CL_Sprite
+Sprite
 Brush::get_sprite()
 {
   return impl->get_sprite();

@@ -169,7 +169,7 @@ ObjectSelector::draw()
     Rectf rect(Pointf(x * obj_width, y * obj_height),
                Sizef(obj_width, obj_height));
 
-    CL_Sprite sprite = brushes[i].get_sprite();
+    Sprite sprite = brushes[i].get_sprite();
     sprite.set_alignment(origin_center, 0, 0);
     sprite.set_scale(std::min(1.0f, (float)obj_width/(float)sprite.get_width()),
                      std::min(1.0f, (float)obj_height/(float)sprite.get_height()));
@@ -195,7 +195,7 @@ ObjectSelector::draw()
                                   Size(CL_Display::get_width(),
                                        CL_Display::get_height())).to_cl());
 
-    CL_Sprite sprite = brushes[drag_obj].get_sprite();
+    Sprite sprite = brushes[drag_obj].get_sprite();
     sprite.set_alpha(0.5f);
     sprite.draw(mouse_pos.x + get_screen_x(), mouse_pos.y + get_screen_y());
   }

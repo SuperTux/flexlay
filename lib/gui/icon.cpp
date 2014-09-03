@@ -30,7 +30,7 @@ public:
   Icon* parent;
 
   std::vector<CL_Slot> slots;
-  CL_Sprite sprite;
+  Sprite sprite;
   std::string tooltip;
   bool draw_tooltip;
   bool down;
@@ -49,7 +49,7 @@ public:
   void mouse_move(const CL_InputEvent& event);
 };
 
-Icon::Icon(const Rect& rect, const CL_Sprite& sprite, const std::string& tooltip,
+Icon::Icon(const Rect& rect, const Sprite& sprite, const std::string& tooltip,
            CL_Component* parent) :
   CL_Component(rect.to_cl(), parent),
   impl(new IconImpl(this))

@@ -21,7 +21,7 @@
 class ObjMapControlPointImpl
 {
 public:
-  CL_Sprite sprite;
+  Sprite sprite;
   Pointf  pos;
   MetaData  data;
 
@@ -36,7 +36,7 @@ ObjMapControlPoint::sig_set_pos()
   return impl->on_set_pos;
 }
 
-ObjMapControlPoint::ObjMapControlPoint(CL_Sprite sprite_, Pointf pos_, MetaData data_)
+ObjMapControlPoint::ObjMapControlPoint(Sprite sprite_, Pointf pos_, MetaData data_)
   : impl(new ObjMapControlPointImpl)
 {
   impl->sprite = sprite_;

@@ -21,7 +21,7 @@
 #include "blitter.hpp"
 
 void
-blit_opaque(CL_PixelBuffer target, CL_PixelBuffer brush, int x_pos, int y_pos)
+blit_opaque(PixelBuffer target, PixelBuffer brush, int x_pos, int y_pos)
 {
   assert(target.get_format().get_type() == pixelformat_rgba);
   assert(target.get_format().get_depth() == 32);
@@ -103,7 +103,7 @@ blit_opaque(CL_PixelBuffer target, CL_PixelBuffer brush, int x_pos, int y_pos)
 }
 
 void
-blit(CL_PixelBuffer target, CL_PixelBuffer brush, int x_pos, int y_pos)
+blit(PixelBuffer target, PixelBuffer brush, int x_pos, int y_pos)
 {
   target.lock();
   brush.lock();
@@ -194,7 +194,7 @@ blit(CL_PixelBuffer target, CL_PixelBuffer brush, int x_pos, int y_pos)
   target.unlock();
 }
 
-void clear(CL_PixelBuffer canvas)
+void clear(PixelBuffer canvas)
 {
   unsigned char* buffer;
 

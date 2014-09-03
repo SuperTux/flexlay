@@ -17,13 +17,13 @@
 #ifndef HEADER_FLEXLAY_BRUSH_IMPL_HPP
 #define HEADER_FLEXLAY_BRUSH_IMPL_HPP
 
-#include <ClanLib/Display/sprite.h>
+#include "sprite.hpp"
 
 class BrushImpl
 {
 public:
   virtual ~BrushImpl() {}
-  virtual CL_Sprite get_sprite() =0;
+  virtual Sprite get_sprite() =0;
   virtual BrushImpl* clone() const =0;
 };
 

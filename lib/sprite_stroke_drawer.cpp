@@ -66,7 +66,7 @@ SpriteStrokeDrawerImpl::draw(const Stroke& stroke, GraphicContext& gc)
   {
     Dab& dab = *i;
 
-    CL_Sprite sprite = DrawerProperties::current()->get_brush().get_sprite();
+    Sprite sprite = DrawerProperties::current()->get_brush().get_sprite();
 
     Color color = DrawerProperties::current()->get_color();
     sprite.set_color(color.to_cl());
@@ -137,10 +137,10 @@ SpriteStrokeDrawerImpl::draw(const Stroke& stroke, GraphicContext& gc)
           if (i != dabs.begin())
           {
             CL_Canvas* canvas = BitmapLayer::current()->get_canvas();
-            CL_PixelBuffer buffer = canvas->get_pixeldata(Rect(Point(static_cast<int>((i-1)->pos.x) - sprite.get_width()/2,
+            PixelBuffer buffer = canvas->get_pixeldata(Rect(Point(static_cast<int>((i-1)->pos.x) - sprite.get_width()/2,
                                                                      static_cast<int>((i-1)->pos.y) - sprite.get_height()/2),
                                                                Size(sprite.get_width(), sprite.get_height())).to_cl());
-            CL_Surface surface(buffer);
+            Surface surface(buffer);
             //surface.set_blend_func_separate(blend_src_alpha, blend_one_minus_src_alpha,
             //                                blend_one, blend_zero);
             surface.set_alignment(origin_center);

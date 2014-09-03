@@ -18,11 +18,11 @@
 
 #include <ClanLib/Display/display.h>
 #include <ClanLib/Display/keys.h>
-#include <ClanLib/Display/sprite.h>
 #include <ClanLib/Display/mouse.h>
 
 #include "display.hpp"
 #include "math/rect.hpp"
+#include "sprite.hpp"
 #include "tile.hpp"
 
 TileEditor::TileEditor(int x, int y, int w, int h, CL_Component* parent) :

@@ -20,9 +20,6 @@
 #include <ClanLib/Core/core_iostream.h>
 #include <ClanLib/Core/System/error.h>
 #include <ClanLib/Display/display.h>
-#include <ClanLib/Display/sprite.h>
-#include <ClanLib/Display/pixel_buffer.h>
-#include <ClanLib/Display/pixel_format.h>
 #include <ClanLib/Display/canvas.h>
 #include <ClanLib/Display/blend_func.h>
 #include <ClanLib/Display/display_window.h>
@@ -34,6 +31,8 @@
 #include "gui/editor_map_component.hpp"
 #include "layer_impl.hpp"
 #include "math.hpp"
+#include "pixel_buffer.hpp"
+#include "surface.hpp"
 
 SketchLayer* SketchLayer::current_ = 0;
 
@@ -44,21 +43,20 @@ public:
   Strokes strokes;
 
   /** Used to cache drawings */
-  CL_Surface  surface;
+  Surface  surface;
   CL_Canvas*  canvas;
   float       last_zoom;
   float       last_rot;
   Pointf   last_pos;
 
   SketchLayerImpl() :
-    surface(CL_PixelBuffer(CL_Display::get_width(), CL_Display::get_height(),
-                           CL_Display::get_width()*4, CL_PixelFormat::rgba8888)),
+    surface(PixelBuffer(CL_Display::get_width(), CL_Display::get_height())),
     canvas(0),
     last_zoom(0.0f),
     last_rot(0)
   {
     try {
-      canvas = new CL_Canvas(surface);
+      canvas = new CL_Canvas(surface.to_cl());
     } catch(const CL_Error& err) {
       std::cout << "CL_Error: " << err.message << std::endl;
     }
@@ -129,7 +127,7 @@ public:
 
       CL_Matrix4x4 matrix = CL_Display::get_modelview();
       Display::pop_modelview();
-      surface.draw();
+      surface.draw(0, 0);
       CL_Display::set_modelview(matrix);
       // FIXME: I think we need the line below, however with it it
       //doesn't work, without it, it does, ClanLib bug or just
@@ -178,7 +176,7 @@ SketchLayer::get_strokes()
   return impl->strokes;
 }
 
-CL_Surface
+Surface
 SketchLayer::get_background_surface()
 {
   return impl->surface;

@@ -19,7 +19,7 @@
 class ObjectBrushImpl
 {
 public:
-  CL_Sprite sprite;
+  Sprite sprite;
   MetaData  data;
 };
 
@@ -28,7 +28,7 @@ ObjectBrush::ObjectBrush()
 
 }
 
-ObjectBrush::ObjectBrush(const CL_Sprite& sprite_,
+ObjectBrush::ObjectBrush(const Sprite& sprite_,
                          const MetaData& data_)
   : impl(new ObjectBrushImpl())
 {
@@ -36,7 +36,7 @@ ObjectBrush::ObjectBrush(const CL_Sprite& sprite_,
   impl->data   = data_;
 }
 
-CL_Sprite
+Sprite
 ObjectBrush::get_sprite()
 {
   return impl->sprite;

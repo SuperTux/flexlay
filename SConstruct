@@ -24,6 +24,6 @@ Export('clanLib_env')
 # SConscript(['external/clanlib/SConstruct'])
 SConscript(['lib/SConscript'])
 SConscript(['ruby/SConscript'])
-SConscript(['netpanzer/SConscript'])
+# SConscript(['netpanzer/SConscript'])
 
 # EOF #

@@ -18,14 +18,13 @@
 
 #include <iostream>
 #include <ClanLib/Display/display.h>
-#include <ClanLib/Display/surface.h>
-#include <ClanLib/Display/pixel_format.h>
-#include <ClanLib/Display/pixel_buffer.h>
 
 #include "display.hpp"
 #include "editor_map.hpp"
 #include "editor_map_component.hpp"
 #include "lib/workspace.hpp"
+#include "pixel_buffer.hpp"
+#include "surface.hpp"
 #include "tile.hpp"
 #include "tilemap_layer.hpp"
 #include "tileset.hpp"
@@ -40,7 +39,7 @@ public:
   EditorMap editor_map;
 
   EditorMapComponent* parent;
-  CL_Surface minimap_surface;
+  Surface minimap_surface;
 
   MinimapImpl()
     : editor_map(false)
@@ -120,7 +119,7 @@ Minimap::draw()
         }
     }
     impl->minimap_surface.draw(Rect(Point(0, 0),
-                                    Size(get_width(), get_height())).to_cl());
+                                    Size(get_width(), get_height())));
 
     // Draw cursor
     Rect rect(impl->parent->get_clip_rect());
@@ -148,8 +147,7 @@ MinimapImpl::update_minimap_surface()
   {
     Field<int>* field = tilemap.get_field();
 
-    CL_PixelBuffer buffer(tilemap.get_width(), tilemap.get_height(),
-                          tilemap.get_width()*4, CL_PixelFormat::rgba8888);
+    PixelBuffer buffer(tilemap.get_width(), tilemap.get_height());
 
     int map_width  = tilemap.get_width();
     int map_height = tilemap.get_height();
@@ -176,7 +174,7 @@ MinimapImpl::update_minimap_surface()
         }
       }
 
-    minimap_surface = CL_Surface(buffer);
+    minimap_surface = Surface(buffer);
   }
 }
 

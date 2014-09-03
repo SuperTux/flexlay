@@ -87,7 +87,7 @@ class LayoutComponent
       panel = Panel.new(rect, parent)
       return LayoutComponent.new(panel, 
                                  LayoutBox.new(sexpr.get_value([:layout, '_'], :vbox),
-                                               CL_Rect.new(0, 0, rect.get_width(), rect.get_height()), 
+                                               Rect.new(0, 0, rect.get_width(), rect.get_height()), 
                                                sexpr, panel),
                                  :name    => sexpr.get_value([:name,    '_'], nil),
                                  :size    => sexpr.get_value([:size,    '_'], nil),
@@ -125,7 +125,7 @@ class LayoutComponent
                            parent)
 
     when :label
-      return CL_Label.new(CL_Point.new(rect.top, rect.left),
+      return CL_Label.new(Point.new(rect.top, rect.left),
                           sexpr.get_value(['label', '_'], []),
                           parent)
 
@@ -136,7 +136,7 @@ class LayoutComponent
       return CL_InputBox.new(rect, parent)
 
     when :radiobutton
-      return CL_RadioButton.new(CL_Point.new(rect.left, rect.top),
+      return CL_RadioButton.new(Point.new(rect.left, rect.top).to_cl(),
                                 sexpr.get_value(['label', '_'], []),
                                 parent)
 
@@ -144,7 +144,7 @@ class LayoutComponent
       return CL_RadioGroup.new()
 
     when :checkbox
-      return CL_CheckBox.new(CL_Point.new(rect.left, rect.top),
+      return CL_CheckBox.new(Point.new(rect.left, rect.top).to_cl(),
                              sexpr.get_value(['label', '_'], []),
                              parent)
 
@@ -183,7 +183,7 @@ class TabComponent < LayoutComponent
     @childs = []
 
     sexpr.get(:components, SExpression.new()).each_pair() { |name, value|
-      @childs.push(LayoutComponent.create(name, CL_Rect.new(0, 0, 256, 256), value, parent))
+      @childs.push(LayoutComponent.create(name, Rect.new(0, 0, 256, 256), value, parent))
     }
   end
 
@@ -229,7 +229,7 @@ class LayoutBox < LayoutComponent
     @homogenus  = false
 
     sexpr.get(:components, SExpression.new()).each_pair() { |name, value|
-      @components.push(LayoutComponent.create(name, CL_Rect.new(0, 0, 256, 256), value, @parent))
+      @components.push(LayoutComponent.create(name, Rect.new(0, 0, 256, 256), value, @parent))
     }
 
     layout()

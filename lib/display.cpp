@@ -69,4 +69,10 @@ Display::pop_cliprect()
   CL_Display::pop_cliprect();
 }
 
+void
+Display::flush()
+{
+  CL_Display::flush();
+}
+
 /* EOF */

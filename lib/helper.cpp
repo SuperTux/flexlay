@@ -23,10 +23,10 @@
 #include "globals.hpp"
 #include "helper.hpp"
 
-typedef std::map<std::string, CL_PixelBuffer> PixelBufferCache;
+typedef std::map<std::string, PixelBuffer> PixelBufferCache;
 PixelBufferCache pixelbuffer_cache;
 
-CL_PixelBuffer get_pixelbuffer(const std::string& filename)
+PixelBuffer get_pixelbuffer(const std::string& filename)
 {
   PixelBufferCache::iterator it = pixelbuffer_cache.find(filename);
 
@@ -36,45 +36,45 @@ CL_PixelBuffer get_pixelbuffer(const std::string& filename)
     return it->second;
 }
 
-CL_Sprite
-pixelbuffer2sprite(const CL_PixelBuffer& buffer)
+Sprite
+pixelbuffer2sprite(const PixelBuffer& buffer)
 {
   CL_SpriteDescription desc;
-  desc.add_frame(buffer);
-  return CL_Sprite(desc);
+  desc.add_frame(buffer.to_cl());
+  return Sprite(desc);
 }
 
-CL_Sprite
+Sprite
 make_sprite(const std::string& filename)
 {
   try {
     CL_SpriteDescription desc;
-    desc.add_frame(get_pixelbuffer(filename));
-    return CL_Sprite(desc);
+    desc.add_frame(get_pixelbuffer(filename).to_cl());
+    return Sprite(desc);
   } catch (const CL_Error& err) {
     std::cout << "CL_Error: " << err.message << std::endl;
-    return CL_Sprite();
+    return Sprite();
   }
 }
 
-CL_PixelBuffer
+PixelBuffer
 make_pixelbuffer(const std::string& filename)
 {
   try {
     return get_pixelbuffer(filename);
   } catch (const CL_Error& err) {
     std::cout << "CL_Error: " << err.message << std::endl;
-    return CL_PixelBuffer();
+    return PixelBuffer();
   }
 }
 
-CL_PixelBuffer
+PixelBuffer
 make_region_pixelbuffer_from_resource(const std::string& filename, int x, int y, int w, int h)
 {
   try
   {
-    CL_PixelBuffer buffer = get_pixelbuffer(filename);
-    CL_PixelBuffer target(w, h, w * 4, CL_PixelFormat::rgba8888);
+    PixelBuffer buffer = get_pixelbuffer(filename);
+    PixelBuffer target(w, h);
     clear(target);
     blit_opaque(target, buffer, -x, -y);
 
@@ -83,60 +83,59 @@ make_region_pixelbuffer_from_resource(const std::string& filename, int x, int y,
   catch (const CL_Error& err)
   {
     std::cout << "CL_Error: " << err.message << std::endl;
-    return CL_PixelBuffer();
+    return PixelBuffer();
   }
 }
 
-CL_Sprite
+Sprite
 make_sprite_from_resource(const std::string& filename, CL_ResourceManager& resources)
 {
   try {
-    return CL_Sprite(filename, &resources);
+    return Sprite(filename, &resources);
   } catch (const CL_Error& err) {
     std::cout << "CL_Error: " << err.message << std::endl;
-    return CL_Sprite();
+    return Sprite();
   }
 }
 
-CL_PixelBuffer
+PixelBuffer
 make_pixelbuffer_from_resource(const std::string& filename, CL_ResourceManager& resources)
 {
   try {
     // FIXME: expects a sprite, won't work with 'surface'
     CL_SpriteDescription descr(filename, &resources);
-    return CL_PixelBuffer(descr.get_frames().begin()->first);
+    return PixelBuffer(descr.get_frames().begin()->first);
   } catch (const CL_Error& err) {
     std::cout << "CL_Error: " << err.message << std::endl;
-    return CL_PixelBuffer();
+    return PixelBuffer();
   }
 }
 
-CL_PixelBuffer
+PixelBuffer
 make_pixelbuffer(int width, int height)
 {
-  return CL_PixelBuffer(width, height, width*4, CL_PixelFormat::rgba8888);
+  return PixelBuffer(width, height);
 }
 
-CL_PixelBuffer
-make_region_pixelbuffer(const CL_PixelBuffer& buffer, int x, int y, int w, int h)
+PixelBuffer
+make_region_pixelbuffer(const PixelBuffer& buffer, int x, int y, int w, int h)
 {
   try {
-    CL_PixelBuffer target(w, h, w * 4, CL_PixelFormat::rgba8888);
+    PixelBuffer target(w, h);
     clear(target);
     blit_opaque(target, buffer, -x, -y);
 
     return target;
   } catch (const CL_Error& err) {
     std::cout << "CL_Error: " << err.message << std::endl;
-    return CL_PixelBuffer();
+    return PixelBuffer();
   }
 }
 
-CL_PixelBuffer
-scale_pixelbuffer(CL_PixelBuffer buffer)
+PixelBuffer
+scale_pixelbuffer(PixelBuffer buffer)
 {
-  CL_PixelBuffer target(buffer.get_width()/2, buffer.get_height()/2, (buffer.get_width()/2)*4,
-                        CL_PixelFormat::rgba8888);
+  PixelBuffer target(buffer.get_width()/2, buffer.get_height()/2);
 
   target.lock();
   buffer.lock();

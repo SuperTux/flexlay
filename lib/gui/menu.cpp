@@ -15,7 +15,6 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <ClanLib/Display/display.h>
-#include <ClanLib/Display/sprite.h>
 
 #include "box.hpp"
 #include "color.hpp"
@@ -25,6 +24,7 @@
 #include "math/rect.hpp"
 #include "math/size.hpp"
 #include "menu.hpp"
+#include "sprite.hpp"
 
 class MenuItem;
 
@@ -97,11 +97,11 @@ public:
 class TextMenuItem : public MenuItem
 {
 private:
-  CL_Sprite sprite;
+  Sprite sprite;
   std::string text;
 
 public:
-  TextMenuItem(const CL_Sprite& sprite_, const std::string& text_, MenuImpl* parent_)
+  TextMenuItem(const Sprite& sprite_, const std::string& text_, MenuImpl* parent_)
     : MenuItem(parent_),
       sprite(sprite_),
       text(text_)
@@ -166,13 +166,13 @@ Menu::add_separator()
 MenuItemHandle
 Menu::add_item(const std::string& name)
 {
-  impl->items.push_back(new TextMenuItem(CL_Sprite(), name, impl.get()));
+  impl->items.push_back(new TextMenuItem(Sprite(), name, impl.get()));
   impl->recalc_size();
   return impl->items.size()-1;
 }
 
 MenuItemHandle
-Menu::add_item(const CL_Sprite& sprite, const std::string& name)
+Menu::add_item(const Sprite& sprite, const std::string& name)
 {
   impl->items.push_back(new TextMenuItem(sprite, name, impl.get()));
   impl->recalc_size();

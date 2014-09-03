@@ -23,8 +23,8 @@
 
 class TileImpl;
 class TileProvider;
-class CL_PixelBuffer;
-class CL_Sprite;
+class PixelBuffer;
+class Sprite;
 
 /** A Tile is a surface or sprite together with meta information for
     collision (aka colmap), walkability or such. */
@@ -33,10 +33,10 @@ class Tile
 public:
   Tile(const TileProvider& provider);
 
-  Tile(const CL_PixelBuffer& pixelbuffer);
+  Tile(const PixelBuffer& pixelbuffer);
 
-  Tile(const CL_PixelBuffer& pixelbuffer,
-       const CL_Sprite& sprite);
+  Tile(const PixelBuffer& pixelbuffer,
+       const Sprite& sprite);
 
   /** @param filename Surface to use
    *  @param arg_colmap a 8 char long array */
@@ -44,11 +44,11 @@ public:
        const Color& attribute_color);
   ~Tile();
 
-  CL_Sprite& get_sprite();
+  Sprite& get_sprite();
 
   /** Return a pixelbuffer associated with this tile, caller must not
       delete the pixelbuffer, the Tile will take care of that */
-  CL_PixelBuffer get_pixelbuffer();
+  PixelBuffer get_pixelbuffer();
 
   // FIXME: Document all those functions
   Color get_color();

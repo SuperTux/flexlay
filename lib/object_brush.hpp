@@ -27,10 +27,10 @@ class ObjectBrush
 {
 public:
   ObjectBrush();
-  ObjectBrush(const CL_Sprite& sprite_,
+  ObjectBrush(const Sprite& sprite_,
               const MetaData& data_);
 
-  CL_Sprite get_sprite();
+  Sprite get_sprite();
   MetaData get_data();
 
   ObjMapSpriteObject to_sprite_object(const Pointf& pos);

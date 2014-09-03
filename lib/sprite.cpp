@@ -14,36 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef HEADER_DISPLAY_HPP
-#define HEADER_DISPLAY_HPP
+#include "sprite.hpp"
 
-class Rect;
-class Rectf;
-class Color;
-
-class Display
-{
-private:
-public:
-  static void draw_rect(const Rectf& rect, const Color& color);
-  static void fill_rect(const Rectf& rect, const Color& color);
-
-  static void draw_line(float x1, float y1, float x2, float y2, const Color& color);
-
-  static void push_modelview();
-  static void pop_modelview();
-  static void add_translate(float x, float y);
-
-  static void push_cliprect(const Rect& rect);
-  static void pop_cliprect();
-
-  static void flush();
-
-private:
-  Display(const Display&) = delete;
-  Display& operator=(const Display&) = delete;
-};
-
-#endif
 
 /* EOF */

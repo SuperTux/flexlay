@@ -17,7 +17,7 @@
 #ifndef HEADER_FLEXLAY_BRUSHMASK_HPP
 #define HEADER_FLEXLAY_BRUSHMASK_HPP
 
-#include <ClanLib/Display/pixel_buffer.h>
+#include "pixel_buffer.hpp"
 
 enum BrushShape {
   BRUSH_SHAPE_CIRCLE,
@@ -25,12 +25,12 @@ enum BrushShape {
   BRUSH_SHAPE_DIAMOND
 };
 
-CL_PixelBuffer generate_brushmask(BrushShape shape,
-                                  float  radius,
-                                  int    spikes,        /* 2 - 20     */
-                                  float  hardness,      /* 0.0 - 1.0  */
-                                  float  aspect_ratio,  /* y/x        */
-                                  float  angle);        /* in degrees */
+PixelBuffer generate_brushmask(BrushShape shape,
+                               float  radius,
+                               int    spikes,        /* 2 - 20     */
+                               float  hardness,      /* 0.0 - 1.0  */
+                               float  aspect_ratio,  /* y/x        */
+                               float  angle);        /* in degrees */
 
 #endif
 

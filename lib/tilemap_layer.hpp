@@ -17,7 +17,6 @@
 #ifndef HEADER_FLEXLAY_TILEMAP_LAYER_HPP
 #define HEADER_FLEXLAY_TILEMAP_LAYER_HPP
 
-#include <ClanLib/Display/pixel_buffer.h>
 #include <memory>
 
 #include "color.hpp"
@@ -26,6 +25,7 @@
 #include "math/point.hpp"
 #include "math/size.hpp"
 #include "meta_data.hpp"
+#include "pixel_buffer.hpp"
 
 class TileBrush;
 class TilemapLayerImpl;
@@ -79,7 +79,7 @@ public:
   void set_draw_grid(bool t);
   bool get_draw_grid() const;
 
-  CL_PixelBuffer create_pixelbuffer();
+  PixelBuffer create_pixelbuffer();
 
   static void draw_tiles(Field<int>* field, const TileBrush& brush, const Point& pos);
 

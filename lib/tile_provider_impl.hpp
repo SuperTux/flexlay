@@ -17,8 +17,8 @@
 #ifndef HEADER_FLEXLAY_TILE_PROVIDER_IMPL_HPP
 #define HEADER_FLEXLAY_TILE_PROVIDER_IMPL_HPP
 
-#include <ClanLib/Display/sprite.h>
-#include <ClanLib/Display/pixel_buffer.h>
+#include "pixel_buffer.hpp"
+#include "sprite.hpp"
 
 class TileProviderImpl
 {
@@ -27,8 +27,8 @@ public:
   virtual ~TileProviderImpl()
   { }
 
-  virtual CL_Sprite      get_sprite()      const =0;
-  virtual CL_PixelBuffer get_pixelbuffer() const =0;
+  virtual Sprite get_sprite() const = 0;
+  virtual PixelBuffer get_pixelbuffer() const = 0;
 };
 
 #endif

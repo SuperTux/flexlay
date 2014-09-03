@@ -16,15 +16,12 @@
 
 #include "tilemap_layer.hpp"
 
-#include <ClanLib/Display/display.h>
-#include <ClanLib/Display/pixel_format.h>
-#include <ClanLib/Display/sprite.h>
-
 #include "blitter.hpp"
 #include "display.hpp"
 #include "graphic_context.hpp"
 #include "gui/editor_map_component.hpp"
 #include "layer_impl.hpp"
+#include "sprite.hpp"
 #include "tile.hpp"
 #include "tile_brush.hpp"
 #include "tileset.hpp"
@@ -102,7 +99,7 @@ TilemapLayerImpl::draw(GraphicContext& gc)
                             Size(this->field.get_width()  * tile_size,
                                  this->field.get_height() * tile_size)),
                        this->background_color);
-  CL_Display::flush();
+  Display::flush();
 
   Rect rect(gc.state.get_clip_rect());
 
@@ -122,7 +119,7 @@ TilemapLayerImpl::draw(GraphicContext& gc)
           Tile* tile = tileset.create(tile_id);
           if (tile) // skip transparent tile for faster draw
           {
-            CL_Sprite sprite = tile->get_sprite();
+            Sprite sprite = tile->get_sprite();
             sprite.set_color(foreground_color.to_cl());
             sprite.draw(x * tile_size, y * tile_size, gc.gc);
 
@@ -173,7 +170,7 @@ TilemapLayerImpl::draw(GraphicContext& gc)
                          x % 2 ? Color(150, 150, 150) : Color(255, 255, 255));
   }
 
-  CL_Display::flush();
+  Display::flush();
 }
 
 int
@@ -251,15 +248,12 @@ TilemapLayer::get_draw_grid() const
   return impl->draw_grid;
 }
 
-CL_PixelBuffer
+PixelBuffer
 TilemapLayer::create_pixelbuffer()
 {
   int tile_size = impl->tileset.get_tile_size();
 
-  CL_PixelBuffer pixelbuffer(get_width()  * tile_size,
-                             get_height() * tile_size,
-                             get_width()  * tile_size * 4,
-                             CL_PixelFormat::rgba8888);
+  PixelBuffer pixelbuffer(get_width()  * tile_size, get_height() * tile_size);
 
   {
     pixelbuffer.lock();
@@ -289,7 +283,7 @@ TilemapLayer::create_pixelbuffer()
 
       if (tile)
       {
-        CL_PixelBuffer buf = tile->get_pixelbuffer();
+        PixelBuffer buf = tile->get_pixelbuffer();
         if (buf)
         {
           blit(pixelbuffer, buf, x*tile_size, y*tile_size);

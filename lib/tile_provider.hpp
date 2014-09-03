@@ -19,6 +19,9 @@
 
 #include <memory>
 
+#include "sprite.hpp"
+#include "pixel_buffer.hpp"
+
 class TileProviderImpl;
 
 /** TileProvider provides a flexible way to perform load-on-demand for Tiles */
@@ -28,10 +31,11 @@ public:
   TileProvider() {}
   TileProvider(TileProviderImpl* impl);
 
-  CL_Sprite      get_sprite() const;
-  CL_PixelBuffer get_pixelbuffer() const;
+  Sprite      get_sprite() const;
+  PixelBuffer get_pixelbuffer() const;
 
-  operator bool() const { return impl.get(); }
+  explicit operator bool() const { return impl.get(); }
+
 private:
   std::shared_ptr<TileProviderImpl> impl;
 };

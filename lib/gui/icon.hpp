@@ -17,10 +17,11 @@
 #ifndef HEADER_FLEXLAY_ICON_HPP
 #define HEADER_FLEXLAY_ICON_HPP
 
-#include <ClanLib/Display/sprite.h>
 #include <ClanLib/GUI/component.h>
 #include <boost/signals2.hpp>
 #include <memory>
+
+#include "sprite.hpp"
 
 class Rect;
 class IconImpl;
@@ -30,7 +31,7 @@ class Icon : public CL_Component
 protected:
   virtual ~Icon() {}
 public:
-  Icon(const Rect& rect, const CL_Sprite& sprite, const std::string& tooltip, CL_Component* parent);
+  Icon(const Rect& rect, const Sprite& sprite, const std::string& tooltip, CL_Component* parent);
 
   void disable();
   void enable();

@@ -277,7 +277,7 @@ gimp_brush_generated_dirty (GimpBrushGenerated *brush)
   delete lookup;
 }
 
-CL_PixelBuffer generate_brushmask(BrushShape shape,
+PixelBuffer generate_brushmask(BrushShape shape,
                                   float  radius,
                                   int    spikes,        /* 2 - 20     */
                                   float  hardness,      /* 0.0 - 1.0  */
@@ -296,8 +296,7 @@ CL_PixelBuffer generate_brushmask(BrushShape shape,
 
   gimp_brush_generated_dirty(&brush);
 
-  CL_PixelBuffer buffer(brush.mask->width, brush.mask->height, brush.mask->width*4,
-                        CL_PixelFormat::rgba8888);
+  PixelBuffer buffer(brush.mask->width, brush.mask->height);
 
   buffer.lock();
   unsigned char* buf = static_cast<unsigned char*>(buffer.get_data());

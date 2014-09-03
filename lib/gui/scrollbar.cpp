@@ -17,6 +17,7 @@
 #include <ClanLib/Display/display.h>
 #include <ClanLib/Display/keys.h>
 
+#include "color.hpp"
 #include "scrollbar.hpp"
 #include "math/rect.hpp"
 
@@ -93,7 +94,7 @@ ScrollbarImpl::draw()
   Rect rect(Point(0, 0),
             Size(parent->get_width()-1,
                  parent->get_height()-1));
-  CL_Display::fill_rect(rect.to_cl(), CL_Color(255, 255, 255));
+  CL_Display::fill_rect(rect.to_cl(), Color(255, 255, 255).to_cl());
 
   if (orientation == Scrollbar::HORIZONTAL)
   {
@@ -101,7 +102,7 @@ ScrollbarImpl::draw()
     CL_Display::fill_rect(Rect(Point(int((pos-min-(pagesize/2)) * scale), 2),
                                Size(int(pagesize*scale),
                                     parent->get_height()-5)).to_cl(),
-                          CL_Color(0, 0, 0));
+                          Color(0, 0, 0).to_cl());
   }
   else if (orientation == Scrollbar::VERTICAL)
   {
@@ -109,11 +110,11 @@ ScrollbarImpl::draw()
     CL_Display::fill_rect(Rect(Point(2, int((pos-min-(pagesize/2)) * scale)),
                                Size(parent->get_width()-5,
                                     int(pagesize*scale))).to_cl(),
-                          CL_Color(0, 0, 0));
+                          Color(0, 0, 0).to_cl());
   }
 
   CL_Display::draw_rect(rect.to_cl(),
-                        CL_Color(155, 155, 155));
+                        Color(155, 155, 155).to_cl());
 
   CL_Display::pop_modelview();
   CL_Display::pop_cliprect();

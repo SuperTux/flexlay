@@ -20,6 +20,7 @@
 #include <ClanLib/Display/pixel_buffer.h>
 #include <memory>
 
+#include "color.hpp"
 #include "field.hpp"
 #include "layer.hpp"
 #include "math/point.hpp"
@@ -69,8 +70,8 @@ public:
   int get_width()  const;
   int get_height() const;
 
-  void set_background_color(const CL_Color& color);
-  void set_foreground_color(const CL_Color& color);
+  void set_background_color(const Color& color);
+  void set_foreground_color(const Color& color);
 
   void set_draw_attribute(bool t);
   bool get_draw_attribute() const;

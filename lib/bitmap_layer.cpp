@@ -22,6 +22,7 @@
 #include <ClanLib/Core/System/error.h>
 #include <ClanLib/Display/canvas.h>
 
+#include "color.hpp"
 #include "objmap_object_impl.hpp"
 
 BitmapLayer* BitmapLayer::current_ = 0;
@@ -71,7 +72,7 @@ public:
   {
     try {
       canvas = new CL_Canvas(surface);
-      canvas->get_gc()->clear(CL_Color(0, 0, 0, 0));
+      canvas->get_gc()->clear(Color(0, 0, 0, 0).to_cl());
       canvas->get_gc()->flush();
       canvas->sync_surface();
     } catch(const CL_Error& err) {
@@ -95,7 +96,7 @@ public:
     surface.set_blend_func(blend_one, blend_one_minus_src_alpha);
     surface.draw(pos.x, pos.y, gc);
 
-    gc->draw_rect(get_bounding_rect().to_cl(), CL_Color(155, 155, 155, 100));
+    gc->draw_rect(get_bounding_rect().to_cl(), Color(155, 155, 155, 100).to_cl());
   }
 
   Rectf get_bound_rect() const

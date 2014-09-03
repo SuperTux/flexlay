@@ -24,6 +24,7 @@
 
 #include "layer.hpp"
 #include "command.hpp"
+#include "color.hpp"
 
 class CL_GraphicContext;
 class EditorMapImpl;
@@ -64,7 +65,7 @@ public:
       from the content of the map */
   void    set_bounding_rect(const Rect& rect);
 
-  void set_background_color(const CL_Color& color);
+  void set_background_color(const Color& color);
 
   /** Execute a command and place it on the undo stack, commands given
       to this function will be deleted by the Editor class, so they

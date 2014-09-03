@@ -339,7 +339,7 @@ NetPanzerData::load_tileset(const std::string& filename)
     }
 }
 
-unsigned char find_nearest_color(const CL_Palette& palette, const CL_Color& rgb)
+unsigned char find_nearest_color(const CL_Palette& palette, const Color& rgb)
 { // Copyright (C) 1998 Pyrosoft Inc. (www.pyrosoftgames.com), Matthew Bogue
   float bestDist = 10000000.0f;
   int   best     = 0;

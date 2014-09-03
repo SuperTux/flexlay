@@ -92,6 +92,8 @@ std::cout << "CL_Error: " << err.message << std::endl;
 #include "math/point.hpp"
 #include "math/origin.hpp"
 
+#include "color.hpp"
+
 // #include "netpanzer.hpp" 
 #include "helper.hpp"
 
@@ -116,6 +118,12 @@ VALUE CL_Color2Value(const CL_Color& arg)
 {
  CL_Color* resultptr = new CL_Color(arg);
  return SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_CL_Color, 1);
+}
+
+VALUE CL_Color2Value(const Color& arg)
+{
+ Color* resultptr = new Color(arg);
+ return SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_Color, 1);
 }
 
 VALUE Pointf2Value(const Pointf& arg)
@@ -226,6 +234,8 @@ VALUE CL_Point2Value(const CL_Point& arg)
 %include "math/size.hpp"
 %include "math/point.hpp"
 %include "math/origin.hpp"
+
+%include "color.hpp"
 
 // %include "netpanzer.hpp" 
 %include "helper.hpp"

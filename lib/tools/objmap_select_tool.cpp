@@ -111,7 +111,7 @@ ObjMapSelectToolImpl::draw()
   for (ObjMapSelectTool::Selection::iterator i = selection.begin(); i != selection.end(); ++i)
   {
     //      (*i).draw();
-    CL_Display::draw_rect((*i).get_bound_rect().to_cl(), CL_Color(255, 0, 0));
+    CL_Display::draw_rect((*i).get_bound_rect().to_cl(), Color(255, 0, 0).to_cl());
   }
 
   switch(state)
@@ -120,7 +120,7 @@ ObjMapSelectToolImpl::draw()
       break;
     case SELECT:
       CL_Display::draw_rect(selection_rect.to_cl(),
-                            CL_Color(255, 255, 255));
+                            Color(255, 255, 255).to_cl());
       break;
     default:
       break;

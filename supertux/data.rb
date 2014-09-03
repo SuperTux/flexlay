@@ -112,7 +112,7 @@ def create_gameobject(editormap, objmap, data, pos, sexpr = [])
     when :rect
       print "NewRect", pos.x, " -", pos.y, "\n"
       obj = ObjMapRectObject.new(Rect.new(Point.new(pos.x.to_i, pos.y.to_i), Size.new(64, 64)),
-                                 CL_Color.new(0, 0, 255, 128),
+                                 Color.new(0, 0, 255, 128),
                                  make_metadata(nil))
       gobj = data[3].call(obj, sexpr)
       obj.to_object.set_metadata(make_metadata(gobj))

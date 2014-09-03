@@ -18,6 +18,7 @@
 #define HEADER_FLEXLAY_DRAWER_PROPERTIES_HPP
 
 #include "brush.hpp"
+#include "color.hpp"
 
 class DrawerPropertiesImpl;
 
@@ -43,8 +44,8 @@ public:
 
   /** Set the base color, the real color itself is calculated from
       combining the base color with the current pressure or tilting */
-  void     set_color(const CL_Color& color);
-  CL_Color get_color() const;
+  void     set_color(const Color& color);
+  Color get_color() const;
 
   /** Set the brush to be used, its color and size settings are
       ignored */

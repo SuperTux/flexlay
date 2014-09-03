@@ -52,7 +52,7 @@ class Sector
     # @sketch  = SketchLayer.new()
 
     @editormap = EditorMap.new(true)
-#    @editormap.set_background_color(CL_Color.new(255, 255, 255))
+#    @editormap.set_background_color(Color.new(255, 255, 255))
     @editormap.add_layer(@background.to_layer())
     @editormap.add_layer(@interactive.to_layer())
     @editormap.add_layer(@objects.to_layer())

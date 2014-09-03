@@ -19,6 +19,7 @@
 
 #include <ClanLib/Display/color.h>
 #include <memory>
+#include "color.hpp"
 
 class TileImpl;
 class TileProvider;
@@ -40,7 +41,7 @@ public:
   /** @param filename Surface to use
    *  @param arg_colmap a 8 char long array */
   Tile(const std::string& filename,
-       const CL_Color& attribute_color);
+       const Color& attribute_color);
   ~Tile();
 
   CL_Sprite& get_sprite();
@@ -50,15 +51,15 @@ public:
   CL_PixelBuffer get_pixelbuffer();
 
   // FIXME: Document all those functions
-  CL_Color   get_color();
-  CL_Color   get_attribute_color();
+  Color get_color();
+  Color get_attribute_color();
 
   std::string get_filename() const;
 
   bool get_col(unsigned char x, unsigned char  y);
   void set_col(unsigned char x, unsigned char  y, bool val);
 
-  CL_Color calc_color();
+  Color calc_color();
 
 private:
   std::shared_ptr<TileImpl> impl;

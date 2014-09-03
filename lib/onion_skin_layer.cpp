@@ -39,7 +39,7 @@ public:
   CL_Canvas*  canvas2;
 
   std::vector<EditorMap> editormaps;
-  std::vector<CL_Color>  color;
+  std::vector<Color>  color;
 
   void draw(const GraphicContextState& state, CL_GraphicContext* gc)
   {
@@ -69,12 +69,12 @@ OnionSkinLayer::OnionSkinLayer(int width, int height) :
   try
   {
     impl->canvas = new CL_Canvas(impl->surface);
-    impl->canvas->get_gc()->clear(CL_Color(0, 0, 0, 0));
+    impl->canvas->get_gc()->clear(Color(0, 0, 0, 0).to_cl());
     impl->canvas->get_gc()->flush();
     impl->canvas->sync_surface();
 
     impl->canvas2 = new CL_Canvas(impl->surface2);
-    impl->canvas2->get_gc()->clear(CL_Color(0, 0, 0, 0));
+    impl->canvas2->get_gc()->clear(Color(0, 0, 0, 0).to_cl());
     impl->canvas2->get_gc()->flush();
     impl->canvas2->sync_surface();
   }
@@ -88,12 +88,12 @@ OnionSkinLayer::OnionSkinLayer(int width, int height) :
 void
 OnionSkinLayer::clear()
 {
-  impl->canvas->get_gc()->clear(CL_Color(0, 0, 0, 0));
+  impl->canvas->get_gc()->clear(Color(0, 0, 0, 0).to_cl());
   impl->canvas->sync_surface();
 }
 
 void
-OnionSkinLayer::add_map(EditorMap editor_map, const CL_Color& color)
+OnionSkinLayer::add_map(EditorMap editor_map, const Color& color)
 {
   impl->editormaps.push_back(editor_map);
   impl->color.push_back(color);
@@ -102,10 +102,10 @@ OnionSkinLayer::add_map(EditorMap editor_map, const CL_Color& color)
 void
 OnionSkinLayer::update()
 {
-  impl->canvas->get_gc()->clear(CL_Color(0, 0, 0, 0));
+  impl->canvas->get_gc()->clear(Color(0, 0, 0, 0).to_cl());
   for (std::vector<EditorMap>::size_type i = 0; i < impl->editormaps.size(); ++i)
   {
-    impl->canvas2->get_gc()->clear(CL_Color(0, 0, 0, 0));
+    impl->canvas2->get_gc()->clear(Color(0, 0, 0, 0).to_cl());
     impl->canvas2->get_gc()->push_modelview();
     impl->canvas2->get_gc()->add_scale(1.0f/SCALE, 1.0f/SCALE);
 
@@ -115,7 +115,7 @@ OnionSkinLayer::update()
 
     impl->canvas2->sync_surface();
 
-    impl->surface2.set_color(impl->color[i]);
+    impl->surface2.set_color(impl->color[i].to_cl());
     impl->surface2.draw(0, 0, impl->canvas->get_gc());
     impl->canvas->sync_surface();
   }

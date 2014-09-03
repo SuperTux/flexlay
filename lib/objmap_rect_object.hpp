@@ -19,19 +19,21 @@
 
 #include <ClanLib/Core/Math/rect.h>
 #include <ClanLib/Display/color.h>
+
 #include "objmap_object.hpp"
 #include "objmap_object_impl.hpp"
 
+class Color;
 class ObjMapRectObjectImpl;
 
 class ObjMapRectObject
 {
 public:
   ObjMapRectObject(const Rect&  rect_,
-                   const CL_Color& color_,
+                   const Color& color_,
                    const MetaData& data_);
 
-  void set_color(const CL_Color& color);
+  void set_color(const Color& color);
 
   void set_rect(const Rect& rect);
   Rectf get_rect() const;

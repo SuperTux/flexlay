@@ -36,7 +36,7 @@ public:
   OnionSkinLayer(Layer layer);
 
   /** Adds an EditorMap to the OnionSkin */
-  void add_map(EditorMap editor_map, const CL_Color& color);
+  void add_map(EditorMap editor_map, const Color& color);
 
   void clear();
 

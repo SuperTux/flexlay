@@ -59,9 +59,9 @@ public:
       {
         Rect rect = layer.get_bounding_rect();
         CL_Display::draw_line(rect.left, rect.top, rect.right, rect.bottom,
-                              CL_Color(0, 255, 255));
+                              Color(0, 255, 255).to_cl());
         CL_Display::draw_line(rect.left, rect.bottom, rect.right, rect.top,
-                              CL_Color(0, 255, 255));
+                              Color(0, 255, 255).to_cl());
       }
     }
   }

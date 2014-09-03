@@ -20,6 +20,8 @@
 #include <ClanLib/Display/display.h>
 #include <boost/signals2.hpp>
 
+#include "color.hpp"
+
 class ColorPickerAlpha;
 class ColorPickerBrightness;
 class ColorPickerHue;
@@ -30,25 +32,25 @@ class ColorPicker : public CL_Component
 protected:
   ~ColorPicker() {}
 private:
-  boost::signals2::signal<void (CL_Color)> on_color_change;
+  boost::signals2::signal<void (Color)> on_color_change;
   std::vector<CL_Slot> slots;
-  CL_Color color;
+  Color color;
 
   ColorPickerHue*     hue;
   ColorPickerBrightness* brightness;
   ColorPickerAlpha*      alpha;
 
-  void update_brightness_color(CL_Color color);
+  void update_brightness_color(Color color);
   void update_alpha_color(float alpha);
 public:
   ColorPicker(const Rect& rect, CL_Component* parent);
 
   void draw();
 
-  boost::signals2::signal<void (CL_Color)>& sig_color_change();
+  boost::signals2::signal<void (Color)>& sig_color_change();
 
-  CL_Color get_color();
-  void set_color(const CL_Color& color);
+  Color get_color();
+  void set_color(const Color& color);
 };
 
 #endif

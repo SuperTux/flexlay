@@ -14,13 +14,16 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+#include "object_selector.hpp"
+
 #include <iostream>
 #include <ClanLib/Core/core_iostream.h>
 #include <ClanLib/display.h>
+
 //#include "editor_map.hpp"
 #include "editor_map_component.hpp"
-#include "object_selector.hpp"
 #include "object_add_command.hpp"
+#include "color.hpp"
 
 ObjectSelector::ObjectSelector(const Rect& rect,
                                int obj_w, int obj_h,
@@ -174,11 +177,11 @@ ObjectSelector::draw()
     sprite.draw(x * obj_width + obj_width/2,
                 y * obj_height + obj_height/2);
 
-    //CL_Display::draw_rect(rect.to_cl(), CL_Color(0,0,0,128));
+    //CL_Display::draw_rect(rect.to_cl(), Color(0,0,0,128));
 
     if (mouse_over_tile == i && has_mouse_over())
     {
-      CL_Display::fill_rect(rect.to_cl(), CL_Color(0,0,255, 20));
+      CL_Display::fill_rect(rect.to_cl(), Color(0,0,255, 20).to_cl());
     }
   }
 

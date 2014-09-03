@@ -21,7 +21,7 @@ DrawerProperties* DrawerProperties::current_ = 0;
 class DrawerPropertiesImpl
 {
 public:
-  CL_Color  color;
+  Color  color;
   float     base_size;
   float     spacing;
   Brush     brush;
@@ -39,7 +39,7 @@ DrawerProperties::current()
 DrawerProperties::DrawerProperties()
   : impl(new DrawerPropertiesImpl())
 {
-  impl->color     = CL_Color(255, 255, 255, 255);
+  impl->color     = Color(255, 255, 255, 255);
   impl->base_size = 1.0f;
 
   impl->base_size = 1.0f;
@@ -71,12 +71,12 @@ DrawerProperties::get_size() const
 }
 
 void
-DrawerProperties::set_color(const CL_Color& color_)
+DrawerProperties::set_color(const Color& color_)
 {
   impl->color = color_;
 }
 
-CL_Color
+Color
 DrawerProperties::get_color() const
 {
   return impl->color;

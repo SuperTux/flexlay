@@ -19,6 +19,7 @@
 #include <ClanLib/Core/IOData/directory_scanner.h>
 #include <ClanLib/Display/display.h>
 
+#include "color.hpp"
 #include "math/rect.hpp"
 #include "fonts.hpp"
 
@@ -106,7 +107,7 @@ DirectoryViewImpl::draw()
   int x_pos = 0;
   int y_pos = 0;
 
-  CL_Display::clear(CL_Color(255, 255, 0));
+  CL_Display::clear(Color(255, 255, 0).to_cl());
 
   int j = 0;
   for(Items::iterator i = items.begin(); i != items.begin()+50 && i != items.end(); ++i)
@@ -118,7 +119,7 @@ DirectoryViewImpl::draw()
                                         i->name);
       CL_Display::fill_rect(Rect(rect.left-5, rect.top-3,
                                    rect.left+5+column_width, rect.bottom+3).to_cl(),
-                            CL_Color(250, 200, 0));
+                            Color(250, 200, 0).to_cl());
     }
 
     // draw item

@@ -20,12 +20,12 @@
 #include <ClanLib/Display/pixel_format.h>
 #include <ClanLib/Display/sprite.h>
 
-#include "gui/editor_map_component.hpp"
-#include "tile.hpp"
-#include "tileset.hpp"
-#include "tile_brush.hpp"
 #include "blitter.hpp"
+#include "gui/editor_map_component.hpp"
 #include "layer_impl.hpp"
+#include "tile.hpp"
+#include "tile_brush.hpp"
+#include "tileset.hpp"
 
 TilemapLayer TilemapLayer::current_;
 
@@ -33,8 +33,8 @@ class TilemapLayerImpl : public LayerImpl
 {
 public:
   Tileset tileset;
-  CL_Color background_color;
-  CL_Color foreground_color;
+  Color background_color;
+  Color foreground_color;
 
   Field<int> field;
 
@@ -74,8 +74,8 @@ TilemapLayer::TilemapLayer(Tileset tileset_, int w,  int h)
     for (int x = 0; x < impl->field.get_width(); ++x)
       impl->field.at(x, y) = 0;
 
-  impl->background_color = CL_Color(0, 0, 0, 0);
-  impl->foreground_color = CL_Color(255, 255, 255, 255);
+  impl->background_color = Color(0, 0, 0, 0);
+  impl->foreground_color = Color(255, 255, 255, 255);
 
   impl->tileset = tileset_;
 }
@@ -99,7 +99,7 @@ TilemapLayerImpl::draw(const GraphicContextState& state, CL_GraphicContext* gc)
     CL_Display::fill_rect(Rect(Point(0,0),
                                Size(this->field.get_width()  * tile_size,
                                     this->field.get_height() * tile_size)).to_cl(),
-                          this->background_color);
+                          this->background_color.to_cl());
   CL_Display::flush();
 
   Rect rect(state.get_clip_rect());
@@ -109,7 +109,7 @@ TilemapLayerImpl::draw(const GraphicContextState& state, CL_GraphicContext* gc)
   int end_x   = std::min(this->field.get_width(),  rect.right  / tile_size + 1);
   int end_y   = std::min(this->field.get_height(), rect.bottom / tile_size + 1);
 
-  if (foreground_color != CL_Color(255, 255, 255, 255))
+  if (foreground_color != Color(255, 255, 255, 255))
   {
     for (int y = start_y; y < end_y; ++y)
       for (int x = start_x; x < end_x; ++x)
@@ -121,13 +121,13 @@ TilemapLayerImpl::draw(const GraphicContextState& state, CL_GraphicContext* gc)
           if (tile) // skip transparent tile for faster draw
           {
             CL_Sprite sprite = tile->get_sprite();
-            sprite.set_color(foreground_color);
+            sprite.set_color(foreground_color.to_cl());
             sprite.draw(x * tile_size, y * tile_size, gc);
 
             if (draw_attribute)
               CL_Display::fill_rect(Rect(Point(x, y), Size(tileset.get_tile_size(),
                                                            tileset.get_tile_size())).to_cl(),
-                                    tile->get_attribute_color());
+                                    tile->get_attribute_color().to_cl());
           }
         }
       }
@@ -148,7 +148,7 @@ TilemapLayerImpl::draw(const GraphicContextState& state, CL_GraphicContext* gc)
             if (draw_attribute)
               CL_Display::fill_rect(Rect(Point(x, y), Size(tileset.get_tile_size(),
                                                            tileset.get_tile_size())).to_cl(),
-                                    tile->get_attribute_color());
+                                    tile->get_attribute_color().to_cl());
           }
         }
       }
@@ -161,14 +161,14 @@ TilemapLayerImpl::draw(const GraphicContextState& state, CL_GraphicContext* gc)
                             y       * tile_size,
                             end_x   * tile_size,
                             y       * tile_size,
-                            y % 2 ? CL_Color(150, 150, 150) : CL_Color(255, 255, 255));
+                            y % 2 ? Color(150, 150, 150).to_cl() : Color(255, 255, 255).to_cl());
 
     for (int x = start_x; x <= end_x; ++x)
       CL_Display::draw_line(x       * tile_size,
                             start_y * tile_size,
                             x       * tile_size,
                             end_y   * tile_size,
-                            x % 2 ? CL_Color(150, 150, 150) : CL_Color(255, 255, 255));
+                            x % 2 ? Color(150, 150, 150).to_cl() : Color(255, 255, 255).to_cl());
   }
 
   CL_Display::flush();
@@ -359,13 +359,13 @@ TilemapLayer::set_data(std::vector<int> d)
 }
 
 void
-TilemapLayer::set_background_color(const CL_Color& color)
+TilemapLayer::set_background_color(const Color& color)
 {
   impl->background_color = color;
 }
 
 void
-TilemapLayer::set_foreground_color(const CL_Color& color)
+TilemapLayer::set_foreground_color(const Color& color)
 {
   impl->foreground_color = color;
 }

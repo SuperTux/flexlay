@@ -18,87 +18,88 @@
 
 #include <ClanLib/Display/display.h>
 
+#include "color.hpp"
 #include "math/rect.hpp"
 
-CL_Color background   (210, 210, 210);
-CL_Color background_hl(240, 240, 240);
-CL_Color background_sw(200, 200, 200);
-CL_Color highlight    (255, 255, 255);
-CL_Color midtone      (150, 150, 150);
-CL_Color shadow       (100, 100, 100);
+Color background   (210, 210, 210);
+Color background_hl(240, 240, 240);
+Color background_sw(200, 200, 200);
+Color highlight    (255, 255, 255);
+Color midtone      (150, 150, 150);
+Color shadow       (100, 100, 100);
 
 void
 Box::draw_button_up(const Rect& rect)
 {
-  CL_Display::fill_rect(rect.to_cl(), background_hl);
+  CL_Display::fill_rect(rect.to_cl(), background_hl.to_cl());
   CL_Display::draw_line(rect.left, rect.top,
-                        rect.right, rect.top, highlight);
+                        rect.right, rect.top, highlight.to_cl());
   CL_Display::draw_line(rect.left, rect.top,
-                        rect.left, rect.bottom, highlight);
+                        rect.left, rect.bottom, highlight.to_cl());
 
   CL_Display::draw_line(rect.left, rect.bottom,
-                        rect.right, rect.bottom, shadow);
+                        rect.right, rect.bottom, shadow.to_cl());
   CL_Display::draw_line(rect.right, rect.top,
-                        rect.right, rect.bottom, shadow);
+                        rect.right, rect.bottom, shadow.to_cl());
 }
 
 void
 Box::draw_button_down(const Rect& rect)
 {
-  CL_Display::fill_rect(rect.to_cl(), background_sw);
+  CL_Display::fill_rect(rect.to_cl(), background_sw.to_cl());
 
   CL_Display::draw_line(rect.left, rect.bottom,
-                        rect.right, rect.bottom, highlight);
+                          rect.right, rect.bottom, highlight.to_cl());
   CL_Display::draw_line(rect.right, rect.top,
-                        rect.right, rect.bottom, highlight);
+                        rect.right, rect.bottom, highlight.to_cl());
 
   CL_Display::draw_line(rect.left, rect.top,
-                        rect.right, rect.top, shadow);
+                        rect.right, rect.top, shadow.to_cl());
   CL_Display::draw_line(rect.left, rect.top,
-                        rect.left, rect.bottom, shadow);
+                        rect.left, rect.bottom, shadow.to_cl());
 }
 
 void
 Box::draw_button_neutral(const Rect& rect)
 {
-  CL_Display::fill_rect(rect.to_cl(), background);
+  CL_Display::fill_rect(rect.to_cl(), background.to_cl());
 }
 
 void
 Box::draw_panel(const Rect& rect)
 {
-  CL_Display::fill_rect(rect.to_cl(), background);
+  CL_Display::fill_rect(rect.to_cl(), background.to_cl());
   CL_Display::draw_line(rect.left, rect.top,
-                        rect.right, rect.top, highlight);
+                        rect.right, rect.top, highlight.to_cl());
   CL_Display::draw_line(rect.left, rect.top,
-                        rect.left, rect.bottom, highlight);
+                        rect.left, rect.bottom, highlight.to_cl());
 
   CL_Display::draw_line(rect.left, rect.bottom,
-                        rect.right, rect.bottom, shadow);
+                        rect.right, rect.bottom, shadow.to_cl());
   CL_Display::draw_line(rect.right, rect.top,
-                        rect.right, rect.bottom, shadow);
+                        rect.right, rect.bottom, shadow.to_cl());
 }
 
 void
 Box::draw_panel_down(const Rect& rect)
 {
-  CL_Display::fill_rect(rect.to_cl(), background);
+  CL_Display::fill_rect(rect.to_cl(), background.to_cl());
   CL_Display::draw_line(rect.left, rect.top,
-                        rect.right, rect.top, shadow);
+                        rect.right, rect.top, shadow.to_cl());
   CL_Display::draw_line(rect.left, rect.top,
-                        rect.left, rect.bottom, shadow);
+                        rect.left, rect.bottom, shadow.to_cl());
 
   CL_Display::draw_line(rect.left, rect.bottom,
-                        rect.right, rect.bottom, highlight);
+                        rect.right, rect.bottom, highlight.to_cl());
   CL_Display::draw_line(rect.right, rect.top,
-                        rect.right, rect.bottom, highlight);
+                        rect.right, rect.bottom, highlight.to_cl());
 }
 
 void
 Box::draw_window(const Rect& rect)
 {
   draw_panel(Rect(rect.left+1, rect.top+1, rect.right-2, rect.bottom-2));
-  CL_Display::draw_rect(rect.to_cl(), CL_Color(0, 0, 0));
+  CL_Display::draw_rect(rect.to_cl(), Color(0, 0, 0).to_cl());
 }
 
 /* EOF */

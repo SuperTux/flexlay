@@ -56,7 +56,7 @@ Workspace::draw(const GraphicContextState& state, CL_GraphicContext* gc)
 {
   assert(impl.get());
 
-  CL_Display::clear(CL_Color(100, 0, 100));
+  CL_Display::clear(Color(100, 0, 100).to_cl());
 
   impl->editor_map.draw_gui(CL_Display::get_current_window()->get_gc());
   impl->editor_map.draw(EditorMapComponent::current()->get_gc_state(), CL_Display::get_current_window()->get_gc());

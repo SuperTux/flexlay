@@ -19,6 +19,7 @@
 
 #include "fonts.hpp"
 #include "box.hpp"
+#include "color.hpp"
 #include "menu.hpp"
 #include "math/point.hpp"
 #include "math/size.hpp"
@@ -83,9 +84,9 @@ public:
   void draw(int x, int y, bool active)
   {
     CL_Display::fill_rect(Rect(Point(x, y), Size(parent->get_width()-7, 2)).to_cl(),
-                          CL_Color(150, 150, 150));
+                          Color(150, 150, 150).to_cl());
     CL_Display::fill_rect(Rect(Point(x, y+1), Size(parent->get_width()-7, 1)).to_cl(),
-                          CL_Color(255, 255, 255));
+                          Color(255, 255, 255).to_cl());
   }
 
   int get_width()  { return 10; }
@@ -113,7 +114,7 @@ public:
   void draw(int x, int y, bool active) {
     if (active)
       CL_Display::fill_rect(Rect(Point(x, y-2), Size(parent->get_width() - 7, 18)).to_cl(),
-                            CL_Color(255, 255, 255));
+                            Color(255, 255, 255).to_cl());
     if (sprite)
     {
       sprite.draw(x+10, y+7);

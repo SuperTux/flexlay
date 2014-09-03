@@ -17,6 +17,7 @@
 #include <ClanLib/Display/keys.h>
 #include <ClanLib/Display/display.h>
 
+#include "color.hpp"
 #include "gui/editor_map_component.hpp"
 #include "tool_impl.hpp"
 #include "zoom_tool.hpp"
@@ -54,8 +55,8 @@ ZoomToolImpl::draw()
     {
       Rectf tmp(zoom_rect);
       tmp.normalize();
-      CL_Display::fill_rect(tmp.to_cl(), CL_Color(255, 255, 0, 50));
-      CL_Display::draw_rect(tmp.to_cl(), CL_Color(255, 255, 0, 200));
+      CL_Display::fill_rect(tmp.to_cl(), Color(255, 255, 0, 50).to_cl());
+      CL_Display::draw_rect(tmp.to_cl(), Color(255, 255, 0, 200).to_cl());
     }
     case NONE:
       break;

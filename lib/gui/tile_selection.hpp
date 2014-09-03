@@ -21,6 +21,7 @@
 
 #include "../tile_brush.hpp"
 #include "../tilemap_layer.hpp"
+#include "color.hpp"
 
 class TileSelectionImpl;
 
@@ -42,7 +43,7 @@ public:
 
   Rect get_rect() const;
 
-  void draw(const CL_Color& color = CL_Color(255, 255, 255, 100));
+  void draw(const Color& color = Color(255, 255, 255, 100));
 
   TileBrush get_brush(const Field<int>& field) const;
 private:

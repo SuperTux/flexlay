@@ -85,7 +85,7 @@ TileMapPaintToolImpl::draw()
   {
     case TileMapPaintToolImpl::SELECTING:
       if (CL_Keyboard::get_keycode(CL_KEY_LSHIFT))
-        selection.draw(CL_Color(255,  128, 128, 100));
+        selection.draw(Color(255,  128, 128, 100));
       else
         selection.draw();
       break;
@@ -109,21 +109,21 @@ TileMapPaintToolImpl::draw()
             CL_Display::fill_rect(Rect(Point((current_tile.x + x) * tile_size,
                                              (current_tile.y + y) * tile_size),
                                        Size(tile_size, tile_size)).to_cl(),
-                                  CL_Color(255, 255, 255, 100));
+                                  Color(255, 255, 255, 100).to_cl());
           }
           else if (brush.is_opaque())
           {
             CL_Display::fill_rect(Rect(Point((current_tile.x + x) * tile_size,
                                              (current_tile.y + y) * tile_size),
                                        Size(tile_size, tile_size)).to_cl(),
-                                  CL_Color(255, 255, 255, 100));
+                                  Color(255, 255, 255, 100).to_cl());
           }
           else
           {
             CL_Display::fill_rect(Rect(Point((current_tile.x + x) * tile_size,
                                                 (current_tile.y + y) * tile_size),
                                        Size(tile_size, tile_size)).to_cl(),
-                                  CL_Color(255, 255, 255, 50));
+                                  Color(255, 255, 255, 50).to_cl());
           }
         }
       break;

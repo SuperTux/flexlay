@@ -45,7 +45,7 @@ TileEditor::draw()
   CL_Display::push_translate(get_screen_x(), get_screen_x());
 
   //no_tile.draw(0, 0);
-  CL_Display::fill_rect(Rect(0, 0, 32, 32).to_cl(), CL_Color(155, 0, 155));
+  CL_Display::fill_rect(Rect(0, 0, 32, 32).to_cl(), Color(155, 0, 155).to_cl());
 
   if (tile)
   {
@@ -58,7 +58,7 @@ TileEditor::draw()
         {
           CL_Display::fill_rect(Rect(tile_x*16, tile_y*16,
                                      tile_x*16 + 16, tile_y*16 + 16).to_cl(),
-                                CL_Color(255, 0, 0, 128));
+                                Color(255, 0, 0, 128).to_cl());
         }
       }
     CL_Display::flush();
@@ -67,7 +67,7 @@ TileEditor::draw()
       CL_Display::fill_rect(Rect(Point(int(mouse_pos.x)/16 * 16,
                                              int(mouse_pos.y)/16 * 16),
                                  Size(16, 16)).to_cl(),
-                            CL_Color(255, 255, 255, 128));
+                            Color(255, 255, 255, 128).to_cl());
     }
   }
   else

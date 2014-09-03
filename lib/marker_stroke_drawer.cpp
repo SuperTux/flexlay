@@ -32,7 +32,7 @@ public:
     state.set_active();
     state.setup_2d();
 
-    CL_Color color = DrawerProperties::current()->get_color();
+    Color color = DrawerProperties::current()->get_color();
 
     const Stroke::Dabs& dabs = stroke.get_interpolated_dabs(DrawerProperties::current()->get_spacing(),
                                                             DrawerProperties::current()->get_spacing());

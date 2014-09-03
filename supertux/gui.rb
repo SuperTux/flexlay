@@ -161,7 +161,7 @@ class SuperTuxGUI
                  pos = @editor_map.screen2world(Point.new(x, y))
                  rectobj = ObjMapRectObject.new(Rect.new(pos,
                                                          Size.new(128, 64)),
-                                                CL_Color.new(0, 255, 255, 155),
+                                                Color.new(0, 255, 255, 155),
                                                 make_metadata(nil))
                  # rectobj.set_metadata(metadata)
                  @workspace.get_map().get_metadata().objects.add_object(rectobj.to_object())
@@ -697,11 +697,11 @@ class DisplayProperties
     end
   
     if @current_only
-      active   = CL_Color.new(255, 255, 255)
-      deactive = CL_Color.new(0, 0, 0, 10)
+      active   = Color.new(255, 255, 255)
+      deactive = Color.new(0, 0, 0, 10)
     else
-      active   = CL_Color.new(255, 255, 255)
-      deactive = CL_Color.new(150, 150, 250, 150)
+      active   = Color.new(255, 255, 255)
+      deactive = Color.new(150, 150, 250, 150)
     end
     
     if (@show_all)

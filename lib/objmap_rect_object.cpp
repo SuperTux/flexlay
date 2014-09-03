@@ -18,6 +18,7 @@
 
 #include <functional>
 
+#include "color.hpp"
 #include "math/size.hpp"
 #include "object_layer.hpp"
 #include "flexlay.hpp"
@@ -27,7 +28,7 @@ class ObjMapRectObjectImpl : public ObjMapObjectImpl
 public:
   std::vector<boost::signals2::connection> slots;
   Sizef size;
-  CL_Color color;
+  Color color;
 
   ObjMapControlPoint cp_top_left;
   ObjMapControlPoint cp_top_right;
@@ -130,7 +131,7 @@ ObjMapRectObject::get_rect() const
 }
 
 void
-ObjMapRectObject::set_color(const CL_Color& color)
+ObjMapRectObject::set_color(const Color& color)
 {
   impl->color = color;
 }
@@ -156,7 +157,7 @@ ObjMapRectObjectImpl::update_control_points()
 }
 
 ObjMapRectObject::ObjMapRectObject(const Rect&  rect_,
-                                   const CL_Color& color_,
+                                   const Color& color_,
                                    const MetaData& data_)
   : impl(new ObjMapRectObjectImpl)
 {
@@ -211,7 +212,7 @@ ObjMapRectObject::ObjMapRectObject(const Rect&  rect_,
 void
 ObjMapRectObjectImpl::draw(CL_GraphicContext* gc)
 {
-  gc->fill_rect(get_bound_rect().to_cl(), color);
+  gc->fill_rect(get_bound_rect().to_cl(), color.to_cl());
 }
 
 Rectf

@@ -67,8 +67,8 @@ SpriteStrokeDrawerImpl::draw(const Stroke& stroke, CL_GraphicContext* gc)
 
     CL_Sprite sprite = DrawerProperties::current()->get_brush().get_sprite();
 
-    CL_Color color = DrawerProperties::current()->get_color();
-    sprite.set_color(color);
+    Color color = DrawerProperties::current()->get_color();
+    sprite.set_color(color.to_cl());
     sprite.set_alpha((color.get_alpha()/255.0f) * dab.pressure);
     sprite.set_scale(DrawerProperties::current()->get_size() * dab.pressure,
                      DrawerProperties::current()->get_size() * dab.pressure);

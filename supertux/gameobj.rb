@@ -50,7 +50,7 @@ class AmbientSound<GameObj
   
   def initialize(data, sexpr = [])
     @data = data
-    @data.set_color(CL_Color.new(200, 200, 200, 128))
+    @data.set_color(Color.new(200, 200, 200, 128))
     @factor = get_value_from_tree(["distance_factor", "_"],  sexpr, 0.1)
     @bias = get_value_from_tree(["distance_bias", "_"],  sexpr, 200)
     @sample = get_value_from_tree(["sample", "_"],  sexpr, "waterfall")
@@ -102,7 +102,7 @@ class SequenceTrigger<GameObj
   def initialize(data, sexpr = [])
     @data     = data
     @sequence = get_value_from_tree(["sequence", "_"], sexpr, "")
-    @data.set_color(CL_Color.new(255, 0, 0, 128))
+    @data.set_color(Color.new(255, 0, 0, 128))
 
     x  = get_value_from_tree(["x", "_"],  sexpr, nil)
     y  = get_value_from_tree(["y", "_"],  sexpr, nil)

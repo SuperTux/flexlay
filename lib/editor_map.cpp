@@ -37,8 +37,8 @@ public:
   typedef std::vector<Layer> Layers;
   Layers layers;
 
-  CL_Color background_color;
-  CL_Color foreground_color;
+  Color background_color;
+  Color foreground_color;
 
   /** Metadata attached to this map (ie. mapname, description, scripts, etc.) */
   MetaData metadata;
@@ -60,8 +60,8 @@ EditorMap::EditorMap(bool create) :
   if (create)
   {
     impl.reset(new EditorMapImpl());
-    impl->background_color = CL_Color(100, 80, 100);
-    impl->foreground_color = CL_Color(255, 80, 255);
+    impl->background_color = Color(100, 80, 100);
+    impl->foreground_color = Color(255, 80, 255);
     impl->modified = false;
     impl->serial = 0;
     impl->has_bounding_rect = false;
@@ -91,12 +91,12 @@ EditorMap::draw_gui(CL_GraphicContext* gc)
 
   if (rect != Rect(0,0,0,0))
   {
-    gc->fill_rect(rect.to_cl(), impl->background_color);
-    gc->draw_rect(rect.to_cl(), impl->foreground_color);
+    gc->fill_rect(rect.to_cl(), impl->background_color.to_cl());
+    gc->draw_rect(rect.to_cl(), impl->foreground_color.to_cl());
   }
   else
   {
-    gc->clear(impl->background_color);
+    gc->clear(impl->background_color.to_cl());
   }
 }
 
@@ -218,7 +218,7 @@ EditorMap::get_bounding_rect()
 }
 
 void
-EditorMap::set_background_color(const CL_Color& color)
+EditorMap::set_background_color(const Color& color)
 {
   impl->background_color = color;
 }

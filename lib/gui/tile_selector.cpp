@@ -199,17 +199,17 @@ TileSelector::draw()
                   static_cast<int>(y * tileset.get_tile_size()*scale));
 
       // Use grid in the tileselector
-      //CL_Display::draw_rect(rect.to_cl(), CL_Color(0,0,0,128));
+      //CL_Display::draw_rect(rect.to_cl(), Color(0,0,0,128));
     }
 
     if (brush.get_width() == 1 && brush.get_height() == 1
         && brush.at(0, 0) == tiles[i])
     {
-      CL_Display::fill_rect(rect.to_cl(), CL_Color(0,0,255, 100));
+      CL_Display::fill_rect(rect.to_cl(), Color(0,0,255, 100).to_cl());
     }
     else if (mouse_over_tile == int(i) && has_mouse_over())
     {
-      CL_Display::fill_rect(rect.to_cl(), CL_Color(0,0,255, 20));
+      CL_Display::fill_rect(rect.to_cl(), Color(0,0,255, 20).to_cl());
     }
   }
 
@@ -222,7 +222,7 @@ TileSelector::draw()
     rect.left   *= static_cast<int>(tileset.get_tile_size()*scale);
     rect.right  *= static_cast<int>(tileset.get_tile_size()*scale);
 
-    CL_Display::fill_rect(rect.to_cl(), CL_Color(0,0,255, 100));
+    CL_Display::fill_rect(rect.to_cl(), Color(0,0,255, 100).to_cl());
   }
 
   CL_Display::pop_modelview();

@@ -17,7 +17,10 @@
 #ifndef HEADER_FLEXLAY_OBJMAP_PATH_NODE_HPP
 #define HEADER_FLEXLAY_OBJMAP_PATH_NODE_HPP
 
+#include "objmap_object.hpp"
 
+class Pointf;
+class MetaData;
 class ObjMapPathNodeImpl;
 
 class ObjMapPathNode
@@ -30,6 +33,7 @@ public:
   void disconnect();
 
   ObjMapObject to_object();
+
 private:
   std::shared_ptr<ObjMapPathNodeImpl> impl;
 };

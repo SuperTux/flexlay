@@ -74,15 +74,15 @@ TileSelection::clear()
 }
 
 void
-TileSelection::draw(const CL_Color& color)
+TileSelection::draw(const Color& color)
 {
   int tile_size = impl->tilemap.get_tileset().get_tile_size();
 
   CL_Display::fill_rect(Rect(impl->selection.left   * tile_size,
-                                impl->selection.top    * tile_size,
-                                impl->selection.right  * tile_size,
-                                impl->selection.bottom * tile_size).to_cl(),
-                        color);
+                             impl->selection.top    * tile_size,
+                             impl->selection.right  * tile_size,
+                             impl->selection.bottom * tile_size).to_cl(),
+                        color.to_cl());
 }
 
 TileBrush
@@ -92,8 +92,8 @@ TileSelection::get_brush(const Field<int>& field) const
 
   sel.normalize();
 
-  if (sel.left     > field.get_width() - 1
-      || sel.top   > field.get_height() - 1
+  if (sel.left > field.get_width() - 1
+      || sel.top > field.get_height() - 1
       || sel.right  <= 0
       || sel.bottom <= 0)
   { // Selection is empty

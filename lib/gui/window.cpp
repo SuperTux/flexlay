@@ -18,6 +18,7 @@
 #include <ClanLib/Display/display.h>
 
 #include "box.hpp"
+#include "color.hpp"
 #include "globals.hpp"
 #include "helper.hpp"
 #include "icon.hpp"
@@ -103,8 +104,8 @@ WindowImpl::draw()
 {
   CL_Display::push_translate (parent->get_screen_x(), parent->get_screen_y());
 
-  CL_Color highlight(255, 255, 255);
-  CL_Color midtone(150, 150, 150);
+  Color highlight(255, 255, 255);
+  Color midtone(150, 150, 150);
 
   Rect rect = parent->get_position() ;
 
@@ -112,8 +113,8 @@ WindowImpl::draw()
   Box::draw_panel_down(Rect(client_area->get_position()));
 
   /*
-    CL_Display::fill_rect(Rect(Point(0, 0), rect.get_size()).to_cl(), CL_Color(220, 220, 220));
-    CL_Display::draw_rect(Rect(Point(0, 0), rect.get_size()).to_cl(), CL_Color(0, 0, 0));
+    CL_Display::fill_rect(Rect(Point(0, 0), rect.get_size()).to_cl(), Color(220, 220, 220));
+    CL_Display::draw_rect(Rect(Point(0, 0), rect.get_size()).to_cl(), Color(0, 0, 0));
 
     CL_Display::draw_line(1, rect.get_height()-2,
     rect.get_width()-2, rect.get_height()-2, midtone);

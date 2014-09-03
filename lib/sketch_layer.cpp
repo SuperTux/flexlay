@@ -28,6 +28,7 @@
 #include <ClanLib/Display/graphic_context.h>
 #include <ClanLib/Display/display_window.h>
 
+#include "color.hpp"
 #include "gui/editor_map_component.hpp"
 #include "flexlay.hpp"
 #include "layer_impl.hpp"
@@ -99,14 +100,14 @@ public:
         last_rot    = state.get_rotation();
 
         state.push(canvas->get_gc());
-        canvas->get_gc()->clear(CL_Color(0, 0, 0, 0));
-        //canvas->get_gc()->clear(CL_Color::white);
+        canvas->get_gc()->clear(Color(0, 0, 0, 0).to_cl());
+        //canvas->get_gc()->clear(Color::white);
 
         Rectf visible_area = state.get_clip_rect();
 
         for(Strokes::iterator i = strokes.begin(); i != strokes.end(); ++i)
         {
-          // canvas->get_gc()->draw_rect(i->get_bounding_rect(), CL_Color(0, 255, 0));
+          // canvas->get_gc()->draw_rect(i->get_bounding_rect(), Color(0, 255, 0));
           // canvas->get_gc()->flush();
 
           if (visible_area.is_overlapped(i->get_bounding_rect()))

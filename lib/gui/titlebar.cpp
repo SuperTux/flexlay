@@ -18,6 +18,7 @@
 #include <ClanLib/Display/keys.h>
 #include <ClanLib/Display/mouse.h>
 
+#include "color.hpp"
 #include "fonts.hpp"
 #include "math/rect.hpp"
 #include "titlebar.hpp"
@@ -107,13 +108,13 @@ TitlebarImpl::draw()
   {
     CL_Display::fill_rect(Rect(Point(0, 0),
                                Size(parent->get_width()-1, parent->get_height())).to_cl(),
-                          CL_Color(250, 250, 250));
+                          Color(250, 250, 250).to_cl());
   }
   else
   {
     CL_Display::fill_rect(Rect(Point(0, 0),
                                Size(parent->get_width()-1, parent->get_height())).to_cl(),
-                          CL_Color(240, 240, 240));
+                          Color(240, 240, 240).to_cl());
   }
 
   Fonts::verdana11.draw(4, 0, title);

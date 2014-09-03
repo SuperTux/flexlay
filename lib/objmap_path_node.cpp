@@ -14,8 +14,10 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "objmap_object_impl.hpp"
 #include "objmap_path_node.hpp"
+
+#include "color.hpp"
+#include "objmap_object_impl.hpp"
 
 class ObjMapPathNodeImpl : public ObjMapObjectImpl
 {
@@ -39,19 +41,19 @@ void
 ObjMapPathNodeImpl::draw(CL_GraphicContext* gc)
 {
   gc->fill_rect(Rect(Point(pos) - Point(16,16), Size(32, 32)).to_cl(),
-                CL_Color(200, 255, 200));
+                Color(200, 255, 200).to_cl());
   if (next)
   {
     gc->draw_line(static_cast<int>(pos.x), static_cast<int>(pos.y),
                   static_cast<int>((pos.x + next->pos.x)/2),
                   static_cast<int>((pos.y+next->pos.y)/2),
-                  CL_Color(255, 255, 0));
+                  Color(255, 255, 0).to_cl());
 
     gc->draw_line(static_cast<int>((pos.x + next->pos.x)/2),
                   static_cast<int>((pos.y+next->pos.y)/2),
                   static_cast<int>(next->pos.x),
                   static_cast<int>(next->pos.y),
-                  CL_Color(255, 0, 0));
+                  Color(255, 0, 0).to_cl());
   }
 }
 

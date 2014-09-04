@@ -1,5 +1,5 @@
 // Flexlay - A Generic 2D Game Editor
-// Copyright (C) 2014 Ingo Ruhnke <grumbel@gmx.de>
+// Copyright (C) 2014 Ingo Ruhnke <grumbel@gmail.com>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -38,11 +38,11 @@ public:
   PixelBuffer(int width, int height) :
     m_pixelbuffer(width, height, width*4, CL_PixelFormat::rgba8888)
   {}
-  
+
   CL_PixelFormat get_format() const { return m_pixelbuffer.get_format(); }
 
   CL_Palette get_palette() const { return m_pixelbuffer.get_palette(); }
-  
+
   int get_width() const { return m_pixelbuffer.get_width(); }
   int get_height() const { return m_pixelbuffer.get_height(); }
   int get_pitch() const { return m_pixelbuffer.get_pitch(); }

@@ -1,5 +1,5 @@
 // Flexlay - A Generic 2D Game Editor
-// Copyright (C) 2014 Ingo Ruhnke <grumbel@gmx.de>
+// Copyright (C) 2014 Ingo Ruhnke <grumbel@gmail.com>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -45,7 +45,7 @@ FileDialog::FileDialog(const std::string& title,
 FileDialog::~FileDialog()
 {
 }
-  
+
 void
 FileDialog::set_filename(const std::string& filename)
 {
@@ -57,7 +57,7 @@ FileDialog::get_filename() const
 {
   return m_inputbox->get_text();
 }
-  
+
 void
 FileDialog::run(std::function<void(std::string)> func)
 {
@@ -69,7 +69,7 @@ FileDialog::run(std::function<void(std::string)> func)
   m_inputbox->set_focus();
   m_window->show();
 }
-  
+
 void
 FileDialog::on_ok()
 {
@@ -79,7 +79,7 @@ FileDialog::on_ok()
     m_callback(m_inputbox->get_text());
   }
 }
-  
+
 void
 FileDialog::on_cancel()
 {

@@ -1,5 +1,5 @@
 // Flexlay - A Generic 2D Game Editor
-// Copyright (C) 2014 Ingo Ruhnke <grumbel@gmx.de>
+// Copyright (C) 2014 Ingo Ruhnke <grumbel@gmail.com>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -60,7 +60,7 @@ public:
   {
     m_sprite.set_scale(x, y);
   }
-  
+
   void set_blend_func(CL_BlendFunc src, CL_BlendFunc dest)
   {
     m_sprite.set_blend_func(src, dest);

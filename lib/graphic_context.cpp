@@ -1,5 +1,5 @@
 // Flexlay - A Generic 2D Game Editor
-// Copyright (C) 2014 Ingo Ruhnke <grumbel@gmx.de>
+// Copyright (C) 2014 Ingo Ruhnke <grumbel@gmail.com>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -47,7 +47,7 @@ GraphicContext::fill_rect(const Rectf& rect, const Color& color)
 
 void
 GraphicContext::draw_line(float x1, float y1, float x2, float y2, const Color& color)
-{ 
+{
   gc->draw_line(x1, y1, x2, y2, color.to_cl());
 }
 

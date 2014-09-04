@@ -18,9 +18,93 @@
 
 #include <iostream>
 
-ButtonPanel::ButtonPanel(const Rect& rect, bool horizontal, CL_Component* parent)
+#include "helper.hpp"
+#include "gui/icon.hpp"
+
+ButtonPanel::ButtonPanel(const Rect& rect, bool horizontal, CL_Component* parent) :
+  m_panel(new Panel(rect, parent)),
+  m_pos(2),
+  m_horizontal(horizontal)
 {
   std::cout << "ButtonPanel in C++" << std::endl;
+}
+
+void
+ButtonPanel::set_position(int x, int y)
+{
+  m_panel->set_position(x, y);
+}
+
+void
+ButtonPanel::set_size(int w, int h)
+{
+  m_panel->set_size(w, h);
+}
+
+Icon*
+ButtonPanel::add_small_icon(const std::string& image,
+                            std::function<void ()> callback)
+{
+  std::string tooltip;
+  Icon* icon = nullptr;
+  if (m_horizontal)
+  {
+    icon = new Icon(Rect(Point(m_pos,  2), Size(16, 32)),
+                    make_sprite(image), tooltip, m_panel);
+  }
+  else
+  {
+    icon = new Icon(Rect(Point(2, m_pos), Size(16, 32)),
+                    make_sprite(image), tooltip, m_panel);
+  }
+
+  m_pos += 16;
+
+  if (callback)
+  {
+    icon->sig_clicked().connect(callback);
+  }
+
+  return icon;
+}
+
+Icon*
+ButtonPanel::add_icon(const std::string& image,
+                      std::function<void ()> callback)
+{
+  std::string tooltip;
+  Icon* icon = nullptr;
+  if (m_horizontal)
+  {
+    icon = new Icon(Rect(Point(m_pos,  2), Size(32, 32)),
+                    make_sprite(image), tooltip, m_panel);
+  }
+  else
+  {
+    icon = new Icon(Rect(Point(2, m_pos), Size(32, 32)),
+                    make_sprite(image), tooltip, m_panel);
+  }
+
+  m_pos += 32;
+
+  if (callback)
+  {
+    icon->sig_clicked().connect(callback);
+  }
+
+  return icon;
+}
+
+void
+ButtonPanel::add_separator()
+{
+  m_pos += 16;
+}
+
+void
+ButtonPanel::show(bool visible)
+{
+  m_panel->show(visible);
 }
 
 /* EOF */

@@ -111,7 +111,6 @@ class GUI
 
 
     @tool_button_panel = @gui.create_button_panel(Rect.new(320, 23, $screen.width, 33), true)
-    @tool_button_panel.init(320, 23, $screen.width, 33, true, @gui.get_component())
     @tool_button_panel.add_separator()
     @tool_button_panel.add_icon($flexlay_datadir + "/images/icons24/object_raise.png", proc{
                                   $objmap_select_tool.get_selection().each {|obj|
@@ -127,7 +126,6 @@ class GUI
 
 
     @toolbar = @gui.create_button_panel(Rect.new(0, 23+33, 33, 32*4+2), false)
-    @toolbar.init(0, 23+33, 33, 32*4+2, false, @gui.get_component())
     @paint = @toolbar.add_icon($flexlay_datadir + "/images/tools/stock-tool-pencil-22.png",
                                method(:set_tilemap_paint_tool))
     @select = @toolbar.add_icon($flexlay_datadir + "/images/tools/stock-tool-rect-select-22.png",

@@ -192,7 +192,6 @@ class SuperTuxGUI
 
   def create_button_panel(rect)
     button_panel = @gui.create_button_panel(rect, true)
-    button_panel.init(rect.left, rect.top, rect.get_width(), rect.get_height(), true, @gui.get_component())
     
     # File Handling
     button_panel.add_icon("../data/images/icons24/stock_new.png",  proc{ self.gui_level_new() })
@@ -203,8 +202,8 @@ class SuperTuxGUI
 
     # Copy&Paste
     button_panel.add_separator()
-    button_panel.add_icon("../data/images/icons24/stock_copy.png")
-    button_panel.add_icon("../data/images/icons24/stock_paste.png")
+    button_panel.add_icon("../data/images/icons24/stock_copy.png", proc{})
+    button_panel.add_icon("../data/images/icons24/stock_paste.png", proc{})
 
     # Undo Redo
     button_panel.add_separator()

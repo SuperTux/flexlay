@@ -21,6 +21,7 @@
 #include <memory>
 
 class PanelImpl;
+class Rect;
 
 class Panel : public CL_Component
 {

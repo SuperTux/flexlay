@@ -160,6 +160,10 @@ VALUE CL_Point2Value(const CL_Point& arg)
 %template(Std_vector_Stroke) std::vector<Stroke>;
 %template(Std_vector_Dab) std::vector<Dab>;
 
+%typemap(in) std::function<void()> {
+    $1 = RubyFunctor($input);
+}
+
 %include "clanlib.i"
 %include "command.hpp"
 %include "paint_command.hpp"

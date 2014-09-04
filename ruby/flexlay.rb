@@ -96,32 +96,8 @@ class CL_Menu
 end
 
 class ButtonPanel
-  attr_reader :panel, :items
-
-  def init(x, y, width, height, horizontal, parent, &block)
-    puts "ButtonPanel in Ruby"
-    @panel = Panel.new(Rect.new(Point.new(x, y), Size.new(width, height)), parent)
-    @pos   = 2
-    @horizontal = horizontal
-    @items = {}
-
-    if block then
-      instance_eval(&block)
-    end
-  end
-
-  def set_position(x, y)
-    @panel.set_position(x, y)
-  end
-
-  def set_size(w, h)
-    @panel.set_size(w, h)
-  end
-
   def ButtonPanel.new_from_spec(x, y, width, height, horizontal, spec, parent)
-    puts "<<<<<<<<<<<<<<<<<<<<<<<<<"
     buttonpanel = ButtonPanel.new(Rect.new(x, y, width, height), horizontal, parent)
-    buttonpanel.init(x, y, width, height, horizontal, parent)
 
     spec.each{ |(type, *data)|
       case type
@@ -139,51 +115,6 @@ class ButtonPanel
     }
     
     return buttonpanel
-  end
-
-  def add_small_icon(image = nil, callback = nil, tooltip = "")
-    if (@horizontal)
-      icon = Icon.new(Rect.new(Point.new(@pos,  2), Size.new(16, 32)),
-                      make_sprite(image), tooltip, @panel);
-    else
-      icon = Icon.new(Rect.new(Point.new(2, @pos), Size.new(16, 32)),
-                      make_sprite(image), tooltip, @panel);
-    end
-    
-    @pos += 16
-    if (callback)
-      icon.set_callback(callback)
-    end
-    return icon
-  end
-
-  def add_icon(image = nil, callback = nil, &block)
-    tooltip = ""
-    if block then
-      callback = block
-    end
-
-    if (@horizontal)
-      icon = Icon.new(Rect.new(Point.new(@pos,  2), Size.new(32, 32)),
-                      make_sprite(image), tooltip, @panel);
-    else
-      icon = Icon.new(Rect.new(Point.new(2, @pos), Size.new(32, 32)),
-                      make_sprite(image), tooltip, @panel);
-    end
-    
-    @pos += 32
-    if (callback)
-      icon.set_callback(callback)
-    end
-    return icon
-  end
-  
-  def add_separator()
-    @pos += 16
-  end
-  
-  def show(b)
-    @panel.show(b)
   end
 end
 

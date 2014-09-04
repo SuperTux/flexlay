@@ -17,7 +17,6 @@
 #ifndef HEADER_FLEXLAY_COLORPICKER_HPP
 #define HEADER_FLEXLAY_COLORPICKER_HPP
 
-#include <ClanLib/Display/display.h>
 #include <boost/signals2.hpp>
 
 #include "color.hpp"

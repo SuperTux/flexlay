@@ -17,10 +17,9 @@
 #ifndef HEADER_FLEXLAY_TILESET_HPP
 #define HEADER_FLEXLAY_TILESET_HPP
 
-#include <vector>
-#include <string>
-#include <ClanLib/Core/System/sharedptr.h>
 #include <memory>
+#include <string>
+#include <vector>
 
 class Tile;
 class TilesetImpl;

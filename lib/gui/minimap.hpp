@@ -18,7 +18,6 @@
 #define HEADER_FLEXLAY_MINIMAP_HPP
 
 #include <ClanLib/GUI/component.h>
-#include <ClanLib/Core/System/sharedptr.h>
 
 #include <memory>
 

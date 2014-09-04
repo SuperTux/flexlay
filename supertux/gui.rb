@@ -86,30 +86,18 @@ class SuperTuxGUI
     @layer_menu.add_item($mysprite, "Show current", proc{ gui_show_current() })
     @layer_menu.add_item($mysprite, "Show only current", proc{ gui_show_only_current() })
 
-    # FIXME: Use ButtonPanel here instead
-    @toolbar = Panel.new(Rect.new(Point.new(0, 23+33),
-                                     Size.new(33, 32*4+2)), @gui.get_component())
-
-    @paint = Icon.new(Rect.new(Point.new(2, 32*0+2), Size.new(32, 32)), make_sprite("../data/images/tools/stock-tool-pencil-22.png"), "Some tooltip", @toolbar);
-    @paint.set_callback(proc{ set_tilemap_paint_tool() })
-
-    @select = Icon.new(Rect.new(Point.new(2, 32*1+2), Size.new(32,32)), make_sprite("../data/images/tools/stock-tool-rect-select-22.png"), "Some tooltip", @toolbar);
-    @select.set_callback(proc{ set_tilemap_select_tool() })
-
-    @zoom = Icon.new(Rect.new(Point.new(2, 32*2+2), Size.new(32,32)), make_sprite("../data/images/tools/stock-tool-zoom-22.png"), "Some tooltip", @toolbar);
-    @zoom.set_callback(proc{ set_zoom_tool() })
-
-    @object = Icon.new(Rect.new(Point.new(2, 32*3+2), Size.new(32,32)), make_sprite("../data/images/tools/stock-tool-clone-22.png"), "Some tooltip", @toolbar);
-    @object.set_callback(proc{ set_objmap_select_tool() })
-
-#     @stroke = Icon.new(Rect.new(Point.new(2, 32*4+2), Size.new(32,32)), make_sprite("../data/images/tools/stock-tool-pencil-22.png"), "Some tooltip", @toolbar);
-#     @stroke.set_callback(proc{ set_sketch_stroke_tool() })
+    @toolbar = @gui.create_button_panel(Rect.new(Point.new(0, 23+33), Size.new(33, 32*4+2)), false)
+    @paint = @toolbar.add_icon("../data/images/tools/stock-tool-pencil-22.png", proc{ set_tilemap_paint_tool() })
+    @select = @toolbar.add_icon("../data/images/tools/stock-tool-rect-select-22.png", proc{ set_tilemap_select_tool() })
+    @zoom = @toolbar.add_icon("../data/images/tools/stock-tool-zoom-22.png", proc{ set_zoom_tool() })
+    @object = @toolbar.add_icon("../data/images/tools/stock-tool-clone-22.png", proc{ set_objmap_select_tool() })
+#     @stroke = @toolbar.add_icon("../data/images/tools/stock-tool-pencil-22.png", proc{ set_sketch_stroke_tool() })
 
     create_menu()
 
-    @load_dialog = FileDialog.new("Load SuperTux Level", "Load", "Cancel", @gui.get_component())
+    @load_dialog = @gui.create_filedialog("Load SuperTux Level", "Load", "Cancel")
     @load_dialog.set_filename($datadir + "levels/")
-    @save_dialog = FileDialog.new("Save SuperTux Level as...", "Save", "Cancel", @gui.get_component())
+    @save_dialog = @gui.create_filedialog("Save SuperTux Level as...", "Save", "Cancel")
     @save_dialog.set_filename($datadir + "levels/")
 
     register_keyboard_shortcuts()

@@ -11,5 +11,4 @@
 %import  "../lib/flexlay_wrap.i"
 %include "netpanzer.hpp"
 
-
 // EOF //

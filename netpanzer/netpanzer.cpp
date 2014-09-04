@@ -40,8 +40,8 @@ class NetPanzerTileProviderImpl : public TileProviderImpl
 {
 private:
   int id;
-  mutable CL_Sprite sprite;
-  mutable CL_PixelBuffer buffer;
+  mutable Sprite sprite;
+  mutable PixelBuffer buffer;
 
 public:
   NetPanzerTileProviderImpl(int id_)
@@ -64,15 +64,15 @@ public:
       NetPanzerTileGroup& tilegroup = NetPanzerData::instance()->find_tilegroup(id);
       int dist = id - tilegroup.start;
 
-      CL_Rect rect(CL_Point((dist % tilegroup.width) * 32,
-                            (dist / tilegroup.width) * 32),
-                   CL_Size(32, 32));
+      Rect rect(Point((dist % tilegroup.width) * 32,
+                      (dist / tilegroup.width) * 32),
+                Size(32, 32));
       sprite.add_frame(tilegroup.get_surface(), rect);
       return sprite;
     }
   }
 
-  CL_PixelBuffer get_pixelbuffer() const
+  PixelBuffer get_pixelbuffer() const
   {
     if (buffer)
     {
@@ -127,12 +127,12 @@ NetPanzerData::load_data(const std::string& datadir_)
   load_tileset(datadir + "/" + "wads/summer12mb.tls");
 }
 
-CL_Surface
+Surface
 NetPanzerTileGroup::get_surface()
 {
   if (!surface)
   {
-    CL_PixelBuffer buffer(width*32, height*32, width*32*4, CL_PixelFormat::rgba8888);
+    PixelBuffer buffer(width*32, height*32);
 
     for(int y = 0; y < height; ++y)
       for(int x = 0; x < width; ++x)
@@ -193,29 +193,29 @@ NetPanzerTileGroup::get_surface()
         blit(buffer, tile, x * 32, y * 32);
       }
       
-    surface = CL_Surface(buffer);
+    surface = Surface(buffer);
   }
 
   return surface;
 }
 
-CL_Sprite
+Sprite
 NetPanzerData::get_tilegroup_sprite(int index)
 {
   for(TileGroups::iterator i = tilegroups.begin(); i != tilegroups.end(); ++i)
   {
     if (index == i->start)
     {
-      CL_Sprite sprite;
-      sprite.add_frame(i->get_surface(), CL_Rect(CL_Point(0, 0),
-                                                 CL_Size(i->get_surface().get_width(),
-                                                         i->get_surface().get_height())));
+      Sprite sprite;
+      sprite.add_frame(i->get_surface(), Rect(Point(0, 0),
+                                              Size(i->get_surface().get_width(),
+                                                   i->get_surface().get_height())));
       return sprite;
     }
   }
 
   std::cout << "NetPanzerData: Couldn't get tilegroup_sprite for '" << index << "'" << std::endl;
-  return CL_Sprite();
+  return Sprite();
 }
 
 NetPanzerTileGroup&

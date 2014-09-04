@@ -22,9 +22,11 @@
 #include <ClanLib/Display/surface.h>
 #include <ClanLib/Display/sprite.h>
 
+#include "../lib/pixel_buffer.hpp"
+#include "../lib/sprite.hpp"
 #include "../lib/surface.hpp"
-#include "../lib/tileset.hpp"
 #include "../lib/tilemap_layer.hpp"
+#include "../lib/tileset.hpp"
 
 void load_netpanzer_tileset(Tileset tileset, const char* filename);
 
@@ -92,7 +94,7 @@ public:
   unsigned char*    get_tiledata() const;
 
   CL_Palette load_palette(const std::string& filename);
-  CL_Sprite  get_tilegroup_sprite(int index);
+  Sprite  get_tilegroup_sprite(int index);
 
   /** Locate the tilegroup in which the tile with \a tileindex is
       located */

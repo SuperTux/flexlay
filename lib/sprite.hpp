@@ -21,6 +21,7 @@
 #include <ClanLib/Display/sprite_description.h>
 
 #include "color.hpp"
+#include "surface.hpp"
 
 class Sprite
 {
@@ -99,6 +100,11 @@ public:
   void get_scale(float& x, float& y) const
   {
     m_sprite.get_scale(x, y);
+  }
+
+  void add_frame(Surface surface, const Rect& rect = Rect(0,0,0,0))
+  {
+    m_sprite.add_frame(surface.to_cl(), rect.to_cl());
   }
 
   explicit operator bool() const

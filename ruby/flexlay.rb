@@ -119,7 +119,9 @@ class ButtonPanel
   end
 
   def ButtonPanel.new_from_spec(x, y, width, height, horizontal, spec, parent)
-    buttonpanel = ButtonPanel.new(x, y, width, height, horizontal, parent)
+    puts "<<<<<<<<<<<<<<<<<<<<<<<<<"
+    buttonpanel = ButtonPanel.new(Rect.new(x, y, width, height), horizontal, parent)
+    buttonpanel.init(x, y, width, height, horizontal, parent)
 
     spec.each{ |(type, *data)|
       case type
@@ -243,9 +245,9 @@ class GenericDialog
   def initialize(title, gui)
     @items = []
     @window = Window.new(Rect.new(Point.new(100, 100), Size.new(400, 100)), title, gui)
-    @ok = CL_Button.new(Rect.new(Point.new(290, 35), Size.new(50, 25)), "Ok",
+    @ok = CL_Button.new(Rect.new(Point.new(290, 35), Size.new(50, 25)).to_cl(), "Ok",
                     @window.get_client_area())
-    @cancel = CL_Button.new(Rect.new(Point.new(230, 35), Size.new(50, 25)), "Cancel",
+    @cancel = CL_Button.new(Rect.new(Point.new(230, 35), Size.new(50, 25)).to_cl(), "Cancel",
                             @window.get_client_area())
     connect_cl(@cancel.sig_clicked(), method(:on_cancel))
     connect_cl(@ok.sig_clicked(), method(:on_ok))
@@ -337,9 +339,9 @@ class GenericDialog
 
   def add_int(name, value = 0)
     @items.push(["int",
-                 CL_Label.new(Point.new(10, 10), name,
+                 CL_Label.new(Point.new(10, 10).to_cl(), name,
                               @window.get_client_area()),
-                 CL_InputBox.new(Rect.new(Point.new(110, 10), Size.new(200, 25)),
+                 CL_InputBox.new(Rect.new(Point.new(110, 10), Size.new(200, 25)).to_cl(),
                                  @window.get_client_area())])
     @items[-1][2].set_text(value.to_s)
     update()
@@ -347,9 +349,9 @@ class GenericDialog
   
   def add_string(name, value = "")
     @items.push(["string",
-                 CL_Label.new(Point.new(10, 10), name,
+                 CL_Label.new(Point.new(10, 10).to_cl(), name,
                               @window.get_client_area()),
-                 CL_InputBox.new(Rect.new(Point.new(110, 10), Size.new(200, 25)),
+                 CL_InputBox.new(Rect.new(Point.new(110, 10), Size.new(200, 25)).to_cl(),
                                  @window.get_client_area())])
     @items[-1][2].set_text(value)
     update()    

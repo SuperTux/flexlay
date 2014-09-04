@@ -1,7 +1,7 @@
 #include <ClanLib/display.h>
 #include <ClanLib/core.h>
 
-CL_Color
+Color
 calc_average_color(const char* filename)
 {
   // FIXME: Works only from indexed images
@@ -20,9 +20,9 @@ calc_average_color(const char* filename)
       blue  += palette.colors[buf[i]].get_blue();
     }
 
-  return CL_Color(int(red/len),
-                  int(green/len),
-                  int(blue/len));
+  return Color(int(red/len),
+               int(green/len),
+               int(blue/len));
 }
 
 int main(int argc, char** argv)
@@ -31,14 +31,14 @@ int main(int argc, char** argv)
   CL_SetupDisplay::init(true);
 
   for(int i = 1; i < argc; ++i)
-    {
-      CL_Color color = calc_average_color(argv[i]);
-      std::cout << argv[i] 
-                << " " << color.get_red()
-                << " " << color.get_green()
-                << " " << color.get_blue()
-                << std::endl;
-    }
+  {
+    Color color = calc_average_color(argv[i]);
+    std::cout << argv[i] 
+              << " " << color.get_red()
+              << " " << color.get_green()
+              << " " << color.get_blue()
+              << std::endl;
+  }
 
   CL_SetupDisplay::deinit();
   CL_SetupCore::deinit();

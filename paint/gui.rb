@@ -162,7 +162,7 @@ class PaintGUI
               drawer.set_mode(SpriteStrokeDrawer::DM_SMUDGE)
             })
 
-    button_panel = ButtonPanel.new(0, 0, 33, 33*4, false, @gui.get_component)
+    button_panel = @gui.create_button_panel(Rect.new(0, 0, 33, 33*4), false)
     button_panel.add_icon($flexlay_datadir + "/images/tools/stock-tool-pencil-22.png", proc{ 
                             @workspace.set_tool($sketch_stroke_tool.to_tool())
                           })
@@ -177,8 +177,9 @@ class PaintGUI
                             @workspace.set_tool($objmap_select_tool.to_tool())
                           })
 
-    anim_panel = ButtonPanel.new($screen_rect.get_width()/2 - (32*3)/2-16-32, 0, 32*3+1+16, 33,
-                                 true, @gui.get_component)
+    anim_panel = @gui.create_button_panel(Rect.new($screen_rect.get_width()/2 - (32*3)/2-16-32, 0, 
+                                                   32*3+1+16, 33),
+                                              true)
     anim_panel.add_icon($flexlay_datadir + "/images/icons24/stock_new.png",
                         proc{ $animation.add_frame() })
     anim_panel.add_separator()

@@ -45,7 +45,7 @@ class GUI
                                                     Size.new(794-134-16, 50)), 
                            @gui.get_component())
 
-    @button_panel = ButtonPanel.new(0, 23, 800, 33, true, @gui.get_component)
+    @button_panel = @gui.create_button_panel(Rect.new(0, 23, 800, 33), true)
 
     @button_panel.add_icon(@datadir + "/images/icons24/stock_new.png")
     @button_panel.add_icon(@datadir + "/images/icons24/stock_open.png", proc{ level_load() })
@@ -72,7 +72,7 @@ class GUI
 
     @layer_menu = Menu.new(Point.new(32*15+2, 54), @gui.get_component())
     
-    @toolbar = ButtonPanel.new(0, 23+33, 33, 32*4+2, false, @gui.get_component)
+    @toolbar = @gui.create_button_panel(Rect.new(0, 23+33, 33, 32*4+2), false)
     @paint  = @toolbar.add_icon(@datadir + "/images/tools/stock-tool-pencil-22.png", proc{ $controller.set_tilemap_paint_tool() })
     @select = @toolbar.add_icon(@datadir + "/images/tools/stock-tool-rect-select-22.png", proc{ $controller.set_tilemap_select_tool() })
     @zoom   = @toolbar.add_icon(@datadir + "/images/tools/stock-tool-zoom-22.png", proc{ $controller.set_zoom_tool() })

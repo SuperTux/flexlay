@@ -67,7 +67,7 @@ module GameObjects
     def Outpost.create(objmap, name, x, y)
       obj = Outpost.new()
       obj.name = name
-      sprite_obj = ObjMapSpriteObject.new(get_sprite(), CL_Pointf.new(x*32, y*32),
+      sprite_obj = ObjMapSpriteObject.new(get_sprite(), Pointf.new(x*32, y*32).to_cl(),
                                           make_metadata(obj))
       obj.data = sprite_obj
       objmap.add_object(sprite_obj.to_object)
@@ -82,7 +82,7 @@ module GameObjects
 
       brush = TileBrush.new(width, height)
       brush.set_data(Range.new(start, start + (width*height)-1).to_a)
-      tilemap.draw_tile(brush, CL_Point.new(x()-18, y()-6))
+      tilemap.draw_tile(brush, Point.new(x()-18, y()-6).to_cl())
     end
   end
   
@@ -97,7 +97,7 @@ module GameObjects
 
     def SpawnPoint.create(objmap, x, y)
       obj = SpawnPoint.new()
-      sprite_obj = ObjMapSpriteObject.new(get_sprite(), CL_Pointf.new(x*32, y*32),
+      sprite_obj = ObjMapSpriteObject.new(get_sprite(), Pointf.new(x*32, y*32),
                                           make_metadata(obj))
       obj.data = sprite_obj
       objmap.add_object(sprite_obj.to_object)
@@ -131,7 +131,7 @@ module GameObjects
       brush = TileBrush.new(width, height)
       brush.set_data(Range.new(start, start + (width*height)-1).to_a)
 
-      tilemap.draw_tile(brush, CL_Point.new(x(), y()))
+      tilemap.draw_tile(brush, Point.new(x(), y()).to_cl())
     end
 
     def get_sprite()

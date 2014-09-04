@@ -32,6 +32,7 @@ public:
   StrokeDrawer get_drawer();
 
   Tool to_tool();
+
 private:
   std::shared_ptr<SketchStrokeToolImpl> impl;
 };

@@ -53,7 +53,7 @@ class GUI
   def initialize()
     @gui = GUIManager.new()
 
-    components = LayoutComponent.create_from_sexpr(CL_Rect.new(0,0, $screen.width, $screen.height),
+    components = LayoutComponent.create_from_sexpr(Rect.new(0,0, $screen.width, $screen.height),
                                                    SExpression.new($guilayout_spec),
                                                    @gui.get_component())
 
@@ -110,7 +110,8 @@ class GUI
     @button_panel.add_separator()
 
 
-    @tool_button_panel = ButtonPanel.new(320, 23, $screen.width, 33, true, @gui.get_component)
+    @tool_button_panel = @gui.create_button_panel(Rect.new(320, 23, $screen.width, 33), true)
+    @tool_button_panel.init(320, 23, $screen.width, 33, true, @gui.get_component())
     @tool_button_panel.add_separator()
     @tool_button_panel.add_icon($flexlay_datadir + "/images/icons24/object_raise.png", proc{
                                   $objmap_select_tool.get_selection().each {|obj|
@@ -125,7 +126,8 @@ class GUI
     @tool_button_panel.show(false)
 
 
-    @toolbar = ButtonPanel.new(0, 23+33, 33, 32*4+2, false, @gui.get_component())
+    @toolbar = @gui.create_button_panel(Rect.new(0, 23+33, 33, 32*4+2), false)
+    @toolbar.init(0, 23+33, 33, 32*4+2, false, @gui.get_component())
     @paint = @toolbar.add_icon($flexlay_datadir + "/images/tools/stock-tool-pencil-22.png",
                                method(:set_tilemap_paint_tool))
     @select = @toolbar.add_icon($flexlay_datadir + "/images/tools/stock-tool-rect-select-22.png",
@@ -158,9 +160,9 @@ class GUI
 
     @minimap = components.get('minimap').component
 
-    @load_dialog = SimpleFileDialog.new("Load netPanzer Level", "Load", "Cancel", @gui.get_component())
+    @load_dialog = FileDialog.new("Load netPanzer Level", "Load", "Cancel", @gui.get_component())
     @load_dialog.set_filename($config.datadir + "/maps/")
-    @save_dialog = SimpleFileDialog.new("Save netPanzer Level as...", "Save", "Cancel", @gui.get_component())
+    @save_dialog = FileDialog.new("Save netPanzer Level as...", "Save", "Cancel", @gui.get_component())
     @save_dialog.set_filename($config.datadir + "/maps/")
 
     connect_v2(@editor_map.sig_on_key("l"), proc{ |x, y|
@@ -220,6 +222,7 @@ class GUI
   def on_object_drop(brush, pos)
     obj = get_ruby_object(brush.get_data()).call()
     pos = @editor_map.screen2world(pos)
+    puts "<>>>>>>>>< ", obj.get_sprite(), pos
     sprite_obj = ObjMapSpriteObject.new(obj.get_sprite(), pos, make_metadata(obj))
     obj.data = sprite_obj
     
@@ -332,11 +335,11 @@ class GUI
     else
       grid_icon.set_up()
       
-      grid_icon = Icon(CL_Rect(CL_Point(p.inc(48), 2), CL_Size(32, 32)),
+      grid_icon = Icon(Rect(CL_Point(p.inc(48), 2), CL_Size(32, 32)),
                        make_sprite($flexlay_datadir + "/images/icons24/grid.png"), "Some tooltip", button_panel);
       grid_icon.set_callback(proc{gui_toggle_grid})
 
-      layer_menu = Menu(CL_Point(32*11+2, 54), $gui.get_component())
+      layer_menu = Menu(Point(32*11+2, 54), $gui.get_component())
     end
   end
 

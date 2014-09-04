@@ -49,7 +49,7 @@ public:
       // FIXME: This translation is a bit ugly, layer position should be handled somewhat different
       Display::push_modelview();
       Display::add_translate(BitmapLayer::current()->to_object().get_pos().x,
-                                BitmapLayer::current()->to_object().get_pos().y);
+                             BitmapLayer::current()->to_object().get_pos().y);
 #ifdef GRUMBEL
       stroke.draw(0);
 #endif
@@ -59,7 +59,7 @@ public:
     {
       EditorMapComponent* parent = EditorMapComponent::current();
       Pointf p = parent->screen2world(Point(CL_Mouse::get_x() - parent->get_screen_x(),
-                                                  CL_Mouse::get_y() - parent->get_screen_y()));
+                                            CL_Mouse::get_y() - parent->get_screen_y()));
       Sprite s = DrawerProperties::current()->get_brush().get_sprite();
       s.set_color(DrawerProperties::current()->get_color().to_cl());
       // FIXME: when using mouse 1.0, when tablet .5f

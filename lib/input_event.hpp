@@ -36,10 +36,15 @@ public:
     MOUSE_WHEEL_DOWN = CL_MOUSE_WHEEL_DOWN
   };
 
+  enum Modifier {
+    MOD_SHIFT = (1<<0)
+  };
+
   InputEvent(const CL_InputEvent& ev);
 
   Type id;
   Point mouse_pos;
+  unsigned int mod;
 };
 
 #endif

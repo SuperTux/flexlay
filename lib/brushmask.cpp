@@ -20,7 +20,7 @@
 
 #include <iostream>
 #include <string.h>
-#include <ClanLib/Display/pixel_format.h>
+
 #include "brushmask.hpp"
 
 #define OVERSAMPLING 5

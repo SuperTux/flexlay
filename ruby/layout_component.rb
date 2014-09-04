@@ -130,10 +130,10 @@ class LayoutComponent
                           parent)
 
     when :listbox
-      return CL_ListBox.new(rect, parent)
+      return CL_ListBox.new(rect.to_cl(), parent)
       
     when :inputbox
-      return CL_InputBox.new(rect, parent)
+      return CL_InputBox.new(rect.to_cl(), parent)
 
     when :radiobutton
       return CL_RadioButton.new(Point.new(rect.left, rect.top).to_cl(),

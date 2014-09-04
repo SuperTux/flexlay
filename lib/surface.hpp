@@ -70,6 +70,11 @@ public:
   int get_height() const { return m_surface.get_height(); }
   
   CL_Surface to_cl() { return m_surface; }
+
+  explicit operator bool() const
+  {
+    return m_surface;
+  }
 };
 
 #endif

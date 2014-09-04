@@ -30,6 +30,7 @@ public:
   CL_Component* window;
   Titlebar* parent;
   Point click_pos;
+  Point mouse_pos;
   Rect old_pos;
   std::string title;
   std::vector<CL_Slot> slots;
@@ -86,6 +87,8 @@ TitlebarImpl::on_mouse_down(const CL_InputEvent& event)
 void
 TitlebarImpl::on_mouse_move(const CL_InputEvent& event)
 {
+  mouse_pos = event.mouse_pos;
+
   if(pressed)
   {
     Rect rect = window->get_position();
@@ -104,9 +107,7 @@ TitlebarImpl::draw()
   Display::add_translate(parent->get_screen_x(), parent->get_screen_y());
 
   // FIXME: Hack should be done via has_mouse_over(), but that doesn't include child components
-  if (parent->get_parent()->get_position().is_inside(Point(CL_Mouse::get_x(),
-                                                           CL_Mouse::get_y()).to_cl()))
-    //parent->get_parent()->has_mouse_over())
+  if (parent->get_parent()->get_position().is_inside(mouse_pos.to_cl()))
   {
     Display::fill_rect(Rect(Point(0, 0),
                                Size(parent->get_width()-1, parent->get_height())),

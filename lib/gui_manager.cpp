@@ -151,7 +151,7 @@ GUIManager::create_editor_map_component(const Rect& rect)
 Minimap*
 GUIManager::create_minimap(EditorMapComponent* parent, const Rect& rect)
 {
-  return new Minimap(parent, rect.to_cl(), get_component());
+  return new Minimap(parent, rect, get_component());
 }
 
 FileDialog*

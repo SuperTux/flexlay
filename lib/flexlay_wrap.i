@@ -164,6 +164,10 @@ VALUE CL_Point2Value(const CL_Point& arg)
     $1 = RubyFunctor($input);
 }
 
+%typemap(in) std::function<void(std::string)> {
+    $1 = RubyFunctor($input);
+}
+
 %include "clanlib.i"
 %include "command.hpp"
 %include "paint_command.hpp"

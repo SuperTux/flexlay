@@ -118,54 +118,6 @@ class ButtonPanel
   end
 end
 
-# Very simple FileDialog, mainly a placeholder until the real thing gets ready.
-class FileDialog
-  @window   = nil
-  @inputbox = nil
-  @ok_button     = nil
-  @cancel_button = nil
-  @callback = nil
-  
-  def initialize(title, ok, cancel, g)
-    @window   = Window.new(Rect.new(Point.new(120, 200), Size.new(560, 100)), title, g)
-    @inputbox = CL_InputBox.new(Rect.new(Point.new(10, 10), Size.new(530, 25)).to_cl(),
-                                @window.get_client_area())
-    @ok_button     = CL_Button.new(Rect.new(Point.new(490, 35), Size.new(50, 25)).to_cl(), ok,
-                                   @window.get_client_area())
-    @cancel_button = CL_Button.new(Rect.new(Point.new(430, 35), Size.new(50, 25)).to_cl(), cancel,
-                                   @window.get_client_area())
-    @window.hide()
-  end
-  
-  def set_filename(filename)
-    @inputbox.set_text(filename)
-  end
-  
-  def get_filename()
-    return @inputbox.get_text()
-  end
-  
-  def run(func)
-    connect_cl(@ok_button.sig_clicked(), method(:on_ok))
-    connect_cl(@inputbox.sig_return_pressed(), method(:on_ok))
-    connect_cl(@cancel_button.sig_clicked(), method(:on_cancel))
-    @callback = func
-    @inputbox.set_focus()
-    @window.show()
-  end
-  
-  def on_ok()
-    @window.hide();
-    if @callback
-      @callback.call(@inputbox.get_text())
-    end
-  end
-  
-  def on_cancel()
-    @window.hide();
-  end
-end
-
 class GenericDialog
   window = nil
   items  = nil

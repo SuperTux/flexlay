@@ -81,6 +81,12 @@ VALUE convert_to_ruby_value<int>(const int& arg)
   return INT2FIX(arg);
 }
 
+template<>
+VALUE convert_to_ruby_value<std::string>(const std::string& arg)
+{
+  return rb_str_new(arg.c_str(), arg.size());
+}
+
 #endif
 
 /* EOF */

@@ -17,7 +17,10 @@
 #ifndef HEADER_FLEXLAY_WINDOW_HPP
 #define HEADER_FLEXLAY_WINDOW_HPP
 
+#include <memory>
+
 class WindowImpl;
+class Rect;
 
 class Window : public CL_Component
 {

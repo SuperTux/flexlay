@@ -18,13 +18,36 @@
 #define HEADER_FILE_DIALOG_HPP
 
 #include <string>
+#include <functional>
+
+#include <ClanLib/GUI/component.h>
+
+class Window;
+class CL_InputBox;
+class CL_Button;
 
 class FileDialog
 {
 private:
+  Window* m_window;
+  CL_InputBox* m_inputbox;
+  CL_Button* m_ok_button;
+  CL_Button* m_cancel_button;
+  std::function<void (std::string)> m_callback;
+  std::vector<CL_Slot> m_slots;
+
+protected:
+  virtual ~FileDialog();
 public:
   FileDialog(const std::string& titel,
-             const std::string& ok_label, const std::string& cancel_label);
+             const std::string& ok_label, const std::string& cancel_label,
+             CL_Component* parent);
+
+  void set_filename(const std::string& filename);
+  std::string get_filename() const;
+  void run(std::function<void(std::string)> func);
+  void on_ok();
+  void on_cancel();
 
 private:
   FileDialog(const FileDialog&);

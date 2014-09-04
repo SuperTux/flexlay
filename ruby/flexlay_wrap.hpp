@@ -18,6 +18,7 @@
 #define HEADER_FLEXLAY_WRAP_HXX
 
 #include <ClanLib/Display/color.h>
+#include <string>
 #include <iostream>
 #include <typeinfo>
 #include "ruby.h"
@@ -47,6 +48,7 @@ template<> VALUE convert_to_ruby_value<Point>(const Point& arg);
 template<> VALUE convert_to_ruby_value<Pointf>(const Pointf& arg);
 template<> VALUE convert_to_ruby_value<int>(const int& arg);
 template<> VALUE convert_to_ruby_value<float>(const float& arg);
+template<> VALUE convert_to_ruby_value<std::string>(const std::string& arg);
 
 #endif
 

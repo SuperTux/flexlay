@@ -158,7 +158,7 @@ FileDialog*
 GUIManager::create_filedialog(const std::string& titel,
                               const std::string& ok_label, const std::string& cancel_label)
 {
-  return new FileDialog(titel, ok_label, cancel_label);
+  return new FileDialog(titel, ok_label, cancel_label, get_component());
 }
 
 /* EOF */

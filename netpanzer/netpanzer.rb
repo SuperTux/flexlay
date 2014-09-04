@@ -34,7 +34,7 @@ require_relative "level.rb"
 require_relative "gameobjects.rb"
 require_relative "gui.rb"
 
-$screen  = CL_Size.new(640, 480)
+$screen  = Size.new(640, 480)
 
 $flexlay = Flexlay.new()
 if ENV["FLEXLAY_DATADIR"] then

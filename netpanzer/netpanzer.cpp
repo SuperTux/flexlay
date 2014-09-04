@@ -17,22 +17,16 @@
 #include <iostream>
 #include <sstream>
 #include <fstream>
-#include <ClanLib/core.h>
-#include <ClanLib/Display/palette.h>
-#include <ClanLib/Display/sprite.h>
-#include <ClanLib/Display/pixel_format.h>
-#include <ClanLib/Display/pixel_format_type.h>
-#include <ClanLib/Display/sprite_description.h>
-#include <ClanLib/Display/Providers/provider_factory.h>
+
+#include "blitter.hpp"
+#include "editor_map.hpp"
 #include "globals.hpp"
+#include "netpanzer.hpp"
+#include "tile.hpp"
 #include "tile_provider.hpp"
 #include "tile_provider_impl.hpp"
-#include "tile.hpp"
-#include "tileset.hpp"
-#include "blitter.hpp"
 #include "tilemap_layer.hpp"
-#include "editor_map.hpp"
-#include "netpanzer.hpp"
+#include "tileset.hpp"
 
 NetPanzerData* NetPanzerData::instance_ = 0;
 
@@ -80,20 +74,19 @@ public:
     }
     else
     {
-      // FIXME: ClanLibs indexed handling seems broken, so we do
-      // the conversion ourself
-      const CL_Palette& palette = NetPanzerData::instance()->get_palette();
+      const Palette& palette = NetPanzerData::instance()->get_palette();
       unsigned char* data = NetPanzerData::instance()->get_tiledata() + (32*32) * id;
-      buffer = CL_PixelBuffer(32, 32, 32*3, CL_PixelFormat::rgb888);
+      buffer = PixelBuffer(32, 32);
 
       buffer.lock();
       unsigned char* target = static_cast<unsigned char*>(buffer.get_data());
 
       for(int i = 0; i < 32*32; ++i)
       {
-        target[3*i+0] = palette[data[i]].get_blue();
-        target[3*i+1] = palette[data[i]].get_green();
-        target[3*i+2] = palette[data[i]].get_red();
+        target[4*i+3] = palette[data[i]].get_blue();
+        target[4*i+2] = palette[data[i]].get_green();
+        target[4*i+1] = palette[data[i]].get_red();
+        target[4*i+0] = 255;
       }
       buffer.unlock();
                 
@@ -137,12 +130,12 @@ NetPanzerTileGroup::get_surface()
     for(int y = 0; y < height; ++y)
       for(int x = 0; x < width; ++x)
       {
-        const CL_Palette& palette = NetPanzerData::instance()->get_palette();
+        const Palette& palette = NetPanzerData::instance()->get_palette();
         unsigned char* data = NetPanzerData::instance()->get_tiledata() + (32*32) * (start + width*y + x);
 
         NetPanzerTileHeader header = NetPanzerData::instance()->get_tile_headers()[start + width*y + x]; 
            
-        CL_PixelBuffer tile(32, 32, 32*3, CL_PixelFormat::rgb888);
+        PixelBuffer tile(32, 32);
 
         tile.lock();
         unsigned char* target = static_cast<unsigned char*>(tile.get_data());
@@ -184,9 +177,10 @@ NetPanzerTileGroup::get_surface()
 
         for(int i = 0; i < 32*32; ++i)
         {
-          target[3*i+0] = int(palette[data[i]].get_blue()  * b);
-          target[3*i+1] = int(palette[data[i]].get_green() * g);
-          target[3*i+2] = int(palette[data[i]].get_red()   * r);
+          target[4*i+3] = int(palette[data[i]].get_blue() * b);
+          target[4*i+2] = int(palette[data[i]].get_green() * g);
+          target[4*i+1] = int(palette[data[i]].get_red() * r);
+          target[4*i+0] = 255;
         }
         tile.unlock();
                 
@@ -240,7 +234,7 @@ NetPanzerData::get_tileset() const
   return tileset;
 }
 
-const CL_Palette&
+const Palette&
 NetPanzerData::get_palette() const
 {
   return palette;
@@ -258,10 +252,10 @@ NetPanzerData::get_tiledata() const
   return tiledata;
 }
 
-CL_Palette
+Palette
 NetPanzerData::load_palette(const std::string& filename)
 {
-  CL_Palette palette;
+  Palette palette;
   unsigned char color_array[256 * 3];
   
   std::ifstream in(filename.c_str());
@@ -271,28 +265,30 @@ NetPanzerData::load_palette(const std::string& filename)
     std::cout << "Couldn't load palette" << std::endl;
     return palette;
   }
-
-  in.read(reinterpret_cast<char*>(color_array), sizeof(color_array));
-
-  for(int i = 0; i < 256; ++i)
+  else
   {
-    palette.colors[i].set_red  (color_array[3*i + 0]);
-    palette.colors[i].set_green(color_array[3*i + 1]);
-    palette.colors[i].set_blue (color_array[3*i + 2]);
-  }
+    in.read(reinterpret_cast<char*>(color_array), sizeof(color_array));
 
-  return palette;
+    for(int i = 0; i < 256; ++i)
+    {
+      palette.colors[i].set_red(color_array[3*i + 0]);
+      palette.colors[i].set_green(color_array[3*i + 1]);
+      palette.colors[i].set_blue(color_array[3*i + 2]);
+    }
+
+    return palette;
+  }
 }
 
 void
 NetPanzerData::load_tileset(const std::string& filename)
 {
-  unsigned char	netp_id_header[64];
-  unsigned short	version;
-  unsigned short	width;
-  unsigned short	height;
-  unsigned short	tile_count;
-  unsigned char	raw_palette[768];
+  unsigned char netp_id_header[64];
+  unsigned short version;
+  unsigned short width;
+  unsigned short height;
+  unsigned short tile_count;
+  unsigned char raw_palette[768];
 
   std::ifstream file(filename.c_str());  
 
@@ -314,7 +310,7 @@ NetPanzerData::load_tileset(const std::string& filename)
     file.read(reinterpret_cast<char*>(&*tile_headers.begin()), 
               sizeof(NetPanzerTileHeader)*tile_count);
 
-    cl_uint32 tilesize = width * height;
+    uint32_t tilesize = width * height;
     // FIXME: Delete this somewhere!
     unsigned char* tiledata = new unsigned char[tilesize*tile_count];
     file.read(reinterpret_cast<char*>(tiledata), tilesize*tile_count);
@@ -337,8 +333,9 @@ NetPanzerData::load_tileset(const std::string& filename)
   }
 }
 
-unsigned char find_nearest_color(const CL_Palette& palette, const Color& rgb)
-{ // Copyright (C) 1998 Pyrosoft Inc. (www.pyrosoftgames.com), Matthew Bogue
+unsigned char find_nearest_color(const Palette& palette, const Color& rgb)
+{ 
+  // Copyright (C) 1998 Pyrosoft Inc. (www.pyrosoftgames.com), Matthew Bogue
   float bestDist = 10000000.0f;
   int   best     = 0;
 
@@ -496,13 +493,13 @@ NetPanzerFileStruct::NetPanzerFileStruct(Tileset tileset, int w, int h)
   impl->tilemap = TilemapLayer(tileset, w, h);
 }
 
-NetPanzerFileStruct::NetPanzerFileStruct(Tileset tileset, const std::string& filename)
-  : impl(new NetPanzerFileStructImpl())
+NetPanzerFileStruct::NetPanzerFileStruct(Tileset tileset, const std::string& filename) :
+  impl(new NetPanzerFileStructImpl())
 {
   impl->tileset = tileset;
   
   // FIXME: endian issues
-  unsigned char   netp_id_header[64]; // Copyright PyroSoft Inc.  ...
+  unsigned char   netp_id_header[64]; // Copyright PyroSoft Inc....
   unsigned short  id; // What is this?
   char            name[256];
   char            description[1024];

@@ -178,7 +178,7 @@ class GUI
 
     connect_v2($objmap_select_tool.sig_on_right_click(), proc{|x,y|
                  puts "Launching Menu at #{x}, #{y}"
-                 menu = Menu.new(CL_Point.new(x-16, y-16), @gui.get_component())
+                 menu = Menu.new(Point.new(x-16, y-16), @gui.get_component())
                  menu.add_item("Delete Selection", proc{ 
                                  cmd = ObjectDeleteCommand.new(@workspace.get_map().get_metadata().objects)
                                  $objmap_select_tool.get_selection().each { |i| cmd.add_object(i) }
@@ -335,7 +335,7 @@ class GUI
     else
       grid_icon.set_up()
       
-      grid_icon = Icon(Rect(CL_Point(p.inc(48), 2), CL_Size(32, 32)),
+      grid_icon = Icon(Rect(Point(p.inc(48), 2), Size(32, 32)),
                        make_sprite($flexlay_datadir + "/images/icons24/grid.png"), "Some tooltip", button_panel);
       grid_icon.set_callback(proc{gui_toggle_grid})
 
@@ -359,7 +359,7 @@ class GUI
     $gui.workspace.get_map().get_data().save(filename)
   end
 
-  # recent_files_menu = Menu.new(CL_Point.new(32*2, 54), $gui.get_component())
+  # recent_files_menu = Menu.new(Point.new(32*2, 54), $gui.get_component())
   # for filename in $config.recent_files
   #    recent_files_menu.add_item(mysprite, filename, proc{ netpanzer_load_level(filename) })
   #end

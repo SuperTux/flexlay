@@ -18,10 +18,8 @@
 #define HEADER_SCRIPTING_NETPANZER_HXX
 
 #include <string>
-#include <ClanLib/Display/palette.h>
-#include <ClanLib/Display/surface.h>
-#include <ClanLib/Display/sprite.h>
 
+#include "../lib/palette.hpp"
 #include "../lib/pixel_buffer.hpp"
 #include "../lib/sprite.hpp"
 #include "../lib/surface.hpp"
@@ -67,9 +65,9 @@ public:
   }
 
 private:
-  std::string    datadir;
-  CL_Palette     palette;
-  Tileset        tileset;
+  std::string datadir;
+  Palette palette;
+  Tileset tileset;
   unsigned char* tiledata;
   typedef std::vector<NetPanzerTileGroup> TileGroups;
   TileGroups tilegroups;
@@ -88,12 +86,12 @@ public:
   void register_tilegroup(int start, int width, int height);
 
   void load_data(const std::string& datadir_);
-  const CL_Palette& get_palette() const;
+  const Palette& get_palette() const;
   const Tileset&    get_tileset() const;
   const std::vector<NetPanzerTileHeader>& get_tile_headers() const;
   unsigned char*    get_tiledata() const;
 
-  CL_Palette load_palette(const std::string& filename);
+  Palette load_palette(const std::string& filename);
   Sprite  get_tilegroup_sprite(int index);
 
   /** Locate the tilegroup in which the tile with \a tileindex is

@@ -132,10 +132,10 @@ blit(PixelBuffer target, PixelBuffer brush, int x_pos, int y_pos)
           int target_pos = (y + y_pos) * target_width + x + x_pos;
           int brush_pos  = y * brush_width + x;
 
-          unsigned char a  = brush_buf[4*brush_pos + 0];
-          unsigned char r  = brush_buf[4*brush_pos + 1];
-          unsigned char g  = brush_buf[4*brush_pos + 2];
-          unsigned char b  = brush_buf[4*brush_pos + 3];
+          unsigned char a = brush_buf[4*brush_pos + 0];
+          unsigned char r = brush_buf[4*brush_pos + 1];
+          unsigned char g = brush_buf[4*brush_pos + 2];
+          unsigned char b = brush_buf[4*brush_pos + 3];
 
           unsigned char ta = target_buf[4*target_pos + 0];
           unsigned char tr = target_buf[4*target_pos + 1];
@@ -188,8 +188,6 @@ blit(PixelBuffer target, PixelBuffer brush, int x_pos, int y_pos)
   {
     assert(!"Unknown pixelformat type");
   }
-
-
 
   brush.unlock();
   target.unlock();

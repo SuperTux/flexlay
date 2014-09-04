@@ -142,7 +142,7 @@ module GameObjects
     def TileObject.create(objmap, brushindex, x, y)
       obj = TileObject.new(brushindex)
       sprite_obj = ObjMapSpriteObject.new(NetPanzerData::instance().get_tilegroup_sprite($brushes[brushindex][0]),
-                                          CL_Pointf.new(x*32, y*32),
+                                          Pointf.new(x*32, y*32),
                                           make_metadata(obj))
       obj.data = sprite_obj
       objmap.add_object(sprite_obj.to_object)

@@ -84,13 +84,13 @@ class CL_Menu
 
   def CL_Menu.new_from_spec(menubarspec, parent)
     menu = CL_Menu.new(parent)
-    
+
     menubarspec.each { |(title, *menu_spec)|
       menu_spec.each{ |(name, callback)|
         menu.add_item("#{title}/#{name}", callback)
       }
     }
-    
+
     return menu
   end
 end
@@ -113,33 +113,16 @@ class ButtonPanel
         raise "ButtonPanel: Unknown type #{type}"
       end
     }
-    
+
     return buttonpanel
   end
 end
 
 class GenericDialog
-  window = nil
-  items  = nil
-  ok     = nil
-  cancel = nil
-  callback = nil
-  
-  def initialize(title, gui)
-    @items = []
-    @window = Window.new(Rect.new(Point.new(100, 100), Size.new(400, 100)), title, gui)
-    @ok = CL_Button.new(Rect.new(Point.new(290, 35), Size.new(50, 25)).to_cl(), "Ok",
-                    @window.get_client_area())
-    @cancel = CL_Button.new(Rect.new(Point.new(230, 35), Size.new(50, 25)).to_cl(), "Cancel",
-                            @window.get_client_area())
-    connect_cl(@cancel.sig_clicked(), method(:on_cancel))
-    connect_cl(@ok.sig_clicked(), method(:on_ok))
-  end
-
   def on_cancel()
     @window.hide()
   end
-  
+
   def on_ok()
     @window.hide()
     if @callback
@@ -173,96 +156,6 @@ class GenericDialog
 
   def set_callback(c)
     @callback = c
-  end
-
-  def add_label(text)
-    @items.push(["void", 
-                  CL_Label.new(Point.new(10, 10), text, @window.get_client_area()),
-                  nil])
-    update()
-  end
-
-  def add_float(name, value = 0)
-    @items.push(["float",
-                 CL_Label.new(Point.new(10, 10), name,
-                              @window.get_client_area()),
-                 CL_InputBox.new(Rect.new(Point.new(110, 10), Size.new(200, 25)),
-                                 @window.get_client_area())])
-    @items[-1][2].set_text(value.to_s)
-    update()
-  end
-    
-  def add_bool(name, value = false)
-    @items.push(["bool",
-                  CL_Label.new(Point.new(10, 10), name,
-                               @window.get_client_area()),
-                  CL_CheckBox.new(Point.new(110, 10), 
-                                  "",
-                                  @window.get_client_area())])
-    if value == true
-      @items[-1][2].set_checked()
-    end
-    update()
-  end
-
-  def add_enum(name, types, value = "foo")
-    group = CL_RadioGroup.new()
-    types.each {|type| 
-      radio = CL_RadioButton.new(Point.new(0, 0),
-                                 type, @window.get_client_area())
-      radio.set_checked(type == value)
-      group.add(radio)
-    }
-    @items.push(["enum",
-                  CL_Label.new(Point.new(10, 10), name,
-                               @window.get_client_area()),
-                 group])
-    update()
-  end
-
-  def add_int(name, value = 0)
-    @items.push(["int",
-                 CL_Label.new(Point.new(10, 10).to_cl(), name,
-                              @window.get_client_area()),
-                 CL_InputBox.new(Rect.new(Point.new(110, 10), Size.new(200, 25)).to_cl(),
-                                 @window.get_client_area())])
-    @items[-1][2].set_text(value.to_s)
-    update()
-  end
-  
-  def add_string(name, value = "")
-    @items.push(["string",
-                 CL_Label.new(Point.new(10, 10).to_cl(), name,
-                              @window.get_client_area()),
-                 CL_InputBox.new(Rect.new(Point.new(110, 10), Size.new(200, 25)).to_cl(),
-                                 @window.get_client_area())])
-    @items[-1][2].set_text(value)
-    update()    
-  end
-
-  def update()
-    y = 10
-    @items.each { |(type, label, comp)| 
-      label.set_position(10, y)
-
-      if type == "int" or type == "string" or type == "float" or type == "void" or type == "bool" then
-        if comp then
-          comp.set_position(110, y)
-        end
-        y += 25
-      elsif type == "enum"
-        y += 5
-        comp.get_buttons.each {|radio|
-          radio.set_position(110, y)
-          y += 20
-        }
-        y += 5
-      end
-    }
-  
-    @cancel.set_position(200, y)
-    @ok.set_position(260, y)
-    @window.set_size(330, y + 60)
   end
 end
 

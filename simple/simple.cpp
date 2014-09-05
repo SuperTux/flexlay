@@ -14,23 +14,23 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#if 0
-
+#include "editor_map.hpp"
+#include "gui/editor_map_component.hpp"
+#include "flexlay.hpp"
+#include "gui_manager.hpp"
+#include "math/rect.hpp"
+#include "tilemap_layer.hpp"
+#include "tileset.hpp"
+#include "workspace.hpp"
 
 int main()
 {
   Flexlay flexlay;
   flexlay.init();
 
-  Editor editor;
+  GUIManager gui;
 
-  GUIManager* gui = editor.get_gui_manager();
-
-  new CL_Button(Rect(Point(50, 50),
-                     Size(100, 25)).to_cl(),
-                "Hello World", gui->get_component());
-
-  EditorMap m;
+  EditorMap m(true);
   Tileset tileset(32);
   TilemapLayer tilemap(tileset, 20, 10);
 
@@ -38,19 +38,14 @@ int main()
 
   TilemapLayer::set_current(tilemap);
 
-  EditorMapComponent editor_map(Rect(0, 0, 799, 599).to_cl(), gui->get_component());
-  Workspace workspace(799, 599);
-  editor_map.set_workspace(workspace);
+  EditorMapComponent* editor_map = gui.create_editor_map_component(Rect(0, 0, 799, 599));
+  Workspace workspace(true);
+  editor_map->set_workspace(workspace);
   workspace.set_map(m);
 
-  new CL_Button(Rect(Point(50, 150), Size(100, 25)).to_cl(),
-                "Quit", gui->get_component());
-
-  gui->run();
+  gui.run();
 
   flexlay.deinit();
 }
-
-#endif
 
 /* EOF */

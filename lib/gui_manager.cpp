@@ -32,8 +32,6 @@ GUIManager* GUIManager::current_ = 0;
 class GUIManagerImpl
 {
 public:
-  std::stack<CL_Component*> components;
-
   CL_GUIManager*      manager;
   CL_StyleManager*    style;
   CL_ResourceManager* resources;
@@ -47,15 +45,10 @@ GUIManager::GUIManager()
   impl->style     = new CL_StyleManager_Silver(impl->resources);
   impl->manager   = new CL_GUIManager(impl->style);
   current_  = this;
-
-  // Make the manager the first component on the stack
-  push_component(impl->manager);
 }
 
 GUIManager::~GUIManager()
 {
-  pop_component();
-
   delete impl->manager;
   //delete style; FIXME: Memory hole?!
   //delete resources;  FIXME: Memory hole?!
@@ -83,7 +76,7 @@ GUIManager::run()
 CL_Component*
 GUIManager::get_component()
 {
-  return impl->components.top();
+  return impl->manager;
 }
 
 void
@@ -110,18 +103,6 @@ void
 GUIManager::quit()
 {
   impl->manager->quit();
-}
-
-void
-GUIManager::push_component(CL_Component* c)
-{
-  impl->components.push(c);
-}
-
-void
-GUIManager::pop_component()
-{
-  impl->components.pop();
 }
 
 Menubar*

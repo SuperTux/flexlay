@@ -46,9 +46,6 @@ public:
   void run();
   void quit();
 
-  void push_component(CL_Component* c);
-  void pop_component();
-
   void hide();
   void show();
   bool is_visible();

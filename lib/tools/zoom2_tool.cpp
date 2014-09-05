@@ -25,7 +25,7 @@ public:
   bool active;
   Point click_pos;
   float old_zoom;
-  void draw();
+  void draw(GraphicContext& gc);
 
   void on_mouse_up  (const InputEvent& event);
   void on_mouse_down(const InputEvent& event);
@@ -43,7 +43,7 @@ Zoom2Tool::~Zoom2Tool()
 }
 
 void
-Zoom2ToolImpl::draw()
+Zoom2ToolImpl::draw(GraphicContext& gc)
 {
 }
 

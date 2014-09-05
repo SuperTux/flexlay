@@ -20,6 +20,7 @@
 #include <iostream>
 
 #include "display.hpp"
+#include "graphic_context.hpp"
 #include "math.hpp"
 #include "math/rect.hpp"
 #include "tileset.hpp"
@@ -75,15 +76,15 @@ TileSelection::clear()
 }
 
 void
-TileSelection::draw(const Color& color)
+TileSelection::draw(GraphicContext& gc, const Color& color)
 {
   int tile_size = impl->tilemap.get_tileset().get_tile_size();
 
-  Display::fill_rect(Rect(impl->selection.left * tile_size,
-                          impl->selection.top * tile_size,
-                          impl->selection.right * tile_size,
-                          impl->selection.bottom * tile_size),
-                        color);
+  gc.fill_rect(Rect(impl->selection.left * tile_size,
+                    impl->selection.top * tile_size,
+                    impl->selection.right * tile_size,
+                    impl->selection.bottom * tile_size),
+               color);
 }
 
 TileBrush

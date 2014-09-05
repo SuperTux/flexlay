@@ -29,7 +29,7 @@ public:
   /** Position of the center */
   Pointf old_trans_offset;
 
-  virtual void draw() {}
+  virtual void draw(GraphicContext& gc) {}
 
   void on_mouse_up  (const InputEvent& event);
   void on_mouse_down(const InputEvent& event);

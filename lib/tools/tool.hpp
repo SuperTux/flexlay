@@ -24,6 +24,7 @@ class InputEvent;
 
 class ToolImpl;
 
+class GraphicContext;
 class Tool
 {
 protected:
@@ -33,7 +34,7 @@ public:
   Tool(std::shared_ptr<ToolImpl> impl_);
   ~Tool();
 
-  void draw();
+  void draw(GraphicContext& gc);
 
   void on_mouse_up  (const InputEvent& event);
   void on_mouse_down(const InputEvent& event);

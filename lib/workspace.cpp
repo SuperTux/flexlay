@@ -67,7 +67,7 @@ Workspace::draw(GraphicContext& gc)
   for(WorkspaceImpl::Tools::iterator it = impl->tools.begin();
       it != impl->tools.end(); ++it)
   {
-    it->second.draw();
+    it->second.draw(gc);
   }
 
   gc.flush();

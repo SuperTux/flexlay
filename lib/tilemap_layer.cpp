@@ -95,11 +95,11 @@ TilemapLayerImpl::draw(GraphicContext& gc)
   int tile_size = this->tileset.get_tile_size();
 
   if (this->background_color.get_alpha() != 0)
-    Display::fill_rect(Rect(Point(0,0),
-                            Size(this->field.get_width()  * tile_size,
-                                 this->field.get_height() * tile_size)),
-                       this->background_color);
-  Display::flush();
+    gc.fill_rect(Rect(Point(0,0),
+                      Size(this->field.get_width()  * tile_size,
+                           this->field.get_height() * tile_size)),
+                 this->background_color);
+  gc.flush();
 
   Rect rect(gc.state.get_clip_rect());
 
@@ -124,9 +124,9 @@ TilemapLayerImpl::draw(GraphicContext& gc)
             sprite.draw(x * tile_size, y * tile_size, gc.gc);
 
             if (draw_attribute)
-              Display::fill_rect(Rect(Point(x, y), Size(tileset.get_tile_size(),
-                                                        tileset.get_tile_size())),
-                                 tile->get_attribute_color());
+              gc.fill_rect(Rect(Point(x, y), Size(tileset.get_tile_size(),
+                                                  tileset.get_tile_size())),
+                           tile->get_attribute_color());
           }
         }
       }
@@ -145,9 +145,9 @@ TilemapLayerImpl::draw(GraphicContext& gc)
             tile->get_sprite().draw(x * tile_size, y * tile_size, gc.gc);
 
             if (draw_attribute)
-              Display::fill_rect(Rect(Point(x, y), Size(tileset.get_tile_size(),
-                                                        tileset.get_tile_size())),
-                                 tile->get_attribute_color());
+              gc.fill_rect(Rect(Point(x, y), Size(tileset.get_tile_size(),
+                                                  tileset.get_tile_size())),
+                           tile->get_attribute_color());
           }
         }
       }
@@ -156,21 +156,21 @@ TilemapLayerImpl::draw(GraphicContext& gc)
   if (this->draw_grid)
   {
     for (int y = start_y; y <= end_y; ++y)
-      Display::draw_line(start_x * tile_size,
-                         y       * tile_size,
-                         end_x   * tile_size,
-                         y       * tile_size,
-                         y % 2 ? Color(150, 150, 150) : Color(255, 255, 255));
+      gc.draw_line(start_x * tile_size,
+                   y       * tile_size,
+                   end_x   * tile_size,
+                   y       * tile_size,
+                   y % 2 ? Color(150, 150, 150) : Color(255, 255, 255));
 
     for (int x = start_x; x <= end_x; ++x)
-      Display::draw_line(x       * tile_size,
-                         start_y * tile_size,
-                         x       * tile_size,
-                         end_y   * tile_size,
-                         x % 2 ? Color(150, 150, 150) : Color(255, 255, 255));
+      gc.draw_line(x       * tile_size,
+                   start_y * tile_size,
+                   x       * tile_size,
+                   end_y   * tile_size,
+                   x % 2 ? Color(150, 150, 150) : Color(255, 255, 255));
   }
 
-  Display::flush();
+  gc.flush();
 }
 
 int

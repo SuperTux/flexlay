@@ -24,6 +24,7 @@
 #include "bitmap_layer.hpp"
 #include "display.hpp"
 #include "drawer_properties.hpp"
+#include "graphic_context.hpp"
 #include "gui/editor_map_component.hpp"
 #include "input_event.hpp"
 #include "sprite_stroke_drawer.hpp"
@@ -42,18 +43,18 @@ public:
     //drawer = MarkerStrokeDrawer().to_drawer();
   }
 
-  void draw()
+  void draw(GraphicContext& gc)
   {
     if (drawing)
     {
       // FIXME: This translation is a bit ugly, layer position should be handled somewhat different
-      Display::push_modelview();
-      Display::add_translate(BitmapLayer::current()->to_object().get_pos().x,
-                             BitmapLayer::current()->to_object().get_pos().y);
+      gc.push_modelview();
+      gc.add_translate(BitmapLayer::current()->to_object().get_pos().x,
+                       BitmapLayer::current()->to_object().get_pos().y);
 #ifdef GRUMBEL
       stroke.draw(0);
 #endif
-      Display::pop_modelview();
+      gc.pop_modelview();
     }
     else
     {

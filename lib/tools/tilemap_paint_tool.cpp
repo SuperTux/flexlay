@@ -18,8 +18,8 @@
 
 #include <ClanLib/Display/keyboard.h>
 
-#include "display.hpp"
 #include "editor_map.hpp"
+#include "graphic_context.hpp"
 #include "gui/editor_map_component.hpp"
 #include "gui/tile_selection.hpp"
 #include "input_event.hpp"
@@ -44,7 +44,7 @@ public:
 
   PaintCommand* command;
 
-  void draw();
+  void draw(GraphicContext& gc);
 
   void on_mouse_down(const InputEvent& event);
   void on_mouse_move(const InputEvent& event);
@@ -73,7 +73,7 @@ TileMapPaintTool::~TileMapPaintTool()
 }
 
 void
-TileMapPaintToolImpl::draw()
+TileMapPaintToolImpl::draw(GraphicContext& gc)
 {
   TilemapLayer tilemap = TilemapLayer::current();
 
@@ -84,9 +84,9 @@ TileMapPaintToolImpl::draw()
   {
     case TileMapPaintToolImpl::SELECTING:
       if (CL_Keyboard::get_keycode(CL_KEY_LSHIFT))
-        selection.draw(Color(255,  128, 128, 100));
+        selection.draw(gc, Color(255,  128, 128, 100));
       else
-        selection.draw();
+        selection.draw(gc);
       break;
 
     default:
@@ -105,24 +105,24 @@ TileMapPaintToolImpl::draw()
             sprite.draw((current_tile.x + x) * tile_size,
                         (current_tile.y + y) * tile_size);
 
-            Display::fill_rect(Rect(Point((current_tile.x + x) * tile_size,
-                                             (current_tile.y + y) * tile_size),
-                                       Size(tile_size, tile_size)),
-                                  Color(255, 255, 255, 100));
+            gc.fill_rect(Rect(Point((current_tile.x + x) * tile_size,
+                                    (current_tile.y + y) * tile_size),
+                              Size(tile_size, tile_size)),
+                         Color(255, 255, 255, 100));
           }
           else if (brush.is_opaque())
           {
-            Display::fill_rect(Rect(Point((current_tile.x + x) * tile_size,
-                                             (current_tile.y + y) * tile_size),
-                                       Size(tile_size, tile_size)),
-                                  Color(255, 255, 255, 100));
+            gc.fill_rect(Rect(Point((current_tile.x + x) * tile_size,
+                                    (current_tile.y + y) * tile_size),
+                              Size(tile_size, tile_size)),
+                         Color(255, 255, 255, 100));
           }
           else
           {
-            Display::fill_rect(Rect(Point((current_tile.x + x) * tile_size,
-                                                (current_tile.y + y) * tile_size),
-                                       Size(tile_size, tile_size)),
-                                  Color(255, 255, 255, 50));
+            gc.fill_rect(Rect(Point((current_tile.x + x) * tile_size,
+                                    (current_tile.y + y) * tile_size),
+                              Size(tile_size, tile_size)),
+                         Color(255, 255, 255, 50));
           }
         }
       break;

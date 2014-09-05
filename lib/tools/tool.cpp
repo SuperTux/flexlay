@@ -31,10 +31,10 @@ Tool::~Tool()
 }
 
 void
-Tool::draw()
+Tool::draw(GraphicContext& gc)
 {
   if (impl.get())
-    impl->draw();
+    impl->draw(gc);
 }
 
 void

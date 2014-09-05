@@ -125,14 +125,16 @@ public:
 
       surface.set_blend_func(blend_one, blend_one_minus_src_alpha);
 
+#ifdef GRUMBEL
       CL_Matrix4x4 matrix = CL_Display::get_modelview();
-      Display::pop_modelview();
+      gc.pop_modelview();
       surface.draw(0, 0);
-      CL_Display::set_modelview(matrix);
+      gc.set_modelview(matrix);
+#endif
       // FIXME: I think we need the line below, however with it it
       //doesn't work, without it, it does, ClanLib bug or just
       //consfusing function names?
-      //Display::push_modelview();
+      //gc.push_modelview();
     }
     else
     {

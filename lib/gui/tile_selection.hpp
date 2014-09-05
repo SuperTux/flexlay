@@ -41,7 +41,7 @@ public:
 
   Rect get_rect() const;
 
-  void draw(const Color& color = Color(255, 255, 255, 100));
+  void draw(GraphicContext& gc, const Color& color = Color(255, 255, 255, 100));
 
   TileBrush get_brush(const Field<int>& field) const;
 private:

@@ -17,6 +17,7 @@
 #ifndef HEADER_FLEXLAY_TOOLS_TOOL_IMPL_HPP
 #define HEADER_FLEXLAY_TOOLS_TOOL_IMPL_HPP
 
+class GraphicContext;
 class InputEvent;
 
 class ToolImpl
@@ -27,7 +28,7 @@ public:
   ToolImpl() {}
   virtual ~ToolImpl() {}
 
-  virtual void draw() {}
+  virtual void draw(GraphicContext& gc) {}
 
   virtual void on_mouse_up  (const InputEvent& event) {}
   virtual void on_mouse_down(const InputEvent& event) {}

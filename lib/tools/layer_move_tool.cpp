@@ -16,8 +16,8 @@
 
 #include "layer_move_tool.hpp"
 
-#include "display.hpp"
 #include "editor_map.hpp"
+#include "graphic_context.hpp"
 #include "gui/editor_map_component.hpp"
 #include "input_event.hpp"
 #include "layer.hpp"
@@ -49,7 +49,7 @@ public:
     return layer;
   }
 
-  void draw()
+  void draw(GraphicContext& gc)
   {
     for(int i = 0; i < EditorMapComponent::current()->get_workspace().get_map().get_layer_count(); ++i)
     {
@@ -57,10 +57,10 @@ public:
       if (layer.has_bounding_rect())
       {
         Rect rect = layer.get_bounding_rect();
-        Display::draw_line(rect.left, rect.top, rect.right, rect.bottom,
-                              Color(0, 255, 255).to_cl());
-        Display::draw_line(rect.left, rect.bottom, rect.right, rect.top,
-                              Color(0, 255, 255).to_cl());
+        gc.draw_line(rect.left, rect.top, rect.right, rect.bottom,
+                     Color(0, 255, 255).to_cl());
+        gc.draw_line(rect.left, rect.bottom, rect.right, rect.top,
+                     Color(0, 255, 255).to_cl());
       }
     }
   }

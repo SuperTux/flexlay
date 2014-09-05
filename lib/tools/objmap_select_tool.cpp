@@ -19,9 +19,9 @@
 #include <algorithm>
 #include <ClanLib/Display/keyboard.h>
 
-#include "display.hpp"
 #include "editor_map.hpp"
 #include "editor_names.hpp"
+#include "graphic_context.hpp"
 #include "gui/editor_map_component.hpp"
 #include "gui/editor_map_component.hpp"
 #include "gui_manager.hpp"
@@ -53,7 +53,7 @@ public:
   ObjectMoveCommand*   move_command;
   ObjectDeleteCommand* delete_command;
 
-  void draw();
+  void draw(GraphicContext& gc);
 
   void on_mouse_up  (const InputEvent& event);
   void on_mouse_down(const InputEvent& event);
@@ -106,12 +106,12 @@ ObjMapSelectTool::sig_on_right_click()
 }
 
 void
-ObjMapSelectToolImpl::draw()
+ObjMapSelectToolImpl::draw(GraphicContext& gc)
 {
   for (ObjMapSelectTool::Selection::iterator i = selection.begin(); i != selection.end(); ++i)
   {
     //      (*i).draw();
-    Display::draw_rect(Rect((*i).get_bound_rect()), Color(255, 0, 0));
+    gc.draw_rect(Rect((*i).get_bound_rect()), Color(255, 0, 0));
   }
 
   switch(state)
@@ -119,8 +119,8 @@ ObjMapSelectToolImpl::draw()
     case DRAG:
       break;
     case SELECT:
-      Display::draw_rect(Rect(selection_rect),
-                         Color(255, 255, 255));
+      gc.draw_rect(Rect(selection_rect),
+                   Color(255, 255, 255));
       break;
     default:
       break;

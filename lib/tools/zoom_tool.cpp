@@ -14,12 +14,13 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+#include "zoom_tool.hpp"
+
 #include "color.hpp"
-#include "display.hpp"
+#include "graphic_context.hpp"
 #include "gui/editor_map_component.hpp"
 #include "input_event.hpp"
 #include "tool_impl.hpp"
-#include "zoom_tool.hpp"
 
 class ZoomToolImpl : public ToolImpl
 {
@@ -28,7 +29,7 @@ public:
 
   Rectf zoom_rect;
 
-  void draw();
+  void draw(GraphicContext& gc);
 
   void on_mouse_up(const InputEvent& event);
   void on_mouse_down(const InputEvent& event);
@@ -46,17 +47,17 @@ ZoomTool::~ZoomTool()
 }
 
 void
-ZoomToolImpl::draw()
+ZoomToolImpl::draw(GraphicContext& gc)
 {
   switch (state)
   {
     case CREATE_ZOOM_RECT:
-    {
-      Rectf tmp(zoom_rect);
-      tmp.normalize();
-      Display::fill_rect(Rect(tmp), Color(255, 255, 0, 50));
-      Display::draw_rect(Rect(tmp), Color(255, 255, 0, 200));
-    }
+      {
+        Rectf tmp(zoom_rect);
+        tmp.normalize();
+        gc.fill_rect(tmp, Color(255, 255, 0, 50));
+        gc.draw_rect(tmp, Color(255, 255, 0, 200));
+      }
     case NONE:
       break;
   }

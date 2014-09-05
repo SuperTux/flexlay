@@ -118,44 +118,31 @@ class ButtonPanel
   end
 end
 
+puts PropertyValue::TYPE_BOOL
+
 class GenericDialog
-  def on_cancel()
-    @window.hide()
-  end
-
-  def on_ok()
-    @window.hide()
-    if @callback
-      vals = []
-      @items.each{|item|
-        (type, label, comp) = item
-        if type == "int"
-          vals.push(comp.get_text().to_i)
-        elsif type == "float"
-          vals.push(comp.get_text().to_f)
-        elsif type == "string"
-          vals.push(comp.get_text())
-        elsif type == "bool"
-          vals.push(comp.is_checked())
-        elsif type == "enum"
-          comp.get_buttons().each{|button|
-            if (button.is_checked()) then
-              vals.push(button.get_text())
-              break;
-            end
-          }
-        end
-      }
-      @callback.call(*vals)
-    end
-  end
-
   def set_block()
-    @callback = proc{ |*args| yield(*args) }
+    callback = proc{ |*args| yield(*args) }
+    set_callback(c)
   end
 
-  def set_callback(c)
-    @callback = c
+  def set_callback(callback)
+    set_ok_callback(proc{
+                      values = get_values()
+                      ruby_values = values.map{ |v|
+                        case v.get_type()
+                        when PropertyValue::TYPE_BOOL
+                          v.get_bool()
+                        when PropertyValue::TYPE_INT
+                          v.get_int()
+                        when PropertyValue::TYPE_FLOAT
+                          v.get_float()
+                        when PropertyValue::TYPE_STRING
+                          v.get_string()
+                        end
+                      }
+                      callback.call(*ruby_values)
+                    })
   end
 end
 

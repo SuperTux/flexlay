@@ -57,12 +57,12 @@ class Animation
       
       if (@frames.length > 1) then
         onion_skin.add_map(@frames[(@current_frame - 1)%@frames.length].editormap, 
-                           CL_Color.new(255, 255, 255, 150))
+                           Color.new(255, 255, 255, 150))
       end
 
       if (@frames.length > 2) then
         onion_skin.add_map(@frames[(@current_frame - 2)%@frames.length].editormap, 
-                           CL_Color.new(255, 255, 255, 75))
+                           Color.new(255, 255, 255, 75))
       end      
       
       img.update_onion_skin()

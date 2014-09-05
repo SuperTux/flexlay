@@ -32,7 +32,8 @@ GenericDialog::GenericDialog(const std::string& title, CL_Component* parent) :
                      m_window->get_client_area())),
   m_cancel(new CL_Button(Rect(Point(230, 35), Size(50, 25)).to_cl(), "Cancel",
                          m_window->get_client_area())),
-  m_items()
+  m_items(),
+  m_ok_callback()
 {
   m_slots.push_back(m_cancel->sig_clicked().connect_functor([this]{ on_cancel(); }));
   m_slots.push_back(m_ok->sig_clicked().connect_functor([this]{ on_ok(); }));
@@ -168,34 +169,66 @@ GenericDialog::on_cancel()
 void
 GenericDialog::on_ok()
 {
-#ifdef GRUMBEL
-  m_window->hide()
-    if m_callback
-
-      vals = []
-        m_items.each{|item|
-                     (type, label, comp) = item
-                     if type == "int"
-                     vals.push(comp.get_text().to_i)
-                     elsif type == "float"
-                     vals.push(comp.get_text().to_f)
-                     elsif type == "string"
-                     vals.push(comp.get_text())
-                     elsif type == "bool"
-                     vals.push(comp.is_checked())
-                     elsif type == "enum"
-                     comp.get_buttons().each{|button|
-                                             if (button.is_checked()) then
-                                                                        vals.push(button.get_text())
-                                                                        break;
-                       }
-      }
+  m_window->hide();
+  if (m_ok_callback)
+  {
+    m_ok_callback();
+  }
 }
 
-}
-m_callback.call(*vals)
-}
-#endif
+void
+GenericDialog::set_ok_callback(std::function<void ()> callback)
+{
+  m_ok_callback = callback;
 }
 
-/* EOF */
+std::vector<PropertyValue>
+GenericDialog::get_values() const
+{
+  std::vector<PropertyValue> result;
+
+  for(auto& item : m_items)
+  {
+    switch(item.type)
+    {
+      case TYPE_LABEL:
+        // ignored
+        break;
+
+      case TYPE_ENUM:
+        {
+          int idx = 0;
+          for(auto& button : item.group->get_buttons())
+          {
+            if (button == item.group->get_toggled())
+            {
+              result.emplace_back(idx);
+              break;
+            }
+            idx += 1;
+          }
+        }
+        break;
+        
+      case TYPE_BOOL:
+        result.emplace_back(static_cast<bool>(std::stoi(static_cast<CL_InputBox*>(item.body)->get_text())));
+        break;
+
+      case TYPE_INT:
+        result.emplace_back(std::stoi(static_cast<CL_InputBox*>(item.body)->get_text()));
+        break;
+
+      case TYPE_FLOAT:
+        result.emplace_back(std::stof(static_cast<CL_InputBox*>(item.body)->get_text()));
+        break;
+
+      case TYPE_STRING:
+        result.emplace_back(static_cast<CL_InputBox*>(item.body)->get_text());
+        break;
+    }
+  }
+
+  return result;
+}
+
+  /* EOF */

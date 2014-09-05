@@ -82,7 +82,7 @@ class AmbientSound<GameObj
     puts @bias.inspect
     puts @sample.inspect
     puts @volume.inspect
-    dialog = $gui.create_generic_dialog("AmbientSound Property Dialog")
+    dialog = $gui.gui.create_generic_dialog("AmbientSound Property Dialog")
     dialog.add_float("Distance Factor: ", @factor)
     dialog.add_float("Distance Bias: ", @bias)
     dialog.add_string("Sample: ", @sample)
@@ -124,7 +124,7 @@ class SequenceTrigger<GameObj
 
   def property_dialog()
     puts @sequence.inspect
-    dialog = $gui.create_generic_dialog("SequenceTrigger Property Dialog")
+    dialog = $gui.gui.create_generic_dialog("SequenceTrigger Property Dialog")
     dialog.add_string("Sequence: ", @sequence)
     dialog.set_callback(proc{|sequence| 
                           @sequence = sequence
@@ -144,7 +144,7 @@ class BadGuy<GameObj
   end  
 
   def property_dialog()
-    dialog = $gui.create_generic_dialog("BadGuy Property Dialog")
+    dialog = $gui.gui.create_generic_dialog("BadGuy Property Dialog")
 
     dialog.add_enum("Direction: ", ["left", "right", "auto"], @direction)
     
@@ -170,7 +170,7 @@ class Dispenser<GameObj
   end
   
   def property_dialog()
-    dialog = $gui.create_generic_dialog("Dispenser Property Dialog")
+    dialog = $gui.gui.create_generic_dialog("Dispenser Property Dialog")
     dialog.add_string("Badguy Type: ", @badguy)
     dialog.add_int("Cycle Type: ", @cycle)
     dialog.set_callback(proc{|badguy, cycle| 
@@ -193,7 +193,7 @@ class Platform<GameObj
   end
   
   def property_dialog()
-    dialog = $gui.create_generic_dialog("Platform Property Dialog")
+    dialog = $gui.gui.create_generic_dialog("Platform Property Dialog")
     dialog.add_string("Use Path: ", @path)
     dialog.add_string("Platform Type: ", @type)
     dialog.set_callback(proc{|path, type| 
@@ -227,7 +227,7 @@ class SpawnPoint<GameObj
   end
 
   def property_dialog()
-    dialog = $gui.create_generic_dialog("SpawnPoint Property Dialog")
+    dialog = $gui.gui.create_generic_dialog("SpawnPoint Property Dialog")
     dialog.add_string("Name: ", @name)
     dialog.set_callback(proc{|name| 
                           @name = name
@@ -292,7 +292,7 @@ class InfoBlock<GameObj
   end
 
   def property_dialog()
-    dialog = $gui.create_generic_dialog("InfoBox Property Dialog" % [@type])
+    dialog = $gui.gui.create_generic_dialog("InfoBox Property Dialog" % [@type])
     dialog.add_string("Message: ", @message)
     dialog.set_callback(proc{|message| 
                           @message = message
@@ -325,7 +325,7 @@ class Powerup<GameObj
   end
 
   def property_dialog()
-    dialog = $gui.create_generic_dialog("Powerup Property Dialog" % [@sprite])
+    dialog = $gui.gui.create_generic_dialog("Powerup Property Dialog" % [@sprite])
     dialog.add_string("Sprite: ", @sprite)
     dialog.set_callback(proc{|sprite| 
                           @sprite = sprite
@@ -348,7 +348,7 @@ class ParticleSystem<GameObj
   end
 
   def property_dialog()
-    dialog = $gui.create_generic_dialog("%s-ParticleSystem Property Dialog" % [@type])
+    dialog = $gui.gui.create_generic_dialog("%s-ParticleSystem Property Dialog" % [@type])
     dialog.add_int("Layer: ", @layer)
     dialog.set_callback(proc{|layer| 
                           @layer = layer
@@ -389,7 +389,7 @@ class Gradient<GameObj
   end
 
   def property_dialog()
-    dialog = $gui.create_generic_dialog("Background Property Dialog")
+    dialog = $gui.gui.create_generic_dialog("Background Property Dialog")
     dialog.add_int("Layer: ", @layer)
     dialog.add_int("Top Red: ", @color_top[0])
     dialog.add_int("Top Green: ", @color_top[1])
@@ -430,7 +430,7 @@ class Background<GameObj
   end
 
   def property_dialog()
-    dialog = $gui.create_generic_dialog("Background Property Dialog")
+    dialog = $gui.gui.create_generic_dialog("Background Property Dialog")
     dialog.add_string("Image: ", @image)
     dialog.add_float("Speed: ", @speed)
     dialog.add_int("Layer: ", @layer)
@@ -467,7 +467,7 @@ class LevelTime<GameObj
   end
 
   def property_dialog()
-    dialog = $gui.create_generic_dialog("LevelTime Property Dialog")
+    dialog = $gui.gui.create_generic_dialog("LevelTime Property Dialog")
     dialog.add_float("Time: ", @time)
     dialog.set_callback(proc{|time| 
                           @time = time
@@ -506,7 +506,7 @@ class Door<GameObj
   end  
 
   def property_dialog()
-    dialog = $gui.create_generic_dialog("Door Property Dialog")
+    dialog = $gui.gui.create_generic_dialog("Door Property Dialog")
     dialog.add_string("Sector: ", @sector)
     dialog.add_string("Spawnpoint: ", @spawnpoint)
     dialog.set_callback(proc{|sector, spawnpoint| 
@@ -576,7 +576,7 @@ class ScriptedObject<GameObj
   end
 
   def property_dialog()
-    dialog = $gui.create_generic_dialog("Scripted Object Property Dialog")
+    dialog = $gui.gui.create_generic_dialog("Scripted Object Property Dialog")
     dialog.add_string("Name: ", @name)
     dialog.add_string("Sprite: ", @sprite)
     dialog.add_int("Layer: ", @layer)

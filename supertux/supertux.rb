@@ -139,7 +139,7 @@ $gui.gui_show_current()
 $gui.set_tilemap_paint_tool()
 
 if not File.exist?($datadir) then
-  dialog = $gui.create_generic_dialog("Specify the SuperTux data directory and restart")
+  dialog = $gui.gui.create_generic_dialog("Specify the SuperTux data directory and restart")
   dialog.add_label("You need to specify the datadir where SuperTux is located")
   dialog.add_string("Datadir:", $datadir)
   

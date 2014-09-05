@@ -35,8 +35,8 @@ if ENV["FLEXLAY_DATADIR"] then
   flexlay.set_datadir($flexlay_datadir)
 end
 
-# $screen_rect = CL_Rect.new(CL_Point.new(0, 0), CL_Size.new(800, 600))
-$screen_rect = CL_Rect.new(CL_Point.new(0, 0), CL_Size.new(1024, 768))
+# $screen_rect = Rect.new(Point.new(0, 0), Size.new(800, 600))
+$screen_rect = Rect.new(Point.new(0, 0), Size.new(1024, 768))
 
 flexlay.init("Flexlay Paint", $screen_rect.get_width(), $screen_rect.get_height(), false)
 
@@ -46,7 +46,7 @@ $layer_move_tool     = LayerMoveTool.new()
 $zoom_tool           = ZoomTool.new()
 $objmap_select_tool  = ObjMapSelectTool.new()
 
-DrawerProperties.current().set_color(CL_Color.new(0, 0, 0, 50))
+DrawerProperties.current().set_color(Color.new(0, 0, 0, 50))
 
 $gui   = PaintGUI.new()
 
@@ -72,7 +72,7 @@ else
 end
 
 $image.layers_count.times {|i|
-  button = CL_Button.new(CL_Rect.new(CL_Point.new(25*i+6, 450), CL_Size.new(25, 25)), "#{i}",
+  button = CL_Button.new(Rect.new(Point.new(25*i+6, 450), Size.new(25, 25)), "#{i}",
                          $gui.selector_window)
   connect_cl(button.sig_clicked(), proc{ $image.set_active_layer(i) })
 }

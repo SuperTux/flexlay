@@ -425,7 +425,7 @@ class SuperTuxGUI
 
   def gui_resize_level()
     level = @workspace.get_map().get_metadata()
-    dialog = $gui.create_generic_dialog("Resize Level")
+    dialog = $gui.gui.create_generic_dialog("Resize Level")
     dialog.add_int("Width: ", level.width)
     dialog.add_int("Height: ", level.height)
     dialog.add_int("X: ", 0)
@@ -486,7 +486,7 @@ class SuperTuxGUI
 
   def gui_edit_level()
     level = @workspace.get_map().get_metadata().get_level()
-    dialog = $gui.create_generic_dialog("Edit Level")
+    dialog = $gui.gui.create_generic_dialog("Edit Level")
 
     dialog.add_string("Name:", level.name)
     dialog.add_string("Author:", level.author)
@@ -501,7 +501,7 @@ class SuperTuxGUI
 
   def gui_edit_sector()
     level = @workspace.get_map().get_metadata().get_level()
-    dialog = $gui.create_generic_dialog("Edit Sector")
+    dialog = $gui.gui.create_generic_dialog("Edit Sector")
     
     dialog.add_string("Name: ",   level.current_sector.name)
     dialog.add_string("Music: ",   level.current_sector.music)

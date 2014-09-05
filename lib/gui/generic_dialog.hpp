@@ -19,8 +19,11 @@
 
 #include <string>
 #include <vector>
+#include <functional>
 
 #include <ClanLib/Signals/slot.h>
+
+#include "property_value.hpp"
 
 class CL_RadioGroup;
 class CL_Label;
@@ -56,6 +59,8 @@ private:
   };
   std::vector<Item> m_items;
 
+  std::function<void ()> m_ok_callback;
+
 public:
   GenericDialog(const std::string& title, CL_Component* parent);
 
@@ -68,10 +73,13 @@ public:
                 const std::vector<std::string>& types,
                 const std::string& value);
 
+  void set_ok_callback(std::function<void ()> callback);
+  std::vector<PropertyValue> get_values() const;
+
+private:
   void on_ok();
   void on_cancel();
 
-private:
   void update_layout();
 
 private:

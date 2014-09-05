@@ -90,6 +90,8 @@ std::cout << "CL_Error: " << err.message << std::endl;
 #include "math/point.hpp"
 #include "math/origin.hpp"
 
+#include "property_value.hpp"
+
 #include "color.hpp"
 
 // #include "netpanzer.hpp" 
@@ -159,6 +161,7 @@ VALUE CL_Point2Value(const CL_Point& arg)
 %template(Std_vector_CL_Pointf) std::vector<CL_Pointf>;
 %template(Std_vector_Stroke) std::vector<Stroke>;
 %template(Std_vector_Dab) std::vector<Dab>;
+%template(Std_vector_PropertyValue) std::vector<PropertyValue>;
 
 %typemap(in) std::function<void()> {
     $1 = RubyFunctor($input);
@@ -240,6 +243,8 @@ VALUE CL_Point2Value(const CL_Point& arg)
 %include "math/size.hpp"
 %include "math/point.hpp"
 %include "math/origin.hpp"
+
+%include "property_value.hpp"
 
 %include "color.hpp"
 

@@ -12,27 +12,27 @@ class PaintGUI
     @workspace.set_tool(2, $workspace_move_tool.to_tool())
     # @workspace.set_tool($layer_move_tool.to_tool());
 
-    @selector_window_main = Window.new(CL_Rect.new(CL_Point.new($screen_rect.get_width()-160, 5), 
-                                                   CL_Size.new(128 + 6 + 10, 658)),
+    @selector_window_main = Window.new(Rect.new(Point.new($screen_rect.get_width()-160, 5), 
+                                                   Size.new(128 + 6 + 10, 658)),
                                        "ColorPicker",
                                        @gui.get_component())
     @selector_window = @selector_window_main.get_client_area()
 
-    @colorpicker = ColorPicker.new(CL_Rect.new(CL_Point.new(3, 3), CL_Size.new(128, 128)),
+    @colorpicker = ColorPicker.new(Rect.new(Point.new(3, 3), Size.new(128, 128)),
                                    @selector_window)
 
     connect_v1_Color(@colorpicker.sig_color_change(), proc{|color|
                        DrawerProperties.current().set_color(color)
                      })
 
-    @bgcolorpicker = ColorPicker.new(CL_Rect.new(CL_Point.new(3, 300), CL_Size.new(128, 128)),
+    @bgcolorpicker = ColorPicker.new(Rect.new(Point.new(3, 300), Size.new(128, 128)),
                                      @selector_window)
 
     connect_v1_Color(@bgcolorpicker.sig_color_change(), proc{|color|
                        @workspace.get_map().set_background_color(color)
                      })
 
-    @size_slider = Slider.new(CL_Rect.new(CL_Point.new(3, 150), CL_Size.new(128, 16)), @selector_window)
+    @size_slider = Slider.new(Rect.new(Point.new(3, 150), Size.new(128, 16)), @selector_window)
     @size_slider.set_range(0.01, 2.0) # FIXME: using 0 size brush makes clanlib crashi
     @size_slider.set_value(1.0)
     connect_v1_float(@size_slider.sig_on_change, proc{|value|
@@ -40,7 +40,7 @@ class PaintGUI
                        DrawerProperties.current().set_size(value)
                      })
 
-    @brush_hardness = Slider.new(CL_Rect.new(CL_Point.new(3, 170), CL_Size.new(128, 16)),
+    @brush_hardness = Slider.new(Rect.new(Point.new(3, 170), Size.new(128, 16)),
                                  @selector_window)
     @brush_hardness.set_range(0.0, 1.0)
     @brush_hardness.set_value(0.75)
@@ -48,7 +48,7 @@ class PaintGUI
                        GeneratedBrush.new(DrawerProperties.current().get_brush()).set_hardness(value)
                      })
 
-    @brush_spikes = Slider.new(CL_Rect.new(CL_Point.new(3, 190), CL_Size.new(128, 16)),
+    @brush_spikes = Slider.new(Rect.new(Point.new(3, 190), Size.new(128, 16)),
                                  @selector_window)
     @brush_spikes.set_range(2, 20)
     @brush_spikes.set_value(2)
@@ -56,7 +56,7 @@ class PaintGUI
                        GeneratedBrush.new(DrawerProperties.current().get_brush()).set_spikes(value.to_i)
                      })
 
-    @brush_aspects = Slider.new(CL_Rect.new(CL_Point.new(3, 210), CL_Size.new(128, 16)),
+    @brush_aspects = Slider.new(Rect.new(Point.new(3, 210), Size.new(128, 16)),
                                  @selector_window)
     @brush_aspects.set_range(0.1, 10)
     @brush_aspects.set_value(1)
@@ -64,7 +64,7 @@ class PaintGUI
                        GeneratedBrush.new(DrawerProperties.current().get_brush()).set_aspect_ratio(value)
                      })
 
-    @brush_angles = Slider.new(CL_Rect.new(CL_Point.new(3, 230), CL_Size.new(128, 16)),
+    @brush_angles = Slider.new(Rect.new(Point.new(3, 230), Size.new(128, 16)),
                                  @selector_window)
     @brush_angles.set_range(0, 360)
     @brush_angles.set_value(0)
@@ -72,7 +72,7 @@ class PaintGUI
                        GeneratedBrush.new(DrawerProperties.current().get_brush()).set_angle(value)
                      })
 
-    @spacing_slider = Slider.new(CL_Rect.new(CL_Point.new(3, 600), CL_Size.new(128, 16)),
+    @spacing_slider = Slider.new(Rect.new(Point.new(3, 600), Size.new(128, 16)),
                                  @selector_window)
     @spacing_slider.set_range(1, 250)
     @spacing_slider.set_value(20)
@@ -80,9 +80,9 @@ class PaintGUI
                        DrawerProperties.current().set_spacing(value)
                      })
 
-    @brush_shape_circle  = CL_Button.new(CL_Rect.new(CL_Point.new(5, 250), CL_Size.new(40, 25)), "Circ", @selector_window)
-    @brush_shape_rect    = CL_Button.new(CL_Rect.new(CL_Point.new(45, 250), CL_Size.new(40, 25)), "Squa", @selector_window)
-    @brush_shape_diamond = CL_Button.new(CL_Rect.new(CL_Point.new(85, 250), CL_Size.new(40, 25)), "Diam", @selector_window)
+    @brush_shape_circle  = Button.new(Rect.new(Point.new(5, 250), Size.new(40, 25)), "Circ", @selector_window)
+    @brush_shape_rect    = Button.new(Rect.new(Point.new(45, 250), Size.new(40, 25)), "Squa", @selector_window)
+    @brush_shape_diamond = Button.new(Rect.new(Point.new(85, 250), Size.new(40, 25)), "Diam", @selector_window)
 
     connect_cl(@brush_shape_circle.sig_clicked(), proc{ 
               GeneratedBrush.new(DrawerProperties.current().get_brush()).set_shape(BRUSH_SHAPE_CIRCLE)
@@ -94,7 +94,7 @@ class PaintGUI
               GeneratedBrush.new(DrawerProperties.current().get_brush()).set_shape(BRUSH_SHAPE_DIAMOND)
             })
 
-#    @zoom_slider = Slider.new(CL_Rect.new(CL_Point.new(3, 182), CL_Size.new(128, 16)), @selector_window)
+#    @zoom_slider = Slider.new(Rect.new(Point.new(3, 182), Size.new(128, 16)), @selector_window)
 #    @zoom_slider.set_range(0.25, 10.0) # FIXME: using 0 size brush makes clanlib crashi
 #    @zoom_slider.set_value(1.0)
 #    connect_v1_float(@zoom_slider.sig_on_change, proc{|value|
@@ -116,7 +116,7 @@ class PaintGUI
     connect_v2(@editor_map.sig_on_key("esc"),  proc{ |x, y| puts "bye, bye2"})
     connect_v2(@editor_map.sig_on_key("q"),  proc{ |x, y| $gui.quit()})
     connect_v2(@editor_map.sig_on_key("s"),  proc{ |x, y| 
-                 CL_ProviderFactory.save(BitmapLayer.current().get_pixeldata(), "/tmp/bla.png")
+                 ProviderFactory.save(BitmapLayer.current().get_pixeldata(), "/tmp/bla.png")
                  # $image.save("/tmp/test.scm")
                })
     connect_v2(@editor_map.sig_on_key("l"),  proc{ |x, y| 
@@ -135,11 +135,11 @@ class PaintGUI
                  $gui.workspace.get_gc_state.set_rotation($gui.workspace.get_gc_state.get_rotation() + 10)
                })
 
-    @normal_mode = CL_Button.new(CL_Rect.new(CL_Point.new(5, 500), CL_Size.new(40, 25)), "Norm", @selector_window)
-    @erase_mode  = CL_Button.new(CL_Rect.new(CL_Point.new(45, 500), CL_Size.new(40, 25)), "Erase", @selector_window)
-    @add_mode    = CL_Button.new(CL_Rect.new(CL_Point.new(85, 500), CL_Size.new(40, 25)), "Add", @selector_window)
-    @shader_mode = CL_Button.new(CL_Rect.new(CL_Point.new(5, 525), CL_Size.new(40, 25)), "Shad", @selector_window)
-    @smudge_mode = CL_Button.new(CL_Rect.new(CL_Point.new(45, 525), CL_Size.new(40, 25)), "Smudge", @selector_window)
+    @normal_mode = Button.new(Rect.new(Point.new(5, 500), Size.new(40, 25)), "Norm", @selector_window)
+    @erase_mode  = Button.new(Rect.new(Point.new(45, 500), Size.new(40, 25)), "Erase", @selector_window)
+    @add_mode    = Button.new(Rect.new(Point.new(85, 500), Size.new(40, 25)), "Add", @selector_window)
+    @shader_mode = Button.new(Rect.new(Point.new(5, 525), Size.new(40, 25)), "Shad", @selector_window)
+    @smudge_mode = Button.new(Rect.new(Point.new(45, 525), Size.new(40, 25)), "Smudge", @selector_window)
 
     connect_cl(@normal_mode.sig_clicked(), proc{ 
               drawer = SpriteStrokeDrawer.new($sketch_stroke_tool.get_drawer())

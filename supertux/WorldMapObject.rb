@@ -40,7 +40,7 @@ class WMSpawnPoint<WorldmapObject
   end
 
   def property_dialog()
-    dialog = $gui.create_generic_dialog("SpawnPoint Property Dialog")
+    dialog = $gui.gui.create_generic_dialog("SpawnPoint Property Dialog")
     dialog.add_string("Name", @name)
     dialog.set_callback(proc{|name|
           @name = name
@@ -96,7 +96,7 @@ class WorldmapLevel<WorldmapObject
   end
 
   def property_dialog()
-    dialog = $gui.create_generic_dialog("LevelTile Property Dialog")
+    dialog = $gui.gui.create_generic_dialog("LevelTile Property Dialog")
     dialog.add_string("level", @name)
     dialog.add_string("sprite", @sprite)
     dialog.add_string("extro-filename", @extro_filename)
@@ -169,7 +169,7 @@ class SpecialTile<WorldmapObject
   end                                  
 
   def property_dialog()
-    dialog = $gui.create_generic_dialog("SpecialTile Property Dialog")
+    dialog = $gui.gui.create_generic_dialog("SpecialTile Property Dialog")
     dialog.add_string("map-message", @map_message)
     dialog.add_bool("passive-message", @passive_message)
     dialog.add_bool("invisible-tile", @invisible_tile)

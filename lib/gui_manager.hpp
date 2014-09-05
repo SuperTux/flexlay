@@ -20,6 +20,7 @@
 #include <memory>
 
 class ButtonPanel;
+class CL_Component;
 class CL_Menu;
 class EditorMapComponent;
 class FileDialog;
@@ -27,6 +28,7 @@ class GUIManagerImpl;
 class GenericDialog;
 class Menubar;
 class Minimap;
+class Rect;
 
 class GUIManager
 {

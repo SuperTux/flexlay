@@ -1,29 +1,23 @@
-# -*- python -*-
+# Flexlay - A Generic 2D Game Editor
+# Copyright (C) 2004 Ingo Ruhnke <grumbel@gmx.de>
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-# Set to False to use local ClanLib instead of global one
-if True:
-    clanLib_env = Environment(LIBPATH=[])
-    clanLib_env.ParseConfig("pkg-config --cflags --libs " +
-                            "clanCore-1.0 clanDisplay-1.0 clanGL-1.0 clanSignals-1.0 clanGUI-1.0 clanGUIStyleSilver-1.0")
-else:
-    # FIXME: replace the X11 stuff with a proper X11 configure check and
-    # make them somehow part of the clanlib libraries themself
-    clanLib_env = Environment(CPPPATH=['../external/clanlib/'],
-                              LIBPATH=['/usr/X11R6/lib/',
-                                       '../external/clanlib/'],
-                              LIBS=['clanGUIStyleSilver', 
-                                    'clanGUI',      
-                                    'clanGL',
-                                    'clanDisplay',
-                                    'clanSignals', 
-                                    'clanCore',
-                                    'X11', 'Xmu', 'GL', 'GLU', 'png', 'jpeg', 'Xxf86vm', 'Xi'])
-
-Export('clanLib_env')
-
-# SConscript(['external/clanlib/SConstruct'])
 SConscript(['lib/SConscript'])
 SConscript(['ruby/SConscript'])
 SConscript(['netpanzer/SConscript'])
+SConscript(['simple/SConscript'])
 
 # EOF #

@@ -22,7 +22,7 @@
 #include "display.hpp"
 #include "editor_map.hpp"
 #include "editor_map_component.hpp"
-#include "lib/workspace.hpp"
+#include "workspace.hpp"
 #include "pixel_buffer.hpp"
 #include "surface.hpp"
 #include "tile.hpp"

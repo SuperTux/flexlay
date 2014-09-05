@@ -29,7 +29,7 @@ class SuperTuxGUI
                                  height - buttonpanel_rect.bottom -
                                  minimap_rect.get_height() - 3))
 
-    @editor_map = EditorMapComponent.new(map_rect, @gui.get_component())
+    @editor_map = @gui.create_editor_map_component(map_rect)
     @workspace = @editor_map.get_workspace()
 
     @workspace.set_tool(0, $tilemap_paint_tool.to_tool())
@@ -44,7 +44,7 @@ class SuperTuxGUI
     @workspace.set_tool(107, $zoom2_tool.to_tool())
     @workspace.set_tool(65507, $zoom2_tool.to_tool())
 
-    @minimap = Minimap.new(@editor_map, minimap_rect, @gui.get_component())
+    @minimap = @gui.create_minimap(@editor_map, minimap_rect)
 
     @selector_window = Panel.new(selector_rect, @gui.get_component())
     @tileselector = TileSelector.new(Rect.new(Point.new(3, 3),
@@ -79,12 +79,6 @@ class SuperTuxGUI
     }
 
     create_button_panel(buttonpanel_rect)
-    @recent_files_menu = Menu.new(Point.new(32*2, 54), @gui.get_component())
-
-    @layer_menu = Menu.new(Point.new(32*15+2, 54), @gui.get_component())
-    @layer_menu.add_item($mysprite, "Show all", proc{ gui_show_all() })
-    @layer_menu.add_item($mysprite, "Show current", proc{ gui_show_current() })
-    @layer_menu.add_item($mysprite, "Show only current", proc{ gui_show_only_current() })
 
     @toolbar = @gui.create_button_panel(Rect.new(Point.new(0, 23+33), Size.new(33, 32*4+2)), false)
     @paint = @toolbar.add_icon("../data/images/tools/stock-tool-pencil-22.png", proc{ set_tilemap_paint_tool() })
@@ -185,6 +179,7 @@ class SuperTuxGUI
     button_panel.add_icon("../data/images/icons24/stock_new.png",  proc{ self.gui_level_new() })
     button_panel.add_icon("../data/images/icons24/stock_open.png", proc{ self.gui_level_load() })
     button_panel.add_small_icon("../data/images/icons24/downarrow.png", proc{ @recent_files_menu.run() })
+    @recent_files_menu = Menu.new(Point.new(32*2, 54), @gui.get_component())
     button_panel.add_icon("../data/images/icons24/stock_save.png", proc{ self.gui_level_save() })
     button_panel.add_icon("../data/images/icons24/stock_save_as.png", proc{ self.gui_level_save_as() })
 
@@ -214,6 +209,11 @@ class SuperTuxGUI
     @interactive_icon = button_panel.add_icon("../data/images/icons24/interactive.png", proc{ gui_show_interactive() })
     @foreground_icon = button_panel.add_icon("../data/images/icons24/foreground.png", proc{ gui_show_foreground() })
     @eye_icon = button_panel.add_icon("../data/images/icons24/eye.png", proc{ @layer_menu.run() })
+
+    @layer_menu = Menu.new(Point.new(32*15+2, 54), @gui.get_component())
+    @layer_menu.add_item($mysprite, "Show all", proc{ gui_show_all() })
+    @layer_menu.add_item($mysprite, "Show current", proc{ gui_show_current() })
+    @layer_menu.add_item($mysprite, "Show only current", proc{ gui_show_only_current() })
 
     button_panel.add_separator()
     @sector_icon = button_panel.add_icon("../data/images/icons24/sector.png", proc{ gui_switch_sector_menu() })

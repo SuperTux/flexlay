@@ -16,6 +16,7 @@
 
 #include "editor_map.hpp"
 #include "gui/editor_map_component.hpp"
+#include "gui/generic_dialog.hpp"
 #include "flexlay.hpp"
 #include "gui_manager.hpp"
 #include "math/rect.hpp"
@@ -42,6 +43,9 @@ int main()
   Workspace workspace(true);
   editor_map->set_workspace(workspace);
   workspace.set_map(m);
+
+  GenericDialog* dialog = gui.create_generic_dialog("Generic Dialog");
+  dialog->add_int("An Int:", 5);
 
   gui.run();
 

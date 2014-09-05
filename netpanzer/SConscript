@@ -24,8 +24,8 @@ env.Append(
     CXXFLAGS = ["-g", "-O2", "-Wall", "-fPIC", "-std=c++11"],
     LIBPATH = ["../lib", "../ruby"],
     LIBS = ["flexlay"],
-    SWIGFLAGS = ["-ruby", "-c++"],
-    SHLIBPREFIX = "")
+    SWIGFLAGS = ["-ruby", "-c++"])
+env.Replace(SHLIBPREFIX = "")
 
 flexlay_ruby_lib = env.SharedLibrary(
     "netpanzer_wrap",

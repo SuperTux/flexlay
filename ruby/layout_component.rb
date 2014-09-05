@@ -43,13 +43,13 @@ class LayoutComponent
   end
   
   def set_pos(x, y)
-    if @component then
+    if @component and (@component.is_a? CL_Component) then
       @component.set_position(x, y)
     end
   end
   
   def set_size(width, height)
-    if @component then
+    if @component and (@component.is_a? CL_Component) then
       @component.set_size(width, height)
     end
 
@@ -111,7 +111,7 @@ class LayoutComponent
       return EditorMapComponent.new(rect, parent)      
       
     when :menubar
-      return CL_Menu.new_from_spec(sexpr.get_value(['spec', '_'], []),
+      return Menubar.new_from_spec(sexpr.get_value(['spec', '_'], []),
                                    parent)
 
     when :button

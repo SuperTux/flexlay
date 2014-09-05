@@ -151,8 +151,7 @@ class SuperTuxGUI
   end
 
   def create_menu()
-    # @menu = @gui.create_menubar()
-    @menu = CL_Menu.new(@gui.get_component())
+    @menu = @gui.create_menubar()
     @menu.add_item("File/New...", method(:gui_level_new))
     @menu.add_item("File/Open...", method(:gui_level_load))
     @menu.add_item("File/Save...", method(:gui_level_save))

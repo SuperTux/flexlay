@@ -76,14 +76,9 @@ class Menu
   end
 end
 
-class CL_Menu
-  def add_item(name, func)
-    item = create_item(name)
-    connect_cl(item.sig_clicked(), func)
-  end
-
-  def CL_Menu.new_from_spec(menubarspec, parent)
-    menu = CL_Menu.new(parent)
+class Menubar
+  def Menubar.new_from_spec(menubarspec, parent)
+    menu = Menubar.new(parent)
 
     menubarspec.each { |(title, *menu_spec)|
       menu_spec.each{ |(name, callback)|

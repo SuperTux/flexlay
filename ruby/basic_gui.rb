@@ -85,7 +85,7 @@ class GUI
     @layer_menu.add_item($mysprite, "Show current", proc{ show_current() })
     @layer_menu.add_item($mysprite, "Show only current", proc{ show_only_current() })
 
-    @menu = CL_Menu.new(@gui.get_component())
+    @menu = @gui.create_menubar()
     @menu.add_item("File/Open...", proc{ level_load() })
     @menu.add_item("File/Save...", proc{ level_save() })
     # @menu.add_item("File/Save Commands...", menu_file_save_commands)

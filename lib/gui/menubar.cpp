@@ -16,36 +16,22 @@
 
 #include "gui/menubar.hpp"
 
+#include <ClanLib/GUI/component.h>
+#include <ClanLib/GUI/menu.h>
+#include <ClanLib/GUI/menu_node.h>
+
 #include "math/rect.hpp"
 
-class MenubarItem
+Menubar::Menubar(CL_Component* parent) :
+  m_menu(new CL_Menu(parent))
 {
-public:
-  MenubarItem(const std::string& name_, Menu* menu_)
-    : name(name_), menu(menu_){}
-
-  std::string name;
-  Menu* menu;
-};
-
-class MenubarImpl
-{
-public:
-  typedef std::vector<MenubarItem> Items;
-  Items items;
-};
-
-Menubar::Menubar(const Point& pos, CL_Component* parent) :
-  CL_Component(Rect(pos, Size(1, 1)).to_cl(), parent),
-  impl(new MenubarImpl())
-{
-
 }
 
 void
-Menubar::add_submenu(const std::string& name, Menu* menu)
+Menubar::add_item(const std::string& path, std::function<void()> callback)
 {
-  impl->items.push_back(MenubarItem(name, menu));
+  CL_MenuNode* item = m_menu->create_item(path);
+  m_slots.push_back(item->sig_clicked().connect_functor(callback));
 }
 
 /* EOF */

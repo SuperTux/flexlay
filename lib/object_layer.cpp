@@ -51,7 +51,7 @@ ObjectLayerImpl::draw(GraphicContext& gc)
   for(ObjectLayer::Objects::iterator i = objects.begin(); i != objects.end(); ++i)
   {
     // FIXME: Add clipping here
-    if (gc.state.get_clip_rect().is_overlapped((*i).get_bound_rect()))
+    if (gc.get_clip_rect().is_overlapped((*i).get_bound_rect()))
     {
       (*i).draw(gc);
     }

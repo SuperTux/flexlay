@@ -38,10 +38,13 @@ public:
   void pop_modelview();
   void add_translate(float x, float y);
 
+  Rectf get_clip_rect() const;
+
   void flush();
 
-public:
+private:
   GraphicContextState& state;
+public:
   CL_GraphicContext* gc;
 
 private:

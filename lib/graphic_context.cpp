@@ -19,6 +19,7 @@
 #include <ClanLib/Display/graphic_context.h>
 
 #include "color.hpp"
+#include "graphic_context_state.hpp"
 #include "math/rect.hpp"
 
 GraphicContext::GraphicContext(GraphicContextState& state_, CL_GraphicContext* gc_) :
@@ -67,6 +68,12 @@ void
 GraphicContext::add_translate(float x, float y)
 {
   gc->add_translate(x, y);
+}
+
+Rectf
+GraphicContext::get_clip_rect() const
+{
+  return state.get_clip_rect();
 }
 
 void

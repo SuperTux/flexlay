@@ -84,6 +84,7 @@ public:
 
   void draw(GraphicContext& gc)
   {
+#ifdef GRUMBEL
     // Nothing to draw, so we go byebye
     if (strokes.empty())
       return;
@@ -100,7 +101,6 @@ public:
         last_pos    = gc.state.get_pos();
         last_rot    = gc.state.get_rotation();
 
-#ifdef GRUMBEL
         gc.state.push(canvas->get_gc());
         canvas->get_gc()->clear(Color(0, 0, 0, 0).to_cl());
         //canvas->get_gc()->clear(Color::white);
@@ -118,19 +118,16 @@ public:
           }
         }
         state.pop(canvas->get_gc());
-#endif
 
         canvas->sync_surface();
       }
 
       surface.set_blend_func(blend_one, blend_one_minus_src_alpha);
 
-#ifdef GRUMBEL
       CL_Matrix4x4 matrix = CL_Display::get_modelview();
       gc.pop_modelview();
       surface.draw(0, 0);
       gc.set_modelview(matrix);
-#endif
       // FIXME: I think we need the line below, however with it it
       //doesn't work, without it, it does, ClanLib bug or just
       //consfusing function names?
@@ -138,14 +135,13 @@ public:
     }
     else
     {
-#ifdef GRUMBEL
       // Direct Drawing, slow
       for(Strokes::iterator i = strokes.begin(); i != strokes.end(); ++i)
       {
         i->draw(0);
       }
-#endif
     }
+#endif
   }
 
   bool has_bounding_rect() const {

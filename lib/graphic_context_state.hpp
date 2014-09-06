@@ -54,7 +54,7 @@ public:
   float get_rotation() const;
 
   /** Move the center of the visible area to pos */
-  void      set_pos(const Pointf& pos);
+  void set_pos(const Pointf& pos);
   Pointf get_pos() const;
 
   /** Set zoom to z, while ensuring that the screen position \a pos

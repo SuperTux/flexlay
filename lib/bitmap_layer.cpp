@@ -48,6 +48,7 @@ public:
     surface(surface_),
     canvas(0)
   {
+#ifdef GRUMBEL
     try {
       canvas = new CL_Canvas(surface.to_cl());
       canvas->sync_surface();
@@ -55,12 +56,14 @@ public:
       std::cout << "CL_Error: " << err.message << std::endl;
       throw err;
     }
+#endif
   }
 
   BitmapLayerImpl(PixelBuffer buffer)
     : surface(buffer),
       canvas(0)
   {
+#ifdef GRUMBEL
     try {
       canvas = new CL_Canvas(surface.to_cl());
       canvas->sync_surface();
@@ -68,12 +71,14 @@ public:
       std::cout << "CL_Error: " << err.message << std::endl;
       throw err;
     }
+#endif
   }
 
   BitmapLayerImpl(int width, int height)
     : surface(PixelBuffer(width, height)),
       canvas(0)
   {
+#ifdef GRUMBEL
     try {
       canvas = new CL_Canvas(surface.to_cl());
       canvas->get_gc()->clear(Color(0, 0, 0, 0).to_cl());
@@ -83,6 +88,7 @@ public:
       std::cout << "CL_Error: " << err.message << std::endl;
       throw err;
     }
+#endif
   }
 
   ~BitmapLayerImpl() {
@@ -97,8 +103,8 @@ public:
     if (strokes.empty())
       return;
 
-    surface.set_blend_func(blend_one, blend_one_minus_src_alpha);
-    surface.draw(pos.x, pos.y, gc.gc);
+    surface.set_blend_func(BlendFunc::one, BlendFunc::one_minus_src_alpha);
+    surface.draw(pos.x, pos.y);
 
     gc.draw_rect(get_bounding_rect(), Color(155, 155, 155, 100));
   }
@@ -173,16 +179,21 @@ BitmapLayer::get_canvas() const
 void
 BitmapLayer::set_pixeldata(PixelBuffer buffer)
 {
+#ifdef GRUMBEL
   //impl->canvas->set_pixeldata(buffer);
   Surface(buffer).draw(0, 0, impl->canvas->get_gc());
   impl->canvas->get_gc()->flush();
   impl->canvas->sync_surface();
+#endif
 }
 
 PixelBuffer
 BitmapLayer::get_pixeldata() const
 {
+#ifdef GRUMBEL
   return impl->canvas->get_pixeldata();
+#endif
+  return PixelBuffer();
 }
 
 ObjMapObject

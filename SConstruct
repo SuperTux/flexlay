@@ -16,8 +16,8 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 SConscript(['lib/SConscript'])
-SConscript(['ruby/SConscript'])
-SConscript(['netpanzer/SConscript'])
+# SConscript(['ruby/SConscript'])
+# SConscript(['netpanzer/SConscript'])
 SConscript(['simple/SConscript'])
 
 # EOF #

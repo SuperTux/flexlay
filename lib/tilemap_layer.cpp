@@ -121,7 +121,7 @@ TilemapLayerImpl::draw(GraphicContext& gc)
           {
             Sprite sprite = tile->get_sprite();
             sprite.set_color(foreground_color.to_cl());
-            sprite.draw(x * tile_size, y * tile_size, gc.gc);
+            sprite.draw(x * tile_size, y * tile_size);
 
             if (draw_attribute)
               gc.fill_rect(Rect(Point(x, y), Size(tileset.get_tile_size(),
@@ -142,7 +142,7 @@ TilemapLayerImpl::draw(GraphicContext& gc)
           Tile* tile = tileset.create(this->field.at(x, y));
           if (tile)
           {
-            tile->get_sprite().draw(x * tile_size, y * tile_size, gc.gc);
+            tile->get_sprite().draw(x * tile_size, y * tile_size);
 
             if (draw_attribute)
               gc.fill_rect(Rect(Point(x, y), Size(tileset.get_tile_size(),

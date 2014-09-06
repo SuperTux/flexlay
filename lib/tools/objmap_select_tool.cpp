@@ -130,6 +130,7 @@ ObjMapSelectToolImpl::draw(GraphicContext& gc)
 void
 ObjMapSelectToolImpl::on_mouse_up(const InputEvent& event)
 {
+#ifdef GRUMBEL
   ObjectLayer objmap = ObjectLayer::current();
 
   EditorMapComponent* parent = EditorMapComponent::current();
@@ -184,11 +185,13 @@ ObjMapSelectToolImpl::on_mouse_up(const InputEvent& event)
     default:
       break;
   }
+#endif
 }
 
 void
 ObjMapSelectToolImpl::on_mouse_down(const InputEvent& event)
 {
+#ifdef GRUMBEL
   ObjectLayer objmap = ObjectLayer::current();
 
   EditorMapComponent* parent = EditorMapComponent::current();
@@ -266,6 +269,7 @@ ObjMapSelectToolImpl::on_mouse_down(const InputEvent& event)
    default:
       break;
   }
+#endif
 }
 
 void

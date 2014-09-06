@@ -39,14 +39,19 @@ PixelBuffer get_pixelbuffer(const std::string& filename)
 Sprite
 pixelbuffer2sprite(const PixelBuffer& buffer)
 {
+#ifdef GRUMBEL
   CL_SpriteDescription desc;
   desc.add_frame(buffer.to_cl());
   return Sprite(desc);
+#else
+  return Sprite();
+#endif
 }
 
 Sprite
 make_sprite(const std::string& filename)
 {
+#ifdef GRUMBEL
   try {
     CL_SpriteDescription desc;
     desc.add_frame(get_pixelbuffer(filename).to_cl());
@@ -55,6 +60,8 @@ make_sprite(const std::string& filename)
     std::cout << "CL_Error: " << err.message << std::endl;
     return Sprite();
   }
+#endif
+  return Sprite();
 }
 
 PixelBuffer
@@ -80,35 +87,32 @@ make_region_pixelbuffer_from_resource(const std::string& filename, int x, int y,
 
     return target;
   }
-  catch (const CL_Error& err)
+  catch (const std::exception& err)
   {
-    std::cout << "CL_Error: " << err.message << std::endl;
+    std::cout << "Error: " << err.what() << std::endl;
     return PixelBuffer();
   }
 }
 
 Sprite
-make_sprite_from_resource(const std::string& filename, CL_ResourceManager& resources)
+make_sprite_from_resource(const std::string& filename)
 {
-  try {
-    return Sprite(filename, &resources);
-  } catch (const CL_Error& err) {
-    std::cout << "CL_Error: " << err.message << std::endl;
-    return Sprite();
-  }
+  return Sprite(filename);
 }
 
 PixelBuffer
-make_pixelbuffer_from_resource(const std::string& filename, CL_ResourceManager& resources)
+make_pixelbuffer_from_resource(const std::string& filename)
 {
+#ifdef GRUMBEL
   try {
-    // FIXME: expects a sprite, won't work with 'surface'
     CL_SpriteDescription descr(filename, &resources);
     return PixelBuffer(descr.get_frames().begin()->first);
   } catch (const CL_Error& err) {
     std::cout << "CL_Error: " << err.message << std::endl;
     return PixelBuffer();
   }
+#endif
+  return PixelBuffer();
 }
 
 PixelBuffer

@@ -43,10 +43,12 @@ public:
 
   void draw(GraphicContext& gc)
   {
+#ifdef GRUMBEL
     // FIXME: We need to stop onion layer to draw onto itself
     surface.set_blend_func(blend_one, blend_one_minus_src_alpha);
     surface.set_scale(SCALE, SCALE);
     surface.draw(0, 0);
+#endif
   }
 
   bool has_bounding_rect() const
@@ -63,6 +65,7 @@ OnionSkinLayer::OnionSkinLayer(Layer layer) :
 OnionSkinLayer::OnionSkinLayer(int width, int height) :
   impl(new OnionSkinLayerImpl())
 {
+#ifdef GRUMBEL
   impl->surface  = Surface(PixelBuffer(width/SCALE, height/SCALE));
   impl->surface2 = Surface(PixelBuffer(width/SCALE, height/SCALE));
 
@@ -83,6 +86,7 @@ OnionSkinLayer::OnionSkinLayer(int width, int height) :
     std::cout << "CL_Error: " << err.message << std::endl;
     throw err;
   }
+#endif
 }
 
 void

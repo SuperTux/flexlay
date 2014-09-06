@@ -138,6 +138,7 @@ TileMapPaintTool::get_brush()
 void
 TileMapPaintToolImpl::on_mouse_down(const InputEvent& event)
 {
+#ifdef GRUMBEL
   TilemapLayer tilemap = TilemapLayer::current();
 
   if (!tilemap.is_null())
@@ -174,11 +175,13 @@ TileMapPaintToolImpl::on_mouse_down(const InputEvent& event)
         break;
     }
   }
+#endif
 }
 
 void
 TileMapPaintToolImpl::on_mouse_move(const InputEvent& event)
 {
+#ifdef GRUMBEL
   TilemapLayer tilemap = TilemapLayer::current();
 
   if (!tilemap.is_null())
@@ -206,11 +209,13 @@ TileMapPaintToolImpl::on_mouse_move(const InputEvent& event)
         break;
     }
   }
+#endif
 }
 
 void
 TileMapPaintToolImpl::on_mouse_up  (const InputEvent& event)
 {
+#ifdef GRUMBEL
   TilemapLayer tilemap = TilemapLayer::current();
 
   if (!tilemap.is_null())
@@ -271,6 +276,7 @@ TileMapPaintToolImpl::on_mouse_up  (const InputEvent& event)
         break;
     }
   }
+#endif
 }
 
 void

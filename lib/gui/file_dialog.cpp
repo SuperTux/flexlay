@@ -33,12 +33,14 @@ FileDialog::FileDialog(const std::string& title,
   m_slots()
 {
   m_window = new Window(Rect(Point(120, 200), Size(560, 100)), title, parent);
+#ifdef GRUMBEL
   m_inputbox = new CL_InputBox(Rect(Point(10, 10), Size(530, 25)).to_cl(),
                                m_window->get_client_area());
   m_ok_button = new CL_Button(Rect(Point(490, 35), Size(50, 25)).to_cl(), ok_label,
                               m_window->get_client_area());
   m_cancel_button = new CL_Button(Rect(Point(430, 35), Size(50, 25)).to_cl(), cancel_label,
                                   m_window->get_client_area());
+#endif
   m_window->hide();
 }
 
@@ -61,9 +63,9 @@ FileDialog::get_filename() const
 void
 FileDialog::run(std::function<void(std::string)> func)
 {
-  m_slots.push_back(m_ok_button->sig_clicked().connect_functor([this]{ on_ok(); }));
-  m_slots.push_back(m_inputbox->sig_return_pressed().connect_functor([this]{ on_ok(); }));
-  m_slots.push_back(m_cancel_button->sig_clicked().connect_functor([this]{ on_cancel(); }));
+  //  m_slots.push_back(m_ok_button->sig_clicked().connect_functor([this]{ on_ok(); }));
+  //  m_slots.push_back(m_inputbox->sig_return_pressed().connect_functor([this]{ on_ok(); }));
+  //  m_slots.push_back(m_cancel_button->sig_clicked().connect_functor([this]{ on_cancel(); }));
 
   m_callback = func;
   m_inputbox->set_focus();

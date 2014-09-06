@@ -122,9 +122,11 @@ Tile::get_sprite()
     }
     else
     {
+#ifdef GRUMBEL
       CL_SpriteDescription desc;
       desc.add_frame(PixelBuffer(get_pixelbuffer()).to_cl());
       impl->sprite = Sprite(desc);
+#endif
     }
 
     return impl->sprite;

@@ -17,13 +17,11 @@
 #ifndef HEADER_FLEXLAY_FONTS_HPP
 #define HEADER_FLEXLAY_FONTS_HPP
 
-#include <ClanLib/Display/font.h>
-
 class Fonts
 {
 public:
-  static CL_Font verdana11;
-  static CL_Font verdana11_yellow;
+  // static CL_Font verdana11;
+  // static CL_Font verdana11_yellow;
 };
 
 #endif

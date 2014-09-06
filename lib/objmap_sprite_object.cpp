@@ -47,14 +47,14 @@ ObjMapSpriteObject::ObjMapSpriteObject(const Sprite& sprite_,
 void
 ObjMapSpriteObjectImpl::draw(GraphicContext& gc)
 {
-  sprite.draw(pos.x, pos.y, gc.gc);
+  sprite.draw(pos.x, pos.y);
 }
 
 Rectf
 ObjMapSpriteObjectImpl::get_bound_rect() const
 {
   Point  align = Point(0, 0);
-  CL_Origin origin_e;
+  Origin origin_e;
 
   sprite.get_alignment(origin_e, align.x, align.y);
 

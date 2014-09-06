@@ -55,11 +55,13 @@ public:
     last_zoom(0.0f),
     last_rot(0)
   {
+#ifdef GRUMBEL
     try {
       canvas = new CL_Canvas(surface.to_cl());
     } catch(const CL_Error& err) {
       std::cout << "CL_Error: " << err.message << std::endl;
     }
+#endif
   }
 
   ~SketchLayerImpl() {

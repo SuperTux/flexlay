@@ -17,102 +17,91 @@
 #ifndef HEADER_SPRITE_HPP
 #define HEADER_SPRITE_HPP
 
-#include <ClanLib/Display/sprite.h>
-#include <ClanLib/Display/sprite_description.h>
-
 #include "color.hpp"
 #include "surface.hpp"
 
 class Sprite
 {
 private:
-  CL_Sprite m_sprite;
+  //CL_Sprite m_sprite;
 
 public:
   Sprite()
   {}
 
-  Sprite(CL_SpriteDescription desc) :
-    m_sprite(desc)
-  {
-  }
-
-  Sprite(const std::string& name, CL_ResourceManager* resources) :
-    m_sprite(name, resources)
+  Sprite(const std::string& name)
   {}
 
-  void draw(float x, float y, CL_GraphicContext* gc = 0)
+  void draw(float x, float y)
   {
-    m_sprite.draw(x, y, gc);
+    //m_sprite.draw(x, y, gc);
   }
 
   int get_width() const
   {
-    return m_sprite.get_width();
+    return 0; //m_sprite.get_width();
   }
 
   int get_height() const
   {
-    return m_sprite.get_height();
+    return 0; //m_sprite.get_height();
   }
 
   void set_scale(float x, float y)
   {
-    m_sprite.set_scale(x, y);
+    //m_sprite.set_scale(x, y);
   }
 
-  void set_blend_func(CL_BlendFunc src, CL_BlendFunc dest)
+  void set_blend_func(BlendFunc src, BlendFunc dest)
   {
-    m_sprite.set_blend_func(src, dest);
+    //m_sprite.set_blend_func(src, dest);
   }
 
-  void set_blend_func_separate(CL_BlendFunc src, CL_BlendFunc dest,
-                               CL_BlendFunc src_alpha, CL_BlendFunc dest_alpha)
+  void set_blend_func_separate(BlendFunc src, BlendFunc dest,
+                               BlendFunc src_alpha, BlendFunc dest_alpha)
   {
-    m_sprite.set_blend_func_separate(src, dest, src_alpha, dest_alpha);
+    //m_sprite.set_blend_func_separate(src, dest, src_alpha, dest_alpha);
   }
 
   void set_color(const Color& color)
   {
-    m_sprite.set_color(color.to_cl());
+    //m_sprite.set_color(color.to_cl());
   }
 
   void set_alpha(float alpha)
   {
-    m_sprite.set_alpha(alpha);
+    //m_sprite.set_alpha(alpha);
   }
 
-  void set_alignment(CL_Origin origin, int x = 0, int y = 0)
+  void set_alignment(Origin origin, int x = 0, int y = 0)
   {
-    m_sprite.set_alignment(origin, x, y);
+    //m_sprite.set_alignment(origin, x, y);
   }
 
   void set_angle(float angle)
   {
-    m_sprite.set_angle(angle);
+    //m_sprite.set_angle(angle);
   }
 
-  void get_alignment(CL_Origin& origin, int& x, int& y) const
+  void get_alignment(Origin& origin, int& x, int& y) const
   {
-    m_sprite.get_alignment(origin, x, y);
+    //m_sprite.get_alignment(origin, x, y);
   }
 
   void get_scale(float& x, float& y) const
   {
-    m_sprite.get_scale(x, y);
+    //m_sprite.get_scale(x, y);
   }
 
   void add_frame(Surface surface, const Rect& rect = Rect(0,0,0,0))
   {
-    m_sprite.add_frame(surface.to_cl(), rect.to_cl());
+    //m_sprite.add_frame(surface.to_cl(), rect.to_cl());
   }
 
   explicit operator bool() const
   {
-    return m_sprite;
+    return true;
   }
-
-  CL_Sprite to_cl() { return m_sprite; }
 };
 
 #endif

@@ -14,9 +14,9 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include <ClanLib/core.h>
-#include <ClanLib/gui.h>
-#include <ClanLib/guistylesilver.h>
+#include "gui_manager.hpp"
+
+#include <QApplication>
 
 #include "globals.hpp"
 #include "gui/button_panel.hpp"
@@ -25,121 +25,62 @@
 #include "gui/generic_dialog.hpp"
 #include "gui/menubar.hpp"
 #include "gui/minimap.hpp"
-#include "gui_manager.hpp"
-
-GUIManager* GUIManager::current_ = 0;
-
-class GUIManagerImpl
-{
-public:
-  CL_GUIManager*      manager;
-  CL_StyleManager*    style;
-  CL_ResourceManager* resources;
-};
 
 GUIManager::GUIManager()
-  : impl(new GUIManagerImpl())
 {
-  std::cout << "Creating GUIManager: " << datadir + "/gui/gui.xml" << std::endl;
-  impl->resources = new CL_ResourceManager(datadir + "/gui/gui.xml");
-  impl->style     = new CL_StyleManager_Silver(impl->resources);
-  impl->manager   = new CL_GUIManager(impl->style);
-  current_  = this;
 }
 
 GUIManager::~GUIManager()
 {
-  delete impl->manager;
-  //delete style; FIXME: Memory hole?!
-  //delete resources;  FIXME: Memory hole?!
-}
-
-void
-GUIManager::draw()
-{
-  if (impl->manager->is_input_enabled())
-    impl->manager->show();
-}
-
-void
-GUIManager::update()
-{
-  // nothing to do
 }
 
 void
 GUIManager::run()
 {
-  impl->manager->run();
-}
-
-CL_Component*
-GUIManager::get_component()
-{
-  return impl->manager;
-}
-
-void
-GUIManager::hide()
-{
-  if (impl->manager->is_input_enabled())
-    impl->manager->disable_input();
-}
-
-void
-GUIManager::show()
-{
-  if (!impl->manager->is_input_enabled())
-    impl->manager->enable_input();
-}
-
-bool
-GUIManager::is_visible()
-{
-  return impl->manager->is_input_enabled();
+  QApplication::instance()->exec();
 }
 
 void
 GUIManager::quit()
 {
-  impl->manager->quit();
+  QCoreApplication::quit();
 }
 
 Menubar*
 GUIManager::create_menubar()
 {
-  return new Menubar(get_component());
+return new Menubar;
 }
 
 ButtonPanel*
 GUIManager::create_button_panel(const Rect& rect, bool horizontal)
 {
-  return new ButtonPanel(rect, horizontal, get_component());
+  return new ButtonPanel(rect, horizontal);
 }
 
 GenericDialog*
 GUIManager::create_generic_dialog(const std::string& title)
 {
-  return new GenericDialog(title, get_component());
+return nullptr; //new GenericDialog(title);
 }
 
 EditorMapComponent*
 GUIManager::create_editor_map_component(const Rect& rect)
 {
-  return new EditorMapComponent(rect.to_cl(), get_component());
+return nullptr; //new EditorMapComponent(rect.to_cl());
 }
 
 Minimap*
 GUIManager::create_minimap(EditorMapComponent* parent, const Rect& rect)
 {
-  return new Minimap(parent, rect, get_component());
+return nullptr; //new Minimap(parent, rect);
 }
 
 FileDialog*
 GUIManager::create_filedialog(const std::string& titel,
                               const std::string& ok_label, const std::string& cancel_label)
 {
-  return new FileDialog(titel, ok_label, cancel_label, get_component());
+return nullptr; //new FileDialog(titel, ok_label, cancel_label);
 }
 
 /* EOF */

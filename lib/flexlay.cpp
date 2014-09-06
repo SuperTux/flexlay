@@ -16,24 +16,21 @@
 
 #include "flexlay.hpp"
 
-#include <ClanLib/core.h>
-#include <ClanLib/display.h>
-#include <ClanLib/gui.h>
-#include <ClanLib/gl.h>
 #include "globals.hpp"
 #include "fonts.hpp"
 
 Flexlay* Flexlay::current_ = 0;
 
-Flexlay::Flexlay()
+Flexlay::Flexlay() :
+  m_app()
 {
-  screen_width  = 800;
-  screen_height = 600;
-  fullscreen    = false;
-  allow_resize  = false;
-  use_opengl    = true;
-
   current_ = this;
+
+  int* argc = new int(1);
+  char** argv = new char*[2];
+  argv[0] = new char[10]{ 'a', '\0' };
+  argv[1] = nullptr;
+  m_app.reset(new QApplication(*argc, argv));
 }
 
 boost::signals2::signal<void (int, int)>&
@@ -43,62 +40,15 @@ Flexlay::sig_resize()
 }
 
 void
-Flexlay::init(const std::string& title, int width, int height, bool fullscreen_, bool allow_resize_)
+Flexlay::init(const std::string& title)
 {
-  screen_width  = width;
-  screen_height = height;
-  fullscreen    = fullscreen_;
-  allow_resize  = allow_resize_;
-
   std::cout << "Flexlay::init()" << std::endl;
-  try {
-#ifdef WIN32
-    CL_SetupCore::set_instance(GetModuleHandle("flexlay_wrap.dll"));
-#endif
-    CL_SetupCore::init();
-#ifdef HAVE_LIBSDL
-    if (use_opengl)
-      CL_SetupGL::init();
-    else
-      CL_SetupSDL::init();
-#else
-    CL_SetupGL::init();
-#endif
-    CL_SetupDisplay::init();
-    CL_SetupGUI::init();
-
-    window = new CL_DisplayWindow(title,
-                                  screen_width, screen_height, fullscreen, allow_resize);
-
-    window->sig_resize().connect_functor([this](int w, int h){
-        m_sig_resize(w, h);
-        });
-
-    resources = CL_ResourceManager(datadir + "/flexlay.xml");
-    Fonts::verdana11        = CL_Font("verdana11_black", &resources);
-    Fonts::verdana11_yellow = CL_Font("verdana11_yellow", &resources);
-  } catch (const CL_Error& err) {
-    std::cout << "CL_Error: " << err.message << std::endl;
-  }
 }
 
 void
 Flexlay::deinit()
 {
   std::cout << "Flexlay::deinit()" << std::endl;
-
-  CL_SetupDisplay::deinit();
-
-#ifdef HAVE_LIBSDL
-  if (use_opengl)
-    CL_SetupGL::deinit();
-  else
-    CL_SetupSDL::init();
-#else
-  CL_SetupGL::deinit();
-#endif
-
-  CL_SetupCore::deinit();
 }
 
 void

@@ -16,7 +16,9 @@
 
 #include "objmap_rect_object.hpp"
 
+#include <vector>
 #include <functional>
+#include <boost/signals2.hpp>
 
 #include "color.hpp"
 #include "flexlay.hpp"
@@ -27,7 +29,7 @@
 class ObjMapRectObjectImpl : public ObjMapObjectImpl
 {
 public:
-  std::vector<boost::signals2::connection> slots;
+  std::vector<boost::signals2::connection> m_slots;
   Sizef size;
   Color color;
 
@@ -167,36 +169,37 @@ ObjMapRectObject::ObjMapRectObject(const Rect&  rect_,
   impl->color = color_;
   impl->data  = data_;
 
-  impl->cp_top_left = ObjMapControlPoint(Sprite("resize1", &(Flexlay::current()->resources)),
+  impl->cp_top_left = ObjMapControlPoint(Sprite("resize1"),
                                          Pointf(),
                                          MetaData());
 
-  impl->cp_bottom_right = ObjMapControlPoint(Sprite("resize1", &(Flexlay::current()->resources)),
+  impl->cp_bottom_right = ObjMapControlPoint(Sprite("resize1"),
                                              Pointf(),
                                              MetaData());
 
-  impl->cp_top_right = ObjMapControlPoint(Sprite("resize2", &(Flexlay::current()->resources)),
+  impl->cp_top_right = ObjMapControlPoint(Sprite("resize2"),
                                           Pointf(),
                                           MetaData());
 
-  impl->cp_bottom_left = ObjMapControlPoint(Sprite("resize2", &(Flexlay::current()->resources)),
+  impl->cp_bottom_left = ObjMapControlPoint(Sprite("resize2"),
                                             Pointf(),
                                             MetaData());
 
-  impl->cp_middle_left = ObjMapControlPoint(Sprite("resize_horz", &(Flexlay::current()->resources)),
+  impl->cp_middle_left = ObjMapControlPoint(Sprite("resize_horz"),
                                             Pointf(),
                                             MetaData());
-  impl->cp_middle_right  = ObjMapControlPoint(Sprite("resize_horz", &(Flexlay::current()->resources)),
+  impl->cp_middle_right  = ObjMapControlPoint(Sprite("resize_horz"),
                                               Pointf(),
                                               MetaData());
-  impl->cp_top_middle = ObjMapControlPoint(Sprite("resize_vert", &(Flexlay::current()->resources)),
+  impl->cp_top_middle = ObjMapControlPoint(Sprite("resize_vert"),
                                            Pointf(),
                                            MetaData());
 
-  impl->cp_bottom_middle = ObjMapControlPoint(Sprite("resize_vert", &(Flexlay::current()->resources)),
+  impl->cp_bottom_middle = ObjMapControlPoint(Sprite("resize_vert"),
                                               Pointf(),
                                               MetaData());
 
+#ifdef GRUMBEL
   impl->slots.push_back(impl->cp_top_right.sig_set_pos().connect(std::bind(&ObjMapRectObjectImpl::cp_top_right_move, impl.get(), std::placeholders::_1)));
   impl->slots.push_back(impl->cp_bottom_right.sig_set_pos().connect(std::bind(&ObjMapRectObjectImpl::cp_bottom_right_move, impl.get(), std::placeholders::_1)));
 
@@ -208,6 +211,7 @@ ObjMapRectObject::ObjMapRectObject(const Rect&  rect_,
 
   impl->slots.push_back(impl->cp_top_middle.sig_set_pos().connect(std::bind(&ObjMapRectObjectImpl::cp_top_middle_move, impl.get(), std::placeholders::_1)));
   impl->slots.push_back(impl->cp_bottom_middle.sig_set_pos().connect(std::bind(&ObjMapRectObjectImpl::cp_bottom_middle_move, impl.get(), std::placeholders::_1)));
+#endif
 }
 
 void

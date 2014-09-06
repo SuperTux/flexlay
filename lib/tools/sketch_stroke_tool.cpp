@@ -45,15 +45,14 @@ public:
 
   void draw(GraphicContext& gc)
   {
+#ifdef GRUMBEL
     if (drawing)
     {
       // FIXME: This translation is a bit ugly, layer position should be handled somewhat different
       gc.push_modelview();
       gc.add_translate(BitmapLayer::current()->to_object().get_pos().x,
                        BitmapLayer::current()->to_object().get_pos().y);
-#ifdef GRUMBEL
       stroke.draw(0);
-#endif
       gc.pop_modelview();
     }
     else
@@ -68,10 +67,12 @@ public:
       s.set_alpha(0.5);
       s.draw(p.x, p.y);
     }
+#endif
   }
 
   void on_mouse_up  (const InputEvent& event)
   {
+#ifdef GRUMBEL
     if (event.id == InputEvent::MOUSE_LEFT && drawing)
     {
       drawing = false;
@@ -82,9 +83,12 @@ public:
 
       BitmapLayer::current()->add_stroke(stroke);
     }
+#endif
   }
 
-  void on_mouse_down(const InputEvent& event) {
+  void on_mouse_down(const InputEvent& event)
+  {
+#ifdef GRUMBEL
     if (event.id == InputEvent::MOUSE_LEFT)
     {
       drawing = true;
@@ -94,6 +98,7 @@ public:
       stroke.set_drawer(drawer.clone());
       add_dab(event);
     }
+#endif
   }
 
   void add_dab(const InputEvent& event)

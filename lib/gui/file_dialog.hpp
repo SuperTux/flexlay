@@ -20,8 +20,6 @@
 #include <string>
 #include <functional>
 
-#include <ClanLib/GUI/component.h>
-
 class Window;
 class CL_InputBox;
 class CL_Button;
@@ -34,7 +32,6 @@ private:
   CL_Button* m_ok_button;
   CL_Button* m_cancel_button;
   std::function<void (std::string)> m_callback;
-  std::vector<CL_Slot> m_slots;
 
 protected:
   virtual ~FileDialog();

@@ -17,10 +17,10 @@
 #ifndef HEADER_FLEXLAY_FLEXLAY_HPP
 #define HEADER_FLEXLAY_FLEXLAY_HPP
 
-#include <ClanLib/Core/Resources/resource_manager.h>
 #include <boost/signals2.hpp>
+#include <memory>
 
-class CL_DisplayWindow;
+#include <QApplication>
 
 /*! \mainpage Flexlay - A Flexible Layered 2D Editor
 
@@ -82,16 +82,10 @@ private:
   static Flexlay* current_;
 
 private:
-  CL_DisplayWindow* window;
-  int  screen_width;
-  int  screen_height;
-  bool fullscreen;
-  bool allow_resize;
-  bool use_opengl;
+  std::unique_ptr<QApplication> m_app;
+  int  m_screen_width;
+  int  m_screen_height;
   boost::signals2::signal<void (int, int)> m_sig_resize;
-
-public:
-  CL_ResourceManager resources;
 
 public:
   Flexlay();
@@ -100,8 +94,7 @@ public:
 
   void set_datadir(const std::string& datadir_);
 
-  void init(const std::string& title = "Flexlay", int width = 800, int height = 600,
-            bool fullscreen = false, bool allow_resize = false);
+  void init(const std::string& title = "Flexlay");
   void deinit();
 };
 

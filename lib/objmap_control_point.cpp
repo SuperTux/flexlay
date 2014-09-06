@@ -53,7 +53,7 @@ ObjMapControlPoint::draw(GraphicContext& gc)
 void
 ObjMapControlPointImpl::draw(GraphicContext& gc)
 {
-  sprite.draw(static_cast<int>(pos.x), static_cast<int>(pos.y), gc.gc);
+  sprite.draw(static_cast<int>(pos.x), static_cast<int>(pos.y));
 }
 
 void
@@ -84,11 +84,11 @@ Rect
 ObjMapControlPointImpl::get_bound_rect() const
 {
   Point  align = Point(0, 0);
-  CL_Origin origin_e;
+  Origin origin_e;
 
   sprite.get_alignment(origin_e, align.x, align.y);
 
-  Point origin = calc_origin(static_cast<Origin>(origin_e),
+  Point origin = calc_origin(origin_e,
                              Size(sprite.get_width(),
                                   sprite.get_height()));
   align.x = -align.x;

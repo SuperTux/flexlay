@@ -16,8 +16,6 @@
 
 #include "icon.hpp"
 
-#include <ClanLib/Display/display.h>
-
 #include "display.hpp"
 #include "math/rect.hpp"
 #include "box.hpp"

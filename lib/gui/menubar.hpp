@@ -20,24 +20,18 @@
 #include <memory>
 #include <vector>
 
-#include <ClanLib/Signals/slot.h>
-
 class Menu;
 class MenubarImpl;
 class Point;
-class CL_Menu;
-class CL_Component;
 
 class Menubar
 {
 private:
-  CL_Menu* m_menu;
-  std::vector<CL_Slot> m_slots;
 
 protected:
   virtual ~Menubar() {}
 public:
-  Menubar(CL_Component* parent);
+  Menubar();
 
   void add_item(const std::string& path, std::function<void()> callback);
 

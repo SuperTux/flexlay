@@ -16,6 +16,8 @@
 
 #include "sprite_brush.hpp"
 
+#include "math/origin.hpp"
+
 class SpriteBrushImpl : public BrushImpl
 {
 public:
@@ -24,7 +26,7 @@ public:
   SpriteBrushImpl(const Sprite& sprite_)
     : sprite(sprite_)
   {
-    sprite.set_alignment (origin_center, 0, 0);
+    sprite.set_alignment(Flexlay_origin_center, 0, 0);
   }
 
   virtual ~SpriteBrushImpl()

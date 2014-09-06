@@ -17,21 +17,20 @@
 #ifndef HEADER_FLEXLAY_MINIMAP_HPP
 #define HEADER_FLEXLAY_MINIMAP_HPP
 
-#include <ClanLib/GUI/component.h>
-
 #include <memory>
 
 class Rect;
 class MinimapImpl;
 class EditorMapComponent;
+class CL_InputEvent;
 
-class Minimap : public CL_Component
+class Minimap
 {
 protected:
   virtual ~Minimap() {}
 
 public:
-  Minimap(EditorMapComponent* p, const Rect& rect, CL_Component* parent);
+  Minimap(EditorMapComponent* p, const Rect& rect);
 
   void draw();
   void update_minimap();

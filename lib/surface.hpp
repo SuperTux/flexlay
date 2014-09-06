@@ -17,63 +17,55 @@
 #ifndef HEADER_SURFACE_HPP
 #define HEADER_SURFACE_HPP
 
-#include <ClanLib/Display/surface.h>
-
 #include "math/rect.hpp"
+#include "math/origin.hpp"
 #include "pixel_buffer.hpp"
+
+enum class BlendFunc
+{
+one, 
+one_minus_src_alpha
+};
 
 class Surface
 {
-private:
-  CL_Surface m_surface;
-
 public:
-  Surface() :
-    m_surface()
+  Surface()
   {}
 
-  Surface(PixelBuffer pixelbuffer) :
-    m_surface(pixelbuffer.to_cl())
+  Surface(PixelBuffer pixelbuffer)
   {}
 
-  void draw(const Rect& rect, CL_GraphicContext* gc = 0)
+  void draw(const Rect& rect)
   {
-    m_surface.draw(rect.to_cl(), gc);
   }
 
-  void draw(float x, float y, CL_GraphicContext* gc = 0)
+  void draw(float x, float y)
   {
-    m_surface.draw(x, y, gc);
   }
 
-  void set_alignment(CL_Origin origin, int x = 0, int y = 0)
+  void set_alignment(Origin origin, int x = 0, int y = 0)
   {
-    m_surface.set_alignment(origin, x, y);
   }
 
   void set_alpha(float alpha)
   {
-    m_surface.set_alpha(alpha);
   }
 
   void set_scale(float x, float y)
   {
-    m_surface.set_scale(x, y);
   }
 
-  void set_blend_func(CL_BlendFunc src, CL_BlendFunc dest)
+  void set_blend_func(BlendFunc src, BlendFunc dest)
   {
-    m_surface.set_blend_func(src, dest);
   }
 
-  int get_width() const { return m_surface.get_width(); }
-  int get_height() const { return m_surface.get_height(); }
-
-  CL_Surface to_cl() { return m_surface; }
+  int get_width() const { return 0; }
+  int get_height() const { return 0; }
 
   explicit operator bool() const
   {
-    return m_surface;
+    return true;
   }
 };
 

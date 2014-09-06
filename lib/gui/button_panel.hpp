@@ -17,11 +17,10 @@
 #ifndef HEADER_BUTTON_PANEL_HPP
 #define HEADER_BUTTON_PANEL_HPP
 
-#include "icon.hpp"
-#include "panel.hpp"
-
-class Rect;
 class CL_Component;
+class Icon;
+class Panel;
+class Rect;
 
 class ButtonPanel
 {
@@ -31,7 +30,7 @@ private:
   bool m_horizontal;
 
 public:
-  ButtonPanel(const Rect& rect, bool horizontal, CL_Component* parent);
+  ButtonPanel(const Rect& rect, bool horizontal);
 
   void set_position(int x, int y);
   void set_size(int w, int h);

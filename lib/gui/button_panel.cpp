@@ -22,7 +22,7 @@
 #include "gui/icon.hpp"
 
 ButtonPanel::ButtonPanel(const Rect& rect, bool horizontal, CL_Component* parent) :
-  m_panel(new Panel(rect, parent)),
+  //m_panel(new Panel(rect, parent)),
   m_pos(2),
   m_horizontal(horizontal)
 {

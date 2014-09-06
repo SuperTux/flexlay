@@ -31,26 +31,12 @@ class Rect;
 
 class GUIManager
 {
-private:
-  static GUIManager* current_;
-
 public:
-  static GUIManager* current() { return current_; }
-
   GUIManager();
   ~GUIManager();
 
-  void draw();
-  void update();
-
   void run();
   void quit();
-
-  void hide();
-  void show();
-  bool is_visible();
-
-  CL_Component* get_component();
 
   Menubar* create_menubar();
   ButtonPanel* create_button_panel(const Rect& rect, bool horizontal);
@@ -61,7 +47,7 @@ public:
                                 const std::string& ok_label, const std::string& cancel_label);
 
 private:
-  std::shared_ptr<GUIManagerImpl> impl;
+  
 };
 
 #endif

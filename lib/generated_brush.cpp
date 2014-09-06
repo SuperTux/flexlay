@@ -66,6 +66,7 @@ GeneratedBrushImpl::update()
 {
   if (dirty)
   {
+#ifdef GRUMBEL
     CL_SpriteDescription desc;
     desc.add_frame(generate_brushmask(shape,
                                       radius,
@@ -76,6 +77,7 @@ GeneratedBrushImpl::update()
     sprite = Sprite(desc);
     sprite.set_alignment(origin_center);
     dirty = false;
+#endif
   }
 }
 

@@ -17,8 +17,8 @@
 #ifndef HEADER_FLEXLAY_EDITOR_MAP_COMPONENT_HPP
 #define HEADER_FLEXLAY_EDITOR_MAP_COMPONENT_HPP
 
-#include <ClanLib/GUI/component.h>
 #include <boost/signals2.hpp>
+
 #include "../workspace.hpp"
 
 class Scrollbar;
@@ -26,7 +26,7 @@ class EditorMapComponentImpl;
 
 /** Object which represents a level, quirled together with the GUI
     stuff */
-class EditorMapComponent : public CL_Component
+class EditorMapComponent
 {
 private:
   static EditorMapComponent* current_;
@@ -35,27 +35,27 @@ protected:
 public:
   static EditorMapComponent* current() { return current_; }
 
-  EditorMapComponent(const Rect& rect, CL_Component* parent);
+ EditorMapComponent(const Rect& rect);
 
-  Workspace get_workspace() const;
-  void      set_workspace(Workspace m);
+ Workspace get_workspace() const;
+ void set_workspace(Workspace m);
 
-  void  set_zoom(float z);
-  void  zoom_to(Rectf rect);
-  void  zoom_out(Point pos);
-  void  zoom_in (Point pos);
+ void set_zoom(float z);
+ void zoom_to(Rectf rect);
+ void zoom_out(Point pos);
+ void zoom_in (Point pos);
 
-  void move_to(int x, int y);
-  void move_to_x(float x);
-  void move_to_y(float y);
+ void move_to(int x, int y);
+ void move_to_x(float x);
+ void move_to_y(float y);
 
-  boost::signals2::signal<void (int, int)>& sig_on_key(const std::string& str);
+ boost::signals2::signal<void (int, int)>& sig_on_key(const std::string& str);
 
-  Pointf screen2world(const Point& pos);
+ Pointf screen2world(const Point& pos);
 
-  Rectf get_clip_rect() const;
+ Rectf get_clip_rect() const;
 
-  GraphicContextState& get_gc_state();
+ GraphicContextState& get_gc_state();
 
 private:
   std::shared_ptr<EditorMapComponentImpl> impl;

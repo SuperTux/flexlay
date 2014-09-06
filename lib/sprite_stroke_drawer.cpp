@@ -54,6 +54,8 @@ SpriteStrokeDrawer::SpriteStrokeDrawer()
 void
 SpriteStrokeDrawerImpl::draw(const Stroke& stroke, GraphicContext& gc)
 {
+#ifdef GRUMBEL
+
   if (DrawerProperties::current()->get_brush().is_null() || stroke.get_dab_count() == 0)
     return;
 
@@ -74,10 +76,8 @@ SpriteStrokeDrawerImpl::draw(const Stroke& stroke, GraphicContext& gc)
     sprite.set_scale(DrawerProperties::current()->get_size() * dab.pressure,
                      DrawerProperties::current()->get_size() * dab.pressure);
 
-#ifdef GRUMBEL
+
     if (gc != 0)
-#endif
-    if (true)
     {
       /* Correct function:
          1: dest
@@ -212,7 +212,6 @@ SpriteStrokeDrawerImpl::draw(const Stroke& stroke, GraphicContext& gc)
 
           state.set_active();
           clUseProgram(0);
-#endif
         }
         break;
 
@@ -251,6 +250,8 @@ SpriteStrokeDrawerImpl::draw(const Stroke& stroke, GraphicContext& gc)
       }
     }
   }
+#endif
+#endif
 }
 
 void

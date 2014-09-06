@@ -40,26 +40,8 @@ EditorMapComponent::EditorMapComponent(QWidget* parent) :
   impl->parent = this;
   ////m_gc_state  = GraphicContextState(rect.get_width(), rect.get_height());
 
-  impl->scrollbar_v = new Scrollbar(Rect(Point(rect.get_width() - 14, 2) + Point(rect.left, rect.top),
-                                         Size(12, rect.get_height() - 4 - 14)),
-                                    Scrollbar::VERTICAL,
-                                    parent);
-
-  impl->scrollbar_h = new Scrollbar(Rect(Point(2, rect.get_height() - 14) + Point(rect.left, rect.top),
-                                         Size(rect.get_width() - 4 - 14, 12)),
-                                    Scrollbar::HORIZONTAL,
-                                    parent);
-
   impl->scrollbar_h->sig_scrollbar_move().connect(std::bind(&EditorMapComponent::move_to_x, this, std::placeholders::_1));
   impl->scrollbar_v->sig_scrollbar_move().connect(std::bind(&EditorMapComponent::move_to_y, this, std::placeholders::_1));
-
-  impl->slots.connect(sig_paint(),      impl.get(), &EditorMapComponentImpl::draw);
-  impl->slots.connect(sig_mouse_up(),   impl.get(), &EditorMapComponentImpl::mouse_up);
-  impl->slots.connect(sig_mouse_down(), impl.get(), &EditorMapComponentImpl::mouse_down);
-  impl->slots.connect(sig_mouse_move(), impl.get(), &EditorMapComponentImpl::mouse_move);
-  impl->slots.connect(sig_key_down(),   impl.get(), &EditorMapComponentImpl::on_key_down);
-  impl->slots.connect(sig_key_up(),     impl.get(), &EditorMapComponentImpl::on_key_up);
-  impl->slots.connect(sig_resize(),     impl.get(), &EditorMapComponentImpl::on_resize);
 #endif
 }
 

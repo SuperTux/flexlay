@@ -16,10 +16,42 @@
 
 #include "input_event.hpp"
 
+#include <QMouseEvent>
+
+#include <iostream>
+
 InputEvent::InputEvent() :
   id(),
-  mouse_pos()
+  mouse_pos(),
+  mod()
 {
+}
+
+InputEvent::InputEvent(QMouseEvent& event) :
+  id(),
+  mouse_pos(event.x(), event.y()),
+  mod()
+{
+  if (event.button() == 0)
+  {
+    id = MOUSE_NO_BUTTON;
+  }
+  else if (event.button() == Qt::LeftButton)
+  {
+    id = MOUSE_LEFT;
+  }
+  else if (event.button() == Qt::MidButton)
+  {
+    id = MOUSE_MIDDLE;
+  }
+  else if (event.button() == Qt::RightButton)
+  {
+    id = MOUSE_RIGHT;
+  }
+  else
+  {
+    std::cout << "unknown mouse button: " << event.button() << std::endl;
+  }
 }
 
 /* EOF */

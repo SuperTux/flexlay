@@ -59,23 +59,20 @@ GraphicContext::draw_line(float x1, float y1, float x2, float y2, const Color& c
 void
 GraphicContext::push_modelview()
 {
-  //  gc->push_modelview();
+  m_painter.save();
 }
 
 void
 GraphicContext::pop_modelview()
 {
-#ifdef GRUMBEL
-  gc->pop_modelview();
-#endif
+  m_painter.restore();
 }
 
 void
 GraphicContext::add_translate(float x, float y)
 {
-#ifdef GRUMBEL
-  gc->add_translate(x, y);
-#endif
+  m_painter.setViewTransformEnabled(true);
+  m_painter.translate(x, y);
 }
 
 Rectf

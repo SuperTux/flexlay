@@ -27,6 +27,7 @@
 #include "tileset.hpp"
 #include "workspace.hpp"
 #include "tools/objmap_select_tool.hpp"
+#include "tools/workspace_move_tool.hpp"
 
 int main()
 {
@@ -62,11 +63,10 @@ int main()
   editor_map->set_workspace(workspace);
   workspace.set_map(m);
 
+  WorkspaceMoveTool workspace_move_tool;
   ObjMapSelectTool objtool;
-  workspace.set_tool(0, objtool.to_tool());
   workspace.set_tool(1, objtool.to_tool());
-  workspace.set_tool(2, objtool.to_tool());
-  workspace.set_tool(3, objtool.to_tool());
+  workspace.set_tool(2, workspace_move_tool.to_tool());
 
   GenericDialog* dialog = gui.create_generic_dialog("Generic Dialog");
   dialog->add_int("An Int:", 5);

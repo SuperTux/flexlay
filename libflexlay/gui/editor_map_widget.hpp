@@ -66,9 +66,7 @@ protected:
   void mouseMoveEvent(QMouseEvent* event) override
   {
     Workspace workspace = m_comp.get_workspace();
-    InputEvent ev;
-    ev.id = InputEvent::MOUSE_LEFT;
-    ev.mouse_pos = { event->x(), event->y() };
+    InputEvent ev(*event);
     workspace.mouse_move(ev);
     std::cout << "mouse move: " << std::endl;
     repaint();
@@ -77,9 +75,7 @@ protected:
   void mousePressEvent(QMouseEvent* event) override
   {
     Workspace workspace = m_comp.get_workspace();
-    InputEvent ev;
-    ev.id = InputEvent::MOUSE_LEFT;
-    ev.mouse_pos = { event->x(), event->y() };
+    InputEvent ev(*event);
     workspace.mouse_down(ev);
     std::cout << "mouse press: " << std::endl;
     repaint();
@@ -88,9 +84,7 @@ protected:
   void mouseReleaseEvent(QMouseEvent* event) override
   {
     Workspace workspace = m_comp.get_workspace();
-    InputEvent ev;
-    ev.id = InputEvent::MOUSE_LEFT;
-    ev.mouse_pos = { event->x(), event->y() };
+    InputEvent ev(*event);
     workspace.mouse_up(ev);
     std::cout << "mouse release: " << std::endl;
     repaint();
@@ -105,12 +99,14 @@ protected:
 
     QPainter painter;
     painter.begin(this);
+
     //painter.setRenderHint(QPainter::Antialiasing);
 
     Workspace workspace = m_comp.get_workspace();
-    GraphicContextState state(width(), height());
-    GraphicContext gc(state, painter);
+    GraphicContext gc(m_comp.get_gc_state(), painter);
+    m_comp.get_gc_state().push(gc);
     workspace.draw(gc);
+    m_comp.get_gc_state().pop(gc);
 
     painter.rotate(10.0f);
     painter.translate(100, 100);
@@ -122,6 +118,8 @@ protected:
 
   void resizeGL(int width, int height) override
   {
+    m_comp.get_gc_state().set_size(width, height);
+
     std::cout << "resizing: " << width << "x" << height << std::endl;
     
     int side = qMin(width, height);

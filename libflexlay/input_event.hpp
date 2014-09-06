@@ -19,13 +19,14 @@
 
 #include "math/point.hpp"
 
-class CL_InputEvent;
+class QMouseEvent;
 
 class InputEvent
 {
 private:
 public:
   enum Type {
+    MOUSE_NO_BUTTON,
     MOUSE_LEFT,
     MOUSE_MIDDLE,
     MOUSE_RIGHT,
@@ -38,6 +39,7 @@ public:
   };
 
   InputEvent();
+  InputEvent(QMouseEvent& event);
 
   Type id;
   Point mouse_pos;

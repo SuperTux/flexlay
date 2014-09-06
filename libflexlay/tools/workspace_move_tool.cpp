@@ -16,6 +16,8 @@
 
 #include "workspace_move_tool.hpp"
 
+#include <iostream>
+
 #include "gui/editor_map_component.hpp"
 #include "input_event.hpp"
 #include "tool_impl.hpp"
@@ -40,6 +42,7 @@ public:
 void
 WorkspaceMoveToolImpl::on_mouse_down(const InputEvent& event)
 {
+  std::cout << "WorkspaceMoveToolImpl::on_mouse_down" << std::endl;
   scrolling = true;
   old_trans_offset = EditorMapComponent::current()->get_gc_state().get_pos();
   click_pos = event.mouse_pos;
@@ -49,6 +52,7 @@ WorkspaceMoveToolImpl::on_mouse_down(const InputEvent& event)
 void
 WorkspaceMoveToolImpl::on_mouse_up(const InputEvent& event)
 {
+  std::cout << "WorkspaceMoveToolImpl::on_mouse_up" << std::endl;
   scrolling = false;
   update(event);
   old_trans_offset = EditorMapComponent::current()->get_gc_state().get_pos();

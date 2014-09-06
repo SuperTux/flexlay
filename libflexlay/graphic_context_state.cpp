@@ -16,6 +16,8 @@
 
 #include "graphic_context_state.hpp"
 
+#include "graphic_context.hpp"
+
 class GraphicContextStateImpl
 {
 public:
@@ -55,32 +57,24 @@ GraphicContextState::set_size(int w, int h)
 }
 
 void
-GraphicContextState::push(CL_GraphicContext* gc) const
+GraphicContextState::push(GraphicContext& gc) const
 {
+  gc.push_modelview();
+
 #ifdef GRUMBEL
-  if (gc == 0)
-    gc = CL_Display::get_current_window()->get_gc();
+  gc.add_translate(impl->width/2, impl->height/2);
+  gc.add_rotate(impl->rotation, 0, 0, 1.0);
+  gc.add_translate(-impl->width/2, -impl->height/2);
 
-  gc->push_modelview();
-
-  gc->add_translate(impl->width/2, impl->height/2);
-  gc->add_rotate(impl->rotation, 0, 0, 1.0);
-  gc->add_translate(-impl->width/2, -impl->height/2);
-
-  gc->add_scale(get_zoom(), get_zoom());
-  gc->add_translate(impl->offset.x, impl->offset.y);
+  gc.add_scale(get_zoom(), get_zoom());
 #endif
+  gc.add_translate(impl->offset.x, impl->offset.y);
 }
 
 void
-GraphicContextState::pop(CL_GraphicContext* gc) const
+GraphicContextState::pop(GraphicContext& gc) const
 {
-#ifdef GRUMBEL
-  if (gc == 0)
-    gc = CL_Display::get_current_window()->get_gc();
-
-  gc->pop_modelview();
-#endif
+  gc.pop_modelview();
 }
 
 Rectf

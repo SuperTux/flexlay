@@ -22,8 +22,7 @@
 #include "math/rect.hpp"
 #include "math/point.hpp"
 
-class CL_GraphicContext;
-
+class GraphicContext;
 class GraphicContextStateImpl;
 
 /** Helper class for capturing the state of a GraphicContext, with
@@ -37,8 +36,8 @@ public:
 
   void set_size(int w, int h);
 
-  void push(CL_GraphicContext* gc = 0) const;
-  void pop (CL_GraphicContext* gc = 0) const;
+  void push(GraphicContext& gc) const;
+  void pop(GraphicContext& gc) const;
 
   /** Return a rectangle in world coordinates that represents the area
       visible on the screen */

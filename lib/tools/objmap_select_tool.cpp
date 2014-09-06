@@ -17,7 +17,6 @@
 #include "objmap_select_tool.hpp"
 
 #include <algorithm>
-#include <ClanLib/Display/keyboard.h>
 
 #include "editor_map.hpp"
 #include "editor_names.hpp"

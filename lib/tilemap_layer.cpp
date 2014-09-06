@@ -120,7 +120,7 @@ TilemapLayerImpl::draw(GraphicContext& gc)
           if (tile) // skip transparent tile for faster draw
           {
             Sprite sprite = tile->get_sprite();
-            sprite.set_color(foreground_color.to_cl());
+            sprite.set_color(foreground_color);
             sprite.draw(x * tile_size, y * tile_size);
 
             if (draw_attribute)

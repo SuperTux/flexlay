@@ -16,70 +16,77 @@
 
 #include "graphic_context.hpp"
 
-#include <ClanLib/Display/graphic_context.h>
+#include <QPainter>
 
 #include "color.hpp"
 #include "graphic_context_state.hpp"
 #include "math/rect.hpp"
 
-GraphicContext::GraphicContext(GraphicContextState& state_, CL_GraphicContext* gc_) :
-  state(state_),
-  gc(gc_)
+GraphicContext::GraphicContext(GraphicContextState& state, QPainter& painter) :
+  m_state(state),
+  m_painter(painter)
 {
 }
 
 void
 GraphicContext::clear(const Color& color)
 {
+#ifdef GRUMBEL
   gc->clear(color.to_cl());
+#endif
 }
 
 void
 GraphicContext::draw_rect(const Rectf& rect, const Color& color)
 {
-  gc->draw_rect(rect.to_cl(), color.to_cl());
+  m_painter.setPen(color.to_qt());
+  m_painter.drawRect(rect.to_qt());
 }
 
 void
 GraphicContext::fill_rect(const Rectf& rect, const Color& color)
 {
-  gc->fill_rect(rect.to_cl(), color.to_cl());
+  m_painter.fillRect(rect.to_qt(), color.to_qt());
 }
 
 void
 GraphicContext::draw_line(float x1, float y1, float x2, float y2, const Color& color)
 {
-  gc->draw_line(x1, y1, x2, y2, color.to_cl());
+  m_painter.setPen(color.to_qt());
+  m_painter.drawLine(QLineF(x1, y1, x2, y2));
 }
 
 void
 GraphicContext::push_modelview()
 {
-  gc->push_modelview();
+  //  gc->push_modelview();
 }
 
 void
 GraphicContext::pop_modelview()
 {
+#ifdef GRUMBEL
   gc->pop_modelview();
+#endif
 }
 
 void
 GraphicContext::add_translate(float x, float y)
 {
+#ifdef GRUMBEL
   gc->add_translate(x, y);
+#endif
 }
 
 Rectf
 GraphicContext::get_clip_rect() const
 {
-  return state.get_clip_rect();
+  return m_state.get_clip_rect();
 }
 
 void
 GraphicContext::flush()
 {
-  gc->flush();
 }
 
 /* EOF */

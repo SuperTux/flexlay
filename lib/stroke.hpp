@@ -18,7 +18,6 @@
 #define HEADER_FLEXLAY_STROKE_HPP
 
 #include <vector>
-#include <ClanLib/Core/System/system.h>
 #include <memory>
 
 #include "math/point.hpp"
@@ -49,15 +48,21 @@ public:
   Pointf tilt;
 
   Dab()
+#ifdef GRUMBEL
     : time(CL_System::get_time()), pos(0, 0), pressure(1.0f), tilt(0, 0)
+#endif
   {}
 
   Dab(float x, float y)
+#ifdef GRUMBEL
     : time(CL_System::get_time()), pos(x, y), pressure(1.0f), tilt(0.0f, 0.0f)
+#endif
   {}
 
   Dab(float x_, float y_, float pressure_)
+#ifdef GRUMBEL
     : time(CL_System::get_time()), pos(x_, y_), pressure(pressure_), tilt(0.0f, 0.0f)
+#endif
   {}
 };
 
@@ -92,7 +97,6 @@ public:
 private:
   std::shared_ptr<StrokeImpl> impl;
 };
-
 
 #endif
 

@@ -14,11 +14,10 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include <ClanLib/Display/mouse.h>
-
 #include "math/point.hpp"
 #include "popup_menu.hpp"
 
+#ifdef GRUMBEL
 PopupMenu::PopupMenu(const Point& pos,  CL_Component* parent)
 {
   menu = new CL_Menu(pos.to_cl(), parent, NULL, true);
@@ -50,5 +49,6 @@ PopupMenu::on_mouse_up(const CL_InputEvent& event)
     menu->set_root_collapsing(true);
   }
 }
+#endif
 
 /* EOF */

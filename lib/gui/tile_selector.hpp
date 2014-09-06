@@ -17,21 +17,18 @@
 #ifndef HEADER_FLEXLAY_TILE_SELECTOR_HPP
 #define HEADER_FLEXLAY_TILE_SELECTOR_HPP
 
-#include <ClanLib/gui.h>
-
 #include "../tileset.hpp"
 #include "math/point.hpp"
 #include "math/rect.hpp"
 
 class Tileset;
 
-class TileSelector : public CL_Component
+class TileSelector
 {
 public:
   typedef std::vector<int> Tiles;
 
 private:
-  CL_SlotContainer slots;
   int width;
   int index;
 
@@ -54,7 +51,7 @@ protected:
   virtual ~TileSelector();
 public:
   /** width and height in number of tiles */
-  TileSelector(const Rect& rect, CL_Component* parent);
+  TileSelector(const Rect& rect);
 
   void set_tileset(Tileset t);
   void set_tiles(const Tiles& t);
@@ -67,14 +64,15 @@ public:
   void draw();
 
   /** Return the position of the mouse in x/y in tilesize */
-  Point get_mouse_tile_pos(const CL_InputEvent& event);
+  Point get_mouse_tile_pos(const Point& mouse_pos);
 
 private:
   Rect get_selection();
-
+#ifdef GRUMBEL
   void mouse_move(const CL_InputEvent& event);
   void mouse_down(const CL_InputEvent& event);
   void mouse_up  (const CL_InputEvent& event);
+#endif
 };
 
 #endif

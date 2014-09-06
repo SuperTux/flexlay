@@ -17,7 +17,6 @@
 #include "tile_selector.hpp"
 
 #include <iostream>
-#include <ClanLib/display.h>
 
 #include "display.hpp"
 #include "math.hpp"
@@ -27,16 +26,17 @@
 #include "tile_brush.hpp"
 #include "tools/tilemap_paint_tool.hpp"
 
-TileSelector::TileSelector(const Rect& rect, CL_Component* parent) :
-  CL_Component(rect.to_cl(), parent),
+TileSelector::TileSelector(const Rect& rect) :
   width(1)
 {
   index = 0;
 
+#ifdef GRUMBEL
   slots.connect(sig_paint(),      this, &TileSelector::draw);
   slots.connect(sig_mouse_move(), this, &TileSelector::mouse_move);
   slots.connect(sig_mouse_down(), this, &TileSelector::mouse_down);
   slots.connect(sig_mouse_up  (), this, &TileSelector::mouse_up);
+#endif
 
   scale = 1.0f;
   mouse_over_tile = -1;
@@ -67,7 +67,7 @@ TileSelector::get_selection()
 
   return selection;
 }
-
+#ifdef GRUMBEL
 void
 TileSelector::mouse_up(const CL_InputEvent& event)
 {
@@ -142,13 +142,6 @@ TileSelector::mouse_down(const CL_InputEvent& event)
   }
 }
 
-Point
-TileSelector::get_mouse_tile_pos(const CL_InputEvent& event)
-{
-  return Point(event.mouse_pos.x/static_cast<int>(tileset.get_tile_size()*scale),
-                  (event.mouse_pos.y+offset)/static_cast<int>(tileset.get_tile_size()*scale));
-}
-
 void
 TileSelector::mouse_move(const CL_InputEvent& event)
 {
@@ -163,10 +156,19 @@ TileSelector::mouse_move(const CL_InputEvent& event)
       offset = 0;
   }
 }
+#endif
+
+Point
+TileSelector::get_mouse_tile_pos(const Point& mouse_pos)
+{
+  return Point(mouse_pos.x/static_cast<int>(tileset.get_tile_size()*scale),
+              (mouse_pos.y+offset)/static_cast<int>(tileset.get_tile_size()*scale));
+}
 
 void
 TileSelector::draw()
 {
+#ifdef GRUMBEL
   Display::push_cliprect(get_screen_rect());
   Display::push_modelview();
   Display::add_translate(get_screen_x(), get_screen_y());
@@ -229,13 +231,16 @@ TileSelector::draw()
 
   Display::pop_modelview();
   Display::pop_cliprect();
+#endif
 }
 
 void
 TileSelector::set_scale(float s)
 {
+#ifdef GRUMBEL
   scale = s;
   width  = static_cast<int>(get_width()/(tileset.get_tile_size() * scale));
+#endif
 }
 
 TileSelector::Tiles
@@ -247,9 +252,11 @@ TileSelector::get_tiles() const
 void
 TileSelector::set_tileset(Tileset t)
 {
+#ifdef GRUMBEL
   tileset = t;
   // Recalc the number of tiles in a row
   width  = static_cast<int>(get_width()/(tileset.get_tile_size() * scale));
+#endif
 }
 
 void

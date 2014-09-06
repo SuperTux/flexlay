@@ -21,8 +21,6 @@
 #include <vector>
 #include <functional>
 
-#include <ClanLib/Signals/slot.h>
-
 #include "property_value.hpp"
 
 class CL_RadioGroup;

@@ -16,14 +16,14 @@
 
 #include "blitter.hpp"
 
+#include <string.h>
 #include <assert.h>
 #include <iostream>
-#include <ClanLib/Display/pixel_format.h>
-#include <ClanLib/Display/palette.h>
 
 void
 blit_opaque(PixelBuffer target, PixelBuffer brush, int x_pos, int y_pos)
 {
+#ifdef GRUMBEL
   assert(target.get_format().get_type() == pixelformat_rgba);
   assert(target.get_format().get_depth() == 32);
 
@@ -97,15 +97,15 @@ blit_opaque(PixelBuffer target, PixelBuffer brush, int x_pos, int y_pos)
     assert(!"Unknown pixelformat type");
   }
 
-
-
   brush.unlock();
   target.unlock();
+#endif
 }
 
 void
 blit(PixelBuffer target, PixelBuffer brush, int x_pos, int y_pos)
 {
+#ifdef GRUMBEL
   target.lock();
   brush.lock();
 
@@ -191,6 +191,7 @@ blit(PixelBuffer target, PixelBuffer brush, int x_pos, int y_pos)
 
   brush.unlock();
   target.unlock();
+#endif
 }
 
 void clear(PixelBuffer canvas)

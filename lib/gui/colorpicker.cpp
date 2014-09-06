@@ -15,18 +15,17 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <iostream>
-#include <ClanLib/Display/keys.h>
-#include <ClanLib/GUI/component.h>
 
 #include "colorpicker.hpp"
 #include "display.hpp"
 #include "math.hpp"
 #include "math/rect.hpp"
 
+#ifdef GRUMBEL
 class ColorPickerHue : public CL_Component
 {
 public:
-  std::vector<CL_Slot> slots;
+  //std::vector<CL_Slot> slots;
   typedef std::vector<Color> Colors;
   Colors  colors;
   bool pressed;
@@ -44,11 +43,13 @@ public:
     colors.push_back(Color(255, 255,   0));
     colors.push_back(Color(255,   0,   0));
 
+#ifdef GRUMBEL
     slots.push_back(sig_paint().connect(this, &ColorPickerHue::draw));
 
     slots.push_back(sig_mouse_down().connect(this, &ColorPickerHue::on_mouse_down));
     slots.push_back(sig_mouse_up().connect(this, &ColorPickerHue::on_mouse_up));
     slots.push_back(sig_mouse_move().connect(this, &ColorPickerHue::on_mouse_move));
+#endif
   }
 
   void update_pointer(const CL_InputEvent& event)
@@ -145,7 +146,7 @@ public:
 class ColorPickerAlpha : public CL_Component
 {
 public:
-  std::vector<CL_Slot> slots;
+  //std::vector<CL_Slot> slots;
   bool pressed;
   boost::signals2::signal<void (float)> on_color_change;
   float alpha;
@@ -155,11 +156,13 @@ public:
     pressed(false),
     alpha(0.5f)
   {
+#ifdef GRUMBEL
     slots.push_back(sig_paint().connect(this, &ColorPickerAlpha::draw));
 
     slots.push_back(sig_mouse_down().connect(this, &ColorPickerAlpha::on_mouse_down));
     slots.push_back(sig_mouse_up().connect(this, &ColorPickerAlpha::on_mouse_up));
     slots.push_back(sig_mouse_move().connect(this, &ColorPickerAlpha::on_mouse_move));
+#endif
   }
 
   void set_alpha(float alpha_)
@@ -223,7 +226,6 @@ public:
 class ColorPickerBrightness : public CL_Component
 {
 public:
-  std::vector<CL_Slot> slots;
   Color color;
   bool pressed;
   boost::signals2::signal<void (Color)> on_color_change;
@@ -236,25 +238,26 @@ public:
       factor_y(1.0f)
   {
     color = Color(255, 0, 0);
+#ifdef GRUMBEL
     slots.push_back(sig_paint().connect(this, &ColorPickerBrightness::draw));
 
     slots.push_back(sig_mouse_down().connect(this, &ColorPickerBrightness::on_mouse_down));
     slots.push_back(sig_mouse_up().connect(this, &ColorPickerBrightness::on_mouse_up));
     slots.push_back(sig_mouse_move().connect(this, &ColorPickerBrightness::on_mouse_move));
+#endif
   }
 
   void draw()
   {
+#ifdef GRUMBEL
     Display::push_modelview();
     Display::add_translate(get_screen_x(), get_screen_y());
 
-#ifdef GRUMBEL
     Display::fill_rect(Rect(Point(0, 0), Size(get_width(), get_height())).to_cl(),
                           CL_Gradient(Color(0, 0, 0).to_cl(),
                                       color.to_cl(),
                                       Color(0, 0, 0).to_cl(),
                                       Color(255, 255, 255).to_cl()));
-#endif
 
     Display::draw_line(factor_x * get_width(),
                           0,
@@ -269,6 +272,7 @@ public:
                           Color(255, 255, 255).to_cl());
 
     Display::pop_modelview();
+#endif
   }
 
   void set_color(Color color_) {
@@ -351,7 +355,9 @@ ColorPicker::ColorPicker(const Rect& rect, CL_Component* parent) :
   brightness->on_color_change.connect([this](const Color& c){ update_brightness_color(c); });
   alpha->on_color_change.connect([this](float v){ update_alpha_color(v); });
 
+#ifdef GRUMBEL
   slots.push_back(sig_paint().connect(this, &ColorPicker::draw));
+#endif
 
   brightness->set_color(Color(255, 0, 0));
   alpha->set_alpha(0.5f);
@@ -405,5 +411,6 @@ ColorPicker::set_color(const Color& color_)
 {
   color = color_;
 }
+#endif
 
 /* EOF */

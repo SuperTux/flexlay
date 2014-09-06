@@ -16,11 +16,6 @@
 
 #include "sketch_stroke_tool.hpp"
 
-#include <ClanLib/Display/mouse.h>
-#include <ClanLib/Display/display.h>
-#include <ClanLib/Display/display_window.h>
-#include <ClanLib/Display/input_context.h>
-
 #include "bitmap_layer.hpp"
 #include "display.hpp"
 #include "drawer_properties.hpp"
@@ -103,6 +98,7 @@ public:
 
   void add_dab(const InputEvent& event)
   {
+#ifdef GRUMBEL
     EditorMapComponent* parent = EditorMapComponent::current();
     Pointf p = parent->screen2world(event.mouse_pos);
 
@@ -135,6 +131,7 @@ public:
       dab.pressure = 1.0f;
 
     stroke.add_dab(dab);
+#endif
   }
 
   void on_mouse_move(const InputEvent& event)

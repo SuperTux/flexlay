@@ -16,10 +16,8 @@
 
 #include "editor_map_component.hpp"
 
-#include <ClanLib/Display/display.h>
-#include <ClanLib/Display/display_window.h>
-#include <ClanLib/Display/keyboard.h>
-#include <ClanLib/Display/mouse.h>
+#include <QGLWidget>
+
 #include <functional>
 #include <iostream>
 
@@ -27,43 +25,87 @@
 #include "editor_map.hpp"
 #include "graphic_context.hpp"
 #include "input_event.hpp"
-#include "scrollbar.hpp"
 
 EditorMapComponent* EditorMapComponent::current_ = 0;
 
-class EditorMapComponentImpl
-{
-public:
-  EditorMapComponent* parent;
-  GraphicContextState gc_state;
-  Scrollbar* scrollbar_h;
-  Scrollbar* scrollbar_v;
-  CL_SlotContainer slots;
-  Workspace workspace;
-  boost::signals2::signal<void (int, int)> key_bindings[256];
+class EditorMapComponent;
 
-  EditorMapComponentImpl() :
-    workspace(true)
+class EditorMapWidget : public QGLWidget
+{
+  //  Q_OBJECT
+private:
+  EditorMapComponent& m_comp;
+
+public:
+  EditorMapWidget(EditorMapComponent& comp, QWidget* parent) :
+    QGLWidget(QGLFormat(QGL::SampleBuffers), parent),
+    m_comp(comp)
+  {
+    setAutoFillBackground(false);
+    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+  }
+
+  virtual ~EditorMapWidget()
   {}
 
-  void draw();
-  void mouse_up  (const CL_InputEvent& event);
-  void mouse_down(const CL_InputEvent& event);
-  void mouse_move(const CL_InputEvent& event);
-  void on_key_up(const CL_InputEvent& event);
-  void on_key_down(const CL_InputEvent& event);
-  void on_resize(int old_w, int old_h);
+protected:
+  QSize minimumSizeHint() const override
+  {
+    return QSize(640, 480);
+  }
+  
+  QSize sizeHint() const override
+  {
+    return QSize(1280, 800);
+  }
+
+  void paintGL() override
+  {
+    std::cout << "Paint" << std::endl;
+
+    glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    QPainter painter;
+    painter.begin(this);
+    painter.setRenderHint(QPainter::Antialiasing);
+
+    Workspace workspace = m_comp.get_workspace();
+    GraphicContextState state(width(), height());
+    GraphicContext gc(state, painter);
+    workspace.draw(gc);
+
+    painter.rotate(10.0f);
+    painter.translate(100, 100);
+
+    painter.fillRect(QRect(50, 50, 50, 50), QColor(255, 255, 255));
+
+    painter.end();
+  }
+
+  void resizeGL(int width, int height) override
+  {
+    std::cout << "resizing: " << width << "x" << height << std::endl;
+    
+    int side = qMin(width, height);
+    glViewport((width - side) / 2, (height - side) / 2, side, side);
+
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glOrtho(-0.5, +0.5, -0.5, +0.5, 4.0, 15.0);
+    glMatrixMode(GL_MODELVIEW);
+  }
 };
 
-EditorMapComponent::EditorMapComponent()
-  : impl(new EditorMapComponentImpl)
+EditorMapComponent::EditorMapComponent(QWidget* parent) :
+  m_editormap_widget(new EditorMapWidget(*this, parent))
 {
-  impl->parent = this;
-  ////impl->gc_state  = GraphicContextState(rect.get_width(), rect.get_height());
-
   current_ = this;
 
 #ifdef GRUMBEL
+  impl->parent = this;
+  ////m_gc_state  = GraphicContextState(rect.get_width(), rect.get_height());
+
   impl->scrollbar_v = new Scrollbar(Rect(Point(rect.get_width() - 14, 2) + Point(rect.left, rect.top),
                                          Size(12, rect.get_height() - 4 - 14)),
                                     Scrollbar::VERTICAL,
@@ -95,19 +137,19 @@ EditorMapComponent::~EditorMapComponent()
 Workspace
 EditorMapComponent::get_workspace() const
 {
-  return impl->workspace;
+  return m_workspace;
 }
 
 void
 EditorMapComponent::set_workspace(Workspace m)
 {
-  impl->workspace = m;
+  m_workspace = m;
 }
 
+#ifdef GRUMBEL
 void
 EditorMapComponentImpl::on_key_down(const CL_InputEvent& event)
 {
-#ifdef GRUMBEL
   if (event.id >= 0 && event.id < 256)
   {
     Rect rect = parent->get_position();
@@ -123,19 +165,16 @@ EditorMapComponentImpl::on_key_down(const CL_InputEvent& event)
                           CL_Mouse::get_y() - rect.top).to_cl();
     workspace.key_down(InputEvent(ev2));
   }
-#endif
 }
 
 void
 EditorMapComponentImpl::on_key_up(const CL_InputEvent& event)
 {
-#ifdef GRUMBEL
   Rect rect = parent->get_position();
   CL_InputEvent ev2 = event;
   ev2.mouse_pos = Point(CL_Mouse::get_x() - rect.left,
                         CL_Mouse::get_y() - rect.top).to_cl();
   workspace.key_up(InputEvent(ev2));
-#endif
 }
 
 void
@@ -159,7 +198,6 @@ EditorMapComponentImpl::mouse_down(const CL_InputEvent& event)
 void
 EditorMapComponentImpl::draw ()
 {
-#ifdef GRUMBEL
   if (workspace.get_map().is_null()) return;
 
   Display::push_cliprect(parent->get_screen_rect());
@@ -185,69 +223,75 @@ EditorMapComponentImpl::draw ()
 
   Display::pop_modelview();
   Display::pop_cliprect();
-#endif
 }
+#endif
 
 Pointf
 EditorMapComponent::screen2world(const Point& pos)
 {
-  return impl->gc_state.screen2world(pos);
+  return m_gc_state.screen2world(pos);
 }
 
 void
 EditorMapComponent::set_zoom(float z)
 {
-  impl->gc_state.set_zoom(z);
+#ifdef GRUMBEL
+  m_gc_state.set_zoom(z);
+#endif
 }
 
 void
 EditorMapComponent::zoom_out(Point pos)
 {
-  impl->gc_state.set_zoom(Pointf(pos.x, pos.y),
-                          impl->gc_state.get_zoom()/1.25f);
+#ifdef GRUMBEL
+  m_gc_state.set_zoom(Pointf(pos.x, pos.y),
+                          m_gc_state.get_zoom()/1.25f);
+#endif
 }
 
 void
 EditorMapComponent::zoom_in(Point pos)
 {
-  impl->gc_state.set_zoom(Pointf(pos.x, pos.y),
-                          impl->gc_state.get_zoom()*1.25f);
+#ifdef GRUMBEL
+  m_gc_state.set_zoom(Pointf(pos.x, pos.y),
+                          m_gc_state.get_zoom()*1.25f);
+#endif
 }
 
 void
 EditorMapComponent::zoom_to(Rectf rect)
 {
-  impl->gc_state.zoom_to(rect);
+  m_gc_state.zoom_to(rect);
 }
 
 Rectf
 EditorMapComponent::get_clip_rect() const
 {
-  return impl->gc_state.get_clip_rect();
+  return m_gc_state.get_clip_rect();
 }
 
 void
 EditorMapComponent::move_to(int x, int y)
 {
-  impl->gc_state.set_pos(Pointf(x, y));
+  m_gc_state.set_pos(Pointf(x, y));
 }
 
 void
 EditorMapComponent::move_to_x(float x)
 {
-  impl->gc_state.set_pos(Pointf(x, impl->gc_state.get_pos().y));
+  m_gc_state.set_pos(Pointf(x, m_gc_state.get_pos().y));
 }
 
 void
 EditorMapComponent::move_to_y(float y)
 {
-  impl->gc_state.set_pos(Pointf(impl->gc_state.get_pos().x, y));
+  m_gc_state.set_pos(Pointf(m_gc_state.get_pos().x, y));
 }
 
+#ifdef GRUMBEL
 void
 EditorMapComponentImpl::on_resize(int old_w, int old_h)
 {
-#ifdef GRUMBEL
   Rect rect = parent->get_screen_rect();
 
   scrollbar_v->set_position(rect.get_width() - 14 + rect.left,  2 + rect.top);
@@ -257,9 +301,10 @@ EditorMapComponentImpl::on_resize(int old_w, int old_h)
   scrollbar_h->set_size(rect.get_width() - 4 - 14, 12);
 
   gc_state.set_size(rect.get_width(), rect.get_height());
-#endif
 }
+#endif
 
+#ifdef GRUMBEL
 boost::signals2::signal<void (int, int)>&
 EditorMapComponent::sig_on_key(const std::string& str)
 {
@@ -277,11 +322,12 @@ EditorMapComponent::sig_on_key(const std::string& str)
     return impl->key_bindings[0];
   }
 }
+#endif
 
 GraphicContextState&
 EditorMapComponent::get_gc_state()
 {
-  return impl->gc_state;
+  return m_gc_state;
 }
 
 /* EOF */

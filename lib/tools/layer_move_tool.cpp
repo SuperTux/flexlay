@@ -58,9 +58,9 @@ public:
       {
         Rect rect = layer.get_bounding_rect();
         gc.draw_line(rect.left, rect.top, rect.right, rect.bottom,
-                     Color(0, 255, 255).to_cl());
+                     Color(0, 255, 255));
         gc.draw_line(rect.left, rect.bottom, rect.right, rect.top,
-                     Color(0, 255, 255).to_cl());
+                     Color(0, 255, 255));
       }
     }
   }

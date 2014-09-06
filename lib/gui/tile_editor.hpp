@@ -17,27 +17,27 @@
 #ifndef HEADER_FLEXLAY_TILE_EDITOR_HPP
 #define HEADER_FLEXLAY_TILE_EDITOR_HPP
 
-#include <ClanLib/GUI/component.h>
-
 #include "math/point.hpp"
 
 class Tile;
 
-class TileEditor : public CL_Component
+class TileEditor
 {
 private:
   Tile* tile;
-  CL_SlotContainer slots;
   Point mouse_pos;
 protected:
   virtual ~TileEditor();
 public:
-  TileEditor(int x, int y, int w, int h, CL_Component* parent);
+  TileEditor(int x, int y, int w, int h);
 
   void draw();
+
+#ifdef GRUMBEL
   void mouse_move(const CL_InputEvent& event);
   void mouse_down(const CL_InputEvent& event);
   void mouse_up  (const CL_InputEvent& event);
+#endif
 
   void set_tile(Tile* tile);
 private:

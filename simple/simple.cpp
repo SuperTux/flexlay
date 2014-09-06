@@ -17,6 +17,7 @@
 #include "editor_map.hpp"
 #include "gui/editor_map_component.hpp"
 #include "gui/generic_dialog.hpp"
+#include "gui/menubar.hpp"
 #include "flexlay.hpp"
 #include "gui_manager.hpp"
 #include "math/rect.hpp"
@@ -38,6 +39,9 @@ int main()
   m.add_layer(tilemap.to_layer());
 
   TilemapLayer::set_current(tilemap);
+
+  Menubar* menu = gui.create_menubar();
+  menu->add_item("Menu/Item", {});
 
   EditorMapComponent* editor_map = gui.create_editor_map_component();
   Workspace workspace(true);

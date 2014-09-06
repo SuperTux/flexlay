@@ -18,16 +18,14 @@
 
 #include <assert.h>
 
-#include <ClanLib/Core/System/error.h>
-#include <ClanLib/Display/canvas.h>
-#include <ClanLib/Display/graphic_context.h>
-
 #include "color.hpp"
 #include "graphic_context.hpp"
 #include "objmap_object_impl.hpp"
 #include "pixel_buffer.hpp"
 #include "pixel_buffer.hpp"
 #include "surface.hpp"
+
+class CL_Canvas;
 
 BitmapLayer* BitmapLayer::current_ = 0;
 
@@ -92,7 +90,9 @@ public:
   }
 
   ~BitmapLayerImpl() {
+#ifdef GRUMBEL
     delete canvas;
+#endif
   }
 
   void draw(GraphicContext& gc)

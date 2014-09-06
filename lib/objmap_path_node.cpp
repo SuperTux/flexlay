@@ -48,13 +48,13 @@ ObjMapPathNodeImpl::draw(GraphicContext& gc)
     gc.draw_line(static_cast<int>(pos.x), static_cast<int>(pos.y),
                  static_cast<int>((pos.x + next->pos.x)/2),
                  static_cast<int>((pos.y+next->pos.y)/2),
-                 Color(255, 255, 0).to_cl());
+                 Color(255, 255, 0));
 
     gc.draw_line(static_cast<int>((pos.x + next->pos.x)/2),
                  static_cast<int>((pos.y+next->pos.y)/2),
                  static_cast<int>(next->pos.x),
                  static_cast<int>(next->pos.y),
-                 Color(255, 0, 0).to_cl());
+                 Color(255, 0, 0));
   }
 }
 

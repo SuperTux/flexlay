@@ -16,9 +16,6 @@
 
 #include "workspace.hpp"
 
-#include <ClanLib/Display/display.h>
-#include <ClanLib/Display/display_window.h>
-#include <ClanLib/Display/keys.h>
 #include <assert.h>
 #include <iostream>
 #include <map>

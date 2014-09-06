@@ -16,8 +16,6 @@
 
 #include "tilemap_paint_tool.hpp"
 
-#include <ClanLib/Display/keyboard.h>
-
 #include "editor_map.hpp"
 #include "graphic_context.hpp"
 #include "gui/editor_map_component.hpp"
@@ -75,6 +73,7 @@ TileMapPaintTool::~TileMapPaintTool()
 void
 TileMapPaintToolImpl::draw(GraphicContext& gc)
 {
+#ifdef GRUMBEL
   TilemapLayer tilemap = TilemapLayer::current();
 
   if (tilemap.is_null())
@@ -127,6 +126,7 @@ TileMapPaintToolImpl::draw(GraphicContext& gc)
         }
       break;
   }
+#endif
 }
 
 const TileBrush&

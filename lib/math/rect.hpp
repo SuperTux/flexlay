@@ -33,7 +33,8 @@
 #ifndef header_flexlay_rect
 #define header_flexlay_rect
 
-#include <ClanLib/Core/Math/rect.h>
+#include <QRect>
+#include <QRectF>
 
 #include "size.hpp"
 #include "point.hpp"
@@ -67,9 +68,6 @@ public:
 	{ left = p.x; top = p.y; right = left + size.width; bottom = top + size.height; }
 
 	Rect(const Rect &rect)
-	{ left = rect.left; top = rect.top; right = rect.right; bottom = rect.bottom; }
-
-	Rect(const CL_Rect &rect)
 	{ left = rect.left; top = rect.top; right = rect.right; bottom = rect.bottom; }
 
 	//: Rect += Rect operator.
@@ -205,10 +203,9 @@ public:
 		bottom += offset.y;
 	}
 
-
-  CL_Rect to_cl() const
+  QRect to_qt() const
   {
-    return CL_Rect(left, top, right, bottom);
+    return QRect(left, top, get_width(), get_height());
   }
 };
 
@@ -375,10 +372,10 @@ public:
 		right += offset.x;
 		bottom += offset.y;
 	}
-
-  CL_Rectf to_cl() const
+  
+  QRectF to_qt() const
   {
-    return CL_Rect(left, top, right, bottom);
+    return QRectF(left, top, get_width(), get_height());
   }
 };
 

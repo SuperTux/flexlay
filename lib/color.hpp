@@ -33,10 +33,10 @@
 #ifndef header_flexlay_color
 #define header_flexlay_color
 
+#include <QColor>
+
 #include <string>
 #include <vector>
-
-#include <ClanLib/Display/color.h>
 
 //: Color description class.
 //- !group=Display/Display 2D!
@@ -57,12 +57,10 @@ public:
   Color(unsigned int red, unsigned int green, unsigned int blue, unsigned int alpha = 255) :
         color((alpha<<24) | (red<<16) | (green<<8) | blue) { return; }
 
-Color(const CL_Color& rhs) :
- color(rhs.color)
-{}
-
-CL_Color to_cl() const
-{  CL_Color c; c.color = color; return c; }
+QColor to_qt() const
+  {
+    return QColor(get_red(), get_green(), get_blue(), get_alpha());
+  }
 
 //! Attributes:
 public:

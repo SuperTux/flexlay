@@ -14,8 +14,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include <ClanLib/gl.h>
-#include <ClanLib/Display/display.h>
 #include "stroke_drawer_impl.hpp"
 #include "stroke.hpp"
 #include "drawer_properties.hpp"
@@ -28,6 +26,7 @@ public:
 
   void draw(const Stroke& stroke, GraphicContext& gc)
   {
+#ifdef GRUMBEL
     CL_OpenGLState state(CL_Display::get_current_window()->get_gc());
     state.set_active();
     state.setup_2d();
@@ -107,6 +106,7 @@ public:
       }
       glEnd();
     }
+#endif
   }
 
   StrokeDrawerImpl* clone() const

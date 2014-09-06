@@ -23,6 +23,7 @@
 class Menu;
 class MenubarImpl;
 class Point;
+class QMenuBar;
 
 class Menubar
 {
@@ -31,12 +32,12 @@ private:
 protected:
   virtual ~Menubar() {}
 public:
-  Menubar();
+  Menubar(QMenuBar* menubar);
 
   void add_item(const std::string& path, std::function<void()> callback);
 
 private:
-  std::shared_ptr<MenubarImpl> impl;
+  QMenuBar* m_menubar;
 };
 
 #endif

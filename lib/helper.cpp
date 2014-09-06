@@ -14,26 +14,27 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include <ClanLib/Display/sprite_description.h>
-#include <ClanLib/Display/pixel_format.h>
-#include <ClanLib/Display/Providers/provider_factory.h>
-#include <ClanLib/core.h>
+#include "helper.hpp"
+
+#include <iostream>
 
 #include "blitter.hpp"
 #include "globals.hpp"
-#include "helper.hpp"
 
 typedef std::map<std::string, PixelBuffer> PixelBufferCache;
 PixelBufferCache pixelbuffer_cache;
 
 PixelBuffer get_pixelbuffer(const std::string& filename)
 {
+#ifdef GRUMBEL
   PixelBufferCache::iterator it = pixelbuffer_cache.find(filename);
 
   if (it == pixelbuffer_cache.end())
     return (pixelbuffer_cache[filename] = CL_ProviderFactory::load(filename));
   else
     return it->second;
+#endif
+  return {};
 }
 
 Sprite
@@ -67,12 +68,15 @@ make_sprite(const std::string& filename)
 PixelBuffer
 make_pixelbuffer(const std::string& filename)
 {
+#ifdef GRUMBEL
   try {
     return get_pixelbuffer(filename);
   } catch (const CL_Error& err) {
     std::cout << "CL_Error: " << err.message << std::endl;
     return PixelBuffer();
   }
+#endif
+  return {};
 }
 
 PixelBuffer
@@ -124,6 +128,7 @@ make_pixelbuffer(int width, int height)
 PixelBuffer
 make_region_pixelbuffer(const PixelBuffer& buffer, int x, int y, int w, int h)
 {
+#ifdef GRUMBEL
   try {
     PixelBuffer target(w, h);
     clear(target);
@@ -134,6 +139,8 @@ make_region_pixelbuffer(const PixelBuffer& buffer, int x, int y, int w, int h)
     std::cout << "CL_Error: " << err.message << std::endl;
     return PixelBuffer();
   }
+#endif
+  return {};
 }
 
 PixelBuffer

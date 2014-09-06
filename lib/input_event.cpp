@@ -16,9 +16,9 @@
 
 #include "input_event.hpp"
 
-InputEvent::InputEvent(const CL_InputEvent& ev) :
-  id(static_cast<Type>(ev.id)),
-  mouse_pos(ev.mouse_pos)
+InputEvent::InputEvent() :
+  id(),
+  mouse_pos()
 {
 }
 

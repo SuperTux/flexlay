@@ -16,10 +16,6 @@
 
 #include "graphic_context_state.hpp"
 
-#include <ClanLib/Display/display.h>
-#include <ClanLib/Display/display_window.h>
-#include <ClanLib/Display/graphic_context.h>
-
 class GraphicContextStateImpl
 {
 public:
@@ -61,6 +57,7 @@ GraphicContextState::set_size(int w, int h)
 void
 GraphicContextState::push(CL_GraphicContext* gc) const
 {
+#ifdef GRUMBEL
   if (gc == 0)
     gc = CL_Display::get_current_window()->get_gc();
 
@@ -72,15 +69,18 @@ GraphicContextState::push(CL_GraphicContext* gc) const
 
   gc->add_scale(get_zoom(), get_zoom());
   gc->add_translate(impl->offset.x, impl->offset.y);
+#endif
 }
 
 void
 GraphicContextState::pop(CL_GraphicContext* gc) const
 {
+#ifdef GRUMBEL
   if (gc == 0)
     gc = CL_Display::get_current_window()->get_gc();
 
   gc->pop_modelview();
+#endif
 }
 
 Rectf

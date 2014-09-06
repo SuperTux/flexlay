@@ -17,7 +17,6 @@
 #include "minimap.hpp"
 
 #include <iostream>
-#include <ClanLib/Display/display.h>
 
 #include "display.hpp"
 #include "editor_map.hpp"
@@ -32,7 +31,9 @@
 class MinimapImpl
 {
 public:
+#ifdef GRUMBEL
   std::vector<CL_Slot> slots;
+#endif
   bool drag_active;
 
   int last_serial;

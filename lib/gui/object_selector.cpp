@@ -17,8 +17,6 @@
 #include "object_selector.hpp"
 
 #include <iostream>
-#include <ClanLib/Core/core_iostream.h>
-#include <ClanLib/display.h>
 
 #include "color.hpp"
 #include "display.hpp"

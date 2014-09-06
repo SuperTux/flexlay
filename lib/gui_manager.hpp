@@ -20,13 +20,13 @@
 #include <memory>
 
 class ButtonPanel;
-class CL_Component;
 class EditorMapComponent;
 class FileDialog;
 class GUIManagerImpl;
 class GenericDialog;
 class Menubar;
 class Minimap;
+class QMainWindow;
 class Rect;
 
 class GUIManager
@@ -47,7 +47,7 @@ public:
                                 const std::string& ok_label, const std::string& cancel_label);
 
 private:
-
+  std::unique_ptr<QMainWindow> m_window;
 };
 
 #endif

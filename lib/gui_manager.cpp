@@ -17,6 +17,9 @@
 #include "gui_manager.hpp"
 
 #include <QApplication>
+#include <QMainWindow>
+#include <QMenuBar>
+#include <QGridLayout>
 
 #include "globals.hpp"
 #include "gui/button_panel.hpp"
@@ -26,7 +29,8 @@
 #include "gui/menubar.hpp"
 #include "gui/minimap.hpp"
 
-GUIManager::GUIManager()
+GUIManager::GUIManager() :
+  m_window(new QMainWindow)
 {
 }
 
@@ -37,6 +41,7 @@ GUIManager::~GUIManager()
 void
 GUIManager::run()
 {
+  m_window->show();
   QApplication::instance()->exec();
 }
 
@@ -49,7 +54,9 @@ GUIManager::quit()
 Menubar*
 GUIManager::create_menubar()
 {
-  return new Menubar;
+  QMenuBar* menubar = m_window->menuBar();
+  menubar->show();
+  return new Menubar(menubar);
 }
 
 ButtonPanel*
@@ -67,7 +74,16 @@ GUIManager::create_generic_dialog(const std::string& title)
 EditorMapComponent*
 GUIManager::create_editor_map_component()
 {
-  return new EditorMapComponent;
+  QWidget* central = new QWidget;
+  QGridLayout* layout = new QGridLayout(central);
+  m_window->setCentralWidget(central);
+
+  QWidget* dummy = new QWidget;
+  layout->addWidget(dummy, 0, 0);
+
+  dummy->setStyleSheet("background-color:black;");
+
+  return new EditorMapComponent(dummy);
 }
 
 Minimap*

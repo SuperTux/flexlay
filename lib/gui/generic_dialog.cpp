@@ -16,13 +16,6 @@
 
 #include "gui/generic_dialog.hpp"
 
-#include <ClanLib/GUI/button.h>
-#include <ClanLib/GUI/checkbox.h>
-#include <ClanLib/GUI/inputbox.h>
-#include <ClanLib/GUI/label.h>
-#include <ClanLib/GUI/radiobutton.h>
-#include <ClanLib/GUI/radiogroup.h>
-
 #include "math/rect.hpp"
 
 GenericDialog::GenericDialog(const std::string& title) :

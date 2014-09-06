@@ -17,12 +17,6 @@
 #include "sketch_layer.hpp"
 
 #include <iostream>
-#include <ClanLib/Core/core_iostream.h>
-#include <ClanLib/Core/System/error.h>
-#include <ClanLib/Display/display.h>
-#include <ClanLib/Display/canvas.h>
-#include <ClanLib/Display/blend_func.h>
-#include <ClanLib/Display/display_window.h>
 
 #include "color.hpp"
 #include "display.hpp"
@@ -35,6 +29,8 @@
 #include "surface.hpp"
 
 SketchLayer* SketchLayer::current_ = 0;
+
+class CL_Canvas;
 
 class SketchLayerImpl : public LayerImpl
 {
@@ -65,7 +61,9 @@ public:
   }
 
   ~SketchLayerImpl() {
+#ifdef GRUMBEL
     delete canvas;
+#endif
   }
 
   void add_stroke(const Stroke& stroke)

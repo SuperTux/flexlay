@@ -16,7 +16,6 @@
 
 #include "tile_selection.hpp"
 
-#include <ClanLib/Display/display.h>
 #include <iostream>
 
 #include "display.hpp"

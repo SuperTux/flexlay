@@ -18,9 +18,10 @@
 #define HEADER_FLEXLAY_COLORPICKER_HPP
 
 #include <boost/signals2.hpp>
-
+#include <vector>
 #include "color.hpp"
 
+#ifdef GRUMBEL
 class ColorPickerAlpha;
 class ColorPickerBrightness;
 class ColorPickerHue;
@@ -32,7 +33,7 @@ protected:
   ~ColorPicker() {}
 private:
   boost::signals2::signal<void (Color)> on_color_change;
-  std::vector<CL_Slot> slots;
+  //std::vector<CL_Slot> slots;
   Color color;
 
   ColorPickerHue*     hue;
@@ -51,6 +52,7 @@ public:
   Color get_color();
   void set_color(const Color& color);
 };
+#endif
 
 #endif
 

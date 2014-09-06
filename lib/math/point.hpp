@@ -38,7 +38,6 @@
 #endif
 
 #include <cmath>
-#include <ClanLib/Core/Math/rect.h>
 
 #include "math.h"
 
@@ -64,14 +63,7 @@ public:
 	Point(const Point &p)
 	{ x = p.x; y = p.y; }
 
-	Point(const CL_Point& p)
-	{ x = p.x; y = p.y; }
-
 	explicit Point(const Pointf& p);
-	explicit Point(const CL_Pointf& p);
-
-  CL_Point to_cl() const
-  { return CL_Point(x, y); }
 
 // Operations:
 public:
@@ -169,12 +161,6 @@ public:
 	Pointf(const Pointf &p)
 	{ x = p.x; y = p.y; }
 
-	Pointf(const CL_Pointf& p)
-	{ x = p.x; y = p.y; }
-	
-  CL_Pointf to_cl() const
-  { return CL_Pointf(x, y); }
-
 // Operations:
 public:
 	//: Return a rotated version of this point.
@@ -252,13 +238,7 @@ public:
 	float y;
 };
 
-
 inline Point::Point(const Pointf& p)
-  : x(static_cast<int>(p.x)),
-    y(static_cast<int>(p.y))
-{}
-
-inline Point::Point(const CL_Pointf& p)
   : x(static_cast<int>(p.x)),
     y(static_cast<int>(p.y))
 {}

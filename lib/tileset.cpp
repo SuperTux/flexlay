@@ -14,14 +14,15 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+#include "tileset.hpp"
+
 #include <string>
-#include <ClanLib/Core/System/system.h>
 #include <assert.h>
 #include <iostream>
+
 #include "globals.hpp"
 #include "string_converter.hpp"
 #include "tile.hpp"
-#include "tileset.hpp"
 
 typedef std::vector<Tile*> Tiles;
 typedef std::vector<int> TileIds;

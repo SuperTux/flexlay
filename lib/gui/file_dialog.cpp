@@ -16,9 +16,6 @@
 
 #include "gui/file_dialog.hpp"
 
-#include <ClanLib/GUI/button.h>
-#include <ClanLib/GUI/inputbox.h>
-
 #include "math/rect.hpp"
 
 FileDialog::FileDialog(const std::string& title,

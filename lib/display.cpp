@@ -16,87 +16,85 @@
 
 #include "display.hpp"
 
-#include <ClanLib/Display/display.h>
-
 #include "color.hpp"
 #include "math/rect.hpp"
 
 void
 Display::clear(const Color& color)
 {
-  CL_Display::clear(color.to_cl());
+  ////CL_Display::clear(color.to_cl());
 }
 
 void
 Display::draw_rect(const Rectf& rect, const Color& color)
 {
-  CL_Display::draw_rect(rect.to_cl(), color.to_cl());
+  ////CL_Display::draw_rect(rect.to_cl(), color.to_cl());
 }
 
 void
 Display::fill_rect(const Rectf& rect, const Color& color)
 {
-  CL_Display::fill_rect(rect.to_cl(), color.to_cl());
+  ////CL_Display::fill_rect(rect.to_cl(), color.to_cl());
 }
 
 void
 Display::draw_line(float x1, float y1, float x2, float y2, const Color& color)
 {
-  CL_Display::draw_line(x1, y1, x2, y2, color.to_cl());
+  ////CL_Display::draw_line(x1, y1, x2, y2, color.to_cl());
 }
 
 void
 Display::push_modelview()
 {
-  CL_Display::push_modelview();
+  ////CL_Display::push_modelview();
 }
 
 void
 Display::pop_modelview()
 {
-  CL_Display::pop_modelview();
+  ////CL_Display::pop_modelview();
 }
 
 void
 Display::add_translate(float x, float y)
 {
-  CL_Display::add_translate(x, y);
+  ////CL_Display::add_translate(x, y);
 }
 
 void
 Display::set_cliprect(const Rect& rect)
 {
-  CL_Display::set_cliprect(rect.to_cl());
+  ////CL_Display::set_cliprect(rect.to_cl());
 }
 
 void
 Display::push_cliprect(const Rect& rect)
 {
-  CL_Display::push_cliprect(rect.to_cl());
+  ////CL_Display::push_cliprect(rect.to_cl());
 }
 
 void
 Display::pop_cliprect()
 {
-  CL_Display::pop_cliprect();
+  ////CL_Display::pop_cliprect();
 }
 
 int
 Display::get_width()
 {
-  return CL_Display::get_width();
+  return 0; ////return CL_Display::get_width();
 }
 
 int
 Display::get_height()
 {
-  return CL_Display::get_height();
+  return 0; ////return CL_Display::get_height();
 }
 
 void
 Display::flush()
 {
-  CL_Display::flush();
+  ////CL_Display::flush();
 }
 
 /* EOF */

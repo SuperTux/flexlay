@@ -17,13 +17,12 @@
 #ifndef HEADER_FLEXLAY_POPUP_MENU_HPP
 #define HEADER_FLEXLAY_POPUP_MENU_HPP
 
-#include <ClanLib/GUI/menu.h>
-
+#ifdef GRUMBEL
 class PopupMenu
 {
 private:
-  std::vector<CL_Slot> slots;
   CL_Menu* menu;
+
 public:
   PopupMenu(const Point& pos, CL_Component* parent);
   ~PopupMenu();
@@ -35,6 +34,7 @@ private:
   PopupMenu (const PopupMenu&);
   PopupMenu& operator= (const PopupMenu&);
 };
+#endif
 
 #endif
 

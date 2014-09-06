@@ -20,8 +20,6 @@ import os
 env = Environment(ENV = os.environ)
 env.ParseConfig("pkg-config --libs --cflags Qt5Gui Qt5Widgets Qt5OpenGL")
 env.ParseConfig("pkg-config --libs --cflags gl")
-env.ParseConfig("pkg-config --cflags --libs " +
-                "clanCore-1.0 clanDisplay-1.0 clanGL-1.0 clanSignals-1.0 clanGUI-1.0 clanGUIStyleSilver-1.0")
 env.Append(CPPPATH = ["."])
 env.Append(CXXFLAGS = ['-g3', '-O0', '-Wall', '-std=c++11'])
 

@@ -16,23 +16,23 @@
 
 #include "gui/menubar.hpp"
 
-#include <ClanLib/GUI/component.h>
-#include <ClanLib/GUI/menu.h>
-#include <ClanLib/GUI/menu_node.h>
+#include <QMenu>
+#include <QMenuBar>
 
 #include "math/rect.hpp"
 
-Menubar::Menubar()
-{
+Menubar::Menubar(QMenuBar* menubar) :
+  m_menubar(menubar)
+{  
 }
 
 void
 Menubar::add_item(const std::string& path, std::function<void()> callback)
 {
-#ifdef GRUMBEL
-  CL_MenuNode* item = m_menu->create_item(path);
-  m_slots.push_back(item->sig_clicked().connect_functor(callback));
-#endif
+  QMenu* menu = m_menubar->addMenu(QString::fromStdString(path));
+  menu->addAction(QString::fromStdString(path));
+  //m_slots.push_back(item->sig_clicked().connect_functor(callback));
 }
 
 /* EOF */
+

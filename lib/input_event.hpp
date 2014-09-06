@@ -17,9 +17,6 @@
 #ifndef HEADER_INPUT_EVENT_HPP
 #define HEADER_INPUT_EVENT_HPP
 
-#include <ClanLib/Display/input_event.h>
-#include <ClanLib/Display/keys.h>
-
 #include "math/point.hpp"
 
 class CL_InputEvent;
@@ -29,18 +26,18 @@ class InputEvent
 private:
 public:
   enum Type {
-    MOUSE_LEFT = CL_MOUSE_LEFT,
-    MOUSE_MIDDLE = CL_MOUSE_MIDDLE,
-    MOUSE_RIGHT = CL_MOUSE_RIGHT,
-    MOUSE_WHEEL_UP = CL_MOUSE_WHEEL_UP,
-    MOUSE_WHEEL_DOWN = CL_MOUSE_WHEEL_DOWN
+    MOUSE_LEFT,
+    MOUSE_MIDDLE,
+    MOUSE_RIGHT,
+    MOUSE_WHEEL_UP,
+    MOUSE_WHEEL_DOWN
   };
 
   enum Modifier {
     MOD_SHIFT = (1<<0)
   };
 
-  InputEvent(const CL_InputEvent& ev);
+  InputEvent();
 
   Type id;
   Point mouse_pos;

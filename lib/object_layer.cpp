@@ -27,7 +27,6 @@ class ObjectLayerImpl : public LayerImpl
 public:
   ObjectLayer::Objects objects;
   ObjectLayer::ControlPoints control_points;
-  std::vector<boost::signals2::connection> slots;
 
   ObjectLayerImpl() {}
   virtual ~ObjectLayerImpl() {}

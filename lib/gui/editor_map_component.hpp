@@ -18,11 +18,14 @@
 #define HEADER_FLEXLAY_EDITOR_MAP_COMPONENT_HPP
 
 #include <boost/signals2.hpp>
+#include <memory>
 
 #include "../workspace.hpp"
 
+class QWidget;
 class Scrollbar;
 class EditorMapComponentImpl;
+class EditorMapWidget;
 
 /** Object which represents a level, quirled together with the GUI
     stuff */
@@ -35,7 +38,7 @@ protected:
 public:
   static EditorMapComponent* current() { return current_; }
 
- EditorMapComponent();
+ EditorMapComponent(QWidget* parent);
 
  Workspace get_workspace() const;
  void set_workspace(Workspace m);
@@ -49,7 +52,9 @@ public:
  void move_to_x(float x);
  void move_to_y(float y);
 
+#ifdef GRUMBEL
  boost::signals2::signal<void (int, int)>& sig_on_key(const std::string& str);
+#endif
 
  Pointf screen2world(const Point& pos);
 
@@ -58,7 +63,9 @@ public:
  GraphicContextState& get_gc_state();
 
 private:
-  std::shared_ptr<EditorMapComponentImpl> impl;
+  std::unique_ptr<EditorMapWidget> m_editormap_widget;
+  Workspace m_workspace;
+  GraphicContextState m_gc_state;
 };
 
 #endif

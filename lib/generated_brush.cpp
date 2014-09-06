@@ -16,8 +16,6 @@
 
 #include "generated_brush.hpp"
 
-#include <ClanLib/Display/sprite_description.h>
-
 class GeneratedBrushImpl : public BrushImpl
 {
 public:

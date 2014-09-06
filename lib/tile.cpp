@@ -16,8 +16,6 @@
 
 #include "tile.hpp"
 
-#include <ClanLib/Core/System/error.h>
-#include <ClanLib/Display/Providers/provider_factory.h>
 #include <assert.h>
 #include <iostream>
 
@@ -136,6 +134,7 @@ Tile::get_sprite()
 PixelBuffer
 Tile::get_pixelbuffer()
 {
+#ifdef GRUMBEL
   if (impl->pixelbuffer)
   {
     return impl->pixelbuffer;
@@ -172,11 +171,14 @@ Tile::get_pixelbuffer()
       }
     }
   }
+#endif
+  return {};
 }
 
 Color
 Tile::calc_color()
 {
+#ifdef GRUMBEL
   PixelBuffer buffer = get_pixelbuffer();
   buffer.lock();
   unsigned char* buf = static_cast<unsigned char*>(buffer.get_data());
@@ -228,6 +230,8 @@ Tile::calc_color()
                   static_cast<int>(green / len),
                   static_cast<int>(blue  / len),
                   static_cast<int>(alpha / len));
+#endif
+  return {};
 }
 
 bool

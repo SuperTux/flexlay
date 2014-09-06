@@ -16,16 +16,12 @@
 
 #include "sprite_stroke_drawer.hpp"
 
-#include <ClanLib/Display/canvas.h>
-#include <ClanLib/gl.h>
 #include <assert.h>
 
 #include "bitmap_layer.hpp"
 #include "drawer_properties.hpp"
 #include "graphic_context.hpp"
 #include "stroke_drawer_impl.hpp"
-
-CL_ProgramObject* program = 0;
 
 class SpriteStrokeDrawerImpl : public StrokeDrawerImpl
 {

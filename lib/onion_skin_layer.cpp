@@ -18,9 +18,6 @@
 
 #include <iostream>
 #include <vector>
-#include <ClanLib/Core/System/error.h>
-#include <ClanLib/Display/canvas.h>
-#include <ClanLib/Display/graphic_context.h>
 
 #include "gui/editor_map_component.hpp"
 #include "layer_impl.hpp"
@@ -28,6 +25,8 @@
 #include "surface.hpp"
 
 #define SCALE 4
+
+class CL_Canvas;
 
 class OnionSkinLayerImpl : public LayerImpl
 {
@@ -92,8 +91,10 @@ OnionSkinLayer::OnionSkinLayer(int width, int height) :
 void
 OnionSkinLayer::clear()
 {
+#ifdef GRUMBEL
   impl->canvas->get_gc()->clear(Color(0, 0, 0, 0).to_cl());
   impl->canvas->sync_surface();
+#endif
 }
 
 void

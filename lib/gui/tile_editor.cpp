@@ -16,24 +16,20 @@
 
 #include "tile_editor.hpp"
 
-#include <ClanLib/Display/display.h>
-#include <ClanLib/Display/keys.h>
-#include <ClanLib/Display/mouse.h>
-
 #include "display.hpp"
 #include "math/rect.hpp"
 #include "sprite.hpp"
 #include "tile.hpp"
 
-TileEditor::TileEditor(int x, int y, int w, int h, CL_Component* parent) :
-  CL_Component(Rect(Point(x, y), Size(w, h)).to_cl(), // FIXME: make this editable via script
-               parent)
+TileEditor::TileEditor(int x, int y, int w, int h) 
 {
   tile = 0;
+#ifdef GRUMBEL
   slots.connect(sig_paint(),      this, &TileEditor::draw);
   slots.connect(sig_mouse_move(), this, &TileEditor::mouse_move);
   slots.connect(sig_mouse_down(), this, &TileEditor::mouse_down);
   slots.connect(sig_mouse_up  (), this, &TileEditor::mouse_up);
+#endif
 }
 
 TileEditor::~TileEditor()
@@ -43,6 +39,7 @@ TileEditor::~TileEditor()
 void
 TileEditor::draw()
 {
+#ifdef GRUMBEL
   Display::push_modelview();
   Display::add_translate(get_screen_x(), get_screen_x());
 
@@ -77,8 +74,10 @@ TileEditor::draw()
   }
 
   Display::pop_modelview();
+#endif
 }
 
+#ifdef GRUMBEL
 void
 TileEditor::mouse_move(const CL_InputEvent& event)
 {
@@ -110,6 +109,13 @@ TileEditor::mouse_down(const CL_InputEvent& event)
 }
 
 void
+TileEditor::mouse_up(const CL_InputEvent& event)
+{
+}
+
+#endif
+
+void
 TileEditor::paint(Point pos, bool val)
 {
   if (tile)
@@ -123,11 +129,6 @@ TileEditor::paint(Point pos, bool val)
       tile->set_col(x, y, val);
     }
   }
-}
-
-void
-TileEditor::mouse_up(const CL_InputEvent& event)
-{
 }
 
 void

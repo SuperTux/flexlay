@@ -17,44 +17,35 @@
 #ifndef HEADER_PIXEL_BUFFER_HPP
 #define HEADER_PIXEL_BUFFER_HPP
 
-#include <ClanLib/Display/palette.h>
-#include <ClanLib/Display/pixel_buffer.h>
-#include <ClanLib/Display/pixel_format.h>
-
 class PixelBuffer
 {
-private:
-  CL_PixelBuffer m_pixelbuffer;
-
 public:
-  PixelBuffer() :
-    m_pixelbuffer()
+  PixelBuffer()
   {}
 
-  PixelBuffer(CL_PixelBuffer pixelbuffer) :
-    m_pixelbuffer(pixelbuffer)
+  PixelBuffer(int width, int height)
   {}
 
-  PixelBuffer(int width, int height) :
-    m_pixelbuffer(width, height, width*4, CL_PixelFormat::rgba8888)
-  {}
-
+#ifdef GRUMBEL
   CL_PixelFormat get_format() const { return m_pixelbuffer.get_format(); }
 
   CL_Palette get_palette() const { return m_pixelbuffer.get_palette(); }
+#endif
 
-  int get_width() const { return m_pixelbuffer.get_width(); }
-  int get_height() const { return m_pixelbuffer.get_height(); }
-  int get_pitch() const { return m_pixelbuffer.get_pitch(); }
+  void lock() { }
+  void unlock() { }
 
-  void* get_data() { return m_pixelbuffer.get_data(); }
+  int get_width() const { return 0; } ////m_pixelbuffer.get_width(); }
+  int get_height() const { return  0; } ////m_pixelbuffer.get_height(); }
+  int get_pitch() const { return  0; } ////m_pixelbuffer.get_pitch(); }
 
-  void lock() { m_pixelbuffer.lock(); }
-  void unlock() { m_pixelbuffer.unlock(); }
+  void* get_data() { return  nullptr; } ////m_pixelbuffer.get_data(); }
 
-  explicit operator bool() { return m_pixelbuffer; }
-
-  CL_PixelBuffer to_cl() const { return m_pixelbuffer; }
+  explicit operator bool() { return true;
+#ifdef GRUMBEL
+    m_pixelbuffer; 
+#endif
+  }
 };
 
 #endif

@@ -18,15 +18,15 @@
 #define HEADER_GRAPHIC_CONTEXT_HPP
 
 class GraphicContextState;
-class CL_GraphicContext;
 class Color;
 class Rectf;
+class QPainter;
 
 class GraphicContext
 {
 private:
 public:
-  GraphicContext(GraphicContextState& state, CL_GraphicContext* gc);
+  GraphicContext(GraphicContextState& state, QPainter& painter);
 
   void clear(const Color& color);
   void draw_rect(const Rectf& rect, const Color& color);
@@ -43,9 +43,8 @@ public:
   void flush();
 
 private:
-  GraphicContextState& state;
-public:
-  CL_GraphicContext* gc;
+  GraphicContextState& m_state;
+  QPainter& m_painter;
 
 private:
   GraphicContext(const GraphicContext&) = delete;

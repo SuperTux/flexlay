@@ -47,11 +47,10 @@ public:
   void update_minimap_surface();
 };
 
-Minimap::Minimap(EditorMapComponent* p, const Rect& rect,
-                 CL_Component* parent) :
-  CL_Component(rect.to_cl(), parent),
-    impl(new MinimapImpl())
+Minimap::Minimap(EditorMapComponent* p, const Rect& rect) :
+  impl(new MinimapImpl)
 {
+#ifdef GRUMBEL
   impl->slots.push_back(sig_paint().connect(this, &Minimap::draw));
   impl->slots.push_back(sig_mouse_move().connect(this, &Minimap::mouse_move));
   impl->slots.push_back(sig_mouse_down().connect(this, &Minimap::mouse_down));
@@ -60,11 +59,13 @@ Minimap::Minimap(EditorMapComponent* p, const Rect& rect,
   impl->parent = p ? p : EditorMapComponent::current();
   impl->drag_active = false;
   impl->last_serial = -1;
+#endif
 }
 
 void
 Minimap::draw()
 {
+#ifdef GRUMBEL
   if (impl->parent->get_workspace().get_map().is_null()) return;
 
   if (!impl->parent || impl->parent->get_workspace().is_null())
@@ -136,6 +137,7 @@ Minimap::draw()
 
   Display::pop_modelview();
   Display::pop_cliprect();
+#endif
 }
 
 void
@@ -179,6 +181,7 @@ MinimapImpl::update_minimap_surface()
   }
 }
 
+#ifdef GRUMBEL
 void
 Minimap::mouse_move(const CL_InputEvent& event)
 {
@@ -224,6 +227,7 @@ Minimap::mouse_up  (const CL_InputEvent& event)
     release_mouse();
   }
 }
+#endif
 
 void
 Minimap::update_minimap()

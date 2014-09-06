@@ -26,12 +26,11 @@
 #include "object_add_command.hpp"
 
 ObjectSelector::ObjectSelector(const Rect& rect,
-                               int obj_w, int obj_h,
-                               CL_Component* parent) :
-  CL_Component(rect.to_cl(), parent),
+                               int obj_w, int obj_h) :
   width(rect.get_width()/obj_w), height(rect.get_height()/obj_h),
   obj_width(obj_w), obj_height(obj_h)
 {
+#ifdef GRUMBEL
   index = 0;
 
   slots.push_back(sig_paint().connect(this, &ObjectSelector::draw));
@@ -44,12 +43,14 @@ ObjectSelector::ObjectSelector(const Rect& rect,
   offset = 0;
   scale = 1.0f;
   drag_obj = -1;
+#endif
 }
 
 ObjectSelector::~ObjectSelector()
 {
 }
 
+#ifdef GRUMBEL
 void
 ObjectSelector::mouse_up(const CL_InputEvent& event)
 {
@@ -100,6 +101,7 @@ ObjectSelector::mouse_up(const CL_InputEvent& event)
 void
 ObjectSelector::mouse_down(const CL_InputEvent& event)
 {
+#ifdef GRUMBEL
   switch(event.id)
   {
     case CL_MOUSE_LEFT:
@@ -127,6 +129,7 @@ ObjectSelector::mouse_down(const CL_InputEvent& event)
       offset += static_cast<int>(obj_height*scale);
       break;
   }
+#endif
 }
 
 void
@@ -147,10 +150,12 @@ ObjectSelector::mouse_move(const CL_InputEvent& event)
   if (mouse_over_tile < 0 || mouse_over_tile >= (int)brushes.size())
     mouse_over_tile = -1;
 }
+#endif
 
 void
 ObjectSelector::draw()
 {
+#ifdef GRUMBEL
   if (offset < 0)
     offset = 0;
 
@@ -199,6 +204,7 @@ ObjectSelector::draw()
     sprite.set_alpha(0.5f);
     sprite.draw(mouse_pos.x + get_screen_x(), mouse_pos.y + get_screen_y());
   }
+#endif
 }
 
 void

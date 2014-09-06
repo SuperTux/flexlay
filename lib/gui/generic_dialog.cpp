@@ -24,33 +24,32 @@
 #include <ClanLib/GUI/radiogroup.h>
 
 #include "math/rect.hpp"
-#include "gui/window.hpp"
 
-GenericDialog::GenericDialog(const std::string& title, CL_Component* parent) :
-  m_window(new Window(Rect(Point(100, 100), Size(400, 100)), title, parent)),
-  m_ok(new CL_Button(Rect(Point(290, 35), Size(50, 25)).to_cl(), "Ok",
-                     m_window->get_client_area())),
-  m_cancel(new CL_Button(Rect(Point(230, 35), Size(50, 25)).to_cl(), "Cancel",
-                         m_window->get_client_area())),
+GenericDialog::GenericDialog(const std::string& title) :
   m_items(),
   m_ok_callback()
 {
+#ifdef GRUMBEL
   m_slots.push_back(m_cancel->sig_clicked().connect_functor([this]{ on_cancel(); }));
   m_slots.push_back(m_ok->sig_clicked().connect_functor([this]{ on_ok(); }));
+#endif
 }
 
 void
 GenericDialog::add_label(const std::string& text)
 {
+#ifdef GRUMBEL
   m_items.emplace_back(TYPE_LABEL,
                        new CL_Label(Point(10, 10).to_cl(), text, m_window->get_client_area()),
                        nullptr);
   update_layout();
+#endif
 }
 
 void
 GenericDialog::add_float(const std::string& name, float value)
 {
+#ifdef GRUMBEL
   CL_Label* label = new CL_Label(Point(10, 10).to_cl(), name,
                                  m_window->get_client_area());
   CL_InputBox* inputbox = new CL_InputBox(Rect(Point(110, 10), Size(200, 25)).to_cl(),
@@ -60,11 +59,13 @@ GenericDialog::add_float(const std::string& name, float value)
 
   m_items.emplace_back(TYPE_FLOAT, label, inputbox);
   update_layout();
+#endif
 }
 
 void
 GenericDialog::add_bool(const std::string& name, bool value)
 {
+#ifdef GRUMBEL
   CL_Label* label = new CL_Label(Point(10, 10).to_cl(), name,
                                  m_window->get_client_area());
   CL_CheckBox* checkbox = new CL_CheckBox(Point(110, 10).to_cl(), "",
@@ -77,11 +78,13 @@ GenericDialog::add_bool(const std::string& name, bool value)
 
   m_items.emplace_back(TYPE_BOOL, label, checkbox);
   update_layout();
+#endif
 }
 
 void
 GenericDialog::add_int(const std::string& name, int value)
 {
+#ifdef GRUMBEL
   CL_Label* label = new CL_Label(Point(10, 10).to_cl(), name,
                                  m_window->get_client_area());
   CL_InputBox* inputbox = new CL_InputBox(Rect(Point(110, 10), Size(200, 25)).to_cl(),
@@ -91,11 +94,13 @@ GenericDialog::add_int(const std::string& name, int value)
 
   m_items.emplace_back(TYPE_INT, label, inputbox);
   update_layout();
+#endif
 }
 
 void
 GenericDialog::add_string(const std::string& name, const std::string& value)
 {
+#ifdef GRUMBEL
   CL_Label* label = new CL_Label(Point(10, 10).to_cl(), name,
                                  m_window->get_client_area());
   CL_InputBox* inputbox = new CL_InputBox(Rect(Point(110, 10), Size(200, 25)).to_cl(),
@@ -105,6 +110,7 @@ GenericDialog::add_string(const std::string& name, const std::string& value)
 
   m_items.emplace_back(TYPE_STRING, label, inputbox);
   update_layout();
+#endif
 }
 
 void
@@ -112,6 +118,7 @@ GenericDialog::add_enum(const std::string& name,
                         const std::vector<std::string>& types,
                         const std::string& value)
 {
+#ifdef GRUMBEL
   CL_Label* label = new CL_Label(Point(10, 10).to_cl(), name,
                                  m_window->get_client_area());
   CL_RadioGroup* group = new CL_RadioGroup();
@@ -125,11 +132,13 @@ GenericDialog::add_enum(const std::string& name,
 
   m_items.emplace_back(TYPE_ENUM, label, nullptr, group);
   update_layout();
+#endif
 }
 
 void
 GenericDialog::update_layout()
 {
+#ifdef GRUMBEL
   int y = 10;
 
   for(auto& item : m_items)
@@ -158,22 +167,27 @@ GenericDialog::update_layout()
   m_cancel->set_position(200, y);
   m_ok->set_position(260, y);
   m_window->set_size(330, y + 60);
+#endif
 }
 
 void
 GenericDialog::on_cancel()
 {
+#ifdef GRUMBEL
   m_window->hide();
+#endif
 }
 
 void
 GenericDialog::on_ok()
 {
+#ifdef GRUMBEL
   m_window->hide();
   if (m_ok_callback)
   {
     m_ok_callback();
   }
+#endif
 }
 
 void
@@ -187,6 +201,7 @@ GenericDialog::get_values() const
 {
   std::vector<PropertyValue> result;
 
+#ifdef GRUMBEL
   for(auto& item : m_items)
   {
     switch(item.type)
@@ -209,7 +224,7 @@ GenericDialog::get_values() const
           }
         }
         break;
-        
+
       case TYPE_BOOL:
         result.emplace_back(static_cast<bool>(std::stoi(static_cast<CL_InputBox*>(item.body)->get_text())));
         break;
@@ -227,8 +242,9 @@ GenericDialog::get_values() const
         break;
     }
   }
+#endif
 
   return result;
 }
 
-  /* EOF */
+/* EOF */

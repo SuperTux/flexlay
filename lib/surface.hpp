@@ -23,7 +23,7 @@
 
 enum class BlendFunc
 {
-one, 
+one,
 one_minus_src_alpha
 };
 

@@ -55,15 +55,15 @@ public:
   void on_resize(int old_w, int old_h);
 };
 
-EditorMapComponent::EditorMapComponent(const Rect& rect, CL_Component* parent)
-  : CL_Component(rect.to_cl(), parent),
-    impl(new EditorMapComponentImpl())
+EditorMapComponent::EditorMapComponent()
+  : impl(new EditorMapComponentImpl)
 {
   impl->parent = this;
-  impl->gc_state  = GraphicContextState(rect.get_width(), rect.get_height());
+  ////impl->gc_state  = GraphicContextState(rect.get_width(), rect.get_height());
 
   current_ = this;
 
+#ifdef GRUMBEL
   impl->scrollbar_v = new Scrollbar(Rect(Point(rect.get_width() - 14, 2) + Point(rect.left, rect.top),
                                          Size(12, rect.get_height() - 4 - 14)),
                                     Scrollbar::VERTICAL,
@@ -84,6 +84,7 @@ EditorMapComponent::EditorMapComponent(const Rect& rect, CL_Component* parent)
   impl->slots.connect(sig_key_down(),   impl.get(), &EditorMapComponentImpl::on_key_down);
   impl->slots.connect(sig_key_up(),     impl.get(), &EditorMapComponentImpl::on_key_up);
   impl->slots.connect(sig_resize(),     impl.get(), &EditorMapComponentImpl::on_resize);
+#endif
 }
 
 EditorMapComponent::~EditorMapComponent()
@@ -106,6 +107,7 @@ EditorMapComponent::set_workspace(Workspace m)
 void
 EditorMapComponentImpl::on_key_down(const CL_InputEvent& event)
 {
+#ifdef GRUMBEL
   if (event.id >= 0 && event.id < 256)
   {
     Rect rect = parent->get_position();
@@ -121,16 +123,19 @@ EditorMapComponentImpl::on_key_down(const CL_InputEvent& event)
                           CL_Mouse::get_y() - rect.top).to_cl();
     workspace.key_down(InputEvent(ev2));
   }
+#endif
 }
 
 void
 EditorMapComponentImpl::on_key_up(const CL_InputEvent& event)
 {
+#ifdef GRUMBEL
   Rect rect = parent->get_position();
   CL_InputEvent ev2 = event;
   ev2.mouse_pos = Point(CL_Mouse::get_x() - rect.left,
                         CL_Mouse::get_y() - rect.top).to_cl();
   workspace.key_up(InputEvent(ev2));
+#endif
 }
 
 void
@@ -154,6 +159,7 @@ EditorMapComponentImpl::mouse_down(const CL_InputEvent& event)
 void
 EditorMapComponentImpl::draw ()
 {
+#ifdef GRUMBEL
   if (workspace.get_map().is_null()) return;
 
   Display::push_cliprect(parent->get_screen_rect());
@@ -179,6 +185,7 @@ EditorMapComponentImpl::draw ()
 
   Display::pop_modelview();
   Display::pop_cliprect();
+#endif
 }
 
 Pointf
@@ -240,6 +247,7 @@ EditorMapComponent::move_to_y(float y)
 void
 EditorMapComponentImpl::on_resize(int old_w, int old_h)
 {
+#ifdef GRUMBEL
   Rect rect = parent->get_screen_rect();
 
   scrollbar_v->set_position(rect.get_width() - 14 + rect.left,  2 + rect.top);
@@ -249,6 +257,7 @@ EditorMapComponentImpl::on_resize(int old_w, int old_h)
   scrollbar_h->set_size(rect.get_width() - 4 - 14, 12);
 
   gc_state.set_size(rect.get_width(), rect.get_height());
+#endif
 }
 
 boost::signals2::signal<void (int, int)>&

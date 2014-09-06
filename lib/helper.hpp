@@ -28,8 +28,8 @@ PixelBuffer make_region_pixelbuffer(const PixelBuffer& buffer, int x, int y, int
 PixelBuffer make_pixelbuffer(int width, int height);
 PixelBuffer scale_pixelbuffer(PixelBuffer buffer);
 
-Sprite make_sprite_from_resource(const std::string& filename, CL_ResourceManager& resources);
-PixelBuffer make_pixelbuffer_from_resource(const std::string& filename, CL_ResourceManager& resources);
+Sprite make_sprite_from_resource(const std::string& filename);
+PixelBuffer make_pixelbuffer_from_resource(const std::string& filename);
 #endif
 
 /* EOF */

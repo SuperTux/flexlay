@@ -20,25 +20,16 @@
 #include <string>
 #include <functional>
 
-class Window;
-class CL_InputBox;
-class CL_Button;
-
 class FileDialog
 {
 private:
-  Window* m_window;
-  CL_InputBox* m_inputbox;
-  CL_Button* m_ok_button;
-  CL_Button* m_cancel_button;
   std::function<void (std::string)> m_callback;
 
 protected:
   virtual ~FileDialog();
 public:
   FileDialog(const std::string& titel,
-             const std::string& ok_label, const std::string& cancel_label,
-             CL_Component* parent);
+             const std::string& ok_label, const std::string& cancel_label);
 
   void set_filename(const std::string& filename);
   std::string get_filename() const;

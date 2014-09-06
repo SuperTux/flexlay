@@ -22,7 +22,6 @@
 class Rect;
 class MinimapImpl;
 class EditorMapComponent;
-class CL_InputEvent;
 
 class Minimap
 {
@@ -35,10 +34,11 @@ public:
   void draw();
   void update_minimap();
 
+#ifdef GRUMBEL
   void mouse_move(const CL_InputEvent& event);
   void mouse_down(const CL_InputEvent& event);
   void mouse_up  (const CL_InputEvent& event);
-
+#endif
 private:
   std::shared_ptr<MinimapImpl> impl;
 };

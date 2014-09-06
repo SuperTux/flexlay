@@ -27,7 +27,6 @@ public:
 
   Icon* parent;
 
-  std::vector<CL_Slot> slots;
   Sprite sprite;
   std::string tooltip;
   bool draw_tooltip;
@@ -42,16 +41,17 @@ public:
 
   void draw();
 
+#ifdef GRUMBEL
   void mouse_up  (const CL_InputEvent& event);
   void mouse_down(const CL_InputEvent& event);
   void mouse_move(const CL_InputEvent& event);
+#endif
 };
 
-Icon::Icon(const Rect& rect, const Sprite& sprite, const std::string& tooltip,
-           CL_Component* parent) :
-  CL_Component(rect.to_cl(), parent),
+Icon::Icon(const Rect& rect, const Sprite& sprite, const std::string& tooltip) :
   impl(new IconImpl(this))
 {
+#ifdef GRUMBEL
   impl->sprite       = sprite;
   impl->tooltip      = tooltip;
   impl->draw_tooltip = true;
@@ -62,6 +62,7 @@ Icon::Icon(const Rect& rect, const Sprite& sprite, const std::string& tooltip,
   impl->slots.push_back(sig_paint().connect(impl.get(), &IconImpl::draw));
   impl->slots.push_back(sig_mouse_down().connect(impl.get(), &IconImpl::mouse_down));
   impl->slots.push_back(sig_mouse_up().connect(impl.get(),   &IconImpl::mouse_up));
+#endif
 }
 
 boost::signals2::signal<void ()>&
@@ -73,6 +74,7 @@ Icon::sig_clicked()
 void
 IconImpl::draw()
 {
+#ifdef GRUMBEL
   Display::push_modelview();
   Display::add_translate(parent->get_screen_x(), parent->get_screen_y());
   Rect rect(Point(0, 0), Size(parent->get_width()-4, parent->get_height()-4));
@@ -106,10 +108,12 @@ IconImpl::draw()
   }
   sprite.draw((rect.get_width()+1)/2, (rect.get_height()+1)/2);
   Display::pop_modelview();
+#endif
 }
 
+#ifdef GRUMBEL
 void
-IconImpl::mouse_up  (const CL_InputEvent& event)
+IconImpl::mouse_up(const CL_InputEvent& event)
 {
   if (is_enabled)
   {
@@ -138,6 +142,7 @@ IconImpl::mouse_move(const CL_InputEvent& event)
 {
   //std::cout << "icon: mouse_move: " << event << std::endl;
 }
+#endif
 
 void
 Icon::disable()

@@ -39,7 +39,7 @@ int main()
 
   TilemapLayer::set_current(tilemap);
 
-  EditorMapComponent* editor_map = gui.create_editor_map_component(Rect(0, 0, 799, 599));
+  EditorMapComponent* editor_map = gui.create_editor_map_component();
   Workspace workspace(true);
   editor_map->set_workspace(workspace);
   workspace.set_map(m);

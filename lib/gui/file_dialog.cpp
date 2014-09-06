@@ -20,28 +20,12 @@
 #include <ClanLib/GUI/inputbox.h>
 
 #include "math/rect.hpp"
-#include "gui/window.hpp"
 
 FileDialog::FileDialog(const std::string& title,
-                       const std::string& ok_label, const std::string& cancel_label,
-                       CL_Component* parent) :
-  m_window(),
-  m_inputbox(),
-  m_ok_button(),
-  m_cancel_button(),
-  m_callback(),
-  m_slots()
+                       const std::string& ok_label,
+                       const std::string& cancel_label) :
+  m_callback()
 {
-  m_window = new Window(Rect(Point(120, 200), Size(560, 100)), title, parent);
-#ifdef GRUMBEL
-  m_inputbox = new CL_InputBox(Rect(Point(10, 10), Size(530, 25)).to_cl(),
-                               m_window->get_client_area());
-  m_ok_button = new CL_Button(Rect(Point(490, 35), Size(50, 25)).to_cl(), ok_label,
-                              m_window->get_client_area());
-  m_cancel_button = new CL_Button(Rect(Point(430, 35), Size(50, 25)).to_cl(), cancel_label,
-                                  m_window->get_client_area());
-#endif
-  m_window->hide();
 }
 
 FileDialog::~FileDialog()
@@ -51,41 +35,38 @@ FileDialog::~FileDialog()
 void
 FileDialog::set_filename(const std::string& filename)
 {
-  m_inputbox->set_text(filename);
 }
 
 std::string
 FileDialog::get_filename() const
 {
-  return m_inputbox->get_text();
+  return {};
 }
 
 void
 FileDialog::run(std::function<void(std::string)> func)
 {
-  //  m_slots.push_back(m_ok_button->sig_clicked().connect_functor([this]{ on_ok(); }));
-  //  m_slots.push_back(m_inputbox->sig_return_pressed().connect_functor([this]{ on_ok(); }));
-  //  m_slots.push_back(m_cancel_button->sig_clicked().connect_functor([this]{ on_cancel(); }));
-
+#ifdef GRUMBEL
   m_callback = func;
   m_inputbox->set_focus();
   m_window->show();
+#endif
 }
 
 void
 FileDialog::on_ok()
 {
-  m_window->hide();
+#ifdef GRUMBEL
   if (m_callback)
   {
     m_callback(m_inputbox->get_text());
   }
+#endif
 }
 
 void
 FileDialog::on_cancel()
 {
-  m_window->hide();
 }
 
 /* EOF */

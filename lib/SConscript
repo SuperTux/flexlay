@@ -25,6 +25,9 @@ env.ParseConfig("pkg-config --cflags --libs " +
 env.Append(CPPPATH = ["."])
 env.Append(CXXFLAGS = ['-g3', '-O0', '-Wall', '-std=c++11'])
 
-flexlay_lib = env.SharedLibrary('flexlay', Glob('*.cpp') + Glob('tools/*.cpp') + Glob('math/*.cpp'))
+flexlay_lib = env.SharedLibrary('flexlay', Glob('*.cpp') + 
+                                Glob('tools/*.cpp') + 
+                                Glob('math/*.cpp') +
+                                Glob('gui/*.cpp'))
 
 # EOF #

@@ -17,15 +17,11 @@
 #ifndef HEADER_FLEXLAY_OBJECT_SELECTOR_HPP
 #define HEADER_FLEXLAY_OBJECT_SELECTOR_HPP
 
-#include <ClanLib/GUI/component.h>
-
 #include "../object_brush.hpp"
 
-class ObjectSelector : public CL_Component
+class ObjectSelector
 {
 private:
-  std::vector<CL_Slot> slots;
-
   int width;
   int height;
 
@@ -51,16 +47,19 @@ protected:
   virtual ~ObjectSelector();
 
 public:
-  ObjectSelector(const Rect& rect, int obj_w, int obj_h, CL_Component* parent);
+  ObjectSelector(const Rect& rect, int obj_w, int obj_h);
 
   void draw();
   void add_brush(const ObjectBrush& brush);
 
   boost::signals2::signal<void (ObjectBrush, Point)>& sig_drop();
+
 private:
+#ifdef GRUMBEL
   void mouse_move(const CL_InputEvent& event);
   void mouse_down(const CL_InputEvent& event);
   void mouse_up  (const CL_InputEvent& event);
+#endif
 };
 
 #endif

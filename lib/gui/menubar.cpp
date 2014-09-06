@@ -22,16 +22,17 @@
 
 #include "math/rect.hpp"
 
-Menubar::Menubar(CL_Component* parent) :
-  m_menu(new CL_Menu(parent))
+Menubar::Menubar()
 {
 }
 
 void
 Menubar::add_item(const std::string& path, std::function<void()> callback)
 {
+#ifdef GRUMBEL
   CL_MenuNode* item = m_menu->create_item(path);
   m_slots.push_back(item->sig_clicked().connect_functor(callback));
+#endif
 }
 
 /* EOF */

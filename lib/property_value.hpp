@@ -72,7 +72,7 @@ public:
   {
     return m_bool;
   }
-  
+
   int get_int() const
   {
     return m_int;

@@ -34,10 +34,6 @@ class Window;
 class GenericDialog
 {
 private:
-  Window* m_window;
-  CL_Button* m_ok;
-  CL_Button* m_cancel;
-  std::vector<CL_Slot> m_slots;
   enum Type {
     TYPE_LABEL,
     TYPE_STRING,
@@ -49,20 +45,18 @@ private:
   struct Item
   {
     Type type;
-    CL_Component* label;
-    CL_Component* body;
-    CL_RadioGroup* group;
-
+#ifdef GRUMBEL
     Item(Type type_, CL_Component* label_, CL_Component* body_, CL_RadioGroup* group_ = nullptr) :
       type(type_), label(label_), body(body_), group(group_)
     {}
+#endif
   };
   std::vector<Item> m_items;
 
   std::function<void ()> m_ok_callback;
 
 public:
-  GenericDialog(const std::string& title, CL_Component* parent);
+  GenericDialog(const std::string& title);
 
   void add_label(const std::string& text);
   void add_bool(const std::string& name, bool value);

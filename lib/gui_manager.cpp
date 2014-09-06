@@ -49,7 +49,7 @@ GUIManager::quit()
 Menubar*
 GUIManager::create_menubar()
 {
-return new Menubar;
+  return new Menubar;
 }
 
 ButtonPanel*
@@ -61,26 +61,26 @@ GUIManager::create_button_panel(const Rect& rect, bool horizontal)
 GenericDialog*
 GUIManager::create_generic_dialog(const std::string& title)
 {
-return nullptr; //new GenericDialog(title);
+  return new GenericDialog(title);
 }
 
 EditorMapComponent*
-GUIManager::create_editor_map_component(const Rect& rect)
+GUIManager::create_editor_map_component()
 {
-return nullptr; //new EditorMapComponent(rect.to_cl());
+  return new EditorMapComponent;
 }
 
 Minimap*
 GUIManager::create_minimap(EditorMapComponent* parent, const Rect& rect)
 {
-return nullptr; //new Minimap(parent, rect);
+  return new Minimap(parent, rect);
 }
 
 FileDialog*
 GUIManager::create_filedialog(const std::string& titel,
                               const std::string& ok_label, const std::string& cancel_label)
 {
-return nullptr; //new FileDialog(titel, ok_label, cancel_label);
+  return new FileDialog(titel, ok_label, cancel_label);
 }
 
 /* EOF */

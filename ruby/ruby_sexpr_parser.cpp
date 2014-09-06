@@ -5,12 +5,12 @@
 //  it under the terms of the GNU General Public License as published by
 //  the Free Software Foundation, either version 3 of the License, or
 //  (at your option) any later version.
-//  
+//
 //  This program is distributed in the hope that it will be useful,
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
-//  
+//
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -23,13 +23,13 @@ build_py_sexpr(lisp_object_t* cur)
   if (lisp_cons_p(cur))
     {
       VALUE lst = rb_ary_new();
-  
+
       while (cur)
         {
           rb_ary_push(lst, build_py_sexpr(lisp_car(cur)));
           cur = lisp_cdr(cur);
         }
-      
+
       return lst;
     }
   else if (lisp_string_p(cur))

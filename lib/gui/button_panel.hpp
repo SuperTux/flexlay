@@ -17,23 +17,20 @@
 #ifndef HEADER_BUTTON_PANEL_HPP
 #define HEADER_BUTTON_PANEL_HPP
 
+#include <string>
+#include <functional>
+
 class CL_Component;
 class Icon;
-class Panel;
 class Rect;
 
 class ButtonPanel
 {
 private:
-  Panel* m_panel;
-  int m_pos;
   bool m_horizontal;
 
 public:
   ButtonPanel(const Rect& rect, bool horizontal);
-
-  void set_position(int x, int y);
-  void set_size(int w, int h);
 
   Icon* add_small_icon(const std::string& image,
                        std::function<void ()> callback);

@@ -21,30 +21,17 @@
 #include "helper.hpp"
 #include "gui/icon.hpp"
 
-ButtonPanel::ButtonPanel(const Rect& rect, bool horizontal, CL_Component* parent) :
-  //m_panel(new Panel(rect, parent)),
-  m_pos(2),
+ButtonPanel::ButtonPanel(const Rect& rect, bool horizontal) :
   m_horizontal(horizontal)
 {
   std::cout << "ButtonPanel in C++" << std::endl;
-}
-
-void
-ButtonPanel::set_position(int x, int y)
-{
-  m_panel->set_position(x, y);
-}
-
-void
-ButtonPanel::set_size(int w, int h)
-{
-  m_panel->set_size(w, h);
 }
 
 Icon*
 ButtonPanel::add_small_icon(const std::string& image,
                             std::function<void ()> callback)
 {
+#ifdef GRUMBEL
   std::string tooltip;
   Icon* icon = nullptr;
   if (m_horizontal)
@@ -66,12 +53,15 @@ ButtonPanel::add_small_icon(const std::string& image,
   }
 
   return icon;
+#endif
+  return nullptr;
 }
 
 Icon*
 ButtonPanel::add_icon(const std::string& image,
                       std::function<void ()> callback)
 {
+#ifdef GRUMBEL
   std::string tooltip;
   Icon* icon = nullptr;
   if (m_horizontal)
@@ -93,18 +83,18 @@ ButtonPanel::add_icon(const std::string& image,
   }
 
   return icon;
+#endif
+  return nullptr;
 }
 
 void
 ButtonPanel::add_separator()
 {
-  m_pos += 16;
 }
 
 void
 ButtonPanel::show(bool visible)
 {
-  m_panel->show(visible);
 }
 
 /* EOF */

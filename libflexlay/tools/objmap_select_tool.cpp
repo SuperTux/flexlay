@@ -129,7 +129,8 @@ ObjMapSelectToolImpl::draw(GraphicContext& gc)
 void
 ObjMapSelectToolImpl::on_mouse_up(const InputEvent& event)
 {
-#ifdef GRUMBEL
+  std::cout << "ObjMapSelectToolImpl::on_mouse_up " << event.id << " " << event.mouse_pos.x << " " << event.mouse_pos.y << std::endl;
+
   ObjectLayer objmap = ObjectLayer::current();
 
   EditorMapComponent* parent = EditorMapComponent::current();
@@ -170,8 +171,10 @@ ObjMapSelectToolImpl::on_mouse_up(const InputEvent& event)
 
     case InputEvent::MOUSE_RIGHT:
     {
+#ifdef GRUMBEL
       on_right_click(event.mouse_pos.x + parent->get_screen_rect().left,
                      event.mouse_pos.y + parent->get_screen_rect().top);
+#endif
       /*
         PopupMenu* menu = new PopupMenu(Point(event.mouse_pos.x + parent->get_screen_rect().left,
         event.mouse_pos.y + parent->get_screen_rect().top),
@@ -184,13 +187,14 @@ ObjMapSelectToolImpl::on_mouse_up(const InputEvent& event)
     default:
       break;
   }
-#endif
+
+  std::cout << "-- Selection: " << selection.size() << std::endl;
 }
 
 void
 ObjMapSelectToolImpl::on_mouse_down(const InputEvent& event)
 {
-#ifdef GRUMBEL
+  std::cout << "ObjMapSelectToolImpl::on_mouse_down " << event.id << " " << event.mouse_pos.x << " " << event.mouse_pos.y << std::endl;
   ObjectLayer objmap = ObjectLayer::current();
 
   EditorMapComponent* parent = EditorMapComponent::current();
@@ -217,7 +221,7 @@ ObjMapSelectToolImpl::on_mouse_down(const InputEvent& event)
 
             if (!obj.is_null())
             {
-              if (CL_Keyboard::get_keycode(CL_KEY_LSHIFT))
+              if (event.mod & InputEvent::MOD_SHIFT)
               {
                 ObjMapSelectTool::Selection::iterator i
                   = std::find(selection.begin(), selection.end(), obj);
@@ -268,12 +272,15 @@ ObjMapSelectToolImpl::on_mouse_down(const InputEvent& event)
    default:
       break;
   }
-#endif
+
+  std::cout << "-- Selection: " << selection.size() << std::endl;
 }
 
 void
 ObjMapSelectToolImpl::on_mouse_move(const InputEvent& event)
 {
+  std::cout << "ObjMapSelectToolImpl::on_mouse_move " << event.id << " " << event.mouse_pos.x << " " << event.mouse_pos.y << std::endl;
+
   EditorMapComponent* parent = EditorMapComponent::current();
   Pointf pos = parent->screen2world(event.mouse_pos);
 

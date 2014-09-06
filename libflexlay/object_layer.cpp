@@ -49,7 +49,6 @@ ObjectLayerImpl::draw(GraphicContext& gc)
 {
   for(ObjectLayer::Objects::iterator i = objects.begin(); i != objects.end(); ++i)
   {
-    // FIXME: Add clipping here
     if (gc.get_clip_rect().is_overlapped((*i).get_bound_rect()))
     {
       (*i).draw(gc);
@@ -106,11 +105,17 @@ ObjectLayer::delete_object(const ObjMapObject& obj)
 ObjectLayer::Objects
 ObjectLayer::get_selection(const Rectf& rect)
 {
+  std::cout << "========= get_selection: " << impl->objects.size() << std::endl;
   Objects selection;
 
   for(Objects::iterator i = impl->objects.begin(); i != impl->objects.end(); ++i)
   {
-    // FIXME:
+    std::cout << " Rect(" 
+              << rect.left << ", " << rect.top << ", "
+              << rect.right << ", " << rect.bottom << ") === "
+              << (*i).get_pos().x << ", " << (*i).get_pos().y
+              << std::endl;
+
     if (rect.is_inside((*i).get_pos()))
     {
       selection.push_back(*i);

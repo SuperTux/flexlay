@@ -60,7 +60,6 @@ TileMapSelectToolImpl::draw(GraphicContext& gc)
 void
 TileMapSelectToolImpl::on_mouse_up(const InputEvent& event)
 {
-#ifdef GRUMBEL
   EditorMapComponent* parent = EditorMapComponent::current();
 
   switch (event.id)
@@ -75,13 +74,11 @@ TileMapSelectToolImpl::on_mouse_up(const InputEvent& event)
    default:
       break;
   }
-#endif
 }
 
 void
 TileMapSelectToolImpl::on_mouse_down(const InputEvent& event)
 {
-#ifdef GRUMBEL
   EditorMapComponent* parent = EditorMapComponent::current();
 
   switch (event.id)
@@ -103,20 +100,17 @@ TileMapSelectToolImpl::on_mouse_down(const InputEvent& event)
     default:
       break;
   }
-#endif
 }
 
 void
 TileMapSelectToolImpl::on_mouse_move(const InputEvent& event)
 {
-#ifdef GRUMBEL
   EditorMapComponent* parent = EditorMapComponent::current();
 
   if (creating_selection)
   {
     selection.update(TilemapLayer::current().world2tile(parent->screen2world(event.mouse_pos)));
   }
-#endif
 }
 
 TileBrush

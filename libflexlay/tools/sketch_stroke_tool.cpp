@@ -83,7 +83,6 @@ public:
 
   void on_mouse_down(const InputEvent& event)
   {
-#ifdef GRUMBEL
     if (event.id == InputEvent::MOUSE_LEFT)
     {
       drawing = true;
@@ -93,7 +92,6 @@ public:
       stroke.set_drawer(drawer.clone());
       add_dab(event);
     }
-#endif
   }
 
   void add_dab(const InputEvent& event)

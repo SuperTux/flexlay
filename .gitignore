@@ -1,6 +1,8 @@
 *.a
 *.o
 *.os
+*.so
+*.so.*
 *~
 .sconsign.dblite
 /TODO

@@ -80,6 +80,18 @@ EditorMapComponent::set_workspace(Workspace m)
   m_workspace = m;
 }
 
+void
+EditorMapComponent::capture_mouse()
+{
+  m_editormap_widget->grabMouse();
+}
+
+void
+EditorMapComponent::release_mouse()
+{
+  m_editormap_widget->releaseMouse();
+}
+
 #ifdef GRUMBEL
 void
 EditorMapComponentImpl::on_key_down(const CL_InputEvent& event)
@@ -109,24 +121,6 @@ EditorMapComponentImpl::on_key_up(const CL_InputEvent& event)
   ev2.mouse_pos = Point(CL_Mouse::get_x() - rect.left,
                         CL_Mouse::get_y() - rect.top).to_cl();
   workspace.key_up(InputEvent(ev2));
-}
-
-void
-EditorMapComponentImpl::mouse_up(const CL_InputEvent& event)
-{
-  workspace.mouse_up(event);
-}
-
-void
-EditorMapComponentImpl::mouse_move(const CL_InputEvent& event)
-{
-  workspace.mouse_move(event);
-}
-
-void
-EditorMapComponentImpl::mouse_down(const CL_InputEvent& event)
-{
-  workspace.mouse_down(event);
 }
 
 void

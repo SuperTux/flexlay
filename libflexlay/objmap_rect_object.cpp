@@ -199,19 +199,17 @@ ObjMapRectObject::ObjMapRectObject(const Rect&  rect_,
                                               Pointf(),
                                               MetaData());
 
-#ifdef GRUMBEL
-  impl->slots.push_back(impl->cp_top_right.sig_set_pos().connect(std::bind(&ObjMapRectObjectImpl::cp_top_right_move, impl.get(), std::placeholders::_1)));
-  impl->slots.push_back(impl->cp_bottom_right.sig_set_pos().connect(std::bind(&ObjMapRectObjectImpl::cp_bottom_right_move, impl.get(), std::placeholders::_1)));
+  impl->m_slots.push_back(impl->cp_top_right.sig_set_pos().connect(std::bind(&ObjMapRectObjectImpl::cp_top_right_move, impl.get(), std::placeholders::_1)));
+  impl->m_slots.push_back(impl->cp_bottom_right.sig_set_pos().connect(std::bind(&ObjMapRectObjectImpl::cp_bottom_right_move, impl.get(), std::placeholders::_1)));
 
-  impl->slots.push_back(impl->cp_top_left.sig_set_pos().connect(std::bind(&ObjMapRectObjectImpl::cp_top_left_move, impl.get(), std::placeholders::_1)));
-  impl->slots.push_back(impl->cp_bottom_left.sig_set_pos().connect(std::bind(&ObjMapRectObjectImpl::cp_bottom_left_move, impl.get(), std::placeholders::_1)));
+  impl->m_slots.push_back(impl->cp_top_left.sig_set_pos().connect(std::bind(&ObjMapRectObjectImpl::cp_top_left_move, impl.get(), std::placeholders::_1)));
+  impl->m_slots.push_back(impl->cp_bottom_left.sig_set_pos().connect(std::bind(&ObjMapRectObjectImpl::cp_bottom_left_move, impl.get(), std::placeholders::_1)));
 
-  impl->slots.push_back(impl->cp_middle_left.sig_set_pos().connect(std::bind(&ObjMapRectObjectImpl::cp_middle_left_move, impl.get(), std::placeholders::_1)));
-  impl->slots.push_back(impl->cp_middle_right.sig_set_pos().connect(std::bind(&ObjMapRectObjectImpl::cp_middle_right_move, impl.get(), std::placeholders::_1)));
+  impl->m_slots.push_back(impl->cp_middle_left.sig_set_pos().connect(std::bind(&ObjMapRectObjectImpl::cp_middle_left_move, impl.get(), std::placeholders::_1)));
+  impl->m_slots.push_back(impl->cp_middle_right.sig_set_pos().connect(std::bind(&ObjMapRectObjectImpl::cp_middle_right_move, impl.get(), std::placeholders::_1)));
 
-  impl->slots.push_back(impl->cp_top_middle.sig_set_pos().connect(std::bind(&ObjMapRectObjectImpl::cp_top_middle_move, impl.get(), std::placeholders::_1)));
-  impl->slots.push_back(impl->cp_bottom_middle.sig_set_pos().connect(std::bind(&ObjMapRectObjectImpl::cp_bottom_middle_move, impl.get(), std::placeholders::_1)));
-#endif
+  impl->m_slots.push_back(impl->cp_top_middle.sig_set_pos().connect(std::bind(&ObjMapRectObjectImpl::cp_top_middle_move, impl.get(), std::placeholders::_1)));
+  impl->m_slots.push_back(impl->cp_bottom_middle.sig_set_pos().connect(std::bind(&ObjMapRectObjectImpl::cp_bottom_middle_move, impl.get(), std::placeholders::_1)));
 }
 
 void

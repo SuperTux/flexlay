@@ -40,23 +40,19 @@ public:
 void
 WorkspaceMoveToolImpl::on_mouse_down(const InputEvent& event)
 {
-#ifdef GRUMBEL
   scrolling = true;
   old_trans_offset = EditorMapComponent::current()->get_gc_state().get_pos();
   click_pos = event.mouse_pos;
   EditorMapComponent::current()->capture_mouse();
-#endif
 }
 
 void
 WorkspaceMoveToolImpl::on_mouse_up(const InputEvent& event)
 {
-#ifdef GRUMBEL
   scrolling = false;
   update(event);
   old_trans_offset = EditorMapComponent::current()->get_gc_state().get_pos();
   EditorMapComponent::current()->release_mouse();
-#endif
 }
 
 void

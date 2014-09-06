@@ -52,6 +52,9 @@ public:
  void move_to_x(float x);
  void move_to_y(float y);
 
+  void capture_mouse();
+  void release_mouse();
+
 #ifdef GRUMBEL
  boost::signals2::signal<void (int, int)>& sig_on_key(const std::string& str);
 #endif

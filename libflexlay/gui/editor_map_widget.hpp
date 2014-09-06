@@ -19,9 +19,11 @@
 
 #include <QGLWidget>
 #include <QPainter>
+#include <QMouseEvent>
 
 #include <iostream>
 
+#include "input_event.hpp"
 #include "workspace.hpp"
 #include "graphic_context.hpp"
 #include "gui/editor_map_component.hpp"
@@ -61,16 +63,49 @@ protected:
     return QSize(1280, 800);
   }
 
+  void mouseMoveEvent(QMouseEvent* event) override
+  {
+    Workspace workspace = m_comp.get_workspace();
+    InputEvent ev;
+    ev.id = InputEvent::MOUSE_LEFT;
+    ev.mouse_pos = { event->x(), event->y() };
+    workspace.mouse_move(ev);
+    std::cout << "mouse move: " << std::endl;
+    repaint();
+  }
+
+  void mousePressEvent(QMouseEvent* event) override
+  {
+    Workspace workspace = m_comp.get_workspace();
+    InputEvent ev;
+    ev.id = InputEvent::MOUSE_LEFT;
+    ev.mouse_pos = { event->x(), event->y() };
+    workspace.mouse_down(ev);
+    std::cout << "mouse press: " << std::endl;
+    repaint();
+  }
+
+  void mouseReleaseEvent(QMouseEvent* event) override
+  {
+    Workspace workspace = m_comp.get_workspace();
+    InputEvent ev;
+    ev.id = InputEvent::MOUSE_LEFT;
+    ev.mouse_pos = { event->x(), event->y() };
+    workspace.mouse_up(ev);
+    std::cout << "mouse release: " << std::endl;
+    repaint();
+  }
+
   void paintGL() override
   {
     std::cout << "Paint" << std::endl;
 
-    glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
+    glClearColor(0.5f, 0.0f, 0.5f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
     QPainter painter;
     painter.begin(this);
-    painter.setRenderHint(QPainter::Antialiasing);
+    //painter.setRenderHint(QPainter::Antialiasing);
 
     Workspace workspace = m_comp.get_workspace();
     GraphicContextState state(width(), height());

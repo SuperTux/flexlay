@@ -67,7 +67,6 @@ public:
 
   void on_mouse_up  (const InputEvent& event)
   {
-#ifdef GRUMBEL
     if (!layer.is_null())
     {
       scrolling = false;
@@ -75,12 +74,10 @@ public:
       EditorMapComponent::current()->release_mouse();
       layer = Layer();
     }
-#endif
   }
 
   void on_mouse_down(const InputEvent& event)
   {
-#ifdef GRUMBEL
     EditorMapComponent* parent = EditorMapComponent::current();
     Pointf pos = parent->screen2world(event.mouse_pos);
 
@@ -92,7 +89,6 @@ public:
       click_pos = pos;
       EditorMapComponent::current()->capture_mouse();
     }
-#endif
   }
 
   void on_mouse_move(const InputEvent& event)

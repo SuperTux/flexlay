@@ -22,8 +22,11 @@
 #include "gui_manager.hpp"
 #include "math/rect.hpp"
 #include "tilemap_layer.hpp"
+#include "object_layer.hpp"
+#include "objmap_rect_object.hpp"
 #include "tileset.hpp"
 #include "workspace.hpp"
+#include "tools/objmap_select_tool.hpp"
 
 int main()
 {
@@ -35,8 +38,17 @@ int main()
   EditorMap m(true);
   Tileset tileset(32);
   TilemapLayer tilemap(tileset, 20, 10);
-
+  ObjectLayer object_layer;
   m.add_layer(tilemap.to_layer());
+  m.add_layer(object_layer.to_layer());
+
+  for(int i = 0; i < 20; ++i)
+  {
+    ObjMapRectObject obj(Rect(Point(rand() % 500, rand() % 500), Size(32, 32)), Color(0, 0, 255), {});
+    object_layer.add_object(obj.to_object());
+  }
+
+  ObjectLayer::set_current(object_layer);
 
   TilemapLayer::set_current(tilemap);
 
@@ -49,6 +61,12 @@ int main()
   Workspace workspace(true);
   editor_map->set_workspace(workspace);
   workspace.set_map(m);
+
+  ObjMapSelectTool objtool;
+  workspace.set_tool(0, objtool.to_tool());
+  workspace.set_tool(1, objtool.to_tool());
+  workspace.set_tool(2, objtool.to_tool());
+  workspace.set_tool(3, objtool.to_tool());
 
   GenericDialog* dialog = gui.create_generic_dialog("Generic Dialog");
   dialog->add_int("An Int:", 5);

@@ -66,7 +66,6 @@ ZoomToolImpl::draw(GraphicContext& gc)
 void
 ZoomToolImpl::on_mouse_up(const InputEvent& event)
 {
-#ifdef GRUMBEL
   EditorMapComponent* parent = EditorMapComponent::current();
 
   if (event.id != InputEvent::MOUSE_RIGHT)
@@ -93,13 +92,11 @@ ZoomToolImpl::on_mouse_up(const InputEvent& event)
         break;
     }
   }
-#endif
 }
 
 void
 ZoomToolImpl::on_mouse_down(const InputEvent& event)
 {
-#ifdef GRUMBEL
   EditorMapComponent* parent = EditorMapComponent::current();
 
   switch(event.id)
@@ -136,7 +133,6 @@ ZoomToolImpl::on_mouse_down(const InputEvent& event)
       }
       break;
   }
-#endif
 }
 
 void

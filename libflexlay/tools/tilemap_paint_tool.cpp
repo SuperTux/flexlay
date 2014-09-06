@@ -73,7 +73,6 @@ TileMapPaintTool::~TileMapPaintTool()
 void
 TileMapPaintToolImpl::draw(GraphicContext& gc)
 {
-#ifdef GRUMBEL
   TilemapLayer tilemap = TilemapLayer::current();
 
   if (tilemap.is_null())
@@ -82,9 +81,11 @@ TileMapPaintToolImpl::draw(GraphicContext& gc)
   switch(mode)
   {
     case TileMapPaintToolImpl::SELECTING:
+#ifdef GRUMBEL
       if (CL_Keyboard::get_keycode(CL_KEY_LSHIFT))
         selection.draw(gc, Color(255,  128, 128, 100));
       else
+#endif
         selection.draw(gc);
       break;
 
@@ -126,7 +127,6 @@ TileMapPaintToolImpl::draw(GraphicContext& gc)
         }
       break;
   }
-#endif
 }
 
 const TileBrush&
@@ -138,7 +138,6 @@ TileMapPaintTool::get_brush()
 void
 TileMapPaintToolImpl::on_mouse_down(const InputEvent& event)
 {
-#ifdef GRUMBEL
   TilemapLayer tilemap = TilemapLayer::current();
 
   if (!tilemap.is_null())
@@ -175,13 +174,11 @@ TileMapPaintToolImpl::on_mouse_down(const InputEvent& event)
         break;
     }
   }
-#endif
 }
 
 void
 TileMapPaintToolImpl::on_mouse_move(const InputEvent& event)
 {
-#ifdef GRUMBEL
   TilemapLayer tilemap = TilemapLayer::current();
 
   if (!tilemap.is_null())
@@ -192,7 +189,7 @@ TileMapPaintToolImpl::on_mouse_move(const InputEvent& event)
     switch (mode)
     {
       case PAINTING:
-        if (CL_Keyboard::get_keycode(CL_KEY_LSHIFT) ||
+        if ((event.mod & InputEvent::MOD_SHIFT) ||
             ((current_tile.x % brush.get_width()) == (last_draw.x % brush.get_width()) &&
              (current_tile.y % brush.get_height() == (last_draw.y % brush.get_height()))))
         {
@@ -209,13 +206,11 @@ TileMapPaintToolImpl::on_mouse_move(const InputEvent& event)
         break;
     }
   }
-#endif
 }
 
 void
 TileMapPaintToolImpl::on_mouse_up  (const InputEvent& event)
 {
-#ifdef GRUMBEL
   TilemapLayer tilemap = TilemapLayer::current();
 
   if (!tilemap.is_null())
@@ -233,7 +228,7 @@ TileMapPaintToolImpl::on_mouse_up  (const InputEvent& event)
           parent->release_mouse();
           mode = NONE;
 
-          if (CL_Keyboard::get_keycode(CL_KEY_LSHIFT) ||
+          if ((event.mod & InputEvent::MOD_SHIFT) ||
               ((current_tile.x % brush.get_width()) == (last_draw.x % brush.get_width()) &&
                (current_tile.y % brush.get_height() == (last_draw.y % brush.get_height()))))
           {
@@ -258,7 +253,7 @@ TileMapPaintToolImpl::on_mouse_up  (const InputEvent& event)
           brush = selection.get_brush(*tilemap.get_field());
 
           if ((brush.get_width() > 1 || brush.get_height() > 1)
-              && !CL_Keyboard::get_keycode(CL_KEY_LSHIFT))
+              && !(event.mod & InputEvent::MOD_SHIFT))
           {
             brush.set_transparent();
             brush.auto_crop();
@@ -276,7 +271,6 @@ TileMapPaintToolImpl::on_mouse_up  (const InputEvent& event)
         break;
     }
   }
-#endif
 }
 
 void

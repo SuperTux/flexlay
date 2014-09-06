@@ -30,7 +30,7 @@ private:
   bool m_horizontal;
 
 public:
-  ButtonPanel(const Rect& rect, bool horizontal);
+  ButtonPanel(bool horizontal);
 
   Icon* add_small_icon(const std::string& image,
                        std::function<void ()> callback);

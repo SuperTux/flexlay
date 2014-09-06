@@ -62,6 +62,8 @@ public:
 
  GraphicContextState& get_gc_state();
 
+  EditorMapWidget* get_editormap_widget() const { return m_editormap_widget.get(); }
+
 private:
   std::unique_ptr<EditorMapWidget> m_editormap_widget;
   Workspace m_workspace;

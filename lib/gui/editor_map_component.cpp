@@ -25,77 +25,11 @@
 #include "editor_map.hpp"
 #include "graphic_context.hpp"
 #include "input_event.hpp"
+#include "editor_map_widget.hpp"
 
 EditorMapComponent* EditorMapComponent::current_ = 0;
 
 class EditorMapComponent;
-
-class EditorMapWidget : public QGLWidget
-{
-  //  Q_OBJECT
-private:
-  EditorMapComponent& m_comp;
-
-public:
-  EditorMapWidget(EditorMapComponent& comp, QWidget* parent) :
-    QGLWidget(QGLFormat(QGL::SampleBuffers), parent),
-    m_comp(comp)
-  {
-    setAutoFillBackground(false);
-    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-  }
-
-  virtual ~EditorMapWidget()
-  {}
-
-protected:
-  QSize minimumSizeHint() const override
-  {
-    return QSize(640, 480);
-  }
-  
-  QSize sizeHint() const override
-  {
-    return QSize(1280, 800);
-  }
-
-  void paintGL() override
-  {
-    std::cout << "Paint" << std::endl;
-
-    glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
-
-    QPainter painter;
-    painter.begin(this);
-    painter.setRenderHint(QPainter::Antialiasing);
-
-    Workspace workspace = m_comp.get_workspace();
-    GraphicContextState state(width(), height());
-    GraphicContext gc(state, painter);
-    workspace.draw(gc);
-
-    painter.rotate(10.0f);
-    painter.translate(100, 100);
-
-    painter.fillRect(QRect(50, 50, 50, 50), QColor(255, 255, 255));
-
-    painter.end();
-  }
-
-  void resizeGL(int width, int height) override
-  {
-    std::cout << "resizing: " << width << "x" << height << std::endl;
-    
-    int side = qMin(width, height);
-    glViewport((width - side) / 2, (height - side) / 2, side, side);
-
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    glOrtho(-0.5, +0.5, -0.5, +0.5, 4.0, 15.0);
-    glMatrixMode(GL_MODELVIEW);
-  }
-};
 
 EditorMapComponent::EditorMapComponent(QWidget* parent) :
   m_editormap_widget(new EditorMapWidget(*this, parent))

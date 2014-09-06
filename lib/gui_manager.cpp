@@ -20,10 +20,13 @@
 #include <QMainWindow>
 #include <QMenuBar>
 #include <QGridLayout>
+#include <QScrollBar>
+#include <QToolBar>
 
 #include "globals.hpp"
 #include "gui/button_panel.hpp"
 #include "gui/editor_map_component.hpp"
+#include "gui/editor_map_widget.hpp"
 #include "gui/file_dialog.hpp"
 #include "gui/generic_dialog.hpp"
 #include "gui/menubar.hpp"
@@ -60,9 +63,13 @@ GUIManager::create_menubar()
 }
 
 ButtonPanel*
-GUIManager::create_button_panel(const Rect& rect, bool horizontal)
+GUIManager::create_button_panel(bool horizontal)
 {
-  return new ButtonPanel(rect, horizontal);
+  QToolBar* toolbar = m_window->addToolBar(QString("Toolbar Title?"));
+toolbar->addAction("Click mich");
+toolbar->addAction("Click dich");
+toolbar->show();
+  return new ButtonPanel(horizontal);
 }
 
 GenericDialog*
@@ -75,15 +82,29 @@ EditorMapComponent*
 GUIManager::create_editor_map_component()
 {
   QWidget* central = new QWidget;
+
   QGridLayout* layout = new QGridLayout(central);
+  layout->setContentsMargins(0, 0, 0, 0);
+  layout->setHorizontalSpacing(0);
+  layout->setVerticalSpacing(0);
+
   m_window->setCentralWidget(central);
 
-  QWidget* dummy = new QWidget;
-  layout->addWidget(dummy, 0, 0);
+  //QWidget* dummy = new QWidget;
+  //layout->addWidget(dummy, 0, 0);
 
-  dummy->setStyleSheet("background-color:black;");
+  EditorMapComponent* editor = new EditorMapComponent(nullptr);
+  layout->addWidget(editor->get_editormap_widget(), 0, 0);
 
-  return new EditorMapComponent(dummy);
+  QScrollBar* scroll_horz = new QScrollBar(Qt::Horizontal);
+  QScrollBar* scroll_vert = new QScrollBar(Qt::Vertical);
+
+  layout->addWidget(scroll_horz, 1, 0);
+  layout->addWidget(scroll_vert, 0, 1);
+
+//dummy->setStyleSheet("background-color:black;");
+
+return editor;
 }
 
 Minimap*

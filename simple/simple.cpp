@@ -40,6 +40,8 @@ int main()
 
   TilemapLayer::set_current(tilemap);
 
+  ButtonPanel* buttons = gui.create_button_panel(true);
+
   Menubar* menu = gui.create_menubar();
   menu->add_item("Menu/Item", {});
 

@@ -21,7 +21,7 @@
 #include "helper.hpp"
 #include "gui/icon.hpp"
 
-ButtonPanel::ButtonPanel(const Rect& rect, bool horizontal) :
+ButtonPanel::ButtonPanel(bool horizontal) :
   m_horizontal(horizontal)
 {
   std::cout << "ButtonPanel in C++" << std::endl;

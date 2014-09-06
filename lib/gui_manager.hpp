@@ -39,7 +39,7 @@ public:
   void quit();
 
   Menubar* create_menubar();
-  ButtonPanel* create_button_panel(const Rect& rect, bool horizontal);
+  ButtonPanel* create_button_panel(bool horizontal);
   GenericDialog* create_generic_dialog(const std::string& title);
   EditorMapComponent* create_editor_map_component();
   Minimap* create_minimap(EditorMapComponent* parent, const Rect& rect);

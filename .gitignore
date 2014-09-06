@@ -11,3 +11,7 @@
 /ruby/flexlay_wrap.so
 /simple/simple
 semantic.cache
+
+/Makefile
+/libflexlay/Makefile
+/simple/Makefile

@@ -20,7 +20,11 @@
 #include <QGLWidget>
 #include <QPainter>
 
+#include <iostream>
+
+#include "workspace.hpp"
 #include "graphic_context.hpp"
+#include "gui/editor_map_component.hpp"
 
 class EditorMapComponent;
 class EditorMapComponentImpl;
@@ -30,7 +34,7 @@ class Scrollbar;
 
 class EditorMapWidget : public QGLWidget
 {
-  //  Q_OBJECT
+  Q_OBJECT
 private:
   EditorMapComponent& m_comp;
 

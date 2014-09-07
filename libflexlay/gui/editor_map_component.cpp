@@ -37,7 +37,6 @@ EditorMapComponent::EditorMapComponent(QWidget* parent) :
   current_ = this;
 
 #ifdef GRUMBEL
-  impl->parent = this;
   ////m_gc_state  = GraphicContextState(rect.get_width(), rect.get_height());
 
   impl->scrollbar_h->sig_scrollbar_move().connect(std::bind(&EditorMapComponent::move_to_x, this, std::placeholders::_1));
@@ -145,27 +144,21 @@ EditorMapComponent::screen2world(const Point& pos)
 void
 EditorMapComponent::set_zoom(float z)
 {
-#ifdef GRUMBEL
   m_gc_state.set_zoom(z);
-#endif
 }
 
 void
 EditorMapComponent::zoom_out(Point pos)
 {
-#ifdef GRUMBEL
   m_gc_state.set_zoom(Pointf(pos.x, pos.y),
                           m_gc_state.get_zoom()/1.25f);
-#endif
 }
 
 void
 EditorMapComponent::zoom_in(Point pos)
 {
-#ifdef GRUMBEL
   m_gc_state.set_zoom(Pointf(pos.x, pos.y),
                           m_gc_state.get_zoom()*1.25f);
-#endif
 }
 
 void

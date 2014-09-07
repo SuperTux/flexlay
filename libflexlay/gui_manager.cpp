@@ -66,10 +66,7 @@ ButtonPanel*
 GUIManager::create_button_panel(bool horizontal)
 {
   QToolBar* toolbar = m_window->addToolBar(QString("Toolbar Title?"));
-toolbar->addAction("Click mich");
-toolbar->addAction("Click dich");
-toolbar->show();
-  return new ButtonPanel(horizontal);
+  return new ButtonPanel(toolbar);
 }
 
 GenericDialog*

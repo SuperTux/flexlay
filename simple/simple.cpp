@@ -15,22 +15,23 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "editor_map.hpp"
+#include "flexlay.hpp"
+#include "gui/button_panel.hpp"
 #include "gui/editor_map_component.hpp"
 #include "gui/generic_dialog.hpp"
 #include "gui/menubar.hpp"
-#include "flexlay.hpp"
 #include "gui_manager.hpp"
 #include "math/rect.hpp"
-#include "tilemap_layer.hpp"
 #include "object_layer.hpp"
 #include "objmap_rect_object.hpp"
-#include "tileset.hpp"
-#include "workspace.hpp"
-#include "tools/objmap_select_tool.hpp"
-#include "tools/workspace_move_tool.hpp"
-#include "tools/tilemap_paint_tool.hpp"
 #include "tile.hpp"
 #include "tile_brush.hpp"
+#include "tilemap_layer.hpp"
+#include "tileset.hpp"
+#include "tools/objmap_select_tool.hpp"
+#include "tools/tilemap_paint_tool.hpp"
+#include "tools/workspace_move_tool.hpp"
+#include "workspace.hpp"
 
 int main()
 {
@@ -41,9 +42,9 @@ int main()
 
   EditorMap m(true);
   Tileset tileset(32);
-tileset.add_tile(0, new Tile(PixelBuffer::from_file("resize1"),
+  tileset.add_tile(0, new Tile(PixelBuffer::from_file("resize1"),
                                Sprite(PixelBuffer::from_file("resize1"))));
-tileset.add_tile(1, new Tile(PixelBuffer::from_file("resize_vert"),
+  tileset.add_tile(1, new Tile(PixelBuffer::from_file("resize_vert"),
                                Sprite(PixelBuffer::from_file("resize_vert"))));
 
   TilemapLayer tilemap(tileset, 20, 10);
@@ -63,7 +64,7 @@ tileset.add_tile(1, new Tile(PixelBuffer::from_file("resize_vert"),
   TilemapLayer::set_current(tilemap);
 
   ButtonPanel* buttons = gui.create_button_panel(true);
-
+  
   Menubar* menu = gui.create_menubar();
   menu->add_item("Menu/Item", {});
 
@@ -82,6 +83,17 @@ tileset.add_tile(1, new Tile(PixelBuffer::from_file("resize_vert"),
   workspace.set_tool(2, workspace_move_tool.to_tool());
   workspace.set_tool(1, tilemap_paint_tool.to_tool());
   workspace.set_tool(3, tilemap_paint_tool.to_tool());
+
+  buttons->add_icon("ObjectTool", [&]{
+      workspace.set_tool(1, objtool.to_tool());
+      workspace.set_tool(2, workspace_move_tool.to_tool());
+      workspace.set_tool(3, Tool());
+    });
+  buttons->add_icon("TileTool", [&]{
+      workspace.set_tool(1, tilemap_paint_tool.to_tool());
+      workspace.set_tool(2, workspace_move_tool.to_tool());
+      workspace.set_tool(3, tilemap_paint_tool.to_tool());
+    });
 
   GenericDialog* dialog = gui.create_generic_dialog("Generic Dialog");
   dialog->add_int("An Int:", 5);

@@ -16,74 +16,30 @@
 
 #include "gui/button_panel.hpp"
 
+#include <QAction>
+#include <QToolBar>
+
 #include <iostream>
 
 #include "helper.hpp"
 #include "gui/icon.hpp"
 
-ButtonPanel::ButtonPanel(bool horizontal) :
-  m_horizontal(horizontal)
+ButtonPanel::ButtonPanel(QToolBar* toolbar) :
+  m_toolbar(toolbar)
 {
   std::cout << "ButtonPanel in C++" << std::endl;
 }
 
 Icon*
-ButtonPanel::add_small_icon(const std::string& image,
-                            std::function<void ()> callback)
-{
-#ifdef GRUMBEL
-  std::string tooltip;
-  Icon* icon = nullptr;
-  if (m_horizontal)
-  {
-    icon = new Icon(Rect(Point(m_pos,  2), Size(16, 32)),
-                    make_sprite(image), tooltip, m_panel);
-  }
-  else
-  {
-    icon = new Icon(Rect(Point(2, m_pos), Size(16, 32)),
-                    make_sprite(image), tooltip, m_panel);
-  }
-
-  m_pos += 16;
-
-  if (callback)
-  {
-    icon->sig_clicked().connect(callback);
-  }
-
-  return icon;
-#endif
-  return nullptr;
-}
-
-Icon*
-ButtonPanel::add_icon(const std::string& image,
+ButtonPanel::add_icon(const std::string& name,
                       std::function<void ()> callback)
 {
-#ifdef GRUMBEL
-  std::string tooltip;
-  Icon* icon = nullptr;
-  if (m_horizontal)
-  {
-    icon = new Icon(Rect(Point(m_pos,  2), Size(32, 32)),
-                    make_sprite(image), tooltip, m_panel);
-  }
-  else
-  {
-    icon = new Icon(Rect(Point(2, m_pos), Size(32, 32)),
-                    make_sprite(image), tooltip, m_panel);
-  }
-
-  m_pos += 32;
-
+  QAction* action = m_toolbar->addAction(QString::fromStdString(name));
   if (callback)
   {
-    icon->sig_clicked().connect(callback);
+    QObject::connect(action, &QAction::triggered, callback);
   }
 
-  return icon;
-#endif
   return nullptr;
 }
 

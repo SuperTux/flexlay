@@ -20,22 +20,19 @@
 #include <string>
 #include <functional>
 
-class CL_Component;
+class QToolBar;
 class Icon;
 class Rect;
 
 class ButtonPanel
 {
 private:
-  bool m_horizontal;
+  QToolBar* m_toolbar;
 
 public:
-  ButtonPanel(bool horizontal);
+  ButtonPanel(QToolBar* toolbar);
 
-  Icon* add_small_icon(const std::string& image,
-                       std::function<void ()> callback);
-
-  Icon* add_icon(const std::string& image,
+  Icon* add_icon(const std::string& name,
                  std::function<void ()> callback);
 
   void add_separator();

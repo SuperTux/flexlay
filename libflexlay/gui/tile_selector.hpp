@@ -21,58 +21,34 @@
 #include "math/point.hpp"
 #include "math/rect.hpp"
 
+class QWidget;
+class TileSelectorWidget;
 class Tileset;
 
 class TileSelector
 {
-public:
-  typedef std::vector<int> Tiles;
-
-private:
-  int width;
-  int index;
-
-  int offset;
-  int old_offset;
-  int mouse_over_tile;
-  bool scrolling;
-  bool region_select;
-  Point current_pos;
-  Point region_select_start;
-  Point mouse_pos;
-  float scale;
-
-  /** set of tiles that should be available in the TileSelector */
-  Tiles tiles;
-
-  Tileset tileset;
-
 protected:
   virtual ~TileSelector();
 public:
-  /** width and height in number of tiles */
-  TileSelector(const Rect& rect);
+  typedef std::vector<int> Tiles;
+
+public:
+  TileSelector();
 
   void set_tileset(Tileset t);
   void set_tiles(const Tiles& t);
   Tiles get_tiles() const;
 
-  /** Set the factor by which tiles are scaled down in the selector
-      widged (ie. for better overview) */
   void set_scale(float s);
 
-  void draw();
-
-  /** Return the position of the mouse in x/y in tilesize */
-  Point get_mouse_tile_pos(const Point& mouse_pos);
+  QWidget* get_widget() const;
 
 private:
+  Point get_mouse_tile_pos(const Point& mouse_pos);
   Rect get_selection();
-#ifdef GRUMBEL
-  void mouse_move(const CL_InputEvent& event);
-  void mouse_down(const CL_InputEvent& event);
-  void mouse_up  (const CL_InputEvent& event);
-#endif
+
+private:
+  TileSelectorWidget* m_widget;
 };
 
 #endif

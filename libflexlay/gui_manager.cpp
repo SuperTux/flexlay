@@ -33,6 +33,7 @@
 #include "gui/menubar.hpp"
 #include "gui/minimap.hpp"
 #include "gui/object_selector.hpp"
+#include "gui/tile_selector.hpp"
 
 GUIManager::GUIManager() :
   m_window(new QMainWindow)
@@ -110,7 +111,12 @@ return editor;
 Minimap*
 GUIManager::create_minimap(EditorMapComponent* parent)
 {
-  return new Minimap(parent);
+  QDockWidget* dockwidget = new QDockWidget("Minimap");
+  Minimap* minimap = new Minimap(parent);
+  dockwidget->setWidget(minimap->get_widget());
+
+  m_window->addDockWidget(Qt::BottomDockWidgetArea, dockwidget);
+  return minimap;
 }
 
 FileDialog*
@@ -129,6 +135,17 @@ GUIManager::create_object_selector(int w, int h)
 
   m_window->addDockWidget(Qt::RightDockWidgetArea, dockwidget);
   return object_selector;
+}
+
+TileSelector*
+GUIManager::create_tile_selector()
+{
+  QDockWidget* dockwidget = new QDockWidget("Tile Selector");
+  TileSelector* tile_selector = new TileSelector;
+  dockwidget->setWidget(tile_selector->get_widget());
+
+  m_window->addDockWidget(Qt::RightDockWidgetArea, dockwidget);
+  return tile_selector;
 }
 
 /* EOF */

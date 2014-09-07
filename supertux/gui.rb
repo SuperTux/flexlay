@@ -46,25 +46,20 @@ class SuperTuxGUI
                                                 make_metadata(objectdata)))
     }
 
-    if false # GRUMBEL
-      @tileselector = TileSelector.new(Rect.new(Point.new(3, 3),
-                                                Size.new(selector_rect.get_width() -3 ,
-                                                         selector_rect.get_height() - 3)))
-      @tileselector.set_tileset($tileset)
-      @tileselector.set_tiles($tileset.get_tiles())
-    
-      @worldmapobjectselector = ObjectSelector.new(Rect.new(Point.new(3, 3),
-                                                            Size.new(selector_rect.get_width()-3,
-                                                                     selector_rect.get_height() - 3)),
-                                                   42, 42, @selector_window);
+    @tileselector = @gui.create_tile_selector()
+    @tileselector.set_tileset($tileset)
+    @tileselector.set_tiles($tileset.get_tiles())
+
+    @worldmapobjectselector = @gui.create_object_selector(42, 42);
+    if false
       connect_v2_ObjectBrush_Point(@worldmapobjectselector.sig_drop(),
                                    method(:on_worldmap_object_drop))
-      $worldmap_objects.each { |object|
-        @worldmapobjectselector.add_brush(ObjectBrush.new(
-                                                          make_sprite($datadir + object[1]),
-                                                          make_metadata(object[0])))
-      }
     end
+    $worldmap_objects.each { |object|
+      @worldmapobjectselector.add_brush(ObjectBrush.new(
+                                                        make_sprite($datadir + object[1]),
+                                                        make_metadata(object[0])))
+    }
 
     create_button_panel()
 
@@ -272,7 +267,7 @@ class SuperTuxGUI
       @tileselector.show(true)        
       @objectselector.show(false)
       @worldmapobjectselector.show(false)
-      #    @colorpicker.show(false)
+      # @colorpicker.show(false)
     end
   end
 

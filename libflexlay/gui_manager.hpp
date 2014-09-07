@@ -29,7 +29,7 @@ class Minimap;
 class QMainWindow;
 class Rect;
 class ObjectSelector;
-
+class TileSelector;
 class GUIManager
 {
 public:
@@ -47,6 +47,7 @@ public:
   FileDialog* create_filedialog(const std::string& titel,
                                 const std::string& ok_label, const std::string& cancel_label);
   ObjectSelector* create_object_selector(int w, int h);
+  TileSelector* create_tile_selector();
 
 private:
   std::unique_ptr<QMainWindow> m_window;

@@ -45,7 +45,7 @@ public:
     QGLWidget(QGLFormat(QGL::SampleBuffers), parent),
     m_comp(comp)
   {
-    setAutoFillBackground(false);
+    setAutoFillBackground(true);
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
   }
 
@@ -94,9 +94,6 @@ protected:
   {
     std::cout << "Paint" << std::endl;
 
-    glClearColor(0.5f, 0.0f, 0.5f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
-
     QPainter painter;
     painter.begin(this);
 
@@ -119,16 +116,6 @@ protected:
   void resizeGL(int width, int height) override
   {
     m_comp.get_gc_state().set_size(width, height);
-
-    std::cout << "resizing: " << width << "x" << height << std::endl;
-    
-    int side = qMin(width, height);
-    glViewport((width - side) / 2, (height - side) / 2, side, side);
-
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    glOrtho(-0.5, +0.5, -0.5, +0.5, 4.0, 15.0);
-    glMatrixMode(GL_MODELVIEW);
   }
 };
 

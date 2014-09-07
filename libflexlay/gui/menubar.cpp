@@ -21,17 +21,39 @@
 
 #include "math/rect.hpp"
 
+Menu::Menu(QMenu* menu) :
+  m_menu(menu)
+{  
+}
+
+Menu
+Menu::add_menu(const std::string& label)
+{
+  QMenu* menu = m_menu->addMenu(QString::fromStdString(label));
+  return Menu(menu);
+}
+
+void
+Menu::add_item(const std::string& label, std::function<void()> callback)
+{
+  QAction* action = m_menu->addAction(QString::fromStdString(label));
+  if (callback)
+  {
+    QObject::connect(action, &QAction::triggered, callback);
+  }
+}
+
+
 Menubar::Menubar(QMenuBar* menubar) :
   m_menubar(menubar)
 {  
 }
 
-void
-Menubar::add_item(const std::string& path, std::function<void()> callback)
+Menu
+Menubar::add_menu(const std::string& label)
 {
-  QMenu* menu = m_menubar->addMenu(QString::fromStdString(path));
-  menu->addAction(QString::fromStdString(path));
-  //m_slots.push_back(item->sig_clicked().connect_functor(callback));
+  QMenu* menu = m_menubar->addMenu(QString::fromStdString(label));
+  return Menu(menu);
 }
 
 /* EOF */

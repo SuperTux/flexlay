@@ -65,8 +65,16 @@ int main()
 
   ButtonPanel* buttons = gui.create_button_panel(true);
   
-  Menubar* menu = gui.create_menubar();
-  menu->add_item("Menu/Item", {});
+  Menubar* menubar = gui.create_menubar();
+  Menu file_menu = menubar->add_menu("File");
+  file_menu.add_item("Open...", []{ std::cout << "Open" << std::endl; });
+  file_menu.add_item("Save...", []{ std::cout << "Save" << std::endl; });
+  file_menu.add_item("Quit...", []{ std::cout << "Quit" << std::endl; });
+
+  Menu view_menu = menubar->add_menu("View");
+  view_menu.add_item("Zoom In", []{  std::cout << "Zoom In" << std::endl; });
+  view_menu.add_item("Zoom Out", []{ std::cout << "Zoom Out" << std::endl; });
+  view_menu.add_item("Reset Zoom", []{ std::cout << "Reset Zoom" << std::endl; });
 
   EditorMapComponent* editor_map = gui.create_editor_map_component();
   Workspace workspace(true);

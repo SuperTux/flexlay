@@ -24,6 +24,19 @@ class Menu;
 class MenubarImpl;
 class Point;
 class QMenuBar;
+class QMenu;
+
+class Menu
+{
+public:
+  Menu(QMenu* menu);
+
+  Menu add_menu(const std::string& label);
+  void add_item(const std::string& label, std::function<void()> callback);
+
+private:
+  QMenu* m_menu;
+};
 
 class Menubar
 {
@@ -34,7 +47,7 @@ protected:
 public:
   Menubar(QMenuBar* menubar);
 
-  void add_item(const std::string& path, std::function<void()> callback);
+  Menu add_menu(const std::string& label);
 
 private:
   QMenuBar* m_menubar;

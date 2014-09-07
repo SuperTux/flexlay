@@ -19,8 +19,7 @@ import os
 
 env = Environment(SHLIBPREFIX="", ENV = os.environ)
 env.ParseConfig("pkg-config --cflags --libs ruby-1.9")
-env.ParseConfig("pkg-config --libs --cflags Qt5Gui Qt5Widgets Qt5OpenGL")
-env.ParseConfig("pkg-config --libs --cflags gl")
+env.ParseConfig("pkg-config --libs --cflags Qt5Gui Qt5Widgets")
 env.Append(CXXFLAGS = ["-g", "-O2", "-Wall", "-fPIC"])
 
 env.Append(CXXFLAGS = ["-std=c++11", "-Wno-uninitialized", "-Wno-unused-variable", "-Wno-unused-but-set-variable"],

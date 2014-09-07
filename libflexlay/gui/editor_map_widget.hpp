@@ -17,9 +17,9 @@
 #ifndef HEADER_EDITOR_MAP_WIDGET_HPP
 #define HEADER_EDITOR_MAP_WIDGET_HPP
 
-#include <QGLWidget>
-#include <QPainter>
 #include <QMouseEvent>
+#include <QPainter>
+#include <QWidget>
 
 #include <iostream>
 
@@ -34,7 +34,7 @@ class EditorMapWidget;
 class QWidget;
 class Scrollbar;
 
-class EditorMapWidget : public QGLWidget
+class EditorMapWidget : public QWidget
 {
   Q_OBJECT
 private:
@@ -42,7 +42,7 @@ private:
 
 public:
   EditorMapWidget(EditorMapComponent& comp, QWidget* parent) :
-    QGLWidget(QGLFormat(QGL::SampleBuffers), parent),
+    QWidget(parent),
     m_comp(comp)
   {
     setAutoFillBackground(true);
@@ -90,7 +90,7 @@ protected:
     repaint();
   }
 
-  void paintGL() override
+  void paintEvent(QPaintEvent* event) override
   {
     QPainter painter;
     painter.begin(this);
@@ -106,9 +106,9 @@ protected:
     painter.end();
   }
 
-  void resizeGL(int width, int height) override
+  void resizeEvent(QResizeEvent* event) override
   {
-    m_comp.get_gc_state().set_size(width, height);
+    m_comp.get_gc_state().set_size(event->size().width(), event->size().height());
   }
 };
 

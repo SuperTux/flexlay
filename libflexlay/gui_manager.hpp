@@ -28,6 +28,7 @@ class Menubar;
 class Minimap;
 class QMainWindow;
 class Rect;
+class ObjectSelector;
 
 class GUIManager
 {
@@ -45,6 +46,7 @@ public:
   Minimap* create_minimap(EditorMapComponent* parent);
   FileDialog* create_filedialog(const std::string& titel,
                                 const std::string& ok_label, const std::string& cancel_label);
+  ObjectSelector* create_object_selector(int w, int h);
 
 private:
   std::unique_ptr<QMainWindow> m_window;

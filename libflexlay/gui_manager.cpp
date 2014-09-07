@@ -17,9 +17,10 @@
 #include "gui_manager.hpp"
 
 #include <QApplication>
+#include <QDockWidget>
+#include <QGridLayout>
 #include <QMainWindow>
 #include <QMenuBar>
-#include <QGridLayout>
 #include <QScrollBar>
 #include <QToolBar>
 
@@ -31,6 +32,7 @@
 #include "gui/generic_dialog.hpp"
 #include "gui/menubar.hpp"
 #include "gui/minimap.hpp"
+#include "gui/object_selector.hpp"
 
 GUIManager::GUIManager() :
   m_window(new QMainWindow)
@@ -65,7 +67,8 @@ GUIManager::create_menubar()
 ButtonPanel*
 GUIManager::create_button_panel(bool horizontal)
 {
-  QToolBar* toolbar = m_window->addToolBar(QString("Toolbar Title?"));
+  QToolBar* toolbar = new QToolBar;
+  m_window->addToolBar(horizontal ? Qt::TopToolBarArea : Qt::LeftToolBarArea, toolbar);
   return new ButtonPanel(toolbar);
 }
 
@@ -115,6 +118,17 @@ GUIManager::create_filedialog(const std::string& titel,
                               const std::string& ok_label, const std::string& cancel_label)
 {
   return new FileDialog(titel, ok_label, cancel_label);
+}
+
+ObjectSelector*
+GUIManager::create_object_selector(int w, int h)
+{
+  QDockWidget* dockwidget = new QDockWidget("Object Selector");
+  ObjectSelector* object_selector = new ObjectSelector(w, h, nullptr);
+  dockwidget->setWidget(object_selector->get_widget());
+
+  m_window->addDockWidget(Qt::RightDockWidgetArea, dockwidget);
+  return object_selector;
 }
 
 /* EOF */

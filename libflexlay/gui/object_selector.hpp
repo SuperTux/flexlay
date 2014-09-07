@@ -19,47 +19,27 @@
 
 #include "../object_brush.hpp"
 
+#include <QWidget>
+
+class ObjectSelectorImpl;
+class QWidget;
+
 class ObjectSelector
 {
-private:
-  int width;
-  int height;
-
-  int obj_width;
-  int obj_height;
-
-  int index;
-
-  int offset;
-  int old_offset;
-  int mouse_over_tile;
-  bool scrolling;
-  Point click_pos;
-  Point mouse_pos;
-  float scale;
-
-  std::vector<ObjectBrush> brushes;
-  int drag_obj;
-
-  boost::signals2::signal<void (ObjectBrush, Point)> on_drop;
-
 protected:
   virtual ~ObjectSelector();
 
 public:
-  ObjectSelector(const Rect& rect, int obj_w, int obj_h);
+  ObjectSelector(int obj_w, int obj_h, QWidget* parent);
 
-  void draw();
   void add_brush(const ObjectBrush& brush);
 
   boost::signals2::signal<void (ObjectBrush, Point)>& sig_drop();
 
+  QWidget* get_widget() const;
+
 private:
-#ifdef GRUMBEL
-  void mouse_move(const CL_InputEvent& event);
-  void mouse_down(const CL_InputEvent& event);
-  void mouse_up  (const CL_InputEvent& event);
-#endif
+  std::shared_ptr<ObjectSelectorImpl> m_impl;
 };
 
 #endif

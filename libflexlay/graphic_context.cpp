@@ -22,8 +22,14 @@
 #include "graphic_context_state.hpp"
 #include "math/rect.hpp"
 
+GraphicContext::GraphicContext(QPainter& painter) :
+  m_state(nullptr),
+  m_painter(painter)
+{
+}
+
 GraphicContext::GraphicContext(GraphicContextState& state, QPainter& painter) :
-  m_state(state),
+  m_state(&state),
   m_painter(painter)
 {
 }
@@ -92,7 +98,10 @@ GraphicContext::rotate(float angle)
 Rectf
 GraphicContext::get_clip_rect() const
 {
-  return m_state.get_clip_rect();
+  if (m_state)
+    return m_state->get_clip_rect();
+  else
+    return Rectf();
 }
 
 void

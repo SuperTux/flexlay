@@ -36,26 +36,23 @@ class SuperTuxGUI
 
     @minimap = @gui.create_minimap(@editor_map)
 
+    @objectselector = @gui.create_object_selector(42, 42)
+    if false # GRUMBEL
+      connect_v2_ObjectBrush_Point(@objectselector.sig_drop(), method(:on_object_drop))
+    end
+    $game_objects.each { |objectdata|
+      sprite = load_cl_sprite($datadir + objectdata[1])
+      @objectselector.add_brush(ObjectBrush.new(sprite,
+                                                make_metadata(objectdata)))
+    }
+
     if false # GRUMBEL
       @tileselector = TileSelector.new(Rect.new(Point.new(3, 3),
                                                 Size.new(selector_rect.get_width() -3 ,
                                                          selector_rect.get_height() - 3)))
       @tileselector.set_tileset($tileset)
       @tileselector.set_tiles($tileset.get_tiles())
-      
-      @objectselector = ObjectSelector.new(Rect.new(Point.new(3, 3),
-                                                    Size.new(selector_rect.get_width()-3,
-                                                             selector_rect.get_height() - 3)),
-                                           42, 42, @selector_window)
-      
-      connect_v2_ObjectBrush_Point(@objectselector.sig_drop(), method(:on_object_drop))
-
-      $game_objects.each { |objectdata|
-        sprite = load_cl_sprite($datadir + objectdata[1])
-        @objectselector.add_brush(ObjectBrush.new(sprite,
-                                                  make_metadata(objectdata)))
-      }
-
+    
       @worldmapobjectselector = ObjectSelector.new(Rect.new(Point.new(3, 3),
                                                             Size.new(selector_rect.get_width()-3,
                                                                      selector_rect.get_height() - 3)),

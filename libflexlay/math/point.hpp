@@ -39,6 +39,8 @@
 
 #include <cmath>
 
+#include <QPoint>
+
 #include "math.h"
 
 class Pointf;
@@ -62,6 +64,12 @@ public:
 
 	Point(const Point &p)
 	{ x = p.x; y = p.y; }
+
+  explicit Point(const QPoint& p) :
+    x(p.x()),
+    y(p.y())
+  {
+  }
 
 	explicit Point(const Pointf& p);
 

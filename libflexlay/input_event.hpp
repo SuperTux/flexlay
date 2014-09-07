@@ -26,12 +26,12 @@ class InputEvent
 private:
 public:
   enum Type {
-    MOUSE_NO_BUTTON,
     MOUSE_LEFT,
-    MOUSE_MIDDLE,
     MOUSE_RIGHT,
+    MOUSE_MIDDLE,
     MOUSE_WHEEL_UP,
-    MOUSE_WHEEL_DOWN
+    MOUSE_WHEEL_DOWN,
+    MOUSE_NO_BUTTON
   };
 
   enum Modifier {

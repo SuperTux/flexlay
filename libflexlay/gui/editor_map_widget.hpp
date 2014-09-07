@@ -92,8 +92,6 @@ protected:
 
   void paintGL() override
   {
-    std::cout << "Paint" << std::endl;
-
     QPainter painter;
     painter.begin(this);
 

@@ -57,8 +57,6 @@ Workspace::draw(GraphicContext& gc)
   {
     assert(impl.get());
 
-    gc.clear(Color(100, 0, 100));
-
     impl->editor_map.draw_gui(gc);
     impl->editor_map.draw(gc);
 

@@ -146,7 +146,7 @@ class SuperTuxGUI
   def create_menu()
     @menubar = @gui.create_menubar()
 
-    file_menu = @menubar.add_menu("File")
+    file_menu = @menubar.add_menu("&File")
     file_menu.add_item("New...", method(:gui_level_new))
     file_menu.add_item("Open...", method(:gui_level_load))
     @recent_files_menu = file_menu.add_menu("Open Recent")
@@ -156,17 +156,22 @@ class SuperTuxGUI
     file_menu.add_item("Properties...", method(:gui_edit_level))
     file_menu.add_item("Quit",  proc{ @gui.quit })
     
-    edit_menu = @menubar.add_menu("Edit");
+    edit_menu = @menubar.add_menu("&Edit");
     edit_menu.add_item("Smooth Selection", method(:gui_smooth_level_struct))
     edit_menu.add_item("Resize", method(:gui_resize_level))
     edit_menu.add_item("Resize to selection", method(:gui_resize_level_to_selection))
     
-    zoom_menu = @menubar.add_menu("Zoom");
+    zoom_menu = @menubar.add_menu("&Zoom");
     zoom_menu.add_item("1:4 (25%) ",  proc{ self.gui_set_zoom(0.25) })
     zoom_menu.add_item("1:2 (50%) ",  proc{ self.gui_set_zoom(0.5) })
     zoom_menu.add_item("1:1 (100%) ", proc{ self.gui_set_zoom(1.0) }) 
     zoom_menu.add_item("2:1 (200%) ", proc{ self.gui_set_zoom(2.0) })
     zoom_menu.add_item("4:1 (400%) ", proc{ self.gui_set_zoom(4.0) })
+
+    layer_menu = @menubar.add_menu("&Layer");
+    layer_menu.add_item("Show all", proc{ gui_show_all() })
+    layer_menu.add_item("Show current", proc{ gui_show_current() })
+    layer_menu.add_item("Show only current", proc{ gui_show_only_current() })
   end
 
   def create_button_panel()
@@ -207,14 +212,6 @@ class SuperTuxGUI
     @background_icon = button_panel.add_icon("../data/images/icons24/background.png", proc{ gui_show_background() })
     @interactive_icon = button_panel.add_icon("../data/images/icons24/interactive.png", proc{ gui_show_interactive() })
     @foreground_icon = button_panel.add_icon("../data/images/icons24/foreground.png", proc{ gui_show_foreground() })
-    @eye_icon = button_panel.add_icon("../data/images/icons24/eye.png", proc{ @layer_menu.run() })
-
-    if false # GRUMBEL
-      @layer_menu = Menu.new(Point.new(32*15+2, 54), @gui.get_component())
-      @layer_menu.add_item($mysprite, "Show all", proc{ gui_show_all() })
-      @layer_menu.add_item($mysprite, "Show current", proc{ gui_show_current() })
-      @layer_menu.add_item($mysprite, "Show only current", proc{ gui_show_only_current() })
-    end
 
     button_panel.add_separator()
     @sector_icon = button_panel.add_icon("../data/images/icons24/sector.png", proc{ gui_switch_sector_menu() })
@@ -260,23 +257,25 @@ class SuperTuxGUI
   #   end
 
   def show_objects()
-    @tileselector.show(false)
-    if $use_worldmap
-      @worldmapobjectselector.show(true)
-      @objectselector.show(false)
-    else
-      @worldmapobjectselector.show(false)
-      @objectselector.show(true)
+    if false # GRUMBEL
+      @tileselector.show(false)
+      if $use_worldmap
+        @worldmapobjectselector.show(true)
+        @objectselector.show(false)
+      else
+        @worldmapobjectselector.show(false)
+        @objectselector.show(true)
+      end
+      #    @colorpicker.show(false)
     end
-    #    @colorpicker.show(false)
   end
 
   def show_tiles()
     if false # GRUMBEL
-    @tileselector.show(true)        
-    @objectselector.show(false)
-    @worldmapobjectselector.show(false)
-    #    @colorpicker.show(false)
+      @tileselector.show(true)        
+      @objectselector.show(false)
+      @worldmapobjectselector.show(false)
+      #    @colorpicker.show(false)
     end
   end
 
@@ -310,6 +309,7 @@ class SuperTuxGUI
 
   def set_zoom_tool()
     @workspace.set_tool(0, $zoom_tool.to_tool())
+    @workspace.set_tool(1, $zoom_tool.to_tool())
     @paint.set_up()
     @select.set_up()
     @zoom.set_down()

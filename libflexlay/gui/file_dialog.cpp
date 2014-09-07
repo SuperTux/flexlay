@@ -17,6 +17,7 @@
 #include "gui/file_dialog.hpp"
 
 #include <QFileDialog>
+#include <iostream>
 
 #include "math/rect.hpp"
 
@@ -24,8 +25,9 @@ FileDialog::FileDialog(const std::string& title,
                        const std::string& ok_label,
                        const std::string& cancel_label) :
   m_callback(),
-  m_file_dialog()
+  m_file_dialog(new QFileDialog())
 {
+  m_file_dialog->setFileMode(QFileDialog::ExistingFile);
 }
 
 FileDialog::~FileDialog()
@@ -46,27 +48,17 @@ FileDialog::get_filename() const
 void
 FileDialog::run(std::function<void(std::string)> func)
 {
-#ifdef GRUMBEL
   m_callback = func;
-  m_inputbox->set_focus();
-  m_window->show();
-#endif
-}
-
-void
-FileDialog::on_ok()
-{
-#ifdef GRUMBEL
   if (m_callback)
   {
-    m_callback(m_inputbox->get_text());
+    QObject::connect(m_file_dialog, &QFileDialog::fileSelected, [this](const QString& filename)
+                     {
+                       std::cout << "FileDialog callback called: " << filename.toStdString() << std::endl;
+                       m_callback(filename.toStdString());
+                     });
   }
-#endif
-}
 
-void
-FileDialog::on_cancel()
-{
+  m_file_dialog->show();
 }
 
 /* EOF */

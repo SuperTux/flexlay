@@ -37,8 +37,6 @@ public:
   void set_filename(const std::string& filename);
   std::string get_filename() const;
   void run(std::function<void(std::string)> func);
-  void on_ok();
-  void on_cancel();
 
 private:
   FileDialog(const FileDialog&);

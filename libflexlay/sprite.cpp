@@ -16,5 +16,117 @@
 
 #include "sprite.hpp"
 
+#include <QPainter>
+#include <iostream>
 
+#include "graphic_context.hpp"
+#include "pixel_buffer.hpp"
+
+class SpriteImpl
+{
+public:
+  PixelBuffer buffer;
+};
+
+Sprite::Sprite() :
+  m_impl()
+{}
+
+Sprite::Sprite(const std::string& filename) :
+  m_impl(new SpriteImpl)
+{
+  m_impl->buffer = PixelBuffer::from_file(filename);
+}
+
+Sprite::Sprite(const PixelBuffer& buffer) :
+  m_impl(new SpriteImpl)
+{
+  m_impl->buffer = buffer;
+}
+
+void
+Sprite::draw(float x, float y, GraphicContext& gc)
+{
+  std::cout << "Sprite::draw: " << x << " " << y << " isNull:" << m_impl->buffer.get_qimage().isNull() << std::endl;
+  QPainter& painter = gc.get_qt_painter();
+  painter.drawImage(QPoint(x, y), m_impl->buffer.get_qimage());
+}
+
+int
+Sprite::get_width() const
+{
+  return m_impl->buffer.get_width();
+}
+
+int
+Sprite::get_height() const
+{
+  return m_impl->buffer.get_height();
+}
+
+void
+Sprite::set_scale(float x, float y)
+{
+  //m_sprite.set_scale(x, y);
+}
+
+void
+Sprite::set_blend_func(BlendFunc src, BlendFunc dest)
+{
+  //m_sprite.set_blend_func(src, dest);
+}
+
+void
+Sprite::set_blend_func_separate(BlendFunc src, BlendFunc dest,
+                                BlendFunc src_alpha, BlendFunc dest_alpha)
+{
+  //m_sprite.set_blend_func_separate(src, dest, src_alpha, dest_alpha);
+}
+
+void
+Sprite::set_color(const Color& color)
+{
+  //m_sprite.set_color(color.to_cl());
+}
+
+void
+Sprite::set_alpha(float alpha)
+{
+  //m_sprite.set_alpha(alpha);
+}
+
+void
+Sprite::set_alignment(Origin origin, int x, int y)
+{
+  //m_sprite.set_alignment(origin, x, y);
+}
+
+void
+Sprite::set_angle(float angle)
+{
+  //m_sprite.set_angle(angle);
+}
+
+void
+Sprite::get_alignment(Origin& origin, int& x, int& y) const
+{
+  //m_sprite.get_alignment(origin, x, y);
+}
+
+void
+Sprite::get_scale(float& x, float& y) const
+{
+  //m_sprite.get_scale(x, y);
+}
+
+void
+Sprite::add_frame(Surface surface, const Rect& rect)
+{
+  //m_sprite.add_frame(surface.to_cl(), rect.to_cl());
+}
+
+Sprite::operator bool() const
+{
+  return true;
+}
 /* EOF */

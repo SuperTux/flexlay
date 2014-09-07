@@ -42,6 +42,8 @@ public:
 
   void flush();
 
+  QPainter& get_qt_painter() { return m_painter; }
+
 private:
   GraphicContextState& m_state;
   QPainter& m_painter;

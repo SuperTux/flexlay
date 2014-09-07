@@ -26,57 +26,30 @@ PixelBufferCache pixelbuffer_cache;
 
 PixelBuffer get_pixelbuffer(const std::string& filename)
 {
-#ifdef GRUMBEL
   PixelBufferCache::iterator it = pixelbuffer_cache.find(filename);
 
   if (it == pixelbuffer_cache.end())
-    return (pixelbuffer_cache[filename] = CL_ProviderFactory::load(filename));
+    return (pixelbuffer_cache[filename] = PixelBuffer::from_file(filename));
   else
     return it->second;
-#endif
-  return {};
 }
 
 Sprite
 pixelbuffer2sprite(const PixelBuffer& buffer)
 {
-#ifdef GRUMBEL
-  CL_SpriteDescription desc;
-  desc.add_frame(buffer.to_cl());
-  return Sprite(desc);
-#else
-  return Sprite();
-#endif
+  return Sprite(buffer);
 }
 
 Sprite
 make_sprite(const std::string& filename)
 {
-#ifdef GRUMBEL
-  try {
-    CL_SpriteDescription desc;
-    desc.add_frame(get_pixelbuffer(filename).to_cl());
-    return Sprite(desc);
-  } catch (const CL_Error& err) {
-    std::cout << "CL_Error: " << err.message << std::endl;
-    return Sprite();
-  }
-#endif
-  return Sprite();
+  return Sprite(filename);
 }
 
 PixelBuffer
 make_pixelbuffer(const std::string& filename)
 {
-#ifdef GRUMBEL
-  try {
-    return get_pixelbuffer(filename);
-  } catch (const CL_Error& err) {
-    std::cout << "CL_Error: " << err.message << std::endl;
-    return PixelBuffer();
-  }
-#endif
-  return {};
+  return get_pixelbuffer(filename);
 }
 
 PixelBuffer
@@ -107,16 +80,7 @@ make_sprite_from_resource(const std::string& filename)
 PixelBuffer
 make_pixelbuffer_from_resource(const std::string& filename)
 {
-#ifdef GRUMBEL
-  try {
-    CL_SpriteDescription descr(filename, &resources);
-    return PixelBuffer(descr.get_frames().begin()->first);
-  } catch (const CL_Error& err) {
-    std::cout << "CL_Error: " << err.message << std::endl;
-    return PixelBuffer();
-  }
-#endif
-  return PixelBuffer();
+  return get_pixelbuffer(filename);
 }
 
 PixelBuffer
@@ -128,19 +92,11 @@ make_pixelbuffer(int width, int height)
 PixelBuffer
 make_region_pixelbuffer(const PixelBuffer& buffer, int x, int y, int w, int h)
 {
-#ifdef GRUMBEL
-  try {
-    PixelBuffer target(w, h);
-    clear(target);
-    blit_opaque(target, buffer, -x, -y);
+  PixelBuffer target(w, h);
+  clear(target);
+  blit_opaque(target, buffer, -x, -y);
 
-    return target;
-  } catch (const CL_Error& err) {
-    std::cout << "CL_Error: " << err.message << std::endl;
-    return PixelBuffer();
-  }
-#endif
-  return {};
+  return target;
 }
 
 PixelBuffer

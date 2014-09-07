@@ -47,7 +47,7 @@ ObjMapSpriteObject::ObjMapSpriteObject(const Sprite& sprite_,
 void
 ObjMapSpriteObjectImpl::draw(GraphicContext& gc)
 {
-  sprite.draw(pos.x, pos.y);
+  sprite.draw(pos.x, pos.y, gc);
 }
 
 Rectf

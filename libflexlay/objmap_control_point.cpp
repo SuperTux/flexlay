@@ -53,7 +53,7 @@ ObjMapControlPoint::draw(GraphicContext& gc)
 void
 ObjMapControlPointImpl::draw(GraphicContext& gc)
 {
-  sprite.draw(static_cast<int>(pos.x), static_cast<int>(pos.y));
+  sprite.draw(static_cast<int>(pos.x), static_cast<int>(pos.y), gc);
 }
 
 void

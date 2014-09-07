@@ -30,6 +30,7 @@ PixelBuffer scale_pixelbuffer(PixelBuffer buffer);
 
 Sprite make_sprite_from_resource(const std::string& filename);
 PixelBuffer make_pixelbuffer_from_resource(const std::string& filename);
+
 #endif
 
 /* EOF */

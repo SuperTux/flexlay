@@ -17,14 +17,20 @@
 #ifndef HEADER_PIXEL_BUFFER_HPP
 #define HEADER_PIXEL_BUFFER_HPP
 
+#include <memory>
+#include <string>
+
+class PixelBufferImpl;
+class QImage;
+
 class PixelBuffer
 {
 public:
-  PixelBuffer()
-  {}
+  static PixelBuffer from_file(const std::string& filename);
 
-  PixelBuffer(int width, int height)
-  {}
+public:
+  PixelBuffer();
+  PixelBuffer(int width, int height);
 
 #ifdef GRUMBEL
   CL_PixelFormat get_format() const { return m_pixelbuffer.get_format(); }
@@ -32,20 +38,21 @@ public:
   CL_Palette get_palette() const { return m_pixelbuffer.get_palette(); }
 #endif
 
-  void lock() { }
-  void unlock() { }
+void lock();
+void unlock();
 
-  int get_width() const { return 0; } ////m_pixelbuffer.get_width(); }
-  int get_height() const { return  0; } ////m_pixelbuffer.get_height(); }
-  int get_pitch() const { return  0; } ////m_pixelbuffer.get_pitch(); }
+  int get_width() const;
+  int get_height() const;
+  int get_pitch() const;
 
-  void* get_data() { return  nullptr; } ////m_pixelbuffer.get_data(); }
+  void* get_data();
 
-  explicit operator bool() { return true;
-#ifdef GRUMBEL
-    m_pixelbuffer; 
-#endif
-  }
+  explicit operator bool() { return static_cast<bool>(m_impl); }
+
+  QImage& get_qimage();
+
+private:
+  std::shared_ptr<PixelBufferImpl> m_impl;
 };
 
 #endif

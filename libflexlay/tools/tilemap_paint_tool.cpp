@@ -103,7 +103,7 @@ TileMapPaintToolImpl::draw(GraphicContext& gc)
             Sprite sprite = tile->get_sprite();
             sprite.set_alpha(0.5f);
             sprite.draw((current_tile.x + x) * tile_size,
-                        (current_tile.y + y) * tile_size);
+                        (current_tile.y + y) * tile_size, gc);
 
             gc.fill_rect(Rect(Point((current_tile.x + x) * tile_size,
                                     (current_tile.y + y) * tile_size),

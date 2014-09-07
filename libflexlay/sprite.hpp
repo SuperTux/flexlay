@@ -17,91 +17,40 @@
 #ifndef HEADER_SPRITE_HPP
 #define HEADER_SPRITE_HPP
 
+#include <memory>
+
 #include "color.hpp"
 #include "surface.hpp"
 
+class GraphicContext;
+class SpriteImpl;
+
 class Sprite
 {
-private:
-  //CL_Sprite m_sprite;
-
 public:
-  Sprite()
-  {}
+  Sprite();
+  Sprite(const PixelBuffer& buffer);
+  Sprite(const std::string& name);
 
-  Sprite(const std::string& name)
-  {}
-
-  void draw(float x, float y)
-  {
-    //m_sprite.draw(x, y, gc);
-  }
-
-  int get_width() const
-  {
-    return 0; //m_sprite.get_width();
-  }
-
-  int get_height() const
-  {
-    return 0; //m_sprite.get_height();
-  }
-
-  void set_scale(float x, float y)
-  {
-    //m_sprite.set_scale(x, y);
-  }
-
-  void set_blend_func(BlendFunc src, BlendFunc dest)
-  {
-    //m_sprite.set_blend_func(src, dest);
-  }
-
+  void draw(float x, float y, GraphicContext& gc);
+  int get_width() const;
+  int get_height() const;
+  void set_scale(float x, float y);
+  void set_blend_func(BlendFunc src, BlendFunc dest);
   void set_blend_func_separate(BlendFunc src, BlendFunc dest,
-                               BlendFunc src_alpha, BlendFunc dest_alpha)
-  {
-    //m_sprite.set_blend_func_separate(src, dest, src_alpha, dest_alpha);
-  }
+                               BlendFunc src_alpha, BlendFunc dest_alpha);
+  void set_color(const Color& color);
+  void set_alpha(float alpha);
+  void set_alignment(Origin origin, int x = 0, int y = 0);
+  void set_angle(float angle);
+  void get_alignment(Origin& origin, int& x, int& y) const;
+  void get_scale(float& x, float& y) const;
+  void add_frame(Surface surface, const Rect& rect = Rect(0,0,0,0));
 
-  void set_color(const Color& color)
-  {
-    //m_sprite.set_color(color.to_cl());
-  }
+  explicit operator bool() const;
 
-  void set_alpha(float alpha)
-  {
-    //m_sprite.set_alpha(alpha);
-  }
-
-  void set_alignment(Origin origin, int x = 0, int y = 0)
-  {
-    //m_sprite.set_alignment(origin, x, y);
-  }
-
-  void set_angle(float angle)
-  {
-    //m_sprite.set_angle(angle);
-  }
-
-  void get_alignment(Origin& origin, int& x, int& y) const
-  {
-    //m_sprite.get_alignment(origin, x, y);
-  }
-
-  void get_scale(float& x, float& y) const
-  {
-    //m_sprite.get_scale(x, y);
-  }
-
-  void add_frame(Surface surface, const Rect& rect = Rect(0,0,0,0))
-  {
-    //m_sprite.add_frame(surface.to_cl(), rect.to_cl());
-  }
-
-  explicit operator bool() const
-  {
-    return true;
-  }
+private:
+  std::shared_ptr<SpriteImpl> m_impl;
 };
 
 #endif

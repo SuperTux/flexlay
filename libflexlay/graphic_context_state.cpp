@@ -61,14 +61,12 @@ GraphicContextState::push(GraphicContext& gc) const
 {
   gc.push_modelview();
 
-#ifdef GRUMBEL
-  gc.add_translate(impl->width/2, impl->height/2);
-  gc.add_rotate(impl->rotation, 0, 0, 1.0);
-  gc.add_translate(-impl->width/2, -impl->height/2);
+  gc.translate(impl->width/2, impl->height/2);
+  gc.rotate(impl->rotation);
+  gc.translate(-impl->width/2, -impl->height/2);
 
-  gc.add_scale(get_zoom(), get_zoom());
-#endif
-  gc.add_translate(impl->offset.x, impl->offset.y);
+  gc.scale(get_zoom(), get_zoom());
+  gc.translate(impl->offset.x, impl->offset.y);
 }
 
 void

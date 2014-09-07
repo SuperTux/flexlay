@@ -69,10 +69,24 @@ GraphicContext::pop_modelview()
 }
 
 void
-GraphicContext::add_translate(float x, float y)
+GraphicContext::translate(float x, float y)
 {
   m_painter.setViewTransformEnabled(true);
   m_painter.translate(x, y);
+}
+
+void
+GraphicContext::scale(float x, float y)
+{
+  m_painter.setViewTransformEnabled(true);
+  m_painter.scale(x, y);
+}
+
+void
+GraphicContext::rotate(float angle)
+{
+  m_painter.setViewTransformEnabled(true);
+  m_painter.rotate(angle);
 }
 
 Rectf

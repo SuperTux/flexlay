@@ -36,7 +36,9 @@ public:
 
   void push_modelview();
   void pop_modelview();
-  void add_translate(float x, float y);
+  void translate(float x, float y);
+  void scale(float x, float y);
+  void rotate(float angle);
 
   Rectf get_clip_rect() const;
 

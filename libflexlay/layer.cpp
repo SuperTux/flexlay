@@ -41,7 +41,7 @@ Layer::draw(GraphicContext& gc)
     if (impl->pos.x != 0 || impl->pos.y != 0)
     {
       gc.push_modelview();
-      gc.add_translate(impl->pos.x, impl->pos.y);
+      gc.translate(impl->pos.x, impl->pos.y);
       impl->draw(gc);
       gc.pop_modelview();
     }

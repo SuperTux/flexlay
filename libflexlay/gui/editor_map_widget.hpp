@@ -105,11 +105,6 @@ protected:
     workspace.draw(gc);
     m_comp.get_gc_state().pop(gc);
 
-    painter.rotate(10.0f);
-    painter.translate(100, 100);
-
-    painter.fillRect(QRect(50, 50, 50, 50), QColor(255, 255, 255));
-
     painter.end();
   }
 

@@ -32,8 +32,6 @@ require_relative "level.rb"
 require_relative "gameobjects.rb"
 require_relative "gui.rb"
 
-$screen  = Size.new(640, 480)
-
 $flexlay = Flexlay.new()
 if ENV["FLEXLAY_DATADIR"] then
   $flexlay.set_datadir(ENV["FLEXLAY_DATADIR"])
@@ -42,7 +40,7 @@ else
   $flexlay.set_datadir("../data/")
   $flexlay_datadir = "../data/"
 end
-$flexlay.init("netPanzer Editor", $screen.width, $screen.height, false, true)
+$flexlay.init("netPanzer Editor")
 
 class NetPanzerConfig
   attr_accessor :datadir, :recent_files
@@ -72,9 +70,8 @@ $tileset = NetPanzerData::instance().get_tileset()
 
 if ENV["NETPANZER_EDITOR_DATADIR"] then
   $config.datadir = ENV["NETPANZER_EDITOR_DATADIR"]
-  $resources = CL_ResourceManager.new(ENV["NETPANZER_EDITOR_DATADIR"] + "/netpanzersprites.xml")
 else
-  $resources = CL_ResourceManager.new("netpanzersprites.xml")
+  $config.datadir = "."
 end
 
 # Tools

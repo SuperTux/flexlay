@@ -18,11 +18,12 @@
 import os
 
 env = Environment(ENV = os.environ)
+env.ParseConfig("pkg-config --cflags --libs Qt5Gui")
 env.ParseConfig("pkg-config --cflags --libs ruby-1.9")
 env.Append(
-    CPPPATH = ["../lib/"],
-    CXXFLAGS = ["-g", "-O2", "-Wall", "-fPIC", "-std=c++11"],
-    LIBPATH = ["../lib", "../ruby"],
+    CPPPATH = ["../libflexlay/"],
+    CXXFLAGS = ["-g", "-O2", "-Wall", "-Wunused-but-set-variable", "-fPIC", "-std=c++11"],
+    LIBPATH = ["../libflexlay", "../ruby"],
     LIBS = ["flexlay"],
     SWIGFLAGS = ["-ruby", "-c++"])
 env.Replace(SHLIBPREFIX = "")

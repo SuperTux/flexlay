@@ -81,7 +81,7 @@ public:
 
   boost::signals2::signal<void ()>& sig_change();
 
-  bool is_null() const { return !impl.get(); }
+  explicit operator bool() const { return static_cast<bool>(impl); }
 
 private:
   std::shared_ptr<EditorMapImpl> impl;

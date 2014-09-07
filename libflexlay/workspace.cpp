@@ -53,21 +53,24 @@ Workspace::Workspace(bool create) :
 void
 Workspace::draw(GraphicContext& gc)
 {
-  assert(impl.get());
-
-  gc.clear(Color(100, 0, 100));
-
-  impl->editor_map.draw_gui(gc);
-  impl->editor_map.draw(gc);
-
-  // FIXME: Only draw active tool?!
-  for(WorkspaceImpl::Tools::iterator it = impl->tools.begin();
-      it != impl->tools.end(); ++it)
+  if (impl->editor_map)
   {
-    it->second.draw(gc);
-  }
+    assert(impl.get());
 
-  gc.flush();
+    gc.clear(Color(100, 0, 100));
+
+    impl->editor_map.draw_gui(gc);
+    impl->editor_map.draw(gc);
+
+    // FIXME: Only draw active tool?!
+    for(WorkspaceImpl::Tools::iterator it = impl->tools.begin();
+        it != impl->tools.end(); ++it)
+    {
+      it->second.draw(gc);
+    }
+
+    gc.flush();
+  }
 }
 
 void

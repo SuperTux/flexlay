@@ -19,12 +19,12 @@
 
 #include <string>
 
-#include "../lib/palette.hpp"
-#include "../lib/pixel_buffer.hpp"
-#include "../lib/sprite.hpp"
-#include "../lib/surface.hpp"
-#include "../lib/tilemap_layer.hpp"
-#include "../lib/tileset.hpp"
+#include "../libflexlay/palette.hpp"
+#include "../libflexlay/pixel_buffer.hpp"
+#include "../libflexlay/sprite.hpp"
+#include "../libflexlay/surface.hpp"
+#include "../libflexlay/tilemap_layer.hpp"
+#include "../libflexlay/tileset.hpp"
 
 void load_netpanzer_tileset(Tileset tileset, const char* filename);
 

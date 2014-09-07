@@ -28,6 +28,9 @@
 #include "workspace.hpp"
 #include "tools/objmap_select_tool.hpp"
 #include "tools/workspace_move_tool.hpp"
+#include "tools/tilemap_paint_tool.hpp"
+#include "tile.hpp"
+#include "tile_brush.hpp"
 
 int main()
 {
@@ -38,7 +41,13 @@ int main()
 
   EditorMap m(true);
   Tileset tileset(32);
+tileset.add_tile(0, new Tile(PixelBuffer::from_file("resize1"),
+                               Sprite(PixelBuffer::from_file("resize1"))));
+tileset.add_tile(1, new Tile(PixelBuffer::from_file("resize_vert"),
+                               Sprite(PixelBuffer::from_file("resize_vert"))));
+
   TilemapLayer tilemap(tileset, 20, 10);
+  tilemap.set_draw_grid(true);
   ObjectLayer object_layer;
   m.add_layer(tilemap.to_layer());
   m.add_layer(object_layer.to_layer());
@@ -65,8 +74,14 @@ int main()
 
   WorkspaceMoveTool workspace_move_tool;
   ObjMapSelectTool objtool;
+  TileMapPaintTool tilemap_paint_tool;
+  TileBrush brush(1, 1);
+  brush.at(0, 0) = 1;
+  tilemap_paint_tool.set_brush(brush);
   workspace.set_tool(1, objtool.to_tool());
   workspace.set_tool(2, workspace_move_tool.to_tool());
+  workspace.set_tool(1, tilemap_paint_tool.to_tool());
+  workspace.set_tool(3, tilemap_paint_tool.to_tool());
 
   GenericDialog* dialog = gui.create_generic_dialog("Generic Dialog");
   dialog->add_int("An Int:", 5);

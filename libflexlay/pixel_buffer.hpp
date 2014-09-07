@@ -45,6 +45,8 @@ void unlock();
   int get_height() const;
   int get_pitch() const;
 
+  int get_depth() const;
+
   void* get_data();
 
   explicit operator bool() { return static_cast<bool>(m_impl); }

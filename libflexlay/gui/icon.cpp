@@ -40,29 +40,17 @@ public:
   boost::signals2::signal<void ()> sig_on_click;
 
   void draw();
-
-#ifdef GRUMBEL
-  void mouse_up  (const CL_InputEvent& event);
-  void mouse_down(const CL_InputEvent& event);
-  void mouse_move(const CL_InputEvent& event);
-#endif
 };
 
 Icon::Icon(const Rect& rect, const Sprite& sprite, const std::string& tooltip) :
   impl(new IconImpl(this))
 {
-#ifdef GRUMBEL
   impl->sprite       = sprite;
   impl->tooltip      = tooltip;
   impl->draw_tooltip = true;
   impl->down         = false;
   impl->is_down      = false;
   impl->is_enabled   = true;
-
-  impl->slots.push_back(sig_paint().connect(impl.get(), &IconImpl::draw));
-  impl->slots.push_back(sig_mouse_down().connect(impl.get(), &IconImpl::mouse_down));
-  impl->slots.push_back(sig_mouse_up().connect(impl.get(),   &IconImpl::mouse_up));
-#endif
 }
 
 boost::signals2::signal<void ()>&

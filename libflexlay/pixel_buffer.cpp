@@ -89,6 +89,12 @@ PixelBuffer::get_pitch() const
   return m_impl->image.bytesPerLine();
 }
 
+int
+PixelBuffer::get_depth() const
+{
+  return m_impl->image.depth();
+}
+
 void*
 PixelBuffer::get_data()
 {

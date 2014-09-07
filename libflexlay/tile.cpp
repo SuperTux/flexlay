@@ -120,11 +120,7 @@ Tile::get_sprite()
     }
     else
     {
-#ifdef GRUMBEL
-      CL_SpriteDescription desc;
-      desc.add_frame(PixelBuffer(get_pixelbuffer()).to_cl());
-      impl->sprite = Sprite(desc);
-#endif
+      impl->sprite = Sprite(get_pixelbuffer());
     }
 
     return impl->sprite;
@@ -134,7 +130,6 @@ Tile::get_sprite()
 PixelBuffer
 Tile::get_pixelbuffer()
 {
-#ifdef GRUMBEL
   if (impl->pixelbuffer)
   {
     return impl->pixelbuffer;
@@ -148,37 +143,33 @@ Tile::get_pixelbuffer()
     }
     else
     {
-      // FIXME: Move all this into a special provider
-
-      try {
+      try
+      {
         if (has_suffix(impl->filename, ".png") || has_suffix(impl->filename, ".jpg"))
         {
-          impl->pixelbuffer = PixelBuffer(CL_ProviderFactory::load(impl->filename));
+          impl->pixelbuffer = PixelBuffer::from_file(impl->filename);
         }
         else
         {
-          //SpriteDescription descr(impl->filename, resources);
-          //impl->pixelbuffer = PixelBuffer(*(descr.get_frames().begin()->first));
           std::cout << "Error: not a png or jpg file: " << impl->filename << std::endl;
           assert(0);
         }
         return impl->pixelbuffer;
 
-      } catch(const CL_Error& err) {
-        std::cout << "CL_Error: " << err.message << std::endl;
+      }
+      catch(const std::exception& err)
+      {
+        std::cout << "Error: " << err.what() << std::endl;
         std::cout << "          filename = " << impl->filename << std::endl;
         return PixelBuffer();
       }
     }
   }
-#endif
-  return {};
 }
 
 Color
 Tile::calc_color()
 {
-#ifdef GRUMBEL
   PixelBuffer buffer = get_pixelbuffer();
   buffer.lock();
   unsigned char* buf = static_cast<unsigned char*>(buffer.get_data());
@@ -189,8 +180,9 @@ Tile::calc_color()
   int blue  = 0;
   int alpha = 0;
 
-  switch (buffer.get_format().get_depth())
+  switch (buffer.get_depth())
   {
+#ifdef GRUMBEL
     case 8:
     {
       CL_Palette palette = buffer.get_palette();
@@ -202,6 +194,7 @@ Tile::calc_color()
         alpha += 255;
       }
     }
+#endif
     break;
     case 24:
       for(int i = 0; i < len; ++i)
@@ -230,8 +223,6 @@ Tile::calc_color()
                   static_cast<int>(green / len),
                   static_cast<int>(blue  / len),
                   static_cast<int>(alpha / len));
-#endif
-  return {};
 }
 
 bool

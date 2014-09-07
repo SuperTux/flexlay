@@ -28,20 +28,13 @@ ObjectSelector::ObjectSelector(const Rect& rect,
   width(rect.get_width()/obj_w), height(rect.get_height()/obj_h),
   obj_width(obj_w), obj_height(obj_h)
 {
-#ifdef GRUMBEL
   index = 0;
-
-  slots.push_back(sig_paint().connect(this, &ObjectSelector::draw));
-  slots.push_back(sig_mouse_move().connect(this, &ObjectSelector::mouse_move));
-  slots.push_back(sig_mouse_down().connect(this, &ObjectSelector::mouse_down));
-  slots.push_back(sig_mouse_up().connect(this, &ObjectSelector::mouse_up));
 
   mouse_over_tile = -1;
   scrolling = false;
   offset = 0;
   scale = 1.0f;
   drag_obj = -1;
-#endif
 }
 
 ObjectSelector::~ObjectSelector()

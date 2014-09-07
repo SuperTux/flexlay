@@ -105,9 +105,9 @@ return editor;
 }
 
 Minimap*
-GUIManager::create_minimap(EditorMapComponent* parent, const Rect& rect)
+GUIManager::create_minimap(EditorMapComponent* parent)
 {
-  return new Minimap(parent, rect);
+  return new Minimap(parent);
 }
 
 FileDialog*

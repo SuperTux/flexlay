@@ -50,11 +50,7 @@ require "sexpr.rb"
 require_relative "gameobj.rb"
 
 flexlay = Flexlay.new()
-width  = 1024
-height = 768
-fullscreen = false
-resizeable = true
-flexlay.init("SuperTux Editor", width, height, fullscreen, resizeable)
+flexlay.init("SuperTux Editor")
 
 # Tools
 $tilemap_paint_tool  = TileMapPaintTool.new()
@@ -115,14 +111,16 @@ $tileset = Tileset.new(32)
 $tileset.load($datadir + "images/tiles.strf")
 $tileset.create_ungrouped_tiles_group()
 
-$gui = SuperTuxGUI.new(width, height)
+$gui = SuperTuxGUI.new()
 
 if !$recent_files then
   $recent_files = []
 end
 
-$recent_files.each do |filename|
-  $gui.recent_files_menu.add_item($mysprite, filename, proc{ supertux_load_level(filename) })
+if false # GRUMBEL
+  $recent_files.each do |filename|
+    $gui.recent_files_menu.add_item($mysprite, filename, proc{ supertux_load_level(filename) })
+  end
 end
 
 if ARGV == []

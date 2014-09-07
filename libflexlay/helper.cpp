@@ -55,20 +55,12 @@ make_pixelbuffer(const std::string& filename)
 PixelBuffer
 make_region_pixelbuffer_from_resource(const std::string& filename, int x, int y, int w, int h)
 {
-  try
-  {
-    PixelBuffer buffer = get_pixelbuffer(filename);
-    PixelBuffer target(w, h);
-    clear(target);
-    blit_opaque(target, buffer, -x, -y);
+  PixelBuffer buffer = get_pixelbuffer(filename);
+  PixelBuffer target(w, h);
+  clear(target);
+  blit_opaque(target, buffer, -x, -y);
 
-    return target;
-  }
-  catch (const std::exception& err)
-  {
-    std::cout << "Error: " << err.what() << std::endl;
-    return PixelBuffer();
-  }
+  return target;
 }
 
 Sprite

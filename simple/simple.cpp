@@ -66,12 +66,12 @@ int main()
   ButtonPanel* buttons = gui.create_button_panel(true);
   
   Menubar* menubar = gui.create_menubar();
-  Menu file_menu = menubar->add_menu("File");
+  Menu file_menu = menubar->add_menu("&File");
   file_menu.add_item("Open...", []{ std::cout << "Open" << std::endl; });
   file_menu.add_item("Save...", []{ std::cout << "Save" << std::endl; });
   file_menu.add_item("Quit...", []{ std::cout << "Quit" << std::endl; });
 
-  Menu view_menu = menubar->add_menu("View");
+  Menu view_menu = menubar->add_menu("&View");
   view_menu.add_item("Zoom In", []{  std::cout << "Zoom In" << std::endl; });
   view_menu.add_item("Zoom Out", []{ std::cout << "Zoom Out" << std::endl; });
   view_menu.add_item("Reset Zoom", []{ std::cout << "Reset Zoom" << std::endl; });
@@ -92,12 +92,12 @@ int main()
   workspace.set_tool(1, tilemap_paint_tool.to_tool());
   workspace.set_tool(3, tilemap_paint_tool.to_tool());
 
-  buttons->add_icon("ObjectTool", [&]{
+  buttons->add_text("ObjectTool", [&]{
       workspace.set_tool(1, objtool.to_tool());
       workspace.set_tool(2, workspace_move_tool.to_tool());
       workspace.set_tool(3, Tool());
     });
-  buttons->add_icon("TileTool", [&]{
+  buttons->add_text("TileTool", [&]{
       workspace.set_tool(1, tilemap_paint_tool.to_tool());
       workspace.set_tool(2, workspace_move_tool.to_tool());
       workspace.set_tool(3, tilemap_paint_tool.to_tool());

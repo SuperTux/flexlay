@@ -16,12 +16,15 @@
 
 #include "gui/file_dialog.hpp"
 
+#include <QFileDialog>
+
 #include "math/rect.hpp"
 
 FileDialog::FileDialog(const std::string& title,
                        const std::string& ok_label,
                        const std::string& cancel_label) :
-  m_callback()
+  m_callback(),
+  m_file_dialog()
 {
 }
 

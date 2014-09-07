@@ -38,8 +38,8 @@ public:
   CL_Palette get_palette() const { return m_pixelbuffer.get_palette(); }
 #endif
 
-void lock();
-void unlock();
+  void lock();
+  void unlock();
 
   int get_width() const;
   int get_height() const;

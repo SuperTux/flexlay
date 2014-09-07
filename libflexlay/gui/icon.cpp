@@ -42,7 +42,12 @@ public:
   void draw();
 };
 
-Icon::Icon(const Rect& rect, const Sprite& sprite, const std::string& tooltip) :
+Icon::Icon() :
+  impl(new IconImpl(this))
+{
+}
+
+Icon::Icon(const Sprite& sprite, const std::string& tooltip) :
   impl(new IconImpl(this))
 {
   impl->sprite       = sprite;

@@ -17,7 +17,9 @@
 #include "pixel_buffer.hpp"
 
 #include <QImage>
+
 #include <iostream>
+#include <assert.h>
 
 class PixelBufferImpl
 {
@@ -26,16 +28,17 @@ public:
 };
 
 PixelBuffer
-PixelBuffer::from_file(const std::string& filename_)
+PixelBuffer::from_file(const std::string& filename)
 {
-  // FIXME: hack
-  std::string filename = "../data/images/icons16/" + filename_ + ".png";
-
   PixelBuffer buffer;
   buffer.m_impl.reset(new PixelBufferImpl);
   buffer.m_impl->image = QImage(filename.c_str());
-
   std::cout << "loading: " << filename << " -> " << buffer.m_impl->image.isNull() << std::endl;
+
+  if (buffer.m_impl->image.isNull())
+  {
+    assert(!"Failed to load image, fatal");
+  }
 
   return buffer;
 }
@@ -58,6 +61,7 @@ PixelBuffer::PixelBuffer(int width, int height) :
 QImage&
 PixelBuffer::get_qimage()
 {
+  assert(m_impl);
   return m_impl->image;  
 }
 
@@ -74,30 +78,35 @@ PixelBuffer::unlock()
 int
 PixelBuffer::get_width() const
 {
+  assert(m_impl);
   return m_impl->image.width(); 
 }
 
 int
 PixelBuffer::get_height() const
 { 
+  assert(m_impl);
   return m_impl->image.height(); 
-
 }
+
 int
 PixelBuffer::get_pitch() const
 {
+  assert(m_impl);
   return m_impl->image.bytesPerLine();
 }
 
 int
 PixelBuffer::get_depth() const
 {
+  assert(m_impl);
   return m_impl->image.depth();
 }
 
 void*
 PixelBuffer::get_data()
 {
+  assert(m_impl);
   return m_impl->image.bits();
 }
 

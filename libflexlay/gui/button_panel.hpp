@@ -32,10 +32,12 @@ private:
 public:
   ButtonPanel(QToolBar* toolbar);
 
-  Icon* add_icon(const std::string& name,
+  Icon* add_icon(const std::string& filename,
                  std::function<void ()> callback);
-
+  Icon* add_text(const std::string& text,
+                 std::function<void ()> callback);
   void add_separator();
+
   void show(bool visible);
 
 private:

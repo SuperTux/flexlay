@@ -32,7 +32,8 @@ EditorMapComponent* EditorMapComponent::current_ = 0;
 class EditorMapComponent;
 
 EditorMapComponent::EditorMapComponent(QWidget* parent) :
-  m_editormap_widget(new EditorMapWidget(*this, parent))
+  m_editormap_widget(new EditorMapWidget(*this, parent)),
+  m_workspace(1)
 {
   current_ = this;
 

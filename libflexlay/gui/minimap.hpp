@@ -29,7 +29,7 @@ protected:
   virtual ~Minimap() {}
 
 public:
-  Minimap(EditorMapComponent* p, const Rect& rect);
+  Minimap(EditorMapComponent* p);
 
   void draw();
   void update_minimap();

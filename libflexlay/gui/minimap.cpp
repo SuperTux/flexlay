@@ -31,9 +31,6 @@
 class MinimapImpl
 {
 public:
-#ifdef GRUMBEL
-  std::vector<CL_Slot> slots;
-#endif
   bool drag_active;
 
   int last_serial;
@@ -48,7 +45,7 @@ public:
   void update_minimap_surface();
 };
 
-Minimap::Minimap(EditorMapComponent* p, const Rect& rect) :
+Minimap::Minimap(EditorMapComponent* p) :
   impl(new MinimapImpl)
 {
 #ifdef GRUMBEL
@@ -56,11 +53,11 @@ Minimap::Minimap(EditorMapComponent* p, const Rect& rect) :
   impl->slots.push_back(sig_mouse_move().connect(this, &Minimap::mouse_move));
   impl->slots.push_back(sig_mouse_down().connect(this, &Minimap::mouse_down));
   impl->slots.push_back(sig_mouse_up().connect(this, &Minimap::mouse_up));
+#endif
 
   impl->parent = p ? p : EditorMapComponent::current();
   impl->drag_active = false;
   impl->last_serial = -1;
-#endif
 }
 
 void
@@ -219,7 +216,7 @@ Minimap::mouse_down(const CL_InputEvent& event)
 }
 
 void
-Minimap::mouse_up  (const CL_InputEvent& event)
+Minimap::mouse_up(const CL_InputEvent& event)
 {
   TilemapLayer tilemap = TilemapLayer::current();
   if (!tilemap.is_null())

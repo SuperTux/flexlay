@@ -30,7 +30,8 @@ class Icon
 protected:
   virtual ~Icon() {}
 public:
-  Icon(const Rect& rect, const Sprite& sprite, const std::string& tooltip);
+  Icon();
+  Icon(const Sprite& sprite, const std::string& tooltip);
 
   void disable();
   void enable();

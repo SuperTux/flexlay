@@ -20,10 +20,13 @@
 #include <string>
 #include <functional>
 
+class QFileDialog;
+
 class FileDialog
 {
 private:
   std::function<void (std::string)> m_callback;
+  QFileDialog* m_file_dialog;
 
 protected:
   virtual ~FileDialog();

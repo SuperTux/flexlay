@@ -95,24 +95,6 @@ VALUE Color2Value(const Color& arg)
  return SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_Color, 1);
 }
 
-VALUE Color2Value(const Color& arg)
-{
- Color* resultptr = new Color(arg);
- return SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_Color, 1);
-}
-
-VALUE Pointf2Value(const Pointf& arg)
-{
- Pointf* resultptr = new Pointf(arg);
- return SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_Pointf, 1);
-}
-
-VALUE Point2Value(const Point& arg)
-{
- Point* resultptr = new Point(arg);
- return SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_Point, 1);
-}
-
 VALUE Pointf2Value(const Pointf& arg)
 {
  Pointf* resultptr = new Pointf(arg);

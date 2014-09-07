@@ -58,24 +58,6 @@ class Icon
   end
 end
 
-class Menu
-  alias_method :orig_add_item, :add_item
-
-  def add_item(*params)
-    if params.length == 2 then
-      (text, func) = params
-      i = orig_add_item(text)
-    else
-      (sprite, text, func) = params
-      i = orig_add_item(sprite, text)
-    end
-
-    if func != nil
-      connect(sig_clicked(i), func)
-    end
-  end
-end
-
 class Menubar
   def Menubar.new_from_spec(menubarspec, parent)
     menu = Menubar.new(parent)

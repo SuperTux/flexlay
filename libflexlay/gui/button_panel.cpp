@@ -34,13 +34,27 @@ Icon*
 ButtonPanel::add_icon(const std::string& name,
                       std::function<void ()> callback)
 {
+  QAction* action = m_toolbar->addAction(QIcon(QString::fromStdString(name)), 
+                                         "Text");
+  if (callback)
+  {
+    QObject::connect(action, &QAction::triggered, callback);
+  }
+
+  return new Icon;
+}
+
+Icon*
+ButtonPanel::add_text(const std::string& name,
+                      std::function<void ()> callback)
+{
   QAction* action = m_toolbar->addAction(QString::fromStdString(name));
   if (callback)
   {
     QObject::connect(action, &QAction::triggered, callback);
   }
 
-  return nullptr;
+  return new Icon;
 }
 
 void

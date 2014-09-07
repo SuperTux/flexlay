@@ -17,7 +17,9 @@
 #include "sprite.hpp"
 
 #include <QPainter>
+
 #include <iostream>
+#include <assert.h>
 
 #include "graphic_context.hpp"
 #include "pixel_buffer.hpp"
@@ -26,6 +28,7 @@ class SpriteImpl
 {
 public:
   PixelBuffer buffer;
+  std::string filename;
 };
 
 Sprite::Sprite() :
@@ -36,31 +39,44 @@ Sprite::Sprite(const std::string& filename) :
   m_impl(new SpriteImpl)
 {
   m_impl->buffer = PixelBuffer::from_file(filename);
+  m_impl->filename = filename;
 }
 
 Sprite::Sprite(const PixelBuffer& buffer) :
   m_impl(new SpriteImpl)
 {
   m_impl->buffer = buffer;
+  m_impl->filename = "<PixelBuffer>";
 }
 
 void
 Sprite::draw(float x, float y, GraphicContext& gc)
 {
+  assert(m_impl);
   std::cout << "Sprite::draw: " << x << " " << y << " isNull:" << m_impl->buffer.get_qimage().isNull() << std::endl;
   QPainter& painter = gc.get_qt_painter();
-  painter.drawImage(QPoint(x, y), m_impl->buffer.get_qimage());
+  QImage img = m_impl->buffer.get_qimage();
+  if (img.isNull())
+  {
+    std::cout << "Error: Sprite: Empty PixelBuffer: " << m_impl->filename << std::endl;
+  }
+  else
+  {
+    painter.drawImage(QPoint(x, y), img);
+  }
 }
 
 int
 Sprite::get_width() const
 {
+  assert(m_impl);
   return m_impl->buffer.get_width();
 }
 
 int
 Sprite::get_height() const
 {
+  assert(m_impl);
   return m_impl->buffer.get_height();
 }
 
@@ -127,6 +143,6 @@ Sprite::add_frame(Surface surface, const Rect& rect)
 
 Sprite::operator bool() const
 {
-  return true;
+  return static_cast<bool>(m_impl);
 }
 /* EOF */

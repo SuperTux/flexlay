@@ -14,9 +14,11 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include <iostream>
-#include "flexlay_wrap.hpp"
 #include "ruby_functor.hpp"
+
+#include <iostream>
+
+#include "flexlay_wrap.hpp"
 
 void
 RubyFunctor::print_error()

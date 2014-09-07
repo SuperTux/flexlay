@@ -1,62 +1,38 @@
 %module flexlay_wrap
- 
-%exception {
-  try {
-    $action
-  }
-  catch (const CL_Error& err) {
-//    static VALUE cpperror = rb_define_class("CPPError", rb_eStandardError);
-//    rb_raise(cpperror, "Range error.");
-std::cout << "CL_Error: " << err.message << std::endl;
-  }
-  catch (...) {
-    std::cout << "Catched some C++ exception" << std::endl;
-  }
-}
- 
-%{
-#include <ClanLib/Display/Providers/provider_factory.h>
-#include <ClanLib/GUI/component.h>
-#include <ClanLib/GUI/button.h>
-#include <ClanLib/GUI/window.h>
 
+%{
+#include "blitter.hpp"
 #include "command.hpp"
-#include "paint_command.hpp"
-#include "object_move_command.hpp"
+#include "meta_data.hpp"
 #include "object_add_command.hpp"
 #include "object_delete_command.hpp"
+#include "object_move_command.hpp"
+#include "paint_command.hpp"
 #include "tile.hpp"
 #include "tile_brush.hpp"
-#include "meta_data.hpp"
-#include "gui/console.hpp"
-#include "blitter.hpp"
 
 #include "layer.hpp"
-#include "tilemap_layer.hpp"
 #include "object_layer.hpp"
 #include "onion_skin_layer.hpp"
+#include "tilemap_layer.hpp"
 
-#include "gui/minimap.hpp"
 #include "editor_map.hpp"
-#include "workspace.hpp"
-#include "tileset.hpp"
-#include "gui/editor_map_component.hpp"
 #include "flexlay.hpp"
 #include "globals.hpp"
-#include "gui_manager.hpp"
-#include "gui/tile_selector.hpp"
-#include "object_brush.hpp"
-#include "gui/object_selector.hpp"
-#include "gui/icon.hpp"
-#include "gui/window.hpp"
-#include "gui/panel.hpp"
-#include "gui/directory_view.hpp"
-#include "gui/menu.hpp"
-#include "gui/menubar.hpp"
 #include "graphic_context_state.hpp"
 #include "gui/button_panel.hpp"
+#include "gui/editor_map_component.hpp"
 #include "gui/file_dialog.hpp"
 #include "gui/generic_dialog.hpp"
+#include "gui/icon.hpp"
+#include "gui/menubar.hpp"
+#include "gui/minimap.hpp"
+#include "gui/object_selector.hpp"
+#include "gui/tile_selector.hpp"
+#include "gui_manager.hpp"
+#include "object_brush.hpp"
+#include "tileset.hpp"
+#include "workspace.hpp"
 
 #include "tools/workspace_move_tool.hpp"
 #include "tools/layer_move_tool.hpp"
@@ -74,7 +50,6 @@ std::cout << "CL_Error: " << err.message << std::endl;
 #include "sprite_brush.hpp"
 
 #include "gui/colorpicker.hpp"
-#include "gui/slider.hpp"
 #include "tools/tilemap_paint_tool.hpp"
 #include "tools/tilemap_select_tool.hpp"
 #include "tools/objmap_select_tool.hpp"
@@ -94,7 +69,7 @@ std::cout << "CL_Error: " << err.message << std::endl;
 
 #include "color.hpp"
 
-// #include "netpanzer.hpp" 
+// #include "netpanzer.hpp"
 #include "helper.hpp"
 
 #ifdef SWIGRUBY
@@ -114,13 +89,13 @@ VALUE ObjectBrush2Value(const ObjectBrush& arg)
  return SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_ObjectBrush, 1);
 }
 
-VALUE CL_Color2Value(const CL_Color& arg)
+VALUE Color2Value(const Color& arg)
 {
- CL_Color* resultptr = new CL_Color(arg);
- return SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_CL_Color, 1);
+ Color* resultptr = new Color(arg);
+ return SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_Color, 1);
 }
 
-VALUE CL_Color2Value(const Color& arg)
+VALUE Color2Value(const Color& arg)
 {
  Color* resultptr = new Color(arg);
  return SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_Color, 1);
@@ -138,16 +113,16 @@ VALUE Point2Value(const Point& arg)
  return SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_Point, 1);
 }
 
-VALUE CL_Pointf2Value(const CL_Pointf& arg)
+VALUE Pointf2Value(const Pointf& arg)
 {
- CL_Pointf* resultptr = new CL_Pointf(arg);
- return SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_CL_Pointf, 1);
+ Pointf* resultptr = new Pointf(arg);
+ return SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_Pointf, 1);
 }
 
-VALUE CL_Point2Value(const CL_Point& arg)
+VALUE Point2Value(const Point& arg)
 {
- CL_Point* resultptr = new CL_Point(arg);
- return SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_CL_Point, 1);
+ Point* resultptr = new Point(arg);
+ return SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_Point, 1);
 }
 #endif
 %}
@@ -156,9 +131,8 @@ VALUE CL_Point2Value(const CL_Point& arg)
 %include "std_vector.i"
 %template(Std_vector_string) std::vector<std::string>;
 %template(Std_vector_int) std::vector<int>;
-%template(Std_vector_CL_RadioButton) std::vector<CL_RadioButton *>;
 %template(Std_vector_ObjMapObject) std::vector<ObjMapObject>;
-%template(Std_vector_CL_Pointf) std::vector<CL_Pointf>;
+%template(Std_vector_Pointf) std::vector<Pointf>;
 %template(Std_vector_Stroke) std::vector<Stroke>;
 %template(Std_vector_Dab) std::vector<Dab>;
 %template(Std_vector_PropertyValue) std::vector<PropertyValue>;
@@ -171,7 +145,6 @@ VALUE CL_Point2Value(const CL_Point& arg)
     $1 = RubyFunctor($input);
 }
 
-%include "clanlib.i"
 %include "command.hpp"
 %include "paint_command.hpp"
 %include "object_move_command.hpp"
@@ -180,9 +153,8 @@ VALUE CL_Point2Value(const CL_Point& arg)
 %include "tile.hpp"
 %include "tile_brush.hpp"
 %include "meta_data.hpp"
-%include "gui/console.hpp"
 %include "blitter.hpp"
- 
+
 %include "layer.hpp"
 %include "tilemap_layer.hpp"
 %include "object_layer.hpp"
@@ -199,11 +171,7 @@ VALUE CL_Point2Value(const CL_Point& arg)
 %include "object_brush.hpp"
 %include "gui/object_selector.hpp"
 %include "gui/icon.hpp"
-%include "gui/window.hpp"
-%include "gui/panel.hpp"
 %include "gui/minimap.hpp"
-%include "gui/directory_view.hpp"
-%include "gui/menu.hpp"
 %include "gui/menubar.hpp"
 
 %include "gui/button_panel.hpp"
@@ -226,15 +194,14 @@ VALUE CL_Point2Value(const CL_Point& arg)
 %include "sprite_brush.hpp"
 
 %include "gui/colorpicker.hpp"
-%include "gui/slider.hpp"
 %include "tools/tilemap_paint_tool.hpp"
 %include "tools/tilemap_select_tool.hpp"
 %include "tools/objmap_select_tool.hpp"
 %include "objmap_sprite_object.hpp"
 %include "objmap_rect_object.hpp"
 %include "objmap_object.hpp"
-%include "tools/zoom_tool.hpp" 
-%include "tools/zoom2_tool.hpp" 
+%include "tools/zoom_tool.hpp"
+%include "tools/zoom2_tool.hpp"
 %include "graphic_context_state.hpp"
 %include "objmap_path_node.hpp"
 # %include "scripting/editor.hpp"
@@ -248,7 +215,7 @@ VALUE CL_Point2Value(const CL_Point& arg)
 
 %include "color.hpp"
 
-// %include "netpanzer.hpp" 
+// %include "netpanzer.hpp"
 %include "helper.hpp"
 
 #ifdef SWIGRUBY

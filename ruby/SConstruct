@@ -24,15 +24,15 @@ env.ParseConfig("pkg-config --libs --cflags gl")
 env.Append(CXXFLAGS = ["-g", "-O2", "-Wall", "-fPIC"])
 
 env.Append(CXXFLAGS = ["-std=c++11", "-Wno-uninitialized", "-Wno-unused-variable", "-Wno-unused-but-set-variable"],
-           CPPPATH = [".", "../lib/"],
-           LIBPATH = ["../lib", "."],
+           CPPPATH = [".", "../libflexlay/"],
+           LIBPATH = ["../libflexlay/"],
            LIBS = ["flexlay"],
            SWIGFLAGS = ["-ruby", "-c++"],
            SHLIBPREFIX = "")
 
 flexlay_ruby_lib = env.SharedLibrary(
     "flexlay_wrap",
-    ["../lib/flexlay_wrap.i",
+    ["../libflexlay/flexlay_wrap.i",
      "ruby_functor.cpp",
      "ruby_meta_data.cpp",
      "ruby_sexpr_parser.cpp",

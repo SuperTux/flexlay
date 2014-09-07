@@ -22,11 +22,9 @@
 // The following functions are defined in flexlay_wrap.i, a bit hacky but seems to work
 VALUE ObjMapObject2Value(const ObjMapObject& arg);
 VALUE ObjectBrush2Value(const ObjectBrush& arg);
-VALUE CL_Point2Value(const CL_Point& arg);
-VALUE CL_Pointf2Value(const CL_Pointf& arg);
 VALUE Point2Value(const Point& arg);
 VALUE Pointf2Value(const Pointf& arg);
-VALUE CL_Color2Value(const CL_Color& arg);
+VALUE Color2Value(const Color& arg);
 
 template<> VALUE convert_to_ruby_value<float>(const float& arg)
 {
@@ -46,21 +44,9 @@ VALUE convert_to_ruby_value<ObjectBrush>(const ObjectBrush& arg)
 }
 
 template<>
-VALUE convert_to_ruby_value<CL_Color>(const CL_Color& arg)
+VALUE convert_to_ruby_value<Color>(const Color& arg)
 {
-  return CL_Color2Value(arg);
-}
-
-template<>
-VALUE convert_to_ruby_value<CL_Point>(const CL_Point& arg)
-{
-  return CL_Point2Value(arg);
-}
-
-template<>
-VALUE convert_to_ruby_value<CL_Pointf>(const CL_Pointf& arg)
-{
-  return CL_Pointf2Value(arg);
+  return Color2Value(arg);
 }
 
 template<>

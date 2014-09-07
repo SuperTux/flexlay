@@ -21,8 +21,8 @@
 
 class ObjMapObject;
 class ObjectLayer;
-
 class ObjectMoveCommandImpl;
+class Pointf;
 
 class ObjectMoveCommand
 {

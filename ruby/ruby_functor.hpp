@@ -18,11 +18,11 @@
 #define HEADER_RUBY_FUNCTOR_HXX
 
 #include <iostream>
+
 #include "ruby.h"
 #include "ruby_object.hpp"
 #include "flexlay_wrap.hpp"
 
-/** */
 class RubyFunctor
 {
 private:

@@ -23,11 +23,11 @@
 
 #include "property_value.hpp"
 
-class CL_RadioGroup;
-class CL_Label;
-class CL_Button;
-class CL_Component;
-class Window;
+class QWidget;
+class QFormLayout;
+class QDialog;
+class QDialogButtonBox;
+class QButtonGroup;
 
 class GenericDialog
 {
@@ -43,18 +43,24 @@ private:
   struct Item
   {
     Type type;
-#ifdef GRUMBEL
-    Item(Type type_, CL_Component* label_, CL_Component* body_, CL_RadioGroup* group_ = nullptr) :
+    QWidget* label;
+    QWidget* body;
+    QButtonGroup* group;
+    Item(Type type_, QWidget* label_, QWidget* body_, QButtonGroup* group_ = nullptr) :
       type(type_), label(label_), body(body_), group(group_)
     {}
-#endif
   };
+
+private:
+  QDialog* m_dialog;
+  QDialogButtonBox* m_buttonbox;
+  QFormLayout* m_layout;
   std::vector<Item> m_items;
 
   std::function<void ()> m_ok_callback;
 
 public:
-  GenericDialog(const std::string& title);
+  GenericDialog(const std::string& title, QWidget* parent);
 
   void add_label(const std::string& text);
   void add_bool(const std::string& name, bool value);
@@ -67,12 +73,6 @@ public:
 
   void set_ok_callback(std::function<void ()> callback);
   std::vector<PropertyValue> get_values() const;
-
-private:
-  void on_ok();
-  void on_cancel();
-
-  void update_layout();
 
 private:
   GenericDialog(const GenericDialog&);

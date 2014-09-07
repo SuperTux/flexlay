@@ -72,7 +72,7 @@ GUIManager::create_button_panel(bool horizontal)
 GenericDialog*
 GUIManager::create_generic_dialog(const std::string& title)
 {
-  return new GenericDialog(title);
+  return new GenericDialog(title, m_window.get());
 }
 
 EditorMapComponent*

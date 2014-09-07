@@ -94,12 +94,13 @@ TilemapLayerImpl::draw(GraphicContext& gc)
 {
   int tile_size = this->tileset.get_tile_size();
 
-  if (this->background_color.get_alpha() != 0)
+  if (false && this->background_color.get_alpha() != 0)
+  {
     gc.fill_rect(Rect(Point(0,0),
                       Size(this->field.get_width()  * tile_size,
                            this->field.get_height() * tile_size)),
                  this->background_color);
-  gc.flush();
+  }
 
   Rect rect(gc.get_clip_rect());
 

@@ -53,7 +53,7 @@ void
 Sprite::draw(float x, float y, GraphicContext& gc)
 {
   assert(m_impl);
-  std::cout << "Sprite::draw: " << x << " " << y << " isNull:" << m_impl->buffer.get_qimage().isNull() << std::endl;
+  //std::cout << "Sprite::draw: " << x << " " << y << " isNull:" << m_impl->buffer.get_qimage().isNull() << std::endl;
   QPainter& painter = gc.get_qt_painter();
   QImage img = m_impl->buffer.get_qimage();
   if (img.isNull())

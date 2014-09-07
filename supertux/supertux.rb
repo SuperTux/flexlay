@@ -111,16 +111,13 @@ $tileset = Tileset.new(32)
 $tileset.load($datadir + "images/tiles.strf")
 $tileset.create_ungrouped_tiles_group()
 
-$gui = SuperTuxGUI.new()
-
 if !$recent_files then
   $recent_files = []
 end
 
-if false # GRUMBEL
-  $recent_files.each do |filename|
-    $gui.recent_files_menu.add_item($mysprite, filename, proc{ supertux_load_level(filename) })
-  end
+$gui = SuperTuxGUI.new()
+$recent_files.each do |filename|
+  $gui.recent_files_menu.add_item(filename, proc{ supertux_load_level(filename) })
 end
 
 if ARGV == []
@@ -148,6 +145,7 @@ end
 
 $gui.run()
 
+puts "config save: #{$config_file}"
 $config.save($config_file)
 
 # Try to cleanup

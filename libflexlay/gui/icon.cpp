@@ -16,6 +16,8 @@
 
 #include "icon.hpp"
 
+#include <QAction>
+
 #include "display.hpp"
 #include "math/rect.hpp"
 #include "box.hpp"
@@ -23,142 +25,39 @@
 class IconImpl
 {
 public:
-  IconImpl(Icon* p) : parent(p) {}
-
-  Icon* parent;
-
-  Sprite sprite;
-  std::string tooltip;
-  bool draw_tooltip;
-  bool down;
-
-  /** Parameter to keep the button down all the time, aka togglebutton
-      like */
-  bool is_down;
-
-  bool is_enabled;
-  boost::signals2::signal<void ()> sig_on_click;
-
-  void draw();
+  QAction* action;
 };
 
-Icon::Icon() :
-  impl(new IconImpl(this))
+Icon::Icon(QAction* action) :
+  m_impl(new IconImpl)
 {
+  m_impl->action = action;
 }
-
-Icon::Icon(const Sprite& sprite, const std::string& tooltip) :
-  impl(new IconImpl(this))
-{
-  impl->sprite       = sprite;
-  impl->tooltip      = tooltip;
-  impl->draw_tooltip = true;
-  impl->down         = false;
-  impl->is_down      = false;
-  impl->is_enabled   = true;
-}
-
-boost::signals2::signal<void ()>&
-Icon::sig_clicked()
-{
-  return impl->sig_on_click;
-}
-
-void
-IconImpl::draw()
-{
-#ifdef GRUMBEL
-  Display::push_modelview();
-  Display::add_translate(parent->get_screen_x(), parent->get_screen_y());
-  Rect rect(Point(0, 0), Size(parent->get_width()-4, parent->get_height()-4));
-
-  sprite.set_alignment(origin_center);
-
-  if (is_enabled)
-  {
-    if (is_down)
-    {
-      Box::draw_button_down(rect);
-    }
-    else
-    {
-      if (parent->has_mouse_over())
-      {
-        if (down)
-          Box::draw_button_down(rect);
-        else
-          Box::draw_button_up(rect);
-      }
-      else
-        Box::draw_button_neutral(rect);
-    }
-    sprite.set_alpha(1.0f);
-  }
-  else
-  {
-    Box::draw_button_neutral(rect);
-    sprite.set_alpha(0.3f);
-  }
-  sprite.draw((rect.get_width()+1)/2, (rect.get_height()+1)/2);
-  Display::pop_modelview();
-#endif
-}
-
-#ifdef GRUMBEL
-void
-IconImpl::mouse_up(const CL_InputEvent& event)
-{
-  if (is_enabled)
-  {
-    down         = false;
-    parent->release_mouse();
-
-    if (parent->has_mouse_over())
-    {
-      sig_on_click();
-    }
-  }
-}
-
-void
-IconImpl::mouse_down(const CL_InputEvent& event)
-{
-  if (is_enabled)
-  {
-    down         = true;
-    parent->capture_mouse();
-  }
-}
-
-void
-IconImpl::mouse_move(const CL_InputEvent& event)
-{
-  //std::cout << "icon: mouse_move: " << event << std::endl;
-}
-#endif
 
 void
 Icon::disable()
 {
-  impl->is_enabled = false;
+  m_impl->action->setEnabled(false);
 }
 
 void
 Icon::enable()
 {
-  impl->is_enabled = true;
+  m_impl->action->setEnabled(true);
 }
 
 void
 Icon::set_up()
 {
-  impl->is_down = false;
+  m_impl->action->setCheckable(true);
+  m_impl->action->setChecked(false);
 }
 
 void
 Icon::set_down()
 {
-  impl->is_down = true;
+  m_impl->action->setCheckable(true);
+  m_impl->action->setChecked(true);
 }
 
 /* EOF */

@@ -51,13 +51,6 @@ class ObjMapObject
   end
 end
 
-
-class Icon
-  def set_callback(func)
-    connect(sig_clicked(), func)
-  end
-end
-
 class Menubar
   def Menubar.new_from_spec(menubarspec, parent)
     menu = Menubar.new(parent)
@@ -100,7 +93,7 @@ puts PropertyValue::TYPE_BOOL
 class GenericDialog
   def set_block()
     callback = proc{ |*args| yield(*args) }
-    set_callback(c)
+    set_callback(callback)
   end
 
   def set_callback(callback)

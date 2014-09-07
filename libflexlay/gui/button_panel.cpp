@@ -31,17 +31,17 @@ ButtonPanel::ButtonPanel(QToolBar* toolbar) :
 }
 
 Icon*
-ButtonPanel::add_icon(const std::string& name,
+ButtonPanel::add_icon(const std::string& filename,
                       std::function<void ()> callback)
 {
-  QAction* action = m_toolbar->addAction(QIcon(QString::fromStdString(name)), 
+  QAction* action = m_toolbar->addAction(QIcon(QString::fromStdString(filename)),
                                          "Text");
   if (callback)
   {
     QObject::connect(action, &QAction::triggered, callback);
   }
 
-  return new Icon;
+  return new Icon(action);
 }
 
 Icon*
@@ -54,7 +54,7 @@ ButtonPanel::add_text(const std::string& name,
     QObject::connect(action, &QAction::triggered, callback);
   }
 
-  return new Icon;
+  return new Icon(action);
 }
 
 void

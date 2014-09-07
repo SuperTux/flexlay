@@ -17,21 +17,17 @@
 #ifndef HEADER_FLEXLAY_ICON_HPP
 #define HEADER_FLEXLAY_ICON_HPP
 
-#include <boost/signals2.hpp>
 #include <memory>
 
-#include "sprite.hpp"
-
-class Rect;
 class IconImpl;
+class QAction;
 
 class Icon
 {
 protected:
   virtual ~Icon() {}
 public:
-  Icon();
-  Icon(const Sprite& sprite, const std::string& tooltip);
+  Icon(QAction* action);
 
   void disable();
   void enable();
@@ -39,13 +35,8 @@ public:
   void set_up();
   void set_down();
 
-  boost::signals2::signal<void ()>& sig_clicked();
-
 private:
-  Icon (const Icon&);
-  Icon& operator= (const Icon&);
-
-  std::shared_ptr<IconImpl> impl;
+  std::shared_ptr<IconImpl> m_impl;
 };
 
 #endif

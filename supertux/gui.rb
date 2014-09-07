@@ -149,6 +149,7 @@ class SuperTuxGUI
     file_menu = @menubar.add_menu("File")
     file_menu.add_item("New...", method(:gui_level_new))
     file_menu.add_item("Open...", method(:gui_level_load))
+    @recent_files_menu = file_menu.add_menu("Open Recent")
     file_menu.add_item("Save...", method(:gui_level_save))
     # file_menu.add_item("Save Commands...", menu_file_save_commands)
     # file_menu.add_item("Save As...", method(:gui_level_save_as))
@@ -174,7 +175,7 @@ class SuperTuxGUI
     # File Handling
     button_panel.add_icon("../data/images/icons24/stock_new.png",  proc{ self.gui_level_new() })
     button_panel.add_icon("../data/images/icons24/stock_open.png", proc{ self.gui_level_load() })
-    if false
+    if false # GRUMBEL
       button_panel.add_icon("../data/images/icons24/downarrow.png", proc{ @recent_files_menu.run() })
       @recent_files_menu = Menu.new(Point.new(32*2, 54), @gui.get_component())
     end
@@ -280,10 +281,12 @@ class SuperTuxGUI
   end
 
   def show_none()
-    @tileselector.show(false)        
-    @objectselector.show(false)
-    @worldmapobjectselector.show(false)
-    #    @colorpicker.show(false)
+    if false # GRUMBEL
+      @tileselector.show(false)        
+      @objectselector.show(false)
+      @worldmapobjectselector.show(false)
+      # @colorpicker.show(false)
+    end
   end
 
   def set_tilemap_paint_tool()
@@ -353,6 +356,7 @@ class SuperTuxGUI
   end
 
   def gui_show_interactive()
+    puts "show_interactive"
     @display_properties.layer = INTERACTIVE_LAYER
     @display_properties.set(@workspace.get_map().get_metadata())
     TilemapLayer.set_current(@workspace.get_map().get_metadata().interactive)
@@ -437,6 +441,7 @@ class SuperTuxGUI
     dialog.add_int("X: ", 0)
     dialog.add_int("Y: ", 0)
     dialog.set_callback(proc{|w, h, x, y| 
+                          puts "Resize Callback"
                           level.resize(Size.new(w, h), Point.new(x, y))})
   end
 
@@ -496,12 +501,11 @@ class SuperTuxGUI
 
     dialog.add_string("Name:", level.name)
     dialog.add_string("Author:", level.author)
-    dialog.add_int("Time:", level.time)
+    # dialog.add_int("Time:", level.time)
 
-    dialog.set_block() { |name, author, time|
+    dialog.set_block() { |name, author|
       level.name   = name
       level.author = author
-      level.time   = time
     }
   end
 
@@ -685,6 +689,7 @@ class DisplayProperties
   end
   
   def set(map)
+    puts map
     if map == nil || !map.instance_of?(Sector)
       return
     end
@@ -736,7 +741,7 @@ def supertux_load_level(filename)
   
   if not($recent_files.find{|el| el == filename}) then
     $recent_files.push(filename)
-    $gui.recent_files_menu.add_item($mysprite, filename, 
+    $gui.recent_files_menu.add_item(filename, 
                                     proc { supertux_load_level(filename) })
   end
   
@@ -750,7 +755,7 @@ def supertux_load_worldmap(filename)
 
   if not($recent_files.find{|el| el == filename}) then
     $recent_files.push(filename)
-    $gui.recent_files_menu.add_item($mysprite, filename,
+    $gui.recent_files_menu.add_item(filename, 
                                     proc { supertux_load_worldmap(filename) })
   end
   $gui.minimap.update_minimap()

@@ -61,7 +61,7 @@ ObjectSelectorWidget::minimumSizeHint() const
 QSize
 ObjectSelectorWidget::sizeHint() const
 {
-  return QSize(1280, 800);
+  return QSize(32 * 6, 32 * 10);
 }
 
 void

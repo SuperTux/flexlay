@@ -48,7 +48,10 @@ class SuperTuxGUI
 
     @tileselector = @gui.create_tile_selector()
     @tileselector.set_tileset($tileset)
-    @tileselector.set_tiles($tileset.get_tiles())
+    @tileselector.set_tiles("All Tiles", $tileset.get_tiles())
+    $tileset.tilegroups.each { |tilegroup|
+      @tileselector.set_tiles(tilegroup.name, tilegroup.tiles)
+    }
 
     @worldmapobjectselector = @gui.create_object_selector(42, 42);
     if false
@@ -212,16 +215,6 @@ class SuperTuxGUI
     @run_icon = button_panel.add_icon("../data/images/icons24/run.png", proc{ gui_run_level() })
 
     @tilegroup_icon = button_panel.add_icon("../data/images/icons24/eye.png", proc{ @tilegroup_menu.run() })
-
-    if false # GRUMBEL
-      @tilegroup_menu = Menu.new(Point.new(@tilegroup_icon.get_screen_x(), 
-                                           @tilegroup_icon.get_screen_y() + @tilegroup_icon.get_height() - 2),
-                                 @gui.get_component())
-      @tilegroup_menu.add_item($mysprite, "All Tiles", proc{@tileselector.set_tiles($tileset.get_tiles())})
-      $tileset.tilegroups.each { |tilegroup|
-        @tilegroup_menu.add_item($mysprite, tilegroup.name, proc{@tileselector.set_tiles(tilegroup.tiles)})
-      }
-    end
   end
 
   def on_worldmap_object_drop(brush, pos)

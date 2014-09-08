@@ -27,8 +27,8 @@
 #include "tile_brush.hpp"
 #include "tools/tilemap_paint_tool.hpp"
 
-TileSelectorWidget::TileSelectorWidget() :
-  m_columns(1),
+TileSelectorWidget::TileSelectorWidget(QWidget* viewport) :
+  m_viewport(viewport),
   index(0),
   offset(0),
   old_offset(),
@@ -44,21 +44,15 @@ TileSelectorWidget::TileSelectorWidget() :
 
 TileSelectorWidget::~TileSelectorWidget()
 {
-  std::cout << "~TileSelectorWidget()" << std::endl;
 }
 
 QSize
 TileSelectorWidget::minimumSizeHint() const
 {
-  return QSize(32, 32);
-}
-  
-QSize
-TileSelectorWidget::sizeHint() const
-{
-  int rows = (tiles.size() + m_columns - 1) / m_columns;
-  return QSize(32 * m_columns,
-               32 * rows);
+  int columns = get_columns();
+  int min_rows = (m_tiles.size() + columns - 1) / columns;
+  return QSize(m_tileset.get_tile_size() * get_columns(), 
+               m_tileset.get_tile_size() * min_rows);
 }
 
 Rect
@@ -89,8 +83,8 @@ TileSelectorWidget::mousePressEvent(QMouseEvent* event)
         TileBrush brush(1, 1);
 
         brush.set_opaque();
-        if (mouse_over_tile >= 0 && mouse_over_tile < int(tiles.size()))
-          brush.at(0, 0) = tiles[mouse_over_tile];
+        if (mouse_over_tile >= 0 && mouse_over_tile < int(m_tiles.size()))
+          brush.at(0, 0) = m_tiles[mouse_over_tile];
         else
           brush.at(0, 0) = 0;
 
@@ -144,8 +138,8 @@ TileSelectorWidget::mouseReleaseEvent(QMouseEvent* event)
           {
             int tile = (selection.top + y) * m_columns + (selection.left + x);
 
-            if (tile >= 0 && tile < int(tiles.size()))
-              brush.at(x, y) = tiles[tile];
+            if (tile >= 0 && tile < int(m_tiles.size()))
+              brush.at(x, y) = m_tiles[tile];
             else
               brush.at(x, y) = 0;
           }
@@ -184,19 +178,20 @@ TileSelectorWidget::wheelEvent(QWheelEvent* event)
   int numDegrees = event->delta() / 8;
   int numSteps = numDegrees / 15;
 
-  offset += static_cast<int>(tileset.get_tile_size()*scale) * numSteps;
+  offset += static_cast<int>(m_tileset.get_tile_size()*scale) * numSteps;
   
   if (offset < 0)
   {
     offset = 0;
   }
+  repaint();
 }
 
 Point
 TileSelectorWidget::get_mouse_tile_pos(const Point& mouse_pos)
 {
-  return Point(mouse_pos.x/static_cast<int>(tileset.get_tile_size()*scale),
-              (mouse_pos.y+offset)/static_cast<int>(tileset.get_tile_size()*scale));
+  return Point(mouse_pos.x / static_cast<int>(m_tileset.get_tile_size() * scale),
+               mouse_pos.y / static_cast<int>(m_tileset.get_tile_size() * scale));
 }
 
 void
@@ -205,15 +200,11 @@ TileSelectorWidget::paintEvent(QPaintEvent* event)
   QPainter painter(this);
   GraphicContext gc(painter);
 
-  gc.push_modelview();
-  ////gc.translate(get_screen_x(), get_screen_y());
-  gc.translate(0, -offset);
-
   const TileBrush& brush = TileMapPaintTool::current().get_brush();
 
-  int start_row = offset / int(tileset.get_tile_size() * scale);
-  int end_row   = start_row + (height() / int(tileset.get_tile_size() * scale));
-  int end_index = std::min(end_row*m_columns, int(tiles.size()));
+  int start_row = event->rect().y() / int(m_tileset.get_tile_size() * scale);
+  int end_row   = start_row + event->rect().height() / int(m_tileset.get_tile_size() * scale);
+  int end_index = std::min(end_row*m_columns, int(m_tiles.size()));
 
   // Draw tiles
   for(int i = (start_row*m_columns); i < end_index; ++i)
@@ -221,12 +212,12 @@ TileSelectorWidget::paintEvent(QPaintEvent* event)
     int x = i % m_columns;
     int y = i / m_columns;
 
-    Tile* tile = tileset.create(tiles[i]);
+    Tile* tile = m_tileset.create(m_tiles[i]);
 
-    Rect rect(Point(static_cast<int>(x * tileset.get_tile_size()*scale),
-                          static_cast<int>(y * tileset.get_tile_size()*scale)),
-                 Size(static_cast<int>(tileset.get_tile_size()*scale),
-                         static_cast<int>(tileset.get_tile_size()*scale)));
+    Rect rect(Point(static_cast<int>(x * m_tileset.get_tile_size()*scale),
+                          static_cast<int>(y * m_tileset.get_tile_size()*scale)),
+                 Size(static_cast<int>(m_tileset.get_tile_size()*scale),
+                         static_cast<int>(m_tileset.get_tile_size()*scale)));
 
     if (tile)
     {
@@ -234,15 +225,15 @@ TileSelectorWidget::paintEvent(QPaintEvent* event)
 
       sprite.set_scale(scale, scale);
 
-      sprite.draw(static_cast<int>(x * tileset.get_tile_size()*scale),
-                  static_cast<int>(y * tileset.get_tile_size()*scale), gc);
+      sprite.draw(static_cast<int>(x * m_tileset.get_tile_size()*scale),
+                  static_cast<int>(y * m_tileset.get_tile_size()*scale), gc);
 
       // Use grid in the tileselector
-      //gc.draw_rect(rect.to_cl(), Color(0,0,0,128));
+      gc.draw_rect(rect, Color(0,0,0,128));
     }
 
     if (brush.get_width() == 1 && brush.get_height() == 1
-        && brush.at(0, 0) == tiles[i])
+        && brush.at(0, 0) == m_tiles[i])
     {
       gc.fill_rect(rect, Color(0,0,255, 100));
     }
@@ -256,49 +247,57 @@ TileSelectorWidget::paintEvent(QPaintEvent* event)
   {
     Rect rect = get_selection();
 
-    rect.top    *= static_cast<int>(tileset.get_tile_size()*scale);
-    rect.bottom *= static_cast<int>(tileset.get_tile_size()*scale);
-    rect.left   *= static_cast<int>(tileset.get_tile_size()*scale);
-    rect.right  *= static_cast<int>(tileset.get_tile_size()*scale);
+    rect.top    *= static_cast<int>(m_tileset.get_tile_size()*scale);
+    rect.bottom *= static_cast<int>(m_tileset.get_tile_size()*scale);
+    rect.left   *= static_cast<int>(m_tileset.get_tile_size()*scale);
+    rect.right  *= static_cast<int>(m_tileset.get_tile_size()*scale);
 
     gc.fill_rect(rect, Color(0,0,255, 100));
   }
-
-  gc.pop_modelview();
 }
 
 void
 TileSelectorWidget::resizeEvent(QResizeEvent* event)
 {
+  m_columns = get_columns();
   repaint();
+}
+
+int
+TileSelectorWidget::get_columns() const
+{
+  return m_viewport->width() / m_tileset.get_tile_size();
 }
 
 void
 TileSelectorWidget::set_scale(float s)
 {
   scale = s;
-  m_columns  = static_cast<int>(size().width() / (tileset.get_tile_size() * scale));
+  m_columns  = static_cast<int>(size().width() / (m_tileset.get_tile_size() * scale));
+  repaint();
 }
 
 TileSelectorWidget::Tiles
 TileSelectorWidget::get_tiles() const
 {
-  return tiles;
+  return m_tiles;
 }
 
 void
 TileSelectorWidget::set_tileset(Tileset t)
 {
-  tileset = t;
+  m_tileset = t;
   // Recalc the number of tiles in a row
-  m_columns  = static_cast<int>(size().width()/(tileset.get_tile_size() * scale));
+  m_columns  = static_cast<int>(size().width()/(m_tileset.get_tile_size() * scale));
+  repaint();
 }
 
 void
 TileSelectorWidget::set_tiles(const Tiles& t)
 {
-  tiles = t;
+  m_tiles = t;
   offset = 0;
+  repaint();
 }
 
 /* EOF */

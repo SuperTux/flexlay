@@ -17,15 +17,39 @@
 #include "gui/tile_selector.hpp"
 
 #include <QScrollArea>
+#include <QVBoxLayout>
+#include <QComboBox>
+#include <iostream>
 
 #include "gui/tile_selector_widget.hpp"
 
 TileSelector::TileSelector() :
-  m_widget(new TileSelectorWidget),
+  m_combobox(),
+  m_widget(),
   m_scroll_area()
 {
+  m_combobox = new QComboBox;
+
   m_scroll_area = new QScrollArea;
+  m_scroll_area->setWidgetResizable(true);
   m_scroll_area->setWidget(m_widget);
+
+  m_widget = new TileSelectorWidget(m_scroll_area->viewport());
+  m_scroll_area->setWidget(m_widget);
+
+  m_box = new QWidget;
+  m_layout = new QVBoxLayout(m_box);
+  m_layout->setContentsMargins(0, 0, 0, 0);
+  m_layout->addWidget(m_combobox);
+  m_layout->addWidget(m_scroll_area);
+
+  QObject::connect(m_combobox, static_cast<void (QComboBox::*)(const QString&)>(&QComboBox::activated),
+                   [this](const QString& text){
+                     auto tiles = m_tiles[text.toStdString()];
+                     std::cout << "Setting tiles: " << text.toStdString() << " - " << tiles.size() << std::endl;
+                     m_widget->set_tiles(tiles);
+                     m_scroll_area->update();
+                   });
 }
 
 TileSelector::~TileSelector()
@@ -42,6 +66,16 @@ void
 TileSelector::set_tiles(const Tiles& t)
 {
   m_widget->set_tiles(t);
+  m_combobox->clear();
+  m_combobox->hide();
+}
+
+void
+TileSelector::set_tiles(const std::string& name, const Tiles& t)
+{
+  m_tiles[name] = t;
+  m_combobox->addItem(QString::fromStdString(name), QVariant(QString::fromStdString(name)));
+  m_combobox->show();
 }
 
 TileSelector::Tiles
@@ -59,7 +93,7 @@ TileSelector::set_scale(float s)
 QWidget*
 TileSelector::get_widget() const
 {
-  return m_scroll_area;
+  return m_box;
 }
 
 /* EOF */

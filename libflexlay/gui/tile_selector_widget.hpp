@@ -24,10 +24,13 @@
 
 class TileSelectorWidget : public QWidget
 {
+  Q_OBJECT
 public:
   typedef std::vector<int> Tiles;
 
 private:
+  QWidget* m_viewport;
+
   int m_columns;
   int index;
 
@@ -42,12 +45,12 @@ private:
   float scale;
 
   /** set of tiles that should be available in the TileSelector */
-  Tiles tiles;
+  Tiles m_tiles;
 
-  Tileset tileset;
+  Tileset m_tileset;
 
 public:
-  TileSelectorWidget();
+  TileSelectorWidget(QWidget* viewport);
   ~TileSelectorWidget();
 
   /** Set the factor by which tiles are scaled down in the selector
@@ -66,13 +69,12 @@ protected:
 
   void paintEvent(QPaintEvent* event) override;
   void resizeEvent(QResizeEvent* event) override;
-
   QSize minimumSizeHint() const override;
-  QSize sizeHint() const override;
 
 private:
   Point get_mouse_tile_pos(const Point& mouse_pos);
   Rect get_selection();
+  int get_columns() const;
 
 private:
   TileSelectorWidget(const TileSelectorWidget&) = delete;

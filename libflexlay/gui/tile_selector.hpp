@@ -17,12 +17,16 @@
 #ifndef HEADER_FLEXLAY_TILE_SELECTOR_HPP
 #define HEADER_FLEXLAY_TILE_SELECTOR_HPP
 
-#include "../tileset.hpp"
+#include <map>
+
+#include "tileset.hpp"
 #include "math/point.hpp"
 #include "math/rect.hpp"
 
-class QWidget;
+class QComboBox;
 class QScrollArea;
+class QVBoxLayout;
+class QWidget;
 class TileSelectorWidget;
 class Tileset;
 
@@ -38,6 +42,7 @@ public:
 
   void set_tileset(Tileset t);
   void set_tiles(const Tiles& t);
+  void set_tiles(const std::string& name, const Tiles& t);
   Tiles get_tiles() const;
 
   void set_scale(float s);
@@ -49,8 +54,13 @@ private:
   Rect get_selection();
 
 private:
+  QWidget* m_box;
+  QVBoxLayout* m_layout;
+  QComboBox* m_combobox;
   TileSelectorWidget* m_widget;
   QScrollArea* m_scroll_area;
+
+  std::map<std::string, Tiles> m_tiles;
 };
 
 #endif

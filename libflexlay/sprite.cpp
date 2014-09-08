@@ -32,6 +32,11 @@ public:
 
   Origin origin;
   Point pos;
+
+  SpriteImpl() :
+    origin(Flexlay_origin_top_left),
+    pos()
+  {}
 };
 
 Sprite::Sprite() :

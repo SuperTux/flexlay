@@ -65,7 +65,7 @@ EditorMapWidget::dropEvent(QDropEvent* event)
 QSize
 EditorMapWidget::sizeHint() const
 {
-  return QSize(640, 480);
+  return QSize(1280, 800);
 }
 
 void

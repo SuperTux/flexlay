@@ -77,8 +77,7 @@ int main()
   view_menu.add_item("Reset Zoom", []{ std::cout << "Reset Zoom" << std::endl; });
 
   EditorMapComponent* editor_map = gui.create_editor_map_component();
-  Workspace workspace(true);
-  editor_map->set_workspace(workspace);
+  Workspace workspace = editor_map->get_workspace();
   workspace.set_map(m);
 
   WorkspaceMoveTool workspace_move_tool;

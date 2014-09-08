@@ -71,7 +71,7 @@ int
 ObjectSelectorWidget::get_columns() const
 {
   return m_viewport->width() / m_cell_width;
- }
+}
 
 void
 ObjectSelectorWidget::mousePressEvent(QMouseEvent* event)

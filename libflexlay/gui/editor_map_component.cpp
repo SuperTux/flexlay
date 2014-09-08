@@ -16,8 +16,6 @@
 
 #include "editor_map_component.hpp"
 
-#include <QGLWidget>
-
 #include <functional>
 #include <iostream>
 

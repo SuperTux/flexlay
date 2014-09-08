@@ -17,9 +17,11 @@
 #ifndef HEADER_EDITOR_MAP_WIDGET_HPP
 #define HEADER_EDITOR_MAP_WIDGET_HPP
 
+#include <QDropEvent>
 #include <QMouseEvent>
 #include <QPainter>
 #include <QWidget>
+#include <QMimeData>
 
 #include <iostream>
 
@@ -47,12 +49,35 @@ public:
   {
     setAutoFillBackground(true);
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    setAcceptDrops(true);
   }
 
   virtual ~EditorMapWidget()
   {}
 
 protected:
+  void dragEnterEvent(QDragEnterEvent* event) override
+  {
+    std::cout << "dragEnter: " << event->mimeData()->hasFormat("application/supertux-badguy") << std::endl;
+    if (event->mimeData()->hasFormat("application/supertux-badguy"))
+    {
+      event->accept();
+    }
+  }
+
+  void dragLeaveEvent(QDragLeaveEvent* event) override
+  {
+    std::cout << "dragLeave" << std::endl;
+  }
+
+  void dropEvent(QDropEvent* event)
+  {
+    std::cout << "drop happened: " << event->pos().x() << " " << event->pos().y() << std::endl;
+    QByteArray data = event->mimeData()->data("application/supertux-badguy");
+    int i = 0;
+    memcpy(&i, data.data(), sizeof(i));
+  }
+
   QSize minimumSizeHint() const override
   {
     return QSize(640, 480);

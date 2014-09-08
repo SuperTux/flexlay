@@ -16,10 +16,18 @@
 
 #include "gui/object_selector_widget.hpp"
 
+#include <QByteArray>
+#include <QDrag>
+#include <QMimeData>
 #include <QPainter>
 #include <QResizeEvent>
 
 #include "graphic_context.hpp"
+
+struct SuperTuxBadGuyData
+{
+  int type;
+};
 
 ObjectSelectorWidget::ObjectSelectorWidget(int obj_w, int obj_h, QWidget* parent) :
   QWidget(parent),
@@ -64,6 +72,30 @@ ObjectSelectorWidget::resizeEvent(QResizeEvent* event)
 }
 
 void
+ObjectSelectorWidget::mousePressEvent(QMouseEvent* event)
+{
+  switch(event->button())
+  {
+    case Qt::LeftButton:
+      if (mouse_over_tile != -1)
+      {
+        drag_obj = mouse_over_tile;
+      }
+      break;
+
+    case Qt::MidButton:
+      scrolling = true;
+      click_pos = Point(event->pos());
+      old_offset = offset;
+      releaseMouse();
+      break;
+
+    default:
+      break;
+  }
+}
+
+void
 ObjectSelectorWidget::mouseReleaseEvent(QMouseEvent* event)
 {
   switch(event->button())
@@ -71,7 +103,7 @@ ObjectSelectorWidget::mouseReleaseEvent(QMouseEvent* event)
     case Qt::LeftButton:
       if (drag_obj != -1)
       {
-        releaseMouse();
+        //releaseMouse();
 
 #ifdef GRUMBEL
         if (!hasFocus())
@@ -111,45 +143,31 @@ ObjectSelectorWidget::mouseReleaseEvent(QMouseEvent* event)
 }
 
 void
-ObjectSelectorWidget::mousePressEvent(QMouseEvent* event)
-{
-  switch(event->button())
-  {
-    case Qt::LeftButton:
-      if (mouse_over_tile != -1)
-      {
-        drag_obj = mouse_over_tile;
-        grabMouse();
-      }
-      break;
-
-    case Qt::MidButton:
-      scrolling = true;
-      click_pos = Point(event->pos());
-      old_offset = offset;
-      releaseMouse();
-      break;
-
-    default:
-      break;
-  }
-}
-
-void
-ObjectSelectorWidget::wheelEvent(QWheelEvent* event)
-{
-  int numDegrees = event->delta() / 8;
-  int numSteps = numDegrees / 15;
-
-  offset += static_cast<int>(obj_height * scale * numSteps);
-}
-
-void
 ObjectSelectorWidget::mouseMoveEvent(QMouseEvent* event)
 {
   if (scrolling)
   {
     offset = old_offset + (click_pos.y - event->y());
+  }
+
+  if (drag_obj != -1)
+  {
+    QDrag* drag = new QDrag(this);
+    QMimeData* mimeData = new QMimeData;
+    SuperTuxBadGuyData object;
+    QByteArray data(reinterpret_cast<const char*>(&object), sizeof(object));
+    mimeData->setData("application/supertux-badguy", data);
+    drag->setMimeData(mimeData);
+
+    drag->setPixmap(QPixmap::fromImage(brushes[drag_obj].get_sprite().get_pixelbuffer().get_qimage()));
+    drag->setHotSpot(QPoint(brushes[drag_obj].get_sprite().get_width()/2,
+                            brushes[drag_obj].get_sprite().get_height()/2));
+
+    std::cout << "Starting drag" << std::endl;
+    Qt::DropAction result = drag->exec();
+    std::cout << "Starting drag finished" << std::endl;
+
+    drag_obj = -1;
   }
 
   mouse_pos = Point(event->pos());
@@ -160,9 +178,20 @@ ObjectSelectorWidget::mouseMoveEvent(QMouseEvent* event)
   mouse_over_tile = y * width + x;
 
   if (mouse_over_tile < 0 || mouse_over_tile >= (int)brushes.size())
+  {
     mouse_over_tile = -1;
+  }
 
   repaint();
+}
+
+void
+ObjectSelectorWidget::wheelEvent(QWheelEvent* event)
+{
+  int numDegrees = event->delta() / 8;
+  int numSteps = numDegrees / 15;
+
+  offset += static_cast<int>(obj_height * scale * numSteps);
 }
 
 void

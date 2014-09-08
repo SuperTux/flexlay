@@ -47,6 +47,8 @@ public:
   void get_scale(float& x, float& y) const;
   void add_frame(Surface surface, const Rect& rect = Rect(0,0,0,0));
 
+  PixelBuffer get_pixelbuffer() const;
+
   explicit operator bool() const;
 
 private:

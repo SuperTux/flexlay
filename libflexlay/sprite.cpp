@@ -29,6 +29,9 @@ class SpriteImpl
 public:
   PixelBuffer buffer;
   std::string filename;
+
+  Origin origin;
+  Point pos;
 };
 
 Sprite::Sprite() :
@@ -62,7 +65,9 @@ Sprite::draw(float x, float y, GraphicContext& gc)
   }
   else
   {
-    painter.drawImage(QPoint(x, y), img);
+    Point origin = calc_origin(m_impl->origin, Size(get_width(), get_height()));
+
+    painter.drawImage(QPoint(x - origin.x, y - origin.y), img);
   }
 }
 
@@ -114,7 +119,8 @@ Sprite::set_alpha(float alpha)
 void
 Sprite::set_alignment(Origin origin, int x, int y)
 {
-  //m_sprite.set_alignment(origin, x, y);
+  m_impl->origin = origin;
+  m_impl->pos = Point(x, y);
 }
 
 void
@@ -126,7 +132,9 @@ Sprite::set_angle(float angle)
 void
 Sprite::get_alignment(Origin& origin, int& x, int& y) const
 {
-  //m_sprite.get_alignment(origin, x, y);
+  origin = m_impl->origin = origin;
+  x = m_impl->pos.x;
+  y = m_impl->pos.y;
 }
 
 void
@@ -139,6 +147,12 @@ void
 Sprite::add_frame(Surface surface, const Rect& rect)
 {
   //m_sprite.add_frame(surface.to_cl(), rect.to_cl());
+}
+
+PixelBuffer
+Sprite::get_pixelbuffer() const
+{
+  return m_impl->buffer;
 }
 
 Sprite::operator bool() const

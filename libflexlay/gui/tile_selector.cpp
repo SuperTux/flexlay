@@ -16,11 +16,16 @@
 
 #include "gui/tile_selector.hpp"
 
+#include <QScrollArea>
+
 #include "gui/tile_selector_widget.hpp"
 
 TileSelector::TileSelector() :
-  m_widget(new TileSelectorWidget)
+  m_widget(new TileSelectorWidget),
+  m_scroll_area()
 {
+  m_scroll_area = new QScrollArea;
+  m_scroll_area->setWidget(m_widget);
 }
 
 TileSelector::~TileSelector()
@@ -54,7 +59,7 @@ TileSelector::set_scale(float s)
 QWidget*
 TileSelector::get_widget() const
 {
-  return m_widget;
+  return m_scroll_area;
 }
 
 /* EOF */

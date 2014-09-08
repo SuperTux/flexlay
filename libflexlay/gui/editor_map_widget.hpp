@@ -17,13 +17,9 @@
 #ifndef HEADER_EDITOR_MAP_WIDGET_HPP
 #define HEADER_EDITOR_MAP_WIDGET_HPP
 
-#include <QDropEvent>
-#include <QMouseEvent>
-#include <QPainter>
-#include <QWidget>
-#include <QMimeData>
-
 #include <iostream>
+
+#include <QWidget>
 
 #include "input_event.hpp"
 #include "workspace.hpp"
@@ -43,98 +39,24 @@ private:
   EditorMapComponent& m_comp;
 
 public:
-  EditorMapWidget(EditorMapComponent& comp, QWidget* parent) :
-    QWidget(parent),
-    m_comp(comp)
-  {
-    setAutoFillBackground(true);
-    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    setAcceptDrops(true);
-  }
+  EditorMapWidget(EditorMapComponent& comp, QWidget* parent = nullptr);
+  virtual ~EditorMapWidget();
 
-  virtual ~EditorMapWidget()
-  {}
+  void on_map_change();
 
 protected:
-  void dragEnterEvent(QDragEnterEvent* event) override
-  {
-    std::cout << "dragEnter: " << event->mimeData()->hasFormat("application/supertux-badguy") << std::endl;
-    if (event->mimeData()->hasFormat("application/supertux-badguy"))
-    {
-      event->accept();
-    }
-  }
+  void dragEnterEvent(QDragEnterEvent* event) override;
+  void dragLeaveEvent(QDragLeaveEvent* event) override;
+  void dropEvent(QDropEvent* event) override;
 
-  void dragLeaveEvent(QDragLeaveEvent* event) override
-  {
-    std::cout << "dragLeave" << std::endl;
-  }
+  void mouseMoveEvent(QMouseEvent* event) override;
+  void mousePressEvent(QMouseEvent* event) override;
+  void mouseReleaseEvent(QMouseEvent* event) override;
 
-  void dropEvent(QDropEvent* event)
-  {
-    std::cout << "drop happened: " << event->pos().x() << " " << event->pos().y() << std::endl;
-    QByteArray data = event->mimeData()->data("application/supertux-badguy");
-    int i = 0;
-    memcpy(&i, data.data(), sizeof(i));
-  }
+  void paintEvent(QPaintEvent* event) override;
 
-  QSize minimumSizeHint() const override
-  {
-    return QSize(640, 480);
-  }
-  
-  QSize sizeHint() const override
-  {
-    return QSize(1280, 800);
-  }
-
-  void mouseMoveEvent(QMouseEvent* event) override
-  {
-    Workspace workspace = m_comp.get_workspace();
-    InputEvent ev(*event);
-    workspace.mouse_move(ev);
-    std::cout << "mouse move: " << std::endl;
-    repaint();
-  }
-
-  void mousePressEvent(QMouseEvent* event) override
-  {
-    Workspace workspace = m_comp.get_workspace();
-    InputEvent ev(*event);
-    workspace.mouse_down(ev);
-    std::cout << "mouse press: " << std::endl;
-    repaint();
-  }
-
-  void mouseReleaseEvent(QMouseEvent* event) override
-  {
-    Workspace workspace = m_comp.get_workspace();
-    InputEvent ev(*event);
-    workspace.mouse_up(ev);
-    std::cout << "mouse release: " << std::endl;
-    repaint();
-  }
-
-  void paintEvent(QPaintEvent* event) override
-  {
-    QPainter painter;
-    painter.begin(this);
-
-    //painter.setRenderHint(QPainter::Antialiasing);
-
-    Workspace workspace = m_comp.get_workspace();
-    GraphicContext gc(m_comp.get_gc_state(), painter);
-    m_comp.get_gc_state().push(gc);
-    workspace.draw(gc);
-    m_comp.get_gc_state().pop(gc);
-
-    painter.end();
-  }
-
-  void resizeEvent(QResizeEvent* event) override
-  {
-    m_comp.get_gc_state().set_size(event->size().width(), event->size().height());
-  }
+  QSize sizeHint() const;
+  void resizeEvent(QResizeEvent* event) override;
 };
 
 #endif

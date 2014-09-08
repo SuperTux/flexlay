@@ -23,14 +23,15 @@
 #include "math/point.hpp"
 #include "object_brush.hpp"
 
+class QWidget;
+
 class ObjectSelectorWidget : public QWidget
 {
 private:
-  int width;
-  int height;
+  QWidget* m_viewport;
 
-  int obj_width;
-  int obj_height;
+  int m_cell_width;
+  int m_cell_height;
 
   int index;
 
@@ -42,13 +43,14 @@ private:
   Point mouse_pos;
   float scale;
 
-  std::vector<ObjectBrush> brushes;
+  std::vector<ObjectBrush> m_brushes;
   int drag_obj;
 
+  bool m_has_focus;
   boost::signals2::signal<void (ObjectBrush, Point)> on_drop;
 
 public:
-  ObjectSelectorWidget(int obj_w, int obj_h, QWidget* parent);
+  ObjectSelectorWidget(int cell_w, int cell_h, QWidget* viewport, QWidget* parent = nullptr);
   ~ObjectSelectorWidget();
 
   void add_brush(const ObjectBrush& brush);
@@ -64,8 +66,13 @@ protected:
   void paintEvent(QPaintEvent* event) override;
   void resizeEvent(QResizeEvent* event) override;
 
+  void enterEvent(QEvent* event) override;
+  void leaveEvent(QEvent* event) override;
+
   QSize minimumSizeHint() const override;
-  QSize sizeHint() const override;
+
+private:
+  int get_columns() const;
 
 private:
   ObjectSelectorWidget(const ObjectSelectorWidget&) = delete;

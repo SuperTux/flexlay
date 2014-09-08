@@ -28,7 +28,7 @@
 #include "tools/tilemap_paint_tool.hpp"
 
 TileSelectorWidget::TileSelectorWidget() :
-  width(1),
+  m_columns(1),
   index(0),
   offset(0),
   old_offset(),
@@ -56,7 +56,9 @@ TileSelectorWidget::minimumSizeHint() const
 QSize
 TileSelectorWidget::sizeHint() const
 {
-  return QSize(32 * 6, 32 * 10);
+  int rows = (tiles.size() + m_columns - 1) / m_columns;
+  return QSize(32 * m_columns,
+               32 * rows);
 }
 
 Rect
@@ -66,11 +68,11 @@ TileSelectorWidget::get_selection()
                  region_select_start.x, region_select_start.y);
 
   selection.normalize();
-  selection.right  += 1;
+  selection.right += 1;
   selection.bottom += 1;
 
-  selection.left  = Math::mid(0, selection.left, width);
-  selection.right = Math::mid(0, selection.right, width);
+  selection.left  = Math::mid(0, selection.left, m_columns);
+  selection.right = Math::mid(0, selection.right, m_columns);
 
   selection.top    = Math::max(0, selection.top);
 
@@ -132,7 +134,7 @@ TileSelectorWidget::mouseReleaseEvent(QMouseEvent* event)
         region_select = false;
 
         Rect selection = get_selection();
-        //selection.bottom = Math::mid(0, selection.right, width);
+        //selection.bottom = Math::mid(0, selection.right, m_columns);
 
         TileBrush brush(selection.get_width(), selection.get_height());
         brush.set_transparent();
@@ -140,7 +142,7 @@ TileSelectorWidget::mouseReleaseEvent(QMouseEvent* event)
         for(int y = 0; y < selection.get_height(); ++y)
           for(int x = 0; x < selection.get_width(); ++x)
           {
-            int tile = (selection.top + y) * width + (selection.left + x);
+            int tile = (selection.top + y) * m_columns + (selection.left + x);
 
             if (tile >= 0 && tile < int(tiles.size()))
               brush.at(x, y) = tiles[tile];
@@ -164,7 +166,7 @@ TileSelectorWidget::mouseMoveEvent(QMouseEvent* event)
 {
   Point pos = get_mouse_tile_pos(Point(event->pos()));
   current_pos = pos;
-  mouse_over_tile = pos.y * width + pos.x;
+  mouse_over_tile = pos.y * m_columns + pos.x;
 
   if (scrolling)
   {
@@ -211,13 +213,13 @@ TileSelectorWidget::paintEvent(QPaintEvent* event)
 
   int start_row = offset / int(tileset.get_tile_size() * scale);
   int end_row   = start_row + (height() / int(tileset.get_tile_size() * scale));
-  int end_index = std::min(end_row*width, int(tiles.size()));
+  int end_index = std::min(end_row*m_columns, int(tiles.size()));
 
   // Draw tiles
-  for(int i = (start_row*width); i < end_index; ++i)
+  for(int i = (start_row*m_columns); i < end_index; ++i)
   {
-    int x = i % width;
-    int y = i / width;
+    int x = i % m_columns;
+    int y = i / m_columns;
 
     Tile* tile = tileset.create(tiles[i]);
 
@@ -275,7 +277,7 @@ void
 TileSelectorWidget::set_scale(float s)
 {
   scale = s;
-  width  = static_cast<int>(size().width() / (tileset.get_tile_size() * scale));
+  m_columns  = static_cast<int>(size().width() / (tileset.get_tile_size() * scale));
 }
 
 TileSelectorWidget::Tiles
@@ -289,7 +291,7 @@ TileSelectorWidget::set_tileset(Tileset t)
 {
   tileset = t;
   // Recalc the number of tiles in a row
-  width  = static_cast<int>(size().width()/(tileset.get_tile_size() * scale));
+  m_columns  = static_cast<int>(size().width()/(tileset.get_tile_size() * scale));
 }
 
 void

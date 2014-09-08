@@ -22,6 +22,7 @@
 #include "math/rect.hpp"
 
 class QWidget;
+class QScrollArea;
 class TileSelectorWidget;
 class Tileset;
 
@@ -49,6 +50,7 @@ private:
 
 private:
   TileSelectorWidget* m_widget;
+  QScrollArea* m_scroll_area;
 };
 
 #endif

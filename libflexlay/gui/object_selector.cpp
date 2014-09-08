@@ -16,18 +16,27 @@
 
 #include "gui/object_selector.hpp"
 
+#include <QScrollArea>
+
 #include "gui/object_selector_widget.hpp"
 
 class ObjectSelectorImpl
 {
 public:
+  QScrollArea* scroll_area;
   ObjectSelectorWidget* widget;
 };
 
 ObjectSelector::ObjectSelector(int obj_w, int obj_h, QWidget* parent) :
   m_impl(new ObjectSelectorImpl)
 {
-  m_impl->widget = new ObjectSelectorWidget(obj_w, obj_h, parent);
+  m_impl->scroll_area = new QScrollArea(parent);
+  m_impl->scroll_area->setWidgetResizable(true);
+  m_impl->scroll_area->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+  m_impl->scroll_area->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+
+  m_impl->widget = new ObjectSelectorWidget(obj_w, obj_h, m_impl->scroll_area->viewport());
+  m_impl->scroll_area->setWidget(m_impl->widget);
 }
 
 ObjectSelector::~ObjectSelector()
@@ -49,7 +58,7 @@ ObjectSelector::sig_drop()
 QWidget*
 ObjectSelector::get_widget() const
 {
-  return m_impl->widget;
+  return m_impl->scroll_area;
 }
 
 /* EOF */

@@ -16,6 +16,8 @@
 
 #include "editor_map_component.hpp"
 
+#include <QScrollArea>
+
 #include <functional>
 #include <iostream>
 
@@ -30,10 +32,15 @@ EditorMapComponent* EditorMapComponent::current_ = 0;
 class EditorMapComponent;
 
 EditorMapComponent::EditorMapComponent(QWidget* parent) :
-  m_editormap_widget(new EditorMapWidget(*this, parent)),
+  m_editormap_widget(),
   m_workspace(1)
 {
   current_ = this;
+
+  m_scroll_area = new QScrollArea(parent);
+  m_editormap_widget = new EditorMapWidget(*this);
+  m_scroll_area->setWidget(m_editormap_widget);
+  m_scroll_area->setAlignment(Qt::AlignCenter);
 
 #ifdef GRUMBEL
   ////m_gc_state  = GraphicContextState(rect.get_width(), rect.get_height());
@@ -52,12 +59,6 @@ Workspace
 EditorMapComponent::get_workspace() const
 {
   return m_workspace;
-}
-
-void
-EditorMapComponent::set_workspace(Workspace m)
-{
-  m_workspace = m;
 }
 
 void
@@ -230,6 +231,12 @@ GraphicContextState&
 EditorMapComponent::get_gc_state()
 {
   return m_gc_state;
+}
+
+QWidget*
+EditorMapComponent::get_widget() const
+{ 
+  return m_scroll_area; 
 }
 
 /* EOF */

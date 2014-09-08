@@ -84,28 +84,15 @@ GUIManager::create_editor_map_component()
 {
   QWidget* central = new QWidget;
 
-  QGridLayout* layout = new QGridLayout(central);
-  layout->setContentsMargins(0, 0, 0, 0);
-  layout->setHorizontalSpacing(0);
-  layout->setVerticalSpacing(0);
+  EditorMapComponent* editor = new EditorMapComponent(nullptr);
+  QVBoxLayout* layout = new QVBoxLayout();
+  layout->setContentsMargins(0,0,0,0);
+  layout->addWidget(editor->get_widget());
+  central->setLayout(layout);
 
   m_window->setCentralWidget(central);
 
-  //QWidget* dummy = new QWidget;
-  //layout->addWidget(dummy, 0, 0);
-
-  EditorMapComponent* editor = new EditorMapComponent(nullptr);
-  layout->addWidget(editor->get_editormap_widget(), 0, 0);
-
-  QScrollBar* scroll_horz = new QScrollBar(Qt::Horizontal);
-  QScrollBar* scroll_vert = new QScrollBar(Qt::Vertical);
-
-  layout->addWidget(scroll_horz, 1, 0);
-  layout->addWidget(scroll_vert, 0, 1);
-
-//dummy->setStyleSheet("background-color:black;");
-
-return editor;
+  return editor;
 }
 
 Minimap*

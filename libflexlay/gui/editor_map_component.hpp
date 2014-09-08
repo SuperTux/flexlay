@@ -22,10 +22,11 @@
 
 #include "../workspace.hpp"
 
-class QWidget;
-class Scrollbar;
 class EditorMapComponentImpl;
 class EditorMapWidget;
+class QScrollArea;
+class QWidget;
+class Scrollbar;
 
 /** Object which represents a level, quirled together with the GUI
     stuff */
@@ -38,37 +39,38 @@ protected:
 public:
   static EditorMapComponent* current() { return current_; }
 
- EditorMapComponent(QWidget* parent);
+  EditorMapComponent(QWidget* parent);
 
- Workspace get_workspace() const;
- void set_workspace(Workspace m);
+  Workspace get_workspace() const;
 
- void set_zoom(float z);
- void zoom_to(Rectf rect);
- void zoom_out(Point pos);
- void zoom_in (Point pos);
+  void set_zoom(float z);
+  void zoom_to(Rectf rect);
+  void zoom_out(Point pos);
+  void zoom_in (Point pos);
 
- void move_to(int x, int y);
- void move_to_x(float x);
- void move_to_y(float y);
+  void move_to(int x, int y);
+  void move_to_x(float x);
+  void move_to_y(float y);
 
   void capture_mouse();
   void release_mouse();
 
 #ifdef GRUMBEL
- boost::signals2::signal<void (int, int)>& sig_on_key(const std::string& str);
+  boost::signals2::signal<void (int, int)>& sig_on_key(const std::string& str);
 #endif
 
- Pointf screen2world(const Point& pos);
+  Pointf screen2world(const Point& pos);
 
- Rectf get_clip_rect() const;
+  Rectf get_clip_rect() const;
 
- GraphicContextState& get_gc_state();
+  GraphicContextState& get_gc_state();
 
-  EditorMapWidget* get_editormap_widget() const { return m_editormap_widget.get(); }
+  EditorMapWidget* get_editormap_widget() const { return m_editormap_widget; }
+  QWidget* get_widget() const;
 
 private:
-  std::unique_ptr<EditorMapWidget> m_editormap_widget;
+  QScrollArea* m_scroll_area;
+  EditorMapWidget* m_editormap_widget;
   Workspace m_workspace;
   GraphicContextState m_gc_state;
 };

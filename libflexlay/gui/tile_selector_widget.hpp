@@ -28,7 +28,7 @@ public:
   typedef std::vector<int> Tiles;
 
 private:
-  int width;
+  int m_columns;
   int index;
 
   int offset;

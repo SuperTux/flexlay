@@ -26,6 +26,7 @@ blit_opaque(PixelBuffer target, PixelBuffer brush, int x_pos, int y_pos)
 #ifdef GRUMBEL
   assert(target.get_format().get_type() == pixelformat_rgba);
   assert(target.get_format().get_depth() == 32);
+#endif
 
   target.lock();
   brush.lock();
@@ -42,9 +43,11 @@ blit_opaque(PixelBuffer target, PixelBuffer brush, int x_pos, int y_pos)
   int target_pitch = target.get_pitch();
   int brush_pitch  = brush.get_pitch();
 
+#ifdef GRUMBEL
   if (brush.get_format().get_type() == pixelformat_rgba)
   {
-    if (brush.get_format().get_depth() == 32)
+#endif
+    if (brush.get_depth() == 32)
     {
       for (int y = start_y; y < end_y; ++y)
         for (int x = start_x; x < end_x; ++x)
@@ -58,7 +61,7 @@ blit_opaque(PixelBuffer target, PixelBuffer brush, int x_pos, int y_pos)
           target_buf[target_pos + 3] = brush_buf[brush_pos + 3];
         }
     }
-    else if (brush.get_format().get_depth() == 24)
+    else if (brush.get_depth() == 24)
     {
       for (int y = start_y; y < end_y; ++y)
         for (int x = start_x; x < end_x; ++x)
@@ -74,8 +77,11 @@ blit_opaque(PixelBuffer target, PixelBuffer brush, int x_pos, int y_pos)
     }
     else
     {
+#ifdef GRUMBEL
       std::cout << "Unsupported bpp: " << brush.get_format().get_depth() << std::endl;
+#endif
     }
+#ifdef GRUMBEL
   }
   else if (brush.get_format().get_type() == pixelformat_index)
   {
@@ -96,16 +102,15 @@ blit_opaque(PixelBuffer target, PixelBuffer brush, int x_pos, int y_pos)
   {
     assert(!"Unknown pixelformat type");
   }
+#endif
 
   brush.unlock();
   target.unlock();
-#endif
 }
 
 void
 blit(PixelBuffer target, PixelBuffer brush, int x_pos, int y_pos)
 {
-#ifdef GRUMBEL
   target.lock();
   brush.lock();
 
@@ -122,9 +127,11 @@ blit(PixelBuffer target, PixelBuffer brush, int x_pos, int y_pos)
   int target_width = target.get_width();
   int brush_width  = brush.get_width();
 
+#ifdef GRUMBEL
   if (brush.get_format().get_type() == pixelformat_rgba)
   {
-    if (brush.get_format().get_depth() == 32)
+#endif
+    if (brush.get_depth() == 32)
     {
       for (int y = start_y; y < end_y; ++y)
         for (int x = start_x; x < end_x; ++x)
@@ -150,7 +157,7 @@ blit(PixelBuffer target, PixelBuffer brush, int x_pos, int y_pos)
           target_buf[4*target_pos + 3] = std::min(255, int((1-alpha)*tb + alpha*b));
         }
     }
-    else if (brush.get_format().get_depth() == 24)
+    else if (brush.get_depth() == 24)
     {
       for (int y = start_y; y < end_y; ++y)
         for (int x = start_x; x < end_x; ++x)
@@ -166,8 +173,9 @@ blit(PixelBuffer target, PixelBuffer brush, int x_pos, int y_pos)
     }
     else
     {
-      std::cout << "Unsupported bpp: " << brush.get_format().get_depth() << std::endl;
+      std::cout << "Unsupported bpp: " << brush.get_depth() << std::endl;
     }
+#ifdef GRUMBEL
   }
   else if (brush.get_format().get_type() == pixelformat_index)
   {
@@ -188,10 +196,10 @@ blit(PixelBuffer target, PixelBuffer brush, int x_pos, int y_pos)
   {
     assert(!"Unknown pixelformat type");
   }
+#endif
 
   brush.unlock();
   target.unlock();
-#endif
 }
 
 void clear(PixelBuffer canvas)

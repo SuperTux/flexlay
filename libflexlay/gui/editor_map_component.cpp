@@ -48,10 +48,10 @@ EditorMapComponent::EditorMapComponent(QWidget* parent) :
   m_scroll_vert = new QScrollBar(Qt::Vertical);
   m_editormap_widget = new EditorMapWidget(*this);
 
-  QObject::connect(m_scroll_horz, &QAbstractSlider::sliderMoved, [this](int value){
+  QObject::connect(m_scroll_horz, &QAbstractSlider::valueChanged, [this](int value){
       move_to_x(value);
     });
-  QObject::connect(m_scroll_vert, &QAbstractSlider::sliderMoved, [this](int value){
+  QObject::connect(m_scroll_vert, &QAbstractSlider::valueChanged, [this](int value){
       move_to_y(value);
     });
 

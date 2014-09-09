@@ -31,12 +31,12 @@ public:
   ObjectLayerImpl() {}
   virtual ~ObjectLayerImpl() {}
 
-  void draw(GraphicContext& gc);
-  bool has_bounding_rect() const { return false; }
+  void draw(GraphicContext& gc) override ;
+  bool has_bounding_rect() const override { return false; }
 };
 
-ObjectLayer::ObjectLayer()
-  : impl(new ObjectLayerImpl)
+ObjectLayer::ObjectLayer() :
+  impl(new ObjectLayerImpl)
 {
 }
 

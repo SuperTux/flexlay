@@ -45,7 +45,7 @@ public:
   virtual bool has_bounding_rect() const =0;
 
   // FIXME: Should use Rectf
-  virtual Rect get_bounding_rect() { return Rect(); }
+  virtual Rect get_bounding_rect() const { return Rect(); }
 };
 
 #endif

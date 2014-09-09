@@ -45,9 +45,10 @@ public:
   TilemapLayerImpl() {}
   virtual ~TilemapLayerImpl() {}
 
-  bool has_bounding_rect() const;
-  Rect get_bounding_rect() const;
-  void draw(GraphicContext& gc);
+  bool has_bounding_rect() const override;
+  Rect get_bounding_rect() const override;
+
+  void draw(GraphicContext& gc) override;
 };
 
 TilemapLayer::TilemapLayer()
@@ -305,8 +306,8 @@ Rect
 TilemapLayerImpl::get_bounding_rect() const
 {
   return Rect(Point(0, 0),
-                 Size(field.get_width()  * tileset.get_tile_size(),
-                         field.get_height() * tileset.get_tile_size()));
+              Size(field.get_width()  * tileset.get_tile_size(),
+                   field.get_height() * tileset.get_tile_size()));
 }
 
 Point

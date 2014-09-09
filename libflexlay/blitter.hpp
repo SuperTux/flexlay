@@ -19,8 +19,8 @@
 
 #include "pixel_buffer.hpp"
 
-void blit(PixelBuffer target, PixelBuffer brush, int x_pos, int y_pos);
-void blit_opaque(PixelBuffer target, PixelBuffer brush, int x_pos, int y_pos);
+void blit(PixelBuffer target, PixelBuffer brush, int x, int y);
+void blit_opaque(PixelBuffer target, PixelBuffer brush, int x, int y);
 void clear(PixelBuffer target);
 
 #endif

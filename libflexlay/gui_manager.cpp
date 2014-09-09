@@ -34,6 +34,7 @@
 #include "gui/menubar.hpp"
 #include "gui/minimap.hpp"
 #include "gui/object_selector.hpp"
+#include "gui/tile_brush_selector.hpp"
 #include "gui/tile_selector.hpp"
 
 GUIManager::GUIManager() :
@@ -124,6 +125,17 @@ GUIManager::create_object_selector(int w, int h)
   // m_window->tabifyDockWidget(first, second)
   m_window->addDockWidget(Qt::RightDockWidgetArea, dockwidget);
   return object_selector;
+}
+
+TileBrushSelector*
+GUIManager::create_tile_brush_selector()
+{
+  QDockWidget* dockwidget = new QDockWidget("Tile Brush");
+  TileBrushSelector* tile_brush_selector = new TileBrushSelector;
+  dockwidget->setWidget(tile_brush_selector->get_widget());
+
+  m_window->addDockWidget(Qt::RightDockWidgetArea, dockwidget);
+  return tile_brush_selector;
 }
 
 TileSelector*

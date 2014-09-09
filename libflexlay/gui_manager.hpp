@@ -30,6 +30,7 @@ class Minimap;
 class ObjectSelector;
 class QMainWindow;
 class Rect;
+class TileBrushSelector;
 class TileSelector;
 
 class GUIManager
@@ -50,6 +51,7 @@ public:
                                 const std::string& ok_label, const std::string& cancel_label);
   ObjectSelector* create_object_selector(int w, int h);
   TileSelector* create_tile_selector();
+  TileBrushSelector* create_tile_brush_selector();
   LayerSelector* create_layer_selector();
 
 private:

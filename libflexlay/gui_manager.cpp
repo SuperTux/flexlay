@@ -30,6 +30,7 @@
 #include "gui/editor_map_widget.hpp"
 #include "gui/file_dialog.hpp"
 #include "gui/generic_dialog.hpp"
+#include "gui/layer_selector.hpp"
 #include "gui/menubar.hpp"
 #include "gui/minimap.hpp"
 #include "gui/object_selector.hpp"
@@ -120,6 +121,7 @@ GUIManager::create_object_selector(int w, int h)
   ObjectSelector* object_selector = new ObjectSelector(w, h, nullptr);
   dockwidget->setWidget(object_selector->get_widget());
 
+  // m_window->tabifyDockWidget(first, second)
   m_window->addDockWidget(Qt::RightDockWidgetArea, dockwidget);
   return object_selector;
 }
@@ -133,6 +135,17 @@ GUIManager::create_tile_selector()
 
   m_window->addDockWidget(Qt::RightDockWidgetArea, dockwidget);
   return tile_selector;
+}
+
+LayerSelector*
+GUIManager::create_layer_selector()
+{
+  QDockWidget* dockwidget = new QDockWidget("Layer Selector");
+  LayerSelector* layer_selector = new LayerSelector;
+  dockwidget->setWidget(layer_selector->get_widget());
+
+  m_window->addDockWidget(Qt::RightDockWidgetArea, dockwidget);
+  return layer_selector;
 }
 
 /* EOF */

@@ -46,6 +46,8 @@ class SuperTuxGUI
                                                 make_metadata(objectdata)))
     }
 
+    @layer_selector = @gui.create_layer_selector()
+
     @tileselector = @gui.create_tile_selector()
     @tileselector.set_tileset($tileset)
     @tileselector.set_tiles("All Tiles", $tileset.get_tiles())
@@ -69,8 +71,10 @@ class SuperTuxGUI
     @toolbar = @gui.create_button_panel(false)
     @paint = @toolbar.add_icon("../data/images/tools/stock-tool-pencil-22.png", proc{ set_tilemap_paint_tool() })
     @select = @toolbar.add_icon("../data/images/tools/stock-tool-rect-select-22.png", proc{ set_tilemap_select_tool() })
-    @zoom = @toolbar.add_icon("../data/images/tools/stock-tool-zoom-22.png", proc{ set_zoom_tool() })
+    @toolbar.add_separator()
     @object = @toolbar.add_icon("../data/images/tools/stock-tool-clone-22.png", proc{ set_objmap_select_tool() })
+    @toolbar.add_separator()
+    @zoom = @toolbar.add_icon("../data/images/tools/stock-tool-zoom-22.png", proc{ set_zoom_tool() })
     #     @stroke = @toolbar.add_icon("../data/images/tools/stock-tool-pencil-22.png", proc{ set_sketch_stroke_tool() })
 
     create_menu()

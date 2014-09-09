@@ -24,12 +24,14 @@ class EditorMapComponent;
 class FileDialog;
 class GUIManagerImpl;
 class GenericDialog;
+class LayerSelector;
 class Menubar;
 class Minimap;
+class ObjectSelector;
 class QMainWindow;
 class Rect;
-class ObjectSelector;
 class TileSelector;
+
 class GUIManager
 {
 public:
@@ -48,6 +50,7 @@ public:
                                 const std::string& ok_label, const std::string& cancel_label);
   ObjectSelector* create_object_selector(int w, int h);
   TileSelector* create_tile_selector();
+  LayerSelector* create_layer_selector();
 
 private:
   std::unique_ptr<QMainWindow> m_window;

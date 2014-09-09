@@ -15,7 +15,7 @@ class SuperTuxGUI
   end
 
   def initialize()
-    @gui = GUIManager.new()
+    @gui = $flexlay.create_gui_manager("SuperTux Editor")
 
     @display_properties = DisplayProperties.new()
 

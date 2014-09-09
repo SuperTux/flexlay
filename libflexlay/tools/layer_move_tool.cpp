@@ -38,7 +38,7 @@ public:
   {
     Layer layer;
 
-    EditorMap parent = EditorMapComponent::current()->get_workspace().get_map();
+    EditorMap parent = Workspace::current().get_map();
 
     for(int i = 0; i < parent.get_layer_count(); ++i)
     {
@@ -51,9 +51,9 @@ public:
 
   void draw(GraphicContext& gc)
   {
-    for(int i = 0; i < EditorMapComponent::current()->get_workspace().get_map().get_layer_count(); ++i)
+    for(int i = 0; i < Workspace::current().get_map().get_layer_count(); ++i)
     {
-      Layer layer = EditorMapComponent::current()->get_workspace().get_map().get_layer(i);
+      Layer layer = Workspace::current().get_map().get_layer(i);
       if (layer.has_bounding_rect())
       {
         Rect rect = layer.get_bounding_rect();

@@ -37,7 +37,7 @@ MinimapWidget::MinimapWidget(EditorMapComponent* p) :
   m_parent(),
   m_minimap_surface()
 {
-  m_parent = p ? p : EditorMapComponent::current();
+  m_parent = p;
 }
 
 QSize

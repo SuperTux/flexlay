@@ -70,6 +70,7 @@ public:
 	Rect(const Rect &rect)
 	{ left = rect.left; top = rect.top; right = rect.right; bottom = rect.bottom; }
 
+#ifndef SWIG
 	//: Rect += Rect operator.
 	Rect &operator+=(const Rect &r)
 	{ left += r.left; top += r.top; right += r.right; bottom += r.bottom; return *this; }
@@ -109,6 +110,7 @@ public:
 	//: Rect != Rect operator.
 	bool operator!=(const Rect &r) const
 	{ return (left != r.left || top != r.top || right != r.right || bottom != r.bottom); }
+#endif
 
 //! Attributes:
 public:
@@ -240,6 +242,7 @@ public:
 	Rectf(const Rectf &rect)
 	{ left = rect.left; top = rect.top; right = rect.right; bottom = rect.bottom; }
 
+#ifndef SWIG
 	//: Rect += Rect operator.
 	Rectf &operator+=(const Rectf &r)
 	{ left += r.left; top += r.top; right += r.right; bottom += r.bottom; return *this; }
@@ -279,6 +282,7 @@ public:
 	//: Rect != Rect operator.
 	bool operator!=(const Rect &r) const
 	{ return (left != r.left || top != r.top || right != r.right || bottom != r.bottom); }
+#endif
 
 //! Attributes:
 public:

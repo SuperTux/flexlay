@@ -114,6 +114,7 @@ public:
 		#endif
 	}
 	
+#ifndef SWIG
 	//: Translate point.
 	Point &operator+=(const Point &p)
 	{ x += p.x; y += p.y; return *this; }
@@ -121,6 +122,7 @@ public:
 	//: Translate point negatively.
 	Point &operator-=(const Point &p)
 	{ x -= p.x; y -= p.y; return *this; }
+#endif
 	
 	//: Point + Point operator.
 	Point operator+(const Point &p) const
@@ -134,9 +136,11 @@ public:
 	bool operator==(const Point &p) const
 	{ return (x == p.x) && (y == p.y); }
 
+#ifndef SWIG
 	//: Point != Point operator (deep compare)
 	bool operator!=(const Point &p) const
 	{ return (x != p.x) || (y != p.y); }
+#endif
 
 // Attributes:
 public:
@@ -213,6 +217,7 @@ public:
 		#endif
 	}
 
+#ifndef SWIG
 	//: Translate point.
 	Pointf &operator+=(const Pointf &p)
 	{ x += p.x; y += p.y; return *this; }
@@ -220,7 +225,8 @@ public:
 	//: Translate point negatively.
 	Pointf &operator-=(const Pointf &p)
 	{ x -= p.x; y -= p.y; return *this; }
-	
+#endif
+
 	//: Point + Point operator.
 	Pointf operator+(const Pointf &p) const
 	{ return Pointf(x + p.x, y + p.y); }
@@ -233,9 +239,11 @@ public:
 	bool operator==(const Pointf &p) const
 	{ return (x == p.x) && (y == p.y); }
 
+#ifndef SWIG
 	//: Point != Point operator (deep compare)
 	bool operator!=(const Pointf &p) const
 	{ return (x != p.x) || (y != p.y); }
+#endif
 
 // Attributes:
 public:

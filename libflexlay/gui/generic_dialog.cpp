@@ -49,6 +49,10 @@ GenericDialog::GenericDialog(const std::string& title, QWidget* parent) :
   m_dialog->show();
 }
 
+GenericDialog::~GenericDialog()
+{
+}
+
 void
 GenericDialog::add_label(const std::string& text)
 {

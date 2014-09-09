@@ -36,8 +36,10 @@ class TileSelector;
 class GUIManager
 {
 public:
-  GUIManager();
+#ifndef SWIG
+  GUIManager(const std::string& title);
   ~GUIManager();
+#endif
 
   void run();
   void quit();
@@ -56,6 +58,10 @@ public:
 
 private:
   std::unique_ptr<QMainWindow> m_window;
+
+private:
+  GUIManager(const GUIManager&);
+  GUIManager& operator=(const GUIManager&);
 };
 
 #endif

@@ -28,11 +28,12 @@ private:
   std::function<void (std::string)> m_callback;
   QFileDialog* m_file_dialog;
 
-protected:
-  virtual ~FileDialog();
 public:
+#ifndef SWIG
   FileDialog(const std::string& titel,
              const std::string& ok_label, const std::string& cancel_label);
+  ~FileDialog();
+#endif
 
   void set_filename(const std::string& filename);
   std::string get_filename() const;

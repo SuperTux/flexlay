@@ -24,14 +24,14 @@ class QTreeView;
 class QVBoxLayout;
 class QWidget;
 
-class LayerSelector
+class LayerSelector final
 {
-private:
-
 public:
+#ifndef SWIG
   LayerSelector();
 
   QWidget* get_widget() const;
+#endif
 
 private:
   QWidget* m_vbox;

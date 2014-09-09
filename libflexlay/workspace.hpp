@@ -18,11 +18,11 @@
 #define HEADER_FLEXLAY_WORKSPACE_HPP
 
 #include "graphic_context_state.hpp"
+#include "tools/tool.hpp"
 
 class EditorMap;
 class GraphicContext;
 class InputEvent;
-class Tool;
 class WorkspaceImpl;
 
 class Workspace

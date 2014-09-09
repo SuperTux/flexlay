@@ -34,6 +34,10 @@ Icon::Icon(QAction* action) :
   m_impl->action = action;
 }
 
+Icon::~Icon()
+{
+}
+
 void
 Icon::disable()
 {

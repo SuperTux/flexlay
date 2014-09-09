@@ -23,6 +23,10 @@ Minimap::Minimap(EditorMapComponent* p) :
 { 
 }
 
+Minimap::~Minimap()
+{
+}
+
 void
 Minimap::update_minimap()
 {

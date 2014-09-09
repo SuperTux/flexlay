@@ -66,6 +66,7 @@ public:
 
 //! Operations:
 public:
+#ifndef SWIG
 	//: Size += Size operator.
 	Size &operator+=(const Size &s)
 	{ width += s.width; height += s.height; return *this; }
@@ -73,6 +74,7 @@ public:
 	//: Size -= Size operator.
 	Size &operator-=(const Size &s)
 	{ width -= s.width; height -= s.height; return *this; }
+#endif
 	
 	//: Size + Size operator.
 	Size operator+(const Size &s) const
@@ -86,9 +88,11 @@ public:
 	bool operator==(const Size &s) const
 	{ return (width == s.width) && (height == s.height); }
 
+#ifndef SWIG
 	//: Size != Size operator (deep compare).
 	bool operator!=(const Size &s) const
 	{ return (width != s.width) || (height != s.height); }
+#endif
 };
 
 //: 2D (width,height) floating point size structure.
@@ -123,6 +127,7 @@ public:
 
 //! Operations:
 public:
+#ifndef SWIG
 	//: Size += Size operator.
 	Sizef &operator+=(const Sizef &s)
 	{ width += s.width; height += s.height; return *this; }
@@ -130,7 +135,7 @@ public:
 	//: Size -= Size operator.
 	Sizef &operator-=(const Sizef &s)
 	{ width -= s.width; height -= s.height; return *this; }
-	
+#endif
 	//: Size + Size operator.
 	Sizef operator+(const Sizef &s) const
 	{ return Sizef(width + s.width, height + s.height); }
@@ -143,9 +148,11 @@ public:
 	bool operator==(const Sizef &s) const
 	{ return (width == s.width) && (height == s.height); }
 
+#ifndef SWIG
 	//: Size != Size operator (deep compare).
 	bool operator!=(const Size &s) const
 	{ return (width != s.width) || (height != s.height); }
+#endif
 };
 
 inline Size::Size(const Sizef& s)

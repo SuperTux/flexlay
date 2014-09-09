@@ -36,9 +36,8 @@
 int main()
 {
   Flexlay flexlay;
-  flexlay.init();
 
-  GUIManager gui;
+  GUIManager* gui = flexlay.create_gui_manager("Simple");
 
   EditorMap m(true);
   Tileset tileset(32);
@@ -63,9 +62,9 @@ int main()
 
   TilemapLayer::set_current(tilemap);
 
-  ButtonPanel* buttons = gui.create_button_panel(true);
+  ButtonPanel* buttons = gui->create_button_panel(true);
   
-  Menubar* menubar = gui.create_menubar();
+  Menubar* menubar = gui->create_menubar();
   Menu file_menu = menubar->add_menu("&File");
   file_menu.add_item("Open...", []{ std::cout << "Open" << std::endl; });
   file_menu.add_item("Save...", []{ std::cout << "Save" << std::endl; });
@@ -76,7 +75,7 @@ int main()
   view_menu.add_item("Zoom Out", []{ std::cout << "Zoom Out" << std::endl; });
   view_menu.add_item("Reset Zoom", []{ std::cout << "Reset Zoom" << std::endl; });
 
-  EditorMapComponent* editor_map = gui.create_editor_map_component();
+  EditorMapComponent* editor_map = gui->create_editor_map_component();
   Workspace workspace = editor_map->get_workspace();
   workspace.set_map(m);
 
@@ -102,12 +101,10 @@ int main()
       workspace.set_tool(3, tilemap_paint_tool.to_tool());
     });
 
-  GenericDialog* dialog = gui.create_generic_dialog("Generic Dialog");
+  GenericDialog* dialog = gui->create_generic_dialog("Generic Dialog");
   dialog->add_int("An Int:", 5);
 
-  gui.run();
-
-  flexlay.deinit();
+  gui->run();
 }
 
 /* EOF */

@@ -49,8 +49,7 @@ require "sexpr.rb"
 
 require_relative "gameobj.rb"
 
-flexlay = Flexlay.new()
-flexlay.init("SuperTux Editor")
+$flexlay = Flexlay.new()
 
 # Tools
 $tilemap_paint_tool  = TileMapPaintTool.new()
@@ -147,26 +146,5 @@ $gui.run()
 
 puts "config save: #{$config_file}"
 $config.save($config_file)
-
-# Try to cleanup
-puts "Cleanup"
-$gui = nil 
-$config = nil
-$tilemap_paint_tool  = nil
-$tilemap_select_tool = nil
-$zoom_tool           = nil
-$zoom2_tool          = nil
-$workspace_move_tool = nil
-$objmap_select_tool  = nil
-$game_objects = nil
-GC.start
-GC.start
-GC.start
-GC.start
-puts "Cleanup done"
-
-# FIXME: Can't deinit flexlay, since we would crash then
-at_exit{flexlay.deinit()}
-# puts "And now we crash"
 
 # EOF #

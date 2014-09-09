@@ -32,27 +32,10 @@ class Tileset;
 
 class TileSelector
 {
-protected:
-  virtual ~TileSelector();
 public:
   typedef std::vector<int> Tiles;
 
-public:
-  TileSelector();
-
-  void set_tileset(Tileset t);
-  void set_tiles(const Tiles& t);
-  void set_tiles(const std::string& name, const Tiles& t);
-  Tiles get_tiles() const;
-
-  void set_scale(float s);
-
-  QWidget* get_widget() const;
-
-private:
-  Point get_mouse_tile_pos(const Point& mouse_pos);
-  Rect get_selection();
-
+#ifndef SWIG
 private:
   QWidget* m_box;
   QVBoxLayout* m_layout;
@@ -61,6 +44,29 @@ private:
   QScrollArea* m_scroll_area;
 
   std::map<std::string, Tiles> m_tiles;
+
+public:
+  TileSelector();
+  ~TileSelector();
+
+  QWidget* get_widget() const;
+
+private:
+  Point get_mouse_tile_pos(const Point& mouse_pos);
+  Rect get_selection();
+#endif
+
+public:
+  void set_tileset(Tileset t);
+  void set_tiles(const Tiles& t);
+  void set_tiles(const std::string& name, const Tiles& t);
+  Tiles get_tiles() const;
+
+  void set_scale(float s);
+
+private:
+  TileSelector(const TileSelector&);
+  TileSelector& operator=(const TileSelector&);
 };
 
 #endif

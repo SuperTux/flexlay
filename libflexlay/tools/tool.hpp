@@ -17,18 +17,15 @@
 #ifndef HEADER_FLEXLAY_TOOLS_TOOL_HPP
 #define HEADER_FLEXLAY_TOOLS_TOOL_HPP
 
-class EditorMapComponent;
-class InputEvent;
-
 #include <memory>
 
+class GraphicContext;
+class InputEvent;
 class ToolImpl;
 
-class GraphicContext;
 class Tool
 {
-protected:
-
+#ifndef SWIG
 public:
   Tool();
   Tool(std::shared_ptr<ToolImpl> impl_);
@@ -39,6 +36,7 @@ public:
   void on_mouse_up  (const InputEvent& event);
   void on_mouse_down(const InputEvent& event);
   void on_mouse_move(const InputEvent& event);
+#endif
 
 private:
   std::shared_ptr<ToolImpl> impl;

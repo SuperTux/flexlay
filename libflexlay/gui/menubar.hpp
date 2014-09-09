@@ -28,29 +28,41 @@ class QMenu;
 
 class Menu
 {
-public:
-  Menu(QMenu* menu);
+private:
+  QMenu* m_menu;
 
+public:
+#ifndef SWIG
+  Menu(QMenu* menu);
+#endif
+
+public:
   Menu add_menu(const std::string& label);
   void add_item(const std::string& label, std::function<void()> callback);
 
+#ifdef SWIG
 private:
-  QMenu* m_menu;
+  Menu(const Menu&);
+  Menu& operator=(const Menu&);
+#endif
 };
 
 class Menubar
 {
 private:
+  QMenuBar* m_menubar;
 
-protected:
-  virtual ~Menubar() {}
 public:
+#ifndef SWIG
   Menubar(QMenuBar* menubar);
+  ~Menubar() {}
+#endif
 
   Menu add_menu(const std::string& label);
 
 private:
-  QMenuBar* m_menubar;
+  Menubar(const Menubar&);
+  Menubar& operator=(const Menubar&);
 };
 
 #endif

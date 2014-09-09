@@ -24,10 +24,11 @@ class QAction;
 
 class Icon
 {
-protected:
-  virtual ~Icon() {}
 public:
+#ifndef SWIG
   Icon(QAction* action);
+  ~Icon();
+#endif
 
   void disable();
   void enable();
@@ -37,6 +38,10 @@ public:
 
 private:
   std::shared_ptr<IconImpl> m_impl;
+
+private:
+  Icon(const Icon&);
+  Icon& operator=(const Icon&);
 };
 
 #endif

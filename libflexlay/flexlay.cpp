@@ -16,16 +16,13 @@
 
 #include "flexlay.hpp"
 
-#include "globals.hpp"
 #include "fonts.hpp"
-
-Flexlay* Flexlay::current_ = 0;
+#include "globals.hpp"
+#include "gui_manager.hpp"
 
 Flexlay::Flexlay() :
   m_app()
 {
-  current_ = this;
-
   int* argc = new int(1);
   char** argv = new char*[2];
   argv[0] = new char[10]{ 'a', '\0' };
@@ -33,28 +30,16 @@ Flexlay::Flexlay() :
   m_app.reset(new QApplication(*argc, argv));
 }
 
-boost::signals2::signal<void (int, int)>&
-Flexlay::sig_resize()
-{
-  return m_sig_resize;
-}
-
-void
-Flexlay::init(const std::string& title)
-{
-  std::cout << "Flexlay::init()" << std::endl;
-}
-
-void
-Flexlay::deinit()
-{
-  std::cout << "Flexlay::deinit()" << std::endl;
-}
-
 void
 Flexlay::set_datadir(const std::string& datadir_)
 {
   datadir = datadir_;
+}
+
+GUIManager*
+Flexlay::create_gui_manager(const std::string& title)
+{
+  return new GUIManager(title);
 }
 
 /* EOF */

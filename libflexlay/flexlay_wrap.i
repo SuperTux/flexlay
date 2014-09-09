@@ -35,9 +35,10 @@
 #include "tileset.hpp"
 #include "workspace.hpp"
 
-#include "tools/workspace_move_tool.hpp"
 #include "tools/layer_move_tool.hpp"
 #include "tools/sketch_stroke_tool.hpp"
+#include "tools/workspace_move_tool.hpp"
+
 #include "sketch_layer.hpp"
 #include "bitmap_layer.hpp"
 #include "stroke.hpp"
@@ -162,9 +163,11 @@ VALUE Point2Value(const Point& arg)
 %include "gui/file_dialog.hpp"
 %include "gui/generic_dialog.hpp"
 
-%include "tools/workspace_move_tool.hpp"
+%include "tools/tool.hpp"
 %include "tools/layer_move_tool.hpp"
 %include "tools/sketch_stroke_tool.hpp"
+%include "tools/workspace_move_tool.hpp"
+
 %include "sketch_layer.hpp"
 %include "bitmap_layer.hpp"
 %include "stroke.hpp"

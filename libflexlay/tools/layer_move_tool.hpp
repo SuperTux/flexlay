@@ -17,7 +17,7 @@
 #ifndef HEADER_FLEXLAY_TOOLS_LAYER_MOVE_TOOL_HPP
 #define HEADER_FLEXLAY_TOOLS_LAYER_MOVE_TOOL_HPP
 
-#include "tool.hpp"
+#include "tools/tool.hpp"
 
 class LayerMoveToolImpl;
 
@@ -27,6 +27,7 @@ public:
   LayerMoveTool();
 
   Tool to_tool();
+
 private:
   std::shared_ptr<LayerMoveToolImpl> impl;
 };

@@ -60,7 +60,10 @@ private:
   std::function<void ()> m_ok_callback;
 
 public:
+#ifndef SWIG
   GenericDialog(const std::string& title, QWidget* parent);
+  ~GenericDialog();
+#endif
 
   void add_label(const std::string& text);
   void add_bool(const std::string& name, bool value);

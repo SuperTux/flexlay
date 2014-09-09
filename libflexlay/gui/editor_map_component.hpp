@@ -31,15 +31,24 @@ class QWidget;
     stuff */
 class EditorMapComponent
 {
+#ifndef SWIG
 private:
   static EditorMapComponent* current_;
-protected:
-  virtual ~EditorMapComponent();
 public:
   static EditorMapComponent* current() { return current_; }
 
+public:
   EditorMapComponent(QWidget* parent);
+  ~EditorMapComponent();
 
+  QWidget* get_widget() const;
+  EditorMapWidget* get_editormap_widget() const { return m_editormap_widget; }
+
+  void capture_mouse();
+  void release_mouse();
+#endif
+
+public:
   Workspace get_workspace() const;
 
   void set_zoom(float z);
@@ -51,21 +60,15 @@ public:
   void move_to_x(float x);
   void move_to_y(float y);
 
-  void capture_mouse();
-  void release_mouse();
-
-#ifdef GRUMBEL
-  boost::signals2::signal<void (int, int)>& sig_on_key(const std::string& str);
-#endif
-
   Pointf screen2world(const Point& pos);
 
   Rectf get_clip_rect() const;
 
   GraphicContextState& get_gc_state();
 
-  EditorMapWidget* get_editormap_widget() const { return m_editormap_widget; }
-  QWidget* get_widget() const;
+#ifdef GRUMBEL
+  boost::signals2::signal<void (int, int)>& sig_on_key(const std::string& str);
+#endif
 
 private:
   void update_scrollbars();
@@ -79,6 +82,10 @@ private:
   EditorMapWidget* m_editormap_widget;
   Workspace m_workspace;
   GraphicContextState m_gc_state;
+
+private:
+  EditorMapComponent(const EditorMapComponent&);
+  EditorMapComponent& operator=(const EditorMapComponent&);
 };
 
 #endif

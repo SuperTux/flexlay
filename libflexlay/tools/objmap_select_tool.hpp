@@ -29,6 +29,7 @@ class ObjMapSelectTool
 public:
   typedef std::vector<ObjMapObject> Selection;
 
+public:
   ObjMapSelectTool();
   ~ObjMapSelectTool();
 
@@ -40,6 +41,7 @@ public:
   boost::signals2::signal<void (CL_Menu*)>& sig_on_popup_menu_display();
 
   Tool to_tool();
+
 private:
   std::shared_ptr<ObjMapSelectToolImpl> impl;
 };

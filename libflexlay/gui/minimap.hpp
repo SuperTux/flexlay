@@ -25,17 +25,21 @@ class MinimapWidget;
 
 class Minimap
 {
-protected:
-  virtual ~Minimap() {}
-
 public:
+#ifndef SWIG
   Minimap(EditorMapComponent* p);
+  ~Minimap();
+#endif
 
   QWidget* get_widget();
   void update_minimap();
 
 private:
   MinimapWidget* m_widget;
+
+private:
+  Minimap(const Minimap&);
+  Minimap& operator=(const Minimap&);
 };
 
 #endif

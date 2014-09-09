@@ -26,20 +26,25 @@ class QWidget;
 
 class ObjectSelector
 {
-protected:
-  virtual ~ObjectSelector();
+public:
+#ifndef SWIG
+  ObjectSelector(int obj_w, int obj_h, QWidget* parent);
+  ~ObjectSelector();
+
+  QWidget* get_widget() const;
+#endif
 
 public:
-  ObjectSelector(int obj_w, int obj_h, QWidget* parent);
-
   void add_brush(const ObjectBrush& brush);
 
   boost::signals2::signal<void (ObjectBrush, Point)>& sig_drop();
 
-  QWidget* get_widget() const;
-
 private:
   std::shared_ptr<ObjectSelectorImpl> m_impl;
+
+private:
+  ObjectSelector(const ObjectSelector&);
+  ObjectSelector& operator=(const ObjectSelector&);
 };
 
 #endif

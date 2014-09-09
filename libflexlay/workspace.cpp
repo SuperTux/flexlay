@@ -104,6 +104,7 @@ Workspace::mouse_down(const InputEvent& event)
 
   switch (event.id)
   {
+#ifdef GRUMBEL
     case InputEvent::MOUSE_WHEEL_UP:
       EditorMapComponent::current()->zoom_in(event.mouse_pos);
       break;
@@ -111,6 +112,7 @@ Workspace::mouse_down(const InputEvent& event)
     case InputEvent::MOUSE_WHEEL_DOWN:
       EditorMapComponent::current()->zoom_out(event.mouse_pos);
       break;
+#endif
 
    default:
       break;

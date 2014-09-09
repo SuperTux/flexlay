@@ -36,6 +36,7 @@ public:
   void set_brush(const TileBrush& b);
 
   Tool to_tool();
+
 private:
   std::shared_ptr<TileMapPaintToolImpl> impl;
 };

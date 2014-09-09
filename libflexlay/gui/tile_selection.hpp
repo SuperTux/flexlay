@@ -27,13 +27,18 @@ class TileSelectionImpl;
     selections of tiles and provides a way to convert this selection
     to a Brush which then can be used for either serialisation or be
     used for painting on the map itself */
-class TileSelection
+class TileSelection final
 {
+#ifndef SWIG
 public:
   TileSelection();
   ~TileSelection();
 
-  void start (TilemapLayer tilemap, const Point& pos);
+  void draw(GraphicContext& gc, const Color& color = Color(255, 255, 255, 100));
+#endif
+
+public:
+  void start(TilemapLayer tilemap, const Point& pos);
   void update(const Point& pos);
 
   void clear();
@@ -41,9 +46,8 @@ public:
 
   Rect get_rect() const;
 
-  void draw(GraphicContext& gc, const Color& color = Color(255, 255, 255, 100));
-
   TileBrush get_brush(const Field<int>& field) const;
+
 private:
   std::shared_ptr<TileSelectionImpl> impl;
 };

@@ -85,9 +85,11 @@ public:
 	bool operator==(const Color &c) const
 	{ return (color == c.color); }
 
+#ifndef SWIG
 	//: Color != Color operator (deep compare)
 	bool operator!=(const Color &c) const
 	{ return (color != c.color); }
+#endif
 
 //! Operations:
 public:

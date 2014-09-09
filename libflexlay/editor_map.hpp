@@ -82,7 +82,9 @@ public:
 
   boost::signals2::signal<void ()>& sig_change();
 
+#ifndef SWIG
   explicit operator bool() const { return static_cast<bool>(impl); }
+#endif
 
 private:
   std::shared_ptr<EditorMapImpl> impl;

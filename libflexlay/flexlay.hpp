@@ -22,6 +22,8 @@
 
 #include <QApplication>
 
+class GUIManager;
+
 /*! \mainpage Flexlay - A Flexible Layered 2D Editor
 
   \section intro Introduction
@@ -76,11 +78,6 @@
     Flexlay 'batchable' so that it can run without a GUI */
 class Flexlay
 {
-public:
-  static Flexlay* current() { return current_; }
-private:
-  static Flexlay* current_;
-
 private:
   std::unique_ptr<QApplication> m_app;
   int  m_screen_width;
@@ -90,12 +87,9 @@ private:
 public:
   Flexlay();
 
-  boost::signals2::signal<void (int, int)>& sig_resize();
-
   void set_datadir(const std::string& datadir_);
 
-  void init(const std::string& title = "Flexlay");
-  void deinit();
+  GUIManager* create_gui_manager(const std::string& title);
 };
 
 #endif

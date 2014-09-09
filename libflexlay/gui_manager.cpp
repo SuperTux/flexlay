@@ -37,9 +37,10 @@
 #include "gui/tile_brush_selector.hpp"
 #include "gui/tile_selector.hpp"
 
-GUIManager::GUIManager() :
+GUIManager::GUIManager(const std::string& title) :
   m_window(new QMainWindow)
 {
+  m_window->setWindowTitle(QString::fromStdString(title));
 }
 
 GUIManager::~GUIManager()

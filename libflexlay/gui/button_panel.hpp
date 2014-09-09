@@ -30,7 +30,9 @@ private:
   QToolBar* m_toolbar;
 
 public:
+#ifndef SWIG
   ButtonPanel(QToolBar* toolbar);
+#endif
 
   Icon* add_icon(const std::string& filename,
                  std::function<void ()> callback);

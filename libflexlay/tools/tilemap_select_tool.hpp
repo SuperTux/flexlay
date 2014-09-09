@@ -34,6 +34,7 @@ public:
   Rect get_selection_rect() const;
 
   Tool to_tool();
+
 private:
   std::shared_ptr<TileMapSelectToolImpl> impl;
 };

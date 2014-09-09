@@ -27,16 +27,18 @@ class QListWidget;
 
 class TileBrushSelector
 {
+#ifndef SWIG
 private:
   std::vector<TileBrush> m_brushes;
   QListWidget* m_list_widget;
 
 public:
   TileBrushSelector();
-
-  void add_brush(const std::string& name, const TileBrush& brush);
-
   QWidget* get_widget() const;
+#endif
+
+public:
+  void add_brush(const std::string& name, const TileBrush& brush);
 
 private:
   TileBrushSelector(const TileBrushSelector&);

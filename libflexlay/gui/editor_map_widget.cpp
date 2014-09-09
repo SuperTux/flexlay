@@ -90,7 +90,6 @@ EditorMapWidget::mouseMoveEvent(QMouseEvent* event)
   Workspace workspace = m_comp.get_workspace();
   InputEvent ev(*event);
   workspace.mouse_move(ev);
-  std::cout << "mouse move: " << std::endl;
   repaint();
 }
 

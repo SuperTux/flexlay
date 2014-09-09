@@ -59,7 +59,7 @@ module GameObjects
     end
 
     def Outpost.get_sprite()
-      return make_sprite_from_resource("sprites/outpost", $resources)
+      return make_sprite("netpanzersprites/outpost.png")
     end
 
     def Outpost.create(objmap, name, x, y)
@@ -104,7 +104,7 @@ module GameObjects
     end
 
     def SpawnPoint.get_sprite()
-      return make_sprite_from_resource("sprites/spawnpoint", $resources)
+      return make_sprite("netpanzersprites/spawnpoint.png")
     end
   end
 

@@ -60,19 +60,21 @@ Sprite::Sprite(const PixelBuffer& buffer) :
 void
 Sprite::draw(float x, float y, GraphicContext& gc)
 {
-  assert(m_impl);
-  //std::cout << "Sprite::draw: " << x << " " << y << " isNull:" << m_impl->buffer.get_qimage().isNull() << std::endl;
-  QPainter& painter = gc.get_qt_painter();
-  QImage img = m_impl->buffer.get_qimage();
-  if (img.isNull())
+  if (m_impl)
   {
-    std::cout << "Error: Sprite: Empty PixelBuffer: " << m_impl->filename << std::endl;
-  }
-  else
-  {
-    Point origin = calc_origin(m_impl->origin, Size(get_width(), get_height()));
+    //std::cout << "Sprite::draw: " << x << " " << y << " isNull:" << m_impl->buffer.get_qimage().isNull() << std::endl;
+    QPainter& painter = gc.get_qt_painter();
+    QImage img = m_impl->buffer.get_qimage();
+    if (img.isNull())
+    {
+      std::cout << "Error: Sprite: Empty PixelBuffer: " << m_impl->filename << std::endl;
+    }
+    else
+    {
+      Point origin = calc_origin(m_impl->origin, Size(get_width(), get_height()));
 
-    painter.drawImage(QPoint(x - origin.x, y - origin.y), img);
+      painter.drawImage(QPoint(x - origin.x, y - origin.y), img);
+    }
   }
 }
 

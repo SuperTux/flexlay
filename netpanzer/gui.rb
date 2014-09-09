@@ -23,32 +23,28 @@ class GUI
     @editor_map = @gui.create_editor_map_component()
     @workspace = @editor_map.get_workspace()
 
+    @brushbox = @gui.create_tile_brush_selector()
     if false # GRUMBEL
-      @brushbox = components.get('brushbox').component
-      @brushbox.show(false)
-
-      @objectselector = components.get('objectselector').component
-
-      @objectselector.add_brush(ObjectBrush.new(GameObjects::Outpost.get_sprite(),
-                                                make_metadata(proc{GameObjects::Outpost.new()})))
-      @objectselector.add_brush(ObjectBrush.new(GameObjects::SpawnPoint.get_sprite(),
-                                                make_metadata(proc{GameObjects::SpawnPoint.new()})))
-
-      $brushes.size.times {|i|
-        @objectselector.add_brush(ObjectBrush.new(make_sprite($config.datadir + "/thumbnails/#{i}.png"),
-                                                  make_metadata(proc{GameObjects::TileObject.new(i)})))
-      }
-
-      @objectselector.show(true)
-
-      connect_v2_ObjectBrush_Point(@objectselector.sig_drop(), method(:on_object_drop))
       connect_v1_cl(@brushbox.sig_highlighted(), method(:brushbox_change))
     end
 
+    @objectselector = @gui.create_object_selector(42, 42)
+
+    @objectselector.add_brush(ObjectBrush.new(GameObjects::Outpost.get_sprite(),
+                                              make_metadata(proc{GameObjects::Outpost.new()})))
+    @objectselector.add_brush(ObjectBrush.new(GameObjects::SpawnPoint.get_sprite(),
+                                              make_metadata(proc{GameObjects::SpawnPoint.new()})))
+
+    $brushes.size.times {|i|
+      @objectselector.add_brush(ObjectBrush.new(make_sprite($config.datadir + "/thumbnails/#{i}.png"),
+                                                make_metadata(proc{GameObjects::TileObject.new(i)})))
+    }
+    connect_v2_ObjectBrush_Point(@objectselector.sig_drop(), method(:on_object_drop))
+    
     @workspace.set_tool(0, $tilemap_paint_tool.to_tool());
     @workspace.set_tool(2, $workspace_move_tool.to_tool());
 
-    @button_panel = @gui.create_button_panel(false)
+    @button_panel = @gui.create_button_panel(true)
 
     @button_panel.add_icon($flexlay_datadir + "/images/icons24/stock_new.png",
                            proc{ gui_level_new() })
@@ -95,12 +91,14 @@ class GUI
     @object = @toolbar.add_icon($flexlay_datadir + "/images/tools/stock-tool-clone-22.png",
                                 method(:set_objmap_select_tool))
 
-    if false # GRUMBEL
-      $brushes.each {|i|
-        (index, width, height, name) = i
-        @brushbox.insert_item("%s - %sx%s" % [name, width, height])
-      }
-    end
+    $brushes.each {|i|
+      (index, width, height, name) = i
+      
+      brush = TileBrush.new(width, height)
+      brush.set_data(Range.new(index, index + (width*height)-1).to_a)
+
+      @brushbox.add_brush("%s - %sx%s" % [name, width, height], brush)
+    }
 
     @menubar = @gui.create_menubar()
     file_menu = @menubar.add_menu("File")
@@ -265,7 +263,7 @@ class GUI
 
 
   def gui_level_new()
-    dialog = @gui.create_generic_dialog("SecretArea Property Dialog")
+    dialog = @gui.create_generic_dialog("Create New Level")
     dialog.add_string("Name: ", "New Level")
     dialog.add_int("Width: ", 128)
     dialog.add_int("Height: ", 128)
@@ -306,6 +304,13 @@ class GUI
 
       layer_menu = Menu(Point(32*11+2, 54), $gui.get_component())
     end
+  end
+
+  def netpanzer_new_level(w, h, name)
+    level = Level.new(w, h)
+    level.activate(@workspace)
+    level.name = name
+    connect(level.editormap.sig_change(), method(:on_map_change))
   end
 
   def netpanzer_load_level(filename)

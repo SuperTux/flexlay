@@ -104,7 +104,7 @@ $gui = GUI.new()
 
 # $gui.set_tilemap_paint_tool()
 
-$gui.gui_level_new()
+$gui.netpanzer_new_level(128, 128, "New Level")
 
 # generate_sprites()
 $gui.run()

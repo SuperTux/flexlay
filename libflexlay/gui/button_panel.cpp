@@ -60,6 +60,7 @@ ButtonPanel::add_text(const std::string& name,
 void
 ButtonPanel::add_separator()
 {
+  m_toolbar->addSeparator();
 }
 
 void

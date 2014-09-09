@@ -28,7 +28,7 @@ GraphicContext::GraphicContext(QPainter& painter) :
 {
 }
 
-GraphicContext::GraphicContext(GraphicContextState& state, QPainter& painter) :
+GraphicContext::GraphicContext(const GraphicContextState& state, QPainter& painter) :
   m_state(&state),
   m_painter(painter)
 {

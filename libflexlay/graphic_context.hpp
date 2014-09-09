@@ -27,7 +27,7 @@ class GraphicContext
 private:
 public:
   GraphicContext(QPainter& painter);
-  GraphicContext(GraphicContextState& state, QPainter& painter);
+  GraphicContext(const GraphicContextState& state, QPainter& painter);
 
   void clear(const Color& color);
   void draw_rect(const Rectf& rect, const Color& color);
@@ -48,7 +48,7 @@ public:
   QPainter& get_qt_painter() { return m_painter; }
 
 private:
-  GraphicContextState* m_state;
+  const GraphicContextState* m_state;
   QPainter& m_painter;
 
 private:

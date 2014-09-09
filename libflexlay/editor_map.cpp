@@ -88,15 +88,9 @@ void
 EditorMap::draw_gui(GraphicContext& gc)
 {
   Rect rect = get_bounding_rect();
-
   if (rect != Rect(0,0,0,0))
   {
-    gc.fill_rect(rect, impl->background_color);
     gc.draw_rect(rect, impl->foreground_color);
-  }
-  else
-  {
-    gc.clear(impl->background_color);
   }
 }
 
@@ -185,7 +179,7 @@ EditorMap::set_bounding_rect(const Rect& rect)
 }
 
 Rect
-EditorMap::get_bounding_rect()
+EditorMap::get_bounding_rect() const
 {
   if (impl->has_bounding_rect)
   {
@@ -224,6 +218,12 @@ void
 EditorMap::set_background_color(const Color& color)
 {
   impl->background_color = color;
+}
+
+Color
+EditorMap::get_background_color() const
+{
+  return impl->background_color;
 }
 
 void

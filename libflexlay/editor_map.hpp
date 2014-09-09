@@ -55,7 +55,7 @@ public:
   MetaData get_metadata() const;
 
   bool has_bounding_rect() const;
-  Rect get_bounding_rect();
+  Rect get_bounding_rect() const;
 
   /** Set the bounding rect for this map, if the given rect is
       Rect() the bounding rect will be calculated automatically
@@ -63,6 +63,7 @@ public:
   void set_bounding_rect(const Rect& rect);
 
   void set_background_color(const Color& color);
+  Color get_background_color() const;
 
   /** Execute a command and place it on the undo stack, commands given
       to this function will be deleted by the Editor class, so they

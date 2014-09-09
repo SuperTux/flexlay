@@ -28,6 +28,10 @@ EditorMapWidget::EditorMapWidget(EditorMapComponent& comp, QWidget* parent) :
   QWidget(parent),
   m_comp(comp)
 {
+  QPalette pal = palette();
+  pal.setColor(backgroundRole(), QColor(100, 80, 100));
+  setPalette(pal);
+
   setAutoFillBackground(true);
   setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
   setAcceptDrops(true);
@@ -80,6 +84,12 @@ EditorMapWidget::on_map_change()
       Rect rect = workspace.get_map().get_bounding_rect();
       std::cout << "Setting minimum Size: " << rect.get_width() << " " << rect.get_height() << std::endl;
       setMinimumSize(QSize(rect.get_width(), rect.get_height()));
+
+      QPalette pal = palette();
+      pal.setColor(backgroundRole(), workspace.get_map().get_background_color().to_qt());
+      setPalette(pal);
+
+      repaint();
     }
   }
 }

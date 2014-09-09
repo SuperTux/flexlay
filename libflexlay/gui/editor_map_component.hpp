@@ -20,13 +20,12 @@
 #include <boost/signals2.hpp>
 #include <memory>
 
-#include "../workspace.hpp"
+#include "workspace.hpp"
 
-class EditorMapComponentImpl;
 class EditorMapWidget;
-class QScrollArea;
+class QGridLayout;
+class QScrollBar;
 class QWidget;
-class Scrollbar;
 
 /** Object which represents a level, quirled together with the GUI
     stuff */
@@ -69,7 +68,14 @@ public:
   QWidget* get_widget() const;
 
 private:
-  QScrollArea* m_scroll_area;
+  void update_scrollbars();
+
+private:
+  QWidget* m_widget;
+  QGridLayout* m_layout;
+  QScrollBar* m_scroll_horz;
+  QScrollBar* m_scroll_vert;
+
   EditorMapWidget* m_editormap_widget;
   Workspace m_workspace;
   GraphicContextState m_gc_state;

@@ -16,7 +16,8 @@
 
 #include "editor_map_component.hpp"
 
-#include <QScrollArea>
+#include <QGridLayout>
+#include <QScrollBar>
 
 #include <functional>
 #include <iostream>
@@ -37,17 +38,26 @@ EditorMapComponent::EditorMapComponent(QWidget* parent) :
 {
   current_ = this;
 
-  m_scroll_area = new QScrollArea(parent);
+  m_widget = new QWidget(parent);
+  m_layout = new QGridLayout(m_widget);
+  m_layout->setContentsMargins(0, 0, 0, 0);
+  m_layout->setHorizontalSpacing(0);
+  m_layout->setVerticalSpacing(0);
+
+  m_scroll_horz = new QScrollBar(Qt::Horizontal);
+  m_scroll_vert = new QScrollBar(Qt::Vertical);
   m_editormap_widget = new EditorMapWidget(*this);
-  m_scroll_area->setWidget(m_editormap_widget);
-  m_scroll_area->setAlignment(Qt::AlignCenter);
 
-#ifdef GRUMBEL
-  ////m_gc_state  = GraphicContextState(rect.get_width(), rect.get_height());
+  QObject::connect(m_scroll_horz, &QAbstractSlider::sliderMoved, [this](int value){
+      move_to_x(value);
+    });
+  QObject::connect(m_scroll_vert, &QAbstractSlider::sliderMoved, [this](int value){
+      move_to_y(value);
+    });
 
-  impl->scrollbar_h->sig_scrollbar_move().connect(std::bind(&EditorMapComponent::move_to_x, this, std::placeholders::_1));
-  impl->scrollbar_v->sig_scrollbar_move().connect(std::bind(&EditorMapComponent::move_to_y, this, std::placeholders::_1));
-#endif
+  m_layout->addWidget(m_editormap_widget, 0, 0);
+  m_layout->addWidget(m_scroll_horz, 1, 0);
+  m_layout->addWidget(m_scroll_vert, 0, 1);
 }
 
 EditorMapComponent::~EditorMapComponent()
@@ -145,6 +155,9 @@ void
 EditorMapComponent::set_zoom(float z)
 {
   m_gc_state.set_zoom(z);
+
+  m_editormap_widget->repaint();
+  update_scrollbars();
 }
 
 void
@@ -152,6 +165,9 @@ EditorMapComponent::zoom_out(Point pos)
 {
   m_gc_state.set_zoom(Pointf(pos.x, pos.y),
                           m_gc_state.get_zoom()/1.25f);
+
+  m_editormap_widget->repaint();
+  update_scrollbars();
 }
 
 void
@@ -159,12 +175,18 @@ EditorMapComponent::zoom_in(Point pos)
 {
   m_gc_state.set_zoom(Pointf(pos.x, pos.y),
                           m_gc_state.get_zoom()*1.25f);
+
+  m_editormap_widget->repaint();
+  update_scrollbars();
 }
 
 void
 EditorMapComponent::zoom_to(Rectf rect)
 {
   m_gc_state.zoom_to(rect);
+
+  m_editormap_widget->repaint();
+  update_scrollbars();
 }
 
 Rectf
@@ -177,18 +199,27 @@ void
 EditorMapComponent::move_to(int x, int y)
 {
   m_gc_state.set_pos(Pointf(x, y));
+
+  m_editormap_widget->repaint();
+  update_scrollbars();
 }
 
 void
 EditorMapComponent::move_to_x(float x)
 {
   m_gc_state.set_pos(Pointf(x, m_gc_state.get_pos().y));
+
+  m_editormap_widget->repaint();
+  update_scrollbars();
 }
 
 void
 EditorMapComponent::move_to_y(float y)
 {
   m_gc_state.set_pos(Pointf(m_gc_state.get_pos().x, y));
+
+  m_editormap_widget->repaint();
+  update_scrollbars();
 }
 
 #ifdef GRUMBEL
@@ -196,12 +227,6 @@ void
 EditorMapComponentImpl::on_resize(int old_w, int old_h)
 {
   Rect rect = parent->get_screen_rect();
-
-  scrollbar_v->set_position(rect.get_width() - 14 + rect.left,  2 + rect.top);
-  scrollbar_v->set_size(12, rect.get_height() - 4 - 14);
-
-  scrollbar_h->set_position(2 + rect.left, rect.get_height() - 14 + rect.top);
-  scrollbar_h->set_size(rect.get_width() - 4 - 14, 12);
 
   gc_state.set_size(rect.get_width(), rect.get_height());
 }
@@ -235,8 +260,25 @@ EditorMapComponent::get_gc_state()
 
 QWidget*
 EditorMapComponent::get_widget() const
-{ 
-  return m_scroll_area; 
+{
+  return m_widget;
+}
+
+void
+EditorMapComponent::update_scrollbars()
+{
+  Rect rect = m_workspace.get_map().get_bounding_rect();
+
+  int border = 128;
+  m_scroll_horz->setMinimum(rect.left - border);
+  m_scroll_horz->setMaximum(rect.right + border);
+  m_scroll_horz->setPageStep(m_editormap_widget->width());
+  m_scroll_horz->setSliderPosition(static_cast<int>(m_gc_state.get_pos().x));
+
+  m_scroll_vert->setMinimum(rect.top - border);
+  m_scroll_vert->setMaximum(rect.bottom + border);
+  m_scroll_vert->setPageStep(m_editormap_widget->height());
+  m_scroll_vert->setSliderPosition(static_cast<int>(m_gc_state.get_pos().y));
 }
 
 /* EOF */

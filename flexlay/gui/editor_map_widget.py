@@ -102,4 +102,5 @@ class EditorMapWidget:
     def resizeEvent(self, event):
         self.comp.get_gc_state().set_size(event.size().width(), event.size().height())
 
+
 # EOF #

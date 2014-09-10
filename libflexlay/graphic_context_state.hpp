@@ -59,7 +59,7 @@ public:
   /** Set zoom to z, while ensuring that the screen position \a pos
       (normaly the position of the mouse pointer) stays in the same
       position even after zoomed in/out */
-  void  set_zoom(Pointf pos, float z);
+  void  set_zoom(float z, Pointf pos);
   void  set_zoom(float z);
   float get_zoom() const;
 

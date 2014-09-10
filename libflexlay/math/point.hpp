@@ -43,6 +43,8 @@
 
 #include "math.h"
 
+#pragma GCC diagnostic ignored "-Wshadow"
+
 class Pointf;
 
 //: 2D (x,y) point structure.

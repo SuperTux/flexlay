@@ -18,7 +18,7 @@ TEMPLATE = lib
 TARGET = flexlay
 CONFIG += sharedlib c++11
 QT += widgets
-QMAKE_CXXFLAGS += -Wall -Wextra -Wno-unused-parameter -pedantic 
+QMAKE_CXXFLAGS += -Wall -Wextra -Wno-unused-parameter -pedantic -Wshadow
 HEADERS = *.hpp gui/*.hpp tools/*.hpp math/*.hpp
 SOURCES = *.cpp gui/*.cpp tools/*.cpp math/*.cpp
 

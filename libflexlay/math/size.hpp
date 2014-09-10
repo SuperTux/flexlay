@@ -33,6 +33,8 @@
 #ifndef header_flexlay_size
 #define header_flexlay_size
 
+#pragma GCC diagnostic ignored "-Wshadow"
+
 class Sizef;
 
 //: 2D (width,height) size structure.

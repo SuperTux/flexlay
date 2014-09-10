@@ -43,14 +43,14 @@ class ObjectSelectorWidget:
                     drag = QDrag(self)
                     mimeData = QMimeData()
                     object = SuperTuxBadGuyData()
-                    #GRUMBEL QByteArray data(reinterpret_cast<const char*>(&object), sizeof(object))
+                    # GRUMBEL QByteArray data(reinterpret_cast<const char*>(&object), sizeof(object))
                     mimeData.setData("application/supertux-badguy", data)
                     drag.setMimeData(mimeData)
 
                     pixmap = QPixmap.fromImage(self.brushes[drag_obj].get_sprite().get_pixelbuffer().get_qimage())
                     drag.setPixmap(pixmap)
-                    drag.setHotSpot(QPoint(self.brushes[drag_obj].get_sprite().get_width()/2,
-                                           self.brushes[drag_obj].get_sprite().get_height()/2))
+                    drag.setHotSpot(QPoint(self.brushes[drag_obj].get_sprite().get_width() / 2,
+                                           self.brushes[drag_obj].get_sprite().get_height() / 2))
 
                     print("Starting drag")
                     result = drag.exec()
@@ -99,43 +99,43 @@ class ObjectSelectorWidget:
         self.offset += int(self.cell_height * scale * numSteps)
 
     def paintEvent(event):
-      if self.offset < 0:
-          self.offset = 0
+        if self.offset < 0:
+            self.offset = 0
 
-      painter = QPainter(self)
-      gc = GraphicContext(painter)
+        painter = QPainter(self)
+        gc = GraphicContext(painter)
 
-      for i in range(len(self.brushes)):
-        x = i % get_columns()
-        y = i // get_columns()
+        for i in range(len(self.brushes)):
+            x = i % get_columns()
+            y = i // get_columns()
 
-        cell_w = width() / get_columns()
-        rect = Rectf(x * cell_w, y * self.cell_height,
-                     (x+1) * cell_w, (y+1) * self.cell_height)
+            cell_w = width() / get_columns()
+            rect = Rectf(x * cell_w, y * self.cell_height,
+                         (x + 1) * cell_w, (y + 1) * self.cell_height)
 
-        if (x + y - 1) % 2 == 0:
-          gc.fill_rect(rect, Color(224, 224, 224))
-        else:
-          gc.fill_rect(rect, Color(192, 192, 192))
+            if (x + y - 1) % 2 == 0:
+                gc.fill_rect(rect, Color(224, 224, 224))
+            else:
+                gc.fill_rect(rect, Color(192, 192, 192))
 
-        sprite = self.brushes[i].get_sprite()
-        sprite.set_alignment(Flexlay_origin_center, 0, 0)
-        sprite.set_scale(min(1.0f, self.cell_width / sprite.get_width()),
-                         min(1.0f, self.cell_height / sprite.get_height()))
-        sprite.draw(rect.left + rect.get_width() / 2,
-                    rect.top + rect.get_height() / 2,
-                    gc)
+            sprite = self.brushes[i].get_sprite()
+            sprite.set_alignment(Flexlay_origin_center, 0, 0)
+            sprite.set_scale(min(1.0f, self.cell_width / sprite.get_width()),
+                             min(1.0f, self.cell_height / sprite.get_height()))
+            sprite.draw(rect.left + rect.get_width() / 2,
+                        rect.top + rect.get_height() / 2,
+                        gc)
 
-        # highlight the current selection
-        if mouse_over_tile == i and self.has_focus:
-          gc.fill_rect(rect, Color(0, 0, 255, 20))
+            # highlight the current selection
+            if mouse_over_tile == i and self.has_focus:
+                gc.fill_rect(rect, Color(0, 0, 255, 20))
 
     def enterEvent(event):
-      self.has_focus = true
+        self.has_focus = true
 
     def leaveEvent(event):
-      self.has_focus = false
-      self.repaint()
+        self.has_focus = false
+        self.repaint()
 
     def add_brush(brush):
         self.brushes.push_back(brush)

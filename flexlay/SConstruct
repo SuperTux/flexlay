@@ -17,10 +17,11 @@
 
 env = Environment()
 
-sources = Glob("*.py", strings=True) + \
-          Glob("gui/*.py", strings=True)
+sources = \
+    Glob("*.py", strings=True) + \
+    Glob("gui/*.py", strings=True)
 
-flake_check = Command(None, sources, 
+flake_check = Command(None, sources,
                       "python3 -m flake8.run --max-line-length=120 $SOURCES")
 
 AlwaysBuild(Alias("test", [], "python3 -m unittest discover"))

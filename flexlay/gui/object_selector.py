@@ -4,6 +4,7 @@ from flexlay.gui import ObjectSelectorWidget
 
 
 class ObjectSelector:
+
     def __init__(self, obj_w, obj_h, parent):
         self.scroll_area = QScrollArea(parent)
         self.scroll_area.setWidgetResizable(True)

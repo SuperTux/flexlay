@@ -20,7 +20,7 @@ from PyQt5.Core import QLinef
 
 class GraphicContext:
 
-    def GraphicContext(self, painter, state = None):
+    def GraphicContext(self, painter, state=None):
         self.painter = painter
         self.state = state
 

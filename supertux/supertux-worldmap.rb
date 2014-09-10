@@ -116,7 +116,7 @@ if !$recent_files then
 end
 
 $recent_files.each do |filename|
-  $gui.recent_files_menu.add_item($mysprite, filename, proc{ supertux_load_level(filename) })
+  $gui.recent_files_menu.add_item(filename, proc{ supertux_load_level(filename) })
 end
 
 if ARGV == []

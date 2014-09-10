@@ -5,12 +5,12 @@
 //  it under the terms of the GNU General Public License as published by
 //  the Free Software Foundation, either version 3 of the License, or
 //  (at your option) any later version.
-//  
+//
 //  This program is distributed in the hope that it will be useful,
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
-//  
+//
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -19,12 +19,12 @@
 
 #include <string>
 
-#include "../lib/palette.hpp"
-#include "../lib/pixel_buffer.hpp"
-#include "../lib/sprite.hpp"
-#include "../lib/surface.hpp"
-#include "../lib/tilemap_layer.hpp"
-#include "../lib/tileset.hpp"
+#include "../libflexlay/palette.hpp"
+#include "../libflexlay/pixel_buffer.hpp"
+#include "../libflexlay/sprite.hpp"
+#include "../libflexlay/surface.hpp"
+#include "../libflexlay/tilemap_layer.hpp"
+#include "../libflexlay/tileset.hpp"
 
 void load_netpanzer_tileset(Tileset tileset, const char* filename);
 
@@ -43,8 +43,8 @@ struct NetPanzerTileGroup
   int start;
   int width;
   int height;
-  
-  Surface get_surface(); 
+
+  Surface get_surface();
 
 private:
   /** Surface holding the tilegroups image */
@@ -56,7 +56,7 @@ class NetPanzerData
 private:
   static NetPanzerData* instance_;
 public:
-  static NetPanzerData* instance() 
+  static NetPanzerData* instance()
   {
     if (instance_)
       return (instance_);
@@ -111,12 +111,12 @@ public:
   std::string get_id_header();
   std::string get_name();
   std::string get_description();
-  TilemapLayer get_tilemap(); 
+  TilemapLayer get_tilemap();
 
   void set_id_header(const std::string& id);
   void set_name(const std::string& name);
   void set_description(const std::string& description);
-  void set_tilemap(TilemapLayer l); 
+  void set_tilemap(TilemapLayer l);
 
   void save(const std::string& filename);
 

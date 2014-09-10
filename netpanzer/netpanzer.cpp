@@ -5,12 +5,12 @@
 //  it under the terms of the GNU General Public License as published by
 //  the Free Software Foundation, either version 3 of the License, or
 //  (at your option) any later version.
-//  
+//
 //  This program is distributed in the hope that it will be useful,
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
-//  
+//
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -40,7 +40,7 @@ private:
 public:
   NetPanzerTileProviderImpl(int id_)
     : id(id_)
-  {    
+  {
   }
 
   virtual ~NetPanzerTileProviderImpl()
@@ -89,13 +89,13 @@ public:
         target[4*i+0] = 255;
       }
       buffer.unlock();
-                
+
       return buffer;
     }
   }
 };
 
-NetPanzerData::NetPanzerData() 
+NetPanzerData::NetPanzerData()
 {
 }
 
@@ -133,8 +133,8 @@ NetPanzerTileGroup::get_surface()
         const Palette& palette = NetPanzerData::instance()->get_palette();
         unsigned char* data = NetPanzerData::instance()->get_tiledata() + (32*32) * (start + width*y + x);
 
-        NetPanzerTileHeader header = NetPanzerData::instance()->get_tile_headers()[start + width*y + x]; 
-           
+        NetPanzerTileHeader header = NetPanzerData::instance()->get_tile_headers()[start + width*y + x];
+
         PixelBuffer tile(32, 32);
 
         tile.lock();
@@ -183,10 +183,10 @@ NetPanzerTileGroup::get_surface()
           target[4*i+0] = 255;
         }
         tile.unlock();
-                
+
         blit(buffer, tile, x * 32, y * 32);
       }
-      
+
     surface = Surface(buffer);
   }
 
@@ -257,9 +257,9 @@ NetPanzerData::load_palette(const std::string& filename)
 {
   Palette palette;
   unsigned char color_array[256 * 3];
-  
+
   std::ifstream in(filename.c_str());
-  
+
   if (!in)
   {
     std::cout << "Couldn't load palette" << std::endl;
@@ -290,7 +290,7 @@ NetPanzerData::load_tileset(const std::string& filename)
   unsigned short tile_count;
   unsigned char raw_palette[768];
 
-  std::ifstream file(filename.c_str());  
+  std::ifstream file(filename.c_str());
 
   if (!file)
   {
@@ -307,7 +307,7 @@ NetPanzerData::load_tileset(const std::string& filename)
 
     tile_headers.resize(tile_count);
 
-    file.read(reinterpret_cast<char*>(&*tile_headers.begin()), 
+    file.read(reinterpret_cast<char*>(&*tile_headers.begin()),
               sizeof(NetPanzerTileHeader)*tile_count);
 
     uint32_t tilesize = width * height;
@@ -320,9 +320,9 @@ NetPanzerData::load_tileset(const std::string& filename)
     // is either broken or otherwise corrupt, so we ignore it
     // and use the seperate palette file 'netp.act' which works
     // fine.
-      
+
     NetPanzerData::instance()->tiledata = tiledata;
-      
+
     tileset = Tileset(width);
 
     for(int i = 0; i < tile_count; ++i)
@@ -334,15 +334,15 @@ NetPanzerData::load_tileset(const std::string& filename)
 }
 
 unsigned char find_nearest_color(const Palette& palette, const Color& rgb)
-{ 
+{
   // Copyright (C) 1998 Pyrosoft Inc. (www.pyrosoftgames.com), Matthew Bogue
   float bestDist = 10000000.0f;
   int   best     = 0;
 
-  float vPic = sqrt(rgb.get_red() * rgb.get_red() 
+  float vPic = sqrt(rgb.get_red() * rgb.get_red()
                     + rgb.get_green() * rgb.get_green()
                     + rgb.get_blue() * rgb.get_blue()) * 0.57735027;
- 
+
   for (int i = 0; i < 256; i++) {
     float vPal = sqrt(palette.colors[i].get_red()     * palette.colors[i].get_red()
                       + palette.colors[i].get_green() * palette.colors[i].get_green()
@@ -369,7 +369,7 @@ public:
   std::string id_header;
   std::string name;
   std::string description;
-  TilemapLayer tilemap; 
+  TilemapLayer tilemap;
   Tileset tileset;
 };
 
@@ -427,7 +427,7 @@ NetPanzerFileStruct::save(const std::string& filename)
 {
   if (impl->tilemap.is_null())
     return;
-    
+
   unsigned char   netp_id_header[64];
   strcpy(reinterpret_cast<char*>(netp_id_header), impl->id_header.c_str());
   unsigned short  id       = 0; // ?
@@ -438,10 +438,10 @@ NetPanzerFileStruct::save(const std::string& filename)
   unsigned short  x_size   = impl->tilemap.get_width();
   unsigned short  y_size   = impl->tilemap.get_height();
   char            tile_set[256] = "summer12mb.tls";
- 
+
   unsigned short  thumbnail_x_pix = impl->tilemap.get_width();
   unsigned short  thumbnail_y_pix = impl->tilemap.get_height();
-    
+
   std::ofstream out(filename.c_str());
 
   // FIXME: Not endian clean
@@ -467,7 +467,7 @@ NetPanzerFileStruct::save(const std::string& filename)
     else
       vec[i] = 8097 + rand()%16;
   }
-  out.write(reinterpret_cast<char*>(&(*vec.begin())), 
+  out.write(reinterpret_cast<char*>(&(*vec.begin())),
             sizeof(unsigned short)*vec.size());
 
   // Generate thumbnail
@@ -479,7 +479,7 @@ NetPanzerFileStruct::save(const std::string& filename)
       thumbnail[i] = find_nearest_color(NetPanzerData::instance()->get_palette(), tile->get_color());
   }
 
-  out.write(reinterpret_cast<char*>(&(*thumbnail.begin())), 
+  out.write(reinterpret_cast<char*>(&(*thumbnail.begin())),
             sizeof(unsigned char)*thumbnail.size());
 }
 
@@ -497,7 +497,7 @@ NetPanzerFileStruct::NetPanzerFileStruct(Tileset tileset, const std::string& fil
   impl(new NetPanzerFileStructImpl())
 {
   impl->tileset = tileset;
-  
+
   // FIXME: endian issues
   unsigned char   netp_id_header[64]; // Copyright PyroSoft Inc....
   unsigned short  id; // What is this?
@@ -506,7 +506,7 @@ NetPanzerFileStruct::NetPanzerFileStruct(Tileset tileset, const std::string& fil
   unsigned short  x_size; // width
   unsigned short  y_size; // height
   char            tile_set[256]; // name of the tileset: "summer12mb.tls"
- 
+
   unsigned short  thumbnail_x_pix;
   unsigned short  thumbnail_y_pix;
 

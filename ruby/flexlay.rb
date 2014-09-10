@@ -51,31 +51,6 @@ class ObjMapObject
   end
 end
 
-
-class Icon
-  def set_callback(func)
-    connect(sig_clicked(), func)
-  end
-end
-
-class Menu
-  alias_method :orig_add_item, :add_item
-
-  def add_item(*params)
-    if params.length == 2 then
-      (text, func) = params
-      i = orig_add_item(text)
-    else
-      (sprite, text, func) = params
-      i = orig_add_item(sprite, text)
-    end
-
-    if func != nil
-      connect(sig_clicked(i), func)
-    end
-  end
-end
-
 class Menubar
   def Menubar.new_from_spec(menubarspec, parent)
     menu = Menubar.new(parent)
@@ -118,7 +93,7 @@ puts PropertyValue::TYPE_BOOL
 class GenericDialog
   def set_block()
     callback = proc{ |*args| yield(*args) }
-    set_callback(c)
+    set_callback(callback)
   end
 
   def set_callback(callback)

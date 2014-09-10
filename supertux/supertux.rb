@@ -49,12 +49,7 @@ require "sexpr.rb"
 
 require_relative "gameobj.rb"
 
-flexlay = Flexlay.new()
-width  = 1024
-height = 768
-fullscreen = false
-resizeable = true
-flexlay.init("SuperTux Editor", width, height, fullscreen, resizeable)
+$flexlay = Flexlay.new()
 
 # Tools
 $tilemap_paint_tool  = TileMapPaintTool.new()
@@ -115,14 +110,13 @@ $tileset = Tileset.new(32)
 $tileset.load($datadir + "images/tiles.strf")
 $tileset.create_ungrouped_tiles_group()
 
-$gui = SuperTuxGUI.new(width, height)
-
 if !$recent_files then
   $recent_files = []
 end
 
+$gui = SuperTuxGUI.new()
 $recent_files.each do |filename|
-  $gui.recent_files_menu.add_item($mysprite, filename, proc{ supertux_load_level(filename) })
+  $gui.recent_files_menu.add_item(filename, proc{ supertux_load_level(filename) })
 end
 
 if ARGV == []
@@ -150,27 +144,7 @@ end
 
 $gui.run()
 
+puts "config save: #{$config_file}"
 $config.save($config_file)
-
-# Try to cleanup
-puts "Cleanup"
-$gui = nil 
-$config = nil
-$tilemap_paint_tool  = nil
-$tilemap_select_tool = nil
-$zoom_tool           = nil
-$zoom2_tool          = nil
-$workspace_move_tool = nil
-$objmap_select_tool  = nil
-$game_objects = nil
-GC.start
-GC.start
-GC.start
-GC.start
-puts "Cleanup done"
-
-# FIXME: Can't deinit flexlay, since we would crash then
-at_exit{flexlay.deinit()}
-# puts "And now we crash"
 
 # EOF #

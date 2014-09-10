@@ -3,11 +3,10 @@
 
 %{
 #include <iostream>
-#include <ClanLib/Core/System/error.h>
 #include "netpanzer.hpp"
 %}
 
-%import  "../lib/flexlay_wrap.i"
+%import  "../libflexlay/flexlay_wrap.i"
 %include "netpanzer.hpp"
 
 // EOF //

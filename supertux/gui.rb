@@ -14,22 +14,12 @@ class SuperTuxGUI
     return @gui.get_component()
   end
 
-  def initialize(width, height)
-    @gui = GUIManager.new()
+  def initialize()
+    @gui = $flexlay.create_gui_manager("SuperTux Editor")
 
     @display_properties = DisplayProperties.new()
 
-    buttonpanel_rect = Rect.new(Point.new(0, 23), Size.new(width, 33))
-    selector_rect = Rect.new(Point.new(width - 134, buttonpanel_rect.bottom),
-                             Size.new(134, height-buttonpanel_rect.bottom))
-    minimap_rect = Rect.new(Point.new(3, height-53),
-                            Size.new(width - selector_rect.get_width() - 4, 50))
-    map_rect = Rect.new(Point.new(0, buttonpanel_rect.bottom),
-                        Size.new(width - selector_rect.get_width() - 1,
-                                 height - buttonpanel_rect.bottom -
-                                 minimap_rect.get_height() - 3))
-
-    @editor_map = @gui.create_editor_map_component(map_rect)
+    @editor_map = @gui.create_editor_map_component()
     @workspace = @editor_map.get_workspace()
 
     @workspace.set_tool(0, $tilemap_paint_tool.to_tool())
@@ -44,48 +34,48 @@ class SuperTuxGUI
     @workspace.set_tool(107, $zoom2_tool.to_tool())
     @workspace.set_tool(65507, $zoom2_tool.to_tool())
 
-    @minimap = @gui.create_minimap(@editor_map, minimap_rect)
+    @minimap = @gui.create_minimap(@editor_map)
 
-    @selector_window = Panel.new(selector_rect, @gui.get_component())
-    @tileselector = TileSelector.new(Rect.new(Point.new(3, 3),
-            Size.new(selector_rect.get_width() -3 ,
-                        selector_rect.get_height() - 3)), @selector_window)
-    @tileselector.set_tileset($tileset)
-    @tileselector.set_tiles($tileset.get_tiles())
-    
-    @objectselector = ObjectSelector.new(Rect.new(Point.new(3, 3),
-                Size.new(selector_rect.get_width()-3,
-                            selector_rect.get_height() - 3)),
-                42, 42, @selector_window)
-
-    connect_v2_ObjectBrush_Point(@objectselector.sig_drop(), method(:on_object_drop))
-
+    @objectselector = @gui.create_object_selector(42, 42)
+    if false # GRUMBEL
+      connect_v2_ObjectBrush_Point(@objectselector.sig_drop(), method(:on_object_drop))
+    end
     $game_objects.each { |objectdata|
       sprite = load_cl_sprite($datadir + objectdata[1])
       @objectselector.add_brush(ObjectBrush.new(sprite,
                                                 make_metadata(objectdata)))
     }
 
-    @worldmapobjectselector = ObjectSelector.new(Rect.new(Point.new(3, 3),
-            Size.new(selector_rect.get_width()-3,
-                        selector_rect.get_height() - 3)),
-            42, 42, @selector_window);
-    connect_v2_ObjectBrush_Point(@worldmapobjectselector.sig_drop(),
-            method(:on_worldmap_object_drop))
-    $worldmap_objects.each { |object|
-      @worldmapobjectselector.add_brush(ObjectBrush.new(
-            make_sprite($datadir + object[1]),
-            make_metadata(object[0])))
+    @layer_selector = @gui.create_layer_selector()
+
+    @tileselector = @gui.create_tile_selector()
+    @tileselector.set_tileset($tileset)
+    @tileselector.set_tiles("All Tiles", $tileset.get_tiles())
+    $tileset.tilegroups.each { |tilegroup|
+      @tileselector.set_tiles(tilegroup.name, tilegroup.tiles)
     }
 
-    create_button_panel(buttonpanel_rect)
+    @worldmapobjectselector = @gui.create_object_selector(42, 42);
+    if false
+      connect_v2_ObjectBrush_Point(@worldmapobjectselector.sig_drop(),
+                                   method(:on_worldmap_object_drop))
+    end
+    $worldmap_objects.each { |object|
+      @worldmapobjectselector.add_brush(ObjectBrush.new(
+                                                        make_sprite($datadir + object[1]),
+                                                        make_metadata(object[0])))
+    }
 
-    @toolbar = @gui.create_button_panel(Rect.new(Point.new(0, 23+33), Size.new(33, 32*4+2)), false)
+    create_button_panel()
+
+    @toolbar = @gui.create_button_panel(false)
     @paint = @toolbar.add_icon("../data/images/tools/stock-tool-pencil-22.png", proc{ set_tilemap_paint_tool() })
     @select = @toolbar.add_icon("../data/images/tools/stock-tool-rect-select-22.png", proc{ set_tilemap_select_tool() })
-    @zoom = @toolbar.add_icon("../data/images/tools/stock-tool-zoom-22.png", proc{ set_zoom_tool() })
+    @toolbar.add_separator()
     @object = @toolbar.add_icon("../data/images/tools/stock-tool-clone-22.png", proc{ set_objmap_select_tool() })
-#     @stroke = @toolbar.add_icon("../data/images/tools/stock-tool-pencil-22.png", proc{ set_sketch_stroke_tool() })
+    @toolbar.add_separator()
+    @zoom = @toolbar.add_icon("../data/images/tools/stock-tool-zoom-22.png", proc{ set_zoom_tool() })
+    #     @stroke = @toolbar.add_icon("../data/images/tools/stock-tool-pencil-22.png", proc{ set_sketch_stroke_tool() })
 
     create_menu()
 
@@ -119,66 +109,80 @@ class SuperTuxGUI
   end
 
   def register_keyboard_shortcuts()
-    connect_v2(@editor_map.sig_on_key("f1"), proc{ |x, y| gui_toggle_minimap()})
-    connect_v2(@editor_map.sig_on_key("m"),  proc{ |x, y| gui_toggle_minimap()})
-    connect_v2(@editor_map.sig_on_key("g"),  proc{ |x, y| gui_toggle_grid()})
-    connect_v2(@editor_map.sig_on_key("4"),  proc{ |x, y| gui_toggle_display_props()})
+    if false # GRUMBEL
+      connect_v2(@editor_map.sig_on_key("f1"), proc{ |x, y| gui_toggle_minimap()})
+      connect_v2(@editor_map.sig_on_key("m"),  proc{ |x, y| gui_toggle_minimap()})
+      connect_v2(@editor_map.sig_on_key("g"),  proc{ |x, y| gui_toggle_grid()})
+      connect_v2(@editor_map.sig_on_key("4"),  proc{ |x, y| gui_toggle_display_props()})
 
-    connect_v2(@editor_map.sig_on_key("3"),  proc{ |x, y| gui_show_foreground()})
-    connect_v2(@editor_map.sig_on_key("2"),  proc{ |x, y| gui_show_interactive()})
-    connect_v2(@editor_map.sig_on_key("1"),  proc{ |x, y| gui_show_background()})
-    
-    connect_v2(@editor_map.sig_on_key("5"),  proc{ |x, y| @editor_map.zoom_in(Point.new(x, y))})
-    connect_v2(@editor_map.sig_on_key("6"),  proc{ |x, y| @editor_map.zoom_out(Point.new(x, y))})
-    
-    connect_v2(@editor_map.sig_on_key("i"),  proc{ |x, y| insert_path_node(x,y)})
-    connect_v2(@editor_map.sig_on_key("c"),  proc{ |x, y| connect_path_nodes()})
-    
-    connect_v2(@editor_map.sig_on_key("7"),  proc{ |x, y| @workspace.get_map().get_metadata().parent.activate_sector("main", @workspace)})
-    connect_v2(@editor_map.sig_on_key("8"),  proc{ |x, y| @workspace.get_map().get_metadata().parent.activate_sector("another_world", @workspace)})
-    
-    connect_v2(@editor_map.sig_on_key("e"),  proc{ |x, y| gui_show_object_properties()})
+      connect_v2(@editor_map.sig_on_key("3"),  proc{ |x, y| gui_show_foreground()})
+      connect_v2(@editor_map.sig_on_key("2"),  proc{ |x, y| gui_show_interactive()})
+      connect_v2(@editor_map.sig_on_key("1"),  proc{ |x, y| gui_show_background()})
+      
+      connect_v2(@editor_map.sig_on_key("5"),  proc{ |x, y| @editor_map.zoom_in(Point.new(x, y))})
+      connect_v2(@editor_map.sig_on_key("6"),  proc{ |x, y| @editor_map.zoom_out(Point.new(x, y))})
+      
+      connect_v2(@editor_map.sig_on_key("i"),  proc{ |x, y| insert_path_node(x,y)})
+      connect_v2(@editor_map.sig_on_key("c"),  proc{ |x, y| connect_path_nodes()})
+      
+      connect_v2(@editor_map.sig_on_key("7"),  proc{ |x, y| @workspace.get_map().get_metadata().parent.activate_sector("main", @workspace)})
+      connect_v2(@editor_map.sig_on_key("8"),  proc{ |x, y| @workspace.get_map().get_metadata().parent.activate_sector("another_world", @workspace)})
+      
+      connect_v2(@editor_map.sig_on_key("e"),  proc{ |x, y| gui_show_object_properties()})
 
-    connect_v2(@editor_map.sig_on_key("a"),  proc { |x, y|
-                 pos = @editor_map.screen2world(Point.new(x, y))
-                 rectobj = ObjMapRectObject.new(Rect.new(pos,
-                                                         Size.new(128, 64)),
-                                                Color.new(0, 255, 255, 155),
-                                                make_metadata(nil))
-                 # rectobj.set_metadata(metadata)
-                 @workspace.get_map().get_metadata().objects.add_object(rectobj.to_object())
-               })
+      connect_v2(@editor_map.sig_on_key("a"),  proc { |x, y|
+                   pos = @editor_map.screen2world(Point.new(x, y))
+                   rectobj = ObjMapRectObject.new(Rect.new(pos,
+                                                           Size.new(128, 64)),
+                                                  Color.new(0, 255, 255, 155),
+                                                  make_metadata(nil))
+                   # rectobj.set_metadata(metadata)
+                   @workspace.get_map().get_metadata().objects.add_object(rectobj.to_object())
+                 })
+    end
   end
 
   def create_menu()
-    @menu = @gui.create_menubar()
-    @menu.add_item("File/New...", method(:gui_level_new))
-    @menu.add_item("File/Open...", method(:gui_level_load))
-    @menu.add_item("File/Save...", method(:gui_level_save))
-    # @menu.add_item("File/Save Commands...", menu_file_save_commands)
-    # @menu.add_item("File/Save As...", method(:gui_level_save_as))
-    @menu.add_item("File/Properties...", method(:gui_edit_level))
-    @menu.add_item("File/Quit",  proc{ @gui.quit })
+    @menubar = @gui.create_menubar()
+
+    file_menu = @menubar.add_menu("&File")
+    file_menu.add_item("New...", method(:gui_level_new))
+    file_menu.add_item("Open...", method(:gui_level_load))
+    @recent_files_menu = file_menu.add_menu("Open Recent")
+    file_menu.add_item("Save...", method(:gui_level_save))
+    # file_menu.add_item("Save Commands...", menu_file_save_commands)
+    # file_menu.add_item("Save As...", method(:gui_level_save_as))
+    file_menu.add_item("Properties...", method(:gui_edit_level))
+    file_menu.add_item("Quit",  proc{ @gui.quit })
     
-    @menu.add_item("Edit/Smooth Selection", method(:gui_smooth_level_struct))
-    @menu.add_item("Edit/Resize", method(:gui_resize_level))
-    @menu.add_item("Edit/Resize to selection", method(:gui_resize_level_to_selection))
+    edit_menu = @menubar.add_menu("&Edit");
+    edit_menu.add_item("Smooth Selection", method(:gui_smooth_level_struct))
+    edit_menu.add_item("Resize", method(:gui_resize_level))
+    edit_menu.add_item("Resize to selection", method(:gui_resize_level_to_selection))
     
-    @menu.add_item("Zoom/1:4 (25%) ",  proc{ self.gui_set_zoom(0.25) })
-    @menu.add_item("Zoom/1:2 (50%) ",  proc{ self.gui_set_zoom(0.5) })
-    @menu.add_item("Zoom/1:1 (100%) ", proc{ self.gui_set_zoom(1.0) }) 
-    @menu.add_item("Zoom/2:1 (200%) ", proc{ self.gui_set_zoom(2.0) })
-    @menu.add_item("Zoom/4:1 (400%) ", proc{ self.gui_set_zoom(4.0) })
+    zoom_menu = @menubar.add_menu("&Zoom");
+    zoom_menu.add_item("1:4 (25%) ",  proc{ self.gui_set_zoom(0.25) })
+    zoom_menu.add_item("1:2 (50%) ",  proc{ self.gui_set_zoom(0.5) })
+    zoom_menu.add_item("1:1 (100%) ", proc{ self.gui_set_zoom(1.0) }) 
+    zoom_menu.add_item("2:1 (200%) ", proc{ self.gui_set_zoom(2.0) })
+    zoom_menu.add_item("4:1 (400%) ", proc{ self.gui_set_zoom(4.0) })
+
+    layer_menu = @menubar.add_menu("&Layer");
+    layer_menu.add_item("Show all", proc{ gui_show_all() })
+    layer_menu.add_item("Show current", proc{ gui_show_current() })
+    layer_menu.add_item("Show only current", proc{ gui_show_only_current() })
   end
 
-  def create_button_panel(rect)
-    button_panel = @gui.create_button_panel(rect, true)
+  def create_button_panel()
+    button_panel = @gui.create_button_panel(true)
     
     # File Handling
     button_panel.add_icon("../data/images/icons24/stock_new.png",  proc{ self.gui_level_new() })
     button_panel.add_icon("../data/images/icons24/stock_open.png", proc{ self.gui_level_load() })
-    button_panel.add_small_icon("../data/images/icons24/downarrow.png", proc{ @recent_files_menu.run() })
-    @recent_files_menu = Menu.new(Point.new(32*2, 54), @gui.get_component())
+    if false # GRUMBEL
+      button_panel.add_icon("../data/images/icons24/downarrow.png", proc{ @recent_files_menu.run() })
+      @recent_files_menu = Menu.new(Point.new(32*2, 54), @gui.get_component())
+    end
     button_panel.add_icon("../data/images/icons24/stock_save.png", proc{ self.gui_level_save() })
     button_panel.add_icon("../data/images/icons24/stock_save_as.png", proc{ self.gui_level_save_as() })
 
@@ -207,12 +211,6 @@ class SuperTuxGUI
     @background_icon = button_panel.add_icon("../data/images/icons24/background.png", proc{ gui_show_background() })
     @interactive_icon = button_panel.add_icon("../data/images/icons24/interactive.png", proc{ gui_show_interactive() })
     @foreground_icon = button_panel.add_icon("../data/images/icons24/foreground.png", proc{ gui_show_foreground() })
-    @eye_icon = button_panel.add_icon("../data/images/icons24/eye.png", proc{ @layer_menu.run() })
-
-    @layer_menu = Menu.new(Point.new(32*15+2, 54), @gui.get_component())
-    @layer_menu.add_item($mysprite, "Show all", proc{ gui_show_all() })
-    @layer_menu.add_item($mysprite, "Show current", proc{ gui_show_current() })
-    @layer_menu.add_item($mysprite, "Show only current", proc{ gui_show_only_current() })
 
     button_panel.add_separator()
     @sector_icon = button_panel.add_icon("../data/images/icons24/sector.png", proc{ gui_switch_sector_menu() })
@@ -221,21 +219,13 @@ class SuperTuxGUI
     @run_icon = button_panel.add_icon("../data/images/icons24/run.png", proc{ gui_run_level() })
 
     @tilegroup_icon = button_panel.add_icon("../data/images/icons24/eye.png", proc{ @tilegroup_menu.run() })
-
-    @tilegroup_menu = Menu.new(Point.new(@tilegroup_icon.get_screen_x(), 
-                                            @tilegroup_icon.get_screen_y() + @tilegroup_icon.get_height() - 2),
-                               @gui.get_component())
-    @tilegroup_menu.add_item($mysprite, "All Tiles", proc{@tileselector.set_tiles($tileset.get_tiles())})
-    $tileset.tilegroups.each { |tilegroup|
-      @tilegroup_menu.add_item($mysprite, tilegroup.name, proc{@tileselector.set_tiles(tilegroup.tiles)})
-    }
   end
 
   def on_worldmap_object_drop(brush, pos)
     pos = @editor_map.screen2world(pos)
     object_type = get_ruby_object(brush.get_data())
     create_worldmapobject_at_pos(
-            $gui.workspace.get_map().get_metadata().objects, object_type, pos)
+                                 $gui.workspace.get_map().get_metadata().objects, object_type, pos)
   end
 
   def on_object_drop(brush, pos)
@@ -248,37 +238,43 @@ class SuperTuxGUI
     @gui.run()
   end
 
-#   def show_colorpicker()
-#     @tileselector.show(false)        
-#     @objectselector.show(false)
-#     @worldmapobjectselector.show(false)
-# #    @colorpicker.show(true)
-#   end
+  #   def show_colorpicker()
+  #     @tileselector.show(false)        
+  #     @objectselector.show(false)
+  #     @worldmapobjectselector.show(false)
+  # #    @colorpicker.show(true)
+  #   end
 
   def show_objects()
-    @tileselector.show(false)
-    if $use_worldmap
-      @worldmapobjectselector.show(true)
-      @objectselector.show(false)
-    else
-      @worldmapobjectselector.show(false)
-      @objectselector.show(true)
+    if false # GRUMBEL
+      @tileselector.show(false)
+      if $use_worldmap
+        @worldmapobjectselector.show(true)
+        @objectselector.show(false)
+      else
+        @worldmapobjectselector.show(false)
+        @objectselector.show(true)
+      end
+      #    @colorpicker.show(false)
     end
-#    @colorpicker.show(false)
   end
 
   def show_tiles()
-    @tileselector.show(true)        
-    @objectselector.show(false)
-    @worldmapobjectselector.show(false)
-#    @colorpicker.show(false)
+    if false # GRUMBEL
+      @tileselector.show(true)        
+      @objectselector.show(false)
+      @worldmapobjectselector.show(false)
+      # @colorpicker.show(false)
+    end
   end
 
   def show_none()
-    @tileselector.show(false)        
-    @objectselector.show(false)
-    @worldmapobjectselector.show(false)
-#    @colorpicker.show(false)
+    if false # GRUMBEL
+      @tileselector.show(false)        
+      @objectselector.show(false)
+      @worldmapobjectselector.show(false)
+      # @colorpicker.show(false)
+    end
   end
 
   def set_tilemap_paint_tool()
@@ -302,6 +298,7 @@ class SuperTuxGUI
 
   def set_zoom_tool()
     @workspace.set_tool(0, $zoom_tool.to_tool())
+    @workspace.set_tool(1, $zoom_tool.to_tool())
     @paint.set_up()
     @select.set_up()
     @zoom.set_down()
@@ -309,14 +306,14 @@ class SuperTuxGUI
     show_none()
   end
 
-#   def set_sketch_stroke_tool()
-#     @workspace.set_tool(0, $sketch_stroke_tool.to_tool())
-#     @paint.set_up()
-#     @select.set_up()
-#     @zoom.set_up()
-#     @object.set_down()
-#     show_colorpicker()
-#   end
+  #   def set_sketch_stroke_tool()
+  #     @workspace.set_tool(0, $sketch_stroke_tool.to_tool())
+  #     @paint.set_up()
+  #     @select.set_up()
+  #     @zoom.set_up()
+  #     @object.set_down()
+  #     show_colorpicker()
+  #   end
 
   def set_objmap_select_tool()
     @workspace.set_tool(0, $objmap_select_tool.to_tool())
@@ -348,6 +345,7 @@ class SuperTuxGUI
   end
 
   def gui_show_interactive()
+    puts "show_interactive"
     @display_properties.layer = INTERACTIVE_LAYER
     @display_properties.set(@workspace.get_map().get_metadata())
     TilemapLayer.set_current(@workspace.get_map().get_metadata().interactive)
@@ -376,12 +374,14 @@ class SuperTuxGUI
   end
 
   def gui_toggle_minimap()
-    if @minimap.is_visible() then
-      @minimap.show(false)
-      @minimap_icon.set_up()
-    else
-      @minimap.show(true)
-      @minimap_icon.set_down()
+    if false # GRUMBEL
+      if @minimap.is_visible() then
+        @minimap.show(false)
+        @minimap_icon.set_up()
+      else
+        @minimap.show(true)
+        @minimap_icon.set_down()
+      end
     end
   end
 
@@ -430,6 +430,7 @@ class SuperTuxGUI
     dialog.add_int("X: ", 0)
     dialog.add_int("Y: ", 0)
     dialog.set_callback(proc{|w, h, x, y| 
+                          puts "Resize Callback"
                           level.resize(Size.new(w, h), Point.new(x, y))})
   end
 
@@ -489,12 +490,11 @@ class SuperTuxGUI
 
     dialog.add_string("Name:", level.name)
     dialog.add_string("Author:", level.author)
-    dialog.add_int("Time:", level.time)
+    # dialog.add_int("Time:", level.time)
 
-    dialog.set_block() { |name, author, time|
+    dialog.set_block() { |name, author|
       level.name   = name
       level.author = author
-      level.time   = time
     }
   end
 
@@ -560,14 +560,14 @@ class SuperTuxGUI
 
     mymenu.add_separator()
     mymenu.add_item($mysprite, "Create New Sector", proc {
-        gui_add_sector()
-        })
+                      gui_add_sector()
+                    })
     mymenu.add_item($mysprite, "Remove Current Sector", proc {
-        gui_remove_sector()
-        })
+                      gui_remove_sector()
+                    })
     mymenu.add_item($mysprite, "Edit Sector Properties", proc {
-        gui_edit_sector()
-        })
+                      gui_edit_sector()
+                    })
     mymenu.run()
   end
 
@@ -660,7 +660,7 @@ class SuperTuxGUI
     last = nil
     for i in pathnodes
       if last != nil
-          last.connect(i)
+        last.connect(i)
       end
       last = i
     end
@@ -678,10 +678,11 @@ class DisplayProperties
   end
   
   def set(map)
+    puts map
     if map == nil || !map.instance_of?(Sector)
       return
     end
-  
+    
     if @current_only
       active   = Color.new(255, 255, 255)
       deactive = Color.new(0, 0, 0, 10)
@@ -729,8 +730,8 @@ def supertux_load_level(filename)
   
   if not($recent_files.find{|el| el == filename}) then
     $recent_files.push(filename)
-    $gui.recent_files_menu.add_item($mysprite, filename, 
-                                proc { supertux_load_level(filename) })
+    $gui.recent_files_menu.add_item(filename, 
+                                    proc { supertux_load_level(filename) })
   end
   
   $gui.minimap.update_minimap()
@@ -743,8 +744,8 @@ def supertux_load_worldmap(filename)
 
   if not($recent_files.find{|el| el == filename}) then
     $recent_files.push(filename)
-    $gui.recent_files_menu.add_item($mysprite, filename,
-        proc { supertux_load_worldmap(filename) })
+    $gui.recent_files_menu.add_item(filename, 
+                                    proc { supertux_load_worldmap(filename) })
   end
   $gui.minimap.update_minimap()
   $use_worldmap = true

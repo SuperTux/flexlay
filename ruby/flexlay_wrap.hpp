@@ -5,19 +5,18 @@
 //  it under the terms of the GNU General Public License as published by
 //  the Free Software Foundation, either version 3 of the License, or
 //  (at your option) any later version.
-//  
+//
 //  This program is distributed in the hope that it will be useful,
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
-//  
+//
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #ifndef HEADER_FLEXLAY_WRAP_HXX
 #define HEADER_FLEXLAY_WRAP_HXX
 
-#include <ClanLib/Display/color.h>
 #include <string>
 #include <iostream>
 #include <typeinfo>
@@ -26,8 +25,6 @@
 class Color;
 class Point;
 class Pointf;
-class CL_Point;
-class CL_Pointf;
 class ObjectBrush;
 class ObjMapObject;
 
@@ -40,10 +37,7 @@ VALUE convert_to_ruby_value(const C& c)
 
 template<> VALUE convert_to_ruby_value<ObjMapObject>(const ObjMapObject& arg);
 template<> VALUE convert_to_ruby_value<ObjectBrush>(const ObjectBrush& arg);
-template<> VALUE convert_to_ruby_value<CL_Color>(const CL_Color& arg);
 template<> VALUE convert_to_ruby_value<Color>(const Color& arg);
-template<> VALUE convert_to_ruby_value<CL_Point>(const CL_Point& arg);
-template<> VALUE convert_to_ruby_value<CL_Pointf>(const CL_Pointf& arg);
 template<> VALUE convert_to_ruby_value<Point>(const Point& arg);
 template<> VALUE convert_to_ruby_value<Pointf>(const Pointf& arg);
 template<> VALUE convert_to_ruby_value<int>(const int& arg);

@@ -15,7 +15,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from PyQt5.Core import QLinef
+from PyQt5.Core import QLineF
+from flexlay.math import Rectf
 
 
 class GraphicContext:

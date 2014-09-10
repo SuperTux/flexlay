@@ -21,7 +21,8 @@
 #include "gui_manager.hpp"
 
 Flexlay::Flexlay() :
-  m_app()
+  m_app(),
+  m_gui_manager()
 {
   int* argc = new int(1);
   char** argv = new char*[2];
@@ -39,7 +40,8 @@ Flexlay::set_datadir(const std::string& datadir_)
 GUIManager*
 Flexlay::create_gui_manager(const std::string& title)
 {
-  return new GUIManager(title);
+  m_gui_manager.reset(new GUIManager(title));
+  return m_gui_manager.get();
 }
 
 /* EOF */

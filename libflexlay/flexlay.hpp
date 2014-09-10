@@ -80,9 +80,10 @@ class Flexlay
 {
 private:
   std::unique_ptr<QApplication> m_app;
+  std::unique_ptr<GUIManager> m_gui_manager;
+
   int  m_screen_width;
   int  m_screen_height;
-  boost::signals2::signal<void (int, int)> m_sig_resize;
 
 public:
   Flexlay();

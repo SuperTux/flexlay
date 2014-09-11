@@ -20,7 +20,7 @@ from flexlay import Color, PixelBuffer, Sprite
 
 class Tile:
 
-    ## FIXME: Need proper constructors
+    # FIXME: Need proper constructors
     def __init__(self, pixelbuffer=None):
         self.provider = None
         self.sprite = None

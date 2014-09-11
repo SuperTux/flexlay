@@ -23,7 +23,7 @@ class TilemapLayer(Layer):
 
     def __init__(self, tileset, w, h):
         self.tileset = tileset
-        self.field = Field < int > (w, h)
+        self.field = Field(w, h)
 
         self.background_color = Color(0, 0, 0, 0)
         self.foreground_color = Color(255, 255, 255, 255)

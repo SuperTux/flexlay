@@ -15,23 +15,37 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-env = Environment()
+from PyQt5.Core import QPoint
 
-sources = (Glob("*.py", strings=True) +
-           Glob("gui/*.py", strings=True) +
-           Glob("math/*.py", strings=True))
 
-flake_check = Command(None, sources,
-                      "python3 -m flake8.run --max-line-length=120 $SOURCES")
+class Point:
 
-AlwaysBuild(Alias("test", [], "python3 -m unittest discover"))
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
 
-for i in sources:
-    Alias("pylint", Command(i + ".pylint", i, "epylint $SOURCE"))
+    def copy(self):
+        return Point(self.x, self.y)
 
-Default(flake_check)
+    def __add__(self, rhs):
+        return Point(self.x + rhs.x,
+                     self.y + rhs.y)
 
-Alias("all", [flake_check, "pylint", "test"])
+    def __sub__(self, rhs):
+        return Point(self.x - rhs.x,
+                     self.y - rhs.y)
+
+    def __eq__(self, rhs):
+        return self.x == rhs.x and self.y == rhs.y
+
+    def __ne__(self, rhs):
+        return not self.__eq__(rhs)
+
+    def to_qt(self):
+        return QPoint(self.x, self.y)
+
+
+Pointf = Point
 
 
 # EOF #

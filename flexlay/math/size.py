@@ -15,23 +15,21 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-env = Environment()
+class Size:
 
-sources = (Glob("*.py", strings=True) +
-           Glob("gui/*.py", strings=True) +
-           Glob("math/*.py", strings=True))
+    def __init__(self, w, h):
+        self.width = w
+        self.height = h
 
-flake_check = Command(None, sources,
-                      "python3 -m flake8.run --max-line-length=120 $SOURCES")
+    def copy(self):
+        return Size(self.x, self.y)
 
-AlwaysBuild(Alias("test", [], "python3 -m unittest discover"))
+    def __eq__(self, rhs):
+        return (self.width == rhs.width and
+                self.height == rhs.height)
 
-for i in sources:
-    Alias("pylint", Command(i + ".pylint", i, "epylint $SOURCE"))
-
-Default(flake_check)
-
-Alias("all", [flake_check, "pylint", "test"])
+    def __ne__(self, rhs):
+        return not self.__eq__(rhs)
 
 
 # EOF #

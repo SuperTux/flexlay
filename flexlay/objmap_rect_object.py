@@ -49,17 +49,17 @@ class ObjMapRectObject(ObjMapObject):
         self.cp_bottom_middle = ObjMapControlPoint(Sprite.from_file("../data/images/icons16/resize_vert.png"),
                                                    Pointf())
 
-        self.cp_top_right.sig_set_pos().connect(self.cp_top_right_move)
-        self.cp_bottom_right.sig_set_pos().connect(self.cp_bottom_right_move)
+        self.cp_top_right.sig_set_pos.connect(self.cp_top_right_move)
+        self.cp_bottom_right.sig_set_pos.connect(self.cp_bottom_right_move)
 
-        self.cp_top_left.sig_set_pos().connect(self.cp_top_left_move)
-        self.cp_bottom_left.sig_set_pos().connect(self.cp_bottom_left_move)
+        self.cp_top_left.sig_set_pos.connect(self.cp_top_left_move)
+        self.cp_bottom_left.sig_set_pos.connect(self.cp_bottom_left_move)
 
-        self.cp_middle_left.sig_set_pos().connect(self.cp_middle_left_move)
-        self.cp_middle_right.sig_set_pos().connect(self.cp_middle_right_move)
+        self.cp_middle_left.sig_set_pos.connect(self.cp_middle_left_move)
+        self.cp_middle_right.sig_set_pos.connect(self.cp_middle_right_move)
 
-        self.cp_top_middle.sig_set_pos().connect(self.cp_top_middle_move)
-        self.cp_bottom_middle.sig_set_pos().connect(self.cp_bottom_middle_move)
+        self.cp_top_middle.sig_set_pos.connect(self.cp_top_middle_move)
+        self.cp_bottom_middle.sig_set_pos.connect(self.cp_bottom_middle_move)
 
     def set_rect(self, rect):
         self.pos = Pointf(rect.left, rect.top)

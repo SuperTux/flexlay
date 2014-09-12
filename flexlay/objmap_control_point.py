@@ -15,24 +15,17 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from PyQt5.QtCore import QObject, pyqtSignal
-
 from flexlay.math import Point, Size, Rect, Origin
+from flexlay.util import Signal
 
 
-class ObjMapControlPoint(QObject):
-
-    on_set_pos = pyqtSignal(Point)
+class ObjMapControlPoint:
 
     def __init__(self, sprite, pos, metadata=None):
-        super().__init__()
-
         self.sprite = sprite
         self.pos = pos
         self.metadata = metadata
-
-    def sig_set_pos(self):
-        return self.on_set_pos
+        self.sig_set_pos = Signal()
 
     def draw(self, gc):
         self.sprite.draw(int(self.pos.x), int(self.pos.y), gc)
@@ -41,7 +34,7 @@ class ObjMapControlPoint(QObject):
         self.pos = p
 
     def set_pos(self, p):
-        self.on_set_pos(p)
+        self.sig_set_pos(p)
 
     def get_pos(self):
         return self.pos

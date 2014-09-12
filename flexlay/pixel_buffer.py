@@ -24,7 +24,7 @@ class PixelBuffer:
     @staticmethod
     def from_file(filename):
         pixelbuffer = PixelBuffer()
-        pixelbuffer.image = QImage(filename.c_str())
+        pixelbuffer.image = QImage(filename)
         print("loading:", filename, " -> ", pixelbuffer.image)
 
         if not pixelbuffer.image:

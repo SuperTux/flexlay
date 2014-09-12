@@ -21,11 +21,22 @@ from .size import Size
 
 class Rect:
 
-    def __init__(self, left, top, right, bottom):
-        self.left = left
-        self.top = top
-        self.right = right
-        self.bottom = bottom
+    def __init__(self, arg1=None, arg2=None, arg3=None, arg4=None):
+        if arg2 is None and arg3 is None and arg4 is None:
+            self.left = int(arg1.left)
+            self.top = int(arg1.top)
+            self.right = int(arg1.right)
+            self.bottom = int(arg1.bottom)
+        elif arg3 is None and arg4 is None:
+            self.left = arg1.x
+            self.top = arg1.y
+            self.right = arg1.x + arg2.width
+            self.bottom = arg1.y + arg2.height
+        else:
+            self.left = arg1
+            self.top = arg2
+            self.right = arg3
+            self.bottom = arg4
 
     def copy(self):
         return Rect(self.left, self.top,
@@ -72,7 +83,24 @@ class Rect:
                      self.get_width(), self.get_height())
 
 
-Rectf = Rect
+class Rectf(Rect):
+
+    def __init__(self, arg1=None, arg2=None, arg3=None, arg4=None):
+        if arg2 is None and arg3 is None and arg4 is None:
+            self.left = arg1.left
+            self.top = arg1.top
+            self.right = arg1.right
+            self.bottom = arg1.bottom
+        elif arg3 is None and arg4 is None:
+            self.left = arg1.x
+            self.top = arg1.y
+            self.right = arg1.x + arg2.width
+            self.bottom = arg1.y + arg2.height
+        else:
+            self.left = arg1
+            self.top = arg2
+            self.right = arg3
+            self.bottom = arg4
 
 
 # EOF #

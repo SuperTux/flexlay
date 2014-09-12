@@ -17,12 +17,14 @@
 
 class Field:
 
-    def __init__(self, w, h):
+    def __init__(self, w, h, data=None):
         self.width = w
         self.height = h
-        self.data = [0] * w * h
+        if data is None:
+            self.data = [0] * w * h
+        else:
+            self.data = data
 
-    @staticmethod
     def copy_region(self, x, y, w, h):
         start_x = max(0, -x)
         start_y = max(0, -y)
@@ -35,6 +37,12 @@ class Field:
             for ix in range(start_x, end_x):
                 field.put(x + ix, y + iy, self.at(ix, iy))
         return field
+
+    def copy(self):
+        return Field(self.width, self.height, self.data[:])
+
+    def put(self, x, y, value):
+        self.data[self.width * y + x] = value
 
     def at(self, x, y):
         assert (x >= 0 or x < self.width or y >= 0 or y < self.height)

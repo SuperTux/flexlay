@@ -33,12 +33,12 @@ class Zoom2Tool:
         self.active = True
         self.click_pos = event.mouse_pos
 
-        gc = EditorMapComponent.current().get_gc_state()
+        gc = EditorMapComponent.current.get_gc_state()
         self.old_zoom = gc.get_zoom()
 
     def on_mouse_move(self, event):
         if self.active:
-            gc = EditorMapComponent.current().get_gc_state()
+            gc = EditorMapComponent.current.get_gc_state()
             zoom_pos = Point(gc.get_width() / 2, gc.get_height() / 2)
 
             factor = (event.mouse_pos.y - self.click_pos.y) / 20.0

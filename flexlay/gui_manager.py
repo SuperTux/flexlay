@@ -26,7 +26,7 @@ from .gui import (ButtonPanel, EditorMapComponent, FileDialog, GenericDialog,
 class GUIManager:
 
     def __init__(self, title):
-        self.window = QMainWindow
+        self.window = QMainWindow()
         self.window.setWindowTitle(title)
 
     def run(self):

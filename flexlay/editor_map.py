@@ -15,24 +15,32 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from PyQt5.QtCore import QObject, pyqtSignal
 from flexlay import Color, Layer
 from flexlay.math import Rect
 
 
-class EditorMap:
+class EditorMap(QObject):
+
+    on_change = pyqtSignal()
 
     def __init__(self):
+        super().__init__()
+
         self.background_color = Color(100, 80, 100)
         self.foreground_color = Color(255, 80, 255)
         self.modified = False
         self.serial = 0
         self.has_bounding_rect = False
         self.bounding_rect = Rect(0, 0, 0, 0)
+        self.layers = []
+        self.redo_stack = []
+        self.undo_stack = []
 
-    def add_layer(self, layer, pos):
+    def add_layer(self, layer, pos=-1):
         print(self, "EditorMap::add_layer")
 
-        assert pos == -1 or (pos >= 0 and pos < int(self.layers.size()))
+        assert pos == -1 or (pos >= 0 and pos < len(self.layers))
 
         if pos == -1:  # insert at last pos
             self.layers.append(layer)
@@ -121,7 +129,7 @@ class EditorMap:
         self.redo_stack.clear()
         command.execute()
         self.undo_stack.append(command)
-        self.on_change()
+        self.on_change.emit()
 
     def undo(self):
         if self.undo_stack:
@@ -129,7 +137,7 @@ class EditorMap:
             self.undo_stack.pop_back()
             command.undo()
             self.redo_stack.append(command)
-            self.on_change()
+            self.on_change.emit()
 
     def redo(self):
         if self.redo_stack:
@@ -137,16 +145,16 @@ class EditorMap:
             self.redo_stack.pop_back()
             command.redo()
             self.undo_stack.append(command)
-            self.on_change()
+            self.on_change.emit()
 
     def undo_stack_size(self):
-        return self.undo_stack.size()
+        return len(self.undo_stack)
 
     def redo_stack_size(self):
-        return self.redo_stack.size()
+        return len(self.redo_stack)
 
     def sig_change(self):
-        return self.on_change
+        return self.on_change.emit()
 
 
 # EOF #

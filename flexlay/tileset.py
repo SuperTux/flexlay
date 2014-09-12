@@ -28,7 +28,7 @@ class Tileset:
         return self.tiles.get(tile_id)
 
     def get_tile_size(self):
-        return len(self.tiles)
+        return self.tile_size
 
     def get_tiles(self):
         return self.tiles.keys()

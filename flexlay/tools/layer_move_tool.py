@@ -31,15 +31,15 @@ class LayerMoveTool(Tool):
 
     def find_closed_layer(self, pos):
         layer = None
-        parent = Workspace.current().get_map()
+        parent = Workspace.current.get_map()
         for i in range(0, parent.get_layer_count()):
             if parent.get_layer(i).get_bounding_rect().is_inside(Point(pos)):
                 layer = parent.get_layer(i)
         return layer
 
     def draw(self, gc):
-        for i in range(0, Workspace.current().get_map().get_layer_count()):
-            layer = Workspace.current().get_map().get_layer(i)
+        for i in range(0, Workspace.current.get_map().get_layer_count()):
+            layer = Workspace.current.get_map().get_layer(i)
             if layer.has_bounding_rect():
                 rect = layer.get_bounding_rect()
                 gc.draw_line(rect.left, rect.top, rect.right, rect.bottom,
@@ -51,11 +51,11 @@ class LayerMoveTool(Tool):
         if self.layer:
             self.scrolling = False
             self.update(event)
-            EditorMapComponent.current().release_mouse()
+            EditorMapComponent.current.release_mouse()
             self.layer = Layer()
 
     def on_mouse_down(self, event):
-        parent = EditorMapComponent.current()
+        parent = EditorMapComponent.current
         pos = parent.screen2world(event.mouse_pos)
 
         self.layer = self.find_closed_layer(pos)
@@ -63,7 +63,7 @@ class LayerMoveTool(Tool):
             self.scrolling = True
             self.old_trans_offset = self.layer.get_pos()
             self.click_pos = pos
-            EditorMapComponent.current().capture_mouse()
+            EditorMapComponent.current.capture_mouse()
 
     def on_mouse_move(self, event):
         if self.layer and self.scrolling:
@@ -71,7 +71,7 @@ class LayerMoveTool(Tool):
 
     def update(self, event):
         if self.layer:
-            parent = EditorMapComponent.current()
+            parent = EditorMapComponent.current
             pos = parent.screen2world(event.mouse_pos)
             self.layer.set_pos(self.old_trans_offset + (pos - self.click_pos))
 

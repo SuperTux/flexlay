@@ -64,7 +64,7 @@ class OnionSkinLayer:
             self.canvas2.get_gc().push_modelview()
             self.canvas2.get_gc().add_scale(1.0 / self.SCALE, 1.0 / self.SCALE)
 
-            self.editormaps[i].draw(EditorMapComponent.current().get_gc_state(), self.canvas2.get_gc())
+            self.editormaps[i].draw(EditorMapComponent.current.get_gc_state(), self.canvas2.get_gc())
 
             self.canvas2.get_gc().pop_modelview()
 

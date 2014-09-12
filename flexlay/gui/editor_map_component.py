@@ -20,15 +20,19 @@ from PyQt5.QtCore import Qt
 
 from ..workspace import Workspace
 from flexlay.math import Pointf
-
+from ..graphic_context_state import GraphicContextState
 from .editor_map_widget import EditorMapWidget
 
 
 class EditorMapComponent:
 
+    current = None
+
     def __init__(self, parent):
-        self.editormap_widget = None
+        EditorMapComponent.current = self
+
         self.workspace = Workspace()
+        self.gc_state = GraphicContextState()
 
         self.widget = QWidget(parent)
         self.layout = QGridLayout(self.widget)
@@ -38,7 +42,7 @@ class EditorMapComponent:
 
         self.scroll_horz = QScrollBar(Qt.Horizontal)
         self.scroll_vert = QScrollBar(Qt.Vertical)
-        self.editormap_widget = EditorMapWidget(self)
+        self.editormap_widget = EditorMapWidget(self, None)
 
         self.scroll_horz.valueChanged.connect(lambda value: self.move_to_x(value))
         self.scroll_vert.valueChanged.connect(lambda value: self.move_to_y(value))

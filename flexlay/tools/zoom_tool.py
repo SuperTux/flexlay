@@ -37,7 +37,7 @@ class ZoomTool:
             gc.draw_rect(tmp, Color(255, 255, 0, 200))
 
     def on_mouse_up(self, event):
-        parent = EditorMapComponent.current()
+        parent = EditorMapComponent.current
 
         if event.kind != InputEvent.MOUSE_RIGHT:
             if self.state == ZoomTool.CREATE_ZOOM_RECT:
@@ -52,7 +52,7 @@ class ZoomTool:
                     parent.zoom_to(self.zoom_rect)
 
     def on_mouse_down(self, event):
-        parent = EditorMapComponent.current()
+        parent = EditorMapComponent.current
 
         if event.kind == InputEvent.MOUSE_RIGHT:
             if self.state == ZoomTool.NONE_STATE:
@@ -71,7 +71,7 @@ class ZoomTool:
                 self.zoom_rect.bottom = pos.y
 
     def on_mouse_move(self, event):
-        parent = EditorMapComponent.current()
+        parent = EditorMapComponent.current
 
         if self.state == ZoomTool.CREATE_ZOOM_RECT:
             pos = parent.screen2world(event.mouse_pos)

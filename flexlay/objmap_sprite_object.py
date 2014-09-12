@@ -33,7 +33,7 @@ class ObjMapSpriteObject(ObjMapObject):
         align = Point(0, 0)
         origin_e = Origin()
 
-        self.sprite.get_alignment(origin_e, align.x, align.y)
+        origin_e, align.x, align.y = self.sprite.get_alignment()
         origin = Origin.calc_origin(origin_e, Size(self.sprite.get_width(),
                                                    self.sprite.get_height()))
         align.x = -align.x

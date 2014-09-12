@@ -63,7 +63,7 @@ class MinimapWidget(QWidget):
                          Color(200, 200, 200, 225))
 
         # FIXME: This doesn't work all that well
-        tilemap = TilemapLayer.current()
+        tilemap = TilemapLayer.current
 
         if tilemap and tilemap.get_height() != 0 and tilemap.get_width() != 0:
             tile_size = tilemap.get_tileset().get_tile_size()
@@ -103,7 +103,7 @@ class MinimapWidget(QWidget):
 
     def update_minimap(self):
         # FIXME: This doesn't work all that well
-        tilemap = TilemapLayer.current()
+        tilemap = TilemapLayer.current
 
         if tilemap:
             field = tilemap.get_field()
@@ -132,7 +132,7 @@ class MinimapWidget(QWidget):
 
     def mouseMoveEvent(self, event):
             # FIXME: This doesn't work all that well
-        tilemap = TilemapLayer.current()
+        tilemap = TilemapLayer.current
         if tilemap:
             tile_size = tilemap.get_tileset().get_tile_size()
             map_width = tilemap.get_width() * tile_size
@@ -145,7 +145,7 @@ class MinimapWidget(QWidget):
 
     def mousePressEvent(self, event):
         # FIXME: This doesn't work all that well
-        tilemap = TilemapLayer.current()
+        tilemap = TilemapLayer.current
         if tilemap:
             tile_size = tilemap.get_tileset().get_tile_size()
             map_width = tilemap.get_width() * tile_size
@@ -159,7 +159,7 @@ class MinimapWidget(QWidget):
         self.repaint()
 
     def mouseReleaseEvent(self, event):
-        tilemap = TilemapLayer.current()
+        tilemap = TilemapLayer.current
         if tilemap:
             self.drag_active = False
             self.releaseMouse()

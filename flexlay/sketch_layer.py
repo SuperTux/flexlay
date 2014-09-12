@@ -37,7 +37,7 @@ class SketchLayer:
             self.strokes.append(self.stroke)
 
             if self.canvas:
-                parent = EditorMapComponent.current()
+                parent = EditorMapComponent.current
                 parent.get_gc_state().push(self.canvas.get_gc())
                 stroke.draw(self.canvas.get_gc())
                 parent.get_gc_state().pop(self.canvas.get_gc())

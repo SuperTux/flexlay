@@ -15,12 +15,15 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+import sys
 from .gui_manager import GUIManager
+from PyQt5.QtWidgets import QApplication
 
 
 class Flexlay:
 
     def __init__(self):
+        self.application = QApplication(sys.argv)
         self.gui_manager = None
 
     def create_gui_manager(self, title):

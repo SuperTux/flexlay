@@ -41,7 +41,7 @@ class SketchStrokeTool:
             self.stroke.draw(0)
             gc.pop_modelview()
         else:
-            parent = EditorMapComponent.current()
+            parent = EditorMapComponent.current
             p = parent.screen2world(Point(Mouse.get_x() - parent.get_screen_x(),
                                           Mouse.get_y() - parent.get_screen_y()))
             s = DrawerProperties.current().get_brush().get_sprite()
@@ -55,7 +55,7 @@ class SketchStrokeTool:
     def on_mouse_up(self, event):
         if event.kind == InputEvent.MOUSE_LEFT and self.drawing:
             self.drawing = False
-            parent = EditorMapComponent.current()
+            parent = EditorMapComponent.current
             parent.release_mouse()
             self.add_dab(event)
             BitmapLayer.current().add_stroke(self.stroke)
@@ -63,14 +63,14 @@ class SketchStrokeTool:
     def on_mouse_down(self, event):
         if event.kind == InputEvent.MOUSE_LEFT:
             self.drawing = True
-            parent = EditorMapComponent.current()
+            parent = EditorMapComponent.current
             parent.capture_mouse()
             self.stroke = Stroke()
             self.stroke.set_drawer(self.drawer.copy())
             self.add_dab(event)
 
     def add_dab(self, event):
-        parent = EditorMapComponent.current()
+        parent = EditorMapComponent.current
         p = parent.screen2world(event.mouse_pos)
 
         # FIXME: This is ugly, events relative to the layer should be handled somewhat differently

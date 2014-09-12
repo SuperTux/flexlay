@@ -28,7 +28,7 @@ class Sprite:
         return Sprite(pixelbuffer, "<no filename>")
 
     @staticmethod
-    def from_filename(filename):
+    def from_file(filename):
         return Sprite(PixelBuffer.from_file(filename), filename)
 
     def __init__(self, pixelbuffer, filename):
@@ -81,10 +81,10 @@ class Sprite:
         # m_sprite.set_angle(angle)
         pass
 
-    def get_alignment(self, origin, x, y):
+    def get_alignment(self):
         return self.origin, self.pos.x, self.pos.y
 
-    def get_scale(self, x, y):
+    def get_scale(self):
         # m_sprite.get_scale(x, y)
         pass
 

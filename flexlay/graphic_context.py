@@ -21,7 +21,7 @@ from flexlay.math import Rectf
 
 class GraphicContext:
 
-    def GraphicContext(self, painter, state=None):
+    def __init__(self, painter, state=None):
         self.painter = painter
         self.state = state
 
@@ -63,8 +63,10 @@ class GraphicContext:
         else:
             return Rectf()
 
-    def flush():
+    def flush(self):
         pass
 
+    def get_qt_painter(self):
+        return self.painter
 
 # EOF #

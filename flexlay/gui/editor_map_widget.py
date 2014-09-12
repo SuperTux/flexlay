@@ -16,12 +16,12 @@
 
 from PyQt5.QtCore import QSize
 from PyQt5.QtGui import QColor, QPainter
-from PyQt5.QtWidgets import QSizePolicy
+from PyQt5.QtWidgets import QSizePolicy, QWidget
 
 from flexlay import InputEvent, GraphicContext
 
 
-class EditorMapWidget:
+class EditorMapWidget(QWidget):
 
     def __init__(self, comp, parent):
         super().__init__(parent)
@@ -68,20 +68,20 @@ class EditorMapWidget:
 
     def mouseMoveEvent(self, event):
         workspace = self.comp.get_workspace()
-        ev = InputEvent(event)
+        ev = InputEvent.from_qt(event)
         workspace.mouse_move(ev)
         self.repaint()
 
     def mousePressEvent(self, event):
         workspace = self.comp.get_workspace()
-        ev = InputEvent(event)
+        ev = InputEvent.from_qt(event)
         workspace.mouse_down(ev)
         print("mouse press: ")
         self.repaint()
 
     def mouseReleaseEvent(self, event):
         workspace = self.comp.get_workspace()
-        ev = InputEvent(event)
+        ev = InputEvent.from_qt(event)
         workspace.mouse_up(ev)
         print("mouse release: ")
         self.repaint()

@@ -21,7 +21,11 @@ from flexlay import Layer
 
 class ObjectLayer(Layer):
 
+    current = None
+
     def __init__(self):
+        ObjectLayer.current = self
+
         self.objects = []
         self.control_points = []
 
@@ -54,7 +58,7 @@ class ObjectLayer(Layer):
         self.objects.remove(obj)
 
     def get_selection(self, rect):
-        print("========= get_selection:", self.objects.size())
+        print("========= get_selection:", len(self.objects))
         selection = []
 
         for obj in self.objects:
@@ -91,7 +95,7 @@ class ObjectLayer(Layer):
 
     def raise_object(self, obj):
         i = self.get_object_index(obj)
-        if i != -1 and self.objects.size() > 1 and i < int(self.objects.size()) - 1:
+        if i != -1 and len(self.objects) > 1 and i < int(self.objects.size()) - 1:
             self.objects[i], self.objects[i + 1] = self.objects[i + 1], self.objects[i]
 
     def lower_object(self, obj):

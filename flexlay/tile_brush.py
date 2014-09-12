@@ -23,9 +23,16 @@ from flexlay.math import Rect
 
 class TileBrush:
 
-    def __init__(self, w, h):
+    @staticmethod
+    def from_field(field, w, h, pos_x, pos_y):
+        return TileBrush(w, h, field.copy_region(pos_x, pos_y, w, h))
+
+    def __init__(self, w, h, data=None):
         self.opaque = False
-        self.data = Field(w, h)
+        if data is None:
+            self.data = Field(w, h)
+        else:
+            self.data = data
 
     def get_width(self):
         return self.data.get_width()

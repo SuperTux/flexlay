@@ -39,7 +39,7 @@ class Stroke:
         rect = Rectf()
 
         # FIXME: Keep the drawer into account (ie. brushsize)
-        if self.dabs.size() > 0:
+        if len(self.dabs) > 0:
             rect.left = rect.right = self.dabs[0].pos.x
             rect.top = rect.bottom = self.dabs[0].pos.y
 
@@ -59,10 +59,10 @@ class Stroke:
         return self.drawer
 
     def get_interpolated_dabs(self, x_spacing, y_spacing):
-        if self.dabs.size() > 0:
+        if len(self.dabs) > 0:
             interpolated_dabs = []
 
-            interpolated_dabs.append(self.dabs.front())
+            interpolated_dabs.append(self.dabs[0])
 
             # The following code basically takes all the event dabs as recieved
             # by from the InputDevice and interpolates new dabs inbetween to
@@ -70,7 +70,7 @@ class Stroke:
             # from the next)
             overspace = 0.0
             dabs = self.dabs
-            for j in range(0,  dabs.size() - 1):
+            for j in range(0,  len(dabs) - 1):
                 dist = dabs[j + 1].pos - dabs[j].pos
                 length = math.sqrt(dist.x * dist.x + dist.y * dist.y)
                 n = 1

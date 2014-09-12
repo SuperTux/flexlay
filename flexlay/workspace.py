@@ -17,8 +17,13 @@
 
 class Workspace:
 
+    current = None
+
     def __init__(self):
+        Workspace.current = self
+
         self.tools = {}
+        self.editor_map = None
 
     def draw(self, gc):
         if self.editor_map:
@@ -32,7 +37,7 @@ class Workspace:
             gc.flush()
 
     def mouse_up(self, event):
-        tool = self.tools.get(event.id)
+        tool = self.tools.get(event.kind)
         if tool is not None:
             tool.on_mouse_up(event)
 
@@ -41,7 +46,7 @@ class Workspace:
             tool.on_mouse_move(event)
 
     def mouse_down(self, event):
-        tool = self.tools.get(event.id)
+        tool = self.tools.get(event.kind)
         if tool is not None:
             tool.on_mouse_down(event)
 
@@ -56,16 +61,16 @@ class Workspace:
     # endif
 
     def key_up(self, event):
-        tool = self.tools.get(event.id)
+        tool = self.tools.get(event.kind)
         if tool is not None:
             tool.on_mouse_up(event)
 
     def key_down(self, event):
-        tool = self.tools.get(event.id)
+        tool = self.tools.get(event.kind)
         if tool is not None:
             tool.on_mouse_down(event)
         else:
-            print("Workspace:", event.id)
+            print("Workspace:", event.kind)
 
     def get_map(self):
         return self.editor_map

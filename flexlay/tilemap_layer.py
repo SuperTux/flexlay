@@ -21,6 +21,8 @@ from flexlay.math import Point, Size, Rect
 
 class TilemapLayer(Layer):
 
+    current = None
+
     def __init__(self, tileset, w, h):
         self.tileset = tileset
         self.field = Field(w, h)
@@ -49,10 +51,10 @@ class TilemapLayer(Layer):
 
         rect = Rect(gc.get_clip_rect())
 
-        start_x = max(0, rect.left / tile_size)
-        start_y = max(0, rect.top / tile_size)
-        end_x = min(self.field.get_width(),  rect.right / tile_size + 1)
-        end_y = min(self.field.get_height(), rect.bottom / tile_size + 1)
+        start_x = max(0, rect.left // tile_size)
+        start_y = max(0, rect.top // tile_size)
+        end_x = min(self.field.get_width(),  rect.right // tile_size + 1)
+        end_y = min(self.field.get_height(), rect.bottom // tile_size + 1)
 
         if self.foreground_color != Color(255, 255, 255, 255):
             for y in range(start_y, end_y):
@@ -160,8 +162,8 @@ class TilemapLayer(Layer):
             for x in range(width):
                 buf[4 * (y * width + x) + 0] = 255
                 buf[4 * (y * width + x) + 1] = 255
-                buf[4 * (y * width + x) + 2] = 255 * y / height
-                buf[4 * (y * width + x) + 3] = 255 * y / height
+                buf[4 * (y * width + x) + 2] = 255 * y // height
+                buf[4 * (y * width + x) + 3] = 255 * y // height
 
         pixelbuffer.unlock()
 

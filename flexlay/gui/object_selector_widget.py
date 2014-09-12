@@ -164,7 +164,7 @@ class ObjectSelectorWidget:
         self.repaint()
 
     def add_brush(self, brush):
-        self.brushes.push_back(brush)
+        self.brushes.append(brush)
 
     def sig_drop(self):
         return self.on_drop

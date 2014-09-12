@@ -27,6 +27,7 @@ class ObjectMoveCommand:
 
     def __init__(self, object_layer):
         self.objmap = object_layer
+        self.objects = []
 
     def execute(self):
         pass

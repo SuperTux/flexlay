@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from flexlay.math import Rect
+from flexlay.math import Point, Rect
 from flexlay import Command, TileBrush, TilemapLayer
 
 
@@ -30,7 +30,7 @@ class PaintCommand(Command):
         # Copy of the field used to generate undo informations */
         self.undo_field = self.tilemap.get_field().copy()
 
-        self.pos = None
+        self.pos = Point(0, 0)
         self.redo_brush = None
         self.undo_brush = None
 
@@ -43,10 +43,10 @@ class PaintCommand(Command):
         assert self.points != []
 
         # Calc bounding rect
-        rect = Rect(self.points.front().x,
-                    self.points.front().y,
-                    self.points.front().x + self.brush.get_width(),
-                    self.points.front().y + self.brush.get_height())
+        rect = Rect(self.points[0].x,
+                    self.points[0].y,
+                    self.points[0].x + self.brush.get_width(),
+                    self.points[0].y + self.brush.get_height())
 
         for point in self.points:
             rect.left = min(rect.left, point.x)
@@ -57,12 +57,14 @@ class PaintCommand(Command):
         self.pos.x = rect.left
         self.pos.y = rect.top
 
-        self.redo_brush = TileBrush(self.tilemap.get_field().copy(), rect.get_width(), rect.get_height(),
-                                    -self.pos.x, -self.pos.y)
+        self.redo_brush = TileBrush.from_field(self.tilemap.get_field().copy(),
+                                               rect.get_width(), rect.get_height(),
+                                               -self.pos.x, -self.pos.y)
 
         # FIXME: undo_field is unneeded, should just record the overwritten color
-        self.undo_brush = TileBrush(self.undo_field, rect.get_width(), rect.get_height(),
-                                    -self.pos.x, -self.pos.y)
+        self.undo_brush = TileBrush.from_field(self.undo_field,
+                                               rect.get_width(), rect.get_height(),
+                                               -self.pos.x, -self.pos.y)
 
         self.redo_brush.set_opaque()
         self.undo_brush.set_opaque()

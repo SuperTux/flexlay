@@ -17,6 +17,7 @@
 
 from flexlay import TilemapLayer, InputEvent
 from ..gui.editor_map_component import EditorMapComponent
+from ..gui.tile_selection import TileSelection
 
 
 class TileMapSelectTool:
@@ -30,21 +31,21 @@ class TileMapSelectTool:
             self.selection.draw(gc)
 
     def on_mouse_up(self, event):
-        parent = EditorMapComponent.current()
+        parent = EditorMapComponent.current
 
         if event.kind == InputEvent.MOUSE_LEFT:
             self.creating_selection = False
             parent.release_mouse()
 
-            self.selection.update(TilemapLayer.current().world2tile(parent.screen2world(event.mouse_pos)))
+            self.selection.update(TilemapLayer.current.world2tile(parent.screen2world(event.mouse_pos)))
 
     def on_mouse_down(self, event):
-        parent = EditorMapComponent.current()
+        parent = EditorMapComponent.current
 
         if event.kind == InputEvent.MOUSE_LEFT:
             creating_selection = True
             parent.capture_mouse()
-            tilemap = TilemapLayer.current()
+            tilemap = TilemapLayer.current
             self.selection.start(tilemap, tilemap.world2tile(parent.screen2world(event.mouse_pos)))
 
         elif event.kind == InputEvent.MOUSE_RIGHT:
@@ -52,13 +53,13 @@ class TileMapSelectTool:
                 self.selection.clear()
 
     def on_mouse_move(self, event):
-        parent = EditorMapComponent.current()
+        parent = EditorMapComponent.current
 
         if self.creating_selection:
-            self.selection.update(TilemapLayer.current().world2tile(parent.screen2world(event.mouse_pos)))
+            self.selection.update(TilemapLayer.current.world2tile(parent.screen2world(event.mouse_pos)))
 
     def get_selection(self):
-        tilemap = TilemapLayer.current()
+        tilemap = TilemapLayer.current
         return self.selection.get_brush(tilemap.get_field())
 
     def get_selection_rect(self):

@@ -17,8 +17,8 @@
 
 class Menu:
 
-    def __init__(self, qmenu):
-        self.qmenu = qmenu
+    def __init__(self, menu):
+        self.menu = menu
 
     def add_menu(self, label):
         menu = self.menu.addMenu(label)

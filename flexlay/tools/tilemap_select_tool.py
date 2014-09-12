@@ -15,6 +15,9 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from flexlay import TileSelection, EditorMapComponent, TilemapLayer, InputEvent
+
+
 class TileMapSelectTool:
 
     def __init__(self):
@@ -22,36 +25,36 @@ class TileMapSelectTool:
         self.creating_selection = False
 
     def draw(self, gc):
-        if selection.is_active():
-            selection.draw(gc)
+        if self.selection.is_active():
+            self.selection.draw(gc)
 
     def on_mouse_up(self, event):
         parent = EditorMapComponent.current()
 
-        if event.kind = =InputEvent.MOUSE_LEFT:
-            creating_selection = false
-            parent->release_mouse()
+        if event.kind == InputEvent.MOUSE_LEFT:
+            self.creating_selection = False
+            parent.release_mouse()
 
-            selection.update(TilemapLayer.current().world2tile(parent->screen2world(event.mouse_pos)))
+            self.selection.update(TilemapLayer.current().world2tile(parent.screen2world(event.mouse_pos)))
 
     def on_mouse_down(self, event):
         parent = EditorMapComponent.current()
 
         if event.kind == InputEvent.MOUSE_LEFT:
-            creating_selection = true
-            parent->capture_mouse()
-            TilemapLayer tilemap = TilemapLayer.current()
-            selection.start(tilemap, tilemap.world2tile(parent->screen2world(event.mouse_pos)))
+            creating_selection = True
+            parent.capture_mouse()
+            tilemap = TilemapLayer.current()
+            self.selection.start(tilemap, tilemap.world2tile(parent.screen2world(event.mouse_pos)))
 
         elif event.kind == InputEvent.MOUSE_RIGHT:
             if not creating_selection:
-                selection.clear()
+                self.selection.clear()
 
     def on_mouse_move(self, event):
         parent = EditorMapComponent.current()
 
         if self.creating_selection:
-            selection.update(TilemapLayer.current().world2tile(parent->screen2world(event.mouse_pos)))
+            self.selection.update(TilemapLayer.current().world2tile(parent.screen2world(event.mouse_pos)))
 
     def get_selection(self):
         tilemap = TilemapLayer.current()

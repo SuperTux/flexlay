@@ -16,12 +16,14 @@
 
 
 import math
+from flexlay import EditorMapComponent
+from flexlay.math import Point, Pointf
 
 
 class WorkspaceMoveTool:
 
     def __init__(self):
-        self.scrolling = false
+        self.scrolling = False
         self.click_pos = Point(0, 0)
         self.old_trans_offset = Pointf(0, 0)
 
@@ -34,13 +36,13 @@ class WorkspaceMoveTool:
 
     def on_mouse_up(self, event):
         print("WorkspaceMoveToolImpl.on_mouse_up")
-        self.scrolling = false
+        self.scrolling = False
         self.update(event)
         self.old_trans_offset = EditorMapComponent.current().get_gc_state().get_pos()
         EditorMapComponent.current().release_mouse()
 
     def on_mouse_move(self, event):
-        if scrolling:
+        if self.scrolling:
             self.update(event)
 
     def update(self, event):
@@ -49,12 +51,12 @@ class WorkspaceMoveTool:
         sa = math.sin(-gc_state.get_rotation() / 180.0 * math.pi)
         ca = math.cos(-gc_state.get_rotation() / 180.0 * math.pi)
 
-        dx = ca * (click_pos.x - event.mouse_pos.x) - sa * (click_pos.y - event.mouse_pos.y)
-        dy = sa * (click_pos.x - event.mouse_pos.x) + ca * (click_pos.y - event.mouse_pos.y)
+        dx = ca * (self.click_pos.x - event.mouse_pos.x) - sa * (self.click_pos.y - event.mouse_pos.y)
+        dy = sa * (self.click_pos.x - event.mouse_pos.x) + ca * (self.click_pos.y - event.mouse_pos.y)
 
-        gc_state.set_pos(Pointf(old_trans_offset.x
+        gc_state.set_pos(Pointf(self.old_trans_offset.x
                                 + dx / EditorMapComponent.current().get_gc_state().get_zoom(),
-                                old_trans_offset.y
+                                self.old_trans_offset.y
                                 + dy / EditorMapComponent.current().get_gc_state().get_zoom()))
 
 

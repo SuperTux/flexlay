@@ -24,8 +24,8 @@ class OnionSkinLayer:
     def __init__(self, width, height):
         self.SCALE = 1
 
-        self.surface = Surface(PixelBuffer(width/self.SCALE, height / self.SCALE))
-        self.surface2 = Surface(PixelBuffer(width/self.SCALE, height / self.SCALE))
+        self.surface = Surface(PixelBuffer(width / self.SCALE, height / self.SCALE))
+        self.surface2 = Surface(PixelBuffer(width / self.SCALE, height / self.SCALE))
 
         self.editormaps = []
         self.color = []

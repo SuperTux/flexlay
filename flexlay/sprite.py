@@ -89,7 +89,7 @@ class Sprite:
         pass
 
     def add_frame(self, surface, rect):
-        #m_sprite.add_frame(surface.to_cl(), rect.to_cl())
+        # m_sprite.add_frame(surface.to_cl(), rect.to_cl())
         pass
 
     def get_pixelbuffer(self):

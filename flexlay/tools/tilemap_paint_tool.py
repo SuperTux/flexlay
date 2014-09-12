@@ -15,6 +15,12 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from flexlay import (Color, TileSelection, TileBrush, PaintCommand,
+                     TilemapLayer, InputEvent, Workspace)
+from flexlay.gui import EditorMapComponent
+from flexlay.math import Point, Size, Rect
+
+
 class TileMapPaintTool:
 
     current = None
@@ -26,141 +32,141 @@ class TileMapPaintTool:
     def __init__(self):
         TileMapPaintTool.current = self
 
-        TileSelection selection
-        TileBrush brush
-        Point last_draw
-        Point current_tile
-        PaintCommand* command
+        self.selection = TileSelection()
+        self.brush = TileBrush()
+        self.command = PaintCommand()
 
         self.last_draw = Point(-1, -1)
         self.brush = TileBrush(1, 1)
-        self.brush.at(0, 0) = 0
+        self.brush.put(0, 0, 0)
         self.brush.set_opaque()
-        self.current_tile = Point(0,0) 
+        self.current_tile = Point(0, 0)
         self.command = 0
-        self.mode = TileMapPaintToolImpl.NONE
+        self.mode = TileMapPaintTool.NONE_MODE
 
     def draw(self, gc):
         tilemap = TilemapLayer.current()
         if not tilemap:
             return
 
-        if self.mode == TileMapPaintToolImpl.SELECTING:
-            #if Keyboard.get_keycode(CL_KEY_LSHIFT):
+        if self.mode == TileMapPaintTool.SELECTING:
+            # if Keyboard.get_keycode(CL_KEY_LSHIFT):
             #    selection.draw(gc, Color(255,  128, 128, 100))
-            #else:
-            selection.draw(gc)
+            # else:
+            self.selection.draw(gc)
 
         else:
             tile_size = tilemap.get_tileset().get_tile_size()
 
             # Draw the brush:
-            for y in range(0, brush.get_height()):
-                for x in range(0, brush.get_width()):
-                    tile = tilemap.get_tileset().create(brush.at(x, y))
+            for y in range(0, self.brush.get_height()):
+                for x in range(0, self.brush.get_width()):
+                    tile = tilemap.get_tileset().create(self.brush.at(x, y))
 
                     if tile:
-                        sprite = tile->get_sprite()
-                        sprite.set_alpha(0.5f)
-                        sprite.draw((current_tile.x + x) * tile_size,
-                                    (current_tile.y + y) * tile_size, gc)
+                        sprite = tile.get_sprite()
+                        sprite.set_alpha(0.5)
+                        sprite.draw((self.current_tile.x + x) * tile_size,
+                                    (self.current_tile.y + y) * tile_size, gc)
 
-                        gc.fill_rect(Rect(Point((current_tile.x + x) * tile_size,
-                                                (current_tile.y + y) * tile_size),
+                        gc.fill_rect(Rect(Point((self.current_tile.x + x) * tile_size,
+                                                (self.current_tile.y + y) * tile_size),
                                           Size(tile_size, tile_size)),
                                      Color(255, 255, 255, 100))
-                    elif brush.is_opaque():
-                        gc.fill_rect(Rect(Point((current_tile.x + x) * tile_size,
-                                                (current_tile.y + y) * tile_size),
+                    elif self.brush.is_opaque():
+                        gc.fill_rect(Rect(Point((self.current_tile.x + x) * tile_size,
+                                                (self.current_tile.y + y) * tile_size),
                                           Size(tile_size, tile_size)),
                                      Color(255, 255, 255, 100))
                     else:
-                          gc.fill_rect(Rect(Point((current_tile.x + x) * tile_size,
-                                                  (current_tile.y + y) * tile_size),
-                                            Size(tile_size, tile_size)),
-                                       Color(255, 255, 255, 50))
+                        gc.fill_rect(Rect(Point((self.current_tile.x + x) * tile_size,
+                                                (self.current_tile.y + y) * tile_size),
+                                          Size(tile_size, tile_size)),
+                                     Color(255, 255, 255, 50))
 
     def get_brush(self):
-            return self.brush
+        return self.brush
 
     def on_mouse_down(self, event):
         tilemap = TilemapLayer.current()
 
         if tilemap:
             parent = EditorMapComponent.current()
-            pos = tilemap.world2tile(parent->screen2world(event.mouse_pos))
+            pos = tilemap.world2tile(parent.screen2world(event.mouse_pos))
 
-            if mode == TileMapPaintToolImpl.NONE:
+            if self.mode == TileMapPaintTool.NONE_MODE:
                 if event.kind == InputEvent.MOUSE_LEFT:
-                    mode = TileMapPaintToolImpl.PAINTING
-                    parent->capture_mouse()
-                    command = new PaintCommand(tilemap, brush)
-                    command->add_point(pos)
-                    last_draw = pos
+                    self.mode = TileMapPaintTool.PAINTING
+                    parent.capture_mouse()
+                    self.command = PaintCommand(tilemap, self.brush)
+                    self.command.add_point(pos)
+                    self.last_draw = pos
 
                 elif event.kind == InputEvent.MOUSE_RIGHT:
-                    mode = TileMapPaintToolImpl.SELECTING
-                    parent->capture_mouse()
+                    self.mode = TileMapPaintTool.SELECTING
+                    parent.capture_mouse()
 
-                    selection.start(tilemap, pos)
+                    self.selection.start(tilemap, pos)
 
     def on_mouse_move(self, event):
         tilemap = TilemapLayer.current()
         if tilemap:
             parent = EditorMapComponent.current()
-            current_tile = tilemap.world2tile(parent->screen2world(event.mouse_pos))
+            self.current_tile = tilemap.world2tile(parent.screen2world(event.mouse_pos))
 
-            if self.mode == PAINTING_MODE:
-                if ((event.mod & InputEvent.MOD_SHIFT) ||
-                    ((current_tile.x % brush.get_width()) == (last_draw.x % brush.get_width()) &&
-                     (current_tile.y % brush.get_height() == (last_draw.y % brush.get_height())))):
-                    command->add_point(current_tile)
-                    last_draw = current_tile
+            if self.mode == TileMapPaintTool.PAINTING_MODE:
+                if ((event.mod & InputEvent.MOD_SHIFT) or
+                    ((self.current_tile.x % self.brush.get_width()) == (self.last_draw.x % self.brush.get_width()) and
+                     (self.current_tile.y % self.brush.get_height() == (self.last_draw.y % self.brush.get_height())))):
+                    self.command.add_point(self.current_tile)
+                    self.last_draw = self.current_tile
 
-            elif self.mode == SELECTING_MODE:
-                selection.update(current_tile)
+            elif self.mode == TileMapPaintTool.SELECTING_MODE:
+                self.selection.update(self.current_tile)
 
-    def on_mouse_up(self, event)
-      tilemap = TilemapLayer.current()
+    def on_mouse_up(self, event):
+        self.tilemap = TilemapLayer.current()
 
-      if tilemap:
-        EditorMapComponent.current()->get_workspace().get_map().modify()
+        if self.tilemap:
+            EditorMapComponent.current().get_workspace().get_map().modify()
 
-        parent = EditorMapComponent.current()
-        current_tile = tilemap.world2tile(parent->screen2world(event.mouse_pos))
+            parent = EditorMapComponent.current()
+            self.current_tile = self.tilemap.world2tile(parent.screen2world(event.mouse_pos))
 
-        if event.kind == InputEvent.MOUSE_LEFT:
-            if self.mode == PAINTING_MODE
-              parent->release_mouse()
-              mode = NONE
+            if event.kind == InputEvent.MOUSE_LEFT:
+                if self.mode == TileMapPaintTool.PAINTING_MODE:
+                    parent.release_mouse()
+                    self.mode = TileMapPaintTool.NONE_MODE
 
-              if ((event.mod & InputEvent.MOD_SHIFT) ||
-                  ((current_tile.x % brush.get_width()) == (last_draw.x % brush.get_width()) &&
-                   (current_tile.y % brush.get_height() == (last_draw.y % brush.get_height())))):
-                command->add_point(current_tile)
+                    if ((event.mod & InputEvent.MOD_SHIFT) or
+                        ((self.current_tile.x % self.brush.get_width()) ==
+                         (self.last_draw.x % self.brush.get_width()) and
+                         (self.current_tile.y % self.brush.get_height() ==
+                          (self.last_draw.y % self.brush.get_height())))):
+                        self.command.add_point(self.current_tile)
 
-              Workspace.current().get_map().execute(command->to_command())
-              command = None
+                    Workspace.current().get_map().execute(self.command)
+                    self.command = None
 
-              tilemap.draw_tile(brush, current_tile)
-              last_draw = Point(-1, -1)
+                    self.tilemap.draw_tile(self.brush, self.current_tile)
+                    self.last_draw = Point(-1, -1)
 
-        elif event.kind == InputEvent.MOUSE_RIGHT:
-            if mode == SELECTING:
-                parent->release_mouse()
-                mode = NONE
+            elif event.kind == InputEvent.MOUSE_RIGHT:
+                if self.mode == TileMapPaintTool.SELECTING_MODE:
+                    parent.release_mouse()
+                    self.mode = TileMapPaintTool.NONE_MODE
 
-                selection.update(current_tile)
-                brush = selection.get_brush(*tilemap.get_field())
+                    self.selection.update(self.current_tile)
+                    self.brush = self.selection.get_brush(self.tilemap.get_field())
 
-                if ((brush.get_width() > 1 or brush.get_height() > 1)
-                    and.mod & InputEvent.MOD_SHIFT)):
-                    brush.set_transparent()
-                    brush.auto_crop()
-                else:
-                    brush.set_opaque()
+                    if ((self.brush.get_width() > 1 or self.brush.get_height() > 1) and
+                       (event.mod & InputEvent.MOD_SHIFT)):
+                        self.brush.set_transparent()
+                        self.brush.auto_crop()
+                    else:
+                        self.brush.set_opaque()
 
-                selection.clear()
+                    self.selection.clear()
 
     def set_brush(self, brush):
         self.brush = brush

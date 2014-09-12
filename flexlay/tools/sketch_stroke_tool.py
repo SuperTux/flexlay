@@ -15,25 +15,34 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from flexlay.math import Point
+from flexlay import (EditorMapComponent, Stroke, SpriteStrokeDrawer,
+                     BitmapLayer, DrawerProperties, InputEvent, Dab)
+
+
+class Mouse:
+    pass
+
+
 class SketchStrokeTool:
 
     def __init__(self):
-        drawing = False
+        self.drawing = False
         self.stroke = Stroke()
         self.drawer = SpriteStrokeDrawer()
 
     def draw(self, gc):
-        if drawing:
+        if self.drawing:
             # FIXME: This translation is a bit ugly, layer position should be handled somewhat different
             gc.push_modelview()
             gc.add_translate(BitmapLayer.current().to_object().get_pos().x,
                              BitmapLayer.current().to_object().get_pos().y)
-            stroke.draw(0)
+            self.stroke.draw(0)
             gc.pop_modelview()
         else:
             parent = EditorMapComponent.current()
-            p = parent.screen2world(Point(CL_Mouse.get_x() - parent.get_screen_x(),
-                                          CL_Mouse.get_y() - parent.get_screen_y()))
+            p = parent.screen2world(Point(Mouse.get_x() - parent.get_screen_x(),
+                                          Mouse.get_y() - parent.get_screen_y()))
             s = DrawerProperties.current().get_brush().get_sprite()
             s.set_color(DrawerProperties.current().get_color().to_cl())
             # FIXME: when using mouse 1.0, when tablet 0.5
@@ -48,16 +57,16 @@ class SketchStrokeTool:
             parent = EditorMapComponent.current()
             parent.release_mouse()
             self.add_dab(event)
-            BitmapLayer.current().add_stroke(stroke)
+            BitmapLayer.current().add_stroke(self.stroke)
 
     def on_mouse_down(self, event):
         if event.kind == InputEvent.MOUSE_LEFT:
-            drawing = True
+            self.drawing = True
             parent = EditorMapComponent.current()
             parent.capture_mouse()
-            stroke = Stroke()
-            stroke.set_drawer(drawer.clone())
-            add_dab(event)
+            self.stroke = Stroke()
+            self.stroke.set_drawer(self.drawer.copy())
+            self.add_dab(event)
 
     def add_dab(self, event):
         parent = EditorMapComponent.current()
@@ -81,7 +90,7 @@ class SketchStrokeTool:
         #   dab.tilt.y   = tablet.get_axis(4)
         # }
 
-        #std.cout << dab.pressure << " " << dab.tilt.x << " " << dab.tilt.y << std.endl
+        # std.cout << dab.pressure << " " << dab.tilt.x << " " << dab.tilt.y << std.endl
 
         if dab.pressure == 0:  # most likly we are using the mouse
             dab.pressure = 1.0
@@ -89,7 +98,7 @@ class SketchStrokeTool:
         self.stroke.add_dab(dab)
 
     def on_mouse_move(self, event):
-        if drawing:
+        if self.drawing:
             self.add_dab(event)
 
     def get_drawer(self):

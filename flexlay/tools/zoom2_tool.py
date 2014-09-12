@@ -15,6 +15,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from flexay.math import Point
+from flexay import EditorMapComponent
+
+
 class Zoom2Tool:
 
     def __init__(self):
@@ -26,24 +30,24 @@ class Zoom2Tool:
         self.active = False
 
     def on_mouse_down(self, event):
-        self.active = true
+        self.active = True
         self.click_pos = event.mouse_pos
 
         gc = EditorMapComponent.current().get_gc_state()
         self.old_zoom = gc.get_zoom()
 
     def on_mouse_move(self, event):
-        if active:
+        if self.active:
             gc = EditorMapComponent.current().get_gc_state()
-            zoom_pos Point(gc.get_width()/2, gc.get_height()/2)
+            zoom_pos = Point(gc.get_width() / 2, gc.get_height() / 2)
 
-            factor = (event.mouse_pos.y - click_pos.y) / 20.0f
+            factor = (event.mouse_pos.y - self.click_pos.y) / 20.0
             if factor > 0:
-                gc.set_zoom(old_zoom * pow(1.25f, factor), zoom_pos)
+                gc.set_zoom(self.old_zoom * pow(1.25, factor), zoom_pos)
             elif factor < 0:
-                gc.set_zoom(old_zoom / pow(1.25f, -factor), zoom_pos)
+                gc.set_zoom(self.old_zoom / pow(1.25, -factor), zoom_pos)
             else:
-                gc.set_zoom(old_zoom, zoom_pos)
+                gc.set_zoom(self.old_zoom, zoom_pos)
 
 
 # EOF #

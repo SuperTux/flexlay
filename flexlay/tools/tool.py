@@ -16,7 +16,21 @@
 
 
 class Tool:
-    pass
+
+    def __init__(self):
+        pass
+
+    def draw(self, gc):
+        pass
+
+    def on_mouse_down(self, event):
+        pass
+
+    def on_mouse_up(self, event):
+        pass
+
+    def on_mouse_move(self, event):
+        pass
 
 
 # EOF #

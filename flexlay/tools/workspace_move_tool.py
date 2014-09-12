@@ -15,8 +15,47 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+import math
+
+
 class WorkspaceMoveTool:
-    pass
+
+    def __init__(self):
+        self.scrolling = false
+        self.click_pos = Point(0, 0)
+        self.old_trans_offset = Pointf(0, 0)
+
+    def on_mouse_down(self, event):
+        print("WorkspaceMoveToolImpl.on_mouse_down")
+        self.scrolling = True
+        self.old_trans_offset = EditorMapComponent.current().get_gc_state().get_pos()
+        self.click_pos = event.mouse_pos
+        EditorMapComponent.current().capture_mouse()
+
+    def on_mouse_up(self, event):
+        print("WorkspaceMoveToolImpl.on_mouse_up")
+        self.scrolling = false
+        self.update(event)
+        self.old_trans_offset = EditorMapComponent.current().get_gc_state().get_pos()
+        EditorMapComponent.current().release_mouse()
+
+    def on_mouse_move(self, event):
+        if scrolling:
+            self.update(event)
+
+    def update(self, event):
+        gc_state = EditorMapComponent.current().get_gc_state()
+
+        sa = math.sin(-gc_state.get_rotation() / 180.0 * math.pi)
+        ca = math.cos(-gc_state.get_rotation() / 180.0 * math.pi)
+
+        dx = ca * (click_pos.x - event.mouse_pos.x) - sa * (click_pos.y - event.mouse_pos.y)
+        dy = sa * (click_pos.x - event.mouse_pos.x) + ca * (click_pos.y - event.mouse_pos.y)
+
+        gc_state.set_pos(Pointf(old_trans_offset.x
+                                + dx / EditorMapComponent.current().get_gc_state().get_zoom(),
+                                old_trans_offset.y
+                                + dy / EditorMapComponent.current().get_gc_state().get_zoom()))
 
 
 # EOF #

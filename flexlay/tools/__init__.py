@@ -26,4 +26,9 @@ from .zoom2_tool import Zoom2Tool
 from .zoom_tool import ZoomTool
 
 
+__all__ = ["Tool", "LayerMoveTool", "ObjMapSelectTool",
+           "SketchStrokeTool", "TileMapSelectTool", "TileMapPaintTool",
+           "WorkspaceMoveTool", "ZoomTool", "Zoom2Tool"]
+
+
 # EOF #

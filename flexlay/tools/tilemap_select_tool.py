@@ -16,7 +16,49 @@
 
 
 class TileMapSelectTool:
-    pass
+
+    def __init__(self):
+        self.selection = TileSelection()
+        self.creating_selection = False
+
+    def draw(self, gc):
+        if selection.is_active():
+            selection.draw(gc)
+
+    def on_mouse_up(self, event):
+        parent = EditorMapComponent.current()
+
+        if event.kind = =InputEvent.MOUSE_LEFT:
+            creating_selection = false
+            parent->release_mouse()
+
+            selection.update(TilemapLayer.current().world2tile(parent->screen2world(event.mouse_pos)))
+
+    def on_mouse_down(self, event):
+        parent = EditorMapComponent.current()
+
+        if event.kind == InputEvent.MOUSE_LEFT:
+            creating_selection = true
+            parent->capture_mouse()
+            TilemapLayer tilemap = TilemapLayer.current()
+            selection.start(tilemap, tilemap.world2tile(parent->screen2world(event.mouse_pos)))
+
+        elif event.kind == InputEvent.MOUSE_RIGHT:
+            if not creating_selection:
+                selection.clear()
+
+    def on_mouse_move(self, event):
+        parent = EditorMapComponent.current()
+
+        if self.creating_selection:
+            selection.update(TilemapLayer.current().world2tile(parent->screen2world(event.mouse_pos)))
+
+    def get_selection(self):
+        tilemap = TilemapLayer.current()
+        return self.selection.get_brush(tilemap.get_field())
+
+    def get_selection_rect(self):
+        return self.selection.get_rect()
 
 
 # EOF #

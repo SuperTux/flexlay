@@ -16,7 +16,83 @@
 
 
 class SketchStrokeTool:
-    pass
 
+    def __init__(self):
+        drawing = False
+        self.stroke = Stroke()
+        self.drawer = SpriteStrokeDrawer()
+
+    def draw(self, gc):
+        if drawing:
+            # FIXME: This translation is a bit ugly, layer position should be handled somewhat different
+            gc.push_modelview()
+            gc.add_translate(BitmapLayer.current().to_object().get_pos().x,
+                             BitmapLayer.current().to_object().get_pos().y)
+            stroke.draw(0)
+            gc.pop_modelview()
+        else:
+            parent = EditorMapComponent.current()
+            p = parent.screen2world(Point(CL_Mouse.get_x() - parent.get_screen_x(),
+                                          CL_Mouse.get_y() - parent.get_screen_y()))
+            s = DrawerProperties.current().get_brush().get_sprite()
+            s.set_color(DrawerProperties.current().get_color().to_cl())
+            # FIXME: when using mouse 1.0, when tablet 0.5
+            s.set_scale(DrawerProperties.current().get_size() * 0.5,
+                        DrawerProperties.current().get_size() * 0.5)
+            s.set_alpha(0.5)
+            s.draw(p.x, p.y)
+
+    def on_mouse_up(self, event):
+        if event.kind == InputEvent.MOUSE_LEFT and self.drawing:
+            self.drawing = False
+            parent = EditorMapComponent.current()
+            parent.release_mouse()
+            self.add_dab(event)
+            BitmapLayer.current().add_stroke(stroke)
+
+    def on_mouse_down(self, event):
+        if event.kind == InputEvent.MOUSE_LEFT:
+            drawing = True
+            parent = EditorMapComponent.current()
+            parent.capture_mouse()
+            stroke = Stroke()
+            stroke.set_drawer(drawer.clone())
+            add_dab(event)
+
+    def add_dab(self, event):
+        parent = EditorMapComponent.current()
+        p = parent.screen2world(event.mouse_pos)
+
+        # FIXME: This is ugly, events relative to the layer should be handled somewhat differently
+        dab = Dab(p.x - BitmapLayer.current().to_object().get_pos().x,
+                  p.y - BitmapLayer.current().to_object().get_pos().y)
+
+        # FIXME: Make tablet configurable
+        # if (CL_Display.get_current_window().get_ic().get_mouse_count() >= 4)
+        # {
+        #   CL_InputDevice tablet = CL_Display.get_current_window().get_ic().get_mouse(5)
+        #   print("Mouse Count: " << CL_Display.get_current_window().get_ic().get_mouse_count() << std.endl
+        #   std.cout << tablet.get_name() << ": "
+        #   for(int i = 0 i < tablet.get_axis_count() ++i)
+        #     std.cout << tablet.get_axis(i) << " "
+        #   std.cout << std.endl
+        #   dab.pressure = tablet.get_axis(2)
+        #   dab.tilt.x   = tablet.get_axis(3)
+        #   dab.tilt.y   = tablet.get_axis(4)
+        # }
+
+        #std.cout << dab.pressure << " " << dab.tilt.x << " " << dab.tilt.y << std.endl
+
+        if dab.pressure == 0:  # most likly we are using the mouse
+            dab.pressure = 1.0
+
+        self.stroke.add_dab(dab)
+
+    def on_mouse_move(self, event):
+        if drawing:
+            self.add_dab(event)
+
+    def get_drawer(self):
+        return self.drawer
 
 # EOF #

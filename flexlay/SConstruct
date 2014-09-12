@@ -19,6 +19,7 @@ env = Environment()
 
 sources = (Glob("*.py", strings=True) +
            Glob("gui/*.py", strings=True) +
+           Glob("tools/*.py", strings=True) +
            Glob("math/*.py", strings=True))
 
 flake_check = Command(None, sources,

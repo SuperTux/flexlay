@@ -29,8 +29,28 @@ def main():
     gui_manager = flexlay.create_gui_manager("Simple Editor")
 
     button_panel = gui_manager.create_button_panel(horizontal=True)
-    button_panel.add_text("ClickMe", None)
-    button_panel.add_text("ClickYou", None)
+
+    def on_object_tool():
+        workspace.set_tool(1, objtool)
+        workspace.set_tool(2, workspace_move_tool)
+        workspace.set_tool(3, Tool())
+    button_panel.add_text("ObjectTool", on_object_tool)
+
+    def on_tile_tool():
+      workspace.set_tool(1, tilemap_paint_tool)
+      workspace.set_tool(2, workspace_move_tool)
+      workspace.set_tool(3, tilemap_paint_tool)
+    button_panel.add_text("TileTool", on_tile_tool)
+
+    def on_generic_dialog():
+        dialog = gui_manager.create_generic_dialog("Generic Dialog")
+        dialog.add_bool("An Bool:", True)
+        dialog.add_int("An Int:", 5)
+        dialog.add_float("An Int:", 5.0)
+        dialog.add_string("An String:", "String")
+        dialog.add_enum("An Enum:", ["String", "Foo", "bar"], 0)
+        dialog.set_ok_callback(lambda: print(dialog.get_values()))
+    button_panel.add_text("Generic Dialog", on_generic_dialog)
 
     menubar = gui_manager.create_menubar()
 
@@ -82,23 +102,7 @@ def main():
 
     print("Successs!")
     gui_manager.run()
-  
 
-  # buttons->add_text("ObjectTool", [&]{
-  #     workspace.set_tool(1, objtool.to_tool())
-  #     workspace.set_tool(2, workspace_move_tool.to_tool())
-  #     workspace.set_tool(3, Tool())
-  #   })
-  # buttons->add_text("TileTool", [&]{
-  #     workspace.set_tool(1, tilemap_paint_tool.to_tool())
-  #     workspace.set_tool(2, workspace_move_tool.to_tool())
-  #     workspace.set_tool(3, tilemap_paint_tool.to_tool())
-  #   })
-
-  # GenericDialog* dialog = gui->create_generic_dialog("Generic Dialog")
-  # dialog->add_int("An Int:", 5)
-
-  # gui->run()
 
 if __name__ == "__main__":
     main()

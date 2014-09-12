@@ -28,6 +28,7 @@ class Item:
     KIND_INT = 2
     KIND_FLOAT = 3
     KIND_STRING = 4
+    KIND_ENUM = 5
 
     def __init__(self, kind, label, body, group=None):
         self.kind = kind
@@ -60,7 +61,7 @@ class GenericDialog:
     def add_label(self, text):
         label = QLabel(text)
         self.layout.addRow(label)
-        self.items.emplace_back(Item.KIND_LABEL, label, None, None)
+        self.items.append(Item(Item.KIND_LABEL, label, None, None))
 
     def add_bool(self, name, value):
         label = QLabel(name)
@@ -70,7 +71,7 @@ class GenericDialog:
         if value:
             checkbox.setCheckState(Qt.Checked)
 
-        self.items.emplace_back(Item.KIND_BOOL, label, checkbox)
+        self.items.append(Item(Item.KIND_BOOL, label, checkbox))
 
     def add_int(self, name, value):
         label = QLabel(name)
@@ -79,7 +80,7 @@ class GenericDialog:
 
         inputbox.setText(str(value))
 
-        self.items.emplace_back(Item.KIND_INT, label, inputbox)
+        self.items.append(Item(Item.KIND_INT, label, inputbox))
 
     def add_float(self, name, value):
         label = QLabel(name)
@@ -88,7 +89,7 @@ class GenericDialog:
 
         inputbox.setText(str(value))
 
-        self.items.emplace_back(Item.KIND_FLOAT, label, inputbox)
+        self.items.append(Item(Item.KIND_FLOAT, label, inputbox))
 
     def add_string(self, name, value):
         label = QLabel(name)
@@ -97,17 +98,20 @@ class GenericDialog:
 
         inputbox.setText(value)
 
-        self.items.emplace_back(Item.KIND_STRING, label, inputbox)
+        self.items.append(Item(Item.KIND_STRING, label, inputbox))
 
-    def add_enum(self, name, values, current_value):
+    def add_enum(self, name, values, current_value=0):
         label = QLabel(name)
         group = QButtonGroup()
-        for value in values:
+        for i, value in enumerate(values):
             radio = QRadioButton(value)
-            radio.setChecked(current_value == value)
+            radio.setChecked(current_value == i)
+            if i == 0:
+                self.layout.addRow(label, radio)
+            else:
+                self.layout.addRow(None, radio)
             group.addButton(radio)
-
-        self.items.emplace_back(Item.KIND_ENUM, label, None, group)
+        self.items.append(Item(Item.KIND_ENUM, label, None, group))
 
     def set_ok_callback(self, callback):
         def on_accept():
@@ -132,21 +136,21 @@ class GenericDialog:
                 idx = 0
                 for button in item.group.buttons():
                     if button == item.group.checkedButton():
-                        result.emplace_back(idx)
+                        result.append(idx)
                         break
                     idx += 1
 
             elif item.kind == Item.KIND_BOOL:
-                result.emplace_back(item.body.checkState() == Qt.Checked)
+                result.append(item.body.checkState() == Qt.Checked)
 
             elif item.kind == Item.KIND_INT:
-                result.emplace_back(item.body.text().toInt())
+                result.append(int(item.body.text()))
 
             elif item.kind == Item.KIND_FLOAT:
-                result.emplace_back(item.body.text().toFloat())
+                result.append(float(item.body.text()))
 
             elif item.kind == Item.KIND_STRING:
-                result.emplace_back(item.body.text().toStdString())
+                result.append(item.body.text())
 
         return result
 

@@ -33,7 +33,7 @@ class ObjectSelector:
 
     def add_brush(self, brush):
         self.widget.add_brush(brush)
-        
+
     @property
     def sig_drop(self):
         return self.widget.sig_drop

@@ -50,7 +50,7 @@ class GUIManager:
         return ButtonPanel(toolbar)
 
     def create_generic_dialog(self, title):
-        return GenericDialog(title, self.window.get())
+        return GenericDialog(title, self.window)
 
     def create_editor_map_component(self):
         central = QWidget()

@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from PyQt5.Core import QColor
+from PyQt5.QtGui import QColor
 
 
 class Color:

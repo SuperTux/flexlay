@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from flexlay import Origin
+from flexlay.math import Origin
 
 
 class SpriteBrush:

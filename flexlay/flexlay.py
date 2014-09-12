@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from flexlay import GUIManager
+from .gui_manager import GUIManager
 
 
 class Flexlay:

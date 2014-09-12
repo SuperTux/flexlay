@@ -15,9 +15,12 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from PyQt5.Core import QSize, Qt
-from PyQt5.Gui import QPainter
-from flexlay import Point, Rect, TileBrush, TileMapPaintTool, GraphicContext, Color, Size
+from PyQt5.QtCore import QSize, Qt
+from PyQt5.QtGui import QPainter
+
+from flexlay import TileBrush, GraphicContext, Color
+from flexlay.math import Point, Rect, Size
+from flexlay.tools import TileMapPaintTool
 
 
 class TileSelectorWidget:

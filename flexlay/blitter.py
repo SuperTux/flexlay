@@ -15,8 +15,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from PyQt5.Core import QPoint
-from PyQt5.Gui import QPainter
+from PyQt5.QtCore import QPoint
+from PyQt5.QtGui import QPainter
 
 
 def blit_opaque(target, brush, x, y):
@@ -31,7 +31,7 @@ def blit(target, brush, x, y):
     painter.drawImage(QPoint(x, y), brush.get_qimage())
 
 
-def clear(canvas):
+def blit_clear(canvas):
     print("clear(PixelBuffer canvas) not implemented")
     # canvas.lock()
     # buffer = static_cast<unsigned char*>(canvas.get_data())

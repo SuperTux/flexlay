@@ -15,10 +15,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from PyQt5.Core import QPoint
+from PyQt5.QtCore import QPoint
 
 from flexlay.math import Origin, Point, Size
-from flexlay import PixelBuffer
+from .pixel_buffer import PixelBuffer
 
 
 class Sprite:

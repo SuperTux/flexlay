@@ -32,4 +32,7 @@ class Size:
         return not self.__eq__(rhs)
 
 
+Sizef = Size
+
+
 # EOF #

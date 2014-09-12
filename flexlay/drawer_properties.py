@@ -15,37 +15,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from PyQt5.QtCore import QPoint
-
-
-class Point:
-
-    def __init__(self, x, y):
-        self.x = x
-        self.y = y
-
-    def copy(self):
-        return Point(self.x, self.y)
-
-    def __add__(self, rhs):
-        return Point(self.x + rhs.x,
-                     self.y + rhs.y)
-
-    def __sub__(self, rhs):
-        return Point(self.x - rhs.x,
-                     self.y - rhs.y)
-
-    def __eq__(self, rhs):
-        return self.x == rhs.x and self.y == rhs.y
-
-    def __ne__(self, rhs):
-        return not self.__eq__(rhs)
-
-    def to_qt(self):
-        return QPoint(self.x, self.y)
-
-
-Pointf = Point
+class DrawerProperties:
+    pass
 
 
 # EOF #

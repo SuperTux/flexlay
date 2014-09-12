@@ -14,9 +14,10 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from PyQt5.GUI import QIcon
 
-from flexlay import Icon
+from PyQt5.QtGui import QIcon
+
+from .icon import Icon
 
 
 class ButtonPanel:

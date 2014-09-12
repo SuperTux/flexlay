@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from flexlay import MinimapWidget
+from .minimap_widget import MinimapWidget
 
 
 class Minimap:

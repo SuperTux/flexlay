@@ -15,11 +15,12 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from PyQt5.QtCore import (QCoreApplication, QApplication, Qt)
-from PyQt5.QtGui import (QMainWindow, QToolBar, QDockWidget, QVBoxLayout, QWidget)
-from flexlay import (ButtonPanel, EditorMapComponent, FileDialog, GenericDialog,
-                     LayerSelector, Menubar, Minimap, ObjectSelector,
-                     TileBrushSelector, TileSelector)
+from PyQt5.QtCore import (QCoreApplication, Qt)
+from PyQt5.QtWidgets import (QApplication, QMainWindow, QToolBar, QDockWidget, QVBoxLayout, QWidget)
+
+from .gui import (ButtonPanel, EditorMapComponent, FileDialog, GenericDialog,
+                  LayerSelector, Menubar, Minimap, ObjectSelector,
+                  TileBrushSelector, TileSelector)
 
 
 class GUIManager:
@@ -30,7 +31,7 @@ class GUIManager:
 
     def run(self):
         self.window.show()
-        QApplication.instance().exec()
+        QApplication.instance().exec_()
 
     def quit(self):
         QCoreApplication.quit()

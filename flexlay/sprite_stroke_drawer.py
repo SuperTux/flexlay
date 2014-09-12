@@ -15,8 +15,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from flexlay.math import Rect, Point, Size
-from flexlay import DrawerProperties, BlendFunc, BitmapLayer, Surface, Origin
+from flexlay.math import Rect, Point, Size, Origin
+from flexlay import DrawerProperties, BlendFunc, BitmapLayer, Surface
 
 
 class SpriteStrokeDrawer:

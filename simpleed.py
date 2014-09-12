@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 # Flexlay - A Generic 2D Game Editor
 # Copyright (C) 2014 Ingo Ruhnke <grumbel@gmail.com>
 #
@@ -15,37 +17,20 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from PyQt5.QtCore import QPoint
+from flexlay.math import Size
+from flexlay.math import Point
+# from flexlay import Flexlay
 
 
-class Point:
+def main():
+    pass
+    # flexlay = Flexlay()
+    # gui_manager = flexlay.create_gui_manager()
+    # gui_manager.run()
+    print("Successs!")
 
-    def __init__(self, x, y):
-        self.x = x
-        self.y = y
-
-    def copy(self):
-        return Point(self.x, self.y)
-
-    def __add__(self, rhs):
-        return Point(self.x + rhs.x,
-                     self.y + rhs.y)
-
-    def __sub__(self, rhs):
-        return Point(self.x - rhs.x,
-                     self.y - rhs.y)
-
-    def __eq__(self, rhs):
-        return self.x == rhs.x and self.y == rhs.y
-
-    def __ne__(self, rhs):
-        return not self.__eq__(rhs)
-
-    def to_qt(self):
-        return QPoint(self.x, self.y)
-
-
-Pointf = Point
+if __name__ == "__main__":
+    main()
 
 
 # EOF #

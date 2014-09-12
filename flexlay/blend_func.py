@@ -15,15 +15,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from flexlay import Flexlay
+class BlendFunc:
+    pass
 
-
-def main():
-    flexlay = Flexlay()
-    gui_manager = flexlay.create_gui_manager()
-    gui_manager.run()
-
-if __name__ == "__main__":
-    main()
 
 # EOF #

@@ -15,8 +15,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from PyQt5.Core import QSize
-from PyQt5.Gui import QImage
+from PyQt5.QtCore import QSize
+from PyQt5.QtGui import QImage
 
 
 class PixelBuffer:

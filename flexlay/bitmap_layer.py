@@ -49,7 +49,7 @@ class BitmapLayer:
 
     def add_stroke(self, stroke):
         if stroke.get_dab_count() > 0:
-            self.strokes.push_back(stroke)
+            self.strokes.append(stroke)
             stroke.draw(self.canvas.get_gc())
             # FIXME: doesn't sync when manually manipulating the canvas
             self.canvas.get_gc().flush()

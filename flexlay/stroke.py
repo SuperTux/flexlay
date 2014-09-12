@@ -17,7 +17,15 @@
 
 import math
 from flexlay.math import Rectf
-from flexlay import Dab
+
+
+class Dab:
+    
+    def __init__(self):
+        self.time = None
+        self.pos = None
+        self.pressure = None
+        self.tilt = None
 
 
 class Stroke:

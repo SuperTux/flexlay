@@ -15,8 +15,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from .blend_func import BlendFunc
+from flexlay import Display, Canvas, PixelBuffer, Color
+from flexlay.gui import EditorMapComponent
 from flexlay.math import Point
-from flexlay import Display, Canvas, PixelBuffer, EditorMapComponent, Color, BlendFunc
 
 
 class SketchLayer:

@@ -15,15 +15,15 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from flexlay import Point, Size, Rect, Origin
+from flexlay.math import Point, Size, Rect, Origin
 
 
 class ObjMapControlPoint:
 
-    def __init__(self, sprite,  pos, data):
+    def __init__(self, sprite,  pos, metadata = None):
         self.sprite = sprite
         self.pos = pos
-        self.data = data
+        self.metadata = metadata
 
         self.on_set_pos = None
 

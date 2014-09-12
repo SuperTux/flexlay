@@ -15,10 +15,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from PyQt5.Core import QVariant
-from PyQt5.Gui import (QComboBox, QScrollArea, QWidget, QVBoxLayout)
+from PyQt5.QtCore import QVariant
+from PyQt5.QtWidgets import (QComboBox, QScrollArea, QWidget, QVBoxLayout)
 
-from flexlay import TileSelectorWidget
+from .tile_selector_widget import TileSelectorWidget
 
 
 class TileSelector:

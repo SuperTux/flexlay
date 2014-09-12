@@ -22,7 +22,7 @@ class ObjectDeleteCommand:
         self.objects = []
 
     def add_object(self, obj):
-        self.objects.push_back(obj)
+        self.objects.append(obj)
 
     def execute(self):
         for obj in self.objects:

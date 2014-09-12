@@ -16,7 +16,9 @@
 
 
 import itertools
-from flexlay import Field, Rect
+
+from flexlay import Field
+from flexlay.math import Rect
 
 
 class TileBrush:

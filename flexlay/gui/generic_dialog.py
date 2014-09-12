@@ -15,10 +15,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from PyQt5.Core import Qt
-from PyQt5.Gui import (QDialog, QDialogButtonBox, QVBoxLayout, QLabel,
-                       QLineEdit, QFormLayout, QCheckBox,
-                       QButtonGroup, QRadioButton)
+from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import (QDialog, QDialogButtonBox, QVBoxLayout,
+                             QLabel, QLineEdit, QFormLayout,
+                             QCheckBox, QButtonGroup, QRadioButton)
 
 
 class Item:

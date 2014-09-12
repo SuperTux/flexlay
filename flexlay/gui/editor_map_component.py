@@ -15,10 +15,13 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from PyQt5.GUI import QWidget, QGridLayout, QScrollBar
-from PyQt5.Core import Qt
-from flexlay import Workspace, EditorMapWidget
+from PyQt5.QtWidgets import QWidget, QGridLayout, QScrollBar
+from PyQt5.QtCore import Qt
+
+from ..workspace import Workspace
 from flexlay.math import Pointf
+
+from .editor_map_widget import EditorMapWidget
 
 
 class EditorMapComponent:

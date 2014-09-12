@@ -15,8 +15,9 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from PyQt5.GUI import QSizePolicy, QDrag, QMimeData, Qt, QPainter, QPixmap
-from PyQt5.Core import QSize, QPoint, QByteArray
+from PyQt5.QtGui import QDrag, QPainter, QPixmap
+from PyQt5.QtWidgets import QSizePolicy
+from PyQt5.QtCore import Qt, QSize, QPoint, QByteArray, QMimeData
 
 from flexlay.math import Rectf, Point, Origin
 from flexlay import Color, GraphicContext

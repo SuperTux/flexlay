@@ -15,7 +15,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from flexlay.math import Rect, TileBrush
+from flexlay.math import Rect
+from ..tile_brush import TileBrush
 
 
 class TileSelection:

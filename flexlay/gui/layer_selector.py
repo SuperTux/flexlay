@@ -15,9 +15,9 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from PyQt5.Gui import (QStandardItemModel, QStandardItem, QIcon,
-                       QWidget, QToolBar, QTreeView, QScrollArea,
-                       QVBoxLayout)
+from PyQt5.QtGui import QStandardItemModel, QStandardItem, QIcon
+from PyQt5.QtWidgets import (QWidget, QToolBar, QTreeView, QScrollArea,
+                             QVBoxLayout)
 
 
 class LayerSelector:

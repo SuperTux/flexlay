@@ -36,7 +36,7 @@ class PaintCommand(Command):
 
     def add_point(self, pos):
         # FIXME: undo_field is unneeded, should just record the overwritten color
-        self.points.push_back(pos)
+        self.points.append(pos)
         self.tilemap.draw_tile(self.brush, pos)
 
     def execute(self):

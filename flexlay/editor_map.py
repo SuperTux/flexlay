@@ -15,7 +15,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from flexlay import Color, Rect, Layer
+from flexlay import Color, Layer
+from flexlay.math import Rect
 
 
 class EditorMap:
@@ -34,7 +35,7 @@ class EditorMap:
         assert pos == -1 or (pos >= 0 and pos < int(self.layers.size()))
 
         if pos == -1:  # insert at last pos
-            self.layers.push_back(layer)
+            self.layers.append(layer)
         else:
             self.layers.insert(self.layers.begin() + pos, layer)
 
@@ -119,7 +120,7 @@ class EditorMap:
     def execute(self, command):
         self.redo_stack.clear()
         command.execute()
-        self.undo_stack.push_back(command)
+        self.undo_stack.append(command)
         self.on_change()
 
     def undo(self):
@@ -127,7 +128,7 @@ class EditorMap:
             command = self.undo_stack.back()
             self.undo_stack.pop_back()
             command.undo()
-            self.redo_stack.push_back(command)
+            self.redo_stack.append(command)
             self.on_change()
 
     def redo(self):
@@ -135,7 +136,7 @@ class EditorMap:
             command = self.redo_stack.back()
             self.redo_stack.pop_back()
             command.redo()
-            self.undo_stack.push_back(command)
+            self.undo_stack.append(command)
             self.on_change()
 
     def undo_stack_size(self):

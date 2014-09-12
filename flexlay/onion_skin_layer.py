@@ -15,7 +15,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from flexlay import PixelBuffer, Surface, Canvas, Color, EditorMapComponent, BlendFunc
+from flexlay import PixelBuffer, Surface, Canvas, Color, BlendFunc
+from flexlay.gui import EditorMapComponent
 
 
 class OnionSkinLayer:
@@ -53,8 +54,8 @@ class OnionSkinLayer:
         self.canvas.sync_surface()
 
     def add_map(self, editor_map, color):
-        self.editormaps.push_back(editor_map)
-        self.color.push_back(color)
+        self.editormaps.append(editor_map)
+        self.color.append(color)
 
     def update(self):
         self.canvas.get_gc().clear(Color(0, 0, 0, 0).to_cl())

@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from PyQt5.Core import Qt
+from PyQt5.QtCore import Qt
 
 from flexlay.math import Point
 

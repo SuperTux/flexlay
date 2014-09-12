@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from flexlay import ObjMapObject, ObjMapControlPoint, MetaData, Sprite, ObjectLayer
+from flexlay import ObjMapObject, ObjMapControlPoint, Sprite, ObjectLayer
 from flexlay.math import Pointf, Sizef, Rect, Rectf
 
 
@@ -28,34 +28,26 @@ class ObjMapRectObject(ObjMapObject):
         self.metadata = metadata
 
         self.cp_top_left = ObjMapControlPoint(Sprite("../data/images/icons16/resize1.png"),
-                                              Pointf(),
-                                              MetaData())
+                                              Pointf())
 
         self.cp_bottom_right = ObjMapControlPoint(Sprite("../data/images/icons16/resize1.png"),
-                                                  Pointf(),
-                                                  MetaData())
+                                                  Pointf())
 
         self.cp_top_right = ObjMapControlPoint(Sprite("../data/images/icons16/resize2.png"),
-                                               Pointf(),
-                                               MetaData())
+                                               Pointf())
 
         self.cp_bottom_left = ObjMapControlPoint(Sprite("../data/images/icons16/resize2.png"),
-                                                 Pointf(),
-                                                 MetaData())
+                                                 Pointf())
 
         self.cp_middle_left = ObjMapControlPoint(Sprite("../data/images/icons16/resize_horz.png"),
-                                                 Pointf(),
-                                                 MetaData())
+                                                 Pointf())
         self.cp_middle_right = ObjMapControlPoint(Sprite("../data/images/icons16/resize_horz.png"),
-                                                  Pointf(),
-                                                  MetaData())
+                                                  Pointf())
         self.cp_top_middle = ObjMapControlPoint(Sprite("../data/images/icons16/resize_vert.png"),
-                                                Pointf(),
-                                                MetaData())
+                                                Pointf())
 
         self.cp_bottom_middle = ObjMapControlPoint(Sprite("../data/images/icons16/resize_vert.png"),
-                                                   Pointf(),
-                                                   MetaData())
+                                                   Pointf())
 
         self.cp_top_right.sig_set_pos().connect(self.cp_top_right_move)
         self.cp_bottom_right.sig_set_pos().connect(self.cp_bottom_right_move)

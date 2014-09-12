@@ -15,37 +15,15 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from PyQt5.QtCore import QPoint
-
-
-class Point:
-
-    def __init__(self, x, y):
-        self.x = x
-        self.y = y
-
-    def copy(self):
-        return Point(self.x, self.y)
-
-    def __add__(self, rhs):
-        return Point(self.x + rhs.x,
-                     self.y + rhs.y)
-
-    def __sub__(self, rhs):
-        return Point(self.x - rhs.x,
-                     self.y - rhs.y)
-
-    def __eq__(self, rhs):
-        return self.x == rhs.x and self.y == rhs.y
-
-    def __ne__(self, rhs):
-        return not self.__eq__(rhs)
-
-    def to_qt(self):
-        return QPoint(self.x, self.y)
-
-
-Pointf = Point
+from .tool import Tool
+from .layer_move_tool import LayerMoveTool
+from .objmap_select_tool import ObjMapSelectTool
+from .sketch_stroke_tool import SketchStrokeTool
+from .tilemap_paint_tool import TileMapPaintTool
+from .tilemap_select_tool import TileMapSelectTool
+from .workspace_move_tool import WorkspaceMoveTool
+from .zoom2_tool import Zoom2Tool
+from .zoom_tool import ZoomTool
 
 
 # EOF #

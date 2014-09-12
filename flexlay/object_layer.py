@@ -71,10 +71,10 @@ class ObjectLayer(Layer):
         return self.objects
 
     def add_object(self, obj):
-        self.objects.push_back(obj)
+        self.objects.append(obj)
 
     def add_control_point(self, obj):
-        self.control_points.push_back(obj)
+        self.control_points.append(obj)
 
     def delete_control_points(self):
         self.control_points.clear()

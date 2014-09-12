@@ -15,8 +15,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from PyQt5.Core import QRect
-from flexlay.math import Size
+from PyQt5.QtCore import QRect
+from .size import Size
 
 
 class Rect:
@@ -70,6 +70,9 @@ class Rect:
     def to_qt(self):
         return QRect(self.left, self.top,
                      self.get_width(), self.get_height())
+
+
+Rectf = Rect
 
 
 # EOF #

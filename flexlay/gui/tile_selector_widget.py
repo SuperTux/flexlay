@@ -16,16 +16,19 @@
 
 
 from PyQt5.QtCore import QSize, Qt
+from PyQt5.QtWidgets import QWidget
 from PyQt5.QtGui import QPainter
 
-from flexlay import TileBrush, GraphicContext, Color
+from flexlay import TileBrush, GraphicContext, Color, Tileset
 from flexlay.math import Point, Rect, Size
 from flexlay.tools import TileMapPaintTool
 
 
-class TileSelectorWidget:
+class TileSelectorWidget(QWidget):
 
     def __init__(self, viewport):
+        super().__init__()
+        
         self.viewport = viewport
         self.index = 0
         self.offset = 0
@@ -37,10 +40,12 @@ class TileSelectorWidget:
         self.region_select_start = Point()
         self.mouse_pos = Point()
         self.scale = 1.0
+        self.tileset = Tileset(32)
+        self.tiles = []
 
     def minimumSizeHint(self):
         columns = self.get_columns()
-        min_rows = (self.tiles.size() + columns - 1) / columns
+        min_rows = (len(self.tiles) + columns - 1) / columns
         return QSize(self.tileset.get_tile_size() * self.get_columns(),
                      self.tileset.get_tile_size() * min_rows)
 
@@ -64,12 +69,12 @@ class TileSelectorWidget:
             brush = TileBrush(1, 1)
 
             brush.set_opaque()
-            if 0 <= self.mouse_over_tile and self.mouse_over_tile < int(self.tiles.size()):
+            if 0 <= self.mouse_over_tile and self.mouse_over_tile < len(self.tiles):
                 brush.put(0, 0, self.tiles[self.mouse_over_tile])
             else:
                 brush.put(0, 0, 0)
 
-            TileMapPaintTool.current().set_brush(brush)
+            TileMapPaintTool.current.set_brush(brush)
 
         elif event.button() == Qt.RightButton:
             self.region_select = True
@@ -104,12 +109,12 @@ class TileSelectorWidget:
                 for x in range(0, selection.get_width()):
                     tile = (selection.top + y) * self.columns + (selection.left + x)
 
-                    if 0 <= tile and tile < int(self.tiles.size()):
+                    if 0 <= tile and tile < len(self.tiles):
                         brush.putt(x, y, self.tiles[tile])
                     else:
                         brush.put(x, y, 0)
 
-            TileMapPaintTool.current().set_brush(brush)
+            TileMapPaintTool.current.set_brush(brush)
 
         self.repaint()
 
@@ -144,11 +149,11 @@ class TileSelectorWidget:
         painter = QPainter(self)
         gc = GraphicContext(painter)
 
-        brush = TileMapPaintTool.current().get_brush()
+        brush = TileMapPaintTool.current.get_brush()
 
-        start_row = event.rect().y() // int(self.tileset.get_tile_size() * self.scale)
-        end_row = start_row + event.rect().height() // int(self.tileset.get_tile_size() * self.scale)
-        end_index = min(end_row * self.columns, int(self.tiles.size()))
+        start_row = int(event.rect().y() // int(self.tileset.get_tile_size() * self.scale))
+        end_row = int(start_row + event.rect().height() // int(self.tileset.get_tile_size() * self.scale))
+        end_index = int(min(end_row * self.columns, len(self.tiles)))
 
         # Draw tiles
         for i in range(start_row * self.columns, end_index):
@@ -192,7 +197,7 @@ class TileSelectorWidget:
         self.repaint()
 
     def get_columns(self):
-        return self.viewport.width() / self.tileset.get_tile_size()
+        return int(self.viewport.width() / self.tileset.get_tile_size())
 
     def set_scale(self, s):
         self.scale = s

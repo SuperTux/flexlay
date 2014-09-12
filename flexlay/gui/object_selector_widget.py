@@ -16,7 +16,7 @@
 
 
 from PyQt5.QtGui import QDrag, QPainter, QPixmap
-from PyQt5.QtWidgets import QSizePolicy
+from PyQt5.QtWidgets import QSizePolicy, QWidget
 from PyQt5.QtCore import Qt, QSize, QPoint, QByteArray, QMimeData
 
 from flexlay.math import Rectf, Point, Origin
@@ -27,18 +27,19 @@ class SuperTuxBadGuyData:
     pass
 
 
-class ObjectSelectorWidget:
+class ObjectSelectorWidget(QWidget):
 
-    def __init__(self, cell_w, cell_h, viewport, parent):
-        super(parent)
+    def __init__(self, cell_w, cell_h, viewport, parent=None):
+        super().__init__(parent)
 
         self.viewport = viewport
         self.cell_width = cell_w
         self.cell_height = cell_h
-        self.brushes = None,
+        self.brushes = []
         self.has_focus = False
 
         self.index = 0
+        self.offset = 0
 
         self.mouse_over_tile = -1
         self.scrolling = False
@@ -50,7 +51,7 @@ class ObjectSelectorWidget:
 
     def minimumSizeHint(self):
         columns = self.get_columns()
-        min_rows = (self.brushes.size() + columns - 1) / columns
+        min_rows = (len(self.brushes) + columns - 1) / columns
         return QSize(self.cell_width * self.get_columns(),
                      self.cell_height * min_rows)
 
@@ -144,6 +145,7 @@ class ObjectSelectorWidget:
             else:
                 gc.fill_rect(rect, Color(192, 192, 192))
 
+            print("BRUSHES:", self.brushes)
             sprite = self.brushes[i].get_sprite()
             sprite.set_alignment(Origin.center, 0, 0)
             sprite.set_scale(min(1.0, self.cell_width / sprite.get_width()),

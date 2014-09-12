@@ -25,6 +25,7 @@ from .pixel_buffer import PixelBuffer
 from .blitter import blit_opaque, blit, blit_clear
 from .tile_brush import TileBrush
 from .color import Color
+from .tileset import Tileset
 
 from .input_event import InputEvent
 from .graphic_context import GraphicContext
@@ -68,7 +69,6 @@ from .sketch_layer import SketchLayer
 from .sprite_brush import SpriteBrush
 from .tile import Tile
 from .tile_provider import TileProvider
-from .tileset import Tileset
 
 
 __all__ = [

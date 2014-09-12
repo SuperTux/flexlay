@@ -24,13 +24,12 @@ from .tile_selector_widget import TileSelectorWidget
 class TileSelector:
 
     def __init__(self):
+
         self.combobox = QComboBox()
 
         self.scroll_area = QScrollArea()
-        self.scroll_area.setWidgetResizable(True)
-        self.scroll_area.setWidget(self.widget)
-
         self.widget = TileSelectorWidget(self.scroll_area.viewport())
+        self.scroll_area.setWidgetResizable(True)
         self.scroll_area.setWidget(self.widget)
 
         self.box = QWidget()

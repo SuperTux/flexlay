@@ -100,6 +100,9 @@ def main():
     # workspace.set_tool(1, tilemap_paint_tool)
     # workspace.set_tool(3, tilemap_paint_tool)
 
+    object_selector = gui_manager.create_object_selector(40, 40)
+    tile_selector = gui_manager.create_tile_selector()
+
     print("Successs!")
     gui_manager.run()
 

@@ -16,7 +16,8 @@
 
 
 from flexlay.math import Rect, Rectf
-from flexlay import EditorMapComponent, Color, InputEvent
+from flexlay import Color, InputEvent
+from ..gui.editor_map_component import EditorMapComponent
 
 
 class ZoomTool:

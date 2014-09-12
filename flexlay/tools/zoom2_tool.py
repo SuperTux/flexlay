@@ -15,8 +15,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from flexay.math import Point
-from flexay import EditorMapComponent
+from flexlay.math import Point
+from ..gui.editor_map_component import EditorMapComponent
 
 
 class Zoom2Tool:

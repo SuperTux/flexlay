@@ -15,6 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from .stroke import Dab, Stroke
 from .drawer_properties import DrawerProperties
 from .brushmask import BrushMask
 from .canvas import Canvas
@@ -36,19 +37,19 @@ from .bitmap_layer import BitmapLayer
 from .brush import Brush
 
 from .display import Display
+from .workspace import Workspace
+from .object_layer import ObjectLayer
 
 from .command import Command
 from .command_group import CommandGroup
 from .object_add_command import ObjectAddCommand
 from .object_brush import ObjectBrush
 from .object_delete_command import ObjectDeleteCommand
+from .paint_command import PaintCommand
 
-from .editor_map import EditorMap
-from .flexlay import Flexlay
-from .graphic_context_state import GraphicContextState
-from .gui_manager import GUIManager
+from .stroke_drawer import StrokeDrawer
+from .sprite_stroke_drawer import SpriteStrokeDrawer
 
-from .object_layer import ObjectLayer
 from .objmap_object import ObjMapObject
 from .object_move_command import ObjectMoveCommand
 from .object_transform_command import ObjectTransformCommand
@@ -57,17 +58,17 @@ from .objmap_path_node import ObjMapPathNode
 from .objmap_rect_object import ObjMapRectObject
 from .objmap_sprite_object import ObjMapSpriteObject
 
+from .editor_map import EditorMap
+from .flexlay import Flexlay
+from .graphic_context_state import GraphicContextState
+from .gui_manager import GUIManager
+
 from .onion_skin_layer import OnionSkinLayer
-from .paint_command import PaintCommand
 from .sketch_layer import SketchLayer
 from .sprite_brush import SpriteBrush
-from .sprite_stroke_drawer import SpriteStrokeDrawer
-from .stroke import Dab, Stroke
-from .stroke_drawer import StrokeDrawer
 from .tile import Tile
 from .tile_provider import TileProvider
 from .tileset import Tileset
-from .workspace import Workspace
 
 
 __all__ = [

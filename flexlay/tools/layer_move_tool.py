@@ -16,7 +16,7 @@
 
 
 from flexlay import Workspace, Color, Layer
-from flexlay.gui import EditorMapComponent
+from ..gui.editor_map_component import EditorMapComponent
 from flexlay.math import Point, Pointf
 from flexlay.tools import Tool
 

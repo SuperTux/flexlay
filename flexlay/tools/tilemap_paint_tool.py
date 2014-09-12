@@ -15,9 +15,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from flexlay import (Color, TileSelection, TileBrush, PaintCommand,
+from flexlay import (Color, TileBrush, PaintCommand,
                      TilemapLayer, InputEvent, Workspace)
-from flexlay.gui import EditorMapComponent
+from ..gui.editor_map_component import EditorMapComponent
+from ..gui.tile_selection import TileSelection
 from flexlay.math import Point, Size, Rect
 
 

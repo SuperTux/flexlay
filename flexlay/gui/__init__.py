@@ -17,8 +17,6 @@
 
 from .button_panel import ButtonPanel
 from .colorpicker import ColorPicker
-from .editor_map_component import EditorMapComponent
-from .editor_map_widget import EditorMapWidget
 from .file_dialog import FileDialog
 from .generic_dialog import GenericDialog
 from .icon import Icon
@@ -32,6 +30,8 @@ from .tile_brush_selector import TileBrushSelector
 from .tile_selection import TileSelection
 from .tile_selector import TileSelector
 from .tile_selector_widget import TileSelectorWidget
+from .editor_map_component import EditorMapComponent
+from .editor_map_widget import EditorMapWidget
 
 
 __all__ = ["ButtonPanel", "ColorPicker", "EditorMapComponent",

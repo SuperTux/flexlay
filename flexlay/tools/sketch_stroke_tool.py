@@ -16,8 +16,9 @@
 
 
 from flexlay.math import Point
-from flexlay import (EditorMapComponent, Stroke, SpriteStrokeDrawer,
-                     BitmapLayer, DrawerProperties, InputEvent, Dab)
+from ..gui.editor_map_component import EditorMapComponent
+from flexlay import (Stroke, SpriteStrokeDrawer, BitmapLayer,
+                     DrawerProperties, InputEvent, Dab)
 
 
 class Mouse:

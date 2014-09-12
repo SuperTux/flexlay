@@ -15,7 +15,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from flexlay import TileSelection, EditorMapComponent, TilemapLayer, InputEvent
+from flexlay import TilemapLayer, InputEvent
+from ..gui.editor_map_component import EditorMapComponent
 
 
 class TileMapSelectTool:

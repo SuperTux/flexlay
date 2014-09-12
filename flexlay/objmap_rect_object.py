@@ -22,10 +22,10 @@ from flexlay.math import Pointf, Sizef, Rect, Rectf
 class ObjMapRectObject(ObjMapObject):
 
     def __init__(self, rect, color, metadata):
-        self.pos = Pointf(rect.left, rect.top)
+        super().__init__(Pointf(rect.left, rect.top), metadata)
+
         self.size = Sizef(rect.get_width(), rect.get_height())
         self.color = color
-        self.metadata = metadata
 
         self.cp_top_left = ObjMapControlPoint(Sprite.from_file("../data/images/icons16/resize1.png"),
                                               Pointf())

@@ -42,7 +42,7 @@ class ObjectMoveCommand:
         for obj in self.objects:
             obj.new_pos = obj.old_pos + delta
             obj.obj.set_pos(obj.new_pos)
-            obj.obj.sig_move()(obj.obj)
+            obj.obj.sig_move(obj.obj)
 
     def redo(self):
         for obj in self.objects:

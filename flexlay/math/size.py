@@ -31,6 +31,9 @@ class Size:
     def __ne__(self, rhs):
         return not self.__eq__(rhs)
 
+    def __str__(self):
+        return "Size({}, {})".format(self.width, self.height)
+
 
 Sizef = Size
 

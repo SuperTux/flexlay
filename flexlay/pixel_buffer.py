@@ -25,7 +25,7 @@ class PixelBuffer:
     def from_file(filename):
         pixelbuffer = PixelBuffer()
         pixelbuffer.image = QImage(filename)
-        print("loading:", filename, " -> ", pixelbuffer.image)
+        print("loading:", filename, " -> ", pixelbuffer.image.width(), pixelbuffer.image.height())
 
         if not pixelbuffer.image:
             assert False, "Failed to load image, fatal"

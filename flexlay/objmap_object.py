@@ -15,14 +15,17 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from flexlay.util import Signal
+
+
 class ObjMapObject:
 
     def __init__(self, pos, metadata):
         self.pos = pos
         self.metadata = metadata
-        self.on_select = None
-        self.on_deselect = None
-        self.on_move = None
+        self.sig_select = Signal()
+        self.sig_deselect = Signal()
+        self.sig_move = Signal()
 
     def get_pos(self):
         return self.pos
@@ -36,14 +39,8 @@ class ObjMapObject:
     def set_metadata(self, metadata):
         self.metadata = metadata
 
-    def sig_select(self):
-        return self.on_select
-
     def sig_deselect(self):
         return self.on_deselect
-
-    def sig_move(self):
-        return self.on_move
 
 
 # EOF #

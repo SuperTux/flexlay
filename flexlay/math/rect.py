@@ -82,6 +82,9 @@ class Rect:
         return QRect(self.left, self.top,
                      self.get_width(), self.get_height())
 
+    def __str__(self):
+        return "Rect({}, {}, {}, {})".format(self.left, self.top, self.right, self.bottom)
+
 
 class Rectf(Rect):
 

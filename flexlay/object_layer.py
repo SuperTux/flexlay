@@ -43,14 +43,14 @@ class ObjectLayer(Layer):
     def find_control_point(self, click_pos):
         for cp in reversed(self.control_points):
             rect = cp.get_bound_rect()
-            if rect.is_inside(Point(click_pos)):
+            if rect.is_inside(click_pos):
                 return cp
         return None
 
     def find_object(self, click_pos):
         for obj in reversed(self.objects):
             rect = obj.get_bound_rect()
-            if rect.is_inside(Point(click_pos)):
+            if rect.is_inside(click_pos):
                 return obj
         return None
 

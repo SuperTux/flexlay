@@ -19,6 +19,7 @@ from flexlay.tools import Tool
 from flexlay.math import Pointf, Rectf, Rect
 from ..gui.editor_map_component import EditorMapComponent
 from flexlay import Color, ObjectLayer, InputEvent, Workspace, ObjectMoveCommand
+from flexlay.util import Signal
 
 
 class ObjMapSelectTool(Tool):
@@ -37,8 +38,8 @@ class ObjMapSelectTool(Tool):
         self.control_point = None
         self.selection = []
 
-        self.on_popup_menu_display = None
-        self.on_right_click = None
+        self.sig_popup_menu_display = Signal()
+        self.sig_right_click = Signal()
 
     def clear_selection(self):
         self.selection.clear()
@@ -49,12 +50,6 @@ class ObjMapSelectTool(Tool):
 
     def set_selection(self, selection):
         self.selection = selection
-
-    def sig_on_popup_menu_display(self):
-        return self.on_popup_menu_display
-
-    def sig_on_right_click(self):
-        return self.on_right_click
 
     def draw(self, gc):
         for obj in self.selection:
@@ -93,7 +88,7 @@ class ObjMapSelectTool(Tool):
                 parent.release_mouse()
 
         elif event.kind == InputEvent.MOUSE_RIGHT:
-            # GRUMBEL on_right_click(event.mouse_pos.x + parent.get_screen_rect().left,
+            # GRUMBEL sig_right_click(event.mouse_pos.x + parent.get_screen_rect().left,
             #               event.mouse_pos.y + parent.get_screen_rect().top)
             pass
 
@@ -106,17 +101,19 @@ class ObjMapSelectTool(Tool):
         pos = parent.screen2world(event.mouse_pos)
 
         if event.kind == InputEvent.MOUSE_LEFT:
-            control_point = objmap.find_control_point(pos)
+            self.control_point = objmap.find_control_point(pos)
 
-            if control_point:
+            if self.control_point:
                 self.state = ObjMapSelectTool.STATE_DRAG
                 parent.capture_mouse()
-                self.offset = pos - control_point.get_pos()
+                self.offset = pos - self.control_point.get_pos()
                 self.drag_start = pos
             else:
                 obj = objmap.find_object(pos)
-                if obj:
+                print("-------------------->>>", obj)
+                if obj is not None:
                     if event.mod & InputEvent.MOD_SHIFT:
+                        print("ObjMapSelectTool: Shift presses")
                         if obj not in self.selection:
                             self.selection.append(obj)
                         else:
@@ -129,7 +126,7 @@ class ObjMapSelectTool(Tool):
                         self.offset = pos - obj.get_pos()
                         self.drag_start = pos
 
-                        if obj in self.selection:
+                        if obj not in self.selection:
                             # Clicked object is not in the selection, so we add it
                             self.selection.clear()
                             objmap.delete_control_points()

@@ -51,6 +51,9 @@ class Point:
     def to_qt(self):
         return QPoint(self.x, self.y)
 
+    def __str__(self):
+        return "Point({}, {})".format(self.x, self.y)
+
 
 Pointf = Point
 

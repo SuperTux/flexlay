@@ -20,7 +20,7 @@ from flexlay.math import Rectf
 
 
 class Dab:
-    
+
     def __init__(self):
         self.time = None
         self.pos = None

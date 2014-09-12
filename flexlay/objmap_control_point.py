@@ -20,7 +20,7 @@ from flexlay.math import Point, Size, Rect, Origin
 
 class ObjMapControlPoint:
 
-    def __init__(self, sprite,  pos, metadata = None):
+    def __init__(self, sprite, pos, metadata=None):
         self.sprite = sprite
         self.pos = pos
         self.metadata = metadata

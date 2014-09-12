@@ -71,16 +71,19 @@ from .workspace import Workspace
 
 
 __all__ = [
-    "BitmapLayer", "Blitter", "Brush", "BrushMask", "Color",
-    "Command", "CommandGroup", "EdtorMap", "Field", "Flexlay",
-    "GraphicContext", "GraphicContextState", "GUIManager", "InputEvent",
-    "Layer", "ObjectAddCommand", "ObjectBrush", "ObjectDeleteCommand",
-    "ObjectLayer", "ObjectMoveCommand", "ObjectTransformCommand",
+    "BitmapLayer", "Blitter", "Brush", "BrushMask", "Canvas",
+    "Color", "BlendFunc", "blit", "blit_clear", "blit_opaque",
+    "Command", "CommandGroup", "DrawerProperties", "EdtorMap",
+    "Field", "Flexlay", "GraphicContext", "GraphicContextState",
+    "GUIManager", "InputEvent", "Layer", "ObjectAddCommand",
+    "ObjectBrush", "ObjectDeleteCommand", "ObjectLayer",
+    "ObjectMoveCommand", "ObjectTransformCommand",
     "ObjMapControlPoint", "ObjMapObject", "ObjMapPathNode",
     "ObjMapRectObject", "ObjMapSpriteObject", "OnionSkinLayer",
-    "PaintCommand", "PixelBuffer", "SketchLayer", "Sprite", "SpriteBrush",
-    "SpriteStrokeDrawer", "Stroke", "StrokeDrawer", "Tile", "TileBrush",
-    "TileProvider", "TilemapLayer", "Tileset", "Workspace"
+    "PaintCommand", "PixelBuffer", "SketchLayer", "Sprite",
+    "SpriteBrush", "SpriteStrokeDrawer", "Stroke", "StrokeDrawer",
+    "Tile", "TileBrush", "TileProvider", "TilemapLayer", "Tileset",
+    "Workspace", "Surface", "Display", "Dab", "EditorMap"
 ]
 
 

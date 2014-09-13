@@ -23,6 +23,8 @@ class ObjectLayer(Layer):
     current = None
 
     def __init__(self):
+        super().__init__()
+
         ObjectLayer.current = self
 
         self.objects = []
@@ -94,7 +96,7 @@ class ObjectLayer(Layer):
 
     def raise_object(self, obj):
         i = self.get_object_index(obj)
-        if i != -1 and len(self.objects) > 1 and i < int(self.objects.size()) - 1:
+        if i != -1 and len(self.objects) > 1 and i < len(self.objects) - 1:
             self.objects[i], self.objects[i + 1] = self.objects[i + 1], self.objects[i]
 
     def lower_object(self, obj):

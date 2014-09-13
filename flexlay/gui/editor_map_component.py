@@ -44,8 +44,8 @@ class EditorMapComponent:
         self.scroll_vert = QScrollBar(Qt.Vertical)
         self.editormap_widget = EditorMapWidget(self, None)
 
-        self.scroll_horz.valueChanged.connect(lambda value: self.move_to_x(value))
-        self.scroll_vert.valueChanged.connect(lambda value: self.move_to_y(value))
+        self.scroll_horz.valueChanged.connect(self.move_to_x)
+        self.scroll_vert.valueChanged.connect(self.move_to_y)
 
         self.layout.addWidget(self.editormap_widget, 0, 0)
         self.layout.addWidget(self.scroll_horz, 1, 0)

@@ -39,8 +39,5 @@ class ObjMapObject:
     def set_metadata(self, metadata):
         self.metadata = metadata
 
-    def sig_deselect(self):
-        return self.on_deselect
-
 
 # EOF #

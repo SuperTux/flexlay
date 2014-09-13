@@ -57,11 +57,11 @@ class Sprite:
         # m_sprite.set_scale(x, y)
         pass
 
-    def set_blend_func(src, dest):
+    def set_blend_func(self, src, dest):
         # m_sprite.set_blend_func(src, dest)
         pass
 
-    def set_blend_func_separate(src, dest, src_alpha, dest_alpha):
+    def set_blend_func_separate(self, src, dest, src_alpha, dest_alpha):
         # m_sprite.set_blend_func_separate(src, dest, src_alpha, dest_alpha)
         pass
 

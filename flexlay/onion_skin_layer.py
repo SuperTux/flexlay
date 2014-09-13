@@ -30,13 +30,13 @@ class OnionSkinLayer:
         self.editormaps = []
         self.color = []
 
-        self.canvas = Canvas(self.surface.to_cl())
-        self.canvas.get_gc().clear(Color(0, 0, 0, 0).to_cl())
+        self.canvas = Canvas(self.surface)
+        self.canvas.get_gc().clear(Color(0, 0, 0, 0))
         self.canvas.get_gc().flush()
         self.canvas.sync_surface()
 
-        self.canvas2 = Canvas(self.surface2.to_cl())
-        self.canvas2.get_gc().clear(Color(0, 0, 0, 0).to_cl())
+        self.canvas2 = Canvas(self.surface2)
+        self.canvas2.get_gc().clear(Color(0, 0, 0, 0))
         self.canvas2.get_gc().flush()
         self.canvas2.sync_surface()
 
@@ -50,7 +50,7 @@ class OnionSkinLayer:
         return False
 
     def clear(self):
-        self.canvas.get_gc().clear(Color(0, 0, 0, 0).to_cl())
+        self.canvas.get_gc().clear(Color(0, 0, 0, 0))
         self.canvas.sync_surface()
 
     def add_map(self, editor_map, color):
@@ -58,9 +58,9 @@ class OnionSkinLayer:
         self.color.append(color)
 
     def update(self):
-        self.canvas.get_gc().clear(Color(0, 0, 0, 0).to_cl())
+        self.canvas.get_gc().clear(Color(0, 0, 0, 0))
         for i, e in enumerate(self, self.editormaps):
-            self.canvas2.get_gc().clear(Color(0, 0, 0, 0).to_cl())
+            self.canvas2.get_gc().clear(Color(0, 0, 0, 0))
             self.canvas2.get_gc().push_modelview()
             self.canvas2.get_gc().add_scale(1.0 / self.SCALE, 1.0 / self.SCALE)
 
@@ -70,7 +70,7 @@ class OnionSkinLayer:
 
             self.canvas2.sync_surface()
 
-            self.surface2.set_color(self.color[i].to_cl())
+            self.surface2.set_color(self.color[i])
             self.surface2.draw(0, 0, self.canvas.get_gc())
             self.canvas.sync_surface()
 

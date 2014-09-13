@@ -32,7 +32,7 @@ def blit(target, brush, x, y):
 
 
 def blit_clear(canvas):
-    print("clear(PixelBuffer canvas) not implemented")
+    print("clear(PixelBuffer canvas) not implemented", canvas)
     # canvas.lock()
     # buffer = static_cast<unsigned char*>(canvas.get_data())
     # memset(buffer, 0, sizeof(unsigned char) * canvas.get_pitch() * canvas.get_height())

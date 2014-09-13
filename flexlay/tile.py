@@ -64,7 +64,7 @@ class Tile:
 
     def calc_color(self):
         print("Tile::calc_color not implemented")
-        return Color()
+        return Color(255, 255, 255, 255)
 
     def get_filename(self):
         return self.filename

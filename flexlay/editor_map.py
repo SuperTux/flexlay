@@ -33,6 +33,7 @@ class EditorMap:
         self.redo_stack = []
         self.undo_stack = []
         self.sig_change = Signal()
+        self.metadata = None
 
     def add_layer(self, layer, pos=-1):
         print(self, "EditorMap::add_layer")
@@ -42,7 +43,7 @@ class EditorMap:
         if pos == -1:  # insert at last pos
             self.layers.append(layer)
         else:
-            self.layers.insert(self.layers.begin() + pos, layer)
+            self.layers.insert(pos, layer)
 
         self.serial += 1
 
@@ -130,16 +131,16 @@ class EditorMap:
 
     def undo(self):
         if self.undo_stack:
-            command = self.undo_stack.back()
-            self.undo_stack.pop_back()
+            command = self.undo_stack[-1]
+            self.undo_stack.pop()
             command.undo()
             self.redo_stack.append(command)
             self.sig_change()
 
     def redo(self):
         if self.redo_stack:
-            command = self.redo_stack.back()
-            self.redo_stack.pop_back()
+            command = self.redo_stack[-1]
+            self.redo_stack.pop()
             command.redo()
             self.undo_stack.append(command)
             self.sig_change()

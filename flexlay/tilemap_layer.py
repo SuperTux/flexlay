@@ -121,7 +121,8 @@ class TilemapLayer(Layer):
     def draw_tile_brush(self, brush, pos):
         self.draw_tiles(self.field, brush, pos)
 
-    def draw_tiles(self, field, brush, pos):
+    @staticmethod
+    def draw_tiles(field, brush, pos):
         start_x = max(0, -pos.x)
         start_y = max(0, -pos.y)
 

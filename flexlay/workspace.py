@@ -31,7 +31,7 @@ class Workspace:
             self.editor_map.draw(gc)
 
             # FIXME: Only draw active tool?!
-            for k, tool in self.tools.items():
+            for tool in self.tools.values():
                 tool.draw(gc)
 
             gc.flush()

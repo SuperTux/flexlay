@@ -22,6 +22,8 @@ from flexlay import Command, TileBrush, TilemapLayer
 class PaintCommand(Command):
 
     def __init__(self, tilemap_layer, brush):
+        super().__init__()
+
         self.points = []
 
         self.tilemap = tilemap_layer

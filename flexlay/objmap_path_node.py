@@ -22,6 +22,8 @@ from flexlay.math import Point, Size, Rect, Pointf, Sizef, Rectf
 class ObjMapPathNode(ObjMapObject):
 
     def __init__(self, pos, data):
+        super().__init__()
+
         self.pos = pos
         self.data = data
         self.prev_node = None

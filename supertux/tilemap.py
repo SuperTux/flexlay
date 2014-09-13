@@ -17,32 +17,32 @@
 
 class TileMap
 
-  def __init__(self):
-      self.tilemaplayer
+    def __init__(self):
+        self.tilemaplayer
 
-  def new_from_size(self, width, height):
-    self.width = width
-    self.height = height
-    self.tilemaplayer = TilemapLayer($tileset, self.width, self.height)
+    def new_from_size(self, width, height):
+        self.width = width
+        self.height = height
+        self.tilemaplayer = TilemapLayer($tileset, self.width, self.height)
 
-  def parse(self, data):
-    self.width = get_value_from_tree(["width", "_"], data, 10)
-    self.height = get_value_from_tree(["height", "_"], data, 10)
-    self.layer = get_value_from_tree(["layer", "_"], data, "interactive")
-    self.solid = get_value_from_tree(["solid", "_"], data, True)
-    self.speed = get_value_from_tree(["speed", "_"], data, 1.0)
-    self.tilemaplayer = TilemapLayer($tileset, self.width, self.height)
-    self.tilemaplayer.set_data(get_value_from_tree(["tiles"], data, []))
+    def parse(self, data):
+        self.width = get_value_from_tree(["width", "_"], data, 10)
+        self.height = get_value_from_tree(["height", "_"], data, 10)
+        self.layer = get_value_from_tree(["layer", "_"], data, "interactive")
+        self.solid = get_value_from_tree(["solid", "_"], data, True)
+        self.speed = get_value_from_tree(["speed", "_"], data, 1.0)
+        self.tilemaplayer = TilemapLayer($tileset, self.width, self.height)
+        self.tilemaplayer.set_data(get_value_from_tree(["tiles"], data, []))
 
-  def save(self, writer):
-    writer.start_list("tilemap")
-    writer.write_int("width", self.width)
-    writer.write_int("height", self.height)
-    writer.write_string("layer", self.layer)
-    writer.write_bool("solid", self.solid)
-    writer.write_float("speed", self.speed)
-    writer.write_int_vector("tiles", self.tilemaplayer.get_data())
-    writer.end_list("tilemap")
+    def save(self, writer):
+        writer.start_list("tilemap")
+        writer.write_int("width", self.width)
+        writer.write_int("height", self.height)
+        writer.write_string("layer", self.layer)
+        writer.write_bool("solid", self.solid)
+        writer.write_float("speed", self.speed)
+        writer.write_int_vector("tiles", self.tilemaplayer.get_data())
+        writer.end_list("tilemap")
 
 
 # EOF #

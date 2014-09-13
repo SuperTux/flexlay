@@ -43,9 +43,10 @@ class Sprite:
 
         self.basedir = File.dirname(filename) + "/"
 
-        tree[1..-1].each do |i|
+        tree[1..-1].each do | i|
         case i[0]
-        when :action
+        when:
+            action
         action = SpriteAction()
         action.parse(i[1..-1])
         self.actions[action.name] = action

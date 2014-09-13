@@ -21,6 +21,7 @@ sources = (Glob("flexlay/*.py") +
            Glob("flexlay/gui/*.py") +
            Glob("flexlay/tools/*.py") +
            Glob("flexlay/math/*.py") +
+           Glob("supertux/*.py") +
            Glob("tests/*.py"))
 
 autopep_cmd = env.Command("autopep", sources,

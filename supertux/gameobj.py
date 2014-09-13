@@ -310,7 +310,7 @@ class InfoBlock(GameObj):
 
 class Powerup(GameObj):
 
-    def __init__(data, sexpr=[]):
+    def __init__(self, data, sexpr=[]):
         self.data = data
         self.sprite = get_value_from_tree(["sprite", "_"], sexpr, "egg")
         connect_v1_ObjMapObject(self.data.to_object.sig_move(), self.on_move)

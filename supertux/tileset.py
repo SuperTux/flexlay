@@ -38,21 +38,20 @@ class Tileset(flexlay.Tileset):
     def get_ungrouped_tiles(self):
         # Searches for tiles which are not yet grouped and creates a group
         # for them
-        # Potentially quite slow
         ungrouped_tiles = []
         for tile in get_tiles():
-            catch:
-                tile_is_grouped do
-                for group in tilegroups:
-                    if group.tiles.index(tile):
-                        throw:
-                            tile_is_grouped
+            ungrouped = True
+            for group in tilegroups:
+                if tile not in group:
+                    ungrouped = False
+                    break
+            if ungrouped:
                 ungrouped_tiles.push(tile)
         return ungrouped_tiles
 
     def load(self, filename):
         print("Loading Tileset: %s" % filename)
-        tree = load_lisp(filename, : "supertux-tiles")
+        tree = load_lisp(filename, "supertux-tiles")
 
         tree = tree[1:]
         counter = 0
@@ -75,7 +74,7 @@ class Tileset(flexlay.Tileset):
                 x = 0
                 y = 0
                 for id in ids:
-                    pixelbuffer = make_region_pixelbuffer_from_resource($datadir + 'images/' + image,
+                    pixelbuffer = make_region_pixelbuffer_from_resource(datadir + 'images/' + image,
                                                                         x * 32, y * 32, 32, 32)
                     add_tile(id, Tile.new(pixelbuffer))
                     x += 1
@@ -93,17 +92,16 @@ class Tileset(flexlay.Tileset):
                     image = get_value_from_tree(['images', '_'], data, "tiles/auxiliary/notile.png")
 
                 if isinstance(image, String):
-                    pixelbuffer = make_pixelbuffer($datadir + 'images/' + image)
+                    pixelbuffer = make_pixelbuffer(datadir + 'images/' + image)
                 elif isinstance(image, Array):
-                    if image[0] == :
-                        region:
-                        pixelbuffer = make_region_pixelbuffer_from_resource($datadir + 'images/' + image[1],
+                    if image[0] == "region":
+                        pixelbuffer = make_region_pixelbuffer_from_resource(datadir + 'images/' + image[1],
                                                                             image[2], image[3], image[4], image[5])
 
                 if not hidden:
                     if id == 0 or not(pixelbuffer):
                         add_tile(id, None)
-                    else
+                    else:
                         add_tile(id, Tile.new(pixelbuffer))
 
             elif i[0] == "tilegroup":

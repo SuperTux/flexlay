@@ -16,40 +16,25 @@
 
 
 class Sector:
-    self.parent = None
-    self.name = None
-    self.music = None
-    self.gravity = 10.0
-
-    self.width = None
-    self.height = None
-
-    self.background = None
-    self.interactive = None
-    self.foreground = None
-
-    self.objects = None
-#  sketch    = None
-    self.editormap = None
-
-    self.cameramode = "normal"
-
-    attr_reader:
-        objects, :
-            background, :
-                interactive, :
-                    foreground, :
-                        parent, :
-                            width, :
-                                height
-    attr_accessor:
-        name, :
-            music, :
-                gravity
 
     def __init__(self, parent):
         self.parent = parent
         self.cameramode = "normal"
+        self.parent = None
+        self.name = None
+        self.music = None
+        self.gravity = 10.0
+
+        self.width = None
+        self.height = None
+
+        self.background = None
+        self.interactive = None
+        self.foreground = None
+
+        self.objects = None
+        # self.sketch = None
+        self.editormap = None
 
     def get_level(self):
         return self.parent
@@ -109,7 +94,7 @@ class Sector:
 
         self.objects = ObjectLayer()
 
-        for i in get_value_from_tree(["objects"], data, [])
+        for i in get_value_from_tree(["objects"], data, []):
             (name, odata) = i[0], i[1:]
             # fix some old object names
             if name == "money":
@@ -126,7 +111,7 @@ class Sector:
         background = get_value_from_tree(["background", "_"], data, "")
         if background != "":
             sexpr = [["image", background], ["speed", 0.5]]
-            create_gameobject_from_data(self.editormap, self.objects, : background, sexpr)
+            create_gameobject_from_data(self.editormap, self.objects, "background", sexpr)
         else:
             sexpr = [["top_color",
                       get_value_from_tree(["bkgd_red_top", "_"], data, 0),
@@ -137,18 +122,18 @@ class Sector:
                      get_value_from_tree(["bkgd_green_bottom", "_"], data, 0),
                      get_value_from_tree(["bkgd_blue_bottom", "_"], data, 0)],
                     ["speed", 0.5]]
-            create_gameobject_from_data(self.editormap, self.objects, : background, sexpr)
+            create_gameobject_from_data(self.editormap, self.objects, "background", sexpr)
 
         partsys = get_value_from_tree(["particle_system", "_"], data, "")
         if partsys == "snow":
             sexpr = []
-            create_gameobject_from_data(self.editormap, self.objects, : 'particles-snow', sexpr)
+            create_gameobject_from_data(self.editormap, self.objects, 'particles-snow', sexpr)
         elif partsys == "rain":
             sexpr = []
-            create_gameobject_from_data(self.editormap, self.objects, : 'particles-rain', sexpr)
+            create_gameobject_from_data(self.editormap, self.objects, 'particles-rain', sexpr)
         elif partsys == "clouds":
             sexpr = []
-            create_gameobject_from_data(self.editormap, self.objects, : 'particles-clouds', sexpr)
+            create_gameobject_from_data(self.editormap, self.objects, 'particles-clouds', sexpr)
         elif partsys == "":
         else:
             print("Unknown particle system type %s" % partsys)
@@ -268,7 +253,7 @@ class Sector:
         f.write("    (gravity %f)\n" % self.gravity)
 
         save_tilemap(f, self.background,  "background")
-        save_tilemap(f, self.interactive, "interactive", : solid)
+        save_tilemap(f, self.interactive, "interactive", "solid")
         save_tilemap(f, self.foreground,  "foreground")
 #    save_strokelayer(f, self.sketch)
 

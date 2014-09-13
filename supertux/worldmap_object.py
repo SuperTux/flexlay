@@ -28,7 +28,7 @@ class WMSpawnPoint(WorldmapObject):
         self.obj = ObjMapSpriteObject.new(
             make_sprite(datadir + "images/worldmap/common/tux.png"),
             Pointf.new(0, 0), self)
-        connect_v1_ObjMapObject(self.obj.to_object.sig_move(), method(: on_move))
+        self.obj.to_object.sig_move.connect(self.on_move)
 
     def on_move(self, data):
         pos = self.obj.to_object.get_pos()
@@ -70,7 +70,7 @@ class WorldmapLevel(WorldmapObject):
         self.obj = ObjMapSpriteObject.new(
                 make_sprite(datadir + "images/worldmap/common/leveldot_green.png"),
                 Pointf.new(0, 0), self)
-        connect_v1_ObjMapObject(self.obj.to_object.sig_move(), method(: on_move))
+        self.obj.to_object.sig_move.connect(self.on_move)
 
     def parse(self, data):
         x = get_value_from_tree(["x", "_"], data, 0)
@@ -86,12 +86,12 @@ class WorldmapLevel(WorldmapObject):
         pos = self.obj.to_object.get_pos()
         writer.write_int("x", pos.x / 32)
         writer.write_int("y", pos.y / 32)
-        if self.sprite != ""
+        if self.sprite != "":
             writer.write_string("sprite", self.sprite)
         writer.write_string("name", self.name)
-        if self.extro_filename != ""
+        if self.extro_filename != "":
             writer.write_string("extro-filename", self.extro_filename)
-        if self.quit_worldmap == True
+        if self.quit_worldmap:
             writer.write_bool("quit-worldmap", self.quit_worldmap)
         writer.end_list("level")
 
@@ -129,7 +129,7 @@ class SpecialTile(WorldmapObject):
         self.obj = ObjMapSpriteObject.new(
                 make_sprite(datadir + "images/worldmap/common/teleporterdot.png"),
                 Pointf.new(0, 0), self)
-        connect_v1_ObjMapObject(self.obj.to_object.sig_move(), method(: on_move))
+        self.obj.to_object.sig_move.connect(self.on_move)
 
     def parse(self, data):
         x = get_value_from_tree(["x", "_"], data, 0)
@@ -195,13 +195,13 @@ worldmap_objects = [
 ]
 
 
-def create_worldmapobject_at_pos(objmap, name, pos)
-    objectclass = worldmap_objects.find {| x | x[0] == name}
-    if objectclass is None
+def create_worldmapobject_at_pos(objmap, name, pos):
+    objectclass = [obj for obj in worldmap_objects if obj[0] == name]
+    if objectclass is []:
         print("Error: Couldn't resolve object type: ", name)
         return
 
-    (name, image, _class) = objectclass
+    name, image, _class = objectclass
     object = _class.new()
     object.obj.to_object.set_pos(pos)
     cmd = ObjectAddCommand.new(objmap)
@@ -210,13 +210,13 @@ def create_worldmapobject_at_pos(objmap, name, pos)
     return object
 
 
-def create_worldmapobject_from_data(objmap, name, sexpr)
-    objectclass = worldmap_objects.find {| x | x[0] == name}
-    if objectclass is None
+def create_worldmapobject_from_data(objmap, name, sexpr):
+    objectclass = [obj for obj in worldmap_objects if obj[0] == name]
+    if objectclass is []:
         print("Error: Couldn't resolve object type: ", name)
         return
 
-    (name, image, _class) = objectclass
+    name, image, _class = objectclass
     object = _class.new()
     object.parse(sexpr)
     cmd = ObjectAddCommand.new(objmap)

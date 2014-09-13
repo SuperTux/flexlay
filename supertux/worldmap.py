@@ -48,19 +48,17 @@ class WorldMap:
             raise Exception("Wrong arguments for SuperTux::___init__")
 
     def parse(self, data):
-        for i in data
-            (name, data) = i[0], i[1:]
+        for i in data:
+            name, data = i[0], i[1:]
 
-            if name ==:
-                properties
+            if name == 'properties':
                 self.name = get_value_from_tree(["name", "_"], data, "No Name")
                 print("Name:", self.name.to_s)
                 self.music = get_value_from_tree(["music", "_"], data, "salcon.ogg")
                 self.intro_filename = get_value_from_tree(["intro-filename", "_"], data, "")
                 self.start_pos_x = get_value_from_tree(["start_pos_x", "_"], data, 0)
                 self.start_pos_y = get_value_from_tree(["start_pos_y", "_"], data, 0)
-            elif name ==:
-                tilemap
+            elif name == 'tilemap':
                 self.tilemap = TileMap.new()
                 self.tilemap.parse(data)
             else:
@@ -84,7 +82,7 @@ class WorldMap:
 
         self.tilemap.save(writer)
 
-        for o in self.objects.get_objects()
+        for o in self.objects.get_objects():
             object = o.get_data()
             object.save(writer)
         writer.end_list("supertux-worldmap")

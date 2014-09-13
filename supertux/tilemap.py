@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-class TileMap
+class TileMap:
 
     def __init__(self):
         self.tilemaplayer

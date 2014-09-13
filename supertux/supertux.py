@@ -24,14 +24,6 @@ BACKGROUND_LAYER = 1
 INTERACTIVE_LAYER = 2
 FOREGROUND_LAYER = 3
 
-require "flexlay_wrap"
-include Flexlay_wrap
-
-require "flexlay.rb"
-require "sexpr.rb"
-
-require_relative "gameobj.rb"
-
 flexlay = Flexlay()
 
 # Tools
@@ -45,22 +37,9 @@ objmap_select_tool = ObjMapSelectTool()
 
 mysprite = Sprite.from_file("../data/images/icons16/stock_paste-16.png")
 
-require_relative "gui.rb"
-
 config = Config()
 if not datadir:
     datadir = File.expand_path("~/projects/supertux/trunk/supertux/data/") + "/"
-
-require_relative "data.rb"
-require_relative "WorldMap.rb"
-require_relative "WorldMapObject.rb"
-require_relative "TileMap.rb"
-require_relative "LispWriter.rb"
-require_relative "tileset.rb"
-require_relative "level.rb"
-require_relative "sector.rb"
-require_relative "sprite.rb"
-require_relative "util.rb"
 
 tileset = Tileset(32)
 tileset.load(datadir + "images/tiles.strf")

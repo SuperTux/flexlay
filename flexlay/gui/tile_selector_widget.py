@@ -83,7 +83,7 @@ class TileSelectorWidget(QWidget):
 
         elif event.button() == Qt.MidButton:
             self.scrolling = True
-            self.mouse_pos = Point(event.pos())
+            self.mouse_pos = Point.from_qt(event.pos())
             self.old_offset = self.offset
             self.grabMouse()
 
@@ -110,7 +110,7 @@ class TileSelectorWidget(QWidget):
                     tile = (selection.top + y) * self.columns + (selection.left + x)
 
                     if 0 <= tile and tile < len(self.tiles):
-                        brush.putt(x, y, self.tiles[tile])
+                        brush.put(x, y, self.tiles[tile])
                     else:
                         brush.put(x, y, 0)
 
@@ -119,7 +119,7 @@ class TileSelectorWidget(QWidget):
         self.repaint()
 
     def mouseMoveEvent(self, event):
-        pos = self.get_mouse_tile_pos(Point(event.pos()))
+        pos = self.get_mouse_tile_pos(Point.from_qt(event.pos()))
         self.current_pos = pos
         self.mouse_over_tile = pos.y * self.columns + pos.x
 
@@ -142,8 +142,8 @@ class TileSelectorWidget(QWidget):
         self.repaint()
 
     def get_mouse_tile_pos(self, mouse_pos):
-        return Point(mouse_pos.x // int(self.tileset.get_tile_size() * self.scale),
-                     mouse_pos.y // int(self.tileset.get_tile_size() * self.scale))
+        return Point(int(mouse_pos.x / int(self.tileset.get_tile_size() * self.scale)),
+                     int(mouse_pos.y / int(self.tileset.get_tile_size() * self.scale)))
 
     def paintEvent(self, event):
         painter = QPainter(self)

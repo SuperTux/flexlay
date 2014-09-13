@@ -20,6 +20,10 @@ from PyQt5.QtCore import QPoint
 
 class Point:
 
+    @staticmethod
+    def from_qt(qpoint):
+        return Point(qpoint.x(), qpoint.y())
+
     def __init__(self, arg1=None, arg2=None):
         if arg1 is None and arg2 is None:
             self.x = 0

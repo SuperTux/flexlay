@@ -21,7 +21,7 @@ import random
 from flexlay.math import Size, Point, Rect
 from flexlay.tools import WorkspaceMoveTool, ObjMapSelectTool, TileMapPaintTool
 from flexlay import (Flexlay, PixelBuffer, Sprite, Tile, Tileset, EditorMap,
-                     TilemapLayer, ObjectLayer, ObjMapRectObject, Color, TileBrush)
+                     TilemapLayer, ObjectLayer, ObjMapRectObject, Color, TileBrush, ObjectBrush)
 
 
 def main():
@@ -68,10 +68,10 @@ def main():
 
     editormap = EditorMap()
     tileset = Tileset(32)
-    tileset.add_tile(0, Tile(PixelBuffer.from_file("resize1"), 
-                             Sprite.from_file("resize1")))
-    tileset.add_tile(1, Tile(PixelBuffer.from_file("resize_vert"),
-                              Sprite.from_file("resize_vert")))
+    tileset.add_tile(0, Tile(PixelBuffer.from_file("../data/images/icons16/resize1.png"), 
+                             Sprite.from_file("../data/images/icons16/resize1.png")))
+    tileset.add_tile(1, Tile(PixelBuffer.from_file("../data/images/icons16/resize_vert.png"),
+                              Sprite.from_file("../data/images/icons16/resize_vert.png")))
 
     tilemap = TilemapLayer(tileset, 20, 10)
     TilemapLayer.current = tilemap
@@ -101,7 +101,12 @@ def main():
     # workspace.set_tool(3, tilemap_paint_tool)
 
     object_selector = gui_manager.create_object_selector(40, 40)
+    object_selector.add_brush(ObjectBrush(Sprite.from_file("../data/images/icons16/resize1.png"), None))
+    object_selector.add_brush(ObjectBrush(Sprite.from_file("../data/images/icons16/resize2.png"), None))
     tile_selector = gui_manager.create_tile_selector()
+    tile_selector.set_tiles("All the tiles", tileset.get_tiles())
+    tile_selector.set_tiles("All the tiles again", tileset.get_tiles())
+    tile_selector.set_tiles("And again", tileset.get_tiles())
 
     print("Successs!")
     gui_manager.run()

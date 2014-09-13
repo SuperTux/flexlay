@@ -45,7 +45,6 @@ class Sprite:
             print("Error: Sprite: Empty PixelBuffer:", self.filename)
         else:
             origin = Origin.calc_origin(self.origin, Size(self.get_width(), self.get_height()))
-            print("origin:", origin)
             painter.drawImage(QPoint(x - origin.x, y - origin.y), img)
 
     def get_width(self):

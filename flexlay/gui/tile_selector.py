@@ -25,6 +25,8 @@ class TileSelector:
 
     def __init__(self):
 
+        self.tiles = {}
+
         self.combobox = QComboBox()
 
         self.scroll_area = QScrollArea()
@@ -38,9 +40,10 @@ class TileSelector:
         self.layout.addWidget(self.combobox)
         self.layout.addWidget(self.scroll_area)
 
-        def on_activated(text):
+        def on_activated(idx):
+            text = self.combobox.itemData(idx)
             tiles = self.tiles[text]
-            print("Setting tiles:", text, " - ", tiles.size())
+            print("Setting tiles:", text, " - ", len(tiles))
             self.widget.set_tiles(tiles)
             self.scroll_area.update()
 
@@ -56,7 +59,7 @@ class TileSelector:
 
     def set_tiles(self, name, tiles):
         self.tiles[name] = tiles
-        self.combobox.addItem(name, QVariant(name))
+        self.combobox.addItem(name, name)
         self.combobox.show()
 
     def get_tiles(self):

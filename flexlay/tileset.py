@@ -31,7 +31,7 @@ class Tileset:
         return self.tile_size
 
     def get_tiles(self):
-        return self.tiles.keys()
+        return list(self.tiles.keys())
 
 
 # EOF #

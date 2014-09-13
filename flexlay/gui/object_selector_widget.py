@@ -59,14 +59,14 @@ class ObjectSelectorWidget(QWidget):
         pass
 
     def get_columns(self):
-        return self.viewport.width() / self.cell_width
+        return int(self.viewport.width() // self.cell_width)
 
     def mousePressEvent(self, event):
         if event.button() == Qt.LeftButton:
             if self.mouse_over_tile != -1:
-                drag_obj = self.mouse_over_tile
+                self.drag_obj = self.mouse_over_tile
 
-                if (drag_obj != -1):
+                if (self.drag_obj != -1):
                     drag = QDrag(self)
                     mimeData = QMimeData()
                     # GRUMBEL obj = SuperTuxBadGuyData()
@@ -74,10 +74,11 @@ class ObjectSelectorWidget(QWidget):
                     mimeData.setData("application/supertux-badguy", data)
                     drag.setMimeData(mimeData)
 
-                    pixmap = QPixmap.fromImage(self.brushes[drag_obj].get_sprite().get_pixelbuffer().get_qimage())
+                    print("DRAG:", self.drag_obj)
+                    pixmap = QPixmap.fromImage(self.brushes[self.drag_obj].get_sprite().get_pixelbuffer().get_qimage())
                     drag.setPixmap(pixmap)
-                    drag.setHotSpot(QPoint(self.brushes[drag_obj].get_sprite().get_width() / 2,
-                                           self.brushes[drag_obj].get_sprite().get_height() / 2))
+                    drag.setHotSpot(QPoint(self.brushes[self.drag_obj].get_sprite().get_width() / 2,
+                                           self.brushes[self.drag_obj].get_sprite().get_height() / 2))
 
                     print("Starting drag")
                     result = drag.exec()
@@ -87,7 +88,7 @@ class ObjectSelectorWidget(QWidget):
 
         elif event.button() == Qt.MidButton:
             self.scrolling = True
-            self.click_pos = Point(event.pos())
+            self.click_pos = Point.from_qt(event.pos())
             self.old_offset = self.offset
             # GRUMBEL: ui.scrollArea.horizontalScrollBar().setValue(100)
             self.releaseMouse()
@@ -106,11 +107,11 @@ class ObjectSelectorWidget(QWidget):
         if self.scrolling:
             self.offset = self.old_offset + (self.click_pos.y - event.y())
 
-        self.mouse_pos = Point(event.pos())
+        self.mouse_pos = Point.from_qt(event.pos())
 
         cell_w = self.width() / self.get_columns()
-        x = event.x() // cell_w
-        y = (event.y() + self.offset) // self.cell_height
+        x = int(event.x() // cell_w)
+        y = int((event.y() + self.offset) // self.cell_height)
 
         self.mouse_over_tile = y * self.get_columns() + x
 
@@ -145,7 +146,6 @@ class ObjectSelectorWidget(QWidget):
             else:
                 gc.fill_rect(rect, Color(192, 192, 192))
 
-            print("BRUSHES:", self.brushes)
             sprite = self.brushes[i].get_sprite()
             sprite.set_alignment(Origin.center, 0, 0)
             sprite.set_scale(min(1.0, self.cell_width / sprite.get_width()),

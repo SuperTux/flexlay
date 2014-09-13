@@ -72,10 +72,10 @@ from .tile_provider import TileProvider
 
 
 __all__ = [
-    "BitmapLayer", "Blitter", "Brush", "BrushMask", "Canvas",
+    "BitmapLayer", "Brush", "BrushMask", "Canvas",
     "Color", "BlendFunc", "blit", "blit_clear", "blit_opaque",
-    "Command", "CommandGroup", "DrawerProperties", "EdtorMap",
-    "Field", "Flexlay", "GraphicContext", "GraphicContextState",
+    "Command", "CommandGroup", "DrawerProperties", "Field",
+    "Flexlay", "GraphicContext", "GraphicContextState",
     "GUIManager", "InputEvent", "Layer", "ObjectAddCommand",
     "ObjectBrush", "ObjectDeleteCommand", "ObjectLayer",
     "ObjectMoveCommand", "ObjectTransformCommand",

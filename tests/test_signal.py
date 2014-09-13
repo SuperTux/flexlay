@@ -33,35 +33,41 @@ class SignalTestCase(unittest.TestCase):
     def test_signal_args(self):
         signal = Signal()
         x = 0
+
         def add_n(n):
             nonlocal x
             x += n
+
         signal.connect(lambda n: add_n(n))
-        signal.connect(lambda n: add_n(n+2))
+        signal.connect(lambda n: add_n(n + 2))
         signal(9)
         self.assertEqual(x, 20)
 
     def test_signal_connect(self):
         signal = Signal()
         x = 0
+
         def add_two():
             nonlocal x
             x += 2
+
         signal.connect(add_two)
         signal.connect(add_two)
         signal()
         self.assertEqual(x, 4)
 
-
     def test_signal_disconnect(self):
         signal = Signal()
         x = 0
+
         def add_two():
             nonlocal x
             x += 2
+
         def add_three():
             nonlocal x
             x += 3
+
         signal.connect(add_two)
         signal.connect(add_three)
         signal.disconnect(add_two)

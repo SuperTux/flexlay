@@ -28,7 +28,7 @@ class TileSelectorWidget(QWidget):
 
     def __init__(self, viewport):
         super().__init__()
-        
+
         self.viewport = viewport
         self.index = 0
         self.offset = 0

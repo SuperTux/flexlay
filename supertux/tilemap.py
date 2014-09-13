@@ -23,7 +23,7 @@ class TileMap
     def new_from_size(self, width, height):
         self.width = width
         self.height = height
-        self.tilemaplayer = TilemapLayer($tileset, self.width, self.height)
+        self.tilemaplayer = TilemapLayer(tileset, self.width, self.height)
 
     def parse(self, data):
         self.width = get_value_from_tree(["width", "_"], data, 10)
@@ -31,7 +31,7 @@ class TileMap
         self.layer = get_value_from_tree(["layer", "_"], data, "interactive")
         self.solid = get_value_from_tree(["solid", "_"], data, True)
         self.speed = get_value_from_tree(["speed", "_"], data, 1.0)
-        self.tilemaplayer = TilemapLayer($tileset, self.width, self.height)
+        self.tilemaplayer = TilemapLayer(tileset, self.width, self.height)
         self.tilemaplayer.set_data(get_value_from_tree(["tiles"], data, []))
 
     def save(self, writer):

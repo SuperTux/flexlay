@@ -17,23 +17,6 @@
 
 class WorldMap:
 
-    attr_reader:
-        name, :
-            music, :
-                intro_filename, :
-                    start_pos_x, :
-                        start_pos_y, :
-                            filename
-    attr_writer:
-        name, :
-            music, :
-                intro_filename, :
-                    start_pos_x, :
-                        start_pos_y, :
-                            filename
-    attr_accessor:
-        objects
-
     def __init__(self, *params):
         self.name = "No Name"
         self.music = ""
@@ -57,21 +40,21 @@ class WorldMap:
             # Load Level from file
             (self.filename,) = params
 
-            tree = load_lisp(self.filename, : "supertux-worldmap")
+            tree = load_lisp(self.filename, "supertux-worldmap")
 
-            data = tree[1..-1]
+            data = tree[1:]
             parse(data)
         else:
             raise Exception("Wrong arguments for SuperTux::___init__")
 
     def parse(self, data):
         for i in data
-            (name, data) = i[0], i[1..-1]
+            (name, data) = i[0], i[1:]
 
             if name ==:
                 properties
                 self.name = get_value_from_tree(["name", "_"], data, "No Name")
-                print "Name:" + self.name.to_s
+                print("Name:", self.name.to_s)
                 self.music = get_value_from_tree(["music", "_"], data, "salcon.ogg")
                 self.intro_filename = get_value_from_tree(["intro-filename", "_"], data, "")
                 self.start_pos_x = get_value_from_tree(["start_pos_x", "_"], data, 0)
@@ -117,7 +100,7 @@ class WorldMap:
         workspace.set_map(self.editormap)
         TilemapLayer.set_current(self.tilemap.tilemaplayer)
         ObjectLayer.set_current(self.objects)
-        connect(self.editormap.sig_change(), proc{$gui.on_map_change()})
+        connect(self.editormap.sig_change(), gui.on_map_change)
 
 
 # EOF #

@@ -30,9 +30,9 @@ def load_lisp(filename, root_symbol):
 
 
 def load_cl_sprite(filename):
-    if filename[-4..-1] == ".png":
+    if filename[-4:] == ".png":
         sprite = make_sprite(filename)
-    elif filename[-7..-1] == ".sprite":
+    elif filename[-7:] == ".sprite":
         supertux_sprite = Sprite(filename)
         sprite = supertux_sprite.get_cl_sprite()
     else:

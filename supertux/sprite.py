@@ -43,17 +43,17 @@ class Sprite:
 
         self.basedir = File.dirname(filename) + "/"
 
-        tree[1..-1].each do | i|
+        tree[1:].each do | i|
         case i[0]
         when:
             action
         action = SpriteAction()
-        action.parse(i[1..-1])
+        action.parse(i[1:])
         self.actions[action.name] = action
         if self.actions.default is None or action.name == "default":
             self.actions.default = action
         else:
-            print "Unknown symbol '#{i[0]}' in sprite '#{filename}'"
+            print("Unknown symbol '%s' in sprite '%s'" % (i[0], filename))
 
     def get_cl_sprite(self, action="default"):
         action = self.actions[action]

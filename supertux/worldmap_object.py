@@ -26,8 +26,8 @@ class WMSpawnPoint(WorldmapObject):
     def __init__(self):
         self.name = ""
         self.obj = ObjMapSpriteObject.new(
-            make_sprite($datadir + "images/worldmap/common/tux.png"),
-            Pointf.new(0, 0), make_metadata(self))
+            make_sprite(datadir + "images/worldmap/common/tux.png"),
+            Pointf.new(0, 0), self)
         connect_v1_ObjMapObject(self.obj.to_object.sig_move(), method(: on_move))
 
     def on_move(self, data):
@@ -51,11 +51,13 @@ class WMSpawnPoint(WorldmapObject):
         writer.end_list("spawnpoint")
 
     def property_dialog(self):
-        dialog = $gui.gui.create_generic_dialog("SpawnPoint Property Dialog")
+        dialog = gui.gui.create_generic_dialog("SpawnPoint Property Dialog")
         dialog.add_string("Name", self.name)
-        dialog.set_callback(proc{| name |
-              self.name=name
-          })
+
+        def on_callback(name):
+            self.name = name
+
+        dialog.set_callback(on_callback)
 
 
 class WorldmapLevel(WorldmapObject):
@@ -66,8 +68,8 @@ class WorldmapLevel(WorldmapObject):
         self.sprite = ""
         self.quit_worldmap = False
         self.obj = ObjMapSpriteObject.new(
-                make_sprite($datadir + "images/worldmap/common/leveldot_green.png"),
-                Pointf.new(0, 0), make_metadata(self))
+                make_sprite(datadir + "images/worldmap/common/leveldot_green.png"),
+                Pointf.new(0, 0), self)
         connect_v1_ObjMapObject(self.obj.to_object.sig_move(), method(: on_move))
 
     def parse(self, data):
@@ -99,18 +101,20 @@ class WorldmapLevel(WorldmapObject):
         pos.y = (((pos.y + 16) / 32).to_i) * 32
         self.obj.to_object.set_pos(pos)
 
-    def property_dialog():
-        dialog = $gui.gui.create_generic_dialog("LevelTile Property Dialog")
+    def property_dialog(self):
+        dialog = gui.gui.create_generic_dialog("LevelTile Property Dialog")
         dialog.add_string("level", self.name)
         dialog.add_string("sprite", self.sprite)
         dialog.add_string("extro-filename", self.extro_filename)
         dialog.add_bool("quit-worldmap", self.quit_worldmap)
-        dialog.set_callback(proc{| name, sprite, extro_filename, quit_worldmap |
-              self.name=name
-              self.sprite=sprite
-              self.extro_filename=extro_filename
-              self.quit_worldmap=quit_worldmap
-            })
+
+        def on_callback(name, sprite, extro_filename, quit_worldmap):
+            self.name = name
+            self.sprite = sprite
+            self.extro_filename = extro_filename
+            self.quit_worldmap = quit_worldmap
+
+        dialog.set_callback(on_callback)
 
 
 class SpecialTile(WorldmapObject):
@@ -123,8 +127,8 @@ class SpecialTile(WorldmapObject):
         self.teleport_y = 0
         self.invisible_tile = False
         self.obj = ObjMapSpriteObject.new(
-                make_sprite($datadir + "images/worldmap/common/teleporterdot.png"),
-                Pointf.new(0, 0), make_metadata(self))
+                make_sprite(datadir + "images/worldmap/common/teleporterdot.png"),
+                Pointf.new(0, 0), self)
         connect_v1_ObjMapObject(self.obj.to_object.sig_move(), method(: on_move))
 
     def parse(self, data):
@@ -144,15 +148,15 @@ class SpecialTile(WorldmapObject):
         pos = self.obj.to_object.get_pos()
         writer.write_int("x", pos.x / 32)
         writer.write_int("y", pos.y / 32)
-        if(self.map_message != "")
+        if self.map_message != "":
             writer.write_string("map-message", self.map_message, True)
-        if(self.passive_message != False)
+        if self.passive_message != False:
             writer.write_bool("passive-message", self.passive_message)
-        if(self.invisible_tile != False)
+        if self.invisible_tile != False:
             writer.write_bool("invisible-tile", self.invisible_tile)
-        if(self.apply_to_direction != "")
+        if self.apply_to_direction != "":
             writer.write_string("apply-to-direction", self.apply_to_direction)
-        if(self.teleport_x != -1)
+        if self.teleport_x != -1:
             writer.write_int("teleport-to-x", self.teleport_x)
             writer.write_int("teleport-to-y", self.teleport_y)
         writer.end_list("special-tile")
@@ -164,7 +168,7 @@ class SpecialTile(WorldmapObject):
         self.obj.to_object.set_pos(pos)
 
     def property_dialog(self):
-        dialog = $gui.gui.create_generic_dialog("SpecialTile Property Dialog")
+        dialog = gui.gui.create_generic_dialog("SpecialTile Property Dialog")
         dialog.add_string("map-message", self.map_message)
         dialog.add_bool("passive-message", self.passive_message)
         dialog.add_bool("invisible-tile", self.invisible_tile)
@@ -172,50 +176,52 @@ class SpecialTile(WorldmapObject):
         dialog.add_int("teleport-to-x", self.teleport_x)
         dialog.add_int("teleport-to-y", self.teleport_y)
 
-        dialog.set_callback(proc{ | map_message, passive_message, invisible_tile,
-            apply_to_direction, teleport_x, teleport_y |
-              self.map_message=map_message
-              self.passive_message=passive_message
-              self.invisible_tile=invisible_tile
-              self.apply_to_direction=apply_to_direction
-              self.teleport_x=teleport_x
-              self.teleport_y=teleport_y
-            })
+        def on_callback(map_message, passive_message, invisible_tile,
+                        apply_to_direction, teleport_x, teleport_y):
+            self.map_message = map_message
+            self.passive_message = passive_message
+            self.invisible_tile = invisible_tile
+            self.apply_to_direction = apply_to_direction
+            self.teleport_x = teleport_x
+            self.teleport_y = teleport_y
 
-$worldmap_objects = [
-  [:level, "images/worldmap/common/leveldot_green.png", WorldmapLevel],
-  [:"special-tile", "images/worldmap/common/teleporterdot.png", SpecialTile],
-  [:spawnpoint, "images/worldmap/common/tux.png", WMSpawnPoint],
+        dialog.set_callback(on_callback)
+
+
+worldmap_objects = [
+  ["level", "images/worldmap/common/leveldot_green.png", WorldmapLevel],
+  ["special-tile", "images/worldmap/common/teleporterdot.png", SpecialTile],
+  ["spawnpoint", "images/worldmap/common/tux.png", WMSpawnPoint],
 ]
 
 
 def create_worldmapobject_at_pos(objmap, name, pos)
-    objectclass = $worldmap_objects.find {| x | x[0] == name}
-    if objectclass == None
-        print "Error: Couldn't resolve object type: ", name, "\n"
+    objectclass = worldmap_objects.find {| x | x[0] == name}
+    if objectclass is None
+        print("Error: Couldn't resolve object type: ", name)
         return
 
     (name, image, _class) = objectclass
     object = _class.new()
     object.obj.to_object.set_pos(pos)
     cmd = ObjectAddCommand.new(objmap)
-    cmd.add_object(object.obj.to_object);
-    $gui.workspace.get_map().execute(cmd.to_command());
+    cmd.add_object(object.obj.to_object)
+    gui.workspace.get_map().execute(cmd.to_command())
     return object
 
 
 def create_worldmapobject_from_data(objmap, name, sexpr)
-    objectclass = $worldmap_objects.find {| x | x[0] == name}
-    if objectclass == None
-        print "Error: Couldn't resolve object type: ", name, "\n"
+    objectclass = worldmap_objects.find {| x | x[0] == name}
+    if objectclass is None
+        print("Error: Couldn't resolve object type: ", name)
         return
 
     (name, image, _class) = objectclass
     object = _class.new()
     object.parse(sexpr)
     cmd = ObjectAddCommand.new(objmap)
-    cmd.add_object(object.obj.to_object);
-    $gui.workspace.get_map().execute(cmd.to_command());
+    cmd.add_object(object.obj)
+    gui.workspace.get_map().execute(cmd)
     return object
 
 

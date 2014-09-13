@@ -69,9 +69,9 @@ class Sector:
         self.width = width
         self.height = height
 
-        self.foreground = TilemapLayer($tileset, self.width, self.height)
-        self.interactive = TilemapLayer($tileset, self.width, self.height)
-        self.background = TilemapLayer($tileset, self.width, self.height)
+        self.foreground = TilemapLayer(tileset, self.width, self.height)
+        self.interactive = TilemapLayer(tileset, self.width, self.height)
+        self.background = TilemapLayer(tileset, self.width, self.height)
         self.objects = ObjectLayer()
         # self.sketch  = SketchLayer()
 
@@ -94,13 +94,13 @@ class Sector:
         self.width = get_value_from_tree(["width", "_"], data, 20)
         self.height = get_value_from_tree(["height", "_"], data, 15)
 
-        self.foreground = TilemapLayer($tileset, self.width, self.height)
+        self.foreground = TilemapLayer(tileset, self.width, self.height)
         self.foreground.set_data(get_value_from_tree(["foreground-tm"], data, []))
 
-        self.interactive = TilemapLayer($tileset, self.width, self.height)
+        self.interactive = TilemapLayer(tileset, self.width, self.height)
         self.interactive.set_data(get_value_from_tree(["interactive-tm"], data, []))
 
-        self.background = TilemapLayer($tileset, self.width, self.height)
+        self.background = TilemapLayer(tileset, self.width, self.height)
         self.background.set_data(get_value_from_tree(["background-tm"], data, []))
 
         self.cameramode = "normal"
@@ -110,14 +110,12 @@ class Sector:
         self.objects = ObjectLayer()
 
         for i in get_value_from_tree(["objects"], data, [])
-            (name, odata) = i[0], i[1..-1]
+            (name, odata) = i[0], i[1:]
             # fix some old object names
-            if(name == : money)
-                name = :
-                    jumpy
-            if(name == : laptop)
-                name = :
-                    mriceblock
+            if name == "money":
+                name = "jumpy"
+            if name == "laptop":
+                name = "mriceblock"
             create_gameobject_from_data(self.editormap, self.objects, name, odata)
 
         start_pos_x = get_value_from_tree(["start_pos_x", "_"], data, 0)
@@ -126,7 +124,7 @@ class Sector:
         create_gameobject_from_data(self.editormap, self.objects, "spawnpoint", sexpr)
 
         background = get_value_from_tree(["background", "_"], data, "")
-        if(background != "")
+        if background != "":
             sexpr = [["image", background], ["speed", 0.5]]
             create_gameobject_from_data(self.editormap, self.objects, : background, sexpr)
         else:
@@ -142,18 +140,18 @@ class Sector:
             create_gameobject_from_data(self.editormap, self.objects, : background, sexpr)
 
         partsys = get_value_from_tree(["particle_system", "_"], data, "")
-        if(partsys == "snow")
+        if partsys == "snow":
             sexpr = []
             create_gameobject_from_data(self.editormap, self.objects, : 'particles-snow', sexpr)
-        elif(partsys == "rain")
+        elif partsys == "rain":
             sexpr = []
             create_gameobject_from_data(self.editormap, self.objects, : 'particles-rain', sexpr)
-        elif(partsys == "clouds")
+        elif partsys == "clouds":
             sexpr = []
             create_gameobject_from_data(self.editormap, self.objects, : 'particles-clouds', sexpr)
-        elif(partsys == "")
+        elif partsys == "":
         else:
-            print "Unknown particle system type '", partsys, "'\n"
+            print("Unknown particle system type %s" % partsys)
 
         self.editormap.add_layer(self.background.to_layer())
         self.editormap.add_layer(self.interactive.to_layer())
@@ -182,27 +180,22 @@ class Sector:
 #    self.sketch = SketchLayer()
 
         for i in data
-            (name, data) = i[0], i[1..-1]
-            if name == :
-                name:
+            (name, data) = i[0], i[1:]
+            if name == "name":
                 self.name = data[0]
-            elif name == :
-                gravity
+            elif name == "gravity":
                 self.gravity = data[0]
-            elif name == :
-                music
+            elif name == "music":
                 self.music = data[0]
-            elif name == :
-                "init-script"
+            elif name == "init-script":
                 self.init_script = data[0]
-            elif name == :
-                tilemap
+            elif name == "tilemap":
                 layer = get_value_from_tree(["layer", "_"], data, "interactive")
                 width = get_value_from_tree(["width", "_"],  data, 20)
                 height = get_value_from_tree(["height", "_"], data, 15)
                 solid = get_value_from_tree(["solid", "_"],  data, False)
 
-                tilemap = TilemapLayer($tileset, width, height)
+                tilemap = TilemapLayer(tileset, width, height)
                 tilemap.set_data(get_value_from_tree(["tiles"], data, []))
 
                 if solid:
@@ -214,24 +207,23 @@ class Sector:
                 elif layer == "foreground"
                     self.foreground = tilemap
                 else:
-                    print "Flexlay doesn't handle tilemap layer '", layer, "'.\n"
-            elif name == :
-                camera
+                    print("Flexlay doesn't handle tilemap layer '%s'" % layer)
+            elif name == "camera":
                 self.cameramode = "normal"
                 # TODO...
             else:
                 create_gameobject_from_data(self.editormap, self.objects, name, data)
 
-        print "Tileset: ", $tileset, " ", width, " ", height, "\n"
+        print("Tileset: ", tileset, width, height)
 
-        if(self.interactive == None or self.width == 0 or self.height == 0)
-            throw "No interactive tilemap in sector '", self.name, "'.\n"
+        if self.interactive is None or self.width == 0 or self.height == 0:
+            raise Exception("No interactive tilemap in sector '", self.name, "'")
 
-        if (self.background == None):
-            self.background = TilemapLayer($tileset, self.width, self.height)
+        if self.background is None:
+            self.background = TilemapLayer(tileset, self.width, self.height)
 
-        if (self.foreground == None):
-            self.foreground = TilemapLayer($tileset, self.width, self.height)
+        if (self.foreground is None):
+            self.foreground = TilemapLayer(tileset, self.width, self.height)
 
         if self.background:
             self.editormap.add_layer(self.background.to_layer())
@@ -247,12 +239,12 @@ class Sector:
         workspace.set_map(self.editormap)
         TilemapLayer.set_current(self.interactive)
         ObjectLayer.set_current(self.objects)
-        connect(self.editormap.sig_change(), proc{$gui.on_map_change()})
+        connect(self.editormap.sig_change(), gui.on_map_change)
 
     def save_tilemap(self, f, tilemap, name, solid=None):
         f.write("    (tilemap\n")
         f.write("      (layer  \"%s\")\n" % name)
-        f.write("      (solid %s)\n" % if solid == : solid then "#t" else "#f" end)
+        f.write("      (solid %s)\n" % "#t" if solid == "solid" else "#f")
         f.write("      (speed  %f)\n" % 1.0)
         f.write("      (width  %d)\n" % tilemap.get_width())
         f.write("      (height %d)\n" % tilemap.get_height())
@@ -269,9 +261,9 @@ class Sector:
 
     def save(self, f):
         f.write("    (name  \"#{self.name}\")\n" % self.name)
-        if(self.music != "")
+        if self.music != "":
             f.write("    (music  \"#{self.music}\")\n" % self.music)
-        if(self.init_script != "")
+        if self.init_script != "":
             f.write("    (init-script \"#{self.init_script}\")\n")
         f.write("    (gravity %f)\n" % self.gravity)
 
@@ -283,11 +275,10 @@ class Sector:
         f.write("    (camera\n")
         f.write("      (mode \"%s\")\n" % [self.cameramode])
 #    f.write("      (path\n")
-#    self.objects.get_objects().each {|obj|
+#    for obj in self.objects.get_objects():
 #      pathnode = obj.get_data()
-#      if (pathnode.is_a?(PathNode))
+#      if isinstance(pathnode, PathNode):
 #        f.write("       (point (x %d) (y %d) (speed 1))\n" % obj.get_pos().x, obj.get_pos().y)
-#    }
 #    f.write("      )")
             f.write("    )\n\n")
 

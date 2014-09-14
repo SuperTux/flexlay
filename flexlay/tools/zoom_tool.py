@@ -27,6 +27,8 @@ class ZoomTool(Tool):
     CREATE_ZOOM_RECT = 1
 
     def __init__(self):
+        super().__init__()
+
         self.state = ZoomTool.NONE_STATE
         self.zoom_rect = Rect()
 

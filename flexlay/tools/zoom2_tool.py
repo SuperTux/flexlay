@@ -23,6 +23,8 @@ from flexlay.tools import Tool
 class Zoom2Tool(Tool):
 
     def __init__(self):
+        super().__init__()
+
         self.active = False
         self.click_pos = Point(0, 0)
         self.old_zoom = 0.0

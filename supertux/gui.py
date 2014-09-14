@@ -130,7 +130,7 @@ class SuperTuxGUI:
         self.register_keyboard_shortcuts()
 
         # Popup menu
-        # connect_v2(objmap_select_tool.sig_on_right_click(), proc{ | x, y |
+        # objmap_select_tool.sig_on_right_click().connect(proc{ | x, y |
         #              print("Launching Menu at %s, %s" % (x, y))
         #              menu=Menu(Point(x, y))
         #              menu.add_item(mysprite, "Delete Object(s)", proc{
@@ -535,7 +535,7 @@ class SuperTuxGUI:
         zoom = min(self.editor_map.editormap_widget.width() / rect.get_width(),
                    self.editor_map.editormap_widget.height() / rect.get_height())
         print(zoom)
-        self.gui_set_zoom(zoom, Point(rect.get_width()/2, rect.get_height()/2))
+        self.gui_set_zoom(zoom, Point(rect.get_width() / 2, rect.get_height() / 2))
 
     def gui_set_zoom(self, zoom, pos=None):
         gc = self.editor_map.get_gc_state()
@@ -594,7 +594,7 @@ class SuperTuxGUI:
         elif len(selection) == 1:
             obj = selection[0].get_data()
             print(obj)
-            obj.property_dialog()
+            obj.property_dialog(self.gui)
         else:
             print("Warning: Selection is empty")
 

@@ -55,7 +55,7 @@ class GUIManager:
 
     def create_editor_map_component(self, tabbed=True):
         central = QWidget()
-        editor = EditorMapComponent()
+        editor = EditorMapComponent(tabbed)
         layout = QVBoxLayout()
 
         layout.setContentsMargins(0, 0, 0, 0)

@@ -94,6 +94,8 @@ class Rect:
 class Rectf(Rect):
 
     def __init__(self, arg1=None, arg2=None, arg3=None, arg4=None):
+        super().__init__()
+
         if arg1 is None and arg2 is None and arg3 is None and arg4 is None:
             self.left = 0.0
             self.top = 0.0

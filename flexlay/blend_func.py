@@ -16,7 +16,12 @@
 
 
 class BlendFunc:
-    pass
 
+    zero = 0
+    one = 1
+    one_minus_src_alpha = 2
+
+    def __init__(self):
+        pass
 
 # EOF #

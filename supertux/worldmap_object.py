@@ -21,8 +21,6 @@ from flexlay.util import get_value_from_tree
 
 from .config import Config
 
-gui = None
-
 
 class WorldmapObject:
 
@@ -59,8 +57,8 @@ class WMSpawnPoint(WorldmapObject):
         writer.write_string("name", self.name)
         writer.end_list("spawnpoint")
 
-    def property_dialog(self):
-        dialog = gui.gui.create_generic_dialog("SpawnPoint Property Dialog")
+    def property_dialog(self, gui):
+        dialog = gui.create_generic_dialog("SpawnPoint Property Dialog")
         dialog.add_string("Name", self.name)
 
         def on_callback(name):
@@ -110,8 +108,8 @@ class WorldmapLevel(WorldmapObject):
         pos.y = (((pos.y + 16) / 32).to_i) * 32
         self.obj.to_object.set_pos(pos)
 
-    def property_dialog(self):
-        dialog = gui.gui.create_generic_dialog("LevelTile Property Dialog")
+    def property_dialog(self, gui):
+        dialog = gui.create_generic_dialog("LevelTile Property Dialog")
         dialog.add_string("level", self.name)
         dialog.add_string("sprite", self.sprite)
         dialog.add_string("extro-filename", self.extro_filename)
@@ -176,8 +174,8 @@ class SpecialTile(WorldmapObject):
         pos.y = (((pos.y + 16) / 32).to_i) * 32
         self.obj.to_object.set_pos(pos)
 
-    def property_dialog(self):
-        dialog = gui.gui.create_generic_dialog("SpecialTile Property Dialog")
+    def property_dialog(self, gui):
+        dialog = gui.create_generic_dialog("SpecialTile Property Dialog")
         dialog.add_string("map-message", self.map_message)
         dialog.add_bool("passive-message", self.passive_message)
         dialog.add_bool("invisible-tile", self.invisible_tile)
@@ -215,7 +213,8 @@ def create_worldmapobject_at_pos(objmap, name, pos):
     object.obj.to_object.set_pos(pos)
     cmd = ObjectAddCommand(objmap)
     cmd.add_object(object.obj.to_object)
-    gui.workspace.get_map().execute(cmd.to_command())
+    from .gui import SuperTuxGUI
+    SuperTuxGUI.current.workspace.get_map().execute(cmd.to_command())
     return object
 
 
@@ -230,7 +229,8 @@ def create_worldmapobject_from_data(objmap, name, sexpr):
     object.parse(sexpr)
     cmd = ObjectAddCommand(objmap)
     cmd.add_object(object.obj)
-    gui.workspace.get_map().execute(cmd)
+    from .gui import SuperTuxGUI
+    SuperTuxGUI.workspace.get_map().execute(cmd)
     return object
 
 

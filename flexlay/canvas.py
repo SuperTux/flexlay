@@ -17,10 +17,16 @@
 
 class Canvas:
 
-    def __init__(self):
+    def __init__(self, surface):
         pass
 
     def get_gc(self):
+        pass
+
+    def sync_surface(self):
+        pass
+
+    def get_pixeldata(self):
         pass
 
 

@@ -24,6 +24,8 @@ class TilemapLayer(Layer):
     current = None
 
     def __init__(self, tileset, w, h):
+        super().__init__()
+        
         self.tileset = tileset
         self.field = Field(w, h)
 

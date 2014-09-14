@@ -116,7 +116,7 @@ class MinimapWidget(QWidget):
         #     map_width = tilemap.get_width()
         #     map_height = tilemap.get_height()
 
-        #     # FIXME: No Tileset.current
+        # FIXME: No Tileset.current
         #     buf = buffer.get_data()
         #     for y in range(0, map_height):
         #         for x in range(0, map_width):

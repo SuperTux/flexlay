@@ -21,8 +21,6 @@ from flexlay.util import get_value_from_tree, SExprWriter
 from .util import load_lisp
 from .tilemap import TileMap
 
-gui = None
-
 
 class WorldMap:
 
@@ -106,7 +104,8 @@ class WorldMap:
         workspace.set_map(self.editormap)
         TilemapLayer.current = self.tilemap.tilemaplayer
         ObjectLayer.current = self.objects
-        self.editormap.sig_change.connect(gui.on_map_change)
+        from .gui import SuperTuxGUI
+        self.editormap.sig_change.connect(SuperTuxGUI.current.on_map_change)
 
 
 # EOF #

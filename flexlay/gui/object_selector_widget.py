@@ -42,6 +42,7 @@ class ObjectSelectorWidget(QWidget):
 
         self.index = 0
         self.offset = 0
+        self.old_offset = 0
 
         self.mouse_pos = None
         self.click_pos = None

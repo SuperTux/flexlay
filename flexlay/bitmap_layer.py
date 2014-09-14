@@ -16,20 +16,24 @@
 
 
 from flexlay.math import Rectf, Pointf, Point, Sizef, Rect, Size
-from flexlay import PixelBuffer, Canvas, Color, BlendFunc, Surface
+from flexlay import PixelBuffer, Canvas, Color, BlendFunc, Surface, Layer
 
 
-class BitmapLayer:
+class BitmapLayer(Layer):
 
     current = None
 
     def __init__(self, width, height):
+        super().__init__()
+
         BitmapLayer.current = self
 
         self.strokes = []
         self.pixelbuffer = PixelBuffer(width, height)
+        self.surface = None
         self.canvas = Canvas()
         self.last_pos = Point()
+        self.surface = None
 
     def draw(self, gc):
         # Nothing to draw, so we go byebye
@@ -48,7 +52,7 @@ class BitmapLayer:
         return Rect(Point(0, 0),
                     Size(self.surface.get_width(), self.surface.get_height()))
 
-    def has_bounding_rect():
+    def has_bounding_rect(self):
         return True
 
     def add_stroke(self, stroke):

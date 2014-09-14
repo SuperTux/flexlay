@@ -22,15 +22,12 @@ from flexlay.util import get_value_from_tree
 from .config import Config
 
 
-gui = None  # GRUMBEL
-
-
 class GameObj:
 
     def __init__(self):
         pass
 
-    def property_dialog(self):
+    def property_dialog(self, gui):
         print("Object ", type(self), " has no properties")
 
     def set_obj(self, obj):
@@ -61,7 +58,7 @@ class SecretArea(GameObj):
                  "                    (message %r))\n") %
                 (rect.left, rect.top, rect.get_width(), rect.get_height(), self.message))
 
-    def property_dialog(self):
+    def property_dialog(self, gui):
         print(self.message)
         dialog = gui.create_generic_dialog("SecretArea Property Dialog")
         dialog.add_string("Message: ", self.message)
@@ -102,7 +99,7 @@ class AmbientSound(GameObj):
                 (rect.left, rect.top, rect.get_width(), rect.get_height(),
                  self.sample, self.factor, self.bias, self.volume))
 
-    def property_dialog(self):
+    def property_dialog(self, gui):
         print(self.factor)
         print(self.bias)
         print(self.sample)
@@ -146,7 +143,7 @@ class SequenceTrigger(GameObj):
                 (rect.left, rect.top, rect.get_width(), rect.get_height(),
                  self.sequence))
 
-    def property_dialog(self):
+    def property_dialog(self, gui):
         print(self.sequence.inspect)
         dialog = gui.gui.create_generic_dialog("SequenceTrigger Property Dialog")
         dialog.add_string("Sequence: ", self.sequence)
@@ -167,7 +164,7 @@ class BadGuy(GameObj):
         pos = obj.get_pos()
         f.write("       (%s (x %d) (y %d) (direction \"%s\")\n" % [self.type, pos.x, pos.y, self.direction])
 
-    def property_dialog(self):
+    def property_dialog(self, gui):
         dialog = gui.gui.create_generic_dialog("BadGuy Property Dialog")
 
         dialog.add_enum("Direction: ", ["left", "right", "auto"], self.direction)
@@ -192,7 +189,7 @@ class Dispenser(GameObj):
         f.write("       (dispenser (x %d) (y %d) (badguy \"%s\") (cycle %d))\n" %
                 [pos.x, pos.y, self.badguy, self.cycle])
 
-    def property_dialog(self):
+    def property_dialog(self, gui):
         dialog = gui.gui.create_generic_dialog("Dispenser Property Dialog")
         dialog.add_string("Badguy Type: ", self.badguy)
         dialog.add_int("Cycle Type: ", self.cycle)
@@ -216,7 +213,7 @@ class Platform(GameObj):
         f.write("       (platform (x %d) (y %d) (use_path \"%s\") (type \"%s\"))\n" %
                 [pos.x, pos.y, self.path, self.type])
 
-    def property_dialog(self):
+    def property_dialog(self, gui):
         dialog = gui.gui.create_generic_dialog("Platform Property Dialog")
         dialog.add_string("Use Path: ", self.path)
         dialog.add_string("Platform Type: ", self.type)
@@ -245,7 +242,7 @@ class SpawnPoint(GameObj):
         pos = obj.get_pos()
         f.write("       (spawnpoint (name \"%s\") (x %d) (y %d))\n" % [self.name, pos.x, pos.y])
 
-    def property_dialog(self):
+    def property_dialog(self, gui):
         dialog = gui.gui.create_generic_dialog("SpawnPoint Property Dialog")
         dialog.add_string("Name: ", self.name)
 
@@ -304,7 +301,7 @@ class InfoBlock(GameObj):
         f.write("        (message (_ \"%s\"))\n" % [self.message])
         f.write("      )\n")
 
-    def property_dialog(self):
+    def property_dialog(self, gui):
         dialog = gui.gui.create_generic_dialog("InfoBox Property Dialog" % [self.type])
         dialog.add_string("Message: ", self.message)
 
@@ -334,7 +331,7 @@ class Powerup(GameObj):
         f.write("        (sprite (_ \"%s\"))\n" % [self.sprite])
         f.write("      )\n")
 
-    def property_dialog(self):
+    def property_dialog(self, gui):
         dialog = gui.gui.create_generic_dialog("Powerup Property Dialog" % [self.sprite])
         dialog.add_string("Sprite: ", self.sprite)
 
@@ -356,7 +353,7 @@ class ParticleSystem(GameObj):
             f.write("         (layer %d)\n" % [self.layer])
         f.write("       )\n")
 
-    def property_dialog(self):
+    def property_dialog(self, gui):
         dialog = gui.gui.create_generic_dialog("%s-ParticleSystem Property Dialog" % [self.type])
         dialog.add_int("Layer: ", self.layer)
 
@@ -395,7 +392,7 @@ class Gradient(GameObj):
             f.write("         (layer %d)\n" % [self.layer])
         f.write("       )\n")
 
-    def property_dialog(self):
+    def property_dialog(self, gui):
         dialog = gui.gui.create_generic_dialog("Background Property Dialog")
         dialog.add_int("Layer: ", self.layer)
         dialog.add_int("Top Red: ", self.color_top[0])
@@ -434,7 +431,7 @@ class Background(GameObj):
             f.write("         (layer %d)\n" % [self.layer])
         f.write("       )\n")
 
-    def property_dialog(self):
+    def property_dialog(self, gui):
         dialog = gui.gui.create_generic_dialog("Background Property Dialog")
         dialog.add_string("Image: ", self.image)
         dialog.add_float("Speed: ", self.speed)
@@ -470,7 +467,7 @@ class LevelTime(GameObj):
         f.write("         (time %f)\n" % [self.time])
         f.write("       )\n")
 
-    def property_dialog(self):
+    def property_dialog(self, gui):
         dialog = gui.gui.create_generic_dialog("LevelTime Property Dialog")
         dialog.add_float("Time: ", self.time)
 
@@ -505,7 +502,7 @@ class Door(GameObj):
         f.write("         (spawnpoint \"%s\")\n" % self.spawnpoint)
         f.write("       )\n")
 
-    def property_dialog(self):
+    def property_dialog(self, gui):
         dialog = gui.gui.create_generic_dialog("Door Property Dialog")
         dialog.add_string("Sector: ", self.sector)
         dialog.add_string("Spawnpoint: ", self.spawnpoint)
@@ -567,7 +564,7 @@ class ScriptedObject(GameObj):
         sprite = Sprite.from_file(Config.current.datadir + self.sprite)
         self.object.set_sprite(sprite)
 
-    def property_dialog(self):
+    def property_dialog(self, gui):
         dialog = gui.gui.create_generic_dialog("Scripted Object Property Dialog")
         dialog.add_string("Name: ", self.name)
         dialog.add_string("Sprite: ", self.sprite)

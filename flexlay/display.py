@@ -26,5 +26,8 @@ class Display:
     def get_height(self):
         return 0
 
+    def get_modelview(self):
+        pass
+
 
 # EOF #

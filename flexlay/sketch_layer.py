@@ -16,12 +16,12 @@
 
 
 from .blend_func import BlendFunc
-from flexlay import Display, Canvas, PixelBuffer, Color
+from flexlay import Display, Canvas, PixelBuffer, Color, Layer
 from flexlay.gui import EditorMapComponent
 from flexlay.math import Point
 
 
-class SketchLayer:
+class SketchLayer(Layer):
 
     def __init__(self):
         self.strokes = []

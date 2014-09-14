@@ -23,6 +23,8 @@ from .blitter import blit_clear, blit_opaque
 
 class PixelBuffer:
 
+    cache = {}
+
     @staticmethod
     def subregion_from_file(filename, x, y, w, h):
         source = PixelBuffer.from_file(filename)
@@ -34,8 +36,15 @@ class PixelBuffer:
     @staticmethod
     def from_file(filename):
         pixelbuffer = PixelBuffer()
-        pixelbuffer.image = QImage(filename)
-        print("loading:", filename, " -> ", pixelbuffer.image.width(), pixelbuffer.image.height())
+
+        qimg = PixelBuffer.cache.get(filename)
+        if qimg is not None:
+            pixelbuffer.image = qimg
+        else:
+            qimg = QImage(filename)
+            PixelBuffer.cache[filename] = qimg
+            pixelbuffer.image = qimg
+            print("loading:", filename, " -> ", pixelbuffer.image.width(), pixelbuffer.image.height())
 
         if not pixelbuffer.image:
             assert False, "Failed to load image, fatal"

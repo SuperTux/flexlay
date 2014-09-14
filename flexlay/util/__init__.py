@@ -17,7 +17,8 @@
 
 from .signal import Signal
 from .sexpr_writer import SExprWriter, write_sexpr
-from .sexpr_reader import SExprReader, get_value_from_tree
+from .sexpr_reader import SExprReader, get_value_from_tree, sexpr_filter
+from .sexpr import sexpr_read_from_file
 
 
 __all__ = ["Signal",

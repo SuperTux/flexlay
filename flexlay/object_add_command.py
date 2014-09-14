@@ -21,6 +21,8 @@ from flexlay import Command
 class ObjectAddCommand(Command):
 
     def __init__(self, objmap):
+        super().__init__()
+
         self.objmap = objmap
         self.objs = []
 

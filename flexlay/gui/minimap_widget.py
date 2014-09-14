@@ -26,6 +26,8 @@ from flexlay.math import Point, Size, Rect
 class MinimapWidget(QWidget):
 
     def __init__(self, editormap_component):
+        super().__init__(self)
+
         self.drag_active = False
         self.last_serial = -1
         self.editor_map = False

@@ -24,7 +24,9 @@ from flexlay import Color, GraphicContext
 
 
 class SuperTuxBadGuyData:
-    pass
+
+    def __init__(self):
+        pass
 
 
 class ObjectSelectorWidget(QWidget):
@@ -40,6 +42,9 @@ class ObjectSelectorWidget(QWidget):
 
         self.index = 0
         self.offset = 0
+
+        self.mouse_pos = None
+        self.click_pos = None
 
         self.mouse_over_tile = -1
         self.scrolling = False

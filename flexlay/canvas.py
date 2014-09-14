@@ -20,5 +20,8 @@ class Canvas:
     def __init__(self):
         pass
 
+    def get_gc(self):
+        pass
+
 
 # EOF #

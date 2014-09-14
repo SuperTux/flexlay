@@ -19,7 +19,6 @@ from flexlay import TilemapLayer
 from flexlay.util import get_value_from_tree
 
 
-datadir = None
 tileset = None
 
 

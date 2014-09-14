@@ -19,16 +19,17 @@ import subprocess
 import os
 
 from flexlay import (Color, ObjectBrush, Sprite, TilemapLayer,
-                     ObjMapRectObject, Sector, ObjMapPathNode, PathNode)
+                     ObjMapRectObject, ObjMapPathNode)
 from flexlay.math import Point, Rect, Size
 from flexlay.tools import (TileMapPaintTool, TileMapSelectTool,
                            ObjMapSelectTool, ZoomTool, Zoom2Tool, WorkspaceMoveTool)
 
+from .gameobj import PathNode
 from .level import Level
+from .sector import Sector
 from .worldmap import WorldMap
+from .config import Config
 
-
-datadir = None
 game_objects = None
 gui = None
 recent_files = None
@@ -84,7 +85,7 @@ class SuperTuxGUI:
         if False:  # GRUMBEL
             self.objectselector.sig_drop.connect(self.on_object_drop)
         for objectdata in game_objects:
-            sprite = Sprite.from_file(datadir + objectdata[1])
+            sprite = Sprite.from_file(Config.current.datadir + objectdata[1])
             self.objectselector.add_brush(ObjectBrush(sprite, objectdata))
 
         self.layer_selector = self.gui.create_layer_selector()
@@ -99,7 +100,7 @@ class SuperTuxGUI:
         if False:
             self.worldmapobjectselector.sig_drop.connect(self.on_worldmap_object_drop)
         for object in worldmap_objects:
-            self.worldmapobjectselector.add_brush(ObjectBrush(Sprite.from_file(datadir + object[1]),
+            self.worldmapobjectselector.add_brush(ObjectBrush(Sprite.from_file(Config.current.datadir + object[1]),
                                                               object[0]))
 
         self.create_button_panel()
@@ -121,9 +122,9 @@ class SuperTuxGUI:
         self.create_menu()
 
         self.load_dialog = self.gui.create_filedialog("Load SuperTux Level", "Load", "Cancel")
-        self.load_dialog.set_filename(datadir + "levels/")
+        self.load_dialog.set_filename(Config.current.datadir + "levels/")
         self.save_dialog = self.gui.create_filedialog("Save SuperTux Level as...", "Save", "Cancel")
-        self.save_dialog.set_filename(datadir + "levels/")
+        self.save_dialog.set_filename(Config.current.datadir + "levels/")
 
         self.register_keyboard_shortcuts()
 
@@ -285,7 +286,7 @@ class SuperTuxGUI:
     def show_objects(self):
         if False:  # GRUMBEL
             self.tileselector.show(False)
-            if use_worldmap:
+            if self.use_worldmap:
                 self.worldmapobjectselector.show(True)
                 self.objectselector.show(False)
             else:
@@ -425,12 +426,12 @@ class SuperTuxGUI:
         print("Run this level...")
         if self.use_worldmap:
             tmpfile = "/tmp/tmpflexlay-worldmap.stwm"
-            supertux_save_level(tmpfile)
+            self.save_level(tmpfile)
         else:
             # FIXME: use real tmpfile
             tmpfile = "/tmp/tmpflexlay-supertux.stl"
-            supertux_save_level(tmpfile)
-        subprocess.Popen(["#{datadir}/../supertux", tmpfile])
+            self.save_level(tmpfile)
+        subprocess.Popen(["#{Config.current.datadir}/../supertux", tmpfile])
 
     def gui_resize_level(self):
         level = self.workspace.get_map().get_metadata()
@@ -596,10 +597,10 @@ class SuperTuxGUI:
             self.save_dialog.set_filename(filename)
         else:
             self.save_dialog.set_filename(os.path.dirname(filename) + "/")
-        self.save_dialog.run(supertux_save_level)
+        self.save_dialog.run(self.save_level)
 
     def gui_level_save(self):
-        if use_worldmap:
+        if self.use_worldmap:
             filename = self.workspace.get_map().get_metadata().filename
         else:
             filename = self.workspace.get_map().get_metadata().parent.filename
@@ -614,13 +615,14 @@ class SuperTuxGUI:
             else:
                 self.save_dialog.set_filename(os.path.dirname(filename) + "/")
 
-        self.save_dialog.run(supertux_save_level)
+        self.save_dialog.run(self.save_level)
 
     def gui_level_new(self):
-        print("not implemented: gui_level_new()")
+        w, h = 100, 50
+        self.new_level(w, h)
 
     def gui_level_load(self):
-        self.load_dialog.run(supertux_load_level)
+        self.load_dialog.run(self.load_level)
 
     def insert_path_node(self, x, y):
         print("Insert path Node")
@@ -643,6 +645,60 @@ class SuperTuxGUI:
             if last is not None:
                 last.connect(i)
             last = i
+
+    def gui_set_datadir(self):
+        if os.path.isdir(Config.current.datadir):
+            dialog = gui.gui.create_generic_dialog("Specify the SuperTux data directory and restart")
+            dialog.add_label("You need to specify the datadir where SuperTux is located")
+            dialog.add_string("Datadir:", Config.current.datadir)
+
+            def on_callback(datadir):
+                Config.current.datadir = datadir
+
+            dialog.set_ok_callback(on_callback)
+
+    def new_level(self, width, height):
+        level = Level(width, height)
+        level.activate(gui.workspace)
+
+    def load_level(self, filename):
+        if filename[-5:] == ".stwm":
+            self.load_worldmap(filename)
+            return
+
+        print("Loading: ", filename)
+        level = Level(filename)
+        level.activate(self.workspace)
+
+        if filename not in self.recent_files:
+            self.recent_files.push(filename)
+            self.recent_files_menu.add_item(filename, self.load_level)
+
+        self.minimap.update_minimap()
+
+    def load_worldmap(self, filename):
+        print("Loading: ", filename)
+        worldmap = WorldMap(filename)
+        worldmap.activate(self.workspace)
+
+        if filename not in self.recent_files:
+            self.recent_files.push(filename)
+            self.recent_files_menu.add_item(filename, self.load_worldmap)
+
+        self.minimap.update_minimap()
+        self.use_worldmap = True
+
+    def save_level(self, filename):
+        if self.use_worldmap:
+            level = self.workspace.get_map().get_metadata()
+        else:
+            level = self.workspace.get_map().get_metadata().parent
+
+        # Do backup save
+        if os.path.isfile(filename):
+            os.rename(filename, filename + "~")
+        level.save(filename)
+        level.filename = filename
 
 
 class DisplayProperties:
@@ -683,49 +739,6 @@ class DisplayProperties:
                 map.background.set_foreground_color(active)
             else:
                 map.background.set_foreground_color(deactive)
-
-
-def supertux_load_level(filename):
-    if filename[-5:] == ".stwm":
-        supertux_load_worldmap(filename)
-        return
-
-    print("Loading: ", filename)
-    level = Level(filename)
-    level.activate(gui.workspace)
-
-    if filename not in recent_files:
-        recent_files.push(filename)
-        gui.recent_files_menu.add_item(filename, supertux_load_level)
-
-    gui.minimap.update_minimap()
-
-
-def supertux_load_worldmap(filename):
-    global use_worldmap
-
-    print("Loading: ", filename)
-    worldmap = WorldMap(filename)
-    worldmap.activate(gui.workspace)
-
-    if filename not in recent_files:
-        recent_files.push(filename)
-        gui.recent_files_menu.add_item(filename, supertux_load_worldmap)
-    gui.minimap.update_minimap()
-    use_worldmap = True
-
-
-def supertux_save_level(filename):
-    if use_worldmap:
-        level = gui.workspace.get_map().get_metadata()
-    else:
-        level = gui.workspace.get_map().get_metadata().parent
-
-    # Do backup save
-    if os.path.isfile(filename):
-        os.rename(filename, filename + "~")
-    level.save(filename)
-    level.filename = filename
 
 
 # EOF #

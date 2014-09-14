@@ -23,12 +23,17 @@ import re
 import codecs
 
 
-def parse(string):
+def sexpr_read_from_file(filename):
+    with open(filename, "rt") as fin:
+        content = fin.read()
+        return parse(content, filename)
+
+def parse(string, context=None):
     parser = SExprParser(string)
     try:
         return parser.parse()
     except Exception as e:
-        raise SExprParseError(parser.line, parser.column, str(e))
+        raise SExprParseError(context, parser.line, parser.column, str(e))
 
 
 def num(s):
@@ -40,8 +45,9 @@ def num(s):
 
 class SExprParseError(Exception):
 
-    def __init__(self, line, column, message):
-        super().__init__("%d:%d: %s" % ((line, column, message)))
+    def __init__(self, context, line, column, message):
+        super().__init__("%s:%d:%d: error: %s" % (context, line, column, message))
+        self.context = context
         self.line = line
         self.column = column
 
@@ -88,7 +94,7 @@ class SExprParser:
         if c is None:
             raise Exception("string not closed at end of file")
         elif c == "\\":
-            i += 1
+            self.index += 1
             self.atom += self.text[i]
         elif c == "\"":
             self.stack[-1].append(self.atom)

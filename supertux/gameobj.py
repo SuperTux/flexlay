@@ -18,7 +18,8 @@
 from flexlay import (Color, Sprite)
 from flexlay.math import Point, Rect, Size
 from flexlay.util import get_value_from_tree
-from supertux import datadir
+
+from .config import Config
 
 
 gui = None  # GRUMBEL
@@ -563,7 +564,7 @@ class ScriptedObject(GameObj):
         f.write("      )\n")
 
     def load_sprite(self):
-        sprite = Sprite.from_file(datadir + self.sprite)
+        sprite = Sprite.from_file(Config.current.datadir + self.sprite)
         self.object.set_sprite(sprite)
 
     def property_dialog(self):

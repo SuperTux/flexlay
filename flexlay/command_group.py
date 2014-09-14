@@ -21,6 +21,8 @@ from flexlay import Command
 class CommandGroup(Command):
 
     def __init__(self):
+        super().__init__()
+
         self.commands = []
 
     def add_command(self, command):

@@ -29,6 +29,8 @@ class ObjMapSelectTool(Tool):
     STATE_SELECT = 2
 
     def __init__(self):
+        super().__init__()
+
         self.state = ObjMapSelectTool.STATE_NONE
         self.drag_start = Pointf(0, 0)
         self.selection_rect = Rectf(0, 0, 0, 0)

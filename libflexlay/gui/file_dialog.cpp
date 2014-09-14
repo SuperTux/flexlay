@@ -25,7 +25,7 @@ FileDialog::FileDialog(const std::string& title,
                        const std::string& ok_label,
                        const std::string& cancel_label) :
   m_callback(),
-  m_file_dialog(new QFileDialog())
+  m_file_dialog(new QFileDialog(None, title))
 {
   m_file_dialog->setFileMode(QFileDialog::ExistingFile);
   m_file_dialog->setWindowModality(Qt::ApplicationModal);

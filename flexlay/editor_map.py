@@ -27,7 +27,7 @@ class EditorMap:
         self.foreground_color = Color(255, 80, 255)
         self.modified = False
         self.serial = 0
-        self.has_bounding_rect = False
+        self._has_bounding_rect = False
         self.bounding_rect = Rect(0, 0, 0, 0)
         self.layers = []
         self.redo_stack = []
@@ -86,18 +86,18 @@ class EditorMap:
         return self.metadata
 
     def has_bounding_rect(self):
-        return self.has_bounding_rect
+        return self._has_bounding_rect
 
     def set_bounding_rect(self, rect):
         if rect != Rect(0, 0, 0, 0):
-            self.has_bounding_rect = True
+            self._has_bounding_rect = True
             self.bounding_rect = rect
         else:
-            self.has_bounding_rect = False
+            self._has_bounding_rect = False
             self.bounding_rect = rect
 
     def get_bounding_rect(self):
-        if self.has_bounding_rect:
+        if self._has_bounding_rect:
             return self.bounding_rect
         else:
             init = False

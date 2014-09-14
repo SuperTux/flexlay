@@ -16,7 +16,9 @@
 
 
 class TileProvider:
-    pass
+
+    def __init__(self):
+        pass
 
 
 # EOF #

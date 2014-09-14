@@ -24,6 +24,8 @@ from flexlay.tools import Tool
 class LayerMoveTool(Tool):
 
     def __init__(self):
+        super().__init__()
+
         self.scrolling = False
         self.click_pos = Point(0, 0)
         self.old_trans_offset = Pointf(0, 0)

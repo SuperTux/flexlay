@@ -18,13 +18,13 @@
 from flexlay import (Color, ObjMapSpriteObject, ObjMapRectObject, ObjectAddCommand, Sprite)
 from flexlay.math import Point, Pointf, Rect, Size
 from flexlay.util import get_value_from_tree
-from supertux import datadir
-from supertux.gameobj import (BadGuy, Dispenser, SpawnPoint,
-                              AmbientSound, SimpleObject,
-                              SimpleTileObject, Powerup, SecretArea,
-                              SequenceTrigger, Door, Background,
-                              Gradient, ParticleSystem, Platform,
-                              ScriptedObject, InfoBlock, LevelTime)
+
+from .config import Config
+from .gameobj import (BadGuy, Dispenser, SpawnPoint, AmbientSound,
+                      SimpleObject, SimpleTileObject, Powerup,
+                      SecretArea, SequenceTrigger, Door, Background,
+                      Gradient, ParticleSystem, Platform,
+                      ScriptedObject, InfoBlock, LevelTime)
 
 
 game_objects = [
@@ -137,7 +137,7 @@ def create_gameobject(editormap, objmap, data, pos, sexpr=[]):
 
     # Creates a gameobject the given position, data is the entry in the game_objects table
     if type == "sprite":
-        sprite = Sprite.from_file(datadir + spritefile)
+        sprite = Sprite.from_file(Config.current.datadir + spritefile)
 
         obj = ObjMapSpriteObject(sprite, pos, None)
         gobj = func.call(obj, sexpr)

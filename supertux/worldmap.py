@@ -15,13 +15,12 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from flexlay import ObjectLayer, TileMap, EditorMap, TilemapLayer
+from flexlay import ObjectLayer, EditorMap, TilemapLayer
 from flexlay.util import get_value_from_tree, SExprWriter
 
 from .util import load_lisp
+from .tilemap import TileMap
 
-
-datadir = None
 gui = None
 
 

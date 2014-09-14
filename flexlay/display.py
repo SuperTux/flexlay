@@ -16,7 +16,15 @@
 
 
 class Display:
-    pass
+
+    def __init__(self):
+        pass
+
+    def get_width(self):
+        return 0
+
+    def get_height(self):
+        return 0
 
 
 # EOF #

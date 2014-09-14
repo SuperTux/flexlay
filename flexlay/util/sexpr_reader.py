@@ -15,6 +15,14 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+def sexpr_filter(name, tree):
+  ret = []
+  for i in tree:
+    if i[0] == name:
+      ret.push(i[1:])
+  return ret
+
+
 def assoc_ref(lst, key):
     if lst == []:
         return None

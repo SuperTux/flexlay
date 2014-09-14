@@ -18,52 +18,40 @@
 import os
 import sys
 
-from flexlay import Flexlay, Sprite, Tileset
+from flexlay import Flexlay
 
-from supertux import Config, Level
-from .gui import SuperTuxGUI, supertux_load_level
+from .tileset import SuperTuxTileset
+from .config import Config
+from .gui import SuperTuxGUI
 
-datadir = None
 
-flexlay = Flexlay()
+def main():
+    flexlay = Flexlay()
 
-mysprite = Sprite.from_file("../data/images/icons16/stock_paste-16.png")
+    config = Config.create("supertux-editor")
+    if not config.datadir:
+        config.datadir = os.path.expanduser("~/projects/supertux/trunk/supertux/data/")
 
-config = Config()
-if not datadir:
-    datadir = os.path.expanduser("~/projects/supertux/trunk/supertux/data/")
+    tileset = SuperTuxTileset(32)
+    tileset.load(config.datadir + "images/tiles.strf")
+    tileset.create_ungrouped_tiles_group()
 
-tileset = Tileset(32)
-tileset.load(datadir + "images/tiles.strf")
-tileset.create_ungrouped_tiles_group()
+    gui = SuperTuxGUI(flexlay)
+    if not sys.argv[1:]:
+        gui.new_level(100, 50)
+    else:
+        gui.load_level(sys.argv[1])
 
-gui = SuperTuxGUI(flexlay)
+    # Init the GUI, so that button state is in sync with internal state
+    gui.gui_toggle_minimap()
+    gui.gui_toggle_minimap()
+    gui.gui_show_interactive()
+    gui.gui_show_current()
+    gui.set_tilemap_paint_tool()
 
-if sys.argv[1:] == []:
-    Level(100, 50).activate(gui.workspace)
-else:
-    supertux_load_level(sys.argv[1])
+    gui.run()
 
-# Init the GUI, so that button state is in sync with internal state
-gui.gui_toggle_minimap()
-gui.gui_toggle_minimap()
-gui.gui_show_interactive()
-gui.gui_show_current()
-gui.set_tilemap_paint_tool()
-
-if os.path.isdir(datadir):
-    dialog = gui.gui.create_generic_dialog("Specify the SuperTux data directory and restart")
-    dialog.add_label("You need to specify the datadir where SuperTux is located")
-    dialog.add_string("Datadir:", datadir)
-
-    def on_callback(datadir):
-        datadir = datadir
-
-    dialog.set_ok_callback(on_callback)
-
-gui.run()
-
-config.save()
+    config.save()
 
 
 # EOF #

@@ -18,7 +18,7 @@
 from flexlay.util import get_value_from_tree
 from flexlay import TilemapLayer, ObjectLayer, EditorMap
 
-from .gameobj import create_gameobject_from_data
+from .data import create_gameobject_from_data
 
 
 tileset = None

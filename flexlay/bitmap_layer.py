@@ -21,7 +21,11 @@ from flexlay import PixelBuffer, Canvas, Color, BlendFunc, Surface
 
 class BitmapLayer:
 
+    current = None
+
     def __init__(self, width, height):
+        BitmapLayer.current = self
+
         self.strokes = []
         self.pixelbuffer = PixelBuffer(width, height)
         self.canvas = Canvas()

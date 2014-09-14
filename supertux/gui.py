@@ -352,7 +352,7 @@ class SuperTuxGUI:
         self.show_objects()
 
     def gui_show_foreground(self):
-        self.display_properties.layer = self.FOREGROUND_LAYER
+        self.display_properties.layer = FOREGROUND_LAYER
         self.display_properties.set(self.workspace.get_map().get_metadata())
         TilemapLayer.current = self.workspace.get_map().get_metadata().foreground
         self.foreground_icon.set_down()
@@ -361,7 +361,7 @@ class SuperTuxGUI:
         self.minimap.update_minimap()
 
     def gui_show_background(self):
-        self.display_properties.layer = self.BACKGROUND_LAYER
+        self.display_properties.layer = BACKGROUND_LAYER
         self.display_properties.set(self.workspace.get_map().get_metadata())
         TilemapLayer.current = self.workspace.get_map().get_metadata().background
         self.foreground_icon.set_up()
@@ -510,8 +510,8 @@ class SuperTuxGUI:
         level = self.workspace.get_map().get_metadata().get_level()
         dialog = self.gui.create_generic_dialog("Edit Sector")
 
-        dialog.add_string("Name: ",   level.current_sector.name)
-        dialog.add_string("Music: ",   level.current_sector.music)
+        dialog.add_string("Name: ", level.current_sector.name)
+        dialog.add_string("Music: ", level.current_sector.music)
         dialog.add_float("Gravity: ", level.current_sector.gravity)
 
         def on_callback(name, music, gravity):
@@ -656,7 +656,7 @@ class SuperTuxGUI:
             def on_callback(datadir):
                 Config.current.datadir = datadir
 
-            dialog.set_ok_callback(on_callback)
+            dialog.set_callback(on_callback)
 
     def new_level(self, width, height):
         level = Level(width, height)

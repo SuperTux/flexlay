@@ -146,7 +146,7 @@ class EditorMapComponent:
         self.update_scrollbars()
 
     def zoom_to(self, rect):
-        self.gc_state.zooself.to(rect)
+        self.gc_state.zoom_to(rect)
 
         self.editormap_widget.repaint()
         self.update_scrollbars()

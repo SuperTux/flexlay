@@ -113,9 +113,9 @@ class GenericDialog:
             group.addButton(radio)
         self.items.append(Item(Item.KIND_ENUM, label, None, group))
 
-    def set_ok_callback(self, callback):
+    def set_callback(self, callback):
         def on_accept():
-            self.ok_callback()
+            self.ok_callback(*self.get_values())
             self.dialog.hide()
 
         def on_rejected():

@@ -98,7 +98,7 @@ class WorldMap:
 
     def activate(self, workspace):
         # FIXME: All wrong and obsolote
-        self.editormap = EditorMap(True)
+        self.editormap = EditorMap()
         self.editormap.add_layer(self.tilemap.tilemaplayer.to_layer())
         self.editormap.add_layer(self.objects.to_layer())
         self.editormap.metadata = self

@@ -19,6 +19,7 @@ from flexlay.math import Point
 from ..gui.editor_map_component import EditorMapComponent
 from flexlay.tools import Tool
 
+
 class Zoom2Tool(Tool):
 
     def __init__(self):

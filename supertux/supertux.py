@@ -16,46 +16,33 @@
 
 
 import os
+import sys
 
-from supertux import Config
+from flexlay import Flexlay, Sprite, Tileset
 
+from supertux import Config, Level
+from .gui import SuperTuxGUI, supertux_load_level
 
-BACKGROUND_LAYER = 1
-INTERACTIVE_LAYER = 2
-FOREGROUND_LAYER = 3
+datadir = None
 
 flexlay = Flexlay()
-
-# Tools
-tilemap_paint_tool = TileMapPaintTool()
-tilemap_select_tool = TileMapSelectTool()
-zoom_tool = ZoomTool()
-zoom2_tool = Zoom2Tool()
-workspace_move_tool = WorkspaceMoveTool()
-objmap_select_tool = ObjMapSelectTool()
-# sketch_stroke_tool = SketchStrokeTool()
 
 mysprite = Sprite.from_file("../data/images/icons16/stock_paste-16.png")
 
 config = Config()
 if not datadir:
-    datadir = File.expand_path("~/projects/supertux/trunk/supertux/data/") + "/"
+    datadir = os.path.expanduser("~/projects/supertux/trunk/supertux/data/")
 
 tileset = Tileset(32)
 tileset.load(datadir + "images/tiles.strf")
 tileset.create_ungrouped_tiles_group()
 
-if not recent_files:
-    recent_files = []
+gui = SuperTuxGUI(flexlay)
 
-gui = SuperTuxGUI()
-for filename in recent_files:
-    gui.recent_files_menu.add_item(filename, lambda filename=filename: supertux_load_level(filename))
-
-if ARGV == []:
+if sys.argv[1:] == []:
     Level(100, 50).activate(gui.workspace)
 else:
-    supertux_load_level(ARGV[0])
+    supertux_load_level(sys.argv[1])
 
 # Init the GUI, so that button state is in sync with internal state
 gui.gui_toggle_minimap()
@@ -77,5 +64,6 @@ if os.path.isdir(datadir):
 gui.run()
 
 config.save()
+
 
 # EOF #

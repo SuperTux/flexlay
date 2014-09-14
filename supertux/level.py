@@ -15,6 +15,13 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from flexlay.util import get_value_from_tree, sexpr_filter
+
+from .sector import Sector
+from .gameobj import PathNode, BadGuy
+from .util import load_lisp
+
+
 class Level:
 
     def __init__(self, *params):
@@ -49,9 +56,9 @@ class Level:
             print("VERSION:", self.filename, " ",  self.version)
 
             if self.version == 1:
-                parse_v1(data)
+                self.parse_v1(data)
             else:
-                parse_v2(data)
+                self.parse_v2(data)
         else:
             raise Exception("Wrong arguments for SuperTux::___init__")
 
@@ -69,7 +76,7 @@ class Level:
                 self.current_sector = sector
 
         if self.current_sector is None:
-            print("Error: No main sector defined:", sectors)
+            print("Error: No main sector defined:", self.sectors)
             self.current_sector = self.sectors[0]
 
     def parse_v1(self, data):
@@ -84,7 +91,7 @@ class Level:
         self.author = get_value_from_tree(["author", "_"], data, "no author")
 
     def save(self, filename):
-        save_v2(filename)
+        self.save_v2(filename)
 
     def save_v2(self, filename):
         with open(filename, "w") as f:

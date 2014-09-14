@@ -15,6 +15,16 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from flexlay.util import get_value_from_tree
+from flexlay import TilemapLayer, ObjectLayer, EditorMap
+
+from .gameobj import create_gameobject_from_data
+
+
+tileset = None
+gui = None
+
+
 class Sector:
 
     def __init__(self, parent):
@@ -135,6 +145,7 @@ class Sector:
             sexpr = []
             create_gameobject_from_data(self.editormap, self.objects, 'particles-clouds', sexpr)
         elif partsys == "":
+            pass
         else:
             print("Unknown particle system type %s" % partsys)
 
@@ -164,7 +175,7 @@ class Sector:
         self.objects = ObjectLayer()
 #    self.sketch = SketchLayer()
 
-        for i in data
+        for i in data:
             (name, data) = i[0], i[1:]
             if name == "name":
                 self.name = data[0]
@@ -187,9 +198,9 @@ class Sector:
                     self.interactive = tilemap
                     self.width = width
                     self.height = height
-                elif layer == "background"
+                elif layer == "background":
                     self.background = tilemap
-                elif layer == "foreground"
+                elif layer == "foreground":
                     self.foreground = tilemap
                 else:
                     print("Flexlay doesn't handle tilemap layer '%s'" % layer)
@@ -224,7 +235,7 @@ class Sector:
         workspace.set_map(self.editormap)
         TilemapLayer.set_current(self.interactive)
         ObjectLayer.set_current(self.objects)
-        connect(self.editormap.sig_change(), gui.on_map_change)
+        self.editormap.sig_change.connect(gui.on_map_change)
 
     def save_tilemap(self, f, tilemap, name, solid=None):
         f.write("    (tilemap\n")
@@ -236,10 +247,10 @@ class Sector:
         f.write("      (tiles\n")
         f.write("        ")
         x = 0
-        for i in tilemap.get_data()
+        for i in tilemap.get_data():
             f.write("%d " % i)
             x += 1
-            if x == width:
+            if x == self.width:
                 f.write("\n        ")
                 x = 0
         f.write("))\n")
@@ -252,22 +263,22 @@ class Sector:
             f.write("    (init-script \"#{self.init_script}\")\n")
         f.write("    (gravity %f)\n" % self.gravity)
 
-        save_tilemap(f, self.background,  "background")
-        save_tilemap(f, self.interactive, "interactive", "solid")
-        save_tilemap(f, self.foreground,  "foreground")
-#    save_strokelayer(f, self.sketch)
+        self.save_tilemap(f, self.background,  "background")
+        self.save_tilemap(f, self.interactive, "interactive", "solid")
+        self.save_tilemap(f, self.foreground,  "foreground")
+        # save_strokelayer(f, self.sketch)
 
         f.write("    (camera\n")
         f.write("      (mode \"%s\")\n" % [self.cameramode])
-#    f.write("      (path\n")
-#    for obj in self.objects.get_objects():
-#      pathnode = obj.get_data()
-#      if isinstance(pathnode, PathNode):
-#        f.write("       (point (x %d) (y %d) (speed 1))\n" % obj.get_pos().x, obj.get_pos().y)
-#    f.write("      )")
-            f.write("    )\n\n")
+        # f.write("      (path\n")
+        # for obj in self.objects.get_objects():
+        #     pathnode = obj.get_data()
+        #     if isinstance(pathnode, PathNode):
+        #        f.write("       (point (x %d) (y %d) (speed 1))\n" % obj.get_pos().x, obj.get_pos().y)
+        # f.write("      )")
+        f.write("    )\n\n")
 
-        for obj in self.objects.get_objects()
+        for obj in self.objects.get_objects():
             object = obj.get_data()
             object.save(f, obj)
 

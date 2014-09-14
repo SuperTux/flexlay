@@ -53,11 +53,12 @@ class SecretArea(GameObj):
 
     def save(self, f, obj):
         rect = self.data.get_rect()
-        f.write("        (secretarea (x #{rect.left})\n" +
-                "                    (y #{rect.top})\n" +
-                "                    (width #{rect.get_width()})\n" +
-                "                    (height #{rect.get_height()})\n" +
-                "                    (message #{self.message.inspect}))\n")
+        f.write(("        (secretarea (x %s)\n"
+                 "                    (y %s)\n"
+                 "                    (width %s)\n"
+                 "                    (height %s)\n"
+                 "                    (message %r))\n") %
+                (rect.left, rect.top, rect.get_width(), rect.get_height(), self.message))
 
     def property_dialog(self):
         print(self.message)
@@ -89,14 +90,16 @@ class AmbientSound(GameObj):
 
     def save(self, f, obj):
         rect = self.data.get_rect()
-        f.write("        (ambient_sound (x #{rect.left})\n" +
-                "                       (y #{rect.top})\n" +
-                "                       (width #{rect.get_width()})\n" +
-                "                       (height #{rect.get_height()})\n" +
-                "                       (sample #{self.sample.inspect})\n" +
-                "                       (distance_factor #{self.factor.inspect})\n" +
-                "                       (distance_bias #{self.bias.inspect})\n" +
-                "                       (volume #{self.volume.inspect}))\n")
+        f.write(("        (ambient_sound (x %s)\n"
+                 "                       (y %s)\n"
+                 "                       (width %s)\n"
+                 "                       (height %s)\n"
+                 "                       (sample %s)\n"
+                 "                       (distance_factor %s)\n"
+                 "                       (distance_bias %s)\n"
+                 "                       (volume %s))\n") %
+                (rect.left, rect.top, rect.get_width(), rect.get_height(),
+                 self.sample, self.factor, self.bias, self.volume))
 
     def property_dialog(self):
         print(self.factor)
@@ -134,11 +137,13 @@ class SequenceTrigger(GameObj):
 
     def save(self, f, obj):
         rect = self.data.get_rect()
-        f.write("        (sequencetrigger (x #{rect.left})\n" +
-                "                         (y #{rect.top})\n" +
-                "                         (width #{rect.get_width()})\n" +
-                "                         (height #{rect.get_height()})\n" +
-                "                         (sequence #{self.sequence.inspect}))\n")
+        f.write(("        (sequencetrigger (x %s)\n" +
+                 "                         (y %s)\n" +
+                 "                         (width %s)\n" +
+                 "                         (height %s)\n" +
+                 "                         (sequence %s))\n") %
+                (rect.left, rect.top, rect.get_width(), rect.get_height(),
+                 self.sequence))
 
     def property_dialog(self):
         print(self.sequence.inspect)
@@ -369,9 +374,9 @@ class Gradient(GameObj):
         self.color_bottom = [0, 0, 0]
         self.type = "image"
         if get_value_from_tree(["top_color"], sexpr, []) != []:
-            self.color_top = parse_color(
+            self.color_top = self.parse_color(
                 get_value_from_tree(["top_color"], sexpr, []))
-            self.color_bottom = parse_color(
+            self.color_bottom = self.parse_color(
                 get_value_from_tree(["bottom_color"], sexpr, []))
 
     def parse_color(self, sexpr=[]):
@@ -482,7 +487,7 @@ class Door(GameObj):
         self.sector = get_value_from_tree(["sector", "_"], sexpr, "main")
         self.spawnpoint = get_value_from_tree(["spawnpoint", "_"], sexpr, "main")
 
-        connect_v1_ObjMapObject(self.data.to_object.sig_move(), self.on_move)
+        self.data.to_object.sig_move.connect(self.on_move)
         self.on_move(data)
 
     def on_move(self, data):
@@ -530,7 +535,7 @@ class ScriptedObject(GameObj):
         self.physic_enabled = get_value_from_tree(["physic-enabled", "_"], sexpr, False)
         self.solid = get_value_from_tree(["solid", "_"], sexpr, False)
         self.layer = get_value_from_tree(["layer", "_"], sexpr, 100)
-        load_sprite()
+        self.load_sprite()
 
     def save(self, f, obj):
         pos = obj.get_pos()

@@ -15,6 +15,14 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from flexlay import TilemapLayer
+from flexlay.util import get_value_from_tree
+
+
+datadir = None
+tileset = None
+
+
 class TileMap:
 
     def __init__(self):

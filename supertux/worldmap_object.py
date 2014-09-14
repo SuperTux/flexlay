@@ -15,6 +15,15 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from flexlay import ObjectAddCommand, Sprite, ObjMapSpriteObject
+from flexlay.math import Pointf
+from flexlay.util import get_value_from_tree
+
+
+gui = None
+datadir = None
+
+
 class WorldmapObject:
 
     def __init__(self):
@@ -25,9 +34,9 @@ class WMSpawnPoint(WorldmapObject):
 
     def __init__(self):
         self.name = ""
-        self.obj = ObjMapSpriteObject.new(
-            make_sprite(datadir + "images/worldmap/common/tux.png"),
-            Pointf.new(0, 0), self)
+        self.obj = ObjMapSpriteObject(
+            Sprite.from_file(datadir + "images/worldmap/common/tux.png"),
+            Pointf(0, 0), self)
         self.obj.to_object.sig_move.connect(self.on_move)
 
     def on_move(self, data):
@@ -39,7 +48,7 @@ class WMSpawnPoint(WorldmapObject):
     def parse(self, data):
         x = get_value_from_tree(["x", "_"], data, 0)
         y = get_value_from_tree(["y", "_"], data, 0)
-        self.obj.to_object.set_pos(Pointf.new(x * 32, y * 32))
+        self.obj.to_object.set_pos(Pointf(x * 32, y * 32))
         self.name = get_value_from_tree(["name", "_"], data, "")
 
     def save(self, writer):
@@ -67,15 +76,15 @@ class WorldmapLevel(WorldmapObject):
         self.extro_filename = ""
         self.sprite = ""
         self.quit_worldmap = False
-        self.obj = ObjMapSpriteObject.new(
-                make_sprite(datadir + "images/worldmap/common/leveldot_green.png"),
-                Pointf.new(0, 0), self)
+        self.obj = ObjMapSpriteObject(
+            Sprite.from_file(datadir + "images/worldmap/common/leveldot_green.png"),
+            Pointf(0, 0), self)
         self.obj.to_object.sig_move.connect(self.on_move)
 
     def parse(self, data):
         x = get_value_from_tree(["x", "_"], data, 0)
         y = get_value_from_tree(["y", "_"], data, 0)
-        self.obj.to_object.set_pos(Pointf.new(x * 32, y * 32))
+        self.obj.to_object.set_pos(Pointf(x * 32, y * 32))
         self.name = get_value_from_tree(["name", "_"], data, "")
         self.sprite = get_value_from_tree(["sprite", "_"], data, "")
         self.extro_filename = get_value_from_tree(["extro-filename", "_"], data, "")
@@ -126,22 +135,22 @@ class SpecialTile(WorldmapObject):
         self.teleport_x = 0
         self.teleport_y = 0
         self.invisible_tile = False
-        self.obj = ObjMapSpriteObject.new(
-                make_sprite(datadir + "images/worldmap/common/teleporterdot.png"),
-                Pointf.new(0, 0), self)
+        self.obj = ObjMapSpriteObject(
+            Sprite.from_file(datadir + "images/worldmap/common/teleporterdot.png"),
+            Pointf(0, 0), self)
         self.obj.to_object.sig_move.connect(self.on_move)
 
     def parse(self, data):
         x = get_value_from_tree(["x", "_"], data, 0)
         y = get_value_from_tree(["y", "_"], data, 0)
-        self.obj.to_object.set_pos(Pointf.new(x * 32, y * 32))
+        self.obj.to_object.set_pos(Pointf(x * 32, y * 32))
         self.map_message = get_value_from_tree(["map-message", "_"], data, "")
         self.passive_message = get_value_from_tree(["passive-message", "_"], data, False)
         self.teleport_x = get_value_from_tree(["teleport-to-x", "_"], data, -1)
         self.teleport_y = get_value_from_tree(["teleport-to-y", "_"], data, -1)
         self.invisible_tile = get_value_from_tree(["invisible_tile", "_"], data, False)
         self.apply_to_direction = get_value_from_tree(["apply-to-direction", "_"],
-            data, "")
+                                                      data, "")
 
     def save(self, writer):
         writer.start_list("special-tile")
@@ -150,9 +159,9 @@ class SpecialTile(WorldmapObject):
         writer.write_int("y", pos.y / 32)
         if self.map_message != "":
             writer.write_string("map-message", self.map_message, True)
-        if self.passive_message != False:
+        if self.passive_message:
             writer.write_bool("passive-message", self.passive_message)
-        if self.invisible_tile != False:
+        if self.invisible_tile:
             writer.write_bool("invisible-tile", self.invisible_tile)
         if self.apply_to_direction != "":
             writer.write_string("apply-to-direction", self.apply_to_direction)
@@ -189,9 +198,9 @@ class SpecialTile(WorldmapObject):
 
 
 worldmap_objects = [
-  ["level", "images/worldmap/common/leveldot_green.png", WorldmapLevel],
-  ["special-tile", "images/worldmap/common/teleporterdot.png", SpecialTile],
-  ["spawnpoint", "images/worldmap/common/tux.png", WMSpawnPoint],
+    ["level", "images/worldmap/common/leveldot_green.png", WorldmapLevel],
+    ["special-tile", "images/worldmap/common/teleporterdot.png", SpecialTile],
+    ["spawnpoint", "images/worldmap/common/tux.png", WMSpawnPoint],
 ]
 
 
@@ -202,9 +211,9 @@ def create_worldmapobject_at_pos(objmap, name, pos):
         return
 
     name, image, _class = objectclass
-    object = _class.new()
+    object = _class()
     object.obj.to_object.set_pos(pos)
-    cmd = ObjectAddCommand.new(objmap)
+    cmd = ObjectAddCommand(objmap)
     cmd.add_object(object.obj.to_object)
     gui.workspace.get_map().execute(cmd.to_command())
     return object
@@ -217,9 +226,9 @@ def create_worldmapobject_from_data(objmap, name, sexpr):
         return
 
     name, image, _class = objectclass
-    object = _class.new()
+    object = _class()
     object.parse(sexpr)
-    cmd = ObjectAddCommand.new(objmap)
+    cmd = ObjectAddCommand(objmap)
     cmd.add_object(object.obj)
     gui.workspace.get_map().execute(cmd)
     return object

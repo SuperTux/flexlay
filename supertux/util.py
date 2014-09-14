@@ -15,6 +15,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from flexlay import Sprite
+from flexlay.util import sexpr_read_from_file
+
+
 def load_lisp(filename, root_symbol):
     """Convenience function that loads a lisp file from disk and checks for a
     root symbol"""
@@ -31,12 +35,12 @@ def load_lisp(filename, root_symbol):
 
 def load_cl_sprite(filename):
     if filename[-4:] == ".png":
-        sprite = make_sprite(filename)
+        sprite = Sprite.from_file(filename)
     elif filename[-7:] == ".sprite":
         supertux_sprite = Sprite(filename)
         sprite = supertux_sprite.get_cl_sprite()
     else:
-        raise Exception("Unsupported sprite format '%s'" % spritefile)
+        raise Exception("Unsupported sprite format '%s'" % filename)
 
     return sprite
 

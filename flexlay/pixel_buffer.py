@@ -18,8 +18,18 @@
 from PyQt5.QtCore import QSize
 from PyQt5.QtGui import QImage
 
+from .blitter import blit_clear, blit_opaque
+
 
 class PixelBuffer:
+
+    @staticmethod
+    def subregion_from_file(filename, x, y, w, h):
+        source = PixelBuffer.from_file(filename)
+        target = PixelBuffer(w, h)
+        blit_clear(target)
+        blit_opaque(target, source, -x, -y)
+        return target
 
     @staticmethod
     def from_file(filename):

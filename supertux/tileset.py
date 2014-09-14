@@ -16,6 +16,13 @@
 
 
 import flexlay
+from flexlay import Tile, PixelBuffer
+from flexlay.util import get_value_from_tree
+
+from .util import load_lisp
+
+
+datadir = None
 
 
 class TileGroup:
@@ -33,15 +40,15 @@ class Tileset(flexlay.Tileset):
         self.tilegroups = []
 
     def create_ungrouped_tiles_group(self):
-        self.tilegroups.push(TileGroup.new("Ungrouped Tiles", get_ungrouped_tiles()))
+        self.tilegroups.push(TileGroup("Ungrouped Tiles", self.get_ungrouped_tiles()))
 
     def get_ungrouped_tiles(self):
         # Searches for tiles which are not yet grouped and creates a group
         # for them
         ungrouped_tiles = []
-        for tile in get_tiles():
+        for tile in self.get_tiles():
             ungrouped = True
-            for group in tilegroups:
+            for group in self.tilegroups:
                 if tile not in group:
                     ungrouped = False
                     break
@@ -59,8 +66,8 @@ class Tileset(flexlay.Tileset):
         for i in tree:
             if i[0] == "tiles":
                 data = i[1:]
-                width = get_value_from_tree(['width', '_'], data, 1)
-                height = get_value_from_tree(['height', '_'], data, 1)
+                self.width = get_value_from_tree(['width', '_'], data, 1)
+                self.height = get_value_from_tree(['height', '_'], data, 1)
                 ids = get_value_from_tree(['ids'], data, [])
                 # attributes = get_value_from_tree(['attributes'], data, [])
                 image = get_value_from_tree(['image', '_'], data, None)
@@ -74,11 +81,11 @@ class Tileset(flexlay.Tileset):
                 x = 0
                 y = 0
                 for id in ids:
-                    pixelbuffer = make_region_pixelbuffer_from_resource(datadir + 'images/' + image,
-                                                                        x * 32, y * 32, 32, 32)
-                    add_tile(id, Tile.new(pixelbuffer))
+                    pixelbuffer = PixelBuffer.subregion_from_file(datadir + 'images/' + image,
+                                                                  x * 32, y * 32, 32, 32)
+                    self.add_tile(id, Tile(pixelbuffer))
                     x += 1
-                    if (x == width):
+                    if (x == self.width):
                         x = 0
                         y += 1
 
@@ -91,18 +98,18 @@ class Tileset(flexlay.Tileset):
                 if not(image):
                     image = get_value_from_tree(['images', '_'], data, "tiles/auxiliary/notile.png")
 
-                if isinstance(image, String):
-                    pixelbuffer = make_pixelbuffer(datadir + 'images/' + image)
-                elif isinstance(image, Array):
+                if isinstance(image, str):
+                    pixelbuffer = PixelBuffer.from_file(datadir + 'images/' + image)
+                elif isinstance(image, list):
                     if image[0] == "region":
-                        pixelbuffer = make_region_pixelbuffer_from_resource(datadir + 'images/' + image[1],
-                                                                            image[2], image[3], image[4], image[5])
+                        pixelbuffer = PixelBuffer.subregion_from_file(datadir + 'images/' + image[1],
+                                                                      image[2], image[3], image[4], image[5])
 
                 if not hidden:
                     if id == 0 or not(pixelbuffer):
-                        add_tile(id, None)
+                        self.add_tile(id, None)
                     else:
-                        add_tile(id, Tile.new(pixelbuffer))
+                        self.add_tile(id, Tile(pixelbuffer))
 
             elif i[0] == "tilegroup":
                 data = i[1:]
@@ -111,7 +118,7 @@ class Tileset(flexlay.Tileset):
 
                 if not self.tilegroups:
                     self.tilegroups = []
-                self.tilegroups.push(TileGroup.new(name, tiles))
+                self.tilegroups.push(TileGroup(name, tiles))
 
             counter += 1
             if counter % 20 == 0:

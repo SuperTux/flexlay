@@ -15,6 +15,11 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+import os
+
+from flexlay.util import get_value_from_tree, sexpr_read_from_file
+
+
 class SpriteAction:
 
     def __init__(self):
@@ -41,7 +46,7 @@ class Sprite:
         if tree is None:
             raise Exception("Error: Couldn't load: '%s'" % filename)
 
-        self.basedir = File.dirname(filename) + "/"
+        self.basedir = os.path.dirname(filename) + "/"
 
         for i in tree[1:]:
             if i[0] == "action":
@@ -55,7 +60,7 @@ class Sprite:
 
     def get_cl_sprite(self, action="default"):
         action = self.actions[action]
-        sprite = make_sprite(self.basedir + action.image)
+        sprite = Sprite.from_file(self.basedir + action.image)
         # FIXME:
         # sprite.set_frame_offset(0, Point(action.x_offset, action.y_offset))
         return sprite

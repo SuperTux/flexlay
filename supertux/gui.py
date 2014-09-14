@@ -16,13 +16,35 @@
 
 
 import subprocess
+import os
 
-from flexlay import Flexlay
+from flexlay import (Color, ObjectBrush, Sprite, TilemapLayer,
+                     ObjMapRectObject, Sector, ObjMapPathNode, PathNode)
+from flexlay.math import Point, Rect, Size
+from flexlay.tools import (TileMapPaintTool, TileMapSelectTool,
+                           ObjMapSelectTool, ZoomTool, Zoom2Tool, WorkspaceMoveTool)
+
+from .level import Level
+from .worldmap import WorldMap
+
+
+datadir = None
+game_objects = None
+gui = None
+recent_files = None
+tileset = None
+use_worldmap = None
+world_objects = None
+worldmap_objects = None
+
+BACKGROUND_LAYER = 1
+INTERACTIVE_LAYER = 2
+FOREGROUND_LAYER = 3
 
 
 class SuperTuxGUI:
 
-    def __init__(self):
+    def __init__(self, flexlay):
         self.menu = None
 
         self.selector_window = None
@@ -36,17 +58,25 @@ class SuperTuxGUI:
         self.editor_map = self.gui.create_editor_map_component()
         self.workspace = self.editor_map.get_workspace()
 
-        self.workspace.set_tool(0, tilemap_paint_tool.to_tool())
-        self.workspace.set_tool(2, workspace_move_tool.to_tool())
-        self.workspace.set_tool(1, tilemap_paint_tool.to_tool())
-        # 'x' key
-        self.workspace.set_tool(120, zoom_tool.to_tool())
-        # 'u' key
-        self.workspace.set_tool(117, objmap_select_tool.to_tool())
+        # Tools
+        self.tilemap_paint_tool = TileMapPaintTool()
+        self.tilemap_select_tool = TileMapSelectTool()
+        self.zoom_tool = ZoomTool()
+        self.zoom2_tool = Zoom2Tool()
+        self.workspace_move_tool = WorkspaceMoveTool()
+        self.objmap_select_tool = ObjMapSelectTool()
 
-        self.workspace.set_tool(106, workspace_move_tool.to_tool())
-        self.workspace.set_tool(107, zoom2_tool.to_tool())
-        self.workspace.set_tool(65507, zoom2_tool.to_tool())
+        self.workspace.set_tool(0, self.tilemap_paint_tool)
+        self.workspace.set_tool(2, self.workspace_move_tool)
+        self.workspace.set_tool(1, self.tilemap_paint_tool)
+        # 'x' key
+        self.workspace.set_tool(120, self.zoom_tool)
+        # 'u' key
+        self.workspace.set_tool(117, self.objmap_select_tool)
+
+        self.workspace.set_tool(106, self.workspace_move_tool)
+        self.workspace.set_tool(107, self.zoom2_tool)
+        self.workspace.set_tool(65507, self.zoom2_tool)
 
         self.minimap = self.gui.create_minimap(self.editor_map)
 
@@ -54,7 +84,7 @@ class SuperTuxGUI:
         if False:  # GRUMBEL
             self.objectselector.sig_drop.connect(self.on_object_drop)
         for objectdata in game_objects:
-            sprite = load_cl_sprite(datadir + objectdata[1])
+            sprite = Sprite.from_file(datadir + objectdata[1])
             self.objectselector.add_brush(ObjectBrush(sprite, objectdata))
 
         self.layer_selector = self.gui.create_layer_selector()
@@ -69,33 +99,33 @@ class SuperTuxGUI:
         if False:
             self.worldmapobjectselector.sig_drop.connect(self.on_worldmap_object_drop)
         for object in worldmap_objects:
-            self.worldmapobjectselector.add_brush(ObjectBrush(make_sprite(datadir + object[1]),
+            self.worldmapobjectselector.add_brush(ObjectBrush(Sprite.from_file(datadir + object[1]),
                                                               object[0]))
 
-        create_button_panel()
+        self.create_button_panel()
 
         self.toolbar = self.gui.create_button_panel(False)
         self.paint = self.toolbar.add_icon("../data/images/tools/stock-tool-pencil-22.png",
-                                           set_tilemap_paint_tool)
+                                           self.set_tilemap_paint_tool)
         self.select = self.toolbar.add_icon("../data/images/tools/stock-tool-rect-select-22.png",
-                                            set_tilemap_select_tool)
+                                            self.set_tilemap_select_tool)
         self.toolbar.add_separator()
         self.object = self.toolbar.add_icon("../data/images/tools/stock-tool-clone-22.png",
-                                            set_objmap_select_tool)
+                                            self.set_objmap_select_tool)
         self.toolbar.add_separator()
         self.zoom = self.toolbar.add_icon("../data/images/tools/stock-tool-zoom-22.png",
-                                          set_zoom_tool)
+                                          self.set_zoom_tool)
         # self.stroke =
         # self.toolbar.add_icon("../data/images/tools/stock-tool-pencil-22.png", set_sketch_stroke_tool)
 
-        create_menu()
+        self.create_menu()
 
         self.load_dialog = self.gui.create_filedialog("Load SuperTux Level", "Load", "Cancel")
         self.load_dialog.set_filename(datadir + "levels/")
         self.save_dialog = self.gui.create_filedialog("Save SuperTux Level as...", "Save", "Cancel")
         self.save_dialog.set_filename(datadir + "levels/")
 
-        register_keyboard_shortcuts()
+        self.register_keyboard_shortcuts()
 
         # Popup menu
         # connect_v2(objmap_select_tool.sig_on_right_click(), proc{ | x, y |
@@ -123,37 +153,39 @@ class SuperTuxGUI:
 
     def register_keyboard_shortcuts(self):
         if False:  # GRUMBEL
-            connect_v2(self.editor_map.sig_on_key("f1"), lambda x, y: gui_toggle_minimap())
-            connect_v2(self.editor_map.sig_on_key("m"), lambda x, y: gui_toggle_minimap())
-            connect_v2(self.editor_map.sig_on_key("g"), lambda x, y: gui_toggle_grid())
-            connect_v2(self.editor_map.sig_on_key("4"), lambda x, y: gui_toggle_display_props())
+            self.editor_map.sig_on_key("f1").connect(lambda x, y: self.gui_toggle_minimap())
+            self.editor_map.sig_on_key("m").connect(lambda x, y: self.gui_toggle_minimap())
+            self.editor_map.sig_on_key("g").connect(lambda x, y: self.gui_toggle_grid())
+            self.editor_map.sig_on_key("4").connect(lambda x, y: self.gui_toggle_display_props())
 
-            connect_v2(self.editor_map.sig_on_key("3"), lambda x, y: gui_show_foreground())
-            connect_v2(self.editor_map.sig_on_key("2"), lambda x, y: gui_show_interactive())
-            connect_v2(self.editor_map.sig_on_key("1"), lambda x, y: gui_show_background())
+            self.editor_map.sig_on_key("3").connect(lambda x, y: self.gui_show_foreground())
+            self.editor_map.sig_on_key("2").connect(lambda x, y: self.gui_show_interactive())
+            self.editor_map.sig_on_key("1").connect(lambda x, y: self.gui_show_background())
 
-            connect_v2(self.editor_map.sig_on_key("5"), lambda x, y: self.editor_map.zoom_in(Point(x, y)))
-            connect_v2(self.editor_map.sig_on_key("6"), lambda x, y: self.editor_map.zoom_out(Point(x, y)))
+            self.editor_map.sig_on_key("5").connect(lambda x, y: self.editor_map.zoom_in(Point(x, y)))
+            self.editor_map.sig_on_key("6").connect(lambda x, y: self.editor_map.zoom_out(Point(x, y)))
 
-            connect_v2(self.editor_map.sig_on_key("i"), lambda x, y: insert_path_node(x, y))
-            connect_v2(self.editor_map.sig_on_key("c"), lambda x, y: connect_path_nodes())
+            self.editor_map.sig_on_key("i").connect(lambda x, y: self.insert_path_node(x, y))
+            self.editor_map.sig_on_key("c").connect(lambda x, y: self.connect_path_nodes())
 
-            connect_v2(self.editor_map.sig_on_key("7"),
-                       lambda x, y: self.workspace.get_map().get_metadata().parent.activate_sector("main", self.workspace))
-            connect_v2(self.editor_map.sig_on_key("8"),
-                       lambda x, y: self.workspace.get_map().get_metadata().parent.activate_sector("another_world", self.workspace))
+            self.editor_map.sig_on_key("7").connect(
+                lambda x, y: self.workspace.get_map().get_metadata().parent.activate_sector("main",
+                                                                                            self.workspace))
+            self.editor_map.sig_on_key("8").connect(
+                lambda x, y: self.workspace.get_map().get_metadata().parent.activate_sector("another_world",
+                                                                                            self.workspace))
 
-            connect_v2(self.editor_map.sig_on_key("e"), lambda x, y: gui_show_object_properties())
+            self.editor_map.sig_on_key("e").connect(lambda x, y: self.gui_show_object_properties())
 
             def on_a_key(x, y):
                 pos = self.editor_map.screen2world(Point(x, y))
                 rectobj = ObjMapRectObject(Rect(pos,
-                                              Size(128, 64)),
-                                         Color(0, 255, 255, 155),
-                                         None)
+                                                Size(128, 64)),
+                                           Color(0, 255, 255, 155),
+                                           None)
                 self.workspace.get_map().get_metadata().objects.add_object(rectobj)
 
-            connect_v2(self.editor_map.sig_on_key("a"),  on_a_key)
+            self.editor_map.sig_on_key("a").connect(on_a_key)
 
     def create_menu(self):
         self.menubar = self.gui.create_menubar()
@@ -191,9 +223,6 @@ class SuperTuxGUI:
         # File Handling
         button_panel.add_icon("../data/images/icons24/stock_new.png",  self.gui_level_new)
         button_panel.add_icon("../data/images/icons24/stock_open.png", self.gui_level_load)
-        if False:  # GRUMBEL
-            button_panel.add_icon("../data/images/icons24/downarrow.png", self.recent_files_menu.run)
-            self.recent_files_menu = Menu(Point(32 * 2, 54))
 
         button_panel.add_icon("../data/images/icons24/stock_save.png", self.gui_level_save)
         button_panel.add_icon("../data/images/icons24/stock_save_as.png", self.gui_level_save_as)
@@ -215,33 +244,34 @@ class SuperTuxGUI:
 
         # Visibility Toggles
         button_panel.add_separator()
-        self.minimap_icon = button_panel.add_icon("../data/images/icons24/minimap.png", gui_toggle_minimap)
-        self.grid_icon = button_panel.add_icon("../data/images/icons24/grid.png", gui_toggle_grid)
+        self.minimap_icon = button_panel.add_icon("../data/images/icons24/minimap.png", self.gui_toggle_minimap)
+        self.grid_icon = button_panel.add_icon("../data/images/icons24/grid.png", self.gui_toggle_grid)
 
         # Layers
         button_panel.add_separator()
-        self.background_icon = button_panel.add_icon("../data/images/icons24/background.png", gui_show_background)
-        self.interactive_icon = button_panel.add_icon("../data/images/icons24/interactive.png", gui_show_interactive)
-        self.foreground_icon = button_panel.add_icon("../data/images/icons24/foreground.png", gui_show_foreground)
+        self.background_icon = button_panel.add_icon("../data/images/icons24/background.png", self.gui_show_background)
+        self.interactive_icon = button_panel.add_icon(
+            "../data/images/icons24/interactive.png", self.gui_show_interactive)
+        self.foreground_icon = button_panel.add_icon("../data/images/icons24/foreground.png", self.gui_show_foreground)
 
         button_panel.add_separator()
-        self.sector_icon = button_panel.add_icon("../data/images/icons24/sector.png", gui_switch_sector_menu)
+        self.sector_icon = button_panel.add_icon("../data/images/icons24/sector.png", self.gui_switch_sector_menu)
 
         button_panel.add_separator()
-        self.run_icon = button_panel.add_icon("../data/images/icons24/run.png", gui_run_level)
+        self.run_icon = button_panel.add_icon("../data/images/icons24/run.png", self.gui_run_level)
 
         self.tilegroup_icon = button_panel.add_icon("../data/images/icons24/eye.png", self.tilegroup_menu.run)
 
     def on_worldmap_object_drop(self, brush, pos):
         pos = self.editor_map.screen2world(pos)
-        object_type = get_ruby_object(brush.get_data())
-        create_worldmapobject_at_pos(
-gui.workspace.get_map().get_metadata().objects, object_type, pos)
+        object_type = brush.get_metadata()
+        self.create_worldmapobject_at_pos(
+            gui.workspace.get_map().get_metadata().objects, object_type, pos)
 
     def on_object_drop(self, brush, pos):
         pos = self.editor_map.screen2world(pos)
-        data = get_ruby_object(brush.get_data())
-        create_gameobject(gui.workspace.get_map(), gui.workspace.get_map().get_metadata().objects, data, pos)
+        data = brush.get_metadata()
+        self.create_gameobject(gui.workspace.get_map(), gui.workspace.get_map().get_metadata().objects, data, pos)
 
     def run(self):
         self.gui.run()
@@ -278,33 +308,33 @@ gui.workspace.get_map().get_metadata().objects, object_type, pos)
             # self.colorpicker.show(False)
 
     def set_tilemap_paint_tool(self):
-        self.workspace.set_tool(0, tilemap_paint_tool.to_tool())
-        self.workspace.set_tool(1, tilemap_paint_tool.to_tool())
+        self.workspace.set_tool(0, self.tilemap_paint_tool)
+        self.workspace.set_tool(1, self.tilemap_paint_tool)
         self.paint.set_down()
         self.select.set_up()
         self.zoom.set_up()
         self.object.set_up()
-        show_tiles()
+        self.show_tiles()
 
     def set_tilemap_select_tool(self):
-        self.workspace.set_tool(0, tilemap_select_tool.to_tool())
+        self.workspace.set_tool(0, self.tilemap_select_tool)
         self.paint.set_up()
         self.select.set_down()
         self.zoom.set_up()
         self.object.set_up()
-        show_none()
+        self.show_none()
 
     def set_zoom_tool(self):
-        self.workspace.set_tool(0, zoom_tool.to_tool())
-        self.workspace.set_tool(1, zoom_tool.to_tool())
+        self.workspace.set_tool(0, self.zoom_tool)
+        self.workspace.set_tool(1, self.zoom_tool)
         self.paint.set_up()
         self.select.set_up()
         self.zoom.set_down()
         self.object.set_up()
-        show_none()
+        self.show_none()
 
     #   def set_sketch_stroke_tool(self):
-    #     self.workspace.set_tool(0, sketch_stroke_tool.to_tool())
+    #     self.workspace.set_tool(0, sketch_stroke_tool)
     #     self.paint.set_up()
     #     self.select.set_up()
     #     self.zoom.set_up()
@@ -312,15 +342,15 @@ gui.workspace.get_map().get_metadata().objects, object_type, pos)
     #     show_colorpicker()
 
     def set_objmap_select_tool(self):
-        self.workspace.set_tool(0, objmap_select_tool.to_tool())
+        self.workspace.set_tool(0, self.objmap_select_tool)
         self.paint.set_up()
         self.select.set_up()
         self.zoom.set_up()
         self.object.set_down()
-        show_objects()
+        self.show_objects()
 
     def gui_show_foreground(self):
-        self.display_properties.layer = FOREGROUND_LAYER
+        self.display_properties.layer = self.FOREGROUND_LAYER
         self.display_properties.set(self.workspace.get_map().get_metadata())
         TilemapLayer.set_current(self.workspace.get_map().get_metadata().foreground)
         self.foreground_icon.set_down()
@@ -329,7 +359,7 @@ gui.workspace.get_map().get_metadata().objects, object_type, pos)
         self.minimap.update_minimap()
 
     def gui_show_background(self):
-        self.display_properties.layer = BACKGROUND_LAYER
+        self.display_properties.layer = self.BACKGROUND_LAYER
         self.display_properties.set(self.workspace.get_map().get_metadata())
         TilemapLayer.set_current(self.workspace.get_map().get_metadata().background)
         self.foreground_icon.set_up()
@@ -339,7 +369,7 @@ gui.workspace.get_map().get_metadata().objects, object_type, pos)
 
     def gui_show_interactive(self):
         print("show_interactive")
-        self.display_properties.layer = INTERACTIVE_LAYER
+        self.display_properties.layer = self.INTERACTIVE_LAYER
         self.display_properties.set(self.workspace.get_map().get_metadata())
         TilemapLayer.set_current(self.workspace.get_map().get_metadata().interactive)
         self.foreground_icon.set_up()
@@ -393,7 +423,7 @@ gui.workspace.get_map().get_metadata().objects, object_type, pos)
 
     def gui_run_level(self):
         print("Run this level...")
-        if use_worldmap:
+        if self.use_worldmap:
             tmpfile = "/tmp/tmpflexlay-worldmap.stwm"
             supertux_save_level(tmpfile)
         else:
@@ -421,7 +451,6 @@ gui.workspace.get_map().get_metadata().objects, object_type, pos)
         tilemap = TilemapLayer.current()
         data = tilemap.get_data()
         width = tilemap.get_width()
-        height = tilemap.get_height()
 
         def get(x, y):
             return data[y * width + x]
@@ -443,7 +472,7 @@ gui.workspace.get_map().get_metadata().objects, object_type, pos)
             #         and (solid_itiles.index(get[x + 1, y + 1]) ? 1: 0) == ary[8]):
             #         set[x, y, ary[9]]
 
-        rect = tilemap_select_tool.get_selection_rect()
+        rect = self.tilemap_select_tool.get_selection_rect()
 
         start_x = rect.left
         end_x = rect.right
@@ -457,7 +486,7 @@ gui.workspace.get_map().get_metadata().objects, object_type, pos)
 
     def gui_resize_level_to_selection(self):
         level = self.workspace.get_map().get_metadata()
-        rect = tilemap_select_tool.get_selection_rect()
+        rect = self.tilemap_select_tool.get_selection_rect()
         if (rect.get_width() > 2 and rect.get_height() > 2):
             level.resize(rect.get_size(), Point(-rect.left, -rect.top))
 
@@ -514,32 +543,33 @@ gui.workspace.get_map().get_metadata().objects, object_type, pos)
         sector.new_from_size(uniq_name, 30, 20)
         level.add_sector(sector)
         level.activate_sector(uniq_name, self.workspace)
-        gui_edit_sector()
+        self.gui_edit_sector()
 
     def gui_switch_sector_menu(self):
-        mymenu = Menu(Point(530, 54))
-        sector = self.workspace.get_map().get_metadata()
-        for i in sector.parent.get_sectors():
-            if sector.name == i:
-                current = " [current]"
-            else:
-                current = ""
-
-            def on_sector_callback():
-                print("Switching to %s" % i)
-                self.workspace.get_map().get_metadata().parent.activate_sector(i, self.workspace)
-
-            mymenu.add_item(mysprite, ("Sector (%s)%s" % [i, current]), on_sector_callback)
-
-        mymenu.add_separator()
-        mymenu.add_item(mysprite, "Create New Sector", self.gui_add_sector)
-        mymenu.add_item(mysprite, "Remove Current Sector", self.gui_remove_sector)
-        mymenu.add_item(mysprite, "Edit Sector Properties", self.gui_edit_sector)
-        mymenu.run()
+        pass
+        # mymenu = Menu(Point(530, 54))
+        # sector = self.workspace.get_map().get_metadata()
+        # for i in sector.parent.get_sectors():
+        #     if sector.name == i:
+        #         current = " [current]"
+        #     else:
+        #         current = ""
+        #
+        #     def on_sector_callback():
+        #         print("Switching to %s" % i)
+        #         self.workspace.get_map().get_metadata().parent.activate_sector(i, self.workspace)
+        #
+        #     mymenu.add_item(mysprite, ("Sector (%s)%s" % [i, current]), on_sector_callback)
+        #
+        # mymenu.add_separator()
+        # mymenu.add_item(mysprite, "Create New Sector", self.gui_add_sector)
+        # mymenu.add_item(mysprite, "Remove Current Sector", self.gui_remove_sector)
+        # mymenu.add_item(mysprite, "Edit Sector Properties", self.gui_edit_sector)
+        # mymenu.run()
 
     def gui_show_object_properties(self):
-        objmap_select_tool.get_selection()
-        selection = objmap_select_tool.get_selection()
+        self.objmap_select_tool.get_selection()
+        selection = self.objmap_select_tool.get_selection()
         if len(selection) > 1:
             print("Warning: Selection to large")
         elif len(selection) == 1:
@@ -565,7 +595,7 @@ gui.workspace.get_map().get_metadata().objects, object_type, pos)
         if filename[-1] == "/"[0]:
             self.save_dialog.set_filename(filename)
         else:
-            self.save_dialog.set_filename(File.dirname(filename) + "/")
+            self.save_dialog.set_filename(os.path.dirname(filename) + "/")
         self.save_dialog.run(supertux_save_level)
 
     def gui_level_save(self):
@@ -582,7 +612,7 @@ gui.workspace.get_map().get_metadata().objects, object_type, pos)
             if filename[-1] == "/"[0]:
                 self.save_dialog.set_filename(filename)
             else:
-                self.save_dialog.set_filename(File.dirname(filename) + "/")
+                self.save_dialog.set_filename(os.path.dirname(filename) + "/")
 
         self.save_dialog.run(supertux_save_level)
 
@@ -603,14 +633,14 @@ gui.workspace.get_map().get_metadata().objects, object_type, pos)
     def connect_path_nodes(self):
         print("Connecting path nodes")
         pathnodes = []
-        for i in objmap_select_tool.get_selection():
+        for i in self.objmap_select_tool.get_selection():
             obj = i.get_data()
             if isinstance(obj, PathNode):
                 pathnodes.push(obj.node)
 
         last = None
         for i in pathnodes:
-            if last != None:
+            if last is not None:
                 last.connect(i)
             last = i
 
@@ -672,6 +702,8 @@ def supertux_load_level(filename):
 
 
 def supertux_load_worldmap(filename):
+    global use_worldmap
+
     print("Loading: ", filename)
     worldmap = WorldMap(filename)
     worldmap.activate(gui.workspace)

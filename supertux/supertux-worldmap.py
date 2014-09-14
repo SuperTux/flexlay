@@ -15,7 +15,20 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-config_file = File.expand_path("~/.flexlay/supertux-worldmap.rb")
+import sys
+import os
+
+from flexlay.tools import TileMapPaintTool, TileMapSelectTool, ZoomTool, ObjMapSelectTool
+from flexlay import Tileset, Sprite, Flexlay
+
+from .worldmap import WorldMap
+from .config import Config
+from .gui import SuperTuxGUI, supertux_load_level, supertux_load_worldmap
+
+datadir = None
+recent_files = None
+
+config_file = os.path.expanduser("~/.flexlay/supertux-worldmap.rb")
 
 BACKGROUND_LAYER = 1
 INTERACTIVE_LAYER = 2
@@ -35,13 +48,13 @@ objmap_select_tool = ObjMapSelectTool()
 
 config = Config()
 if not datadir:
-    datadir = File.expand_path("~/projects/supertux/data/") + "/"
+    datadir = os.path.expanduser("~/projects/supertux/data/") + "/"
 
 tileset = Tileset(32)
 tileset.load(datadir + "images/worldmap.strf")
 tileset.create_ungrouped_tiles_group()
 
-mysprite = make_sprite("../data/images/icons16/stock_paste-16.png")
+mysprite = Sprite.from_file("../data/images/icons16/stock_paste-16.png")
 gui = SuperTuxGUI(width, height)
 
 if not recent_files:
@@ -50,11 +63,11 @@ if not recent_files:
 for filename in recent_files:
     gui.recent_files_menu.add_item(filename, lambda filename=filename: supertux_load_level(filename))
 
-if ARGV == []:
+if sys.argv[1:] == []:
     WorldMap(70, 50).activate(gui.workspace)
     use_worldmap = True
 else:
-    supertux_load_worldmap(ARGV[0])
+    supertux_load_worldmap(sys.argv[1])
 
 # Init the GUI, so that button state is in sync with internal state
 gui.gui_toggle_minimap()

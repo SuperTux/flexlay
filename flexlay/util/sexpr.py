@@ -123,7 +123,7 @@ class SExprParser:
             self.atom += c
 
     def state_symbol(self, c):
-        if c.isspace() or c == '(' or c == ')':
+        if c is None or c.isspace() or c == '(' or c == ')':
             self.stack[-1].append(self.atom)
             self.atom = None
             self.state = self.state_list

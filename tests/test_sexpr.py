@@ -71,6 +71,9 @@ class SExprWriterTestCase(unittest.TestCase):
         result = sexpr_parse("(8(8)8)")
         self.assertEqual(result, [[8, [8], 8]])
 
+        result = sexpr_parse("symbol")
+        self.assertEqual(result, ["symbol"])
+
         result = sexpr_parse(r'(() ("bar" foo) ()) () bar ')
         self.assertEqual(result, [[[], ["bar", "foo"], []], [], "bar"])
 

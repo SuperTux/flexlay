@@ -18,95 +18,131 @@
 #    misrepresented as being the original software.
 # 3. This notice may not be removed or altered from any source distribution.
 
+
 import re
 import codecs
 
-def parse(text):
-    stack = [[]]
-    state = 'list'
-    i = 0
-    line = 1
-    column = 0
-    while i < len(text):
-        c = text[i]
-        if c == '\n':
-            line += 1
-            column = 0
+
+def num(s):
+    try:
+        return int(s)
+    except ValueError:
+        return float(s)
+
+
+def parse(string):
+    parser = SExprParser(string)
+    return parser.parse()
+
+
+class SExprParser:
+
+    def __init__(self, text):
+        self.text = text
+
+    def state_list(self, c):
+        if c is None:
+            pass  # handled in parse()
+        elif c == '(':
+            self.stack.append([])
+        elif c == ')':
+            self.stack[-2].append(self.stack.pop())
+        elif c == "\"":
+            self.state = self.state_string
+            self.atom = ""
+        elif c == ";":
+            self.state = self.state_comment
+            self.atom = None
+        elif c == "#":
+            self.state = self.state_bool
+            self.atom = "#"
+        elif c.isdigit():
+            self.state = self.state_number
+            self.atom = c
+        elif c.isalpha():
+            self.state = self.state_symbol
+            self.atom = c
+        elif c.isspace():
+            pass
         else:
-            column += 1
+            raise Exception("unexpected character: '%s'" % c)
 
-        if state == 'list':
-            if c == '(':
-                stack.append([])
-            elif c == ')':
-                stack[-2].append(stack.pop())
-            elif c == "\"":
-                state = 'string'
-                atom = ""
-            elif c == ";":
-                state = 'comment'
-            elif c.isalpha():
-                state = 'symbol'
-                atom = c
-            elif c.isdigit():
-                state = 'number'
-                atom = c
-            elif c.isspace():
-                pass
+    def state_comment(self, c):
+        if c == '\n':
+            self.state = self.state_list
+        else:
+            pass
+
+    def state_string(self, c):
+        if c is None:
+            raise Exception("string not closed at end of file")
+        elif c == "\\":
+            i += 1
+            self.atom += self.text[i]
+        elif c == "\"":
+            self.stack[-1].append(self.atom)
+            self.atom = None
+            self.state = self.state_list
+        else:
+            self.atom += c
+
+    def state_bool(self, c):
+        if len(self.atom) == 2:
+            if self.atom == "#f":
+                self.stack[-1].append(False)
+            elif self.atom == "#t":
+                self.stack[-1].append(True)
             else:
-                raise Exception("%d:%d: error: unexpected character: '%s'" % (line, column, c))
+                raise Exception("unknown token: %s" % self.atom)
 
-        elif state == 'comment':
+            self.atom = None
+            self.state = self.state_list
+        elif c is None:
+            raise Exception("incomplete bool: %s" % self.atom)
+        else:
+            self.atom += c
+
+    def state_number(self, c):
+        if c is None or (not c.isdigit() and c != "."):
+            self.stack[-1].append(num(self.atom))
+            self.atom = None
+            self.state = self.state_list
+            self.index -= 1
+        else:
+            self.atom += c
+
+    def state_symbol(self, c):
+        if c.isspace() or c == '(' or c == ')':
+            self.stack[-1].append(self.atom)
+            self.atom = None
+            self.state = self.state_list
+            self.index -= 1
+        else:
+            self.atom += c
+
+    def parse(self):
+        self.atom = None
+        self.stack = [[]]
+        self.state = self.state_list
+        self.line = 1
+        self.column = 0
+
+        self.index = 0
+        while self.index < len(self.text):
+            c = self.text[self.index]
             if c == '\n':
-                state = 'list'
+                self.line += 1
+                self.column = 0
             else:
-                pass
+                self.column += 1
+            self.state(c)
+            self.index += 1
+        self.state(None)
 
-        elif state == 'string':
-            if c == "\\":
-                i += 1
-                atom += text[i]
-            elif c == "\"":
-                stack[-1].append(atom)
-                state = 'list'
-            else:
-                atom += c
+        if len(self.stack) == 1:
+            return self.stack[0]
+        else:
+            raise Exception("list not closed")
 
-        elif state == 'number':
-            if not c.isdigit() or c != ".":
-                stack[-1].append(int(atom))
-                state = 'list'
-                i -= 1
-            else:
-                atom += c
-
-        elif state == 'symbol':
-            if c.isspace() or c == '(' or c == ')':
-                stack[-1].append(atom)
-                state = 'list'
-                i -= 1
-            else:
-                atom += c
-
-        # print c, stack
-
-        i += 1
-
-    if len(stack) == 1:
-        return stack[0]
-    else:
-        raise Exception("error: list not closed")
-
-if __name__ == "__main__":
-    print "parsing..."
-    result = parse(r'(() ("bar" foo) ()) () bar ')
-    print "1.", result
-    print "2.", parse(""";;comment
-    ("Hello World" 5 1 123) ("Hello" 123 123 "foobar") ;; comment""")
-    print "3.", parse(r'(8(8)8)')
-    print "4.", parse(r'')
-    print "5.", parse(r'  ')
-    with codecs.open("white.stf", encoding='utf-8') as fin:
-        print "6.", parse(fin.read())
 
 # EOF #

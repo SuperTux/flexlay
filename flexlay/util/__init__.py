@@ -16,9 +16,13 @@
 
 
 from .signal import Signal
+from .sexpr_writer import SExprWriter, write_sexpr
+from .sexpr_reader import SExprReader, get_value_from_tree
 
 
-__all__ = ["Signal"]
+__all__ = ["Signal",
+           "SExprWriter", "write_sexpr",
+           "SExprReader", "get_value_from_tree"]
 
 
 # EOF #

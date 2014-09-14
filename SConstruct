@@ -28,7 +28,7 @@ autopep_cmd = env.Command("autopep", sources,
                           "autopep8  --max-line=120  --in-place $SOURCES")
 env.Alias("autopep", autopep_cmd)
 
-test_cmd = env.Command("test.phony", None, "python3 -m unittest discover")
+test_cmd = env.Command("test.phony", None, "python3 -m unittest discover -s tests/")
 env.Alias("test", test_cmd)
 
 flake_cmd = env.Command("flake.phony", sources,

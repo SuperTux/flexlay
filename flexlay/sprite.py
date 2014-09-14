@@ -25,13 +25,13 @@ class Sprite:
 
     @staticmethod
     def from_pixelbuffer(pixelbuffer):
-        return Sprite(pixelbuffer, "<no filename>")
+        return Sprite(pixelbuffer)
 
     @staticmethod
     def from_file(filename):
         return Sprite(PixelBuffer.from_file(filename), filename)
 
-    def __init__(self, pixelbuffer, filename):
+    def __init__(self, pixelbuffer, filename="<unknown-source>"):
         self.pixelbuffer = pixelbuffer
         self.filename = filename
 

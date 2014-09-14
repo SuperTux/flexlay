@@ -27,26 +27,26 @@ class ObjMapRectObject(ObjMapObject):
         self.size = Sizef(rect.get_width(), rect.get_height())
         self.color = color
 
-        self.cp_top_left = ObjMapControlPoint(Sprite.from_file("../data/images/icons16/resize1.png"),
+        self.cp_top_left = ObjMapControlPoint(Sprite.from_file("data/images/icons16/resize1.png"),
                                               Pointf())
 
-        self.cp_bottom_right = ObjMapControlPoint(Sprite.from_file("../data/images/icons16/resize1.png"),
+        self.cp_bottom_right = ObjMapControlPoint(Sprite.from_file("data/images/icons16/resize1.png"),
                                                   Pointf())
 
-        self.cp_top_right = ObjMapControlPoint(Sprite.from_file("../data/images/icons16/resize2.png"),
+        self.cp_top_right = ObjMapControlPoint(Sprite.from_file("data/images/icons16/resize2.png"),
                                                Pointf())
 
-        self.cp_bottom_left = ObjMapControlPoint(Sprite.from_file("../data/images/icons16/resize2.png"),
+        self.cp_bottom_left = ObjMapControlPoint(Sprite.from_file("data/images/icons16/resize2.png"),
                                                  Pointf())
 
-        self.cp_middle_left = ObjMapControlPoint(Sprite.from_file("../data/images/icons16/resize_horz.png"),
+        self.cp_middle_left = ObjMapControlPoint(Sprite.from_file("data/images/icons16/resize_horz.png"),
                                                  Pointf())
-        self.cp_middle_right = ObjMapControlPoint(Sprite.from_file("../data/images/icons16/resize_horz.png"),
+        self.cp_middle_right = ObjMapControlPoint(Sprite.from_file("data/images/icons16/resize_horz.png"),
                                                   Pointf())
-        self.cp_top_middle = ObjMapControlPoint(Sprite.from_file("../data/images/icons16/resize_vert.png"),
+        self.cp_top_middle = ObjMapControlPoint(Sprite.from_file("data/images/icons16/resize_vert.png"),
                                                 Pointf())
 
-        self.cp_bottom_middle = ObjMapControlPoint(Sprite.from_file("../data/images/icons16/resize_vert.png"),
+        self.cp_bottom_middle = ObjMapControlPoint(Sprite.from_file("data/images/icons16/resize_vert.png"),
                                                    Pointf())
 
         self.cp_top_right.sig_set_pos.connect(self.cp_top_right_move)

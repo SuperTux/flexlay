@@ -19,14 +19,14 @@ from PyQt5.QtCore import QSize
 from PyQt5.QtGui import QPainter
 from PyQt5.QtWidgets import QWidget
 
-from flexlay import Color, GraphicContext, TilemapLayer, PixelBuffer, Sprite
+from flexlay import Color, GraphicContext, TilemapLayer
 from flexlay.math import Point, Size, Rect
 
 
 class MinimapWidget(QWidget):
 
     def __init__(self, editormap_component):
-        super().__init__(self)
+        super().__init__()
 
         self.drag_active = False
         self.last_serial = -1
@@ -90,7 +90,8 @@ class MinimapWidget(QWidget):
                                          tile.get_color())
                         gc.flush()
 
-            self.minimap_surface.draw(Rect(Point(0, 0), Size(self.width(), self.height())))
+            if self.minimap_surface:
+                self.minimap_surface.draw(Rect(Point(0, 0), Size(self.width(), self.height())))
 
             # Draw cursor
             rect = self.parent.get_clip_rect()
@@ -105,32 +106,33 @@ class MinimapWidget(QWidget):
 
     def update_minimap(self):
         # FIXME: This doesn't work all that well
-        tilemap = TilemapLayer.current
+        # tilemap = TilemapLayer.current
+        pass
+        # GRUMBEL
+        # if tilemap:
+        #     field = tilemap.get_field()
+        #     buffer = PixelBuffer(tilemap.get_width(), tilemap.get_height())
 
-        if tilemap:
-            field = tilemap.get_field()
-            buffer = PixelBuffer(tilemap.get_width(), tilemap.get_height())
+        #     map_width = tilemap.get_width()
+        #     map_height = tilemap.get_height()
 
-            map_width = tilemap.get_width()
-            map_height = tilemap.get_height()
-
-            # FIXME: No Tileset.current
-            buf = buffer.get_data()
-            for y in range(0, map_height):
-                for x in range(0, map_width):
-                    tile = tilemap.get_tileset().create(field.at(x, y))
-                    if tile:
-                        buf[4 * (x + y * map_width) + 3] = tile.get_color().get_red()
-                        buf[4 * (x + y * map_width) + 2] = tile.get_color().get_green()
-                        buf[4 * (x + y * map_width) + 1] = tile.get_color().get_blue()
-                        buf[4 * (x + y * map_width) + 0] = tile.get_color().get_alpha()
-                    else:
-                        buf[4 * (x + y * map_width) + 0] = 0
-                        buf[4 * (x + y * map_width) + 1] = 0
-                        buf[4 * (x + y * map_width) + 2] = 0
-                        buf[4 * (x + y * map_width) + 3] = 0
-
-            self.minimap_surface = Sprite(buffer)
+        #     # FIXME: No Tileset.current
+        #     buf = buffer.get_data()
+        #     for y in range(0, map_height):
+        #         for x in range(0, map_width):
+        #             tile = tilemap.get_tileset().create(field.at(x, y))
+        #             if tile:
+        #                 buf[4 * (x + y * map_width) + 3] = tile.get_color().get_red()
+        #                 buf[4 * (x + y * map_width) + 2] = tile.get_color().get_green()
+        #                 buf[4 * (x + y * map_width) + 1] = tile.get_color().get_blue()
+        #                 buf[4 * (x + y * map_width) + 0] = tile.get_color().get_alpha()
+        #             else:
+        #                 buf[4 * (x + y * map_width) + 0] = 0
+        #                 buf[4 * (x + y * map_width) + 1] = 0
+        #                 buf[4 * (x + y * map_width) + 2] = 0
+        #                 buf[4 * (x + y * map_width) + 3] = 0
+        #
+        #    self.minimap_surface = Sprite(buffer)
 
     def mouseMoveEvent(self, event):
             # FIXME: This doesn't work all that well

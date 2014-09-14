@@ -42,7 +42,7 @@ class Sprite:
     def __init__(self, filename):
         self.actions = {}
 
-        tree = sexpr_read_from_file(filename)
+        tree = sexpr_read_from_file(filename)[0]
         if tree is None:
             raise Exception("Error: Couldn't load: '%s'" % filename)
 

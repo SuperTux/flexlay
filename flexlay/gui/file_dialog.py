@@ -22,7 +22,7 @@ from PyQt5.QtWidgets import QFileDialog
 class FileDialog:
 
     def __init__(self, title, ok_label, cancel_label):
-        self.callback()
+        self.callback = None
         self.file_dialog = QFileDialog()
         self.file_dialog.setFileMode(QFileDialog.ExistingFile)
         self.file_dialog.setWindowModality(Qt.ApplicationModal)
@@ -33,6 +33,10 @@ class FileDialog:
             self.file_dialog.fileSelected.connect(self.callback)
 
         self.file_dialog.show()
+
+    def set_filename(self, file_dialog):
+        # GRUMBEL
+        pass
 
 
 # EOF #

@@ -23,12 +23,12 @@ def load_lisp(filename, root_symbol):
     """Convenience function that loads a lisp file from disk and checks for a
     root symbol"""
 
-    tree = sexpr_read_from_file(filename)
+    tree = sexpr_read_from_file(filename)[0]
     if tree is None:
         raise Exception("Error: Couldn't load '%s'" % filename)
     else:
         if tree[0] != root_symbol:
-            raise Exception("Error: '#{filename}' is not a '%s' file" % root_symbol)
+            raise Exception("Error: '%s' is not a '%s' file" % (filename, root_symbol))
         else:
             return tree
 

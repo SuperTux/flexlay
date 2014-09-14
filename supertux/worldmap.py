@@ -104,8 +104,8 @@ class WorldMap:
         self.editormap.set_metadata(self)
 
         workspace.set_map(self.editormap)
-        TilemapLayer.set_current(self.tilemap.tilemaplayer)
-        ObjectLayer.set_current(self.objects)
+        TilemapLayer.current = self.tilemap.tilemaplayer
+        ObjectLayer.current = self.objects
         self.editormap.sig_change.connect(gui.on_map_change)
 
 

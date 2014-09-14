@@ -49,8 +49,8 @@ class SecretArea(GameObj):
         width = get_value_from_tree(["width", "_"],  sexpr, 64)
         height = get_value_from_tree(["height", "_"], sexpr, 64)
         if x is not None and y is not None:
-            self.data.set_rect(Rect(Point(x.to_i, y.to_i),
-                                    Size(width.to_i, height.to_i)))
+            self.data.set_rect(Rect(Point(x, y),
+                                    Size(width, height)))
 
     def save(self, f, obj):
         rect = self.data.get_rect()
@@ -232,14 +232,14 @@ class SpawnPoint(GameObj):
     def __init__(self, data, sexpr=[]):
         self.data = data
         self.name = get_value_from_tree(["name", "_"],  sexpr, "main")
-        data.to_object.sig_move.connect(self.on_move)
+        data.sig_move.connect(self.on_move)
         self.on_move(data)
 
     def on_move(self, data):
-        pos = self.data.to_object.get_pos()
-        pos.x = (((pos.x + 16) / 32).to_i) * 32
-        pos.y = (((pos.y + 16) / 32).to_i) * 32
-        self.data.to_object.set_pos(pos)
+        pos = self.data.get_pos()
+        pos.x = (((pos.x + 16) // 32)) * 32
+        pos.y = (((pos.y + 16) // 32)) * 32
+        self.data.set_pos(pos)
 
     def save(self, f, obj):
         pos = obj.get_pos()
@@ -270,14 +270,14 @@ class SimpleTileObject(GameObj):
     def __init__(self, data, type, sexpr=[]):
         self.type = type
         self.data = data
-        self.data.to_object.sig_move.connect(self.on_move)
+        self.data.sig_move.connect(self.on_move)
         self.on_move(data)
 
     def on_move(self, data):
-        pos = self.data.to_object.get_pos()
-        pos.x = (((pos.x + 16) / 32).to_i) * 32
-        pos.y = (((pos.y + 16) / 32).to_i) * 32
-        self.data.to_object.set_pos(pos)
+        pos = self.data.get_pos()
+        pos.x = (((pos.x + 16) // 32)) * 32
+        pos.y = (((pos.y + 16) // 32)) * 32
+        self.data.set_pos(pos)
 
     def save(self, f, obj):
         pos = obj.get_pos()
@@ -289,14 +289,14 @@ class InfoBlock(GameObj):
     def __init__(self, data, sexpr=[]):
         self.data = data
         self.message = get_value_from_tree(["message", "_"], sexpr, "")
-        self.data.to_object.sig_move.connect(self.on_move)
+        self.data.sig_move.connect(self.on_move)
         self.on_move(data)
 
     def on_move(self, data):
-        pos = self.data.to_object.get_pos()
-        pos.x = (((pos.x + 16) / 32).to_i) * 32
-        pos.y = (((pos.y + 16) / 32).to_i) * 32
-        self.data.to_object.set_pos(pos)
+        pos = self.data.get_pos()
+        pos.x = (((pos.x + 16) // 32)) * 32
+        pos.y = (((pos.y + 16) // 32)) * 32
+        self.data.set_pos(pos)
 
     def save(self, f, obj):
         pos = obj.get_pos()
@@ -319,14 +319,14 @@ class Powerup(GameObj):
     def __init__(self, data, sexpr=[]):
         self.data = data
         self.sprite = get_value_from_tree(["sprite", "_"], sexpr, "egg")
-        self.data.to_object.sig_move.connect(self.on_move)
+        self.data.sig_move.connect(self.on_move)
         self.on_move(data)
 
     def on_move(self, data):
-        pos = self.data.to_object.get_pos()
-        pos.x = (((pos.x + 16) / 32).to_i) * 32
-        pos.y = (((pos.y + 16) / 32).to_i) * 32
-        self.data.to_object.set_pos(pos)
+        pos = self.data.get_pos()
+        pos.x = (((pos.x + 16) // 32)) * 32
+        pos.y = (((pos.y + 16) // 32)) * 32
+        self.data.set_pos(pos)
 
     def save(self, f, obj):
         pos = obj.get_pos()
@@ -488,14 +488,14 @@ class Door(GameObj):
         self.sector = get_value_from_tree(["sector", "_"], sexpr, "main")
         self.spawnpoint = get_value_from_tree(["spawnpoint", "_"], sexpr, "main")
 
-        self.data.to_object.sig_move.connect(self.on_move)
+        self.data.sig_move.connect(self.on_move)
         self.on_move(data)
 
     def on_move(self, data):
-        pos = self.data.to_object.get_pos()
-        pos.x = (((pos.x + 16) / 32).to_i) * 32
-        pos.y = (((pos.y + 16) / 32).to_i) * 32
-        self.data.to_object.set_pos(pos)
+        pos = self.data.get_pos()
+        pos.x = (((pos.x + 16) // 32)) * 32
+        pos.y = (((pos.y + 16) // 32)) * 32
+        self.data.set_pos(pos)
 
     def save(self, f, obj):
         pos = obj.get_pos()

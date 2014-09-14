@@ -19,10 +19,7 @@ from flexlay.util import get_value_from_tree
 from flexlay import TilemapLayer, ObjectLayer, EditorMap
 
 from .data import create_gameobject_from_data
-
-
-tileset = None
-gui = None
+from .tileset import SuperTuxTileset
 
 
 class Sector:
@@ -64,20 +61,19 @@ class Sector:
         self.width = width
         self.height = height
 
-        self.foreground = TilemapLayer(tileset, self.width, self.height)
-        self.interactive = TilemapLayer(tileset, self.width, self.height)
-        self.background = TilemapLayer(tileset, self.width, self.height)
+        self.foreground = TilemapLayer(SuperTuxTileset.current, self.width, self.height)
+        self.interactive = TilemapLayer(SuperTuxTileset.current, self.width, self.height)
+        self.background = TilemapLayer(SuperTuxTileset.current, self.width, self.height)
         self.objects = ObjectLayer()
         # self.sketch  = SketchLayer()
 
-        self.editormap = EditorMap(True)
-#    self.editormap.set_background_color(Color(255, 255, 255))
-        self.editormap.add_layer(self.background.to_layer())
-        self.editormap.add_layer(self.interactive.to_layer())
-        self.editormap.add_layer(self.objects.to_layer())
-        self.editormap.add_layer(self.foreground.to_layer())
-#    self.editormap.add_layer(self.sketch.to_layer())
-        # FIXME: Data might not get freed since its 'recursively' refcounted
+        self.editormap = EditorMap()
+        # self.editormap.set_background_color(Color(255, 255, 255))
+        self.editormap.add_layer(self.background)
+        self.editormap.add_layer(self.interactive)
+        self.editormap.add_layer(self.objects)
+        self.editormap.add_layer(self.foreground)
+        # self.editormap.add_layer(self.sketch)
         self.editormap.set_metadata(self)
         return self
 
@@ -89,18 +85,18 @@ class Sector:
         self.width = get_value_from_tree(["width", "_"], data, 20)
         self.height = get_value_from_tree(["height", "_"], data, 15)
 
-        self.foreground = TilemapLayer(tileset, self.width, self.height)
+        self.foreground = TilemapLayer(SuperTuxTileset.current, self.width, self.height)
         self.foreground.set_data(get_value_from_tree(["foreground-tm"], data, []))
 
-        self.interactive = TilemapLayer(tileset, self.width, self.height)
+        self.interactive = TilemapLayer(SuperTuxTileset.current, self.width, self.height)
         self.interactive.set_data(get_value_from_tree(["interactive-tm"], data, []))
 
-        self.background = TilemapLayer(tileset, self.width, self.height)
+        self.background = TilemapLayer(SuperTuxTileset.current, self.width, self.height)
         self.background.set_data(get_value_from_tree(["background-tm"], data, []))
 
         self.cameramode = "normal"
 
-        self.editormap = EditorMap(True)
+        self.editormap = EditorMap()
 
         self.objects = ObjectLayer()
 
@@ -149,10 +145,10 @@ class Sector:
         else:
             print("Unknown particle system type %s" % partsys)
 
-        self.editormap.add_layer(self.background.to_layer())
-        self.editormap.add_layer(self.interactive.to_layer())
-        self.editormap.add_layer(self.objects.to_layer())
-        self.editormap.add_layer(self.foreground.to_layer())
+        self.editormap.add_layer(self.background)
+        self.editormap.add_layer(self.interactive)
+        self.editormap.add_layer(self.objects)
+        self.editormap.add_layer(self.foreground)
         # FIXME: Data might not get freed since its 'recursively' refcounted
         self.editormap.set_metadata(self)
 
@@ -170,7 +166,7 @@ class Sector:
         self.interactive = None
         self.foreground = None
 
-        self.editormap = EditorMap(True)
+        self.editormap = EditorMap()
 
         self.objects = ObjectLayer()
 #    self.sketch = SketchLayer()
@@ -191,7 +187,7 @@ class Sector:
                 height = get_value_from_tree(["height", "_"], data, 15)
                 solid = get_value_from_tree(["solid", "_"],  data, False)
 
-                tilemap = TilemapLayer(tileset, width, height)
+                tilemap = TilemapLayer(SuperTuxTileset.current, width, height)
                 tilemap.set_data(get_value_from_tree(["tiles"], data, []))
 
                 if solid:
@@ -210,32 +206,33 @@ class Sector:
             else:
                 create_gameobject_from_data(self.editormap, self.objects, name, data)
 
-        print("Tileset: ", tileset, width, height)
+        print("Tileset: ", SuperTuxTileset.current, width, height)
 
         if self.interactive is None or self.width == 0 or self.height == 0:
             raise Exception("No interactive tilemap in sector '", self.name, "'")
 
         if self.background is None:
-            self.background = TilemapLayer(tileset, self.width, self.height)
+            self.background = TilemapLayer(SuperTuxTileset.current, self.width, self.height)
 
         if (self.foreground is None):
-            self.foreground = TilemapLayer(tileset, self.width, self.height)
+            self.foreground = TilemapLayer(SuperTuxTileset.current, self.width, self.height)
 
         if self.background:
-            self.editormap.add_layer(self.background.to_layer())
+            self.editormap.add_layer(self.background)
         if self.interactive:
-            self.editormap.add_layer(self.interactive.to_layer())
+            self.editormap.add_layer(self.interactive)
         if self.foreground:
-            self.editormap.add_layer(self.foreground.to_layer())
-        self.editormap.add_layer(self.objects.to_layer())
-#    self.editormap.add_layer(self.sketch.to_layer())
+            self.editormap.add_layer(self.foreground)
+        self.editormap.add_layer(self.objects)
+#    self.editormap.add_layer(self.sketch)
         self.editormap.set_metadata(self)
 
     def activate(self, workspace):
         workspace.set_map(self.editormap)
-        TilemapLayer.set_current(self.interactive)
-        ObjectLayer.set_current(self.objects)
-        self.editormap.sig_change.connect(gui.on_map_change)
+        TilemapLayer.current = self.interactive
+        ObjectLayer.current = self.objects
+        from .gui import SuperTuxGUI
+        self.editormap.sig_change.connect(SuperTuxGUI.current.on_map_change)
 
     def save_tilemap(self, f, tilemap, name, solid=None):
         f.write("    (tilemap\n")

@@ -22,7 +22,12 @@ from .size import Size
 class Rect:
 
     def __init__(self, arg1=None, arg2=None, arg3=None, arg4=None):
-        if arg2 is None and arg3 is None and arg4 is None:
+        if arg1 is None and arg2 is None and arg3 is None and arg4 is None:
+            self.left = 0
+            self.top = 0
+            self.right = 0
+            self.bottom = 0
+        elif arg2 is None and arg3 is None and arg4 is None:
             self.left = int(arg1.left)
             self.top = int(arg1.top)
             self.right = int(arg1.right)
@@ -89,7 +94,12 @@ class Rect:
 class Rectf(Rect):
 
     def __init__(self, arg1=None, arg2=None, arg3=None, arg4=None):
-        if arg2 is None and arg3 is None and arg4 is None:
+        if arg1 is None and arg2 is None and arg3 is None and arg4 is None:
+            self.left = 0.0
+            self.top = 0.0
+            self.right = 0.0
+            self.bottom = 0.0
+        elif arg2 is None and arg3 is None and arg4 is None:
             self.left = arg1.left
             self.top = arg1.top
             self.right = arg1.right

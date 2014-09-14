@@ -20,7 +20,7 @@
 PYTHONPATH="$PYTHONPATH:."
 export PYTHONPATH
 
-exec python3 -Wall supertux/__main__.py -- "$@"
+exec python3 -Wall -m supertux "$@"
 
 
 # EOF #

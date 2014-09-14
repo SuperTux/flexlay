@@ -42,7 +42,7 @@ class Level:
             self.current_sector = Sector(self)
             self.current_sector.new_from_size("main", width, height)
             self.sectors = []
-            self.sectors.push(self.current_sector)
+            self.sectors.append(self.current_sector)
 
         elif len(params) == 1:
             # Load Level from file
@@ -71,7 +71,7 @@ class Level:
         for sec in sexpr_filter("sector", data):
             sector = Sector(self)
             sector.load_v2(sec)
-            self.sectors.push(sector)
+            self.sectors.append(sector)
             if sector.name == "main":
                 self.current_sector = sector
 
@@ -84,7 +84,7 @@ class Level:
         sector.load_v1(data)
 
         self.sectors = []
-        self.sectors.push(sector)
+        self.sectors.append(sector)
         self.current_sector = sector
 
         self.name = get_value_from_tree(["name", "_"], data, "no name")
@@ -163,7 +163,7 @@ class Level:
                 if type(badguy) == BadGuy:
                     pos = obj.get_pos()
                     if badguy.type == "resetpoint":
-                        f.write("     (point (x %d) (y %d))\n" % (pos.x.to_i), pos.y.to_i)
+                        f.write("     (point (x %d) (y %d))\n" % (pos.x), (pos.y))
             f.write("  )\n\n")
 
             f.write(" )\n\n;; EOF ;;\n")
@@ -179,7 +179,7 @@ class Level:
         self.current_sector.activate(workspace)
 
     def add_sector(self, sector):
-        self.sectors.push(sector)
+        self.sectors.append(sector)
 
     def remove_sector(self, name):
         if len(self.sectors) > 1:

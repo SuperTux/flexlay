@@ -33,7 +33,9 @@ class Config:
         Config.current = self
 
         self.datadir = ""
-        self.recent_files = []
+        self.recent_files = [
+            "/home/ingo/projects/supertux/trunk/supertux/data/levels/world1/02 - The Journey Begins.stl"
+        ]
         self.filename = filename
 
         if os.path.isfile(filename):

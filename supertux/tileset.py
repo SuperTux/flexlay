@@ -32,12 +32,15 @@ class TileGroup:
 # Load game tiles from filename into tileset
 class SuperTuxTileset(Tileset):
 
+    current = None
+
     def __init__(self, *params):
         super().__init__(*params)
+        SuperTuxTileset.current = self
         self.tilegroups = []
 
     def create_ungrouped_tiles_group(self):
-        self.tilegroups.push(TileGroup("Ungrouped Tiles", self.get_ungrouped_tiles()))
+        self.tilegroups.append(TileGroup("Ungrouped Tiles", self.get_ungrouped_tiles()))
 
     def get_ungrouped_tiles(self):
         # Searches for tiles which are not yet grouped and creates a group
@@ -46,11 +49,11 @@ class SuperTuxTileset(Tileset):
         for tile in self.get_tiles():
             ungrouped = True
             for group in self.tilegroups:
-                if tile not in group:
+                if tile not in group.tiles:
                     ungrouped = False
                     break
             if ungrouped:
-                ungrouped_tiles.push(tile)
+                ungrouped_tiles.append(tile)
         return ungrouped_tiles
 
     def load(self, filename):
@@ -115,11 +118,11 @@ class SuperTuxTileset(Tileset):
 
                 if not self.tilegroups:
                     self.tilegroups = []
-                self.tilegroups.push(TileGroup(name, tiles))
+                self.tilegroups.append(TileGroup(name, tiles))
 
             counter += 1
             if counter % 20 == 0:
-                print("Loading tiles: %3.0f%%" % (counter.to_f / float(len(tree) * 100.0)))
+                print("Loading tiles: %3.0f%%" % (float(counter) / float(len(tree) * 100.0)))
         print()
 
 

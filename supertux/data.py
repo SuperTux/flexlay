@@ -28,8 +28,8 @@ from .gameobj import (BadGuy, Dispenser, SpawnPoint, AmbientSound,
 
 
 game_objects = [
-    ["angrystone", "images/creatures/angrystone/angrystone.sprite", "sprite",
-     lambda data, sexpr: BadGuy("angrystone")],
+    #["angrystone", "images/creatures/angrystone/angrystone.sprite", "sprite",
+    # lambda data, sexpr: BadGuy("angrystone")],
     ["jumpy", "images/creatures/jumpy/left-middle.png", "sprite",
      lambda data, sexpr: BadGuy("jumpy")],
     ["snowball", "images/creatures/snowball/left-0.png", "sprite",
@@ -141,22 +141,22 @@ def create_gameobject(editormap, objmap, data, pos, sexpr=[]):
 
         obj = ObjMapSpriteObject(sprite, pos, None)
         gobj = func.call(obj, sexpr)
-        obj.to_object.set_metadata(gobj)
+        obj.set_metadata(gobj)
         gobj.set_obj(obj)
 
     elif type == "rect":
         print("NewRect", pos.x, " -", pos.y)
-        obj = ObjMapRectObject(Rect(Point(pos.x.to_i, pos.y.to_i), Size(64, 64)),
+        obj = ObjMapRectObject(Rect(Point(pos.x, pos.y), Size(64, 64)),
                                Color(0, 0, 255, 128),
                                None)
         gobj = data[3].call(obj, sexpr)
-        obj.to_object.set_metadata(gobj)
+        obj.set_metadata(gobj)
     else:
         raise Exception("Error: Unknown object type dropped: %r".format(data))
 
     cmd = ObjectAddCommand(objmap)
-    cmd.add_object(obj.to_object)
-    editormap.execute(cmd.to_command())
+    cmd.add_object(obj)
+    editormap.execute(cmd)
     return obj
 
 solid_itiles = [10, 11, 12, 13, 14, 15, 20, 21, 22, 23, 30, 31, 113, 114]

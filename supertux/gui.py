@@ -19,24 +19,19 @@ import subprocess
 import os
 
 from flexlay import (Color, ObjectBrush, Sprite, TilemapLayer,
-                     ObjMapRectObject, ObjMapPathNode)
+                     ObjMapRectObject, ObjMapPathNode, EditorMap)
 from flexlay.math import Point, Rect, Size
 from flexlay.tools import (TileMapPaintTool, TileMapSelectTool,
                            ObjMapSelectTool, ZoomTool, Zoom2Tool, WorkspaceMoveTool)
 
+from .data import game_objects
 from .gameobj import PathNode
 from .level import Level
 from .sector import Sector
 from .worldmap import WorldMap
 from .config import Config
-
-game_objects = None
-gui = None
-recent_files = None
-tileset = None
-use_worldmap = None
-world_objects = None
-worldmap_objects = None
+from .worldmap_object import worldmap_objects
+from .tileset import SuperTuxTileset
 
 BACKGROUND_LAYER = 1
 INTERACTIVE_LAYER = 2
@@ -45,7 +40,11 @@ FOREGROUND_LAYER = 3
 
 class SuperTuxGUI:
 
+    current = None
+
     def __init__(self, flexlay):
+        SuperTuxGUI.current = self
+
         self.menu = None
 
         self.selector_window = None
@@ -58,6 +57,8 @@ class SuperTuxGUI:
 
         self.editor_map = self.gui.create_editor_map_component()
         self.workspace = self.editor_map.get_workspace()
+        editormap = EditorMap()
+        self.workspace.set_map(editormap)
 
         # Tools
         self.tilemap_paint_tool = TileMapPaintTool()
@@ -91,9 +92,9 @@ class SuperTuxGUI:
         self.layer_selector = self.gui.create_layer_selector()
 
         self.tileselector = self.gui.create_tile_selector()
-        self.tileselector.set_tileset(tileset)
-        self.tileselector.set_tiles("All Tiles", tileset.get_tiles())
-        for tilegroup in tileset.tilegroups:
+        self.tileselector.set_tileset(SuperTuxTileset.current)
+        self.tileselector.set_tiles("All Tiles", SuperTuxTileset.current.get_tiles())
+        for tilegroup in SuperTuxTileset.current.tilegroups:
             self.tileselector.set_tiles(tilegroup.name, tilegroup.tiles)
 
         self.worldmapobjectselector = self.gui.create_object_selector(42, 42)
@@ -106,18 +107,18 @@ class SuperTuxGUI:
         self.create_button_panel()
 
         self.toolbar = self.gui.create_button_panel(False)
-        self.paint = self.toolbar.add_icon("../data/images/tools/stock-tool-pencil-22.png",
+        self.paint = self.toolbar.add_icon("data/images/tools/stock-tool-pencil-22.png",
                                            self.set_tilemap_paint_tool)
-        self.select = self.toolbar.add_icon("../data/images/tools/stock-tool-rect-select-22.png",
+        self.select = self.toolbar.add_icon("data/images/tools/stock-tool-rect-select-22.png",
                                             self.set_tilemap_select_tool)
         self.toolbar.add_separator()
-        self.object = self.toolbar.add_icon("../data/images/tools/stock-tool-clone-22.png",
+        self.object = self.toolbar.add_icon("data/images/tools/stock-tool-clone-22.png",
                                             self.set_objmap_select_tool)
         self.toolbar.add_separator()
-        self.zoom = self.toolbar.add_icon("../data/images/tools/stock-tool-zoom-22.png",
+        self.zoom = self.toolbar.add_icon("data/images/tools/stock-tool-zoom-22.png",
                                           self.set_zoom_tool)
         # self.stroke =
-        # self.toolbar.add_icon("../data/images/tools/stock-tool-pencil-22.png", set_sketch_stroke_tool)
+        # self.toolbar.add_icon("data/images/tools/stock-tool-pencil-22.png", set_sketch_stroke_tool)
 
         self.create_menu()
 
@@ -139,7 +140,7 @@ class SuperTuxGUI:
         #                              cmd=ObjectDeleteCommand(self.workspace.get_map().get_metadata().objects)
         #                              for i in objmap_select_tool.get_selection():
         #                                  cmd.add_object(i)
-        #                              self.workspace.get_map().execute(cmd.to_command())
+        #                              self.workspace.get_map().execute(cmd)
         #                              objmap_select_tool.clear_selection()
         #                            })
         #              menu.add_item(mysprite, "Edit Properties", proc{
@@ -222,22 +223,22 @@ class SuperTuxGUI:
         button_panel = self.gui.create_button_panel(True)
 
         # File Handling
-        button_panel.add_icon("../data/images/icons24/stock_new.png",  self.gui_level_new)
-        button_panel.add_icon("../data/images/icons24/stock_open.png", self.gui_level_load)
+        button_panel.add_icon("data/images/icons24/stock_new.png",  self.gui_level_new)
+        button_panel.add_icon("data/images/icons24/stock_open.png", self.gui_level_load)
 
-        button_panel.add_icon("../data/images/icons24/stock_save.png", self.gui_level_save)
-        button_panel.add_icon("../data/images/icons24/stock_save_as.png", self.gui_level_save_as)
+        button_panel.add_icon("data/images/icons24/stock_save.png", self.gui_level_save)
+        button_panel.add_icon("data/images/icons24/stock_save_as.png", self.gui_level_save_as)
 
         # Copy&Paste
         button_panel.add_separator()
-        button_panel.add_icon("../data/images/icons24/stock_copy.png", None)
-        button_panel.add_icon("../data/images/icons24/stock_paste.png", None)
+        button_panel.add_icon("data/images/icons24/stock_copy.png", None)
+        button_panel.add_icon("data/images/icons24/stock_paste.png", None)
 
         # Undo Redo
         button_panel.add_separator()
-        self.undo_icon = button_panel.add_icon("../data/images/icons24/stock_undo.png",
+        self.undo_icon = button_panel.add_icon("data/images/icons24/stock_undo.png",
                                                self.workspace.get_map().undo)
-        self.redo_icon = button_panel.add_icon("../data/images/icons24/stock_redo.png",
+        self.redo_icon = button_panel.add_icon("data/images/icons24/stock_redo.png",
                                                self.workspace.get_map().redo)
 
         self.undo_icon.disable()
@@ -245,34 +246,34 @@ class SuperTuxGUI:
 
         # Visibility Toggles
         button_panel.add_separator()
-        self.minimap_icon = button_panel.add_icon("../data/images/icons24/minimap.png", self.gui_toggle_minimap)
-        self.grid_icon = button_panel.add_icon("../data/images/icons24/grid.png", self.gui_toggle_grid)
+        self.minimap_icon = button_panel.add_icon("data/images/icons24/minimap.png", self.gui_toggle_minimap)
+        self.grid_icon = button_panel.add_icon("data/images/icons24/grid.png", self.gui_toggle_grid)
 
         # Layers
         button_panel.add_separator()
-        self.background_icon = button_panel.add_icon("../data/images/icons24/background.png", self.gui_show_background)
+        self.background_icon = button_panel.add_icon("data/images/icons24/background.png", self.gui_show_background)
         self.interactive_icon = button_panel.add_icon(
-            "../data/images/icons24/interactive.png", self.gui_show_interactive)
-        self.foreground_icon = button_panel.add_icon("../data/images/icons24/foreground.png", self.gui_show_foreground)
+            "data/images/icons24/interactive.png", self.gui_show_interactive)
+        self.foreground_icon = button_panel.add_icon("data/images/icons24/foreground.png", self.gui_show_foreground)
 
         button_panel.add_separator()
-        self.sector_icon = button_panel.add_icon("../data/images/icons24/sector.png", self.gui_switch_sector_menu)
+        self.sector_icon = button_panel.add_icon("data/images/icons24/sector.png", self.gui_switch_sector_menu)
 
         button_panel.add_separator()
-        self.run_icon = button_panel.add_icon("../data/images/icons24/run.png", self.gui_run_level)
+        self.run_icon = button_panel.add_icon("data/images/icons24/run.png", self.gui_run_level)
 
-        self.tilegroup_icon = button_panel.add_icon("../data/images/icons24/eye.png", self.tilegroup_menu.run)
+        # self.tilegroup_icon = button_panel.add_icon("data/images/icons24/eye.png", self.tilegroup_menu.run)
 
     def on_worldmap_object_drop(self, brush, pos):
         pos = self.editor_map.screen2world(pos)
         object_type = brush.get_metadata()
         self.create_worldmapobject_at_pos(
-            gui.workspace.get_map().get_metadata().objects, object_type, pos)
+            self.workspace.get_map().get_metadata().objects, object_type, pos)
 
     def on_object_drop(self, brush, pos):
         pos = self.editor_map.screen2world(pos)
         data = brush.get_metadata()
-        self.create_gameobject(gui.workspace.get_map(), gui.workspace.get_map().get_metadata().objects, data, pos)
+        self.create_gameobject(self.workspace.get_map(), self.workspace.get_map().get_metadata().objects, data, pos)
 
     def run(self):
         self.gui.run()
@@ -353,7 +354,7 @@ class SuperTuxGUI:
     def gui_show_foreground(self):
         self.display_properties.layer = self.FOREGROUND_LAYER
         self.display_properties.set(self.workspace.get_map().get_metadata())
-        TilemapLayer.set_current(self.workspace.get_map().get_metadata().foreground)
+        TilemapLayer.current = self.workspace.get_map().get_metadata().foreground
         self.foreground_icon.set_down()
         self.interactive_icon.set_up()
         self.background_icon.set_up()
@@ -362,7 +363,7 @@ class SuperTuxGUI:
     def gui_show_background(self):
         self.display_properties.layer = self.BACKGROUND_LAYER
         self.display_properties.set(self.workspace.get_map().get_metadata())
-        TilemapLayer.set_current(self.workspace.get_map().get_metadata().background)
+        TilemapLayer.current = self.workspace.get_map().get_metadata().background
         self.foreground_icon.set_up()
         self.interactive_icon.set_up()
         self.background_icon.set_down()
@@ -370,9 +371,9 @@ class SuperTuxGUI:
 
     def gui_show_interactive(self):
         print("show_interactive")
-        self.display_properties.layer = self.INTERACTIVE_LAYER
+        self.display_properties.layer = INTERACTIVE_LAYER
         self.display_properties.set(self.workspace.get_map().get_metadata())
-        TilemapLayer.set_current(self.workspace.get_map().get_metadata().interactive)
+        TilemapLayer.current = self.workspace.get_map().get_metadata().interactive
         self.foreground_icon.set_up()
         self.interactive_icon.set_down()
         self.background_icon.set_up()
@@ -431,11 +432,11 @@ class SuperTuxGUI:
             # FIXME: use real tmpfile
             tmpfile = "/tmp/tmpflexlay-supertux.stl"
             self.save_level(tmpfile)
-        subprocess.Popen(["#{Config.current.datadir}/../supertux", tmpfile])
+        subprocess.Popen([os.path.join(Config.current.datadir, "supertux")], tmpfile)
 
     def gui_resize_level(self):
         level = self.workspace.get_map().get_metadata()
-        dialog = gui.gui.create_generic_dialog("Resize Level")
+        dialog = self.gui.create_generic_dialog("Resize Level")
         dialog.add_int("Width: ", level.width)
         dialog.add_int("Height: ", level.height)
         dialog.add_int("X: ", 0)
@@ -493,7 +494,7 @@ class SuperTuxGUI:
 
     def gui_edit_level(self):
         level = self.workspace.get_map().get_metadata().get_level()
-        dialog = gui.gui.create_generic_dialog("Edit Level")
+        dialog = self.gui.create_generic_dialog("Edit Level")
 
         dialog.add_string("Name:", level.name)
         dialog.add_string("Author:", level.author)
@@ -507,7 +508,7 @@ class SuperTuxGUI:
 
     def gui_edit_sector(self):
         level = self.workspace.get_map().get_metadata().get_level()
-        dialog = gui.gui.create_generic_dialog("Edit Sector")
+        dialog = self.gui.create_generic_dialog("Edit Sector")
 
         dialog.add_string("Name: ",   level.current_sector.name)
         dialog.add_string("Music: ",   level.current_sector.music)
@@ -638,7 +639,7 @@ class SuperTuxGUI:
         for i in self.objmap_select_tool.get_selection():
             obj = i.get_data()
             if isinstance(obj, PathNode):
-                pathnodes.push(obj.node)
+                pathnodes.append(obj.node)
 
         last = None
         for i in pathnodes:
@@ -648,7 +649,7 @@ class SuperTuxGUI:
 
     def gui_set_datadir(self):
         if os.path.isdir(Config.current.datadir):
-            dialog = gui.gui.create_generic_dialog("Specify the SuperTux data directory and restart")
+            dialog = self.gui.create_generic_dialog("Specify the SuperTux data directory and restart")
             dialog.add_label("You need to specify the datadir where SuperTux is located")
             dialog.add_string("Datadir:", Config.current.datadir)
 
@@ -659,7 +660,7 @@ class SuperTuxGUI:
 
     def new_level(self, width, height):
         level = Level(width, height)
-        level.activate(gui.workspace)
+        level.activate(self.workspace)
 
     def load_level(self, filename):
         if filename[-5:] == ".stwm":
@@ -671,7 +672,7 @@ class SuperTuxGUI:
         level.activate(self.workspace)
 
         if filename not in self.recent_files:
-            self.recent_files.push(filename)
+            self.recent_files.append(filename)
             self.recent_files_menu.add_item(filename, self.load_level)
 
         self.minimap.update_minimap()
@@ -682,7 +683,7 @@ class SuperTuxGUI:
         worldmap.activate(self.workspace)
 
         if filename not in self.recent_files:
-            self.recent_files.push(filename)
+            self.recent_files.append(filename)
             self.recent_files_menu.add_item(filename, self.load_worldmap)
 
         self.minimap.update_minimap()

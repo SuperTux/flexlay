@@ -18,9 +18,10 @@
 from flexlay.math import Rect, Rectf
 from flexlay import Color, InputEvent
 from ..gui.editor_map_component import EditorMapComponent
+from flexlay.tools import Tool
 
 
-class ZoomTool:
+class ZoomTool(Tool):
 
     NONE_STATE = 0
     CREATE_ZOOM_RECT = 1

@@ -172,10 +172,10 @@ class SuperTuxGUI:
 
             self.editor_map.sig_on_key("7").connect(
                 lambda x, y: self.workspace.get_map().metadata.parent.activate_sector("main",
-                                                                                            self.workspace))
+                                                                                      self.workspace))
             self.editor_map.sig_on_key("8").connect(
                 lambda x, y: self.workspace.get_map().metadata.parent.activate_sector("another_world",
-                                                                                            self.workspace))
+                                                                                      self.workspace))
 
             self.editor_map.sig_on_key("e").connect(lambda x, y: self.gui_show_object_properties())
 
@@ -233,14 +233,12 @@ class SuperTuxGUI:
         button_panel.add_separator()
         button_panel.add_icon("data/images/icons24/stock_copy.png", None)
         button_panel.add_icon("data/images/icons24/stock_paste.png", None)
-
         # Undo Redo
         button_panel.add_separator()
         self.undo_icon = button_panel.add_icon("data/images/icons24/stock_undo.png",
                                                self.workspace.get_map().undo)
         self.redo_icon = button_panel.add_icon("data/images/icons24/stock_redo.png",
                                                self.workspace.get_map().redo)
-
         self.undo_icon.disable()
         self.redo_icon.disable()
 
@@ -248,6 +246,13 @@ class SuperTuxGUI:
         button_panel.add_separator()
         self.minimap_icon = button_panel.add_icon("data/images/icons24/minimap.png", self.gui_toggle_minimap)
         self.grid_icon = button_panel.add_icon("data/images/icons24/grid.png", self.gui_toggle_grid)
+
+        # Zoom Buttons
+        button_panel.add_separator()
+        button_panel.add_icon("data/images/icons24/stock_zoom_in.png", self.gui_zoom_in)
+        button_panel.add_icon("data/images/icons24/stock_zoom_out.png", self.gui_zoom_out)
+        button_panel.add_icon("data/images/icons24/stock_zoom_1.png", lambda: self.gui_set_zoom(1.0))
+        button_panel.add_icon("data/images/icons24/stock_zoom_fit.png", self.gui_zoom_fit)
 
         # Layers
         button_panel.add_separator()
@@ -262,8 +267,6 @@ class SuperTuxGUI:
         button_panel.add_separator()
         self.run_icon = button_panel.add_icon("data/images/icons24/run.png", self.gui_run_level)
 
-        # self.tilegroup_icon = button_panel.add_icon("data/images/icons24/eye.png", self.tilegroup_menu.run)
-
     def on_worldmap_object_drop(self, brush, pos):
         pos = self.editor_map.screen2world(pos)
         object_type = brush.metadata
@@ -277,12 +280,6 @@ class SuperTuxGUI:
 
     def run(self):
         self.gui.run()
-
-    #   def show_colorpicker(self):
-    #     self.tileselector.show(False)
-    #     self.objectselector.show(False)
-    #     self.worldmapobjectselector.show(False)
-    # self.colorpicker.show(True)
 
     def show_objects(self):
         if False:  # GRUMBEL
@@ -521,11 +518,31 @@ class SuperTuxGUI:
 
         dialog.set_callback(on_callback)
 
-    def gui_set_zoom(self, zoom):
+    def gui_zoom_in(self):
+        factor = 2.0
         gc = self.editor_map.get_gc_state()
-        pos = gc.get_pos()
+        zoom = gc.get_zoom()
+        self.gui_set_zoom(zoom / pow(1.25, -factor))
+
+    def gui_zoom_out(self):
+        factor = 2.0
+        gc = self.editor_map.get_gc_state()
+        zoom = gc.get_zoom()
+        self.gui_set_zoom(zoom * pow(1.25, -factor))
+
+    def gui_zoom_fit(self):
+        rect = self.workspace.get_map().get_bounding_rect()
+        zoom = min(self.editor_map.editormap_widget.width() / rect.get_width(),
+                   self.editor_map.editormap_widget.height() / rect.get_height())
+        print(zoom)
+        self.gui_set_zoom(zoom, Point(rect.get_width()/2, rect.get_height()/2))
+
+    def gui_set_zoom(self, zoom, pos=None):
+        gc = self.editor_map.get_gc_state()
+        pos = pos or gc.get_pos()
         gc.set_zoom(zoom)
         gc.set_pos(pos)
+        self.editor_map.editormap_widget.repaint()
 
     def gui_remove_sector(self):
         sector = self.workspace.get_map().metadata

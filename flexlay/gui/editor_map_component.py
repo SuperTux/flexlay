@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from PyQt5.QtWidgets import QWidget, QGridLayout, QScrollBar
+from PyQt5.QtWidgets import QWidget, QGridLayout, QScrollBar, QTabWidget
 from PyQt5.QtCore import Qt
 
 from ..workspace import Workspace
@@ -28,13 +28,20 @@ class EditorMapComponent:
 
     current = None
 
-    def __init__(self, parent):
+    def __init__(self, tabbed=True, parent=None):
         EditorMapComponent.current = self
 
         self.workspace = Workspace()
         self.gc_state = GraphicContextState()
 
-        self.widget = QWidget(parent)
+        if tabbed:
+            self.tab_widget = QTabWidget(parent)
+            self.widget = QWidget(self.tab_widget)
+            self.tab_widget.addTab(self.widget, "A Label")
+        else:
+            self.tab_widget = None
+            self.widget = QWidget(parent)
+
         self.layout = QGridLayout(self.widget)
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.layout.setHorizontalSpacing(0)
@@ -207,7 +214,7 @@ class EditorMapComponent:
         return self.gc_state
 
     def get_widget(self):
-        return self.widget
+        return self.tab_widget or self.widget
 
     def update_scrollbars(self):
         rect = self.workspace.get_map().get_bounding_rect()

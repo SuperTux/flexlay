@@ -16,7 +16,8 @@
 
 
 from PyQt5.QtCore import (QCoreApplication, Qt)
-from PyQt5.QtWidgets import (QApplication, QMainWindow, QToolBar, QDockWidget, QVBoxLayout, QWidget)
+from PyQt5.QtWidgets import (QApplication, QMainWindow, QToolBar,
+                             QDockWidget, QVBoxLayout, QWidget)
 
 from .gui import (ButtonPanel, EditorMapComponent, FileDialog, GenericDialog,
                   LayerSelector, Menubar, Minimap, ObjectSelector,
@@ -52,9 +53,9 @@ class GUIManager:
     def create_generic_dialog(self, title):
         return GenericDialog(title, self.window)
 
-    def create_editor_map_component(self):
+    def create_editor_map_component(self, tabbed=True):
         central = QWidget()
-        editor = EditorMapComponent(None)
+        editor = EditorMapComponent()
         layout = QVBoxLayout()
 
         layout.setContentsMargins(0, 0, 0, 0)

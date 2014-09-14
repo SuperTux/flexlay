@@ -114,6 +114,7 @@ class SExprParser:
 
             self.atom = None
             self.state = self.state_list
+            self.index -= 1
         elif c is None:
             raise Exception("incomplete bool: %s" % self.atom)
         else:

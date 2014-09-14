@@ -68,6 +68,9 @@ class SExprWriterTestCase(unittest.TestCase):
         result = sexpr_parse("512323")
         self.assertEqual(result, [512323])
 
+        result = sexpr_parse("(#t)")
+        self.assertEqual(result, [[True]])
+
         result = sexpr_parse("(8(8)8)")
         self.assertEqual(result, [[8, [8], 8]])
 

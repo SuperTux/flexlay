@@ -26,7 +26,7 @@ class SketchLayer(Layer):
     def __init__(self):
         self.strokes = []
 
-        self.surface = PixelBuffer(Display.get_width(), Display.get_height())
+        self.surface = PixelBuffer(Display.width, Display.height)
         self.canvas = Canvas(self.surface)
         self.last_zoom = 0.0
         self.last_rot = 0.0

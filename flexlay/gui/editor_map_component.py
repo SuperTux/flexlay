@@ -109,12 +109,12 @@ class EditorMapComponent:
     #   Display::add_translate(parent.get_screen_x(), parent.get_screen_y())
 
     #   // Update scrollbars (FIXME: move me to function)
-    #   scrollbar_v.set_range(0, workspace.get_map().get_bounding_rect().get_height())
-    #   scrollbar_v.set_pagesize(parent.get_height()/gc_state.get_zoom())
+    #   scrollbar_v.set_range(0, workspace.get_map().get_bounding_rect().height)
+    #   scrollbar_v.set_pagesize(parent.height/gc_state.get_zoom())
     #   scrollbar_v.set_pos(gc_state.get_pos().y)
 
-    #   scrollbar_h.set_range(0, workspace.get_map().get_bounding_rect().get_width())
-    #   scrollbar_h.set_pagesize(parent.get_width()/gc_state.get_zoom())
+    #   scrollbar_h.set_range(0, workspace.get_map().get_bounding_rect().width)
+    #   scrollbar_h.set_pagesize(parent.width/gc_state.get_zoom())
     #   scrollbar_h.set_pos(gc_state.get_pos().x)
 
     #   gc_state.push()
@@ -186,7 +186,7 @@ class EditorMapComponent:
     # {
     #   Rect rect = parent.get_screen_rect()
 
-    #   gc_state.set_size(rect.get_width(), rect.get_height())
+    #   gc_state.set_size(rect.width, rect.height)
     # }
     # endif
 

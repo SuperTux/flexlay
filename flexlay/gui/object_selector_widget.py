@@ -83,8 +83,8 @@ class ObjectSelectorWidget(QWidget):
                     print("DRAG:", self.drag_obj)
                     pixmap = QPixmap.fromImage(self.brushes[self.drag_obj].get_sprite().get_pixelbuffer().get_qimage())
                     drag.setPixmap(pixmap)
-                    drag.setHotSpot(QPoint(self.brushes[self.drag_obj].get_sprite().get_width() / 2,
-                                           self.brushes[self.drag_obj].get_sprite().get_height() / 2))
+                    drag.setHotSpot(QPoint(self.brushes[self.drag_obj].get_sprite().width / 2,
+                                           self.brushes[self.drag_obj].get_sprite().height / 2))
 
                     print("Starting drag")
                     result = drag.exec()
@@ -154,10 +154,10 @@ class ObjectSelectorWidget(QWidget):
 
             sprite = self.brushes[i].get_sprite()
             sprite.set_alignment(Origin.center, 0, 0)
-            sprite.set_scale(min(1.0, self.cell_width / sprite.get_width()),
-                             min(1.0, self.cell_height / sprite.get_height()))
-            sprite.draw(rect.left + rect.get_width() / 2,
-                        rect.top + rect.get_height() / 2,
+            sprite.set_scale(min(1.0, self.cell_width / sprite.width),
+                             min(1.0, self.cell_height / sprite.height))
+            sprite.draw(rect.left + rect.width / 2,
+                        rect.top + rect.height / 2,
                         gc)
 
             # highlight the current selection

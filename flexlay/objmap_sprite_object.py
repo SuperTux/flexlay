@@ -36,41 +36,41 @@ class ObjMapSpriteObject(ObjMapObject):
         origin_e = Origin()
 
         origin_e, align.x, align.y = self.sprite.get_alignment()
-        origin = Origin.calc_origin(origin_e, Size(self.sprite.get_width(),
-                                                   self.sprite.get_height()))
+        origin = Origin.calc_origin(origin_e, Size(self.sprite.width,
+                                                   self.sprite.height))
         align.x = -align.x
 
         # FIXME: This looks a bit hacky
         scale_x, scale_y = self.sprite.get_scale()
 
         if scale_x < 0:
-            align.x += self.sprite.get_width()
+            align.x += self.sprite.width
 
         if scale_y < 0:
-            align.y += self.sprite.get_height()
+            align.y += self.sprite.height
 
         #   if (scale_x > 1.0f && scale_y > 1.0f)
         #    return Rectf(pos - origin - align,
-        #                   Sizef(sprite.get_width() * scale_x, sprite.get_height() * scale_y))
+        #                   Sizef(sprite.width * scale_x, sprite.height * scale_y))
         #  else
         return Rectf(self.pos - origin - align,
-                     Sizef(self.sprite.get_width(), self.sprite.get_height()))
+                     Sizef(self.sprite.width, self.sprite.height))
 
     def flip_vertical(self):
         scale_x, scale_y = self.sprite.get_scale()
         self.sprite.set_scale(scale_x, -scale_y)
         if scale_y < 0:
-            self.pos.y -= self.sprite.get_height()
+            self.pos.y -= self.sprite.height
         else:
-            self.pos.y += self.sprite.get_height()
+            self.pos.y += self.sprite.height
 
     def flip_horizontal(self):
         scale_x, scale_y = self.sprite.get_scale()
         self.sprite.set_scale(-scale_x, scale_y)
         if scale_x < 0:
-            self.pos.x -= self.sprite.get_width()
+            self.pos.x -= self.sprite.width
         else:
-            self.pos.x += self.sprite.get_width()
+            self.pos.x += self.sprite.width
 
     def set_sprite(self, sprite):
         self.sprite = sprite

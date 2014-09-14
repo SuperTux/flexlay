@@ -66,10 +66,12 @@ class PixelBuffer:
     def unlock(self):
         pass
 
-    def get_width(self):
+    @property
+    def width(self):
         return self.image.width()
 
-    def get_height(self):
+    @property
+    def height(self):
         return self.image.height()
 
     def get_pitch(self):

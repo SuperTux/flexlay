@@ -449,7 +449,7 @@ class SuperTuxGUI:
         print("Smoothing level structure")
         tilemap = TilemapLayer.current()
         data = tilemap.get_data()
-        width = tilemap.get_width()
+        width = tilemap.width
 
         def get(x, y):
             return data[y * width + x]
@@ -486,8 +486,8 @@ class SuperTuxGUI:
     def gui_resize_level_to_selection(self):
         level = self.workspace.get_map().metadata
         rect = self.tilemap_select_tool.get_selection_rect()
-        if (rect.get_width() > 2 and rect.get_height() > 2):
-            level.resize(rect.get_size(), Point(-rect.left, -rect.top))
+        if (rect.width > 2 and rect.height > 2):
+            level.resize(rect.size, Point(-rect.left, -rect.top))
 
     def gui_edit_level(self):
         level = self.workspace.get_map().metadata.get_level()
@@ -532,10 +532,10 @@ class SuperTuxGUI:
 
     def gui_zoom_fit(self):
         rect = self.workspace.get_map().get_bounding_rect()
-        zoom = min(self.editor_map.editormap_widget.width() / rect.get_width(),
-                   self.editor_map.editormap_widget.height() / rect.get_height())
+        zoom = min(self.editor_map.editormap_widget.width() / rect.width,
+                   self.editor_map.editormap_widget.height() / rect.height)
         print(zoom)
-        self.gui_set_zoom(zoom, Point(rect.get_width() / 2, rect.get_height() / 2))
+        self.gui_set_zoom(zoom, Point(rect.width / 2, rect.height / 2))
 
     def gui_set_zoom(self, zoom, pos=None):
         gc = self.editor_map.get_gc_state()

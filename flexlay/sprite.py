@@ -44,14 +44,16 @@ class Sprite:
         if not img:
             print("Error: Sprite: Empty PixelBuffer:", self.filename)
         else:
-            origin = Origin.calc_origin(self.origin, Size(self.get_width(), self.get_height()))
+            origin = Origin.calc_origin(self.origin, Size(self.width, self.height))
             painter.drawImage(QPoint(x - origin.x, y - origin.y), img)
 
-    def get_width(self):
-        return self.pixelbuffer.get_width()
+    @property
+    def width(self):
+        return self.pixelbuffer.width
 
-    def get_height(self):
-        return self.pixelbuffer.get_height()
+    @property
+    def height(self):
+        return self.pixelbuffer.height
 
     def set_scale(self, x, y):
         # m_sprite.set_scale(x, y)

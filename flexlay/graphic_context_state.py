@@ -49,16 +49,16 @@ class GraphicContextState:
     def get_clip_rect(self):
         return Rectf(Pointf(-self.offset.x,
                             -self.offset.y),
-                     Sizef(self.get_width() / self.zoom,
-                           self.get_height() / self.zoom))
+                     Sizef(self.width / self.zoom,
+                           self.height / self.zoom))
 
     def set_pos(self, pos):
-        self.offset.x = -pos.x + (self.get_width() / 2 / self.zoom)
-        self.offset.y = -pos.y + (self.get_height() / 2 / self.zoom)
+        self.offset.x = -pos.x + (self.width / 2 / self.zoom)
+        self.offset.y = -pos.y + (self.height / 2 / self.zoom)
 
     def get_pos(self):
-        return Pointf(-self.offset.x + (self.get_width() / 2 / self.zoom),
-                      -self.offset.y + (self.get_height() / 2 / self.zoom))
+        return Pointf(-self.offset.x + (self.width / 2 / self.zoom),
+                      -self.offset.y + (self.height / 2 / self.zoom))
 
     def set_zoom(self, z, pos=None):
         if pos is None:
@@ -78,16 +78,16 @@ class GraphicContextState:
 
         width = rect.right - rect.left
         height = rect.bottom - rect.top
-        screen_relation = float(self.get_height()) / float(self.get_width())
+        screen_relation = float(self.height) / float(self.width)
         rect_relation = height / width
 
         if rect_relation < screen_relation:  # take width, ignore height
-            self.zoom = self.get_width() / width
+            self.zoom = self.width / width
         else:  # take height, ignore width
-            self.zoom = self.get_height() / height
+            self.zoom = self.height / height
 
-        self.offset.x = (self.get_width() / (2 * self.zoom)) - center_x
-        self.offset.y = (self.get_height() / (2 * self.zoom)) - center_y
+        self.offset.x = (self.width / (2 * self.zoom)) - center_x
+        self.offset.y = (self.height / (2 * self.zoom)) - center_y
 
     def screen2world(self, pos):
         pos = Pointf(pos)
@@ -108,12 +108,6 @@ class GraphicContextState:
 
     def get_rotation(self):
         return self.rotation
-
-    def get_width(self):
-        return self.width
-
-    def get_height(self):
-        return self.height
 
 
 # EOF #

@@ -38,10 +38,12 @@ class Surface:
     def set_blend_func(self, src, dest):
         pass
 
-    def get_width(self):
+    @property
+    def width(self):
         return 0
 
-    def get_height(self):
+    @property
+    def height(self):
         return 0
 
 

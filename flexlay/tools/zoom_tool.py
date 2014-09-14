@@ -51,7 +51,7 @@ class ZoomTool(Tool):
                 self.zoom_rect.right = pos.x
                 self.zoom_rect.bottom = pos.y
                 self.zoom_rect.normalize()
-                if self.zoom_rect.get_width() > 10 and self.zoom_rect.get_height() > 10:
+                if self.zoom_rect.width > 10 and self.zoom_rect.height > 10:
                     parent.zoom_to(self.zoom_rect)
 
     def on_mouse_down(self, event):

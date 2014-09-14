@@ -67,11 +67,11 @@ class MinimapWidget(QWidget):
         # FIXME: This doesn't work all that well
         tilemap = TilemapLayer.current
 
-        if tilemap and tilemap.get_height() != 0 and tilemap.get_width() != 0:
+        if tilemap and tilemap.height != 0 and tilemap.width != 0:
             tile_size = tilemap.get_tileset().get_tile_size()
 
-            map_width = tilemap.get_width() * tile_size
-            map_height = tilemap.get_height() * tile_size
+            map_width = tilemap.width * tile_size
+            map_height = tilemap.height * tile_size
 
             small_tile = Size(tile_size * self.width() / map_width + 1,
                               tile_size * self.height() / map_height + 1)
@@ -80,8 +80,8 @@ class MinimapWidget(QWidget):
 
             # FIXME: No current tileset
             if False:
-                for y in range(0, field.get_height()):
-                    for x in range(0, field.get_width()):
+                for y in range(0, field.height):
+                    for x in range(0, field.width):
                         tile = tilemap.get_tileset().create(field.at(x, y))
                         if tile:
                             gc.fill_rect(Rect(Point((x * tile_size) * self.width() / map_width,
@@ -97,8 +97,8 @@ class MinimapWidget(QWidget):
             rect = self.parent.get_clip_rect()
             screen_rect = Rect(Point(rect.left * self.width() / map_width,
                                      rect.top * self.height() / map_height),
-                               Size(rect.get_width() * self.width() / map_width,
-                                    rect.get_height() * self.height() / map_height))
+                               Size(rect.width * self.width() / map_width,
+                                    rect.height * self.height() / map_height))
             gc.fill_rect(screen_rect, Color(255, 255, 0, 50))
             gc.draw_rect(screen_rect, Color(0, 0, 0))
 
@@ -111,10 +111,10 @@ class MinimapWidget(QWidget):
         # GRUMBEL
         # if tilemap:
         #     field = tilemap.get_field()
-        #     buffer = PixelBuffer(tilemap.get_width(), tilemap.get_height())
+        #     buffer = PixelBuffer(tilemap.width, tilemap.height)
 
-        #     map_width = tilemap.get_width()
-        #     map_height = tilemap.get_height()
+        #     map_width = tilemap.width
+        #     map_height = tilemap.height
 
         # FIXME: No Tileset.current
         #     buf = buffer.get_data()
@@ -139,8 +139,8 @@ class MinimapWidget(QWidget):
         tilemap = TilemapLayer.current
         if tilemap:
             tile_size = tilemap.get_tileset().get_tile_size()
-            map_width = tilemap.get_width() * tile_size
-            map_height = tilemap.get_height() * tile_size
+            map_width = tilemap.width * tile_size
+            map_height = tilemap.height * tile_size
 
             if self.drag_active:
                 self.parent.move_to(event.x() * map_width / self.width(),
@@ -152,8 +152,8 @@ class MinimapWidget(QWidget):
         tilemap = TilemapLayer.current
         if tilemap:
             tile_size = tilemap.get_tileset().get_tile_size()
-            map_width = tilemap.get_width() * tile_size
-            map_height = tilemap.get_height() * tile_size
+            map_width = tilemap.width * tile_size
+            map_height = tilemap.height * tile_size
 
             self.parent.move_to(event.x() * map_width / self.width(),
                                 event.y() * map_height / self.height())

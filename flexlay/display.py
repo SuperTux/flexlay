@@ -20,10 +20,12 @@ class Display:
     def __init__(self):
         pass
 
-    def get_width(self):
+    @property
+    def width(self):
         return 0
 
-    def get_height(self):
+    @property
+    def height(self):
         return 0
 
     def get_modelview(self):

@@ -239,8 +239,8 @@ class Sector:
         f.write("      (layer  \"%s\")\n" % name)
         f.write("      (solid %s)\n" % "#t" if solid == "solid" else "#f")
         f.write("      (speed  %f)\n" % 1.0)
-        f.write("      (width  %d)\n" % tilemap.get_width())
-        f.write("      (height %d)\n" % tilemap.get_height())
+        f.write("      (width  %d)\n" % tilemap.width)
+        f.write("      (height %d)\n" % tilemap.height)
         f.write("      (tiles\n")
         f.write("        ")
         x = 0

@@ -29,8 +29,8 @@ class Field:
         start_x = max(0, -x)
         start_y = max(0, -y)
 
-        end_x = min(self.get_width(), w - x)
-        end_y = min(self.get_height(), h - y)
+        end_x = min(self.width, w - x)
+        end_y = min(self.height, h - y)
 
         field = Field(w, h)
         for iy in range(start_y, end_y):
@@ -67,12 +67,6 @@ class Field:
 
     def size(self):
         return len(self.data)
-
-    def get_width(self):
-        return self.width
-
-    def get_height(self):
-        return self.height
 
 
 # EOF #

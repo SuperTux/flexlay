@@ -47,25 +47,25 @@ class PaintCommand(Command):
         # Calc bounding rect
         rect = Rect(self.points[0].x,
                     self.points[0].y,
-                    self.points[0].x + self.brush.get_width(),
-                    self.points[0].y + self.brush.get_height())
+                    self.points[0].x + self.brush.width,
+                    self.points[0].y + self.brush.height)
 
         for point in self.points:
             rect.left = min(rect.left, point.x)
             rect.top = min(rect.top, point.y)
-            rect.right = max(rect.right, point.x + self.brush.get_width())
-            rect.bottom = max(rect.bottom, point.y + self.brush.get_height())
+            rect.right = max(rect.right, point.x + self.brush.width)
+            rect.bottom = max(rect.bottom, point.y + self.brush.height)
 
         self.pos.x = rect.left
         self.pos.y = rect.top
 
         self.redo_brush = TileBrush.from_field(self.tilemap.get_field().copy(),
-                                               rect.get_width(), rect.get_height(),
+                                               rect.width, rect.height,
                                                -self.pos.x, -self.pos.y)
 
         # FIXME: undo_field is unneeded, should just record the overwritten color
         self.undo_brush = TileBrush.from_field(self.undo_field,
-                                               rect.get_width(), rect.get_height(),
+                                               rect.width, rect.height,
                                                -self.pos.x, -self.pos.y)
 
         self.redo_brush.set_opaque()

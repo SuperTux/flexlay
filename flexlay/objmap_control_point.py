@@ -43,10 +43,10 @@ class ObjMapControlPoint:
         origin_enum, align_x, align_y = self.sprite.get_alignment()
         align_x = -align_x
         origin = Origin.calc_origin(origin_enum,
-                                    Size(self.sprite.get_width(),
-                                         self.sprite.get_height()))
+                                    Size(self.sprite.width,
+                                         self.sprite.height))
 
         return Rect(Point(self.pos) - origin - Point(align_x, align_y),
-                    Size(self.sprite.get_width(), self.sprite.get_height()))
+                    Size(self.sprite.width, self.sprite.height))
 
 # EOF #

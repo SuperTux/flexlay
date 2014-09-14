@@ -102,11 +102,11 @@ class TileSelectorWidget(QWidget):
             selection = self.get_selection()
             # selection.bottom = min(max(0, selection.right), self.columns)
 
-            brush = TileBrush(selection.get_width(), selection.get_height())
+            brush = TileBrush(selection.width, selection.height)
             brush.set_transparent()
 
-            for y in range(0, selection.get_height()):
-                for x in range(0, selection.get_width()):
+            for y in range(0, selection.height):
+                for x in range(0, selection.width):
                     tile = (selection.top + y) * self.columns + (selection.left + x)
 
                     if 0 <= tile and tile < len(self.tiles):
@@ -176,7 +176,7 @@ class TileSelectorWidget(QWidget):
                 # Use grid in the tileselector
                 gc.draw_rect(rect, Color(0, 0, 0, 128))
 
-            if (brush.get_width() == 1 and brush.get_height() == 1 and
+            if (brush.width == 1 and brush.height == 1 and
                     brush.at(0, 0) == self.tiles[i]):
                 gc.fill_rect(rect, Color(0, 0, 255, 100))
             elif self.mouse_over_tile == int(i):  # GRUMBEL and has_mouse_over())

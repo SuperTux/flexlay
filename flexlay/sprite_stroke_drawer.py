@@ -71,9 +71,9 @@ class SpriteStrokeDrawer:
                     if dab != dabs[0]:
                         canvas = BitmapLayer.current().get_canvas()
                         buffer = canvas.get_pixeldata(
-                            Rect(Point(int(self.dabs[i - 1].pos.x) - sprite.get_width() / 2,
-                                       int(self.dabs[i - 1].pos.y) - sprite.get_height() / 2),
-                                 Size(sprite.get_width(), sprite.get_height())).to_cl())
+                            Rect(Point(int(self.dabs[i - 1].pos.x) - sprite.width / 2,
+                                       int(self.dabs[i - 1].pos.y) - sprite.height / 2),
+                                 Size(sprite.width, sprite.height)).to_cl())
                         surface = Surface(buffer)
                         # surface.set_blend_func_separate(BlendFunc.src_alpha, BlendFunc.one_minus_src_alpha,
                         #                                BlendFunc.one, BlendFunc.zero)

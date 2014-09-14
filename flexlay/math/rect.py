@@ -56,13 +56,16 @@ class Rect:
     def __ne__(self, rhs):
         return not self.__eq__(rhs)
 
-    def get_width(self):
+    @property
+    def width(self):
         return self.right - self.left
 
-    def get_height(self):
+    @property
+    def height(self):
         return self.bottom - self.top
 
-    def get_size(self):
+    @property
+    def size(self):
         return Size(self.right - self.left, self.bottom - self.top)
 
     def is_inside(self, point):
@@ -85,7 +88,7 @@ class Rect:
 
     def to_qt(self):
         return QRect(self.left, self.top,
-                     self.get_width(), self.get_height())
+                     self.width, self.height)
 
     def __str__(self):
         return "Rect({}, {}, {}, {})".format(self.left, self.top, self.right, self.bottom)

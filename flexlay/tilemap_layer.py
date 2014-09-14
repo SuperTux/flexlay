@@ -25,7 +25,7 @@ class TilemapLayer(Layer):
 
     def __init__(self, tileset, w, h):
         super().__init__()
-        
+
         self.tileset = tileset
         self.field = Field(w, h)
 
@@ -38,8 +38,8 @@ class TilemapLayer(Layer):
 
         self.metadata = None
 
-        for y in range(0, self.field.get_height()):
-            for x in range(0, self.field.get_width()):
+        for y in range(0, self.field.height):
+            for x in range(0, self.field.width):
                 self.field.put(x, y, 0)
 
     def draw(self, gc):
@@ -47,16 +47,16 @@ class TilemapLayer(Layer):
 
         if False and self.background_color.get_alpha() != 0:
             gc.fill_rect(Rect(Point(0, 0),
-                              Size(self.field.get_width() * tile_size,
-                                   self.field.get_height() * tile_size)),
+                              Size(self.field.width * tile_size,
+                                   self.field.height * tile_size)),
                          self.background_color)
 
         rect = Rect(gc.get_clip_rect())
 
         start_x = max(0, rect.left // tile_size)
         start_y = max(0, rect.top // tile_size)
-        end_x = min(self.field.get_width(),  rect.right // tile_size + 1)
-        end_y = min(self.field.get_height(), rect.bottom // tile_size + 1)
+        end_x = min(self.field.width,  rect.right // tile_size + 1)
+        end_y = min(self.field.height, rect.bottom // tile_size + 1)
 
         if self.foreground_color != Color(255, 255, 255, 255):
             for y in range(start_y, end_y):
@@ -105,8 +105,8 @@ class TilemapLayer(Layer):
         gc.flush()
 
     def get_tile(self, x, y):
-        if x >= 0 and x < self.field.get_width() and \
-           y >= 0 and y < self.field.get_height():
+        if x >= 0 and x < self.field.width and \
+           y >= 0 and y < self.field.height:
             return self.field.at(x, y)
         else:
             return 0
@@ -115,8 +115,8 @@ class TilemapLayer(Layer):
         self.field.resize(size.width, size.height, point.x, point.y)
 
     def draw_tile(self, tile_id, pos):
-        if pos.x >= 0 and pos.x < self.field.get_width() and \
-           pos.y >= 0 and pos.y < self.field.get_height():
+        if pos.x >= 0 and pos.x < self.field.width and \
+           pos.y >= 0 and pos.y < self.field.height:
             self.field.put(pos.x, pos.y, tile_id)
 
     # formerly draw_tile()
@@ -128,8 +128,8 @@ class TilemapLayer(Layer):
         start_x = max(0, -pos.x)
         start_y = max(0, -pos.y)
 
-        end_x = min(brush.get_width(),  field.get_width() - pos.x)
-        end_y = min(brush.get_height(), field.get_height() - pos.y)
+        end_x = min(brush.width,  field.width - pos.x)
+        end_y = min(brush.height, field.get_height() - pos.y)
 
         for y in range(start_y, end_y):
             for x in range(start_x, end_x):
@@ -151,14 +151,14 @@ class TilemapLayer(Layer):
     def create_pixelbuffer(self):
         tile_size = self.tileset.get_tile_size()
 
-        pixelbuffer = PixelBuffer(self.get_width() * tile_size,
-                                  self.get_height() * tile_size)
+        pixelbuffer = PixelBuffer(self.width * tile_size,
+                                  self.height * tile_size)
 
         pixelbuffer.lock()
         buf = pixelbuffer.get_data()
 
-        width = pixelbuffer.get_width()
-        height = pixelbuffer.get_height()
+        width = pixelbuffer.width
+        height = pixelbuffer.height
 
         # Draw a nice gradient
         for y in range(height):
@@ -170,8 +170,8 @@ class TilemapLayer(Layer):
 
         pixelbuffer.unlock()
 
-        for y in range(self.get_height()):
-            for x in range(self.get_width()):
+        for y in range(self.height):
+            for x in range(self.width):
                 tile = self.tileset.create(self.field.at(x, y))
 
                 if tile:
@@ -183,8 +183,8 @@ class TilemapLayer(Layer):
 
     def get_bounding_rect(self):
         return Rect(Point(0, 0),
-                    Size(self.field.get_width() * self.tileset.get_tile_size(),
-                         self.field.get_height() * self.tileset.get_tile_size()))
+                    Size(self.field.width * self.tileset.get_tile_size(),
+                         self.field.height * self.tileset.get_tile_size()))
 
     def world2tile(self, pos):
         x = int(pos.x / self.tileset.get_tile_size())
@@ -211,11 +211,13 @@ class TilemapLayer(Layer):
     def set_foreground_color(self, color):
         self.foreground_color = color
 
-    def get_width(self):
-        return self.field.get_width()
+    @property
+    def width(self):
+        return self.field.width
 
-    def get_height(self):
-        return self.field.get_height()
+    @property
+    def height(self):
+        return self.field.height
 
     def has_bounding_rect(self):
         return True

@@ -57,8 +57,8 @@ class EditorMapWidget(QWidget):
         if workspace and workspace.get_map():
             if workspace.get_map().has_bounding_rect():
                 rect = workspace.get_map().get_bounding_rect()
-                print("Setting minimum Size:", rect.get_width(), rect.get_height())
-                self.setMinimumSize(QSize(rect.get_width(), rect.get_height()))
+                print("Setting minimum Size:", rect.width, rect.height)
+                self.setMinimumSize(QSize(rect.width, rect.height))
 
                 pal = self.palette()
                 pal.setColor(self.backgroundRole(), workspace.get_map().get_background_color().to_qt())

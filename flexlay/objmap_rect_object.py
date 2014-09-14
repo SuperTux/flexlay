@@ -24,7 +24,7 @@ class ObjMapRectObject(ObjMapObject):
     def __init__(self, rect, color, metadata):
         super().__init__(Pointf(rect.left, rect.top), metadata)
 
-        self.size = Sizef(rect.get_width(), rect.get_height())
+        self.size = Sizef(rect.width, rect.height)
         self.color = color
 
         self.cp_top_left = ObjMapControlPoint(Sprite.from_file("data/images/icons16/resize1.png"),
@@ -63,7 +63,7 @@ class ObjMapRectObject(ObjMapObject):
 
     def set_rect(self, rect):
         self.pos = Pointf(rect.left, rect.top)
-        self.size = Sizef(rect.get_width(), rect.get_height())
+        self.size = Sizef(rect.width, rect.height)
 
     def cp_top_left_move(self, pos_):
         self.size.width += self.pos.x - pos_.x

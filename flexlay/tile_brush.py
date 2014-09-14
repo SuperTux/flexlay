@@ -34,11 +34,13 @@ class TileBrush:
         else:
             self.data = data
 
-    def get_width(self):
-        return self.data.get_width()
+    @property
+    def width(self):
+        return self.data.width
 
-    def get_height(self):
-        return self.data.get_height()
+    @property
+    def height(self):
+        return self.data.height
 
     def set_data(self, data):
         self.data.set_data(data)
@@ -67,32 +69,32 @@ class TileBrush:
     def auto_crop(self):
         rect = Rect(0, 0, 0, 0)
 
-        for y, x in itertools.product(range(0, self.data.get_height()),
-                                      range(0, self.data.get_width())):
+        for y, x in itertools.product(range(0, self.data.height),
+                                      range(0, self.data.width)):
             if self.data.at(x, y) != 0:
                 rect.top = y
                 break
 
-        for y, x in itertools.product(reversed(range(0, self.data.get_height())),
-                                      range(0, self.data.get_width())):
+        for y, x in itertools.product(reversed(range(0, self.data.height)),
+                                      range(0, self.data.width)):
             if self.data.at(x, y) != 0:
                 rect.bottom = y + 1
                 break
 
-        for x, y in itertools.product(range(0, self.data.get_width()),
-                                      range(0, self.data.get_height())):
+        for x, y in itertools.product(range(0, self.data.width),
+                                      range(0, self.data.height)):
             if self.data.at(x, y) != 0:
                 rect.left = x
                 break
 
-        for x, y in itertools.product(reversed(range(0, self.data.get_width())),
-                                      range(0, self.data.get_height())):
+        for x, y in itertools.product(reversed(range(0, self.data.width)),
+                                      range(0, self.data.height)):
             if self.data.at(x, y) != 0:
                 rect.right = x + 1
                 break
 
-        if rect.get_width() != 0:
-            self.resize(rect.get_width(), rect.get_height(),
+        if rect.width != 0:
+            self.resize(rect.width, rect.height,
                         -rect.left, -rect.top)
         else:
             self.data = Field(1, 1)

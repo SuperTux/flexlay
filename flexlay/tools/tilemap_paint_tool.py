@@ -57,8 +57,8 @@ class TileMapPaintTool:
             tile_size = tilemap.get_tileset().get_tile_size()
 
             # Draw the brush:
-            for y in range(0, self.brush.get_height()):
-                for x in range(0, self.brush.get_width()):
+            for y in range(0, self.brush.height):
+                for x in range(0, self.brush.width):
                     tile = tilemap.get_tileset().create(self.brush.at(x, y))
 
                     if tile:
@@ -114,8 +114,8 @@ class TileMapPaintTool:
 
             if self.mode == TileMapPaintTool.PAINTING_MODE:
                 if ((event.mod & InputEvent.MOD_SHIFT) or
-                    ((self.current_tile.x % self.brush.get_width()) == (self.last_draw.x % self.brush.get_width()) and
-                     (self.current_tile.y % self.brush.get_height() == (self.last_draw.y % self.brush.get_height())))):
+                    ((self.current_tile.x % self.brush.width) == (self.last_draw.x % self.brush.width) and
+                     (self.current_tile.y % self.brush.height == (self.last_draw.y % self.brush.get_height())))):
                     self.command.add_point(self.current_tile)
                     self.last_draw = self.current_tile
 
@@ -137,10 +137,10 @@ class TileMapPaintTool:
                     self.mode = TileMapPaintTool.NONE_MODE
 
                     if ((event.mod & InputEvent.MOD_SHIFT) or
-                        ((self.current_tile.x % self.brush.get_width()) ==
-                         (self.last_draw.x % self.brush.get_width()) and
-                         (self.current_tile.y % self.brush.get_height() ==
-                          (self.last_draw.y % self.brush.get_height())))):
+                        ((self.current_tile.x % self.brush.width) ==
+                         (self.last_draw.x % self.brush.width) and
+                         (self.current_tile.y % self.brush.height ==
+                          (self.last_draw.y % self.brush.height)))):
                         self.command.add_point(self.current_tile)
 
                     Workspace.current.get_map().execute(self.command)
@@ -157,7 +157,7 @@ class TileMapPaintTool:
                     self.selection.update(self.current_tile)
                     self.brush = self.selection.get_brush(self.tilemap.get_field())
 
-                    if ((self.brush.get_width() > 1 or self.brush.get_height() > 1) and
+                    if ((self.brush.width > 1 or self.brush.height > 1) and
                        (event.mod & InputEvent.MOD_SHIFT)):
                         self.brush.set_transparent()
                         self.brush.auto_crop()

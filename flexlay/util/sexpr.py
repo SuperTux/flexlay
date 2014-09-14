@@ -23,6 +23,14 @@ import re
 import codecs
 
 
+def parse(string):
+    parser = SExprParser(string)
+    try:
+        return parser.parse()
+    except Exception as e:
+        raise SExprParseError(parser.line, parser.column, str(e))
+
+
 def num(s):
     try:
         return int(s)
@@ -30,9 +38,12 @@ def num(s):
         return float(s)
 
 
-def parse(string):
-    parser = SExprParser(string)
-    return parser.parse()
+class SExprParseError(Exception):
+
+    def __init__(self, line, column, message):
+        super().__init__("%d:%d: %s" % ((line, column, message)))
+        self.line = line
+        self.column = column
 
 
 class SExprParser:

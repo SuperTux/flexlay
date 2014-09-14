@@ -17,7 +17,7 @@
 
 from flexlay.util import SExprWriter
 from flexlay.util.sexpr_reader import get_value_from_tree, assoc_ref
-from flexlay.util.sexpr import parse as sexpr_parse
+from flexlay.util.sexpr import parse as sexpr_parse, SExprParseError
 
 import io
 import unittest
@@ -78,6 +78,17 @@ class SExprWriterTestCase(unittest.TestCase):
                               '("Hello World" 5 1 123) ("Hello" 123 123 "foobar") ;; comment'))
         self.assertEqual(result, [["Hello World", 5, 1, 123], ["Hello", 123, 123, "foobar"]])
 
+        with self.assertRaises(SExprParseError):
+            sexpr_parse("(")
+
+        with self.assertRaises(SExprParseError):
+            sexpr_parse("#  ")
+
+        with self.assertRaises(SExprParseError):
+            sexpr_parse("#b")
+
+        with self.assertRaises(SExprParseError):
+            sexpr_parse("\"unterminated string")
 
     def test_sexpr_writer(self):
         with io.StringIO() as out:

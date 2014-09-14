@@ -74,7 +74,7 @@ class Sector:
         self.editormap.add_layer(self.objects)
         self.editormap.add_layer(self.foreground)
         # self.editormap.add_layer(self.sketch)
-        self.editormap.set_metadata(self)
+        self.editormap.metadata = self
         return self
 
     def load_v1(self, data):
@@ -150,7 +150,7 @@ class Sector:
         self.editormap.add_layer(self.objects)
         self.editormap.add_layer(self.foreground)
         # FIXME: Data might not get freed since its 'recursively' refcounted
-        self.editormap.set_metadata(self)
+        self.editormap.metadata = self
 
     def load_v2(self, data):
         self.name = "<No Name>"
@@ -225,7 +225,7 @@ class Sector:
             self.editormap.add_layer(self.foreground)
         self.editormap.add_layer(self.objects)
 #    self.editormap.add_layer(self.sketch)
-        self.editormap.set_metadata(self)
+        self.editormap.metadata = self
 
     def activate(self, workspace):
         workspace.set_map(self.editormap)

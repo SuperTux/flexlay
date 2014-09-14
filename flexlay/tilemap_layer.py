@@ -218,10 +218,5 @@ class TilemapLayer(Layer):
     def has_bounding_rect(self):
         return True
 
-    def set_metadata(self, metadata):
-        self.metadata = metadata
-
-    def get_metadata(self):
-        return self.metadata
 
 # EOF #

@@ -23,6 +23,7 @@ class Layer:
     def __init__(self):
         self.data = None
         self.pos = Pointf(0, 0)
+        self.metadata = None
 
     def draw(self, gc):
         if self.pos.x != 0 or self.pos.y != 0:
@@ -43,12 +44,6 @@ class Layer:
         rect.right += self.pos.x
         rect.bottom += self.pos.y
         return rect
-
-    def get_metadata(self):
-        return self.data
-
-    def set_metadata(self, data):
-        self.data = data
 
     def set_pos(self, pos):
         self.pos = pos

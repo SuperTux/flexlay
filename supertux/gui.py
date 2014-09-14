@@ -135,9 +135,9 @@ class SuperTuxGUI:
         #              menu=Menu(Point(x, y))
         #              menu.add_item(mysprite, "Delete Object(s)", proc{
         #                              print("Trying to delete
-        #                              {self.workspace.get_map().get_metadata()}
-        #                              {self.workspace.get_map().get_metadata().objects}")
-        #                              cmd=ObjectDeleteCommand(self.workspace.get_map().get_metadata().objects)
+        #                              {self.workspace.get_map().metadata}
+        #                              {self.workspace.get_map().metadata.objects}")
+        #                              cmd=ObjectDeleteCommand(self.workspace.get_map().metadata.objects)
         #                              for i in objmap_select_tool.get_selection():
         #                                  cmd.add_object(i)
         #                              self.workspace.get_map().execute(cmd)
@@ -171,10 +171,10 @@ class SuperTuxGUI:
             self.editor_map.sig_on_key("c").connect(lambda x, y: self.connect_path_nodes())
 
             self.editor_map.sig_on_key("7").connect(
-                lambda x, y: self.workspace.get_map().get_metadata().parent.activate_sector("main",
+                lambda x, y: self.workspace.get_map().metadata.parent.activate_sector("main",
                                                                                             self.workspace))
             self.editor_map.sig_on_key("8").connect(
-                lambda x, y: self.workspace.get_map().get_metadata().parent.activate_sector("another_world",
+                lambda x, y: self.workspace.get_map().metadata.parent.activate_sector("another_world",
                                                                                             self.workspace))
 
             self.editor_map.sig_on_key("e").connect(lambda x, y: self.gui_show_object_properties())
@@ -185,7 +185,7 @@ class SuperTuxGUI:
                                                 Size(128, 64)),
                                            Color(0, 255, 255, 155),
                                            None)
-                self.workspace.get_map().get_metadata().objects.add_object(rectobj)
+                self.workspace.get_map().metadata.objects.add_object(rectobj)
 
             self.editor_map.sig_on_key("a").connect(on_a_key)
 
@@ -266,14 +266,14 @@ class SuperTuxGUI:
 
     def on_worldmap_object_drop(self, brush, pos):
         pos = self.editor_map.screen2world(pos)
-        object_type = brush.get_metadata()
+        object_type = brush.metadata
         self.create_worldmapobject_at_pos(
-            self.workspace.get_map().get_metadata().objects, object_type, pos)
+            self.workspace.get_map().metadata.objects, object_type, pos)
 
     def on_object_drop(self, brush, pos):
         pos = self.editor_map.screen2world(pos)
-        data = brush.get_metadata()
-        self.create_gameobject(self.workspace.get_map(), self.workspace.get_map().get_metadata().objects, data, pos)
+        data = brush.metadata
+        self.create_gameobject(self.workspace.get_map(), self.workspace.get_map().metadata.objects, data, pos)
 
     def run(self):
         self.gui.run()
@@ -353,8 +353,8 @@ class SuperTuxGUI:
 
     def gui_show_foreground(self):
         self.display_properties.layer = FOREGROUND_LAYER
-        self.display_properties.set(self.workspace.get_map().get_metadata())
-        TilemapLayer.current = self.workspace.get_map().get_metadata().foreground
+        self.display_properties.set(self.workspace.get_map().metadata)
+        TilemapLayer.current = self.workspace.get_map().metadata.foreground
         self.foreground_icon.set_down()
         self.interactive_icon.set_up()
         self.background_icon.set_up()
@@ -362,8 +362,8 @@ class SuperTuxGUI:
 
     def gui_show_background(self):
         self.display_properties.layer = BACKGROUND_LAYER
-        self.display_properties.set(self.workspace.get_map().get_metadata())
-        TilemapLayer.current = self.workspace.get_map().get_metadata().background
+        self.display_properties.set(self.workspace.get_map().metadata)
+        TilemapLayer.current = self.workspace.get_map().metadata.background
         self.foreground_icon.set_up()
         self.interactive_icon.set_up()
         self.background_icon.set_down()
@@ -372,8 +372,8 @@ class SuperTuxGUI:
     def gui_show_interactive(self):
         print("show_interactive")
         self.display_properties.layer = INTERACTIVE_LAYER
-        self.display_properties.set(self.workspace.get_map().get_metadata())
-        TilemapLayer.current = self.workspace.get_map().get_metadata().interactive
+        self.display_properties.set(self.workspace.get_map().metadata)
+        TilemapLayer.current = self.workspace.get_map().metadata.interactive
         self.foreground_icon.set_up()
         self.interactive_icon.set_down()
         self.background_icon.set_up()
@@ -382,17 +382,17 @@ class SuperTuxGUI:
     def gui_show_all(self):
         self.display_properties.show_all = True
         self.display_properties.current_only = False
-        self.display_properties.set(self.workspace.get_map().get_metadata())
+        self.display_properties.set(self.workspace.get_map().metadata)
 
     def gui_show_current(self):
         self.display_properties.show_all = False
         self.display_properties.current_only = False
-        self.display_properties.set(self.workspace.get_map().get_metadata())
+        self.display_properties.set(self.workspace.get_map().metadata)
 
     def gui_show_only_current(self):
         self.display_properties.show_all = False
         self.display_properties.current_only = True
-        self.display_properties.set(self.workspace.get_map().get_metadata())
+        self.display_properties.set(self.workspace.get_map().metadata)
 
     def gui_toggle_minimap(self):
         if False:  # GRUMBEL
@@ -404,7 +404,7 @@ class SuperTuxGUI:
                 self.minimap_icon.set_down()
 
     def gui_toggle_grid(self):
-        tilemap = self.workspace.get_map().get_metadata().foreground
+        tilemap = self.workspace.get_map().metadata.foreground
         tilemap.set_draw_grid(not tilemap.get_draw_grid())
 
         if tilemap.get_draw_grid():
@@ -421,7 +421,7 @@ class SuperTuxGUI:
             self.display_properties.show_all = True
             self.display_properties.current_only = False
 
-        self.display_properties.set(self.workspace.get_map().get_metadata())
+        self.display_properties.set(self.workspace.get_map().metadata)
 
     def gui_run_level(self):
         print("Run this level...")
@@ -435,7 +435,7 @@ class SuperTuxGUI:
         subprocess.Popen([os.path.join(Config.current.datadir, "supertux")], tmpfile)
 
     def gui_resize_level(self):
-        level = self.workspace.get_map().get_metadata()
+        level = self.workspace.get_map().metadata
         dialog = self.gui.create_generic_dialog("Resize Level")
         dialog.add_int("Width: ", level.width)
         dialog.add_int("Height: ", level.height)
@@ -487,13 +487,13 @@ class SuperTuxGUI:
         tilemap.set_data(data)
 
     def gui_resize_level_to_selection(self):
-        level = self.workspace.get_map().get_metadata()
+        level = self.workspace.get_map().metadata
         rect = self.tilemap_select_tool.get_selection_rect()
         if (rect.get_width() > 2 and rect.get_height() > 2):
             level.resize(rect.get_size(), Point(-rect.left, -rect.top))
 
     def gui_edit_level(self):
-        level = self.workspace.get_map().get_metadata().get_level()
+        level = self.workspace.get_map().metadata.get_level()
         dialog = self.gui.create_generic_dialog("Edit Level")
 
         dialog.add_string("Name:", level.name)
@@ -507,7 +507,7 @@ class SuperTuxGUI:
         dialog.set_callback(on_callback)
 
     def gui_edit_sector(self):
-        level = self.workspace.get_map().get_metadata().get_level()
+        level = self.workspace.get_map().metadata.get_level()
         dialog = self.gui.create_generic_dialog("Edit Sector")
 
         dialog.add_string("Name: ", level.current_sector.name)
@@ -528,11 +528,11 @@ class SuperTuxGUI:
         gc.set_pos(pos)
 
     def gui_remove_sector(self):
-        sector = self.workspace.get_map().get_metadata()
+        sector = self.workspace.get_map().metadata
         sector.get_level().remove_sector(sector.name)
 
     def gui_add_sector(self):
-        level = self.workspace.get_map().get_metadata().get_level()
+        level = self.workspace.get_map().metadata.get_level()
 
         name = "sector"
         uniq_name = name
@@ -550,7 +550,7 @@ class SuperTuxGUI:
     def gui_switch_sector_menu(self):
         pass
         # mymenu = Menu(Point(530, 54))
-        # sector = self.workspace.get_map().get_metadata()
+        # sector = self.workspace.get_map().metadata
         # for i in sector.parent.get_sectors():
         #     if sector.name == i:
         #         current = " [current]"
@@ -559,7 +559,7 @@ class SuperTuxGUI:
         #
         #     def on_sector_callback():
         #         print("Switching to %s" % i)
-        #         self.workspace.get_map().get_metadata().parent.activate_sector(i, self.workspace)
+        #         self.workspace.get_map().metadata.parent.activate_sector(i, self.workspace)
         #
         #     mymenu.add_item(mysprite, ("Sector (%s)%s" % [i, current]), on_sector_callback)
         #
@@ -602,9 +602,9 @@ class SuperTuxGUI:
 
     def gui_level_save(self):
         if self.use_worldmap:
-            filename = self.workspace.get_map().get_metadata().filename
+            filename = self.workspace.get_map().metadata.filename
         else:
-            filename = self.workspace.get_map().get_metadata().parent.filename
+            filename = self.workspace.get_map().metadata.parent.filename
 
         print("Filename:", filename)
         if filename:
@@ -627,10 +627,10 @@ class SuperTuxGUI:
 
     def insert_path_node(self, x, y):
         print("Insert path Node")
-        m = self.workspace.get_map().get_metadata()
+        m = self.workspace.get_map().metadata
         pathnode = ObjMapPathNode(self.editor_map.screen2world(Point(x, y)),
                                   "PathNode")
-        pathnode.to_object().set_metadata(PathNode(pathnode))
+        pathnode.to_object().metadata = PathNode(pathnode)
         m.objects.add_object(pathnode.to_object())
 
     def connect_path_nodes(self):
@@ -691,9 +691,9 @@ class SuperTuxGUI:
 
     def save_level(self, filename):
         if self.use_worldmap:
-            level = self.workspace.get_map().get_metadata()
+            level = self.workspace.get_map().metadata
         else:
-            level = self.workspace.get_map().get_metadata().parent
+            level = self.workspace.get_map().metadata.parent
 
         # Do backup save
         if os.path.isfile(filename):

@@ -101,7 +101,7 @@ class WorldMap:
         self.editormap = EditorMap(True)
         self.editormap.add_layer(self.tilemap.tilemaplayer.to_layer())
         self.editormap.add_layer(self.objects.to_layer())
-        self.editormap.set_metadata(self)
+        self.editormap.metadata = self
 
         workspace.set_map(self.editormap)
         TilemapLayer.current = self.tilemap.tilemaplayer

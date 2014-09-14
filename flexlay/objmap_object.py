@@ -33,11 +33,5 @@ class ObjMapObject:
     def set_pos(self, pos):
         self.pos = pos
 
-    def get_metadata(self):
-        return self.metadata
-
-    def set_metadata(self, metadata):
-        self.metadata = metadata
-
 
 # EOF #

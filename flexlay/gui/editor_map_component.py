@@ -83,7 +83,7 @@ class EditorMapComponent:
     #     Rect rect = parent.get_position()
     #     CL_InputEvent ev2 = event
     #     ev2.mouse_pos = Point(CL_Mouse::get_x() - rect.left,
-    #                           CL_Mouse::get_y() - rect.top).to_cl()
+    #                           CL_Mouse::get_y() - rect.top)
     #     workspace.key_down(InputEvent(ev2))
     #   }
     # }
@@ -94,7 +94,7 @@ class EditorMapComponent:
     #   Rect rect = parent.get_position()
     #   CL_InputEvent ev2 = event
     #   ev2.mouse_pos = Point(CL_Mouse::get_x() - rect.left,
-    #                         CL_Mouse::get_y() - rect.top).to_cl()
+    #                         CL_Mouse::get_y() - rect.top)
     #   workspace.key_up(InputEvent(ev2))
     # }
 

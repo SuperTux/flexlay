@@ -26,7 +26,7 @@ class GraphicContext:
         self.state = state
 
     def clear(self, color):
-        pass  # GRUMBEL gc.clear(color.to_cl())
+        pass  # GRUMBEL gc.clear(color)
 
     def draw_rect(self, rect, color):
         self.painter.setPen(color.to_qt())
@@ -62,9 +62,6 @@ class GraphicContext:
             return self.state.get_clip_rect()
         else:
             return Rectf()
-
-    def flush(self):
-        pass
 
     def get_qt_painter(self):
         return self.painter

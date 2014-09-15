@@ -60,7 +60,7 @@ class WorldMap:
 
             if name == 'properties':
                 self.name = get_value_from_tree(["name", "_"], data, "No Name")
-                print("Name:", self.name.to_s)
+                print("Name:", self.name)
                 self.music = get_value_from_tree(["music", "_"], data, "salcon.ogg")
                 self.intro_filename = get_value_from_tree(["intro-filename", "_"], data, "")
                 self.start_pos_x = get_value_from_tree(["start_pos_x", "_"], data, 0)
@@ -97,8 +97,8 @@ class WorldMap:
     def activate(self, workspace):
         # FIXME: All wrong and obsolote
         self.editormap = EditorMap()
-        self.editormap.add_layer(self.tilemap.tilemaplayer.to_layer())
-        self.editormap.add_layer(self.objects.to_layer())
+        self.editormap.add_layer(self.tilemap.tilemaplayer)
+        self.editormap.add_layer(self.objects)
         self.editormap.metadata = self
 
         workspace.set_map(self.editormap)

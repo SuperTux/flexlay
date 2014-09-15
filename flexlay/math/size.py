@@ -22,7 +22,7 @@ class Size:
         self.height = h
 
     def copy(self):
-        return Size(self.x, self.y)
+        return Size(self.width, self.height)
 
     def __eq__(self, rhs):
         return (self.width == rhs.width and

@@ -31,27 +31,29 @@ class WorldmapObject:
 class WMSpawnPoint(WorldmapObject):
 
     def __init__(self):
+        super().__init__()
+
         self.name = ""
         self.obj = ObjMapSpriteObject(
             Sprite.from_file(Config.current.datadir + "images/worldmap/common/tux.png"),
             Pointf(0, 0), self)
-        self.obj.to_object.sig_move.connect(self.on_move)
+        self.obj.sig_move.connect(self.on_move)
 
     def on_move(self, data):
-        pos = self.obj.to_object.get_pos()
-        pos.x = (((pos.x + 16) / 32).to_i) * 32
-        pos.y = (((pos.y + 16) / 32).to_i) * 32
-        self.obj.to_object.set_pos(pos)
+        pos = self.obj.get_pos()
+        pos.x = int((pos.x + 16) / 32) * 32
+        pos.y = int((pos.y + 16) / 32) * 32
+        self.obj.set_pos(pos)
 
     def parse(self, data):
         x = get_value_from_tree(["x", "_"], data, 0)
         y = get_value_from_tree(["y", "_"], data, 0)
-        self.obj.to_object.set_pos(Pointf(x * 32, y * 32))
+        self.obj.set_pos(Pointf(x * 32, y * 32))
         self.name = get_value_from_tree(["name", "_"], data, "")
 
     def save(self, writer):
         writer.start_list("spawnpoint")
-        pos = self.obj.to_object.get_pos()
+        pos = self.obj.get_pos()
         writer.write_int("x", pos.x / 32)
         writer.write_int("y", pos.y / 32)
         writer.write_string("name", self.name)
@@ -70,6 +72,8 @@ class WMSpawnPoint(WorldmapObject):
 class WorldmapLevel(WorldmapObject):
 
     def __init__(self):
+        super().__init__()
+
         self.name = ""
         self.extro_filename = ""
         self.sprite = ""
@@ -77,12 +81,12 @@ class WorldmapLevel(WorldmapObject):
         self.obj = ObjMapSpriteObject(
             Sprite.from_file(Config.current.datadir + "images/worldmap/common/leveldot_green.png"),
             Pointf(0, 0), self)
-        self.obj.to_object.sig_move.connect(self.on_move)
+        self.obj.sig_move.connect(self.on_move)
 
     def parse(self, data):
         x = get_value_from_tree(["x", "_"], data, 0)
         y = get_value_from_tree(["y", "_"], data, 0)
-        self.obj.to_object.set_pos(Pointf(x * 32, y * 32))
+        self.obj.set_pos(Pointf(x * 32, y * 32))
         self.name = get_value_from_tree(["name", "_"], data, "")
         self.sprite = get_value_from_tree(["sprite", "_"], data, "")
         self.extro_filename = get_value_from_tree(["extro-filename", "_"], data, "")
@@ -90,7 +94,7 @@ class WorldmapLevel(WorldmapObject):
 
     def save(self, writer):
         writer.start_list("level")
-        pos = self.obj.to_object.get_pos()
+        pos = self.obj.get_pos()
         writer.write_int("x", pos.x / 32)
         writer.write_int("y", pos.y / 32)
         if self.sprite != "":
@@ -103,10 +107,10 @@ class WorldmapLevel(WorldmapObject):
         writer.end_list("level")
 
     def on_move(self, data):
-        pos = self.obj.to_object.get_pos()
-        pos.x = (((pos.x + 16) / 32).to_i) * 32
-        pos.y = (((pos.y + 16) / 32).to_i) * 32
-        self.obj.to_object.set_pos(pos)
+        pos = self.obj.get_pos()
+        pos.x = int((pos.x + 16) / 32) * 32
+        pos.y = int((pos.y + 16) / 32) * 32
+        self.obj.set_pos(pos)
 
     def property_dialog(self, gui):
         dialog = gui.create_generic_dialog("LevelTile Property Dialog")
@@ -127,6 +131,8 @@ class WorldmapLevel(WorldmapObject):
 class SpecialTile(WorldmapObject):
 
     def __init__(self):
+        super().__init__()
+
         self.map_message = ""
         self.apply_to_direction = ""
         self.passive_message = False
@@ -136,12 +142,12 @@ class SpecialTile(WorldmapObject):
         self.obj = ObjMapSpriteObject(
             Sprite.from_file(Config.current.datadir + "images/worldmap/common/teleporterdot.png"),
             Pointf(0, 0), self)
-        self.obj.to_object.sig_move.connect(self.on_move)
+        self.obj.sig_move.connect(self.on_move)
 
     def parse(self, data):
         x = get_value_from_tree(["x", "_"], data, 0)
         y = get_value_from_tree(["y", "_"], data, 0)
-        self.obj.to_object.set_pos(Pointf(x * 32, y * 32))
+        self.obj.set_pos(Pointf(x * 32, y * 32))
         self.map_message = get_value_from_tree(["map-message", "_"], data, "")
         self.passive_message = get_value_from_tree(["passive-message", "_"], data, False)
         self.teleport_x = get_value_from_tree(["teleport-to-x", "_"], data, -1)
@@ -152,7 +158,7 @@ class SpecialTile(WorldmapObject):
 
     def save(self, writer):
         writer.start_list("special-tile")
-        pos = self.obj.to_object.get_pos()
+        pos = self.obj.get_pos()
         writer.write_int("x", pos.x / 32)
         writer.write_int("y", pos.y / 32)
         if self.map_message != "":
@@ -169,10 +175,10 @@ class SpecialTile(WorldmapObject):
         writer.end_list("special-tile")
 
     def on_move(self, data):
-        pos = self.obj.to_object.get_pos()
-        pos.x = (((pos.x + 16) / 32).to_i) * 32
-        pos.y = (((pos.y + 16) / 32).to_i) * 32
-        self.obj.to_object.set_pos(pos)
+        pos = self.obj.get_pos()
+        pos.x = int((pos.x + 16) / 32) * 32
+        pos.y = int((pos.y + 16) / 32) * 32
+        self.obj.set_pos(pos)
 
     def property_dialog(self, gui):
         dialog = gui.create_generic_dialog("SpecialTile Property Dialog")
@@ -209,13 +215,13 @@ def create_worldmapobject_at_pos(objmap, name, pos):
         return
 
     name, image, _class = objectclass
-    object = _class()
-    object.obj.to_object.set_pos(pos)
+    obj = _class()
+    obj.obj.set_pos(pos)
     cmd = ObjectAddCommand(objmap)
-    cmd.add_object(object.obj.to_object)
+    cmd.add_object(obj.obj)
     from .gui import SuperTuxGUI
-    SuperTuxGUI.current.workspace.get_map().execute(cmd.to_command())
-    return object
+    SuperTuxGUI.current.workspace.get_map().execute(cmd)
+    return obj
 
 
 def create_worldmapobject_from_data(objmap, name, sexpr):
@@ -225,13 +231,13 @@ def create_worldmapobject_from_data(objmap, name, sexpr):
         return
 
     name, image, _class = objectclass
-    object = _class()
-    object.parse(sexpr)
+    obj = _class()
+    obj.parse(sexpr)
     cmd = ObjectAddCommand(objmap)
-    cmd.add_object(object.obj)
+    cmd.add_object(obj.obj)
     from .gui import SuperTuxGUI
     SuperTuxGUI.workspace.get_map().execute(cmd)
-    return object
+    return obj
 
 
 # EOF #

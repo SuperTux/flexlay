@@ -45,6 +45,7 @@ class SuperTuxGUI:
     def __init__(self, flexlay):
         SuperTuxGUI.current = self
 
+        self.use_worldmap = False
         self.menu = None
 
         self.selector_window = None
@@ -647,8 +648,8 @@ class SuperTuxGUI:
         m = self.workspace.get_map().metadata
         pathnode = ObjMapPathNode(self.editor_map.screen2world(Point(x, y)),
                                   "PathNode")
-        pathnode.to_object().metadata = PathNode(pathnode)
-        m.objects.add_object(pathnode.to_object())
+        pathnode.metadata = PathNode(pathnode)
+        m.objects.add_object(pathnode)
 
     def connect_path_nodes(self):
         print("Connecting path nodes")

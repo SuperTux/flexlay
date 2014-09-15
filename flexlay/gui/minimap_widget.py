@@ -73,8 +73,8 @@ class MinimapWidget(QWidget):
             map_width = tilemap.width * tile_size
             map_height = tilemap.height * tile_size
 
-            small_tile = Size(tile_size * self.width() / map_width + 1,
-                              tile_size * self.height() / map_height + 1)
+            small_tile_size = Size(tile_size * self.width() / map_width + 1,
+                                   tile_size * self.height() / map_height + 1)
 
             field = tilemap.get_field()
 
@@ -86,9 +86,8 @@ class MinimapWidget(QWidget):
                         if tile:
                             gc.fill_rect(Rect(Point((x * tile_size) * self.width() / map_width,
                                                     (y * tile_size) * self.height() / map_height),
-                                              Size(small_tile)),
+                                              small_tile_size),
                                          tile.get_color())
-                        gc.flush()
 
             if self.minimap_surface:
                 self.minimap_surface.draw(Rect(Point(0, 0), Size(self.width(), self.height())))

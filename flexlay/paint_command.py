@@ -50,6 +50,8 @@ class PaintCommand(Command):
                     self.points[0].x + self.brush.width,
                     self.points[0].y + self.brush.height)
 
+        print("PaintCommand: %s" % rect)
+
         for point in self.points:
             rect.left = min(rect.left, point.x)
             rect.top = min(rect.top, point.y)

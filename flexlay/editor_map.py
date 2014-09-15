@@ -55,7 +55,6 @@ class EditorMap:
     def draw(self, gc):
         for layer in self.layers:
             layer.draw(gc)
-        gc.flush()
 
     def is_modified(self):
         return self.modified

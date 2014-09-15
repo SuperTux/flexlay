@@ -119,24 +119,24 @@ def find_game_object(name):
 
 def create_gameobject_from_data(editormap, objmap, name, sexpr):
     # Creates a gameobject from the given sexpr: "snowball", ((x 5) (y 5))
-    object = find_game_object(name)
-    if object is not None:
-        name, image, type, func = object
+    obj = find_game_object(name)
+    if obj is not None:
+        name, image, kind, func = obj
 
         x = get_value_from_tree(["x", "_"], sexpr, 0)
         y = get_value_from_tree(["y", "_"], sexpr, 0)
 
-        create_gameobject(editormap, objmap, object, Pointf(x, y), sexpr)
+        create_gameobject(editormap, objmap, obj, Pointf(x, y), sexpr)
     else:
         print("Error: Couldn't resolve object type: ", name)
         print("Sector: Unhandled tag: ", name)
 
 
 def create_gameobject(editormap, objmap, data, pos, sexpr=[]):
-    name, spritefile, type, func = data
+    name, spritefile, kind, func = data
 
     # Creates a gameobject the given position, data is the entry in the game_objects table
-    if type == "sprite":
+    if kind == "sprite":
         sprite = Sprite.from_file(Config.current.datadir + spritefile)
 
         obj = ObjMapSpriteObject(sprite, pos, None)
@@ -144,7 +144,7 @@ def create_gameobject(editormap, objmap, data, pos, sexpr=[]):
         obj.metadata = gobj
         gobj.set_obj(obj)
 
-    elif type == "rect":
+    elif kind == "rect":
         print("NewRect", pos.x, " -", pos.y)
         obj = ObjMapRectObject(Rect(Point(pos.x, pos.y), Size(64, 64)),
                                Color(0, 0, 255, 128),

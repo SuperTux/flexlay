@@ -33,8 +33,8 @@ from .worldmap_object import WorldmapObject
 __all__ = ["Config", "game_objects", "create_gameobject",
            "create_gameobject_from_data", "find_game_object",
            "GameObj", "SuperTuxGUI", "Level", "Sector", "Sprite",
-           "SuperTuxWorldmap", "SuperTux", "TileMap", "SuperTuxTileset",
-           "load_lisp", "WorldMap", "WorldmapObject"]
+           "TileMap", "SuperTuxTileset", "load_lisp", "WorldMap",
+           "WorldmapObject"]
 
 
 # EOF #

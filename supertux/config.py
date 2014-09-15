@@ -23,11 +23,11 @@ class Config:
 
     @staticmethod
     def create(projectname):
-        dir = os.path.expanduser("~/.flexlay/")
-        if not os.path.isdir(dir):
-            os.mkdir(dir)
+        path = os.path.expanduser("~/.flexlay/")
+        if not os.path.isdir(path):
+            os.mkdir(path)
 
-        return Config(os.path.join(dir, projectname))
+        return Config(os.path.join(path, projectname))
 
     def __init__(self, filename):
         Config.current = self

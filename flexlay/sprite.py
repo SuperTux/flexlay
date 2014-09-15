@@ -68,7 +68,7 @@ class Sprite:
         pass
 
     def set_color(self, color):
-        # m_sprite.set_color(color.to_cl())
+        # m_sprite.set_color(color)
         pass
 
     def set_alpha(self, alpha):
@@ -91,7 +91,7 @@ class Sprite:
         pass
 
     def add_frame(self, surface, rect):
-        # m_sprite.add_frame(surface.to_cl(), rect.to_cl())
+        # m_sprite.add_frame(surface, rect)
         pass
 
     def get_pixelbuffer(self):

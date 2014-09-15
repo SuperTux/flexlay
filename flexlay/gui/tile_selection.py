@@ -16,6 +16,7 @@
 
 
 from flexlay.math import Rect
+from ..color import Color
 from ..tile_brush import TileBrush
 
 
@@ -46,7 +47,7 @@ class TileSelection:
         self.selection = Rect()
         self.active = False
 
-    def draw(self, gc, color):
+    def draw(self, gc, color=Color(255, 255, 255, 100)):
         tile_size = self.tilemap.get_tileset().get_tile_size()
 
         gc.fill_rect(Rect(self.selection.left * tile_size,

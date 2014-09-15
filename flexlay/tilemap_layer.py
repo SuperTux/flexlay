@@ -102,8 +102,6 @@ class TilemapLayer(Layer):
                              end_y * tile_size,
                              Color(150, 150, 150))
 
-        gc.flush()
-
     def get_tile(self, x, y):
         if x >= 0 and x < self.field.width and \
            y >= 0 and y < self.field.height:
@@ -129,7 +127,7 @@ class TilemapLayer(Layer):
         start_y = max(0, -pos.y)
 
         end_x = min(brush.width,  field.width - pos.x)
-        end_y = min(brush.height, field.get_height() - pos.y)
+        end_y = min(brush.height, field.height - pos.y)
 
         for y in range(start_y, end_y):
             for x in range(start_x, end_x):

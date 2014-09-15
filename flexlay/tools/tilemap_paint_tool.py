@@ -48,6 +48,7 @@ class TileMapPaintTool:
             return
 
         if self.mode == TileMapPaintTool.SELECTING_MODE:
+            # GRUMBEL
             # if Keyboard.get_keycode(CL_KEY_LSHIFT):
             #    selection.draw(gc, Color(255,  128, 128, 100))
             # else:
@@ -101,7 +102,7 @@ class TileMapPaintTool:
                     self.last_draw = pos
 
                 elif event.kind == InputEvent.MOUSE_RIGHT:
-                    self.mode = TileMapPaintTool.SELECTING
+                    self.mode = TileMapPaintTool.SELECTING_MODE
                     parent.capture_mouse()
 
                     self.selection.start(tilemap, pos)
@@ -115,7 +116,7 @@ class TileMapPaintTool:
             if self.mode == TileMapPaintTool.PAINTING_MODE:
                 if ((event.mod & InputEvent.MOD_SHIFT) or
                     ((self.current_tile.x % self.brush.width) == (self.last_draw.x % self.brush.width) and
-                     (self.current_tile.y % self.brush.height == (self.last_draw.y % self.brush.get_height())))):
+                     (self.current_tile.y % self.brush.height == (self.last_draw.y % self.brush.height)))):
                     self.command.add_point(self.current_tile)
                     self.last_draw = self.current_tile
 
@@ -123,13 +124,13 @@ class TileMapPaintTool:
                 self.selection.update(self.current_tile)
 
     def on_mouse_up(self, event):
-        self.tilemap = TilemapLayer.current
+        tilemap = TilemapLayer.current
 
-        if self.tilemap:
+        if tilemap:
             EditorMapComponent.current.get_workspace().get_map().modify()
 
             parent = EditorMapComponent.current
-            self.current_tile = self.tilemap.world2tile(parent.screen2world(event.mouse_pos))
+            self.current_tile = tilemap.world2tile(parent.screen2world(event.mouse_pos))
 
             if event.kind == InputEvent.MOUSE_LEFT:
                 if self.mode == TileMapPaintTool.PAINTING_MODE:
@@ -146,7 +147,7 @@ class TileMapPaintTool:
                     Workspace.current.get_map().execute(self.command)
                     self.command = None
 
-                    self.tilemap.draw_tile(self.brush, self.current_tile)
+                    tilemap.draw_tile(self.brush, self.current_tile)
                     self.last_draw = Point(-1, -1)
 
             elif event.kind == InputEvent.MOUSE_RIGHT:
@@ -155,7 +156,7 @@ class TileMapPaintTool:
                     self.mode = TileMapPaintTool.NONE_MODE
 
                     self.selection.update(self.current_tile)
-                    self.brush = self.selection.get_brush(self.tilemap.get_field())
+                    self.brush = self.selection.get_brush(tilemap.get_field())
 
                     if ((self.brush.width > 1 or self.brush.height > 1) and
                        (event.mod & InputEvent.MOD_SHIFT)):

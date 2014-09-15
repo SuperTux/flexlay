@@ -34,15 +34,13 @@ class Workspace:
             for tool in self.tools.values():
                 tool.draw(gc)
 
-            gc.flush()
-
     def mouse_up(self, event):
         tool = self.tools.get(event.kind)
         if tool is not None:
             tool.on_mouse_up(event)
 
     def mouse_move(self, event):
-        for k, tool in self.tools.items():
+        for tool in self.tools.values():
             tool.on_mouse_move(event)
 
     def mouse_down(self, event):

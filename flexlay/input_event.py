@@ -30,6 +30,7 @@ class InputEvent:
     MOUSE_NO_BUTTON = 6
 
     MOD_SHIFT = (1 << 0)
+    MOD_CTRL = (1 << 1)
 
     def __init__(self):
         self.kind = InputEvent.MOUSE_NO_BUTTON

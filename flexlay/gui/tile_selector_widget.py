@@ -44,9 +44,8 @@ class TileSelectorWidget(QWidget):
         self.tiles = []
 
     def minimumSizeHint(self):
-        columns = self.get_columns()
-        min_rows = (len(self.tiles) + columns - 1) / columns
-        return QSize(self.tileset.get_tile_size() * self.get_columns(),
+        min_rows = (len(self.tiles) + self.columns - 1) / self.columns
+        return QSize(self.tileset.get_tile_size() * self.columns,
                      self.tileset.get_tile_size() * min_rows)
 
     def get_selection(self):
@@ -193,15 +192,14 @@ class TileSelectorWidget(QWidget):
             gc.fill_rect(rect, Color(0, 0, 255, 100))
 
     def resizeEvent(self, event):
-        self.columns = self.get_columns()
         self.repaint()
 
-    def get_columns(self):
-        return int(self.viewport.width() / self.tileset.get_tile_size())
+    @property
+    def columns(self):
+        return int(self.size().width() / (self.tileset.get_tile_size() * self.scale))
 
     def set_scale(self, s):
         self.scale = s
-        self.columns = int(self.size().width() / (self.tileset.get_tile_size() * self.scale))
         self.repaint()
 
     def get_tiles(self):
@@ -209,8 +207,6 @@ class TileSelectorWidget(QWidget):
 
     def set_tileset(self, tileset):
         self.tileset = tileset
-        # Recalc the number of tiles in a row
-        self.columns = int(self.size().width() / (self.tileset.get_tile_size() * self.scale))
         self.repaint()
 
     def set_tiles(self, tiles):

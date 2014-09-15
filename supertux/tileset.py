@@ -66,8 +66,8 @@ class SuperTuxTileset(Tileset):
         for i in tree:
             if i[0] == "tiles":
                 data = i[1:]
-                self.width = get_value_from_tree(['width', '_'], data, 1)
-                self.height = get_value_from_tree(['height', '_'], data, 1)
+                width = get_value_from_tree(['width', '_'], data, 1)
+                # height = get_value_from_tree(['height', '_'], data, 1)
                 ids = get_value_from_tree(['ids'], data, [])
                 # attributes = get_value_from_tree(['attributes'], data, [])
                 image = get_value_from_tree(['image', '_'], data, None)
@@ -85,7 +85,7 @@ class SuperTuxTileset(Tileset):
                                                                   x * 32, y * 32, 32, 32)
                     self.add_tile(id, Tile(pixelbuffer))
                     x += 1
-                    if (x == self.width):
+                    if (x == width):
                         x = 0
                         y += 1
 

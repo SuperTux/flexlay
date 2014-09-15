@@ -34,6 +34,9 @@ class FileDialog:
 
         self.file_dialog.show()
 
+    def get_filename(self):
+        pass
+
     def set_filename(self, file_dialog):
         # GRUMBEL
         pass

@@ -80,10 +80,10 @@ class SuperTuxTileset(Tileset):
 
                 x = 0
                 y = 0
-                for id in ids:
+                for tile_id in ids:
                     pixelbuffer = PixelBuffer.subregion_from_file(Config.current.datadir + 'images/' + image,
                                                                   x * 32, y * 32, 32, 32)
-                    self.add_tile(id, Tile(pixelbuffer))
+                    self.add_tile(tile_id, Tile(pixelbuffer))
                     x += 1
                     if (x == width):
                         x = 0
@@ -91,7 +91,7 @@ class SuperTuxTileset(Tileset):
 
             elif i[0] == "tile":
                 data = i[1:]
-                id = get_value_from_tree(['id', '_'], data, -1)
+                tile_id = get_value_from_tree(['id', '_'], data, -1)
                 image = get_value_from_tree(['editor-images', '_'], data, False)
                 hidden = get_value_from_tree(['hidden', '_'], data, False)
 
@@ -106,10 +106,10 @@ class SuperTuxTileset(Tileset):
                                                                       image[2], image[3], image[4], image[5])
 
                 if not hidden:
-                    if id == 0 or not(pixelbuffer):
-                        self.add_tile(id, None)
+                    if tile_id == 0 or not(pixelbuffer):
+                        self.add_tile(tile_id, None)
                     else:
-                        self.add_tile(id, Tile(pixelbuffer))
+                        self.add_tile(tile_id, Tile(pixelbuffer))
 
             elif i[0] == "tilegroup":
                 data = i[1:]

@@ -101,9 +101,9 @@ class SuperTuxGUI:
         self.worldmapobjectselector = self.gui.create_object_selector(42, 42)
         if False:
             self.worldmapobjectselector.sig_drop.connect(self.on_worldmap_object_drop)
-        for object in worldmap_objects:
-            self.worldmapobjectselector.add_brush(ObjectBrush(Sprite.from_file(Config.current.datadir + object[1]),
-                                                              object[0]))
+        for obj in worldmap_objects:
+            self.worldmapobjectselector.add_brush(ObjectBrush(Sprite.from_file(Config.current.datadir + obj[1]),
+                                                              obj[0]))
 
         self.create_button_panel()
 
@@ -689,8 +689,8 @@ class SuperTuxGUI:
         level = Level(filename)
         level.activate(self.workspace)
 
-        if filename not in self.recent_files:
-            self.recent_files.append(filename)
+        if filename not in Config.current.recent_files:
+            Config.current.recent_files.append(filename)
             self.recent_files_menu.add_item(filename, self.load_level)
 
         self.minimap.update_minimap()
@@ -700,8 +700,8 @@ class SuperTuxGUI:
         worldmap = WorldMap(filename)
         worldmap.activate(self.workspace)
 
-        if filename not in self.recent_files:
-            self.recent_files.append(filename)
+        if filename not in Config.current.recent_files:
+            Config.current.recent_files.append(filename)
             self.recent_files_menu.add_item(filename, self.load_worldmap)
 
         self.minimap.update_minimap()

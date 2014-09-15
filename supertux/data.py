@@ -37,7 +37,7 @@ game_objects = [
     ["mriceblock", "images/creatures/mr_iceblock/left-0.png", "sprite",
      lambda data, sexpr: BadGuy("mriceblock")],
     ["mrbomb", "images/creatures/mr_bomb/left-0.png", "sprite",
-               lambda data, sexpr: BadGuy("mrbomb")],
+     lambda data, sexpr: BadGuy("mrbomb")],
     ["flame", "images/creatures/flame/flame-0.png", "sprite",
      lambda data, sexpr: BadGuy("flame")],
     ["stalactite", "images/creatures/stalactite/falling.png", "sprite",
@@ -79,7 +79,7 @@ game_objects = [
     ["rock", "images/tiles/blocks/block11.png", "sprite",
      lambda data, sexpr: SimpleObject("rock")],
     ["unstable_tile", "images/objects/unstable_tile/crumbling-1.png", "sprite",
-     lambda data, sexpr: SimpleTileObject(data, "unstable_tile")],
+     lambda data, sexpr: SimpleTileObject(data, "unstable_tile", sexpr)],
     ["infoblock", "images/engine/editor/infoblock.png", "sprite",
      lambda data, sexpr: InfoBlock(data, sexpr)],
     ["powerup", "images/engine/editor/powerup.png", "sprite",
@@ -121,8 +121,6 @@ def create_gameobject_from_data(editormap, objmap, name, sexpr):
     # Creates a gameobject from the given sexpr: "snowball", ((x 5) (y 5))
     obj = find_game_object(name)
     if obj is not None:
-        name, image, kind, func = obj
-
         x = get_value_from_tree(["x", "_"], sexpr, 0)
         y = get_value_from_tree(["y", "_"], sexpr, 0)
 
@@ -132,7 +130,7 @@ def create_gameobject_from_data(editormap, objmap, name, sexpr):
         print("Sector: Unhandled tag: ", name)
 
 
-def create_gameobject(editormap, objmap, data, pos, sexpr=[]):
+def create_gameobject(editormap, objmap, data, pos, sexpr):
     name, spritefile, kind, func = data
 
     # Creates a gameobject the given position, data is the entry in the game_objects table
@@ -152,7 +150,7 @@ def create_gameobject(editormap, objmap, data, pos, sexpr=[]):
         gobj = data[3].call(obj, sexpr)
         obj.metadata = gobj
     else:
-        raise Exception("Error: Unknown object type dropped: %r".format(data))
+        raise Exception("Error: Unknown object type dropped: %r" % data)
 
     cmd = ObjectAddCommand(objmap)
     cmd.add_object(obj)

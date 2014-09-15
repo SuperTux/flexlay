@@ -25,7 +25,7 @@ from .config import Config
 class GameObj:
 
     def __init__(self):
-        pass
+        self.obj = None
 
     def property_dialog(self, gui):
         print("Object ", type(self), " has no properties")
@@ -36,7 +36,8 @@ class GameObj:
 
 class SecretArea(GameObj):
 
-    def __init__(self, data, sexpr=[]):
+    def __init__(self, data, sexpr):
+        super().__init__()
         self.data = data
 
         self.message = get_value_from_tree(["message", "_"], sexpr, "")
@@ -71,7 +72,8 @@ class SecretArea(GameObj):
 
 class AmbientSound(GameObj):
 
-    def __init__(self, data, sexpr=[]):
+    def __init__(self, data, sexpr):
+        super().__init__()
         self.data = data
         self.data.set_color(Color(200, 200, 200, 128))
         self.factor = get_value_from_tree(["distance_factor", "_"],  sexpr, 0.1)
@@ -121,7 +123,8 @@ class AmbientSound(GameObj):
 
 class SequenceTrigger(GameObj):
 
-    def __init__(self, data, sexpr=[]):
+    def __init__(self, data, sexpr):
+        super().__init__()
         self.data = data
         self.sequence = get_value_from_tree(["sequence", "_"], sexpr, "")
         self.data.set_color(Color(255, 0, 0, 128))
@@ -144,7 +147,7 @@ class SequenceTrigger(GameObj):
                  self.sequence))
 
     def property_dialog(self, gui):
-        print(self.sequence.inspect)
+        print(self.sequence)
         dialog = gui.gui.create_generic_dialog("SequenceTrigger Property Dialog")
         dialog.add_string("Sequence: ", self.sequence)
 
@@ -156,13 +159,14 @@ class SequenceTrigger(GameObj):
 
 class BadGuy(GameObj):
 
-    def __init__(self, type):
-        self.type = type
+    def __init__(self, kind):
+        super().__init__()
+        self.kind = kind
         self.direction = "auto"
 
     def save(self, f, obj):
         pos = obj.get_pos()
-        f.write("       (%s (x %d) (y %d) (direction \"%s\")\n" % [self.type, pos.x, pos.y, self.direction])
+        f.write("       (%s (x %d) (y %d) (direction \"%s\")\n" % (self.kind, pos.x, pos.y, self.direction))
 
     def property_dialog(self, gui):
         dialog = gui.gui.create_generic_dialog("BadGuy Property Dialog")
@@ -179,7 +183,8 @@ class BadGuy(GameObj):
 
 class Dispenser(GameObj):
 
-    def __init__(self, data, sexpr=[]):
+    def __init__(self, data, sexpr):
+        super().__init__()
         self.data = data
         self.badguy = get_value_from_tree(["badguy", "_"], sexpr, "snowball")
         self.cycle = get_value_from_tree(["cycle", "_"], sexpr, 2)
@@ -187,7 +192,7 @@ class Dispenser(GameObj):
     def save(self, f, obj):
         pos = obj.get_pos()
         f.write("       (dispenser (x %d) (y %d) (badguy \"%s\") (cycle %d))\n" %
-                [pos.x, pos.y, self.badguy, self.cycle])
+                (pos.x, pos.y, self.badguy, self.cycle))
 
     def property_dialog(self, gui):
         dialog = gui.gui.create_generic_dialog("Dispenser Property Dialog")
@@ -203,44 +208,46 @@ class Dispenser(GameObj):
 
 class Platform(GameObj):
 
-    def __init__(self, data, sexpr=[]):
+    def __init__(self, data, sexpr):
+        super().__init__()
         self.data = data
         self.path = get_value_from_tree(["use_path", "_"], sexpr, "path01")
-        self.type = get_value_from_tree(["type", "_"], sexpr, "flying")
+        self.kind = get_value_from_tree(["type", "_"], sexpr, "flying")
 
     def save(self, f, obj):
         pos = obj.get_pos()
         f.write("       (platform (x %d) (y %d) (use_path \"%s\") (type \"%s\"))\n" %
-                [pos.x, pos.y, self.path, self.type])
+                (pos.x, pos.y, self.path, self.kind))
 
     def property_dialog(self, gui):
         dialog = gui.gui.create_generic_dialog("Platform Property Dialog")
         dialog.add_string("Use Path: ", self.path)
-        dialog.add_string("Platform Type: ", self.type)
+        dialog.add_string("Platform Type: ", self.kind)
 
-        def on_callback(path, type):
+        def on_callback(path, kind):
             self.path = path
-            self.type = type
+            self.kind = kind
         dialog.set_callback(on_callback)
 
 
 class SpawnPoint(GameObj):
 
-    def __init__(self, data, sexpr=[]):
+    def __init__(self, data, sexpr):
+        super().__init__()
         self.data = data
-        self.name = get_value_from_tree(["name", "_"],  sexpr, "main")
+        self.name = get_value_from_tree(["name", "_"], sexpr, "main")
         data.sig_move.connect(self.on_move)
         self.on_move(data)
 
     def on_move(self, data):
         pos = self.data.get_pos()
-        pos.x = (((pos.x + 16) // 32)) * 32
-        pos.y = (((pos.y + 16) // 32)) * 32
+        pos.x = ((pos.x + 16) // 32) * 32
+        pos.y = ((pos.y + 16) // 32) * 32
         self.data.set_pos(pos)
 
     def save(self, f, obj):
         pos = obj.get_pos()
-        f.write("       (spawnpoint (name \"%s\") (x %d) (y %d))\n" % [self.name, pos.x, pos.y])
+        f.write("       (spawnpoint (name \"%s\") (x %d) (y %d))\n" % (self.name, pos.x, pos.y))
 
     def property_dialog(self, gui):
         dialog = gui.gui.create_generic_dialog("SpawnPoint Property Dialog")
@@ -254,18 +261,20 @@ class SpawnPoint(GameObj):
 
 class SimpleObject(GameObj):
 
-    def __init__(self, type):
-        self.type = type
+    def __init__(self, kind):
+        super().__init__()
+        self.kind = kind
 
     def save(self, f, obj):
         pos = obj.get_pos()
-        f.write("       (%s (x %d) (y %d))\n" % [self.type, pos.x, pos.y])
+        f.write("       (%s (x %d) (y %d))\n" % (self.kind, pos.x, pos.y))
 
 
 class SimpleTileObject(GameObj):
 
-    def __init__(self, data, type, sexpr=[]):
-        self.type = type
+    def __init__(self, data, kind, sexpr):
+        super().__init__()
+        self.kind = kind
         self.data = data
         self.data.sig_move.connect(self.on_move)
         self.on_move(data)
@@ -278,12 +287,13 @@ class SimpleTileObject(GameObj):
 
     def save(self, f, obj):
         pos = obj.get_pos()
-        f.write("       (%s (x %d) (y %d))\n" % [self.type, pos.x, pos.y])
+        f.write("       (%s (x %d) (y %d))\n" % (self.kind, pos.x, pos.y))
 
 
 class InfoBlock(GameObj):
 
-    def __init__(self, data, sexpr=[]):
+    def __init__(self, data, sexpr):
+        super().__init__()
         self.data = data
         self.message = get_value_from_tree(["message", "_"], sexpr, "")
         self.data.sig_move.connect(self.on_move)
@@ -297,12 +307,12 @@ class InfoBlock(GameObj):
 
     def save(self, f, obj):
         pos = obj.get_pos()
-        f.write("      (infoblock (x %d) (y %d)\n" % [pos.x, pos.y])
-        f.write("        (message (_ \"%s\"))\n" % [self.message])
+        f.write("      (infoblock (x %d) (y %d)\n" % (pos.x, pos.y))
+        f.write("        (message (_ \"%s\"))\n" % (self.message))
         f.write("      )\n")
 
     def property_dialog(self, gui):
-        dialog = gui.gui.create_generic_dialog("InfoBox Property Dialog" % [self.type])
+        dialog = gui.gui.create_generic_dialog("InfoBox Property Dialog %s" % self.kind)
         dialog.add_string("Message: ", self.message)
 
         def on_callback(message):
@@ -313,7 +323,8 @@ class InfoBlock(GameObj):
 
 class Powerup(GameObj):
 
-    def __init__(self, data, sexpr=[]):
+    def __init__(self, data, sexpr):
+        super().__init__()
         self.data = data
         self.sprite = get_value_from_tree(["sprite", "_"], sexpr, "egg")
         self.data.sig_move.connect(self.on_move)
@@ -327,12 +338,12 @@ class Powerup(GameObj):
 
     def save(self, f, obj):
         pos = obj.get_pos()
-        f.write("      (powerup (x %d) (y %d)\n" % [pos.x, pos.y])
-        f.write("        (sprite (_ \"%s\"))\n" % [self.sprite])
+        f.write("      (powerup (x %d) (y %d)\n" % (pos.x, pos.y))
+        f.write("        (sprite (_ \"%s\"))\n" % self.sprite)
         f.write("      )\n")
 
     def property_dialog(self, gui):
-        dialog = gui.gui.create_generic_dialog("Powerup Property Dialog" % [self.sprite])
+        dialog = gui.gui.create_generic_dialog("Powerup Property Dialog" % self.sprite)
         dialog.add_string("Sprite: ", self.sprite)
 
         def on_callback(sprite):
@@ -343,18 +354,19 @@ class Powerup(GameObj):
 
 class ParticleSystem(GameObj):
 
-    def __init__(self, type, sexpr=[]):
-        self.type = type
+    def __init__(self, kind, sexpr):
+        super().__init__()
+        self.kind = kind
         self.layer = get_value_from_tree(["layer", "_"], sexpr, -1)
 
     def save(self, f, obj):
-        f.write("       (particles-%s\n" % [self.type])
+        f.write("       (particles-%s\n" % self.kind)
         if self.layer != -1:
-            f.write("         (layer %d)\n" % [self.layer])
+            f.write("         (layer %d)\n" % self.layer)
         f.write("       )\n")
 
     def property_dialog(self, gui):
-        dialog = gui.gui.create_generic_dialog("%s-ParticleSystem Property Dialog" % [self.type])
+        dialog = gui.gui.create_generic_dialog("%s-ParticleSystem Property Dialog" % self.kind)
         dialog.add_int("Layer: ", self.layer)
 
         def on_callback(layer):
@@ -365,19 +377,20 @@ class ParticleSystem(GameObj):
 
 class Gradient(GameObj):
 
-    def __init__(self, object, sexpr=[]):
-        self.object = object
+    def __init__(self, obj, sexpr):
+        super().__init__()
+        self.obj = obj
         self.layer = get_value_from_tree(["layer", "_"], sexpr, -1)
         self.color_top = [0, 0, 0]
         self.color_bottom = [0, 0, 0]
-        self.type = "image"
+        self.kind = "image"
         if get_value_from_tree(["top_color"], sexpr, []) != []:
             self.color_top = self.parse_color(
                 get_value_from_tree(["top_color"], sexpr, []))
             self.color_bottom = self.parse_color(
                 get_value_from_tree(["bottom_color"], sexpr, []))
 
-    def parse_color(self, sexpr=[]):
+    def parse_color(self, sexpr):
         if sexpr.size() < 3:
             return [0, 0, 0]
 
@@ -385,11 +398,11 @@ class Gradient(GameObj):
 
     def save(self, f, obj):
         f.write("       (gradient\n")
-        f.write("         (top_color %f %f %f)\n" % [self.color_top[0], self.color_top[1], self.color_top[2]])
+        f.write("         (top_color %f %f %f)\n" % (self.color_top[0], self.color_top[1], self.color_top[2]))
         f.write("         (bottom_color %f %f %f)\n" %
-                [self.color_bottom[0], self.color_bottom[1], self.color_bottom[2]])
+                (self.color_bottom[0], self.color_bottom[1], self.color_bottom[2]))
         if self.layer != -1:
-            f.write("         (layer %d)\n" % [self.layer])
+            f.write("         (layer %d)\n" % self.layer)
         f.write("       )\n")
 
     def property_dialog(self, gui):
@@ -416,19 +429,20 @@ class Gradient(GameObj):
 
 class Background(GameObj):
 
-    def __init__(self, object, sexpr=[]):
-        self.object = object
+    def __init__(self, obj, sexpr):
+        super().__init__()
+        self.obj = obj
         self.image = get_value_from_tree(["image", "_"], sexpr, "")
         self.speed = get_value_from_tree(["speed", "_"], sexpr, 1.0)
         self.layer = get_value_from_tree(["layer", "_"], sexpr, -1)
-        self.type = "image"
+        self.kind = "image"
 
     def save(self, f, obj):
         f.write("       (background\n")
-        f.write("         (image \"%s\")\n" % [self.image])
-        f.write("         (speed %f)\n" % [self.speed])
+        f.write("         (image \"%s\")\n" % self.image)
+        f.write("         (speed %f)\n" % self.speed)
         if self.layer != -1:
-            f.write("         (layer %d)\n" % [self.layer])
+            f.write("         (layer %d)\n" % self.layer)
         f.write("       )\n")
 
     def property_dialog(self, gui):
@@ -437,8 +451,8 @@ class Background(GameObj):
         dialog.add_float("Speed: ", self.speed)
         dialog.add_int("Layer: ", self.layer)
 
-        def on_callback(type, image, speed, layer):
-            self.type = type
+        def on_callback(kind, image, speed, layer):
+            self.kind = kind
             self.image = image
             self.speed = speed
             self.layer = layer
@@ -448,23 +462,24 @@ class Background(GameObj):
 
 class UnimplementedObject(GameObj):
 
-    def __init__(self, sexpr=[]):
+    def __init__(self, sexpr):
         super().__init__()
         self.sexpr = sexpr
 
     def save(self, f):
-        f.write("           (sexpr %s)\n" % [self.sexpr])
+        f.write("           (sexpr %s)\n" % self.sexpr)
         # TODO
 
 
 class LevelTime(GameObj):
 
-    def __init__(self, sexpr=[]):
+    def __init__(self, sexpr):
+        super().__init__()
         self.time = get_value_from_tree(["time", "_"], sexpr, 999)
 
     def save(self, f, obj):
         f.write("       (leveltime\n")
-        f.write("         (time %f)\n" % [self.time])
+        f.write("         (time %f)\n" % self.time)
         f.write("       )\n")
 
     def property_dialog(self, gui):
@@ -479,8 +494,9 @@ class LevelTime(GameObj):
 
 class Door(GameObj):
 
-    def __init__(self, type, data, sexpr=[]):
-        self.type = type
+    def __init__(self, kind, data, sexpr):
+        super().__init__()
+        self.kind = kind
         self.data = data
         self.sector = get_value_from_tree(["sector", "_"], sexpr, "main")
         self.spawnpoint = get_value_from_tree(["spawnpoint", "_"], sexpr, "main")
@@ -496,8 +512,8 @@ class Door(GameObj):
 
     def save(self, f, obj):
         pos = obj.get_pos()
-        f.write("       (%s\n" % [self.type])
-        f.write("         (x %d) (y %d)" % [pos.x, pos.y])
+        f.write("       (%s\n" % self.kind)
+        f.write("         (x %d) (y %d)" % (pos.x, pos.y))
         f.write("         (sector \"%s\")\n" % self.sector)
         f.write("         (spawnpoint \"%s\")\n" % self.spawnpoint)
         f.write("       )\n")
@@ -517,6 +533,7 @@ class Door(GameObj):
 class PathNode(GameObj):
 
     def __init__(self, node):
+        super().__init__()
         self.node = node
 
     def save(self, f, obj):
@@ -525,8 +542,9 @@ class PathNode(GameObj):
 
 class ScriptedObject(GameObj):
 
-    def __init__(self, object, sexpr=[]):
-        self.object = object
+    def __init__(self, obj, sexpr):
+        super().__init__()
+        self.obj = obj
         self.name = get_value_from_tree(["name", "_"], sexpr, "")
         self.sprite = get_value_from_tree(["sprite", "_"], sexpr, "")
         self.visible = get_value_from_tree(["visible", "_"], sexpr, True)
@@ -562,7 +580,7 @@ class ScriptedObject(GameObj):
 
     def load_sprite(self):
         sprite = Sprite.from_file(Config.current.datadir + self.sprite)
-        self.object.set_sprite(sprite)
+        self.obj.set_sprite(sprite)
 
     def property_dialog(self, gui):
         dialog = gui.gui.create_generic_dialog("Scripted Object Property Dialog")

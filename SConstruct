@@ -16,6 +16,7 @@
 
 
 env = Environment()
+env['ENV']['PYTHONPATH'] = "."
 
 sources = (Glob("flexlay/*.py") +
            Glob("flexlay/gui/*.py") +

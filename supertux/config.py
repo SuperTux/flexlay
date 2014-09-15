@@ -25,7 +25,7 @@ class Config:
     def create(projectname):
         dir = os.path.expanduser("~/.flexlay/")
         if not os.path.isdir(dir):
-            os.path.mkdir(dir)
+            os.mkdir(dir)
 
         return Config(os.path.join(dir, projectname))
 

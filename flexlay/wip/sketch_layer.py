@@ -64,7 +64,7 @@ class SketchLayer(Layer):
                 self.last_rot = gc.state.get_rotation()
 
                 gc.state.push(self.canvas.get_gc())
-                self.canvas.get_gc().clear(Color(0, 0, 0, 0).to_cl())
+                self.canvas.get_gc().clear(Color(0, 0, 0, 0))
                 # canvas.get_gc().clear(Color.white)
 
                 visible_area = self.state.get_clip_rect()

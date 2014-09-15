@@ -38,7 +38,7 @@ class SpriteStrokeDrawer:
             sprite = DrawerProperties.current().get_brush().get_sprite()
             color = DrawerProperties.current().get_color()
 
-            sprite.set_color(color.to_cl())
+            sprite.set_color(color)
             sprite.set_alpha((color.get_alpha() / 255.0) * dab.pressure)
             sprite.set_scale(DrawerProperties.current().get_size() * dab.pressure,
                              DrawerProperties.current().get_size() * dab.pressure)
@@ -73,7 +73,7 @@ class SpriteStrokeDrawer:
                         buffer = canvas.get_pixeldata(
                             Rect(Point(int(self.dabs[i - 1].pos.x) - sprite.width / 2,
                                        int(self.dabs[i - 1].pos.y) - sprite.height / 2),
-                                 Size(sprite.width, sprite.height)).to_cl())
+                                 Size(sprite.width, sprite.height)))
                         surface = Surface(buffer)
                         # surface.set_blend_func_separate(BlendFunc.src_alpha, BlendFunc.one_minus_src_alpha,
                         #                                BlendFunc.one, BlendFunc.zero)

@@ -36,15 +36,15 @@ class SketchStrokeTool:
         if self.drawing:
             # FIXME: This translation is a bit ugly, layer position should be handled somewhat different
             gc.push_modelview()
-            gc.add_translate(BitmapLayer.current.to_object().get_pos().x,
-                             BitmapLayer.current.to_object().get_pos().y)
+            gc.add_translate(BitmapLayer.current.get_pos().x,
+                             BitmapLayer.current.get_pos().y)
             self.stroke.draw(0)
             gc.pop_modelview()
         else:
             parent = EditorMapComponent.current
             p = parent.screen2world(Point(Mouse.get_x(), Mouse.get_y()))
             s = DrawerProperties.current().get_brush().get_sprite()
-            s.set_color(DrawerProperties.current().get_color().to_cl())
+            s.set_color(DrawerProperties.current().get_color())
             # FIXME: when using mouse 1.0, when tablet 0.5
             s.set_scale(DrawerProperties.current().get_size() * 0.5,
                         DrawerProperties.current().get_size() * 0.5)
@@ -73,8 +73,8 @@ class SketchStrokeTool:
         p = parent.screen2world(event.mouse_pos)
 
         # FIXME: This is ugly, events relative to the layer should be handled somewhat differently
-        dab = Dab(p.x - BitmapLayer.current.to_object().get_pos().x,
-                  p.y - BitmapLayer.current.to_object().get_pos().y)
+        dab = Dab(p.x - BitmapLayer.current.get_pos().x,
+                  p.y - BitmapLayer.current.get_pos().y)
 
         # FIXME: Make tablet configurable
         # if (CL_Display.get_current_window().get_ic().get_mouse_count() >= 4)

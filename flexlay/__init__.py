@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from .stroke import Dab, Stroke
+# from .stroke import Dab, Stroke
 from .drawer_properties import DrawerProperties
 from .brushmask import BrushMask
 from .canvas import Canvas
@@ -34,7 +34,7 @@ from .tilemap_layer import TilemapLayer
 from .surface import Surface
 from .sprite import Sprite
 
-from .bitmap_layer import BitmapLayer
+# from .bitmap_layer import BitmapLayer
 from .brush import Brush
 
 from .display import Display
@@ -48,8 +48,8 @@ from .object_brush import ObjectBrush
 from .object_delete_command import ObjectDeleteCommand
 from .paint_command import PaintCommand
 
-from .stroke_drawer import StrokeDrawer
-from .sprite_stroke_drawer import SpriteStrokeDrawer
+# from .stroke_drawer import StrokeDrawer
+# from .sprite_stroke_drawer import SpriteStrokeDrawer
 
 from .objmap_object import ObjMapObject
 from .object_move_command import ObjectMoveCommand
@@ -64,15 +64,17 @@ from .flexlay import Flexlay
 from .graphic_context_state import GraphicContextState
 from .gui_manager import GUIManager
 
-from .onion_skin_layer import OnionSkinLayer
-from .sketch_layer import SketchLayer
+# from .onion_skin_layer import OnionSkinLayer
+# from .sketch_layer import SketchLayer
 from .sprite_brush import SpriteBrush
 from .tile import Tile
 from .tile_provider import TileProvider
 
 
 __all__ = [
-    "BitmapLayer", "Brush", "BrushMask", "Canvas",
+    # "BitmapLayer", "OnionSkinLayer", "SketchLayer",
+    # "SpriteStrokeDrawer", "Stroke", "StrokeDrawer", "Dab",
+    "Brush", "BrushMask", "Canvas",
     "Color", "BlendFunc", "blit", "blit_clear", "blit_opaque",
     "Command", "CommandGroup", "DrawerProperties", "Field",
     "Flexlay", "GraphicContext", "GraphicContextState",
@@ -80,11 +82,11 @@ __all__ = [
     "ObjectBrush", "ObjectDeleteCommand", "ObjectLayer",
     "ObjectMoveCommand", "ObjectTransformCommand",
     "ObjMapControlPoint", "ObjMapObject", "ObjMapPathNode",
-    "ObjMapRectObject", "ObjMapSpriteObject", "OnionSkinLayer",
-    "PaintCommand", "PixelBuffer", "SketchLayer", "Sprite",
-    "SpriteBrush", "SpriteStrokeDrawer", "Stroke", "StrokeDrawer",
+    "ObjMapRectObject", "ObjMapSpriteObject",
+    "PaintCommand", "PixelBuffer", "Sprite",
+    "SpriteBrush",
     "Tile", "TileBrush", "TileProvider", "TilemapLayer", "Tileset",
-    "Workspace", "Surface", "Display", "Dab", "EditorMap"
+    "Workspace", "Surface", "Display", "EditorMap"
 ]
 
 

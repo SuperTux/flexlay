@@ -18,7 +18,7 @@
 from .tool import Tool
 from .layer_move_tool import LayerMoveTool
 from .objmap_select_tool import ObjMapSelectTool
-from .sketch_stroke_tool import SketchStrokeTool
+# from .sketch_stroke_tool import SketchStrokeTool
 from .tilemap_paint_tool import TileMapPaintTool
 from .tilemap_select_tool import TileMapSelectTool
 from .workspace_move_tool import WorkspaceMoveTool
@@ -27,7 +27,7 @@ from .zoom_tool import ZoomTool
 
 
 __all__ = ["Tool", "LayerMoveTool", "ObjMapSelectTool",
-           "SketchStrokeTool", "TileMapSelectTool", "TileMapPaintTool",
+           "TileMapSelectTool", "TileMapPaintTool",
            "WorkspaceMoveTool", "ZoomTool", "Zoom2Tool"]
 
 

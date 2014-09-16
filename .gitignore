@@ -5,6 +5,7 @@
 *.so
 *.so.*
 *~
+.pylint/
 .sconsign.dblite
 /TODO
 /libflexlay/flexlay_wrap_wrap.cc

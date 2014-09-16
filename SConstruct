@@ -15,6 +15,9 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+import os
+
+
 env = Environment()
 env['ENV']['PYTHONPATH'] = "."
 
@@ -37,7 +40,10 @@ flake_cmd = env.Command("flake.phony", sources,
 env.Alias("flake", flake_cmd)
 
 for i in sources:
-    pylint_cmd = env.Command(str(i) + ".pylint.phony", i, "epylint $SOURCE")
+    filename = str(i)
+    base = os.path.basename(filename)
+    path = os.path.dirname(filename)
+    pylint_cmd = env.Command(os.path.join(path, ".pylint", base), i, "epylint $SOURCE && touch $TARGET")
     Alias("pylint", pylint_cmd)
 
 env.Default(flake_cmd)

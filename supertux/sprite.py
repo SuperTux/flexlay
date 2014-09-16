@@ -18,6 +18,7 @@
 import os
 
 from flexlay.util import get_value_from_tree, sexpr_read_from_file
+from flexlay import Sprite as FlexlaySprite
 
 
 class SpriteAction:
@@ -41,6 +42,7 @@ class Sprite:
 
     def __init__(self, filename):
         self.actions = {}
+        self.actions_default = None
 
         tree = sexpr_read_from_file(filename)[0]
         if tree is None:
@@ -53,14 +55,14 @@ class Sprite:
                 action = SpriteAction()
                 action.parse(i[1:])
                 self.actions[action.name] = action
-                if self.actions.default is None or action.name == "default":
-                    self.actions.default = action
+                if self.actions_default is None or action.name == "default":
+                    self.actions_default = action
             else:
                 print("Unknown symbol '%s' in sprite '%s'" % (i[0], filename))
 
     def get_cl_sprite(self, action="default"):
-        action = self.actions[action]
-        sprite = Sprite.from_file(self.basedir + action.image)
+        action = self.actions.get(action, self.actions_default)
+        sprite = FlexlaySprite.from_file(self.basedir + action.image)
         # FIXME:
         # sprite.set_frame_offset(0, Point(action.x_offset, action.y_offset))
         return sprite

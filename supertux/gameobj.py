@@ -312,7 +312,7 @@ class InfoBlock(GameObj):
         f.write("      )\n")
 
     def property_dialog(self, gui):
-        dialog = gui.gui.create_generic_dialog("InfoBox Property Dialog %s" % self.kind)
+        dialog = gui.gui.create_generic_dialog("InfoBlock Property Dialog")
         dialog.add_string("Message: ", self.message)
 
         def on_callback(message):

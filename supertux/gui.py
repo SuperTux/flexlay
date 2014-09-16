@@ -24,13 +24,13 @@ from flexlay.math import Point, Rect, Size
 from flexlay.tools import (TileMapPaintTool, TileMapSelectTool,
                            ObjMapSelectTool, ZoomTool, Zoom2Tool, WorkspaceMoveTool)
 
-from .data import game_objects
+from .data import game_objects, create_gameobject
 from .gameobj import PathNode
 from .level import Level
 from .sector import Sector
 from .worldmap import WorldMap
 from .config import Config
-from .worldmap_object import worldmap_objects
+from .worldmap_object import worldmap_objects, create_worldmapobject_at_pos
 from .tileset import SuperTuxTileset
 
 BACKGROUND_LAYER = 1
@@ -105,8 +105,55 @@ class SuperTuxGUI:
             self.worldmapobjectselector.add_brush(ObjectBrush(Sprite.from_file(Config.current.datadir + obj[1]),
                                                               obj[0]))
 
-        self.create_button_panel()
+        # Create Buttonpanel
+        button_panel = self.gui.create_button_panel(True)
 
+        # File Handling
+        button_panel.add_icon("data/images/icons24/stock_new.png",  self.gui_level_new)
+        button_panel.add_icon("data/images/icons24/stock_open.png", self.gui_level_load)
+
+        button_panel.add_icon("data/images/icons24/stock_save.png", self.gui_level_save)
+        button_panel.add_icon("data/images/icons24/stock_save_as.png", self.gui_level_save_as)
+
+        # Copy&Paste
+        button_panel.add_separator()
+        button_panel.add_icon("data/images/icons24/stock_copy.png", None)
+        button_panel.add_icon("data/images/icons24/stock_paste.png", None)
+        # Undo Redo
+        button_panel.add_separator()
+        self.undo_icon = button_panel.add_icon("data/images/icons24/stock_undo.png",
+                                               self.workspace.get_map().undo)
+        self.redo_icon = button_panel.add_icon("data/images/icons24/stock_redo.png",
+                                               self.workspace.get_map().redo)
+        self.undo_icon.disable()
+        self.redo_icon.disable()
+
+        # Visibility Toggles
+        button_panel.add_separator()
+        self.minimap_icon = button_panel.add_icon("data/images/icons24/minimap.png", self.gui_toggle_minimap)
+        self.grid_icon = button_panel.add_icon("data/images/icons24/grid.png", self.gui_toggle_grid)
+
+        # Zoom Buttons
+        button_panel.add_separator()
+        button_panel.add_icon("data/images/icons24/stock_zoom_in.png", self.gui_zoom_in)
+        button_panel.add_icon("data/images/icons24/stock_zoom_out.png", self.gui_zoom_out)
+        button_panel.add_icon("data/images/icons24/stock_zoom_1.png", lambda: self.gui_set_zoom(1.0))
+        button_panel.add_icon("data/images/icons24/stock_zoom_fit.png", self.gui_zoom_fit)
+
+        # Layers
+        button_panel.add_separator()
+        self.background_icon = button_panel.add_icon("data/images/icons24/background.png", self.gui_show_background)
+        self.interactive_icon = button_panel.add_icon(
+            "data/images/icons24/interactive.png", self.gui_show_interactive)
+        self.foreground_icon = button_panel.add_icon("data/images/icons24/foreground.png", self.gui_show_foreground)
+
+        button_panel.add_separator()
+        self.sector_icon = button_panel.add_icon("data/images/icons24/sector.png", self.gui_switch_sector_menu)
+
+        button_panel.add_separator()
+        self.run_icon = button_panel.add_icon("data/images/icons24/run.png", self.gui_run_level)
+
+        # Create Toolbox
         self.toolbar = self.gui.create_button_panel(False)
         self.paint = self.toolbar.add_icon("data/images/tools/stock-tool-pencil-22.png",
                                            self.set_tilemap_paint_tool)
@@ -121,8 +168,37 @@ class SuperTuxGUI:
         # self.stroke =
         # self.toolbar.add_icon("data/images/tools/stock-tool-pencil-22.png", set_sketch_stroke_tool)
 
-        self.create_menu()
+        # Create Menu
+        self.menubar = self.gui.create_menubar()
 
+        file_menu = self.menubar.add_menu("&File")
+        file_menu.add_item("New...", self.gui_level_new)
+        file_menu.add_item("Open...", self.gui_level_load)
+        self.recent_files_menu = file_menu.add_menu("Open Recent")
+        file_menu.add_item("Save...", self.gui_level_save)
+        # file_menu.add_item("Save Commands...", menu_file_save_commands)
+        # file_menu.add_item("Save As...", self.gui_level_save_as)
+        file_menu.add_item("Properties...", self.gui_edit_level)
+        file_menu.add_item("Quit",  self.gui.quit)
+
+        edit_menu = self.menubar.add_menu("&Edit")
+        edit_menu.add_item("Smooth Selection", self.gui_smooth_level_struct)
+        edit_menu.add_item("Resize", self.gui_resize_level)
+        edit_menu.add_item("Resize to selection", self.gui_resize_level_to_selection)
+
+        zoom_menu = self.menubar.add_menu("&Zoom")
+        zoom_menu.add_item("1:4 (25%) ", lambda: self.gui_set_zoom(0.25))
+        zoom_menu.add_item("1:2 (50%) ", lambda: self.gui_set_zoom(0.5))
+        zoom_menu.add_item("1:1 (100%) ", lambda: self.gui_set_zoom(1.0))
+        zoom_menu.add_item("2:1 (200%) ", lambda: self.gui_set_zoom(2.0))
+        zoom_menu.add_item("4:1 (400%) ", lambda: self.gui_set_zoom(4.0))
+
+        layer_menu = self.menubar.add_menu("&Layer")
+        layer_menu.add_item("Show all", self.gui_show_all)
+        layer_menu.add_item("Show current", self.gui_show_current)
+        layer_menu.add_item("Show only current", self.gui_show_only_current)
+
+        # stuff
         self.load_dialog = self.gui.create_filedialog("Load SuperTux Level", "Load", "Cancel")
         self.load_dialog.set_filename(Config.current.datadir + "levels/")
         self.save_dialog = self.gui.create_filedialog("Save SuperTux Level as...", "Save", "Cancel")
@@ -190,94 +266,16 @@ class SuperTuxGUI:
 
             self.editor_map.sig_on_key("a").connect(on_a_key)
 
-    def create_menu(self):
-        self.menubar = self.gui.create_menubar()
-
-        file_menu = self.menubar.add_menu("&File")
-        file_menu.add_item("New...", self.gui_level_new)
-        file_menu.add_item("Open...", self.gui_level_load)
-        self.recent_files_menu = file_menu.add_menu("Open Recent")
-        file_menu.add_item("Save...", self.gui_level_save)
-        # file_menu.add_item("Save Commands...", menu_file_save_commands)
-        # file_menu.add_item("Save As...", self.gui_level_save_as)
-        file_menu.add_item("Properties...", self.gui_edit_level)
-        file_menu.add_item("Quit",  self.gui.quit)
-
-        edit_menu = self.menubar.add_menu("&Edit")
-        edit_menu.add_item("Smooth Selection", self.gui_smooth_level_struct)
-        edit_menu.add_item("Resize", self.gui_resize_level)
-        edit_menu.add_item("Resize to selection", self.gui_resize_level_to_selection)
-
-        zoom_menu = self.menubar.add_menu("&Zoom")
-        zoom_menu.add_item("1:4 (25%) ", lambda: self.gui_set_zoom(0.25))
-        zoom_menu.add_item("1:2 (50%) ", lambda: self.gui_set_zoom(0.5))
-        zoom_menu.add_item("1:1 (100%) ", lambda: self.gui_set_zoom(1.0))
-        zoom_menu.add_item("2:1 (200%) ", lambda: self.gui_set_zoom(2.0))
-        zoom_menu.add_item("4:1 (400%) ", lambda: self.gui_set_zoom(4.0))
-
-        layer_menu = self.menubar.add_menu("&Layer")
-        layer_menu.add_item("Show all", self.gui_show_all)
-        layer_menu.add_item("Show current", self.gui_show_current)
-        layer_menu.add_item("Show only current", self.gui_show_only_current)
-
-    def create_button_panel(self):
-        button_panel = self.gui.create_button_panel(True)
-
-        # File Handling
-        button_panel.add_icon("data/images/icons24/stock_new.png",  self.gui_level_new)
-        button_panel.add_icon("data/images/icons24/stock_open.png", self.gui_level_load)
-
-        button_panel.add_icon("data/images/icons24/stock_save.png", self.gui_level_save)
-        button_panel.add_icon("data/images/icons24/stock_save_as.png", self.gui_level_save_as)
-
-        # Copy&Paste
-        button_panel.add_separator()
-        button_panel.add_icon("data/images/icons24/stock_copy.png", None)
-        button_panel.add_icon("data/images/icons24/stock_paste.png", None)
-        # Undo Redo
-        button_panel.add_separator()
-        self.undo_icon = button_panel.add_icon("data/images/icons24/stock_undo.png",
-                                               self.workspace.get_map().undo)
-        self.redo_icon = button_panel.add_icon("data/images/icons24/stock_redo.png",
-                                               self.workspace.get_map().redo)
-        self.undo_icon.disable()
-        self.redo_icon.disable()
-
-        # Visibility Toggles
-        button_panel.add_separator()
-        self.minimap_icon = button_panel.add_icon("data/images/icons24/minimap.png", self.gui_toggle_minimap)
-        self.grid_icon = button_panel.add_icon("data/images/icons24/grid.png", self.gui_toggle_grid)
-
-        # Zoom Buttons
-        button_panel.add_separator()
-        button_panel.add_icon("data/images/icons24/stock_zoom_in.png", self.gui_zoom_in)
-        button_panel.add_icon("data/images/icons24/stock_zoom_out.png", self.gui_zoom_out)
-        button_panel.add_icon("data/images/icons24/stock_zoom_1.png", lambda: self.gui_set_zoom(1.0))
-        button_panel.add_icon("data/images/icons24/stock_zoom_fit.png", self.gui_zoom_fit)
-
-        # Layers
-        button_panel.add_separator()
-        self.background_icon = button_panel.add_icon("data/images/icons24/background.png", self.gui_show_background)
-        self.interactive_icon = button_panel.add_icon(
-            "data/images/icons24/interactive.png", self.gui_show_interactive)
-        self.foreground_icon = button_panel.add_icon("data/images/icons24/foreground.png", self.gui_show_foreground)
-
-        button_panel.add_separator()
-        self.sector_icon = button_panel.add_icon("data/images/icons24/sector.png", self.gui_switch_sector_menu)
-
-        button_panel.add_separator()
-        self.run_icon = button_panel.add_icon("data/images/icons24/run.png", self.gui_run_level)
-
     def on_worldmap_object_drop(self, brush, pos):
         pos = self.editor_map.screen2world(pos)
         object_type = brush.metadata
-        self.create_worldmapobject_at_pos(
+        create_worldmapobject_at_pos(
             self.workspace.get_map().metadata.objects, object_type, pos)
 
     def on_object_drop(self, brush, pos):
         pos = self.editor_map.screen2world(pos)
         data = brush.metadata
-        self.create_gameobject(self.workspace.get_map(), self.workspace.get_map().metadata.objects, data, pos)
+        create_gameobject(self.workspace.get_map(), self.workspace.get_map().metadata.objects, data, pos, [])
 
     def run(self):
         self.gui.run()
@@ -450,38 +448,41 @@ class SuperTuxGUI:
         print("Smoothing level structure")
         tilemap = TilemapLayer.current()
         data = tilemap.get_data()
-        width = tilemap.width
+        # width = tilemap.width
+        #
+        # GRUMBEL
+        # def get(x, y):
+        #     return data[y * width + x]
+        #
+        # def set(x, y, val):
+        #     data[y * width + x] = val
+        #
+        # def smooth(x, y):
+        # pass  # GRUMBEL
+        #     for ary in itile_conditions:
+        #         if ((solid_itiles.index(get[x - 1, y - 1]) ? 1: 0) == ary[0]
+        #             and (solid_itiles.index(get[x,  y - 1]) ? 1: 0) == ary[1]
+        #             and (solid_itiles.index(get[x + 1, y - 1]) ? 1: 0) == ary[2]
+        #             and (solid_itiles.index(get[x - 1, y]) ? 1: 0) == ary[3]
+        #             and (solid_itiles.index(get[x,  y]) ? 1: 0) == ary[4]
+        #             and (solid_itiles.index(get[x + 1, y]) ? 1: 0) == ary[5]
+        #             and (solid_itiles.index(get[x - 1, y + 1]) ? 1: 0) == ary[6]
+        #             and (solid_itiles.index(get[x,  y + 1]) ? 1: 0) == ary[7]
+        #             and (solid_itiles.index(get[x + 1, y + 1]) ? 1: 0) == ary[8]):
+        #             set[x, y, ary[9]]
+        #
+        # rect = self.tilemap_select_tool.get_selection_rect()
+        #
+        # start_x = rect.left
+        # end_x = rect.right
+        # start_y = rect.top
+        # end_y = rect.bottom
+        #
+        # GRUMBEL
+        # for y in range(start_y, end_y):
+        #     for x in range(start_x, end_x):
+        #         smooth(x, y)
 
-        def get(x, y):
-            return data[y * width + x]
-
-        def set(x, y, val):
-            data[y * width + x] = val
-
-        def smooth(x, y):
-            pass  # GRUMBEL
-            # for ary in itile_conditions:
-            #     if ((solid_itiles.index(get[x - 1, y - 1]) ? 1: 0) == ary[0]
-            #         and (solid_itiles.index(get[x,  y - 1]) ? 1: 0) == ary[1]
-            #         and (solid_itiles.index(get[x + 1, y - 1]) ? 1: 0) == ary[2]
-            #         and (solid_itiles.index(get[x - 1, y]) ? 1: 0) == ary[3]
-            #         and (solid_itiles.index(get[x,  y]) ? 1: 0) == ary[4]
-            #         and (solid_itiles.index(get[x + 1, y]) ? 1: 0) == ary[5]
-            #         and (solid_itiles.index(get[x - 1, y + 1]) ? 1: 0) == ary[6]
-            #         and (solid_itiles.index(get[x,  y + 1]) ? 1: 0) == ary[7]
-            #         and (solid_itiles.index(get[x + 1, y + 1]) ? 1: 0) == ary[8]):
-            #         set[x, y, ary[9]]
-
-        rect = self.tilemap_select_tool.get_selection_rect()
-
-        start_x = rect.left
-        end_x = rect.right
-        start_y = rect.top
-        end_y = rect.bottom
-
-        for y in range(start_y, end_y):
-            for x in range(start_x, end_x):
-                smooth[x, y]
         tilemap.set_data(data)
 
     def gui_resize_level_to_selection(self):
@@ -727,9 +728,9 @@ class DisplayProperties:
         self.show_all = False
         self.current_only = False
 
-    def set(self, map):
-        print(map)
-        if map is None or not isinstance(map, Sector):
+    def set(self, editormap):
+        print(editormap)
+        if editormap is None or not isinstance(editormap, Sector):
             return
 
         if self.current_only:
@@ -740,24 +741,24 @@ class DisplayProperties:
             deactive = Color(150, 150, 250, 150)
 
         if self.show_all:
-            map.foreground.set_foreground_color(active)
-            map.interactive.set_foreground_color(active)
-            map.background.set_foreground_color(active)
+            editormap.foreground.set_foreground_color(active)
+            editormap.interactive.set_foreground_color(active)
+            editormap.background.set_foreground_color(active)
         else:
             if (self.layer == FOREGROUND_LAYER):
-                map.foreground.set_foreground_color(active)
+                editormap.foreground.set_foreground_color(active)
             else:
-                map.foreground.set_foreground_color(deactive)
+                editormap.foreground.set_foreground_color(deactive)
 
             if (self.layer == INTERACTIVE_LAYER):
-                map.interactive.set_foreground_color(active)
+                editormap.interactive.set_foreground_color(active)
             else:
-                map.interactive.set_foreground_color(deactive)
+                editormap.interactive.set_foreground_color(deactive)
 
             if (self.layer == BACKGROUND_LAYER):
-                map.background.set_foreground_color(active)
+                editormap.background.set_foreground_color(active)
             else:
-                map.background.set_foreground_color(deactive)
+                editormap.background.set_foreground_color(deactive)
 
 
 # EOF #

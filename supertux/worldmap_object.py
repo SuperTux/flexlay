@@ -214,7 +214,7 @@ def create_worldmapobject_at_pos(objmap, name, pos):
         print("Error: Couldn't resolve object type: ", name)
         return
 
-    name, image, _class = objectclass
+    name, _, _class = objectclass
     obj = _class()
     obj.obj.set_pos(pos)
     cmd = ObjectAddCommand(objmap)
@@ -230,13 +230,13 @@ def create_worldmapobject_from_data(objmap, name, sexpr):
         print("Error: Couldn't resolve object type: ", name)
         return
 
-    name, image, _class = objectclass
+    name, _, _class = objectclass
     obj = _class()
     obj.parse(sexpr)
     cmd = ObjectAddCommand(objmap)
     cmd.add_object(obj.obj)
     from .gui import SuperTuxGUI
-    SuperTuxGUI.workspace.get_map().execute(cmd)
+    SuperTuxGUI.current.workspace.get_map().execute(cmd)
     return obj
 
 

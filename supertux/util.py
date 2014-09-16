@@ -17,6 +17,7 @@
 
 from flexlay import Sprite
 from flexlay.util import sexpr_read_from_file
+from .sprite import Sprite as SuperTuxSprite
 
 
 def load_lisp(filename, root_symbol):
@@ -37,7 +38,7 @@ def load_cl_sprite(filename):
     if filename[-4:] == ".png":
         sprite = Sprite.from_file(filename)
     elif filename[-7:] == ".sprite":
-        supertux_sprite = Sprite(filename)
+        supertux_sprite = SuperTuxSprite(filename)
         sprite = supertux_sprite.get_cl_sprite()
     else:
         raise Exception("Unsupported sprite format '%s'" % filename)

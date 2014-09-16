@@ -31,6 +31,7 @@ class Sector:
         self.name = None
         self.music = None
         self.gravity = 10.0
+        self.init_script = ""
 
         self.width = None
         self.height = None
@@ -276,8 +277,7 @@ class Sector:
         f.write("    )\n\n")
 
         for obj in self.objects.get_objects():
-            object = obj.get_data()
-            object.save(f, obj)
+            obj.get_data().save(f, obj)
 
 
 # EOF #

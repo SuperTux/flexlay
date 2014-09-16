@@ -59,7 +59,6 @@ class Level:
             else:
                 self.parse_v2(data)
 
-
     def parse_v2(self, data):
         self.name = get_value_from_tree(["name", "_"], data, "no name")
         self.author = get_value_from_tree(["author", "_"], data, "no author")

@@ -25,6 +25,11 @@ from .tileset import SuperTuxTileset
 class TileMap:
 
     def __init__(self):
+        self.width = None
+        self.height = None
+        self.solid = True
+        self.speed = 1.0
+        self.layer = "interactive"
         self.tilemaplayer = None
 
     def new_from_size(self, width, height):

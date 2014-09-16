@@ -131,7 +131,7 @@ def create_gameobject_from_data(editormap, objmap, name, sexpr):
 
 
 def create_gameobject(editormap, objmap, data, pos, sexpr):
-    name, spritefile, kind, func = data
+    _, spritefile, kind, func = data
 
     # Creates a gameobject the given position, data is the entry in the game_objects table
     if kind == "sprite":

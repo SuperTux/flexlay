@@ -20,11 +20,12 @@ from flexlay.util import get_value_from_tree, SExprWriter
 
 from .util import load_lisp
 from .tilemap import TileMap
+from .worldmap_object import create_worldmapobject_from_data
 
 
 class WorldMap:
 
-    def __init__(self, *params):
+    def __init__(self, arg1, arg2=None):
         self.name = "No Name"
         self.music = ""
         self.intro_filename = ""
@@ -34,25 +35,24 @@ class WorldMap:
         self.width = 0
         self.height = 0
         self.objects = ObjectLayer()
+        self.editormap = None
 
-        if len(params) == 2:
+        if arg2 is not None:
             # New Level
-            (width, height) = params
+            (width, height) = arg1, arg2
 
             self.width = width
             self.height = height
             self.tilemap = TileMap()
             self.tilemap.new_from_size(self.width, self.height)
-        elif len(params) == 1:
+        else:
             # Load Level from file
-            (self.filename,) = params
+            self.filename = arg1
 
             tree = load_lisp(self.filename, "supertux-worldmap")
 
             data = tree[1:]
             self.parse(data)
-        else:
-            raise Exception("Wrong arguments for SuperTux::___init__")
 
     def parse(self, data):
         for i in data:
@@ -69,7 +69,7 @@ class WorldMap:
                 self.tilemap = TileMap()
                 self.tilemap.parse(data)
             else:
-                self.create_worldmapobject_from_data(self.objects, name, data)
+                create_worldmapobject_from_data(self.objects, name, data)
 
     def save(self, filename):
         with open(filename, "w") as f:
@@ -90,8 +90,7 @@ class WorldMap:
             self.tilemap.save(writer)
 
             for o in self.objects.get_objects():
-                object = o.get_data()
-                object.save(writer)
+                o.get_data().save(writer)
             writer.end_list("supertux-worldmap")
 
     def activate(self, workspace):

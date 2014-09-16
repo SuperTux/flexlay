@@ -22,7 +22,7 @@ from flexlay.math import Point, Origin, Size, Sizef, Rectf
 class ObjMapSpriteObject(ObjMapObject):
 
     def __init__(self, sprite, pos, metadata):
-        super().__init__()
+        super().__init__(pos, metadata)
 
         self.sprite = sprite
         self.pos = pos

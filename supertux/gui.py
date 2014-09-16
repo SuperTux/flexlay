@@ -30,7 +30,7 @@ from .level import Level
 from .sector import Sector
 from .worldmap import WorldMap
 from .config import Config
-from .worldmap_object import worldmap_objects, create_worldmapobject_at_pos
+from .worldmap_object import create_worldmapobject_at_pos  # worldmap_objects
 from .tileset import SuperTuxTileset
 
 
@@ -88,8 +88,7 @@ class SuperTuxGUI:
         self.minimap = self.gui.create_minimap(self.editor_map)
 
         self.objectselector = self.gui.create_object_selector(42, 42)
-        if False:  # GRUMBEL
-            self.objectselector.sig_drop.connect(self.on_object_drop)
+        self.editor_map.sig_drop.connect(self.on_object_drop)
         for objectdata in game_objects:
             sprite = Sprite.from_file(Config.current.datadir + objectdata[1])
             self.objectselector.add_brush(ObjectBrush(sprite, objectdata))
@@ -102,12 +101,12 @@ class SuperTuxGUI:
         for tilegroup in SuperTuxTileset.current.tilegroups:
             self.tileselector.set_tiles(tilegroup.name, tilegroup.tiles)
 
-        self.worldmapobjectselector = self.gui.create_object_selector(42, 42)
-        if False:
-            self.worldmapobjectselector.sig_drop.connect(self.on_worldmap_object_drop)
-        for obj in worldmap_objects:
-            self.worldmapobjectselector.add_brush(ObjectBrush(Sprite.from_file(Config.current.datadir + obj[1]),
-                                                              obj[0]))
+        # self.worldmapobjectselector = self.gui.create_object_selector(42, 42)
+        # if False:
+        #     self.worldmapobjectselector.sig_drop.connect(self.on_worldmap_object_drop)
+        # for obj in worldmap_objects:
+        #     self.objectselector.add_brush(ObjectBrush(Sprite.from_file(Config.current.datadir + obj[1]),
+        #                                                       obj[0]))
 
         # Create Buttonpanel
         button_panel = self.gui.create_button_panel(True)
@@ -150,9 +149,6 @@ class SuperTuxGUI:
         self.interactive_icon = button_panel.add_icon(
             "data/images/icons24/interactive.png", self.gui_show_interactive)
         self.foreground_icon = button_panel.add_icon("data/images/icons24/foreground.png", self.gui_show_foreground)
-
-        button_panel.add_separator()
-        self.sector_icon = button_panel.add_icon("data/images/icons24/sector.png", self.gui_switch_sector_menu)
 
         button_panel.add_separator()
         self.run_icon = button_panel.add_icon("data/images/icons24/run.png", self.gui_run_level)
@@ -202,7 +198,24 @@ class SuperTuxGUI:
         layer_menu.add_item("Show current", self.gui_show_current)
         layer_menu.add_item("Show only current", self.gui_show_only_current)
 
-        # stuff
+        sector_menu = self.menubar.add_menu("&Sector")
+        # sector = self.workspace.get_map().metadata
+        # for i in sector.parent.get_sectors():
+        #     if sector.name == i:
+        #         current = " [current]"
+        #     else:
+        #         current = ""
+        #
+        #     def on_sector_callback():
+        #         print("Switching to %s" % i)
+        #         self.workspace.get_map().metadata.parent.activate_sector(i, self.workspace)
+        #
+        #     mymenu.add_item(mysprite, ("Sector (%s)%s" % [i, current]), on_sector_callback)
+        sector_menu.add_item("Create New Sector", self.gui_add_sector)
+        sector_menu.add_item("Remove Current Sector", self.gui_remove_sector)
+        sector_menu.add_item("Edit Sector Properties", self.gui_edit_sector)
+
+        # Loading Dialogs
         self.load_dialog = self.gui.create_filedialog("Load SuperTux Level", "Load", "Cancel")
         self.load_dialog.set_filename(Config.current.datadir + "levels/")
         self.save_dialog = self.gui.create_filedialog("Save SuperTux Level as...", "Save", "Cancel")
@@ -277,9 +290,9 @@ class SuperTuxGUI:
             self.workspace.get_map().metadata.objects, object_type, pos)
 
     def on_object_drop(self, brush, pos):
+        print("on_object_drop:", brush, pos)
         pos = self.editor_map.screen2world(pos)
-        data = brush.metadata
-        create_gameobject(self.workspace.get_map(), self.workspace.get_map().metadata.objects, data, pos, [])
+        create_gameobject(self.workspace.get_map(), self.workspace.get_map().metadata.objects, brush.metadata, pos, [])
 
     def run(self):
         self.gui.run()
@@ -288,26 +301,19 @@ class SuperTuxGUI:
         if False:  # GRUMBEL
             self.tileselector.show(False)
             if self.use_worldmap:
-                self.worldmapobjectselector.show(True)
                 self.objectselector.show(False)
             else:
-                self.worldmapobjectselector.show(False)
                 self.objectselector.show(True)
-            #    self.colorpicker.show(False)
 
     def show_tiles(self):
         if False:  # GRUMBEL
             self.tileselector.show(True)
             self.objectselector.show(False)
-            self.worldmapobjectselector.show(False)
-            # self.colorpicker.show(False)
 
     def show_none(self):
         if False:  # GRUMBEL
             self.tileselector.show(False)
             self.objectselector.show(False)
-            self.worldmapobjectselector.show(False)
-            # self.colorpicker.show(False)
 
     def set_tilemap_paint_tool(self):
         self.workspace.set_tool(InputEvent.MOUSE_LEFT, self.tile_paint_tool)
@@ -389,13 +395,12 @@ class SuperTuxGUI:
         self.display_properties.set(self.workspace.get_map().metadata)
 
     def gui_toggle_minimap(self):
-        if False:  # GRUMBEL
-            if self.minimap.is_visible():
-                self.minimap.show(False)
-                self.minimap_icon.set_up()
-            else:
-                self.minimap.show(True)
-                self.minimap_icon.set_down()
+        if self.minimap.get_widget().isVisible():
+            self.minimap.get_widget().hide()
+            self.minimap_icon.set_up()
+        else:
+            self.minimap.get_widget().show()
+            self.minimap_icon.set_down()
 
     def gui_toggle_grid(self):
         tilemap = self.workspace.get_map().metadata.foreground
@@ -405,6 +410,7 @@ class SuperTuxGUI:
             self.grid_icon.set_down()
         else:
             self.grid_icon.set_up()
+        self.editor_map.editormap_widget.repaint()
 
     def gui_toggle_display_props(self):
         if self.display_properties.show_all:
@@ -563,28 +569,6 @@ class SuperTuxGUI:
         level.add_sector(sector)
         level.activate_sector(uniq_name, self.workspace)
         self.gui_edit_sector()
-
-    def gui_switch_sector_menu(self):
-        pass
-        # mymenu = Menu(Point(530, 54))
-        # sector = self.workspace.get_map().metadata
-        # for i in sector.parent.get_sectors():
-        #     if sector.name == i:
-        #         current = " [current]"
-        #     else:
-        #         current = ""
-        #
-        #     def on_sector_callback():
-        #         print("Switching to %s" % i)
-        #         self.workspace.get_map().metadata.parent.activate_sector(i, self.workspace)
-        #
-        #     mymenu.add_item(mysprite, ("Sector (%s)%s" % [i, current]), on_sector_callback)
-        #
-        # mymenu.add_separator()
-        # mymenu.add_item(mysprite, "Create New Sector", self.gui_add_sector)
-        # mymenu.add_item(mysprite, "Remove Current Sector", self.gui_remove_sector)
-        # mymenu.add_item(mysprite, "Edit Sector Properties", self.gui_edit_sector)
-        # mymenu.run()
 
     def gui_show_object_properties(self):
         self.objmap_select_tool.get_selection()

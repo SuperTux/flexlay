@@ -88,7 +88,7 @@ class Sprite:
 
     def get_scale(self):
         # m_sprite.get_scale(x, y)
-        pass
+        return (1.0, 1.0)
 
     def add_frame(self, surface, rect):
         # m_sprite.add_frame(surface, rect)

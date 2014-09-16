@@ -48,16 +48,6 @@ class Workspace:
         if tool is not None:
             tool.on_mouse_down(event)
 
-    # ifdef GRUMBEL
-    # case InputEvent::MOUSE_WHEEL_UP:
-    #   EditorMapComponent::current()->zoom_in(event.mouse_pos)
-    #   break
-    #
-    # case InputEvent::MOUSE_WHEEL_DOWN:
-    #   EditorMapComponent::current()->zoom_out(event.mouse_pos)
-    #   break
-    # endif
-
     def key_up(self, event):
         tool = self.tools.get(event.kind)
         if tool is not None:

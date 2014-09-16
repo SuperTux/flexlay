@@ -30,10 +30,8 @@ class TileSelectorWidget(QWidget):
 
         self.viewport = viewport
         self.index = 0
-        self.offset = 0
-        self.old_offset = 0
+
         self.mouse_over_tile = -1
-        self.scrolling = False
         self.region_select = False
         self.current_pos = Point()
         self.region_select_start = Point()
@@ -79,21 +77,11 @@ class TileSelectorWidget(QWidget):
             self.region_select_start = self.current_pos
             self.grabMouse()
 
-        elif event.button() == Qt.MidButton:
-            self.scrolling = True
-            self.mouse_pos = Point.from_qt(event.pos())
-            self.old_offset = self.offset
-            self.grabMouse()
-
         self.repaint()
 
     def mouseReleaseEvent(self, event):
 
-        if event.button() == Qt.MidButton:
-            self.scrolling = False
-            self.releaseMouse()
-
-        elif event.button() == Qt.RightButton:
+        if event.button() == Qt.RightButton:
             self.releaseMouse()
             self.region_select = False
 
@@ -120,23 +108,6 @@ class TileSelectorWidget(QWidget):
         pos = self.get_mouse_tile_pos(Point.from_qt(event.pos()))
         self.current_pos = pos
         self.mouse_over_tile = pos.y * self.columns + pos.x
-
-        if self.scrolling:
-            self.offset = self.old_offset + (self.mouse_pos.y - event.y())
-            if self.offset < 0:
-                self.offset = 0
-
-        self.repaint()
-
-    def wheelEvent(self, event):
-        numDegrees = event.delta() / 8
-        numSteps = numDegrees / 15
-
-        self.offset += int(self.tileset.get_tile_size() * self.scale) * numSteps
-
-        if self.offset < 0:
-            self.offset = 0
-
         self.repaint()
 
     def get_mouse_tile_pos(self, mouse_pos):
@@ -210,7 +181,6 @@ class TileSelectorWidget(QWidget):
 
     def set_tiles(self, tiles):
         self.tiles = tiles
-        self.offset = 0
         self.repaint()
 
 

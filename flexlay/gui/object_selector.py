@@ -22,7 +22,11 @@ from .object_selector_widget import ObjectSelectorWidget
 
 class ObjectSelector:
 
+    current = None
+
     def __init__(self, obj_w, obj_h, parent):
+        ObjectSelector.current = self
+
         self.scroll_area = QScrollArea(parent)
         self.scroll_area.setWidgetResizable(True)
         self.scroll_area.setHorizontalScrollBarPolicy(Qt.ScrollBarAsNeeded)
@@ -34,9 +38,8 @@ class ObjectSelector:
     def add_brush(self, brush):
         self.widget.add_brush(brush)
 
-    @property
-    def sig_drop(self):
-        return self.widget.sig_drop
+    def get_brush(self, brush_id):
+        return self.widget.brushes[brush_id]
 
     def get_widget(self):
         return self.scroll_area

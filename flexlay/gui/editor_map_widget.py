@@ -18,7 +18,9 @@ from PyQt5.QtCore import QSize
 from PyQt5.QtGui import QColor, QPainter
 from PyQt5.QtWidgets import QSizePolicy, QWidget
 
+from flexlay.math import Point
 from flexlay import InputEvent, GraphicContext
+from flexlay.util import Signal
 
 
 class EditorMapWidget(QWidget):
@@ -36,10 +38,11 @@ class EditorMapWidget(QWidget):
         self.setAutoFillBackground(True)
         self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         self.setAcceptDrops(True)
+        self.sig_drop = Signal()
 
     def dragEnterEvent(self, event):
-        print("dragEnter:", event.mimeData().hasFormat("application/supertux-badguy"))
-        if event.mimeData().hasFormat("application/supertux-badguy"):
+        print("dragEnter:", event.mimeData().hasFormat("application/x-supertux-badguy"))
+        if event.mimeData().hasFormat("application/x-supertux-badguy"):
             event.accept()
 
     def dragLeaveEvent(self, event):
@@ -47,8 +50,10 @@ class EditorMapWidget(QWidget):
 
     def dropEvent(self, event):
         print("drop happened:", event.pos().x(), event.pos().y())
-        data = event.mimeData().data("application/supertux-badguy")
+        data = event.mimeData().data("application/x-supertux-badguy")
+        pos = self.comp.screen2world(Point.from_qt(event.pos()))
         print("Received:", data)
+        self.sig_drop(data, pos)
 
     def sizeHint(self):
         return QSize(1280, 800)
@@ -67,6 +72,16 @@ class EditorMapWidget(QWidget):
                 self.setPalette(pal)
 
                 self.repaint()
+
+    def wheelEvent(self, event):
+        num_degrees = event.angleDelta().y() / 8
+        num_steps = int(abs(num_degrees) / 15)
+
+        for _ in range(num_steps):
+            if num_degrees > 0:
+                self.comp.zoom_in(Point.from_qt(event.pos()))
+            else:
+                self.comp.zoom_out(Point.from_qt(event.pos()))
 
     def mouseMoveEvent(self, event):
         workspace = self.comp.get_workspace()

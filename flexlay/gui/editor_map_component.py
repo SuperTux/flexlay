@@ -15,13 +15,17 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+import pickle
+
 from PyQt5.QtWidgets import QWidget, QGridLayout, QScrollBar, QTabWidget
 from PyQt5.QtCore import Qt
 
 from ..workspace import Workspace
 from flexlay.math import Pointf
+from flexlay.util import Signal
 from ..graphic_context_state import GraphicContextState
 from .editor_map_widget import EditorMapWidget
+from .object_selector import ObjectSelector
 
 
 class EditorMapComponent:
@@ -57,6 +61,16 @@ class EditorMapComponent:
         self.layout.addWidget(self.editormap_widget, 0, 0)
         self.layout.addWidget(self.scroll_horz, 1, 0)
         self.layout.addWidget(self.scroll_vert, 0, 1)
+
+        self.sig_drop = Signal()
+        self.editormap_widget.sig_drop.connect(self.on_drop)
+
+    def on_drop(self, data, pos):
+        """sends (brush, pos)"""
+        brush_id = pickle.loads(data)
+        brush = ObjectSelector.current.get_brush(brush_id)
+        print(">>>>>>>>>>>", brush_id, brush, pos)
+        return self.sig_drop(brush, pos)
 
     def get_workspace(self):
         return self.workspace

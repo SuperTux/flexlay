@@ -138,7 +138,7 @@ def create_gameobject(editormap, objmap, data, pos, sexpr):
         sprite = Sprite.from_file(Config.current.datadir + spritefile)
 
         obj = ObjMapSpriteObject(sprite, pos, None)
-        gobj = func.call(obj, sexpr)
+        gobj = func(obj, sexpr)
         obj.metadata = gobj
         gobj.set_obj(obj)
 
@@ -147,7 +147,7 @@ def create_gameobject(editormap, objmap, data, pos, sexpr):
         obj = ObjMapRectObject(Rect(Point(pos.x, pos.y), Size(64, 64)),
                                Color(0, 0, 255, 128),
                                None)
-        gobj = data[3].call(obj, sexpr)
+        gobj = data[3](obj, sexpr)
         obj.metadata = gobj
     else:
         raise Exception("Error: Unknown object type dropped: %r" % data)

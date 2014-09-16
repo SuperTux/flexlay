@@ -15,6 +15,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+import pickle
+
 from PyQt5.QtGui import QDrag, QPainter, QPixmap
 from PyQt5.QtWidgets import QSizePolicy, QWidget
 from PyQt5.QtCore import Qt, QSize, QPoint, QByteArray, QMimeData
@@ -41,14 +43,11 @@ class ObjectSelectorWidget(QWidget):
         self.has_focus = False
 
         self.index = 0
-        self.offset = 0
-        self.old_offset = 0
 
         self.mouse_pos = None
         self.click_pos = None
 
         self.mouse_over_tile = -1
-        self.scrolling = False
         self.scale = 1.0
         self.drag_obj = -1
 
@@ -72,12 +71,12 @@ class ObjectSelectorWidget(QWidget):
             if self.mouse_over_tile != -1:
                 self.drag_obj = self.mouse_over_tile
 
-                if (self.drag_obj != -1):
+                if self.drag_obj != -1:
                     drag = QDrag(self)
                     mimeData = QMimeData()
                     # GRUMBEL obj = SuperTuxBadGuyData()
-                    data = QByteArray("test")  # GRUMBEL reinterpret_cast<const char*>(&obj), sizeof(obj))
-                    mimeData.setData("application/supertux-badguy", data)
+                    data = QByteArray(pickle.dumps(self.drag_obj))
+                    mimeData.setData("application/x-supertux-badguy", data)
                     drag.setMimeData(mimeData)
 
                     print("DRAG:", self.drag_obj)
@@ -92,32 +91,18 @@ class ObjectSelectorWidget(QWidget):
 
                     self.drag_obj = -1
 
-        elif event.button() == Qt.MidButton:
-            self.scrolling = True
-            self.click_pos = Point.from_qt(event.pos())
-            self.old_offset = self.offset
-            # GRUMBEL: ui.scrollArea.horizontalScrollBar().setValue(100)
-            self.releaseMouse()
-
     def mouseReleaseEvent(self, event):
         if event.button() == Qt.LeftButton:
             if self.drag_obj != -1:
                 # releaseMouse()
                 self.drag_obj = -1
 
-        elif event.button() == Qt.MidButton:
-            self.scrolling = False
-            self.releaseMouse()
-
     def mouseMoveEvent(self, event):
-        if self.scrolling:
-            self.offset = self.old_offset + (self.click_pos.y - event.y())
-
         self.mouse_pos = Point.from_qt(event.pos())
 
         cell_w = self.width() / self.get_columns()
         x = int(event.x() // cell_w)
-        y = int((event.y() + self.offset) // self.cell_height)
+        y = int(event.y() // self.cell_height)
 
         self.mouse_over_tile = y * self.get_columns() + x
 
@@ -126,16 +111,7 @@ class ObjectSelectorWidget(QWidget):
 
         self.repaint()
 
-    def wheelEvent(self, event):
-        numDegrees = event.delta() / 8
-        numSteps = numDegrees / 15
-
-        self.offset += int(self.cell_height * self.scale * numSteps)
-
     def paintEvent(self, event):
-        if self.offset < 0:
-            self.offset = 0
-
         painter = QPainter(self)
         gc = GraphicContext(painter)
 
@@ -174,7 +150,5 @@ class ObjectSelectorWidget(QWidget):
     def add_brush(self, brush):
         self.brushes.append(brush)
 
-    def sig_drop(self):
-        return self.on_drop
 
 # EOF #

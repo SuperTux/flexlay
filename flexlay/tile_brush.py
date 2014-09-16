@@ -27,12 +27,12 @@ class TileBrush:
     def from_field(field, w, h, pos_x, pos_y):
         return TileBrush(w, h, field.copy_region(pos_x, pos_y, w, h))
 
-    def __init__(self, w, h, data=None):
+    def __init__(self, w, h, field=None):
         self.opaque = False
-        if data is None:
+        if field is None:
             self.data = Field(w, h)
         else:
-            self.data = data
+            self.data = field
 
     @property
     def width(self):
@@ -52,6 +52,7 @@ class TileBrush:
         return self.data.at(x, y)
 
     def put(self, x, y, value):
+        assert isinstance(value, int)
         return self.data.put(x, y, value)
 
     def resize(self, w, h, pos_x=0, pos_y=0):

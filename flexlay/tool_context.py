@@ -15,21 +15,18 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from .tool import Tool
-from .layer_move_tool import LayerMoveTool
-from .objmap_select_tool import ObjMapSelectTool
-# from .sketch_stroke_tool import SketchStrokeTool
-from .tile_paint_tool import TilePaintTool
-from .tile_brush_create_tool import TileBrushCreateTool
-from .tilemap_select_tool import TileMapSelectTool
-from .workspace_move_tool import WorkspaceMoveTool
-from .zoom2_tool import Zoom2Tool
-from .zoom_tool import ZoomTool
+from .tile_brush import TileBrush
 
 
-__all__ = ["Tool", "LayerMoveTool", "ObjMapSelectTool",
-           "TileMapSelectTool", "TilePaintTool", "TileBrushCreateTool",
-           "WorkspaceMoveTool", "ZoomTool", "Zoom2Tool"]
+class ToolContext:
+
+    current = None
+
+    def __init__(self):
+        ToolContext.current = self
+        self.tile_brush = TileBrush(1, 1)
+        self.tile_brush.put(0, 0, 0)
+        self.tile_brush.set_opaque()
 
 
 # EOF #

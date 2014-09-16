@@ -32,7 +32,7 @@ class WorkspaceMoveTool:
         self.scrolling = True
         self.old_trans_offset = EditorMapComponent.current.get_gc_state().get_pos()
         self.click_pos = event.mouse_pos
-        EditorMapComponent.current.capture_mouse()
+        EditorMapComponent.current.grab_mouse()
 
     def on_mouse_up(self, event):
         print("WorkspaceMoveToolImpl.on_mouse_up")

@@ -64,7 +64,7 @@ class ObjMapSelectTool(Tool):
                          Color(255, 255, 255))
 
     def on_mouse_up(self, event):
-        print("ObjMapSelectToolImpl.on_mouse_up ", event.kind, event.mouse_pos.x, event.mouse_pos.y)
+        # print("ObjMapSelectToolImpl.on_mouse_up ", event.kind, event.mouse_pos.x, event.mouse_pos.y)
 
         objmap = ObjectLayer.current
         parent = EditorMapComponent.current
@@ -97,7 +97,7 @@ class ObjMapSelectTool(Tool):
         print("-- Selection: ", len(self.selection))
 
     def on_mouse_down(self, event):
-        print("ObjMapSelectToolImpl.on_mouse_down ", event.kind, event.mouse_pos.x, event.mouse_pos.y)
+        # print("ObjMapSelectToolImpl.on_mouse_down ", event.kind, event.mouse_pos.x, event.mouse_pos.y)
         objmap = ObjectLayer.current
         parent = EditorMapComponent.current
         pos = parent.screen2world(event.mouse_pos)
@@ -107,7 +107,7 @@ class ObjMapSelectTool(Tool):
 
             if self.control_point:
                 self.state = ObjMapSelectTool.STATE_DRAG
-                parent.capture_mouse()
+                parent.grab_mouse()
                 self.offset = pos - self.control_point.get_pos()
                 self.drag_start = pos
             else:
@@ -124,7 +124,7 @@ class ObjMapSelectTool(Tool):
                         self.on_selection_change()
                     else:
                         self.state = ObjMapSelectTool.STATE_DRAG
-                        parent.capture_mouse()
+                        parent.grab_mouse()
                         self.offset = pos - obj.get_pos()
                         self.drag_start = pos
 
@@ -141,12 +141,12 @@ class ObjMapSelectTool(Tool):
                 else:
                     self.state = ObjMapSelectTool.STATE_SELECT
                     self.selection_rect = Rectf(pos.x, pos.y, pos.x, pos.y)
-                    parent.capture_mouse()
+                    parent.grab_mouse()
 
         print("-- Selection: ", len(self.selection))
 
     def on_mouse_move(self, event):
-        print("ObjMapSelectToolImpl.on_mouse_move ", event.kind, event.mouse_pos.x, event.mouse_pos.y)
+        # print("ObjMapSelectToolImpl.on_mouse_move ", event.kind, event.mouse_pos.x, event.mouse_pos.y)
 
         parent = EditorMapComponent.current
         pos = parent.screen2world(event.mouse_pos)

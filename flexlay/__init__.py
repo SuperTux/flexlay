@@ -24,6 +24,7 @@ from .field import Field
 from .pixel_buffer import PixelBuffer
 from .blitter import blit_opaque, blit, blit_clear
 from .tile_brush import TileBrush
+from .tool_context import ToolContext
 from .color import Color
 from .tileset import Tileset
 
@@ -86,7 +87,7 @@ __all__ = [
     "PaintCommand", "PixelBuffer", "Sprite",
     "SpriteBrush",
     "Tile", "TileBrush", "TileProvider", "TilemapLayer", "Tileset",
-    "Workspace", "Surface", "Display", "EditorMap"
+    "Workspace", "Surface", "Display", "EditorMap", "ToolContext"
 ]
 
 

@@ -113,6 +113,7 @@ class TilemapLayer(Layer):
         self.field.resize(size.width, size.height, point.x, point.y)
 
     def draw_tile(self, tile_id, pos):
+        assert isinstance(tile_id, int)
         if pos.x >= 0 and pos.x < self.field.width and \
            pos.y >= 0 and pos.y < self.field.height:
             self.field.put(pos.x, pos.y, tile_id)

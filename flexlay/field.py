@@ -42,6 +42,7 @@ class Field:
         return Field(self.width, self.height, self.data[:])
 
     def put(self, x, y, value):
+        assert isinstance(value, int)
         self.data[self.width * y + x] = value
 
     def at(self, x, y):
@@ -67,6 +68,14 @@ class Field:
 
     def size(self):
         return len(self.data)
+
+    def __str__(self):
+        result = "\n"
+        for y in range(self.height):
+            for x in range(self.width):
+                result += "%04s " % self.at(x, y)
+            result += "\n"
+        return result
 
 
 # EOF #

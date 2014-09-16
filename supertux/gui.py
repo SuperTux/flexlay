@@ -18,10 +18,10 @@
 import subprocess
 import os
 
-from flexlay import (Color, ObjectBrush, Sprite, TilemapLayer,
-                     ObjMapRectObject, ObjMapPathNode, EditorMap)
+from flexlay import (Color, ObjectBrush, Sprite, TilemapLayer, InputEvent,
+                     ObjMapRectObject, ObjMapPathNode, EditorMap, ToolContext)
 from flexlay.math import Point, Rect, Size
-from flexlay.tools import (TileMapPaintTool, TileMapSelectTool,
+from flexlay.tools import (TilePaintTool, TileBrushCreateTool, TileMapSelectTool,
                            ObjMapSelectTool, ZoomTool, Zoom2Tool, WorkspaceMoveTool)
 
 from .data import game_objects, create_gameobject
@@ -32,6 +32,7 @@ from .worldmap import WorldMap
 from .config import Config
 from .worldmap_object import worldmap_objects, create_worldmapobject_at_pos
 from .tileset import SuperTuxTileset
+
 
 BACKGROUND_LAYER = 1
 INTERACTIVE_LAYER = 2
@@ -52,6 +53,8 @@ class SuperTuxGUI:
         self.tileselector = None
         self.objectselector = None
 
+        self.tool_context = ToolContext()
+
         self.gui = flexlay.create_gui_manager("SuperTux Editor")
 
         self.display_properties = DisplayProperties()
@@ -62,16 +65,17 @@ class SuperTuxGUI:
         self.workspace.set_map(editormap)
 
         # Tools
-        self.tilemap_paint_tool = TileMapPaintTool()
+        self.tile_paint_tool = TilePaintTool()
+        self.tile_brush_create_tool = TileBrushCreateTool()
         self.tilemap_select_tool = TileMapSelectTool()
         self.zoom_tool = ZoomTool()
         self.zoom2_tool = Zoom2Tool()
         self.workspace_move_tool = WorkspaceMoveTool()
         self.objmap_select_tool = ObjMapSelectTool()
 
-        self.workspace.set_tool(0, self.tilemap_paint_tool)
-        self.workspace.set_tool(2, self.workspace_move_tool)
-        self.workspace.set_tool(1, self.tilemap_paint_tool)
+        self.workspace.set_tool(InputEvent.MOUSE_LEFT, self.tile_paint_tool)
+        self.workspace.set_tool(InputEvent.MOUSE_MIDDLE, self.workspace_move_tool)
+        self.workspace.set_tool(InputEvent.MOUSE_RIGHT, self.tile_brush_create_tool)
         # 'x' key
         self.workspace.set_tool(120, self.zoom_tool)
         # 'u' key
@@ -122,9 +126,9 @@ class SuperTuxGUI:
         # Undo Redo
         button_panel.add_separator()
         self.undo_icon = button_panel.add_icon("data/images/icons24/stock_undo.png",
-                                               self.workspace.get_map().undo)
+                                               lambda: self.workspace.get_map().undo())
         self.redo_icon = button_panel.add_icon("data/images/icons24/stock_redo.png",
-                                               self.workspace.get_map().redo)
+                                               lambda: self.workspace.get_map().redo())
         self.undo_icon.disable()
         self.redo_icon.disable()
 
@@ -306,8 +310,8 @@ class SuperTuxGUI:
             # self.colorpicker.show(False)
 
     def set_tilemap_paint_tool(self):
-        self.workspace.set_tool(0, self.tilemap_paint_tool)
-        self.workspace.set_tool(1, self.tilemap_paint_tool)
+        self.workspace.set_tool(InputEvent.MOUSE_LEFT, self.tile_paint_tool)
+        self.workspace.set_tool(InputEvent.MOUSE_RIGHT, self.tile_brush_create_tool)
         self.paint.set_down()
         self.select.set_up()
         self.zoom.set_up()
@@ -315,7 +319,8 @@ class SuperTuxGUI:
         self.show_tiles()
 
     def set_tilemap_select_tool(self):
-        self.workspace.set_tool(0, self.tilemap_select_tool)
+        self.workspace.set_tool(InputEvent.MOUSE_LEFT, self.tilemap_select_tool)
+        self.workspace.set_tool(InputEvent.MOUSE_RIGHT, None)
         self.paint.set_up()
         self.select.set_down()
         self.zoom.set_up()
@@ -323,24 +328,17 @@ class SuperTuxGUI:
         self.show_none()
 
     def set_zoom_tool(self):
-        self.workspace.set_tool(0, self.zoom_tool)
-        self.workspace.set_tool(1, self.zoom_tool)
+        self.workspace.set_tool(InputEvent.MOUSE_LEFT, self.zoom_tool)
+        self.workspace.set_tool(InputEvent.MOUSE_RIGHT, self.zoom_tool)
         self.paint.set_up()
         self.select.set_up()
         self.zoom.set_down()
         self.object.set_up()
         self.show_none()
 
-    #   def set_sketch_stroke_tool(self):
-    #     self.workspace.set_tool(0, sketch_stroke_tool)
-    #     self.paint.set_up()
-    #     self.select.set_up()
-    #     self.zoom.set_up()
-    #     self.object.set_down()
-    #     show_colorpicker()
-
     def set_objmap_select_tool(self):
-        self.workspace.set_tool(0, self.objmap_select_tool)
+        self.workspace.set_tool(InputEvent.MOUSE_LEFT, self.objmap_select_tool)
+        self.workspace.set_tool(InputEvent.MOUSE_RIGHT, None)
         self.paint.set_up()
         self.select.set_up()
         self.zoom.set_up()
@@ -601,6 +599,7 @@ class SuperTuxGUI:
             print("Warning: Selection is empty")
 
     def on_map_change(self):
+        self.editor_map.editormap_widget.repaint()
         if self.workspace.get_map().undo_stack_size() > 0:
             self.undo_icon.enable()
         else:

@@ -15,6 +15,9 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from ..gui.editor_map_component import EditorMapComponent
+
+
 class Tool:
 
     def __init__(self):
@@ -31,6 +34,12 @@ class Tool:
 
     def on_mouse_move(self, event):
         pass
+
+    def grab_mouse(self):
+        EditorMapComponent.current.grab_mouse()
+
+    def release_mouse(self):
+        EditorMapComponent.current.release_mouse()
 
 
 # EOF #

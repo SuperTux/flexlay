@@ -61,7 +61,7 @@ class EditorMapComponent:
     def get_workspace(self):
         return self.workspace
 
-    def capture_mouse(self):
+    def grab_mouse(self):
         self.editormap_widget.grabMouse()
 
     def release_mouse(self):

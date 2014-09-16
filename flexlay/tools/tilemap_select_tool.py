@@ -43,13 +43,13 @@ class TileMapSelectTool:
         parent = EditorMapComponent.current
 
         if event.kind == InputEvent.MOUSE_LEFT:
-            creating_selection = True
-            parent.capture_mouse()
+            self.creating_selection = True
+            parent.grab_mouse()
             tilemap = TilemapLayer.current
             self.selection.start(tilemap, tilemap.world2tile(parent.screen2world(event.mouse_pos)))
 
         elif event.kind == InputEvent.MOUSE_RIGHT:
-            if not creating_selection:
+            if not self.creating_selection:
                 self.selection.clear()
 
     def on_mouse_move(self, event):

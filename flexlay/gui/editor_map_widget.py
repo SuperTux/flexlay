@@ -25,6 +25,8 @@ class EditorMapWidget(QWidget):
 
     def __init__(self, comp, parent):
         super().__init__(parent)
+        self.setMouseTracking(True)
+
         self.comp = comp
 
         pal = self.palette()
@@ -76,14 +78,12 @@ class EditorMapWidget(QWidget):
         workspace = self.comp.get_workspace()
         ev = InputEvent.from_qt(event)
         workspace.mouse_down(ev)
-        print("mouse press: ")
         self.repaint()
 
     def mouseReleaseEvent(self, event):
         workspace = self.comp.get_workspace()
         ev = InputEvent.from_qt(event)
         workspace.mouse_up(ev)
-        print("mouse release: ")
         self.repaint()
 
     def paintEvent(self, event):

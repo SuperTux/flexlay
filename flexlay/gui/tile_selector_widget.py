@@ -19,9 +19,8 @@ from PyQt5.QtCore import QSize, Qt
 from PyQt5.QtWidgets import QWidget
 from PyQt5.QtGui import QPainter
 
-from flexlay import TileBrush, GraphicContext, Color, Tileset
+from flexlay import TileBrush, GraphicContext, Color, Tileset, ToolContext
 from flexlay.math import Point, Rect, Size
-from flexlay.tools import TileMapPaintTool
 
 
 class TileSelectorWidget(QWidget):
@@ -73,7 +72,7 @@ class TileSelectorWidget(QWidget):
             else:
                 brush.put(0, 0, 0)
 
-            TileMapPaintTool.current.set_brush(brush)
+            ToolContext.current.tile_brush = brush
 
         elif event.button() == Qt.RightButton:
             self.region_select = True
@@ -113,7 +112,7 @@ class TileSelectorWidget(QWidget):
                     else:
                         brush.put(x, y, 0)
 
-            TileMapPaintTool.current.set_brush(brush)
+            ToolContext.current.tile_brush = brush
 
         self.repaint()
 
@@ -148,7 +147,7 @@ class TileSelectorWidget(QWidget):
         painter = QPainter(self)
         gc = GraphicContext(painter)
 
-        brush = TileMapPaintTool.current.get_brush()
+        brush = ToolContext.current.tile_brush
 
         start_row = int(event.rect().y() // int(self.tileset.get_tile_size() * self.scale))
         end_row = int(start_row + event.rect().height() // int(self.tileset.get_tile_size() * self.scale))

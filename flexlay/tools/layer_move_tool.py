@@ -65,7 +65,7 @@ class LayerMoveTool(Tool):
             self.scrolling = True
             self.old_trans_offset = self.layer.get_pos()
             self.click_pos = pos
-            EditorMapComponent.current.capture_mouse()
+            EditorMapComponent.current.grab_mouse()
 
     def on_mouse_move(self, event):
         if self.layer and self.scrolling:

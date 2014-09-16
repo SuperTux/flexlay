@@ -65,7 +65,7 @@ class ZoomTool(Tool):
         else:
             if self.state == ZoomTool.NONE_STATE:
                 self.state = ZoomTool.CREATE_ZOOM_RECT
-                parent.capture_mouse()
+                parent.grab_mouse()
 
                 pos = parent.screen2world(event.mouse_pos)
                 self.zoom_rect.left = pos.x

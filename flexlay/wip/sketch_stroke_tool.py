@@ -63,7 +63,7 @@ class SketchStrokeTool:
         if event.kind == InputEvent.MOUSE_LEFT:
             self.drawing = True
             parent = EditorMapComponent.current
-            parent.capture_mouse()
+            parent.grab_mouse()
             self.stroke = Stroke()
             self.stroke.set_drawer(self.drawer.copy())
             self.add_dab(event)

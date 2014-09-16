@@ -19,7 +19,7 @@
 
 import random
 from flexlay.math import Size, Point, Rect
-from flexlay.tools import WorkspaceMoveTool, ObjMapSelectTool, TileMapPaintTool
+from flexlay.tools import WorkspaceMoveTool, ObjMapSelectTool, TilePaintTool
 from flexlay import (Flexlay, PixelBuffer, Sprite, Tile, Tileset, EditorMap,
                      TilemapLayer, ObjectLayer, ObjMapRectObject, Color, TileBrush, ObjectBrush)
 
@@ -91,7 +91,7 @@ def main():
 
     workspace_move_tool = WorkspaceMoveTool()
     objtool = ObjMapSelectTool()
-    tilemap_paint_tool = TileMapPaintTool()
+    tilemap_paint_tool = TilePaintTool()
     brush = TileBrush(1, 1)
     brush.put(0, 0, 1)
     tilemap_paint_tool.set_brush(brush)

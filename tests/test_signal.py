@@ -20,6 +20,7 @@
 from flexlay.util import Signal
 
 import unittest
+import unittest.mock
 
 
 class SignalTestCase(unittest.TestCase):
@@ -32,47 +33,38 @@ class SignalTestCase(unittest.TestCase):
 
     def test_signal_args(self):
         signal = Signal()
-        x = 0
-
-        def add_n(n):
-            nonlocal x
-            x += n
-
-        signal.connect(lambda n: add_n(n))
-        signal.connect(lambda n: add_n(n + 2))
-        signal(9)
-        self.assertEqual(x, 20)
+        mock1 = unittest.mock.Mock()
+        mock2 = unittest.mock.Mock()
+        signal.connect(mock1)
+        signal.connect(mock2)
+        signal(9, 11, 13)
+        mock1.assert_called_with(9, 11, 13)
+        mock2.assert_called_with(9, 11, 13)
+        self.assertEqual(mock1.call_count, 1)
+        self.assertEqual(mock2.call_count, 1)
 
     def test_signal_connect(self):
         signal = Signal()
-        x = 0
-
-        def add_two():
-            nonlocal x
-            x += 2
-
-        signal.connect(add_two)
-        signal.connect(add_two)
+        mock1 = unittest.mock.Mock()
+        mock2 = unittest.mock.Mock()
+        signal.connect(mock1)
+        signal.connect(mock2)
         signal()
-        self.assertEqual(x, 4)
+        mock1.assert_called_with()
+        mock2.assert_called_with()
+        self.assertEqual(mock1.call_count, 1)
+        self.assertEqual(mock2.call_count, 1)
 
     def test_signal_disconnect(self):
         signal = Signal()
-        x = 0
-
-        def add_two():
-            nonlocal x
-            x += 2
-
-        def add_three():
-            nonlocal x
-            x += 3
-
-        signal.connect(add_two)
-        signal.connect(add_three)
-        signal.disconnect(add_two)
+        mock1 = unittest.mock.Mock()
+        mock2 = unittest.mock.Mock()
+        signal.connect(mock1)
+        signal.connect(mock2)
+        signal.disconnect(mock1)
         signal()
-        self.assertEqual(x, 3)
+        self.assertEqual(mock1.call_count, 0)
+        self.assertEqual(mock2.call_count, 1)
 
 
 if __name__ == '__main__':

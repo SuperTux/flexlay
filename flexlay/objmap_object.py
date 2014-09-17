@@ -33,5 +33,11 @@ class ObjMapObject:
     def set_pos(self, pos):
         self.pos = pos
 
+    def add_control_points(self):
+        pass
+
+    def update_control_points(self):
+        pass
+
 
 # EOF #

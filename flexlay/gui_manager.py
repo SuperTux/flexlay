@@ -15,9 +15,9 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from PyQt5.QtCore import (QCoreApplication, Qt)
-from PyQt5.QtWidgets import (QApplication, QMainWindow, QToolBar,
-                             QDockWidget, QVBoxLayout, QWidget)
+from PyQt4.QtCore import (QCoreApplication, Qt)
+from PyQt4.QtGui import (QApplication, QMainWindow, QToolBar,
+                         QDockWidget, QVBoxLayout, QWidget)
 
 from .gui import (ButtonPanel, EditorMapComponent, FileDialog, GenericDialog,
                   LayerSelector, Menubar, Minimap, ObjectSelector,

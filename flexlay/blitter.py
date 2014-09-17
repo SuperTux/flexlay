@@ -15,8 +15,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from PyQt5.QtCore import QPoint
-from PyQt5.QtGui import QPainter
+from PyQt4.QtCore import QPoint
+from PyQt4.QtGui import QPainter
 
 
 def blit_opaque(target, brush, x, y):

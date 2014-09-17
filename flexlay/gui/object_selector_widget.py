@@ -17,9 +17,9 @@
 
 import pickle
 
-from PyQt5.QtGui import QDrag, QPainter, QPixmap
-from PyQt5.QtWidgets import QSizePolicy, QWidget
-from PyQt5.QtCore import Qt, QSize, QPoint, QByteArray, QMimeData
+from PyQt4.QtGui import QDrag, QPainter, QPixmap
+from PyQt4.QtGui import QSizePolicy, QWidget
+from PyQt4.QtCore import Qt, QSize, QPoint, QByteArray, QMimeData
 
 from flexlay.math import Rectf, Point, Origin
 from flexlay import Color, GraphicContext

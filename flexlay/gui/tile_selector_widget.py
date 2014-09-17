@@ -15,9 +15,9 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from PyQt5.QtCore import QSize, Qt
-from PyQt5.QtWidgets import QWidget
-from PyQt5.QtGui import QPainter
+from PyQt4.QtCore import QSize, Qt
+from PyQt4.QtGui import QWidget
+from PyQt4.QtGui import QPainter
 
 from flexlay import TileBrush, GraphicContext, Color, Tileset, ToolContext
 from flexlay.math import Point, Rect, Size

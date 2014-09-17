@@ -17,7 +17,7 @@
 
 import sys
 from .gui_manager import GUIManager
-from PyQt5.QtWidgets import QApplication
+from PyQt4.QtGui import QApplication
 
 
 class Flexlay:

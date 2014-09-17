@@ -17,8 +17,8 @@
 
 import pickle
 
-from PyQt5.QtWidgets import QWidget, QGridLayout, QScrollBar, QTabWidget
-from PyQt5.QtCore import Qt
+from PyQt4.QtGui import QWidget, QGridLayout, QScrollBar, QTabWidget
+from PyQt4.QtCore import Qt
 
 from ..workspace import Workspace
 from flexlay.math import Pointf

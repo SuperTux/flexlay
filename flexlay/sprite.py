@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from PyQt5.QtCore import QPoint
+from PyQt4.QtCore import QPoint
 
 from flexlay.math import Origin, Point, Size
 from .pixel_buffer import PixelBuffer

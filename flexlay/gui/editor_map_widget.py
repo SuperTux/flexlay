@@ -14,9 +14,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from PyQt5.QtCore import QSize
-from PyQt5.QtGui import QColor, QPainter
-from PyQt5.QtWidgets import QSizePolicy, QWidget
+from PyQt4.QtCore import QSize
+from PyQt4.QtGui import QColor, QPainter
+from PyQt4.QtGui import QSizePolicy, QWidget
 
 from flexlay.math import Point
 from flexlay import InputEvent, GraphicContext

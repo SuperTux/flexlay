@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from PyQt5.QtCore import QRect
+from PyQt4.QtCore import QRect
 from .size import Size
 
 

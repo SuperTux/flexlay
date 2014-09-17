@@ -73,10 +73,10 @@ class SExprParser:
         elif c == "#":
             self.state = self.state_bool
             self.atom = "#"
-        elif c.isdigit():
+        elif c.isdigit() or c in "-+":
             self.state = self.state_number
             self.atom = c
-        elif c.isalpha():
+        elif c.isalpha() or c in "-_":
             self.state = self.state_symbol
             self.atom = c
         elif c.isspace():

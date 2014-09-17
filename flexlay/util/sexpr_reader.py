@@ -16,11 +16,11 @@
 
 
 def sexpr_filter(name, tree):
-  ret = []
-  for i in tree:
-    if i[0] == name:
-      ret.push(i[1:])
-  return ret
+    ret = []
+    for i in tree:
+        if i[0] == name:
+          ret.append(i[1:])
+    return ret
 
 
 def assoc_ref(lst, key):

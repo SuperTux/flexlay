@@ -23,7 +23,7 @@ import io
 import unittest
 
 
-class SExprWriterTestCase(unittest.TestCase):
+class SExprTestCase(unittest.TestCase):
 
     def setUp(self):
         pass
@@ -73,6 +73,9 @@ class SExprWriterTestCase(unittest.TestCase):
 
         result = sexpr_parse("(8(8)8)")
         self.assertEqual(result, [[8, [8], 8]])
+
+        result = sexpr_parse("(_ \"Test\")")
+        self.assertEqual(result, [["_", "Test"]])
 
         result = sexpr_parse("symbol")
         self.assertEqual(result, ["symbol"])

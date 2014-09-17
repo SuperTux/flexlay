@@ -291,7 +291,6 @@ class SuperTuxGUI:
 
     def on_object_drop(self, brush, pos):
         print("on_object_drop:", brush, pos)
-        pos = self.editor_map.screen2world(pos)
         create_gameobject(self.workspace.get_map(), self.workspace.get_map().metadata.objects, brush.metadata, pos, [])
 
     def run(self):

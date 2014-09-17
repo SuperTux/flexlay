@@ -20,18 +20,22 @@ from flexlay.math import Point, Pointf, Rect, Size
 from flexlay.util import get_value_from_tree
 
 from .config import Config
-from .gameobj import (BadGuy, Dispenser, SpawnPoint, AmbientSound,
-                      SimpleObject, SimpleTileObject, Powerup,
-                      SecretArea, SequenceTrigger, Door, Background,
-                      Gradient, ParticleSystem, Platform,
+from .gameobj import (BadGuy, Dispenser, SpawnPoint, ResetPoint,
+                      AmbientSound, SimpleObject, SimpleTileObject,
+                      Powerup, SecretArea, SequenceTrigger, Door,
+                      Background, Gradient, ParticleSystem, Platform,
                       ScriptedObject, InfoBlock, LevelTime)
 
 
 game_objects = [
     #["angrystone", "images/creatures/angrystone/angrystone.sprite", "sprite",
     # lambda data, sexpr: BadGuy("angrystone")],
+    ["firefly", "images/engine/editor/resetpoint.png", "sprite",
+     lambda data, sexpr: ResetPoint()],
     ["jumpy", "images/creatures/jumpy/left-middle.png", "sprite",
      lambda data, sexpr: BadGuy("jumpy")],
+    ["smartball", "images/creatures/snowball/cpt-left-0.png", "sprite",
+     lambda data, sexpr: BadGuy("smartball")],
     ["snowball", "images/creatures/snowball/left-0.png", "sprite",
      lambda data, sexpr: BadGuy("snowball")],
     ["mriceblock", "images/creatures/mr_iceblock/left-0.png", "sprite",

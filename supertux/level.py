@@ -26,7 +26,7 @@ class Level:
     @staticmethod
     def from_file(filename):
         level = Level(0, 0)
-        
+
         level.filename = filename
 
         tree = load_lisp(level.filename, "supertux-level")

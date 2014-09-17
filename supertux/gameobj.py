@@ -34,6 +34,16 @@ class GameObj:
         self.obj = obj
 
 
+class ResetPoint(GameObj):
+
+    def __init__(self):
+        super().__init__()
+
+    def save(self, f, obj):
+        pos = obj.get_pos()
+        f.write("       (resetpoint (x %d) (y %d)\n" % (pos.x, pos.y))
+
+
 class SecretArea(GameObj):
 
     def __init__(self, data, sexpr):

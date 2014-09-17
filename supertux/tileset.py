@@ -61,7 +61,6 @@ class SuperTuxTileset(Tileset):
         tree = load_lisp(filename, "supertux-tiles")
 
         tree = tree[1:]
-        counter = 0
 
         for i in tree:
             if i[0] == "tiles":
@@ -119,10 +118,6 @@ class SuperTuxTileset(Tileset):
                 if not self.tilegroups:
                     self.tilegroups = []
                 self.tilegroups.append(TileGroup(name, tiles))
-
-            counter += 1
-            if counter % 20 == 0:
-                print("Loading tiles: %3.0f%%" % (float(counter) / float(len(tree) * 100.0)))
 
 
 # EOF #

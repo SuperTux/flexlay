@@ -28,7 +28,7 @@ test_levelfile = os.path.join(os.path.dirname(__file__), "test.stl")
 
 
 class SuperTuxTestCase(unittest.TestCase):
-    
+
     def setUp(self):
         pass
 
@@ -36,8 +36,11 @@ class SuperTuxTestCase(unittest.TestCase):
         pass
 
     def test_level_load(self):
-        config = Config.create("supertux")
+        config = Config.create("supertux-editor")
+        print("datadir:", repr(config.datadir))
         level = Level.from_file(test_levelfile)
+        self.assertEqual(level.width, 113)
+        self.assertEqual(level.height, 171)
 
     def test_level_new(self):
         level = Level(400, 300)

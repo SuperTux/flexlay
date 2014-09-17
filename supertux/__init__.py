@@ -28,13 +28,14 @@ from .tileset import SuperTuxTileset
 from .util import load_lisp
 from .worldmap import WorldMap
 from .worldmap_object import WorldmapObject
+from .supertux import main
 
 
 __all__ = ["Config", "game_objects", "create_gameobject",
            "create_gameobject_from_data", "find_game_object",
            "GameObj", "SuperTuxGUI", "Level", "Sector", "Sprite",
            "TileMap", "SuperTuxTileset", "load_lisp", "WorldMap",
-           "WorldmapObject"]
+           "WorldmapObject", "main"]
 
 
 # EOF #

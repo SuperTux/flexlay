@@ -15,10 +15,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from .supertux import main
+import supertux
 
 
-main()
+supertux.main()
 
 
 # EOF #

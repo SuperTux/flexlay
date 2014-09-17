@@ -111,8 +111,13 @@ class TileSelectorWidget(QWidget):
         self.repaint()
 
     def get_mouse_tile_pos(self, mouse_pos):
-        return Point(int(mouse_pos.x / int(self.tileset.get_tile_size() * self.scale)),
-                     int(mouse_pos.y / int(self.tileset.get_tile_size() * self.scale)))
+        x = int(mouse_pos.x / int(self.tileset.get_tile_size() * self.scale))
+        y = int(mouse_pos.y / int(self.tileset.get_tile_size() * self.scale))
+
+        if x >= self.columns:
+            x = self.columns - 1
+
+        return Point(tile_x, tile_y)
 
     def paintEvent(self, event):
         painter = QPainter(self)
@@ -166,7 +171,7 @@ class TileSelectorWidget(QWidget):
 
     @property
     def columns(self):
-        return int(self.size().width() / (self.tileset.get_tile_size() * self.scale))
+        return int(self.viewport.width() / (self.tileset.get_tile_size() * self.scale))
 
     def set_scale(self, s):
         self.scale = s

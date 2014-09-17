@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env python3
 
 # Flexlay - A Generic 2D Game Editor
 # Copyright (C) 2014 Ingo Ruhnke <grumbel@gmail.com>
@@ -17,10 +17,13 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-PYTHONPATH="$PYTHONPATH:."
-export PYTHONPATH
+import sys
+import supertux
 
-exec python3 -Wall -m supertux "$@"
+
+if __name__ == "__main__":
+  sys.path.append(".")
+  supertux.main()
 
 
 # EOF #

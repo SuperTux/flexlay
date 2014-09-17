@@ -23,7 +23,27 @@ from .util import load_lisp
 
 class Level:
 
-    def __init__(self, arg1, arg2=None):
+    @staticmethod
+    def from_file(filename):
+        level = Level(0, 0)
+        
+        level.filename = filename
+
+        tree = load_lisp(level.filename, "supertux-level")
+        data = tree[1:]
+
+        level.version = get_value_from_tree(["version", "_"], data, 0)
+
+        print("VERSION:", level.filename, " ",  level.version)
+
+        if level.version == 1:
+            level.parse_v1(data)
+        else:
+            level.parse_v2(data)
+
+        return level
+
+    def __init__(self, width, height):
         self.version = 2
         self.filename = None
         self.name = "No Name"
@@ -31,33 +51,13 @@ class Level:
         self.theme = "antarctica"
         self.music = ""
 
-        if arg2 is not None:
-            # New Level
-            width, height = arg1, arg2
+        self.width = width
+        self.height = height
 
-            self.width = width
-            self.height = height
-
-            self.current_sector = Sector(self)
-            self.current_sector.new_from_size("main", width, height)
-            self.sectors = []
-            self.sectors.append(self.current_sector)
-
-        else:
-            # Load Level from file
-            self.filename, = arg1
-
-            tree = load_lisp(self.filename, "supertux-level")
-            data = tree[1:]
-
-            self.version = get_value_from_tree(["version", "_"], data, 0)
-
-            print("VERSION:", self.filename, " ",  self.version)
-
-            if self.version == 1:
-                self.parse_v1(data)
-            else:
-                self.parse_v2(data)
+        self.current_sector = Sector(self)
+        self.current_sector.new_from_size("main", width, height)
+        self.sectors = []
+        self.sectors.append(self.current_sector)
 
     def parse_v2(self, data):
         self.name = get_value_from_tree(["name", "_"], data, "no name")

@@ -663,7 +663,7 @@ class SuperTuxGUI:
             return
 
         print("Loading: ", filename)
-        level = Level(filename)
+        level = Level.from_file(filename)
         level.activate(self.workspace)
 
         if filename not in Config.current.recent_files:

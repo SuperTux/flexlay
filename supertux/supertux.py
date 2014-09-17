@@ -15,8 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-import os
-import sys
+import argparse
 
 from flexlay import Flexlay
 
@@ -26,11 +25,23 @@ from .gui import SuperTuxGUI
 
 
 def main():
+    parser = argparse.ArgumentParser(description="Flexlay - SuperTux Editor")
+    parser.add_argument("LEVELFILE", action="store", type=str, nargs="?",
+                        help=".stl file to load")
+    parser.add_argument("-d", "--datadir", metavar="DIR", action="store", type=str,
+                        help="SuperTux data directory directory")
+    args = parser.parse_args()
+
+    print("Datadir:", args.datadir)
+
     flexlay = Flexlay()
 
     config = Config.create("supertux-editor")
     if not config.datadir:
-        config.datadir = os.path.expanduser("~/projects/supertux/trunk/supertux/data/")
+        if args.datadir:
+            config.datadir = args.datadir
+        else:
+            raise RuntimeError("datadir missing, use --datadir DIR")
 
     tileset = SuperTuxTileset(32)
     tileset.load(config.datadir + "images/tiles.strf")
@@ -40,10 +51,10 @@ def main():
     tileset.create_ungrouped_tiles_group()
 
     gui = SuperTuxGUI(flexlay)
-    if not sys.argv[1:]:
+    if args.LEVELFILE is None:
         gui.new_level(100, 50)
     else:
-        gui.load_level(sys.argv[1])
+        gui.load_level(args.LEVELFILE)
 
     # Init the GUI, so that button state is in sync with internal state
     gui.gui_toggle_minimap()

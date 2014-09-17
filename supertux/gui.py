@@ -175,6 +175,9 @@ class SuperTuxGUI:
         file_menu.add_item("New...", self.gui_level_new)
         file_menu.add_item("Open...", self.gui_level_load)
         self.recent_files_menu = file_menu.add_menu("Open Recent")
+        for filename in Config.current.recent_files:
+            self.recent_files_menu.add_item(filename, lambda filename=filename: self.load_level(filename))
+
         file_menu.add_item("Save...", self.gui_level_save)
         # file_menu.add_item("Save Commands...", menu_file_save_commands)
         # file_menu.add_item("Save As...", self.gui_level_save_as)
@@ -657,7 +660,7 @@ class SuperTuxGUI:
         level = Level(width, height)
         level.activate(self.workspace)
 
-    def load_level(self, filename):
+    def load_level(self, filename: str):
         if filename[-5:] == ".stwm":
             self.load_worldmap(filename)
             return
@@ -668,7 +671,7 @@ class SuperTuxGUI:
 
         if filename not in Config.current.recent_files:
             Config.current.recent_files.append(filename)
-            self.recent_files_menu.add_item(filename, self.load_level)
+            self.recent_files_menu.add_item(filename, lambda filename=filename: self.load_level(filename))
 
         self.minimap.update_minimap()
 

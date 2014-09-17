@@ -44,10 +44,10 @@ class PixelBuffer:
             qimg = QImage(filename)
             PixelBuffer.cache[filename] = qimg
             pixelbuffer.image = qimg
-            print("loading:", filename, " -> ", pixelbuffer.image.width(), pixelbuffer.image.height())
+            # print("loading:", filename, " -> ", pixelbuffer.image.width(), pixelbuffer.image.height())
 
-        if not pixelbuffer.image:
-            assert False, "Failed to load image, fatal"
+        if pixelbuffer.image.isNull():
+            assert False, "Failed to load image: {}".format(filename)
 
         return pixelbuffer
 

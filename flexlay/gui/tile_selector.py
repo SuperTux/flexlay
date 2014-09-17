@@ -42,7 +42,6 @@ class TileSelector:
         def on_activated(idx):
             text = self.combobox.itemData(idx)
             tiles = self.tiles[text]
-            print("Setting tiles:", text, " - ", len(tiles))
             self.widget.set_tiles(tiles)
             self.scroll_area.update()
 

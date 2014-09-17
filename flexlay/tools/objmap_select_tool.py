@@ -94,8 +94,6 @@ class ObjMapSelectTool(Tool):
             #               event.mouse_pos.y + parent.get_screen_rect().top)
             pass
 
-        print("-- Selection: ", len(self.selection))
-
     def on_mouse_down(self, event):
         # print("ObjMapSelectToolImpl.on_mouse_down ", event.kind, event.mouse_pos.x, event.mouse_pos.y)
         objmap = ObjectLayer.current
@@ -112,7 +110,6 @@ class ObjMapSelectTool(Tool):
                 self.drag_start = pos
             else:
                 obj = objmap.find_object(pos)
-                print("-------------------->>>", obj)
                 if obj is not None:
                     if event.mod & InputEvent.MOD_SHIFT:
                         print("ObjMapSelectTool: Shift presses")
@@ -142,8 +139,6 @@ class ObjMapSelectTool(Tool):
                     self.state = ObjMapSelectTool.STATE_SELECT
                     self.selection_rect = Rectf(pos.x, pos.y, pos.x, pos.y)
                     parent.grab_mouse()
-
-        print("-- Selection: ", len(self.selection))
 
     def on_mouse_move(self, event):
         # print("ObjMapSelectToolImpl.on_mouse_move ", event.kind, event.mouse_pos.x, event.mouse_pos.y)

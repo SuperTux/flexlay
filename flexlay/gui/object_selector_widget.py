@@ -79,16 +79,11 @@ class ObjectSelectorWidget(QWidget):
                     mimeData.setData("application/x-supertux-badguy", data)
                     drag.setMimeData(mimeData)
 
-                    print("DRAG:", self.drag_obj)
                     pixmap = QPixmap.fromImage(self.brushes[self.drag_obj].get_sprite().get_pixelbuffer().get_qimage())
                     drag.setPixmap(pixmap)
                     drag.setHotSpot(QPoint(self.brushes[self.drag_obj].get_sprite().width / 2,
                                            self.brushes[self.drag_obj].get_sprite().height / 2))
-
-                    print("Starting drag")
-                    result = drag.exec()
-                    print("Starting drag finished: ", result)
-
+                    drag.exec()
                     self.drag_obj = -1
 
     def mouseReleaseEvent(self, event):

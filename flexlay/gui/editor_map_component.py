@@ -69,7 +69,6 @@ class EditorMapComponent:
         """sends (brush, pos)"""
         brush_id = pickle.loads(data)
         brush = ObjectSelector.current.get_brush(brush_id)
-        print(">>>>>>>>>>>", brush_id, brush, pos)
         return self.sig_drop(brush, pos)
 
     def get_workspace(self):

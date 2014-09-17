@@ -28,14 +28,12 @@ class WorkspaceMoveTool:
         self.old_trans_offset = Pointf(0, 0)
 
     def on_mouse_down(self, event):
-        print("WorkspaceMoveToolImpl.on_mouse_down")
         self.scrolling = True
         self.old_trans_offset = EditorMapComponent.current.get_gc_state().get_pos()
         self.click_pos = event.mouse_pos
         EditorMapComponent.current.grab_mouse()
 
     def on_mouse_up(self, event):
-        print("WorkspaceMoveToolImpl.on_mouse_up")
         self.scrolling = False
         self.update(event)
         self.old_trans_offset = EditorMapComponent.current.get_gc_state().get_pos()

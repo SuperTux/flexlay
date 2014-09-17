@@ -65,7 +65,6 @@ class Workspace:
 
     def set_map(self, editor_map):
         self.editor_map = editor_map
-        print("Workspace:set_map")
 
     def set_tool(self, button, tool):
         from flexlay.tools import Tool

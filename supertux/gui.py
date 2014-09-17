@@ -239,8 +239,6 @@ class SuperTuxGUI:
         #                            })
         #              menu.add_item(mysprite, "Edit Properties", proc{
         #                                for i in objmap_select_tool.get_selection():
-        #                                  print(i)
-        #                                  print(i.get_data())
         #                                  i.get_data().property_dialog()
         #                              }
         #                            })
@@ -290,7 +288,6 @@ class SuperTuxGUI:
             self.workspace.get_map().metadata.objects, object_type, pos)
 
     def on_object_drop(self, brush, pos):
-        print("on_object_drop:", brush, pos)
         create_gameobject(self.workspace.get_map(), self.workspace.get_map().metadata.objects, brush.metadata, pos, [])
 
     def run(self):
@@ -369,7 +366,6 @@ class SuperTuxGUI:
         self.minimap.update_minimap()
 
     def gui_show_interactive(self):
-        print("show_interactive")
         self.display_properties.layer = INTERACTIVE_LAYER
         self.display_properties.set(self.workspace.get_map().metadata)
         TilemapLayer.current = self.workspace.get_map().metadata.interactive
@@ -539,7 +535,6 @@ class SuperTuxGUI:
         rect = self.workspace.get_map().get_bounding_rect()
         zoom = min(self.editor_map.editormap_widget.width() / rect.width,
                    self.editor_map.editormap_widget.height() / rect.height)
-        print(zoom)
         self.gui_set_zoom(zoom, Point(rect.width / 2, rect.height / 2))
 
     def gui_set_zoom(self, zoom, pos=None):
@@ -576,7 +571,6 @@ class SuperTuxGUI:
             print("Warning: Selection to large")
         elif len(selection) == 1:
             obj = selection[0].get_data()
-            print(obj)
             obj.property_dialog(self.gui)
         else:
             print("Warning: Selection is empty")
@@ -711,7 +705,6 @@ class DisplayProperties:
         self.current_only = False
 
     def set(self, editormap):
-        print(editormap)
         if editormap is None or not isinstance(editormap, Sector):
             return
 

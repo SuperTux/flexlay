@@ -24,7 +24,6 @@ class ButtonPanel:
 
     def __init__(self, toolbar):
         self.toolbar = toolbar
-        print("ButtonPanel in C++")
 
     def add_icon(self, filename, callback):
         action = self.toolbar.addAction(QIcon(filename), "Text")

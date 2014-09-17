@@ -41,30 +41,25 @@ class EditorMapWidget(QWidget):
         self.sig_drop = Signal()
 
     def dragEnterEvent(self, event):
-        print("dragEnter:", event.mimeData().hasFormat("application/x-supertux-badguy"))
         if event.mimeData().hasFormat("application/x-supertux-badguy"):
             event.accept()
 
     def dragLeaveEvent(self, event):
-        print("dragLeave")
+        pass
 
     def dropEvent(self, event):
-        print("drop happened:", event.pos().x(), event.pos().y())
         data = event.mimeData().data("application/x-supertux-badguy")
         pos = self.comp.screen2world(Point.from_qt(event.pos()))
-        print("Received:", data)
         self.sig_drop(data, pos)
 
     def sizeHint(self):
         return QSize(1280, 800)
 
     def on_map_change(self):
-        print("def on_map_change()")
         workspace = self.comp.get_workspace()
         if workspace and workspace.get_map():
             if workspace.get_map().has_bounding_rect():
                 rect = workspace.get_map().get_bounding_rect()
-                print("Setting minimum Size:", rect.width, rect.height)
                 self.setMinimumSize(QSize(rect.width, rect.height))
 
                 pal = self.palette()

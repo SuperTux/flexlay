@@ -123,7 +123,6 @@ class SuperTuxTileset(Tileset):
             counter += 1
             if counter % 20 == 0:
                 print("Loading tiles: %3.0f%%" % (float(counter) / float(len(tree) * 100.0)))
-        print()
 
 
 # EOF #

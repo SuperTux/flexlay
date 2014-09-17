@@ -36,8 +36,6 @@ class EditorMap:
         self.metadata = None
 
     def add_layer(self, layer, pos=-1):
-        print(self, "EditorMap::add_layer")
-
         assert pos == -1 or (pos >= 0 and pos < len(self.layers))
 
         if pos == -1:  # insert at last pos

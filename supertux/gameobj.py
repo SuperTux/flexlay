@@ -60,7 +60,6 @@ class SecretArea(GameObj):
                 (rect.left, rect.top, rect.width, rect.height, self.message))
 
     def property_dialog(self, gui):
-        print(self.message)
         dialog = gui.create_generic_dialog("SecretArea Property Dialog")
         dialog.add_string("Message: ", self.message)
 
@@ -102,10 +101,6 @@ class AmbientSound(GameObj):
                  self.sample, self.factor, self.bias, self.volume))
 
     def property_dialog(self, gui):
-        print(self.factor)
-        print(self.bias)
-        print(self.sample)
-        print(self.volume)
         dialog = gui.gui.create_generic_dialog("AmbientSound Property Dialog")
         dialog.add_float("Distance Factor: ", self.factor)
         dialog.add_float("Distance Bias: ", self.bias)
@@ -147,7 +142,6 @@ class SequenceTrigger(GameObj):
                  self.sequence))
 
     def property_dialog(self, gui):
-        print(self.sequence)
         dialog = gui.gui.create_generic_dialog("SequenceTrigger Property Dialog")
         dialog.add_string("Sequence: ", self.sequence)
 

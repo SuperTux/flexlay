@@ -31,6 +31,7 @@ class TileSelectorWidget(QWidget):
         self.viewport = viewport
         self.index = 0
 
+        self.has_focus = False
         self.mouse_over_tile = -1
         self.region_select = False
         self.current_pos = Point()
@@ -39,6 +40,8 @@ class TileSelectorWidget(QWidget):
         self.scale = 1.0
         self.tileset = Tileset(32)
         self.tiles = []
+
+        self.setMouseTracking(True)
 
     def minimumSizeHint(self):
         min_rows = (len(self.tiles) + self.columns - 1) / self.columns
@@ -111,13 +114,13 @@ class TileSelectorWidget(QWidget):
         self.repaint()
 
     def get_mouse_tile_pos(self, mouse_pos):
-        x = int(mouse_pos.x / int(self.tileset.get_tile_size() * self.scale))
-        y = int(mouse_pos.y / int(self.tileset.get_tile_size() * self.scale))
+        x = int(mouse_pos.x / self.cell_size)
+        y = int(mouse_pos.y / self.cell_size)
 
         if x >= self.columns:
             x = self.columns - 1
 
-        return Point(tile_x, tile_y)
+        return Point(x, y)
 
     def paintEvent(self, event):
         painter = QPainter(self)
@@ -125,8 +128,8 @@ class TileSelectorWidget(QWidget):
 
         brush = ToolContext.current.tile_brush
 
-        start_row = int(event.rect().y() // int(self.tileset.get_tile_size() * self.scale))
-        end_row = int(start_row + event.rect().height() // int(self.tileset.get_tile_size() * self.scale))
+        start_row = int(event.rect().y() // self.cell_size)
+        end_row = int(start_row + event.rect().height() // self.cell_size)
         end_index = int(min(end_row * self.columns, len(self.tiles)))
 
         # Draw tiles
@@ -136,42 +139,52 @@ class TileSelectorWidget(QWidget):
 
             tile = self.tileset.create(self.tiles[i])
 
-            rect = Rect(Point(int(x * self.tileset.get_tile_size() * self.scale),
-                              int(y * self.tileset.get_tile_size() * self.scale)),
-                        Size(int(self.tileset.get_tile_size() * self.scale),
-                             int(self.tileset.get_tile_size() * self.scale)))
+            rect = Rect(Point(int(x * self.cell_size),
+                              int(y * self.cell_size)),
+                        Size(self.cell_size,
+                             self.cell_size))
 
             if tile:
                 sprite = tile.get_sprite()
                 sprite.set_scale(self.scale, self.scale)
-                sprite.draw(int(x * self.tileset.get_tile_size() * self.scale),
-                            int(y * self.tileset.get_tile_size() * self.scale), gc)
+                sprite.draw(int(x * self.cell_size),
+                            int(y * self.cell_size), gc)
 
                 # Use grid in the tileselector
                 gc.draw_rect(rect, Color(0, 0, 0, 128))
 
-            if (brush.width == 1 and brush.height == 1 and
-                    brush.at(0, 0) == self.tiles[i]):
+            # mark the currently selected tile
+            if brush.width == 1 and brush.height == 1 and \
+               brush.at(0, 0) == self.tiles[i]:
                 gc.fill_rect(rect, Color(0, 0, 255, 100))
-            elif self.mouse_over_tile == int(i):  # GRUMBEL and has_mouse_over())
+            elif self.mouse_over_tile == i and self.has_focus:
                 gc.fill_rect(rect, Color(0, 0, 255, 20))
 
+        # draw rectangle selection
         if self.region_select:
             rect = self.get_selection()
 
-            rect.top *= int(self.tileset.get_tile_size() * self.scale)
-            rect.bottom *= int(self.tileset.get_tile_size() * self.scale)
-            rect.left *= int(self.tileset.get_tile_size() * self.scale)
-            rect.right *= int(self.tileset.get_tile_size() * self.scale)
+            rect.top *= self.cell_size
+            rect.bottom *= self.cell_size
+            rect.left *= self.cell_size
+            rect.right *= self.cell_size
 
             gc.fill_rect(rect, Color(0, 0, 255, 100))
+
+    def enterEvent(self, event):
+        self.has_focus = True
+        self.repaint()
+
+    def leaveEvent(self, event):
+        self.has_focus = False
+        self.repaint()
 
     def resizeEvent(self, event):
         self.repaint()
 
     @property
     def columns(self):
-        return int(self.viewport.width() / (self.tileset.get_tile_size() * self.scale))
+        return int(self.viewport.width() / self.cell_size)
 
     def set_scale(self, s):
         self.scale = s
@@ -187,6 +200,10 @@ class TileSelectorWidget(QWidget):
     def set_tiles(self, tiles):
         self.tiles = tiles
         self.repaint()
+
+    @property
+    def cell_size(self):
+        return int(self.tileset.get_tile_size() * self.scale)
 
 
 # EOF #

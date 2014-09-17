@@ -596,7 +596,7 @@ class SuperTuxGUI:
 
     def gui_level_save_as(self):
         filename = self.save_dialog.get_filename()
-        if filename[-1] == "/"[0]:
+        if os.path.isdir(filename):
             self.save_dialog.set_filename(filename)
         else:
             self.save_dialog.set_filename(os.path.dirname(filename) + "/")

@@ -661,7 +661,7 @@ class SuperTuxGUI:
         level = Level(width, height)
         level.activate(self.workspace)
 
-    def load_level(self, filename: str):
+    def load_level(self, filename):
         if filename[-5:] == ".stwm":
             self.load_worldmap(filename)
             return

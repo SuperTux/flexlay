@@ -27,7 +27,7 @@ class Menu:
     def add_item(self, label, callback):
         action = self.menu.addAction(label)
         if callback:
-            action.triggered.connect(callback)
+            action.triggered.connect(lambda *args: callback())
         return action
 
 

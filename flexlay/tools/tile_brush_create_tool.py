@@ -19,6 +19,7 @@ from flexlay import (TilemapLayer, InputEvent)
 from ..gui.editor_map_component import EditorMapComponent
 from ..gui.tile_selection import TileSelection
 from .tool import Tool
+from ..color import Color
 from ..tool_context import ToolContext
 
 
@@ -29,6 +30,7 @@ class TileBrushCreateTool(Tool):
         self.is_active = False
 
         self.selection = TileSelection()
+        self.shift_pressed = False
 
     def draw(self, gc):
         if self.is_active:
@@ -36,13 +38,14 @@ class TileBrushCreateTool(Tool):
             if not tilemap:
                 return
 
-            # GRUMBEL
-            # if Keyboard.get_keycode(CL_KEY_LSHIFT):
-            #    selection.draw(gc, Color(255,  128, 128, 100))
-            # else:
-            self.selection.draw(gc)
+            if self.shift_pressed:
+                self.selection.draw(gc, Color(255,  128, 128, 100))
+            else:
+                self.selection.draw(gc)
 
     def on_mouse_down(self, event):
+        self.shift_pressed = event.mod & InputEvent.MOD_SHIFT
+
         tilemap = TilemapLayer.current
 
         if tilemap:
@@ -54,6 +57,8 @@ class TileBrushCreateTool(Tool):
             self.selection.start(tilemap, pos)
 
     def on_mouse_move(self, event):
+        self.shift_pressed = event.mod & InputEvent.MOD_SHIFT
+
         tilemap = TilemapLayer.current
         if tilemap:
             parent = EditorMapComponent.current
@@ -63,6 +68,8 @@ class TileBrushCreateTool(Tool):
                 self.selection.update(current_tile)
 
     def on_mouse_up(self, event):
+        self.shift_pressed = event.mod & InputEvent.MOD_SHIFT
+
         tilemap = TilemapLayer.current
 
         if tilemap:
@@ -78,10 +85,13 @@ class TileBrushCreateTool(Tool):
                 self.selection.update(current_tile)
                 ToolContext.current.tile_brush = self.selection.get_brush(tilemap.get_field())
 
-                if (ToolContext.current.tile_brush.width > 1 or ToolContext.current.tile_brush.height > 1) and \
-                   (event.mod & InputEvent.MOD_SHIFT):
-                    ToolContext.current.tile_brush.set_transparent()
-                    ToolContext.current.tile_brush.auto_crop()
+                if ToolContext.current.tile_brush.width > 1 or \
+                   ToolContext.current.tile_brush.height > 1:
+                    if self.shift_pressed:
+                        ToolContext.current.tile_brush.set_opaque()
+                    else:
+                        ToolContext.current.tile_brush.set_transparent()
+                        ToolContext.current.tile_brush.auto_crop()
                 else:
                     ToolContext.current.tile_brush.set_opaque()
 

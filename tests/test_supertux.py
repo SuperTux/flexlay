@@ -39,13 +39,11 @@ class SuperTuxTestCase(unittest.TestCase):
         config = Config.create("supertux-editor")
         print("datadir:", repr(config.datadir))
         level = Level.from_file(test_levelfile)
-        self.assertEqual(level.width, 113)
-        self.assertEqual(level.height, 171)
+        self.assertEqual(level.name, "Welcome to Antarctica")
 
     def test_level_new(self):
         level = Level(400, 300)
-        self.assertEqual(level.width, 400)
-        self.assertEqual(level.height, 300)
+        self.assertEqual(level.name, "No Name")
 
 
 if __name__ == '__main__':

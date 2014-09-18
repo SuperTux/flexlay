@@ -22,7 +22,7 @@ from PyQt4.QtGui import (QWidget, QGridLayout, QScrollBar, QTabWidget,
 from PyQt4.QtCore import Qt
 
 from ..workspace import Workspace
-from flexlay.math import Pointf, Point
+from flexlay.math import Pointf
 from flexlay.util import Signal
 from ..graphic_context_state import GraphicContextState
 from .editor_map_widget import EditorMapWidget

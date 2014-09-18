@@ -51,9 +51,6 @@ class Level:
         self.theme = "antarctica"
         self.music = ""
 
-        self.width = width
-        self.height = height
-
         self.current_sector = Sector(self)
         self.current_sector.new_from_size("main", width, height)
         self.sectors = []

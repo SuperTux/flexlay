@@ -204,8 +204,8 @@ class EditorMapComponent:
 
         def on_key(*args):
             pos = self.editormap_widget.mapFromGlobal(QCursor.pos())
-            pos = self.gc_state.screen2world(Point.from_qt(pos))
-            signal(pos.x, pos.y)
+            # pos = self.gc_state.screen2world(Point.from_qt(pos))
+            signal(pos.x(), pos.y())
 
         shortcut.activated.connect(on_key)
 

@@ -527,13 +527,13 @@ class SuperTuxGUI:
         factor = 2.0
         gc = self.editor_map.get_gc_state()
         zoom = gc.get_zoom()
-        self.gui_set_zoom(zoom / pow(1.25, -factor))
+        self.gui_set_zoom(zoom / pow(1.25, -factor), pos)
 
     def gui_zoom_out(self):
         factor = 2.0
         gc = self.editor_map.get_gc_state()
         zoom = gc.get_zoom()
-        self.gui_set_zoom(zoom * pow(1.25, -factor))
+        self.gui_set_zoom(zoom * pow(1.25, -factor), pos)
 
     def gui_zoom_fit(self):
         rect = self.workspace.get_map().get_bounding_rect()

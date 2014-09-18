@@ -53,6 +53,10 @@ class Sector:
         self.background.resize(size, pos)
         self.interactive.resize(size, pos)
         self.foreground.resize(size, pos)
+        for obj in self.objects.objects:
+            p = obj.get_pos()
+            p += 32 * pos
+            obj.set_pos(p)
 
     def new_from_size(self, name, width, height):
         self.name = name

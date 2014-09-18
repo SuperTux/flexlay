@@ -21,6 +21,7 @@ from supertux.level import Level
 from supertux.config import Config
 
 import os
+import io
 import unittest
 import unittest.mock
 
@@ -37,9 +38,15 @@ class SuperTuxTestCase(unittest.TestCase):
 
     def test_level_load(self):
         config = Config.create("supertux-editor")
-        print("datadir:", repr(config.datadir))
         level = Level.from_file(test_levelfile)
         self.assertEqual(level.name, "Welcome to Antarctica")
+
+    def test_level_save(self):
+        config = Config.create("supertux-editor")
+        level = Level.from_file(test_levelfile)
+        out = io.StringIO()
+        level.save_io(out)
+        print(out.getvalue())
 
     def test_level_new(self):
         level = Level(400, 300)

@@ -19,9 +19,10 @@ from PyQt4.QtCore import (QCoreApplication, Qt)
 from PyQt4.QtGui import (QApplication, QMainWindow, QToolBar,
                          QDockWidget, QVBoxLayout, QWidget)
 
-from .gui import (ButtonPanel, EditorMapComponent, FileDialog, GenericDialog,
-                  LayerSelector, Menubar, Minimap, ObjectSelector,
-                  TileBrushSelector, TileSelector, StatusBar)
+from .gui import (ButtonPanel, EditorMapComponent, OpenFileDialog,
+                  SaveFileDialog, GenericDialog, LayerSelector,
+                  Menubar, Minimap, ObjectSelector, TileBrushSelector,
+                  TileSelector, StatusBar)
 
 
 class GUIManager:
@@ -84,8 +85,11 @@ class GUIManager:
         self.window.addDockWidget(Qt.BottomDockWidgetArea, dockwidget)
         return minimap
 
-    def create_filedialog(self, titel, ok_label, cancel_label):
-        return FileDialog(titel, ok_label, cancel_label)
+    def create_openfiledialog(self, titel):
+        return OpenFileDialog(titel)
+
+    def create_savefiledialog(self, titel):
+        return SaveFileDialog(titel)
 
     def create_object_selector(self, w, h):
         dockwidget = QDockWidget("Object Selector")

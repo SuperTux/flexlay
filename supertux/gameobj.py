@@ -395,7 +395,7 @@ class Gradient(GameObj):
                 get_value_from_tree(["bottom_color"], sexpr, []))
 
     def parse_color(self, sexpr):
-        if sexpr.size() < 3:
+        if len(sexpr) < 3:
             return [0, 0, 0]
 
         return [sexpr[0], sexpr[1], sexpr[2]]

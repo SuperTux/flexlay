@@ -220,10 +220,10 @@ class SuperTuxGUI:
         sector_menu.add_item("Edit Sector Properties", self.gui_edit_sector)
 
         # Loading Dialogs
-        self.load_dialog = self.gui.create_filedialog("Load SuperTux Level", "Load", "Cancel")
-        self.load_dialog.set_filename(Config.current.datadir + "levels/")
-        self.save_dialog = self.gui.create_filedialog("Save SuperTux Level as...", "Save", "Cancel")
-        self.save_dialog.set_filename(Config.current.datadir + "levels/")
+        self.load_dialog = self.gui.create_openfiledialog("Load SuperTux Level")
+        self.load_dialog.set_directory(Config.current.datadir + "levels/")
+        self.save_dialog = self.gui.create_savefiledialog("Save SuperTux Level as...")
+        self.save_dialog.set_directory(Config.current.datadir + "levels/")
 
         self.register_keyboard_shortcuts()
 
@@ -496,11 +496,13 @@ class SuperTuxGUI:
 
     def gui_edit_level(self):
         level = self.workspace.get_map().metadata.get_level()
+        print(self.workspace.get_map())
+        print(self.workspace.get_map().metadata)
         dialog = self.gui.create_generic_dialog("Edit Level")
 
         dialog.add_string("Name:", level.name)
         dialog.add_string("Author:", level.author)
-        # dialog.add_int("Time:", level.time)
+        dialog.add_int("Target Time:", level.target_time)
 
         def on_callback(name, author):
             level.name = name
@@ -592,11 +594,11 @@ class SuperTuxGUI:
             self.redo_icon.disable()
 
     def gui_level_save_as(self):
-        filename = self.save_dialog.get_filename()
-        if os.path.isdir(filename):
-            self.save_dialog.set_filename(filename)
+        path = self.save_dialog.get_filename()
+        if os.path.isdir(path):
+            self.save_dialog.set_directory(path)
         else:
-            self.save_dialog.set_filename(os.path.dirname(filename) + "/")
+            self.save_dialog.set_directory(os.path.dirname(path) + "/")
         self.save_dialog.run(self.save_level)
 
     def gui_level_save(self):
@@ -607,13 +609,13 @@ class SuperTuxGUI:
 
         print("Filename:", filename)
         if filename:
-            self.save_dialog.set_filename(filename)
+            self.save_dialog.set_directory(filename)
         else:
             filename = self.save_dialog.get_filename()
             if filename[-1] == "/"[0]:
-                self.save_dialog.set_filename(filename)
+                self.save_dialog.set_directory(filename)
             else:
-                self.save_dialog.set_filename(os.path.dirname(filename) + "/")
+                self.save_dialog.set_directory(os.path.dirname(filename) + "/")
 
         self.save_dialog.run(self.save_level)
 

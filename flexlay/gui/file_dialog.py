@@ -21,11 +21,16 @@ from PyQt4.QtGui import QFileDialog
 
 class FileDialog:
 
-    def __init__(self, title, ok_label, cancel_label):
+    def __init__(self, title):
         self.callback = None
         self.file_dialog = QFileDialog()
-        self.file_dialog.setFileMode(QFileDialog.ExistingFile)
         self.file_dialog.setWindowModality(Qt.ApplicationModal)
+        self.filename = ""
+
+        def on_selected(path):
+            self.filename = path
+
+        self.file_dialog.fileSelected.connect(on_selected)
 
     def run(self, callback):
         self.callback = callback
@@ -35,11 +40,28 @@ class FileDialog:
         self.file_dialog.show()
 
     def get_filename(self):
-        pass
+        return self.filename
 
-    def set_filename(self, file_dialog):
-        # GRUMBEL
-        pass
+    def set_directory(self, path):
+        self.filename = path
+        self.file_dialog.setDirectory(path)
+
+
+class OpenFileDialog(FileDialog):
+
+    def __init__(self, *args):
+        super().__init__(*args)
+
+        self.file_dialog.setAcceptMode(QFileDialog.AcceptOpen)
+        self.file_dialog.setFileMode(QFileDialog.ExistingFile)
+
+
+class SaveFileDialog(FileDialog):
+
+    def __init__(self, *args):
+        super().__init__(*args)
+        self.file_dialog.setAcceptMode(QFileDialog.AcceptSave)
+        self.file_dialog.setFileMode(QFileDialog.AnyFile)
 
 
 # EOF #

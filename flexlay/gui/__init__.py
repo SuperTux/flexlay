@@ -17,7 +17,7 @@
 
 from .button_panel import ButtonPanel
 from .colorpicker import ColorPicker
-from .file_dialog import FileDialog
+from .file_dialog import OpenFileDialog, SaveFileDialog
 from .generic_dialog import GenericDialog
 from .icon import Icon
 from .layer_selector import LayerSelector
@@ -36,11 +36,12 @@ from .statusbar import StatusBar
 
 
 __all__ = ["ButtonPanel", "ColorPicker", "EditorMapComponent",
-           "EditorMapWidget", "FileDialog", "GenericDialog", "Icon",
-           "LayerSelector", "Menubar", "Minimap", "MinimapWidget",
-           "ObjectSelector", "ObjectSelectorWidget",
-           "TileBrushSelector", "TileSelector", "TileSelection",
-           "TileSelector", "TileSelectorWidget", "StatusBar"]
+           "EditorMapWidget", "OpenFileDialog", "SaveFileDialog",
+           "GenericDialog", "Icon", "LayerSelector", "Menubar",
+           "Minimap", "MinimapWidget", "ObjectSelector",
+           "ObjectSelectorWidget", "TileBrushSelector",
+           "TileSelector", "TileSelection", "TileSelector",
+           "TileSelectorWidget", "StatusBar"]
 
 
 # EOF #

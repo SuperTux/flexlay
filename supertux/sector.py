@@ -27,7 +27,6 @@ class Sector:
     def __init__(self, parent):
         self.parent = parent
         self.cameramode = "normal"
-        self.parent = None
         self.name = None
         self.music = None
         self.gravity = 10.0
@@ -182,6 +181,8 @@ class Sector:
                 self.name = data[0]
             elif name == "gravity":
                 self.gravity = data[0]
+            elif name == "ambient-light":
+                pass  # GRUMBEL self.ambient_light = data[0]
             elif name == "music":
                 self.music = data[0]
             elif name == "init-script":
@@ -258,11 +259,11 @@ class Sector:
         f.write("))\n")
 
     def save(self, f):
-        f.write("    (name  \"#{self.name}\")\n" % self.name)
+        f.write("    (name  %r)\n" % self.name)
         if self.music != "":
-            f.write("    (music  \"#{self.music}\")\n" % self.music)
+            f.write("    (music  %r)\n" % self.music)
         if self.init_script != "":
-            f.write("    (init-script \"#{self.init_script}\")\n")
+            f.write("    (init-script %r)\n" % self.init_script)
         f.write("    (gravity %f)\n" % self.gravity)
 
         self.save_tilemap(f, self.background,  "background")
@@ -281,7 +282,7 @@ class Sector:
         f.write("    )\n\n")
 
         for obj in self.objects.get_objects():
-            obj.get_data().save(f, obj)
+            obj.metadata.save(f, obj)
 
 
 # EOF #

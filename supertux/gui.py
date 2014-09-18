@@ -249,40 +249,40 @@ class SuperTuxGUI:
         #            })
 
     def register_keyboard_shortcuts(self):
-        if False:  # GRUMBEL
-            self.editor_map.sig_on_key("f1").connect(lambda x, y: self.gui_toggle_minimap())
-            self.editor_map.sig_on_key("m").connect(lambda x, y: self.gui_toggle_minimap())
-            self.editor_map.sig_on_key("g").connect(lambda x, y: self.gui_toggle_grid())
-            self.editor_map.sig_on_key("4").connect(lambda x, y: self.gui_toggle_display_props())
+        self.editor_map.sig_on_key("f1").connect(lambda x, y: self.gui_toggle_minimap())
+        self.editor_map.sig_on_key("m").connect(lambda x, y: self.gui_toggle_minimap())
+        self.editor_map.sig_on_key("g").connect(lambda x, y: self.gui_toggle_grid())
+        self.editor_map.sig_on_key("4").connect(lambda x, y: self.gui_toggle_display_props())
 
-            self.editor_map.sig_on_key("3").connect(lambda x, y: self.gui_show_foreground())
-            self.editor_map.sig_on_key("2").connect(lambda x, y: self.gui_show_interactive())
-            self.editor_map.sig_on_key("1").connect(lambda x, y: self.gui_show_background())
+        self.editor_map.sig_on_key("3").connect(lambda x, y: self.gui_show_foreground())
+        self.editor_map.sig_on_key("2").connect(lambda x, y: self.gui_show_interactive())
+        self.editor_map.sig_on_key("1").connect(lambda x, y: self.gui_show_background())
 
-            self.editor_map.sig_on_key("5").connect(lambda x, y: self.editor_map.zoom_in(Point(x, y)))
-            self.editor_map.sig_on_key("6").connect(lambda x, y: self.editor_map.zoom_out(Point(x, y)))
+        self.editor_map.sig_on_key("+").connect(lambda x, y: self.editor_map.zoom_in(Point(x, y)))
+        self.editor_map.sig_on_key("-").connect(lambda x, y: self.editor_map.zoom_out(Point(x, y)))
+        self.editor_map.sig_on_key("Enter").connect(lambda x, y: self.gui_set_zoom(1.0))
 
-            self.editor_map.sig_on_key("i").connect(lambda x, y: self.insert_path_node(x, y))
-            self.editor_map.sig_on_key("c").connect(lambda x, y: self.connect_path_nodes())
+        self.editor_map.sig_on_key("i").connect(lambda x, y: self.insert_path_node(x, y))
+        self.editor_map.sig_on_key("c").connect(lambda x, y: self.connect_path_nodes())
 
-            self.editor_map.sig_on_key("7").connect(
-                lambda x, y: self.workspace.get_map().metadata.parent.activate_sector("main",
-                                                                                      self.workspace))
-            self.editor_map.sig_on_key("8").connect(
-                lambda x, y: self.workspace.get_map().metadata.parent.activate_sector("another_world",
-                                                                                      self.workspace))
+        self.editor_map.sig_on_key("7").connect(
+            lambda x, y: self.workspace.get_map().metadata.parent.activate_sector("main",
+                                                                                  self.workspace))
+        self.editor_map.sig_on_key("8").connect(
+            lambda x, y: self.workspace.get_map().metadata.parent.activate_sector("another_world",
+                                                                                  self.workspace))
 
-            self.editor_map.sig_on_key("e").connect(lambda x, y: self.gui_show_object_properties())
+        self.editor_map.sig_on_key("e").connect(lambda x, y: self.gui_show_object_properties())
 
-            def on_a_key(x, y):
-                pos = self.editor_map.screen2world(Point(x, y))
-                rectobj = ObjMapRectObject(Rect(pos,
-                                                Size(128, 64)),
-                                           Color(0, 255, 255, 155),
-                                           None)
-                self.workspace.get_map().metadata.objects.add_object(rectobj)
+        def on_a_key(x, y):
+            pos = self.editor_map.screen2world(Point(x, y))
+            rectobj = ObjMapRectObject(Rect(pos,
+                                            Size(128, 64)),
+                                       Color(0, 255, 255, 155),
+                                       None)
+            self.workspace.get_map().metadata.objects.add_object(rectobj)
 
-            self.editor_map.sig_on_key("a").connect(on_a_key)
+        self.editor_map.sig_on_key("a").connect(on_a_key)
 
     def on_worldmap_object_drop(self, brush, pos):
         pos = self.editor_map.screen2world(pos)

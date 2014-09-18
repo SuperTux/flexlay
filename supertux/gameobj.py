@@ -39,9 +39,11 @@ class ResetPoint(GameObj):
     def __init__(self):
         super().__init__()
 
-    def save(self, f, obj):
+    def save(self, writer, obj):
         pos = obj.get_pos()
-        f.write("       (resetpoint (x %d) (y %d)\n" % (pos.x, pos.y))
+        writer.begin_list("firefly")
+        writer.write_inline_point(pos)
+        writer.end_list()
 
 
 class SecretArea(GameObj):
@@ -51,6 +53,7 @@ class SecretArea(GameObj):
         self.data = data
 
         self.message = get_value_from_tree(["message", "_"], sexpr, "")
+        self.fade_tilemap = get_value_from_tree(["fade-tilemap", "_"], sexpr, "")
 
         x = get_value_from_tree(["x", "_"],  sexpr, None)
         y = get_value_from_tree(["y", "_"],  sexpr, None)
@@ -60,14 +63,14 @@ class SecretArea(GameObj):
             self.data.set_rect(Rect(Point(x, y),
                                     Size(width, height)))
 
-    def save(self, f, obj):
+    def save(self, writer, obj):
         rect = self.data.get_rect()
-        f.write(("        (secretarea (x %s)\n"
-                 "                    (y %s)\n"
-                 "                    (width %s)\n"
-                 "                    (height %s)\n"
-                 "                    (message %r))\n") %
-                (rect.left, rect.top, rect.width, rect.height, self.message))
+        writer.begin_list("secretarea")
+        writer.write_string("fade-tilemap", self.fade_tilemap)
+        writer.write_inline_rect(rect)
+        if self.message:
+            writer.write_tr_string("message", self.message)
+        writer.end_list()
 
     def property_dialog(self, gui):
         dialog = gui.create_generic_dialog("SecretArea Property Dialog")
@@ -97,18 +100,16 @@ class AmbientSound(GameObj):
         if x is not None and y is not None:
             self.data.set_rect(Rect(Point(x, y), Size(width, height)))
 
-    def save(self, f, obj):
+    def save(self, writer, obj):
         rect = self.data.get_rect()
-        f.write(("        (ambient_sound (x %s)\n"
-                 "                       (y %s)\n"
-                 "                       (width %s)\n"
-                 "                       (height %s)\n"
-                 "                       (sample %s)\n"
-                 "                       (distance_factor %s)\n"
-                 "                       (distance_bias %s)\n"
-                 "                       (volume %s))\n") %
-                (rect.left, rect.top, rect.width, rect.height,
-                 self.sample, self.factor, self.bias, self.volume))
+
+        writer.begin_list("ambient_sound")
+        writer.write_inline_rect(rect)
+        writer.write_int("sample", self.sample)
+        writer.write_float("distance_factor", self.factor)
+        writer.write_float("distance_bias", self.bias)
+        writer.write_float("volume", self.volume)
+        writer.end_list()
 
     def property_dialog(self, gui):
         dialog = gui.gui.create_generic_dialog("AmbientSound Property Dialog")
@@ -141,15 +142,12 @@ class SequenceTrigger(GameObj):
         if x is not None and y is not None:
             self.data.set_rect(Rect(Point(x, y), Size(width, height)))
 
-    def save(self, f, obj):
+    def save(self, writer, obj):
         rect = self.data.get_rect()
-        f.write(("        (sequencetrigger (x %s)\n" +
-                 "                         (y %s)\n" +
-                 "                         (width %s)\n" +
-                 "                         (height %s)\n" +
-                 "                         (sequence %s))\n") %
-                (rect.left, rect.top, rect.width, rect.height,
-                 self.sequence))
+        writer.begin_list("sequencetrigger")
+        writer.write_inline_rect(rect)
+        writer.write_string("sequence", self.sequence)
+        writer.end_list()
 
     def property_dialog(self, gui):
         dialog = gui.gui.create_generic_dialog("SequenceTrigger Property Dialog")
@@ -168,9 +166,13 @@ class BadGuy(GameObj):
         self.kind = kind
         self.direction = "auto"
 
-    def save(self, f, obj):
+    def save(self, writer, obj):
         pos = obj.get_pos()
-        f.write("       (%s (x %d) (y %d) (direction \"%s\")\n" % (self.kind, pos.x, pos.y, self.direction))
+        writer.begin_list(self.kind)
+        writer.write_inline_point(pos)
+        if self.direction != "auto":
+            writer.write_string("direction", self.direction)
+        writer.end_list()
 
     def property_dialog(self, gui):
         dialog = gui.gui.create_generic_dialog("BadGuy Property Dialog")
@@ -193,10 +195,13 @@ class Dispenser(GameObj):
         self.badguy = get_value_from_tree(["badguy", "_"], sexpr, "snowball")
         self.cycle = get_value_from_tree(["cycle", "_"], sexpr, 2)
 
-    def save(self, f, obj):
+    def save(self, writer, obj):
         pos = obj.get_pos()
-        f.write("       (dispenser (x %d) (y %d) (badguy \"%s\") (cycle %d))\n" %
-                (pos.x, pos.y, self.badguy, self.cycle))
+        writer.begin_list("dispenser")
+        writer.write_inline_point(pos)
+        writer.write_string("badguy", self.badguy)
+        writer.write_string("cycle", self.cycle)
+        writer.end_list()
 
     def property_dialog(self, gui):
         dialog = gui.gui.create_generic_dialog("Dispenser Property Dialog")
@@ -218,10 +223,13 @@ class Platform(GameObj):
         self.path = get_value_from_tree(["use_path", "_"], sexpr, "path01")
         self.kind = get_value_from_tree(["type", "_"], sexpr, "flying")
 
-    def save(self, f, obj):
+    def save(self, writer, obj):
         pos = obj.get_pos()
-        f.write("       (platform (x %d) (y %d) (use_path \"%s\") (type \"%s\"))\n" %
-                (pos.x, pos.y, self.path, self.kind))
+        writer.begin_list("platform")
+        writer.write_inline_point(pos)
+        writer.write_string("use_path", self.path)
+        writer.write_string("type", self.kind)
+        writer.end_list()
 
     def property_dialog(self, gui):
         dialog = gui.gui.create_generic_dialog("Platform Property Dialog")
@@ -249,9 +257,11 @@ class SpawnPoint(GameObj):
         pos.y = ((pos.y + 16) // 32) * 32
         self.data.set_pos(pos)
 
-    def save(self, f, obj):
-        pos = obj.get_pos()
-        f.write("       (spawnpoint (name \"%s\") (x %d) (y %d))\n" % (self.name, pos.x, pos.y))
+    def save(self, writer, obj):
+        writer.begin_list("spawnpoint")
+        writer.write_string("name", self.name)
+        writer.write_inline_point(obj.get_pos())
+        writer.end_list()
 
     def property_dialog(self, gui):
         dialog = gui.gui.create_generic_dialog("SpawnPoint Property Dialog")
@@ -269,9 +279,10 @@ class SimpleObject(GameObj):
         super().__init__()
         self.kind = kind
 
-    def save(self, f, obj):
-        pos = obj.get_pos()
-        f.write("       (%s (x %d) (y %d))\n" % (self.kind, pos.x, pos.y))
+    def save(self, writer, obj):
+        writer.begin_list(self.kind)
+        writer.write_inline_point(obj.get_pos())
+        writer.end_list()
 
 
 class SimpleTileObject(GameObj):
@@ -289,9 +300,10 @@ class SimpleTileObject(GameObj):
         pos.y = (((pos.y + 16) // 32)) * 32
         self.data.set_pos(pos)
 
-    def save(self, f, obj):
-        pos = obj.get_pos()
-        f.write("       (%s (x %d) (y %d))\n" % (self.kind, pos.x, pos.y))
+    def save(self, writer, obj):
+        writer.begin_list(self.kind)
+        writer.write_inline_point(obj.get_pos())
+        writer.end_list()
 
 
 class InfoBlock(GameObj):
@@ -309,11 +321,11 @@ class InfoBlock(GameObj):
         pos.y = (((pos.y + 16) // 32)) * 32
         self.data.set_pos(pos)
 
-    def save(self, f, obj):
-        pos = obj.get_pos()
-        f.write("      (infoblock (x %d) (y %d)\n" % (pos.x, pos.y))
-        f.write("        (message (_ \"%s\"))\n" % (self.message))
-        f.write("      )\n")
+    def save(self, writer, obj):
+        writer.begin_list("infoblock")
+        writer.write_tr_string("message", self.message)
+        writer.write_inline_point(obj.get_pos())
+        writer.end_list()
 
     def property_dialog(self, gui):
         dialog = gui.gui.create_generic_dialog("InfoBlock Property Dialog")
@@ -340,11 +352,11 @@ class Powerup(GameObj):
         pos.y = (((pos.y + 16) // 32)) * 32
         self.data.set_pos(pos)
 
-    def save(self, f, obj):
-        pos = obj.get_pos()
-        f.write("      (powerup (x %d) (y %d)\n" % (pos.x, pos.y))
-        f.write("        (sprite (_ \"%s\"))\n" % self.sprite)
-        f.write("      )\n")
+    def save(self, writer, obj):
+        writer.begin_list("powerup")
+        writer.write_inline_point(obj.get_pos())
+        writer.write_string("sprite", self.sprite)
+        writer.end_list()
 
     def property_dialog(self, gui):
         dialog = gui.gui.create_generic_dialog("Powerup Property Dialog" % self.sprite)
@@ -363,11 +375,11 @@ class ParticleSystem(GameObj):
         self.kind = kind
         self.layer = get_value_from_tree(["layer", "_"], sexpr, -1)
 
-    def save(self, f, obj):
-        f.write("       (particles-%s\n" % self.kind)
+    def save(self, writer, obj):
+        writer.begin_list("particles")
         if self.layer != -1:
-            f.write("         (layer %d)\n" % self.layer)
-        f.write("       )\n")
+            writer.write_int("layer", self.layer)
+        writer.end_list()
 
     def property_dialog(self, gui):
         dialog = gui.gui.create_generic_dialog("%s-ParticleSystem Property Dialog" % self.kind)
@@ -400,14 +412,13 @@ class Gradient(GameObj):
 
         return [sexpr[0], sexpr[1], sexpr[2]]
 
-    def save(self, f, obj):
-        f.write("       (gradient\n")
-        f.write("         (top_color %f %f %f)\n" % (self.color_top[0], self.color_top[1], self.color_top[2]))
-        f.write("         (bottom_color %f %f %f)\n" %
-                (self.color_bottom[0], self.color_bottom[1], self.color_bottom[2]))
+    def save(self, writer, obj):
+        writer.begin_list("gradient")
+        writer.write_rgb("top_color", self.color_top)
+        writer.write_rgb("bottom_color", self.color_bottom)
         if self.layer != -1:
-            f.write("         (layer %d)\n" % self.layer)
-        f.write("       )\n")
+            writer.write_int("layer", self.layer)
+        writer.end_list()
 
     def property_dialog(self, gui):
         dialog = gui.gui.create_generic_dialog("Background Property Dialog")
@@ -441,13 +452,13 @@ class Background(GameObj):
         self.layer = get_value_from_tree(["layer", "_"], sexpr, -1)
         self.kind = "image"
 
-    def save(self, f, obj):
-        f.write("       (background\n")
-        f.write("         (image \"%s\")\n" % self.image)
-        f.write("         (speed %f)\n" % self.speed)
+    def save(self, writer, obj):
+        writer.begin_list("background")
+        writer.write_string("image", self.image)
+        writer.write_float("speed", self.speed)
         if self.layer != -1:
-            f.write("         (layer %d)\n" % self.layer)
-        f.write("       )\n")
+            writer.write_int("layer", self.layer)
+        writer.end_list()
 
     def property_dialog(self, gui):
         dialog = gui.gui.create_generic_dialog("Background Property Dialog")
@@ -481,10 +492,10 @@ class LevelTime(GameObj):
         super().__init__()
         self.time = get_value_from_tree(["time", "_"], sexpr, 999)
 
-    def save(self, f, obj):
-        f.write("       (leveltime\n")
-        f.write("         (time %f)\n" % self.time)
-        f.write("       )\n")
+    def save(self, writer, obj):
+        writer.begin_list("leveltime")
+        writer.write_int("time", self.time)
+        writer.end_list()
 
     def property_dialog(self, gui):
         dialog = gui.gui.create_generic_dialog("LevelTime Property Dialog")
@@ -514,13 +525,13 @@ class Door(GameObj):
         pos.y = (((pos.y + 16) // 32)) * 32
         self.data.set_pos(pos)
 
-    def save(self, f, obj):
+    def save(self, writer, obj):
         pos = obj.get_pos()
-        f.write("       (%s\n" % self.kind)
-        f.write("         (x %d) (y %d)" % (pos.x, pos.y))
-        f.write("         (sector \"%s\")\n" % self.sector)
-        f.write("         (spawnpoint \"%s\")\n" % self.spawnpoint)
-        f.write("       )\n")
+        writer.begin_list(self.kind)
+        writer.write_inline_point(pos)
+        writer.write_string("sector", self.sector)
+        writer.write_string("spawnpoint", self.spawnpoint)
+        writer.end_list()
 
     def property_dialog(self, gui):
         dialog = gui.gui.create_generic_dialog("Door Property Dialog")
@@ -540,7 +551,7 @@ class PathNode(GameObj):
         super().__init__()
         self.node = node
 
-    def save(self, f, obj):
+    def save(self, writer, obj):
         pass
 
 
@@ -557,30 +568,17 @@ class ScriptedObject(GameObj):
         self.layer = get_value_from_tree(["layer", "_"], sexpr, 100)
         self.load_sprite()
 
-    def save(self, f, obj):
+    def save(self, writer, obj):
         pos = obj.get_pos()
-        f.write("      (scriptedobject\n")
-        f.write("        (x %d) (y %d)\n" % (pos.x, pos.y))
-        f.write("        (name \"%s\")\n" % self.name)
-        f.write("        (sprite \"%s\")\n" % self.sprite)
-        f.write("        (layer %d)\n" % self.layer)
-
-        if self.visible:
-            f.write("        (visible #t)\n")
-        else:
-            f.write("        (visible #f)\n")
-
-        if self.physic_enabled:
-            f.write("        (physic-enabled #t)\n")
-        else:
-            f.write("        (physic-enabled #f)\n")
-
-        if self.solid:
-            f.write("        (solid #t)\n")
-        else:
-            f.write("        (solid #f)\n")
-
-        f.write("      )\n")
+        writer.begin_list("scriptedobject")
+        writer.write_inline_point(pos)
+        writer.write_string("name", self.name)
+        writer.write_string("sprite", self.sprite)
+        writer.write_int("layer", self.layer)
+        writer.write_bool("visible", self.visible)
+        writer.write_bool("physic-enabled", self.physic_enabled)
+        writer.write_bool("solid", self.solid)
+        writer.end_list()
 
     def load_sprite(self):
         sprite = Sprite.from_file(Config.current.datadir + self.sprite)

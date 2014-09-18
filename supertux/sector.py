@@ -240,49 +240,38 @@ class Sector:
         from .gui import SuperTuxGUI
         self.editormap.sig_change.connect(SuperTuxGUI.current.on_map_change)
 
-    def save_tilemap(self, f, tilemap, name, solid=None):
-        f.write("    (tilemap\n")
-        f.write("      (layer  \"%s\")\n" % name)
-        f.write("      (solid %s)\n" % "#t" if solid == "solid" else "#f")
-        f.write("      (speed  %f)\n" % 1.0)
-        f.write("      (width  %d)\n" % tilemap.width)
-        f.write("      (height %d)\n" % tilemap.height)
-        f.write("      (tiles\n")
-        f.write("        ")
-        x = 0
-        for i in tilemap.get_data():
-            f.write("%d " % i)
-            x += 1
-            if x == self.width:
-                f.write("\n        ")
-                x = 0
-        f.write("))\n")
+    def save_tilemap(self, writer, tilemap, name, solid=None):
+        writer.begin_list("tilemap")
+        writer.write_string("layer", name)
+        writer.write_bool("solid", solid)
+        writer.write_float("speed", 1.0)
+        writer.write_int("width", tilemap.width)
+        writer.write_int("height", tilemap.height)
+        writer.write_field("tiles", tilemap.field)
+        writer.end_list()
 
-    def save(self, f):
-        f.write("    (name  %r)\n" % self.name)
-        if self.music != "":
-            f.write("    (music  %r)\n" % self.music)
-        if self.init_script != "":
-            f.write("    (init-script %r)\n" % self.init_script)
-        f.write("    (gravity %f)\n" % self.gravity)
+    def save(self, writer):
+        writer.write_string("name", self.name)
+        writer.write_string("music", self.music)
+        writer.write_string("init-script", self.init_script)
 
-        self.save_tilemap(f, self.background,  "background")
-        self.save_tilemap(f, self.interactive, "interactive", "solid")
-        self.save_tilemap(f, self.foreground,  "foreground")
-        # save_strokelayer(f, self.sketch)
+        self.save_tilemap(writer, self.background,  "background")
+        self.save_tilemap(writer, self.interactive, "interactive", "solid")
+        self.save_tilemap(writer, self.foreground,  "foreground")
+        # save_strokelayer(writer, self.sketch)
 
-        f.write("    (camera\n")
-        f.write("      (mode \"%s\")\n" % [self.cameramode])
+        writer.begin_list("camera")
+        writer.write_string("mode", self.cameramode)
         # f.write("      (path\n")
         # for obj in self.objects.get_objects():
         #     pathnode = obj.get_data()
         #     if isinstance(pathnode, PathNode):
         #        f.write("       (point (x %d) (y %d) (speed 1))\n" % obj.get_pos().x, obj.get_pos().y)
         # f.write("      )")
-        f.write("    )\n\n")
+        writer.end_list()
 
         for obj in self.objects.get_objects():
-            obj.metadata.save(f, obj)
+            obj.metadata.save(writer, obj)
 
 
 # EOF #

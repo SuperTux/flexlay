@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from flexlay.util import get_value_from_tree, sexpr_filter
+from flexlay.util import get_value_from_tree, sexpr_filter, SExprWriter
 
 from .sector import Sector
 from .util import load_lisp
@@ -48,6 +48,7 @@ class Level:
         self.filename = None
         self.name = "No Name"
         self.author = "No Author"
+        self.license = "GPL 2+ / CC-by-sa 3.0"
         self.target_time = 0
 
         self.current_sector = Sector(self)
@@ -58,6 +59,7 @@ class Level:
     def parse_v2(self, data):
         self.name = get_value_from_tree(["name", "_"], data, "no name")
         self.author = get_value_from_tree(["author", "_"], data, "no author")
+        self.license = get_value_from_tree(["license", "_"], data, "no license")
         self.target_time = get_value_from_tree(["target-time", "_"], data, 0)
 
         self.current_sector = None
@@ -92,17 +94,20 @@ class Level:
             self.save_io(f)
 
     def save_io(self, f):
-        f.write("(supertux-level\n")
-        f.write("  (version 2)\n")
-        f.write("  (name   (_ \"%s\"))\n" % self.name)
-        f.write("  (author \"%s\")\n" % self.author)
+        writer = SExprWriter(f)
+        writer.begin_list("supertux-level")
+        writer.write_int("version", 2)
+        writer.write_tr_string("name", self.name)
+        writer.write_string("author", self.author)
+        writer.write_int("target-time", self.target_time)
+        writer.write_string("license", self.license)
 
         for sector in self.sectors:
-            f.write("  (sector\n")
-            sector.save(f)
-            f.write("   )\n")
+            writer.begin_list("sector")
+            sector.save(writer)
+            writer.end_list()
 
-        f.write(" )\n\n;; EOF ;;\n")
+        writer.end_list()
 
     def activate_sector(self, sectorname, workspace):
         for sec in self.sectors:

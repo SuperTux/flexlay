@@ -37,14 +37,15 @@ class SuperTuxTestCase(unittest.TestCase):
         pass
 
     def test_level_load(self):
-        config = Config.create("supertux-editor")
+        Config.create("supertux-editor")
         level = Level.from_file(test_levelfile)
         self.assertEqual(level.name, "Welcome to Antarctica")
 
     def test_level_save(self):
-        config = Config.create("supertux-editor")
+        Config.create("supertux-editor")
         level = Level.from_file(test_levelfile)
         out = io.StringIO()
+        # out = open("/tmp/test.stl", "w")
         level.save_io(out)
         print(out.getvalue())
 

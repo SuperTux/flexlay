@@ -39,12 +39,12 @@ class SExprWriter:
     def write_comment(self, comment):
         self.fout.write(";; " + comment + "\n")
 
-    def start_list(self, listname):
+    def begin_list(self, listname):
         self.indent()
         self.fout.write("(" + listname + "\n")
         self.indent_depth += 2
 
-    def end_list(self, listname):
+    def end_list(self, listname=None):
         self.indent_depth -= 2
         self.indent()
         self.fout.write(")\n")
@@ -68,6 +68,9 @@ class SExprWriter:
         # trimmed ones, e.g. "45.0"
         self.fout.write("(%s %s)\n" % (name, value))
 
+    def write_tr_string(self, name, value):
+        self.write_string(name, value, translatable=True)
+
     def write_string(self, name, value, translatable=False):
         self.indent()
         self.fout.write("(" + name)
@@ -76,12 +79,38 @@ class SExprWriter:
         else:
             self.fout.write(" \"" + value + "\")\n")
 
+    def write_rgb(self, name, color):
+        self.indent()
+        self.fout.write("(" + name)
+        self.fout.write(" %s %s %s)\n" % (color[0], color[1], color[2]))
+
+    def write_inline_point(self, pos):
+        self.write_int("x", pos.x)
+        self.write_int("y", pos.y)
+
+    def write_inline_rect(self, rect):
+        self.write_int("x", rect.left)
+        self.write_int("y", rect.top)
+        self.write_int("width", rect.width)
+        self.write_int("height", rect.height)
+
     def write_vector(self, name, values):
         self.indent()
         self.fout.write("(" + name)
         for i in values:
             self.fout.write(" %r" % i)
         self.fout.write(")\n")
+
+    def write_field(self, name, field):
+        self.indent()
+        self.fout.write("(%s\n" % name)
+        for y in range(0, field.height):
+            self.indent()
+            for x in range(0, field.width):
+                self.fout.write("%d " % field.at(x, y))
+            self.fout.write("\n")
+        self.indent()
+        self.fout.write(")")
 
     def indent(self):
         self.fout.write(" " * self.indent_depth)

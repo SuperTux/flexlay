@@ -103,10 +103,10 @@ class SExprTestCase(unittest.TestCase):
         with io.StringIO() as out:
             writer = SExprWriter(out)
             writer.write_comment("This is a comment")
-            writer.start_list("supertux-level")
-            writer.start_list("empty-section")
+            writer.begin_list("supertux-level")
+            writer.begin_list("empty-section")
             writer.end_list("empty-section")
-            writer.start_list("test-section")
+            writer.begin_list("test-section")
             writer.write_bool("falsebool", False)
             writer.write_bool("falsebool", True)
             writer.write_int("intvalue", 45)

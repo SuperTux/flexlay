@@ -17,11 +17,12 @@
 
 import pickle
 
-from PyQt4.QtGui import QWidget, QGridLayout, QScrollBar, QTabWidget
+from PyQt4.QtGui import (QWidget, QGridLayout, QScrollBar, QTabWidget,
+                         QKeySequence, QShortcut, QCursor)
 from PyQt4.QtCore import Qt
 
 from ..workspace import Workspace
-from flexlay.math import Pointf
+from flexlay.math import Pointf, Point
 from flexlay.util import Signal
 from ..graphic_context_state import GraphicContextState
 from .editor_map_widget import EditorMapWidget
@@ -193,35 +194,22 @@ class EditorMapComponent:
         self.editormap_widget.repaint()
         self.update_scrollbars()
 
-    # ifdef GRUMBEL
-    # void
-    # EditorMapComponentImpl::on_resize(int old_w, int old_h)
-    # {
-    #   Rect rect = parent.get_screen_rect()
+    def sig_on_key(self, keyseq_str):
+        key_sequence = QKeySequence(keyseq_str)
+        if key_sequence.isEmpty():
+            raise RuntimeError("invalid key binding: '%s'" % keyseq_str)
 
-    #   gc_state.set_size(rect.width, rect.height)
-    # }
-    # endif
+        shortcut = QShortcut(key_sequence, self.editormap_widget)
+        signal = Signal()
 
-    # ifdef GRUMBEL
-    # boost::signals2::signal<void (int, int)>&
-    # def sig_on_key(const std::string& str)
-    # {
-    #   int id = CL_Keyboard::get_device().string_to_keyid(str)
+        def on_key(*args):
+            pos = self.editormap_widget.mapFromGlobal(QCursor.pos())
+            pos = self.gc_state.screen2world(Point.from_qt(pos))
+            signal(pos.x, pos.y)
 
-    #   //std::cout << str << " => " << id << std::endl
+        shortcut.activated.connect(on_key)
 
-    #   if (id > 0 && id < 256)
-    #   {
-    #     return impl.key_bindings[id]
-    #   }
-    #   else
-    #   {
-    #     std::cout << "def sig_on_key: invalid key id: " << id << std::endl
-    #     return impl.key_bindings[0]
-    #   }
-    # }
-    # endif
+        return signal
 
     def get_gc_state(self):
         return self.gc_state

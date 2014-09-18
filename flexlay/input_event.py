@@ -31,6 +31,7 @@ class InputEvent:
 
     MOD_SHIFT = (1 << 0)
     MOD_CTRL = (1 << 1)
+    MOD_ALT = (1 << 2)
 
     def __init__(self):
         self.kind = InputEvent.MOUSE_NO_BUTTON
@@ -53,6 +54,15 @@ class InputEvent:
             result.kind = InputEvent.MOUSE_RIGHT
         else:
             print("unknown mouse button:", event.button())
+
+        if event.modifiers() & Qt.ControlModifier:
+            result.mod |= InputEvent.MOD_CTRL
+
+        if event.modifiers() & Qt.AltModifier:
+            result.mod |= InputEvent.MOD_ALT
+
+        if event.modifiers() & Qt.ShiftModifier:
+            result.mod |= InputEvent.MOD_SHIFT
 
         return result
 

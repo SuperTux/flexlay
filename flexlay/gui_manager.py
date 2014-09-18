@@ -21,7 +21,7 @@ from PyQt4.QtGui import (QApplication, QMainWindow, QToolBar,
 
 from .gui import (ButtonPanel, EditorMapComponent, FileDialog, GenericDialog,
                   LayerSelector, Menubar, Minimap, ObjectSelector,
-                  TileBrushSelector, TileSelector)
+                  TileBrushSelector, TileSelector, StatusBar)
 
 
 class GUIManager:
@@ -30,16 +30,26 @@ class GUIManager:
         self.window = QMainWindow()
         self.window.setWindowTitle(title)
 
+        self.editormap_component = None
+        self.statusbar = None
+
     def run(self):
+        if self.statusbar and self.editormap_component:
+            (self.editormap_component.editormap_widget
+             .sig_mouse_move.connect(self.statusbar.set_mouse_coordinates))
+
         self.window.show()
         QApplication.instance().exec_()
 
     def quit(self):
         QCoreApplication.quit()
 
+    def create_statusbar(self):
+        self.statusbar = StatusBar(self.window.statusBar())
+        return self.statusbar
+
     def create_menubar(self):
         menubar = self.window.menuBar()
-        menubar.show()
         return Menubar(menubar)
 
     def create_button_panel(self, horizontal):
@@ -55,16 +65,16 @@ class GUIManager:
 
     def create_editor_map_component(self, tabbed=True):
         central = QWidget()
-        editor = EditorMapComponent(tabbed)
+        self.editormap_component = EditorMapComponent(tabbed)
         layout = QVBoxLayout()
 
         layout.setContentsMargins(0, 0, 0, 0)
-        layout.addWidget(editor.get_widget())
+        layout.addWidget(self.editormap_component.get_widget())
         central.setLayout(layout)
 
         self.window.setCentralWidget(central)
 
-        return editor
+        return self.editormap_component
 
     def create_minimap(self, parent):
         dockwidget = QDockWidget("Minimap")

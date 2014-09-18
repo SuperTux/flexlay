@@ -60,6 +60,7 @@ class SuperTuxGUI:
         self.display_properties = DisplayProperties()
 
         self.editor_map = self.gui.create_editor_map_component()
+        self.statusbar = self.gui.create_statusbar()
         self.workspace = self.editor_map.get_workspace()
         editormap = EditorMap()
         self.workspace.set_map(editormap)
@@ -186,8 +187,8 @@ class SuperTuxGUI:
 
         edit_menu = self.menubar.add_menu("&Edit")
         edit_menu.add_item("Smooth Selection", self.gui_smooth_level_struct)
-        edit_menu.add_item("Resize", self.gui_resize_level)
-        edit_menu.add_item("Resize to selection", self.gui_resize_level_to_selection)
+        edit_menu.add_item("Resize", self.gui_resize_sector)
+        edit_menu.add_item("Resize to selection", self.gui_resize_sector_to_selection)
 
         zoom_menu = self.menubar.add_menu("&Zoom")
         zoom_menu.add_item("1:4 (25%) ", lambda: self.gui_set_zoom(0.25))
@@ -432,9 +433,9 @@ class SuperTuxGUI:
             self.save_level(tmpfile)
         subprocess.Popen([os.path.join(Config.current.datadir, "supertux")], tmpfile)
 
-    def gui_resize_level(self):
+    def gui_resize_sector(self):
         level = self.workspace.get_map().metadata
-        dialog = self.gui.create_generic_dialog("Resize Level")
+        dialog = self.gui.create_generic_dialog("Resize Sector")
         dialog.add_int("Width: ", level.width)
         dialog.add_int("Height: ", level.height)
         dialog.add_int("X: ", 0)
@@ -487,7 +488,7 @@ class SuperTuxGUI:
 
         tilemap.set_data(data)
 
-    def gui_resize_level_to_selection(self):
+    def gui_resize_sector_to_selection(self):
         level = self.workspace.get_map().metadata
         rect = self.tilemap_select_tool.get_selection_rect()
         if (rect.width > 2 and rect.height > 2):

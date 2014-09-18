@@ -39,6 +39,7 @@ class EditorMapWidget(QWidget):
         self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         self.setAcceptDrops(True)
         self.sig_drop = Signal()
+        self.sig_mouse_move = Signal()
 
     def dragEnterEvent(self, event):
         if event.mimeData().hasFormat("application/x-supertux-badguy"):
@@ -83,6 +84,9 @@ class EditorMapWidget(QWidget):
         ev = InputEvent.from_qt(event)
         workspace.mouse_move(ev)
         self.repaint()
+
+        pos = self.comp.screen2world(Point.from_qt(event.pos()))
+        self.sig_mouse_move(pos)
 
     def mousePressEvent(self, event):
         workspace = self.comp.get_workspace()

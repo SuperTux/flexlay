@@ -50,7 +50,7 @@ class WMSpawnPoint(WorldmapObject):
         self.name = get_value_from_tree(["name", "_"], data, "")
 
     def save(self, writer):
-        writer.start_list("spawnpoint")
+        writer.begin_list("spawnpoint")
         pos = self.obj.get_pos()
         writer.write_int("x", pos.x / 32)
         writer.write_int("y", pos.y / 32)
@@ -91,7 +91,7 @@ class WorldmapLevel(WorldmapObject):
         self.quit_worldmap = get_value_from_tree(["quit-worldmap", "_"], data, False)
 
     def save(self, writer):
-        writer.start_list("level")
+        writer.begin_list("level")
         pos = self.obj.get_pos()
         writer.write_int("x", pos.x / 32)
         writer.write_int("y", pos.y / 32)
@@ -155,7 +155,7 @@ class SpecialTile(WorldmapObject):
                                                       data, "")
 
     def save(self, writer):
-        writer.start_list("special-tile")
+        writer.begin_list("special-tile")
         pos = self.obj.get_pos()
         writer.write_int("x", pos.x / 32)
         writer.write_int("y", pos.y / 32)

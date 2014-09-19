@@ -67,6 +67,9 @@ class SuperTuxTileMap:
         writer.write_field("tiles", self.tilemap_layer.field)
         writer.end_list()
 
+    def get_data(self):
+        return self.tilemap_layer.get_data()
+
     def set_data(self, data):
         self.tilemap_layer.set_data(data)
 

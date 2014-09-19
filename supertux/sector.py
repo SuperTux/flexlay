@@ -19,7 +19,6 @@ from flexlay.util import get_value_from_tree
 from flexlay import TilemapLayer, ObjectLayer, EditorMap
 
 from .data import create_gameobject_from_data
-from .tileset import SuperTuxTileset
 from .tilemap import SuperTuxTileMap
 
 

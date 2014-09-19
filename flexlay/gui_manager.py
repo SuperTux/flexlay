@@ -15,29 +15,50 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from PyQt4.QtCore import (QCoreApplication, Qt)
+from PyQt4.QtCore import (QCoreApplication, Qt, QSize)
 from PyQt4.QtGui import (QApplication, QMainWindow, QToolBar,
                          QDockWidget, QVBoxLayout, QWidget)
 
+from supertux.config import Config
 from .gui import (ButtonPanel, EditorMapComponent, OpenFileDialog,
                   SaveFileDialog, GenericDialog, LayerSelector,
                   Menubar, Minimap, ObjectSelector, TileBrushSelector,
                   TileSelector, StatusBar)
 
 
+class FlexlayMainWindow(QMainWindow):
+
+    def closeEvent(self, event):
+        Config.current.geometry = self.saveGeometry().toBase64().data().decode()
+        Config.current.window_state = self.saveState().toBase64().data().decode()
+        event.accept()
+
+
 class GUIManager:
 
     def __init__(self, title):
-        self.window = QMainWindow()
+        self.window = FlexlayMainWindow()
         self.window.setWindowTitle(title)
 
         self.editormap_component = None
         self.statusbar = None
 
+        self.tile_selector = None
+        self.object_selector = None
+        self.tile_selector_dock = None
+        self.object_selector_dock = None
+        self.layer_selector = None
+
     def run(self):
         if self.statusbar and self.editormap_component:
             (self.editormap_component.editormap_widget
              .sig_mouse_move.connect(self.statusbar.set_mouse_coordinates))
+
+        if self.tile_selector_dock and self.object_selector_dock:
+            self.window.tabifyDockWidget(self.tile_selector_dock,
+                                         self.object_selector_dock)
+
+        layer = self.layer_selector.get_widget()
 
         self.window.show()
         QApplication.instance().exec_()
@@ -55,6 +76,10 @@ class GUIManager:
 
     def create_button_panel(self, horizontal):
         toolbar = QToolBar()
+        if horizontal:
+            toolbar.setObjectName("button_panel")
+        else:
+            toolbar.setObjectName("toolbox")
         if horizontal:
             self.window.addToolBar(Qt.TopToolBarArea, toolbar)
         else:
@@ -79,6 +104,7 @@ class GUIManager:
 
     def create_minimap(self, parent):
         dockwidget = QDockWidget("Minimap")
+        dockwidget.setObjectName("minimap")
         minimap = Minimap(parent)
         dockwidget.setWidget(minimap.get_widget())
 
@@ -92,21 +118,23 @@ class GUIManager:
         return SaveFileDialog(titel)
 
     def create_object_selector(self, w, h):
-        dockwidget = QDockWidget("Object Selector")
-        object_selector = ObjectSelector(w, h, None)
-        dockwidget.setWidget(object_selector.get_widget())
+        self.object_selector_dock = QDockWidget("Object Selector")
+        self.object_selector_dock.setObjectName("object_selector_dock")
+        self.object_selector = ObjectSelector(w, h, None)
+        self.object_selector_dock.setWidget(self.object_selector.get_widget())
 
         # self.window.tabifyDockWidget(first, second)
-        self.window.addDockWidget(Qt.RightDockWidgetArea, dockwidget)
-        return object_selector
+        self.window.addDockWidget(Qt.RightDockWidgetArea, self.object_selector_dock)
+        return self.object_selector
 
     def create_tile_selector(self):
-        dockwidget = QDockWidget("Tile Selector")
-        tile_selector = TileSelector()
-        dockwidget.setWidget(tile_selector.get_widget())
+        self.tile_selector_dock = QDockWidget("Tile Selector")
+        self.tile_selector_dock.setObjectName("tile_selector_dock")
+        self.tile_selector = TileSelector()
+        self.tile_selector_dock.setWidget(self.tile_selector.get_widget())
 
-        self.window.addDockWidget(Qt.RightDockWidgetArea, dockwidget)
-        return tile_selector
+        self.window.addDockWidget(Qt.RightDockWidgetArea, self.tile_selector_dock)
+        return self.tile_selector
 
     def create_tile_brush_selector(self):
         dockwidget = QDockWidget("Tile Brush")
@@ -118,11 +146,12 @@ class GUIManager:
 
     def create_layer_selector(self):
         dockwidget = QDockWidget("Layer Selector")
-        layer_selector = LayerSelector()
-        dockwidget.setWidget(layer_selector.get_widget())
+        dockwidget.setObjectName("layer_selector_dock")
+        self.layer_selector = LayerSelector()
+        dockwidget.setWidget(self.layer_selector.get_widget())
 
         self.window.addDockWidget(Qt.RightDockWidgetArea, dockwidget)
-        return layer_selector
+        return self.layer_selector
 
 
 # EOF #

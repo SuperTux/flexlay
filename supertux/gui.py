@@ -101,13 +101,13 @@ class SuperTuxGUI:
             sprite = Sprite.from_file(Config.current.datadir + objectdata[1])
             self.objectselector.add_brush(ObjectBrush(sprite, objectdata))
 
-        self.layer_selector = self.gui.create_layer_selector()
-
         self.tileselector = self.gui.create_tile_selector()
         self.tileselector.set_tileset(SuperTuxTileset.current)
         self.tileselector.add_tilegroup("All Tiles", SuperTuxTileset.current.get_tiles())
         for tilegroup in SuperTuxTileset.current.tilegroups:
             self.tileselector.add_tilegroup(tilegroup.name, tilegroup.tiles)
+
+        self.layer_selector = self.gui.create_layer_selector()
 
         # self.worldmapobjectselector = self.gui.create_object_selector(42, 42)
         # if False:

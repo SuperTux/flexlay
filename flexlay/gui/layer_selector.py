@@ -1,4 +1,4 @@
-  # Flexlay - A Generic 2D Game Editor
+# Flexlay - A Generic 2D Game Editor
 # Copyright (C) 2014 Ingo Ruhnke <grumbel@gmail.com>
 #
 # This program is free software: you can redistribute it and/or modify
@@ -15,7 +15,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from PyQt4.QtGui import QStandardItemModel, QStandardItem, QIcon
+from PyQt4.QtCore import QSize
+from PyQt4.QtGui import QStandardItemModel, QStandardItem, QIcon, QSizePolicy
 from PyQt4.QtGui import (QWidget, QToolBar, QTreeView, QScrollArea,
                          QVBoxLayout)
 
@@ -41,19 +42,14 @@ class LayerSelector:
         self.tree_view = QTreeView()
         self.tree_view.setModel(model)
 
-        self.scroll_area = QScrollArea()
-
         self.toolbar = QToolBar()
         self.toolbar.addAction("Hide All")
         self.toolbar.addAction("Show All")
 
         self.layout = QVBoxLayout(self.vbox)
         self.layout.setContentsMargins(0, 0, 0, 0)
-        self.layout.addWidget(self.scroll_area)
+        self.layout.addWidget(self.tree_view)
         self.layout.addWidget(self.toolbar)
-
-        self.scroll_area.setWidgetResizable(True)
-        self.scroll_area.setWidget(self.tree_view)
 
     def get_widget(self):
         return self.vbox

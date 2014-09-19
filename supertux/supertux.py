@@ -16,6 +16,7 @@
 
 
 import argparse
+from PyQt4.QtCore import QByteArray
 
 from flexlay import Flexlay
 
@@ -62,6 +63,13 @@ def main():
     gui.gui_show_interactive()
     gui.gui_show_current()
     gui.set_tilemap_paint_tool()
+
+    if config.geometry:
+        if not gui.gui.window.restoreGeometry(QByteArray.fromBase64(config.geometry)):
+            print("error: failed to restore window geometry")
+    if config.window_state:
+        if not gui.gui.window.restoreState(QByteArray.fromBase64(config.window_state)):
+            print("error: failed to restore window state")
 
     gui.run()
 

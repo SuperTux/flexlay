@@ -36,6 +36,8 @@ class Config:
 
         self.datadir = ""
         self.recent_files = []
+        self.geometry = ""
+        self.window_state = ""
 
         if os.path.isfile(filename):
             self.load()
@@ -47,7 +49,13 @@ class Config:
         parser = configparser.ConfigParser()
         parser.read(filename)
         if "supertux-editor" in parser:
-            self.datadir = parser["supertux-editor"]["datadir"]
+            if "datadir" in parser["supertux-editor"]:
+                self.datadir = parser["supertux-editor"]["datadir"]
+            if "geometry" in parser["supertux-editor"]:
+                self.geometry = parser['supertux-editor']['geometry']
+            if "window_state" in parser["supertux-editor"]:
+                self.window_state = parser['supertux-editor']['window_state']
+
             self.recent_files = []
             for i in range(0, 10):
                 if ('recent_files%d' % i) in parser['supertux-editor']:
@@ -63,6 +71,8 @@ class Config:
         parser = configparser.ConfigParser()
         parser['supertux-editor'] = {}
         parser['supertux-editor']['datadir'] = self.datadir
+        parser['supertux-editor']['geometry'] = self.geometry
+        parser['supertux-editor']['window_state'] = self.window_state
         for i, recent_file in enumerate(self.recent_files):
             parser['supertux-editor']['recent_files%d' % i] = recent_file
 

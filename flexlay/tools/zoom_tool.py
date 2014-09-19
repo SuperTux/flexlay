@@ -16,7 +16,7 @@
 
 
 from flexlay.math import Rect, Rectf
-from flexlay import Color, InputEvent
+from flexlay import Color
 from ..gui.editor_map_component import EditorMapComponent
 from flexlay.tools import Tool
 

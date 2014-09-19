@@ -15,8 +15,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from flexlay.math import Rect, Rectf
-from flexlay import Color, InputEvent
 from ..gui.editor_map_component import EditorMapComponent
 from flexlay.tools import Tool
 
@@ -28,9 +26,7 @@ class ZoomOutTool(Tool):
 
     def on_mouse_down(self, event):
         parent = EditorMapComponent.current
-
-        if self.state == ZoomTool.NONE_STATE:
-            parent.zoom_out(event.mouse_pos)
+        parent.zoom_out(event.mouse_pos)
 
 
 # EOF #

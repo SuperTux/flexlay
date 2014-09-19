@@ -22,7 +22,7 @@ from flexlay import (Color, ObjectBrush, Sprite, TilemapLayer, InputEvent,
                      ObjMapRectObject, ObjMapPathNode, EditorMap, ToolContext)
 from flexlay.math import Point, Rect, Size
 from flexlay.tools import (TilePaintTool, TileBrushCreateTool, TileMapSelectTool,
-                           ObjMapSelectTool, ZoomTool, Zoom2Tool, WorkspaceMoveTool)
+                           ObjMapSelectTool, ZoomTool, ZoomOutTool, Zoom2Tool, WorkspaceMoveTool)
 
 from .data import game_objects, create_gameobject
 from .gameobj import PathNode
@@ -70,6 +70,7 @@ class SuperTuxGUI:
         self.tile_brush_create_tool = TileBrushCreateTool()
         self.tilemap_select_tool = TileMapSelectTool()
         self.zoom_tool = ZoomTool()
+        self.zoom_out_tool = ZoomOutTool()
         self.zoom2_tool = Zoom2Tool()
         self.workspace_move_tool = WorkspaceMoveTool()
         self.objmap_select_tool = ObjMapSelectTool()
@@ -335,7 +336,7 @@ class SuperTuxGUI:
 
     def set_zoom_tool(self):
         self.workspace.set_tool(InputEvent.MOUSE_LEFT, self.zoom_tool)
-        self.workspace.set_tool(InputEvent.MOUSE_RIGHT, self.zoom_tool)
+        self.workspace.set_tool(InputEvent.MOUSE_RIGHT, self.zoom_out_tool)
         self.paint.set_up()
         self.select.set_up()
         self.zoom.set_down()
@@ -449,7 +450,7 @@ class SuperTuxGUI:
 
     def gui_smooth_level_struct(self):
         print("Smoothing level structure")
-        tilemap = TilemapLayer.current()
+        tilemap = TilemapLayer.current
         data = tilemap.get_data()
         # width = tilemap.width
         #

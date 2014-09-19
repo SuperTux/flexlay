@@ -15,22 +15,22 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from .tool import Tool
-from .layer_move_tool import LayerMoveTool
-from .objmap_select_tool import ObjMapSelectTool
-# from .sketch_stroke_tool import SketchStrokeTool
-from .tile_paint_tool import TilePaintTool
-from .tile_brush_create_tool import TileBrushCreateTool
-from .tilemap_select_tool import TileMapSelectTool
-from .workspace_move_tool import WorkspaceMoveTool
-from .zoom2_tool import Zoom2Tool
-from .zoom_tool import ZoomTool
-from .zoom_out_tool import ZoomOutTool
+from flexlay.math import Rect, Rectf
+from flexlay import Color, InputEvent
+from ..gui.editor_map_component import EditorMapComponent
+from flexlay.tools import Tool
 
 
-__all__ = ["Tool", "LayerMoveTool", "ObjMapSelectTool",
-           "TileMapSelectTool", "TilePaintTool", "TileBrushCreateTool",
-           "WorkspaceMoveTool", "ZoomTool", "ZoomOutTool", "Zoom2Tool"]
+class ZoomOutTool(Tool):
+
+    def __init__(self):
+        super().__init__()
+
+    def on_mouse_down(self, event):
+        parent = EditorMapComponent.current
+
+        if self.state == ZoomTool.NONE_STATE:
+            parent.zoom_out(event.mouse_pos)
 
 
 # EOF #

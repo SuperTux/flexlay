@@ -20,7 +20,7 @@ import os
 
 from flexlay import (Color, ObjectBrush, Sprite, TilemapLayer,
                      InputEvent, ObjMapRectObject, ObjMapPathNode,
-                     EditorMap, ToolContext)
+                     EditorMap, ToolContext, Config)
 from flexlay.math import Point, Rect, Size
 from flexlay.tools import (TilePaintTool, TileBrushCreateTool,
                            TileMapSelectTool, TileFillTool,
@@ -33,7 +33,6 @@ from .gameobj import PathNode
 from .level import Level
 from .sector import Sector
 from .worldmap import WorldMap
-from .config import Config
 from .worldmap_object import create_worldmapobject_at_pos  # worldmap_objects
 from .tileset import SuperTuxTileset
 

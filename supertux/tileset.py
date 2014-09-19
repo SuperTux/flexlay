@@ -15,11 +15,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from flexlay import Tile, Tileset, PixelBuffer
+from flexlay import Tile, Tileset, PixelBuffer, Config
 from flexlay.util import get_value_from_tree
 
 from .util import load_lisp
-from .config import Config
 
 
 class TileGroup:

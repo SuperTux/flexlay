@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from PyQt4.QtGui import (QComboBox, QScrollArea, QWidget, QVBoxLayout, QSizePolicy)
+from PyQt4.QtGui import (QComboBox, QScrollArea, QWidget, QVBoxLayout)
 from PyQt4.QtCore import Qt
 
 from .tile_selector_widget import TileSelectorWidget

@@ -18,10 +18,9 @@
 import argparse
 from PyQt4.QtCore import QByteArray
 
-from flexlay import Flexlay
+from flexlay import Flexlay, Config
 
 from .tileset import SuperTuxTileset
-from .config import Config
 from .gui import SuperTuxGUI
 
 

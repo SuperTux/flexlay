@@ -15,11 +15,9 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from flexlay import ObjectAddCommand, Sprite, ObjMapSpriteObject
+from flexlay import ObjectAddCommand, Sprite, ObjMapSpriteObject, Config
 from flexlay.math import Pointf
 from flexlay.util import get_value_from_tree
-
-from .config import Config
 
 
 class WorldmapObject:

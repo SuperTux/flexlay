@@ -17,8 +17,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from flexlay import Config
 from supertux.level import Level
-from supertux.config import Config
 
 import os
 import io

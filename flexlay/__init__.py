@@ -15,6 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from .config import Config
 # from .stroke import Dab, Stroke
 from .drawer_properties import DrawerProperties
 from .brushmask import BrushMask
@@ -75,7 +76,7 @@ from .tile_provider import TileProvider
 __all__ = [
     # "BitmapLayer", "OnionSkinLayer", "SketchLayer",
     # "SpriteStrokeDrawer", "Stroke", "StrokeDrawer", "Dab",
-    "Brush", "BrushMask", "Canvas",
+    "Brush", "BrushMask", "Canvas", "Config",
     "Color", "BlendFunc", "blit", "blit_clear", "blit_opaque",
     "Command", "CommandGroup", "DrawerProperties", "Field",
     "Flexlay", "GraphicContext", "GraphicContextState",

@@ -15,7 +15,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from .config import Config
 from .data import (game_objects, create_gameobject,
                    create_gameobject_from_data, find_game_object)
 from .gameobj import GameObj
@@ -23,7 +22,7 @@ from .gui import SuperTuxGUI
 from .level import Level
 from .sector import Sector
 from .sprite import Sprite
-from .tilemap import TileMap
+from .tilemap import SuperTuxTileMap
 from .tileset import SuperTuxTileset
 from .util import load_lisp
 from .worldmap import WorldMap
@@ -31,10 +30,10 @@ from .worldmap_object import WorldmapObject
 from .supertux import main
 
 
-__all__ = ["Config", "game_objects", "create_gameobject",
+__all__ = ["game_objects", "create_gameobject",
            "create_gameobject_from_data", "find_game_object",
            "GameObj", "SuperTuxGUI", "Level", "Sector", "Sprite",
-           "TileMap", "SuperTuxTileset", "load_lisp", "WorldMap",
+           "SuperTuxTileMap", "SuperTuxTileset", "load_lisp", "WorldMap",
            "WorldmapObject", "main"]
 
 

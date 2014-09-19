@@ -15,10 +15,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from PyQt4.QtCore import QSize
-from PyQt4.QtGui import QStandardItemModel, QStandardItem, QIcon, QSizePolicy
-from PyQt4.QtGui import (QWidget, QToolBar, QTreeView, QScrollArea,
-                         QVBoxLayout)
+from PyQt4.QtGui import QStandardItemModel, QStandardItem, QIcon
+from PyQt4.QtGui import QWidget, QToolBar, QTreeView, QVBoxLayout
 
 
 class LayerSelector:

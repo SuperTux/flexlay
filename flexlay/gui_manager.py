@@ -15,11 +15,11 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from PyQt4.QtCore import (QCoreApplication, Qt, QSize)
+from PyQt4.QtCore import (QCoreApplication, Qt)
 from PyQt4.QtGui import (QApplication, QMainWindow, QToolBar,
                          QDockWidget, QVBoxLayout, QWidget)
 
-from supertux.config import Config
+from .config import Config
 from .gui import (ButtonPanel, EditorMapComponent, OpenFileDialog,
                   SaveFileDialog, GenericDialog, LayerSelector,
                   Menubar, Minimap, ObjectSelector, TileBrushSelector,
@@ -57,8 +57,6 @@ class GUIManager:
         if self.tile_selector_dock and self.object_selector_dock:
             self.window.tabifyDockWidget(self.tile_selector_dock,
                                          self.object_selector_dock)
-
-        layer = self.layer_selector.get_widget()
 
         self.window.show()
         QApplication.instance().exec_()

@@ -35,6 +35,7 @@ class Sector:
         self.width = None
         self.height = None
 
+        self.tilemaps = []
         self.background = None
         self.interactive = None
         self.foreground = None
@@ -49,9 +50,10 @@ class Sector:
     def resize(self, size, pos):
         self.width = size.width
         self.height = size.height
-        self.background.resize(size, pos)
-        self.interactive.resize(size, pos)
-        self.foreground.resize(size, pos)
+
+        for tilemap in self.tilemaps:
+            tilemap.resize(size, pos)
+
         for obj in self.objects.objects:
             p = obj.get_pos()
             p += 32 * pos
@@ -68,15 +70,18 @@ class Sector:
         self.foreground = TilemapLayer(SuperTuxTileset.current, self.width, self.height)
         self.interactive = TilemapLayer(SuperTuxTileset.current, self.width, self.height)
         self.background = TilemapLayer(SuperTuxTileset.current, self.width, self.height)
+        self.tilemaps.append(self.foreground)
+        self.tilemaps.append(self.interactive)
+        self.tilemaps.append(self.background)
+
         self.objects = ObjectLayer()
         # self.sketch  = SketchLayer()
 
         self.editormap = EditorMap()
         # self.editormap.set_background_color(Color(255, 255, 255))
-        self.editormap.add_layer(self.background)
-        self.editormap.add_layer(self.interactive)
+        for tilemap in self.tilemaps:
+            self.editormap.add_layer(tilemap)
         self.editormap.add_layer(self.objects)
-        self.editormap.add_layer(self.foreground)
         # self.editormap.add_layer(self.sketch)
         self.editormap.metadata = self
         return self
@@ -97,6 +102,10 @@ class Sector:
 
         self.background = TilemapLayer(SuperTuxTileset.current, self.width, self.height)
         self.background.set_data(get_value_from_tree(["background-tm"], data, []))
+
+        self.tilemaps.append(self.foreground)
+        self.tilemaps.append(self.interactive)
+        self.tilemaps.append(self.background)
 
         self.cameramode = "normal"
 
@@ -149,10 +158,10 @@ class Sector:
         else:
             print("Unknown particle system type %s" % partsys)
 
-        self.editormap.add_layer(self.background)
-        self.editormap.add_layer(self.interactive)
+        for tilemap in self.tilemaps:
+            self.editormap.add_layer(tilemap)
         self.editormap.add_layer(self.objects)
-        self.editormap.add_layer(self.foreground)
+
         # FIXME: Data might not get freed since its 'recursively' refcounted
         self.editormap.metadata = self
 
@@ -169,11 +178,12 @@ class Sector:
         self.background = None
         self.interactive = None
         self.foreground = None
+        self.tilemaps = []
 
         self.editormap = EditorMap()
 
         self.objects = ObjectLayer()
-#    self.sketch = SketchLayer()
+        # self.sketch = SketchLayer()
 
         for i in data:
             (name, data) = i[0], i[1:]
@@ -192,6 +202,7 @@ class Sector:
                 width = get_value_from_tree(["width", "_"],  data, 20)
                 height = get_value_from_tree(["height", "_"], data, 15)
                 solid = get_value_from_tree(["solid", "_"],  data, False)
+                # zpos = get_value_from_tree(["z-pos", "_"],  data, 0)
 
                 tilemap = TilemapLayer(SuperTuxTileset.current, width, height)
                 tilemap.set_data(get_value_from_tree(["tiles"], data, []))
@@ -204,8 +215,9 @@ class Sector:
                     self.background = tilemap
                 elif layer == "foreground":
                     self.foreground = tilemap
-                else:
-                    print("Flexlay doesn't handle tilemap layer '%s'" % layer)
+
+                self.tilemaps.append(tilemap)
+
             elif name == "camera":
                 self.cameramode = "normal"
                 # TODO...
@@ -219,18 +231,17 @@ class Sector:
 
         if self.background is None:
             self.background = TilemapLayer(SuperTuxTileset.current, self.width, self.height)
+            self.tilemaps.append(self.background)
 
-        if (self.foreground is None):
+        if self.foreground is None:
             self.foreground = TilemapLayer(SuperTuxTileset.current, self.width, self.height)
+            self.tilemaps.append(self.foreground)
 
-        if self.background:
-            self.editormap.add_layer(self.background)
-        if self.interactive:
-            self.editormap.add_layer(self.interactive)
-        if self.foreground:
-            self.editormap.add_layer(self.foreground)
+        for tilemap in self.tilemaps:
+            self.editormap.add_layer(tilemap)
+
         self.editormap.add_layer(self.objects)
-#    self.editormap.add_layer(self.sketch)
+        # self.editormap.add_layer(self.sketch)
         self.editormap.metadata = self
 
     def activate(self, workspace):

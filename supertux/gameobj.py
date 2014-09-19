@@ -44,6 +44,22 @@ class ResetPoint(GameObj):
         writer.end_list()
 
 
+class Decal(GameObj):
+
+    def __init__(self, data, sexpr):
+        super().__init__()
+        self.layer = get_value_from_tree(["layer", "_"],  sexpr, 0)
+        self.sprite = get_value_from_tree(["sprite", "_"], sexpr, "")
+        data.set_sprite(Sprite.from_file(Config.current.datadir + self.sprite))
+
+    def save(self, writer, obj):
+        writer.begin_list("decal")
+        writer.write_inline_point(obj.get_pos())
+        writer.write_int("layer", self.layer)
+        writer.write_string("sprite", self.sprite)
+        writer.end_list()
+
+
 class SecretArea(GameObj):
 
     def __init__(self, data, sexpr):

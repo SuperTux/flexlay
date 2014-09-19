@@ -15,21 +15,23 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from flexlay import (Color, ObjMapSpriteObject, ObjMapRectObject, ObjectAddCommand, Sprite)
+from flexlay import (Color, ObjMapSpriteObject, ObjMapRectObject,
+                     ObjectAddCommand, Sprite, Config)
 from flexlay.math import Point, Pointf, Rect, Size
 from flexlay.util import get_value_from_tree
 
-from .config import Config
 from .gameobj import (BadGuy, Dispenser, SpawnPoint, ResetPoint,
                       AmbientSound, SimpleObject, SimpleTileObject,
                       Powerup, SecretArea, SequenceTrigger, Door,
                       Background, Gradient, ParticleSystem, Platform,
-                      ScriptedObject, InfoBlock, LevelTime)
+                      ScriptedObject, InfoBlock, LevelTime, Decal)
 
 
 game_objects = [
     #["angrystone", "images/creatures/angrystone/angrystone.sprite", "sprite",
     # lambda data, sexpr: BadGuy("angrystone")],
+    ["decal", "images/engine/editor/resetpoint.png", "sprite",
+     lambda data, sexpr: Decal(data, sexpr)],
     ["firefly", "images/engine/editor/resetpoint.png", "sprite",
      lambda data, sexpr: ResetPoint()],
     ["jumpy", "images/creatures/jumpy/left-middle.png", "sprite",
@@ -147,7 +149,6 @@ def create_gameobject(editormap, objmap, data, pos, sexpr):
         gobj.set_obj(obj)
 
     elif kind == "rect":
-        print("NewRect", pos.x, " -", pos.y)
         obj = ObjMapRectObject(Rect(Point(pos.x, pos.y), Size(64, 64)),
                                Color(0, 0, 255, 128),
                                None)

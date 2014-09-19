@@ -114,21 +114,26 @@ class TilemapLayer(Layer):
 
     def flood_fill_at(self, pos, tile_id):
         replace_id = self.field.at(pos.x, pos.y)
-        self._flood_fill_at(pos.x, pos.y, tile_id, replace_id)
+        if tile_id != replace_id:
+            self._flood_fill_at(pos.x, pos.y, tile_id, replace_id)
 
     def _flood_fill_at(self, x, y, fill_id, replace_id):
         stack = [(x, y)]
-        while stack:
-            x, y = stack.pop()
+
+        def add(x, y):
             if 0 <= x < self.field.width and \
                0 <= y < self.field.height:
-                tile_id = self.field.at(x, y)
-                if tile_id == replace_id:
-                    self.field.put(x, y, fill_id)
-                    stack.append((x + 1, y))
-                    stack.append((x - 1, y))
-                    stack.append((x, y + 1))
-                    stack.append((x, y - 1))
+                stack.append((x, y))
+
+        while stack:
+            x, y = stack.pop()
+            tile_id = self.field.at(x, y)
+            if tile_id == replace_id:
+                self.field.put(x, y, fill_id)
+                add(x + 1, y)
+                add(x - 1, y)
+                add(x, y + 1)
+                add(x, y - 1)
 
     def draw_tile(self, tile_id, pos):
         assert isinstance(tile_id, int)

@@ -53,7 +53,6 @@ class Config:
                 if ('recent_files%d' % i) in parser['supertux-editor']:
                     recent_file = parser['supertux-editor']['recent_files%d' % i]
                     self.recent_files.append(recent_file)
-            print(self.recent_files)
         else:
             print("%s: [supertux-editor] section missing" % filename)
 

@@ -98,9 +98,9 @@ class SuperTuxGUI:
 
         self.tileselector = self.gui.create_tile_selector()
         self.tileselector.set_tileset(SuperTuxTileset.current)
-        self.tileselector.set_tiles("All Tiles", SuperTuxTileset.current.get_tiles())
+        self.tileselector.add_tilegroup("All Tiles", SuperTuxTileset.current.get_tiles())
         for tilegroup in SuperTuxTileset.current.tilegroups:
-            self.tileselector.set_tiles(tilegroup.name, tilegroup.tiles)
+            self.tileselector.add_tilegroup(tilegroup.name, tilegroup.tiles)
 
         # self.worldmapobjectselector = self.gui.create_object_selector(42, 42)
         # if False:
@@ -652,7 +652,7 @@ class SuperTuxGUI:
         if os.path.isdir(Config.current.datadir):
             dialog = self.gui.create_generic_dialog("Specify the SuperTux data directory and restart")
             dialog.add_label("You need to specify the datadir where SuperTux is located")
-            dialog.add_string("Datadir:", Config.current.datadir)
+            dialog.add_string("SuperTux datadir:", Config.current.datadir)
 
             def on_callback(datadir):
                 Config.current.datadir = datadir

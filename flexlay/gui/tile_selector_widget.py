@@ -43,11 +43,6 @@ class TileSelectorWidget(QWidget):
 
         self.setMouseTracking(True)
 
-    def minimumSizeHint(self):
-        min_rows = (len(self.tiles) + self.columns - 1) / self.columns
-        return QSize(self.tileset.get_tile_size() * self.columns,
-                     self.tileset.get_tile_size() * min_rows)
-
     def get_selection(self):
         selection = Rect(self.current_pos.x, self.current_pos.y,
                          self.region_select_start.x, self.region_select_start.y)
@@ -180,7 +175,13 @@ class TileSelectorWidget(QWidget):
         self.repaint()
 
     def resizeEvent(self, event):
-        self.repaint()
+        self.update_minimum_size()
+
+    def update_minimum_size(self):
+        min_rows = (len(self.tiles) + self.columns - 1) / self.columns
+        size = QSize(self.tileset.get_tile_size() * self.columns,
+                     self.tileset.get_tile_size() * min_rows)
+        self.setMinimumSize(size)
 
     @property
     def columns(self):
@@ -195,11 +196,11 @@ class TileSelectorWidget(QWidget):
 
     def set_tileset(self, tileset):
         self.tileset = tileset
-        self.repaint()
+        self.update_minimum_size()
 
     def set_tiles(self, tiles):
         self.tiles = tiles
-        self.repaint()
+        self.update_minimum_size()
 
     @property
     def cell_size(self):

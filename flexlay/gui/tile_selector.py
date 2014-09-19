@@ -16,6 +16,7 @@
 
 
 from PyQt4.QtGui import (QComboBox, QScrollArea, QWidget, QVBoxLayout)
+from PyQt4.QtCore import Qt
 
 from .tile_selector_widget import TileSelectorWidget
 
@@ -32,6 +33,7 @@ class TileSelector:
         self.widget = TileSelectorWidget(self.scroll_area.viewport())
         self.scroll_area.setWidgetResizable(True)
         self.scroll_area.setWidget(self.widget)
+        self.scroll_area.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
 
         self.box = QWidget()
         self.layout = QVBoxLayout(self.box)
@@ -39,13 +41,13 @@ class TileSelector:
         self.layout.addWidget(self.combobox)
         self.layout.addWidget(self.scroll_area)
 
-        def on_activated(idx):
-            text = self.combobox.itemData(idx)
-            tiles = self.tiles[text]
-            self.widget.set_tiles(tiles)
-            self.scroll_area.update()
+        self.combobox.activated.connect(self.on_combobox_activated)
 
-        self.combobox.activated.connect(on_activated)
+    def on_combobox_activated(self, idx):
+        text = self.combobox.itemData(idx)
+        tiles = self.tiles[text]
+        self.widget.set_tiles(tiles)
+        self.scroll_area.update()
 
     def set_tileset(self, tileset):
         self.widget.set_tileset(tileset)
@@ -55,10 +57,14 @@ class TileSelector:
         self.combobox.clear()
         self.combobox.hide()
 
-    def set_tiles(self, name, tiles):
+    def add_tilegroup(self, name, tiles):
         self.tiles[name] = tiles
         self.combobox.addItem(name, name)
         self.combobox.show()
+
+        # It's the first tilegroup, so show it
+        if len(self.tiles) == 1:
+            self.on_combobox_activated(0)
 
     def get_tiles(self):
         return self.widget.get_tiles()

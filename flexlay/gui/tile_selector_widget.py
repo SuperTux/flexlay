@@ -128,9 +128,9 @@ class TileSelectorWidget(QWidget):
 
         brush = ToolContext.current.tile_brush
 
-        start_row = int(event.rect().y() // self.cell_size)
-        end_row = int(start_row + event.rect().height() // self.cell_size)
-        end_index = int(min(end_row * self.columns, len(self.tiles)))
+        start_row = event.rect().top() // self.cell_size
+        end_row = (event.rect().bottom() + self.cell_size - 1) // self.cell_size
+        end_index = min(end_row * self.columns, len(self.tiles))
 
         # Draw tiles
         for i in range(start_row * self.columns, end_index):

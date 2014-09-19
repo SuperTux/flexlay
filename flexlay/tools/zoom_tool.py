@@ -60,7 +60,6 @@ class ZoomTool(Tool):
         if event.kind == InputEvent.MOUSE_RIGHT:
             if self.state == ZoomTool.NONE_STATE:
                 parent.zoom_out(event.mouse_pos)
-                parent.zoom_out(event.mouse_pos)
 
         else:
             if self.state == ZoomTool.NONE_STATE:

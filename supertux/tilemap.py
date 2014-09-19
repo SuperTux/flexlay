@@ -67,11 +67,29 @@ class SuperTuxTileMap:
         writer.write_field("tiles", self.tilemap_layer.field)
         writer.end_list()
 
+    def get_bounding_rect(self):
+        return self.tilemap_layer.get_bounding_rect()
+
+    def has_bounding_rect(self):
+        return self.tilemap_layer.has_bounding_rect()
+
+    def draw(self, gc):
+        self.tilemap_layer.draw(gc)
+
+    def world2tile(self, p):
+        return self.tilemap_layer.world2tile(p)
+
+    def get_tileset(self):
+        return self.tilemap_layer.get_tileset()
+
     def get_data(self):
         return self.tilemap_layer.get_data()
 
     def set_data(self, data):
         self.tilemap_layer.set_data(data)
+
+    def get_field(self):
+        self.tilemap_layer.get_field()
 
     @property
     def width(self):

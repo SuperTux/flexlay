@@ -750,8 +750,8 @@ class DisplayProperties:
         self.show_all = False
         self.current_only = False
 
-    def set(self, editormap):
-        if editormap is None or not isinstance(editormap, Sector):
+    def set(self, sector):
+        if sector is None or not isinstance(sector, Sector):
             return
 
         if self.current_only:
@@ -762,24 +762,24 @@ class DisplayProperties:
             deactive = Color(150, 150, 250, 150)
 
         if self.show_all:
-            editormap.foreground.set_foreground_color(active)
-            editormap.interactive.set_foreground_color(active)
-            editormap.background.set_foreground_color(active)
+            sector.foreground.tilemap_layer.set_foreground_color(active)
+            sector.interactive.tilemap_layer.set_foreground_color(active)
+            sector.background.tilemap_layer.set_foreground_color(active)
         else:
             if (self.layer == FOREGROUND_LAYER):
-                editormap.foreground.set_foreground_color(active)
+                sector.foreground.tilemap_layer.set_foreground_color(active)
             else:
-                editormap.foreground.set_foreground_color(deactive)
+                sector.foreground.tilemap_layer.set_foreground_color(deactive)
 
             if (self.layer == INTERACTIVE_LAYER):
-                editormap.interactive.set_foreground_color(active)
+                sector.interactive.tilemap_layer.set_foreground_color(active)
             else:
-                editormap.interactive.set_foreground_color(deactive)
+                sector.interactive.tilemap_layer.set_foreground_color(deactive)
 
             if (self.layer == BACKGROUND_LAYER):
-                editormap.background.set_foreground_color(active)
+                sector.background.tilemap_layer.set_foreground_color(active)
             else:
-                editormap.background.set_foreground_color(deactive)
+                sector.background.tilemap_layer.set_foreground_color(deactive)
 
 
 # EOF #

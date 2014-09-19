@@ -15,23 +15,29 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from flexlay import TilemapLayer
+from ..gui.editor_map_component import EditorMapComponent
 from .tool import Tool
-from .layer_move_tool import LayerMoveTool
-from .objmap_select_tool import ObjMapSelectTool
-# from .sketch_stroke_tool import SketchStrokeTool
-from .tile_paint_tool import TilePaintTool
-from .tile_fill_tool import TileFillTool
-from .tile_brush_create_tool import TileBrushCreateTool
-from .tilemap_select_tool import TileMapSelectTool
-from .workspace_move_tool import WorkspaceMoveTool
-from .zoom2_tool import Zoom2Tool
-from .zoom_tool import ZoomTool
-from .zoom_out_tool import ZoomOutTool
+from ..tool_context import ToolContext
 
 
-__all__ = ["Tool", "LayerMoveTool", "ObjMapSelectTool", "TileFillTool",
-           "TileMapSelectTool", "TilePaintTool", "TileBrushCreateTool",
-           "WorkspaceMoveTool", "ZoomTool", "ZoomOutTool", "Zoom2Tool"]
+class TileFillTool(Tool):
+
+    current = None
+
+    def __init__(self):
+        super().__init__()
+
+        TileFillTool.current = self
+
+    def on_mouse_down(self, event):
+        tilemap = TilemapLayer.current
+
+        if tilemap:
+            parent = EditorMapComponent.current
+            pos = tilemap.world2tile(parent.screen2world(event.mouse_pos))
+            tilemap.flood_fill_at(pos, ToolContext.current.tile_brush.at(0, 0))
+            # GRUMBEL: undo missing
 
 
 # EOF #

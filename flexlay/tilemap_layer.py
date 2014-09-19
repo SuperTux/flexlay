@@ -112,6 +112,21 @@ class TilemapLayer(Layer):
     def resize(self, size, point):
         self.field.resize(size.width, size.height, point.x, point.y)
 
+    def flood_fill_at(self, pos, tile_id):
+        replace_id = self.field.at(pos.x, pos.y)
+        self._flood_fill_at(pos.x, pos.y, tile_id, replace_id)
+
+    def _flood_fill_at(self, x, y, fill_id, replace_id):
+        if 0 <= x < self.field.width and \
+           0 <= y < self.field.height:
+            tile_id = self.field.at(x, y)
+            if tile_id == replace_id:
+                self.field.put(x, y, fill_id)
+                self._flood_fill_at(x + 1, y, fill_id, replace_id)
+                self._flood_fill_at(x - 1, y, fill_id, replace_id)
+                self._flood_fill_at(x, y + 1, fill_id, replace_id)
+                self._flood_fill_at(x, y - 1, fill_id, replace_id)
+
     def draw_tile(self, tile_id, pos):
         assert isinstance(tile_id, int)
         if pos.x >= 0 and pos.x < self.field.width and \

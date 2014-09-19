@@ -21,7 +21,7 @@ import os
 from flexlay import (Color, ObjectBrush, Sprite, TilemapLayer, InputEvent,
                      ObjMapRectObject, ObjMapPathNode, EditorMap, ToolContext)
 from flexlay.math import Point, Rect, Size
-from flexlay.tools import (TilePaintTool, TileBrushCreateTool, TileMapSelectTool,
+from flexlay.tools import (TilePaintTool, TileBrushCreateTool, TileMapSelectTool, TileFillTool,
                            ObjMapSelectTool, ZoomTool, ZoomOutTool, Zoom2Tool, WorkspaceMoveTool)
 
 from .data import game_objects, create_gameobject
@@ -67,6 +67,7 @@ class SuperTuxGUI:
 
         # Tools
         self.tile_paint_tool = TilePaintTool()
+        self.tile_fill_tool = TileFillTool()
         self.tile_brush_create_tool = TileBrushCreateTool()
         self.tilemap_select_tool = TileMapSelectTool()
         self.zoom_tool = ZoomTool()
@@ -159,6 +160,8 @@ class SuperTuxGUI:
         self.toolbar = self.gui.create_button_panel(False)
         self.paint = self.toolbar.add_icon("data/images/tools/stock-tool-pencil-22.png",
                                            self.set_tilemap_paint_tool)
+        self.fill = self.toolbar.add_icon("data/images/tools/stock-tool-fill-24.png",
+                                          self.set_tilemap_fill_tool)
         self.select = self.toolbar.add_icon("data/images/tools/stock-tool-rect-select-22.png",
                                             self.set_tilemap_select_tool)
         self.toolbar.add_separator()
@@ -320,6 +323,17 @@ class SuperTuxGUI:
         self.workspace.set_tool(InputEvent.MOUSE_LEFT, self.tile_paint_tool)
         self.workspace.set_tool(InputEvent.MOUSE_RIGHT, self.tile_brush_create_tool)
         self.paint.set_down()
+        self.fill.set_up()
+        self.select.set_up()
+        self.zoom.set_up()
+        self.object.set_up()
+        self.show_tiles()
+
+    def set_tilemap_fill_tool(self):
+        self.workspace.set_tool(InputEvent.MOUSE_LEFT, self.tile_fill_tool)
+        self.workspace.set_tool(InputEvent.MOUSE_RIGHT, self.tile_brush_create_tool)
+        self.paint.set_up()
+        self.fill.set_down()
         self.select.set_up()
         self.zoom.set_up()
         self.object.set_up()
@@ -329,6 +343,7 @@ class SuperTuxGUI:
         self.workspace.set_tool(InputEvent.MOUSE_LEFT, self.tilemap_select_tool)
         self.workspace.set_tool(InputEvent.MOUSE_RIGHT, None)
         self.paint.set_up()
+        self.fill.set_up()
         self.select.set_down()
         self.zoom.set_up()
         self.object.set_up()
@@ -347,6 +362,7 @@ class SuperTuxGUI:
         self.workspace.set_tool(InputEvent.MOUSE_LEFT, self.objmap_select_tool)
         self.workspace.set_tool(InputEvent.MOUSE_RIGHT, None)
         self.paint.set_up()
+        self.fill.set_up()
         self.select.set_up()
         self.zoom.set_up()
         self.object.set_down()

@@ -21,6 +21,7 @@ from .objmap_select_tool import ObjMapSelectTool
 # from .sketch_stroke_tool import SketchStrokeTool
 from .tile_paint_tool import TilePaintTool
 from .tile_fill_tool import TileFillTool
+from .tile_replace_tool import TileReplaceTool
 from .tile_brush_create_tool import TileBrushCreateTool
 from .tilemap_select_tool import TileMapSelectTool
 from .workspace_move_tool import WorkspaceMoveTool
@@ -29,9 +30,11 @@ from .zoom_tool import ZoomTool
 from .zoom_out_tool import ZoomOutTool
 
 
-__all__ = ["Tool", "LayerMoveTool", "ObjMapSelectTool", "TileFillTool",
-           "TileMapSelectTool", "TilePaintTool", "TileBrushCreateTool",
-           "WorkspaceMoveTool", "ZoomTool", "ZoomOutTool", "Zoom2Tool"]
+__all__ = ["Tool", "LayerMoveTool", "ObjMapSelectTool",
+           "TileFillTool", "TileReplaceTool", "TileMapSelectTool",
+           "TilePaintTool", "TileBrushCreateTool",
+           "WorkspaceMoveTool", "ZoomTool", "ZoomOutTool",
+           "Zoom2Tool"]
 
 
 # EOF #

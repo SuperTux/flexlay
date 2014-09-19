@@ -112,6 +112,12 @@ class TilemapLayer(Layer):
     def resize(self, size, point):
         self.field.resize(size.width, size.height, point.x, point.y)
 
+    def replace_tile(self, source_id, replacement_id):
+        for y in range(self.field.height):
+            for x in range(self.field.width):
+                if self.field.at(x, y) == source_id:
+                    self.field.put(x, y, replacement_id)
+
     def flood_fill_at(self, pos, tile_id):
         replace_id = self.field.at(pos.x, pos.y)
         if tile_id != replace_id:

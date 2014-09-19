@@ -107,10 +107,13 @@ class SExprWriter:
         for y in range(0, field.height):
             self.indent()
             for x in range(0, field.width):
-                self.fout.write("%d " % field.at(x, y))
+                if x < field.width - 1:
+                    self.fout.write("%d " % field.at(x, y))
+                else:
+                    self.fout.write("%d" % field.at(x, y))
             self.fout.write("\n")
         self.indent()
-        self.fout.write(")")
+        self.fout.write(")\n")
 
     def indent(self):
         self.fout.write(" " * self.indent_depth)

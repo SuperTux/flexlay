@@ -22,41 +22,61 @@ from flexlay.util import get_value_from_tree
 from .tileset import SuperTuxTileset
 
 
-class TileMap:
+class SuperTuxTileMap:
+
+    @staticmethod
+    def from_sexpr(data):
+        result = SuperTuxTileMap()
+        width = get_value_from_tree(["width", "_"],  data, 20)
+        height = get_value_from_tree(["height", "_"], data, 15)
+        result.solid = get_value_from_tree(["solid", "_"],  data, False)
+        result.z_pos = get_value_from_tree(["z-pos", "_"],  data, 0)
+        result.name = get_value_from_tree(["name", "_"],  data, "")
+
+        result.tilemap_layer = TilemapLayer(SuperTuxTileset.current, width, height)
+        result.tilemap_layer.set_data(get_value_from_tree(["tiles"], data, []))
+        result.tilemap_layer.metadata = result
+
+        return result
+
+    @staticmethod
+    def from_size(width, height):
+        result = SuperTuxTileMap()
+        result.tilemap_layer = TilemapLayer(SuperTuxTileset.current, width, height)
+        result.tilemap_layer.metadata = result
+        return result
 
     def __init__(self):
         self.solid = True
         self.z_pos = 0
         self.name = ""
-        self.width = None
-        self.height = None
         self.speed = 1.0
         self.layer = "interactive"
-        self.tilemaplayer = None
-
-    def new_from_size(self, width, height):
-        self.width = width
-        self.height = height
-        self.tilemaplayer = TilemapLayer(SuperTuxTileset.current, self.width, self.height)
-
-    def parse(self, data):
-        self.width = get_value_from_tree(["width", "_"], data, 10)
-        self.height = get_value_from_tree(["height", "_"], data, 10)
-        self.layer = get_value_from_tree(["layer", "_"], data, "interactive")
-        self.solid = get_value_from_tree(["solid", "_"], data, True)
-        self.speed = get_value_from_tree(["speed", "_"], data, 1.0)
-        self.tilemaplayer = TilemapLayer(SuperTuxTileset.current, self.width, self.height)
-        self.tilemaplayer.set_data(get_value_from_tree(["tiles"], data, []))
+        self.tilemap_layer = None
 
     def save(self, writer):
-        writer.start_list("tilemap")
-        writer.write_int("width", self.width)
-        writer.write_int("height", self.height)
-        writer.write_string("layer", self.layer)
+        writer.begin_list("tilemap")
         writer.write_bool("solid", self.solid)
-        writer.write_float("speed", self.speed)
-        writer.write_int_vector("tiles", self.tilemaplayer.get_data())
-        writer.end_list("tilemap")
+        writer.write_int("z-pos", self.z_pos)
+        if self.speed != 1.0:
+            writer.write_float("speed", self.speed)
+        if self.name:
+            writer.write_string("name", self.name)
+        writer.write_int("width", self.tilemap_layer.width)
+        writer.write_int("height", self.tilemap_layer.height)
+        writer.write_field("tiles", self.tilemap_layer.field)
+        writer.end_list()
+
+    def set_data(self, data):
+        self.tilemap_layer.set_data(data)
+
+    @property
+    def width(self):
+        return self.tilemap_layer.width
+
+    @property
+    def height(self):
+        return self.tilemap_layer.height
 
 
 # EOF #

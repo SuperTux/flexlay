@@ -19,7 +19,7 @@ from flexlay import ObjectLayer, EditorMap, TilemapLayer
 from flexlay.util import get_value_from_tree, SExprWriter
 
 from .util import load_lisp
-from .tilemap import TileMap
+from .tilemap import SuperTuxTileMap
 from .worldmap_object import create_worldmapobject_from_data
 
 
@@ -43,7 +43,7 @@ class WorldMap:
 
             self.width = width
             self.height = height
-            self.tilemap = TileMap()
+            self.tilemap = SuperTuxTileMap()
             self.tilemap.new_from_size(self.width, self.height)
         else:
             # Load Level from file
@@ -66,7 +66,7 @@ class WorldMap:
                 self.start_pos_x = get_value_from_tree(["start_pos_x", "_"], data, 0)
                 self.start_pos_y = get_value_from_tree(["start_pos_y", "_"], data, 0)
             elif name == 'tilemap':
-                self.tilemap = TileMap()
+                self.tilemap = SuperTuxTileMap()
                 self.tilemap.parse(data)
             else:
                 create_worldmapobject_from_data(self.objects, name, data)

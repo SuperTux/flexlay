@@ -20,6 +20,7 @@ from flexlay import TilemapLayer, ObjectLayer, EditorMap
 
 from .data import create_gameobject_from_data
 from .tileset import SuperTuxTileset
+from .tilemap import SuperTuxTileMap
 
 
 class Sector:
@@ -31,6 +32,7 @@ class Sector:
         self.music = None
         self.gravity = 10.0
         self.init_script = ""
+        self.ambient_light = [1, 1, 1]
 
         self.width = None
         self.height = None
@@ -67,9 +69,9 @@ class Sector:
         self.width = width
         self.height = height
 
-        self.foreground = TilemapLayer(SuperTuxTileset.current, self.width, self.height)
-        self.interactive = TilemapLayer(SuperTuxTileset.current, self.width, self.height)
-        self.background = TilemapLayer(SuperTuxTileset.current, self.width, self.height)
+        self.foreground = SuperTuxTileMap.from_size(self.width, self.height)
+        self.interactive = SuperTuxTileMap.from_size(self.width, self.height)
+        self.background = SuperTuxTileMap.from_size(self.width, self.height)
         self.tilemaps.append(self.foreground)
         self.tilemaps.append(self.interactive)
         self.tilemaps.append(self.background)
@@ -94,13 +96,13 @@ class Sector:
         self.width = get_value_from_tree(["width", "_"], data, 20)
         self.height = get_value_from_tree(["height", "_"], data, 15)
 
-        self.foreground = TilemapLayer(SuperTuxTileset.current, self.width, self.height)
+        self.foreground = SuperTuxTileMap.from_size(self.width, self.height)
         self.foreground.set_data(get_value_from_tree(["foreground-tm"], data, []))
 
-        self.interactive = TilemapLayer(SuperTuxTileset.current, self.width, self.height)
+        self.interactive = SuperTuxTileMap.from_size(self.width, self.height)
         self.interactive.set_data(get_value_from_tree(["interactive-tm"], data, []))
 
-        self.background = TilemapLayer(SuperTuxTileset.current, self.width, self.height)
+        self.background = SuperTuxTileMap.from_size(self.width, self.height)
         self.background.set_data(get_value_from_tree(["background-tm"], data, []))
 
         self.tilemaps.append(self.foreground)
@@ -189,6 +191,8 @@ class Sector:
             (name, data) = i[0], i[1:]
             if name == "name":
                 self.name = data[0]
+            elif name == "ambient-light":
+                self.ambient_light = data
             elif name == "gravity":
                 self.gravity = data[0]
             elif name == "ambient-light":
@@ -198,25 +202,17 @@ class Sector:
             elif name == "init-script":
                 self.init_script = data[0]
             elif name == "tilemap":
-                layer = get_value_from_tree(["layer", "_"], data, "interactive")
-                width = get_value_from_tree(["width", "_"],  data, 20)
-                height = get_value_from_tree(["height", "_"], data, 15)
-                solid = get_value_from_tree(["solid", "_"],  data, False)
-                # zpos = get_value_from_tree(["z-pos", "_"],  data, 0)
-
-                tilemap = TilemapLayer(SuperTuxTileset.current, width, height)
-                tilemap.set_data(get_value_from_tree(["tiles"], data, []))
-
-                if solid:
-                    self.interactive = tilemap
-                    self.width = width
-                    self.height = height
-                elif layer == "background":
-                    self.background = tilemap
-                elif layer == "foreground":
-                    self.foreground = tilemap
-
+                tilemap = SuperTuxTileMap.from_sexpr(data)
                 self.tilemaps.append(tilemap)
+
+                if tilemap.solid:
+                    self.interactive = tilemap
+                    self.width = tilemap.width
+                    self.height = tilemap.height
+                elif tilemap.name == "background":
+                    self.background = tilemap
+                elif tilemap.name == "foreground":
+                    self.foreground = tilemap
 
             elif name == "camera":
                 self.cameramode = "normal"
@@ -224,17 +220,15 @@ class Sector:
             else:
                 create_gameobject_from_data(self.editormap, self.objects, name, data)
 
-        print("Tileset: ", SuperTuxTileset.current, width, height)
-
         if self.interactive is None or self.width == 0 or self.height == 0:
             raise Exception("No interactive tilemap in sector '", self.name, "'")
 
         if self.background is None:
-            self.background = TilemapLayer(SuperTuxTileset.current, self.width, self.height)
+            self.background = SuperTuxTileMap.from_size(self.width, self.height)
             self.tilemaps.append(self.background)
 
         if self.foreground is None:
-            self.foreground = TilemapLayer(SuperTuxTileset.current, self.width, self.height)
+            self.foreground = SuperTuxTileMap.from_size(self.width, self.height)
             self.tilemaps.append(self.foreground)
 
         for tilemap in self.tilemaps:
@@ -251,25 +245,12 @@ class Sector:
         from .gui import SuperTuxGUI
         self.editormap.sig_change.connect(SuperTuxGUI.current.on_map_change)
 
-    def save_tilemap(self, writer, tilemap, name, solid=None):
-        writer.begin_list("tilemap")
-        writer.write_string("layer", name)
-        writer.write_bool("solid", solid)
-        writer.write_float("speed", 1.0)
-        writer.write_int("width", tilemap.width)
-        writer.write_int("height", tilemap.height)
-        writer.write_field("tiles", tilemap.field)
-        writer.end_list()
-
     def save(self, writer):
         writer.write_string("name", self.name)
         writer.write_string("music", self.music)
-        writer.write_string("init-script", self.init_script)
-
-        self.save_tilemap(writer, self.background,  "background")
-        self.save_tilemap(writer, self.interactive, "interactive", "solid")
-        self.save_tilemap(writer, self.foreground,  "foreground")
-        # save_strokelayer(writer, self.sketch)
+        writer.write_rgb("ambient-light", self.ambient_light)
+        if self.init_script:
+            writer.write_string("init-script", self.init_script)
 
         writer.begin_list("camera")
         writer.write_string("mode", self.cameramode)
@@ -283,6 +264,11 @@ class Sector:
 
         for obj in self.objects.get_objects():
             obj.metadata.save(writer, obj)
+
+        for tilemap in self.tilemaps:
+            tilemap.save(writer)
+
+        # save_strokelayer(writer, self.sketch)
 
 
 # EOF #

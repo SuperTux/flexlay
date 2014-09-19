@@ -26,22 +26,22 @@ class SpriteStrokeDrawer:
         self.drawer = drawer
 
     def draw(self, stroke, gc):
-        if DrawerProperties.current().get_brush().is_null() or stroke.get_dab_count() == 0:
+        if DrawerProperties.current.get_brush().is_null() or stroke.get_dab_count() == 0:
             return
 
-        dabs = stroke.get_interpolated_dabs(DrawerProperties.current().get_spacing()
-                                            * DrawerProperties.current().get_size(),
-                                            DrawerProperties.current().get_spacing()
-                                            * DrawerProperties.current().get_size())
+        dabs = stroke.get_interpolated_dabs(DrawerProperties.current.get_spacing()
+                                            * DrawerProperties.current.get_size(),
+                                            DrawerProperties.current.get_spacing()
+                                            * DrawerProperties.current.get_size())
 
         for i, dab in enumerate(self.dabs):
-            sprite = DrawerProperties.current().get_brush().get_sprite()
-            color = DrawerProperties.current().get_color()
+            sprite = DrawerProperties.current.get_brush().get_sprite()
+            color = DrawerProperties.current.get_color()
 
             sprite.set_color(color)
             sprite.set_alpha((color.get_alpha() / 255.0) * dab.pressure)
-            sprite.set_scale(DrawerProperties.current().get_size() * dab.pressure,
-                             DrawerProperties.current().get_size() * dab.pressure)
+            sprite.set_scale(DrawerProperties.current.get_size() * dab.pressure,
+                             DrawerProperties.current.get_size() * dab.pressure)
 
             if gc is not None:
                 # DO Multipass:
@@ -69,7 +69,7 @@ class SpriteStrokeDrawer:
 
                 elif self.mode == SpriteStrokeDrawer.DM_SMUDGE:
                     if dab != dabs[0]:
-                        canvas = BitmapLayer.current().get_canvas()
+                        canvas = BitmapLayer.current.get_canvas()
                         buffer = canvas.get_pixeldata(
                             Rect(Point(int(self.dabs[i - 1].pos.x) - sprite.width / 2,
                                        int(self.dabs[i - 1].pos.y) - sprite.height / 2),
@@ -79,8 +79,8 @@ class SpriteStrokeDrawer:
                         #                                BlendFunc.one, BlendFunc.zero)
                         surface.set_alignment(Origin.center)
                         surface.set_alpha(0.5)
-                        # surface.set_scale(DrawerProperties.current().get_size(),
-                        #                 DrawerProperties.current().get_size())
+                        # surface.set_scale(DrawerProperties.current.get_size(),
+                        #                 DrawerProperties.current.get_size())
                         surface.draw(dab.pos.x, dab.pos.y, gc.gc)
                 else:
                     print("Error: SpriteStrokeDrawer: Unknown draw mode: ", self.mode)

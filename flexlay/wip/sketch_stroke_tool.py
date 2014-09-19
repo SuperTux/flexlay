@@ -43,11 +43,11 @@ class SketchStrokeTool:
         else:
             parent = EditorMapComponent.current
             p = parent.screen2world(Point(Mouse.get_x(), Mouse.get_y()))
-            s = DrawerProperties.current().get_brush().get_sprite()
-            s.set_color(DrawerProperties.current().get_color())
+            s = DrawerProperties.current.get_brush().get_sprite()
+            s.set_color(DrawerProperties.current.get_color())
             # FIXME: when using mouse 1.0, when tablet 0.5
-            s.set_scale(DrawerProperties.current().get_size() * 0.5,
-                        DrawerProperties.current().get_size() * 0.5)
+            s.set_scale(DrawerProperties.current.get_size() * 0.5,
+                        DrawerProperties.current.get_size() * 0.5)
             s.set_alpha(0.5)
             s.draw(p.x, p.y)
 

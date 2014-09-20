@@ -58,6 +58,10 @@ class ObjectLayer(Layer):
     def delete_object(self, obj):
         self.objects.remove(obj)
 
+    def delete_objects(self, objs):
+        for obj in objs:
+            self.objects.remove(obj)
+
     def get_selection(self, rect):
         print("========= get_selection:", len(self.objects))
         selection = []
@@ -85,7 +89,7 @@ class ObjectLayer(Layer):
         self.control_points.clear()
 
     def get_object_index(self, needle):
-        for idx, obj in self.objects:
+        for idx, obj in enumerate(self.objects):
             if obj == needle:
                 return idx
         return -1
@@ -93,6 +97,14 @@ class ObjectLayer(Layer):
     def move_to(self, obj, height):
         # FIXME: Implement me
         pass
+
+    def raise_objects_to_top(self, objs):
+        self.delete_objects(objs)
+        self.objects.extend(objs)
+
+    def lower_objects_to_bottom(self, objs):
+        self.delete_objects(objs)
+        self.objects = objs + self.objects
 
     def raise_object(self, obj):
         i = self.get_object_index(obj)

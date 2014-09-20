@@ -150,6 +150,13 @@ class SuperTuxGUI:
         button_panel.add_icon("data/images/icons24/stock_zoom_1.png", lambda: self.gui_set_zoom(1.0))
         button_panel.add_icon("data/images/icons24/stock_zoom_fit.png", self.gui_zoom_fit)
 
+        # Raise/Lower
+        button_panel.add_separator()
+        button_panel.add_icon("data/images/icons24/object_lower_to_bottom.png", self.lower_selection_to_bottom)
+        button_panel.add_icon("data/images/icons24/object_lower.png", self.lower_selection)
+        button_panel.add_icon("data/images/icons24/object_raise.png", self.raise_selection)
+        button_panel.add_icon("data/images/icons24/object_raise_to_top.png", self.raise_selection_to_top)
+
         # Layers
         button_panel.add_separator()
         self.background_icon = button_panel.add_icon("data/images/icons24/background.png", self.gui_show_background)
@@ -161,23 +168,23 @@ class SuperTuxGUI:
         self.run_icon = button_panel.add_icon("data/images/icons24/run.png", self.gui_run_level)
 
         # Create Toolbox
-        self.toolbar = self.gui.create_button_panel(False)
-        self.paint = self.toolbar.add_icon("data/images/tools/stock-tool-pencil-22.png",
+        self.toolbox = self.gui.create_button_panel(False)
+        self.paint = self.toolbox.add_icon("data/images/tools/stock-tool-pencil-22.png",
                                            self.set_tilemap_paint_tool)
-        self.fill = self.toolbar.add_icon("data/images/tools/stock-tool-fill-24.png",
+        self.fill = self.toolbox.add_icon("data/images/tools/stock-tool-fill-24.png",
                                           self.set_tilemap_fill_tool)
-        self.replace = self.toolbar.add_icon("data/images/tools/stock-tool-replace-24.png",
+        self.replace = self.toolbox.add_icon("data/images/tools/stock-tool-replace-24.png",
                                              self.set_tilemap_replace_tool)
-        self.select = self.toolbar.add_icon("data/images/tools/stock-tool-rect-select-22.png",
+        self.select = self.toolbox.add_icon("data/images/tools/stock-tool-rect-select-22.png",
                                             self.set_tilemap_select_tool)
-        self.toolbar.add_separator()
-        self.object = self.toolbar.add_icon("data/images/tools/stock-tool-clone-22.png",
+        self.toolbox.add_separator()
+        self.object = self.toolbox.add_icon("data/images/tools/stock-tool-clone-22.png",
                                             self.set_objmap_select_tool)
-        self.toolbar.add_separator()
-        self.zoom = self.toolbar.add_icon("data/images/tools/stock-tool-zoom-22.png",
+        self.toolbox.add_separator()
+        self.zoom = self.toolbox.add_icon("data/images/tools/stock-tool-zoom-22.png",
                                           self.set_zoom_tool)
         # self.stroke =
-        # self.toolbar.add_icon("data/images/tools/stock-tool-pencil-22.png", set_sketch_stroke_tool)
+        # self.toolbox.add_icon("data/images/tools/stock-tool-pencil-22.png", set_sketch_stroke_tool)
 
         # Create Menu
         self.menubar = self.gui.create_menubar()
@@ -741,6 +748,26 @@ class SuperTuxGUI:
             os.rename(filename, filename + "~")
         level.save(filename)
         level.filename = filename
+
+    def raise_selection(self):
+        for obj in self.objmap_select_tool.selection:
+            self.workspace.get_map().metadata.objects.raise_object(obj)
+        self.editor_map.editormap_widget.repaint()
+
+    def lower_selection(self):
+        for obj in self.objmap_select_tool.selection:
+            self.workspace.get_map().metadata.objects.lower_object(obj)
+        self.editor_map.editormap_widget.repaint()
+
+    def raise_selection_to_top(self):
+        selection = self.objmap_select_tool.selection
+        self.workspace.get_map().metadata.objects.raise_objects_to_top(selection)
+        self.editor_map.editormap_widget.repaint()
+
+    def lower_selection_to_bottom(self):
+        selection = self.objmap_select_tool.selection
+        self.workspace.get_map().metadata.objects.lower_objects_to_bottom(selection)
+        self.editor_map.editormap_widget.repaint()
 
 
 class DisplayProperties:

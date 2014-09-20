@@ -81,7 +81,7 @@ class Sector:
         self.editormap = EditorMap()
         # self.editormap.set_background_color(Color(255, 255, 255))
         for tilemap in self.tilemaps:
-            self.editormap.add_layer(tilemap)
+            self.editormap.add_layer(tilemap.tilemap_layer)
         self.editormap.add_layer(self.objects)
         # self.editormap.add_layer(self.sketch)
         self.editormap.metadata = self
@@ -231,18 +231,11 @@ class Sector:
             self.tilemaps.append(self.foreground)
 
         for tilemap in self.tilemaps:
-            self.editormap.add_layer(tilemap)
+            self.editormap.add_layer(tilemap.tilemap_layer)
 
         self.editormap.add_layer(self.objects)
         # self.editormap.add_layer(self.sketch)
         self.editormap.metadata = self
-
-    def activate(self, workspace):
-        workspace.set_map(self.editormap)
-        ToolContext.current.tilemap_layer = self.interactive.tilemap_layer
-        ObjectLayer.current = self.objects
-        from .gui import SuperTuxGUI
-        self.editormap.sig_change.connect(SuperTuxGUI.current.on_map_change)
 
     def save(self, writer):
         writer.write_string("name", self.name)

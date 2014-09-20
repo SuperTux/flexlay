@@ -66,7 +66,7 @@ class ObjMapSelectTool(Tool):
     def on_mouse_up(self, event):
         # print("ObjMapSelectToolImpl.on_mouse_up ", event.kind, event.mouse_pos.x, event.mouse_pos.y)
 
-        objmap = ObjectLayer.current
+        objmap = ToolContext.current.object_layer
         parent = EditorMapComponent.current
         pos = parent.screen2world(event.mouse_pos)
 
@@ -96,7 +96,7 @@ class ObjMapSelectTool(Tool):
 
     def on_mouse_down(self, event):
         # print("ObjMapSelectToolImpl.on_mouse_down ", event.kind, event.mouse_pos.x, event.mouse_pos.y)
-        objmap = ObjectLayer.current
+        objmap = ToolContext.current.object_layer
         parent = EditorMapComponent.current
         pos = parent.screen2world(event.mouse_pos)
 
@@ -159,7 +159,7 @@ class ObjMapSelectTool(Tool):
             self.selection_rect.bottom = pos.y
 
     def on_selection_change(self):
-        objmap = ObjectLayer.current
+        objmap = ToolContext.current.object_layer
         objmap.delete_control_points()
 
         if len(self.context.object_selection) == 1:

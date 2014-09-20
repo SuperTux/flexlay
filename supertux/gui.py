@@ -125,9 +125,8 @@ class SuperTuxGUI:
         #            })
 
         # setting initial state
-        self.level = Level(100, 50)
-        self.level.activate(self.workspace)
-        # self.layer_selector.set_map(editormap)
+        level = Level.from_size(100, 50)
+        self.set_level(level, "main")
 
         self.set_tilemap_paint_tool()
         self.gui_show_foreground()
@@ -406,7 +405,7 @@ class SuperTuxGUI:
         sector = Sector(level)
         sector.new_from_size(uniq_name, 30, 20)
         level.add_sector(sector)
-        level.activate_sector(uniq_name, self.workspace)
+        self.set_level(level, uniq_name)
         self.gui_edit_sector()
 
     def gui_show_object_properties(self):
@@ -505,8 +504,8 @@ class SuperTuxGUI:
             dialog.set_callback(on_callback)
 
     def new_level(self, width, height):
-        level = Level(width, height)
-        level.activate(self.workspace)
+        level = Level.from_size(width, height)
+        self.set_level(level, "main")
 
     def load_level(self, filename):
         if filename[-5:] == ".stwm":
@@ -515,7 +514,7 @@ class SuperTuxGUI:
 
         print("Loading: ", filename)
         level = Level.from_file(filename)
-        level.activate(self.workspace)
+        self.set_level(level, "main")
 
         if filename not in Config.current.recent_files:
             Config.current.recent_files.append(filename)
@@ -597,6 +596,23 @@ class SuperTuxGUI:
         self.workspace.set_tool(InputEvent.MOUSE_RIGHT, None)
         self.toolbox.set_down(self.toolbox.object_icon)
 
+    def set_level(self, level, sectorname):
+        self.level = level
+        for sec in self.level.sectors:
+            if sec.name == sectorname:
+                self.set_sector(sec)
+                break
+
+    def set_sector(self, sector):
+        self.sector = sector
+
+        self.workspace.set_map(self.sector.editormap)
+        self.layer_selector.set_map(self.sector.editormap)
+
+        ToolContext.current.tilemap_layer = self.sector.interactive.tilemap_layer
+        ToolContext.current.object_layer = self.sector.objects
+
+        self.sector.editormap.sig_change.connect(SuperTuxGUI.current.on_map_change)
 
 class DisplayProperties:
 

@@ -20,12 +20,8 @@ from .layer import Layer
 
 class ObjectLayer(Layer):
 
-    current = None
-
     def __init__(self):
         super().__init__()
-
-        ObjectLayer.current = self
 
         self.objects = []
         self.control_points = []

@@ -45,11 +45,10 @@ class LayerSelector:
         self.layout.addWidget(self.toolbar)
 
     def set_map(self, editormap):
-        print("SetMAP")
+        self.model.clear()
         for layer in editormap.layers:
-            print("SetMAP: %s" % layer)
             if isinstance(layer, TilemapLayer):
-                self.model.appendRow([QStandardItem("Tile: %s %dx%d" % layer.name, layer.width, layer.height)])
+                self.model.appendRow([QStandardItem("Tile: %s %dx%d" % (layer.metadata.name, layer.width, layer.height))])
             elif isinstance(layer, ObjectLayer):
                 self.model.appendRow([QStandardItem("Objects")])
 

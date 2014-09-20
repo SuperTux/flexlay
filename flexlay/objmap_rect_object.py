@@ -157,8 +157,8 @@ class ObjMapRectObject(ObjMapObject):
     def add_control_points(self):
         self.update_control_points()
         print("Adding control poinst...")
-        objmap = ObjectLayer.current
 
+        objmap = ToolContext.current.object_layer
         objmap.add_control_point(self.cp_top_left)
         objmap.add_control_point(self.cp_top_right)
         objmap.add_control_point(self.cp_bottom_left)

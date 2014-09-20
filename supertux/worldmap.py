@@ -100,7 +100,7 @@ class WorldMap:
 
         workspace.set_map(self.editormap)
         ToolContext.current.tilemap_layer = self.tilemap.tilemap_layer
-        ObjectLayer.current = self.objects
+        ToolContext.current.object_layer = self.objects
         from .gui import SuperTuxGUI
         self.editormap.sig_change.connect(SuperTuxGUI.current.on_map_change)
 

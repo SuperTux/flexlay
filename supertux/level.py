@@ -25,7 +25,7 @@ class Level:
 
     @staticmethod
     def from_file(filename):
-        level = Level(0, 0)
+        level = Level()
 
         level.filename = filename
 
@@ -43,7 +43,15 @@ class Level:
 
         return level
 
-    def __init__(self, width, height):
+    @staticmethod
+    def from_size(width, height):
+        result = Level()
+        result.current_sector = Sector(result)
+        result.current_sector.new_from_size("main", width, height)
+        result.sectors.append(result.current_sector)
+        return result
+        
+    def __init__(self):
         self.version = 2
         self.filename = None
         self.name = "No Name"
@@ -51,10 +59,8 @@ class Level:
         self.license = "GPL 2+ / CC-by-sa 3.0"
         self.target_time = 0
 
-        self.current_sector = Sector(self)
-        self.current_sector.new_from_size("main", width, height)
+        self.current_sector = None
         self.sectors = []
-        self.sectors.append(self.current_sector)
 
     def parse_v2(self, data):
         self.name = get_value_from_tree(["name", "_"], data, "no name")
@@ -108,16 +114,6 @@ class Level:
             writer.end_list()
 
         writer.end_list()
-
-    def activate_sector(self, sectorname, workspace):
-        for sec in self.sectors:
-            if sec.name == sectorname:
-                sec.activate(workspace)
-                self.current_sector = sec
-                break
-
-    def activate(self, workspace):
-        self.current_sector.activate(workspace)
 
     def add_sector(self, sector):
         self.sectors.append(sector)

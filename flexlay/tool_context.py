@@ -34,6 +34,7 @@ class ToolContext:
         self.object_selection = []
 
         self.tilemap_layer = None
+        self.object_layer = None
 
 
 # EOF #

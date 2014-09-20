@@ -26,6 +26,8 @@ class TilemapLayer(Layer):
     def __init__(self, tileset, w, h):
         super().__init__()
 
+        self.name = "<no name>"
+
         self.tileset = tileset
         self.field = Field(w, h)
 

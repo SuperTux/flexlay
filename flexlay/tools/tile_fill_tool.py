@@ -15,7 +15,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from flexlay import TilemapLayer
 from ..gui.editor_map_component import EditorMapComponent
 from .tool import Tool
 from ..tool_context import ToolContext
@@ -31,7 +30,7 @@ class TileFillTool(Tool):
         TileFillTool.current = self
 
     def on_mouse_down(self, event):
-        tilemap = TilemapLayer.current
+        tilemap = ToolContext.current.tilemap_layer
 
         if tilemap:
             parent = EditorMapComponent.current

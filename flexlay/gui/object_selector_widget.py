@@ -22,7 +22,8 @@ from PyQt4.QtGui import QSizePolicy, QWidget
 from PyQt4.QtCore import Qt, QSize, QPoint, QByteArray, QMimeData
 
 from flexlay.math import Rectf, Point, Origin
-from flexlay import Color, GraphicContext
+from ..color import Color
+from ..graphic_context import GraphicContext
 
 
 class SuperTuxBadGuyData:

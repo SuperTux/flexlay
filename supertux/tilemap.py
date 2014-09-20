@@ -88,8 +88,9 @@ class SuperTuxTileMap:
     def set_data(self, data):
         self.tilemap_layer.set_data(data)
 
-    def get_field(self):
-        self.tilemap_layer.get_field()
+    @property
+    def field(self):
+        return self.tilemap_layer.field
 
     @property
     def width(self):

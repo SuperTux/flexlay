@@ -15,13 +15,13 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from flexlay import Layer, Field, Color, PixelBuffer, blit
+from flexlay import Field, PixelBuffer, blit
 from flexlay.math import Point, Size, Rect
+from .layer import Layer
+from .color import Color
 
 
 class TilemapLayer(Layer):
-
-    current = None
 
     def __init__(self, tileset, w, h):
         super().__init__()
@@ -220,9 +220,6 @@ class TilemapLayer(Layer):
 
         return Point(x - 1 if (pos.x < 0) else x,
                      y - 1 if (pos.y < 0) else y)
-
-    def get_field(self):
-        return self.field
 
     def get_tileset(self):
         return self.tileset

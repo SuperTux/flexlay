@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from flexlay import ObjectLayer, EditorMap, TilemapLayer
+from flexlay import ObjectLayer, EditorMap, ToolContext
 from flexlay.util import get_value_from_tree, SExprWriter
 
 from .util import load_lisp
@@ -99,7 +99,7 @@ class WorldMap:
         self.editormap.metadata = self
 
         workspace.set_map(self.editormap)
-        TilemapLayer.current = self.tilemap.tilemap_layer
+        ToolContext.current.tilemap_layer = self.tilemap.tilemap_layer
         ObjectLayer.current = self.objects
         from .gui import SuperTuxGUI
         self.editormap.sig_change.connect(SuperTuxGUI.current.on_map_change)

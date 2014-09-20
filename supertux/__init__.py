@@ -17,6 +17,9 @@
 
 from .data import (game_objects, create_gameobject,
                    create_gameobject_from_data, find_game_object)
+from .button_panel import SuperTuxButtonPanel
+from .toolbox import SuperTuxToolbox
+from .menubar import SuperTuxMenuBar
 from .gameobj import GameObj
 from .gui import SuperTuxGUI
 from .level import Level
@@ -33,8 +36,9 @@ from .supertux import main
 __all__ = ["game_objects", "create_gameobject",
            "create_gameobject_from_data", "find_game_object",
            "GameObj", "SuperTuxGUI", "Level", "Sector", "Sprite",
-           "SuperTuxTileMap", "SuperTuxTileset", "load_lisp", "WorldMap",
-           "WorldmapObject", "main"]
+           "SuperTuxTileMap", "SuperTuxTileset", "load_lisp",
+           "WorldMap", "WorldmapObject", "main", "SuperTuxMenuBar",
+           "SuperTuxToolbox", "SuperTuxButtonPanel"]
 
 
 # EOF #

@@ -19,8 +19,12 @@ from PyQt4.QtCore import QSize, Qt
 from PyQt4.QtGui import QWidget
 from PyQt4.QtGui import QPainter
 
-from flexlay import TileBrush, GraphicContext, Color, Tileset, ToolContext
 from flexlay.math import Point, Rect, Size
+from ..graphic_context import GraphicContext
+from ..color import Color
+from ..tileset import Tileset
+from ..tile_brush import TileBrush
+from ..tool_context import ToolContext
 
 
 class TileSelectorWidget(QWidget):

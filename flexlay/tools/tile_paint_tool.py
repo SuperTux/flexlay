@@ -16,7 +16,7 @@
 
 
 from flexlay import (Color, PaintCommand,
-                     TilemapLayer, InputEvent, Workspace)
+                     InputEvent, Workspace)
 from ..gui.editor_map_component import EditorMapComponent
 from flexlay.math import Point, Size, Rect
 from .tool import Tool
@@ -39,7 +39,7 @@ class TilePaintTool(Tool):
         self.is_active = False
 
     def draw(self, gc):
-        tilemap = TilemapLayer.current
+        tilemap = ToolContext.current.tilemap_layer
         if not tilemap:
             return
 
@@ -72,20 +72,19 @@ class TilePaintTool(Tool):
                                  Color(255, 255, 255, 50))
 
     def on_mouse_down(self, event):
-        tilemap = TilemapLayer.current
-
+        tilemap = ToolContext.current.tilemap_layer
         if tilemap:
             parent = EditorMapComponent.current
             pos = tilemap.world2tile(parent.screen2world(event.mouse_pos))
 
             self.is_active = True
             self.grab_mouse()
-            self.command = PaintCommand(tilemap, ToolContext.current.tile_brush)
+            self.command = PaintCommand(ToolContext.current.tilemap_layer, ToolContext.current.tile_brush)
             self.command.add_point(pos)
             self.last_draw = pos
 
     def on_mouse_move(self, event):
-        tilemap = TilemapLayer.current
+        tilemap = ToolContext.current.tilemap_layer
         if tilemap:
             parent = EditorMapComponent.current
             self.current_tile = tilemap.world2tile(parent.screen2world(event.mouse_pos))
@@ -99,8 +98,7 @@ class TilePaintTool(Tool):
                     self.last_draw = self.current_tile
 
     def on_mouse_up(self, event):
-        tilemap = TilemapLayer.current
-
+        tilemap = ToolContext.current.tilemap_layer
         if tilemap:
             EditorMapComponent.current.get_workspace().get_map().modify()
 

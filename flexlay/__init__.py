@@ -25,13 +25,12 @@ from .field import Field
 from .pixel_buffer import PixelBuffer
 from .blitter import blit_opaque, blit, blit_clear
 from .tile_brush import TileBrush
-from .tool_context import ToolContext
 from .color import Color
 from .tileset import Tileset
+from .layer import Layer
 
 from .input_event import InputEvent
 from .graphic_context import GraphicContext
-from .layer import Layer
 from .tilemap_layer import TilemapLayer
 from .surface import Surface
 from .sprite import Sprite
@@ -71,6 +70,7 @@ from .gui_manager import GUIManager
 from .sprite_brush import SpriteBrush
 from .tile import Tile
 from .tile_provider import TileProvider
+from .tool_context import ToolContext
 
 
 __all__ = [

@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from flexlay import (TilemapLayer, InputEvent)
+from flexlay import InputEvent
 from ..gui.editor_map_component import EditorMapComponent
 from ..gui.tile_selection import TileSelection
 from .tool import Tool
@@ -34,7 +34,7 @@ class TileBrushCreateTool(Tool):
 
     def draw(self, gc):
         if self.is_active:
-            tilemap = TilemapLayer.current
+            tilemap = ToolContext.current.tilemap_layer
             if not tilemap:
                 return
 
@@ -46,7 +46,7 @@ class TileBrushCreateTool(Tool):
     def on_mouse_down(self, event):
         self.shift_pressed = event.mod & InputEvent.MOD_SHIFT
 
-        tilemap = TilemapLayer.current
+        tilemap = ToolContext.current.tilemap_layer
 
         if tilemap:
             parent = EditorMapComponent.current
@@ -59,7 +59,7 @@ class TileBrushCreateTool(Tool):
     def on_mouse_move(self, event):
         self.shift_pressed = event.mod & InputEvent.MOD_SHIFT
 
-        tilemap = TilemapLayer.current
+        tilemap = ToolContext.current.tilemap_layer
         if tilemap:
             parent = EditorMapComponent.current
             current_tile = tilemap.world2tile(parent.screen2world(event.mouse_pos))
@@ -70,7 +70,7 @@ class TileBrushCreateTool(Tool):
     def on_mouse_up(self, event):
         self.shift_pressed = event.mod & InputEvent.MOD_SHIFT
 
-        tilemap = TilemapLayer.current
+        tilemap = ToolContext.current.tilemap_layer
 
         if tilemap:
             EditorMapComponent.current.get_workspace().get_map().modify()
@@ -83,7 +83,7 @@ class TileBrushCreateTool(Tool):
                 self.is_active = False
 
                 self.selection.update(current_tile)
-                ToolContext.current.tile_brush = self.selection.get_brush(tilemap.get_field())
+                ToolContext.current.tile_brush = self.selection.get_brush(tilemap.field)
 
                 if ToolContext.current.tile_brush.width > 1 or \
                    ToolContext.current.tile_brush.height > 1:

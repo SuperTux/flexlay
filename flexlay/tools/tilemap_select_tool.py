@@ -15,15 +15,14 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from flexlay import TilemapLayer, InputEvent
+from flexlay import InputEvent, ToolContext
 from ..gui.editor_map_component import EditorMapComponent
-from ..gui.tile_selection import TileSelection
 
 
 class TileMapSelectTool:
 
     def __init__(self):
-        self.selection = TileSelection()
+        self.selection = ToolContext.current.tile_selection
         self.creating_selection = False
 
     def draw(self, gc):
@@ -37,7 +36,7 @@ class TileMapSelectTool:
             self.creating_selection = False
             parent.release_mouse()
 
-            self.selection.update(TilemapLayer.current.world2tile(parent.screen2world(event.mouse_pos)))
+            self.selection.update(ToolContext.current.tilemap_layer.world2tile(parent.screen2world(event.mouse_pos)))
 
     def on_mouse_down(self, event):
         parent = EditorMapComponent.current
@@ -45,7 +44,7 @@ class TileMapSelectTool:
         if event.kind == InputEvent.MOUSE_LEFT:
             self.creating_selection = True
             parent.grab_mouse()
-            tilemap = TilemapLayer.current
+            tilemap = ToolContext.current.tilemap_layer
             self.selection.start(tilemap, tilemap.world2tile(parent.screen2world(event.mouse_pos)))
 
         elif event.kind == InputEvent.MOUSE_RIGHT:
@@ -56,11 +55,11 @@ class TileMapSelectTool:
         parent = EditorMapComponent.current
 
         if self.creating_selection:
-            self.selection.update(TilemapLayer.current.world2tile(parent.screen2world(event.mouse_pos)))
+            self.selection.update(ToolContext.current.tilemap_layer.world2tile(parent.screen2world(event.mouse_pos)))
 
     def get_selection(self):
-        tilemap = TilemapLayer.current
-        return self.selection.get_brush(tilemap.get_field())
+        tilemap = ToolContext.current.tilemap_layer
+        return self.selection.get_brush(tilemap.field)
 
     def get_selection_rect(self):
         return self.selection.get_rect()

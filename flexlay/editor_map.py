@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from flexlay import Color, Layer
+from flexlay import Color
 from flexlay.math import Rect
 from flexlay.util import Signal
 
@@ -74,7 +74,7 @@ class EditorMap:
         if i >= 0 and i < len(self.layers):
             return self.layers[i]
         else:
-            return Layer()
+            return None
 
     def has_bounding_rect(self):
         return self._has_bounding_rect

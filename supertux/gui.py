@@ -18,15 +18,14 @@
 import subprocess
 import os
 
-from flexlay import (Color, ObjectBrush, Sprite, TilemapLayer,
-                     InputEvent, ObjMapRectObject, ObjMapPathNode,
-                     EditorMap, ToolContext, Config)
+from flexlay import (Color, ObjectBrush, Sprite, InputEvent,
+                     ObjMapRectObject, ObjMapPathNode, Config,
+                     ToolContext)
 from flexlay.math import Point, Rect, Size
 from flexlay.tools import (TilePaintTool, TileBrushCreateTool,
                            TileMapSelectTool, TileFillTool,
                            TileReplaceTool, ObjMapSelectTool,
-                           ZoomTool, ZoomOutTool, Zoom2Tool,
-                           WorkspaceMoveTool)
+                           ZoomTool, ZoomOutTool, WorkspaceMoveTool)
 
 from .data import game_objects, create_gameobject
 from .gameobj import PathNode
@@ -35,6 +34,9 @@ from .sector import Sector
 from .worldmap import WorldMap
 from .worldmap_object import create_worldmapobject_at_pos  # worldmap_objects
 from .tileset import SuperTuxTileset
+from .button_panel import SuperTuxButtonPanel
+from .menubar import SuperTuxMenuBar
+from .toolbox import SuperTuxToolbox
 
 
 BACKGROUND_LAYER = 1
@@ -50,47 +52,24 @@ class SuperTuxGUI:
         SuperTuxGUI.current = self
 
         self.use_worldmap = False
-        self.menu = None
-
-        self.selector_window = None
-        self.tileselector = None
-        self.objectselector = None
 
         self.tool_context = ToolContext()
+        self.level = None
 
         self.gui = flexlay.create_gui_manager("SuperTux Editor")
+
+        self.button_panel = SuperTuxButtonPanel(self.gui, self)
+        self.toolbox = SuperTuxToolbox(self.gui, self)
+        self.menubar = SuperTuxMenuBar(self.gui, self)
 
         self.display_properties = DisplayProperties()
 
         self.editor_map = self.gui.create_editor_map_component()
         self.statusbar = self.gui.create_statusbar()
         self.workspace = self.editor_map.get_workspace()
-        editormap = EditorMap()
-        self.workspace.set_map(editormap)
 
         # Tools
-        self.tile_paint_tool = TilePaintTool()
-        self.tile_fill_tool = TileFillTool()
-        self.tile_replace_tool = TileReplaceTool()
-        self.tile_brush_create_tool = TileBrushCreateTool()
-        self.tilemap_select_tool = TileMapSelectTool()
-        self.zoom_tool = ZoomTool()
-        self.zoom_out_tool = ZoomOutTool()
-        self.zoom2_tool = Zoom2Tool()
-        self.workspace_move_tool = WorkspaceMoveTool()
-        self.objmap_select_tool = ObjMapSelectTool()
-
-        self.workspace.set_tool(InputEvent.MOUSE_LEFT, self.tile_paint_tool)
-        self.workspace.set_tool(InputEvent.MOUSE_MIDDLE, self.workspace_move_tool)
-        self.workspace.set_tool(InputEvent.MOUSE_RIGHT, self.tile_brush_create_tool)
-        # 'x' key
-        self.workspace.set_tool(120, self.zoom_tool)
-        # 'u' key
-        self.workspace.set_tool(117, self.objmap_select_tool)
-
-        self.workspace.set_tool(106, self.workspace_move_tool)
-        self.workspace.set_tool(107, self.zoom2_tool)
-        self.workspace.set_tool(65507, self.zoom2_tool)
+        self.workspace.set_tool(InputEvent.MOUSE_MIDDLE, WorkspaceMoveTool())
 
         self.minimap = self.gui.create_minimap(self.editor_map)
 
@@ -114,127 +93,6 @@ class SuperTuxGUI:
         # for obj in worldmap_objects:
         #     self.objectselector.add_brush(ObjectBrush(Sprite.from_file(Config.current.datadir + obj[1]),
         #                                                       obj[0]))
-
-        # Create Buttonpanel
-        button_panel = self.gui.create_button_panel(True)
-
-        # File Handling
-        button_panel.add_icon("data/images/icons24/stock_new.png",  self.gui_level_new)
-        button_panel.add_icon("data/images/icons24/stock_open.png", self.gui_level_load)
-
-        button_panel.add_icon("data/images/icons24/stock_save.png", self.gui_level_save)
-        button_panel.add_icon("data/images/icons24/stock_save_as.png", self.gui_level_save_as)
-
-        # Copy&Paste
-        button_panel.add_separator()
-        button_panel.add_icon("data/images/icons24/stock_copy.png", None)
-        button_panel.add_icon("data/images/icons24/stock_paste.png", None)
-        # Undo Redo
-        button_panel.add_separator()
-        self.undo_icon = button_panel.add_icon("data/images/icons24/stock_undo.png",
-                                               lambda: self.workspace.get_map().undo())
-        self.redo_icon = button_panel.add_icon("data/images/icons24/stock_redo.png",
-                                               lambda: self.workspace.get_map().redo())
-        self.undo_icon.disable()
-        self.redo_icon.disable()
-
-        # Visibility Toggles
-        button_panel.add_separator()
-        self.minimap_icon = button_panel.add_icon("data/images/icons24/minimap.png", self.gui_toggle_minimap)
-        self.grid_icon = button_panel.add_icon("data/images/icons24/grid.png", self.gui_toggle_grid)
-
-        # Zoom Buttons
-        button_panel.add_separator()
-        button_panel.add_icon("data/images/icons24/stock_zoom_in.png", self.gui_zoom_in)
-        button_panel.add_icon("data/images/icons24/stock_zoom_out.png", self.gui_zoom_out)
-        button_panel.add_icon("data/images/icons24/stock_zoom_1.png", lambda: self.gui_set_zoom(1.0))
-        button_panel.add_icon("data/images/icons24/stock_zoom_fit.png", self.gui_zoom_fit)
-
-        # Raise/Lower
-        button_panel.add_separator()
-        button_panel.add_icon("data/images/icons24/object_lower_to_bottom.png", self.lower_selection_to_bottom)
-        button_panel.add_icon("data/images/icons24/object_lower.png", self.lower_selection)
-        button_panel.add_icon("data/images/icons24/object_raise.png", self.raise_selection)
-        button_panel.add_icon("data/images/icons24/object_raise_to_top.png", self.raise_selection_to_top)
-
-        # Layers
-        button_panel.add_separator()
-        self.background_icon = button_panel.add_icon("data/images/icons24/background.png", self.gui_show_background)
-        self.interactive_icon = button_panel.add_icon(
-            "data/images/icons24/interactive.png", self.gui_show_interactive)
-        self.foreground_icon = button_panel.add_icon("data/images/icons24/foreground.png", self.gui_show_foreground)
-
-        button_panel.add_separator()
-        self.run_icon = button_panel.add_icon("data/images/icons24/run.png", self.gui_run_level)
-
-        # Create Toolbox
-        self.toolbox = self.gui.create_button_panel(False)
-        self.paint = self.toolbox.add_icon("data/images/tools/stock-tool-pencil-22.png",
-                                           self.set_tilemap_paint_tool)
-        self.fill = self.toolbox.add_icon("data/images/tools/stock-tool-fill-24.png",
-                                          self.set_tilemap_fill_tool)
-        self.replace = self.toolbox.add_icon("data/images/tools/stock-tool-replace-24.png",
-                                             self.set_tilemap_replace_tool)
-        self.select = self.toolbox.add_icon("data/images/tools/stock-tool-rect-select-22.png",
-                                            self.set_tilemap_select_tool)
-        self.toolbox.add_separator()
-        self.object = self.toolbox.add_icon("data/images/tools/stock-tool-clone-22.png",
-                                            self.set_objmap_select_tool)
-        self.toolbox.add_separator()
-        self.zoom = self.toolbox.add_icon("data/images/tools/stock-tool-zoom-22.png",
-                                          self.set_zoom_tool)
-        # self.stroke =
-        # self.toolbox.add_icon("data/images/tools/stock-tool-pencil-22.png", set_sketch_stroke_tool)
-
-        # Create Menu
-        self.menubar = self.gui.create_menubar()
-
-        file_menu = self.menubar.add_menu("&File")
-        file_menu.add_item("New...", self.gui_level_new)
-        file_menu.add_item("Open...", self.gui_level_load)
-        self.recent_files_menu = file_menu.add_menu("Open Recent")
-        for filename in Config.current.recent_files:
-            self.recent_files_menu.add_item(filename, lambda filename=filename: self.load_level(filename))
-
-        file_menu.add_item("Save...", self.gui_level_save)
-        # file_menu.add_item("Save Commands...", menu_file_save_commands)
-        # file_menu.add_item("Save As...", self.gui_level_save_as)
-        file_menu.add_item("Properties...", self.gui_edit_level)
-        file_menu.add_item("Quit",  self.gui.quit)
-
-        edit_menu = self.menubar.add_menu("&Edit")
-        edit_menu.add_item("Smooth Selection", self.gui_smooth_level_struct)
-        edit_menu.add_item("Resize", self.gui_resize_sector)
-        edit_menu.add_item("Resize to selection", self.gui_resize_sector_to_selection)
-
-        zoom_menu = self.menubar.add_menu("&Zoom")
-        zoom_menu.add_item("1:4 (25%) ", lambda: self.gui_set_zoom(0.25))
-        zoom_menu.add_item("1:2 (50%) ", lambda: self.gui_set_zoom(0.5))
-        zoom_menu.add_item("1:1 (100%) ", lambda: self.gui_set_zoom(1.0))
-        zoom_menu.add_item("2:1 (200%) ", lambda: self.gui_set_zoom(2.0))
-        zoom_menu.add_item("4:1 (400%) ", lambda: self.gui_set_zoom(4.0))
-
-        layer_menu = self.menubar.add_menu("&Layer")
-        layer_menu.add_item("Show all", self.gui_show_all)
-        layer_menu.add_item("Show current", self.gui_show_current)
-        layer_menu.add_item("Show only current", self.gui_show_only_current)
-
-        sector_menu = self.menubar.add_menu("&Sector")
-        # sector = self.workspace.get_map().metadata
-        # for i in sector.parent.get_sectors():
-        #     if sector.name == i:
-        #         current = " [current]"
-        #     else:
-        #         current = ""
-        #
-        #     def on_sector_callback():
-        #         print("Switching to %s" % i)
-        #         self.workspace.get_map().metadata.parent.activate_sector(i, self.workspace)
-        #
-        #     mymenu.add_item(mysprite, ("Sector (%s)%s" % [i, current]), on_sector_callback)
-        sector_menu.add_item("Create New Sector", self.gui_add_sector)
-        sector_menu.add_item("Remove Current Sector", self.gui_remove_sector)
-        sector_menu.add_item("Edit Sector Properties", self.gui_edit_sector)
 
         # Loading Dialogs
         self.load_dialog = self.gui.create_openfiledialog("Load SuperTux Level")
@@ -265,6 +123,14 @@ class SuperTuxGUI:
         #                            })
         #              menu.run()
         #            })
+
+        # setting initial state
+        self.level = Level(100, 50)
+        self.level.activate(self.workspace)
+        # self.layer_selector.set_map(editormap)
+
+        self.set_tilemap_paint_tool()
+        self.gui_show_foreground()
 
     def register_keyboard_shortcuts(self):
         self.editor_map.sig_on_key("f1").connect(lambda x, y: self.gui_toggle_minimap())
@@ -332,97 +198,22 @@ class SuperTuxGUI:
             self.tileselector.show(False)
             self.objectselector.show(False)
 
-    def set_tilemap_paint_tool(self):
-        self.workspace.set_tool(InputEvent.MOUSE_LEFT, self.tile_paint_tool)
-        self.workspace.set_tool(InputEvent.MOUSE_RIGHT, self.tile_brush_create_tool)
-        self.paint.set_down()
-        self.fill.set_up()
-        self.replace.set_up()
-        self.select.set_up()
-        self.zoom.set_up()
-        self.object.set_up()
-        self.show_tiles()
-
-    def set_tilemap_replace_tool(self):
-        self.workspace.set_tool(InputEvent.MOUSE_LEFT, self.tile_replace_tool)
-        self.workspace.set_tool(InputEvent.MOUSE_RIGHT, self.tile_brush_create_tool)
-        self.paint.set_up()
-        self.fill.set_up()
-        self.replace.set_down()
-        self.select.set_up()
-        self.zoom.set_up()
-        self.object.set_up()
-        self.show_tiles()
-
-    def set_tilemap_fill_tool(self):
-        self.workspace.set_tool(InputEvent.MOUSE_LEFT, self.tile_fill_tool)
-        self.workspace.set_tool(InputEvent.MOUSE_RIGHT, self.tile_brush_create_tool)
-        self.paint.set_up()
-        self.fill.set_down()
-        self.replace.set_up()
-        self.select.set_up()
-        self.zoom.set_up()
-        self.object.set_up()
-        self.show_tiles()
-
-    def set_tilemap_select_tool(self):
-        self.workspace.set_tool(InputEvent.MOUSE_LEFT, self.tilemap_select_tool)
-        self.workspace.set_tool(InputEvent.MOUSE_RIGHT, None)
-        self.paint.set_up()
-        self.fill.set_up()
-        self.replace.set_up()
-        self.select.set_down()
-        self.zoom.set_up()
-        self.object.set_up()
-        self.show_none()
-
-    def set_zoom_tool(self):
-        self.workspace.set_tool(InputEvent.MOUSE_LEFT, self.zoom_tool)
-        self.workspace.set_tool(InputEvent.MOUSE_RIGHT, self.zoom_out_tool)
-        self.paint.set_up()
-        self.fill.set_up()
-        self.replace.set_up()
-        self.select.set_up()
-        self.zoom.set_down()
-        self.object.set_up()
-        self.show_none()
-
-    def set_objmap_select_tool(self):
-        self.workspace.set_tool(InputEvent.MOUSE_LEFT, self.objmap_select_tool)
-        self.workspace.set_tool(InputEvent.MOUSE_RIGHT, None)
-        self.paint.set_up()
-        self.fill.set_up()
-        self.replace.set_up()
-        self.select.set_up()
-        self.zoom.set_up()
-        self.object.set_down()
-        self.show_objects()
-
     def gui_show_foreground(self):
         self.display_properties.layer = FOREGROUND_LAYER
         self.display_properties.set(self.workspace.get_map().metadata)
-        TilemapLayer.current = self.workspace.get_map().metadata.foreground
-        self.foreground_icon.set_down()
-        self.interactive_icon.set_up()
-        self.background_icon.set_up()
+        self.tool_context.tilemap_layer = self.workspace.get_map().metadata.foreground.tilemap_layer
         self.minimap.update_minimap()
 
     def gui_show_background(self):
         self.display_properties.layer = BACKGROUND_LAYER
         self.display_properties.set(self.workspace.get_map().metadata)
-        TilemapLayer.current = self.workspace.get_map().metadata.background
-        self.foreground_icon.set_up()
-        self.interactive_icon.set_up()
-        self.background_icon.set_down()
+        self.tool_context.tilemap_layer = self.workspace.get_map().metadata.background.tilemap_layer
         self.minimap.update_minimap()
 
     def gui_show_interactive(self):
         self.display_properties.layer = INTERACTIVE_LAYER
         self.display_properties.set(self.workspace.get_map().metadata)
-        TilemapLayer.current = self.workspace.get_map().metadata.interactive
-        self.foreground_icon.set_up()
-        self.interactive_icon.set_down()
-        self.background_icon.set_up()
+        self.tool_context.tilemap_layer = self.workspace.get_map().metadata.interactive.tilemap_layer
         self.minimap.update_minimap()
 
     def gui_show_all(self):
@@ -443,19 +234,19 @@ class SuperTuxGUI:
     def gui_toggle_minimap(self):
         if self.minimap.get_widget().isVisible():
             self.minimap.get_widget().hide()
-            self.minimap_icon.set_up()
+            self.button_panel.minimap_icon.set_up()
         else:
             self.minimap.get_widget().show()
-            self.minimap_icon.set_down()
+            self.button_panel.minimap_icon.set_down()
 
     def gui_toggle_grid(self):
         tilemap = self.workspace.get_map().metadata.foreground
         tilemap.set_draw_grid(not tilemap.get_draw_grid())
 
         if tilemap.get_draw_grid():
-            self.grid_icon.set_down()
+            self.button_panel.grid_icon.set_down()
         else:
-            self.grid_icon.set_up()
+            self.button_panel.grid_icon.set_up()
         self.editor_map.editormap_widget.repaint()
 
     def gui_toggle_display_props(self):
@@ -496,7 +287,7 @@ class SuperTuxGUI:
 
     def gui_smooth_level_struct(self):
         print("Smoothing level structure")
-        tilemap = TilemapLayer.current
+        tilemap = self.tool_context.tilemap_layer
         data = tilemap.get_data()
         # width = tilemap.width
         #
@@ -536,10 +327,11 @@ class SuperTuxGUI:
         tilemap.set_data(data)
 
     def gui_resize_sector_to_selection(self):
-        level = self.workspace.get_map().metadata
-        rect = self.tilemap_select_tool.get_selection_rect()
-        if (rect.width > 2 and rect.height > 2):
-            level.resize(rect.size, Point(-rect.left, -rect.top))
+        if self.tool_context.tile_selection is not None:
+            level = self.workspace.get_map().metadata
+            rect = self.tool_context.tile_selection.get_rect()
+            if (rect.width > 2 and rect.height > 2):
+                level.resize(rect.size, Point(-rect.left, -rect.top))
 
     def gui_edit_level(self):
         level = self.workspace.get_map().metadata.get_level()
@@ -618,27 +410,33 @@ class SuperTuxGUI:
         self.gui_edit_sector()
 
     def gui_show_object_properties(self):
-        self.objmap_select_tool.get_selection()
-        selection = self.objmap_select_tool.get_selection()
-        if len(selection) > 1:
-            print("Warning: Selection to large")
-        elif len(selection) == 1:
-            obj = selection[0].get_data()
-            obj.property_dialog(self.gui)
-        else:
-            print("Warning: Selection is empty")
+        if self.tool_context.object_selection:
+            selection = self.tool_context.object_selection
+            if len(selection) > 1:
+                print("Warning: Selection to large")
+            elif len(selection) == 1:
+                obj = selection[0].get_data()
+                obj.property_dialog(self.gui)
+            else:
+                print("Warning: Selection is empty")
+
+    def undo(self):
+        self.workspace.get_map().undo()
+
+    def redo(self):
+        self.workspace.get_map().redo()
 
     def on_map_change(self):
         self.editor_map.editormap_widget.repaint()
         if self.workspace.get_map().undo_stack_size() > 0:
-            self.undo_icon.enable()
+            self.button_panel.undo_icon.enable()
         else:
-            self.undo_icon.disable()
+            self.button_panel.undo_icon.disable()
 
         if self.workspace.get_map().redo_stack_size() > 0:
-            self.redo_icon.enable()
+            self.button_panel.redo_icon.enable()
         else:
-            self.redo_icon.disable()
+            self.button_panel.redo_icon.disable()
 
     def gui_level_save_as(self):
         path = self.save_dialog.get_filename()
@@ -684,7 +482,7 @@ class SuperTuxGUI:
     def connect_path_nodes(self):
         print("Connecting path nodes")
         pathnodes = []
-        for i in self.objmap_select_tool.get_selection():
+        for i in self.tool_context.object_selection:
             obj = i.get_data()
             if isinstance(obj, PathNode):
                 pathnodes.append(obj.node)
@@ -721,7 +519,7 @@ class SuperTuxGUI:
 
         if filename not in Config.current.recent_files:
             Config.current.recent_files.append(filename)
-            self.recent_files_menu.add_item(filename, lambda filename=filename: self.load_level(filename))
+            self.menubar.recent_files_menu.add_item(filename, lambda filename=filename: self.load_level(filename))
 
         self.minimap.update_minimap()
 
@@ -732,7 +530,7 @@ class SuperTuxGUI:
 
         if filename not in Config.current.recent_files:
             Config.current.recent_files.append(filename)
-            self.recent_files_menu.add_item(filename, self.load_worldmap)
+            self.menubar.recent_files_menu.add_item(filename, self.load_worldmap)
 
         self.minimap.update_minimap()
         self.use_worldmap = True
@@ -750,24 +548,54 @@ class SuperTuxGUI:
         level.filename = filename
 
     def raise_selection(self):
-        for obj in self.objmap_select_tool.selection:
+        for obj in self.tool_context.object_selection:
             self.workspace.get_map().metadata.objects.raise_object(obj)
         self.editor_map.editormap_widget.repaint()
 
     def lower_selection(self):
-        for obj in self.objmap_select_tool.selection:
+        for obj in self.tool_context.object_selection:
             self.workspace.get_map().metadata.objects.lower_object(obj)
         self.editor_map.editormap_widget.repaint()
 
     def raise_selection_to_top(self):
-        selection = self.objmap_select_tool.selection
+        selection = self.tool_context.object_selection
         self.workspace.get_map().metadata.objects.raise_objects_to_top(selection)
         self.editor_map.editormap_widget.repaint()
 
     def lower_selection_to_bottom(self):
-        selection = self.objmap_select_tool.selection
+        selection = self.tool_context.object_selection
         self.workspace.get_map().metadata.objects.lower_objects_to_bottom(selection)
         self.editor_map.editormap_widget.repaint()
+
+    def set_tilemap_paint_tool(self):
+        self.workspace.set_tool(InputEvent.MOUSE_LEFT, TilePaintTool())
+        self.workspace.set_tool(InputEvent.MOUSE_RIGHT, TileBrushCreateTool())
+        self.toolbox.set_down(self.toolbox.paint_icon)
+
+    def set_tilemap_replace_tool(self):
+        self.workspace.set_tool(InputEvent.MOUSE_LEFT, TileReplaceTool())
+        self.workspace.set_tool(InputEvent.MOUSE_RIGHT, TileBrushCreateTool())
+        self.toolbox.set_down(self.toolbox.replace_icon)
+
+    def set_tilemap_fill_tool(self):
+        self.workspace.set_tool(InputEvent.MOUSE_LEFT, TileFillTool())
+        self.workspace.set_tool(InputEvent.MOUSE_RIGHT, TileBrushCreateTool())
+        self.toolbox.set_down(self.toolbox.fill_icon)
+
+    def set_tilemap_select_tool(self):
+        self.workspace.set_tool(InputEvent.MOUSE_LEFT, TileMapSelectTool())
+        self.workspace.set_tool(InputEvent.MOUSE_RIGHT, None)
+        self.toolbox.set_down(self.toolbox.select_icon)
+
+    def set_zoom_tool(self):
+        self.workspace.set_tool(InputEvent.MOUSE_LEFT, ZoomTool())
+        self.workspace.set_tool(InputEvent.MOUSE_RIGHT, ZoomOutTool())
+        self.toolbox.set_down(self.toolbox.zoom_icon)
+
+    def set_objmap_select_tool(self):
+        self.workspace.set_tool(InputEvent.MOUSE_LEFT, ObjMapSelectTool())
+        self.workspace.set_tool(InputEvent.MOUSE_RIGHT, None)
+        self.toolbox.set_down(self.toolbox.object_icon)
 
 
 class DisplayProperties:

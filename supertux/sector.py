@@ -16,7 +16,7 @@
 
 
 from flexlay.util import get_value_from_tree
-from flexlay import TilemapLayer, ObjectLayer, EditorMap
+from flexlay import ObjectLayer, EditorMap, ToolContext
 
 from .data import create_gameobject_from_data
 from .tilemap import SuperTuxTileMap
@@ -239,7 +239,7 @@ class Sector:
 
     def activate(self, workspace):
         workspace.set_map(self.editormap)
-        TilemapLayer.current = self.interactive
+        ToolContext.current.tilemap_layer = self.interactive.tilemap_layer
         ObjectLayer.current = self.objects
         from .gui import SuperTuxGUI
         self.editormap.sig_change.connect(SuperTuxGUI.current.on_map_change)

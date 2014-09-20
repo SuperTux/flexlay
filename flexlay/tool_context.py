@@ -16,6 +16,7 @@
 
 
 from .tile_brush import TileBrush
+from .gui.tile_selection import TileSelection
 
 
 class ToolContext:
@@ -27,6 +28,12 @@ class ToolContext:
         self.tile_brush = TileBrush(1, 1)
         self.tile_brush.put(0, 0, 0)
         self.tile_brush.set_opaque()
+
+        self.tile_selection = TileSelection()
+
+        self.object_selection = []
+
+        self.tilemap_layer = None
 
 
 # EOF #

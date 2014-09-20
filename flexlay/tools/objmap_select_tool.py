@@ -18,7 +18,7 @@
 from flexlay.tools import Tool
 from flexlay.math import Pointf, Rectf, Rect
 from ..gui.editor_map_component import EditorMapComponent
-from flexlay import Color, ObjectLayer, InputEvent, Workspace, ObjectMoveCommand
+from flexlay import Color, ObjectLayer, InputEvent, Workspace, ObjectMoveCommand, ToolContext
 from flexlay.util import Signal
 
 
@@ -38,23 +38,23 @@ class ObjMapSelectTool(Tool):
         self.move_command = None
 
         self.control_point = None
-        self.selection = []
+        self.context = ToolContext.current
 
         self.sig_popup_menu_display = Signal()
         self.sig_right_click = Signal()
 
     def clear_selection(self):
-        self.selection.clear()
+        self.context.object_selection.clear()
         self.on_selection_change()
 
     def get_selection(self):
-        return self.selection
+        return self.context.object_selection
 
     def set_selection(self, selection):
-        self.selection = selection
+        self.context.object_selection = selection
 
     def draw(self, gc):
-        for obj in self.selection:
+        for obj in self.context.object_selection:
             gc.draw_rect(Rect(obj.get_bound_rect()), Color(255, 0, 0))
 
         if self.state == ObjMapSelectTool.STATE_DRAG:
@@ -85,7 +85,7 @@ class ObjMapSelectTool(Tool):
                 self.selection_rect.bottom = pos.y
                 self.selection_rect.normalize()
 
-                self.selection = objmap.get_selection(self.selection_rect)
+                self.context.object_selection = objmap.get_selection(self.selection_rect)
                 self.on_selection_change()
                 parent.release_mouse()
 
@@ -113,10 +113,10 @@ class ObjMapSelectTool(Tool):
                 if obj is not None:
                     if event.mod & InputEvent.MOD_SHIFT:
                         print("ObjMapSelectTool: Shift presses")
-                        if obj not in self.selection:
-                            self.selection.append(obj)
+                        if obj not in self.context.object_selection:
+                            self.context.object_selection.append(obj)
                         else:
-                            self.selection.remove(obj)
+                            self.context.object_selection.remove(obj)
 
                         self.on_selection_change()
                     else:
@@ -125,15 +125,15 @@ class ObjMapSelectTool(Tool):
                         self.offset = pos - obj.get_pos()
                         self.drag_start = pos
 
-                        if obj not in self.selection:
+                        if obj not in self.context.object_selection:
                             # Clicked object is not in the selection, so we add it
-                            self.selection.clear()
+                            self.context.object_selection.clear()
                             objmap.delete_control_points()
-                            self.selection.append(obj)
+                            self.context.object_selection.append(obj)
                             self.on_selection_change()
 
                         self.move_command = ObjectMoveCommand(objmap)
-                        for obj in self.selection:
+                        for obj in self.context.object_selection:
                             self.move_command.add_obj(obj)
                 else:
                     self.state = ObjMapSelectTool.STATE_SELECT
@@ -151,8 +151,8 @@ class ObjMapSelectTool(Tool):
                 self.control_point.set_pos(pos - self.offset)
             else:
                 self.move_command.move_by(pos - self.drag_start)
-                if len(self.selection) == 1:
-                    self.selection[0].update_control_points()
+                if len(self.context.object_selection) == 1:
+                    self.context.object_selection[0].update_control_points()
 
         elif self.state == ObjMapSelectTool.STATE_SELECT:
             self.selection_rect.right = pos.x
@@ -162,8 +162,8 @@ class ObjMapSelectTool(Tool):
         objmap = ObjectLayer.current
         objmap.delete_control_points()
 
-        if len(self.selection) == 1:
-            self.selection[0].add_control_points()
+        if len(self.context.object_selection) == 1:
+            self.context.object_selection[0].add_control_points()
 
 
 # EOF #

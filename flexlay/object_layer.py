@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from flexlay import Layer
+from .layer import Layer
 
 
 class ObjectLayer(Layer):
@@ -63,9 +63,7 @@ class ObjectLayer(Layer):
             self.objects.remove(obj)
 
     def get_selection(self, rect):
-        print("========= get_selection:", len(self.objects))
         selection = []
-
         for obj in self.objects:
             print(" Rect(", rect.left, ",", rect.top, ",",
                   rect.right, ",", rect.bottom, ") ===",

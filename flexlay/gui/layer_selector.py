@@ -15,30 +15,25 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from PyQt4.QtGui import QStandardItemModel, QStandardItem, QIcon
+from PyQt4.QtGui import QStandardItemModel, QStandardItem
 from PyQt4.QtGui import QWidget, QToolBar, QTreeView, QVBoxLayout
+
+from ..tilemap_layer import TilemapLayer
+from ..object_layer import ObjectLayer
 
 
 class LayerSelector:
 
     def __init__(self):
-        model = QStandardItemModel()
-        model.setHorizontalHeaderItem(0, QStandardItem("Visible"))
-        model.setHorizontalHeaderItem(1, QStandardItem("Layer"))
+        self.model = QStandardItemModel()
+        # self.model.setHorizontalHeaderItem(0, QStandardItem("Visible"))
+        self.model.setHorizontalHeaderItem(1, QStandardItem("Layer"))
 
-        model.appendRow([QStandardItem(QIcon("../data/images/icons16/resize1.png"), "Wrong"),
-                         QStandardItem("Background")])
-
-        model.appendRow([QStandardItem("Eye"),
-                         QStandardItem("Interactive")])
-
-        model.appendRow([QStandardItem("Eye"),
-                         QStandardItem("Foreground")])
         self.vbox = QWidget()
 
         # Use QTreeWidget instead!?
         self.tree_view = QTreeView()
-        self.tree_view.setModel(model)
+        self.tree_view.setModel(self.model)
 
         self.toolbar = QToolBar()
         self.toolbar.addAction("Hide All")
@@ -49,7 +44,17 @@ class LayerSelector:
         self.layout.addWidget(self.tree_view)
         self.layout.addWidget(self.toolbar)
 
+    def set_map(self, editormap):
+        print("SetMAP")
+        for layer in editormap.layers:
+            print("SetMAP: %s" % layer)
+            if isinstance(layer, TilemapLayer):
+                self.model.appendRow([QStandardItem("Tile: %s %dx%d" % layer.name, layer.width, layer.height)])
+            elif isinstance(layer, ObjectLayer):
+                self.model.appendRow([QStandardItem("Objects")])
+
     def get_widget(self):
         return self.vbox
+
 
 # EOF #

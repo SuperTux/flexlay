@@ -30,7 +30,7 @@ class PaintCommand(Command):
         self.brush = brush
 
         # Copy of the field used to generate undo informations */
-        self.undo_field = self.tilemap.get_field().copy()
+        self.undo_field = self.tilemap.field.copy()
 
         self.pos = Point(0, 0)
         self.redo_brush = None
@@ -59,7 +59,7 @@ class PaintCommand(Command):
         self.pos.x = rect.left
         self.pos.y = rect.top
 
-        self.redo_brush = TileBrush.from_field(self.tilemap.get_field().copy(),
+        self.redo_brush = TileBrush.from_field(self.tilemap.field.copy(),
                                                rect.width, rect.height,
                                                -self.pos.x, -self.pos.y)
 
@@ -74,10 +74,10 @@ class PaintCommand(Command):
         self.undo_field.clear()
 
     def redo(self):
-        TilemapLayer.draw_tiles(self.tilemap.get_field(), self.redo_brush, self.pos)
+        TilemapLayer.draw_tiles(self.tilemap.field, self.redo_brush, self.pos)
 
     def undo(self):
-        TilemapLayer.draw_tiles(self.tilemap.get_field(), self.undo_brush, self.pos)
+        TilemapLayer.draw_tiles(self.tilemap.field, self.undo_brush, self.pos)
 
 
 # EOF #

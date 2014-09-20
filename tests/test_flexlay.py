@@ -15,28 +15,23 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from ..gui.editor_map_component import EditorMapComponent
-from .tool import Tool
-from ..tool_context import ToolContext
+import unittest
+
+import flexlay
+import flexlay.math
+import flexlay.util
+import flexlay.tools
+import flexlay.gui
 
 
-class TileReplaceTool(Tool):
+class FlexlayTestCase(unittest.TestCase):
 
-    current = None
-
-    def __init__(self):
-        super().__init__()
-
-        TileReplaceTool.current = self
-
-    def on_mouse_down(self, event):
-        tilemap = ToolContext.current.tilemap_layer
-        if tilemap:
-            parent = EditorMapComponent.current
-            pos = tilemap.world2tile(parent.screen2world(event.mouse_pos))
-            tilemap.replace_tile(tilemap.field.at(pos.x, pos.y),
-                                 ToolContext.current.tile_brush.at(0, 0))
-            # GRUMBEL: undo missing
+    def test_imports(self):
+        id(flexlay)
+        id(flexlay.math)
+        id(flexlay.util)
+        id(flexlay.tools)
+        id(flexlay.gui)
 
 
 # EOF #

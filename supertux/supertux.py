@@ -37,11 +37,10 @@ def main():
     flexlay = Flexlay()
 
     config = Config.create("supertux-editor")
-    if not config.datadir:
-        if args.datadir:
-            config.datadir = args.datadir
-        else:
-            raise RuntimeError("datadir missing, use --datadir DIR")
+    if args.datadir is not None:
+        config.datadir = args.datadir
+    elif not config.datadir:
+        raise RuntimeError("datadir missing, use --datadir DIR")
 
     tileset = SuperTuxTileset(32)
     tileset.load(config.datadir + "images/tiles.strf")

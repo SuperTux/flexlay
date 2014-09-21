@@ -35,6 +35,7 @@ class Config:
         self.filename = filename
 
         self.datadir = ""
+        self.binary = ""
         self.recent_files = []
         self.geometry = ""
         self.window_state = ""
@@ -51,6 +52,8 @@ class Config:
         if "supertux-editor" in parser:
             if "datadir" in parser["supertux-editor"]:
                 self.datadir = parser["supertux-editor"]["datadir"]
+            if "binary" in parser["supertux-editor"]:
+                self.binary = parser["supertux-editor"]["binary"]
             if "geometry" in parser["supertux-editor"]:
                 self.geometry = parser['supertux-editor']['geometry']
             if "window_state" in parser["supertux-editor"]:
@@ -71,6 +74,7 @@ class Config:
         parser = configparser.ConfigParser()
         parser['supertux-editor'] = {}
         parser['supertux-editor']['datadir'] = self.datadir
+        parser['supertux-editor']['binary'] = self.binary
         parser['supertux-editor']['geometry'] = self.geometry
         parser['supertux-editor']['window_state'] = self.window_state
         for i, recent_file in enumerate(self.recent_files):

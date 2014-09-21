@@ -269,7 +269,7 @@ class SuperTuxGUI:
             # FIXME: use real tmpfile
             tmpfile = "/tmp/tmpflexlay-supertux.stl"
             self.save_level(tmpfile)
-        subprocess.Popen([os.path.join(Config.current.datadir, "supertux")], tmpfile)
+        subprocess.Popen([Config.current.binary, tmpfile])
 
     def gui_resize_sector(self):
         level = self.workspace.get_map().metadata

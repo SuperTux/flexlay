@@ -15,6 +15,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+import os
+
 from flexlay import ObjectAddCommand, Sprite, ObjMapSpriteObject, Config
 from flexlay.math import Pointf
 from flexlay.util import get_value_from_tree
@@ -33,7 +35,7 @@ class WMSpawnPoint(WorldmapObject):
 
         self.name = ""
         self.obj = ObjMapSpriteObject(
-            Sprite.from_file(Config.current.datadir + "images/worldmap/common/tux.png"),
+            Sprite.from_file(os.path.join(Config.current.datadir, "images/worldmap/common/tux.png")),
             Pointf(0, 0), self)
         self.obj.sig_move.connect(self.on_move)
 
@@ -77,7 +79,7 @@ class WorldmapLevel(WorldmapObject):
         self.sprite = ""
         self.quit_worldmap = False
         self.obj = ObjMapSpriteObject(
-            Sprite.from_file(Config.current.datadir + "images/worldmap/common/leveldot_green.png"),
+            Sprite.from_file(os.path.join(Config.current.datadir, "images/worldmap/common/leveldot_green.png")),
             Pointf(0, 0), self)
         self.obj.sig_move.connect(self.on_move)
 
@@ -138,7 +140,7 @@ class SpecialTile(WorldmapObject):
         self.teleport_y = 0
         self.invisible_tile = False
         self.obj = ObjMapSpriteObject(
-            Sprite.from_file(Config.current.datadir + "images/worldmap/common/teleporterdot.png"),
+            Sprite.from_file(os.path.join(Config.current.datadir, "images/worldmap/common/teleporterdot.png")),
             Pointf(0, 0), self)
         self.obj.sig_move.connect(self.on_move)
 

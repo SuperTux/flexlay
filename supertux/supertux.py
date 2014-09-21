@@ -15,6 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+import os
 import argparse
 from PyQt4.QtCore import QByteArray
 
@@ -43,7 +44,7 @@ def main():
         raise RuntimeError("datadir missing, use --datadir DIR")
 
     tileset = SuperTuxTileset(32)
-    tileset.load(config.datadir + "images/tiles.strf")
+    tileset.load(os.path.join(config.datadir, "images/tiles.strf"))
     # tileset.load(os.path.join(Config.current.datadir, "images/worldmap.strf"))
     tileset.create_ungrouped_tiles_group()
 

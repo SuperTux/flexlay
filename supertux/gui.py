@@ -77,7 +77,7 @@ class SuperTuxGUI:
         self.objectselector = self.gui.create_object_selector(42, 42)
         self.editor_map.sig_drop.connect(self.on_object_drop)
         for objectdata in game_objects:
-            sprite = Sprite.from_file(Config.current.datadir + objectdata[1])
+            sprite = Sprite.from_file(os.path.join(Config.current.datadir, objectdata[1]))
             self.objectselector.add_brush(ObjectBrush(sprite, objectdata))
 
         self.tileselector = self.gui.create_tile_selector()
@@ -92,14 +92,14 @@ class SuperTuxGUI:
         # if False:
         #     self.worldmapobjectselector.sig_drop.connect(self.on_worldmap_object_drop)
         # for obj in worldmap_objects:
-        #     self.objectselector.add_brush(ObjectBrush(Sprite.from_file(Config.current.datadir + obj[1]),
+        #     self.objectselector.add_brush(ObjectBrush(Sprite.from_file(os.path.join(Config.current.datadir, obj[1])),
         #                                                       obj[0]))
 
         # Loading Dialogs
         self.load_dialog = self.gui.create_openfiledialog("Load SuperTux Level")
-        self.load_dialog.set_directory(Config.current.datadir + "levels/")
+        self.load_dialog.set_directory(os.path.join(Config.current.datadir, "levels"))
         self.save_dialog = self.gui.create_savefiledialog("Save SuperTux Level as...")
-        self.save_dialog.set_directory(Config.current.datadir + "levels/")
+        self.save_dialog.set_directory(os.path.join(Config.current.datadir, "levels"))
 
         self.register_keyboard_shortcuts()
 

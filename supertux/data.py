@@ -15,6 +15,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+import os
+
 from flexlay import (Color, ObjMapSpriteObject, ObjMapRectObject,
                      ObjectAddCommand, Sprite, Config)
 from flexlay.math import Point, Pointf, Rect, Size
@@ -141,7 +143,7 @@ def create_gameobject(editormap, objmap, data, pos, sexpr):
 
     # Creates a gameobject the given position, data is the entry in the game_objects table
     if kind == "sprite":
-        sprite = Sprite.from_file(Config.current.datadir + spritefile)
+        sprite = Sprite.from_file(os.path.join(Config.current.datadir, spritefile))
 
         obj = ObjMapSpriteObject(sprite, pos, None)
         gobj = func(obj, sexpr)

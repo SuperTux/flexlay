@@ -15,6 +15,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+import os
+
 from flexlay import (Color, Sprite, Config)
 from flexlay.math import Point, Rect, Size
 from flexlay.util import get_value_from_tree
@@ -50,7 +52,7 @@ class Decal(GameObj):
         super().__init__()
         self.layer = get_value_from_tree(["layer", "_"],  sexpr, 0)
         self.sprite = get_value_from_tree(["sprite", "_"], sexpr, "")
-        data.set_sprite(Sprite.from_file(Config.current.datadir + self.sprite))
+        data.set_sprite(Sprite.from_file(os.path.join(Config.current.datadir, self.sprite)))
 
     def save(self, writer, obj):
         writer.begin_list("decal")
@@ -595,7 +597,7 @@ class ScriptedObject(GameObj):
         writer.end_list()
 
     def load_sprite(self):
-        sprite = Sprite.from_file(Config.current.datadir + self.sprite)
+        sprite = Sprite.from_file(os.path.join(Config.current.datadir, self.sprite))
         self.obj.set_sprite(sprite)
 
     def property_dialog(self, gui):

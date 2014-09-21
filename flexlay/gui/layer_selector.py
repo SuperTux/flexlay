@@ -48,7 +48,8 @@ class LayerSelector:
         self.model.clear()
         for layer in editormap.layers:
             if isinstance(layer, TilemapLayer):
-                self.model.appendRow([QStandardItem("Tile: %s %dx%d" % (layer.metadata.name, layer.width, layer.height))])
+                self.model.appendRow([QStandardItem("Tile: %s %dx%d" % (layer.metadata.name,
+                                                                        layer.width, layer.height))])
             elif isinstance(layer, ObjectLayer):
                 self.model.appendRow([QStandardItem("Objects")])
 

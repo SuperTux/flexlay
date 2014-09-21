@@ -15,8 +15,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from flexlay import ObjMapObject, ObjMapControlPoint, Sprite, ObjectLayer
 from flexlay.math import Pointf, Sizef, Rect, Rectf
+from .objmap_object import ObjMapObject
+from .objmap_control_point import ObjMapControlPoint
+from .sprite import Sprite
 
 
 class ObjMapRectObject(ObjMapObject):
@@ -158,6 +160,7 @@ class ObjMapRectObject(ObjMapObject):
         self.update_control_points()
         print("Adding control poinst...")
 
+        from .tool_context import ToolContext
         objmap = ToolContext.current.object_layer
         objmap.add_control_point(self.cp_top_left)
         objmap.add_control_point(self.cp_top_right)

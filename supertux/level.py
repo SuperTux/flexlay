@@ -50,7 +50,7 @@ class Level:
         result.current_sector.new_from_size("main", width, height)
         result.sectors.append(result.current_sector)
         return result
-        
+
     def __init__(self):
         self.version = 2
         self.filename = None

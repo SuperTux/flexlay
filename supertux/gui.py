@@ -55,6 +55,7 @@ class SuperTuxGUI:
 
         self.tool_context = ToolContext()
         self.level = None
+        self.sector = None
 
         self.gui = flexlay.create_gui_manager("SuperTux Editor")
 
@@ -613,6 +614,7 @@ class SuperTuxGUI:
         ToolContext.current.object_layer = self.sector.objects
 
         self.sector.editormap.sig_change.connect(SuperTuxGUI.current.on_map_change)
+
 
 class DisplayProperties:
 

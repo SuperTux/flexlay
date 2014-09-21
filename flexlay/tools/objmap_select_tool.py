@@ -18,7 +18,7 @@
 from flexlay.tools import Tool
 from flexlay.math import Pointf, Rectf, Rect
 from ..gui.editor_map_component import EditorMapComponent
-from flexlay import Color, ObjectLayer, InputEvent, Workspace, ObjectMoveCommand, ToolContext
+from flexlay import Color, InputEvent, Workspace, ObjectMoveCommand, ToolContext
 from flexlay.util import Signal
 
 

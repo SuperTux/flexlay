@@ -120,13 +120,13 @@ class TilemapLayer(Layer):
                 if self.field.at(x, y) == source_id:
                     self.field.put(x, y, replacement_id)
 
-    def flood_fill_at(self, pos, tile_id):
+    def flood_fill_at(self, pos, brush):
         replace_id = self.field.at(pos.x, pos.y)
-        if tile_id != replace_id:
-            self._flood_fill_at(pos.x, pos.y, tile_id, replace_id)
+        if replace_id not in brush.field:
+            self._flood_fill_at(pos.x, pos.y, brush, replace_id)
 
-    def _flood_fill_at(self, x, y, fill_id, replace_id):
-        stack = [(x, y)]
+    def _flood_fill_at(self, orig_x, orig_y, brush, replace_id):
+        stack = [(orig_x, orig_y)]
 
         def add(x, y):
             if 0 <= x < self.field.width and \
@@ -137,6 +137,8 @@ class TilemapLayer(Layer):
             x, y = stack.pop()
             tile_id = self.field.at(x, y)
             if tile_id == replace_id:
+                fill_id = brush.at((x - orig_x) % brush.width,
+                                   (y - orig_y) % brush.height)
                 self.field.put(x, y, fill_id)
                 add(x + 1, y)
                 add(x - 1, y)

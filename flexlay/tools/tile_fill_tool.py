@@ -35,7 +35,7 @@ class TileFillTool(Tool):
         if tilemap:
             parent = EditorMapComponent.current
             pos = tilemap.world2tile(parent.screen2world(event.mouse_pos))
-            tilemap.flood_fill_at(pos, ToolContext.current.tile_brush.at(0, 0))
+            tilemap.flood_fill_at(pos, ToolContext.current.tile_brush)
             # GRUMBEL: undo missing
 
 

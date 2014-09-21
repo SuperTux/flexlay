@@ -69,6 +69,9 @@ class Field:
     def size(self):
         return len(self.data)
 
+    def __contains__(self, key):
+        return key in self.data
+
     def __str__(self):
         result = "\n"
         for y in range(self.height):

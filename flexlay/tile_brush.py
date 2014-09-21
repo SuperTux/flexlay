@@ -30,33 +30,33 @@ class TileBrush:
     def __init__(self, w, h, field=None):
         self.opaque = False
         if field is None:
-            self.data = Field(w, h)
+            self.field = Field(w, h)
         else:
-            self.data = field
+            self.field = field
 
     @property
     def width(self):
-        return self.data.width
+        return self.field.width
 
     @property
     def height(self):
-        return self.data.height
+        return self.field.height
 
     def set_data(self, data):
-        self.data.set_data(data)
+        self.field.set_data(data)
 
     def get_data(self, data):
-        return self.data.get_data(data)
+        return self.field.get_data(data)
 
     def at(self, x, y):
-        return self.data.at(x, y)
+        return self.field.at(x, y)
 
     def put(self, x, y, value):
         assert isinstance(value, int)
-        return self.data.put(x, y, value)
+        return self.field.put(x, y, value)
 
     def resize(self, w, h, pos_x=0, pos_y=0):
-        self.data.resize(w, h, pos_x, pos_y)
+        self.field.resize(w, h, pos_x, pos_y)
 
     def set_opaque(self):
         self.opaque = True
@@ -70,27 +70,27 @@ class TileBrush:
     def auto_crop(self):
         rect = Rect(0, 0, 0, 0)
 
-        for y, x in itertools.product(range(0, self.data.height),
-                                      range(0, self.data.width)):
-            if self.data.at(x, y) != 0:
+        for y, x in itertools.product(range(0, self.field.height),
+                                      range(0, self.field.width)):
+            if self.field.at(x, y) != 0:
                 rect.top = y
                 break
 
-        for y, x in itertools.product(reversed(range(0, self.data.height)),
-                                      range(0, self.data.width)):
-            if self.data.at(x, y) != 0:
+        for y, x in itertools.product(reversed(range(0, self.field.height)),
+                                      range(0, self.field.width)):
+            if self.field.at(x, y) != 0:
                 rect.bottom = y + 1
                 break
 
-        for x, y in itertools.product(range(0, self.data.width),
-                                      range(0, self.data.height)):
-            if self.data.at(x, y) != 0:
+        for x, y in itertools.product(range(0, self.field.width),
+                                      range(0, self.field.height)):
+            if self.field.at(x, y) != 0:
                 rect.left = x
                 break
 
-        for x, y in itertools.product(reversed(range(0, self.data.width)),
-                                      range(0, self.data.height)):
-            if self.data.at(x, y) != 0:
+        for x, y in itertools.product(reversed(range(0, self.field.width)),
+                                      range(0, self.field.height)):
+            if self.field.at(x, y) != 0:
                 rect.right = x + 1
                 break
 
@@ -98,8 +98,8 @@ class TileBrush:
             self.resize(rect.width, rect.height,
                         -rect.left, -rect.top)
         else:
-            self.data = Field(1, 1)
-            self.data.put(0, 0, 0)
+            self.field = Field(1, 1)
+            self.field.put(0, 0, 0)
             self.set_opaque()
 
 

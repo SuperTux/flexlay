@@ -17,6 +17,7 @@
 
 import os
 import argparse
+import os.path
 from PyQt4.QtCore import QByteArray
 
 from flexlay import Flexlay, Config
@@ -31,6 +32,8 @@ def main():
                         help=".stl file to load")
     parser.add_argument("-d", "--datadir", metavar="DIR", action="store", type=str,
                         help="SuperTux data directory directory")
+    parser.add_argument("-b", "--binary", metavar="BIN", action="store", type=str,
+                        help="SuperTux binary path")
     args = parser.parse_args()
 
     flexlay = Flexlay()
@@ -42,6 +45,16 @@ def main():
         raise RuntimeError("datadir missing, use --datadir DIR")
 
     print("Datadir:", config.datadir)
+
+    if not config.binary:
+        if args.binary and os.path.isfile(args.binary):
+            config.binary = args.binary
+        elif os.path.isfile(config.datadir + "../supertux"):
+            config.binary = config.datadir + "../supertux"
+        else:
+            raise RuntimeError("binary path missing, use --binary BIN")
+
+    print("Binary path:", config.binary)
 
     tileset = SuperTuxTileset(32)
     tileset.load(os.path.join(config.datadir, "images/tiles.strf"))

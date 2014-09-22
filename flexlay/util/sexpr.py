@@ -95,7 +95,18 @@ class SExprParser:
             raise Exception("string not closed at end of file")
         elif c == "\\":
             self.index += 1
-            self.atom += self.text[i]
+            c = self.text[self.index]
+            if c == "n":
+                self.atom += "\n"
+            elif c == "t":
+                self.atom += "\t"
+            elif c == "\\":
+                self.atom += "\\"
+            elif c == "\"":
+                self.atom += "\""
+            else:
+                self.atom += "\\"
+                self.atom += c
         elif c == "\"":
             self.stack[-1].append(self.atom)
             self.atom = None

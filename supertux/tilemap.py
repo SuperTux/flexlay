@@ -51,7 +51,7 @@ class SuperTuxTileMap:
         self.z_pos = 0
         self.name = ""
         self.speed = 1.0
-        self.layer = "interactive"
+        self.name = "interactive"
         self.tilemap_layer = None
 
     def save(self, writer):

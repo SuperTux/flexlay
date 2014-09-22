@@ -37,6 +37,7 @@ from .tileset import SuperTuxTileset
 from .button_panel import SuperTuxButtonPanel
 from .menubar import SuperTuxMenuBar
 from .toolbox import SuperTuxToolbox
+from .util import load_cl_sprite
 
 
 BACKGROUND_LAYER = 1
@@ -77,7 +78,7 @@ class SuperTuxGUI:
         self.objectselector = self.gui.create_object_selector(42, 42)
         self.editor_map.sig_drop.connect(self.on_object_drop)
         for objectdata in game_objects:
-            sprite = Sprite.from_file(os.path.join(Config.current.datadir, objectdata[1]))
+            sprite = load_cl_sprite(os.path.join(Config.current.datadir, objectdata[1]))
             self.objectselector.add_brush(ObjectBrush(sprite, objectdata))
 
         self.tileselector = self.gui.create_tile_selector()
@@ -130,17 +131,12 @@ class SuperTuxGUI:
         self.set_level(level, "main")
 
         self.set_tilemap_paint_tool()
-        self.gui_show_foreground()
 
     def register_keyboard_shortcuts(self):
         self.editor_map.sig_on_key("f1").connect(lambda x, y: self.gui_toggle_minimap())
         self.editor_map.sig_on_key("m").connect(lambda x, y: self.gui_toggle_minimap())
         self.editor_map.sig_on_key("g").connect(lambda x, y: self.gui_toggle_grid())
         self.editor_map.sig_on_key("4").connect(lambda x, y: self.gui_toggle_display_props())
-
-        self.editor_map.sig_on_key("3").connect(lambda x, y: self.gui_show_foreground())
-        self.editor_map.sig_on_key("2").connect(lambda x, y: self.gui_show_interactive())
-        self.editor_map.sig_on_key("1").connect(lambda x, y: self.gui_show_background())
 
         self.editor_map.sig_on_key("+").connect(lambda x, y: self.editor_map.zoom_in(Point(x, y)))
         self.editor_map.sig_on_key("-").connect(lambda x, y: self.editor_map.zoom_out(Point(x, y)))
@@ -192,29 +188,6 @@ class SuperTuxGUI:
         if False:  # GRUMBEL
             self.tileselector.show(True)
             self.objectselector.show(False)
-
-    def show_none(self):
-        if False:  # GRUMBEL
-            self.tileselector.show(False)
-            self.objectselector.show(False)
-
-    def gui_show_foreground(self):
-        self.display_properties.layer = FOREGROUND_LAYER
-        self.display_properties.set(self.workspace.get_map().metadata)
-        self.tool_context.tilemap_layer = self.workspace.get_map().metadata.foreground.tilemap_layer
-        self.minimap.update_minimap()
-
-    def gui_show_background(self):
-        self.display_properties.layer = BACKGROUND_LAYER
-        self.display_properties.set(self.workspace.get_map().metadata)
-        self.tool_context.tilemap_layer = self.workspace.get_map().metadata.background.tilemap_layer
-        self.minimap.update_minimap()
-
-    def gui_show_interactive(self):
-        self.display_properties.layer = INTERACTIVE_LAYER
-        self.display_properties.set(self.workspace.get_map().metadata)
-        self.tool_context.tilemap_layer = self.workspace.get_map().metadata.interactive.tilemap_layer
-        self.minimap.update_minimap()
 
     def gui_show_all(self):
         self.display_properties.show_all = True
@@ -610,7 +583,7 @@ class SuperTuxGUI:
         self.workspace.set_map(self.sector.editormap)
         self.layer_selector.set_map(self.sector.editormap)
 
-        ToolContext.current.tilemap_layer = self.sector.interactive.tilemap_layer
+        ToolContext.current.tilemap_layer = self.sector.get_some_solid_tilemap().tilemap_layer
         ToolContext.current.object_layer = self.sector.objects
 
         self.sector.editormap.sig_change.connect(SuperTuxGUI.current.on_map_change)
@@ -619,7 +592,7 @@ class SuperTuxGUI:
 class DisplayProperties:
 
     def __init__(self):
-        self.layer = INTERACTIVE_LAYER
+        self.layer = None
         self.show_all = False
         self.current_only = False
 
@@ -635,24 +608,14 @@ class DisplayProperties:
             deactive = Color(150, 150, 250, 150)
 
         if self.show_all:
-            sector.foreground.tilemap_layer.set_foreground_color(active)
-            sector.interactive.tilemap_layer.set_foreground_color(active)
-            sector.background.tilemap_layer.set_foreground_color(active)
+            for tilemap in sector.tilemaps:
+                tilemap.tilemap_layer.set_foreground_color(active)
         else:
-            if (self.layer == FOREGROUND_LAYER):
-                sector.foreground.tilemap_layer.set_foreground_color(active)
-            else:
-                sector.foreground.tilemap_layer.set_foreground_color(deactive)
-
-            if (self.layer == INTERACTIVE_LAYER):
-                sector.interactive.tilemap_layer.set_foreground_color(active)
-            else:
-                sector.interactive.tilemap_layer.set_foreground_color(deactive)
-
-            if (self.layer == BACKGROUND_LAYER):
-                sector.background.tilemap_layer.set_foreground_color(active)
-            else:
-                sector.background.tilemap_layer.set_foreground_color(deactive)
+            for tilemap in sector.tilemaps:
+                if tilemap == self.layer:
+                    tilemap.tilemap_layer.set_foreground_color(active)
+                else:
+                    tilemap.tilemap_layer.set_foreground_color(deactive)
 
 
 # EOF #

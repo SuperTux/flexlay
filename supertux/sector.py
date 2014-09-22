@@ -20,6 +20,7 @@ from flexlay import ObjectLayer, EditorMap
 
 from .data import create_gameobject_from_data
 from .tilemap import SuperTuxTileMap
+from .gameobj import PathNode
 
 
 class Sector:
@@ -37,13 +38,15 @@ class Sector:
         self.height = None
 
         self.tilemaps = []
-        self.background = None
-        self.interactive = None
-        self.foreground = None
 
         self.objects = None
         # self.sketch = None
         self.editormap = None
+
+    def get_some_solid_tilemap(self):
+        for tilemap in self.tilemaps:
+            if tilemap.solid:
+                return tilemap
 
     def get_level(self):
         return self.parent
@@ -68,12 +71,9 @@ class Sector:
         self.width = width
         self.height = height
 
-        self.foreground = SuperTuxTileMap.from_size(self.width, self.height)
-        self.interactive = SuperTuxTileMap.from_size(self.width, self.height)
-        self.background = SuperTuxTileMap.from_size(self.width, self.height)
-        self.tilemaps.append(self.foreground)
-        self.tilemaps.append(self.interactive)
-        self.tilemaps.append(self.background)
+        self.tilemaps.append(SuperTuxTileMap.from_size(self.width, self.height))
+        self.tilemaps.append(SuperTuxTileMap.from_size(self.width, self.height))
+        self.tilemaps.append(SuperTuxTileMap.from_size(self.width, self.height))
 
         self.objects = ObjectLayer()
         # self.sketch  = SketchLayer()
@@ -95,18 +95,18 @@ class Sector:
         self.width = get_value_from_tree(["width", "_"], data, 20)
         self.height = get_value_from_tree(["height", "_"], data, 15)
 
-        self.foreground = SuperTuxTileMap.from_size(self.width, self.height)
-        self.foreground.set_data(get_value_from_tree(["foreground-tm"], data, []))
+        foreground = SuperTuxTileMap.from_size(self.width, self.height)
+        foreground.set_data(get_value_from_tree(["foreground-tm"], data, []))
 
-        self.interactive = SuperTuxTileMap.from_size(self.width, self.height)
-        self.interactive.set_data(get_value_from_tree(["interactive-tm"], data, []))
+        interactive = SuperTuxTileMap.from_size(self.width, self.height)
+        interactive.set_data(get_value_from_tree(["interactive-tm"], data, []))
 
-        self.background = SuperTuxTileMap.from_size(self.width, self.height)
-        self.background.set_data(get_value_from_tree(["background-tm"], data, []))
+        background = SuperTuxTileMap.from_size(self.width, self.height)
+        background.set_data(get_value_from_tree(["background-tm"], data, []))
 
-        self.tilemaps.append(self.foreground)
-        self.tilemaps.append(self.interactive)
-        self.tilemaps.append(self.background)
+        self.tilemaps.append(foreground)
+        self.tilemaps.append(interactive)
+        self.tilemaps.append(background)
 
         self.cameramode = "normal"
 
@@ -176,9 +176,6 @@ class Sector:
         self.width = 0
         self.height = 0
 
-        self.background = None
-        self.interactive = None
-        self.foreground = None
         self.tilemaps = []
 
         self.editormap = EditorMap()
@@ -204,31 +201,16 @@ class Sector:
                 tilemap = SuperTuxTileMap.from_sexpr(data)
                 self.tilemaps.append(tilemap)
 
+                # GRUMBEL: incorrect
                 if tilemap.solid:
-                    self.interactive = tilemap
                     self.width = tilemap.width
                     self.height = tilemap.height
-                elif tilemap.name == "background":
-                    self.background = tilemap
-                elif tilemap.name == "foreground":
-                    self.foreground = tilemap
 
             elif name == "camera":
                 self.cameramode = "normal"
                 # TODO...
             else:
                 create_gameobject_from_data(self.editormap, self.objects, name, data)
-
-        if self.interactive is None or self.width == 0 or self.height == 0:
-            raise Exception("No interactive tilemap in sector '", self.name, "'")
-
-        if self.background is None:
-            self.background = SuperTuxTileMap.from_size(self.width, self.height)
-            self.tilemaps.append(self.background)
-
-        if self.foreground is None:
-            self.foreground = SuperTuxTileMap.from_size(self.width, self.height)
-            self.tilemaps.append(self.foreground)
 
         for tilemap in self.tilemaps:
             self.editormap.add_layer(tilemap.tilemap_layer)
@@ -246,12 +228,17 @@ class Sector:
 
         writer.begin_list("camera")
         writer.write_string("mode", self.cameramode)
-        # f.write("      (path\n")
-        # for obj in self.objects.get_objects():
-        #     pathnode = obj.get_data()
-        #     if isinstance(pathnode, PathNode):
-        #        f.write("       (point (x %d) (y %d) (speed 1))\n" % obj.get_pos().x, obj.get_pos().y)
-        # f.write("      )")
+        path_nodes = [obj for obj in self.objects.get_objects() if isinstance(obj, PathNode)]
+        if path_nodes:
+            writer.begin_list("path")
+            for obj in path_nodes:
+                pathnode = obj.get_data()
+                if isinstance(pathnode, PathNode):
+                    writer.begin_list("point")
+                    writer.write_inline_point(obj.get_pos())
+                    writer.write_int("speed", 1)
+                    writer.end_list()
+            writer.end_list()
         writer.end_list()
 
         for obj in self.objects.get_objects():

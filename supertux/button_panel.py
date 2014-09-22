@@ -58,14 +58,6 @@ class SuperTuxButtonPanel:
         self.button_panel.add_icon("data/images/icons24/object_raise.png", editor.raise_selection)
         self.button_panel.add_icon("data/images/icons24/object_raise_to_top.png", editor.raise_selection_to_top)
 
-        # Layers
-        self.button_panel.add_separator()
-        self.background_icon = self.button_panel.add_icon("data/images/icons24/background.png",
-                                                          editor.gui_show_background)
-        self.interactive_icon = self.button_panel.add_icon("data/images/icons24/interactive.png",
-                                                           editor.gui_show_interactive)
-        self.foreground_icon = self.button_panel.add_icon("data/images/icons24/foreground.png",
-                                                          editor.gui_show_foreground)
         self.button_panel.add_separator()
         self.run_icon = self.button_panel.add_icon("data/images/icons24/run.png", editor.gui_run_level)
 

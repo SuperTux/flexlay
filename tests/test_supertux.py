@@ -44,13 +44,13 @@ class SuperTuxTestCase(unittest.TestCase):
     def test_level_save(self):
         Config.create("supertux-editor")
         level = Level.from_file(test_levelfile)
-        out = io.StringIO()
-        # out = open("/tmp/test.stl", "w")
-        level.save_io(out)
-        print(out.getvalue())
+        with io.StringIO() as out:
+        # with open("/tmp/test.stl", "w") as out:
+            level.save_io(out)
+            # print(out.getvalue())
 
     def test_level_new(self):
-        level = Level(400, 300)
+        level = Level.from_size(400, 300)
         self.assertEqual(level.name, "No Name")
 
 

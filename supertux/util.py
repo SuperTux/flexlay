@@ -17,7 +17,7 @@
 
 from flexlay import Sprite
 from flexlay.util import sexpr_read_from_file
-from .sprite import Sprite as SuperTuxSprite
+from .sprite import SuperTuxSprite
 
 
 def load_lisp(filename, root_symbol):

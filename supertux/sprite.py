@@ -21,7 +21,7 @@ from flexlay.util import get_value_from_tree, sexpr_read_from_file
 from flexlay import Sprite as FlexlaySprite
 
 
-class SpriteAction:
+class SuperTuxSpriteAction:
 
     def __init__(self):
         self.name = None
@@ -38,7 +38,7 @@ class SpriteAction:
         self.image = get_value_from_tree(["images", "_"], sexpr, 0)
 
 
-class Sprite:
+class SuperTuxSprite:
 
     def __init__(self, filename):
         self.actions = {}
@@ -52,7 +52,7 @@ class Sprite:
 
         for i in tree[1:]:
             if i[0] == "action":
-                action = SpriteAction()
+                action = SuperTuxSpriteAction()
                 action.parse(i[1:])
                 self.actions[action.name] = action
                 if self.actions_default is None or action.name == "default":

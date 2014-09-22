@@ -99,11 +99,13 @@ class SuperTuxTileset(Tileset):
                     image = get_value_from_tree(['images', '_'], data, "tiles/auxiliary/notile.png")
 
                 if isinstance(image, str):
-                    pixelbuffer = PixelBuffer.from_file(os.path.join(Config.current.datadir, "images", image))
+                    pixelbuffer = PixelBuffer.from_file(
+                        os.path.join(Config.current.datadir, "images", image))
                 elif isinstance(image, list):
                     if image[0] == "region":
-                        pixelbuffer = PixelBuffer.subregion_from_file(os.path.join(Config.current.datadir, "images", image[1]),
-                                                                      image[2], image[3], image[4], image[5])
+                        pixelbuffer = PixelBuffer.subregion_from_file(
+                            os.path.join(Config.current.datadir, "images", image[1]),
+                            image[2], image[3], image[4], image[5])
 
                 if not hidden:
                     if tile_id == 0 or not(pixelbuffer):

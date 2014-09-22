@@ -24,7 +24,7 @@ from .gameobj import GameObj
 from .gui import SuperTuxGUI
 from .level import Level
 from .sector import Sector
-from .sprite import Sprite
+from .sprite import SuperTuxSprite
 from .tilemap import SuperTuxTileMap
 from .tileset import SuperTuxTileset
 from .util import load_lisp
@@ -35,7 +35,7 @@ from .supertux import main
 
 __all__ = ["game_objects", "create_gameobject",
            "create_gameobject_from_data", "find_game_object",
-           "GameObj", "SuperTuxGUI", "Level", "Sector", "Sprite",
+           "GameObj", "SuperTuxGUI", "Level", "Sector", "SuperTuxSprite",
            "SuperTuxTileMap", "SuperTuxTileset", "load_lisp",
            "WorldMap", "WorldmapObject", "main", "SuperTuxMenuBar",
            "SuperTuxToolbox", "SuperTuxButtonPanel"]

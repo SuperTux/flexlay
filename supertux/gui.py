@@ -212,10 +212,9 @@ class SuperTuxGUI:
             self.button_panel.minimap_icon.set_down()
 
     def gui_toggle_grid(self):
-        tilemap = self.workspace.get_map().metadata.foreground.tilemap_layer
-        tilemap.set_draw_grid(not tilemap.get_draw_grid())
+        self.workspace.get_map().draw_grid = not self.workspace.get_map().draw_grid
 
-        if tilemap.get_draw_grid():
+        if not self.workspace.get_map().draw_grid:
             self.button_panel.grid_icon.set_down()
         else:
             self.button_panel.grid_icon.set_up()

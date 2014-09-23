@@ -34,6 +34,7 @@ class EditorMap:
         self.undo_stack = []
         self.sig_change = Signal()
         self.metadata = None
+        self.draw_grid = False
 
     def add_layer(self, layer, pos=-1):
         assert pos == -1 or (pos >= 0 and pos < len(self.layers))
@@ -47,9 +48,33 @@ class EditorMap:
         self.serial += 1
 
     def draw_gui(self, gc):
-        rect = self.get_bounding_rect()
-        if rect != Rect(0, 0, 0, 0):
-            gc.draw_rect(rect, self.foreground_color)
+        bounding_rect = self.get_bounding_rect()
+        if bounding_rect != Rect(0, 0, 0, 0):
+            if self.draw_grid:
+                rect = Rect(gc.get_clip_rect())
+
+                start_x = rect.left // 32
+                start_y = rect.top // 32
+                end_x = rect.right // 32 + 1
+                end_y = rect.bottom // 32 + 1
+                tile_size = 32
+
+                for y in range(start_y, end_y):
+                    gc.draw_line(start_x * tile_size,
+                                 y * tile_size,
+                                 end_x * tile_size,
+                                 y * tile_size,
+                                 Color(150, 150, 150))
+
+                for x in range(start_x, end_x):
+                    gc.draw_line(x * tile_size,
+                                 start_y * tile_size,
+                                 x * tile_size,
+                                 end_y * tile_size,
+                                 Color(150, 150, 150))
+
+            # bounding rect
+            gc.draw_rect(bounding_rect, self.foreground_color)
 
     def draw(self, gc):
         for layer in self.layers:

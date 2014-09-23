@@ -15,9 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from flexlay import Sprite
 from flexlay.util import sexpr_read_from_file
-from .sprite import SuperTuxSprite
 
 
 def load_lisp(filename, root_symbol):
@@ -32,18 +30,6 @@ def load_lisp(filename, root_symbol):
             raise Exception("Error: '%s' is not a '%s' file" % (filename, root_symbol))
         else:
             return tree
-
-
-def load_cl_sprite(filename):
-    if filename[-4:] == ".png":
-        sprite = Sprite.from_file(filename)
-    elif filename[-7:] == ".sprite":
-        supertux_sprite = SuperTuxSprite(filename)
-        sprite = supertux_sprite.get_cl_sprite()
-    else:
-        raise Exception("Unsupported sprite format '%s'" % filename)
-
-    return sprite
 
 
 # EOF #

@@ -18,9 +18,8 @@
 import subprocess
 import os
 
-from flexlay import (Color, ObjectBrush, Sprite, InputEvent,
-                     ObjMapRectObject, ObjMapPathNode, Config,
-                     ToolContext)
+from flexlay import (Color, ObjectBrush, InputEvent, ObjMapRectObject,
+                     ObjMapPathNode, Config, ToolContext)
 from flexlay.math import Point, Rect, Size
 from flexlay.tools import (TilePaintTool, TileBrushCreateTool,
                            TileMapSelectTool, TileFillTool,
@@ -37,7 +36,7 @@ from .tileset import SuperTuxTileset
 from .button_panel import SuperTuxButtonPanel
 from .menubar import SuperTuxMenuBar
 from .toolbox import SuperTuxToolbox
-from .util import load_cl_sprite
+from .sprite import SuperTuxSprite
 
 
 BACKGROUND_LAYER = 1
@@ -78,8 +77,8 @@ class SuperTuxGUI:
         self.objectselector = self.gui.create_object_selector(42, 42)
         self.editor_map.sig_drop.connect(self.on_object_drop)
         for objectdata in game_objects:
-            sprite = load_cl_sprite(os.path.join(Config.current.datadir, objectdata[1]))
-            self.objectselector.add_brush(ObjectBrush(sprite, objectdata))
+            st_sprite = SuperTuxSprite.from_file(os.path.join(Config.current.datadir, objectdata[1]))
+            self.objectselector.add_brush(ObjectBrush(st_sprite.get_sprite(), objectdata))
 
         self.tileselector = self.gui.create_tile_selector()
         self.tileselector.set_tileset(SuperTuxTileset.current)

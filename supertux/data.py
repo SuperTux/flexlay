@@ -18,10 +18,11 @@
 import os
 
 from flexlay import (Color, ObjMapSpriteObject, ObjMapRectObject,
-                     ObjectAddCommand, Sprite, Config)
+                     ObjectAddCommand, Config)
 from flexlay.math import Point, Pointf, Rect, Size
 from flexlay.util import get_value_from_tree
 
+from .sprite import SuperTuxSprite
 from .gameobj import (BadGuy, Dispenser, SpawnPoint, ResetPoint,
                       AmbientSound, SimpleObject, SimpleTileObject,
                       Powerup, SecretArea, SequenceTrigger, Door,
@@ -37,7 +38,7 @@ game_objects = [
     #  lambda data, sexpr: SimpleObject("bell")],
     ["angrystone", "images/creatures/angrystone/angrystone.sprite", "sprite",
      lambda data, sexpr: BadGuy("angrystone")],
-    ["bell", "images/objects/resetpoints/bell.sprite", "sprite",
+    ["bell", "images/objects/resetpoints/default-resetpoint.sprite", "sprite",
      lambda data, sexpr: BadGuy("bell")],
     ["bicycle-platform", "images/engine/editor/bicycleplatform.png", "sprite",
      lambda data, sexpr: BadGuy("bicycle-platform")],
@@ -195,7 +196,7 @@ game_objects = [
      lambda data, sexpr: SimpleObject("rock")],
     ["unstable_tile", "images/objects/unstable_tile/crumbling-1.png", "sprite",
      lambda data, sexpr: SimpleTileObject(data, "unstable_tile", sexpr)],
-    ["infoblock", "images/engine/editor/infoblock.png", "sprite",
+    ["infoblock", "images/objects/bonus_block/infoblock.sprite", "sprite",
      lambda data, sexpr: InfoBlock(data, sexpr)],
     ["powerup", "images/engine/editor/powerup.png", "sprite",
      lambda data, sexpr: Powerup(data, sexpr)],
@@ -250,9 +251,8 @@ def create_gameobject(editormap, objmap, data, pos, sexpr):
 
     # Creates a gameobject the given position, data is the entry in the game_objects table
     if kind == "sprite":
-        sprite = Sprite.from_file(os.path.join(Config.current.datadir, spritefile))
-
-        obj = ObjMapSpriteObject(sprite, pos, None)
+        sprite = SuperTuxSprite.from_file(os.path.join(Config.current.datadir, spritefile))
+        obj = ObjMapSpriteObject(sprite.get_sprite(), pos, None)
         gobj = func(obj, sexpr)
         obj.metadata = gobj
         gobj.set_obj(obj)

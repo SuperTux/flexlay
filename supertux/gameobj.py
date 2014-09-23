@@ -82,7 +82,8 @@ class SecretArea(GameObj):
     def save(self, writer, obj):
         rect = self.data.get_rect()
         writer.begin_list("secretarea")
-        writer.write_string("fade-tilemap", self.fade_tilemap)
+        if self.fade_tilemap:
+            writer.write_string("fade-tilemap", self.fade_tilemap)
         writer.write_inline_rect(rect)
         if self.message:
             writer.write_tr_string("message", self.message)
@@ -392,7 +393,7 @@ class ParticleSystem(GameObj):
         self.layer = get_value_from_tree(["layer", "_"], sexpr, -1)
 
     def save(self, writer, obj):
-        writer.begin_list("particles")
+        writer.begin_list("particles-%s" % self.kind)
         if self.layer != -1:
             writer.write_int("layer", self.layer)
         writer.end_list()

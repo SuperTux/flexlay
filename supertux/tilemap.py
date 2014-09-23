@@ -31,6 +31,8 @@ class SuperTuxTileMap:
         height = get_value_from_tree(["height", "_"], data, 15)
         result.solid = get_value_from_tree(["solid", "_"],  data, False)
         result.z_pos = get_value_from_tree(["z-pos", "_"],  data, 0)
+        result.speed = get_value_from_tree(["speed", "_"],  data, 1.0)
+        result.speed_y = get_value_from_tree(["speed-y", "_"],  data, 1.0)
         result.name = get_value_from_tree(["name", "_"],  data, "")
 
         result.tilemap_layer = TilemapLayer(SuperTuxTileset.current, width, height)
@@ -51,15 +53,18 @@ class SuperTuxTileMap:
         self.z_pos = 0
         self.name = ""
         self.speed = 1.0
+        self.speed_y = 1.0
         self.name = "interactive"
         self.tilemap_layer = None
 
     def save(self, writer):
         writer.begin_list("tilemap")
         writer.write_bool("solid", self.solid)
-        writer.write_int("z-pos", self.z_pos)
         if self.speed != 1.0:
             writer.write_float("speed", self.speed)
+        if self.speed_y != 1.0:
+            writer.write_float("speed-y", self.speed)
+        writer.write_int("z-pos", self.z_pos)
         if self.name:
             writer.write_string("name", self.name)
         writer.write_int("width", self.tilemap_layer.width)

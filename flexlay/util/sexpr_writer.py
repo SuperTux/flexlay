@@ -89,10 +89,11 @@ class SExprWriter:
         self.write_int("y", pos.y)
 
     def write_inline_rect(self, rect):
-        self.write_int("x", rect.left)
-        self.write_int("y", rect.top)
+        # ugly this way around, but for compatibilty with the C# supertux-editor
         self.write_int("width", rect.width)
         self.write_int("height", rect.height)
+        self.write_int("x", rect.left)
+        self.write_int("y", rect.top)
 
     def write_vector(self, name, values):
         self.indent()

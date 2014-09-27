@@ -128,7 +128,7 @@ class Sector:
                 self.cameramode = "normal"
                 # TODO...
             else:
-                obj = supertux_gameobj_factory.create_gameobject(name, data)
+                obj = supertux_gameobj_factory.create_gameobj(name, data)
                 if obj is None:
                     print("Error: Couldn't resolve object type: ", name)
                     print("Sector: Unhandled tag: ", name)
@@ -160,7 +160,7 @@ class Sector:
         writer.end_list()
 
         for obj in self.objects.get_objects():
-            obj.metadata.save(writer, obj)
+            obj.metadata.write(writer, obj)
 
         for tilemap in self.tilemaps:
             tilemap.save(writer)

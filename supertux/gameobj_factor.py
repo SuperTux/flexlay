@@ -22,7 +22,7 @@ from flexlay import ObjectBrush, Config
 from .sprite import SuperTuxSprite
 from .gameobj import (BadGuy, Dispenser, SpawnPoint, ResetPoint,
                       AmbientSound, SimpleObject, SimpleTileObject,
-                      Powerup, SecretArea, SequenceTrigger, Door,
+                      Powerup, SecretArea, SequenceTrigger,
                       Background, Gradient, ParticleSystem, Platform,
                       ScriptedObject, InfoBlock, LevelTime, Decal)
 
@@ -50,7 +50,7 @@ class SuperTuxGameObjFactory:
         else:
             _, constructor = data
             print(constructor, pos)
-            obj = constructor([])
+            obj = constructor()
             obj.objmap_object.pos = pos
             return obj
 
@@ -60,7 +60,9 @@ class SuperTuxGameObjFactory:
             print("couldn't create: %r" % identifier)
         else:
             _, constructor = data
-            return constructor(sexpr)
+            obj = constructor()
+            obj.read(sexpr)
+            return obj
 
     def create_object_brushes(self):
         return [ObjectBrush(SuperTuxSprite.from_file(os.path.join(Config.current.datadir, sprite)).get_sprite(),
@@ -71,16 +73,16 @@ class SuperTuxGameObjFactory:
         self.objects[gameobj_class.identifier] = (gameobj_class.sprite, gameobj_class)
 
     def add_badguy(self, identifier, sprite):
-        self.objects[identifier] = (sprite, lambda sexpr: BadGuy(identifier, sprite))
+        self.objects[identifier] = (sprite, lambda: BadGuy(identifier, sprite))
 
     def add_simple_object(self, identifier, sprite):
-        self.objects[identifier] = (sprite, lambda sexpr: SimpleObject(identifier, sprite))
+        self.objects[identifier] = (sprite, lambda: SimpleObject(identifier, sprite))
 
     def add_simple_tile(self, identifier, sprite):
-        self.objects[identifier] = (sprite, lambda sexpr: SimpleTileObject(identifier, sprite))
+        self.objects[identifier] = (sprite, lambda: SimpleTileObject(identifier, sprite))
 
     def add_particle_system(self, identifier, sprite, kind):
-        self.objects[identifier] = (sprite, lambda sexpr: ParticleSystem(kind, sprite))
+        self.objects[identifier] = (sprite, lambda: ParticleSystem(kind, sprite))
 
     def init_factories(self):
         # ["igel", "", "sprite", lambda data, sexpr: BadGuy("igel")]

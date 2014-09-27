@@ -15,6 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from flexlay.math import Point
 from flexlay.util import get_value_from_tree
 
 
@@ -27,10 +28,10 @@ class Property:
         self.default = default
         self.optional = optional
 
-    def read(self, sexpr):
-        self.value = get_value_from_tree([self.identifier, "_"],  sexpr, 0)
+    def read(self, sexpr, obj):
+        self.value = get_value_from_tree([self.identifier, "_"],  sexpr, self.default)
 
-    def write(self, writer):
+    def write(self, writer, obj):
         pass
 
     def property_dialog(self, dialog):
@@ -39,17 +40,14 @@ class Property:
 
 class BoolProperty(Property):
 
-    def read(self, sexpr):
-        self.value = get_value_from_tree([self.identifier, "_"],  sexpr, 0)
-
     def property_dialog(self, dialog):
         dialog.add_int(self.label, self.value)
 
 
 class IntProperty(Property):
 
-    def read(self, sexpr):
-        self.value = get_value_from_tree([self.identifier, "_"],  sexpr, 0)
+    def __init__(self, label, identifier, default=0, optional=False):
+        super().__init__(label, identifier, default, optional)
 
     def property_dialog(self, dialog):
         dialog.add_int(self.label, self.value)
@@ -57,8 +55,8 @@ class IntProperty(Property):
 
 class FloatProperty(Property):
 
-    def read(self, sexpr):
-        self.value = get_value_from_tree([self.identifier, "_"],  sexpr, 0.0)
+    def __init__(self, label, identifier, default=0.0, optional=False):
+        super().__init__(label, identifier, default, optional)
 
     def property_dialog(self, dialog):
         dialog.add_int(self.label, self.value)
@@ -66,10 +64,10 @@ class FloatProperty(Property):
 
 class StringProperty(Property):
 
-    def read(self, sexpr):
-        pass
+    def __init__(self, label, identifier, default="", optional=False):
+        super().__init__(label, identifier, default, optional)
 
-    def write(self, writer):
+    def write(self, writer, obj):
         pass
 
 
@@ -88,9 +86,6 @@ class DirectionProperty(EnumProperty):
 
 class PosProperty(Property):
 
-    def read(self, sexpr):
-        self.value = get_value_from_tree([self.identifier, "_"],  sexpr, 0.0)
-
     def property_dialog(self, dialog):
         dialog.add_int(self.label, self.value)
 
@@ -100,13 +95,12 @@ class InlinePosProperty(Property):
     def __init__(self):
         pass
 
-    def read(self, sexpr):
-        x = get_value_from_tree(["x", "_"],  sexpr, 0.0)
-        y = get_value_from_tree(["y", "_"],  sexpr, 0.0)
-        self.obj.set_pos(x, y)
+    def read(self, sexpr, obj):
+        obj.pos.x = get_value_from_tree(["x", "_"],  sexpr, 0.0)
+        obj.pos.y = get_value_from_tree(["y", "_"],  sexpr, 0.0)
 
-    def write(self, writer):
-        writer.write_inline_point(self.pos)
+    def write(self, writer, obj):
+        writer.write_inline_point(obj.pos)
 
     def property_dialog(self, dialog):
         pass
@@ -117,16 +111,15 @@ class InlineRectProperty(Property):
     def __init__(self):
         pass
 
-    def read(self, sexpr):
-        x = get_value_from_tree(["x", "_"],  sexpr, 0.0)
-        y = get_value_from_tree(["y", "_"],  sexpr, 0.0)
-        width = get_value_from_tree(["width", "_"],  sexpr, 0.0)
-        height = get_value_from_tree(["height", "_"],  sexpr, 0.0)
+    def read(self, sexpr, obj):
+        obj.pos.x = get_value_from_tree(["x", "_"],  sexpr, 0.0)
+        obj.pos.y = get_value_from_tree(["y", "_"],  sexpr, 0.0)
+        obj.size.width = get_value_from_tree(["width", "_"],  sexpr, 0.0)
+        obj.size.height = get_value_from_tree(["height", "_"],  sexpr, 0.0)
 
-        # do stuff
-
-    def write(self, writer):
-        writer.write_inline_rect(self.rect)
+    def write(self, writer, obj):
+        writer.write_inline_point(obj.pos)
+        writer.write_inline_size(obj.size)
 
 
 class SpriteProperty(StringProperty):
@@ -162,10 +155,10 @@ class TilemapProperty(StringProperty):
     def __init__(self, label, identifier):
         super().__init__(label, identifier, None)
 
-    def read(self, sexpr):
+    def read(self, sexpr, obj):
         pass
 
-    def write(self, writer):
+    def write(self, writer, obj):
         pass
 
 

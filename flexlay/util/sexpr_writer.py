@@ -88,6 +88,10 @@ class SExprWriter:
         self.write_int("x", pos.x)
         self.write_int("y", pos.y)
 
+    def write_inline_size(self, size):
+        self.write_int("width", size.width)
+        self.write_int("height", size.height)
+
     def write_inline_rect(self, rect):
         # ugly this way around, but for compatibilty with the C# supertux-editor
         self.write_int("width", rect.width)

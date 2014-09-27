@@ -52,35 +52,26 @@ class GridConstrain:
 
 class GameObj:
 
-    def __init__(self):
-        self.obj = None
-
-    def property_dialog(self, gui):
-        print("Object ", type(self), " has no properties")
-
-    def set_obj(self, obj):
-        self.obj = obj
-
-
-class PropertyGameObj:
+    label = None
+    identifier = None
+    properties = []
+    constraints = []
 
     def __init__(self):
-        self.label = None
-        self.identifier = None
-        self.properties = []
-        self.constraints = []
+        pass
 
     def add_property(self, prop):
         self.properties.append(prop)
 
-    def load(self, sexpr):
+    def read(self, sexpr):
+        print(self.properties)
         for prop in self.properties:
-            prop.read(sexpr)
+            prop.read(sexpr, self.objmap_object)
 
-    def save(self, writer, obj):
+    def write(self, writer, obj):
         writer.begin_list(self.identifier)
         for prop in self.properties:
-            prop.write(writer)
+            prop.write(writer, obj)
         writer.end_list()
 
     def property_dialog(self, gui):
@@ -93,7 +84,7 @@ class PropertyGameObj:
         dialog.set_callback(on_callback)
 
 
-class ResetPoint(PropertyGameObj):
+class ResetPoint(GameObj):
 
     label = "ResetPoint"
     identifier = "firefly"
@@ -102,21 +93,26 @@ class ResetPoint(PropertyGameObj):
     # ["bell", "images/objects/bell/bell.sprite", "sprite",
     #  lambda data, sexpr: SimpleObject("bell")],
 
-    def __init__(self, sexpr):
+    def __init__(self):
         super().__init__()
-        self.add_property([
+
+        self.objmap_object = make_sprite_object(self, self.sprite)
+
+        self.properties = [
             InlinePosProperty()
-        ])
+        ]
 
 
-class Decal(PropertyGameObj):
+class Decal(GameObj):
 
     label = "Decal"
     identifier = "decal"
     sprite = "images/engine/editor/resetpoint.png"
 
-    def __init__(self, sexpr):
+    def __init__(self):
         super().__init__()
+
+        self.objmap_object = make_sprite_object(self, self.sprite)
 
         self.properties = [
             InlinePosProperty(),
@@ -125,16 +121,16 @@ class Decal(PropertyGameObj):
         ]
 
 
-class SecretArea(PropertyGameObj):
+class SecretArea(GameObj):
 
     label = "SecretArea"
     identifier = "secretarea"
     sprite = "images/engine/editor/secretarea.png"
 
-    def __init__(self, sexpr):
+    def __init__(self):
         super().__init__()
 
-        self.objmap_object = make_rect_object(self, Color(255, 255, 0))
+        self.objmap_object = make_rect_object(self, Color(0, 255, 0))
 
         self.properties = [
             InlineRectProperty(),
@@ -144,13 +140,13 @@ class SecretArea(PropertyGameObj):
         ]
 
 
-class AmbientSound(PropertyGameObj):
+class AmbientSound(GameObj):
 
     label = "AmbientSound"
     identifier = "ambient_sound"
     sprite = "images/engine/editor/ambientsound.png"
 
-    def __init__(self, sexpr):
+    def __init__(self):
         super().__init__()
 
         self.objmap_object = make_rect_object(self, Color(255, 0, 0))
@@ -164,24 +160,24 @@ class AmbientSound(PropertyGameObj):
         ]
 
 
-class SequenceTrigger(PropertyGameObj):
+class SequenceTrigger(GameObj):
 
     label = "SequenceTrigger"
     identifier = "sequencetrigger"
     sprite = "images/engine/editor/sequencetrigger.png"
 
-    def __init__(self, sexpr):
+    def __init__(self):
         super().__init__()
 
         self.objmap_object = make_rect_object(self, Color(255, 0, 0))
 
         self.properties = [
             InlineRectProperty(),
-            StringProperty("Sequence", "sequence")
+            StringProperty("Sequence", "sequence", "")
         ]
 
 
-class BadGuy(PropertyGameObj):
+class BadGuy(GameObj):
 
     def __init__(self, kind, sprite_filename):
         super().__init__()
@@ -203,7 +199,7 @@ class Dispenser(GameObj):
     identifier = "dispenser"
     sprite = "images/creatures/dispenser/working.png"
 
-    def __init__(self, sexpr):
+    def __init__(self):
         super().__init__()
 
         self.objmap_object = make_sprite_object(self, self.sprite)
@@ -221,7 +217,7 @@ class Platform(GameObj):
     identifier = "platform"
     sprite = "images/objects/flying_platform/flying_platform-0.png"
 
-    def __init__(self, sexpr):
+    def __init__(self):
         super().__init__()
 
         self.objmap_object = make_sprite_object(self, self.sprite)
@@ -240,7 +236,7 @@ class SpawnPoint(GameObj):
     identifier = "spawnpoint"
     sprite = "images/engine/editor/spawnpoint.png"
 
-    def __init__(self, sexpr):
+    def __init__(self):
         super().__init__()
 
         self.objmap_object = make_sprite_object(self, self.sprite)
@@ -265,7 +261,7 @@ class SimpleObject(GameObj):
 
 class SimpleTileObject(GameObj):
 
-    def __init__(self, kind, sexpr):
+    def __init__(self, kind):
         super().__init__()
 
         self.label = kind
@@ -284,7 +280,7 @@ class InfoBlock(GameObj):
     identifier = "infoblock"
     sprite = "images/objects/bonus_block/infoblock.sprite"
 
-    def __init__(self, sexpr):
+    def __init__(self):
         super().__init__()
 
         self.objmap_object = make_sprite_object(self, self.sprite)
@@ -304,7 +300,7 @@ class Powerup(GameObj):
     identifier = "powerup"
     sprite = "images/engine/editor/powerup.png"
 
-    def __init__(self, sexpr):
+    def __init__(self):
         super().__init__()
 
         self.objmap_object = make_sprite_object(self, self.sprite)
@@ -320,7 +316,7 @@ class Powerup(GameObj):
 
 class ParticleSystem(GameObj):
 
-    def __init__(self, kind, sexpr):
+    def __init__(self, kind):
         super().__init__()
 
         self.objmap_object = make_sprite_object(self, self.sprite)
@@ -338,7 +334,7 @@ class Gradient(GameObj):
     identifier = "gradient"
     sprite = "images/engine/editor/gradient.png"
 
-    def __init__(self, sexpr):
+    def __init__(self):
         super().__init__()
 
         self.objmap_object = make_sprite_object(self, self.sprite)
@@ -356,7 +352,7 @@ class Background(GameObj):
     identifier = "background"
     sprite = "images/engine/editor/background.png"
 
-    def __init__(self, sexpr):
+    def __init__(self):
         super().__init__()
 
         self.objmap_object = make_sprite_object(self, self.sprite)
@@ -371,9 +367,9 @@ class Background(GameObj):
 
 class UnimplementedObject(GameObj):
 
-    def __init__(self, sexpr):
+    def __init__(self):
         super().__init__()
-        self.sexpr = sexpr
+        # self.sexpr = sexpr
 
     def save(self, f):
         f.write("           (sexpr %s)\n" % self.sexpr)
@@ -386,7 +382,7 @@ class LevelTime(GameObj):
     identifier = "leveltime"
     sprite = "images/engine/editor/clock.png"
 
-    def __init__(self, sexpr):
+    def __init__(self):
         super().__init__()
 
         self.properties = [
@@ -398,7 +394,7 @@ class Door(GameObj):
 
     sprite = "images/objects/door/door-0.png"
 
-    def __init__(self, kind, sexpr):
+    def __init__(self, kind):
         super().__init__()
 
         self.objmap_object = make_sprite_object(self, self.sprite)
@@ -421,9 +417,6 @@ class PathNode(GameObj):
         super().__init__()
         self.node = node
 
-    def save(self, writer, obj):
-        pass
-
 
 class ScriptedObject(GameObj):
 
@@ -431,7 +424,7 @@ class ScriptedObject(GameObj):
     identifier = "scriptedobject"
     sprite = "images/engine/editor/scriptedobject.png"
 
-    def __init__(self, sexpr):
+    def __init__(self):
         super().__init__()
 
         self.properties = [

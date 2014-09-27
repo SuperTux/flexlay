@@ -15,12 +15,11 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from flexlay.util import get_value_from_tree
 from flexlay import ObjectLayer, EditorMap
 
-from .data import create_gameobject_from_data
 from .tilemap import SuperTuxTileMap
 from .gameobj import PathNode
+from .gameobj_factor import supertux_gameobj_factory
 
 
 class Sector:
@@ -87,85 +86,6 @@ class Sector:
         self.editormap.metadata = self
         return self
 
-    def load_v1(self, data):
-        self.name = "main"
-        self.music = get_value_from_tree(["music", "_"], data, "")
-        self.gravity = get_value_from_tree(["gravity", "_"], data, 10.0)
-
-        self.width = get_value_from_tree(["width", "_"], data, 20)
-        self.height = get_value_from_tree(["height", "_"], data, 15)
-
-        foreground = SuperTuxTileMap.from_size(self.width, self.height)
-        foreground.set_data(get_value_from_tree(["foreground-tm"], data, []))
-
-        interactive = SuperTuxTileMap.from_size(self.width, self.height)
-        interactive.set_data(get_value_from_tree(["interactive-tm"], data, []))
-
-        background = SuperTuxTileMap.from_size(self.width, self.height)
-        background.set_data(get_value_from_tree(["background-tm"], data, []))
-
-        self.tilemaps.append(foreground)
-        self.tilemaps.append(interactive)
-        self.tilemaps.append(background)
-
-        self.cameramode = "normal"
-
-        self.editormap = EditorMap()
-
-        self.objects = ObjectLayer()
-
-        for i in get_value_from_tree(["objects"], data, []):
-            (name, odata) = i[0], i[1:]
-            # fix some old object names
-            if name == "money":
-                name = "jumpy"
-            if name == "laptop":
-                name = "mriceblock"
-            create_gameobject_from_data(self.editormap, self.objects, name, odata)
-
-        start_pos_x = get_value_from_tree(["start_pos_x", "_"], data, 0)
-        start_pos_y = get_value_from_tree(["start_pos_y", "_"], data, 0)
-        sexpr = [["name", "main"], ["x", start_pos_x], ["y", start_pos_y]]
-        create_gameobject_from_data(self.editormap, self.objects, "spawnpoint", sexpr)
-
-        background = get_value_from_tree(["background", "_"], data, "")
-        if background != "":
-            sexpr = [["image", background], ["speed", 0.5]]
-            create_gameobject_from_data(self.editormap, self.objects, "background", sexpr)
-        else:
-            sexpr = [["top_color",
-                      get_value_from_tree(["bkgd_red_top", "_"], data, 0),
-                      get_value_from_tree(["bkgd_green_top", "_"], data, 0),
-                      get_value_from_tree(["bkgd_blue_top", "_"], data, 0)],
-                    ["bottom_color",
-                     get_value_from_tree(["bkgd_red_bottom", "_"], data, 0),
-                     get_value_from_tree(["bkgd_green_bottom", "_"], data, 0),
-                     get_value_from_tree(["bkgd_blue_bottom", "_"], data, 0)],
-                    ["speed", 0.5]]
-            create_gameobject_from_data(self.editormap, self.objects, "background", sexpr)
-
-        partsys = get_value_from_tree(["particle_system", "_"], data, "")
-        if partsys == "snow":
-            sexpr = []
-            create_gameobject_from_data(self.editormap, self.objects, 'particles-snow', sexpr)
-        elif partsys == "rain":
-            sexpr = []
-            create_gameobject_from_data(self.editormap, self.objects, 'particles-rain', sexpr)
-        elif partsys == "clouds":
-            sexpr = []
-            create_gameobject_from_data(self.editormap, self.objects, 'particles-clouds', sexpr)
-        elif partsys == "":
-            pass
-        else:
-            print("Unknown particle system type %s" % partsys)
-
-        for tilemap in self.tilemaps:
-            self.editormap.add_layer(tilemap)
-        self.editormap.add_layer(self.objects)
-
-        # FIXME: Data might not get freed since its 'recursively' refcounted
-        self.editormap.metadata = self
-
     def load_v2(self, data):
         self.name = "<No Name>"
         self.music = ""
@@ -178,10 +98,9 @@ class Sector:
 
         self.tilemaps = []
 
-        self.editormap = EditorMap()
-
         self.objects = ObjectLayer()
-        # self.sketch = SketchLayer()
+        self.editormap = EditorMap()
+        self.editormap.add_layer(self.objects)
 
         for i in data:
             (name, data) = i[0], i[1:]
@@ -191,8 +110,6 @@ class Sector:
                 self.ambient_light = data
             elif name == "gravity":
                 self.gravity = data[0]
-            elif name == "ambient-light":
-                pass  # GRUMBEL self.ambient_light = data[0]
             elif name == "music":
                 self.music = data[0]
             elif name == "init-script":
@@ -200,6 +117,7 @@ class Sector:
             elif name == "tilemap":
                 tilemap = SuperTuxTileMap.from_sexpr(data)
                 self.tilemaps.append(tilemap)
+                self.editormap.add_layer(tilemap.tilemap_layer)
 
                 # GRUMBEL: incorrect
                 if tilemap.solid:
@@ -210,13 +128,13 @@ class Sector:
                 self.cameramode = "normal"
                 # TODO...
             else:
-                create_gameobject_from_data(self.editormap, self.objects, name, data)
+                obj = supertux_gameobj_factory.create_gameobject(name, data)
+                if obj is None:
+                    print("Error: Couldn't resolve object type: ", name)
+                    print("Sector: Unhandled tag: ", name)
+                else:
+                    self.objects.add_object(obj.objmap_object)
 
-        for tilemap in self.tilemaps:
-            self.editormap.add_layer(tilemap.tilemap_layer)
-
-        self.editormap.add_layer(self.objects)
-        # self.editormap.add_layer(self.sketch)
         self.editormap.metadata = self
 
     def save(self, writer):

@@ -37,7 +37,7 @@ class Level:
         print("VERSION:", level.filename, " ",  level.version)
 
         if level.version == 1:
-            level.parse_v1(data)
+            raise Exception("version 1 levels not supported at the moment")
         else:
             level.parse_v2(data)
 
@@ -80,17 +80,6 @@ class Level:
         if self.current_sector is None:
             print("Error: No main sector defined:", self.sectors)
             self.current_sector = self.sectors[0]
-
-    def parse_v1(self, data):
-        sector = Sector(self)
-        sector.load_v1(data)
-
-        self.sectors = []
-        self.sectors.append(sector)
-        self.current_sector = sector
-
-        self.name = get_value_from_tree(["name", "_"], data, "no name")
-        self.author = get_value_from_tree(["author", "_"], data, "no author")
 
     def save(self, filename):
         self.save_v2(filename)

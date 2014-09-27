@@ -15,12 +15,11 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from .data import (game_objects, create_gameobject,
-                   create_gameobject_from_data, find_game_object)
 from .button_panel import SuperTuxButtonPanel
 from .toolbox import SuperTuxToolbox
 from .menubar import SuperTuxMenuBar
 from .gameobj import GameObj
+from .gameobj_factor import supertux_gameobj_factory
 from .gui import SuperTuxGUI
 from .level import Level
 from .sector import Sector
@@ -31,14 +30,20 @@ from .util import load_lisp
 from .worldmap import WorldMap
 from .worldmap_object import WorldmapObject
 from .supertux import main
+from .property import (BoolProperty, IntProperty, FloatProperty,
+                       StringProperty, DirectionProperty, PosProperty, InlinePosProperty,
+                       InlineRectProperty, TilemapProperty, ColorProperty, ImageProperty)
 
 
-__all__ = ["game_objects", "create_gameobject",
-           "create_gameobject_from_data", "find_game_object",
-           "GameObj", "SuperTuxGUI", "Level", "Sector", "SuperTuxSprite",
-           "SuperTuxTileMap", "SuperTuxTileset", "load_lisp",
-           "WorldMap", "WorldmapObject", "main", "SuperTuxMenuBar",
-           "SuperTuxToolbox", "SuperTuxButtonPanel"]
+__all__ = ["GameObj", "SuperTuxGUI", "Level",
+           "Sector", "SuperTuxSprite", "SuperTuxTileMap",
+           "SuperTuxTileset", "load_lisp", "WorldMap",
+           "WorldmapObject", "main", "SuperTuxMenuBar",
+           "SuperTuxToolbox", "SuperTuxButtonPanel",
+           "supertux_gameobj_factory",
+           "BoolProperty", "IntProperty", "FloatProperty",
+           "StringProperty", "DirectionProperty", "PosProperty", "InlinePosProperty",
+           "InlineRectProperty", "TilemapProperty", "ColorProperty", "ImageProperty"]
 
 
 # EOF #

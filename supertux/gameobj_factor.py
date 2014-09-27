@@ -24,7 +24,8 @@ from .gameobj import (BadGuy, Dispenser, SpawnPoint, ResetPoint,
                       AmbientSound, SimpleObject, SimpleTileObject,
                       Powerup, SecretArea, SequenceTrigger,
                       Background, Gradient, ParticleSystem, Platform,
-                      ScriptedObject, InfoBlock, LevelTime, Decal)
+                      ScriptedObject, InfoBlock, LevelTime, Decal,
+                      ScriptTrigger)
 
 
 class SuperTuxGameObjFactory:
@@ -98,6 +99,7 @@ class SuperTuxGameObjFactory:
         self.add_object(Decal)
         self.add_object(Dispenser)
         self.add_object(SequenceTrigger)
+        self.add_object(ScriptTrigger)
 
         # ["hatch", "images/objects/hatch/hatch-0.png", "sprite", lambda data, sexpr: Door("hatch", data, sexpr)]
         # self.add_object(Door)
@@ -157,7 +159,6 @@ class SuperTuxGameObjFactory:
         self.add_badguy("poisonivy", "images/creatures/poison_ivy/left-0.png")
         self.add_badguy("pushbutton", "images/objects/pushbutton/pushbutton.sprite")
         self.add_badguy("rustytrampoline", "images/objects/rusty-trampoline/rusty-trampoline.sprite")
-        self.add_badguy("scripttrigger", "images/engine/editor/scripttrigger.png")
         self.add_badguy("short_fuse", "images/creatures/short_fuse/short_fuse.sprite")
         self.add_badguy("skullyhop", "images/creatures/skullyhop/skullyhop.sprite")
         self.add_badguy("smartball", "images/creatures/snowball/left-1.png")

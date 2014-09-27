@@ -116,7 +116,7 @@ class SuperTuxGUI:
         #                            })
         #              menu.add_item(mysprite, "Edit Properties", proc{
         #                                for i in objmap_select_tool.get_selection():
-        #                                  i.get_data().property_dialog()
+        #                                  i.metadata.property_dialog()
         #                              }
         #                            })
         #              menu.run()
@@ -389,7 +389,7 @@ class SuperTuxGUI:
             if len(selection) > 1:
                 print("Warning: Selection to large")
             elif len(selection) == 1:
-                obj = selection[0].get_data()
+                obj = selection[0].metadata
                 obj.property_dialog(self.gui)
             else:
                 print("Warning: Selection is empty")

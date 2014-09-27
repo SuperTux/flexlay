@@ -61,10 +61,6 @@ class ObjectLayer(Layer):
     def get_selection(self, rect):
         selection = []
         for obj in self.objects:
-            print(" Rect(", rect.left, ",", rect.top, ",",
-                  rect.right, ",", rect.bottom, ") ===",
-                  obj.get_pos().x, ",", obj.get_pos().y)
-
             if rect.is_inside(obj.get_pos()):
                 selection.append(obj)
 

@@ -15,8 +15,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from flexlay.math import Point
 from flexlay.util import get_value_from_tree
+from flexlay import Color
 
 
 class Property:
@@ -32,7 +32,8 @@ class Property:
         self.value = get_value_from_tree([self.identifier, "_"],  sexpr, self.default)
 
     def write(self, writer, obj):
-        pass
+        if not self.optional or self.value != self.default:
+            writer.write(self.identifier, self.value)
 
     def property_dialog(self, dialog):
         pass
@@ -67,15 +68,34 @@ class StringProperty(Property):
     def __init__(self, label, identifier, default="", optional=False):
         super().__init__(label, identifier, default, optional)
 
+    def read(self, sexpr, obj):
+        self.value = get_value_from_tree([self.identifier, "_"],  sexpr, self.default)
+
     def write(self, writer, obj):
-        pass
+        if not self.optional or self.value != self.default:
+            writer.write_string(self.identifier, self.value)
+
+    def property_dialog(self, dialog):
+        dialog.add_string(self.label, self.value)
 
 
 class EnumProperty(Property):
 
     def __init__(self, label, identifier, default, values):
-        super().__init__(label, identifier, default)
+        super().__init__(label, identifier, default, optional=True)
         self.values = values
+
+    def read(self, sexpr, obj):
+        self.value = get_value_from_tree([self.identifier, "_"],  sexpr, self.default)
+        if self.value not in self.values:
+            raise RuntimeError("%s: invalid enum value: %r not in %r" % (self.identifier, self.value, self.values))
+
+    def write(self, writer, obj):
+        if not self.optional or self.value != self.default:
+            writer.write_string(self.identifier, self.value)
+
+    def property_dialog(self, dialog):
+        dialog.add_enum(self.label, self.values, self.value)
 
 
 class DirectionProperty(EnumProperty):
@@ -118,48 +138,52 @@ class InlineRectProperty(Property):
         obj.size.height = get_value_from_tree(["height", "_"],  sexpr, 0.0)
 
     def write(self, writer, obj):
-        writer.write_inline_point(obj.pos)
         writer.write_inline_size(obj.size)
+        writer.write_inline_point(obj.pos)
 
 
 class SpriteProperty(StringProperty):
 
     def __init__(self, label, identifier):
-        super().__init__(label, identifier, None)
+        super().__init__(label, identifier, "")
 
 
 class ImageProperty(StringProperty):
 
-    def __init__(self, label, identifier):
-        super().__init__(label, identifier, None)
+    pass
 
 
 class ColorProperty(StringProperty):
 
-    pass
+    def __init__(self, label, identifier):
+        super().__init__(label, identifier, Color())
+
+    def read(self, sexpr, obj):
+        self.value = Color(*get_value_from_tree([self.identifier],  sexpr, Color()))
+
+    def write(self, writer, obj):
+        writer.write_vector(self.identifier, self.value.to_list()[0:3])
+
+    def property_dialog(self, dialog):
+        pass
 
 
 class PathProperty(StringProperty):
 
-    pass
+    def __init__(self, label, identifier):
+        super().__init__(label, identifier, "", optional=True)
 
 
 class SampleProperty(StringProperty):
 
     def __init__(self, label, identifier):
-        super().__init__(label, identifier, None)
+        super().__init__(label, identifier, "", optional=True)
 
 
 class TilemapProperty(StringProperty):
 
     def __init__(self, label, identifier):
-        super().__init__(label, identifier, None)
-
-    def read(self, sexpr, obj):
-        pass
-
-    def write(self, writer, obj):
-        pass
+        super().__init__(label, identifier, "", optional=True)
 
 
 # EOF #

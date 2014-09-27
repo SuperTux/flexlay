@@ -20,7 +20,7 @@ from PyQt4.QtGui import QColor
 
 class Color:
 
-    def __init__(self, r, g, b, a=255):
+    def __init__(self, r=255, g=255, b=255, a=255):
         self.r = r
         self.g = g
         self.b = b
@@ -52,6 +52,9 @@ class Color:
 
     def to_qt(self):
         return QColor(self.r, self.g, self.b, self.a)
+
+    def to_list(self):
+        return [self.r, self.g, self.b, self.a]
 
 
 # EOF #

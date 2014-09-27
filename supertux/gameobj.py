@@ -64,7 +64,6 @@ class GameObj:
         self.properties.append(prop)
 
     def read(self, sexpr):
-        print(self.properties)
         for prop in self.properties:
             prop.read(sexpr, self.objmap_object)
 
@@ -76,10 +75,11 @@ class GameObj:
 
     def property_dialog(self, gui):
         dialog = gui.create_generic_dialog("SecretArea Property Dialog")
-        dialog.add_string("Message: ", self.message)
+        for prop in self.properties:
+            prop.property_dialog(dialog)
 
-        def on_callback(message):
-            self.message = message
+        def on_callback(*args):
+            print(*args)
 
         dialog.set_callback(on_callback)
 
@@ -133,9 +133,9 @@ class SecretArea(GameObj):
         self.objmap_object = make_rect_object(self, Color(0, 255, 0))
 
         self.properties = [
+            TilemapProperty("FadeTilemap", "fade-tilemap"),
             InlineRectProperty(),
             StringProperty("Message", "message", ""),
-            TilemapProperty("FadeTilemap", "fade-tilemap"),
             SpriteProperty("Sprite", "sprite")
         ]
 
@@ -157,6 +157,24 @@ class AmbientSound(GameObj):
             SampleProperty("Sample", "sample", "waterfall"),
             IntProperty("Max Volume", "volume", 1),
             InlineRectProperty()
+        ]
+
+
+class ScriptTrigger(GameObj):
+
+    label = "ScriptTrigger"
+    identifier = "scripttrigger"
+    sprite = "images/engine/editor/scripttrigger.png"
+
+    def __init__(self):
+        super().__init__()
+
+        self.objmap_object = make_rect_object(self, Color(255, 0, 255))
+
+        self.properties = [
+            StringProperty("Script", "script", ""),
+            BoolProperty("Button", "button", False),
+            InlineRectProperty(),
         ]
 
 
@@ -188,8 +206,8 @@ class BadGuy(GameObj):
         self.objmap_object = make_sprite_object(self, self.sprite)
 
         self.properties = [
+            DirectionProperty("Direction", "direction", "left"),
             InlinePosProperty(),
-            DirectionProperty("Direction", "direction", "left")
         ]
 
 
@@ -358,10 +376,12 @@ class Background(GameObj):
         self.objmap_object = make_sprite_object(self, self.sprite)
 
         self.properties = [
-            ImageProperty("Image", "image"),
-            FloatProperty("Speed (X)", "speed"),
-            FloatProperty("Speed (Y)", "speed_y"),
-            IntProperty("Layer", "layer")
+            FloatProperty("Speed (X)", "speed", optional=True),
+            FloatProperty("Speed (Y)", "speed_y", optional=True),
+            ImageProperty("Image (top)", "image-top"),
+            ImageProperty("Image (middle)", "image"),
+            ImageProperty("Image (bottom)", "image-bottom"),
+            IntProperty("Layer", "layer", optional=True)
         ]
 
 

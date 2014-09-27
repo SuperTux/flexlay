@@ -49,6 +49,20 @@ class SExprWriter:
         self.indent()
         self.fout.write(")\n")
 
+    def write(self, name, value):
+        if type(value) == bool:
+            self.write_bool(name, value)
+        elif type(value) == int:
+            self.write_int(name, value)
+        elif type(value) == float:
+            self.write_float(name, value)
+        elif type(value) == str:
+            self.write_string(name, value)
+        elif type(value) == list:
+            self.write_vector(name, value)
+        else:
+            raise RuntimeError("unknown requested in generic write(): %r" % type(value))
+
     def write_bool(self, name, value):
         self.indent()
         self.fout.write("(" + name + " ")

@@ -26,7 +26,7 @@ from .property import (BoolProperty, IntProperty, FloatProperty,
                        InlinePosProperty, InlineRectProperty,
                        TilemapProperty, SpriteProperty,
                        SampleProperty, PathProperty, ColorProperty,
-                       ImageProperty)
+                       ImageProperty, EnumProperty)
 
 
 def make_sprite_object(metadata, filename):
@@ -58,7 +58,7 @@ class GameObj:
     constraints = []
 
     def __init__(self):
-        pass
+        self.objmap_object = None
 
     def add_property(self, prop):
         self.properties.append(prop)
@@ -135,8 +135,8 @@ class SecretArea(GameObj):
         self.properties = [
             TilemapProperty("FadeTilemap", "fade-tilemap"),
             InlineRectProperty(),
-            StringProperty("Message", "message", ""),
-            SpriteProperty("Sprite", "sprite")
+            StringProperty("Message", "message", "", optional=True, translatable=True),
+            SpriteProperty("Sprite", "sprite", "", optional=True)
         ]
 
 
@@ -154,7 +154,7 @@ class AmbientSound(GameObj):
         self.properties = [
             FloatProperty("Distance Factor", "distance_factor", 0.1),
             FloatProperty("Distance Bias", "distance_bias", 200),
-            SampleProperty("Sample", "sample", "waterfall"),
+            SampleProperty("Sample", "sample", ""),
             IntProperty("Max Volume", "volume", 1),
             InlineRectProperty()
         ]
@@ -190,8 +190,8 @@ class SequenceTrigger(GameObj):
         self.objmap_object = make_rect_object(self, Color(255, 0, 0))
 
         self.properties = [
+            StringProperty("Sequence", "sequence", ""),
             InlineRectProperty(),
-            StringProperty("Sequence", "sequence", "")
         ]
 
 
@@ -223,9 +223,9 @@ class Dispenser(GameObj):
         self.objmap_object = make_sprite_object(self, self.sprite)
 
         self.properties = [
+            IntProperty("Cycle", "cycle", 2),
             InlinePosProperty(),
             StringProperty("Badguy", "badguy", "snowball"),
-            IntProperty("Cycle", "cycle", 2)
         ]
 
 
@@ -243,7 +243,7 @@ class Platform(GameObj):
         self.properties = [
             InlinePosProperty(),
             StringProperty("Badguy", "badguy", "snowball"),
-            PathProperty("Path", "use_path", None),
+            PathProperty("Path", "use_path", ""),
             StringProperty("Type", "type", None)
         ]
 
@@ -267,11 +267,15 @@ class SpawnPoint(GameObj):
 
 class SimpleObject(GameObj):
 
-    def __init__(self, kind):
+    def __init__(self, kind, sprite):
         super().__init__()
 
         self.label = kind
         self.identifier = kind
+        self.sprite = sprite
+
+        self.objmap_object = make_sprite_object(self, self.sprite)
+
         self.properties = [
             InlinePosProperty()
         ]
@@ -279,12 +283,53 @@ class SimpleObject(GameObj):
 
 class SimpleTileObject(GameObj):
 
-    def __init__(self, kind):
+    def __init__(self, kind, sprite):
         super().__init__()
 
         self.label = kind
         self.identifier = kind
+        self.sprite = sprite
+
+        self.objmap_object = make_sprite_object(self, self.sprite)
+
         self.properties = [
+            SpriteProperty("Sprite", "sprite"),
+            InlinePosProperty()
+        ]
+        self.constraints = [
+            GridConstrain(32, 32, 16, 16)
+        ]
+
+
+class BonusBlock(GameObj):
+
+    label = "BonusBlock"
+    identifier = "bonusblock"
+    sprite = "images/objects/bonus_block/bonusblock.sprite"
+    values = [
+        "1up",
+        "coin",
+        "custom",
+        "explode",
+        "firegrow",
+        "icegrow",
+        "light",
+        "rain",
+        "script",
+        "star",
+        "trampoline",
+    ]
+
+    def __init__(self):
+        super().__init__()
+
+        self.objmap_object = make_sprite_object(self, self.sprite)
+
+        self.properties = [
+            StringProperty("Message", "message", "", optional=True, translatable=True),
+            StringProperty("Script", "script", "", optional=True),
+            EnumProperty("Contents", "contents", default="star", optional=False, values=self.values),
+            SpriteProperty("Sprite", "sprite"),
             InlinePosProperty()
         ]
         self.constraints = [
@@ -304,7 +349,7 @@ class InfoBlock(GameObj):
         self.objmap_object = make_sprite_object(self, self.sprite)
 
         self.properties = [
-            StringProperty("Message", "message"),
+            StringProperty("Message", "message", "", optional=True, translatable=True),
             InlinePosProperty()
         ]
         self.constraints = [
@@ -334,15 +379,17 @@ class Powerup(GameObj):
 
 class ParticleSystem(GameObj):
 
-    def __init__(self, kind):
+    def __init__(self, kind, sprite):
         super().__init__()
-
-        self.objmap_object = make_sprite_object(self, self.sprite)
 
         self.label = "ParticleSystem (%s)" % kind
         self.identifier = "particles-%s" % kind
+        self.sprite = sprite
+
+        self.objmap_object = make_sprite_object(self, self.sprite)
+
         self.properties = [
-            IntProperty("Layer", "layer")
+            IntProperty("Layer", "layer", 0, optional=True)
         ]
 
 
@@ -360,7 +407,7 @@ class Gradient(GameObj):
         self.properties = [
             ColorProperty("Top Color", "top_color"),
             ColorProperty("Bottom Color", "bottom_color"),
-            IntProperty("Layer", "layer")
+            IntProperty("Layer", "layer", 0, optional=True)
         ]
 
 
@@ -378,9 +425,9 @@ class Background(GameObj):
         self.properties = [
             FloatProperty("Speed (X)", "speed", optional=True),
             FloatProperty("Speed (Y)", "speed_y", optional=True),
-            ImageProperty("Image (top)", "image-top"),
+            ImageProperty("Image (top)", "image-top", optional=True),
             ImageProperty("Image (middle)", "image"),
-            ImageProperty("Image (bottom)", "image-bottom"),
+            ImageProperty("Image (bottom)", "image-bottom", optional=True),
             IntProperty("Layer", "layer", optional=True)
         ]
 
@@ -389,11 +436,16 @@ class UnimplementedObject(GameObj):
 
     def __init__(self):
         super().__init__()
-        # self.sexpr = sexpr
+        self.sexpr = None
 
-    def save(self, f):
-        f.write("           (sexpr %s)\n" % self.sexpr)
-        # TODO
+    def read(self, sexpr):
+        self.sexpr = sexpr
+
+    def write(self, writer, obj):
+        print("Uimplemented:", self.sexpr)
+
+    def property_dialog(self, gui):
+        pass
 
 
 class LevelTime(GameObj):
@@ -405,6 +457,8 @@ class LevelTime(GameObj):
     def __init__(self):
         super().__init__()
 
+        self.objmap_object = make_sprite_object(self, self.sprite)
+
         self.properties = [
             IntProperty("Time", "time", None)
         ]
@@ -412,19 +466,19 @@ class LevelTime(GameObj):
 
 class Door(GameObj):
 
-    sprite = "images/objects/door/door-0.png"
+    label = "Door"
+    identifier = "door"
+    sprite = "images/objects/door/door.sprite"
 
-    def __init__(self, kind):
+    def __init__(self):
         super().__init__()
 
         self.objmap_object = make_sprite_object(self, self.sprite)
 
-        self.label = "Door (%s)" % kind
-        self.identifier = kind
         self.properties = [
-            InlinePosProperty(),
             StringProperty("Sector", "sector"),
             StringProperty("SpawnPoint", "spawnpoint"),
+            InlinePosProperty(),
         ]
         self.constraints = [
             GridConstrain(32, 32, 16, 16)
@@ -447,14 +501,16 @@ class ScriptedObject(GameObj):
     def __init__(self):
         super().__init__()
 
+        self.objmap_object = make_sprite_object(self, self.sprite)
+
         self.properties = [
             InlinePosProperty(),
             StringProperty("Name", "name"),
             SpriteProperty("Sprite", "sprite"),
             IntProperty("Layer", "layer"),
-            BoolProperty("Visible", "visible"),
-            BoolProperty("Physics", "physic-enabled"),
-            BoolProperty("Solid", "solid"),
+            BoolProperty("Visible", "visible", True),
+            BoolProperty("Physics", "physic-enabled", False),
+            BoolProperty("Solid", "solid", False),
         ]
 
 

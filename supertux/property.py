@@ -65,15 +65,16 @@ class FloatProperty(Property):
 
 class StringProperty(Property):
 
-    def __init__(self, label, identifier, default="", optional=False):
+    def __init__(self, label, identifier, default="", optional=False, translatable=False):
         super().__init__(label, identifier, default, optional)
+        self.translatable = translatable
 
     def read(self, sexpr, obj):
         self.value = get_value_from_tree([self.identifier, "_"],  sexpr, self.default)
 
     def write(self, writer, obj):
         if not self.optional or self.value != self.default:
-            writer.write_string(self.identifier, self.value)
+            writer.write_string(self.identifier, self.value, translatable=self.translatable)
 
     def property_dialog(self, dialog):
         dialog.add_string(self.label, self.value)
@@ -81,8 +82,11 @@ class StringProperty(Property):
 
 class EnumProperty(Property):
 
-    def __init__(self, label, identifier, default, values):
-        super().__init__(label, identifier, default, optional=True)
+    def __init__(self, label, identifier, default, optional=False, values=None):
+        if values is None:
+            values = []
+
+        super().__init__(label, identifier, default, optional=optional)
         self.values = values
 
     def read(self, sexpr, obj):
@@ -101,7 +105,7 @@ class EnumProperty(Property):
 class DirectionProperty(EnumProperty):
 
     def __init__(self, label, identifier, default):
-        super().__init__(label, identifier, default, ["left", "right", "auto"])
+        super().__init__(label, identifier, default, optional=True, values=["left", "right", "auto"])
 
 
 class PosProperty(Property):
@@ -110,7 +114,7 @@ class PosProperty(Property):
         dialog.add_int(self.label, self.value)
 
 
-class InlinePosProperty(Property):
+class InlinePosProperty:
 
     def __init__(self):
         pass
@@ -126,7 +130,7 @@ class InlinePosProperty(Property):
         pass
 
 
-class InlineRectProperty(Property):
+class InlineRectProperty:
 
     def __init__(self):
         pass
@@ -141,11 +145,13 @@ class InlineRectProperty(Property):
         writer.write_inline_size(obj.size)
         writer.write_inline_point(obj.pos)
 
+    def property_dialog(self, dialog):
+        pass
+
 
 class SpriteProperty(StringProperty):
 
-    def __init__(self, label, identifier):
-        super().__init__(label, identifier, "")
+    pass
 
 
 class ImageProperty(StringProperty):
@@ -170,14 +176,14 @@ class ColorProperty(StringProperty):
 
 class PathProperty(StringProperty):
 
-    def __init__(self, label, identifier):
-        super().__init__(label, identifier, "", optional=True)
+    def __init__(self, label, identifier, default):
+        super().__init__(label, identifier, default, optional=True)
 
 
 class SampleProperty(StringProperty):
 
-    def __init__(self, label, identifier):
-        super().__init__(label, identifier, "", optional=True)
+    def __init__(self, label, identifier, default):
+        super().__init__(label, identifier, default, optional=True)
 
 
 class TilemapProperty(StringProperty):

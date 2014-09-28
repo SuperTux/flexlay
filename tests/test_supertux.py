@@ -18,7 +18,9 @@
 
 
 from flexlay import Config
+from flexlay.math import Point
 from supertux.level import Level
+from supertux.gameobj_factor import supertux_gameobj_factory
 
 import os
 import io
@@ -31,18 +33,16 @@ test_levelfile = os.path.join(os.path.dirname(__file__), "test.stl")
 class SuperTuxTestCase(unittest.TestCase):
 
     def setUp(self):
-        pass
+        Config.create("supertux-editor")
 
     def tearDown(self):
-        pass
+        Config.current = None
 
     def test_level_load(self):
-        Config.create("supertux-editor")
         level = Level.from_file(test_levelfile)
         self.assertEqual(level.name, "Welcome to Antarctica")
 
     def test_level_save(self):
-        Config.create("supertux-editor")
         level = Level.from_file(test_levelfile)
         with io.StringIO() as out:
         # with open("/tmp/test.stl", "w") as out:
@@ -52,6 +52,15 @@ class SuperTuxTestCase(unittest.TestCase):
     def test_level_new(self):
         level = Level.from_size(400, 300)
         self.assertEqual(level.name, "No Name")
+
+    def test_gameobj_factory_create_object_brushes(self):
+        supertux_gameobj_factory.create_object_brushes()
+
+    def test_gameobj_factory_create_gameobj_at(self):
+        for identifier, (_, _) in supertux_gameobj_factory.objects.items():
+            print(identifier)
+            obj = supertux_gameobj_factory.create_gameobj_at(identifier, Point(0, 0))
+            print(obj)
 
 
 if __name__ == '__main__':

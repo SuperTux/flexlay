@@ -20,12 +20,12 @@ import os.path
 
 from flexlay import ObjectBrush, Config
 from .sprite import SuperTuxSprite
-from .gameobj import (BadGuy, Dispenser, SpawnPoint, ResetPoint,
-                      AmbientSound, SimpleObject, SimpleTileObject,
-                      Powerup, SecretArea, SequenceTrigger,
-                      Background, Gradient, ParticleSystem, Platform,
-                      ScriptedObject, InfoBlock, LevelTime, Decal,
-                      ScriptTrigger)
+from .gameobj import (BadGuy, BonusBlock, Dispenser, Door, SpawnPoint,
+                      ResetPoint, AmbientSound, SimpleObject,
+                      SimpleTileObject, Powerup, SecretArea,
+                      SequenceTrigger, Background, Gradient,
+                      ParticleSystem, Platform, ScriptedObject,
+                      InfoBlock, LevelTime, Decal, ScriptTrigger)
 
 
 class SuperTuxGameObjFactory:
@@ -86,11 +86,9 @@ class SuperTuxGameObjFactory:
         self.objects[identifier] = (sprite, lambda: ParticleSystem(kind, sprite))
 
     def init_factories(self):
-        # ["igel", "", "sprite", lambda data, sexpr: BadGuy("igel")]
-        # ["wingling", "", "sprite", # lambda data, sexpr: BadGuy("wingling")]
-
         self.add_simple_object("point", "images/engine/editor/point.png")
         self.add_simple_object("rock", "images/tiles/blocks/block11.png")
+        self.add_simple_object("heavycoin", "images/objects/coin/heavy_coin.png")
 
         self.add_simple_tile("unstable_tile", "images/objects/unstable_tile/crumbling-1.png")
 
@@ -101,9 +99,8 @@ class SuperTuxGameObjFactory:
         self.add_object(SequenceTrigger)
         self.add_object(ScriptTrigger)
 
-        # ["hatch", "images/objects/hatch/hatch-0.png", "sprite", lambda data, sexpr: Door("hatch", data, sexpr)]
-        # self.add_object(Door)
-
+        self.add_object(BonusBlock)
+        self.add_object(Door)
         self.add_object(Gradient)
         self.add_object(InfoBlock)
         self.add_object(LevelTime)
@@ -120,7 +117,6 @@ class SuperTuxGameObjFactory:
 
         self.add_badguy("angrystone", "images/creatures/angrystone/angrystone.sprite")
         self.add_badguy("bicycle-platform", "images/engine/editor/bicycleplatform.png")
-        self.add_badguy("bonusblock", "images/objects/bonus_block/bonusblock.sprite")
         self.add_badguy("bouncingsnowball", "images/creatures/bouncing_snowball/left-0.png")
         self.add_badguy("candle", "images/objects/candle/candle.sprite")
         self.add_badguy("captainsnowball", "images/creatures/snowball/cpt-left-0.png")
@@ -139,6 +135,7 @@ class SuperTuxGameObjFactory:
         self.add_badguy("hurting_platform", "images/objects/sawblade/sawblade.sprite")
         self.add_badguy("icecrusher", "images/creatures/icecrusher/icecrusher.sprite")
         self.add_badguy("iceflame", "images/creatures/flame/iceflame.sprite")
+        self.add_badguy("igel", "images/creatures/igel/igel.sprite")
         self.add_badguy("invisible_wall", "images/engine/editor/invisible_wall.png")
         self.add_badguy("ispy", "images/objects/ispy/ispy.sprite")
         self.add_badguy("jumpy", "images/creatures/jumpy/left-middle.png")

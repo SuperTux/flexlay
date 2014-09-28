@@ -18,6 +18,7 @@
 
 
 import argparse
+import logging
 
 import sys
 from flexlay.config import Config
@@ -41,13 +42,13 @@ def main():
         raise RuntimeError("datadir missing, use --datadir DIR")
 
     for levelfile in args.LEVELFILE:
-        print("Loading {}".format(levelfile))
+        logging.info("Loading {}".format(levelfile))
         try:
             level = Level.from_file(levelfile)
             if args.output:
                 level.save_v2(args.output)
         except Exception as e:
-            print("ERROR:", e)
+            logging.exception("ERROR")
 
 
 if __name__ == "__main__":

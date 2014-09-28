@@ -18,7 +18,7 @@
 
 
 from flexlay import Config
-from flexlay.math import Point
+from flexlay.math import Point, Size
 from supertux.level import Level
 from supertux.gameobj_factor import supertux_gameobj_factory
 
@@ -58,10 +58,15 @@ class SuperTuxTestCase(unittest.TestCase):
 
     def test_gameobj_factory_create_gameobj_at(self):
         for identifier, (_, _) in supertux_gameobj_factory.objects.items():
-            print(identifier)
-            obj = supertux_gameobj_factory.create_gameobj_at(identifier, Point(0, 0))
-            print(obj)
+            try:
+                obj = supertux_gameobj_factory.create_gameobj_at(identifier, Point(0, 0))
+            except Exception:
+                print("Exception received: %r %r" % (identifier, obj))
+                raise
 
+    def test_level_resize(self):
+        level = Level.from_file(test_levelfile)
+        level.sectors[0].resize(Size(10, 10), Point(10, 10))
 
 if __name__ == '__main__':
     unittest.main()

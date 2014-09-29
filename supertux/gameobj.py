@@ -79,9 +79,42 @@ class GameObj:
             prop.property_dialog(dialog)
 
         def on_callback(*args):
-            print(*args)
+            print("Property Dialog callback:", *args)
 
         dialog.set_callback(on_callback)
+
+
+class LevelTime(GameObj):
+
+    label = "LevelTime"
+    identifier = "leveltime"
+    sprite = "images/engine/editor/clock.png"
+
+    def __init__(self):
+        super().__init__()
+
+        self.objmap_object = make_sprite_object(self, self.sprite)
+
+        self.properties = [
+            IntProperty("Time", "time", None)
+        ]
+
+
+class Camera(GameObj):
+
+    label = "Camera"
+    identifier = "camera"
+    sprite = "images/engine/editor/camera.png"
+    values = ["normal"]
+
+    def __init__(self):
+        super().__init__()
+
+        self.objmap_object = make_sprite_object(self, self.sprite)
+
+        self.properties = [
+            EnumProperty("Mode", "mode", default=0, optional=False, values=self.values)
+        ]
 
 
 class ResetPoint(GameObj):
@@ -206,7 +239,8 @@ class BadGuy(GameObj):
         self.objmap_object = make_sprite_object(self, self.sprite)
 
         self.properties = [
-            DirectionProperty("Direction", "direction", "left"),
+            SpriteProperty("Sprite", "sprite", default="", optional=True),
+            DirectionProperty("Direction", "direction", 0),
             InlinePosProperty(),
         ]
 
@@ -215,7 +249,7 @@ class Dispenser(GameObj):
 
     label = "Dispenser"
     identifier = "dispenser"
-    sprite = "images/creatures/dispenser/working.png"
+    sprite = "images/creatures/dispenser/dispenser.sprite"
 
     def __init__(self):
         super().__init__()
@@ -224,8 +258,29 @@ class Dispenser(GameObj):
 
         self.properties = [
             IntProperty("Cycle", "cycle", 2),
-            InlinePosProperty(),
+            EnumProperty("Type", "type", default=0, optional=False, values=["rocketlauncher", "cannon"]),
+            BoolProperty("Random", "random", default=False, optional=True),
             StringProperty("Badguy", "badguy", "snowball"),
+            InlinePosProperty(),
+        ]
+
+
+class Switch(GameObj):
+
+    label = "Switch"
+    identifier = "switch"
+    sprite = "images/objects/switch/switch.sprite"
+
+    def __init__(self):
+        super().__init__()
+
+        self.objmap_object = make_sprite_object(self, self.sprite)
+
+        self.properties = [
+            StringProperty("Script", "script", default=""),
+            SpriteProperty("Sprite", "sprite", default="", optional=True),
+            DirectionProperty("Direction", "direction", 0),
+            InlinePosProperty(),
         ]
 
 
@@ -241,10 +296,10 @@ class Platform(GameObj):
         self.objmap_object = make_sprite_object(self, self.sprite)
 
         self.properties = [
-            InlinePosProperty(),
-            StringProperty("Badguy", "badguy", "snowball"),
-            PathProperty("Path", "use_path", ""),
-            StringProperty("Type", "type", None)
+            StringProperty("Name", "name", "", optional=True),
+            BoolProperty("Running", "running", default=True, optional=True),
+            SpriteProperty("Sprite", "sprite"),
+            PathProperty("Path", "path")
         ]
 
 
@@ -260,7 +315,7 @@ class SpawnPoint(GameObj):
         self.objmap_object = make_sprite_object(self, self.sprite)
 
         self.properties = [
-            StringProperty("Name", "name", None),
+            StringProperty("Name", "name", ""),
             InlinePosProperty()
         ]
 
@@ -301,14 +356,32 @@ class SimpleTileObject(GameObj):
         ]
 
 
+class WeakBlock(GameObj):
+
+    label = "WeakBlock"
+    identifier = "weak_block"
+    sprite = "images/objects/weak_block/meltbox.sprite"
+    sprite_linked = "images/objects/weak_block/strawbox.sprite"
+
+    def __init__(self):
+        super().__init__()
+
+        self.objmap_object = make_sprite_object(self, self.sprite)
+
+        self.properties = [
+            BoolProperty("Linked", "linked", default=False),
+            InlinePosProperty()
+        ]
+
+
 class BonusBlock(GameObj):
 
     label = "BonusBlock"
     identifier = "bonusblock"
     sprite = "images/objects/bonus_block/bonusblock.sprite"
     values = [
-        "1up",
         "coin",
+        "1up",
         "custom",
         "explode",
         "firegrow",
@@ -327,8 +400,9 @@ class BonusBlock(GameObj):
 
         self.properties = [
             StringProperty("Message", "message", "", optional=True, translatable=True),
+            IntProperty("Count", "count", default=1, optional=True),
             StringProperty("Script", "script", "", optional=True),
-            EnumProperty("Contents", "contents", default="star", optional=False, values=self.values),
+            EnumProperty("Contents", "contents", default=0, optional=True, values=self.values),
             SpriteProperty("Sprite", "sprite"),
             InlinePosProperty()
         ]
@@ -369,8 +443,9 @@ class Powerup(GameObj):
         self.objmap_object = make_sprite_object(self, self.sprite)
 
         self.properties = [
+            StringProperty("Script", "script", "", optional=True),
+            SpriteProperty("Sprite", "sprite"),
             InlinePosProperty(),
-            SpriteProperty("Sprite", "sprite")
         ]
         self.constraints = [
             GridConstrain(32, 32, 16, 16)
@@ -423,6 +498,10 @@ class Background(GameObj):
         self.objmap_object = make_sprite_object(self, self.sprite)
 
         self.properties = [
+            FloatProperty("X", "x", default=0, optional=True),
+            FloatProperty("Y", "y", default=0, optional=True),
+            EnumProperty("Alignment", "alignment", default=0, optional=True,
+                         values=["none", "left", "right", "top", "bottom"]),
             FloatProperty("Speed (X)", "speed", optional=True),
             FloatProperty("Speed (Y)", "speed_y", optional=True),
             ImageProperty("Image (top)", "image-top", optional=True),
@@ -446,22 +525,6 @@ class UnimplementedObject(GameObj):
 
     def property_dialog(self, gui):
         pass
-
-
-class LevelTime(GameObj):
-
-    label = "LevelTime"
-    identifier = "leveltime"
-    sprite = "images/engine/editor/clock.png"
-
-    def __init__(self):
-        super().__init__()
-
-        self.objmap_object = make_sprite_object(self, self.sprite)
-
-        self.properties = [
-            IntProperty("Time", "time", None)
-        ]
 
 
 class Door(GameObj):
@@ -511,6 +574,26 @@ class ScriptedObject(GameObj):
             BoolProperty("Visible", "visible", True),
             BoolProperty("Physics", "physic-enabled", False),
             BoolProperty("Solid", "solid", False),
+        ]
+
+class Wind(GameObj):
+
+    label = "Wind"
+    identifier = "wind"
+    sprite ="images/engine/editor/wind.png"
+    
+    def __init__(self):
+        super().__init__()
+
+        self.objmap_object = make_rect_object(self, Color(0, 200, 200, 200))
+
+        self.properties = [
+            StringProperty("Name", "name", default="", optional=True),
+            BoolProperty("Blowing", "blowing", default=True, optional=True),
+            FloatProperty("Speed-X", "speed-x", default=0.0, optional=False),
+            FloatProperty("Speed-Y", "speed-y", default=0.0, optional=False),
+            FloatProperty("Acceleration", "acceleration", default=0.0, optional=False),
+            InlineRectProperty(),
         ]
 
 

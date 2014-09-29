@@ -56,6 +56,7 @@ class Level:
         self.filename = None
         self.name = "No Name"
         self.author = "No Author"
+        self.contact = ""
         self.license = "GPL 2+ / CC-by-sa 3.0"
         self.target_time = 0
 
@@ -94,7 +95,10 @@ class Level:
         writer.write_int("version", 2)
         writer.write_tr_string("name", self.name)
         writer.write_string("author", self.author)
-        writer.write_int("target-time", self.target_time)
+        if self.contact:
+            writer.write_string("contact", self.contact)
+        if self.target_time != 0:
+            writer.write_int("target-time", self.target_time)
         writer.write_string("license", self.license)
 
         for sector in self.sectors:

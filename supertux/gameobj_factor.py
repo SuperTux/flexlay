@@ -20,12 +20,13 @@ import os.path
 
 from flexlay import ObjectBrush, Config
 from .sprite import SuperTuxSprite
-from .gameobj import (BadGuy, BonusBlock, Dispenser, Door, SpawnPoint,
-                      ResetPoint, AmbientSound, SimpleObject,
-                      SimpleTileObject, Powerup, SecretArea,
-                      SequenceTrigger, Background, Gradient,
-                      ParticleSystem, Platform, ScriptedObject,
-                      InfoBlock, LevelTime, Decal, ScriptTrigger)
+from .gameobj import (BadGuy, BonusBlock, Camera, Dispenser, Door,
+                      SpawnPoint, ResetPoint, AmbientSound,
+                      SimpleObject, SimpleTileObject, Powerup,
+                      SecretArea, SequenceTrigger, Background,
+                      Gradient, ParticleSystem, Platform,
+                      ScriptedObject, InfoBlock, LevelTime, Decal,
+                      ScriptTrigger, Switch, WeakBlock, Wind)
 
 
 class SuperTuxGameObjFactory:
@@ -50,7 +51,6 @@ class SuperTuxGameObjFactory:
             print("couldn't create: %r at %s" % (identifier, pos))
         else:
             _, constructor = data
-            print(constructor, pos)
             obj = constructor()
             obj.objmap_object.pos = pos
             return obj
@@ -94,6 +94,7 @@ class SuperTuxGameObjFactory:
 
         self.add_object(AmbientSound)
         self.add_object(Background)
+        self.add_object(Camera)
         self.add_object(Decal)
         self.add_object(Dispenser)
         self.add_object(SequenceTrigger)
@@ -110,13 +111,20 @@ class SuperTuxGameObjFactory:
         self.add_object(ScriptedObject)
         self.add_object(SecretArea)
         self.add_object(SpawnPoint)
+        self.add_object(Switch)
+        self.add_object(WeakBlock)
+        self.add_object(Wind)
+
+        self.add_badguy("pneumatic-platform", "images/engine/editor/pneumaticplatform.png")
+        self.add_badguy("bicycle-platform", "images/engine/editor/bicycleplatform.png")
+        self.add_badguy("flying-platform", "images/objects/flying_platform/flying_platform.sprite")
+        self.add_badguy("hurting_platform", "images/objects/sawblade/sawblade.sprite")
 
         self.add_particle_system("particles-clouds", "images/engine/editor/clouds.png", "clouds")
         self.add_particle_system("particles-rain", "images/engine/editor/rain.png", "rain")
         self.add_particle_system("particles-snow", "images/engine/editor/snow.png", "snow")
 
         self.add_badguy("angrystone", "images/creatures/angrystone/angrystone.sprite")
-        self.add_badguy("bicycle-platform", "images/engine/editor/bicycleplatform.png")
         self.add_badguy("bouncingsnowball", "images/creatures/bouncing_snowball/left-0.png")
         self.add_badguy("candle", "images/objects/candle/candle.sprite")
         self.add_badguy("captainsnowball", "images/creatures/snowball/cpt-left-0.png")
@@ -126,13 +134,11 @@ class SuperTuxGameObjFactory:
         self.add_badguy("darttrap", "images/creatures/darttrap/darttrap.sprite")
         self.add_badguy("fish", "images/creatures/fish/left-0.png")
         self.add_badguy("flame", "images/creatures/flame/flame-0.png")
-        self.add_badguy("flying-platform", "images/objects/flying_platform/flying_platform.sprite")
         self.add_badguy("flyingsnowball", "images/creatures/flying_snowball/left-0.png")
         self.add_badguy("ghostflame", "images/creatures/flame/ghostflame.sprite")
         self.add_badguy("ghosttree", "images/creatures/flame/ghostflame.sprite")
         self.add_badguy("goldbomb", "images/creatures/gold_bomb/gold_bomb.sprite")
         self.add_badguy("haywire", "images/creatures/haywire/haywire.sprite")
-        self.add_badguy("hurting_platform", "images/objects/sawblade/sawblade.sprite")
         self.add_badguy("icecrusher", "images/creatures/icecrusher/icecrusher.sprite")
         self.add_badguy("iceflame", "images/creatures/flame/iceflame.sprite")
         self.add_badguy("igel", "images/creatures/igel/igel.sprite")
@@ -152,7 +158,6 @@ class SuperTuxGameObjFactory:
         self.add_badguy("nolok_01", "images/creatures/nolok/nolok.sprite")
         self.add_badguy("owl", "images/creatures/owl/owl.sprite")
         self.add_badguy("particles-ghosts", "images/engine/editor/ghostparticles.png")
-        self.add_badguy("pneumatic-platform", "images/engine/editor/pneumaticplatform.png")
         self.add_badguy("poisonivy", "images/creatures/poison_ivy/left-0.png")
         self.add_badguy("pushbutton", "images/objects/pushbutton/pushbutton.sprite")
         self.add_badguy("rustytrampoline", "images/objects/rusty-trampoline/rusty-trampoline.sprite")
@@ -170,16 +175,13 @@ class SuperTuxGameObjFactory:
         self.add_badguy("stalactite", "images/creatures/stalactite/falling.png")
         self.add_badguy("stalactite_yeti", "images/engine/editor/stalactite_yeti.png")
         self.add_badguy("stumpy", "images/creatures/mr_tree/stumpy.sprite")
-        self.add_badguy("switch", "images/objects/switch/switch.sprite")
         self.add_badguy("thunderstorm", "images/engine/editor/thunderstorm.png")
         self.add_badguy("toad", "images/creatures/toad/toad.sprite")
         self.add_badguy("totem", "images/creatures/totem/totem.sprite")
         self.add_badguy("trampoline", "images/objects/trampoline/trampoline1-0.png")
         self.add_badguy("walkingleaf", "images/creatures/walkingleaf/walkingleaf.sprite")
         self.add_badguy("walkingtree", "images/creatures/walkingleaf/walkingleaf.sprite")
-        self.add_badguy("weak_block", "images/objects/weak_block/meltbox.sprite")
         self.add_badguy("willowisp", "images/creatures/willowisp/willowisp.sprite")
-        self.add_badguy("wind", "images/engine/editor/wind.png")
         self.add_badguy("yeti", "images/creatures/yeti/yeti.png")
         self.add_badguy("yeti_stalactite", "images/engine/editor/stalactite_yeti.png")
         self.add_badguy("zeekling", "images/creatures/zeekling/left-0.png")

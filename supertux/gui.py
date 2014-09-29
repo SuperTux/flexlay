@@ -315,11 +315,14 @@ class SuperTuxGUI:
 
         dialog.add_string("Name:", level.name)
         dialog.add_string("Author:", level.author)
+        dialog.add_string("Contact:", level.contact)
         dialog.add_int("Target Time:", level.target_time)
 
-        def on_callback(name, author):
+        def on_callback(name, author, contact, target_time):
             level.name = name
             level.author = author
+            level.contact = contact
+            level.target_time = target_time
 
         dialog.set_callback(on_callback)
 

@@ -18,7 +18,6 @@
 from flexlay import ObjectLayer, EditorMap
 
 from .tilemap import SuperTuxTileMap
-from .gameobj import PathNode
 from .gameobj_factor import supertux_gameobj_factory
 
 
@@ -26,7 +25,6 @@ class Sector:
 
     def __init__(self, parent):
         self.parent = parent
-        self.cameramode = "normal"
         self.name = None
         self.music = None
         self.gravity = 10.0
@@ -91,7 +89,6 @@ class Sector:
         self.music = ""
         self.init_script = ""
         self.gravity = 10.0
-        self.cameramode = "normal"
 
         self.width = 0
         self.height = 0
@@ -124,9 +121,6 @@ class Sector:
                     self.width = tilemap.width
                     self.height = tilemap.height
 
-            elif name == "camera":
-                self.cameramode = "normal"
-                # TODO...
             else:
                 obj = supertux_gameobj_factory.create_gameobj(name, data)
                 if obj is None:
@@ -140,24 +134,9 @@ class Sector:
     def save(self, writer):
         writer.write_string("name", self.name)
         writer.write_string("music", self.music)
-        writer.write_rgb("ambient-light", self.ambient_light)
         if self.init_script:
             writer.write_string("init-script", self.init_script)
-
-        writer.begin_list("camera")
-        writer.write_string("mode", self.cameramode)
-        path_nodes = [obj for obj in self.objects.get_objects() if isinstance(obj, PathNode)]
-        if path_nodes:
-            writer.begin_list("path")
-            for obj in path_nodes:
-                pathnode = obj.get_data()
-                if isinstance(pathnode, PathNode):
-                    writer.begin_list("point")
-                    writer.write_inline_point(obj.get_pos())
-                    writer.write_int("speed", 1)
-                    writer.end_list()
-            writer.end_list()
-        writer.end_list()
+        writer.write_rgb("ambient-light", self.ambient_light)
 
         for obj in self.objects.get_objects():
             obj.metadata.write(writer, obj)

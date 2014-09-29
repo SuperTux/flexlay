@@ -83,29 +83,32 @@ class StringProperty(Property):
 class EnumProperty(Property):
 
     def __init__(self, label, identifier, default, optional=False, values=None):
+        super().__init__(label, identifier, default, optional=optional)
+
         if values is None:
             values = []
 
-        super().__init__(label, identifier, default, optional=optional)
         self.values = values
 
     def read(self, sexpr, obj):
-        self.value = get_value_from_tree([self.identifier, "_"],  sexpr, self.default)
-        if self.value not in self.values:
+        value_name = get_value_from_tree([self.identifier, "_"],  sexpr, self.values[self.default])
+        try:
+            self.value = self.values.index(value_name)
+        except:
             raise RuntimeError("%s: invalid enum value: %r not in %r" % (self.identifier, self.value, self.values))
 
     def write(self, writer, obj):
         if not self.optional or self.value != self.default:
-            writer.write_string(self.identifier, self.value)
+            writer.write_string(self.identifier, self.values[self.value])
 
     def property_dialog(self, dialog):
-        dialog.add_enum(self.label, self.values, self.value)
+        dialog.add_enum(self.label, self.values, self.values[self.value])
 
 
 class DirectionProperty(EnumProperty):
 
     def __init__(self, label, identifier, default):
-        super().__init__(label, identifier, default, optional=True, values=["left", "right", "auto"])
+        super().__init__(label, identifier, default, optional=True, values=["auto", "left", "right"])
 
 
 class PosProperty(Property):
@@ -124,7 +127,7 @@ class InlinePosProperty:
         obj.pos.y = get_value_from_tree(["y", "_"],  sexpr, 0.0)
 
     def write(self, writer, obj):
-        writer.write_inline_point(obj.pos)
+        writer.write_inline_pointf(obj.pos)
 
     def property_dialog(self, dialog):
         pass
@@ -142,8 +145,8 @@ class InlineRectProperty:
         obj.size.height = get_value_from_tree(["height", "_"],  sexpr, 0.0)
 
     def write(self, writer, obj):
-        writer.write_inline_size(obj.size)
-        writer.write_inline_point(obj.pos)
+        writer.write_inline_sizef(obj.size)
+        writer.write_inline_pointf(obj.pos)
 
     def property_dialog(self, dialog):
         pass
@@ -174,10 +177,44 @@ class ColorProperty(StringProperty):
         pass
 
 
-class PathProperty(StringProperty):
+class PathProperty:
 
-    def __init__(self, label, identifier, default):
-        super().__init__(label, identifier, default, optional=True)
+    class Node:
+
+        def __init__(self, x, y, time):
+            self.x = x
+            self.y = y
+            self.time = time
+
+    def __init__(self, label, identifier):
+        self.label = label
+        self.identifier = identifier
+        self.nodes = []
+
+    def read(self, sexpr, obj):
+        self.nodes = []
+
+        sexpr = get_value_from_tree([self.identifier], sexpr, [])
+        for node in sexpr:
+            if node[0] == 'node':
+                x = get_value_from_tree(["x", "_"], node[1:], 0)
+                y = get_value_from_tree(["y", "_"], node[1:], 0)
+                time = get_value_from_tree(["time", "_"], node[1:], 1)
+                self.nodes.append(PathProperty.Node(x, y, time))
+            else:
+                raise RuntimeError("unknown tag %r" % node[0])
+
+    def write(self, writer, obj):
+        if self.nodes:
+            writer.begin_list("path")
+            for node in self.nodes:
+                writer.begin_list("node")
+                writer.write_int("x", node.x)
+                writer.write_int("y", node.y)
+                if node.time != 1:
+                    writer.write_float("time", node.time)
+                writer.end_list()
+            writer.end_list()
 
 
 class SampleProperty(StringProperty):

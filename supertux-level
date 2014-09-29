@@ -17,6 +17,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+import sys
 import argparse
 import logging
 
@@ -26,6 +27,7 @@ from supertux.level import Level
 
 
 def main():
+    has_error = False
     parser = argparse.ArgumentParser(description="SuperTux Level Tool")
     parser.add_argument("LEVELFILE", action="store", type=str, nargs="+",
                         help=".stl file to load")
@@ -49,10 +51,12 @@ def main():
                 level.save_v2(args.output)
         except Exception as e:
             logging.exception("ERROR")
+            has_error = True
 
+    return 1 if has_error else 0
 
 if __name__ == "__main__":
-     main()
+    sys.exit(main())
 
 
 # EOF #

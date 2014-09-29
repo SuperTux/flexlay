@@ -89,9 +89,9 @@ class SExprWriter:
         self.indent()
         self.fout.write("(" + name)
         if translatable:
-            self.fout.write(" (_ \"" + value + "\"))\n")
+            self.fout.write(" (_ \"" + value.replace('"', '\\"') + "\"))\n")
         else:
-            self.fout.write(" \"" + value + "\")\n")
+            self.fout.write(" \"" + value.replace('"', '\\"') + "\")\n")
 
     def write_rgb(self, name, color):
         self.indent()
@@ -102,9 +102,17 @@ class SExprWriter:
         self.write_int("x", pos.x)
         self.write_int("y", pos.y)
 
+    def write_inline_pointf(self, pos):
+        self.write_float("x", pos.x)
+        self.write_float("y", pos.y)
+
     def write_inline_size(self, size):
         self.write_int("width", size.width)
         self.write_int("height", size.height)
+
+    def write_inline_sizef(self, size):
+        self.write_float("width", size.width)
+        self.write_float("height", size.height)
 
     def write_inline_rect(self, rect):
         # ugly this way around, but for compatibilty with the C# supertux-editor
@@ -112,6 +120,13 @@ class SExprWriter:
         self.write_int("height", rect.height)
         self.write_int("x", rect.left)
         self.write_int("y", rect.top)
+
+    def write_inline_rectf(self, rect):
+        # ugly this way around, but for compatibilty with the C# supertux-editor
+        self.write_float("width", rect.width)
+        self.write_float("height", rect.height)
+        self.write_float("x", rect.left)
+        self.write_float("y", rect.top)
 
     def write_vector(self, name, values):
         self.indent()

@@ -178,6 +178,8 @@ class PathProperty:
 
     class Node:
 
+        mode_values = ['oneshot', 'pingpong', 'circular']
+
         def __init__(self, x, y, time):
             self.x = x
             self.y = y
@@ -186,6 +188,7 @@ class PathProperty:
     def __init__(self, label, identifier):
         self.label = label
         self.identifier = identifier
+        self.mode = 2
         self.nodes = []
 
     def read(self, sexpr, obj):
@@ -198,12 +201,19 @@ class PathProperty:
                 y = get_value_from_tree(["y", "_"], node[1:], 0)
                 time = get_value_from_tree(["time", "_"], node[1:], 1)
                 self.nodes.append(PathProperty.Node(x, y, time))
+            elif node[0] == 'mode':
+                if node[1] in PathProperty.Node.mode_values:
+                    self.mode = PathProperty.Node.mode_values.index(node[1])
+                else:
+                    raise RuntimeError("unknown enum value %r" % node[1])
             else:
                 raise RuntimeError("unknown tag %r" % node[0])
 
     def write(self, writer, obj):
         if self.nodes:
             writer.begin_list("path")
+            if self.mode != 2:
+                writer.write_string("mode", PathProperty.Node.mode_values[self.mode])
             for node in self.nodes:
                 writer.begin_list("node")
                 writer.write_int("x", node.x)

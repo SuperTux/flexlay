@@ -105,7 +105,7 @@ class Camera(GameObj):
     label = "Camera"
     identifier = "camera"
     sprite = "images/engine/editor/camera.png"
-    values = ["normal"]
+    values = ["normal", "autoscroll"]
 
     def __init__(self):
         super().__init__()
@@ -113,7 +113,8 @@ class Camera(GameObj):
         self.objmap_object = make_sprite_object(self, self.sprite)
 
         self.properties = [
-            EnumProperty("Mode", "mode", default=0, optional=False, values=self.values)
+            EnumProperty("Mode", "mode", default=0, optional=False, values=self.values),
+            PathProperty("Path", "path")
         ]
 
 

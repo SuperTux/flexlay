@@ -171,7 +171,7 @@ class SuperTuxGUI:
         if obj is None:
             print("Error: Unknown object type dropped: %r" % brush.metadata)
         else:
-            cmd = ObjectAddCommand(self.workspace.get_map().metadata.objects)
+            cmd = ObjectAddCommand(self.workspace.get_map().metadata.object_layer)
             cmd.add_object(obj.objmap_object)
             self.workspace.get_map().execute(cmd)
 

@@ -62,11 +62,11 @@ class SuperTuxTileMap:
     def write(self, writer, objmap_tilemap_object):
         writer.begin_list("tilemap")
         writer.write_bool("solid", self.solid)
-        writer.write_int("z-pos", self.z_pos)
         if self.speed != 1.0:
             writer.write_float("speed", self.speed)
         if self.speed_y != 1.0:
             writer.write_float("speed-y", self.speed)
+        writer.write_int("z-pos", self.z_pos)
         if self.alpha != 1.0:
             writer.write_float("alpha", self.alpha)
         if self.name:

@@ -168,9 +168,9 @@ class SecretArea(GameObj):
 
         self.properties = [
             TilemapProperty("FadeTilemap", "fade-tilemap"),
+            StringProperty("Script", "script", "", optional=False),
+            StringProperty("Message", "message", "", optional=False, translatable=True),
             InlineRectProperty(),
-            StringProperty("Message", "message", "", optional=True, translatable=True),
-            SpriteProperty("Sprite", "sprite", "", optional=True)
         ]
 
 

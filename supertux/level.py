@@ -97,10 +97,10 @@ class Level:
         writer.write_string("author", self.author)
         if self.contact:
             writer.write_string("contact", self.contact)
-        if self.target_time != 0:
-            writer.write_int("target-time", self.target_time)
         if self.license:
             writer.write_string("license", self.license)
+        if self.target_time != 0:
+            writer.write_int("target-time", self.target_time)
 
         for sector in self.sectors:
             writer.begin_list("sector")

@@ -104,7 +104,7 @@ class Level:
 
         for sector in self.sectors:
             writer.begin_list("sector")
-            sector.save(writer)
+            sector.write(writer)
             writer.end_list()
 
         writer.end_list()

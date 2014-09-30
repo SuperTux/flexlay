@@ -588,7 +588,7 @@ class SuperTuxGUI:
         self.layer_selector.set_map(self.sector.editormap)
 
         ToolContext.current.tilemap_layer = self.sector.get_some_solid_tilemap().tilemap_layer
-        ToolContext.current.object_layer = self.sector.objects
+        ToolContext.current.object_layer = self.sector.object_layer
 
         self.sector.editormap.sig_change.connect(SuperTuxGUI.current.on_map_change)
 

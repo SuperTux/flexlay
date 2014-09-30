@@ -59,7 +59,7 @@ class SuperTuxTileMap:
         self.alpha = 1.0
         self.tilemap_layer = None
 
-    def save(self, writer):
+    def write(self, writer, objmap_tilemap_object):
         writer.begin_list("tilemap")
         writer.write_bool("solid", self.solid)
         writer.write_int("z-pos", self.z_pos)

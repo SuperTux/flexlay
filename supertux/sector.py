@@ -15,7 +15,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from flexlay import ObjectLayer, EditorMap
+from flexlay import ObjectLayer, ObjMapTilemapObject, EditorMap
+from flexlay.math import Rect
 
 from .tilemap import SuperTuxTileMap
 from .gameobj_factor import supertux_gameobj_factory
@@ -36,7 +37,7 @@ class Sector:
 
         self.tilemaps = []
 
-        self.objects = None
+        self.object_layer = None
         # self.sketch = None
         self.editormap = None
 
@@ -56,7 +57,7 @@ class Sector:
         for tilemap in self.tilemaps:
             tilemap.resize(size, pos)
 
-        for obj in self.objects.objects:
+        for obj in self.object_layer.objects:
             p = obj.get_pos()
             p += 32 * pos
             obj.set_pos(p)
@@ -73,7 +74,7 @@ class Sector:
         self.tilemaps.append(SuperTuxTileMap.from_size(self.width, self.height))
         self.tilemaps.append(SuperTuxTileMap.from_size(self.width, self.height))
 
-        self.objects = ObjectLayer()
+        self.object_layer = ObjectLayer()
         # self.sketch  = SketchLayer()
 
         self.editormap = EditorMap()
@@ -97,9 +98,9 @@ class Sector:
 
         self.tilemaps = []
 
-        self.objects = ObjectLayer()
+        self.object_layer = ObjectLayer()
         self.editormap = EditorMap()
-        self.editormap.add_layer(self.objects)
+        self.editormap.add_layer(self.object_layer)
 
         for i in data:
             (name, data) = i[0], i[1:]
@@ -131,18 +132,18 @@ class Sector:
                     print("Error: Couldn't resolve object type: ", name)
                     print("Sector: Unhandled tag: ", name)
                 else:
-                    self.objects.add_object(obj.objmap_object)
+                    self.object_layer.add_object(obj.objmap_object)
 
         self.editormap.metadata = self
 
-    def save(self, writer):
+    def write(self, writer):
         writer.write_string("name", self.name)
         writer.write_string("music", self.music)
         if self.init_script:
             writer.write_string("init-script", self.init_script)
         writer.write_rgb("ambient-light", self.ambient_light)
 
-        for obj in self.objects.get_objects():
+        for obj in self.object_layer.get_objects():
             obj.metadata.write(writer, obj)
 
         # for tilemap in self.tilemaps:

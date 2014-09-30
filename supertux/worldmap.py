@@ -85,10 +85,10 @@ class WorldMap:
             writer.write_int("start_pos_y", self.start_pos_y)
             writer.end_list("properties")
 
-            self.tilemap.save(writer)
+            self.tilemap.write(writer)
 
             for o in self.objects.get_objects():
-                o.get_data().save(writer)
+                o.get_data().write(writer)
             writer.end_list("supertux-worldmap")
 
     def activate(self, workspace):

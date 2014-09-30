@@ -32,7 +32,7 @@ class EditorMapWidget(QWidget):
         self.comp = comp
 
         pal = self.palette()
-        pal.setColor(self.backgroundRole(), QColor(100, 80, 100))
+        pal.setColor(self.backgroundRole(), QColor(100, 0, 100))
         self.setPalette(pal)
 
         self.setAutoFillBackground(True)

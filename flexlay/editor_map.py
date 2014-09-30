@@ -47,7 +47,12 @@ class EditorMap:
 
         self.serial += 1
 
-    def draw_gui(self, gc):
+    def draw_background(self, gc):
+        bounding_rect = self.get_bounding_rect()
+        if bounding_rect != Rect(0, 0, 0, 0):
+            gc.fill_rect(bounding_rect, self.background_color)
+
+    def draw_foreground(self, gc):
         bounding_rect = self.get_bounding_rect()
         if bounding_rect != Rect(0, 0, 0, 0):
             if self.draw_grid:
@@ -77,8 +82,10 @@ class EditorMap:
             gc.draw_rect(bounding_rect, self.foreground_color)
 
     def draw(self, gc):
+        self.draw_background(gc)
         for layer in self.layers:
             layer.draw(gc)
+        self.draw_foreground(gc)
 
     def is_modified(self):
         return self.modified

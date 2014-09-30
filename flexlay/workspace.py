@@ -28,7 +28,6 @@ class Workspace:
     def draw(self, gc):
         if self.editor_map:
             self.editor_map.draw(gc)
-            self.editor_map.draw_gui(gc)
 
             # FIXME: Only draw active tool?!
             for tool in self.tools.values():

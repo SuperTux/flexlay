@@ -30,11 +30,38 @@ class Item:
     KIND_STRING = 4
     KIND_ENUM = 5
 
-    def __init__(self, kind, label, body, group=None):
+    def __init__(self, kind, label, body, callback=None, group=None):
         self.kind = kind
         self.label = label
         self.body = body
         self.group = group
+        self.callback = None
+
+    def get_value(self):
+        if self.kind == Item.KIND_LABEL:
+            return None
+
+        elif self.kind == Item.KIND_ENUM:
+            idx = 0
+            for button in self.group.buttons():
+                if button == self.group.checkedButton():
+                    return idx
+                idx += 1
+
+        elif self.kind == Item.KIND_BOOL:
+            return (self.body.checkState() == Qt.Checked)
+
+        elif self.kind == Item.KIND_INT:
+            return int(self.body.text())
+
+        elif self.kind == Item.KIND_FLOAT:
+            return float(self.body.text())
+
+        elif self.kind == Item.KIND_STRING:
+            return self.body.text()
+
+        else:
+            assert False, "unknown item type: %r" % self.kind
 
 
 class GenericDialog:
@@ -63,7 +90,7 @@ class GenericDialog:
         self.layout.addRow(label)
         self.items.append(Item(Item.KIND_LABEL, label, None, None))
 
-    def add_bool(self, name, value):
+    def add_bool(self, name, value, callback):
         label = QLabel(name)
         checkbox = QCheckBox()
         self.layout.addRow(label, checkbox)
@@ -71,36 +98,36 @@ class GenericDialog:
         if value:
             checkbox.setCheckState(Qt.Checked)
 
-        self.items.append(Item(Item.KIND_BOOL, label, checkbox))
+        self.items.append(Item(Item.KIND_BOOL, label, checkbox, callback=callback))
 
-    def add_int(self, name, value):
+    def add_int(self, name, value, callback=None):
         label = QLabel(name)
         inputbox = QLineEdit()
         self.layout.addRow(label, inputbox)
 
         inputbox.setText(str(value))
 
-        self.items.append(Item(Item.KIND_INT, label, inputbox))
+        self.items.append(Item(Item.KIND_INT, label, inputbox, callback=callback))
 
-    def add_float(self, name, value):
+    def add_float(self, name, value, callback=None):
         label = QLabel(name)
         inputbox = QLineEdit()
         self.layout.addRow(label, inputbox)
 
         inputbox.setText(str(value))
 
-        self.items.append(Item(Item.KIND_FLOAT, label, inputbox))
+        self.items.append(Item(Item.KIND_FLOAT, label, inputbox, callback=callback))
 
-    def add_string(self, name, value):
+    def add_string(self, name, value, callback=None):
         label = QLabel(name)
         inputbox = QLineEdit()
         self.layout.addRow(label, inputbox)
 
         inputbox.setText(value)
 
-        self.items.append(Item(Item.KIND_STRING, label, inputbox))
+        self.items.append(Item(Item.KIND_STRING, label, inputbox, callback=callback))
 
-    def add_enum(self, name, values, current_value=0):
+    def add_enum(self, name, values, current_value=0, callback=None):
         label = QLabel(name)
         group = QButtonGroup()
         for i, value in enumerate(values):
@@ -111,7 +138,7 @@ class GenericDialog:
             else:
                 self.layout.addRow(None, radio)
             group.addButton(radio)
-        self.items.append(Item(Item.KIND_ENUM, label, None, group))
+        self.items.append(Item(Item.KIND_ENUM, label, None, callback=callback, group=group))
 
     def set_callback(self, callback):
         def on_accept():
@@ -125,32 +152,18 @@ class GenericDialog:
         self.buttonbox.accepted.connect(on_accept)
         self.buttonbox.rejected.connect(on_rejected)
 
+    def call_callbacks(self):
+        for item in self.items:
+            if item.callback is not None:
+                item.callback(item.get_value())
+
     def get_values(self):
         result = []
 
         for item in self.items:
-            if item.kind == Item.KIND_LABEL:
-                pass
-
-            elif item.kind == Item.KIND_ENUM:
-                idx = 0
-                for button in item.group.buttons():
-                    if button == item.group.checkedButton():
-                        result.append(idx)
-                        break
-                    idx += 1
-
-            elif item.kind == Item.KIND_BOOL:
-                result.append(item.body.checkState() == Qt.Checked)
-
-            elif item.kind == Item.KIND_INT:
-                result.append(int(item.body.text()))
-
-            elif item.kind == Item.KIND_FLOAT:
-                result.append(float(item.body.text()))
-
-            elif item.kind == Item.KIND_STRING:
-                result.append(item.body.text())
+            value = item.get_value()
+            if value is not None:
+                result.append(value)
 
         return result
 

@@ -38,11 +38,14 @@ class Property:
     def property_dialog(self, dialog):
         pass
 
+    def on_value_change(self, value):
+        self.value = value
+
 
 class BoolProperty(Property):
 
     def property_dialog(self, dialog):
-        dialog.add_int(self.label, self.value)
+        dialog.add_bool(self.label, self.value, self.on_value_change)
 
 
 class IntProperty(Property):
@@ -51,7 +54,7 @@ class IntProperty(Property):
         super().__init__(label, identifier, default, optional)
 
     def property_dialog(self, dialog):
-        dialog.add_int(self.label, self.value)
+        dialog.add_int(self.label, self.value, self.on_value_change)
 
 
 class FloatProperty(Property):
@@ -60,7 +63,7 @@ class FloatProperty(Property):
         super().__init__(label, identifier, default, optional)
 
     def property_dialog(self, dialog):
-        dialog.add_int(self.label, self.value)
+        dialog.add_int(self.label, self.value, self.on_value_change)
 
 
 class StringProperty(Property):
@@ -77,7 +80,7 @@ class StringProperty(Property):
             writer.write_string(self.identifier, self.value, translatable=self.translatable)
 
     def property_dialog(self, dialog):
-        dialog.add_string(self.label, self.value)
+        dialog.add_string(self.label, self.value, self.on_value_change)
 
 
 class EnumProperty(Property):
@@ -102,19 +105,13 @@ class EnumProperty(Property):
             writer.write_string(self.identifier, self.values[self.value])
 
     def property_dialog(self, dialog):
-        dialog.add_enum(self.label, self.values, self.values[self.value])
+        dialog.add_enum(self.label, self.values, self.value, self.on_value_change)
 
 
 class DirectionProperty(EnumProperty):
 
     def __init__(self, label, identifier, default):
         super().__init__(label, identifier, default, optional=True, values=["auto", "left", "right"])
-
-
-class PosProperty(Property):
-
-    def property_dialog(self, dialog):
-        dialog.add_int(self.label, self.value)
 
 
 class InlinePosProperty:
@@ -215,6 +212,9 @@ class PathProperty:
                     writer.write_float("time", node.time)
                 writer.end_list()
             writer.end_list()
+
+    def property_dialog(self, dialog):
+        pass
 
 
 class SampleProperty(StringProperty):

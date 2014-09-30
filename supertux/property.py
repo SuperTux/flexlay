@@ -171,7 +171,7 @@ class ColorProperty(StringProperty):
         writer.write_vector(self.identifier, self.value.to_list()[0:3])
 
     def property_dialog(self, dialog):
-        pass
+        dialog.add_color(self.label, self.value)
 
 
 class PathProperty:

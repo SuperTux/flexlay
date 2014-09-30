@@ -17,8 +17,11 @@
 
 from PyQt4.QtCore import Qt
 from PyQt4.QtGui import (QDialog, QDialogButtonBox, QVBoxLayout,
-                         QLabel, QLineEdit, QFormLayout,
-                         QCheckBox, QButtonGroup, QRadioButton)
+                         QLabel, QLineEdit, QFormLayout, QPushButton,
+                         QIcon, QCheckBox, QPixmap, QButtonGroup,
+                         QRadioButton, QColorDialog)
+
+from ..color import Color
 
 
 class Item:
@@ -29,6 +32,7 @@ class Item:
     KIND_FLOAT = 3
     KIND_STRING = 4
     KIND_ENUM = 5
+    KIND_COLOR = 6
 
     def __init__(self, kind, label, body, callback=None, group=None):
         self.kind = kind
@@ -59,6 +63,10 @@ class Item:
 
         elif self.kind == Item.KIND_STRING:
             return self.body.text()
+
+        elif self.kind == Item.KIND_COLOR:
+            # FIXME: not implemented
+            return Color()
 
         else:
             assert False, "unknown item type: %r" % self.kind
@@ -139,6 +147,33 @@ class GenericDialog:
                 self.layout.addRow(None, radio)
             group.addButton(radio)
         self.items.append(Item(Item.KIND_ENUM, label, None, callback=callback, group=group))
+
+    def add_color(self, name, color, callback=None):
+        label = QLabel(name)
+        pixmap = QPixmap(32, 32)
+        pixmap.fill(color.to_qt())
+        icon = QIcon(pixmap)
+        colorbutton = QPushButton(icon, color.to_hex())
+
+        def on_color(qcolor):
+            pixmap.fill(qcolor)
+            icon.addPixmap(pixmap)
+            colorbutton.setIcon(icon)
+            colorbutton.setText(qcolor.name())
+
+            if callback:
+                callback(Color(qcolor.r, qcolor.g, qcolor.b))
+
+        def on_click():
+            color_dialog = QColorDialog(self.dialog)
+            color_dialog.colorSelected.connect(on_color)
+            color_dialog.show()
+
+        colorbutton.clicked.connect(on_click)
+
+        self.layout.addRow(label, colorbutton)
+
+        self.items.append(Item(Item.KIND_COLOR, label, colorbutton, callback=callback))
 
     def set_callback(self, callback):
         def on_accept():

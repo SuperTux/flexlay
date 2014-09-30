@@ -56,5 +56,8 @@ class Color:
     def to_list(self):
         return [self.r, self.g, self.b, self.a]
 
+    def to_hex(self):
+        return "#%02x%02x%02x" % (self.r, self.g, self.b)
+
 
 # EOF #

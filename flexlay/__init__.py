@@ -52,13 +52,14 @@ from .paint_command import PaintCommand
 # from .stroke_drawer import StrokeDrawer
 # from .sprite_stroke_drawer import SpriteStrokeDrawer
 
-from .objmap_object import ObjMapObject
 from .object_move_command import ObjectMoveCommand
 from .object_transform_command import ObjectTransformCommand
 from .objmap_control_point import ObjMapControlPoint
+from .objmap_object import ObjMapObject
 from .objmap_path_node import ObjMapPathNode
 from .objmap_rect_object import ObjMapRectObject
 from .objmap_sprite_object import ObjMapSpriteObject
+from .objmap_tilemap_object import ObjMapTilemapObject
 
 from .editor_map import EditorMap
 from .flexlay import Flexlay
@@ -84,7 +85,7 @@ __all__ = [
     "ObjectBrush", "ObjectDeleteCommand", "ObjectLayer",
     "ObjectMoveCommand", "ObjectTransformCommand",
     "ObjMapControlPoint", "ObjMapObject", "ObjMapPathNode",
-    "ObjMapRectObject", "ObjMapSpriteObject",
+    "ObjMapRectObject", "ObjMapSpriteObject", "ObjMapTilemapObject",
     "PaintCommand", "PixelBuffer", "Sprite",
     "SpriteBrush",
     "Tile", "TileBrush", "TileProvider", "TilemapLayer", "Tileset",

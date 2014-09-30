@@ -79,8 +79,9 @@ class Sector:
         self.editormap = EditorMap()
         # self.editormap.set_background_color(Color(255, 255, 255))
         for tilemap in self.tilemaps:
-            self.editormap.add_layer(tilemap.tilemap_layer)
-        self.editormap.add_layer(self.objects)
+            # self.editormap.add_layer(tilemap.tilemap_layer)
+            self.object_layer.add_object(ObjMapTilemapObject(tilemap.tilemap_layer, tilemap))
+        self.editormap.add_layer(self.object_layer)
         # self.editormap.add_layer(self.sketch)
         self.editormap.metadata = self
         return self
@@ -115,13 +116,15 @@ class Sector:
             elif name == "tilemap":
                 tilemap = SuperTuxTileMap.from_sexpr(data)
                 self.tilemaps.append(tilemap)
-                self.editormap.add_layer(tilemap.tilemap_layer)
+                # self.editormap.add_layer(tilemap.tilemap_layer)
+                self.object_layer.add_object(ObjMapTilemapObject(tilemap.tilemap_layer, tilemap))
 
                 # GRUMBEL: incorrect
                 if tilemap.solid:
-                    self.width = tilemap.width
-                    self.height = tilemap.height
+                    self.width = max(self.width, tilemap.tilemap_layer.width)
+                    self.height = max(self.height, tilemap.tilemap_layer.height)
 
+                self.editormap.set_bounding_rect(Rect(0, 0, self.width * 32, self.height * 32))
             else:
                 obj = supertux_gameobj_factory.create_gameobj(name, data)
                 if obj is None:
@@ -142,10 +145,8 @@ class Sector:
         for obj in self.objects.get_objects():
             obj.metadata.write(writer, obj)
 
-        for tilemap in self.tilemaps:
-            tilemap.save(writer)
-
-        # save_strokelayer(writer, self.sketch)
+        # for tilemap in self.tilemaps:
+        #   tilemap.write(writer)
 
 
 # EOF #

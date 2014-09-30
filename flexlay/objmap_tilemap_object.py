@@ -33,6 +33,9 @@ class ObjMapTilemapObject(ObjMapObject):
     def get_pos(self):
         return self.pos
 
+    def is_inside(self, click_pos):
+        return False
+
     def get_bound_rect(self):
         return Rectf(Pointf(0, 0),
                      Sizef(self.tilemap_layer.width * 32,

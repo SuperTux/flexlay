@@ -46,9 +46,7 @@ class ObjectLayer(Layer):
 
     def find_object(self, click_pos):
         for obj in reversed(self.objects):
-            rect = obj.get_bound_rect()
-            if rect.is_inside(click_pos):
-                return obj
+            obj.is_inside(click_pos)
         return None
 
     def delete_object(self, obj):

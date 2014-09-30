@@ -49,4 +49,5 @@ class ObjMapControlPoint:
         return Rect(Point(self.pos) - origin - Point(align_x, align_y),
                     Size(self.sprite.width, self.sprite.height))
 
+
 # EOF #

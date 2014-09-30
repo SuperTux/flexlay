@@ -44,8 +44,8 @@ class SuperTuxTestCase(unittest.TestCase):
 
     def test_level_save(self):
         level = Level.from_file(test_levelfile)
-        with io.StringIO() as out:
         # with open("/tmp/test.stl", "w") as out:
+        with io.StringIO() as out:
             level.save_io(out)
             # print(out.getvalue())
 

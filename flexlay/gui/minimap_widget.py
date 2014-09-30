@@ -1,4 +1,4 @@
- # Flexlay - A Generic 2D Game Editor
+# Flexlay - A Generic 2D Game Editor
 # Copyright (C) 2014 Ingo Ruhnke <grumbel@gmail.com>
 #
 # This program is free software: you can redistribute it and/or modify
@@ -56,7 +56,7 @@ class MinimapWidget(QWidget):
 
         # FIXME: Do this only on map changes
         if self.last_serial != self.parent.get_workspace().get_map().get_serial():
-        # or editor_map != parent.get_workspace().get_map())
+            # or editor_map != parent.get_workspace().get_map())
             self.update_minimap()
             self.last_serial = self.parent.get_workspace().get_map().get_serial()
             self.editor_map = self.parent.get_workspace().get_map()

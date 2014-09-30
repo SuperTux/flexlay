@@ -64,9 +64,9 @@ class Level:
         self.sectors = []
 
     def parse_v2(self, data):
-        self.name = get_value_from_tree(["name", "_"], data, "no name")
-        self.author = get_value_from_tree(["author", "_"], data, "no author")
-        self.license = get_value_from_tree(["license", "_"], data, "no license")
+        self.name = get_value_from_tree(["name", "_"], data, "")
+        self.author = get_value_from_tree(["author", "_"], data, "")
+        self.license = get_value_from_tree(["license", "_"], data, "")
         self.target_time = get_value_from_tree(["target-time", "_"], data, 0)
 
         self.current_sector = None
@@ -99,7 +99,8 @@ class Level:
             writer.write_string("contact", self.contact)
         if self.target_time != 0:
             writer.write_int("target-time", self.target_time)
-        writer.write_string("license", self.license)
+        if self.license:
+            writer.write_string("license", self.license)
 
         for sector in self.sectors:
             writer.begin_list("sector")

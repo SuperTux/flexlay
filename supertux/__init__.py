@@ -31,7 +31,7 @@ from .worldmap import WorldMap
 from .worldmap_object import WorldmapObject
 from .supertux import main
 from .property import (BoolProperty, IntProperty, FloatProperty,
-                       StringProperty, DirectionProperty, PosProperty, InlinePosProperty,
+                       StringProperty, DirectionProperty, InlinePosProperty,
                        InlineRectProperty, TilemapProperty, ColorProperty, ImageProperty)
 
 
@@ -42,7 +42,7 @@ __all__ = ["GameObj", "SuperTuxGUI", "Level",
            "SuperTuxToolbox", "SuperTuxButtonPanel",
            "supertux_gameobj_factory",
            "BoolProperty", "IntProperty", "FloatProperty",
-           "StringProperty", "DirectionProperty", "PosProperty", "InlinePosProperty",
+           "StringProperty", "DirectionProperty", "InlinePosProperty",
            "InlineRectProperty", "TilemapProperty", "ColorProperty", "ImageProperty"]
 
 

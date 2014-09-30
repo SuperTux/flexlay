@@ -576,12 +576,13 @@ class ScriptedObject(GameObj):
             BoolProperty("Solid", "solid", False),
         ]
 
+
 class Wind(GameObj):
 
     label = "Wind"
     identifier = "wind"
-    sprite ="images/engine/editor/wind.png"
-    
+    sprite = "images/engine/editor/wind.png"
+
     def __init__(self):
         super().__init__()
 

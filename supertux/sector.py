@@ -44,6 +44,7 @@ class Sector:
         for tilemap in self.tilemaps:
             if tilemap.solid:
                 return tilemap
+        return self.tilemaps[0]
 
     def get_level(self):
         return self.parent

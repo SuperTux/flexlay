@@ -132,7 +132,7 @@ EditorMapWidget::paintEvent(QPaintEvent* event)
   //painter.setRenderHint(QPainter::Antialiasing);
 
   Workspace workspace = m_comp.get_workspace();
-  GraphicContext gc(m_comp.get_gc_state(), painter);
+  GraphicContext gc(painter, m_comp.get_gc_state());
   m_comp.get_gc_state().push(gc);
   workspace.draw(gc);
   m_comp.get_gc_state().pop(gc);

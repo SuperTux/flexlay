@@ -23,14 +23,14 @@
 #include "math/rect.hpp"
 
 GraphicContext::GraphicContext(QPainter& painter) :
-  m_state(nullptr),
-  m_painter(painter)
+  m_painter(painter),
+  m_state(nullptr)
 {
 }
 
-GraphicContext::GraphicContext(const GraphicContextState& state, QPainter& painter) :
-  m_state(&state),
-  m_painter(painter)
+GraphicContext::GraphicContext(QPainter& painter, const GraphicContextState& state) :
+  m_painter(painter),
+  m_state(&state)
 {
 }
 

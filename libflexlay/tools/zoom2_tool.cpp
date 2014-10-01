@@ -75,11 +75,11 @@ Zoom2ToolImpl::on_mouse_move(const InputEvent& event)
 
     float factor = (event.mouse_pos.y - click_pos.y) / 20.0f;
     if (factor > 0)
-      gc.set_zoom(zoom_pos, old_zoom * pow(1.25f, factor));
+      gc.set_zoom(old_zoom * pow(1.25f, factor), zoom_pos);
     else if (factor < 0)
-      gc.set_zoom(zoom_pos, old_zoom / pow(1.25f, -factor));
+      gc.set_zoom(old_zoom / pow(1.25f, -factor), zoom_pos);
     else
-      gc.set_zoom(zoom_pos, old_zoom);
+      gc.set_zoom(old_zoom, zoom_pos);
   }
 }
 

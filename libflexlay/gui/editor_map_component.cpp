@@ -163,8 +163,8 @@ EditorMapComponent::set_zoom(float z)
 void
 EditorMapComponent::zoom_out(Point pos)
 {
-  m_gc_state.set_zoom(Pointf(pos.x, pos.y),
-                          m_gc_state.get_zoom()/1.25f);
+  m_gc_state.set_zoom(m_gc_state.get_zoom()/1.25f, 
+                      Pointf(pos.x, pos.y));
 
   m_editormap_widget->repaint();
   update_scrollbars();
@@ -173,8 +173,8 @@ EditorMapComponent::zoom_out(Point pos)
 void
 EditorMapComponent::zoom_in(Point pos)
 {
-  m_gc_state.set_zoom(Pointf(pos.x, pos.y),
-                          m_gc_state.get_zoom()*1.25f);
+  m_gc_state.set_zoom(m_gc_state.get_zoom()*1.25f,
+                      Pointf(pos.x, pos.y));
 
   m_editormap_widget->repaint();
   update_scrollbars();

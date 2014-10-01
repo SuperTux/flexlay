@@ -1,9 +1,11 @@
 *.a
 *.o
 *.os
+*.pyc
 *.so
 *.so.*
 *~
+.pylint/
 .sconsign.dblite
 /TODO
 /libflexlay/flexlay_wrap_wrap.cc
@@ -18,3 +20,4 @@ semantic.cache
 /Makefile
 /libflexlay/Makefile
 /simple/Makefile
+/old

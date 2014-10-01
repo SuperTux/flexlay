@@ -99,7 +99,7 @@ GraphicContextState::get_pos() const
 }
 
 void
-GraphicContextState::set_zoom(Pointf pos, float z)
+GraphicContextState::set_zoom(float z, Pointf pos)
 {
   float old_zoom = impl->zoom;
   set_zoom(z);

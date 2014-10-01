@@ -34,6 +34,9 @@ class ObjMapObject:
         rect = self.get_bound_rect()
         return rect.is_inside(click_pos)
 
+    def get_bound_rect(self):
+        pass
+
     def get_pos(self):
         return self.pos
 

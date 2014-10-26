@@ -169,7 +169,7 @@ class SecretArea(GameObj):
         self.properties = [
             TilemapProperty("FadeTilemap", "fade-tilemap"),
             StringProperty("Script", "script", "", optional=False),
-            StringProperty("Message", "message", "", optional=False, translatable=True),
+            StringProperty("Message", "message", "", optional=False, translatable=False),
             InlineRectProperty(),
         ]
 
@@ -242,6 +242,44 @@ class BadGuy(GameObj):
         self.properties = [
             SpriteProperty("Sprite", "sprite", default="", optional=True),
             DirectionProperty("Direction", "direction", 0),
+            InlinePosProperty(),
+        ]
+
+
+class Candle(GameObj):
+
+    label = "Candle"
+    identifier = "candle"
+    sprite = "images/objects/candle/candle.sprite"
+
+    def __init__(self):
+        super().__init__()
+
+        self.objmap_object = make_sprite_object(self, self.sprite)
+
+        self.properties = [
+            ColorProperty("Color", "color"),
+            StringProperty("Name", "name", "", optional=True),
+            BoolProperty("Burning", "burning", optional=True, default=True),
+            BoolProperty("Flicker", "flicker", optional=True, default=True),
+            SpriteProperty("Sprite", "sprite", default=self.sprite, optional=True),
+            InlinePosProperty(),
+        ]
+
+
+class Torch(GameObj):
+
+    label = "Torch"
+    identifier = "torch"
+    sprite = "images/objects/torch/torch1.sprite"
+
+    def __init__(self):
+        super().__init__()
+
+        self.objmap_object = make_sprite_object(self, self.sprite)
+
+        self.properties = [
+            SpriteProperty("Sprite", "sprite", default=self.sprite, optional=False),
             InlinePosProperty(),
         ]
 
@@ -503,7 +541,7 @@ class Background(GameObj):
             FloatProperty("Y", "y", default=0, optional=True),
             EnumProperty("Alignment", "alignment", default=0, optional=True,
                          values=["none", "left", "right", "top", "bottom"]),
-            FloatProperty("Speed (X)", "speed", optional=True),
+            FloatProperty("Speed (X)", "speed", optional=False),
             FloatProperty("Speed (Y)", "speed_y", optional=True),
             ImageProperty("Image (top)", "image-top", optional=True),
             ImageProperty("Image (middle)", "image"),

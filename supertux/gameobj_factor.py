@@ -20,13 +20,13 @@ import os.path
 
 from flexlay import ObjectBrush, Config
 from .sprite import SuperTuxSprite
-from .gameobj import (BadGuy, BonusBlock, Camera, Dispenser, Door,
+from .gameobj import (BadGuy, BonusBlock, Candle, Camera, Dispenser, Door,
                       SpawnPoint, ResetPoint, AmbientSound,
                       SimpleObject, SimpleTileObject, Powerup,
                       SecretArea, SequenceTrigger, Background,
                       Gradient, ParticleSystem, Platform,
                       ScriptedObject, InfoBlock, LevelTime, Decal,
-                      ScriptTrigger, Switch, WeakBlock, Wind)
+                      ScriptTrigger, Switch, Torch, WeakBlock, Wind)
 
 
 class SuperTuxGameObjFactory:
@@ -101,6 +101,7 @@ class SuperTuxGameObjFactory:
         self.add_object(ScriptTrigger)
 
         self.add_object(BonusBlock)
+        self.add_object(Candle)
         self.add_object(Door)
         self.add_object(Gradient)
         self.add_object(InfoBlock)
@@ -112,6 +113,7 @@ class SuperTuxGameObjFactory:
         self.add_object(SecretArea)
         self.add_object(SpawnPoint)
         self.add_object(Switch)
+        self.add_object(Torch)
         self.add_object(WeakBlock)
         self.add_object(Wind)
 
@@ -126,7 +128,6 @@ class SuperTuxGameObjFactory:
 
         self.add_badguy("angrystone", "images/creatures/angrystone/angrystone.sprite")
         self.add_badguy("bouncingsnowball", "images/creatures/bouncing_snowball/left-0.png")
-        self.add_badguy("candle", "images/objects/candle/candle.sprite")
         self.add_badguy("captainsnowball", "images/creatures/snowball/cpt-left-0.png")
         self.add_badguy("climbable", "images/engine/editor/climbable.png")
         self.add_badguy("coin", "images/objects/coin/coin.sprite")

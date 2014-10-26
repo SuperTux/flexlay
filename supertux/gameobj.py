@@ -240,8 +240,8 @@ class BadGuy(GameObj):
         self.objmap_object = make_sprite_object(self, self.sprite)
 
         self.properties = [
-            SpriteProperty("Sprite", "sprite", default="", optional=True),
             DirectionProperty("Direction", "direction", 0),
+            SpriteProperty("Sprite", "sprite", default="", optional=True),
             InlinePosProperty(),
         ]
 
@@ -258,11 +258,11 @@ class Candle(GameObj):
         self.objmap_object = make_sprite_object(self, self.sprite)
 
         self.properties = [
-            ColorProperty("Color", "color"),
             StringProperty("Name", "name", "", optional=True),
             BoolProperty("Burning", "burning", optional=True, default=True),
             BoolProperty("Flicker", "flicker", optional=True, default=True),
             SpriteProperty("Sprite", "sprite", default=self.sprite, optional=True),
+            ColorProperty("Color", "color"),
             InlinePosProperty(),
         ]
 
@@ -442,7 +442,7 @@ class BonusBlock(GameObj):
             IntProperty("Count", "count", default=1, optional=True),
             StringProperty("Script", "script", "", optional=True),
             EnumProperty("Contents", "contents", default=0, optional=True, values=self.values),
-            SpriteProperty("Sprite", "sprite"),
+            SpriteProperty("Sprite", "sprite", optional=True),
             InlinePosProperty()
         ]
         self.constraints = [

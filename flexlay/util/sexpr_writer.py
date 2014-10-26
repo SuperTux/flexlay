@@ -135,6 +135,18 @@ class SExprWriter:
             self.fout.write(" %r" % i)
         self.fout.write(")\n")
 
+    def write_color(self, name, values):
+        self.indent()
+        self.fout.write("(" + name)
+        for i in values:
+            if i == 1.0:
+                self.fout.write(" 1")
+            elif i == 0:
+                self.fout.write(" 0")
+            else:
+                self.fout.write(" %r" % i)
+        self.fout.write(")\n")
+
     def write_field(self, name, field):
         self.indent()
         self.fout.write("(%s\n" % name)

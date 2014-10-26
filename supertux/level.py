@@ -66,6 +66,7 @@ class Level:
     def parse_v2(self, data):
         self.name = get_value_from_tree(["name", "_"], data, "")
         self.author = get_value_from_tree(["author", "_"], data, "")
+        self.contact = get_value_from_tree(["contact", "_"], data, "")
         self.license = get_value_from_tree(["license", "_"], data, "")
         self.target_time = get_value_from_tree(["target-time", "_"], data, 0)
 

@@ -165,10 +165,10 @@ class ColorProperty(StringProperty):
         super().__init__(label, identifier, Color())
 
     def read(self, sexpr, obj):
-        self.value = Color(*get_value_from_tree([self.identifier],  sexpr, Color()))
+        self.value = Color(*[int(c * 255) for c in get_value_from_tree([self.identifier],  sexpr, [1.0, 1.0, 1.0])])
 
     def write(self, writer, obj):
-        writer.write_vector(self.identifier, self.value.to_list()[0:3])
+        writer.write_color(self.identifier, [c/255.0 for c in self.value.to_list()[0:3]])
 
     def property_dialog(self, dialog):
         dialog.add_color(self.label, self.value)

@@ -30,6 +30,7 @@ class SuperTuxTileMap:
         width = get_value_from_tree(["width", "_"],  data, 20)
         height = get_value_from_tree(["height", "_"], data, 15)
         result.solid = get_value_from_tree(["solid", "_"],  data, False)
+        result.draw_target = get_value_from_tree(["draw-target", "_"],  data, "")
         result.z_pos = get_value_from_tree(["z-pos", "_"],  data, 0)
         result.speed = get_value_from_tree(["speed", "_"],  data, 1.0)
         result.speed_y = get_value_from_tree(["speed-y", "_"],  data, 1.0)
@@ -51,6 +52,7 @@ class SuperTuxTileMap:
 
     def __init__(self):
         self.solid = False
+        self.draw_target = ""
         self.z_pos = 0
         self.name = ""
         self.speed = 1.0
@@ -62,6 +64,8 @@ class SuperTuxTileMap:
     def write(self, writer, objmap_tilemap_object):
         writer.begin_list("tilemap")
         writer.write_bool("solid", self.solid)
+        if self.draw_target:
+            writer.write_string("draw-target", self.draw_target)
         if self.speed != 1.0:
             writer.write_float("speed", self.speed)
         if self.speed_y != 1.0:

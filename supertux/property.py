@@ -239,4 +239,10 @@ class TilemapProperty(StringProperty):
         super().__init__(label, identifier, "", optional=True)
 
 
+class SectorProperty(StringProperty):
+
+    def __init__(self, label, identifier, default, optional):
+        super().__init__(label, identifier, default, optional=optional)
+
+
 # EOF #

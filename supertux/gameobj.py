@@ -26,7 +26,7 @@ from .property import (BoolProperty, IntProperty, FloatProperty,
                        InlinePosProperty, InlineRectProperty,
                        TilemapProperty, SpriteProperty,
                        SampleProperty, PathProperty, ColorProperty,
-                       ImageProperty, EnumProperty)
+                       ImageProperty, EnumProperty, SectorProperty)
 
 
 def make_sprite_object(metadata, filename):
@@ -155,6 +155,23 @@ class Decal(GameObj):
         ]
 
 
+class Trampoline(GameObj):
+
+    label = "Trampoline"
+    identifier = "trampoline"
+    sprite = "images/objects/trampoline/trampoline.sprite"
+
+    def __init__(self):
+        super().__init__()
+
+        self.objmap_object = make_sprite_object(self, self.sprite)
+
+        self.properties = [
+            BoolProperty("Portable", "portable", optional=True, default=True),
+            InlinePosProperty()
+        ]
+
+
 class SecretArea(GameObj):
 
     label = "SecretArea"
@@ -280,6 +297,29 @@ class Torch(GameObj):
 
         self.properties = [
             SpriteProperty("Sprite", "sprite", default=self.sprite, optional=False),
+            InlinePosProperty(),
+        ]
+
+
+class WilloWisp(GameObj):
+
+    label = "WillowIsp"
+    identifier = "willowisp"
+    sprite = "images/creatures/willowisp/willowisp.sprite"
+
+    def __init__(self):
+        super().__init__()
+
+        self.objmap_object = make_sprite_object(self, self.sprite)
+
+        self.properties = [
+            SectorProperty("Sector", "sector", default="", optional=False),
+            StringProperty("SpawnPoint", "spawnpoint", default="", optional=False),
+            FloatProperty("Fly Speed", "flyspeed", default=64.0, optional=True),
+            FloatProperty("Track Range", "track-range", default=384.0, optional=True),
+            FloatProperty("Vanish Range", "vanish-range", default=512, optional=True),
+            StringProperty("Hit Script", "hit-script", default="", optional=True),
+            # ColorProperty("Color", "color"),
             InlinePosProperty(),
         ]
 

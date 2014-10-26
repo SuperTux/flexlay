@@ -20,13 +20,14 @@ import os.path
 
 from flexlay import ObjectBrush, Config
 from .sprite import SuperTuxSprite
-from .gameobj import (BadGuy, BonusBlock, Candle, Camera, Dispenser, Door,
-                      SpawnPoint, ResetPoint, AmbientSound,
+from .gameobj import (BadGuy, BonusBlock, Candle, Camera, Dispenser,
+                      Door, SpawnPoint, ResetPoint, AmbientSound,
                       SimpleObject, SimpleTileObject, Powerup,
                       SecretArea, SequenceTrigger, Background,
                       Gradient, ParticleSystem, Platform,
                       ScriptedObject, InfoBlock, LevelTime, Decal,
-                      ScriptTrigger, Switch, Torch, WeakBlock, Wind)
+                      ScriptTrigger, Switch, Torch, WeakBlock,
+                      WilloWisp, Wind, Trampoline)
 
 
 class SuperTuxGameObjFactory:
@@ -114,7 +115,9 @@ class SuperTuxGameObjFactory:
         self.add_object(SpawnPoint)
         self.add_object(Switch)
         self.add_object(Torch)
+        self.add_object(Trampoline)
         self.add_object(WeakBlock)
+        self.add_object(WilloWisp)
         self.add_object(Wind)
 
         self.add_badguy("pneumatic-platform", "images/engine/editor/pneumaticplatform.png")
@@ -179,10 +182,8 @@ class SuperTuxGameObjFactory:
         self.add_badguy("thunderstorm", "images/engine/editor/thunderstorm.png")
         self.add_badguy("toad", "images/creatures/toad/toad.sprite")
         self.add_badguy("totem", "images/creatures/totem/totem.sprite")
-        self.add_badguy("trampoline", "images/objects/trampoline/trampoline1-0.png")
         self.add_badguy("walkingleaf", "images/creatures/walkingleaf/walkingleaf.sprite")
         self.add_badguy("walkingtree", "images/creatures/walkingleaf/walkingleaf.sprite")
-        self.add_badguy("willowisp", "images/creatures/willowisp/willowisp.sprite")
         self.add_badguy("yeti", "images/creatures/yeti/yeti.png")
         self.add_badguy("yeti_stalactite", "images/engine/editor/stalactite_yeti.png")
         self.add_badguy("zeekling", "images/creatures/zeekling/left-0.png")

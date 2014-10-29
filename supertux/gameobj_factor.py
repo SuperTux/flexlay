@@ -27,7 +27,8 @@ from .gameobj import (BadGuy, BonusBlock, Candle, Camera, Dispenser,
                       Gradient, ParticleSystem, Platform,
                       ScriptedObject, InfoBlock, LevelTime, Decal,
                       ScriptTrigger, Switch, Torch, WeakBlock,
-                      WilloWisp, Wind, Trampoline)
+                      WilloWisp, Wind, Trampoline,
+                      DartTrap, GhostFlame, InvisibleWall)
 
 
 class SuperTuxGameObjFactory:
@@ -103,9 +104,12 @@ class SuperTuxGameObjFactory:
 
         self.add_object(BonusBlock)
         self.add_object(Candle)
+        self.add_object(DartTrap)
         self.add_object(Door)
+        self.add_object(GhostFlame)
         self.add_object(Gradient)
         self.add_object(InfoBlock)
+        self.add_object(InvisibleWall)
         self.add_object(LevelTime)
         self.add_object(Platform)
         self.add_object(Powerup)
@@ -135,18 +139,15 @@ class SuperTuxGameObjFactory:
         self.add_badguy("climbable", "images/engine/editor/climbable.png")
         self.add_badguy("coin", "images/objects/coin/coin.sprite")
         self.add_badguy("crystallo", "images/creatures/crystallo/crystallo.sprite")
-        self.add_badguy("darttrap", "images/creatures/darttrap/darttrap.sprite")
         self.add_badguy("fish", "images/creatures/fish/left-0.png")
         self.add_badguy("flame", "images/creatures/flame/flame-0.png")
         self.add_badguy("flyingsnowball", "images/creatures/flying_snowball/left-0.png")
-        self.add_badguy("ghostflame", "images/creatures/flame/ghostflame.sprite")
         self.add_badguy("ghosttree", "images/creatures/flame/ghostflame.sprite")
         self.add_badguy("goldbomb", "images/creatures/gold_bomb/gold_bomb.sprite")
         self.add_badguy("haywire", "images/creatures/haywire/haywire.sprite")
         self.add_badguy("icecrusher", "images/creatures/icecrusher/icecrusher.sprite")
         self.add_badguy("iceflame", "images/creatures/flame/iceflame.sprite")
         self.add_badguy("igel", "images/creatures/igel/igel.sprite")
-        self.add_badguy("invisible_wall", "images/engine/editor/invisible_wall.png")
         self.add_badguy("ispy", "images/objects/ispy/ispy.sprite")
         self.add_badguy("jumpy", "images/creatures/jumpy/left-middle.png")
         self.add_badguy("kugelblitz", "images/creatures/kugelblitz/flying-0.png")

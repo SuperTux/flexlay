@@ -31,19 +31,21 @@ from .worldmap import WorldMap
 from .worldmap_object import WorldmapObject
 from .supertux import main
 from .property import (BoolProperty, IntProperty, FloatProperty,
-                       StringProperty, DirectionProperty, InlinePosProperty,
-                       InlineRectProperty, TilemapProperty, ColorProperty, ImageProperty, SectorProperty)
+                       StringProperty, DirectionProperty,
+                       InlinePosProperty, InlineRectProperty,
+                       TilemapProperty, ColorProperty, ImageProperty,
+                       SectorProperty)
 
 
-__all__ = ["GameObj", "SuperTuxGUI", "Level",
-           "Sector", "SuperTuxSprite", "SuperTuxTileMap",
-           "SuperTuxTileset", "load_lisp", "WorldMap",
-           "WorldmapObject", "main", "SuperTuxMenuBar",
-           "SuperTuxToolbox", "SuperTuxButtonPanel",
-           "supertux_gameobj_factory",
+__all__ = ["GameObj", "SuperTuxGUI", "Level", "Sector",
+           "SuperTuxSprite", "SuperTuxTileMap", "SuperTuxTileset",
+           "load_lisp", "WorldMap", "WorldmapObject", "main",
+           "SuperTuxMenuBar", "SuperTuxToolbox",
+           "SuperTuxButtonPanel", "supertux_gameobj_factory",
            "BoolProperty", "IntProperty", "FloatProperty",
            "StringProperty", "DirectionProperty", "InlinePosProperty",
-           "InlineRectProperty", "TilemapProperty", "ColorProperty", "ImageProperty"]
+           "InlineRectProperty", "TilemapProperty", "ColorProperty",
+           "ImageProperty", "SectorProperty"]
 
 
 # EOF #

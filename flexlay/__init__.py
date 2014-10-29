@@ -25,7 +25,7 @@ from .field import Field
 from .pixel_buffer import PixelBuffer
 from .blitter import blit_opaque, blit, blit_clear
 from .tile_brush import TileBrush
-from .color import Color
+from .color import Color, Colorf
 from .tileset import Tileset
 from .layer import Layer
 
@@ -78,7 +78,7 @@ __all__ = [
     # "BitmapLayer", "OnionSkinLayer", "SketchLayer",
     # "SpriteStrokeDrawer", "Stroke", "StrokeDrawer", "Dab",
     "Brush", "BrushMask", "Canvas", "Config",
-    "Color", "BlendFunc", "blit", "blit_clear", "blit_opaque",
+    "Color", "Colorf", "BlendFunc", "blit", "blit_clear", "blit_opaque",
     "Command", "CommandGroup", "DrawerProperties", "Field",
     "Flexlay", "GraphicContext", "GraphicContextState",
     "GUIManager", "InputEvent", "Layer", "ObjectAddCommand",

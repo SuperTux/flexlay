@@ -138,7 +138,8 @@ class Sector:
 
     def write(self, writer):
         writer.write_string("name", self.name)
-        writer.write_string("music", self.music)
+        if self.music:
+            writer.write_string("music", self.music)
         if self.init_script:
             writer.write_string("init-script", self.init_script)
         writer.write_rgb("ambient-light", self.ambient_light)

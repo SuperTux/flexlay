@@ -16,7 +16,7 @@
 
 
 from flexlay.util import get_value_from_tree
-from flexlay import Color
+from flexlay import Colorf
 
 
 class Property:
@@ -162,13 +162,13 @@ class ImageProperty(StringProperty):
 class ColorProperty(StringProperty):
 
     def __init__(self, label, identifier):
-        super().__init__(label, identifier, Color())
+        super().__init__(label, identifier, Colorf())
 
     def read(self, sexpr, obj):
-        self.value = Color(*[int(c * 255) for c in get_value_from_tree([self.identifier],  sexpr, [1.0, 1.0, 1.0])])
+        self.value = Colorf(*get_value_from_tree([self.identifier],  sexpr, [1.0, 1.0, 1.0]))
 
     def write(self, writer, obj):
-        writer.write_color(self.identifier, [c/255.0 for c in self.value.to_list()[0:3]])
+        writer.write_color(self.identifier, self.value.to_list()[0:3])
 
     def property_dialog(self, dialog):
         dialog.add_color(self.label, self.value)

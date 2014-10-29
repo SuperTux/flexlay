@@ -137,6 +137,24 @@ class ResetPoint(GameObj):
         ]
 
 
+class GhostFlame(GameObj):
+
+    label = "GhostFlame"
+    identifier = "ghostflame"
+    sprite = "images/creatures/flame/ghostflame.sprite"
+
+    def __init__(self):
+        super().__init__()
+
+        self.objmap_object = make_sprite_object(self, self.sprite)
+
+        self.properties = [
+            FloatProperty("Radius", "radius", default=100.0, optional=True),
+            FloatProperty("Speed", "speed", default=2.0, optional=True),
+            InlinePosProperty(),
+        ]
+
+
 class Decal(GameObj):
 
     label = "Decal"
@@ -187,6 +205,22 @@ class SecretArea(GameObj):
             TilemapProperty("FadeTilemap", "fade-tilemap"),
             StringProperty("Script", "script", "", optional=False),
             StringProperty("Message", "message", "", optional=False, translatable=False),
+            InlineRectProperty(),
+        ]
+
+
+class InvisibleWall(GameObj):
+
+    label = "InvisibleWall"
+    identifier = "invisible_wall"
+    sprite = "images/engine/editor/invisible_wall.png"
+
+    def __init__(self):
+        super().__init__()
+
+        self.objmap_object = make_rect_object(self, Color(0, 0, 0, 255*0.8))
+
+        self.properties = [
             InlineRectProperty(),
         ]
 
@@ -297,6 +331,26 @@ class Torch(GameObj):
 
         self.properties = [
             SpriteProperty("Sprite", "sprite", default=self.sprite, optional=False),
+            InlinePosProperty(),
+        ]
+
+
+class DartTrap(GameObj):
+
+    label = "DartTrap"
+    identifier = "darttrap"
+    sprite = "images/creatures/darttrap/darttrap.sprite"
+
+    def __init__(self):
+        super().__init__()
+
+        self.objmap_object = make_sprite_object(self, self.sprite)
+
+        self.properties = [
+            FloatProperty("Initial Delay", "initial-delay", default=0, optional=False),
+            FloatProperty("Fire Delay", "fire-delay", default=2.0, optional=False),
+            IntProperty("Ammo", "ammo", default=-1, optional=False),
+            DirectionProperty("Direction", "direction", 0),
             InlinePosProperty(),
         ]
 
@@ -478,9 +532,9 @@ class BonusBlock(GameObj):
         self.objmap_object = make_sprite_object(self, self.sprite)
 
         self.properties = [
-            StringProperty("Message", "message", "", optional=True, translatable=True),
+            StringProperty("Message", "message", default="", optional=True, translatable=True),
             IntProperty("Count", "count", default=1, optional=True),
-            StringProperty("Script", "script", "", optional=True),
+            StringProperty("Script", "script", default="", optional=False),
             EnumProperty("Contents", "contents", default=0, optional=True, values=self.values),
             SpriteProperty("Sprite", "sprite", optional=True),
             InlinePosProperty()
@@ -522,8 +576,9 @@ class Powerup(GameObj):
         self.objmap_object = make_sprite_object(self, self.sprite)
 
         self.properties = [
-            StringProperty("Script", "script", "", optional=True),
-            SpriteProperty("Sprite", "sprite"),
+            BoolProperty("Disable Physics", "disable-physics", default=False, optional=True),
+            StringProperty("Script", "script", default="", optional=True),
+            SpriteProperty("Sprite", "sprite", default=self.sprite, optional=False),
             InlinePosProperty(),
         ]
         self.constraints = [

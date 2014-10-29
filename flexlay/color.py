@@ -60,4 +60,22 @@ class Color:
         return "#%02x%02x%02x" % (self.r, self.g, self.b)
 
 
+class Colorf:
+
+    def __init__(self, r=1.0, g=1.0, b=1.0, a=1.0):
+        self.r = r
+        self.g = g
+        self.b = b
+        self.a = a
+
+    def to_list(self):
+        return [self.r, self.g, self.b, self.a]
+
+    def to_color(self):
+        return Color(int(255 * self.r),
+                     int(255 * self.g),
+                     int(255 * self.b),
+                     int(255 * self.a))
+
+
 # EOF #

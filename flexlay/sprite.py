@@ -37,6 +37,7 @@ class Sprite:
 
         self.origin = Origin.top_left
         self.pos = Point(0, 0)
+        self.scale = (1.0, 1.0)
 
     def draw(self, x, y, gc):
         painter = gc.get_qt_painter()
@@ -44,7 +45,12 @@ class Sprite:
         if not img:
             print("Error: Sprite: Empty PixelBuffer:", self.filename)
         else:
-            origin = Origin.calc_origin(self.origin, Size(self.width, self.height))
+            origin = Origin.calc_origin(self.origin,
+                            Size(self.width * self.scale[0], self.height * self.scale[1]))
+            if self.width > self.height:
+                img = img.scaledToWidth(self.width * self.scale[0])
+            else:
+                img = img.scaledToHeight(self.height * self.scale[1])
             painter.drawImage(QPoint(x - origin.x, y - origin.y), img)
 
     @property
@@ -56,7 +62,7 @@ class Sprite:
         return self.pixelbuffer.height
 
     def set_scale(self, x, y):
-        # m_sprite.set_scale(x, y)
+        self.scale = (x, y)
         pass
 
     def set_blend_func(self, src, dest):
@@ -88,7 +94,7 @@ class Sprite:
 
     def get_scale(self):
         # m_sprite.get_scale(x, y)
-        return (1.0, 1.0)
+        return self.scale
 
     def add_frame(self, surface, rect):
         # m_sprite.add_frame(surface, rect)

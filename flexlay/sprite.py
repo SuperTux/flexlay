@@ -45,12 +45,13 @@ class Sprite:
         if not img:
             print("Error: Sprite: Empty PixelBuffer:", self.filename)
         else:
-            origin = Origin.calc_origin(self.origin,
-                            Size(self.width * self.scale[0], self.height * self.scale[1]))
+            scaled_width = self.width * self.scale[0]
+            scaled_height = self.height * self.scale[1]
+            origin = Origin.calc_origin(self.origin, Size(scaled_width, scaled_height))
             if self.width > self.height:
-                img = img.scaledToWidth(self.width * self.scale[0])
+                img = img.scaledToWidth(scaled_width)
             else:
-                img = img.scaledToHeight(self.height * self.scale[1])
+                img = img.scaledToHeight(scaled_height)
             painter.drawImage(QPoint(x - origin.x, y - origin.y), img)
 
     @property

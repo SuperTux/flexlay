@@ -105,6 +105,9 @@ class ObjectSelectorWidget(QWidget):
         if self.mouse_over_tile < 0 or self.mouse_over_tile >= len(self.brushes):
             self.mouse_over_tile = -1
 
+        if self.mouse_over_tile > -1:
+            self.setToolTip(self.brushes[self.mouse_over_tile].get_data())
+
         self.repaint()
 
     def paintEvent(self, event):

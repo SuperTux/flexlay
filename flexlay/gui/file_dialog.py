@@ -37,7 +37,7 @@ class FileDialog:
         if self.callback:
             self.file_dialog.fileSelected.connect(self.callback)
 
-        self.file_dialog.show()
+        self.file_dialog.exec_()
 
     def get_filename(self):
         return self.filename

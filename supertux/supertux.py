@@ -61,8 +61,6 @@ def main():
     # tileset.load(os.path.join(Config.current.datadir, "images/worldmap.strf"))
     tileset.create_ungrouped_tiles_group()
 
-    tileset.create_ungrouped_tiles_group()
-
     gui = SuperTuxGUI(flexlay)
     if args.LEVELFILE is None:
         gui.new_level(100, 50)

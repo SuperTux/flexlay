@@ -30,6 +30,8 @@ class EditorMapWidget(QWidget):
         self.setMouseTracking(True)
 
         self.comp = comp
+        self.workspace = comp.get_workspace()
+        self.gc_state = comp.get_gc_state()
 
         pal = self.palette()
         pal.setColor(self.backgroundRole(), QColor(100, 0, 100))
@@ -105,12 +107,10 @@ class EditorMapWidget(QWidget):
         painter.begin(self)
 
         # painter.setRenderHint(QPainter::Antialiasing)
-
-        workspace = self.comp.get_workspace()
-        gc = GraphicContext(painter, self.comp.get_gc_state())
-        self.comp.get_gc_state().push(gc)
-        workspace.draw(gc)
-        self.comp.get_gc_state().pop(gc)
+        gc = GraphicContext(painter, self.gc_state)
+        self.gc_state.push(gc)
+        self.workspace.draw(gc)
+        self.gc_state.pop(gc)
 
         painter.end()
 

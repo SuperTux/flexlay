@@ -21,19 +21,19 @@ class SuperTuxToolbox:
         # Create Toolbox
         self.toolbox = gui_manager.create_button_panel(False)
         self.paint_icon = self.toolbox.add_icon("data/images/tools/stock-tool-pencil-22.png",
-                                                editor.set_tilemap_paint_tool)
+                                                editor.set_tilemap_paint_tool, hover="Pencil Tool")
         self.fill_icon = self.toolbox.add_icon("data/images/tools/stock-tool-fill-24.png",
-                                               editor.set_tilemap_fill_tool)
+                                               editor.set_tilemap_fill_tool, hover="Fill Tool")
         self.replace_icon = self.toolbox.add_icon("data/images/tools/stock-tool-replace-24.png",
-                                                  editor.set_tilemap_replace_tool)
+                                                  editor.set_tilemap_replace_tool, hover="Replace Tool")
         self.select_icon = self.toolbox.add_icon("data/images/tools/stock-tool-rect-select-22.png",
-                                                 editor.set_tilemap_select_tool)
+                                                 editor.set_tilemap_select_tool, hover="Rectangle Select Tool")
         self.toolbox.add_separator()
         self.object_icon = self.toolbox.add_icon("data/images/tools/stock-tool-clone-22.png",
-                                                 editor.set_objmap_select_tool)
+                                                 editor.set_objmap_select_tool, hover="Clone Tool")
         self.toolbox.add_separator()
         self.zoom_icon = self.toolbox.add_icon("data/images/tools/stock-tool-zoom-22.png",
-                                               editor.set_zoom_tool)
+                                               editor.set_zoom_tool, hover="Zoom Tool")
 
         self.icons = [self.paint_icon, self.fill_icon, self.replace_icon,
                       self.select_icon, self.object_icon, self.zoom_icon]

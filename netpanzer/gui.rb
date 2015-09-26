@@ -1,51 +1,18 @@
-##  $Id$
-## 
-##  Flexlay - A Generic 2D Game Editor
-##  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
-##
-##  This program is free software: you can redistribute it and/or modify
-##  it under the terms of the GNU General Public License as published by
-##  the Free Software Foundation, either version 3 of the License, or
-##  (at your option) any later version.
-##  
-##  This program is distributed in the hope that it will be useful,
-##  but WITHOUT ANY WARRANTY; without even the implied warranty of
-##  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-##  GNU General Public License for more details.
-##  
-##  You should have received a copy of the GNU General Public License
-##  along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-require "layout_component.rb"
-
-$guilayout_spec = \
-[:vbox,
-  [:components,
-    [:menubar,
-      [:name, 'menubar'],
-      [:size, 23]],
-    [:buttonpanel, 
-      [:name, 'buttonpanel'],
-      [:size, 33]],
-    [:hbox,
-      [:components,
-        [:editormap, 
-          [:name, 'editormap']],
-        [:panel,
-          [:layout, :vbox],
-          [:size, 134],
-          [:components,
-            [:tab,
-              [:padding, 3],
-              [:components,
-                [:listbox, 
-                  [:name, 'brushbox']],
-                [:objectselector,
-                  [:name, 'objectselector']]]],
-            [:minimap, 
-              [:padding, 3],
-              [:size, 134],
-              [:name, 'minimap']]]]]]]]
+# Flexlay - A Generic 2D Game Editor
+# Copyright (C) 2002 Ingo Ruhnke <grumbel@gmail.com>
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 class GUI
   attr_reader :workspace, :minimap, :editor_map
@@ -53,21 +20,15 @@ class GUI
   def initialize()
     @gui = GUIManager.new()
 
-    components = LayoutComponent.create_from_sexpr(CL_Rect.new(0,0, $screen.width, $screen.height),
-                                                   SExpression.new($guilayout_spec),
-                                                   @gui.get_component())
-
-    connect_v2_graceful($flexlay.sig_resize(), proc{|w, h|
-                          components.set_size(w, h)
-                        })
-
-    @editor_map = components.get('editormap').component
+    @editor_map = @gui.create_editor_map_component()
     @workspace = @editor_map.get_workspace()
 
-    @brushbox = components.get('brushbox').component
-    @brushbox.show(false)
+    @brushbox = @gui.create_tile_brush_selector()
+    if false # GRUMBEL
+      connect_v1_cl(@brushbox.sig_highlighted(), method(:brushbox_change))
+    end
 
-    @objectselector = components.get('objectselector').component
+    @objectselector = @gui.create_object_selector(42, 42)
 
     @objectselector.add_brush(ObjectBrush.new(GameObjects::Outpost.get_sprite(),
                                               make_metadata(proc{GameObjects::Outpost.new()})))
@@ -78,24 +39,19 @@ class GUI
       @objectselector.add_brush(ObjectBrush.new(make_sprite($config.datadir + "/thumbnails/#{i}.png"),
                                                 make_metadata(proc{GameObjects::TileObject.new(i)})))
     }
-
-    @objectselector.show(true)
-
     connect_v2_ObjectBrush_Point(@objectselector.sig_drop(), method(:on_object_drop))
-    connect_v1(@brushbox.sig_highlighted(), method(:brushbox_change))
-
+    
     @workspace.set_tool(0, $tilemap_paint_tool.to_tool());
     @workspace.set_tool(2, $workspace_move_tool.to_tool());
 
-
-    @button_panel = components.get('buttonpanel').component
+    @button_panel = @gui.create_button_panel(true)
 
     @button_panel.add_icon($flexlay_datadir + "/images/icons24/stock_new.png",
                            proc{ gui_level_new() })
     @button_panel.add_icon($flexlay_datadir + "/images/icons24/stock_open.png", 
                            proc{ gui_level_load() })
-    @button_panel.add_small_icon($flexlay_datadir + "/images/icons24/downarrow.png", 
-                                 proc{ gui_level_load() })
+    @button_panel.add_icon($flexlay_datadir + "/images/icons24/downarrow.png", 
+                           proc{ gui_level_load() })
     @button_panel.add_icon($flexlay_datadir + "/images/icons24/stock_save.png",
                            proc{ gui_level_save() })
     @button_panel.add_icon($flexlay_datadir + "/images/icons24/stock_save_as.png", 
@@ -110,7 +66,7 @@ class GUI
     @button_panel.add_separator()
 
 
-    @tool_button_panel = ButtonPanel.new(320, 23, $screen.width, 33, true, @gui.get_component)
+    @tool_button_panel = @gui.create_button_panel(true)
     @tool_button_panel.add_separator()
     @tool_button_panel.add_icon($flexlay_datadir + "/images/icons24/object_raise.png", proc{
                                   $objmap_select_tool.get_selection().each {|obj|
@@ -125,7 +81,7 @@ class GUI
     @tool_button_panel.show(false)
 
 
-    @toolbar = ButtonPanel.new(0, 23+33, 33, 32*4+2, false, @gui.get_component())
+    @toolbar = @gui.create_button_panel(false)
     @paint = @toolbar.add_icon($flexlay_datadir + "/images/tools/stock-tool-pencil-22.png",
                                method(:set_tilemap_paint_tool))
     @select = @toolbar.add_icon($flexlay_datadir + "/images/tools/stock-tool-rect-select-22.png",
@@ -137,77 +93,86 @@ class GUI
 
     $brushes.each {|i|
       (index, width, height, name) = i
-      @brushbox.insert_item("%s - %sx%s" % [name, width, height])
+      
+      brush = TileBrush.new(width, height)
+      brush.set_data(Range.new(index, index + (width*height)-1).to_a)
+
+      @brushbox.add_brush("%s - %sx%s" % [name, width, height], brush)
     }
 
-    @menu = components.get('menubar').component
-    @menu.add_item("File/New...", proc{gui_level_new})
-    @menu.add_item("File/Open...", proc{gui_level_load})
-    @menu.add_item("File/Save...", proc{gui_level_save})
-    @menu.add_item("File/Save As...", proc{gui_level_save_as})
-    @menu.add_item("File/Quit",  proc{@gui.quit})
+    @menubar = @gui.create_menubar()
+    file_menu = @menubar.add_menu("File")
+    file_menu.add_item("New...", proc{gui_level_new})
+    file_menu.add_item("Open...", proc{gui_level_load})
+    file_menu.add_item("Save...", proc{gui_level_save})
+    file_menu.add_item("Save As...", proc{gui_level_save_as})
+    file_menu.add_item("Quit",  proc{@gui.quit})
 
-    @menu.add_item("Zoom/1:4 (25%) ",  proc{ gui_set_zoom(0.25) })
-    @menu.add_item("Zoom/1:2 (50%) ",  proc{ gui_set_zoom(0.5) })
-    @menu.add_item("Zoom/1:1 (100%) ", proc{ gui_set_zoom(1.0) })
-    @menu.add_item("Zoom/2:1 (200%) ", proc{ gui_set_zoom(2.0) })
-    @menu.add_item("Zoom/4:1 (400%) ", proc{ gui_set_zoom(4.0) })
+    zoom_menu = @menubar.add_menu("Zoom")
+    zoom_menu.add_item("1:4 (25%) ",  proc{ gui_set_zoom(0.25) })
+    zoom_menu.add_item("1:2 (50%) ",  proc{ gui_set_zoom(0.5) })
+    zoom_menu.add_item("1:1 (100%) ", proc{ gui_set_zoom(1.0) })
+    zoom_menu.add_item("2:1 (200%) ", proc{ gui_set_zoom(2.0) })
+    zoom_menu.add_item("4:1 (400%) ", proc{ gui_set_zoom(4.0) })
 
-    @menu.add_item("Scripts/Flatten",  proc{ @workspace.get_map().get_data().flatten() })
-    @menu.add_item("Scripts/Unflatten",  proc{ @workspace.get_map().get_data().unflatten() })
+    script_menu = @menubar.add_menu("Scripts")
+    script_menu.add_item("Flatten",  proc{ @workspace.get_map().get_data().flatten() })
+    script_menu.add_item("Unflatten",  proc{ @workspace.get_map().get_data().unflatten() })
 
-    @minimap = components.get('minimap').component
+    @minimap = @gui.create_minimap(@editor_map)
 
-    @load_dialog = SimpleFileDialog.new("Load netPanzer Level", "Load", "Cancel", @gui.get_component())
+    @load_dialog = @gui.create_filedialog("Load netPanzer Level", "Load", "Cancel")
     @load_dialog.set_filename($config.datadir + "/maps/")
-    @save_dialog = SimpleFileDialog.new("Save netPanzer Level as...", "Save", "Cancel", @gui.get_component())
+    @save_dialog = @gui.create_filedialog("Save netPanzer Level as...", "Save", "Cancel")
     @save_dialog.set_filename($config.datadir + "/maps/")
 
-    connect_v2(@editor_map.sig_on_key("l"), proc{ |x, y|
-                 $objmap_select_tool.get_selection().each {|obj|
-                   @workspace.get_map().get_data().objects.raise(obj)
-                 }
-               })
-    connect_v2(@editor_map.sig_on_key("s"), proc{ |x, y| 
-                 $objmap_select_tool.get_selection().each {|obj|
-                   @workspace.get_map().get_data().objects.lower(obj)
-                 }
-               })
+    if false # GRUMBEL
+      connect_v2(@editor_map.sig_on_key("l"), proc{ |x, y|
+                   $objmap_select_tool.get_selection().each {|obj|
+                     @workspace.get_map().get_data().objects.raise(obj)
+                   }
+                 })
+      connect_v2(@editor_map.sig_on_key("s"), proc{ |x, y| 
+                   $objmap_select_tool.get_selection().each {|obj|
+                     @workspace.get_map().get_data().objects.lower(obj)
+                   }
+                 })
 
-    connect_v2($objmap_select_tool.sig_on_right_click(), proc{|x,y|
-                 puts "Launching Menu at #{x}, #{y}"
-                 menu = Menu.new(CL_Point.new(x-16, y-16), @gui.get_component())
-                 menu.add_item("Delete Selection", proc{ 
-                                 cmd = ObjectDeleteCommand.new(@workspace.get_map().get_metadata().objects)
-                                 $objmap_select_tool.get_selection().each { |i| cmd.add_object(i) }
-                                 @workspace.get_map().execute(cmd.to_command())
-                                 $objmap_select_tool.clear_selection()
-                               })
-                 menu.add_item("Flatten Selection", proc{
-                                 @workspace.get_map().get_data().objects.get_objects().each{|obj|
-                                   obj.get_data().draw_to_tilemap(@workspace.get_map().get_data().tilemap)
-                                 }
-                                 cmd = ObjectDeleteCommand.new(@workspace.get_map().get_metadata().objects)
-                                 @workspace.get_map().execute(cmd.to_command())
-                                 $objmap_select_tool.get_selection().each { |i| cmd.add_object(i) }
-                                 @workspace.get_map().execute(cmd.to_command())
-                                 $objmap_select_tool.clear_selection()
-                               })
-                 menu.add_separator()
-                 menu.add_item(make_sprite($flexlay_datadir + "/images/icons16/object_raise.png"), 
-                               "Raise Selection", proc{
-                                 $objmap_select_tool.get_selection().each {|obj|
-                                   @workspace.get_map().get_data().objects.raise(obj)
-                                 }
-                               })
-                 menu.add_item(make_sprite($flexlay_datadir + "/images/icons16/object_lower.png"), 
-                               "Lower Selection", proc{
-                                 $objmap_select_tool.get_selection().each {|obj|
-                                   @workspace.get_map().get_data().objects.lower(obj)
-                                 }
-                               })
-                 menu.run()
-               })
+      connect_v2($objmap_select_tool.sig_on_right_click(), proc{|x,y|
+                   puts "Launching Menu at #{x}, #{y}"
+                   menu = Menu.new(Point.new(x-16, y-16), @gui.get_component())
+                   menu.add_item("Delete Selection", proc{ 
+                                   cmd = ObjectDeleteCommand.new(@workspace.get_map().get_metadata().objects)
+                                   $objmap_select_tool.get_selection().each { |i| cmd.add_object(i) }
+                                   @workspace.get_map().execute(cmd.to_command())
+                                   $objmap_select_tool.clear_selection()
+                                 })
+                   menu.add_item("Flatten Selection", proc{
+                                   @workspace.get_map().get_data().objects.get_objects().each{|obj|
+                                     obj.get_data().draw_to_tilemap(@workspace.get_map().get_data().tilemap)
+                                   }
+                                   cmd = ObjectDeleteCommand.new(@workspace.get_map().get_metadata().objects)
+                                   @workspace.get_map().execute(cmd.to_command())
+                                   $objmap_select_tool.get_selection().each { |i| cmd.add_object(i) }
+                                   @workspace.get_map().execute(cmd.to_command())
+                                   $objmap_select_tool.clear_selection()
+                                 })
+                   menu.add_separator()
+                   menu.add_item(make_sprite($flexlay_datadir + "/images/icons16/object_raise.png"), 
+                                 "Raise Selection", proc{
+                                   $objmap_select_tool.get_selection().each {|obj|
+                                     @workspace.get_map().get_data().objects.raise(obj)
+                                   }
+                                 })
+                   menu.add_item(make_sprite($flexlay_datadir + "/images/icons16/object_lower.png"), 
+                                 "Lower Selection", proc{
+                                   $objmap_select_tool.get_selection().each {|obj|
+                                     @workspace.get_map().get_data().objects.lower(obj)
+                                   }
+                                 })
+                   menu.run()
+                 })
+    end
   end
 
   def brushbox_change(index)
@@ -220,6 +185,7 @@ class GUI
   def on_object_drop(brush, pos)
     obj = get_ruby_object(brush.get_data()).call()
     pos = @editor_map.screen2world(pos)
+    puts "<>>>>>>>>< ", obj.get_sprite(), pos
     sprite_obj = ObjMapSpriteObject.new(obj.get_sprite(), pos, make_metadata(obj))
     obj.data = sprite_obj
     
@@ -283,7 +249,7 @@ class GUI
 
   def gui_level_save()
     if @workspace.get_map().get_metadata().filename
-        @save_dialog.set_filename(@workspace.get_map().get_metadata().filename)
+      @save_dialog.set_filename(@workspace.get_map().get_metadata().filename)
     else
       @save_dialog.set_filename(File::dirname(@save_dialog.get_filename())  + "/")
     end
@@ -297,7 +263,7 @@ class GUI
 
 
   def gui_level_new()
-    dialog = GenericDialog.new("SecretArea Property Dialog", @gui.get_component())
+    dialog = @gui.create_generic_dialog("Create New Level")
     dialog.add_string("Name: ", "New Level")
     dialog.add_int("Width: ", 128)
     dialog.add_int("Height: ", 128)
@@ -332,12 +298,19 @@ class GUI
     else
       grid_icon.set_up()
       
-      grid_icon = Icon(CL_Rect(CL_Point(p.inc(48), 2), CL_Size(32, 32)),
+      grid_icon = Icon(Rect(Point(p.inc(48), 2), Size(32, 32)),
                        make_sprite($flexlay_datadir + "/images/icons24/grid.png"), "Some tooltip", button_panel);
       grid_icon.set_callback(proc{gui_toggle_grid})
 
-      layer_menu = Menu(CL_Point(32*11+2, 54), $gui.get_component())
+      layer_menu = Menu(Point(32*11+2, 54), $gui.get_component())
     end
+  end
+
+  def netpanzer_new_level(w, h, name)
+    level = Level.new(w, h)
+    level.activate(@workspace)
+    level.name = name
+    connect(level.editormap.sig_change(), method(:on_map_change))
   end
 
   def netpanzer_load_level(filename)
@@ -356,7 +329,7 @@ class GUI
     $gui.workspace.get_map().get_data().save(filename)
   end
 
-  # recent_files_menu = Menu.new(CL_Point.new(32*2, 54), $gui.get_component())
+  # recent_files_menu = Menu.new(Point.new(32*2, 54), $gui.get_component())
   # for filename in $config.recent_files
   #    recent_files_menu.add_item(mysprite, filename, proc{ netpanzer_load_level(filename) })
   #end

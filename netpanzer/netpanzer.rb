@@ -1,20 +1,18 @@
-##  $Id$
-## 
-##  Flexlay - A Generic 2D Game Editor
-##  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
-##
-##  This program is free software: you can redistribute it and/or modify
-##  it under the terms of the GNU General Public License as published by
-##  the Free Software Foundation, either version 3 of the License, or
-##  (at your option) any later version.
-##  
-##  This program is distributed in the hope that it will be useful,
-##  but WITHOUT ANY WARRANTY; without even the implied warranty of
-##  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-##  GNU General Public License for more details.
-##  
-##  You should have received a copy of the GNU General Public License
-##  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# Flexlay - A Generic 2D Game Editor
+# Copyright (C) 2002 Ingo Ruhnke <grumbel@gmail.com>
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Handle command line arguments
 if ARGV != []
@@ -34,8 +32,6 @@ require_relative "level.rb"
 require_relative "gameobjects.rb"
 require_relative "gui.rb"
 
-$screen  = CL_Size.new(640, 480)
-
 $flexlay = Flexlay.new()
 if ENV["FLEXLAY_DATADIR"] then
   $flexlay.set_datadir(ENV["FLEXLAY_DATADIR"])
@@ -44,7 +40,7 @@ else
   $flexlay.set_datadir("../data/")
   $flexlay_datadir = "../data/"
 end
-$flexlay.init("netPanzer Editor", $screen.width, $screen.height, false, true)
+$flexlay.init("netPanzer Editor")
 
 class NetPanzerConfig
   attr_accessor :datadir, :recent_files
@@ -74,9 +70,8 @@ $tileset = NetPanzerData::instance().get_tileset()
 
 if ENV["NETPANZER_EDITOR_DATADIR"] then
   $config.datadir = ENV["NETPANZER_EDITOR_DATADIR"]
-  $resources = CL_ResourceManager.new(ENV["NETPANZER_EDITOR_DATADIR"] + "/netpanzersprites.xml")
 else
-  $resources = CL_ResourceManager.new("netpanzersprites.xml")
+  $config.datadir = "."
 end
 
 # Tools
@@ -109,7 +104,7 @@ $gui = GUI.new()
 
 # $gui.set_tilemap_paint_tool()
 
-$gui.gui_level_new()
+$gui.netpanzer_new_level(128, 128, "New Level")
 
 # generate_sprites()
 $gui.run()

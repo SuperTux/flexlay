@@ -1,21 +1,20 @@
 #!/usr/bin/ruby
-##  $Id$
-##
-##  Flexlay - A Generic 2D Game Editor
-##  Copyright (C) 2004 Ingo Ruhnke <grumbel@gmx.de>
-##
-##  This program is free software: you can redistribute it and/or modify
-##  it under the terms of the GNU General Public License as published by
-##  the Free Software Foundation, either version 3 of the License, or
-##  (at your option) any later version.
-##  
-##  This program is distributed in the hope that it will be useful,
-##  but WITHOUT ANY WARRANTY; without even the implied warranty of
-##  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-##  GNU General Public License for more details.
-##  
-##  You should have received a copy of the GNU General Public License
-##  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# Flexlay - A Generic 2D Game Editor
+# Copyright (C) 2004 Ingo Ruhnke <grumbel@gmail.com>
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 require "flexlay_wrap"
 include Flexlay_wrap
@@ -36,8 +35,8 @@ if ENV["FLEXLAY_DATADIR"] then
   flexlay.set_datadir($flexlay_datadir)
 end
 
-# $screen_rect = CL_Rect.new(CL_Point.new(0, 0), CL_Size.new(800, 600))
-$screen_rect = CL_Rect.new(CL_Point.new(0, 0), CL_Size.new(1024, 768))
+# $screen_rect = Rect.new(Point.new(0, 0), Size.new(800, 600))
+$screen_rect = Rect.new(Point.new(0, 0), Size.new(1024, 768))
 
 flexlay.init("Flexlay Paint", $screen_rect.get_width(), $screen_rect.get_height(), false)
 
@@ -47,7 +46,7 @@ $layer_move_tool     = LayerMoveTool.new()
 $zoom_tool           = ZoomTool.new()
 $objmap_select_tool  = ObjMapSelectTool.new()
 
-DrawerProperties.current().set_color(CL_Color.new(0, 0, 0, 50))
+DrawerProperties.current().set_color(Color.new(0, 0, 0, 50))
 
 $gui   = PaintGUI.new()
 
@@ -73,9 +72,9 @@ else
 end
 
 $image.layers_count.times {|i|
-  button = CL_Button.new(CL_Rect.new(CL_Point.new(25*i+6, 450), CL_Size.new(25, 25)), "#{i}",
+  button = CL_Button.new(Rect.new(Point.new(25*i+6, 450), Size.new(25, 25)), "#{i}",
                          $gui.selector_window)
-  connect(button.sig_clicked(), proc{ $image.set_active_layer(i) })
+  connect_cl(button.sig_clicked(), proc{ $image.set_active_layer(i) })
 }
 
 $gui.run()

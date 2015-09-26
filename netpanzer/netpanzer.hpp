@@ -1,16 +1,16 @@
 //  Pingus - A free Lemmings clone
-//  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmx.de>
+//  Copyright (C) 2002 Ingo Ruhnke <grumbel@gmail.com>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
 //  the Free Software Foundation, either version 3 of the License, or
 //  (at your option) any later version.
-//  
+//
 //  This program is distributed in the hope that it will be useful,
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
-//  
+//
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -18,12 +18,13 @@
 #define HEADER_SCRIPTING_NETPANZER_HXX
 
 #include <string>
-#include <ClanLib/Display/palette.h>
-#include <ClanLib/Display/surface.h>
-#include <ClanLib/Display/sprite.h>
 
-#include "../lib/tileset.hpp"
-#include "../lib/tilemap_layer.hpp"
+#include "../libflexlay/palette.hpp"
+#include "../libflexlay/pixel_buffer.hpp"
+#include "../libflexlay/sprite.hpp"
+#include "../libflexlay/surface.hpp"
+#include "../libflexlay/tilemap_layer.hpp"
+#include "../libflexlay/tileset.hpp"
 
 void load_netpanzer_tileset(Tileset tileset, const char* filename);
 
@@ -42,12 +43,12 @@ struct NetPanzerTileGroup
   int start;
   int width;
   int height;
-  
-  CL_Surface get_surface(); 
+
+  Surface get_surface();
 
 private:
   /** Surface holding the tilegroups image */
-  CL_Surface surface;
+  Surface surface;
 };
 
 class NetPanzerData
@@ -55,7 +56,7 @@ class NetPanzerData
 private:
   static NetPanzerData* instance_;
 public:
-  static NetPanzerData* instance() 
+  static NetPanzerData* instance()
   {
     if (instance_)
       return (instance_);
@@ -64,13 +65,14 @@ public:
   }
 
 private:
-  std::string    datadir;
-  CL_Palette     palette;
-  Tileset        tileset;
+  std::string datadir;
+  Palette palette;
+  Tileset tileset;
   unsigned char* tiledata;
   typedef std::vector<NetPanzerTileGroup> TileGroups;
   TileGroups tilegroups;
   std::vector<NetPanzerTileHeader> tile_headers;
+
 public:
   NetPanzerData();
 
@@ -84,13 +86,13 @@ public:
   void register_tilegroup(int start, int width, int height);
 
   void load_data(const std::string& datadir_);
-  const CL_Palette& get_palette() const;
+  const Palette& get_palette() const;
   const Tileset&    get_tileset() const;
   const std::vector<NetPanzerTileHeader>& get_tile_headers() const;
   unsigned char*    get_tiledata() const;
 
-  CL_Palette load_palette(const std::string& filename);
-  CL_Sprite  get_tilegroup_sprite(int index);
+  Palette load_palette(const std::string& filename);
+  Sprite  get_tilegroup_sprite(int index);
 
   /** Locate the tilegroup in which the tile with \a tileindex is
       located */
@@ -109,12 +111,12 @@ public:
   std::string get_id_header();
   std::string get_name();
   std::string get_description();
-  TilemapLayer get_tilemap(); 
+  TilemapLayer get_tilemap();
 
   void set_id_header(const std::string& id);
   void set_name(const std::string& name);
   void set_description(const std::string& description);
-  void set_tilemap(TilemapLayer l); 
+  void set_tilemap(TilemapLayer l);
 
   void save(const std::string& filename);
 

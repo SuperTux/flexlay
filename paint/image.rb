@@ -4,8 +4,8 @@ class Image
 
   def initialize(filename = nil)
     @editormap = EditorMap.new(true)
-    @editormap.set_bounding_rect(CL_Rect.new(0, 0, 1024, 768))
-    @editormap.set_background_color(CL_Color.new(255, 255, 255))
+    @editormap.set_bounding_rect(Rect.new(0, 0, 1024, 768))
+    @editormap.set_background_color(Color.new(255, 255, 255))
 
     @objectmap = ObjectLayer.new()
     @editormap.add_layer(@objectmap.to_layer()) 
@@ -105,7 +105,7 @@ class Image
                                                             1.0, # aspect
                                                             0).to_brush()) # angle
     
-    sprite_drawer.set_color(CL_Color.new(0, 0, 0, 155))
+    sprite_drawer.set_color(Color.new(0, 0, 0, 155))
     sprite_drawer.set_size(1.0)
     stroke.set_drawer(sprite_drawer.to_drawer())
 
@@ -133,7 +133,7 @@ class Image
           drawer.set_spacing(spacing)
           drawer.set_mode(mode)
           drawer.set_size(size)
-          drawer.set_color(CL_Color.new(color[0], color[1], color[2], color[3]))
+          drawer.set_color(Color.new(color[0], color[1], color[2], color[3]))
           drawer.set_brush(GeneratedBrush.new(get_value_from_tree(["shape", "_"], brush, 0),
                                               get_value_from_tree(["radius", "_"], brush, 32),
                                               get_value_from_tree(["spikes", "_"], brush, 2),

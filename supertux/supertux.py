@@ -27,6 +27,7 @@ from .gui import SuperTuxGUI
 
 
 def main():
+    #Parse Arguments
     parser = argparse.ArgumentParser(description="Flexlay - SuperTux Editor")
     parser.add_argument("LEVELFILE", action="store", type=str, nargs="?",
                         help=".stl file to load")
@@ -36,8 +37,10 @@ def main():
                         help="SuperTux binary path")
     args = parser.parse_args()
 
+    #Create flexlay instance
     flexlay = Flexlay()
-
+    
+    #Load data directory from config file or --datadir argument
     config = Config.create("supertux-editor")
     if args.datadir is not None:
         config.datadir = args.datadir
@@ -46,6 +49,7 @@ def main():
 
     print("Datadir:", config.datadir)
 
+    #Load supertux binary from config file or --binary argument
     if not config.binary:
         if args.binary and os.path.isfile(args.binary):
             config.binary = args.binary
@@ -55,7 +59,9 @@ def main():
             raise RuntimeError("binary path missing, use --binary BIN")
 
     print("Binary path:", config.binary)
+    
 
+    #Load tileset
     tileset = SuperTuxTileset(32)
     tileset.load(os.path.join(config.datadir, "images/tiles.strf"))
     # tileset.load(os.path.join(Config.current.datadir, "images/worldmap.strf"))

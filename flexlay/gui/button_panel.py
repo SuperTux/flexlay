@@ -25,8 +25,8 @@ class ButtonPanel:
     def __init__(self, toolbar):
         self.toolbar = toolbar
 
-    def add_icon(self, filename, callback):
-        action = self.toolbar.addAction(QIcon(filename), "Text")
+    def add_icon(self, filename, callback, hover="Text"):
+        action = self.toolbar.addAction(QIcon(filename), hover)
         if callback:
             action.triggered.connect(callback)
         return Icon(action)

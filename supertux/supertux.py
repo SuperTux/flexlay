@@ -19,6 +19,7 @@ import os
 import argparse
 import os.path
 from PyQt4.QtCore import QByteArray
+from PyQt4.QtGui import QMessageBox, QFileDialog
 
 from flexlay import Flexlay, Config
 
@@ -40,23 +41,31 @@ def main():
     #Create flexlay instance
     flexlay = Flexlay()
     
-    #Load data directory from config file or --datadir argument
+    #Load data directory path from config file, --datadir argument or open directory dialog
     config = Config.create("supertux-editor")
     if args.datadir is not None:
         config.datadir = args.datadir
     elif not config.datadir:
-        raise RuntimeError("datadir missing, use --datadir DIR")
+        QMessageBox.warning(None, "No Data Directory Found",
+                             "Press OK to select your Supertux directory")
+        config.datadir = QFileDialog.getExistingDirectory(None, "Open Data Directory")
+        if not config.datadir:
+            raise RuntimeError("datadir missing, use --datadir DIR")
 
     print("Datadir:", config.datadir)
 
-    #Load supertux binary from config file or --binary argument
+    #Load supertux binary path from config file, --binary argument or open file dialog
     if not config.binary:
         if args.binary and os.path.isfile(args.binary):
             config.binary = args.binary
         elif os.path.isfile(config.datadir + "../supertux"):
             config.binary = config.datadir + "../supertux"
         else:
-            raise RuntimeError("binary path missing, use --binary BIN")
+            QMessageBox.warning(None, "No Supertux Binary Found",
+                             "Press OK to select your Supertux binary")
+            config.binary = QFileDialog.getOpenFileName(None, "Open Supertux Binary")
+            if not config.binary:
+                raise RuntimeError("binary path missing, use --binary BIN")
 
     print("Binary path:", config.binary)
     

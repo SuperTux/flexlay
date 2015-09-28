@@ -43,7 +43,7 @@ class WorldMap:
 
             self.width = width
             self.height = height
-            self.tilemap = SuperTuxTileMap.from_size(self.width, self.height)
+            self.tilemap = SuperTuxTileMap.from_size(self.width, self.height, self.name)
         else:
             # Load Level from file
             self.filename = arg1

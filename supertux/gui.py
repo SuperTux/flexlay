@@ -18,6 +18,8 @@
 import subprocess
 import os
 
+from PyQt4.QtGui import QIcon
+
 from flexlay import (Color, InputEvent, ObjMapRectObject,
                      ObjMapPathNode, Config, ToolContext, ObjectAddCommand)
 from flexlay.math import Point, Rect, Size
@@ -36,6 +38,7 @@ from .tileset import SuperTuxTileset
 from .toolbox import SuperTuxToolbox
 from .worldmap import WorldMap
 from .worldmap_object import create_worldmapobject_at_pos  # worldmap_objects
+from .new_level import NewLevelDialog
 
 BACKGROUND_LAYER = 1
 INTERACTIVE_LAYER = 2
@@ -56,6 +59,7 @@ class SuperTuxGUI:
         self.sector = None
 
         self.gui = flexlay.create_gui_manager("SuperTux Editor")
+        self.gui.window.setWindowIcon(QIcon("data/images/supertux/supertux-editor.png"))
 
         self.button_panel = SuperTuxButtonPanel(self.gui, self)
         self.toolbox = SuperTuxToolbox(self.gui, self)
@@ -431,19 +435,25 @@ class SuperTuxGUI:
 
         print("Filename:", filename)
         if filename:
-            self.save_dialog.set_directory(filename)
+            self.save_level(filename)
         else:
             filename = self.save_dialog.get_filename()
             if filename[-1] == "/"[0]:
                 self.save_dialog.set_directory(filename)
             else:
                 self.save_dialog.set_directory(os.path.dirname(filename) + "/")
-
-        self.save_dialog.run(self.save_level)
+ 
+            self.save_dialog.run(self.save_level)
 
     def gui_level_new(self):
-        w, h = 100, 50
-        self.new_level(w, h)
+        dialog = NewLevelDialog(self.gui.window)
+        dialog.exec_()
+        
+        if dialog.level:
+            self.set_level(dialog.level, "main")
+
+        #Does nothing:
+        self.new_level()
 
     def gui_level_load(self):
         self.load_dialog.run(self.load_level)
@@ -481,9 +491,8 @@ class SuperTuxGUI:
 
             dialog.set_callback(on_callback)
 
-    def new_level(self, width, height):
-        level = Level.from_size(width, height)
-        self.set_level(level, "main")
+    def new_level(self):
+        pass
 
     def load_level(self, filename):
         if filename[-5:] == ".stwm":
@@ -499,6 +508,8 @@ class SuperTuxGUI:
             self.menubar.recent_files_menu.add_item(filename, lambda filename=filename: self.load_level(filename))
 
         self.minimap.update_minimap()
+        # TODO: We don't yet support multiple sectors, so we set the first sector's name.
+        self.editor_map.set_sector_tab_label(0, level.sectors[0].name)
 
     def load_worldmap(self, filename):
         print("Loading: ", filename)
@@ -517,6 +528,10 @@ class SuperTuxGUI:
             level = self.workspace.get_map().metadata
         else:
             level = self.workspace.get_map().metadata.parent
+
+        if filename not in Config.current.recent_files:
+            Config.current.recent_files.append(filename)
+            self.menubar.recent_files_menu.add_item(filename, lambda filename=filename: self.load_level(filename))
 
         # Do backup save
         if os.path.isfile(filename):

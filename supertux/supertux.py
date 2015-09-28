@@ -77,10 +77,12 @@ def main():
     tileset.create_ungrouped_tiles_group()
 
     gui = SuperTuxGUI(flexlay)
-    if args.LEVELFILE is None:
+    if args.LEVELFILE is not None:
+         gui.load_level(args.LEVELFILE)
+    elif len(config.recent_files) > 0:
+        gui.load_level(config.recent_files[-1])
+    else:    
         gui.new_level(100, 50)
-    else:
-        gui.load_level(args.LEVELFILE)
 
     # Init the GUI, so that button state is in sync with internal state
     gui.gui_toggle_minimap()

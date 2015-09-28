@@ -35,7 +35,7 @@ class SuperTuxMenuBar:
 
         file_menu.add_item("Save...", editor.gui_level_save)
         # file_menu.add_item("Save Commands...", menu_file_save_commands)
-        # file_menu.add_item("Save As...", editor.gui_level_save_as)
+        file_menu.add_item("Save As...", editor.gui_level_save_as)
         file_menu.add_item("Properties...", editor.gui_edit_level)
         file_menu.add_item("Quit",  editor.gui.quit)
 

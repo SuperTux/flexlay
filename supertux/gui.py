@@ -499,8 +499,6 @@ class SuperTuxGUI:
             self.menubar.recent_files_menu.add_item(filename, lambda filename=filename: self.load_level(filename))
 
         self.minimap.update_minimap()
-        # TODO: We don't yet support multiple sectors, so we set the first sector's name.
-        self.editor_map.set_sector_tab_label(0, level.sectors[0].name)
 
     def load_worldmap(self, filename):
         print("Loading: ", filename)
@@ -588,6 +586,8 @@ class SuperTuxGUI:
 
         self.workspace.set_map(self.sector.editormap)
         self.layer_selector.set_map(self.sector.editormap)
+        # TODO: We don't yet support multiple sectors, so we set the first sector's name.
+        self.editor_map.set_sector_tab_label(0, sector.name)
 
         ToolContext.current.tilemap_layer = self.sector.get_some_solid_tilemap().tilemap_layer
         ToolContext.current.object_layer = self.sector.object_layer

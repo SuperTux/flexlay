@@ -142,27 +142,27 @@ class NewLevelDialog(QtGui.QWizard):
         browse_for_img.clicked.connect(self.browse_image)
 
         #Add everything to Vertical layout
-        vbox = QtGui.QVBoxLayout()
-        vbox.addWidget(QtGui.QLabel("Level Name:"))
-        vbox.addWidget(name_input)
+        grid = QtGui.QGridLayout()
+        grid.addWidget(QtGui.QLabel("Level Name:"),0,0)
+        grid.addWidget(name_input, 1, 0)
         
-        vbox.addWidget(QtGui.QLabel("Level Author:"))
-        vbox.addWidget(author_input)
+        grid.addWidget(QtGui.QLabel("Level Author:"),2,0)
+        grid.addWidget(author_input,3,0)
         
-        vbox.addWidget(QtGui.QLabel("Level Width:"))
-        vbox.addWidget(w_in)
-        vbox.addWidget(QtGui.QLabel("Level Height:"))
-        vbox.addWidget(h_in)
+        grid.addWidget(QtGui.QLabel("Level Width:"),4,0)
+        grid.addWidget(w_in,5,0)
+        grid.addWidget(QtGui.QLabel("Level Height:"),6,0)
+        grid.addWidget(h_in,7,0)
         
-        vbox.addWidget(QtGui.QLabel("Level Music:"))
-        vbox.addWidget(self.music_input)
-        vbox.addWidget(browse_for_music)
+        grid.addWidget(QtGui.QLabel("Level Music:"),8,0)
+        grid.addWidget(self.music_input,9,0)
+        grid.addWidget(browse_for_music,9,1)
         
-        vbox.addWidget(QtGui.QLabel("Level Background:"))
-        vbox.addWidget(self.img_input)
-        vbox.addWidget(browse_for_img)
+        grid.addWidget(QtGui.QLabel("Level Background:"),10,0)
+        grid.addWidget(self.img_input,11,0)
+        grid.addWidget(browse_for_img,11,1)
         
-        page.setLayout(vbox)
+        page.setLayout(grid)
         return page
     
     def set_name(self, text): #Connected to signal

@@ -449,7 +449,9 @@ class SuperTuxGUI:
         dialog = NewLevelDialog(self.gui.window)
         dialog.exec_()
         
-        self.set_level(dialog.level, "main")
+        if dialog.level:
+            self.set_level(dialog.level, "main")
+
         #Does nothing:
         self.new_level()
 
@@ -506,6 +508,8 @@ class SuperTuxGUI:
             self.menubar.recent_files_menu.add_item(filename, lambda filename=filename: self.load_level(filename))
 
         self.minimap.update_minimap()
+        # TODO: We don't yet support multiple sectors, so we set the first sector's name.
+        self.editor_map.set_sector_tab_label(0, level.sectors[0].name)
 
     def load_worldmap(self, filename):
         print("Loading: ", filename)

@@ -434,7 +434,7 @@ class SuperTuxGUI:
 
         print("Filename:", filename)
         if filename:
-            self.save_dialog.set_directory(filename)
+            self.save_level(filename)
         else:
             filename = self.save_dialog.get_filename()
             if filename[-1] == "/"[0]:
@@ -442,7 +442,7 @@ class SuperTuxGUI:
             else:
                 self.save_dialog.set_directory(os.path.dirname(filename) + "/")
 
-        self.save_dialog.run(self.save_level)
+            self.save_dialog.run(self.save_level)
 
     def gui_level_new(self):
         w, h = 100, 50

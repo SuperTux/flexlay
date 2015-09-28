@@ -38,6 +38,7 @@ from .tileset import SuperTuxTileset
 from .toolbox import SuperTuxToolbox
 from .worldmap import WorldMap
 from .worldmap_object import create_worldmapobject_at_pos  # worldmap_objects
+from .new_level import NewLevelDialog
 
 BACKGROUND_LAYER = 1
 INTERACTIVE_LAYER = 2
@@ -441,12 +442,16 @@ class SuperTuxGUI:
                 self.save_dialog.set_directory(filename)
             else:
                 self.save_dialog.set_directory(os.path.dirname(filename) + "/")
-
+ 
             self.save_dialog.run(self.save_level)
 
     def gui_level_new(self):
-        w, h = 100, 50
-        self.new_level(w, h)
+        dialog = NewLevelDialog(self.gui.window)
+        dialog.exec_()
+        
+        self.set_level(dialog.level, "main")
+        #Does nothing:
+        self.new_level()
 
     def gui_level_load(self):
         self.load_dialog.run(self.load_level)
@@ -484,9 +489,8 @@ class SuperTuxGUI:
 
             dialog.set_callback(on_callback)
 
-    def new_level(self, width, height):
-        level = Level.from_size(width, height)
-        self.set_level(level, "main")
+    def new_level(self):
+        pass
 
     def load_level(self, filename):
         if filename[-5:] == ".stwm":

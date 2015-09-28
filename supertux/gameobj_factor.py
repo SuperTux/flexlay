@@ -157,7 +157,7 @@ class SuperTuxGameObjFactory:
         self.add_badguy("livefire_dormant", "images/creatures/livefire/livefire.sprite")
         self.add_badguy("magicblock", "images/objects/magicblock/magicblock.sprite")
         self.add_badguy("mole", "images/creatures/mole/mole.sprite")
-        self.add_badguy("mrbomb", "images/creatures/mr_bomb/left-0.png")
+        self.add_badguy("mrbomb", "images/creatures/mr_bomb/left.png")
         self.add_badguy("mriceblock", "images/creatures/mr_iceblock/left-0.png")
         self.add_badguy("mrtree", "images/creatures/mr_tree/walk-left-1.png")
         self.add_badguy("nolok_01", "images/creatures/nolok/nolok.sprite")

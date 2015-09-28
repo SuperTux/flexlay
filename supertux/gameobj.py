@@ -448,7 +448,7 @@ class SpawnPoint(GameObj):
         self.objmap_object = make_sprite_object(self, self.sprite)
 
         self.properties = [
-            StringProperty("Name", "name", ""),
+            StringProperty("Name", "name", "main"),
             InlinePosProperty()
         ]
 

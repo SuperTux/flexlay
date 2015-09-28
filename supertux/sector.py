@@ -70,9 +70,9 @@ class Sector:
         self.width = width
         self.height = height
 
-        self.tilemaps.append(SuperTuxTileMap.from_size(self.width, self.height))
-        self.tilemaps.append(SuperTuxTileMap.from_size(self.width, self.height))
-        self.tilemaps.append(SuperTuxTileMap.from_size(self.width, self.height))
+        self.tilemaps.append(SuperTuxTileMap.from_size(self.width, self.height, "background", -100, False))
+        self.tilemaps.append(SuperTuxTileMap.from_size(self.width, self.height, "interactive", 0, True))
+        self.tilemaps.append(SuperTuxTileMap.from_size(self.width, self.height, "foreground", 100, False))
 
         self.object_layer = ObjectLayer()
         # self.sketch  = SketchLayer()

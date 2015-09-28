@@ -82,7 +82,7 @@ def main():
     elif len(config.recent_files) > 0:
         gui.load_level(config.recent_files[-1])
     else:    
-        gui.new_level(100, 50)
+        gui.gui_level_new()
 
     # Init the GUI, so that button state is in sync with internal state
     gui.gui_toggle_minimap()

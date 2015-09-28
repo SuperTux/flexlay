@@ -26,16 +26,18 @@ class SuperTuxTileMap:
 
     @staticmethod
     def from_sexpr(data):
-        result = SuperTuxTileMap()
+        name = get_value_from_tree(["name", "_"],  data, "")
+        z_pos = get_value_from_tree(["z-pos", "_"],  data, 0)
+        solid = get_value_from_tree(["solid", "_"],  data, False)
+        
+        result = SuperTuxTileMap(name, z_pos, solid)
+        
         width = get_value_from_tree(["width", "_"],  data, 20)
         height = get_value_from_tree(["height", "_"], data, 15)
-        result.solid = get_value_from_tree(["solid", "_"],  data, False)
         result.draw_target = get_value_from_tree(["draw-target", "_"],  data, "")
-        result.z_pos = get_value_from_tree(["z-pos", "_"],  data, 0)
         result.speed = get_value_from_tree(["speed", "_"],  data, 1.0)
         result.speed_y = get_value_from_tree(["speed-y", "_"],  data, 1.0)
         result.alpha = get_value_from_tree(["alpha", "_"],  data, 1.0)
-        result.name = get_value_from_tree(["name", "_"],  data, "")
 
         result.tilemap_layer = TilemapLayer(SuperTuxTileset.current, width, height)
         result.tilemap_layer.set_data(get_value_from_tree(["tiles"], data, []))
@@ -44,20 +46,20 @@ class SuperTuxTileMap:
         return result
 
     @staticmethod
-    def from_size(width, height):
-        result = SuperTuxTileMap()
+    def from_size(width, height, name, z_pos=0, solid=False):
+        result = SuperTuxTileMap(name, z_pos, solid)
         result.tilemap_layer = TilemapLayer(SuperTuxTileset.current, width, height)
         result.tilemap_layer.metadata = result
         return result
 
-    def __init__(self):
-        self.solid = False
+    def __init__(self, name, z_pos=0, solid=False):
+        self.solid = solid
         self.draw_target = ""
-        self.z_pos = 0
+        self.z_pos = z_pos
         self.name = ""
         self.speed = 1.0
         self.speed_y = 1.0
-        self.name = "interactive"
+        self.name = name
         self.alpha = 1.0
         self.tilemap_layer = None
 

@@ -521,6 +521,10 @@ class SuperTuxGUI:
         else:
             level = self.workspace.get_map().metadata.parent
 
+        if filename not in Config.current.recent_files:
+            Config.current.recent_files.append(filename)
+            self.menubar.recent_files_menu.add_item(filename, lambda filename=filename: self.load_level(filename))
+
         # Do backup save
         if os.path.isfile(filename):
             os.rename(filename, filename + "~")

@@ -18,6 +18,8 @@
 import subprocess
 import os
 
+from PyQt4.QtGui import QIcon
+
 from flexlay import (Color, InputEvent, ObjMapRectObject,
                      ObjMapPathNode, Config, ToolContext, ObjectAddCommand)
 from flexlay.math import Point, Rect, Size
@@ -56,6 +58,7 @@ class SuperTuxGUI:
         self.sector = None
 
         self.gui = flexlay.create_gui_manager("SuperTux Editor")
+        self.gui.window.setWindowIcon(QIcon("data/images/supertux/supertux-editor.png"))
 
         self.button_panel = SuperTuxButtonPanel(self.gui, self)
         self.toolbox = SuperTuxToolbox(self.gui, self)

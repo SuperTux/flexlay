@@ -231,5 +231,8 @@ class EditorMapComponent:
         self.scroll_vert.setPageStep(self.editormap_widget.height())
         self.scroll_vert.setSliderPosition(int(self.gc_state.get_pos().y))
 
+    def set_sector_tab_label(self, index, text):
+        self.tab_widget.setTabText(index, "Sector \"%s\""  % text)
+
 
 # EOF #

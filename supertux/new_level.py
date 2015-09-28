@@ -130,14 +130,14 @@ class NewLevelDialog(QtGui.QWizard):
         self.music_input = QtGui.QLineEdit()
         #Run self.set_music whenever text changes
         self.music_input.textChanged[str].connect(self.set_music)
-        browse_for_music = QtGui.QPushButton("Browse")
+        browse_for_music = QtGui.QPushButton("Browse...")
         #Run self.browse_music whenever button clicked
         browse_for_music.clicked.connect(self.browse_music)
         
         self.img_input = QtGui.QLineEdit()
         #Run self.set_img whenever text changes
         self.img_input.textChanged[str].connect(self.set_img)
-        browse_for_img = QtGui.QPushButton("Browse")
+        browse_for_img = QtGui.QPushButton("Browse...")
         #Run self.browse_image whenever button clicked
         browse_for_img.clicked.connect(self.browse_image)
 

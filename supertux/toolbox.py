@@ -20,6 +20,10 @@ class SuperTuxToolbox:
     def __init__(self, gui_manager, editor):
         # Create Toolbox
         self.toolbox = gui_manager.create_button_panel(False)
+        self.toolbox.add_separator()
+        self.object_icon = self.toolbox.add_icon("data/images/tools/stock-tool-move-22.png",
+                                                 editor.set_objmap_select_tool, hover="Select Tool")
+        
         self.paint_icon = self.toolbox.add_icon("data/images/tools/stock-tool-pencil-22.png",
                                                 editor.set_tilemap_paint_tool, hover="Pencil Tool")
         self.fill_icon = self.toolbox.add_icon("data/images/tools/stock-tool-fill-24.png",
@@ -28,9 +32,7 @@ class SuperTuxToolbox:
                                                   editor.set_tilemap_replace_tool, hover="Replace Tool")
         self.select_icon = self.toolbox.add_icon("data/images/tools/stock-tool-rect-select-22.png",
                                                  editor.set_tilemap_select_tool, hover="Rectangle Select Tool")
-        self.toolbox.add_separator()
-        self.object_icon = self.toolbox.add_icon("data/images/tools/stock-tool-clone-22.png",
-                                                 editor.set_objmap_select_tool, hover="Clone Tool")
+        
         self.toolbox.add_separator()
         self.zoom_icon = self.toolbox.add_icon("data/images/tools/stock-tool-zoom-22.png",
                                                editor.set_zoom_tool, hover="Zoom Tool")

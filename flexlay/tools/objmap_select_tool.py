@@ -32,16 +32,21 @@ class ObjMapSelectTool(Tool):
         super().__init__()
 
         self.state = ObjMapSelectTool.STATE_NONE
+        #Left click + drag rectangle
         self.drag_start = Pointf(0, 0)
         self.selection_rect = Rectf(0, 0, 0, 0)
+        
+        #For selected objects do: self.context.object_selection
+        
         self.offset = Pointf(0, 0)
         self.move_command = None
 
         self.control_point = None
         self.context = ToolContext.current
 
-        self.sig_popup_menu_display = Signal()
-        self.sig_right_click = Signal()
+        #Never used:
+        #self.sig_popup_menu_display = Signal()
+        #self.sig_right_click = Signal()
 
     def clear_selection(self):
         self.context.object_selection.clear()
@@ -102,7 +107,6 @@ class ObjMapSelectTool(Tool):
 
         if event.kind == InputEvent.MOUSE_LEFT:
             self.control_point = objmap.find_control_point(pos)
-
             if self.control_point:
                 self.state = ObjMapSelectTool.STATE_DRAG
                 parent.grab_mouse()
@@ -139,6 +143,10 @@ class ObjMapSelectTool(Tool):
                     self.state = ObjMapSelectTool.STATE_SELECT
                     self.selection_rect = Rectf(pos.x, pos.y, pos.x, pos.y)
                     parent.grab_mouse()
+                    
+        elif event.kind == InputEvent.MOUSE_RIGHT:
+            print("objmap_select_tool.py: Selected Objects\n\t"+str(self.context.object_selection))
+            #TODO: Open Menu
 
     def on_mouse_move(self, event):
         # print("ObjMapSelectToolImpl.on_mouse_move ", event.kind, event.mouse_pos.x, event.mouse_pos.y)

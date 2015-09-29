@@ -586,7 +586,7 @@ class SuperTuxGUI:
 
     def set_objmap_select_tool(self):
         self.workspace.set_tool(InputEvent.MOUSE_LEFT, ObjMapSelectTool())
-        self.workspace.set_tool(InputEvent.MOUSE_RIGHT, None)
+        self.workspace.set_tool(InputEvent.MOUSE_RIGHT, ObjMapSelectTool())
         self.toolbox.set_down(self.toolbox.object_icon)
 
     def set_level(self, level, sectorname):

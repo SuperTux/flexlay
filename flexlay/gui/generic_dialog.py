@@ -73,7 +73,14 @@ class Item:
 
 
 class GenericDialog:
-
+    '''
+    A class which can display properties in a dialog.
+    If you add capabilities here, you should be able to
+    copy-paste them into:
+    @see: supertux/properties_widget.py
+    Also see the properties this displays:
+    @see: supertux/property.py
+    '''
     def __init__(self, title, parent):
         self.items = []
         self.ok_callback = None
@@ -201,6 +208,28 @@ class GenericDialog:
                 result.append(value)
 
         return result
+    
+    def add_file(self, file_property, callback=None):
+        '''Untested in this context, but works in properties widget'''
+        label = QLabel(file_property.label)
+        inputbox = QLineEdit(file_property.default)
+        browse = QPushButton("Browse...")
+        
+        def browse_files():
+            '''Called when Browse... button clicked'''
+            path = QFileDialog.getOpenFileName(None, "Open File", 
+                                              file_property.open_in)
+            file_property.actual_path = path
+            if path[:len(file_property.relative_to)] == file_property.relative_to:
+                inputbox.setText(path[len(file_property.relative_to):])
+            else:
+                inputbox.setText(path)
+                
+        browse.clicked.connect(browse_files) #Connect the above to click signal
+        self.layout.addRow(label, inputbox)
+        self.layout.addRow(browse)
+
+        self.items.append(Item(Item.KIND_STRING, label, inputbox, callback=callback))
 
 
 # EOF #

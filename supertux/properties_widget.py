@@ -11,25 +11,33 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 #
-# You should have received a copy ofQWidget the GNU General Public License
+# You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from PyQt4.QtGui import (QDialog, QDialogButtonBox, QVBoxLayout,
                          QLabel, QLineEdit, QFormLayout, QPushButton,
                          QIcon, QCheckBox, QPixmap, QButtonGroup,
-                         QRadioButton, QColorDialog, QWidget)
-from .property import StringProperty
+                         QRadioButton, QColorDialog, QWidget, QFileDialog)
+from .property import FileProperty
 from flexlay.gui.generic_dialog import Item
 
 class PropertiesWidget(QWidget):
-    '''Mostly based around Grumbel's flexlay/gui/generic_dialog.py - GenericDialog
-    Uses a list of [supertux/property]s to display a properties dialog with boxes'''
+    '''
+    Uses a list of [supertux/property]s to display a properties dialog with boxes
+    
+    A class which can display properties in a docked widget form.
+    If you add capabilities here, you should be able to copy-paste them into:
+    @see: flexlay/gui/generic_dialog.py
+    Also see the properties this displays:
+    @see: supertux/property.py
+    '''
+    
     def __init__(self, parent):
         super().__init__(parent)
         self.items = []
         self.ok_callback = None
 
-        prop_test = [StringProperty("label", "identifier", default="default"), StringProperty("test", "identifier", default="default")]
+        prop_test = [FileProperty("Thing", "ident", relative_to)]
 
         vbox = QVBoxLayout()
         self.layout = QFormLayout()
@@ -40,24 +48,19 @@ class PropertiesWidget(QWidget):
         self.show()
         
         self.set_properties(prop_test)
-
-    @staticmethod
-    def from_properties(self, props, parent):
-        widget = PropertiesWidget(parent)
-        for prop in props:
-            prop.property_dialog(widget)
-        return widget
         
     def set_properties(self, props):
         for prop in props:
             prop.property_dialog(self)
     
-    def add_label(self, text):
+    #From flexlay/gui/generic_dialog.py:
+    
+    def add_label(self, text): #If changed, update in flexlay/gui/generic_dialog.py
         label = QLabel(text)
         self.layout.addRow(label)
         self.items.append(Item(Item.KIND_LABEL, label, None, None))
 
-    def add_bool(self, name, value, callback):
+    def add_bool(self, name, value, callback): #If changed, update in flexlay/gui/generic_dialog.py
         label = QLabel(name)
         checkbox = QCheckBox()
         self.layout.addRow(label, checkbox)
@@ -67,7 +70,7 @@ class PropertiesWidget(QWidget):
 
         self.items.append(Item(Item.KIND_BOOL, label, checkbox, callback=callback))
 
-    def add_int(self, name, value, callback=None):
+    def add_int(self, name, value, callback=None): #If changed, update in flexlay/gui/generic_dialog.py
         label = QLabel(name)
         inputbox = QLineEdit()
         self.layout.addRow(label, inputbox)
@@ -76,7 +79,7 @@ class PropertiesWidget(QWidget):
 
         self.items.append(Item(Item.KIND_INT, label, inputbox, callback=callback))
 
-    def add_float(self, name, value, callback=None):
+    def add_float(self, name, value, callback=None): #If changed, update in flexlay/gui/generic_dialog.py
         label = QLabel(name)
         inputbox = QLineEdit()
         self.layout.addRow(label, inputbox)
@@ -85,7 +88,7 @@ class PropertiesWidget(QWidget):
 
         self.items.append(Item(Item.KIND_FLOAT, label, inputbox, callback=callback))
 
-    def add_string(self, name, value, callback=None):
+    def add_string(self, name, value, callback=None): #If changed, update in flexlay/gui/generic_dialog.py
         label = QLabel(name)
         inputbox = QLineEdit()
         self.layout.addRow(label, inputbox)
@@ -93,8 +96,29 @@ class PropertiesWidget(QWidget):
         inputbox.setText(value)
 
         self.items.append(Item(Item.KIND_STRING, label, inputbox, callback=callback))
+        
+    def add_file(self, file_property, callback=None): #If changed, update in flexlay/gui/generic_dialog.py
+        label = QLabel(file_property.label)
+        inputbox = QLineEdit(file_property.default)
+        browse = QPushButton("Browse...")
+        
+        def browse_files():
+            '''Called when Browse... button clicked'''
+            path = QFileDialog.getOpenFileName(None, "Open File", 
+                                              file_property.open_in)
+            file_property.actual_path = path
+            if path[:len(file_property.relative_to)] == file_property.relative_to:
+                inputbox.setText(path[len(file_property.relative_to):])
+            else:
+                inputbox.setText(path)
+                
+        browse.clicked.connect(browse_files) #Connect the above to click signal
+        self.layout.addRow(label, inputbox)
+        self.layout.addRow(browse)
 
-    def add_enum(self, name, values, current_value=0, callback=None):
+        self.items.append(Item(Item.KIND_STRING, label, inputbox, callback=callback))
+
+    def add_enum(self, name, values, current_value=0, callback=None): #If changed, update in flexlay/gui/generic_dialog.py
         label = QLabel(name)
         group = QButtonGroup()
         for i, value in enumerate(values):
@@ -107,7 +131,7 @@ class PropertiesWidget(QWidget):
             group.addButton(radio)
         self.items.append(Item(Item.KIND_ENUM, label, None, callback=callback, group=group))
 
-    def add_color(self, name, color, callback=None):
+    def add_color(self, name, color, callback=None): #If changed, update in flexlay/gui/generic_dialog.py
         label = QLabel(name)
         pixmap = QPixmap(32, 32)
         pixmap.fill(color.to_qt())
@@ -134,7 +158,7 @@ class PropertiesWidget(QWidget):
 
         self.items.append(Item(Item.KIND_COLOR, label, colorbutton, callback=callback))
 
-    def set_callback(self, callback):
+    def set_callback(self, callback): #If changed, update in flexlay/gui/generic_dialog.py
         def on_accept():
             self.ok_callback(*self.get_values())
             self.dialog.hide()
@@ -146,12 +170,12 @@ class PropertiesWidget(QWidget):
         self.buttonbox.accepted.connect(on_accept)
         self.buttonbox.rejected.connect(on_rejected)
 
-    def call_callbacks(self):
+    def call_callbacks(self): #If changed, update in flexlay/gui/generic_dialog.py
         for item in self.items:
             if item.callback is not None:
                 item.callback(item.get_value())
 
-    def get_values(self):
+    def get_values(self): #If changed, update in flexlay/gui/generic_dialog.py
         result = []
 
         for item in self.items:

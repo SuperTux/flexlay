@@ -20,7 +20,12 @@ from flexlay import Colorf
 
 
 class Property:
-
+    '''
+    A property is just that: a property
+    What these classes do is allow properties to easily be written to files,
+    and displayed in dialogs.
+    @see: flexlay/gui/generic_dialog.py, supertux/properties_widget.py 
+    '''
     def __init__(self, label, identifier, default, optional=False):
         self.label = label
         self.identifier = identifier
@@ -81,7 +86,21 @@ class StringProperty(Property):
 
     def property_dialog(self, dialog):
         dialog.add_string(self.label, self.value, self.on_value_change)
-
+        
+class FileProperty(StringProperty):
+    def __init__(self, label, identifier, default="", relative_to="", open_in=""):
+        super().__init__(label, identifier, default=default)
+        #Where the file dialog opens by default
+        self.open_in = open_in
+        
+        #Where the path shown is relative to (if possible)
+        self.relative_to = relative_to
+        
+        #The actual path stored, so that the relative path can be displayed.
+        self.actual_path = ""
+        
+    def property_dialog(self, dialog):
+        dialog.add_file(self)
 
 class EnumProperty(Property):
 

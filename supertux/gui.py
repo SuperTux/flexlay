@@ -77,6 +77,8 @@ class SuperTuxGUI:
         self.minimap = self.gui.create_minimap(self.editor_map)
 
         self.objectselector = self.gui.create_object_selector(42, 42)
+        self.properties_widget = self.gui.create_properties_view()
+        
         self.editor_map.sig_drop.connect(self.on_object_drop)
         for object_brush in supertux_gameobj_factory.create_object_brushes():
             self.objectselector.add_brush(object_brush)

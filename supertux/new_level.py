@@ -185,25 +185,29 @@ class NewLevelDialog(QtGui.QWizard):
             self.level_width = int(text) if text is not "" else 100
         except TypeError:
             self.level_width = 100
-        
+
     def browse_music(self): #Connected to signal
-        #Square brackets at the end make visible path in line edit relative
-        self.music_input.setText(QtGui.QFileDialog.getOpenFileName(None, 
-                                                                   "Open Music File",
-                                                                   os.path.join(
-                                                                   Config.current.datadir, "music"))[len(Config.current.datadir):])
+        full_path = QtGui.QFileDialog.getOpenFileName(None, "Open Music File",
+                                                      os.path.join(Config.current.datadir, "music"))
+        #If path goes to datadir,
+        if full_path[:len(Config.current.datadir)] == Config.current.datadir:
+            #Set path as relative
+            self.music_input.setText(full_path[len(Config.current.datadir):])
+        else:
+            self.music_input.setText(full_path)
 
     def set_img(self, text): #Connected to signal
         self.level_image = text if text is not "" else ""
     
     def browse_image(self): #Connected to signal
-        #Square brackets at the end make visible path in line edit relative
-        self.img_input.setText(QtGui.QFileDialog.getOpenFileName(None, 
-                                                                 "Open Background File",
-                                                                 os.path.join(
-                                                                 Config.current.datadir, 
-                                                                 "images",
-                                                                 "background"))[len(Config.current.datadir):])
+        full_path = QtGui.QFileDialog.getOpenFileName(None, "Open Background Image",
+                                                      os.path.join(Config.current.datadir, "music", "images"))
+        #If path goes to datadir
+        if full_path[:len(Config.current.datadir)] == Config.current.datadir:
+            #Set path as relative
+            self.music_input.setText(full_path[len(Config.current.datadir):])
+        else:
+            self.music_input.setText(full_path)
     
     #<License Page>
     def create_license_page(self):

@@ -37,23 +37,25 @@ class PropertiesWidget(QWidget):
         self.items = []
         self.ok_callback = None
 
-        prop_test = [FileProperty("Thing", "ident", relative_to)]
-
-        vbox = QVBoxLayout()
+        self.vbox = QVBoxLayout()
         self.layout = QFormLayout()
-        vbox.addLayout(self.layout)
+        self.vbox.addLayout(self.layout)
 
-        self.setLayout(vbox)
+        self.setLayout(self.vbox)
         self.setMinimumWidth(300)
         self.show()
         
-        self.set_properties(prop_test)
-        
     def set_properties(self, props):
+        #Clear Items
+        self.items = []
+        #Remove all widgets
+        for i in range(self.layout.count()):
+            self.layout.layout().takeAt(0).widget().setParent(None)
+        #Add all properties
         for prop in props:
             prop.property_dialog(self)
     
-    #From flexlay/gui/generic_dialog.py:
+    #See generic_dialog.py for more about these:
     
     def add_label(self, text): #If changed, update in flexlay/gui/generic_dialog.py
         label = QLabel(text)
@@ -61,8 +63,11 @@ class PropertiesWidget(QWidget):
         self.items.append(Item(Item.KIND_LABEL, label, None, None))
 
     def add_bool(self, name, value, callback): #If changed, update in flexlay/gui/generic_dialog.py
+        def state_change(self, state):
+            callback(state == Qt.QChecked)
         label = QLabel(name)
         checkbox = QCheckBox()
+        checkbox.stateChanged.connect(state_change)
         self.layout.addRow(label, checkbox)
 
         if value:
@@ -71,8 +76,11 @@ class PropertiesWidget(QWidget):
         self.items.append(Item(Item.KIND_BOOL, label, checkbox, callback=callback))
 
     def add_int(self, name, value, callback=None): #If changed, update in flexlay/gui/generic_dialog.py
+        def text_change(text):
+            callback(int(text))
         label = QLabel(name)
         inputbox = QLineEdit()
+        inputbox.textChanged.connect(text_change)
         self.layout.addRow(label, inputbox)
 
         inputbox.setText(str(value))
@@ -80,35 +88,40 @@ class PropertiesWidget(QWidget):
         self.items.append(Item(Item.KIND_INT, label, inputbox, callback=callback))
 
     def add_float(self, name, value, callback=None): #If changed, update in flexlay/gui/generic_dialog.py
+        def text_change(text):
+            callback(float(text))
         label = QLabel(name)
         inputbox = QLineEdit()
+        inputbox.textChanged.connect(text_change)
         self.layout.addRow(label, inputbox)
 
         inputbox.setText(str(value))
 
         self.items.append(Item(Item.KIND_FLOAT, label, inputbox, callback=callback))
-
+        
     def add_string(self, name, value, callback=None): #If changed, update in flexlay/gui/generic_dialog.py
         label = QLabel(name)
         inputbox = QLineEdit()
+        inputbox.textChanged.connect(callback)
         self.layout.addRow(label, inputbox)
 
         inputbox.setText(value)
 
         self.items.append(Item(Item.KIND_STRING, label, inputbox, callback=callback))
         
-    def add_file(self, file_property, callback=None): #If changed, update in flexlay/gui/generic_dialog.py
+    def add_file(self, label, default, relative_to=None, open_in=None, callback=None):
         label = QLabel(file_property.label)
         inputbox = QLineEdit(file_property.default)
+        inputbox.textChanged.connect(callback)
         browse = QPushButton("Browse...")
         
         def browse_files():
             '''Called when Browse... button clicked'''
             path = QFileDialog.getOpenFileName(None, "Open File", 
-                                              file_property.open_in)
+                                              open_in)
             file_property.actual_path = path
-            if path[:len(file_property.relative_to)] == file_property.relative_to:
-                inputbox.setText(path[len(file_property.relative_to):])
+            if path[:len(file_property.relative_to)] == relative_to:
+                inputbox.setText(path[len(relative_to):])
             else:
                 inputbox.setText(path)
                 
@@ -129,6 +142,9 @@ class PropertiesWidget(QWidget):
             else:
                 self.layout.addRow(None, radio)
             group.addButton(radio)
+        def button_clicked(button):
+            callback(button.text())
+        group.buttonClicked.connect(button_clicked)
         self.items.append(Item(Item.KIND_ENUM, label, None, callback=callback, group=group))
 
     def add_color(self, name, color, callback=None): #If changed, update in flexlay/gui/generic_dialog.py

@@ -100,14 +100,19 @@ class GenericDialog:
         self.dialog.setMinimumWidth(300)
         self.dialog.show()
 
+    #Also found in properties_widget.py
+
     def add_label(self, text):
         label = QLabel(text)
         self.layout.addRow(label)
         self.items.append(Item(Item.KIND_LABEL, label, None, None))
 
     def add_bool(self, name, value, callback):
+        def state_change(self, state):
+            callback(state == Qt.QChecked)
         label = QLabel(name)
         checkbox = QCheckBox()
+        checkbox.stateChanged.connect(state_change)
         self.layout.addRow(label, checkbox)
 
         if value:
@@ -116,8 +121,11 @@ class GenericDialog:
         self.items.append(Item(Item.KIND_BOOL, label, checkbox, callback=callback))
 
     def add_int(self, name, value, callback=None):
+        def text_change(text):
+            callback(int(text))
         label = QLabel(name)
         inputbox = QLineEdit()
+        inputbox.textChanged.connect(text_change)
         self.layout.addRow(label, inputbox)
 
         inputbox.setText(str(value))
@@ -125,8 +133,11 @@ class GenericDialog:
         self.items.append(Item(Item.KIND_INT, label, inputbox, callback=callback))
 
     def add_float(self, name, value, callback=None):
+        def text_change(text):
+            callback(float(text))
         label = QLabel(name)
         inputbox = QLineEdit()
+        inputbox.textChanged.connect(text_change)
         self.layout.addRow(label, inputbox)
 
         inputbox.setText(str(value))
@@ -136,9 +147,33 @@ class GenericDialog:
     def add_string(self, name, value, callback=None):
         label = QLabel(name)
         inputbox = QLineEdit()
+        inputbox.textChanged.connect(callback)
         self.layout.addRow(label, inputbox)
 
         inputbox.setText(value)
+
+        self.items.append(Item(Item.KIND_STRING, label, inputbox, callback=callback))
+
+    #Untested in this context, but works in properties widget
+    def add_file(self, label, default, relative_to=None, open_in=None, callback=None):
+        label = QLabel(file_property.label)
+        inputbox = QLineEdit(file_property.default)
+        inputbox.textChanged.connect(callback)
+        browse = QPushButton("Browse...")
+        
+        def browse_files():
+            '''Called when Browse... button clicked'''
+            path = QFileDialog.getOpenFileName(None, "Open File", 
+                                              open_in)
+            file_property.actual_path = path
+            if path[:len(file_property.relative_to)] == relative_to:
+                inputbox.setText(path[len(relative_to):])
+            else:
+                inputbox.setText(path)
+                
+        browse.clicked.connect(browse_files) #Connect the above to click signal
+        self.layout.addRow(label, inputbox)
+        self.layout.addRow(browse)
 
         self.items.append(Item(Item.KIND_STRING, label, inputbox, callback=callback))
 
@@ -153,6 +188,9 @@ class GenericDialog:
             else:
                 self.layout.addRow(None, radio)
             group.addButton(radio)
+        def button_clicked(button):
+            callback(button.text())
+        group.buttonClicked.connect(button_clicked)
         self.items.append(Item(Item.KIND_ENUM, label, None, callback=callback, group=group))
 
     def add_color(self, name, color, callback=None):
@@ -209,27 +247,6 @@ class GenericDialog:
 
         return result
     
-    def add_file(self, file_property, callback=None):
-        '''Untested in this context, but works in properties widget'''
-        label = QLabel(file_property.label)
-        inputbox = QLineEdit(file_property.default)
-        browse = QPushButton("Browse...")
-        
-        def browse_files():
-            '''Called when Browse... button clicked'''
-            path = QFileDialog.getOpenFileName(None, "Open File", 
-                                              file_property.open_in)
-            file_property.actual_path = path
-            if path[:len(file_property.relative_to)] == file_property.relative_to:
-                inputbox.setText(path[len(file_property.relative_to):])
-            else:
-                inputbox.setText(path)
-                
-        browse.clicked.connect(browse_files) #Connect the above to click signal
-        self.layout.addRow(label, inputbox)
-        self.layout.addRow(browse)
-
-        self.items.append(Item(Item.KIND_STRING, label, inputbox, callback=callback))
 
 
 # EOF #

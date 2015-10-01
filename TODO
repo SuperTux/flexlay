@@ -1,8 +1,0 @@
-* grayscale images make the thing crash
-
-- GC_VALUE in netpanzer isn't defined, might be related to %import'ing flexlay.i
-
-- SConstruct file needs configuration features (check for clanlib,
-   check for ruby.h, check for swig1.3)
-
-# EOF #

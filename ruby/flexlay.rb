@@ -51,74 +51,23 @@ class ObjMapObject
   end
 end
 
+class Menubar
+  def Menubar.new_from_spec(menubarspec, parent)
+    menu = Menubar.new(parent)
 
-class Icon
-  def set_callback(func)
-    connect(sig_clicked(), func)
-  end
-end
-
-class Menu
-  alias_method :orig_add_item, :add_item
-
-  def add_item(*params)
-    if params.length == 2 then
-      (text, func) = params
-      i = orig_add_item(text)
-    else
-      (sprite, text, func) = params
-      i = orig_add_item(sprite, text)
-    end
-
-    if func != nil
-      connect(sig_clicked(i), func)
-    end
-  end
-end
-
-class CL_Menu
-  def add_item(name, func)
-    item = create_item(name)
-    connect(item.sig_clicked(), func)
-  end
-
-  def CL_Menu.new_from_spec(menubarspec, parent)
-    menu = CL_Menu.new(parent)
-    
     menubarspec.each { |(title, *menu_spec)|
       menu_spec.each{ |(name, callback)|
         menu.add_item("#{title}/#{name}", callback)
       }
     }
-    
+
     return menu
   end
 end
 
 class ButtonPanel
-  attr_reader :panel, :items
-
-  def initialize(x, y, width, height, horizontal, parent, &block)
-    @panel = Panel.new(CL_Rect.new(CL_Point.new(x, y), CL_Size.new(width, height)), parent)
-    @pos   = 2
-    @horizontal = horizontal
-    @items = {}
-
-    if block then
-      instance_eval(&block)
-    end
-  end
-
-  def set_position(x, y)
-    @panel.set_position(x, y)
-  end
-
-  def set_size(w, h)
-    @panel.set_size(w, h)
-  end
-
   def ButtonPanel.new_from_spec(x, y, width, height, horizontal, spec, parent)
-    buttonpanel = ButtonPanel.new(x, y, width, height, horizontal, parent)
+    buttonpanel = ButtonPanel.new(Rect.new(x, y, width, height), horizontal, parent)
 
     spec.each{ |(type, *data)|
       case type
@@ -134,249 +83,36 @@ class ButtonPanel
         raise "ButtonPanel: Unknown type #{type}"
       end
     }
-    
+
     return buttonpanel
   end
-
-  def add_small_icon(image = nil, callback = nil, tooltip = "")
-    if (@horizontal)
-      icon = Icon.new(CL_Rect.new(CL_Point.new(@pos,  2), CL_Size.new(16, 32)),
-                      make_sprite(image), tooltip, @panel);
-    else
-      icon = Icon.new(CL_Rect.new(CL_Point.new(2, @pos), CL_Size.new(16, 32)),
-                      make_sprite(image), tooltip, @panel);
-    end
-    
-    @pos += 16
-    if (callback)
-      icon.set_callback(callback)
-    end
-    return icon
-  end
-
-  def add_icon(image = nil, callback = nil, &block)
-    tooltip = ""
-    if block then
-      callback = block
-    end
-
-    if (@horizontal)
-      icon = Icon.new(CL_Rect.new(CL_Point.new(@pos,  2), CL_Size.new(32, 32)),
-                      make_sprite(image), tooltip, @panel);
-    else
-      icon = Icon.new(CL_Rect.new(CL_Point.new(2, @pos), CL_Size.new(32, 32)),
-                      make_sprite(image), tooltip, @panel);
-    end
-    
-    @pos += 32
-    if (callback)
-      icon.set_callback(callback)
-    end
-    return icon
-  end
-  
-  def add_separator()
-    @pos += 16
-  end
-  
-  def show(b)
-    @panel.show(b)
-  end
 end
 
-# Very simple FileDialog, mainly a placeholder until the real thing gets ready.
-class SimpleFileDialog
-  @window   = nil
-  @inputbox = nil
-  @ok_button     = nil
-  @cancel_button = nil
-  @callback = nil
-  
-  def initialize(title, ok, cancel, g)
-    @window   = Window.new(CL_Rect.new(CL_Point.new(120, 200), CL_Size.new(560, 100)), title, g)
-    @inputbox = CL_InputBox.new(CL_Rect.new(CL_Point.new(10, 10), CL_Size.new(530, 25)),
-                            @window.get_client_area())
-    @ok_button     = CL_Button.new(CL_Rect.new(CL_Point.new(490, 35), CL_Size.new(50, 25)), ok,
-                               @window.get_client_area())
-    @cancel_button = CL_Button.new(CL_Rect.new(CL_Point.new(430, 35), CL_Size.new(50, 25)), cancel,
-                               @window.get_client_area())
-    @window.hide()
-  end
-  
-  def set_filename(filename)
-    @inputbox.set_text(filename)
-  end
-  
-  def get_filename()
-    return @inputbox.get_text()
-  end
-  
-  def run(func)
-    connect(@ok_button.sig_clicked(), method(:on_ok))
-    connect(@inputbox.sig_return_pressed(), method(:on_ok))
-    connect(@cancel_button.sig_clicked(), method(:on_cancel))
-    @callback = func
-    @inputbox.set_focus()
-    @window.show()
-  end
-  
-  def on_ok()
-    @window.hide();
-    if @callback
-      @callback.call(@inputbox.get_text())
-    end
-  end
-  
-  def on_cancel()
-    @window.hide();
-  end
-end
+puts PropertyValue::TYPE_BOOL
 
 class GenericDialog
-  window = nil
-  items  = nil
-  ok     = nil
-  cancel = nil
-  callback = nil
-  
-  def initialize(title, gui)
-    @items = []
-    @window = Window.new(CL_Rect.new(CL_Point.new(100, 100), CL_Size.new(400, 100)), title, gui)
-    @ok = CL_Button.new(CL_Rect.new(CL_Point.new(290, 35), CL_Size.new(50, 25)), "Ok",
-                    @window.get_client_area())
-    @cancel = CL_Button.new(CL_Rect.new(CL_Point.new(230, 35), CL_Size.new(50, 25)), "Cancel",
-                            @window.get_client_area())
-    connect(@cancel.sig_clicked(), method(:on_cancel))
-    connect(@ok.sig_clicked(), method(:on_ok))
-  end
-
-  def on_cancel()
-    @window.hide()
-  end
-  
-  def on_ok()
-    @window.hide()
-    if @callback
-      vals = []
-      @items.each{|item|
-        (type, label, comp) = item
-        if type == "int"
-          vals.push(comp.get_text().to_i)
-        elsif type == "float"
-          vals.push(comp.get_text().to_f)
-        elsif type == "string"
-          vals.push(comp.get_text())
-        elsif type == "bool"
-          vals.push(comp.is_checked())
-        elsif type == "enum"
-          comp.get_buttons().each{|button|
-            if (button.is_checked()) then
-              vals.push(button.get_text())
-              break;
-            end
-          }
-        end
-      }
-      @callback.call(*vals)
-    end
-  end
-
   def set_block()
-    @callback = proc{ |*args| yield(*args) }
+    callback = proc{ |*args| yield(*args) }
+    set_callback(callback)
   end
 
-  def set_callback(c)
-    @callback = c
-  end
-
-  def add_label(text)
-    @items.push(["void", 
-                  CL_Label.new(CL_Point.new(10, 10), text, @window.get_client_area()),
-                  nil])
-    update()
-  end
-
-  def add_float(name, value = 0)
-    @items.push(["float",
-                 CL_Label.new(CL_Point.new(10, 10), name,
-                              @window.get_client_area()),
-                 CL_InputBox.new(CL_Rect.new(CL_Point.new(110, 10), CL_Size.new(200, 25)),
-                                 @window.get_client_area())])
-    @items[-1][2].set_text(value.to_s)
-    update()
-  end
-    
-  def add_bool(name, value = false)
-    @items.push(["bool",
-                  CL_Label.new(CL_Point.new(10, 10), name,
-                               @window.get_client_area()),
-                  CL_CheckBox.new(CL_Point.new(110, 10), 
-                                  "",
-                                  @window.get_client_area())])
-    if value == true
-      @items[-1][2].set_checked()
-    end
-    update()
-  end
-
-  def add_enum(name, types, value = "foo")
-    group = CL_RadioGroup.new()
-    types.each {|type| 
-      radio = CL_RadioButton.new(CL_Point.new(0, 0),
-                                 type, @window.get_client_area())
-      radio.set_checked(type == value)
-      group.add(radio)
-    }
-    @items.push(["enum",
-                  CL_Label.new(CL_Point.new(10, 10), name,
-                               @window.get_client_area()),
-                 group])
-    update()
-  end
-
-  def add_int(name, value = 0)
-    @items.push(["int",
-                 CL_Label.new(CL_Point.new(10, 10), name,
-                              @window.get_client_area()),
-                 CL_InputBox.new(CL_Rect.new(CL_Point.new(110, 10), CL_Size.new(200, 25)),
-                                 @window.get_client_area())])
-    @items[-1][2].set_text(value.to_s)
-    update()
-  end
-  
-  def add_string(name, value = "")
-    @items.push(["string",
-                 CL_Label.new(CL_Point.new(10, 10), name,
-                              @window.get_client_area()),
-                 CL_InputBox.new(CL_Rect.new(CL_Point.new(110, 10), CL_Size.new(200, 25)),
-                                 @window.get_client_area())])
-    @items[-1][2].set_text(value)
-    update()    
-  end
-
-  def update()
-    y = 10
-    @items.each { |(type, label, comp)| 
-      label.set_position(10, y)
-
-      if type == "int" or type == "string" or type == "float" or type == "void" or type == "bool" then
-        if comp then
-          comp.set_position(110, y)
-        end
-        y += 25
-      elsif type == "enum"
-        y += 5
-        comp.get_buttons.each {|radio|
-          radio.set_position(110, y)
-          y += 20
-        }
-        y += 5
-      end
-    }
-  
-    @cancel.set_position(200, y)
-    @ok.set_position(260, y)
-    @window.set_size(330, y + 60)
+  def set_callback(callback)
+    set_ok_callback(proc{
+                      values = get_values()
+                      ruby_values = values.map{ |v|
+                        case v.get_type()
+                        when PropertyValue::TYPE_BOOL
+                          v.get_bool()
+                        when PropertyValue::TYPE_INT
+                          v.get_int()
+                        when PropertyValue::TYPE_FLOAT
+                          v.get_float()
+                        when PropertyValue::TYPE_STRING
+                          v.get_string()
+                        end
+                      }
+                      callback.call(*ruby_values)
+                    })
   end
 end
 

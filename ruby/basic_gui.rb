@@ -1,20 +1,18 @@
-##  $Id$
-## 
-##  Flexlay - A Generic 2D Game Editor
-##  Copyright (C) 2004 Ingo Ruhnke <grumbel@gmx.de>
-##
-##  This program is free software: you can redistribute it and/or modify
-##  it under the terms of the GNU General Public License as published by
-##  the Free Software Foundation, either version 3 of the License, or
-##  (at your option) any later version.
-##  
-##  This program is distributed in the hope that it will be useful,
-##  but WITHOUT ANY WARRANTY; without even the implied warranty of
-##  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-##  GNU General Public License for more details.
-##  
-##  You should have received a copy of the GNU General Public License
-##  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# Flexlay - A Generic 2D Game Editor
+# Copyright (C) 2004 Ingo Ruhnke <grumbel@gmail.com>
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 ## Create some Basic GUI, this is a bit more complicated then it
 ## should be due to the lack of proper button-banel class and layout manager
@@ -35,17 +33,17 @@ class GUI
     @editor = Editor.new()
     @gui = @editor.get_gui_manager()
 
-    myrect      = CL_Rect.new(CL_Point.new(0, 56), CL_Size.new(665, 488+56))
+    myrect      = Rect.new(Point.new(0, 56), Size.new(665, 488+56))
     @editor_map = EditorMapComponent.new(myrect, @gui.get_component())
     @workspace  = Workspace.new(myrect.get_width(), myrect.get_height())
     @editor_map.set_workspace(@workspace)
 
-    @minimap = Minimap.new(@editor_map, CL_Rect.new(CL_Point.new(3 + myrect.left, 
+    @minimap = Minimap.new(@editor_map, Rect.new(Point.new(3 + myrect.left, 
                                                                  488+3-14  + myrect.top), 
-                                                    CL_Size.new(794-134-16, 50)), 
+                                                    Size.new(794-134-16, 50)), 
                            @gui.get_component())
 
-    @button_panel = ButtonPanel.new(0, 23, 800, 33, true, @gui.get_component)
+    @button_panel = @gui.create_button_panel(Rect.new(0, 23, 800, 33), true)
 
     @button_panel.add_icon(@datadir + "/images/icons24/stock_new.png")
     @button_panel.add_icon(@datadir + "/images/icons24/stock_open.png", proc{ level_load() })
@@ -70,9 +68,9 @@ class GUI
     @button_panel.add_icon(@datadir + "/images/icons24/foreground.png")
     @button_panel.add_icon(@datadir + "/images/icons24/eye.png")
 
-    @layer_menu = Menu.new(CL_Point.new(32*15+2, 54), @gui.get_component())
+    @layer_menu = Menu.new(Point.new(32*15+2, 54), @gui.get_component())
     
-    @toolbar = ButtonPanel.new(0, 23+33, 33, 32*4+2, false, @gui.get_component)
+    @toolbar = @gui.create_button_panel(Rect.new(0, 23+33, 33, 32*4+2), false)
     @paint  = @toolbar.add_icon(@datadir + "/images/tools/stock-tool-pencil-22.png", proc{ $controller.set_tilemap_paint_tool() })
     @select = @toolbar.add_icon(@datadir + "/images/tools/stock-tool-rect-select-22.png", proc{ $controller.set_tilemap_select_tool() })
     @zoom   = @toolbar.add_icon(@datadir + "/images/tools/stock-tool-zoom-22.png", proc{ $controller.set_zoom_tool() })
@@ -87,7 +85,7 @@ class GUI
     @layer_menu.add_item($mysprite, "Show current", proc{ show_current() })
     @layer_menu.add_item($mysprite, "Show only current", proc{ show_only_current() })
 
-    @menu = CL_Menu.new(@gui.get_component())
+    @menu = @gui.create_menubar()
     @menu.add_item("File/Open...", proc{ level_load() })
     @menu.add_item("File/Save...", proc{ level_save() })
     # @menu.add_item("File/Save Commands...", menu_file_save_commands)
@@ -116,15 +114,15 @@ class GUI
     # show_current()
     # set_tilemap_paint_tool()
 
-    @selector_window = Panel.new(CL_Rect.new(CL_Point.new(800-134, 23+33), CL_Size.new(128 + 6, 558)),
+    @selector_window = Panel.new(Rect.new(Point.new(800-134, 23+33), Size.new(128 + 6, 558)),
                                  @gui.get_component())
-    @tileselector = TileSelector.new(CL_Rect.new(CL_Point.new(3, 3), CL_Size.new(128, 552)), @selector_window)
+    @tileselector = TileSelector.new(Rect.new(Point.new(3, 3), Size.new(128, 552)), @selector_window)
     @tileselector.set_tileset($tileset)
     @tileselector.set_scale(0.5)
     @tileselector.set_tiles($tileset.get_tiles())
     @tileselector.show(true)
     
-    @objectselector = ObjectSelector.new(CL_Rect.new(0, 0, 128, 256), 42, 42, @selector_window)
+    @objectselector = ObjectSelector.new(Rect.new(0, 0, 128, 256), 42, 42, @selector_window)
     @objectselector.show(false)
 
     connect_v1_ObjMapObject(@objectselector.sig_drop(), proc{ on_object_drop() })

@@ -52,17 +52,17 @@ class Animation
 
       # Hack for Onion_Skin
       onion_skin = OnionSkinLayer.new(1024, 768)
-      # onion_skin.to_layer().set_pos(CL_Pointf.new(-100, -100))
+      # onion_skin.to_layer().set_pos(Pointf.new(-100, -100))
       img.add_onion_skin(onion_skin)
       
       if (@frames.length > 1) then
         onion_skin.add_map(@frames[(@current_frame - 1)%@frames.length].editormap, 
-                           CL_Color.new(255, 255, 255, 150))
+                           Color.new(255, 255, 255, 150))
       end
 
       if (@frames.length > 2) then
         onion_skin.add_map(@frames[(@current_frame - 2)%@frames.length].editormap, 
-                           CL_Color.new(255, 255, 255, 75))
+                           Color.new(255, 255, 255, 75))
       end      
       
       img.update_onion_skin()

@@ -1,23 +1,18 @@
-##  $Id$
-##   ______ __               ___
-##  |   ___|  |.-----.--.--.|   | .---.-.--.--.
-##  |   ___|  ||  -__|_   _||   |_|  _  |  |  |
-##  |__|   |__||_____|__.__||_____|___._|___  |
-##                                      |_____|
-##  Copyright (C) 2004 Ingo Ruhnke <grumbel@gmx.de>
-##
-##  This program is free software: you can redistribute it and/or modify
-##  it under the terms of the GNU General Public License as published by
-##  the Free Software Foundation, either version 3 of the License, or
-##  (at your option) any later version.
-##  
-##  This program is distributed in the hope that it will be useful,
-##  but WITHOUT ANY WARRANTY; without even the implied warranty of
-##  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-##  GNU General Public License for more details.
-##  
-##  You should have received a copy of the GNU General Public License
-##  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# Flexlay - A Generic 2D Game Editor
+# Copyright (C) 2004 Ingo Ruhnke <grumbel@gmail.com>
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 require "sexpr.rb"
 
@@ -48,13 +43,13 @@ class LayoutComponent
   end
   
   def set_pos(x, y)
-    if @component then
+    if @component and (@component.is_a? CL_Component) then
       @component.set_position(x, y)
     end
   end
   
   def set_size(width, height)
-    if @component then
+    if @component and (@component.is_a? CL_Component) then
       @component.set_size(width, height)
     end
 
@@ -87,7 +82,7 @@ class LayoutComponent
       panel = Panel.new(rect, parent)
       return LayoutComponent.new(panel, 
                                  LayoutBox.new(sexpr.get_value([:layout, '_'], :vbox),
-                                               CL_Rect.new(0, 0, rect.get_width(), rect.get_height()), 
+                                               Rect.new(0, 0, rect.get_width(), rect.get_height()), 
                                                sexpr, panel),
                                  :name    => sexpr.get_value([:name,    '_'], nil),
                                  :size    => sexpr.get_value([:size,    '_'], nil),
@@ -116,7 +111,7 @@ class LayoutComponent
       return EditorMapComponent.new(rect, parent)      
       
     when :menubar
-      return CL_Menu.new_from_spec(sexpr.get_value(['spec', '_'], []),
+      return Menubar.new_from_spec(sexpr.get_value(['spec', '_'], []),
                                    parent)
 
     when :button
@@ -125,18 +120,18 @@ class LayoutComponent
                            parent)
 
     when :label
-      return CL_Label.new(CL_Point.new(rect.top, rect.left),
+      return CL_Label.new(Point.new(rect.top, rect.left),
                           sexpr.get_value(['label', '_'], []),
                           parent)
 
     when :listbox
-      return CL_ListBox.new(rect, parent)
+      return CL_ListBox.new(rect.to_cl(), parent)
       
     when :inputbox
-      return CL_InputBox.new(rect, parent)
+      return CL_InputBox.new(rect.to_cl(), parent)
 
     when :radiobutton
-      return CL_RadioButton.new(CL_Point.new(rect.left, rect.top),
+      return CL_RadioButton.new(Point.new(rect.left, rect.top).to_cl(),
                                 sexpr.get_value(['label', '_'], []),
                                 parent)
 
@@ -144,7 +139,7 @@ class LayoutComponent
       return CL_RadioGroup.new()
 
     when :checkbox
-      return CL_CheckBox.new(CL_Point.new(rect.left, rect.top),
+      return CL_CheckBox.new(Point.new(rect.left, rect.top).to_cl(),
                              sexpr.get_value(['label', '_'], []),
                              parent)
 
@@ -183,7 +178,7 @@ class TabComponent < LayoutComponent
     @childs = []
 
     sexpr.get(:components, SExpression.new()).each_pair() { |name, value|
-      @childs.push(LayoutComponent.create(name, CL_Rect.new(0, 0, 256, 256), value, parent))
+      @childs.push(LayoutComponent.create(name, Rect.new(0, 0, 256, 256), value, parent))
     }
   end
 
@@ -229,7 +224,7 @@ class LayoutBox < LayoutComponent
     @homogenus  = false
 
     sexpr.get(:components, SExpression.new()).each_pair() { |name, value|
-      @components.push(LayoutComponent.create(name, CL_Rect.new(0, 0, 256, 256), value, @parent))
+      @components.push(LayoutComponent.create(name, Rect.new(0, 0, 256, 256), value, @parent))
     }
 
     layout()

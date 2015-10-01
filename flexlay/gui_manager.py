@@ -25,7 +25,7 @@ from .gui import (ButtonPanel, EditorMapComponent, OpenFileDialog,
                   Menubar, Minimap, ObjectSelector, TileBrushSelector,
                   TileSelector, StatusBar)
 
-from supertux.properties_widget import PropertiesWidget
+from flexlay.gui.properties_widget import PropertiesWidget
 
 
 class FlexlayMainWindow(QMainWindow):

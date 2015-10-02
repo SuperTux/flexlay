@@ -80,8 +80,12 @@ def main():
     if args.LEVELFILE is not None:
          gui.load_level(args.LEVELFILE)
     elif len(config.recent_files) > 0:
-        gui.load_level(config.recent_files[-1])
-    else:    
+        try:
+            gui.load_level(config.recent_files[-1])
+        except FileNotFoundError:
+            print("Could not load recent file... defaulting...")
+            gui.gui_level_new()
+    else:
         gui.gui_level_new()
 
     # Init the GUI, so that button state is in sync with internal state

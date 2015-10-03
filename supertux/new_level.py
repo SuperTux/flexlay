@@ -37,7 +37,7 @@ class NewLevelDialog(QtGui.QWizard):
         self.level_name = "Unnamed Level"
         self.level_author = "Anonymous"
         self.level_music = ""
-        self.level_image = ""
+        self.level_background = ""
         self.level_license = "GPL 2+ / CC-by-sa 3.0"
         self.level_width = 100
         self.level_height = 50
@@ -197,17 +197,17 @@ class NewLevelDialog(QtGui.QWizard):
             self.music_input.setText(full_path)
 
     def set_img(self, text): #Connected to signal
-        self.level_image = text if text is not "" else ""
+        self.level_background = text if text is not "" else ""
     
     def browse_image(self): #Connected to signal
         full_path = QtGui.QFileDialog.getOpenFileName(None, "Open Background Image",
-                                                      os.path.join(Config.current.datadir, "music", "images"))
+                                                      os.path.join(Config.current.datadir, "images", "background"))
         #If path goes to datadir
         if full_path[:len(Config.current.datadir)] == Config.current.datadir:
             #Set path as relative
-            self.music_input.setText(full_path[len(Config.current.datadir):])
+            self.img_input.setText(full_path[len(Config.current.datadir):])
         else:
-            self.music_input.setText(full_path)
+            self.img_input.setText(full_path)
     
     #<License Page>
     def create_license_page(self):

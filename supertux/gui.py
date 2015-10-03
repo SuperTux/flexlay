@@ -18,7 +18,7 @@
 import subprocess
 import os
 
-from PyQt4.QtGui import QIcon
+from PyQt4.QtGui import QIcon, QMessageBox, QFileDialog
 
 from flexlay import (Color, InputEvent, ObjMapRectObject,
                      ObjMapPathNode, Config, ToolContext, ObjectAddCommand)
@@ -249,8 +249,15 @@ class SuperTuxGUI:
             # FIXME: use real tmpfile
             tmpfile = "/tmp/tmpflexlay-supertux.stl"
             self.save_level(tmpfile)
-        subprocess.Popen([Config.current.binary, tmpfile])
-
+        try:
+            subprocess.Popen([Config.current.binary, tmpfile])
+        except FileNotFoundError:
+            QMessageBox.warning(None, "No Supertux Binary Found",
+                             "Press OK to select your Supertux binary")
+            Config.current.binary = QFileDialog.getOpenFileName(None, "Open Supertux Binary")
+            if not Config.current.binary:
+                raise RuntimeError("binary path missing, use --binary BIN")
+            
     def gui_resize_sector(self):
         level = self.workspace.get_map().metadata
         dialog = self.gui.create_generic_dialog("Resize Sector")

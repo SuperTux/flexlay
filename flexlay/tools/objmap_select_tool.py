@@ -28,20 +28,28 @@ class ObjMapSelectTool(Tool):
     STATE_DRAG = 1
     STATE_SELECT = 2
 
-    def __init__(self):
+    def __init__(self, gui_manager):
         super().__init__()
 
+        self.manager = gui_manager
+
         self.state = ObjMapSelectTool.STATE_NONE
+        #Left click + drag rectangle
         self.drag_start = Pointf(0, 0)
         self.selection_rect = Rectf(0, 0, 0, 0)
+        
+        #For selected objects do: self.context.object_selection
+        self.deselected = [] #Objects that were selected before
+        
         self.offset = Pointf(0, 0)
         self.move_command = None
 
         self.control_point = None
         self.context = ToolContext.current
 
-        self.sig_popup_menu_display = Signal()
-        self.sig_right_click = Signal()
+        #Never used:
+        #self.sig_popup_menu_display = Signal()
+        #self.sig_right_click = Signal()
 
     def clear_selection(self):
         self.context.object_selection.clear()
@@ -54,6 +62,7 @@ class ObjMapSelectTool(Tool):
         self.context.object_selection = selection
 
     def draw(self, gc):
+        self.deselected = self.context.object_selection
         for obj in self.context.object_selection:
             gc.draw_rect(Rect(obj.get_bound_rect()), Color(255, 0, 0))
 
@@ -86,6 +95,7 @@ class ObjMapSelectTool(Tool):
                 self.selection_rect.normalize()
 
                 self.context.object_selection = objmap.get_selection(self.selection_rect)
+                
                 self.on_selection_change()
                 parent.release_mouse()
 
@@ -102,7 +112,6 @@ class ObjMapSelectTool(Tool):
 
         if event.kind == InputEvent.MOUSE_LEFT:
             self.control_point = objmap.find_control_point(pos)
-
             if self.control_point:
                 self.state = ObjMapSelectTool.STATE_DRAG
                 parent.grab_mouse()
@@ -139,6 +148,10 @@ class ObjMapSelectTool(Tool):
                     self.state = ObjMapSelectTool.STATE_SELECT
                     self.selection_rect = Rectf(pos.x, pos.y, pos.x, pos.y)
                     parent.grab_mouse()
+                    
+        elif event.kind == InputEvent.MOUSE_RIGHT:
+            print("objmap_select_tool.py: Selected Objects\n\t"+str(self.context.object_selection))
+            #TODO: Open Menu
 
     def on_mouse_move(self, event):
         # print("ObjMapSelectToolImpl.on_mouse_move ", event.kind, event.mouse_pos.x, event.mouse_pos.y)
@@ -159,6 +172,15 @@ class ObjMapSelectTool(Tool):
             self.selection_rect.bottom = pos.y
 
     def on_selection_change(self):
+        for obj in self.deselected:
+            obj.sig_deselect()
+        if len(self.context.object_selection) != 1:
+            for obj in self.context.object_selection:
+                obj.sig_select(None)
+        else:
+            self.context.object_selection[0].sig_select(self.manager)
+        selected = self.context.object_selection
+        
         objmap = ToolContext.current.object_layer
         objmap.delete_control_points()
 

@@ -25,6 +25,8 @@ from .gui import (ButtonPanel, EditorMapComponent, OpenFileDialog,
                   Menubar, Minimap, ObjectSelector, TileBrushSelector,
                   TileSelector, StatusBar)
 
+from flexlay.gui.properties_widget import PropertiesWidget
+
 
 class FlexlayMainWindow(QMainWindow):
 
@@ -120,10 +122,18 @@ class GUIManager:
         self.object_selector_dock.setObjectName("object_selector_dock")
         self.object_selector = ObjectSelector(w, h, None)
         self.object_selector_dock.setWidget(self.object_selector.get_widget())
-
+        
         # self.window.tabifyDockWidget(first, second)
         self.window.addDockWidget(Qt.RightDockWidgetArea, self.object_selector_dock)
         return self.object_selector
+    
+    def create_properties_view(self):
+        self.properties_dock = QDockWidget("Properties")
+        self.properties_dock.setObjectName("properties_dock")
+        self.properties_dock.setWidget(PropertiesWidget(self.window))
+        
+        self.window.addDockWidget(Qt.RightDockWidgetArea, self.properties_dock)
+        return self.properties_dock
 
     def create_tile_selector(self):
         self.tile_selector_dock = QDockWidget("Tile Selector")

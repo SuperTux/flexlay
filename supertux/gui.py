@@ -77,6 +77,8 @@ class SuperTuxGUI:
         self.minimap = self.gui.create_minimap(self.editor_map)
 
         self.objectselector = self.gui.create_object_selector(42, 42)
+        self.properties_widget = self.gui.create_properties_view()
+        
         self.editor_map.sig_drop.connect(self.on_object_drop)
         for object_brush in supertux_gameobj_factory.create_object_brushes():
             self.objectselector.add_brush(object_brush)
@@ -585,8 +587,8 @@ class SuperTuxGUI:
         self.toolbox.set_down(self.toolbox.zoom_icon)
 
     def set_objmap_select_tool(self):
-        self.workspace.set_tool(InputEvent.MOUSE_LEFT, ObjMapSelectTool())
-        self.workspace.set_tool(InputEvent.MOUSE_RIGHT, None)
+        self.workspace.set_tool(InputEvent.MOUSE_LEFT, ObjMapSelectTool(self.gui))
+        self.workspace.set_tool(InputEvent.MOUSE_RIGHT, ObjMapSelectTool(self.gui))
         self.toolbox.set_down(self.toolbox.object_icon)
 
     def set_level(self, level, sectorname):

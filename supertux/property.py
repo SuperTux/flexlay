@@ -20,7 +20,12 @@ from flexlay import Colorf
 
 
 class Property:
-
+    '''
+    A property is just that: a property
+    What these classes do is allow properties to easily be written to files,
+    and displayed in dialogs.
+    @see: flexlay/gui/generic_dialog.py, supertux/properties_widget.py 
+    '''
     def __init__(self, label, identifier, default, optional=False):
         self.label = label
         self.identifier = identifier
@@ -81,11 +86,30 @@ class StringProperty(Property):
 
     def property_dialog(self, dialog):
         dialog.add_string(self.label, self.value, self.on_value_change)
-
+        
+class FileProperty(StringProperty):
+    def __init__(self, label, identifier, default="", relative_to="", open_in=""):
+        '''
+        @param relative_to: The prefix text not displayed in the input box
+        @param open_in: Where the browse dialog opens
+        '''
+        super().__init__(label, identifier, default=default)
+        #Where the file dialog opens by default
+        self.open_in = open_in
+        
+        #Where the path shown is relative to (if possible)
+        self.relative_to = relative_to
+        
+        #The actual path stored, so that the relative path can be displayed.
+        self.actual_path = ""
+        
+    def property_dialog(self, dialog):
+        dialog.add_file(self.label, self.default, self.relative_to, self.open_in, self.on_value_change)
 
 class EnumProperty(Property):
 
     def __init__(self, label, identifier, default, optional=False, values=None):
+        '''default is an index from values!!!'''
         super().__init__(label, identifier, default, optional=optional)
 
         if values is None:
@@ -96,13 +120,13 @@ class EnumProperty(Property):
     def read(self, sexpr, obj):
         value_name = get_value_from_tree([self.identifier, "_"],  sexpr, self.values[self.default])
         try:
-            self.value = self.values.index(value_name)
+            self.value = value_name
         except:
             raise RuntimeError("%s: invalid enum value: %r not in %r" % (self.identifier, self.value, self.values))
 
     def write(self, writer, obj):
         if not self.optional or self.value != self.default:
-            writer.write_string(self.identifier, self.values[self.value])
+            writer.write_string(self.identifier, self.value)
 
     def property_dialog(self, dialog):
         dialog.add_enum(self.label, self.values, self.value, self.on_value_change)

@@ -59,6 +59,22 @@ class GameObj:
 
     def __init__(self):
         self.objmap_object = None
+        
+    def signal_connect(self):
+        '''Connect the objmap_object signals to the 
+        on_select and on_deselect'''
+        if not self.objmap_object:
+            return
+        self.objmap_object.sig_select.connect(self.on_select)
+        self.objmap_object.sig_deselect.connect(self.on_deselect)
+
+    def on_select(self, manager):
+        if manager:
+            props_widget = manager.properties_dock.widget()
+            props_widget.set_properties(self.properties)
+    
+    def on_deselect(self):
+        pass
 
     def add_property(self, prop):
         self.properties.append(prop)
@@ -94,6 +110,7 @@ class LevelTime(GameObj):
         super().__init__()
 
         self.objmap_object = make_sprite_object(self, self.sprite)
+        self.signal_connect()
 
         self.properties = [
             IntProperty("Time", "time", None)
@@ -111,6 +128,7 @@ class Camera(GameObj):
         super().__init__()
 
         self.objmap_object = make_sprite_object(self, self.sprite)
+        self.signal_connect()
 
         self.properties = [
             EnumProperty("Mode", "mode", default=0, optional=False, values=self.values),
@@ -131,6 +149,7 @@ class ResetPoint(GameObj):
         super().__init__()
 
         self.objmap_object = make_sprite_object(self, self.sprite)
+        self.signal_connect()
 
         self.properties = [
             InlinePosProperty()
@@ -147,6 +166,7 @@ class GhostFlame(GameObj):
         super().__init__()
 
         self.objmap_object = make_sprite_object(self, self.sprite)
+        self.signal_connect()
 
         self.properties = [
             FloatProperty("Radius", "radius", default=100.0, optional=True),
@@ -165,6 +185,7 @@ class Decal(GameObj):
         super().__init__()
 
         self.objmap_object = make_sprite_object(self, self.sprite)
+        self.signal_connect()
 
         self.properties = [
             InlinePosProperty(),
@@ -183,6 +204,7 @@ class Trampoline(GameObj):
         super().__init__()
 
         self.objmap_object = make_sprite_object(self, self.sprite)
+        self.signal_connect()
 
         self.properties = [
             BoolProperty("Portable", "portable", optional=True, default=True),
@@ -289,6 +311,7 @@ class BadGuy(GameObj):
         self.identifier = kind
         self.sprite = sprite_filename
         self.objmap_object = make_sprite_object(self, self.sprite)
+        self.signal_connect()
 
         self.properties = [
             DirectionProperty("Direction", "direction", 0),
@@ -307,6 +330,7 @@ class Candle(GameObj):
         super().__init__()
 
         self.objmap_object = make_sprite_object(self, self.sprite)
+        self.signal_connect()
 
         self.properties = [
             StringProperty("Name", "name", "", optional=True),
@@ -328,6 +352,7 @@ class Torch(GameObj):
         super().__init__()
 
         self.objmap_object = make_sprite_object(self, self.sprite)
+        self.signal_connect()
 
         self.properties = [
             SpriteProperty("Sprite", "sprite", default=self.sprite, optional=False),
@@ -345,6 +370,7 @@ class DartTrap(GameObj):
         super().__init__()
 
         self.objmap_object = make_sprite_object(self, self.sprite)
+        self.signal_connect()
 
         self.properties = [
             FloatProperty("Initial Delay", "initial-delay", default=0, optional=False),
@@ -365,6 +391,7 @@ class WilloWisp(GameObj):
         super().__init__()
 
         self.objmap_object = make_sprite_object(self, self.sprite)
+        self.signal_connect()
 
         self.properties = [
             SectorProperty("Sector", "sector", default="", optional=False),
@@ -388,6 +415,7 @@ class Dispenser(GameObj):
         super().__init__()
 
         self.objmap_object = make_sprite_object(self, self.sprite)
+        self.signal_connect()
 
         self.properties = [
             IntProperty("Cycle", "cycle", 2),
@@ -408,6 +436,7 @@ class Switch(GameObj):
         super().__init__()
 
         self.objmap_object = make_sprite_object(self, self.sprite)
+        self.signal_connect()
 
         self.properties = [
             StringProperty("Script", "script", default=""),
@@ -427,6 +456,7 @@ class Platform(GameObj):
         super().__init__()
 
         self.objmap_object = make_sprite_object(self, self.sprite)
+        self.signal_connect()
 
         self.properties = [
             StringProperty("Name", "name", "", optional=True),
@@ -446,6 +476,7 @@ class SpawnPoint(GameObj):
         super().__init__()
 
         self.objmap_object = make_sprite_object(self, self.sprite)
+        self.signal_connect()
 
         self.properties = [
             StringProperty("Name", "name", "main"),
@@ -463,6 +494,7 @@ class SimpleObject(GameObj):
         self.sprite = sprite
 
         self.objmap_object = make_sprite_object(self, self.sprite)
+        self.signal_connect()
 
         self.properties = [
             InlinePosProperty()
@@ -479,6 +511,7 @@ class SimpleTileObject(GameObj):
         self.sprite = sprite
 
         self.objmap_object = make_sprite_object(self, self.sprite)
+        self.signal_connect()
 
         self.properties = [
             SpriteProperty("Sprite", "sprite"),
@@ -500,6 +533,7 @@ class WeakBlock(GameObj):
         super().__init__()
 
         self.objmap_object = make_sprite_object(self, self.sprite)
+        self.signal_connect()
 
         self.properties = [
             BoolProperty("Linked", "linked", default=False),
@@ -530,6 +564,7 @@ class BonusBlock(GameObj):
         super().__init__()
 
         self.objmap_object = make_sprite_object(self, self.sprite)
+        self.signal_connect()
 
         self.properties = [
             StringProperty("Message", "message", default="", optional=True, translatable=True),
@@ -554,6 +589,7 @@ class InfoBlock(GameObj):
         super().__init__()
 
         self.objmap_object = make_sprite_object(self, self.sprite)
+        self.signal_connect()
 
         self.properties = [
             StringProperty("Message", "message", "", optional=True, translatable=True),
@@ -574,6 +610,7 @@ class Powerup(GameObj):
         super().__init__()
 
         self.objmap_object = make_sprite_object(self, self.sprite)
+        self.signal_connect()
 
         self.properties = [
             BoolProperty("Disable Physics", "disable-physics", default=False, optional=True),
@@ -596,6 +633,7 @@ class ParticleSystem(GameObj):
         self.sprite = sprite
 
         self.objmap_object = make_sprite_object(self, self.sprite)
+        self.signal_connect()
 
         self.properties = [
             IntProperty("Layer", "layer", 0, optional=True)
@@ -612,6 +650,7 @@ class Gradient(GameObj):
         super().__init__()
 
         self.objmap_object = make_sprite_object(self, self.sprite)
+        self.signal_connect()
 
         self.properties = [
             ColorProperty("Top Color", "top_color"),
@@ -630,6 +669,7 @@ class Background(GameObj):
         super().__init__()
 
         self.objmap_object = make_sprite_object(self, self.sprite)
+        self.signal_connect()
 
         self.properties = [
             FloatProperty("X", "x", default=0, optional=True),
@@ -671,6 +711,7 @@ class Door(GameObj):
         super().__init__()
 
         self.objmap_object = make_sprite_object(self, self.sprite)
+        self.signal_connect()
 
         self.properties = [
             StringProperty("Sector", "sector"),
@@ -699,6 +740,7 @@ class ScriptedObject(GameObj):
         super().__init__()
 
         self.objmap_object = make_sprite_object(self, self.sprite)
+        self.signal_connect()
 
         self.properties = [
             InlinePosProperty(),
@@ -721,6 +763,7 @@ class Wind(GameObj):
         super().__init__()
 
         self.objmap_object = make_rect_object(self, Color(0, 200, 200, 200))
+        self.signal_connect()
 
         self.properties = [
             StringProperty("Name", "name", default="", optional=True),

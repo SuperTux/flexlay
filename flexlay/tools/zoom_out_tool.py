@@ -17,6 +17,7 @@
 
 from ..gui.editor_map_component import EditorMapComponent
 from flexlay.tools import Tool
+from flexlay import InputEvent
 
 
 class ZoomOutTool(Tool):
@@ -26,7 +27,8 @@ class ZoomOutTool(Tool):
 
     def on_mouse_down(self, event):
         parent = EditorMapComponent.current
-        parent.zoom_out(event.mouse_pos)
+        if event.kind == InputEvent.MOUSE_RIGHT:
+            parent.zoom_out(event.mouse_pos)
 
 
 # EOF #

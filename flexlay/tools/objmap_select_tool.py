@@ -21,6 +21,7 @@ from ..gui.editor_map_component import EditorMapComponent
 from flexlay import Color, InputEvent, Workspace, ObjectMoveCommand, ToolContext
 from flexlay.util import Signal
 
+from PyQt4.QtGui import QIcon, QMenu, QCursor, QAction
 
 class ObjMapSelectTool(Tool):
 
@@ -150,8 +151,19 @@ class ObjMapSelectTool(Tool):
                     parent.grab_mouse()
                     
         elif event.kind == InputEvent.MOUSE_RIGHT:
-            print("objmap_select_tool.py: Selected Objects\n\t"+str(self.context.object_selection))
-            #TODO: Open Menu
+            obj = objmap.find_object(pos)
+            menu = QMenu()
+            #Is there an object under cursor?
+            if len(self.context.object_selection) > 0 and obj:
+                #Add object actions to menu
+                def delete_obj():
+                    self.context.object_layer.delete_object(obj)
+                    self.context.object_selection.remove(obj)    
+                delete_action = menu.addAction(QIcon("data/images/icons24/stock_delete.png"), "Delete Object")
+                delete_action.triggered.connect(delete_obj)
+                menu.addSeparator()
+            menu.move(QCursor.pos())
+            menu.exec_()
 
     def on_mouse_move(self, event):
         # print("ObjMapSelectToolImpl.on_mouse_move ", event.kind, event.mouse_pos.x, event.mouse_pos.y)

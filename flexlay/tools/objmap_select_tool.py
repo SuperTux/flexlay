@@ -18,7 +18,7 @@
 from flexlay.tools import Tool
 from flexlay.math import Pointf, Rectf, Rect
 from ..gui.editor_map_component import EditorMapComponent
-from flexlay import Color, InputEvent, Workspace, ObjectMoveCommand, ToolContext
+from flexlay import Color, InputEvent, Workspace, ObjectMoveCommand, ToolContext, ObjectDeleteCommand
 from flexlay.util import Signal
 
 from PyQt4.QtGui import QIcon, QMenu, QCursor, QAction
@@ -157,9 +157,13 @@ class ObjMapSelectTool(Tool):
             if len(self.context.object_selection) > 0 and obj:
                 #Add object actions to menu
                 def delete_obj():
-                    self.context.object_layer.delete_object(obj)
-                    self.context.object_selection.remove(obj)    
-                delete_action = menu.addAction(QIcon("data/images/icons24/stock_delete.png"), "Delete Object")
+                    delete_command = ObjectDeleteCommand(self.context.object_layer)
+                    delete_command.objects = self.context.object_selection
+                    self.context.object_selection = []
+                    Workspace.current.get_map().execute(delete_command)
+                s = "s" if len(self.context.object_selection) >= 2 else "" #Append s if multiple objects selected
+                print(s)
+                delete_action = menu.addAction(QIcon("data/images/icons24/stock_delete.png"), "Delete Object"+s)
                 delete_action.triggered.connect(delete_obj)
                 menu.addSeparator()
             menu.move(QCursor.pos())

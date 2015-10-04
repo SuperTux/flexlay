@@ -18,10 +18,12 @@
 import subprocess
 import os
 
-from PyQt4.QtGui import QIcon, QMessageBox, QFileDialog
+from PyQt4.QtGui import (QIcon, QMessageBox, QFileDialog, QDialog, QFormLayout,
+                         QPushButton, QVBoxLayout, QButtonGroup, QLabel)
 
 from flexlay import (Color, InputEvent, ObjMapRectObject,
-                     ObjMapPathNode, Config, ToolContext, ObjectAddCommand)
+                     ObjMapPathNode, Config, ToolContext, ObjectAddCommand,
+                     Workspace)
 from flexlay.math import Point, Rect, Size
 from flexlay.tools import (TilePaintTool, TileBrushCreateTool,
                            TileMapSelectTool, TileFillTool,
@@ -60,6 +62,7 @@ class SuperTuxGUI:
 
         self.gui = flexlay.create_gui_manager("SuperTux Editor")
         self.gui.window.setWindowIcon(QIcon("data/images/supertux/supertux-editor.png"))
+        self.gui.window.set_on_close(self.on_window_close)
 
         self.button_panel = SuperTuxButtonPanel(self.gui, self)
         self.toolbox = SuperTuxToolbox(self.gui, self)
@@ -165,6 +168,39 @@ class SuperTuxGUI:
             self.workspace.get_map().metadata.objects.add_object(rectobj)
 
         self.editor_map.sig_on_key("a").connect(on_a_key)
+        
+    def on_window_close(self, *args):
+        '''
+        Called when window x button is clicked
+        Ask whether to save, continue, or just quit.
+        @return: boolean whether to close or not. If not boolean, will close.
+        '''
+        editor_map = Workspace.current.get_map()
+        #If the most recent save was the same as the save_pointer index,
+        # we can safely quit
+        if editor_map.save_pointer == len(editor_map.undo_stack):
+            return True
+        else:
+            choice = QMessageBox.warning(self.gui.window, "Unsaved Changes to Level",
+                                      "The level has been changed since "
+                                      "the last save.",
+                                      "Save Now", "Cancel", "Leave Anyway",
+                                      0, 1)
+            if choice == 0:
+                dialog_is_cancelled = False
+                def after_save(i):
+                    dialog_is_cancelled = (i == 0)
+                self.save_dialog.file_dialog.finished.connect(after_save)
+                self.gui_level_save()
+                #If saved, show confirmation dialog to reassure user.
+                if not dialog_is_cancelled:
+                    QMessageBox.information(self.gui.window, "Saved Successfully", "Editor will now quit")
+                #If dialog is cancelled, don't quit, as that would lose changes
+                return not dialog_is_cancelled
+            elif choice == 1:
+                return False
+            elif choice == 2:
+                return True
 
     def on_worldmap_object_drop(self, brush, pos):
         pos = self.editor_map.screen2world(pos)
@@ -533,6 +569,8 @@ class SuperTuxGUI:
         self.use_worldmap = True
 
     def save_level(self, filename):
+        editor_map = Workspace.current.get_map()
+        editor_map.save_pointer = len(editor_map.undo_stack)
         if self.use_worldmap:
             level = self.workspace.get_map().metadata
         else:

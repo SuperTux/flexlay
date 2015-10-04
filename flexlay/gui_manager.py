@@ -17,7 +17,9 @@
 
 from PyQt4.QtCore import (QCoreApplication, Qt)
 from PyQt4.QtGui import (QApplication, QMainWindow, QToolBar,
-                         QDockWidget, QVBoxLayout, QWidget)
+                         QDockWidget, QVBoxLayout, QWidget,
+                         QDialog, QFormLayout, QLabel,
+                         QButtonGroup, QPushButton)
 
 from .config import Config
 from .gui import (ButtonPanel, EditorMapComponent, OpenFileDialog,
@@ -26,14 +28,28 @@ from .gui import (ButtonPanel, EditorMapComponent, OpenFileDialog,
                   TileSelector, StatusBar)
 
 from flexlay.gui.properties_widget import PropertiesWidget
+from flexlay.util.signal import Signal
+from flexlay import Workspace
 
 
 class FlexlayMainWindow(QMainWindow):
+    on_close = None
+    
+    def set_on_close(self, on_close):
+        self.on_close =  on_close
 
     def closeEvent(self, event):
-        Config.current.geometry = self.saveGeometry().toBase64().data().decode()
-        Config.current.window_state = self.saveState().toBase64().data().decode()
-        event.accept()
+        if self.on_close:
+            if not self.on_close(event) == False:
+                Config.current.geometry = self.saveGeometry().toBase64().data().decode()
+                Config.current.window_state = self.saveState().toBase64().data().decode()
+                event.accept()
+            else:
+                event.ignore()
+        else:
+            Config.current.geometry = self.saveGeometry().toBase64().data().decode()
+            Config.current.window_state = self.saveState().toBase64().data().decode()
+            event.accept()
 
 
 class GUIManager:
@@ -41,7 +57,7 @@ class GUIManager:
     def __init__(self, title):
         self.window = FlexlayMainWindow()
         self.window.setWindowTitle(title)
-
+        
         self.editormap_component = None
         self.statusbar = None
 
@@ -50,7 +66,7 @@ class GUIManager:
         self.tile_selector_dock = None
         self.object_selector_dock = None
         self.layer_selector = None
-
+    
     def run(self):
         if self.statusbar and self.editormap_component:
             (self.editormap_component.editormap_widget

@@ -32,6 +32,8 @@ class EditorMap:
         self.layers = []
         self.redo_stack = []
         self.undo_stack = []
+        #Index in undo_stack + redo_stack, all with index <= are saved.
+        self.save_pointer = 0
         self.sig_change = Signal()
         self.metadata = None
         self.draw_grid = False

@@ -17,7 +17,8 @@
 from PyQt4.QtGui import (QDialog, QDialogButtonBox, QVBoxLayout,
                          QLabel, QLineEdit, QFormLayout, QPushButton,
                          QIcon, QCheckBox, QPixmap, QButtonGroup,
-                         QRadioButton, QColorDialog, QWidget, QFileDialog)
+                         QRadioButton, QColorDialog, QWidget, QFileDialog,
+                         QComboBox)
 from supertux.property import FileProperty
 
 class Item:
@@ -184,6 +185,18 @@ class PropertiesWidget(QWidget):
         self.items.append(Item(Item.KIND_STRING, label, inputbox, callback=callback))
 
     def add_enum(self, name, values, current_value=0, callback=None): 
+        label = QLabel(name)
+        drop_down = QComboBox()
+        for i, value in enumerate(values):
+            drop_down.addItem(value)
+        self.layout.addRow(drop_down)
+        def button_clicked(text):
+            if callback:
+                callback(button.text())
+        drop_down.currentIndexChanged.connect(button_clicked)
+        self.items.append(Item(Item.KIND_ENUM, label, None, callback=callback, group=group))
+
+    def add_radio(self, name, values, current_value=0, callback=None): 
         label = QLabel(name)
         group = QButtonGroup()
         for i, value in enumerate(values):

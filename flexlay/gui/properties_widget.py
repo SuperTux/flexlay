@@ -187,9 +187,9 @@ class PropertiesWidget(QWidget):
     def add_enum(self, name, values, current_value=0, callback=None): 
         label = QLabel(name)
         drop_down = QComboBox()
-        for i, value in enumerate(values):
+        for value in values:
             drop_down.addItem(value)
-        self.layout.addRow(drop_down)
+        self.layout.addRow(label, drop_down)
         def button_clicked(text):
             if callback:
                 callback(button.text())

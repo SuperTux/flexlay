@@ -96,6 +96,7 @@ class Sector:
         self.width = 0
         self.height = 0
 
+        self.objects = []
         self.tilemaps = []
 
         self.object_layer = ObjectLayer()
@@ -131,12 +132,15 @@ class Sector:
                     print("Error: Couldn't resolve object type: ", name)
                     print("Sector: Unhandled tag: ", name)
                 else:
-                    self.object_layer.add_object(obj.objmap_object)
+                    self.objects.append(obj)
 
         # Sort tilemaps according to z-pos before adding them:
         self.tilemaps = sorted(self.tilemaps, key = lambda tilemap: tilemap.z_pos)
         for tilemap in self.tilemaps:
             self.object_layer.add_object(ObjMapTilemapObject(tilemap.tilemap_layer, tilemap))
+
+        for obj in self.objects:
+            self.object_layer.add_object(obj.objmap_object)
 
         self.editormap.metadata = self
 

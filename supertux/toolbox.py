@@ -28,9 +28,9 @@ class SuperTuxToolbox:
                                                 editor.set_tilemap_paint_tool, hover="Pencil Tool")
         self.fill_icon = self.toolbox.add_icon(self.icon_path("fill", 24),
                                                editor.set_tilemap_fill_tool, hover="Fill Tool")
-        self.replace_icon = self.toolbox.add_icon(self.icon_path("replace"),
+        self.replace_icon = self.toolbox.add_icon(self.icon_path("replace", 24),
                                                   editor.set_tilemap_replace_tool, hover="Replace Tool")
-        self.select_icon = self.toolbox.add_icon(self.icon_path("rect_select"),
+        self.select_icon = self.toolbox.add_icon(self.icon_path("rect-select"),
                                                  editor.set_tilemap_select_tool, hover="Rectangle Select Tool")
         
         self.toolbox.add_separator()

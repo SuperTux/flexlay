@@ -141,14 +141,17 @@ class ObjMapRectObject(ObjMapObject):
         self.color = color
 
     def update_control_points(self):
-        self.cp_top_left.set_pos_raw(self.pos)
-        self.cp_top_right.set_pos_raw(self.pos + Pointf(self.size.width, 0))
-        self.cp_bottom_left.set_pos_raw(self.pos + Pointf(0, self.size.height))
-        self.cp_bottom_right.set_pos_raw(self.pos + Pointf(self.size.width, self.size.height))
-        self.cp_top_middle.set_pos_raw(self.pos + Pointf(self.size.width / 2, 0))
-        self.cp_bottom_middle.set_pos_raw(self.pos + Pointf(self.size.width / 2, self.size.height))
-        self.cp_middle_left.set_pos_raw(self.pos + Pointf(0, self.size.height / 2))
-        self.cp_middle_right.set_pos_raw(self.pos + Pointf(self.size.width, self.size.height / 2))
+        # Correct the control point position by 8 pixels (so that they align perfectly)
+        pos = self.pos - Pointf(8, 8)
+
+        self.cp_top_left.set_pos_raw(pos)
+        self.cp_top_right.set_pos_raw(pos + Pointf(self.size.width, 0))
+        self.cp_bottom_left.set_pos_raw(pos + Pointf(0, self.size.height))
+        self.cp_bottom_right.set_pos_raw(pos + Pointf(self.size.width, self.size.height))
+        self.cp_top_middle.set_pos_raw(pos + Pointf(self.size.width / 2, 0))
+        self.cp_bottom_middle.set_pos_raw(pos + Pointf(self.size.width / 2, self.size.height))
+        self.cp_middle_left.set_pos_raw(pos + Pointf(0, self.size.height / 2))
+        self.cp_middle_right.set_pos_raw(pos + Pointf(self.size.width, self.size.height / 2))
 
     def draw(self, gc):
         gc.fill_rect(Rect(self.get_bound_rect()), self.color)
@@ -158,7 +161,7 @@ class ObjMapRectObject(ObjMapObject):
 
     def add_control_points(self):
         self.update_control_points()
-        print("Adding control poinst...")
+        print("Adding control points...")
 
         from .tool_context import ToolContext
         objmap = ToolContext.current.object_layer

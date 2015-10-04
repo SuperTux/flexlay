@@ -118,7 +118,6 @@ class Sector:
                 tilemap = SuperTuxTileMap.from_sexpr(data)
                 self.tilemaps.append(tilemap)
                 # self.editormap.add_layer(tilemap.tilemap_layer)
-                self.object_layer.add_object(ObjMapTilemapObject(tilemap.tilemap_layer, tilemap))
 
                 # GRUMBEL: incorrect
                 if tilemap.solid:
@@ -133,6 +132,11 @@ class Sector:
                     print("Sector: Unhandled tag: ", name)
                 else:
                     self.object_layer.add_object(obj.objmap_object)
+
+        # Sort tilemaps according to z-pos before adding them:
+        self.tilemaps = sorted(self.tilemaps, key = lambda tilemap: tilemap.z_pos)
+        for tilemap in self.tilemaps:
+            self.object_layer.add_object(ObjMapTilemapObject(tilemap.tilemap_layer, tilemap))
 
         self.editormap.metadata = self
 

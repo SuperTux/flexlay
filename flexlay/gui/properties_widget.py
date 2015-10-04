@@ -194,7 +194,7 @@ class PropertiesWidget(QWidget):
             if callback:
                 callback(button.text())
         drop_down.currentIndexChanged.connect(button_clicked)
-        self.items.append(Item(Item.KIND_ENUM, label, None, callback=callback, group=group))
+        self.items.append(Item(Item.KIND_ENUM, label, None, callback=callback, group=None))
 
     def add_radio(self, name, values, current_value=0, callback=None): 
         label = QLabel(name)

@@ -195,9 +195,9 @@ class PropertiesWidget(QWidget):
         for value in values:
             drop_down.addItem(value)
         self.layout.addRow(label, drop_down)
-        def button_clicked(text):
+        def button_clicked(i):
             if callback:
-                callback(button.text())
+                callback(values[i])
         drop_down.currentIndexChanged.connect(button_clicked)
         self.items.append(Item(Item.KIND_ENUM, label, None, callback=callback, group=None))
 

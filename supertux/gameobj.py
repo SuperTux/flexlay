@@ -222,6 +222,7 @@ class SecretArea(GameObj):
         super().__init__()
 
         self.objmap_object = make_rect_object(self, Color(0, 255, 0))
+        self.signal_connect()
 
         self.properties = [
             TilemapProperty("FadeTilemap", "fade-tilemap"),
@@ -241,6 +242,7 @@ class InvisibleWall(GameObj):
         super().__init__()
 
         self.objmap_object = make_rect_object(self, Color(0, 0, 0, 255*0.8))
+        self.signal_connect()
 
         self.properties = [
             InlineRectProperty(),
@@ -257,6 +259,7 @@ class AmbientSound(GameObj):
         super().__init__()
 
         self.objmap_object = make_rect_object(self, Color(255, 0, 0))
+        self.signal_connect()
 
         self.properties = [
             FloatProperty("Distance Factor", "distance_factor", 0.1),
@@ -277,6 +280,7 @@ class ScriptTrigger(GameObj):
         super().__init__()
 
         self.objmap_object = make_rect_object(self, Color(255, 0, 255))
+        self.signal_connect()
 
         self.properties = [
             StringProperty("Script", "script", ""),
@@ -295,6 +299,7 @@ class SequenceTrigger(GameObj):
         super().__init__()
 
         self.objmap_object = make_rect_object(self, Color(255, 0, 0))
+        self.signal_connect()
 
         self.properties = [
             StringProperty("Sequence", "sequence", ""),

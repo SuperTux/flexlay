@@ -189,7 +189,7 @@ class ObjMapSelectTool(Tool):
 
     def on_selection_change(self):
         for obj in self.deselected:
-            obj.sig_deselect()
+            obj.sig_deselect(self.manager)
         if len(self.context.object_selection) != 1:
             for obj in self.context.object_selection:
                 obj.sig_select(None)

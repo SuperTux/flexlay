@@ -89,12 +89,17 @@ class PropertiesWidget(QWidget):
         self.setMinimumWidth(300)
         self.show()
         
-    def set_properties(self, props):
+    def clear_properties(self):
         #Clear Items
         self.items = []
         #Remove all widgets
         for i in range(self.layout.count()):
             self.layout.layout().takeAt(0).widget().setParent(None)
+
+    def set_properties(self, props):
+        #Clear previous properties
+        self.clear_properties()
+
         #Add all properties
         for prop in props:
             prop.property_dialog(self)

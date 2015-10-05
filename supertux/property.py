@@ -106,30 +106,23 @@ class FileProperty(StringProperty):
     def property_dialog(self, dialog):
         dialog.add_file(self.label, self.default, self.relative_to, self.open_in, self.on_value_change)
 
-class EnumProperty(Property):
+class EnumProperty(StringProperty):
 
     def __init__(self, label, identifier, default, optional=False, values=None):
-        '''default is an index from values!!!'''
-        super().__init__(label, identifier, default, optional=optional)
+        '''
+        @param default: Is an index from values!!!
+        '''
+        super().__init__(label, identifier, values[default] if values else "", optional=optional)
+
+        self.default_index = default
 
         if values is None:
             values = []
 
         self.values = values
 
-    def read(self, sexpr, obj):
-        value_name = get_value_from_tree([self.identifier, "_"],  sexpr, self.values[self.default])
-        try:
-            self.value = value_name
-        except:
-            raise RuntimeError("%s: invalid enum value: %r not in %r" % (self.identifier, self.value, self.values))
-
-    def write(self, writer, obj):
-        if not self.optional or self.value != self.default:
-            writer.write_string(self.identifier, self.value)
-
     def property_dialog(self, dialog):
-        dialog.add_enum(self.label, self.values, self.value, self.on_value_change)
+        dialog.add_enum(self.label, self.values, self.default_index, self.on_value_change)
 
 
 class DirectionProperty(EnumProperty):

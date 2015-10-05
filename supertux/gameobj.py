@@ -73,8 +73,10 @@ class GameObj:
             props_widget = manager.properties_dock.widget()
             props_widget.set_properties(self.properties)
     
-    def on_deselect(self):
-        pass
+    def on_deselect(self, manager):
+        if manager:
+            props_widget = manager.properties_dock.widget()
+            props_widget.clear_properties()
 
     def add_property(self, prop):
         self.properties.append(prop)

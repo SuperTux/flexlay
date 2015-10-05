@@ -179,7 +179,7 @@ class Decal(GameObj):
 
     label = "Decal"
     identifier = "decal"
-    sprite = "images/engine/editor/resetpoint.png"
+    sprite = "images/engine/editor/decal.png"
 
     def __init__(self):
         super().__init__()

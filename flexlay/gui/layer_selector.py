@@ -20,6 +20,7 @@ from PyQt4.QtGui import QWidget, QToolBar, QTreeView, QVBoxLayout
 
 from ..tilemap_layer import TilemapLayer
 from ..object_layer import ObjectLayer
+from ..objmap_tilemap_object import ObjMapTilemapObject
 
 
 class LayerSelector:
@@ -46,12 +47,23 @@ class LayerSelector:
 
     def set_map(self, editormap):
         self.model.clear()
-        for layer in editormap.layers:
-            if isinstance(layer, TilemapLayer):
-                self.model.appendRow([QStandardItem("Tile: %s %dx%d" % (layer.metadata.name,
-                                                                        layer.width, layer.height))])
-            elif isinstance(layer, ObjectLayer):
-                self.model.appendRow([QStandardItem("Objects")])
+
+#        for layer in editormap.layers:
+#            if isinstance(layer, TilemapLayer):
+#                self.model.appendRow([QStandardItem("Tile: %s %dx%d" % (layer.m
+#                                                                        layer.w
+#            elif isinstance(layer, ObjectLayer):
+#                self.model.appendRow([QStandardItem("Objects")])
+
+        
+        #As TilemapLayers are used by ObjMapTilemapObjects,
+        # which are stored in the objects array in an ObjectLayer. (!)
+        for object in editormap.layers[0].objects:
+            if isinstance(object, ObjMapTilemapObject):
+                layer = object.tilemap_layer
+                if isinstance(layer, TilemapLayer):
+                    self.model.appendRow([QStandardItem("Tile: %s %dx%d" % (layer.metadata.name,
+                                                                            layer.width, layer.height))])
 
     def get_widget(self):
         return self.vbox

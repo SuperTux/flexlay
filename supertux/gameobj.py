@@ -702,7 +702,7 @@ class UnimplementedObject(GameObj):
         self.sexpr = sexpr
 
     def write(self, writer, obj):
-        print("Uimplemented:", self.sexpr)
+        print("Unimplemented:", self.sexpr)
 
     def property_dialog(self, gui):
         pass

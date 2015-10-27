@@ -83,5 +83,20 @@ class Config:
         with open(filename, "w") as fout:
             parser.write(fout)
 
+    def add_recent_file(self, filename):
+        '''
+        Add/move to top of recent files list.
+        Max in list is 10, so remove first filename
+        if necessary
+        '''
+        if filename in self.recent_files:
+            #Remove from list, to be appended at the end
+            self.recent_files.pop(self.recent_files.index(filename))
+        else:
+            #Ensure only 9 recent files
+            while len(self.recent_files) >= 10:
+                self.recent_files.pop(0)
+            
+        self.recent_files.append(filename)
 
 # EOF #

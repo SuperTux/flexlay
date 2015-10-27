@@ -72,6 +72,11 @@ class SuperTuxMenuBar:
         sector_menu.add_item("Create New Sector", editor.gui_add_sector)
         sector_menu.add_item("Remove Current Sector", editor.gui_remove_sector)
         sector_menu.add_item("Edit Sector Properties", editor.gui_edit_sector)
+        self.editor = editor
+        print(editor)
 
-
+    def update_recent_files(self):
+        self.recent_files_menu.menu.clear()
+        for filename in Config.current.recent_files:
+            self.recent_files_menu.add_item(filename, lambda filename=filename: self.editor.load_level(filename))
 # EOF #

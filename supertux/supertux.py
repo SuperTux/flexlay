@@ -83,7 +83,8 @@ def main():
         try:
             gui.load_level(config.recent_files[-1])
         except FileNotFoundError:
-            print("Could not load recent file... defaulting...")
+            print(config.recent_files)
+            print("Could not load recent file '"+ config.recent_files[-1]+"' defaulting...")
             gui.gui_level_new()
     else:
         gui.gui_level_new()

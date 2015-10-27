@@ -548,9 +548,8 @@ class SuperTuxGUI:
         level = Level.from_file(filename)
         self.set_level(level, "main")
 
-        if filename not in Config.current.recent_files:
-            Config.current.recent_files.append(filename)
-            self.menubar.recent_files_menu.add_item(filename, lambda filename=filename: self.load_level(filename))
+        Config.current.add_recent_file(filename)
+        self.menubar.update_recent_files()
 
         self.minimap.update_minimap()
         # TODO: We don't yet support multiple sectors, so we set the first sector's name.
@@ -561,9 +560,8 @@ class SuperTuxGUI:
         worldmap = WorldMap(filename)
         worldmap.activate(self.workspace)
 
-        if filename not in Config.current.recent_files:
-            Config.current.recent_files.append(filename)
-            self.menubar.recent_files_menu.add_item(filename, self.load_worldmap)
+        Config.current.add_recent_file(filename)
+        self.menubar.update_recent_files()
 
         self.minimap.update_minimap()
         self.use_worldmap = True
@@ -576,9 +574,8 @@ class SuperTuxGUI:
         else:
             level = self.workspace.get_map().metadata.parent
 
-        if filename not in Config.current.recent_files:
-            Config.current.recent_files.append(filename)
-            self.menubar.recent_files_menu.add_item(filename, lambda filename=filename: self.load_level(filename))
+        Config.current.add_recent_file(filename)
+        self.menubar.update_recent_files()
 
         # Do backup save
         if os.path.isfile(filename):

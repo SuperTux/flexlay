@@ -1,3 +1,0 @@
- - start as border-less fullscreen app without grabbing the mouse
- - allow resize
- - take bound-rect into account when drawing

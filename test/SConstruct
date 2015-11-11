@@ -1,6 +1,0 @@
-Program("xinput", "xinput.c", CCFLAGS=['-Wall', '-std=c99'], LIBS=['-lX11', '-lXext', '-lXi'], LIBPATH=['/usr/X11R6/lib/'])
-
-Program("brushmask", "brushmask.cxx", CXXFLAGS=['-Wall'])
-
-# EOF #
-

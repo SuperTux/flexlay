@@ -17,7 +17,7 @@
 
 import os
 
-from flexlay import (Color, Config, ObjMapSpriteObject, ObjMapRectObject)
+from flexlay import (Color, Config, ObjMapSpriteObject, ObjMapRectObject, ObjectBrush)
 from flexlay.math import Point, Rect, Size
 
 from .sprite import SuperTuxSprite
@@ -29,18 +29,19 @@ from .property import (BoolProperty, IntProperty, FloatProperty,
                        ImageProperty, EnumProperty, SectorProperty)
 
 
-def make_sprite_object(metadata, filename):
-    pos = Point(0, 0)
+def make_sprite_object(metadata, filename, pos=None):
+    pos = Point(0, 0) if pos is None else pos
     sprite = SuperTuxSprite.from_file(os.path.join(Config.current.datadir, filename))
     obj = ObjMapSpriteObject(sprite.get_sprite(), pos, metadata)
     return obj
 
 
-def make_rect_object(metadata, color=None):
+def make_rect_object(metadata, color=None, pos=None, size=None):
     if color is None:
         color = Color(0, 0, 255, 128)
-    obj = ObjMapRectObject(Rect(Point(0, 0), Size(64, 64)),
-                           color, metadata)
+    pos = Point(0, 0) if pos is None else pos
+    size = Size(64, 64) if size is None else size
+    obj = ObjMapRectObject(Rect(pos, size),  color, metadata)
     return obj
 
 
@@ -100,6 +101,18 @@ class GameObj:
             print("Property Dialog callback:", *args)
 
         dialog.set_callback(on_callback)
+
+    def find_property(self, identifier):
+        for prop in self.properties:
+            if prop.identifier == identifier:
+                return prop
+
+    def update(self):
+        '''
+        Called after properties read,
+        and optionally at any other time
+        '''
+        pass
 
 
 class LevelTime(GameObj):
@@ -195,6 +208,9 @@ class Decal(GameObj):
             SpriteProperty("Sprite", "sprite")
         ]
 
+    def update(self):
+        self.sprite = self.find_property("sprite").value
+        self.objmap_object = make_sprite_object(self, self.sprite, Point(self.objmap_object.pos.x, self.objmap_object.pos.y))
 
 class Trampoline(GameObj):
 

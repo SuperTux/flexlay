@@ -17,9 +17,13 @@
 
 class ObjectBrush:
 
-    def __init__(self, sprite, metadata):
+    def __init__(self, sprite, metadata, variable=False):
         self.sprite = sprite
         self.metadata = metadata
+        self.variable = variable
+
+    def check_sprite(self):
+        pass
 
     def get_sprite(self):
         return self.sprite

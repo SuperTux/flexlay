@@ -134,7 +134,7 @@ class DirectionProperty(EnumProperty):
 class InlinePosProperty:
 
     def __init__(self):
-        pass
+        self.identifier = "" #To stop errors
 
     def read(self, sexpr, obj):
         obj.pos.x = get_value_from_tree(["x", "_"],  sexpr, 0.0)

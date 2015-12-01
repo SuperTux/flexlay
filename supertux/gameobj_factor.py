@@ -42,7 +42,7 @@ class SuperTuxGameObjFactory:
 
     See editor/supertux-editor/LevelObjects/Objects.cs
     """
-
+    supertux_gui = None
     def __init__(self):
         self.objects = OrderedDict()
         self.init_factories()
@@ -65,9 +65,14 @@ class SuperTuxGameObjFactory:
             _, constructor = data
             obj = constructor()
             obj.read(sexpr)
+            obj.update()
             return obj
 
     def create_object_brushes(self):
+        '''
+        Creates Object Brushes for each sprite
+        '''
+        #print("Creating object brushes...")
         return [ObjectBrush(SuperTuxSprite.from_file(os.path.join(Config.current.datadir, sprite)).get_sprite(),
                             identifier)
                 for identifier, (sprite, constructor) in self.objects.items()]

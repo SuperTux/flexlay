@@ -53,6 +53,7 @@ class SuperTuxGUI:
 
     def __init__(self, flexlay):
         SuperTuxGUI.current = self
+        supertux_gameobj_factory.supertux_gui = self
 
         self.use_worldmap = False
 

@@ -22,10 +22,10 @@ class SuperTuxButtonPanel:
         self.button_panel = gui_manager.create_button_panel(True)
 
         # File Handling
-        self.button_panel.add_icon("data/images/icons24/stock_new.png",  editor.gui_level_new, hover="New")
-        self.button_panel.add_icon("data/images/icons24/stock_open.png", editor.gui_level_load, hover="Open")
+        self.button_panel.add_icon("data/images/icons24/stock_new.png",  editor.gui_level_new, hover="New", shortcut="Ctrl+N")
+        self.button_panel.add_icon("data/images/icons24/stock_open.png", editor.gui_level_load, hover="Open", shortcut="Ctrl+O")
 
-        self.button_panel.add_icon("data/images/icons24/stock_save.png", editor.gui_level_save, hover="Save")
+        self.button_panel.add_icon("data/images/icons24/stock_save.png", editor.gui_level_save, hover="Save", shortcut="Ctrl+S")
         self.button_panel.add_icon("data/images/icons24/stock_save_as.png", editor.gui_level_save_as, hover="Save As")
 
         # Copy&Paste
@@ -34,8 +34,8 @@ class SuperTuxButtonPanel:
         self.button_panel.add_icon("data/images/icons24/stock_paste.png", None, hover="Paste")
         # Undo Redo
         self.button_panel.add_separator()
-        self.undo_icon = self.button_panel.add_icon("data/images/icons24/stock_undo.png", editor.undo, hover="Undo")
-        self.redo_icon = self.button_panel.add_icon("data/images/icons24/stock_redo.png", editor.redo, hover="Redo")
+        self.undo_icon = self.button_panel.add_icon("data/images/icons24/stock_undo.png", editor.undo, hover="Undo", shortcut="Ctrl+Z")
+        self.redo_icon = self.button_panel.add_icon("data/images/icons24/stock_redo.png", editor.redo, hover="Redo", shortcut="Ctrl+Y")
         self.undo_icon.disable()
         self.redo_icon.disable()
 

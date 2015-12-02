@@ -25,8 +25,10 @@ class ButtonPanel:
     def __init__(self, toolbar):
         self.toolbar = toolbar
 
-    def add_icon(self, filename, callback, hover="Text"):
+    def add_icon(self, filename, callback, hover="Hover Text", shortcut=None):
         action = self.toolbar.addAction(QIcon(filename), hover)
+        if shortcut:
+            action.setShortcut(shortcut)
         if callback:
             action.triggered.connect(callback)
         return Icon(action)

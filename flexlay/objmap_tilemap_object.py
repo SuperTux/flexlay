@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from flexlay.math import Pointf, Rectf, Sizef
+from flexlay.math import Pointf, Point, Rectf, Sizef
 from .objmap_object import ObjMapObject
 # from .objmap_control_point import ObjMapControlPoint
 
@@ -28,7 +28,7 @@ class ObjMapTilemapObject(ObjMapObject):
         self.tilemap_layer = tilemap_layer
 
     def draw(self, gc):
-        self.tilemap_layer.draw(gc)
+        self.tilemap_layer.draw(self.metadata.pos, gc)
 
     def get_pos(self):
         return self.pos

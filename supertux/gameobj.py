@@ -36,12 +36,12 @@ def make_sprite_object(metadata, filename, pos=None):
     return obj
 
 
-def make_rect_object(metadata, color=None, pos=None, size=None):
+def make_rect_object(metadata, color=None):
     if color is None:
         color = Color(0, 0, 255, 128)
-    pos = Point(0, 0) if pos is None else pos
-    size = Size(64, 64) if size is None else size
-    obj = ObjMapRectObject(Rect(pos, size),  color, metadata)
+    pos = Point(0, 0)
+    size = Size(64, 64)
+    obj = ObjMapRectObject(Rect(pos, size), color, metadata)
     return obj
 
 

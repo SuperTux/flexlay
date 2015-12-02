@@ -14,7 +14,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
 from flexlay import Field, PixelBuffer, blit
 from flexlay.math import Point, Size, Rect
 from .layer import Layer
@@ -44,11 +43,11 @@ class TilemapLayer(Layer):
             for x in range(0, self.field.width):
                 self.field.put(x, y, 0)
 
-    def draw(self, gc):
+    def draw(self, pos, gc):
         tile_size = self.tileset.get_tile_size()
 
         if False and self.background_color.get_alpha() != 0:
-            gc.fill_rect(Rect(Point(0, 0),
+            gc.fill_rect(Rect(pos,
                               Size(self.field.width * tile_size,
                                    self.field.height * tile_size)),
                          self.background_color)
@@ -57,6 +56,7 @@ class TilemapLayer(Layer):
 
         start_x = max(0, rect.left // tile_size)
         start_y = max(0, rect.top // tile_size)
+
         end_x = min(self.field.width,  rect.right // tile_size + 1)
         end_y = min(self.field.height, rect.bottom // tile_size + 1)
 
@@ -147,8 +147,8 @@ class TilemapLayer(Layer):
 
     def draw_tile(self, tile_id, pos):
         assert isinstance(tile_id, int)
-        if pos.x >= 0 and pos.x < self.field.width and \
-           pos.y >= 0 and pos.y < self.field.height:
+        if 0 <= pos.x < self.field.width and \
+           0 <= pos.y < self.field.height:
             self.field.put(pos.x, pos.y, tile_id)
 
     # formerly draw_tile()

@@ -17,7 +17,7 @@
 
 from flexlay import TilemapLayer
 from flexlay.util import get_value_from_tree
-
+from flexlay.math import Point
 
 from .tileset import SuperTuxTileset
 
@@ -26,12 +26,22 @@ class SuperTuxTileMap:
 
     @staticmethod
     def from_sexpr(data):
+        #Load position from path, node and then x, ys
+        x = 0
+        y = 0
+        path = get_value_from_tree(["path"],  data, None)
+        if path:
+            node = get_value_from_tree(["node"],  path, None)
+            if node:
+                x = get_value_from_tree(["x", "_"],  node, None)
+                y = get_value_from_tree(["y", "_"],  node, None)
+
         name = get_value_from_tree(["name", "_"],  data, "")
         z_pos = get_value_from_tree(["z-pos", "_"],  data, 0)
         solid = get_value_from_tree(["solid", "_"],  data, False)
-        
+
         result = SuperTuxTileMap(name, z_pos, solid)
-        
+
         width = get_value_from_tree(["width", "_"],  data, 20)
         height = get_value_from_tree(["height", "_"], data, 15)
         result.draw_target = get_value_from_tree(["draw-target", "_"],  data, "")
@@ -42,6 +52,8 @@ class SuperTuxTileMap:
         result.tilemap_layer = TilemapLayer(SuperTuxTileset.current, width, height)
         result.tilemap_layer.set_data(get_value_from_tree(["tiles"], data, []))
         result.tilemap_layer.metadata = result
+        result.pos = Point(x, y)
+        result.tilemap_layer.name = result.name
 
         return result
 
@@ -61,6 +73,7 @@ class SuperTuxTileMap:
         self.speed_y = 1.0
         self.name = name
         self.alpha = 1.0
+        self.pos = Point(0, 0)
         self.tilemap_layer = None
 
     def write(self, writer, objmap_tilemap_object):
@@ -77,6 +90,13 @@ class SuperTuxTileMap:
             writer.write_float("alpha", self.alpha)
         if self.name:
             writer.write_string("name", self.name)
+        if self.pos:
+            writer.begin_list("path")
+            writer.begin_list("node")
+            writer.write_int("x", self.pos.x)
+            writer.write_int("y", self.pos.y)
+            writer.end_list("node")
+            writer.end_list("path")
         writer.write_int("width", self.tilemap_layer.width)
         writer.write_int("height", self.tilemap_layer.height)
         writer.write_field("tiles", self.tilemap_layer.field)
@@ -89,7 +109,7 @@ class SuperTuxTileMap:
         return self.tilemap_layer.has_bounding_rect()
 
     def draw(self, gc):
-        self.tilemap_layer.draw(gc)
+        self.tilemap_layer.draw(self.pos, gc)
 
     def world2tile(self, p):
         return self.tilemap_layer.world2tile(p)

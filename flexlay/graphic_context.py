@@ -58,6 +58,10 @@ class GraphicContext:
         self.painter.rotate(angle)
 
     def get_clip_rect(self):
+        """
+        If it's not obvious, this is rect containing all
+        which is visible
+        """
         if self.state:
             return self.state.get_clip_rect()
         else:

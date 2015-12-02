@@ -14,6 +14,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import random
+
 from flexlay import Field, PixelBuffer, blit
 from flexlay.math import Point, Size, Rect
 from .layer import Layer
@@ -52,18 +54,22 @@ class TilemapLayer(Layer):
                                    self.field.height * tile_size)),
                          self.background_color)
 
+        #The visible rectangle
         rect = Rect(gc.get_clip_rect())
 
-        start_x = max(0, rect.left // tile_size)
-        start_y = max(0, rect.top // tile_size)
+        #max() here stops tiles off screen (below 0) from being drawn
+        start_x = max(0, pos.x // tile_size)
+        start_y = max(0, pos.y // tile_size)
 
-        end_x = min(self.field.width,  rect.right // tile_size + 1)
-        end_y = min(self.field.height, rect.bottom // tile_size + 1)
+        #min() here stops tiles off screen (above size of clip rect) from being drawn
+        end_x = min(self.field.width + pos.x // tile_size,  rect.right // tile_size + 1)
+        end_y = min(self.field.height + pos.y // tile_size, rect.bottom // tile_size + 1)
 
         if self.foreground_color != Color(255, 255, 255, 255):
             for y in range(start_y, end_y):
                 for x in range(start_x, end_x):
-                    tile_id = self.field.at(x, y)
+                    # The coordinates on the field are from 0 - field.width
+                    tile_id = self.field.at(x - start_x, y - start_y)
                     if tile_id:
                         tile = self.tileset.create(tile_id)
                         if tile:  # skip transparent tile for faster draw
@@ -78,7 +84,7 @@ class TilemapLayer(Layer):
         else:
             for y in range(start_y, end_y):
                 for x in range(start_x, end_x):
-                    tile_id = self.field.at(x, y)
+                    tile_id = self.field.at(x - start_x, y - start_y)
                     if tile_id:  # skip transparent tile for faster draw
                         tile = self.tileset.create(self.field.at(x, y))
                         if tile:

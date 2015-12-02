@@ -14,6 +14,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import random
 
 from flexlay.math import Pointf, Point, Rectf, Sizef
 from .objmap_object import ObjMapObject
@@ -37,7 +38,7 @@ class ObjMapTilemapObject(ObjMapObject):
         return False
 
     def get_bound_rect(self):
-        return Rectf(Pointf(0, 0),
+        return Rectf(self.tilemap_layer.metadata.pos,
                      Sizef(self.tilemap_layer.width * 32,
                            self.tilemap_layer.height * 32))
 

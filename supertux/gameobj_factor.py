@@ -16,7 +16,7 @@
 
 
 from collections import OrderedDict
-import os.path
+import os.path, csv
 
 from flexlay import ObjectBrush, Config
 from .sprite import SuperTuxSprite
@@ -30,6 +30,13 @@ from .gameobj import (BadGuy, BonusBlock, Candle, Camera, Dispenser,
                       WilloWisp, Wind, Trampoline,
                       DartTrap, GhostFlame, InvisibleWall)
 
+def format_sprite_name(name):
+    '''
+    sprite_name -> Sprite Name
+    '''
+    name = name.replace("_", " ")
+    name = name.title()
+    return name
 
 class SuperTuxGameObjFactory:
 
@@ -138,62 +145,16 @@ class SuperTuxGameObjFactory:
         self.add_particle_system("particles-rain", "images/engine/editor/rain.png", "rain")
         self.add_particle_system("particles-snow", "images/engine/editor/snow.png", "snow")
 
-        self.add_badguy("angrystone", "images/creatures/angrystone/angrystone.sprite")
-        self.add_badguy("bouncingsnowball", "images/creatures/bouncing_snowball/left-0.png")
-        self.add_badguy("captainsnowball", "images/creatures/snowball/cpt-left-0.png")
-        self.add_badguy("climbable", "images/engine/editor/climbable.png")
-        self.add_badguy("coin", "images/objects/coin/coin.sprite")
-        self.add_badguy("crystallo", "images/creatures/crystallo/crystallo.sprite")
-        self.add_badguy("fish", "images/creatures/fish/left-0.png")
-        self.add_badguy("flame", "images/creatures/flame/flame-0.png")
-        self.add_badguy("flyingsnowball", "images/creatures/flying_snowball/left-0.png")
-        self.add_badguy("ghosttree", "images/creatures/flame/ghostflame.sprite")
-        self.add_badguy("goldbomb", "images/creatures/gold_bomb/gold_bomb.sprite")
-        self.add_badguy("haywire", "images/creatures/haywire/haywire.sprite")
-        self.add_badguy("icecrusher", "images/creatures/icecrusher/icecrusher.sprite")
-        self.add_badguy("iceflame", "images/creatures/flame/iceflame.sprite")
-        self.add_badguy("igel", "images/creatures/igel/igel.sprite")
-        self.add_badguy("ispy", "images/objects/ispy/ispy.sprite")
-        self.add_badguy("jumpy", "images/creatures/jumpy/left-middle.png")
-        self.add_badguy("kugelblitz", "images/creatures/kugelblitz/flying-0.png")
-        self.add_badguy("lantern", "images/objects/lantern/lantern.sprite")
-        self.add_badguy("livefire", "images/creatures/livefire/livefire.sprite")
-        self.add_badguy("livefire_asleep", "images/creatures/livefire/livefire.sprite")
-        self.add_badguy("livefire_dormant", "images/creatures/livefire/livefire.sprite")
-        self.add_badguy("magicblock", "images/objects/magicblock/magicblock.sprite")
-        self.add_badguy("mole", "images/creatures/mole/mole.sprite")
-        self.add_badguy("mrbomb", "images/creatures/mr_bomb/left.png")
-        self.add_badguy("mriceblock", "images/creatures/mr_iceblock/left-0.png")
-        self.add_badguy("mrtree", "images/creatures/mr_tree/walk-left-1.png")
-        self.add_badguy("nolok_01", "images/creatures/nolok/nolok.sprite")
-        self.add_badguy("owl", "images/creatures/owl/owl.sprite")
-        self.add_badguy("particles-ghosts", "images/engine/editor/ghostparticles.png")
-        self.add_badguy("poisonivy", "images/creatures/poison_ivy/left-0.png")
-        self.add_badguy("pushbutton", "images/objects/pushbutton/pushbutton.sprite")
-        self.add_badguy("rustytrampoline", "images/objects/rusty-trampoline/rusty-trampoline.sprite")
-        self.add_badguy("short_fuse", "images/creatures/short_fuse/short_fuse.sprite")
-        self.add_badguy("skullyhop", "images/creatures/skullyhop/skullyhop.sprite")
-        self.add_badguy("smartball", "images/creatures/snowball/left-1.png")
-        self.add_badguy("smartblock", "images/creatures/mr_iceblock/smart_block/smart_block.sprite")
-        self.add_badguy("snail", "images/creatures/snail/snail.sprite")
-        self.add_badguy("snowball", "images/creatures/snowball/sport-left-1.png")
-        self.add_badguy("snowman", "images/creatures/snowman/snowman.sprite")
-        self.add_badguy("spidermite", "images/creatures/spidermite/spidermite.sprite")
-        self.add_badguy("spiky", "images/creatures/spiky/left-0.png")
-        self.add_badguy("spotlight", "images/objects/spotlight/spotlight_center.sprite")
-        self.add_badguy("sspiky", "images/creatures/spiky/sleepingspiky.sprite")
-        self.add_badguy("stalactite", "images/creatures/stalactite/falling.png")
-        self.add_badguy("stalactite_yeti", "images/engine/editor/stalactite_yeti.png")
-        self.add_badguy("stumpy", "images/creatures/mr_tree/stumpy.sprite")
-        self.add_badguy("thunderstorm", "images/engine/editor/thunderstorm.png")
-        self.add_badguy("toad", "images/creatures/toad/toad.sprite")
-        self.add_badguy("totem", "images/creatures/totem/totem.sprite")
-        self.add_badguy("walkingleaf", "images/creatures/walkingleaf/walkingleaf.sprite")
-        self.add_badguy("walkingtree", "images/creatures/walkingleaf/walkingleaf.sprite")
-        self.add_badguy("yeti", "images/creatures/yeti/yeti.png")
-        self.add_badguy("yeti_stalactite", "images/engine/editor/stalactite_yeti.png")
-        self.add_badguy("zeekling", "images/creatures/zeekling/left-0.png")
+        self.load_CSV()
 
+    def load_CSV(self):
+        with open('data/supertux/objects.csv', 'r') as csvfile:
+            reader = csv.reader(csvfile)
+            for row in reader:
+                identifier = row[0]
+                path = row[1]
+                name = format_sprite_name(identifier) if len(row) < 3 else row[2]
+                self.add_badguy(identifier, path)
 
 supertux_gameobj_factory = SuperTuxGameObjFactory()
 

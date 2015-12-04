@@ -162,25 +162,34 @@ class PropertiesWidget(QWidget):
 
         self.items.append(Item(Item.KIND_STRING, label, inputbox, callback=callback))
         
-    def add_file(self, label, default, relative_to=None, open_in=None, callback=None):
-        label = QLabel(file_property.label)
-        inputbox = QLineEdit(file_property.default)
+    def add_file(self, label, default, ret_rel_to=None, show_rel_to=None, open_in="", callback=None):
+        '''
+        :param ret_rel_to: Path to which the param. of callback(value)
+         will be relative to
+        :param show_rel_to: Path to which the displayed text (in input box)
+         will be relative to
+        :param open_in: Where the open file dialog will begin
+        '''
+        label = QLabel(label)
+        inputbox = QLineEdit(default)
         if callback:
             inputbox.textChanged.connect(callback)
         browse = QPushButton("Browse...")
         
         def browse_files():
             '''Called when Browse... button clicked'''
-            path = QFileDialog.getOpenFileName(None, "Open File", 
-                                              open_in)
-            file_property.actual_path = path
-            if path[:len(file_property.relative_to)] == relative_to:
-                inputbox.setText(path[len(relative_to):])
+            path = QFileDialog.getOpenFileName(None, "Open File", open_in)
+            actual_path = path
+            if show_rel_to and path[:len(show_rel_to)] == show_rel_to:
+                inputbox.setText(path[len(show_rel_to):])
             else:
                 inputbox.setText(path)
                 
             if callback:
-                callback(path)
+                if ret_rel_to and path[:len(ret_rel_to)] == ret_rel_to:
+                    callback(path[len(ret_rel_to):])
+                else:
+                    callback(path)
                 
         browse.clicked.connect(browse_files) #Connect the above to click signal
             

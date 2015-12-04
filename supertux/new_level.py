@@ -71,7 +71,7 @@ class NewLevelDialog(QtGui.QWizard):
     #<Introduction Page>
     def create_intro_page(self):
         '''Creates the intro page containing a bit of text
-        @return: QWizardPage Introduction Page'''
+        :return: QWizardPage Introduction Page'''
         page = QtGui.QWizardPage()
         
         page.setTitle("Welcome to the New Level Wizard")

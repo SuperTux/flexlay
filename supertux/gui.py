@@ -381,7 +381,10 @@ class SuperTuxGUI:
         dialog = self.gui.create_generic_dialog("Edit Sector")
 
         dialog.add_string("Name: ", level.current_sector.name)
-        dialog.add_string("Music: ", level.current_sector.music)
+        dialog.add_file("Music: ", level.current_sector.music,
+                        ret_rel_to=Config.current.datadir,
+                        show_rel_to=os.path.join(Config.current.datadir, "music"),
+                        open_in=os.path.join(Config.current.datadir, "music"))
         dialog.add_float("Gravity: ", level.current_sector.gravity)
 
         def on_callback(name, music, gravity):

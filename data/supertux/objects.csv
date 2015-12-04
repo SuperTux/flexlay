@@ -14,7 +14,7 @@ icecrusher,images/creatures/icecrusher/icecrusher.sprite
 iceflame,images/creatures/flame/iceflame.sprite
 igel,images/creatures/igel/igel.sprite
 ispy,images/objects/ispy/ispy.sprite
-jumpy,images/creatures/jumpy/left-middle.png
+jumpy,images/creatures/snowjumpy/left-middle.png
 kugelblitz,images/creatures/kugelblitz/flying-0.png
 lantern,images/objects/lantern/lantern.sprite
 livefire,images/creatures/livefire/livefire.sprite
@@ -25,7 +25,6 @@ mole,images/creatures/mole/mole.sprite
 mrbomb,images/creatures/mr_bomb/left.png
 mriceblock,images/creatures/mr_iceblock/left-0.png
 mrtree,images/creatures/mr_tree/walk-left-1.png
-nolok_01,images/creatures/nolok/nolok.sprite
 owl,images/creatures/owl/owl.sprite
 particles-ghosts,images/engine/editor/ghostparticles.png
 poisonivy,images/creatures/poison_ivy/left-0.png
@@ -41,7 +40,7 @@ snowman,images/creatures/snowman/snowman.sprite
 spidermite,images/creatures/spidermite/spidermite.sprite
 spiky,images/creatures/spiky/left-0.png
 spotlight,images/objects/spotlight/spotlight_center.sprite
-sspiky,images/creatures/spiky/sleepingspiky.sprite
+sspiky,images/creatures/spiky/sleeping-left.png
 stalactite,images/creatures/stalactite/falling.png
 stalactite_yeti,images/engine/editor/stalactite_yeti.png
 stumpy,images/creatures/mr_tree/stumpy.sprite

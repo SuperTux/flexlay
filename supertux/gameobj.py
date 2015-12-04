@@ -26,7 +26,8 @@ from .property import (BoolProperty, IntProperty, FloatProperty,
                        InlinePosProperty, InlineRectProperty,
                        TilemapProperty, SpriteProperty,
                        SampleProperty, PathProperty, ColorProperty,
-                       ImageProperty, EnumProperty, SectorProperty)
+                       ImageProperty, EnumProperty, SectorProperty,
+                       BadGuyProperty)
 
 
 def make_sprite_object(metadata, filename, pos=None):
@@ -57,10 +58,11 @@ class GameObj:
     identifier = None
     properties = []
     constraints = []
+    factory = None
 
     def __init__(self):
         self.objmap_object = None
-        
+
     def signal_connect(self):
         '''Connect the objmap_object signals to the 
         on_select and on_deselect'''
@@ -73,7 +75,7 @@ class GameObj:
         if manager:
             props_widget = manager.properties_dock.widget()
             props_widget.set_properties(self.properties)
-    
+
     def on_deselect(self, manager):
         if manager:
             props_widget = manager.properties_dock.widget()
@@ -432,7 +434,7 @@ class Dispenser(GameObj):
 
     label = "Dispenser"
     identifier = "dispenser"
-    sprite = "images/creatures/dispenser/dispenser.sprite"
+    sprite = "images/creatures/dispenser/canon.png"
 
     def __init__(self):
         super().__init__()
@@ -444,7 +446,7 @@ class Dispenser(GameObj):
             IntProperty("Cycle", "cycle", 2),
             EnumProperty("Type", "type", default=0, optional=False, values=["rocketlauncher", "cannon"]),
             BoolProperty("Random", "random", default=False, optional=True),
-            StringProperty("Badguy", "badguy", "snowball"),
+            BadGuyProperty("Badguy", "badguy", GameObj.factory),
             InlinePosProperty(),
         ]
 

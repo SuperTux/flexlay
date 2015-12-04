@@ -20,14 +20,14 @@ import os.path, csv
 
 from flexlay import ObjectBrush, Config
 from .sprite import SuperTuxSprite
-from .gameobj import (BadGuy, BonusBlock, Candle, Camera, Dispenser,
+from .gameobj import (GameObj, BadGuy, BonusBlock, Candle, Camera,
                       Door, SpawnPoint, ResetPoint, AmbientSound,
                       SimpleObject, SimpleTileObject, Powerup,
                       SecretArea, SequenceTrigger, Background,
                       Gradient, ParticleSystem, Platform,
                       ScriptedObject, InfoBlock, LevelTime, Decal,
                       ScriptTrigger, Switch, Torch, WeakBlock,
-                      WilloWisp, Wind, Trampoline,
+                      WilloWisp, Wind, Trampoline, Dispenser,
                       DartTrap, GhostFlame, InvisibleWall)
 
 def format_sprite_name(name):
@@ -51,7 +51,10 @@ class SuperTuxGameObjFactory:
     """
     supertux_gui = None
     def __init__(self):
+        GameObj.factory = self
         self.objects = OrderedDict()
+        # List of (identifier, image, tag)
+        self.badguys = []
         self.init_factories()
 
     def create_gameobj_at(self, identifier, pos):
@@ -87,8 +90,12 @@ class SuperTuxGameObjFactory:
     def add_object(self, gameobj_class):
         self.objects[gameobj_class.identifier] = (gameobj_class.sprite, gameobj_class)
 
-    def add_badguy(self, identifier, sprite):
+    def add_badguy(self, identifier, sprite, tag=None):
         self.objects[identifier] = (sprite, lambda: BadGuy(identifier, sprite))
+        if tag:
+            self.badguys.append((identifier, sprite, tag))
+        else:
+            self.badguys.append((identifier, sprite))
 
     def add_simple_object(self, identifier, sprite):
         self.objects[identifier] = (sprite, lambda: SimpleObject(identifier, sprite))

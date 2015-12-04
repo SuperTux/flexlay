@@ -14,12 +14,10 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from PyQt4.QtGui import (QDialog, QDialogButtonBox, QVBoxLayout,
-                         QLabel, QLineEdit, QFormLayout, QPushButton,
+from PyQt4.QtGui import (QVBoxLayout, QLabel, QLineEdit, QFormLayout,
                          QIcon, QCheckBox, QPixmap, QButtonGroup,
                          QRadioButton, QColorDialog, QWidget, QFileDialog,
-                         QComboBox)
-from supertux.property import FileProperty
+                         QComboBox, QPushButton)
 
 class Item:
 

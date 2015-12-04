@@ -14,7 +14,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
 from flexlay.util import get_value_from_tree
 from flexlay import Colorf
 
@@ -170,10 +169,22 @@ class SpriteProperty(StringProperty):
 
     pass
 
+class BadGuyProperty(EnumProperty):
+
+    def __init__(self, label, identifier, supertux_gameobj_factory):
+        super().__init__(label, identifier, 0, values=[badguy[0] for badguy in supertux_gameobj_factory.badguys])
 
 class ImageProperty(StringProperty):
 
     pass
+
+class SoundProperty(StringProperty):
+
+    def __init__(self, label, identifier, default=""):
+        super().__init__(label, identifier, default=default)
+
+    def property_dialog(self, dialog):
+        pass
 
 
 class ColorProperty(StringProperty):

@@ -138,6 +138,11 @@ class SuperTuxGUI:
 
         self.set_tilemap_paint_tool()
 
+        #Whether to record gameplay
+        self.record = False
+        #Where to put recording
+        self.record_target = ""
+
     def register_keyboard_shortcuts(self):
         self.editor_map.sig_on_key("f1").connect(lambda x, y: self.gui_toggle_minimap())
         self.editor_map.sig_on_key("m").connect(lambda x, y: self.gui_toggle_minimap())
@@ -287,14 +292,37 @@ class SuperTuxGUI:
             tmpfile = "/tmp/tmpflexlay-supertux.stl"
             self.save_level(tmpfile)
         try:
-            subprocess.Popen([Config.current.binary, tmpfile])
+            subprocess.Popen([Config.current.binary, tmpfile] +
+                             ([] if not self.record else ["--record-demo", self.record_target]))
         except FileNotFoundError:
             QMessageBox.warning(None, "No Supertux Binary Found",
                              "Press OK to select your Supertux binary")
             Config.current.binary = QFileDialog.getOpenFileName(None, "Open Supertux Binary")
             if not Config.current.binary:
                 raise RuntimeError("binary path missing, use --binary BIN")
-            
+
+    def gui_record_level(self):
+        self.record = True
+        self.record_target = QFileDialog.getSaveFileName(None, "Choose Record Target File")
+        self.gui_run_level()
+        self.record = False
+
+    def gui_play_demo(self):
+        QMessageBox.information(None,
+                                "Select a level file",
+                                "You must now select a level file - the level of the demo")
+        level = QFileDialog.getOpenFileName(None, "Select the level")
+        QMessageBox.information(None,
+                                "Select a demo file",
+                                "You must now select a demo file to play")
+        demo = QFileDialog.getOpenFileName(None, "Select the demo")
+        subprocess.Popen([Config.current.binary, level, "--play-demo", demo])
+
+    def gui_watch_example(self):
+        level = os.path.join(Config.current.datadir, "levels", "world1", "01 - Welcome to Antarctica.stl")
+        demo = os.path.join("data", "supertux", "demos", "karkus476_plays_level_1")
+        subprocess.Popen([Config.current.binary, level, "--play-demo", demo])
+
     def gui_resize_sector(self):
         level = self.workspace.get_map().metadata
         dialog = self.gui.create_generic_dialog("Resize Sector")

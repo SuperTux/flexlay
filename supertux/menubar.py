@@ -72,6 +72,12 @@ class SuperTuxMenuBar:
         sector_menu.add_item("Create New Sector", editor.gui_add_sector)
         sector_menu.add_item("Remove Current Sector", editor.gui_remove_sector)
         sector_menu.add_item("Edit Sector Properties", editor.gui_edit_sector)
+
+        run_menu = self.menubar.add_menu("&Run")
+        run_menu.add_item("Run Level", editor.gui_run_level)
+        run_menu.add_item("Record Level Playthrough", editor.gui_record_level)
+        run_menu.add_item("Play A Demo", editor.gui_play_demo)
+        run_menu.add_item("Play Example Demo", editor.gui_watch_example)
         self.editor = editor
 
     def update_recent_files(self):

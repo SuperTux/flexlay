@@ -1,0 +1,69 @@
+{
+  "supertux-level":{
+    "id":"root",
+    "type":"tree",
+    "color": "red",
+    "bold":true,
+    "italic":false,
+    "branches":{
+      "version":{
+        "id":"level-version",
+        "type":"int",
+        "color": "blue",
+        "bold":true,
+        "italic":false,
+        "branches":{}
+      },
+      "name":{
+        "id":"level-name",
+        "type":"str",
+        "color": "blue",
+        "bold":true,
+        "italic":false,
+        "branches":{}
+      },
+      "author":{
+        "id":"level-author",
+        "type":"str",
+        "color": "blue",
+        "bold":true,
+        "italic":false,
+        "branches":{}
+      },
+      "target-time":{
+        "id":"level-target-time",
+        "type":"int",
+        "color": "blue",
+        "bold":true,
+        "italic":false,
+        "branches":{}
+      },
+      "license":{
+        "id":"level-license",
+        "type":"str",
+        "color": "blue",
+        "bold":true,
+        "italic":false,
+        "branches":{}
+      },
+      "sector":{
+        "id":"level-sector",
+        "type":"tree",
+        "color": "darkBlue",
+        "bold":true,
+        "italic":false,
+        "branches":{
+          "name":{
+            "id":"sector-name",
+            "type":"str",
+            "color": "darkGreen",
+            "bold":false,
+            "italic":false,
+            "branches":{}
+          }
+        }
+      }
+    }
+  },
+  "squirrel":[]
+}

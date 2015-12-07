@@ -1,0 +1,109 @@
+{
+  "supertux-level":[
+    {
+      "id":"version",
+      "find":"\\(version [1-9]\\)",
+      "type":"int",
+      "color":"blue",
+      "bold":true,
+      "italic":false
+    },
+    {
+      "id":"name",
+      "find":"\\(name .*\\)",
+      "type":"str",
+      "color":"blue",
+      "bold":true,
+      "italic":false
+    },
+    {
+      "id":"author",
+      "find":"\\(author .*\\)",
+      "type":"str",
+      "color":"blue",
+      "bold":true,
+      "italic":false
+    },
+    {
+      "id":"target-time",
+      "find":"\\(target-time [0-9]+\\)",
+      "type":"int",
+      "color":"blue",
+      "bold":true,
+      "italic":false
+    },
+    {
+      "id": "license",
+      "find": "\\(license .*\\)",
+      "type": "str",
+      "color": "blue",
+      "bold": true,
+      "italic": false
+    },
+    {
+      "id":"x",
+      "find":"\\(x [0-9]+(\\.[0-9]+)?\\)",
+      "type":"int",
+      "color":"red",
+      "bold":false,
+      "italic":true
+    },
+    {
+      "id":"y",
+      "find":"\\(y [0-9]+(\\.[0-9]+)?\\)",
+      "type":"int",
+      "color":"red",
+      "bold":false,
+      "italic":true
+    },
+    {
+      "id":"width",
+      "find":"\\(width [0-9]+(\\.[0-9]+)?\\)",
+      "type":"int",
+      "color":"red",
+      "bold":false,
+      "italic":true
+    },
+    {
+      "id":"height",
+      "find":"\\(height [0-9]+(\\.[0-9]+)?\\)",
+      "type":"int",
+      "color":"red",
+      "bold":false,
+      "italic":true
+    },
+    {
+      "id":"root",
+      "find":"supertux-level",
+      "type":"list",
+      "color":"red",
+      "bold":true,
+      "italic":false
+    },
+    {
+      "id": "comment",
+      "find": ";.*",
+      "type": "comment",
+      "color": "darkGreen",
+      "bold": false,
+      "italic": true
+    },
+    {
+      "id":"sector",
+      "find":"sector",
+      "type":"list",
+      "color":"darkBlue",
+      "bold":true,
+      "italic":false
+    },
+    {
+      "id":"tiles",
+      "find":"\\(tiles\\)",
+      "type":"tiles",
+      "color":"magenta",
+      "bold":true,
+      "italic":false
+    }
+  ],
+  "squirrel":[]
+}

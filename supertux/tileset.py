@@ -34,6 +34,7 @@ class TileGroup:
 class SuperTuxTileset(Tileset):
 
     current = None
+    filename = ""
 
     def __init__(self, *params):
         super().__init__(*params)
@@ -59,6 +60,7 @@ class SuperTuxTileset(Tileset):
 
     def load(self, filename):
         print("Loading Tileset: %s" % filename)
+        self.filename = filename
         tree = load_lisp(filename, "supertux-tiles")
 
         tree = tree[1:]

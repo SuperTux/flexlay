@@ -585,23 +585,27 @@ class SuperTuxGUI:
         pass
 
     def load_level(self, filename):
-        if filename[-5:] == ".stwm":
+        #if filename[-5:] == ".stwm":
             #QMessageBox.warning(None, "Opening Worldmap File",
             #                    "[WARNING] Opening supertux worldmap file:\n'"+filename+"'\n" +
             #                    "Worldmaps usually use different tilesets to levels.\n"+
             #                    "Please select a different tileset to use (look for .strf files).")
             #if not self.gui_change_tileset():
             #    return
-            tileset = SuperTuxTileset(32)
-            tileset.load(Config.current.datadir + "/images/worldmap.strf")
-            self.gui_set_tileset(tileset)
-        else:
-            tileset = SuperTuxTileset(32)
-            tileset.load(Config.current.datadir + "/images/tiles.strf")
-            self.gui_set_tileset(tileset)
+        #    print("Loading worldmap")
 
         print("Loading: ", filename)
         level = Level.from_file(filename)
+        level.tileset_path = Config.current.datadir + "/" + level.tileset_path
+
+        if level.tileset_path != SuperTuxTileset.current.filename:
+            tileset = SuperTuxTileset(32)
+            tileset.load(level.tileset_path)
+            self.gui_set_tileset(tileset)
+
+            # Tileset has changed, reload level:
+            level = Level.from_file(filename)
+
         self.set_level(level, "main")
 
         Config.current.add_recent_file(filename)

@@ -14,7 +14,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import os
 
+from flexlay import Config
 from flexlay.util import get_value_from_tree, sexpr_filter, SExprWriter
 
 from .sector import Sector
@@ -70,6 +72,7 @@ class Level:
         self.license = get_value_from_tree(["license", "_"], data, "")
         self.target_time = get_value_from_tree(["target-time", "_"], data, 0)
         self.tileset_path = get_value_from_tree(["tileset", "_"], data, "images/tiles.strf")
+        self.tileset_path = os.path.join(Config.current.datadir, self.tileset_path)
 
         self.current_sector = None
         self.sectors = []

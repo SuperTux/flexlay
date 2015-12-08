@@ -596,7 +596,6 @@ class SuperTuxGUI:
 
         print("Loading: ", filename)
         level = Level.from_file(filename)
-        level.tileset_path = Config.current.datadir + "/" + level.tileset_path
 
         if level.tileset_path != SuperTuxTileset.current.filename:
             tileset = SuperTuxTileset(32)

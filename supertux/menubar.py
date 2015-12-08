@@ -43,6 +43,7 @@ class SuperTuxMenuBar:
         edit_menu.add_item("Smooth Selection", editor.gui_smooth_level_struct)
         edit_menu.add_item("Resize", editor.gui_resize_sector)
         edit_menu.add_item("Resize to selection", editor.gui_resize_sector_to_selection)
+        edit_menu.add_item("Change Tileset", editor.gui_change_tileset)
 
         zoom_menu = self.menubar.add_menu("&Zoom")
         zoom_menu.add_item("1:4 (25%) ", lambda: editor.gui_set_zoom(0.25))

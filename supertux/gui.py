@@ -82,7 +82,7 @@ class SuperTuxGUI:
 
         self.objectselector = self.gui.create_object_selector(42, 42)
         self.properties_widget = self.gui.create_properties_view()
-        
+
         self.editor_map.sig_drop.connect(self.on_object_drop)
         for object_brush in supertux_gameobj_factory.create_object_brushes():
             self.objectselector.add_brush(object_brush)
@@ -171,7 +171,7 @@ class SuperTuxGUI:
             self.workspace.get_map().metadata.objects.add_object(rectobj)
 
         self.editor_map.sig_on_key("a").connect(on_a_key)
-        
+
     def on_window_close(self, *args):
         '''
         Called when window x button is clicked
@@ -532,13 +532,13 @@ class SuperTuxGUI:
                 self.save_dialog.set_directory(filename)
             else:
                 self.save_dialog.set_directory(os.path.dirname(filename) + "/")
- 
+
             self.save_dialog.run(self.save_level)
 
     def gui_level_new(self):
         dialog = NewLevelDialog(self.gui.window)
         dialog.exec_()
-        
+
         if dialog.level:
             self.set_level(dialog.level, "main")
 
@@ -586,12 +586,15 @@ class SuperTuxGUI:
 
     def load_level(self, filename):
         if filename[-5:] == ".stwm":
-            QMessageBox.warning(None, "Opening Worldmap File",
-                                "[WARNING] Opening supertux worldmap file:\n'"+filename+"'\n" +
-                                "Worldmaps usually use different tilesets to levels.\n"+
-                                "Please select a different tileset to use (look for .strf files).")
-            if not self.gui_change_tileset():
-                return
+            #QMessageBox.warning(None, "Opening Worldmap File",
+            #                    "[WARNING] Opening supertux worldmap file:\n'"+filename+"'\n" +
+            #                    "Worldmaps usually use different tilesets to levels.\n"+
+            #                    "Please select a different tileset to use (look for .strf files).")
+            #if not self.gui_change_tileset():
+            #    return
+            tileset = SuperTuxTileset(32)
+            tileset.load(Config.current.datadir + "/images/worldmap.strf")
+            self.gui_set_tileset(tileset)
 
         print("Loading: ", filename)
         level = Level.from_file(filename)

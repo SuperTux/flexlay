@@ -85,7 +85,8 @@ class StringProperty(Property):
 
     def property_dialog(self, dialog):
         dialog.add_string(self.label, self.value, self.on_value_change)
-        
+
+
 class FileProperty(StringProperty):
     def __init__(self, label, identifier, default="", relative_to="", open_in=""):
         '''
@@ -104,6 +105,7 @@ class FileProperty(StringProperty):
         
     def property_dialog(self, dialog):
         dialog.add_file(self.label, self.default, self.relative_to, self.open_in, self.on_value_change)
+
 
 class EnumProperty(StringProperty):
 
@@ -169,14 +171,17 @@ class SpriteProperty(StringProperty):
 
     pass
 
+
 class BadGuyProperty(EnumProperty):
 
     def __init__(self, label, identifier, supertux_gameobj_factory):
         super().__init__(label, identifier, 0, values=[badguy[0] for badguy in supertux_gameobj_factory.badguys])
 
+
 class ImageProperty(StringProperty):
 
     pass
+
 
 class SoundProperty(StringProperty):
 

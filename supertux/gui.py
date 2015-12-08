@@ -88,10 +88,7 @@ class SuperTuxGUI:
             self.objectselector.add_brush(object_brush)
 
         self.tileselector = self.gui.create_tile_selector()
-        self.tileselector.set_tileset(SuperTuxTileset.current)
-        self.tileselector.add_tilegroup("All Tiles", SuperTuxTileset.current.get_tiles())
-        for tilegroup in SuperTuxTileset.current.tilegroups:
-            self.tileselector.add_tilegroup(tilegroup.name, tilegroup.tiles)
+        self.gui_set_tileset(SuperTuxTileset.current)
 
         self.layer_selector = self.gui.create_layer_selector()
 
@@ -281,6 +278,22 @@ class SuperTuxGUI:
             self.display_properties.current_only = False
 
         self.display_properties.set(self.workspace.get_map().metadata)
+
+    def gui_set_tileset(self, tileset):
+        self.tileselector.set_tileset(tileset)
+        self.tileselector.add_tilegroup("All Tiles", tileset.get_tiles())
+        for tilegroup in tileset.tilegroups:
+            self.tileselector.add_tilegroup(tilegroup.name, tilegroup.tiles)
+
+    def gui_change_tileset(self):
+        filename = QFileDialog.getOpenFileName(None, "Select Tileset To Open", Config.current.datadir)
+        if not filename:
+            QMessageBox.warning(None, "No Tileset Selected", "No tileset was selected, aborting...")
+            return False
+        tileset = SuperTuxTileset(32)
+        tileset.load(filename)
+        self.gui_set_tileset(tileset)
+        return True
 
     def gui_run_level(self):
         print("Run this level...")
@@ -573,8 +586,12 @@ class SuperTuxGUI:
 
     def load_level(self, filename):
         if filename[-5:] == ".stwm":
-            self.load_worldmap(filename)
-            return
+            QMessageBox.warning(None, "Opening Worldmap File",
+                                "[WARNING] Opening supertux worldmap file:\n'"+filename+"'\n" +
+                                "Worldmaps usually use different tilesets to levels.\n"+
+                                "Please select a different tileset to use (look for .strf files).")
+            if not self.gui_change_tileset():
+                return
 
         print("Loading: ", filename)
         level = Level.from_file(filename)
@@ -588,6 +605,9 @@ class SuperTuxGUI:
         self.editor_map.set_sector_tab_label(0, level.sectors[0].name)
 
     def load_worldmap(self, filename):
+        '''
+        Unused.
+        '''
         print("Loading: ", filename)
         worldmap = WorldMap(filename)
         worldmap.activate(self.workspace)

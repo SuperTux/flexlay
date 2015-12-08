@@ -595,6 +595,10 @@ class SuperTuxGUI:
             tileset = SuperTuxTileset(32)
             tileset.load(Config.current.datadir + "/images/worldmap.strf")
             self.gui_set_tileset(tileset)
+        else:
+            tileset = SuperTuxTileset(32)
+            tileset.load(Config.current.datadir + "/images/tiles.strf")
+            self.gui_set_tileset(tileset)
 
         print("Loading: ", filename)
         level = Level.from_file(filename)

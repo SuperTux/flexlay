@@ -69,6 +69,7 @@ class Level:
         self.contact = get_value_from_tree(["contact", "_"], data, "")
         self.license = get_value_from_tree(["license", "_"], data, "")
         self.target_time = get_value_from_tree(["target-time", "_"], data, 0)
+        self.tileset_path = get_value_from_tree(["tileset", "_"], data, "images/tiles.strf")
 
         self.current_sector = None
         self.sectors = []

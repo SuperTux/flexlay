@@ -41,11 +41,15 @@ class TilemapLayer(Layer):
 
         self.metadata = None
 
+        self.hidden = False
+
         for y in range(0, self.field.height):
             for x in range(0, self.field.width):
                 self.field.put(x, y, 0)
 
     def draw(self, pos, gc):
+        if self.hidden:
+            return
         tile_size = self.tileset.get_tile_size()
 
         if False and self.background_color.get_alpha() != 0:

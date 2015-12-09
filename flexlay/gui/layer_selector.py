@@ -37,15 +37,19 @@ class LayerSelector:
         self.tree_view.setModel(self.model)
 
         self.toolbar = QToolBar()
-        self.toolbar.addAction("Hide All")
-        self.toolbar.addAction("Show All")
+        hide_all = self.toolbar.addAction("Hide All", self.hide_all_layers)
+        show_all = self.toolbar.addAction("Show All", self.show_all_layers)
 
         self.layout = QVBoxLayout(self.vbox)
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.layout.addWidget(self.tree_view)
         self.layout.addWidget(self.toolbar)
 
+        self.editormap = None
+
     def set_map(self, editormap):
+        self.editormap = editormap
+
         self.model.clear()
 
 #        for layer in editormap.layers:
@@ -64,6 +68,24 @@ class LayerSelector:
                 if isinstance(layer, TilemapLayer):
                     self.model.appendRow([QStandardItem("Tile: %s %dx%d" % (layer.metadata.name,
                                                                             layer.width, layer.height))])
+
+    def hide_all_layers(self):
+        if not self.editormap:
+            return
+        for object in self.editormap.layers[0].objects:
+            if isinstance(object, ObjMapTilemapObject):
+                layer = object.tilemap_layer
+                if isinstance(layer, TilemapLayer):
+                    layer.hidden = True
+
+    def show_all_layers(self):
+        if not self.editormap:
+            return
+        for object in self.editormap.layers[0].objects:
+            if isinstance(object, ObjMapTilemapObject):
+                layer = object.tilemap_layer
+                if isinstance(layer, TilemapLayer):
+                    layer.hidden = False
 
     def get_widget(self):
         return self.vbox

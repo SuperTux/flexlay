@@ -15,11 +15,11 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+import csv
+import os.path
 from collections import OrderedDict
-import os.path, csv
 
 from flexlay import ObjectBrush, Config
-from .sprite import SuperTuxSprite
 from .gameobj import (GameObj, BadGuy, BonusBlock, Candle, Camera,
                       Door, SpawnPoint, ResetPoint, AmbientSound,
                       SimpleObject, SimpleTileObject, Powerup,
@@ -29,6 +29,8 @@ from .gameobj import (GameObj, BadGuy, BonusBlock, Candle, Camera,
                       ScriptTrigger, Switch, Torch, WeakBlock,
                       WilloWisp, Wind, Trampoline, Dispenser,
                       DartTrap, GhostFlame, InvisibleWall)
+from .sprite import SuperTuxSprite
+
 
 def format_sprite_name(name):
     '''
@@ -38,8 +40,8 @@ def format_sprite_name(name):
     name = name.title()
     return name
 
-class SuperTuxGameObjFactory:
 
+class SuperTuxGameObjFactory:
     """
     identifier: section in the .stl file, used for load and save, most of the time, also for Drag&drop
     sprite: used in the object selection and/or in the ObjMapSpriteObject
@@ -50,6 +52,7 @@ class SuperTuxGameObjFactory:
     See editor/supertux-editor/LevelObjects/Objects.cs
     """
     supertux_gui = None
+
     def __init__(self):
         GameObj.factory = self
         self.objects = OrderedDict()
@@ -82,7 +85,7 @@ class SuperTuxGameObjFactory:
         '''
         Creates Object Brushes for each sprite
         '''
-        #print("Creating object brushes...")
+        # print("Creating object brushes...")
         return [ObjectBrush(SuperTuxSprite.from_file(os.path.join(Config.current.datadir, sprite)).get_sprite(),
                             identifier)
                 for identifier, (sprite, constructor) in self.objects.items()]
@@ -162,6 +165,7 @@ class SuperTuxGameObjFactory:
                 path = row[1]
                 name = format_sprite_name(identifier) if len(row) < 3 else row[2]
                 self.add_badguy(identifier, path)
+
 
 supertux_gameobj_factory = SuperTuxGameObjFactory()
 

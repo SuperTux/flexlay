@@ -15,10 +15,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from flexlay.math import Point
-from ..gui.editor_map_component import EditorMapComponent
 from flexlay import (Stroke, SpriteStrokeDrawer, BitmapLayer,
                      DrawerProperties, InputEvent, Dab)
+from flexlay.gui.editor_map_component import EditorMapComponent
+from flexlay.math import Point
 
 
 class Mouse:
@@ -26,7 +26,6 @@ class Mouse:
 
 
 class SketchStrokeTool:
-
     def __init__(self):
         self.drawing = False
         self.stroke = Stroke()

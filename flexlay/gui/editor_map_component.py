@@ -17,20 +17,19 @@
 
 import pickle
 
+from PyQt4.QtCore import Qt
 from PyQt4.QtGui import (QWidget, QGridLayout, QScrollBar, QTabWidget,
                          QKeySequence, QShortcut, QCursor)
-from PyQt4.QtCore import Qt
 
-from ..workspace import Workspace
+from flexlay.graphic_context_state import GraphicContextState
 from flexlay.math import Pointf
 from flexlay.util import Signal
-from ..graphic_context_state import GraphicContextState
+from flexlay.workspace import Workspace
 from .editor_map_widget import EditorMapWidget
 from .object_selector import ObjectSelector
 
 
 class EditorMapComponent:
-
     current = None
 
     def __init__(self, tabbed=True, parent=None):
@@ -232,7 +231,6 @@ class EditorMapComponent:
         self.scroll_vert.setSliderPosition(int(self.gc_state.get_pos().y))
 
     def set_sector_tab_label(self, index, text):
-        self.tab_widget.setTabText(index, "Sector \"%s\""  % text)
-
+        self.tab_widget.setTabText(index, "Sector \"%s\"" % text)
 
 # EOF #

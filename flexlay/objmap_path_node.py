@@ -20,7 +20,6 @@ from flexlay.math import Point, Size, Rect, Pointf, Sizef, Rectf
 
 
 class ObjMapPathNode(ObjMapObject):
-
     def __init__(self, pos, data):
         super().__init__()
 
@@ -67,6 +66,5 @@ class ObjMapPathNode(ObjMapObject):
 
         self.next_node = node
         node.prev_node = self
-
 
 # EOF #

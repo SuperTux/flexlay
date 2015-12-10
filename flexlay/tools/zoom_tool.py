@@ -15,14 +15,13 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from flexlay.math import Rect, Rectf
 from flexlay import Color
-from ..gui.editor_map_component import EditorMapComponent
+from flexlay.gui.editor_map_component import EditorMapComponent
+from flexlay.math import Rect, Rectf
 from flexlay.tools import Tool
 
 
 class ZoomTool(Tool):
-
     def __init__(self):
         super().__init__()
 
@@ -66,6 +65,5 @@ class ZoomTool(Tool):
             pos = parent.screen2world(event.mouse_pos)
             self.zoom_rect.right = pos.x
             self.zoom_rect.bottom = pos.y
-
 
 # EOF #

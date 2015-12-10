@@ -16,11 +16,11 @@
 
 
 from PyQt4.QtCore import QLineF
+
 from flexlay.math import Rectf
 
 
 class GraphicContext:
-
     def __init__(self, painter, state=None):
         self.painter = painter
         self.state = state

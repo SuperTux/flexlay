@@ -19,13 +19,11 @@ from flexlay.math import Origin
 
 
 class SpriteBrush:
-
     def __init__(self, sprite):
         self.sprite = sprite
         self.sprite.set_alignment(Origin.center, 0, 0)
 
     def get_sprite(self):
         return self.sprite
-
 
 # EOF #

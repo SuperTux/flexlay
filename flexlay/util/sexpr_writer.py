@@ -31,7 +31,6 @@ def write_sexpr(fout, sexpr, indent=0):
 
 
 class SExprWriter:
-
     def __init__(self, fout):
         self.fout = fout
         self.indent_depth = 0
@@ -163,6 +162,5 @@ class SExprWriter:
 
     def indent(self):
         self.fout.write(" " * self.indent_depth)
-
 
 # EOF #

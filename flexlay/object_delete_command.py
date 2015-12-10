@@ -16,7 +16,6 @@
 
 
 class ObjectDeleteCommand:
-
     def __init__(self, object_layer):
         self.object_layer = object_layer
         self.objects = []
@@ -34,6 +33,5 @@ class ObjectDeleteCommand:
     def undo(self):
         for obj in self.objects:
             self.object_layer.add_object(obj)
-
 
 # EOF #

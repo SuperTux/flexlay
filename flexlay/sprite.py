@@ -22,7 +22,6 @@ from .pixel_buffer import PixelBuffer
 
 
 class Sprite:
-
     @staticmethod
     def from_pixelbuffer(pixelbuffer):
         return Sprite(pixelbuffer)
@@ -103,6 +102,5 @@ class Sprite:
 
     def get_pixelbuffer(self):
         return self.pixelbuffer
-
 
 # EOF #

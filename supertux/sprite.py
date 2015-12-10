@@ -17,12 +17,11 @@
 
 import os
 
-from flexlay.util import get_value_from_tree, sexpr_read_from_file
 from flexlay import Sprite
+from flexlay.util import get_value_from_tree, sexpr_read_from_file
 
 
 class SuperTuxSpriteAction:
-
     def __init__(self):
         self.name = None
         self.image = None
@@ -39,7 +38,6 @@ class SuperTuxSpriteAction:
 
 
 class SuperTuxSprite:
-
     def __init__(self):
         self.actions = {}
         self.actions_default = None
@@ -94,6 +92,5 @@ class SuperTuxSprite:
             # FIXME:
             # sprite.set_frame_offset(0, Point(action.x_offset, action.y_offset))
             return sprite
-
 
 # EOF #

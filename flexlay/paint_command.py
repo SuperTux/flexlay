@@ -15,12 +15,11 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from flexlay.math import Point, Rect
 from flexlay import Command, TileBrush, TilemapLayer
+from flexlay.math import Point, Rect
 
 
 class PaintCommand(Command):
-
     def __init__(self, tilemap_layer, brush):
         super().__init__()
 
@@ -78,6 +77,5 @@ class PaintCommand(Command):
 
     def undo(self):
         TilemapLayer.draw_tiles(self.tilemap.field, self.undo_brush, self.pos)
-
 
 # EOF #

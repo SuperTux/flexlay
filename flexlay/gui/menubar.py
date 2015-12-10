@@ -16,7 +16,6 @@
 
 
 class Menu:
-
     def __init__(self, menu):
         self.menu = menu
 
@@ -32,13 +31,11 @@ class Menu:
 
 
 class Menubar:
-
     def __init__(self, qmenubar):
         self.qmenubar = qmenubar
 
     def add_menu(self, label):
         menu = self.qmenubar.addMenu(label)
         return Menu(menu)
-
 
 # EOF #

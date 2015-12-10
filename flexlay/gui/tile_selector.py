@@ -15,16 +15,14 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from PyQt4.QtGui import (QComboBox, QScrollArea, QWidget, QVBoxLayout)
 from PyQt4.QtCore import Qt
+from PyQt4.QtGui import (QComboBox, QScrollArea, QWidget, QVBoxLayout)
 
 from .tile_selector_widget import TileSelectorWidget
 
 
 class TileSelector:
-
     def __init__(self):
-
         self.tiles = {}
 
         self.combobox = QComboBox()
@@ -74,6 +72,5 @@ class TileSelector:
 
     def get_widget(self):
         return self.box
-
 
 # EOF #

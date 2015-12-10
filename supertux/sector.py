@@ -17,13 +17,11 @@
 
 from flexlay import ObjectLayer, ObjMapTilemapObject, EditorMap
 from flexlay.math import Rect
-
-from .tilemap import SuperTuxTileMap
 from .gameobj_factor import supertux_gameobj_factory
+from .tilemap import SuperTuxTileMap
 
 
 class Sector:
-
     def __init__(self, parent):
         self.parent = parent
         self.name = None
@@ -135,7 +133,7 @@ class Sector:
                     self.objects.append(obj)
 
         # Sort tilemaps according to z-pos before adding them:
-        self.tilemaps = sorted(self.tilemaps, key = lambda tilemap: tilemap.z_pos)
+        self.tilemaps = sorted(self.tilemaps, key=lambda tilemap: tilemap.z_pos)
         for tilemap in self.tilemaps:
             self.object_layer.add_object(ObjMapTilemapObject(tilemap.tilemap_layer, tilemap))
 
@@ -155,8 +153,7 @@ class Sector:
         for obj in self.object_layer.get_objects():
             obj.metadata.write(writer, obj)
 
-        # for tilemap in self.tilemaps:
-        #   tilemap.write(writer)
-
+            # for tilemap in self.tilemaps:
+            #   tilemap.write(writer)
 
 # EOF #

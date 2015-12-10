@@ -18,12 +18,12 @@
 
 
 import sys
+
 import supertux
 
-
 if __name__ == "__main__":
-  sys.path.append(".")
-  supertux.main()
+    sys.path.append(".")
+    supertux.main()
 
 
 # EOF #

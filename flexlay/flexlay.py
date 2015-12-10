@@ -16,12 +16,13 @@
 
 
 import sys
-from .gui_manager import GUIManager
+
 from PyQt4.QtGui import QApplication
+
+from .gui_manager import GUIManager
 
 
 class Flexlay:
-
     def __init__(self):
         self.application = QApplication(sys.argv)
         self.gui_manager = None
@@ -29,6 +30,5 @@ class Flexlay:
     def create_gui_manager(self, title):
         self.gui_manager = GUIManager(title)
         return self.gui_manager
-
 
 # EOF #

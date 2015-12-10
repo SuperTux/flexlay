@@ -18,13 +18,11 @@ import os
 
 from flexlay import Config
 from flexlay.util import get_value_from_tree, sexpr_filter, SExprWriter
-
 from .sector import Sector
 from .util import load_lisp
 
 
 class Level:
-
     @staticmethod
     def from_file(filename):
         level = Level()
@@ -36,7 +34,7 @@ class Level:
 
         level.version = get_value_from_tree(["version", "_"], data, 0)
 
-        print("VERSION:", level.filename, " ",  level.version)
+        print("VERSION:", level.filename, " ", level.version)
 
         if level.version == 1:
             raise Exception("version 1 levels not supported at the moment")
@@ -124,6 +122,5 @@ class Level:
 
     def get_sectors(self):
         return [sec.name for sec in self.sectors]
-
 
 # EOF #

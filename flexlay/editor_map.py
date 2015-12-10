@@ -21,7 +21,6 @@ from flexlay.util import Signal
 
 
 class EditorMap:
-
     def __init__(self):
         self.background_color = Color(100, 80, 100)
         self.foreground_color = Color(255, 80, 255)
@@ -32,7 +31,7 @@ class EditorMap:
         self.layers = []
         self.redo_stack = []
         self.undo_stack = []
-        #Index in undo_stack + redo_stack, all with index <= are saved.
+        # Index in undo_stack + redo_stack, all with index <= are saved.
         self.save_pointer = 0
         self.sig_change = Signal()
         self.metadata = None
@@ -176,6 +175,5 @@ class EditorMap:
 
     def redo_stack_size(self):
         return len(self.redo_stack)
-
 
 # EOF #

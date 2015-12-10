@@ -16,19 +16,18 @@
 
 
 from PyQt4.QtCore import QSize, Qt
-from PyQt4.QtGui import QWidget
 from PyQt4.QtGui import QPainter
+from PyQt4.QtGui import QWidget
 
+from flexlay.color import Color
+from flexlay.graphic_context import GraphicContext
 from flexlay.math import Point, Rect, Size
-from ..graphic_context import GraphicContext
-from ..color import Color
-from ..tileset import Tileset
-from ..tile_brush import TileBrush
-from ..tool_context import ToolContext
+from flexlay.tile_brush import TileBrush
+from flexlay.tileset import Tileset
+from flexlay.tool_context import ToolContext
 
 
 class TileSelectorWidget(QWidget):
-
     def __init__(self, viewport):
         super().__init__()
 
@@ -67,7 +66,7 @@ class TileSelectorWidget(QWidget):
             brush = TileBrush(1, 1)
 
             brush.set_opaque()
-            if 0 <= self.mouse_over_tile and self.mouse_over_tile < len(self.tiles):
+            if 0 <= self.mouse_over_tile < len(self.tiles):
                 brush.put(0, 0, self.tiles[self.mouse_over_tile])
             else:
                 brush.put(0, 0, 0)
@@ -97,7 +96,7 @@ class TileSelectorWidget(QWidget):
                 for x in range(0, selection.width):
                     tile = (selection.top + y) * self.columns + (selection.left + x)
 
-                    if 0 <= tile and tile < len(self.tiles):
+                    if 0 <= tile < len(self.tiles):
                         brush.put(x, y, self.tiles[tile])
                     else:
                         brush.put(x, y, 0)
@@ -153,8 +152,7 @@ class TileSelectorWidget(QWidget):
                 gc.draw_rect(rect, Color(0, 0, 0, 128))
 
             # mark the currently selected tile
-            if brush.width == 1 and brush.height == 1 and \
-               brush.at(0, 0) == self.tiles[i]:
+            if brush.width == 1 and brush.height == 1 and brush.at(0, 0) == self.tiles[i]:
                 gc.fill_rect(rect, Color(0, 0, 255, 100))
             elif self.mouse_over_tile == i and self.has_focus:
                 gc.fill_rect(rect, Color(0, 0, 255, 20))
@@ -209,6 +207,5 @@ class TileSelectorWidget(QWidget):
     @property
     def cell_size(self):
         return int(self.tileset.get_tile_size() * self.scale)
-
 
 # EOF #

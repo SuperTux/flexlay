@@ -16,3 +16,4 @@
 /ruby/flexlay_wrap.so
 /simple/simple
 moc_*.cpp
+.idea/

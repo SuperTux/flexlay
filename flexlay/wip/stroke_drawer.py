@@ -16,12 +16,10 @@
 
 
 class StrokeDrawer:
-
     def __init__(self):
         pass
 
     def draw(self, stroke, gc):
         pass
-
 
 # EOF #

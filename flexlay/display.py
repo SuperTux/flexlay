@@ -16,7 +16,6 @@
 
 
 class Display:
-
     def __init__(self):
         pass
 
@@ -30,6 +29,5 @@ class Display:
 
     def get_modelview(self):
         pass
-
 
 # EOF #

@@ -20,7 +20,6 @@ from PyQt4.QtGui import QFileDialog
 
 
 class FileDialog:
-
     def __init__(self, title):
         self.callback = None
         self.file_dialog = QFileDialog()
@@ -48,7 +47,6 @@ class FileDialog:
 
 
 class OpenFileDialog(FileDialog):
-
     def __init__(self, *args):
         super().__init__(*args)
 
@@ -57,11 +55,9 @@ class OpenFileDialog(FileDialog):
 
 
 class SaveFileDialog(FileDialog):
-
     def __init__(self, *args):
         super().__init__(*args)
         self.file_dialog.setAcceptMode(QFileDialog.AcceptSave)
         self.file_dialog.setFileMode(QFileDialog.AnyFile)
-
 
 # EOF #

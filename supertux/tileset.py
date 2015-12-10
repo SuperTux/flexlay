@@ -19,12 +19,10 @@ import os
 
 from flexlay import Tile, Tileset, PixelBuffer, Config
 from flexlay.util import get_value_from_tree
-
 from .util import load_lisp
 
 
 class TileGroup:
-
     def __init__(self, name, tiles):
         self.name = name
         self.tiles = tiles
@@ -32,7 +30,6 @@ class TileGroup:
 
 # Load game tiles from filename into tileset
 class SuperTuxTileset(Tileset):
-
     current = None
     filename = ""
 
@@ -87,7 +84,7 @@ class SuperTuxTileset(Tileset):
                                                                   x * 32, y * 32, 32, 32)
                     self.add_tile(tile_id, Tile(pixelbuffer))
                     x += 1
-                    if (x == width):
+                    if x == width:
                         x = 0
                         y += 1
 
@@ -97,7 +94,7 @@ class SuperTuxTileset(Tileset):
                 image = get_value_from_tree(['editor-images', '_'], data, False)
                 hidden = get_value_from_tree(['hidden', '_'], data, False)
 
-                if not(image):
+                if not image:
                     image = get_value_from_tree(['images', '_'], data, "tiles/auxiliary/notile.png")
 
                 if isinstance(image, str):
@@ -110,7 +107,7 @@ class SuperTuxTileset(Tileset):
                             image[2], image[3], image[4], image[5])
 
                 if not hidden:
-                    if tile_id == 0 or not(pixelbuffer):
+                    if tile_id == 0 or not pixelbuffer:
                         self.add_tile(tile_id, None)
                     else:
                         self.add_tile(tile_id, Tile(pixelbuffer))
@@ -123,6 +120,5 @@ class SuperTuxTileset(Tileset):
                 if not self.tilegroups:
                     self.tilegroups = []
                 self.tilegroups.append(TileGroup(name, tiles))
-
 
 # EOF #

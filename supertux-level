@@ -17,11 +17,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-import sys
 import argparse
 import logging
-
 import sys
+
 from flexlay.config import Config
 from supertux.level import Level
 
@@ -54,6 +53,7 @@ def main():
             has_error = True
 
     return 1 if has_error else 0
+
 
 if __name__ == "__main__":
     sys.exit(main())

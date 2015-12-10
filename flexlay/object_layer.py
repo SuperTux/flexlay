@@ -14,13 +14,10 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import random
-
 from .layer import Layer
-from .objmap_tilemap_object import ObjMapTilemapObject
+
 
 class ObjectLayer(Layer):
-
     def __init__(self):
         super().__init__()
 

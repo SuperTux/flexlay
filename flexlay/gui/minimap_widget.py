@@ -19,14 +19,13 @@ from PyQt4.QtCore import QSize
 from PyQt4.QtGui import QPainter
 from PyQt4.QtGui import QWidget
 
-from ..color import Color
-from ..graphic_context import GraphicContext
-from ..tool_context import ToolContext
+from flexlay.color import Color
+from flexlay.graphic_context import GraphicContext
 from flexlay.math import Point, Size, Rect
+from flexlay.tool_context import ToolContext
 
 
 class MinimapWidget(QWidget):
-
     def __init__(self, editormap_component):
         super().__init__()
 

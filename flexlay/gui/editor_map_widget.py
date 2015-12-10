@@ -18,13 +18,12 @@ from PyQt4.QtCore import QSize
 from PyQt4.QtGui import QColor, QPainter
 from PyQt4.QtGui import QSizePolicy, QWidget
 
-from flexlay.math import Point
 from flexlay import InputEvent, GraphicContext
+from flexlay.math import Point
 from flexlay.util import Signal
 
 
 class EditorMapWidget(QWidget):
-
     def __init__(self, comp, parent):
         super().__init__(parent)
         self.setMouseTracking(True)
@@ -116,6 +115,5 @@ class EditorMapWidget(QWidget):
 
     def resizeEvent(self, event):
         self.comp.get_gc_state().set_size(event.size().width(), event.size().height())
-
 
 # EOF #

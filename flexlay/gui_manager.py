@@ -17,26 +17,21 @@
 
 from PyQt4.QtCore import (QCoreApplication, Qt)
 from PyQt4.QtGui import (QApplication, QMainWindow, QToolBar,
-                         QDockWidget, QVBoxLayout, QWidget,
-                         QDialog, QFormLayout, QLabel,
-                         QButtonGroup, QPushButton)
+                         QDockWidget, QVBoxLayout, QWidget)
 
+from flexlay.gui.properties_widget import PropertiesWidget
 from .config import Config
 from .gui import (ButtonPanel, EditorMapComponent, OpenFileDialog,
                   SaveFileDialog, GenericDialog, LayerSelector,
                   Menubar, Minimap, ObjectSelector, TileBrushSelector,
                   TileSelector, StatusBar)
 
-from flexlay.gui.properties_widget import PropertiesWidget
-from flexlay.util.signal import Signal
-from flexlay import Workspace
-
 
 class FlexlayMainWindow(QMainWindow):
     on_close = None
-    
+
     def set_on_close(self, on_close):
-        self.on_close =  on_close
+        self.on_close = on_close
 
     def closeEvent(self, event):
         if self.on_close:
@@ -53,11 +48,10 @@ class FlexlayMainWindow(QMainWindow):
 
 
 class GUIManager:
-
     def __init__(self, title):
         self.window = FlexlayMainWindow()
         self.window.setWindowTitle(title)
-        
+
         self.editormap_component = None
         self.statusbar = None
 
@@ -66,7 +60,7 @@ class GUIManager:
         self.tile_selector_dock = None
         self.object_selector_dock = None
         self.layer_selector = None
-    
+
     def run(self):
         if self.statusbar and self.editormap_component:
             (self.editormap_component.editormap_widget
@@ -138,16 +132,16 @@ class GUIManager:
         self.object_selector_dock.setObjectName("object_selector_dock")
         self.object_selector = ObjectSelector(w, h, None)
         self.object_selector_dock.setWidget(self.object_selector.get_widget())
-        
+
         # self.window.tabifyDockWidget(first, second)
         self.window.addDockWidget(Qt.RightDockWidgetArea, self.object_selector_dock)
         return self.object_selector
-    
+
     def create_properties_view(self):
         self.properties_dock = QDockWidget("Properties")
         self.properties_dock.setObjectName("properties_dock")
         self.properties_dock.setWidget(PropertiesWidget(self.window))
-        
+
         self.window.addDockWidget(Qt.RightDockWidgetArea, self.properties_dock)
         return self.properties_dock
 
@@ -176,6 +170,5 @@ class GUIManager:
 
         self.window.addDockWidget(Qt.RightDockWidgetArea, dockwidget)
         return self.layer_selector
-
 
 # EOF #

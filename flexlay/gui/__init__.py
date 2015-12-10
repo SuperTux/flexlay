@@ -17,6 +17,8 @@
 
 from .button_panel import ButtonPanel
 from .colorpicker import ColorPicker
+from .editor_map_component import EditorMapComponent
+from .editor_map_widget import EditorMapWidget
 from .file_dialog import OpenFileDialog, SaveFileDialog
 from .generic_dialog import GenericDialog
 from .icon import Icon
@@ -26,14 +28,11 @@ from .minimap import Minimap
 from .minimap_widget import MinimapWidget
 from .object_selector import ObjectSelector
 from .object_selector_widget import ObjectSelectorWidget
+from .statusbar import StatusBar
 from .tile_brush_selector import TileBrushSelector
 from .tile_selection import TileSelection
 from .tile_selector import TileSelector
 from .tile_selector_widget import TileSelectorWidget
-from .editor_map_component import EditorMapComponent
-from .editor_map_widget import EditorMapWidget
-from .statusbar import StatusBar
-
 
 __all__ = ["ButtonPanel", "ColorPicker", "EditorMapComponent",
            "EditorMapWidget", "OpenFileDialog", "SaveFileDialog",

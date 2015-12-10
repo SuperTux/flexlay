@@ -16,7 +16,6 @@
 
 
 class Brush:
-
     def __init__(self):
         pass
 
@@ -25,6 +24,5 @@ class Brush:
 
     def copy(self):
         pass
-
 
 # EOF #

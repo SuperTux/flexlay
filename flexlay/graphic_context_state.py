@@ -15,13 +15,12 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from flexlay.math import Pointf, Rectf, Sizef
-
 import math
+
+from flexlay.math import Pointf, Rectf, Sizef
 
 
 class GraphicContextState:
-
     def __init__(self, w=1, h=1):
         self.width = w
         self.height = h
@@ -108,6 +107,5 @@ class GraphicContextState:
 
     def get_rotation(self):
         return self.rotation
-
 
 # EOF #

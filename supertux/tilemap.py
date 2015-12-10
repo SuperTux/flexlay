@@ -16,38 +16,36 @@
 
 
 from flexlay import TilemapLayer
-from flexlay.util import get_value_from_tree
 from flexlay.math import Point
-
+from flexlay.util import get_value_from_tree
 from .tileset import SuperTuxTileset
 
 
 class SuperTuxTileMap:
-
     @staticmethod
     def from_sexpr(data):
-        #Load position from path, node and then x, ys
+        # Load position from path, node and then x, ys
         x = 0
         y = 0
-        path = get_value_from_tree(["path"],  data, None)
+        path = get_value_from_tree(["path"], data, None)
         if path:
-            node = get_value_from_tree(["node"],  path, None)
+            node = get_value_from_tree(["node"], path, None)
             if node:
-                x = get_value_from_tree(["x", "_"],  node, None)
-                y = get_value_from_tree(["y", "_"],  node, None)
+                x = get_value_from_tree(["x", "_"], node, None)
+                y = get_value_from_tree(["y", "_"], node, None)
 
-        name = get_value_from_tree(["name", "_"],  data, "")
-        z_pos = get_value_from_tree(["z-pos", "_"],  data, 0)
-        solid = get_value_from_tree(["solid", "_"],  data, False)
+        name = get_value_from_tree(["name", "_"], data, "")
+        z_pos = get_value_from_tree(["z-pos", "_"], data, 0)
+        solid = get_value_from_tree(["solid", "_"], data, False)
 
         result = SuperTuxTileMap(name, z_pos, solid)
 
-        width = get_value_from_tree(["width", "_"],  data, 20)
+        width = get_value_from_tree(["width", "_"], data, 20)
         height = get_value_from_tree(["height", "_"], data, 15)
-        result.draw_target = get_value_from_tree(["draw-target", "_"],  data, "")
-        result.speed = get_value_from_tree(["speed", "_"],  data, 1.0)
-        result.speed_y = get_value_from_tree(["speed-y", "_"],  data, 1.0)
-        result.alpha = get_value_from_tree(["alpha", "_"],  data, 1.0)
+        result.draw_target = get_value_from_tree(["draw-target", "_"], data, "")
+        result.speed = get_value_from_tree(["speed", "_"], data, 1.0)
+        result.speed_y = get_value_from_tree(["speed-y", "_"], data, 1.0)
+        result.alpha = get_value_from_tree(["alpha", "_"], data, 1.0)
 
         result.tilemap_layer = TilemapLayer(SuperTuxTileset.current, width, height)
         result.tilemap_layer.set_data(get_value_from_tree(["tiles"], data, []))
@@ -137,6 +135,5 @@ class SuperTuxTileMap:
     @property
     def height(self):
         return self.tilemap_layer.height
-
 
 # EOF #

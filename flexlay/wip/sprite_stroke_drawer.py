@@ -15,12 +15,11 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from flexlay.math import Rect, Point, Size, Origin
 from flexlay import DrawerProperties, BlendFunc, BitmapLayer, Surface
+from flexlay.math import Rect, Point, Size, Origin
 
 
 class SpriteStrokeDrawer:
-
     def __init__(self, drawer):
         self.mode = SpriteStrokeDrawer.DM_NORMAL
         self.drawer = drawer
@@ -109,6 +108,5 @@ class SpriteStrokeDrawer:
 
     def get_mode(self):
         return self.mode
-
 
 # EOF #

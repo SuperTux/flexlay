@@ -21,7 +21,6 @@ from flexlay.math import Point
 
 
 class InputEvent:
-
     MOUSE_LEFT = 1
     MOUSE_RIGHT = 2
     MOUSE_MIDDLE = 3
@@ -65,6 +64,5 @@ class InputEvent:
             result.mod |= InputEvent.MOD_SHIFT
 
         return result
-
 
 # EOF #

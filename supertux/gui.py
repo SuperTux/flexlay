@@ -15,11 +15,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-import subprocess
 import os
+import subprocess
 
-from PyQt4.QtGui import (QIcon, QMessageBox, QFileDialog, QDialog, QFormLayout,
-                         QPushButton, QVBoxLayout, QButtonGroup, QLabel)
+from PyQt4.QtGui import (QIcon, QMessageBox, QFileDialog)
 
 from flexlay import (Color, InputEvent, ObjMapRectObject,
                      ObjMapPathNode, Config, ToolContext, ObjectAddCommand,
@@ -29,18 +28,17 @@ from flexlay.tools import (TilePaintTool, TileBrushCreateTool,
                            TileMapSelectTool, TileFillTool,
                            TileReplaceTool, ObjMapSelectTool,
                            ZoomTool, ZoomOutTool, WorkspaceMoveTool)
-
 from .button_panel import SuperTuxButtonPanel
 from .gameobj import PathNode
 from .gameobj_factor import supertux_gameobj_factory
 from .level import Level
 from .menubar import SuperTuxMenuBar
+from .new_level import NewLevelDialog
 from .sector import Sector
 from .tileset import SuperTuxTileset
 from .toolbox import SuperTuxToolbox
 from .worldmap import WorldMap
 from .worldmap_object import create_worldmapobject_at_pos  # worldmap_objects
-from .new_level import NewLevelDialog
 
 BACKGROUND_LAYER = 1
 INTERACTIVE_LAYER = 2
@@ -48,7 +46,6 @@ FOREGROUND_LAYER = 3
 
 
 class SuperTuxGUI:
-
     current = None
 
     def __init__(self, flexlay):
@@ -135,9 +132,9 @@ class SuperTuxGUI:
 
         self.set_tilemap_paint_tool()
 
-        #Whether to record gameplay
+        # Whether to record gameplay
         self.record = False
-        #Where to put recording
+        # Where to put recording
         self.record_target = ""
 
     def register_keyboard_shortcuts(self):
@@ -179,26 +176,28 @@ class SuperTuxGUI:
         @return: boolean whether to close or not. If not boolean, will close.
         '''
         editor_map = Workspace.current.get_map()
-        #If the most recent save was the same as the save_pointer index,
+        # If the most recent save was the same as the save_pointer index,
         # we can safely quit
         if editor_map.save_pointer == len(editor_map.undo_stack):
             return True
         else:
             choice = QMessageBox.warning(self.gui.window, "Unsaved Changes to Level",
-                                      "The level has been changed since "
-                                      "the last save.",
-                                      "Save Now", "Cancel", "Leave Anyway",
-                                      0, 1)
+                                         "The level has been changed since "
+                                         "the last save.",
+                                         "Save Now", "Cancel", "Leave Anyway",
+                                         0, 1)
             if choice == 0:
                 dialog_is_cancelled = False
+
                 def after_save(i):
                     dialog_is_cancelled = (i == 0)
+
                 self.save_dialog.file_dialog.finished.connect(after_save)
                 self.gui_level_save()
-                #If saved, show confirmation dialog to reassure user.
+                # If saved, show confirmation dialog to reassure user.
                 if not dialog_is_cancelled:
                     QMessageBox.information(self.gui.window, "Saved Successfully", "Editor will now quit")
-                #If dialog is cancelled, don't quit, as that would lose changes
+                # If dialog is cancelled, don't quit, as that would lose changes
                 return not dialog_is_cancelled
             elif choice == 1:
                 return False
@@ -271,7 +270,7 @@ class SuperTuxGUI:
     def gui_toggle_display_props(self):
         if self.display_properties.show_all:
             self.display_properties.show_all = False
-        elif not(self.display_properties.current_only):
+        elif not (self.display_properties.current_only):
             self.display_properties.current_only = True
         else:
             self.display_properties.show_all = True
@@ -309,7 +308,7 @@ class SuperTuxGUI:
                              ([] if not self.record else ["--record-demo", self.record_target]))
         except FileNotFoundError:
             QMessageBox.warning(None, "No Supertux Binary Found",
-                             "Press OK to select your Supertux binary")
+                                "Press OK to select your Supertux binary")
             Config.current.binary = QFileDialog.getOpenFileName(None, "Open Supertux Binary")
             if not Config.current.binary:
                 raise RuntimeError("binary path missing, use --binary BIN")
@@ -542,7 +541,7 @@ class SuperTuxGUI:
         if dialog.level:
             self.set_level(dialog.level, "main")
 
-        #Does nothing:
+        # Does nothing:
         self.new_level()
 
     def gui_level_load(self):
@@ -585,13 +584,13 @@ class SuperTuxGUI:
         pass
 
     def load_level(self, filename):
-        #if filename[-5:] == ".stwm":
-            #QMessageBox.warning(None, "Opening Worldmap File",
-            #                    "[WARNING] Opening supertux worldmap file:\n'"+filename+"'\n" +
-            #                    "Worldmaps usually use different tilesets to levels.\n"+
-            #                    "Please select a different tileset to use (look for .strf files).")
-            #if not self.gui_change_tileset():
-            #    return
+        # if filename[-5:] == ".stwm":
+        # QMessageBox.warning(None, "Opening Worldmap File",
+        #                    "[WARNING] Opening supertux worldmap file:\n'"+filename+"'\n" +
+        #                    "Worldmaps usually use different tilesets to levels.\n"+
+        #                    "Please select a different tileset to use (look for .strf files).")
+        # if not self.gui_change_tileset():
+        #    return
         #    print("Loading worldmap")
 
         print("Loading: ", filename)
@@ -717,7 +716,6 @@ class SuperTuxGUI:
 
 
 class DisplayProperties:
-
     def __init__(self):
         self.layer = None
         self.show_all = False
@@ -743,6 +741,5 @@ class DisplayProperties:
                     tilemap.tilemap_layer.set_foreground_color(active)
                 else:
                     tilemap.tilemap_layer.set_foreground_color(deactive)
-
 
 # EOF #

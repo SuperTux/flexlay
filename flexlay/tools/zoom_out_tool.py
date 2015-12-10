@@ -15,13 +15,12 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from ..gui.editor_map_component import EditorMapComponent
-from flexlay.tools import Tool
 from flexlay import InputEvent
+from flexlay.gui.editor_map_component import EditorMapComponent
+from flexlay.tools import Tool
 
 
 class ZoomOutTool(Tool):
-
     def __init__(self):
         super().__init__()
 
@@ -29,6 +28,5 @@ class ZoomOutTool(Tool):
         parent = EditorMapComponent.current
         if event.kind == InputEvent.MOUSE_RIGHT:
             parent.zoom_out(event.mouse_pos)
-
 
 # EOF #

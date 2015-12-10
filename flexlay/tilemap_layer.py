@@ -14,16 +14,13 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import random
-
 from flexlay import Field, PixelBuffer, blit
 from flexlay.math import Point, Size, Rect
-from .layer import Layer
 from .color import Color
+from .layer import Layer
 
 
 class TilemapLayer(Layer):
-
     def __init__(self, tileset, w, h):
         super().__init__()
 
@@ -58,15 +55,15 @@ class TilemapLayer(Layer):
                                    self.field.height * tile_size)),
                          self.background_color)
 
-        #The visible rectangle
+        # The visible rectangle
         rect = Rect(gc.get_clip_rect())
 
-        #max() here stops tiles off screen (below 0) from being drawn
+        # max() here stops tiles off screen (below 0) from being drawn
         start_x = max(0, pos.x // tile_size)
         start_y = max(0, pos.y // tile_size)
 
-        #min() here stops tiles off screen (above size of clip rect) from being drawn
-        end_x = min(self.field.width + pos.x // tile_size,  rect.right // tile_size + 1)
+        # min() here stops tiles off screen (above size of clip rect) from being drawn
+        end_x = min(self.field.width + pos.x // tile_size, rect.right // tile_size + 1)
         end_y = min(self.field.height + pos.y // tile_size, rect.bottom // tile_size + 1)
 
         if self.foreground_color != Color(255, 255, 255, 255):
@@ -115,8 +112,7 @@ class TilemapLayer(Layer):
                              Color(150, 150, 150))
 
     def get_tile(self, x, y):
-        if x >= 0 and x < self.field.width and \
-           y >= 0 and y < self.field.height:
+        if 0 <= x < self.field.width and 0 <= y < self.field.height:
             return self.field.at(x, y)
         else:
             return 0
@@ -139,8 +135,7 @@ class TilemapLayer(Layer):
         stack = [(orig_x, orig_y)]
 
         def add(x, y):
-            if 0 <= x < self.field.width and \
-               0 <= y < self.field.height:
+            if 0 <= x < self.field.width and 0 <= y < self.field.height:
                 stack.append((x, y))
 
         while stack:
@@ -157,8 +152,7 @@ class TilemapLayer(Layer):
 
     def draw_tile(self, tile_id, pos):
         assert isinstance(tile_id, int)
-        if 0 <= pos.x < self.field.width and \
-           0 <= pos.y < self.field.height:
+        if 0 <= pos.x < self.field.width and 0 <= pos.y < self.field.height:
             self.field.put(pos.x, pos.y, tile_id)
 
     # formerly draw_tile()
@@ -170,12 +164,12 @@ class TilemapLayer(Layer):
         start_x = max(0, -pos.x)
         start_y = max(0, -pos.y)
 
-        end_x = min(brush.width,  field.width - pos.x)
+        end_x = min(brush.width, field.width - pos.x)
         end_y = min(brush.height, field.height - pos.y)
 
         for y in range(start_y, end_y):
             for x in range(start_x, end_x):
-                if (brush.is_opaque() or brush.at(x, y) != 0):
+                if brush.is_opaque() or brush.at(x, y) != 0:
                     field.put(pos.x + x, pos.y + y, brush.at(x, y))
 
     def set_draw_attribute(self, t):
@@ -260,6 +254,5 @@ class TilemapLayer(Layer):
 
     def has_bounding_rect(self):
         return True
-
 
 # EOF #

@@ -16,11 +16,11 @@
 
 
 from PyQt4.QtCore import QRect
+
 from .size import Size
 
 
 class Rect:
-
     def __init__(self, arg1=None, arg2=None, arg3=None, arg4=None):
         if arg1 is None and arg2 is None and arg3 is None and arg4 is None:
             self.left = 0
@@ -95,7 +95,6 @@ class Rect:
 
 
 class Rectf(Rect):
-
     def __init__(self, arg1=None, arg2=None, arg3=None, arg4=None):
         super().__init__()
 
@@ -119,6 +118,5 @@ class Rectf(Rect):
             self.top = arg2
             self.right = arg3
             self.bottom = arg4
-
 
 # EOF #

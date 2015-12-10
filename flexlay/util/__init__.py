@@ -15,11 +15,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from .signal import Signal
-from .sexpr_writer import SExprWriter, write_sexpr
-from .sexpr_reader import SExprReader, get_value_from_tree, sexpr_filter
 from .sexpr import sexpr_read_from_file
-
+from .sexpr_reader import SExprReader, get_value_from_tree, sexpr_filter
+from .sexpr_writer import SExprWriter, write_sexpr
+from .signal import Signal
 
 __all__ = ["Signal",
            "SExprWriter", "write_sexpr",

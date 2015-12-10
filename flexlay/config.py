@@ -15,8 +15,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-import os
 import configparser
+import os
 
 
 class Config:
@@ -90,13 +90,13 @@ class Config:
         if necessary
         '''
         if filename in self.recent_files:
-            #Remove from list, to be appended at the end
+            # Remove from list, to be appended at the end
             self.recent_files.pop(self.recent_files.index(filename))
         else:
-            #Ensure only 9 recent files
+            # Ensure only 9 recent files
             while len(self.recent_files) >= 10:
                 self.recent_files.pop(0)
-            
+
         self.recent_files.append(filename)
 
 # EOF #

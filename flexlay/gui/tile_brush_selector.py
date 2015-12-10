@@ -19,7 +19,6 @@ from PyQt4.QtGui import QListWidget
 
 
 class TileBrushSelector:
-
     def __init__(self):
         self.brushes = []
         self.list_widget = QListWidget()
@@ -30,6 +29,5 @@ class TileBrushSelector:
 
     def get_widget(self):
         return self.list_widget
-
 
 # EOF #

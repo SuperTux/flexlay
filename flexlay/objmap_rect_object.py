@@ -16,13 +16,12 @@
 
 
 from flexlay.math import Pointf, Sizef, Rect, Rectf
-from .objmap_object import ObjMapObject
 from .objmap_control_point import ObjMapControlPoint
+from .objmap_object import ObjMapObject
 from .sprite import Sprite
 
 
 class ObjMapRectObject(ObjMapObject):
-
     def __init__(self, rect, color, metadata):
         super().__init__(Pointf(rect.left, rect.top), metadata)
 
@@ -173,6 +172,5 @@ class ObjMapRectObject(ObjMapObject):
         objmap.add_control_point(self.cp_bottom_middle)
         objmap.add_control_point(self.cp_middle_left)
         objmap.add_control_point(self.cp_middle_right)
-
 
 # EOF #

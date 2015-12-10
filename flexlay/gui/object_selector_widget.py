@@ -17,9 +17,9 @@
 
 import pickle
 
+from PyQt4.QtCore import Qt, QSize, QPoint, QByteArray, QMimeData
 from PyQt4.QtGui import QDrag, QPainter, QPixmap
 from PyQt4.QtGui import QSizePolicy, QWidget
-from PyQt4.QtCore import Qt, QSize, QPoint, QByteArray, QMimeData
 
 from flexlay.math import Rectf, Point, Origin
 from ..color import Color
@@ -27,13 +27,11 @@ from ..graphic_context import GraphicContext
 
 
 class SuperTuxBadGuyData:
-
     def __init__(self):
         pass
 
 
 class ObjectSelectorWidget(QWidget):
-
     def __init__(self, cell_w, cell_h, viewport, parent=None):
         super().__init__(parent)
 
@@ -148,6 +146,5 @@ class ObjectSelectorWidget(QWidget):
 
     def add_brush(self, brush):
         self.brushes.append(brush)
-
 
 # EOF #

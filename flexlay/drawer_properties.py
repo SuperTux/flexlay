@@ -16,11 +16,9 @@
 
 
 class DrawerProperties:
-
     current = None
 
     def __init__(self):
         DrawerProperties.current = self
-
 
 # EOF #

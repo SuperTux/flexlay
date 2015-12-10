@@ -19,8 +19,8 @@ from PyQt4.QtGui import (QVBoxLayout, QLabel, QLineEdit, QFormLayout,
                          QRadioButton, QColorDialog, QWidget, QFileDialog,
                          QComboBox, QPushButton)
 
-class Item:
 
+class Item:
     KIND_LABEL = 0
     KIND_BOOL = 1
     KIND_INT = 2
@@ -66,6 +66,7 @@ class Item:
         else:
             assert False, "unknown item type: %r" % self.kind
 
+
 class PropertiesWidget(QWidget):
     '''
     A widget for displaying & editing properties of objects etc.
@@ -73,7 +74,7 @@ class PropertiesWidget(QWidget):
     Also see the properties this likes to display:
     @see: supertux/property.py
     '''
-    
+
     def __init__(self, parent):
         super().__init__(parent)
         self.items = []
@@ -86,33 +87,34 @@ class PropertiesWidget(QWidget):
         self.setLayout(self.vbox)
         self.setMinimumWidth(300)
         self.show()
-        
+
     def clear_properties(self):
-        #Clear Items
+        # Clear Items
         self.items = []
-        #Remove all widgets
+        # Remove all widgets
         for i in range(self.layout.count()):
             self.layout.layout().takeAt(0).widget().setParent(None)
 
     def set_properties(self, props):
-        #Clear previous properties
+        # Clear previous properties
         self.clear_properties()
 
-        #Add all properties
+        # Add all properties
         for prop in props:
             prop.property_dialog(self)
-    
-    #See generic_dialog.py for more about these:
-    
-    def add_label(self, text): 
+
+    # See generic_dialog.py for more about these:
+
+    def add_label(self, text):
         label = QLabel(text)
         self.layout.addRow(label)
         self.items.append(Item(Item.KIND_LABEL, label, None, None))
 
-    def add_bool(self, name, value, callback): 
+    def add_bool(self, name, value, callback):
         def state_change(self, state):
             if callback:
                 callback(state == Qt.QChecked)
+
         label = QLabel(name)
         checkbox = QCheckBox()
         checkbox.stateChanged.connect(state_change)
@@ -123,10 +125,11 @@ class PropertiesWidget(QWidget):
 
         self.items.append(Item(Item.KIND_BOOL, label, checkbox, callback=callback))
 
-    def add_int(self, name, value, callback=None): 
+    def add_int(self, name, value, callback=None):
         def text_change(text):
             if callback:
                 callback(int(text))
+
         label = QLabel(name)
         inputbox = QLineEdit()
         inputbox.textChanged.connect(text_change)
@@ -136,10 +139,11 @@ class PropertiesWidget(QWidget):
 
         self.items.append(Item(Item.KIND_INT, label, inputbox, callback=callback))
 
-    def add_float(self, name, value, callback=None): 
+    def add_float(self, name, value, callback=None):
         def text_change(text):
             if callback:
                 callback(float(text))
+
         label = QLabel(name)
         inputbox = QLineEdit()
         inputbox.textChanged.connect(text_change)
@@ -148,8 +152,8 @@ class PropertiesWidget(QWidget):
         inputbox.setText(str(value))
 
         self.items.append(Item(Item.KIND_FLOAT, label, inputbox, callback=callback))
-        
-    def add_string(self, name, value, callback=None): 
+
+    def add_string(self, name, value, callback=None):
         label = QLabel(name)
         inputbox = QLineEdit()
         if callback:
@@ -159,7 +163,7 @@ class PropertiesWidget(QWidget):
         inputbox.setText(value)
 
         self.items.append(Item(Item.KIND_STRING, label, inputbox, callback=callback))
-        
+
     def add_file(self, label, default, ret_rel_to=None, show_rel_to=None, open_in="", callback=None):
         '''
         :param ret_rel_to: Path to which the param. of callback(value)
@@ -173,7 +177,7 @@ class PropertiesWidget(QWidget):
         if callback:
             inputbox.textChanged.connect(callback)
         browse = QPushButton("Browse...")
-        
+
         def browse_files():
             '''Called when Browse... button clicked'''
             path = QFileDialog.getOpenFileName(None, "Open File", open_in)
@@ -182,33 +186,35 @@ class PropertiesWidget(QWidget):
                 inputbox.setText(path[len(show_rel_to):])
             else:
                 inputbox.setText(path)
-                
+
             if callback:
                 if ret_rel_to and path[:len(ret_rel_to)] == ret_rel_to:
                     callback(path[len(ret_rel_to):])
                 else:
                     callback(path)
-                
-        browse.clicked.connect(browse_files) #Connect the above to click signal
-            
+
+        browse.clicked.connect(browse_files)  # Connect the above to click signal
+
         self.layout.addRow(label, inputbox)
         self.layout.addRow(browse)
 
         self.items.append(Item(Item.KIND_STRING, label, inputbox, callback=callback))
 
-    def add_enum(self, name, values, current_value=0, callback=None): 
+    def add_enum(self, name, values, current_value=0, callback=None):
         label = QLabel(name)
         drop_down = QComboBox()
         for value in values:
             drop_down.addItem(value)
         self.layout.addRow(label, drop_down)
+
         def button_clicked(i):
             if callback:
                 callback(values[i])
+
         drop_down.currentIndexChanged.connect(button_clicked)
         self.items.append(Item(Item.KIND_ENUM, label, None, callback=callback, group=None))
 
-    def add_radio(self, name, values, current_value=0, callback=None): 
+    def add_radio(self, name, values, current_value=0, callback=None):
         label = QLabel(name)
         group = QButtonGroup()
         for i, value in enumerate(values):
@@ -219,9 +225,11 @@ class PropertiesWidget(QWidget):
             else:
                 self.layout.addRow(None, radio)
             group.addButton(radio)
+
         def button_clicked(button):
             if callback:
                 callback(button.text())
+
         group.buttonClicked.connect(button_clicked)
         self.items.append(Item(Item.KIND_ENUM, label, None, callback=callback, group=group))
 
@@ -253,7 +261,7 @@ class PropertiesWidget(QWidget):
 
         self.items.append(Item(Item.KIND_COLOR, label, colorbutton, callback=callback))
 
-    def set_callback(self, callback): 
+    def set_callback(self, callback):
         def on_accept():
             self.ok_callback(*self.get_values())
             self.dialog.hide()
@@ -265,12 +273,12 @@ class PropertiesWidget(QWidget):
         self.buttonbox.accepted.connect(on_accept)
         self.buttonbox.rejected.connect(on_rejected)
 
-    def call_callbacks(self): 
+    def call_callbacks(self):
         for item in self.items:
             if item.callback is not None:
                 item.callback(item.get_value())
 
-    def get_values(self): 
+    def get_values(self):
         result = []
 
         for item in self.items:

@@ -17,14 +17,13 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from flexlay.util import Signal
-
 import unittest
 import unittest.mock
 
+from flexlay.util import Signal
+
 
 class SignalTestCase(unittest.TestCase):
-
     def setUp(self):
         pass
 

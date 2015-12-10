@@ -73,7 +73,6 @@ from .tile import Tile
 from .tile_provider import TileProvider
 from .tool_context import ToolContext
 
-
 __all__ = [
     # "BitmapLayer", "OnionSkinLayer", "SketchLayer",
     # "SpriteStrokeDrawer", "Stroke", "StrokeDrawer", "Dab",

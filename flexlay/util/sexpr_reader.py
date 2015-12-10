@@ -19,7 +19,7 @@ def sexpr_filter(name, tree):
     ret = []
     for i in tree:
         if i[0] == name:
-          ret.append(i[1:])
+            ret.append(i[1:])
     return ret
 
 
@@ -52,9 +52,7 @@ def get_value_from_tree(spec, tree, default):
 
 
 class SExprReader:
-
     def __init__(self):
-      pass
-
+        pass
 
 # EOF #

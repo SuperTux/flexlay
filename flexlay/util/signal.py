@@ -16,7 +16,6 @@
 
 
 class Signal:
-
     def __init__(self):
         self.subscribers = []
 
@@ -32,6 +31,5 @@ class Signal:
     def __call__(self, *args):
         for sub in self.subscribers:
             sub(*args)
-
 
 # EOF #

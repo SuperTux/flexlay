@@ -20,7 +20,6 @@ from flexlay.util import Signal
 
 
 class ObjMapControlPoint:
-
     def __init__(self, sprite, pos, metadata=None):
         self.sprite = sprite
         self.pos = pos
@@ -48,6 +47,5 @@ class ObjMapControlPoint:
 
         return Rect(Point(self.pos) - origin - Point(align_x, align_y),
                     Size(self.sprite.width, self.sprite.height))
-
 
 # EOF #

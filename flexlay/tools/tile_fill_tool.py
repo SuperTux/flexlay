@@ -15,13 +15,12 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from ..gui.editor_map_component import EditorMapComponent
+from flexlay.gui.editor_map_component import EditorMapComponent
+from flexlay.tool_context import ToolContext
 from .tool import Tool
-from ..tool_context import ToolContext
 
 
 class TileFillTool(Tool):
-
     current = None
 
     def __init__(self):
@@ -37,6 +36,5 @@ class TileFillTool(Tool):
             pos = tilemap.world2tile(parent.screen2world(event.mouse_pos))
             tilemap.flood_fill_at(pos, ToolContext.current.tile_brush)
             # GRUMBEL: undo missing
-
 
 # EOF #

@@ -19,7 +19,6 @@ from PyQt4.QtCore import QPoint
 
 
 class Point:
-
     @staticmethod
     def from_qt(qpoint):
         return Point(qpoint.x(), qpoint.y())
@@ -39,20 +38,16 @@ class Point:
         return Point(self.x, self.y)
 
     def __add__(self, rhs):
-        return Point(self.x + rhs.x,
-                     self.y + rhs.y)
+        return Point(self.x + rhs.x, self.y + rhs.y)
 
     def __sub__(self, rhs):
-        return Point(self.x - rhs.x,
-                     self.y - rhs.y)
+        return Point(self.x - rhs.x, self.y - rhs.y)
 
     def __mul__(self, rhs):
-        return Point(self.x * rhs,
-                     self.y * rhs)
+        return Point(self.x * rhs, self.y * rhs)
 
     def __rmul__(self, rhs):
-        return Point(self.x * rhs,
-                     self.y * rhs)
+        return Point(self.x * rhs, self.y * rhs)
 
     def __eq__(self, rhs):
         return self.x == rhs.x and self.y == rhs.y

@@ -16,7 +16,6 @@
 
 
 class Icon:
-
     def __init__(self, action):
         self.action = action
 
@@ -33,6 +32,5 @@ class Icon:
     def set_down(self):
         self.action.setCheckable(True)
         self.action.setChecked(True)
-
 
 # EOF #

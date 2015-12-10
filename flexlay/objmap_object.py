@@ -19,7 +19,6 @@ from flexlay.util import Signal
 
 
 class ObjMapObject:
-
     def __init__(self, pos, metadata):
         self.pos = pos
         self.metadata = metadata
@@ -48,6 +47,5 @@ class ObjMapObject:
 
     def update_control_points(self):
         pass
-
 
 # EOF #

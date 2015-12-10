@@ -15,13 +15,12 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from flexlay.gui.editor_map_component import EditorMapComponent
 from flexlay.math import Point
-from ..gui.editor_map_component import EditorMapComponent
 from flexlay.tools import Tool
 
 
 class Zoom2Tool(Tool):
-
     def __init__(self):
         super().__init__()
 
@@ -51,6 +50,5 @@ class Zoom2Tool(Tool):
                 gc.set_zoom(self.old_zoom / pow(1.25, -factor), zoom_pos)
             else:
                 gc.set_zoom(self.old_zoom, zoom_pos)
-
 
 # EOF #

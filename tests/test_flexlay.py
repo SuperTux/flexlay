@@ -18,20 +18,18 @@
 import unittest
 
 import flexlay
-import flexlay.math
-import flexlay.util
-import flexlay.tools
 import flexlay.gui
+import flexlay.math
+import flexlay.tools
+import flexlay.util
 
 
 class FlexlayTestCase(unittest.TestCase):
-
     def test_imports(self):
         id(flexlay)
         id(flexlay.math)
         id(flexlay.util)
         id(flexlay.tools)
         id(flexlay.gui)
-
 
 # EOF #

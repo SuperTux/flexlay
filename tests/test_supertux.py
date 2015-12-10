@@ -17,21 +17,20 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from flexlay import Config
-from flexlay.math import Point, Size
-from supertux.level import Level
-from supertux.gameobj_factor import supertux_gameobj_factory
-
-import os
 import io
+import os
 import unittest
 import unittest.mock
+
+from flexlay import Config
+from flexlay.math import Point, Size
+from supertux.gameobj_factor import supertux_gameobj_factory
+from supertux.level import Level
 
 test_levelfile = os.path.join(os.path.dirname(__file__), "test.stl")
 
 
 class SuperTuxTestCase(unittest.TestCase):
-
     def setUp(self):
         Config.create("supertux-editor")
 
@@ -67,6 +66,7 @@ class SuperTuxTestCase(unittest.TestCase):
     def test_level_resize(self):
         level = Level.from_file(test_levelfile)
         level.sectors[0].resize(Size(10, 10), Point(10, 10))
+
 
 if __name__ == '__main__':
     unittest.main()

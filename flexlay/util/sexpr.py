@@ -19,14 +19,11 @@
 # 3. This notice may not be removed or altered from any source distribution.
 
 
-import re
-import codecs
-
-
 def sexpr_read_from_file(filename):
     with open(filename, "rt") as fin:
         content = fin.read()
         return parse(content, filename)
+
 
 def parse(string, context=None):
     parser = SExprParser(string)
@@ -44,7 +41,6 @@ def num(s):
 
 
 class SExprParseError(Exception):
-
     def __init__(self, context, line, column, message):
         super().__init__("%s:%d:%d: error: %s" % (context, line, column, message))
         self.context = context
@@ -53,7 +49,6 @@ class SExprParseError(Exception):
 
 
 class SExprParser:
-
     def __init__(self, text):
         self.text = text
 
@@ -172,6 +167,5 @@ class SExprParser:
             return self.stack[0]
         else:
             raise Exception("list not closed")
-
 
 # EOF #

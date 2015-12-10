@@ -16,26 +16,25 @@
 
 
 from .button_panel import SuperTuxButtonPanel
-from .toolbox import SuperTuxToolbox
-from .menubar import SuperTuxMenuBar
 from .gameobj import GameObj
 from .gameobj_factor import supertux_gameobj_factory
 from .gui import SuperTuxGUI
 from .level import Level
-from .sector import Sector
-from .sprite import SuperTuxSprite
-from .tilemap import SuperTuxTileMap
-from .tileset import SuperTuxTileset
-from .util import load_lisp
-from .worldmap import WorldMap
-from .worldmap_object import WorldmapObject
-from .supertux import main
+from .menubar import SuperTuxMenuBar
 from .property import (BoolProperty, IntProperty, FloatProperty,
                        StringProperty, DirectionProperty,
                        InlinePosProperty, InlineRectProperty,
                        TilemapProperty, ColorProperty, ImageProperty,
                        SectorProperty)
-
+from .sector import Sector
+from .sprite import SuperTuxSprite
+from .supertux import main
+from .tilemap import SuperTuxTileMap
+from .tileset import SuperTuxTileset
+from .toolbox import SuperTuxToolbox
+from .util import load_lisp
+from .worldmap import WorldMap
+from .worldmap_object import WorldmapObject
 
 __all__ = ["GameObj", "SuperTuxGUI", "Level", "Sector",
            "SuperTuxSprite", "SuperTuxTileMap", "SuperTuxTileset",

@@ -20,7 +20,6 @@ from flexlay.math import Point, Origin, Size, Sizef, Rectf
 
 
 class ObjMapSpriteObject(ObjMapObject):
-
     def __init__(self, sprite, pos, metadata):
         super().__init__(pos, metadata)
 
@@ -49,7 +48,7 @@ class ObjMapSpriteObject(ObjMapObject):
         if scale_y < 0:
             align.y += self.sprite.height
 
-        #   if (scale_x > 1.0f && scale_y > 1.0f)
+        # if (scale_x > 1.0f && scale_y > 1.0f)
         #    return Rectf(pos - origin - align,
         #                   Sizef(sprite.width * scale_x, sprite.height * scale_y))
         #  else
@@ -77,6 +76,5 @@ class ObjMapSpriteObject(ObjMapObject):
 
     def set_rotate(self, angle):
         self.sprite.set_angle(angle)
-
 
 # EOF #

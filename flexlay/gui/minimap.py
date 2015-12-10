@@ -19,7 +19,6 @@ from .minimap_widget import MinimapWidget
 
 
 class Minimap:
-
     def __init__(self, editormap_component):
         self.widget = MinimapWidget(editormap_component)
 
@@ -28,6 +27,5 @@ class Minimap:
 
     def get_widget(self):
         return self.widget
-
 
 # EOF #

@@ -39,5 +39,4 @@ def blit_clear(canvas):
     # memset(buffer, 0, sizeof(unsigned char) * canvas.get_pitch() * canvas.height)
     # canvas.unlock()
 
-
 # EOF #

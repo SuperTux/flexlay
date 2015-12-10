@@ -22,7 +22,6 @@ from .blitter import blit_clear, blit_opaque
 
 
 class PixelBuffer:
-
     cache = {}
 
     @staticmethod
@@ -82,6 +81,5 @@ class PixelBuffer:
 
     def get_data(self):
         return self.image.bits()
-
 
 # EOF #

@@ -15,12 +15,11 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from flexlay.math import Rectf, Pointf, Point, Sizef, Rect, Size
 from flexlay import PixelBuffer, Canvas, Color, BlendFunc, Surface, Layer
+from flexlay.math import Rectf, Pointf, Point, Sizef, Rect, Size
 
 
 class BitmapLayer(Layer):
-
     current = None
 
     def __init__(self, width, height):
@@ -79,6 +78,5 @@ class BitmapLayer(Layer):
 
     def get_pixeldata(self):
         return self.canvas.get_pixeldata()
-
 
 # EOF #

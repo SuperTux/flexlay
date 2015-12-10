@@ -16,7 +16,6 @@
 
 
 class Tileset:
-
     def __init__(self, tile_size):
         self.tiles = {}
         self.tile_size = tile_size
@@ -32,6 +31,5 @@ class Tileset:
 
     def get_tiles(self):
         return list(self.tiles.keys())
-
 
 # EOF #

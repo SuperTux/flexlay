@@ -16,7 +16,6 @@
 
 
 class BlendFunc:
-
     zero = 0
     one = 1
     one_minus_src_alpha = 2

@@ -14,8 +14,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from flexlay.util import get_value_from_tree
 from flexlay import Colorf
+from flexlay.util import get_value_from_tree
 
 
 class Property:
@@ -25,6 +25,7 @@ class Property:
     and displayed in dialogs.
     @see: flexlay/gui/generic_dialog.py, supertux/properties_widget.py 
     '''
+
     def __init__(self, label, identifier, default, optional=False):
         self.label = label
         self.identifier = identifier
@@ -33,7 +34,7 @@ class Property:
         self.optional = optional
 
     def read(self, sexpr, obj):
-        self.value = get_value_from_tree([self.identifier, "_"],  sexpr, self.default)
+        self.value = get_value_from_tree([self.identifier, "_"], sexpr, self.default)
 
     def write(self, writer, obj):
         if not self.optional or self.value != self.default:
@@ -47,13 +48,11 @@ class Property:
 
 
 class BoolProperty(Property):
-
     def property_dialog(self, dialog):
         dialog.add_bool(self.label, self.value, self.on_value_change)
 
 
 class IntProperty(Property):
-
     def __init__(self, label, identifier, default=0, optional=False):
         super().__init__(label, identifier, default, optional)
 
@@ -62,7 +61,6 @@ class IntProperty(Property):
 
 
 class FloatProperty(Property):
-
     def __init__(self, label, identifier, default=0.0, optional=False):
         super().__init__(label, identifier, default, optional)
 
@@ -71,13 +69,12 @@ class FloatProperty(Property):
 
 
 class StringProperty(Property):
-
     def __init__(self, label, identifier, default="", optional=False, translatable=False):
         super().__init__(label, identifier, default, optional)
         self.translatable = translatable
 
     def read(self, sexpr, obj):
-        self.value = get_value_from_tree([self.identifier, "_"],  sexpr, self.default)
+        self.value = get_value_from_tree([self.identifier, "_"], sexpr, self.default)
 
     def write(self, writer, obj):
         if not self.optional or self.value != self.default:
@@ -94,21 +91,20 @@ class FileProperty(StringProperty):
         @param open_in: Where the browse dialog opens
         '''
         super().__init__(label, identifier, default=default)
-        #Where the file dialog opens by default
+        # Where the file dialog opens by default
         self.open_in = open_in
-        
-        #Where the path shown is relative to (if possible)
+
+        # Where the path shown is relative to (if possible)
         self.relative_to = relative_to
-        
-        #The actual path stored, so that the relative path can be displayed.
+
+        # The actual path stored, so that the relative path can be displayed.
         self.actual_path = ""
-        
+
     def property_dialog(self, dialog):
         dialog.add_file(self.label, self.default, self.relative_to, self.open_in, self.on_value_change)
 
 
 class EnumProperty(StringProperty):
-
     def __init__(self, label, identifier, default, optional=False, values=None):
         '''
         @param default: Is an index from values!!!
@@ -127,19 +123,17 @@ class EnumProperty(StringProperty):
 
 
 class DirectionProperty(EnumProperty):
-
     def __init__(self, label, identifier, default):
         super().__init__(label, identifier, default, optional=True, values=["auto", "left", "right"])
 
 
 class InlinePosProperty:
-
     def __init__(self):
-        self.identifier = "" #To stop errors
+        self.identifier = ""  # To stop errors
 
     def read(self, sexpr, obj):
-        obj.pos.x = get_value_from_tree(["x", "_"],  sexpr, 0.0)
-        obj.pos.y = get_value_from_tree(["y", "_"],  sexpr, 0.0)
+        obj.pos.x = get_value_from_tree(["x", "_"], sexpr, 0.0)
+        obj.pos.y = get_value_from_tree(["y", "_"], sexpr, 0.0)
 
     def write(self, writer, obj):
         writer.write_inline_pointf(obj.pos)
@@ -149,15 +143,14 @@ class InlinePosProperty:
 
 
 class InlineRectProperty:
-
     def __init__(self):
         pass
 
     def read(self, sexpr, obj):
-        obj.pos.x = get_value_from_tree(["x", "_"],  sexpr, 0.0)
-        obj.pos.y = get_value_from_tree(["y", "_"],  sexpr, 0.0)
-        obj.size.width = get_value_from_tree(["width", "_"],  sexpr, 0.0)
-        obj.size.height = get_value_from_tree(["height", "_"],  sexpr, 0.0)
+        obj.pos.x = get_value_from_tree(["x", "_"], sexpr, 0.0)
+        obj.pos.y = get_value_from_tree(["y", "_"], sexpr, 0.0)
+        obj.size.width = get_value_from_tree(["width", "_"], sexpr, 0.0)
+        obj.size.height = get_value_from_tree(["height", "_"], sexpr, 0.0)
 
     def write(self, writer, obj):
         writer.write_inline_sizef(obj.size)
@@ -168,23 +161,19 @@ class InlineRectProperty:
 
 
 class SpriteProperty(StringProperty):
-
     pass
 
 
 class BadGuyProperty(EnumProperty):
-
     def __init__(self, label, identifier, supertux_gameobj_factory):
         super().__init__(label, identifier, 0, values=[badguy[0] for badguy in supertux_gameobj_factory.badguys])
 
 
 class ImageProperty(StringProperty):
-
     pass
 
 
 class SoundProperty(StringProperty):
-
     def __init__(self, label, identifier, default=""):
         super().__init__(label, identifier, default=default)
 
@@ -193,12 +182,11 @@ class SoundProperty(StringProperty):
 
 
 class ColorProperty(StringProperty):
-
     def __init__(self, label, identifier):
         super().__init__(label, identifier, Colorf())
 
     def read(self, sexpr, obj):
-        self.value = Colorf(*get_value_from_tree([self.identifier],  sexpr, [1.0, 1.0, 1.0]))
+        self.value = Colorf(*get_value_from_tree([self.identifier], sexpr, [1.0, 1.0, 1.0]))
 
     def write(self, writer, obj):
         writer.write_color(self.identifier, self.value.to_list()[0:3])
@@ -208,7 +196,6 @@ class ColorProperty(StringProperty):
 
 
 class PathProperty:
-
     class Node:
 
         mode_values = ['oneshot', 'pingpong', 'circular']
@@ -261,21 +248,17 @@ class PathProperty:
 
 
 class SampleProperty(StringProperty):
-
     def __init__(self, label, identifier, default):
         super().__init__(label, identifier, default, optional=True)
 
 
 class TilemapProperty(StringProperty):
-
     def __init__(self, label, identifier):
         super().__init__(label, identifier, "", optional=True)
 
 
 class SectorProperty(StringProperty):
-
     def __init__(self, label, identifier, default, optional):
         super().__init__(label, identifier, default, optional=optional)
-
 
 # EOF #

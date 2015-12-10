@@ -19,7 +19,6 @@ from flexlay.math import Point
 
 
 class Origin:
-
     top_left = 0
     top_center = 1
     top_right = 2
@@ -53,6 +52,5 @@ class Origin:
 
     def __init__(self):
         pass
-
 
 # EOF #

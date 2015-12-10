@@ -17,11 +17,11 @@
 
 from PyQt4.QtCore import Qt
 from PyQt4.QtGui import QScrollArea
+
 from .object_selector_widget import ObjectSelectorWidget
 
 
 class ObjectSelector:
-
     current = None
 
     def __init__(self, obj_w, obj_h, parent):
@@ -43,6 +43,5 @@ class ObjectSelector:
 
     def get_widget(self):
         return self.scroll_area
-
 
 # EOF #

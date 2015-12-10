@@ -14,7 +14,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
 from .tool import Tool
 from .layer_move_tool import LayerMoveTool
 from .objmap_select_tool import ObjMapSelectTool
@@ -28,7 +27,6 @@ from .workspace_move_tool import WorkspaceMoveTool
 from .zoom2_tool import Zoom2Tool
 from .zoom_tool import ZoomTool
 from .zoom_out_tool import ZoomOutTool
-
 
 __all__ = ["Tool", "LayerMoveTool", "ObjMapSelectTool",
            "TileFillTool", "TileReplaceTool", "TileMapSelectTool",

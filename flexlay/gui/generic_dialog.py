@@ -15,13 +15,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from PyQt4.QtCore import Qt
 from PyQt4.QtGui import (QDialog, QDialogButtonBox, QVBoxLayout,
-                         QLabel, QLineEdit, QFormLayout, QPushButton,
-                         QIcon, QCheckBox, QPixmap, QButtonGroup,
-                         QRadioButton, QColorDialog)
-
-from ..color import Color
+                         QFormLayout)
 
 from .properties_widget import PropertiesWidget
 
@@ -30,6 +25,7 @@ class GenericDialog(PropertiesWidget):
     '''
     A class which can display properties in a dialog.
     '''
+
     def __init__(self, title, parent):
         super().__init__(parent)
         self.items = []

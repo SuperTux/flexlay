@@ -15,16 +15,15 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from flexlay.util import SExprWriter
-from flexlay.util.sexpr_reader import get_value_from_tree, assoc_ref
-from flexlay.util.sexpr import parse as sexpr_parse, SExprParseError
-
 import io
 import unittest
 
+from flexlay.util import SExprWriter
+from flexlay.util.sexpr import parse as sexpr_parse, SExprParseError
+from flexlay.util.sexpr_reader import get_value_from_tree, assoc_ref
+
 
 class SExprTestCase(unittest.TestCase):
-
     def setUp(self):
         pass
 

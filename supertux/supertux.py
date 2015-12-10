@@ -15,20 +15,20 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-import os
 import argparse
+import os
 import os.path
+
 from PyQt4.QtCore import QByteArray
 from PyQt4.QtGui import QMessageBox, QFileDialog
 
 from flexlay import Flexlay, Config
-
-from .tileset import SuperTuxTileset
 from .gui import SuperTuxGUI
+from .tileset import SuperTuxTileset
 
 
 def main():
-    #Parse Arguments
+    # Parse Arguments
     parser = argparse.ArgumentParser(description="Flexlay - SuperTux Editor")
     parser.add_argument("LEVELFILE", action="store", type=str, nargs="?",
                         help=".stl file to load")
@@ -38,23 +38,23 @@ def main():
                         help="SuperTux binary path")
     args = parser.parse_args()
 
-    #Create flexlay instance
+    # Create flexlay instance
     flexlay = Flexlay()
-    
-    #Load data directory path from config file, --datadir argument or open directory dialog
+
+    # Load data directory path from config file, --datadir argument or open directory dialog
     config = Config.create("supertux-editor")
     if args.datadir is not None:
         config.datadir = args.datadir
     elif not config.datadir:
         QMessageBox.warning(None, "No Data Directory Found",
-                             "Press OK to select your Supertux directory")
+                            "Press OK to select your Supertux directory")
         config.datadir = QFileDialog.getExistingDirectory(None, "Open Data Directory")
         if not config.datadir:
             raise RuntimeError("datadir missing, use --datadir DIR")
 
     print("Datadir:", config.datadir)
 
-    #Load supertux binary path from config file, --binary argument or open file dialog
+    # Load supertux binary path from config file, --binary argument or open file dialog
     if not config.binary:
         if args.binary and os.path.isfile(args.binary):
             config.binary = args.binary
@@ -62,28 +62,27 @@ def main():
             config.binary = config.datadir + "../supertux"
         else:
             QMessageBox.warning(None, "No Supertux Binary Found",
-                             "Press OK to select your Supertux binary")
+                                "Press OK to select your Supertux binary")
             config.binary = QFileDialog.getOpenFileName(None, "Open Supertux Binary")
             if not config.binary:
                 raise RuntimeError("binary path missing, use --binary BIN")
 
     print("Binary path:", config.binary)
-    
 
-    #Load tileset
+    # Load tileset
     tileset = SuperTuxTileset(32)
     tileset.load(os.path.join(config.datadir, "images/tiles.strf"))
     tileset.create_ungrouped_tiles_group()
 
     gui = SuperTuxGUI(flexlay)
     if args.LEVELFILE is not None:
-         gui.load_level(args.LEVELFILE)
+        gui.load_level(args.LEVELFILE)
     elif len(config.recent_files) > 0:
         try:
             gui.load_level(config.recent_files[-1])
         except FileNotFoundError:
             print(config.recent_files)
-            print("Could not load recent file '"+ config.recent_files[-1]+"' defaulting...")
+            print("Could not load recent file '" + config.recent_files[-1] + "' defaulting...")
             gui.gui_level_new()
     else:
         gui.gui_level_new()
@@ -104,6 +103,5 @@ def main():
     gui.run()
 
     config.save()
-
 
 # EOF #

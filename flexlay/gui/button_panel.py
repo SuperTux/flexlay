@@ -21,7 +21,6 @@ from .icon import Icon
 
 
 class ButtonPanel:
-
     def __init__(self, toolbar):
         self.toolbar = toolbar
 
@@ -44,6 +43,5 @@ class ButtonPanel:
 
     def show(self, visible):
         pass
-
 
 # EOF #

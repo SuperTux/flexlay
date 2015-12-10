@@ -19,7 +19,6 @@ from flexlay import Color, PixelBuffer, Sprite
 
 
 class Tile:
-
     def __init__(self, pixelbuffer=None, sprite=None):
         self.provider = None
         self.sprite = sprite
@@ -67,6 +66,5 @@ class Tile:
 
     def get_filename(self):
         return self.filename
-
 
 # EOF #

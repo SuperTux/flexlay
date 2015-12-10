@@ -15,13 +15,12 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from ..gui.editor_map_component import EditorMapComponent
+from flexlay.gui.editor_map_component import EditorMapComponent
+from flexlay.tool_context import ToolContext
 from .tool import Tool
-from ..tool_context import ToolContext
 
 
 class TileReplaceTool(Tool):
-
     current = None
 
     def __init__(self):
@@ -37,6 +36,5 @@ class TileReplaceTool(Tool):
             tilemap.replace_tile(tilemap.field.at(pos.x, pos.y),
                                  ToolContext.current.tile_brush.at(0, 0))
             # GRUMBEL: undo missing
-
 
 # EOF #

@@ -15,16 +15,15 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from flexlay.tools import Tool
-from flexlay.math import Pointf, Rectf, Rect
-from ..gui.editor_map_component import EditorMapComponent
-from flexlay import Color, InputEvent, Workspace, ObjectMoveCommand, ToolContext, ObjectDeleteCommand
-from flexlay.util import Signal
+from PyQt4.QtGui import QIcon, QMenu, QCursor
 
-from PyQt4.QtGui import QIcon, QMenu, QCursor, QAction
+from flexlay import Color, InputEvent, Workspace, ObjectMoveCommand, ToolContext, ObjectDeleteCommand
+from flexlay.gui.editor_map_component import EditorMapComponent
+from flexlay.math import Pointf, Rectf, Rect
+from flexlay.tools import Tool
+
 
 class ObjMapSelectTool(Tool):
-
     STATE_NONE = 0
     STATE_DRAG = 1
     STATE_SELECT = 2
@@ -35,22 +34,22 @@ class ObjMapSelectTool(Tool):
         self.manager = gui_manager
 
         self.state = ObjMapSelectTool.STATE_NONE
-        #Left click + drag rectangle
+        # Left click + drag rectangle
         self.drag_start = Pointf(0, 0)
         self.selection_rect = Rectf(0, 0, 0, 0)
-        
-        #For selected objects do: self.context.object_selection
-        self.deselected = [] #Objects that were selected before
-        
+
+        # For selected objects do: self.context.object_selection
+        self.deselected = []  # Objects that were selected before
+
         self.offset = Pointf(0, 0)
         self.move_command = None
 
         self.control_point = None
         self.context = ToolContext.current
 
-        #Never used:
-        #self.sig_popup_menu_display = Signal()
-        #self.sig_right_click = Signal()
+        # Never used:
+        # self.sig_popup_menu_display = Signal()
+        # self.sig_right_click = Signal()
 
     def clear_selection(self):
         self.context.object_selection.clear()
@@ -96,7 +95,7 @@ class ObjMapSelectTool(Tool):
                 self.selection_rect.normalize()
 
                 self.context.object_selection = objmap.get_selection(self.selection_rect)
-                
+
                 self.on_selection_change()
                 parent.release_mouse()
 
@@ -149,21 +148,22 @@ class ObjMapSelectTool(Tool):
                     self.state = ObjMapSelectTool.STATE_SELECT
                     self.selection_rect = Rectf(pos.x, pos.y, pos.x, pos.y)
                     parent.grab_mouse()
-                    
+
         elif event.kind == InputEvent.MOUSE_RIGHT:
             obj = objmap.find_object(pos)
             menu = QMenu()
-            #Is there an object under cursor?
+            # Is there an object under cursor?
             if len(self.context.object_selection) > 0 and obj:
-                #Add object actions to menu
+                # Add object actions to menu
                 def delete_obj():
                     delete_command = ObjectDeleteCommand(self.context.object_layer)
                     delete_command.objects = self.context.object_selection
                     self.context.object_selection = []
                     Workspace.current.get_map().execute(delete_command)
-                s = "s" if len(self.context.object_selection) >= 2 else "" #Append s if multiple objects selected
+
+                s = "s" if len(self.context.object_selection) >= 2 else ""  # Append s if multiple objects selected
                 print(s)
-                delete_action = menu.addAction(QIcon("data/images/icons24/stock_delete.png"), "Delete Object"+s)
+                delete_action = menu.addAction(QIcon("data/images/icons24/stock_delete.png"), "Delete Object" + s)
                 delete_action.triggered.connect(delete_obj)
                 menu.addSeparator()
             menu.move(QCursor.pos())
@@ -196,12 +196,11 @@ class ObjMapSelectTool(Tool):
         else:
             self.context.object_selection[0].sig_select(self.manager)
         selected = self.context.object_selection
-        
+
         objmap = ToolContext.current.object_layer
         objmap.delete_control_points()
 
         if len(self.context.object_selection) == 1:
             self.context.object_selection[0].add_control_points()
-
 
 # EOF #

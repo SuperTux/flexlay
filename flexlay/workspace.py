@@ -16,7 +16,6 @@
 
 
 class Workspace:
-
     current = None
 
     def __init__(self):
@@ -70,6 +69,5 @@ class Workspace:
         if tool is None:
             tool = Tool()
         self.tools[button] = tool
-
 
 # EOF #

@@ -23,13 +23,11 @@ from flexlay.util import get_value_from_tree
 
 
 class WorldmapObject:
-
     def __init__(self):
         self.obj = None
 
 
 class WMSpawnPoint(WorldmapObject):
-
     def __init__(self):
         super().__init__()
 
@@ -70,7 +68,6 @@ class WMSpawnPoint(WorldmapObject):
 
 
 class WorldmapLevel(WorldmapObject):
-
     def __init__(self):
         super().__init__()
 
@@ -129,7 +126,6 @@ class WorldmapLevel(WorldmapObject):
 
 
 class SpecialTile(WorldmapObject):
-
     def __init__(self):
         super().__init__()
 
@@ -238,6 +234,5 @@ def create_worldmapobject_from_data(objmap, name, sexpr):
     from .gui import SuperTuxGUI
     SuperTuxGUI.current.workspace.get_map().execute(cmd)
     return obj
-
 
 # EOF #

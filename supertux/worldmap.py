@@ -17,14 +17,12 @@
 
 from flexlay import ObjectLayer, EditorMap, ToolContext
 from flexlay.util import get_value_from_tree, SExprWriter
-
-from .util import load_lisp
 from .tilemap import SuperTuxTileMap
+from .util import load_lisp
 from .worldmap_object import create_worldmapobject_from_data
 
 
 class WorldMap:
-
     def __init__(self, arg1, arg2=None):
         self.name = "No Name"
         self.music = ""
@@ -103,6 +101,5 @@ class WorldMap:
         ToolContext.current.object_layer = self.objects
         from .gui import SuperTuxGUI
         self.editormap.sig_change.connect(SuperTuxGUI.current.on_map_change)
-
 
 # EOF #

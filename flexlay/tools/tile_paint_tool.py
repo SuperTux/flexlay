@@ -17,14 +17,13 @@
 
 from flexlay import (Color, PaintCommand,
                      InputEvent, Workspace)
-from ..gui.editor_map_component import EditorMapComponent
+from flexlay.gui.editor_map_component import EditorMapComponent
 from flexlay.math import Point, Size, Rect
+from flexlay.tool_context import ToolContext
 from .tool import Tool
-from ..tool_context import ToolContext
 
 
 class TilePaintTool(Tool):
-
     current = None
 
     def __init__(self):
@@ -92,8 +91,8 @@ class TilePaintTool(Tool):
             if self.is_active:
                 brush = ToolContext.current.tile_brush
                 if ((event.mod & InputEvent.MOD_SHIFT) or
-                    ((self.current_tile.x % brush.width) == (self.last_draw.x % brush.width) and
-                     (self.current_tile.y % brush.height) == (self.last_draw.y % brush.height))):
+                        ((self.current_tile.x % brush.width) == (self.last_draw.x % brush.width) and
+                                 (self.current_tile.y % brush.height) == (self.last_draw.y % brush.height))):
                     self.command.add_point(self.current_tile)
                     self.last_draw = self.current_tile
 
@@ -110,10 +109,10 @@ class TilePaintTool(Tool):
                 self.is_active = False
 
                 if ((event.mod & InputEvent.MOD_SHIFT) or
-                    ((self.current_tile.x % ToolContext.current.tile_brush.width) ==
-                     (self.last_draw.x % ToolContext.current.tile_brush.width) and
-                     (self.current_tile.y % ToolContext.current.tile_brush.height ==
-                      (self.last_draw.y % ToolContext.current.tile_brush.height)))):
+                        ((self.current_tile.x % ToolContext.current.tile_brush.width) ==
+                             (self.last_draw.x % ToolContext.current.tile_brush.width) and
+                             (self.current_tile.y % ToolContext.current.tile_brush.height ==
+                                  (self.last_draw.y % ToolContext.current.tile_brush.height)))):
                     self.command.add_point(self.current_tile)
 
                 Workspace.current.get_map().execute(self.command)
@@ -121,6 +120,5 @@ class TilePaintTool(Tool):
 
                 tilemap.draw_tile_brush(ToolContext.current.tile_brush, self.current_tile)
                 self.last_draw = Point(-1, -1)
-
 
 # EOF #

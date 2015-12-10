@@ -21,7 +21,6 @@ from ..tile_brush import TileBrush
 
 
 class TileSelection:
-
     def __init__(self):
         self.tilemap = None
         self.start_pos = None
@@ -62,9 +61,9 @@ class TileSelection:
         sel.normalize()
 
         if (sel.left > field.width - 1 or
-            sel.top > field.height - 1 or
-            sel.right <= 0 or
-                sel.bottom <= 0):
+                    sel.top > field.height - 1 or
+                    sel.right <= 0 or
+                    sel.bottom <= 0):
 
             # Selection is empty
             print("Error: Invalid selection")
@@ -78,7 +77,7 @@ class TileSelection:
             sel.left = max(0, sel.left)
             sel.top = max(0, sel.top)
 
-            sel.right = min(sel.right,  field.width)
+            sel.right = min(sel.right, field.width)
             sel.bottom = min(sel.bottom, field.height)
 
             brush = TileBrush(sel.width, sel.height)
@@ -94,6 +93,5 @@ class TileSelection:
         sel = self.selection.copy()
         sel.normalize()
         return sel
-
 
 # EOF #

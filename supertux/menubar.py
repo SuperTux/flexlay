@@ -19,7 +19,6 @@ from flexlay import Config
 
 
 class SuperTuxMenuBar:
-
     def __init__(self, gui_manager, editor):
         self.gui_manager = gui_manager
 
@@ -37,7 +36,7 @@ class SuperTuxMenuBar:
         # file_menu.add_item("Save Commands...", menu_file_save_commands)
         file_menu.add_item("Save As...", editor.gui_level_save_as)
         file_menu.add_item("Properties...", editor.gui_edit_level)
-        file_menu.add_item("Quit",  editor.gui.quit)
+        file_menu.add_item("Quit", editor.gui.quit)
 
         edit_menu = self.menubar.add_menu("&Edit")
         edit_menu.add_item("Smooth Selection", editor.gui_smooth_level_struct)
@@ -85,4 +84,5 @@ class SuperTuxMenuBar:
         self.recent_files_menu.menu.clear()
         for filename in Config.current.recent_files:
             self.recent_files_menu.add_item(filename, lambda filename=filename: self.editor.load_level(filename))
+
 # EOF #

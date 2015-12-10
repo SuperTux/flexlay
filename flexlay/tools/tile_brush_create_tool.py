@@ -16,15 +16,14 @@
 
 
 from flexlay import InputEvent
-from ..gui.editor_map_component import EditorMapComponent
-from ..gui.tile_selection import TileSelection
+from flexlay.color import Color
+from flexlay.gui.editor_map_component import EditorMapComponent
+from flexlay.gui.tile_selection import TileSelection
+from flexlay.tool_context import ToolContext
 from .tool import Tool
-from ..color import Color
-from ..tool_context import ToolContext
 
 
 class TileBrushCreateTool(Tool):
-
     def __init__(self):
         super().__init__()
         self.is_active = False
@@ -39,7 +38,7 @@ class TileBrushCreateTool(Tool):
                 return
 
             if self.shift_pressed:
-                self.selection.draw(gc, Color(255,  128, 128, 100))
+                self.selection.draw(gc, Color(255, 128, 128, 100))
             else:
                 self.selection.draw(gc)
 
@@ -86,7 +85,7 @@ class TileBrushCreateTool(Tool):
                 ToolContext.current.tile_brush = self.selection.get_brush(tilemap.field)
 
                 if ToolContext.current.tile_brush.width > 1 or \
-                   ToolContext.current.tile_brush.height > 1:
+                                ToolContext.current.tile_brush.height > 1:
                     if self.shift_pressed:
                         ToolContext.current.tile_brush.set_opaque()
                     else:
@@ -96,6 +95,5 @@ class TileBrushCreateTool(Tool):
                     ToolContext.current.tile_brush.set_opaque()
 
                 self.selection.clear()
-
 
 # EOF #

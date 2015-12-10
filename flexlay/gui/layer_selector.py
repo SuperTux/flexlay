@@ -18,14 +18,12 @@
 from PyQt4.QtGui import QStandardItemModel, QStandardItem
 from PyQt4.QtGui import QWidget, QToolBar, QTreeView, QVBoxLayout
 
-from ..tilemap_layer import TilemapLayer
-from ..object_layer import ObjectLayer
-from ..objmap_tilemap_object import ObjMapTilemapObject
+from flexlay.objmap_tilemap_object import ObjMapTilemapObject
+from flexlay.tilemap_layer import TilemapLayer
 from .editor_map_component import EditorMapComponent
 
 
 class LayerSelector:
-
     def __init__(self):
         self.model = QStandardItemModel()
         # self.model.setHorizontalHeaderItem(0, QStandardItem("Visible"))
@@ -53,15 +51,15 @@ class LayerSelector:
 
         self.model.clear()
 
-#        for layer in editormap.layers:
-#            if isinstance(layer, TilemapLayer):
-#                self.model.appendRow([QStandardItem("Tile: %s %dx%d" % (layer.m
-#                                                                        layer.w
-#            elif isinstance(layer, ObjectLayer):
-#                self.model.appendRow([QStandardItem("Objects")])
+        #        for layer in editormap.layers:
+        #            if isinstance(layer, TilemapLayer):
+        #                self.model.appendRow([QStandardItem("Tile: %s %dx%d" % (layer.m
+        #                                                                        layer.w
+        #            elif isinstance(layer, ObjectLayer):
+        #                self.model.appendRow([QStandardItem("Objects")])
 
-        
-        #As TilemapLayers are used by ObjMapTilemapObjects,
+
+        # As TilemapLayers are used by ObjMapTilemapObjects,
         # which are stored in the objects array in an ObjectLayer. (!)
         for object in editormap.layers[0].objects:
             if isinstance(object, ObjMapTilemapObject):
@@ -73,29 +71,28 @@ class LayerSelector:
     def hide_all_layers(self):
         if not self.editormap:
             return
-        #Get TilemapLayer, and set hidden
+        # Get TilemapLayer, and set hidden
         for object in self.editormap.layers[0].objects:
             if isinstance(object, ObjMapTilemapObject):
                 layer = object.tilemap_layer
                 if isinstance(layer, TilemapLayer):
                     layer.hidden = True
-        #Repaint so that changes are visible
+        # Repaint so that changes are visible
         EditorMapComponent.current.editormap_widget.repaint()
 
     def show_all_layers(self):
         if not self.editormap:
             return
-        #Get TilemapLayer, and set hidden
+        # Get TilemapLayer, and set hidden
         for object in self.editormap.layers[0].objects:
             if isinstance(object, ObjMapTilemapObject):
                 layer = object.tilemap_layer
                 if isinstance(layer, TilemapLayer):
                     layer.hidden = False
-        #Repaint so that changes are visible
+        # Repaint so that changes are visible
         EditorMapComponent.current.editormap_widget.repaint()
 
     def get_widget(self):
         return self.vbox
-
 
 # EOF #

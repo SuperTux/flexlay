@@ -16,11 +16,11 @@
 
 
 import math
+
 from flexlay.math import Rectf
 
 
 class Dab:
-
     def __init__(self):
         self.time = None
         self.pos = None
@@ -29,7 +29,6 @@ class Dab:
 
 
 class Stroke:
-
     def __init__(self):
         self.dabs = []
         self.drawer = None
@@ -70,7 +69,7 @@ class Stroke:
             # from the next)
             overspace = 0.0
             dabs = self.dabs
-            for j in range(0,  len(dabs) - 1):
+            for j in range(0, len(dabs) - 1):
                 dist = dabs[j + 1].pos - dabs[j].pos
                 length = math.sqrt(dist.x * dist.x + dist.y * dist.y)
                 n = 1
@@ -121,6 +120,5 @@ class Stroke:
 
     def empty(self):
         return self.dabs.size() == 0
-
 
 # EOF #

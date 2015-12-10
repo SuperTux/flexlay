@@ -10,6 +10,7 @@ usefull for creating levels for 2d games.
 Supported games are at the moment:
 
  netPanzer  - http://netpanzer.berlios.de/
+ 
  SuperTux   - http://super-tux.sourceforge.net/
  
 Flexlay can't be run on its own, but instead of you have to start it 

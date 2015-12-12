@@ -21,8 +21,8 @@ import argparse
 import logging
 import sys
 
-from flexlay.config import Config
 from supertux.level import Level
+from util.config import Config
 
 
 def main():

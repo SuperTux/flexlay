@@ -39,6 +39,7 @@ class Config:
         self.recent_files = []
         self.geometry = ""
         self.window_state = ""
+        self.name = "Anonymous"
 
         if os.path.isfile(filename):
             self.load()
@@ -56,6 +57,8 @@ class Config:
                 self.binary = parser["supertux-editor"]["binary"]
             if "geometry" in parser["supertux-editor"]:
                 self.geometry = parser['supertux-editor']['geometry']
+            if "name" in parser["supertux-editor"]:
+                self.name = parser["supertux-editor"]["name"]
             if "window_state" in parser["supertux-editor"]:
                 self.window_state = parser['supertux-editor']['window_state']
 
@@ -77,6 +80,7 @@ class Config:
         parser['supertux-editor']['binary'] = self.binary
         parser['supertux-editor']['geometry'] = self.geometry
         parser['supertux-editor']['window_state'] = self.window_state
+        parser['supertux-editor']['name'] = self.name
         for i, recent_file in enumerate(self.recent_files):
             parser['supertux-editor']['recent_files%d' % i] = recent_file
 

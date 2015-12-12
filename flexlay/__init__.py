@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from .config import Config
+from util.config import Config
 # from .stroke import Dab, Stroke
 from .drawer_properties import DrawerProperties
 from .brushmask import BrushMask

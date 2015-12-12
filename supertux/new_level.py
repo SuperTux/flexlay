@@ -36,7 +36,7 @@ class NewLevelDialog(QtGui.QWizard):
 
         self.level = Level()
         self.level_name = "Unnamed Level"
-        self.level_author = "Anonymous"
+        self.level_author = Config.current.name
         self.level_music = ""
         self.level_background = ""
         self.level_license = "GPL 2+ / CC-by-sa 3.0"
@@ -61,6 +61,7 @@ class NewLevelDialog(QtGui.QWizard):
         # self.level.current_sector.background = self.level_image
         self.level.name = self.level_name
         self.level.author = self.level_author
+        Config.current.name = self.level_author
         self.level.license = self.level_license
         self.level.current_sector.music = self.level_music
         self.level_spawn = ceil(self.level_width / 10), int(self.level_height / 2)
@@ -116,7 +117,7 @@ class NewLevelDialog(QtGui.QWizard):
         # Run self.set_name whenever text changes
         name_input.textChanged[str].connect(self.set_name)
 
-        author_input = QtGui.QLineEdit("Anonymous")
+        author_input = QtGui.QLineEdit(Config.current.name)
         # Run self.set_author whenever text changes
         author_input.textChanged[str].connect(self.set_author)
 

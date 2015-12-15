@@ -20,20 +20,20 @@ class SuperTuxToolbox:
         # Create Toolbox
         self.toolbox = gui_manager.create_button_panel(False)
         self.toolbox.add_separator()
-        self.object_icon = self.toolbox.add_icon(self.icon_path("move"),
+        self.object_icon = self.toolbox.add_icon(SuperTuxToolbox.icon_path("move"),
                                                  editor.set_objmap_select_tool, hover="Select Tool")
 
-        self.paint_icon = self.toolbox.add_icon(self.icon_path("pencil"),
+        self.paint_icon = self.toolbox.add_icon(SuperTuxToolbox.icon_path("tiles", 24),
                                                 editor.set_tilemap_paint_tool, hover="Pencil Tool")
-        self.fill_icon = self.toolbox.add_icon(self.icon_path("fill", 24),
+        self.fill_icon = self.toolbox.add_icon(SuperTuxToolbox.icon_path("fill", 24),
                                                editor.set_tilemap_fill_tool, hover="Fill Tool")
-        self.replace_icon = self.toolbox.add_icon(self.icon_path("replace", 24),
+        self.replace_icon = self.toolbox.add_icon(SuperTuxToolbox.icon_path("replace", 24),
                                                   editor.set_tilemap_replace_tool, hover="Replace Tool")
-        self.select_icon = self.toolbox.add_icon(self.icon_path("rect-select"),
+        self.select_icon = self.toolbox.add_icon(SuperTuxToolbox.icon_path("rect-select"),
                                                  editor.set_tilemap_select_tool, hover="Rectangle Select Tool")
 
         self.toolbox.add_separator()
-        self.zoom_icon = self.toolbox.add_icon(self.icon_path("zoom"),
+        self.zoom_icon = self.toolbox.add_icon(SuperTuxToolbox.icon_path("zoom"),
                                                editor.set_zoom_tool, hover="Zoom Tool")
 
         self.icons = [self.paint_icon, self.fill_icon, self.replace_icon,
@@ -46,7 +46,8 @@ class SuperTuxToolbox:
             else:
                 icon.set_up()
 
-    def icon_path(self, tool_name, size=22):
+    @staticmethod
+    def icon_path(tool_name, size=22):
         return "data/images/tools/stock-tool-%s-%s.png" % (tool_name, size)
 
 # EOF #

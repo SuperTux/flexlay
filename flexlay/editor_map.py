@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from flexlay import Color, Layer
+from flexlay import Color, Layer, TilemapLayer, ObjMapTilemapObject
 from flexlay.math import Rect
 from flexlay.util import Signal
 
@@ -109,6 +109,18 @@ class EditorMap:
             return self.layers[i]
         else:
             return None
+
+    def get_tilemap_layers(self):
+        """Return a list containing only tilemaps in editormap"""
+        tilemap_layers = []
+        # As TilemapLayers are used by ObjMapTilemapObjects,
+        # which are stored in the objects array in an ObjectLayer. (!)
+        for object in self.layers[0].objects:
+            if isinstance(object, ObjMapTilemapObject):
+                layer = object.tilemap_layer
+                if isinstance(layer, TilemapLayer):
+                    tilemap_layers.append(layer)
+        return tilemap_layers
 
     def has_bounding_rect(self):
         return self._has_bounding_rect

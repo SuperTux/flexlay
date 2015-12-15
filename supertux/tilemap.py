@@ -38,7 +38,7 @@ class SuperTuxTileMap:
         z_pos = get_value_from_tree(["z-pos", "_"], data, 0)
         solid = get_value_from_tree(["solid", "_"], data, False)
 
-        result = SuperTuxTileMap(name, z_pos, solid)
+        result = SuperTuxTileMap(z_pos, solid)
 
         width = get_value_from_tree(["width", "_"], data, 20)
         height = get_value_from_tree(["height", "_"], data, 15)
@@ -51,28 +51,31 @@ class SuperTuxTileMap:
         result.tilemap_layer.set_data(get_value_from_tree(["tiles"], data, []))
         result.tilemap_layer.metadata = result
         result.pos = Point(x, y)
-        result.tilemap_layer.name = result.name
+        result.tilemap_layer.name = name
 
         return result
 
     @staticmethod
     def from_size(width, height, name, z_pos=0, solid=False):
-        result = SuperTuxTileMap(name, z_pos, solid)
+        result = SuperTuxTileMap(z_pos, solid)
         result.tilemap_layer = TilemapLayer(SuperTuxTileset.current, width, height)
         result.tilemap_layer.metadata = result
+        result.tilemap_layer.name = name
         return result
 
-    def __init__(self, name, z_pos=0, solid=False):
+    def __init__(self, z_pos=0, solid=False):
         self.solid = solid
         self.draw_target = ""
         self.z_pos = z_pos
-        self.name = ""
         self.speed = 1.0
         self.speed_y = 1.0
-        self.name = name
         self.alpha = 1.0
         self.pos = Point(0, 0)
         self.tilemap_layer = None
+
+    @property
+    def name(self):
+        return self.tilemap_layer.name
 
     def write(self, writer, objmap_tilemap_object):
         writer.begin_list("tilemap")
@@ -86,8 +89,8 @@ class SuperTuxTileMap:
         writer.write_int("z-pos", self.z_pos)
         if self.alpha != 1.0:
             writer.write_float("alpha", self.alpha)
-        if self.name:
-            writer.write_string("name", self.name)
+        if self.tilemap_layer.name:
+            writer.write_string("name", self.tilemap_layer.name)
         if self.pos:
             writer.begin_list("path")
             writer.begin_list("node")

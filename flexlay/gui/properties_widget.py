@@ -72,7 +72,7 @@ class PropertiesWidget(QWidget):
     A widget for displaying & editing properties of objects etc.
     
     Also see the properties this likes to display:
-    @see: supertux/property.py
+    also see: supertux/property.py
     '''
 
     def __init__(self, parent):
@@ -234,7 +234,7 @@ class PropertiesWidget(QWidget):
         self.items.append(Item(Item.KIND_ENUM, label, None, callback=callback, group=group))
 
     def add_color(self, name, color, callback=None):
-        '''Not implemented according to Item class at the top.'''
+        """Not fully implemented according to Item class at the top."""
         label = QLabel(name)
         pixmap = QPixmap(32, 32)
         pixmap.fill(color.to_qt())

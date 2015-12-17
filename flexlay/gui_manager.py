@@ -20,7 +20,7 @@ from PyQt4.QtGui import (QApplication, QMainWindow, QToolBar,
                          QDockWidget, QVBoxLayout, QWidget)
 
 from flexlay.gui.properties_widget import PropertiesWidget
-from util.config import Config
+from .util.config import Config
 from .gui import (ButtonPanel, EditorMapComponent, OpenFileDialog,
                   SaveFileDialog, GenericDialog, LayerSelector,
                   Menubar, Minimap, ObjectSelector, TileBrushSelector,

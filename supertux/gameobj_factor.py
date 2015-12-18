@@ -28,7 +28,7 @@ from .gameobj import (GameObj, BadGuy, BonusBlock, Candle, Camera,
                       ScriptedObject, InfoBlock, LevelTime, Decal,
                       ScriptTrigger, Switch, Torch, WeakBlock,
                       WilloWisp, Wind, Trampoline, Dispenser,
-                      DartTrap, GhostFlame, InvisibleWall)
+                      DartTrap, GhostFlame, InvisibleWall, Tux)
 from .sprite import SuperTuxSprite
 
 
@@ -82,9 +82,7 @@ class SuperTuxGameObjFactory:
             return obj
 
     def create_object_brushes(self):
-        '''
-        Creates Object Brushes for each sprite
-        '''
+        """Creates Object Brushes for each sprite"""
         # print("Creating object brushes...")
         return [ObjectBrush(SuperTuxSprite.from_file(os.path.join(Config.current.datadir, sprite)).get_sprite(),
                             identifier)
@@ -141,6 +139,7 @@ class SuperTuxGameObjFactory:
         self.add_object(SpawnPoint)
         self.add_object(Switch)
         self.add_object(Torch)
+        self.add_object(Tux)
         self.add_object(Trampoline)
         self.add_object(WeakBlock)
         self.add_object(WilloWisp)

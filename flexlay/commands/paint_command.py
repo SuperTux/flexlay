@@ -15,7 +15,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from flexlay import Command, TileBrush, TilemapLayer
+from flexlay import TileBrush, TilemapLayer
+from .command import Command
 from flexlay.math import Point, Rect
 
 

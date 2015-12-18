@@ -18,7 +18,7 @@
 from .util.config import Config
 # from .stroke import Dab, Stroke
 from .drawer_properties import DrawerProperties
-from .brushmask import BrushMask
+from flexlay.wip.brushmask import BrushMask
 from .canvas import Canvas
 from .blend_func import BlendFunc
 from .field import Field
@@ -41,19 +41,12 @@ from .brush import Brush
 from .display import Display
 from .workspace import Workspace
 from .object_layer import ObjectLayer
-
-from .command import Command
 from .command_group import CommandGroup
-from .object_add_command import ObjectAddCommand
+from .commands.object_add_command import ObjectAddCommand
 from .object_brush import ObjectBrush
-from .object_delete_command import ObjectDeleteCommand
-from .paint_command import PaintCommand
-
 # from .stroke_drawer import StrokeDrawer
 # from .sprite_stroke_drawer import SpriteStrokeDrawer
 
-from .object_move_command import ObjectMoveCommand
-from .object_transform_command import ObjectTransformCommand
 from .objmap_control_point import ObjMapControlPoint
 from .objmap_object import ObjMapObject
 from .objmap_path_node import ObjMapPathNode

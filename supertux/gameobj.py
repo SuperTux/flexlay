@@ -114,6 +114,24 @@ class GameObj:
         pass
 
 
+class Tux(GameObj):
+    label = "Tux"
+    identifier = "tux"
+    sprite = "images/creatures/tux/big/jump-0.png"
+
+    def __init__(self):
+        super().__init__()
+
+        self.objmap_object = make_sprite_object(self, self.sprite)
+        self.signal_connect()
+
+    def read(self, sexpr):
+        pass
+
+    def write(self, writer, obj):
+        pass
+
+
 class LevelTime(GameObj):
     label = "LevelTime"
     identifier = "leveltime"

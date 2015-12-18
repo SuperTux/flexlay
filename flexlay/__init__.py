@@ -18,8 +18,6 @@
 from .util.config import Config
 # from .stroke import Dab, Stroke
 from .drawer_properties import DrawerProperties
-from flexlay.wip.brushmask import BrushMask
-from .canvas import Canvas
 from .blend_func import BlendFunc
 from .field import Field
 from .pixel_buffer import PixelBuffer
@@ -32,13 +30,10 @@ from .layer import Layer
 from .input_event import InputEvent
 from .graphic_context import GraphicContext
 from .tilemap_layer import TilemapLayer
-from .surface import Surface
 from .sprite import Sprite
 
 # from .bitmap_layer import BitmapLayer
-from .brush import Brush
 
-from .display import Display
 from .workspace import Workspace
 from .object_layer import ObjectLayer
 from .command_group import CommandGroup
@@ -63,13 +58,11 @@ from .gui_manager import GUIManager
 # from .sketch_layer import SketchLayer
 from .sprite_brush import SpriteBrush
 from .tile import Tile
-from .tile_provider import TileProvider
 from .tool_context import ToolContext
 
 __all__ = [
     # "BitmapLayer", "OnionSkinLayer", "SketchLayer",
     # "SpriteStrokeDrawer", "Stroke", "StrokeDrawer", "Dab",
-    "Brush", "BrushMask", "Canvas", "Config",
     "Color", "Colorf", "BlendFunc", "blit", "blit_clear", "blit_opaque",
     "Command", "CommandGroup", "DrawerProperties", "Field",
     "Flexlay", "GraphicContext", "GraphicContextState",
@@ -78,10 +71,9 @@ __all__ = [
     "ObjectMoveCommand", "ObjectTransformCommand",
     "ObjMapControlPoint", "ObjMapObject", "ObjMapPathNode",
     "ObjMapRectObject", "ObjMapSpriteObject", "ObjMapTilemapObject",
-    "PaintCommand", "PixelBuffer", "Sprite",
-    "SpriteBrush",
-    "Tile", "TileBrush", "TileProvider", "TilemapLayer", "Tileset",
-    "Workspace", "Surface", "Display", "EditorMap", "ToolContext"
+    "PaintCommand", "PixelBuffer", "Sprite", "SpriteBrush",
+    "Tile", "TileBrush", "TilemapLayer", "Tileset",
+    "Workspace", "EditorMap", "ToolContext", "Config",
 ]
 
 

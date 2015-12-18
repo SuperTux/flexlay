@@ -33,6 +33,8 @@ from .tile_brush_selector import TileBrushSelector
 from .tile_selection import TileSelection
 from .tile_selector import TileSelector
 from .tile_selector_widget import TileSelectorWidget
+from .properties_widget import PropertiesWidget
+from .generic_wizard import GenericWizard
 
 __all__ = ["ButtonPanel", "ColorPicker", "EditorMapComponent",
            "EditorMapWidget", "OpenFileDialog", "SaveFileDialog",
@@ -40,7 +42,8 @@ __all__ = ["ButtonPanel", "ColorPicker", "EditorMapComponent",
            "Minimap", "MinimapWidget", "ObjectSelector",
            "ObjectSelectorWidget", "TileBrushSelector",
            "TileSelector", "TileSelection", "TileSelector",
-           "TileSelectorWidget", "StatusBar"]
+           "TileSelectorWidget", "StatusBar", "PropertiesWidget",
+           "GenericWizard"]
 
 
 # EOF #

@@ -22,14 +22,10 @@ from .properties_widget import PropertiesWidget
 
 
 class GenericDialog(PropertiesWidget):
-    '''
-    A class which can display properties in a dialog.
-    '''
+    """A PropertiesWidget in a QDialog."""
 
     def __init__(self, title, parent):
         super().__init__(parent)
-        self.items = []
-        self.ok_callback = None
 
         self.dialog = QDialog(parent)
 
@@ -46,5 +42,17 @@ class GenericDialog(PropertiesWidget):
         self.dialog.setLayout(vbox)
         self.dialog.setMinimumWidth(300)
         self.dialog.show()
+
+    def set_callback(self, callback):
+        def on_accept():
+            self.ok_callback(*self.get_values())
+            self.dialog.hide()
+
+        def on_rejected():
+            self.dialog.hide()
+
+        self.ok_callback = callback
+        self.buttonbox.accepted.connect(on_accept)
+        self.buttonbox.rejected.connect(on_rejected)
 
 # EOF #

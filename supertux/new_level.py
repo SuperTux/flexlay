@@ -55,7 +55,7 @@ class NewLevelDialog(QtGui.QWizard):
         self.rejected.connect(self.cancel)
 
     def finish(self):
-        '''Executed when "Finish" button clicked'''
+        """Executed when "Finish" button clicked"""
         self.level = Level.from_size(self.level_width, self.level_height)
         # self.level.current_sector.music = self.level_music
         # self.level.current_sector.background = self.level_image
@@ -72,8 +72,8 @@ class NewLevelDialog(QtGui.QWizard):
 
     # <Introduction Page>
     def create_intro_page(self):
-        '''Creates the intro page containing a bit of text
-        :return: QWizardPage Introduction Page'''
+        """Creates the intro page containing a bit of text
+        :return: QWizardPage Introduction Page"""
         page = QtGui.QWizardPage()
 
         page.setTitle("Welcome to the New Level Wizard")
@@ -93,11 +93,13 @@ class NewLevelDialog(QtGui.QWizard):
     # <Main Page>
 
     def create_main_page(self):
-        '''Creates the general page containing inputs to
-        type in level name, author and size as well as
-        browse through files for music and background
-        image files
-        @return: QWizardPage General Information Page'''
+        """Returns the main page
+
+        Containing inputs to type in level name,
+        author and size as well as browse through
+        files for music and background
+image files
+        @return: QWizardPage General Information Page"""
         page = QtGui.QWizardPage()
         page.setTitle("General Information")
 

@@ -68,12 +68,12 @@ class Item:
 
 
 class PropertiesWidget(QWidget):
-    '''
+    """
     A widget for displaying & editing properties of objects etc.
     
     Also see the properties this likes to display:
     also see: supertux/property.py
-    '''
+    """
 
     def __init__(self, parent):
         super().__init__(parent)
@@ -86,7 +86,6 @@ class PropertiesWidget(QWidget):
 
         self.setLayout(self.vbox)
         self.setMinimumWidth(300)
-        self.show()
 
     def clear_properties(self):
         # Clear Items
@@ -111,6 +110,7 @@ class PropertiesWidget(QWidget):
         self.items.append(Item(Item.KIND_LABEL, label, None, None))
 
     def add_bool(self, name, value, callback):
+        # FIXME: Qt.Checked doesn't exist!
         def state_change(self, state):
             if callback:
                 callback(state == Qt.QChecked)
@@ -171,6 +171,7 @@ class PropertiesWidget(QWidget):
         :param show_rel_to: Path to which the displayed text (in input box)
          will be relative to
         :param open_in: Where the open file dialog will begin
+        :param callback: Method/function to call upon file being chosen.
         '''
         label = QLabel(label)
         inputbox = QLineEdit(default)
@@ -260,18 +261,6 @@ class PropertiesWidget(QWidget):
         self.layout.addRow(label, colorbutton)
 
         self.items.append(Item(Item.KIND_COLOR, label, colorbutton, callback=callback))
-
-    def set_callback(self, callback):
-        def on_accept():
-            self.ok_callback(*self.get_values())
-            self.dialog.hide()
-
-        def on_rejected():
-            self.dialog.hide()
-
-        self.ok_callback = callback
-        self.buttonbox.accepted.connect(on_accept)
-        self.buttonbox.rejected.connect(on_rejected)
 
     def call_callbacks(self):
         for item in self.items:

@@ -23,6 +23,7 @@ from PyQt4.QtCore import QByteArray
 from PyQt4.QtGui import QMessageBox, QFileDialog
 
 from flexlay import Flexlay, Config
+from flexlay.util.sexpr import SExprParseError
 from .gui import SuperTuxGUI
 from .tileset import SuperTuxTileset
 
@@ -80,7 +81,7 @@ def main():
     elif len(config.recent_files) > 0:
         try:
             gui.load_level(config.recent_files[-1])
-        except FileNotFoundError:
+        except FileNotFoundError or SExprParseError or Exception:
             print(config.recent_files)
             print("Could not load recent file '" + config.recent_files[-1] + "' defaulting...")
             gui.gui_level_new()

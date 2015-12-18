@@ -19,89 +19,75 @@ from math import ceil
 from random import choice
 
 from PyQt4 import QtGui
-from PyQt4.Qt import QTextEdit
 
 from flexlay import Config
+from flexlay.gui import PropertiesWidget, GenericWizard
 from .level import Level
 
 
-class NewLevelDialog(QtGui.QWizard):
+class NewLevelDialog(GenericWizard):
     def __init__(self, parent):
-        super(NewLevelDialog, self).__init__(parent)
-
-        self.setWindowTitle("New Level Wizard")
+        super().__init__(parent, "New Level Wizard")
         # Modal means you cannot touch the parent until this
         # closes
         self.setModal(True)
 
         self.level = Level()
-        self.level_name = "Unnamed Level"
-        self.level_author = Config.current.name
-        self.level_music = ""
-        self.level_background = ""
-        self.level_license = "GPL 2+ / CC-by-sa 3.0"
-        self.level_width = 100
-        self.level_height = 50
-        self.level_spawn = (5, 25)
+        self.level.name = "Unnamed Level"
+        self.level.author = Config.current.name
+        self.level.music = ""
+        self.level.background = ""
+        self.level.license = "GPL 2+ / CC-by-sa 3.0"
+        self.level.width = 100
+        self.level.height = 50
+        self.level.spawn = (5, 25)
 
         # Each function returns a QWizardPage, which is then added
-        self.addPage(self.create_intro_page())
-        self.addPage(self.create_main_page())
+        self.add_page("Create A New Level", self.create_intro_page())
+        self.add_page("General Info", self.create_main_page())
         self.addPage(self.create_license_page())
 
         # When 'Finish' pressed run finish()
-        self.finished.connect(self.finish)
+        self.set_callback(self.finish)
         # When 'Cancel' pressed run cancel()
         self.rejected.connect(self.cancel)
 
-    def finish(self):
+    def finish(self, *pages):
         """Executed when "Finish" button clicked"""
-        self.level = Level.from_size(self.level_width, self.level_height)
-        # self.level.current_sector.music = self.level_music
-        # self.level.current_sector.background = self.level_image
-        self.level.name = self.level_name
-        self.level.author = self.level_author
-        Config.current.name = self.level_author
-        self.level.license = self.level_license
-        self.level.current_sector.music = self.level_music
-        self.level_spawn = ceil(self.level_width / 10), int(self.level_height / 2)
+        main_page_data = pages[1]
+        self.level = Level.from_size(main_page_data[2], main_page_data[3])
+        # self.level.current_sector.music = self.level.music
+        # self.level.current_sector.background = self.level.image
+        self.level.name = main_page_data[0]
+        self.level.author = main_page_data[1]
+        Config.current.name = self.level.author
+        self.level.current_sector.music = main_page_data[4]
+        self.level.spawn = ceil(self.level.width / 10), int(self.level.height / 2)
 
     # Not Implemented
     def cancel(self):
         self.level = None
 
-    # <Introduction Page>
     def create_intro_page(self):
         """Creates the intro page containing a bit of text
-        :return: QWizardPage Introduction Page"""
-        page = QtGui.QWizardPage()
 
-        page.setTitle("Welcome to the New Level Wizard")
-        click_next = QtGui.QLabel("Click 'Next' to continue.\n" +
+        :return: PropertiesWidget Introduction Page
+        """
+        page_widget = PropertiesWidget(self)
+
+        page_widget.add_label("Click 'Next' to continue.\n" +
                                   "In the future, this page will show some " +
                                   "checkboxes to allow experienced users " +
                                   "to view extra pages in this wizard.")
-        click_next.setWordWrap(True)
-        click_next.setStyleSheet("QLabel {\nfont-size: 15px;\n}")
 
-        vbox = QtGui.QVBoxLayout()
-        vbox.addWidget(click_next)
-
-        page.setLayout(vbox)
-        return page
-
-    # <Main Page>
+        return page_widget
 
     def create_main_page(self):
-        """Returns the main page
+        """Creates the main wizard page
 
-        Containing inputs to type in level name,
-        author and size as well as browse through
-        files for music and background
-image files
-        @return: QWizardPage General Information Page"""
-        page = QtGui.QWizardPage()
-        page.setTitle("General Information")
+        :return: PropertiesWidget to add to GenericWidget
+        """
+        page_widget = PropertiesWidget(self)
 
         # A list of names randomly selected as the 'Example
         # Level name.
@@ -113,118 +99,33 @@ image files
                      "Unknown Flying Penguin")
 
         # choice is random.choice
-        self.level_name = "Example: " + choice(fun_names)
+        self.level.name = "Example: " + choice(fun_names)
 
-        name_input = QtGui.QLineEdit(self.level_name)
-        # Run self.set_name whenever text changes
-        name_input.textChanged[str].connect(self.set_name)
+        page_widget.add_string("Level Name:", self.level.name, None)
+        page_widget.add_string("Level Author:", self.level.author, None)
+        page_widget.add_int("Level Width:", self.level.width, None)
+        page_widget.add_int("Level Height:", self.level.height, None)
+        page_widget.add_file("Level Music", "",
+                             ret_rel_to=Config.current.datadir,
+                             show_rel_to=Config.current.datadir,
+                             open_in=os.path.join(Config.current.datadir, "music"))
+        page_widget.add_file("Level Background", "",
+                             ret_rel_to=Config.current.datadir,
+                             show_rel_to=Config.current.datadir,
+                             open_in=os.path.join(Config.current.datadir, "images", "background"))
 
-        author_input = QtGui.QLineEdit(Config.current.name)
-        # Run self.set_author whenever text changes
-        author_input.textChanged[str].connect(self.set_author)
+        return page_widget
 
-        w_in = QtGui.QLineEdit("100")
-        # Run self.set_width whenever text changes
-        w_in.textChanged[str].connect(self.set_width)
-
-        h_in = QtGui.QLineEdit("50")
-        # Run self.set_height whenever text changes
-        h_in.textChanged[str].connect(self.set_height)
-
-        self.music_input = QtGui.QLineEdit()
-        # Run self.set_music whenever text changes
-        self.music_input.textChanged[str].connect(self.set_music)
-        browse_for_music = QtGui.QPushButton("Browse...")
-        # Run self.browse_music whenever button clicked
-        browse_for_music.clicked.connect(self.browse_music)
-
-        self.img_input = QtGui.QLineEdit()
-        # Run self.set_img whenever text changes
-        self.img_input.textChanged[str].connect(self.set_img)
-        browse_for_img = QtGui.QPushButton("Browse...")
-        # Run self.browse_image whenever button clicked
-        browse_for_img.clicked.connect(self.browse_image)
-
-        # Add everything to Vertical layout
-        grid = QtGui.QGridLayout()
-        grid.addWidget(QtGui.QLabel("Level Name:"), 0, 0)
-        grid.addWidget(name_input, 1, 0)
-
-        grid.addWidget(QtGui.QLabel("Level Author:"), 2, 0)
-        grid.addWidget(author_input, 3, 0)
-
-        grid.addWidget(QtGui.QLabel("Level Width:"), 4, 0)
-        grid.addWidget(w_in, 5, 0)
-        grid.addWidget(QtGui.QLabel("Level Height:"), 6, 0)
-        grid.addWidget(h_in, 7, 0)
-
-        grid.addWidget(QtGui.QLabel("Level Music:"), 8, 0)
-        grid.addWidget(self.music_input, 9, 0)
-        grid.addWidget(browse_for_music, 9, 1)
-
-        grid.addWidget(QtGui.QLabel("Level Background:"), 10, 0)
-        grid.addWidget(self.img_input, 11, 0)
-        grid.addWidget(browse_for_img, 11, 1)
-
-        page.setLayout(grid)
-        return page
-
-    def set_name(self, text):  # Connected to signal
-        self.level_name = text if text is not "" else "No Name"
-
-    def set_author(self, text):  # Connected to signal
-        self.level_author = text if text is not "" else "No Author"
-
-    def set_music(self, text):  # Connected to signal
-        self.level_music = text if text is not "" else ""
-
-    def set_height(self, text):  # Connected to signal
-        try:
-            self.level_height = int(text) if text is not "" else 50
-        except TypeError:
-            self.level_height = 50
-
-    def set_width(self, text):  # Connected to signal
-        try:
-            self.level_width = int(text) if text is not "" else 100
-        except TypeError:
-            self.level_width = 100
-
-    def browse_music(self):  # Connected to signal
-        full_path = QtGui.QFileDialog.getOpenFileName(None, "Open Music File",
-                                                      os.path.join(Config.current.datadir, "music"))
-        # If path goes to datadir,
-        if full_path[:len(Config.current.datadir)] == Config.current.datadir:
-            # Set path as relative
-            self.music_input.setText(full_path[len(Config.current.datadir):])
-        else:
-            self.music_input.setText(full_path)
-
-    def set_img(self, text):  # Connected to signal
-        self.level_background = text if text is not "" else ""
-
-    def browse_image(self):  # Connected to signal
-        full_path = QtGui.QFileDialog.getOpenFileName(None, "Open Background Image",
-                                                      os.path.join(Config.current.datadir, "images", "background"))
-        # If path goes to datadir
-        if full_path[:len(Config.current.datadir)] == Config.current.datadir:
-            # Set path as relative
-            self.img_input.setText(full_path[len(Config.current.datadir):])
-        else:
-            self.img_input.setText(full_path)
-
-    # <License Page>
     def create_license_page(self):
-        '''
-        This function inits the license page of the new level
-            wizard
+        """Creates the license page
+
         @return QWizardPage The License Page of the wizard
-        '''
+        """
         page = QtGui.QWizardPage()
 
         page.setTitle("Level License")
         page.setSubTitle("You must set a license for your level, which " +
-                         "defines how others may use and share your level_ " +
+                         "defines how others may use and share your level. " +
                          "In the spirit of 'free and open source' " +
                          "we ask that you make your level free " +
                          "(as in 'free speech' not 'free WiFi')")
@@ -240,4 +141,4 @@ image files
         return page
 
     def set_license(self):  # Connected to signal
-        self.level_license = self.license_input.toPlainText()
+        self.level.license = self.license_input.toPlainText()

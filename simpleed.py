@@ -20,7 +20,8 @@
 import random
 
 from flexlay import (Flexlay, PixelBuffer, Sprite, Tile, Tileset, EditorMap,
-                     TilemapLayer, ObjectLayer, ObjMapRectObject, Color, TileBrush, ObjectBrush)
+                     TilemapLayer, ObjectLayer, ObjMapRectObject, Color, TileBrush, ObjectBrush,
+                     ToolContext)
 from flexlay.math import Size, Point, Rect
 from flexlay.tools import WorkspaceMoveTool, ObjMapSelectTool, TilePaintTool
 
@@ -34,7 +35,7 @@ def main():
     def on_object_tool():
         workspace.set_tool(1, objtool)
         workspace.set_tool(2, workspace_move_tool)
-        workspace.set_tool(3, Tool())
+        workspace.set_tool(3, TilePaintTool())
 
     button_panel.add_text("ObjectTool", on_object_tool)
 
@@ -72,10 +73,10 @@ def main():
 
     editormap = EditorMap()
     tileset = Tileset(32)
-    tileset.add_tile(0, Tile(PixelBuffer.from_file("../data/images/icons16/resize1.png"),
-                             Sprite.from_file("../data/images/icons16/resize1.png")))
-    tileset.add_tile(1, Tile(PixelBuffer.from_file("../data/images/icons16/resize_vert.png"),
-                             Sprite.from_file("../data/images/icons16/resize_vert.png")))
+    tileset.add_tile(0, Tile(PixelBuffer.from_file("data/images/icons16/resize1.png"),
+                             Sprite.from_file("data/images/icons16/resize1.png")))
+    tileset.add_tile(1, Tile(PixelBuffer.from_file("data/images/icons16/resize_vert.png"),
+                             Sprite.from_file("data/images/icons16/resize_vert.png")))
 
     tilemap = TilemapLayer(tileset, 20, 10)
     TilemapLayer.current = tilemap
@@ -94,23 +95,23 @@ def main():
     workspace.set_map(editormap)
 
     workspace_move_tool = WorkspaceMoveTool()
-    objtool = ObjMapSelectTool()
+    objtool = ObjMapSelectTool(gui_manager)
     tilemap_paint_tool = TilePaintTool()
-    brush = TileBrush(1, 1)
-    brush.put(0, 0, 1)
-    tilemap_paint_tool.set_brush(brush)
+    ToolContext()
+    ToolContext.current.tile_brush.put(0, 0, 1)
+    # tilemap_paint_tool.set_brush(ToolContext.current.tile_brush)
     workspace.set_tool(1, objtool)
     workspace.set_tool(2, workspace_move_tool)
     # workspace.set_tool(1, tilemap_paint_tool)
     # workspace.set_tool(3, tilemap_paint_tool)
 
     object_selector = gui_manager.create_object_selector(40, 40)
-    object_selector.add_brush(ObjectBrush(Sprite.from_file("../data/images/icons16/resize1.png"), None))
-    object_selector.add_brush(ObjectBrush(Sprite.from_file("../data/images/icons16/resize2.png"), None))
+    object_selector.add_brush(ObjectBrush(Sprite.from_file("data/images/icons16/resize1.png"), None))
+    object_selector.add_brush(ObjectBrush(Sprite.from_file("data/images/icons16/resize2.png"), None))
     tile_selector = gui_manager.create_tile_selector()
-    tile_selector.set_tiles("All the tiles", tileset.get_tiles())
-    tile_selector.set_tiles("All the tiles again", tileset.get_tiles())
-    tile_selector.set_tiles("And again", tileset.get_tiles())
+    # tile_selector.set_tiles("All the tiles", tileset.get_tiles())
+    # tile_selector.set_tiles("All the tiles again", tileset.get_tiles())
+    # tile_selector.set_tiles("And again", tileset.get_tiles())
 
     print("Successs!")
     gui_manager.run()

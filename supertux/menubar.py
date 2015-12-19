@@ -52,9 +52,9 @@ class SuperTuxMenuBar:
         zoom_menu.add_item("4:1 (400%) ", lambda: editor.gui_set_zoom(4.0))
 
         layer_menu = self.menubar.add_menu("&Layer")
-        layer_menu.add_item("Show all", editor.gui_show_all)
-        layer_menu.add_item("Show current", editor.gui_show_current)
-        layer_menu.add_item("Show only current", editor.gui_show_only_current)
+        layer_menu.add_item("Show All", editor.layer_selector.show_all)
+        layer_menu.add_item("Hide All", editor.layer_selector.show_all)
+        layer_menu.add_item("Show Only Selected", (lambda: print("\"Show Only Selected\" is not implemented")))
 
         sector_menu = self.menubar.add_menu("&Sector")
         # sector = editor.workspace.get_map().metadata

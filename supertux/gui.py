@@ -62,9 +62,6 @@ class SuperTuxGUI:
 
         self.button_panel = SuperTuxButtonPanel(self.gui, self)
         self.toolbox = SuperTuxToolbox(self.gui, self)
-        self.menubar = SuperTuxMenuBar(self.gui, self)
-
-        self.display_properties = DisplayProperties()
 
         self.editor_map = self.gui.create_editor_map_component()
         self.statusbar = self.gui.create_statusbar()
@@ -129,6 +126,7 @@ class SuperTuxGUI:
         self.set_level(level, "main")
 
         self.set_tilemap_paint_tool()
+        self.menubar = SuperTuxMenuBar(self.gui, self)
 
         # Whether to record gameplay
         self.record = False
@@ -233,21 +231,6 @@ class SuperTuxGUI:
             self.tileselector.show(True)
             self.objectselector.show(False)
 
-    def gui_show_all(self):
-        self.display_properties.show_all = True
-        self.display_properties.current_only = False
-        self.display_properties.set(self.workspace.get_map().metadata)
-
-    def gui_show_current(self):
-        self.display_properties.show_all = False
-        self.display_properties.current_only = False
-        self.display_properties.set(self.workspace.get_map().metadata)
-
-    def gui_show_only_current(self):
-        self.display_properties.show_all = False
-        self.display_properties.current_only = True
-        self.display_properties.set(self.workspace.get_map().metadata)
-
     def gui_toggle_minimap(self):
         if self.minimap.get_widget().isVisible():
             self.minimap.get_widget().hide()
@@ -308,11 +291,11 @@ class SuperTuxGUI:
         if level.is_worldmap:
             # FIXME: use real tmpfile
             tmpfile = "/tmp/tmpflexlay-supertux.stwm"
-            self.save_level(tmpfile)
+            self.save_level(tmpfile, False)
         else:
             # FIXME: use real tmpfile
             tmpfile = "/tmp/tmpflexlay-supertux.stl"
-            self.save_level(tmpfile)
+            self.save_level(tmpfile, False)
 
         try:
             subprocess.Popen([Config.current.binary, tmpfile] +
@@ -594,10 +577,11 @@ class SuperTuxGUI:
     def new_level(self):
         pass
 
-    def load_level(self, filename):
+    def load_level(self, filename, set_title=True):
         print("Loading: ", filename)
 
-        self.gui.window.setWindowTitle("SuperTux Editor: [" + filename + "]")
+        if set_title:
+            self.gui.window.setWindowTitle("SuperTux Editor: [" + filename + "]")
 
         level = Level.from_file(filename)
 
@@ -618,8 +602,9 @@ class SuperTuxGUI:
         # TODO: We don't yet support multiple sectors, so we set the first sector's name.
         self.editor_map.set_sector_tab_label(0, level.sectors[0].name)
 
-    def save_level(self, filename):
-        self.gui.window.setWindowTitle("SuperTux Editor: [" + filename + "]")
+    def save_level(self, filename, set_title=True):
+        if set_title:
+            self.gui.window.setWindowTitle("SuperTux Editor: [" + filename + "]")
 
         editor_map = Workspace.current.get_map()
         editor_map.save_pointer = len(editor_map.undo_stack)
@@ -704,33 +689,5 @@ class SuperTuxGUI:
         ToolContext.current.object_layer = self.sector.object_layer
 
         self.sector.editormap.sig_change.connect(SuperTuxGUI.current.on_map_change)
-
-
-class DisplayProperties:
-    def __init__(self):
-        self.layer = None
-        self.show_all = False
-        self.current_only = False
-
-    def set(self, sector):
-        if sector is None or not isinstance(sector, Sector):
-            return
-
-        if self.current_only:
-            active = Color(255, 255, 255)
-            deactive = Color(0, 0, 0, 10)
-        else:
-            active = Color(255, 255, 255)
-            deactive = Color(150, 150, 250, 150)
-
-        if self.show_all:
-            for tilemap in sector.tilemaps:
-                tilemap.tilemap_layer.set_foreground_color(active)
-        else:
-            for tilemap in sector.tilemaps:
-                if tilemap == self.layer:
-                    tilemap.tilemap_layer.set_foreground_color(active)
-                else:
-                    tilemap.tilemap_layer.set_foreground_color(deactive)
 
 # EOF #

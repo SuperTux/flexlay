@@ -237,6 +237,9 @@ class LayerSelector:
         """Toggle the currently selected layer visibility"""
         self.toggle_hidden(self.selected_index)
 
+    def toggle_show_only_selected(self):
+        self.show_only_selected = not self.show_only_selected
+
     def toggle_action(self):
         """Toggle current layer and change eye icon to open/close"""
         self.toggle_current()

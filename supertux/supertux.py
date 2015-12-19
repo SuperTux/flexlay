@@ -99,7 +99,6 @@ def main():
     # Init the GUI, so that button state is in sync with internal state
     gui.gui_toggle_minimap()
     gui.gui_toggle_minimap()
-    gui.gui_show_current()
     gui.set_tilemap_paint_tool()
 
     if config.geometry:

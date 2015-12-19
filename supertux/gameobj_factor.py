@@ -20,22 +20,15 @@ import os.path
 from collections import OrderedDict
 
 from flexlay import ObjectBrush, Config
-from .gameobj import (GameObj, BadGuy, BonusBlock, Candle, Camera,
-                      Door, SpawnPoint, ResetPoint, AmbientSound,
-                      SimpleObject, SimpleTileObject, Powerup,
-                      SecretArea, SequenceTrigger, Background,
-                      Gradient, ParticleSystem, Platform,
-                      ScriptedObject, InfoBlock, LevelTime, Decal,
-                      ScriptTrigger, Switch, Torch, WeakBlock,
-                      WilloWisp, Wind, Trampoline, Dispenser,
-                      DartTrap, GhostFlame, InvisibleWall, Tux)
+from .gameobj import *
+from .worldmap_object import *
 from .sprite import SuperTuxSprite
 
 
 def format_sprite_name(name):
-    '''
+    """
     sprite_name -> Sprite Name
-    '''
+    """
     name = name.replace("_", " ")
     name = name.title()
     return name
@@ -144,6 +137,10 @@ class SuperTuxGameObjFactory:
         self.add_object(WeakBlock)
         self.add_object(WilloWisp)
         self.add_object(Wind)
+
+        self.add_object(WorldmapLevel)
+        self.add_object(WorldmapSpawnpoint)
+        self.add_object(SpecialTile)
 
         self.add_badguy("pneumatic-platform", "images/engine/editor/pneumaticplatform.png")
         self.add_badguy("bicycle-platform", "images/engine/editor/bicycleplatform.png")

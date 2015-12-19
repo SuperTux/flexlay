@@ -33,12 +33,10 @@ from .tilemap import SuperTuxTileMap
 from .tileset import SuperTuxTileset
 from .toolbox import SuperTuxToolbox
 from .util import load_lisp
-from .worldmap import WorldMap
-from .worldmap_object import WorldmapObject
 
 __all__ = ["GameObj", "SuperTuxGUI", "Level", "Sector",
            "SuperTuxSprite", "SuperTuxTileMap", "SuperTuxTileset",
-           "load_lisp", "WorldMap", "WorldmapObject", "main",
+           "load_lisp", "main",
            "SuperTuxMenuBar", "SuperTuxToolbox",
            "SuperTuxButtonPanel", "supertux_gameobj_factory",
            "BoolProperty", "IntProperty", "FloatProperty",

@@ -19,13 +19,7 @@ import os
 
 from flexlay import (Color, Config, ObjMapSpriteObject, ObjMapRectObject)
 from flexlay.math import Point, Rect, Size
-from .property import (BoolProperty, IntProperty, FloatProperty,
-                       StringProperty, DirectionProperty,
-                       InlinePosProperty, InlineRectProperty,
-                       TilemapProperty, SpriteProperty,
-                       SampleProperty, PathProperty, ColorProperty,
-                       ImageProperty, EnumProperty, SectorProperty,
-                       BadGuyProperty)
+from .property import *
 from .sprite import SuperTuxSprite
 
 
@@ -115,6 +109,11 @@ class GameObj:
 
 
 class Tux(GameObj):
+    """Unfinished:
+
+    To be dragged to where you want tux to spawn when you run the level, but *is not*
+    the spawnpoint.
+    """
     label = "Tux"
     identifier = "tux"
     sprite = "images/creatures/tux/big/jump-0.png"

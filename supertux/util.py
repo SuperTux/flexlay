@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from flexlay.util import sexpr_read_from_file
+from flexlay.util import sexpr_read_from_file, SExprParseError
 
 
 def load_lisp(filename, root_symbol):
@@ -27,7 +27,7 @@ def load_lisp(filename, root_symbol):
         raise Exception("Error: Couldn't load '%s'" % filename)
     else:
         if tree[0] != root_symbol:
-            raise Exception("Error: '%s' is not a '%s' file" % (filename, root_symbol))
+            raise SExprParseError("Error: '%s' is not a '%s' file" % (filename, root_symbol))
         else:
             return tree
 

@@ -37,8 +37,6 @@ from .new_level import NewLevelDialog
 from .sector import Sector
 from .tileset import SuperTuxTileset
 from .toolbox import SuperTuxToolbox
-from .worldmap import WorldMap
-from .worldmap_object import create_worldmapobject_at_pos  # worldmap_objects
 
 BACKGROUND_LAYER = 1
 INTERACTIVE_LAYER = 2
@@ -597,15 +595,6 @@ class SuperTuxGUI:
         pass
 
     def load_level(self, filename):
-        # if filename[-5:] == ".stwm":
-        # QMessageBox.warning(None, "Opening Worldmap File",
-        #                    "[WARNING] Opening supertux worldmap file:\n'"+filename+"'\n" +
-        #                    "Worldmaps usually use different tilesets to levels.\n"+
-        #                    "Please select a different tileset to use (look for .strf files).")
-        # if not self.gui_change_tileset():
-        #    return
-        #    print("Loading worldmap")
-
         print("Loading: ", filename)
         level = Level.from_file(filename)
 
@@ -625,20 +614,6 @@ class SuperTuxGUI:
         self.minimap.update_minimap()
         # TODO: We don't yet support multiple sectors, so we set the first sector's name.
         self.editor_map.set_sector_tab_label(0, level.sectors[0].name)
-
-    def load_worldmap(self, filename):
-        '''
-        Unused.
-        '''
-        print("Loading: ", filename)
-        worldmap = WorldMap(filename)
-        worldmap.activate(self.workspace)
-
-        Config.current.add_recent_file(filename)
-        self.menubar.update_recent_files()
-
-        self.minimap.update_minimap()
-        self.use_worldmap = True
 
     def save_level(self, filename):
         editor_map = Workspace.current.get_map()

@@ -79,11 +79,13 @@ def main():
     if args.LEVELFILE is not None:
         gui.load_level(args.LEVELFILE)
     elif len(config.recent_files) > 0:
+        # Check that at least one file is loaded
         any_valid = False
         for recent_file_path in reversed(config.recent_files):
             try:
                 gui.load_level(recent_file_path)
             except: # TODO: Except only reasonable errors.
+                config.recent_files.remove(recent_file_path)
                 continue
             else:
                 any_valid = True

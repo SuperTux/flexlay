@@ -16,6 +16,7 @@
 
 from flexlay import Colorf
 from flexlay.util import get_value_from_tree
+from flexlay.math import Point
 
 
 class Property:
@@ -142,6 +143,17 @@ class InlinePosProperty:
         pass
 
 
+class InlineTilePosProperty(InlinePosProperty):
+    """Written to file as coords on tilemap, but displays correctly."""
+    def read(self, sexpr, obj):
+        obj.pos.x = get_value_from_tree(["x", "_"], sexpr, 0.0) * 32
+        obj.pos.y = get_value_from_tree(["y", "_"], sexpr, 0.0) * 32
+
+    def write(self, writer, obj):
+        tilemap_position = Point(obj.pos.x // 32, obj.pos.y // 32)
+        writer.write_inline_point(tilemap_position)
+
+
 class InlineRectProperty:
     def __init__(self):
         pass
@@ -161,7 +173,9 @@ class InlineRectProperty:
 
 
 class SpriteProperty(StringProperty):
-    pass
+    def write(self, writer, obj):
+        if self.value:
+            super().write(writer, obj)
 
 
 class BadGuyProperty(EnumProperty):

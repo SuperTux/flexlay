@@ -55,8 +55,10 @@ class GameObj:
         self.objmap_object = None
 
     def signal_connect(self):
-        '''Connect the objmap_object signals to the 
-        on_select and on_deselect'''
+        """Connect the objmap_object signals to the on_select and on_deselect
+
+        Used, for example, to display properties in PropertiesWidget.
+        """
         if not self.objmap_object:
             return
         self.objmap_object.sig_select.connect(self.on_select)
@@ -101,10 +103,7 @@ class GameObj:
                 return prop
 
     def update(self):
-        '''
-        Called after properties read,
-        and optionally at any other time
-        '''
+        """Called after properties read, and optionally at any other time"""
         pass
 
 

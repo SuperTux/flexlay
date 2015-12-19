@@ -596,6 +596,9 @@ class SuperTuxGUI:
 
     def load_level(self, filename):
         print("Loading: ", filename)
+
+        self.gui.window.setWindowTitle("SuperTux Editor: [" + filename + "]")
+
         level = Level.from_file(filename)
 
         if level.tileset_path != SuperTuxTileset.current.filename:
@@ -616,11 +619,12 @@ class SuperTuxGUI:
         self.editor_map.set_sector_tab_label(0, level.sectors[0].name)
 
     def save_level(self, filename):
+        self.gui.window.setWindowTitle("SuperTux Editor: [" + filename + "]")
+
         editor_map = Workspace.current.get_map()
         editor_map.save_pointer = len(editor_map.undo_stack)
 
         level = self.workspace.get_map().metadata.parent
-        print(level)
 
         Config.current.add_recent_file(filename)
         self.menubar.update_recent_files()

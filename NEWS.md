@@ -1,6 +1,6 @@
 # Flexlay release and development notes
 
-## Flexlay 0.2.0 (WIP for SuperTux 0.5.0)
+## Flexlay 1.0.0 (WIP for SuperTux 0.5.0)
 
 - Flexlay is now being developed by The SuperTux Team, primarily for SuperTux
   level editing

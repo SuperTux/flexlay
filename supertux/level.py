@@ -27,6 +27,11 @@ class Level:
     def from_file(filename):
         level = Level()
 
+        if filename.endswith(".stwm"):
+            level.is_worldmap = True
+        else:
+            level.is_worldmap = False
+
         level.filename = filename
 
         tree = load_lisp(level.filename, "supertux-level")
@@ -62,6 +67,8 @@ class Level:
 
         self.current_sector = None
         self.sectors = []
+
+        self.is_worldmap = False
 
     def parse_v2(self, data):
         self.name = get_value_from_tree(["name", "_"], data, "")

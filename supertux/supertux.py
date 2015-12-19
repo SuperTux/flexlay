@@ -79,10 +79,17 @@ def main():
     if args.LEVELFILE is not None:
         gui.load_level(args.LEVELFILE)
     elif len(config.recent_files) > 0:
-        try:
-            gui.load_level(config.recent_files[-1])
-        except:
-            print("Could not load recent file '" + config.recent_files[-1] + "' defaulting...")
+        any_valid = False
+        for recent_file_path in reversed(config.recent_files):
+            try:
+                gui.load_level(recent_file_path)
+            except: # TODO: Except only reasonable errors.
+                continue
+            else:
+                any_valid = True
+                break
+        if not any_valid:
+            print("All recent files broken. Creating a new level...")
             gui.gui_level_new()
     else:
         gui.gui_level_new()

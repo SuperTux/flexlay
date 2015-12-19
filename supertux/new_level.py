@@ -14,9 +14,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import os
+import os, random
 from math import ceil
-from random import choice
 
 from PyQt4 import QtGui
 
@@ -62,7 +61,7 @@ class NewLevelDialog(GenericWizard):
         self.level.author = main_page_data[1]
         Config.current.name = self.level.author
         self.level.current_sector.music = main_page_data[4]
-        self.level.spawn = ceil(self.level.width / 10), int(self.level.height / 2)
+        self.level.spawn = ceil(main_page_data[2] / 10), int(main_page_data[3] / 2)
 
     # Not Implemented
     def cancel(self):
@@ -99,7 +98,7 @@ class NewLevelDialog(GenericWizard):
                      "Unknown Flying Penguin")
 
         # choice is random.choice
-        self.level.name = "Example: " + choice(fun_names)
+        self.level.name = "Example: " + random.choice(fun_names)
 
         page_widget.add_string("Level Name:", self.level.name, None)
         page_widget.add_string("Level Author:", self.level.author, None)

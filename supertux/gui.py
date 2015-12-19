@@ -285,7 +285,6 @@ class SuperTuxGUI:
             self.tileselector.add_tilegroup(tilegroup.name, tilegroup.tiles)
 
         if self.sector is not None:
-            print(self.sector.tilemaps)
             for tilemap_layer in [tilemap.tilemap_layer for tilemap in self.sector.tilemaps]:
                 tilemap_layer.tileset = tileset
 
@@ -306,13 +305,17 @@ class SuperTuxGUI:
 
     def gui_run_level(self):
         print("Run this level...")
-        if self.use_worldmap:
-            tmpfile = "/tmp/tmpflexlay-worldmap.stwm"
+
+        level = self.workspace.get_map().metadata.get_level()
+        if level.is_worldmap:
+            # FIXME: use real tmpfile
+            tmpfile = "/tmp/tmpflexlay-supertux.stwm"
             self.save_level(tmpfile)
         else:
             # FIXME: use real tmpfile
             tmpfile = "/tmp/tmpflexlay-supertux.stl"
             self.save_level(tmpfile)
+
         try:
             subprocess.Popen([Config.current.binary, tmpfile] +
                              ([] if not self.record else ["--record-demo", self.record_target]))
@@ -640,10 +643,9 @@ class SuperTuxGUI:
     def save_level(self, filename):
         editor_map = Workspace.current.get_map()
         editor_map.save_pointer = len(editor_map.undo_stack)
-        if self.use_worldmap:
-            level = self.workspace.get_map().metadata
-        else:
-            level = self.workspace.get_map().metadata.parent
+
+        level = self.workspace.get_map().metadata.parent
+        print(level)
 
         Config.current.add_recent_file(filename)
         self.menubar.update_recent_files()

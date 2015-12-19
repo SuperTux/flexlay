@@ -13,7 +13,7 @@ Flexlay can't be run on its own, but instead of you have to start it via wrapper
 scripts (at the moment only `supertux-editor`).
 
 For a more detailed guide to run the SuperTux version of Flexlay, see
-[our guide in the wiki](https://github.com/SuperTux/flexlay/wiki/Downloading-and-Running-the-Flexlay-Editor).
+[our guide in the wiki](https://github.com/SuperTux/flexlay/wiki/Installing-the-Flexlay-SuperTux-editor).
 
 Flexlay is covered under the GNU GPL, which means that you can copy
 and even modify it pretty much as you like, as long as you keep the

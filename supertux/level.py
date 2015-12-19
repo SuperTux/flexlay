@@ -109,6 +109,13 @@ class Level:
             sector.write(writer)
             writer.end_list()
 
+        tileset_path = self.tileset_path
+        if tileset_path[:len(Config.current.datadir)] == Config.current.datadir:
+            tileset_path = tileset_path.replace(Config.current.datadir, "", 1)
+
+        if tileset_path:
+            writer.write_string("tileset", tileset_path)
+
         writer.end_list()
 
     def add_sector(self, sector):

@@ -284,6 +284,16 @@ class SuperTuxGUI:
         for tilegroup in tileset.tilegroups:
             self.tileselector.add_tilegroup(tilegroup.name, tilegroup.tiles)
 
+        if self.sector is not None:
+            print(self.sector.tilemaps)
+            for tilemap_layer in [tilemap.tilemap_layer for tilemap in self.sector.tilemaps]:
+                tilemap_layer.tileset = tileset
+
+            self.editor_map.editormap_widget.repaint()
+
+        if self.level is not None:
+            self.level.tileset_path = tileset.filename
+
     def gui_change_tileset(self):
         filename = QFileDialog.getOpenFileName(None, "Select Tileset To Open", Config.current.datadir)
         if not filename:

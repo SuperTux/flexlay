@@ -81,8 +81,7 @@ def main():
     elif len(config.recent_files) > 0:
         try:
             gui.load_level(config.recent_files[-1])
-        except FileNotFoundError or SExprParseError or Exception:
-            print(config.recent_files)
+        except:
             print("Could not load recent file '" + config.recent_files[-1] + "' defaulting...")
             gui.gui_level_new()
     else:

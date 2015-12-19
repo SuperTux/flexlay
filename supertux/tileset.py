@@ -31,12 +31,12 @@ class TileGroup:
 # Load game tiles from filename into tileset
 class SuperTuxTileset(Tileset):
     current = None
-    filename = ""
 
     def __init__(self, *params):
         super().__init__(*params)
         SuperTuxTileset.current = self
         self.tilegroups = []
+        self.filename = ""
 
     def create_ungrouped_tiles_group(self):
         self.tilegroups.append(TileGroup("Ungrouped Tiles", self.get_ungrouped_tiles()))

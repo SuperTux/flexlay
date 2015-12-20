@@ -77,7 +77,18 @@ class Level:
         self.contact = get_value_from_tree(["contact", "_"], data, "")
         self.license = get_value_from_tree(["license", "_"], data, "")
         self.target_time = get_value_from_tree(["target-time", "_"], data, 0)
-        self.tileset_path = get_value_from_tree(["tileset", "_"], data, "/images/tiles.strf")
+        self.tileset_path = get_value_from_tree(["tileset", "_"], data, os.path.join("images", "tiles.strf"))
+
+        # Check tileset path is somewhat valid
+        if len(self.tileset_path) < 1:
+            self.tileset_path = os.path.join("images", "tiles.strf")
+
+        # Sort out tileset path beginning with os.sep
+        if self.tileset_path[0] == os.sep:
+            if len(self.tileset_path) > 1:
+                self.tileset_path = self.tileset_path[1:]  # Remove os.sep
+            else:
+                self.tileset_path = os.path.join("images", "tiles.strf")  # Reset to default
 
         self.current_sector = None
         self.sectors = []
@@ -115,7 +126,7 @@ class Level:
 
         tileset_path = self.tileset_path
         if tileset_path[:len(Config.current.datadir)] == Config.current.datadir:
-            tileset_path = tileset_path.replace(Config.current.datadir, "", 1)
+            tileset_path = tileset_path.replace(os.path.join(Config.current.datadir, "/"), "", 1)
 
         if tileset_path is not None:
             writer.write_string("tileset", tileset_path)

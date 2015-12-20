@@ -287,7 +287,6 @@ class SuperTuxGUI:
             tmpfile = "/tmp/tmpflexlay-supertux.stwm"
             self.save_level(tmpfile, False)
         else:
-            # FIXME: use real tmpfile
             tmpfile = "/tmp/tmpflexlay-supertux.stl"
             self.save_level(tmpfile, False)
 
@@ -537,8 +536,12 @@ class SuperTuxGUI:
         dialog = NewLevelWizard(self.gui.window)
         dialog.exec_()
 
-        if dialog.level:
-            self.set_level(dialog.level, "main")
+        def save_path_chosen(save_path):
+            if dialog.level:
+                dialog.level.save(save_path)
+            self.load_level(save_path)
+
+        self.save_dialog.run(save_path_chosen)
 
         # Does nothing:
         self.new_level()
@@ -592,7 +595,7 @@ class SuperTuxGUI:
 
         if level.tileset_path != SuperTuxTileset.current.filename:
             tileset = SuperTuxTileset(32)
-            tileset.load(Config.current.datadir + level.tileset_path)
+            tileset.load(os.path.join(Config.current.datadir, level.tileset_path))
             self.gui_set_tileset(tileset)
 
             # Tileset has changed, reload level:

@@ -24,7 +24,7 @@ from flexlay.gui import PropertiesWidget, GenericWizard
 from .level import Level
 
 
-class NewLevelDialog(GenericWizard):
+class NewLevelWizard(GenericWizard):
     def __init__(self, parent):
         super().__init__(parent, "New Level Wizard")
         # Modal means you cannot touch the parent until this
@@ -62,6 +62,7 @@ class NewLevelDialog(GenericWizard):
         Config.current.name = self.level.author
         self.level.current_sector.music = main_page_data[4]
         self.level.spawn = ceil(main_page_data[2] / 10), int(main_page_data[3] / 2)
+        self.level.tileset_path = os.path.join("images", "tiles.strf")
 
     # Not Implemented
     def cancel(self):

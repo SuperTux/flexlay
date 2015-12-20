@@ -14,9 +14,10 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import os
 
 from PyQt4.QtCore import Qt
-from PyQt4.QtGui import QFileDialog
+from PyQt4.QtGui import QFileDialog, QSortFilterProxyModel
 
 
 class FileDialog:
@@ -41,22 +42,29 @@ class FileDialog:
     def get_filename(self):
         return self.filename
 
-    def set_directory(self, path):
+    def set_directory(self, *dirs):
+        path = os.path.join(*dirs)
         self.filename = path
         self.file_dialog.setDirectory(path)
 
 
 class OpenFileDialog(FileDialog):
-    def __init__(self, *args):
-        super().__init__(*args)
+    def __init__(self, title, filters=("All Files (*)",)):
+        super().__init__(title)
+
+        self.file_dialog.setNameFilters(filters)
 
         self.file_dialog.setAcceptMode(QFileDialog.AcceptOpen)
         self.file_dialog.setFileMode(QFileDialog.ExistingFile)
 
 
 class SaveFileDialog(FileDialog):
-    def __init__(self, *args):
-        super().__init__(*args)
+    def __init__(self, title, default_suffix=""):
+        super().__init__(title)
+
+        # FIXME: Not working!?
+        self.file_dialog.setDefaultSuffix(default_suffix)
+
         self.file_dialog.setAcceptMode(QFileDialog.AcceptSave)
         self.file_dialog.setFileMode(QFileDialog.AnyFile)
 

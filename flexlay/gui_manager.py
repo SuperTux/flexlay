@@ -121,12 +121,6 @@ class GUIManager:
         self.window.addDockWidget(Qt.BottomDockWidgetArea, dockwidget)
         return minimap
 
-    def create_openfiledialog(self, titel):
-        return OpenFileDialog(titel)
-
-    def create_savefiledialog(self, titel):
-        return SaveFileDialog(titel)
-
     def create_object_selector(self, w, h):
         self.object_selector_dock = QDockWidget("Object Selector")
         self.object_selector_dock.setObjectName("object_selector_dock")

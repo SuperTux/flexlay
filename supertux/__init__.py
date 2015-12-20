@@ -34,10 +34,11 @@ from .tileset import SuperTuxTileset
 from .toolbox import SuperTuxToolbox
 from .util import load_lisp
 from .supertux_arguments import SuperTuxArguments
+from .level_file_dialog import OpenLevelFileDialog
 
 __all__ = ["GameObj", "SuperTuxGUI", "Level", "Sector",
            "SuperTuxSprite", "SuperTuxTileMap", "SuperTuxTileset",
-           "load_lisp", "main",
+           "load_lisp", "main", "OpenLevelFileDialog"
            "SuperTuxMenuBar", "SuperTuxToolbox",
            "SuperTuxButtonPanel", "supertux_gameobj_factory",
            "BoolProperty", "IntProperty", "FloatProperty",

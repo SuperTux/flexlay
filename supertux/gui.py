@@ -18,11 +18,12 @@
 import os
 import subprocess
 
-from PyQt4.QtGui import (QIcon, QMessageBox, QFileDialog)
+from PyQt4.QtGui import (QIcon, QMessageBox)
 
 from flexlay import (Color, InputEvent, ObjMapRectObject,
                      ObjMapPathNode, Config, ToolContext, ObjectAddCommand,
                      Workspace)
+from flexlay.gui.file_dialog import OpenFileDialog, SaveFileDialog
 from flexlay.math import Point, Rect, Size
 from flexlay.tools import (TilePaintTool, TileBrushCreateTool,
                            TileMapSelectTool, TileFillTool,
@@ -33,11 +34,12 @@ from .gameobj import PathNode, Tux
 from .gameobj_factor import supertux_gameobj_factory
 from .level import Level
 from .menubar import SuperTuxMenuBar
-from .new_level import NewLevelDialog
+from .new_level import NewLevelWizard
 from .sector import Sector
 from .tileset import SuperTuxTileset
 from .toolbox import SuperTuxToolbox
 from .supertux_arguments import SuperTuxArguments
+from .level_file_dialog import OpenLevelFileDialog, SaveLevelFileDialog
 
 BACKGROUND_LAYER = 1
 INTERACTIVE_LAYER = 2
@@ -93,10 +95,10 @@ class SuperTuxGUI:
         #                                                       obj[0]))
 
         # Loading Dialogs
-        self.load_dialog = self.gui.create_openfiledialog("Load SuperTux Level")
-        self.load_dialog.set_directory(os.path.join(Config.current.datadir, "levels"))
-        self.save_dialog = self.gui.create_savefiledialog("Save SuperTux Level as...")
-        self.save_dialog.set_directory(os.path.join(Config.current.datadir, "levels"))
+        self.load_dialog = OpenLevelFileDialog("Load SuperTux Level")
+        self.load_dialog.set_directory(Config.current.datadir, "levels")
+        self.save_dialog = SaveLevelFileDialog("Save SuperTux Level As...")
+        self.save_dialog.set_directory(Config.current.datadir, "levels")
 
         self.register_keyboard_shortcuts()
 
@@ -264,14 +266,17 @@ class SuperTuxGUI:
             self.level.tileset_path = tileset.filename
 
     def gui_change_tileset(self):
-        filename = QFileDialog.getOpenFileName(None, "Select Tileset To Open", Config.current.datadir)
+        tileset_dialog = OpenFileDialog("Select Tileset To Open", ("SuperTux Tilesets (*.strf)", "All Files (*)"))
+        tileset_dialog.set_directory(Config.current.datadir, "images")
+        tileset_dialog.run(self.set_tileset)
+
+    def set_tileset(self, filename):
+        """Set tileset from (.strf) filename"""
         if not filename:
             QMessageBox.warning(None, "No Tileset Selected", "No tileset was selected, aborting...")
-            return False
         tileset = SuperTuxTileset(32)
         tileset.load(filename)
         self.gui_set_tileset(tileset)
-        return True
 
     def gui_run_level(self):
         print("Run this level...")
@@ -297,14 +302,14 @@ class SuperTuxGUI:
         except FileNotFoundError:
             QMessageBox.warning(None, "No Supertux Binary Found",
                                 "Press OK to select your Supertux binary")
-            Config.current.binary = QFileDialog.getOpenFileName(None, "Open Supertux Binary")
+            Config.current.binary = OpenFileDialog("Open Supertux Binary").filename
             if not Config.current.binary:
                 raise RuntimeError("binary path missing, use --binary BIN")
 
         # self.arguments.spawn_at = None
 
     def gui_record_level(self):
-        self.arguments.record_demo_file = QFileDialog.getSaveFileName(None, "Choose Record Target File")
+        self.arguments.record_demo_file = SaveFileDialog("Choose Record Target File")
         self.gui_run_level()
         self.arguments.record_demo_file = None
 
@@ -312,11 +317,11 @@ class SuperTuxGUI:
         QMessageBox.information(None,
                                 "Select a level file",
                                 "You must now select a level file - the level of the demo")
-        level = QFileDialog.getOpenFileName(None, "Select the level")
+        level = OpenLevelFileDialog("Select The Level")
         QMessageBox.information(None,
                                 "Select a demo file",
                                 "You must now select a demo file to play")
-        demo = QFileDialog.getOpenFileName(None, "Select the demo")
+        demo = OpenFileDialog("Select The Demo File To Play").filename
 
         self.arguments.play_demo_file = demo
 
@@ -529,7 +534,7 @@ class SuperTuxGUI:
             self.save_dialog.run(self.save_level)
 
     def gui_level_new(self):
-        dialog = NewLevelDialog(self.gui.window)
+        dialog = NewLevelWizard(self.gui.window)
         dialog.exec_()
 
         if dialog.level:
@@ -587,7 +592,7 @@ class SuperTuxGUI:
 
         if level.tileset_path != SuperTuxTileset.current.filename:
             tileset = SuperTuxTileset(32)
-            tileset.load(level.tileset_path)
+            tileset.load(Config.current.datadir + level.tileset_path)
             self.gui_set_tileset(tileset)
 
             # Tileset has changed, reload level:

@@ -18,6 +18,7 @@
 from flexlay import ObjectLayer, ObjMapTilemapObject, EditorMap
 from flexlay.math import Rect
 from .gameobj_factor import supertux_gameobj_factory
+from .gameobj import Camera
 from .tilemap import SuperTuxTileMap
 
 
@@ -73,13 +74,14 @@ class Sector:
         self.tilemaps.append(SuperTuxTileMap.from_size(self.width, self.height, "foreground", 100, False))
 
         self.object_layer = ObjectLayer()
-        # self.sketch  = SketchLayer()
 
         self.editormap = EditorMap()
         # self.editormap.set_background_color(Color(255, 255, 255))
         for tilemap in self.tilemaps:
             # self.editormap.add_layer(tilemap.tilemap_layer)
             self.object_layer.add_object(ObjMapTilemapObject(tilemap.tilemap_layer, tilemap))
+            #camera = Camera()
+            #self.object_layer.add_object(camera.objmap_object)
         self.editormap.add_layer(self.object_layer)
         # self.editormap.add_layer(self.sketch)
         self.editormap.metadata = self

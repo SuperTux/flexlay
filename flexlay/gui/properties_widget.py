@@ -19,6 +19,9 @@ from PyQt4.QtGui import (QVBoxLayout, QLabel, QLineEdit, QFormLayout,
                          QRadioButton, QColorDialog, QWidget, QFileDialog,
                          QComboBox, QPushButton)
 
+from flexlay.gui import OpenFileDialog
+from flexlay.util import Config
+
 
 class Item:
     KIND_LABEL = 0
@@ -164,24 +167,30 @@ class PropertiesWidget(QWidget):
 
         self.items.append(Item(Item.KIND_STRING, label, inputbox, callback=callback))
 
-    def add_file(self, label, default, ret_rel_to=None, show_rel_to=None, open_in="", callback=None):
-        '''
+    def add_file(self, label, default, ret_rel_to=None, show_rel_to=None, open_in=None, filters=("All Files (*)",),
+                 callback=None):
+        """Open a FileDialog for the user to select a file
+
         :param ret_rel_to: Path to which the param. of callback(value)
          will be relative to
         :param show_rel_to: Path to which the displayed text (in input box)
          will be relative to
         :param open_in: Where the open file dialog will begin
         :param callback: Method/function to call upon file being chosen.
-        '''
+        :param filters: A tuple containing filters for filenames. They should appear like this:
+                        Name of Filter (*.txt)
+                        ^ Only show .txt files
+                        All Files (*)
+                        C++ Files (*.cpp *.h *.hpp *.cxx)
+        """
         label = QLabel(label)
         inputbox = QLineEdit(default)
         if callback:
             inputbox.textChanged.connect(callback)
         browse = QPushButton("Browse...")
 
-        def browse_files():
-            '''Called when Browse... button clicked'''
-            path = QFileDialog.getOpenFileName(None, "Open File", open_in)
+        def file_selected(path):
+            """Called whenever file is selected"""
             actual_path = path
             if show_rel_to and path[:len(show_rel_to)] == show_rel_to:
                 inputbox.setText(path[len(show_rel_to):])
@@ -193,6 +202,12 @@ class PropertiesWidget(QWidget):
                     callback(path[len(ret_rel_to):])
                 else:
                     callback(path)
+
+        def browse_files():
+            """Called when Browse... button clicked"""
+            dialog = OpenFileDialog("Open File")
+            dialog.set_directory(open_in if open_in else Config.current.datadir)
+            dialog.run(file_selected)
 
         browse.clicked.connect(browse_files)  # Connect the above to click signal
 

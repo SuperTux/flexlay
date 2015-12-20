@@ -67,6 +67,7 @@ class Level:
 
         self.current_sector = None
         self.sectors = []
+        self.tileset_path = None
 
         self.is_worldmap = False
 
@@ -76,8 +77,7 @@ class Level:
         self.contact = get_value_from_tree(["contact", "_"], data, "")
         self.license = get_value_from_tree(["license", "_"], data, "")
         self.target_time = get_value_from_tree(["target-time", "_"], data, 0)
-        self.tileset_path = get_value_from_tree(["tileset", "_"], data, "images/tiles.strf")
-        self.tileset_path = os.path.join(Config.current.datadir, self.tileset_path)
+        self.tileset_path = get_value_from_tree(["tileset", "_"], data, "/images/tiles.strf")
 
         self.current_sector = None
         self.sectors = []
@@ -117,7 +117,7 @@ class Level:
         if tileset_path[:len(Config.current.datadir)] == Config.current.datadir:
             tileset_path = tileset_path.replace(Config.current.datadir, "", 1)
 
-        if tileset_path:
+        if tileset_path is not None:
             writer.write_string("tileset", tileset_path)
 
         writer.end_list()

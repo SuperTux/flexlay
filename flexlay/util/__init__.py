@@ -19,8 +19,9 @@ from .sexpr import sexpr_read_from_file, SExprParseError
 from .sexpr_reader import SExprReader, get_value_from_tree, sexpr_filter
 from .sexpr_writer import SExprWriter, write_sexpr
 from .signal import Signal
+from .config import Config
 
-__all__ = ["Signal",
+__all__ = ["Signal", "Config"
            "SExprWriter", "write_sexpr",
            "SExprReader", "get_value_from_tree"]
 

@@ -19,6 +19,7 @@ import os
 
 from flexlay import (Color, Config, ObjMapSpriteObject, ObjMapRectObject)
 from flexlay.math import Point, Rect, Size
+from flexlay.gui import GenericDialog
 from .property import *
 from .sprite import SuperTuxSprite
 
@@ -87,8 +88,8 @@ class GameObj:
             prop.write(writer, obj)
         writer.end_list()
 
-    def property_dialog(self, gui):
-        dialog = gui.create_generic_dialog("SecretArea Property Dialog")
+    def property_dialog(self, gui=None):
+        dialog = GenericDialog(self.label + " Property Dialog", gui)
         for prop in self.properties:
             prop.property_dialog(dialog)
 

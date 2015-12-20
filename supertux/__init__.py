@@ -33,6 +33,7 @@ from .tilemap import SuperTuxTileMap
 from .tileset import SuperTuxTileset
 from .toolbox import SuperTuxToolbox
 from .util import load_lisp
+from .supertux_arguments import SuperTuxArguments
 
 __all__ = ["GameObj", "SuperTuxGUI", "Level", "Sector",
            "SuperTuxSprite", "SuperTuxTileMap", "SuperTuxTileset",
@@ -42,7 +43,7 @@ __all__ = ["GameObj", "SuperTuxGUI", "Level", "Sector",
            "BoolProperty", "IntProperty", "FloatProperty",
            "StringProperty", "DirectionProperty", "InlinePosProperty",
            "InlineRectProperty", "TilemapProperty", "ColorProperty",
-           "ImageProperty", "SectorProperty"]
+           "ImageProperty", "SectorProperty", "SuperTuxArguments"]
 
 
 # EOF #

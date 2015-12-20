@@ -17,6 +17,7 @@
 from .gameobj import GameObj, make_sprite_object
 from .property import *
 
+
 class WorldmapLevel(GameObj):
     label = "WorldmapLevel"
     identifier = "level"

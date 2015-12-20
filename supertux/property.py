@@ -87,10 +87,10 @@ class StringProperty(Property):
 
 class FileProperty(StringProperty):
     def __init__(self, label, identifier, default="", relative_to="", open_in=""):
-        '''
-        @param relative_to: The prefix text not displayed in the input box
-        @param open_in: Where the browse dialog opens
-        '''
+        """
+        :param relative_to: The prefix text not displayed in the input box
+        :param open_in: Where the browse dialog opens
+        """
         super().__init__(label, identifier, default=default)
         # Where the file dialog opens by default
         self.open_in = open_in
@@ -107,9 +107,9 @@ class FileProperty(StringProperty):
 
 class EnumProperty(StringProperty):
     def __init__(self, label, identifier, default, optional=False, values=None):
-        '''
-        @param default: Is an index from values!!!
-        '''
+        """
+        :param default: Is an index from values!!!
+        """
         super().__init__(label, identifier, values[default] if values else "", optional=optional)
 
         self.default_index = default

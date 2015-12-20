@@ -93,9 +93,6 @@ class Level:
             self.current_sector = self.sectors[0]
 
     def save(self, filename):
-        self.save_v2(filename)
-
-    def save_v2(self, filename):
         with open(filename, "w") as f:
             self.save_io(f)
 

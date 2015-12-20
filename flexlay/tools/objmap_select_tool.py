@@ -22,6 +22,7 @@ from ..commands import ObjectMoveCommand, ObjectDeleteCommand
 from flexlay.gui.editor_map_component import EditorMapComponent
 from flexlay.math import Pointf, Rectf, Rect
 from flexlay.tools import Tool
+from flexlay.util import Signal
 
 
 class ObjMapSelectTool(Tool):
@@ -50,7 +51,7 @@ class ObjMapSelectTool(Tool):
 
         # Never used:
         # self.sig_popup_menu_display = Signal()
-        # self.sig_right_click = Signal()
+        self.sig_right_click = Signal()
 
     def clear_selection(self):
         self.context.object_selection.clear()
@@ -151,6 +152,7 @@ class ObjMapSelectTool(Tool):
                     parent.grab_mouse()
 
         elif event.kind == InputEvent.MOUSE_RIGHT:
+            self.sig_right_click()
             obj = objmap.find_object(pos)
             menu = QMenu()
             # Is there an object under cursor?
@@ -162,10 +164,14 @@ class ObjMapSelectTool(Tool):
                     self.context.object_selection = []
                     Workspace.current.get_map().execute(delete_command)
 
-                s = "s" if len(self.context.object_selection) >= 2 else ""  # Append s if multiple objects selected
-                print(s)
-                delete_action = menu.addAction(QIcon("data/images/icons24/stock_delete.png"), "Delete Object" + s)
+                def show_obj_properties():
+                    for i in self.get_selection():
+                        i.metadata.property_dialog()
+
+                delete_action = menu.addAction(QIcon("data/images/icons24/stock_delete.png"), "Delete Object(s)")
                 delete_action.triggered.connect(delete_obj)
+                properties_action = menu.addAction(QIcon("data/images/icons24/stock_edit.png"), "View Properties")
+                properties_action.triggered.connect(show_obj_properties)
                 menu.addSeparator()
             menu.move(QCursor.pos())
             menu.exec_()

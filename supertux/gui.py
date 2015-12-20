@@ -29,7 +29,7 @@ from flexlay.tools import (TilePaintTool, TileBrushCreateTool,
                            TileReplaceTool, ObjMapSelectTool,
                            ZoomTool, ZoomOutTool, WorkspaceMoveTool)
 from .button_panel import SuperTuxButtonPanel
-from .gameobj import PathNode
+from .gameobj import PathNode, Tux
 from .gameobj_factor import supertux_gameobj_factory
 from .level import Level
 from .menubar import SuperTuxMenuBar
@@ -37,6 +37,7 @@ from .new_level import NewLevelDialog
 from .sector import Sector
 from .tileset import SuperTuxTileset
 from .toolbox import SuperTuxToolbox
+from .supertux_arguments import SuperTuxArguments
 
 BACKGROUND_LAYER = 1
 INTERACTIVE_LAYER = 2
@@ -126,18 +127,17 @@ class SuperTuxGUI:
         self.set_level(level, "main")
 
         self.set_tilemap_paint_tool()
+
+        # Must be after LayerSelector initialised
         self.menubar = SuperTuxMenuBar(self.gui, self)
 
-        # Whether to record gameplay
-        self.record = False
-        # Where to put recording
-        self.record_target = ""
+        # Command line arguments, when game is run
+        self.arguments = SuperTuxArguments()
 
     def register_keyboard_shortcuts(self):
         self.editor_map.sig_on_key("f1").connect(lambda x, y: self.gui_toggle_minimap())
         self.editor_map.sig_on_key("m").connect(lambda x, y: self.gui_toggle_minimap())
         self.editor_map.sig_on_key("g").connect(lambda x, y: self.gui_toggle_grid())
-        self.editor_map.sig_on_key("4").connect(lambda x, y: self.gui_toggle_display_props())
 
         self.editor_map.sig_on_key("+").connect(lambda x, y: self.editor_map.zoom_in(Point(x, y)))
         self.editor_map.sig_on_key("-").connect(lambda x, y: self.editor_map.zoom_out(Point(x, y)))
@@ -153,7 +153,7 @@ class SuperTuxGUI:
             lambda x, y: self.workspace.get_map().metadata.parent.activate_sector("another_world",
                                                                                   self.workspace))
 
-        self.editor_map.sig_on_key("e").connect(lambda x, y: self.gui_show_object_properties())
+        self.editor_map.sig_on_key("p").connect(lambda x, y: self.gui_show_object_properties())
 
         def on_a_key(x, y):
             pos = self.editor_map.screen2world(Point(x, y))
@@ -166,11 +166,11 @@ class SuperTuxGUI:
         self.editor_map.sig_on_key("a").connect(on_a_key)
 
     def on_window_close(self, *args):
-        '''
-        Called when window x button is clicked
+        """Called when window x button is clicked
+
         Ask whether to save, continue, or just quit.
-        @return: boolean whether to close or not. If not boolean, will close.
-        '''
+        :return: boolean whether to close or not. If not boolean, will close.
+        """
         editor_map = Workspace.current.get_map()
         # If the most recent save was the same as the save_pointer index,
         # we can safely quit
@@ -248,17 +248,6 @@ class SuperTuxGUI:
             self.button_panel.grid_icon.set_up()
         self.editor_map.editormap_widget.repaint()
 
-    def gui_toggle_display_props(self):
-        if self.display_properties.show_all:
-            self.display_properties.show_all = False
-        elif not (self.display_properties.current_only):
-            self.display_properties.current_only = True
-        else:
-            self.display_properties.show_all = True
-            self.display_properties.current_only = False
-
-        self.display_properties.set(self.workspace.get_map().metadata)
-
     def gui_set_tileset(self, tileset):
         self.tileselector.set_tileset(tileset)
         self.tileselector.add_tilegroup("All Tiles", tileset.get_tiles())
@@ -297,9 +286,14 @@ class SuperTuxGUI:
             tmpfile = "/tmp/tmpflexlay-supertux.stl"
             self.save_level(tmpfile, False)
 
+        self.arguments.run_level = tmpfile
+
+        # for obj in self.sector.object_layer.get_objects():
+        #     if isinstance(obj.metadata, Tux):
+        #         self.arguments.spawn_at = obj.pos
+
         try:
-            subprocess.Popen([Config.current.binary, tmpfile] +
-                             ([] if not self.record else ["--record-demo", self.record_target]))
+            subprocess.Popen(self.arguments.get_popen_arg())
         except FileNotFoundError:
             QMessageBox.warning(None, "No Supertux Binary Found",
                                 "Press OK to select your Supertux binary")
@@ -307,11 +301,12 @@ class SuperTuxGUI:
             if not Config.current.binary:
                 raise RuntimeError("binary path missing, use --binary BIN")
 
+        # self.arguments.spawn_at = None
+
     def gui_record_level(self):
-        self.record = True
-        self.record_target = QFileDialog.getSaveFileName(None, "Choose Record Target File")
+        self.arguments.record_demo_file = QFileDialog.getSaveFileName(None, "Choose Record Target File")
         self.gui_run_level()
-        self.record = False
+        self.arguments.record_demo_file = None
 
     def gui_play_demo(self):
         QMessageBox.information(None,
@@ -322,7 +317,12 @@ class SuperTuxGUI:
                                 "Select a demo file",
                                 "You must now select a demo file to play")
         demo = QFileDialog.getOpenFileName(None, "Select the demo")
-        subprocess.Popen([Config.current.binary, level, "--play-demo", demo])
+
+        self.arguments.play_demo_file = demo
+
+        subprocess.Popen(self.arguments.get_popen_arg())
+
+        self.arguments.play_demo_file = None
 
     def gui_watch_example(self):
         level = os.path.join(Config.current.datadir, "levels", "world1", "01 - Welcome to Antarctica.stl")

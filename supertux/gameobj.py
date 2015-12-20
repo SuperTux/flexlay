@@ -18,9 +18,9 @@
 import os
 
 from flexlay import (Color, Config, ObjMapSpriteObject, ObjMapRectObject)
-from flexlay.math import Point, Rect, Size
 from flexlay.gui import GenericDialog
-from .property import *
+from flexlay.math import Rect, Size
+from flexlay.property import *
 from .sprite import SuperTuxSprite
 
 

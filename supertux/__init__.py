@@ -15,26 +15,26 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from flexlay.property import (BoolProperty, IntProperty, FloatProperty,
+                              StringProperty, DirectionProperty,
+                              InlinePosProperty, InlineRectProperty,
+                              TilemapProperty, ColorProperty, ImageProperty,
+                              SectorProperty)
 from .button_panel import SuperTuxButtonPanel
 from .gameobj import GameObj
 from .gameobj_factor import supertux_gameobj_factory
 from .gui import SuperTuxGUI
 from .level import Level
+from .level_file_dialog import OpenLevelFileDialog
 from .menubar import SuperTuxMenuBar
-from .property import (BoolProperty, IntProperty, FloatProperty,
-                       StringProperty, DirectionProperty,
-                       InlinePosProperty, InlineRectProperty,
-                       TilemapProperty, ColorProperty, ImageProperty,
-                       SectorProperty)
 from .sector import Sector
 from .sprite import SuperTuxSprite
 from .supertux import main
+from .supertux_arguments import SuperTuxArguments
 from .tilemap import SuperTuxTileMap
 from .tileset import SuperTuxTileset
 from .toolbox import SuperTuxToolbox
 from .util import load_lisp
-from .supertux_arguments import SuperTuxArguments
-from .level_file_dialog import OpenLevelFileDialog
 
 __all__ = ["GameObj", "SuperTuxGUI", "Level", "Sector",
            "SuperTuxSprite", "SuperTuxTileMap", "SuperTuxTileset",

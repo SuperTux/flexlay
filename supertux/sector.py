@@ -80,8 +80,8 @@ class Sector:
         for tilemap in self.tilemaps:
             # self.editormap.add_layer(tilemap.tilemap_layer)
             self.object_layer.add_object(ObjMapTilemapObject(tilemap.tilemap_layer, tilemap))
-            camera = Camera()
-            self.object_layer.add_object(camera.objmap_object)
+        camera = Camera()
+        self.object_layer.add_object(camera.objmap_object)
         self.editormap.add_layer(self.object_layer)
         # self.editormap.add_layer(self.sketch)
         self.editormap.metadata = self

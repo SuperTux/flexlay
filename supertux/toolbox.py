@@ -16,7 +16,12 @@
 
 
 class SuperTuxToolbox:
+    """A for selecting tools."""
     def __init__(self, gui_manager, editor):
+        """
+        :param gui_manager: a flexlay.GuiManager
+        :param editor: a SuperTuxGui
+        """
         # Create Toolbox
         self.toolbox = gui_manager.create_button_panel(False)
         self.toolbox.add_separator()

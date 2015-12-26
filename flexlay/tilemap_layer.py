@@ -88,7 +88,7 @@ class TilemapLayer(Layer):
                 for x in range(start_x, end_x):
                     tile_id = self.field.at(x - start_x, y - start_y)
                     if tile_id:  # skip transparent tile for faster draw
-                        tile = self.tileset.create(self.field.at(x, y))
+                        tile = self.tileset.create(self.field.at(x - start_x, y - start_y))
                         if tile:
                             tile.get_sprite().draw(x * tile_size, y * tile_size, gc)
 

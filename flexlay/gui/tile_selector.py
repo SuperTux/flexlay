@@ -45,6 +45,7 @@ class TileSelector:
         text = self.combobox.itemData(idx)
         tiles = self.tiles[text]
         self.widget.set_tiles(tiles)
+        self.widget.repaint()
         self.scroll_area.update()
 
     def set_tileset(self, tileset):
@@ -63,6 +64,10 @@ class TileSelector:
         # It's the first tilegroup, so show it
         if len(self.tiles) == 1:
             self.on_combobox_activated(0)
+
+    def clear_tilegroups(self):
+        self.tiles = {}
+        self.combobox.clear()
 
     def get_tiles(self):
         return self.widget.get_tiles()

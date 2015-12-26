@@ -19,8 +19,7 @@ from flexlay.util import sexpr_read_from_file, SExprParseError
 
 
 def load_lisp(filename, root_symbol):
-    """Convenience function that loads a lisp file from disk and checks for a
-    root symbol"""
+    """Convenience function that loads a lisp file from disk and checks for a root symbol"""
 
     tree = sexpr_read_from_file(filename)[0]
     if tree is None:

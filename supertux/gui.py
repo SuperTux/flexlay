@@ -252,6 +252,7 @@ class SuperTuxGUI:
 
     def gui_set_tileset(self, tileset):
         self.tileselector.set_tileset(tileset)
+        self.tileselector.clear_tilegroups()
         self.tileselector.add_tilegroup("All Tiles", tileset.get_tiles())
         for tilegroup in tileset.tilegroups:
             self.tileselector.add_tilegroup(tilegroup.name, tilegroup.tiles)

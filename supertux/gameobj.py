@@ -781,4 +781,23 @@ class Wind(GameObj):
             InlineRectProperty(),
         ]
 
+
+class Pushbutton(GameObj):
+    label = "Pushbutton"
+    identifier = "pushbutton"
+    sprite = "images/objects/pushbutton/pushbutton.sprite"
+
+    def __init__(self):
+        super().__init__()
+
+        self.objmap_object = make_sprite_object(self, self.sprite)
+        self.signal_connect()
+
+        self.properties = [
+            StringProperty("Script", "script", default=""),
+            SpriteProperty("Sprite", "sprite", default="", optional=True),
+            DirectionProperty("Direction", "direction", 0),
+            InlinePosProperty(),
+        ]
+
 # EOF #

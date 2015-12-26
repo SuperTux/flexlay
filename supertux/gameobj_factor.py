@@ -126,6 +126,7 @@ class SuperTuxGameObjFactory:
         self.add_object(LevelTime)
         self.add_object(Platform)
         self.add_object(Powerup)
+        self.add_object(Pushbutton)
         self.add_object(ResetPoint)
         self.add_object(ScriptedObject)
         self.add_object(SecretArea)

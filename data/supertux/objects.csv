@@ -28,7 +28,6 @@ mrtree,images/creatures/mr_tree/walk-left-1.png
 owl,images/creatures/owl/owl.sprite
 particles-ghosts,images/engine/editor/ghostparticles.png
 poisonivy,images/creatures/poison_ivy/left-0.png
-pushbutton,images/objects/pushbutton/pushbutton.sprite
 rustytrampoline,images/objects/rusty-trampoline/rusty-trampoline.sprite
 short_fuse,images/creatures/short_fuse/short_fuse.sprite
 skullyhop,images/creatures/skullyhop/skullyhop.sprite

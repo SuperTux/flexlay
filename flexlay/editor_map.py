@@ -16,6 +16,7 @@
 
 
 from flexlay import Color, Layer, TilemapLayer, ObjMapTilemapObject
+from flexlay.gui import EditorMapComponent
 from flexlay.math import Rect
 from flexlay.util import Signal
 
@@ -47,6 +48,17 @@ class EditorMap:
             self.layers.insert(pos, layer)
 
         self.serial += 1
+
+    def remove_tilemap_layer(self, tilemap_layer):
+        index = 0
+
+        for object in self.layers[0].objects:
+            if isinstance(object, ObjMapTilemapObject):
+                layer = object.tilemap_layer
+                if isinstance(layer, TilemapLayer):
+                    if layer is tilemap_layer:
+                        del self.layers[0].objects[index]
+            index += 1
 
     def draw_background(self, gc):
         bounding_rect = self.get_bounding_rect()

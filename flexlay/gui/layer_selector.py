@@ -115,6 +115,14 @@ class LayerSelector:
         # Stays pressed when clicked. Pressed = hidden, else shown
         self.current_hidden.setCheckable(True)
 
+        # Buttons to add/remove layers.
+        self.toolbar.addAction(QIcon("data/images/supertux/plus.png"),
+                               "New Layer",
+                               self.add_layer)
+        self.toolbar.addAction(QIcon("data/images/supertux/minus.png"),
+                               "Delete This Layer",
+                               self.remove_layer)
+
         self.layout = QVBoxLayout(self.vbox)
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.layout.addWidget(self.tree_view)
@@ -265,5 +273,19 @@ class LayerSelector:
             self.current_hidden.setIcon(self.eye_closed_icon)
         else:
             self.current_hidden.setIcon(self.eye_open_icon)
+
+    def add_layer(self):
+        """Unimplemented: Creates a new layer"""
+        pass
+
+    def remove_layer(self):
+        """Destroys this layer."""
+        self.editormap.remove_tilemap_layer(self.get_selected())
+        # Remove from TreeView
+        self.model.removeRow(self.selected_index)
+        # Stop errors
+        self.selected_index = None
+        # Update EditorMap
+        EditorMapComponent.current.editormap_widget.repaint()
 
 # EOF #

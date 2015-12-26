@@ -72,7 +72,7 @@ class TilePaintTool(Tool):
 
     def on_mouse_down(self, event):
         tilemap = ToolContext.current.tilemap_layer
-        if tilemap:
+        if tilemap and not tilemap.hidden:
             parent = EditorMapComponent.current
             pos = tilemap.world2tile(parent.screen2world(event.mouse_pos))
 
@@ -84,7 +84,7 @@ class TilePaintTool(Tool):
 
     def on_mouse_move(self, event):
         tilemap = ToolContext.current.tilemap_layer
-        if tilemap:
+        if tilemap and not tilemap.hidden:
             parent = EditorMapComponent.current
             self.current_tile = tilemap.world2tile(parent.screen2world(event.mouse_pos))
 
@@ -98,7 +98,7 @@ class TilePaintTool(Tool):
 
     def on_mouse_up(self, event):
         tilemap = ToolContext.current.tilemap_layer
-        if tilemap:
+        if tilemap and not tilemap.hidden:
             EditorMapComponent.current.get_workspace().get_map().modify()
 
             parent = EditorMapComponent.current

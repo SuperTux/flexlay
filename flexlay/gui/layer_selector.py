@@ -58,7 +58,6 @@ class LayerTreeView(QTreeView):
         selected_index = None
         deselected_index = None
 
-        # FIXME: Only caters for first index. Maybe two Signals, one for first index only?
         if len(selected.indexes()) > 0:
             selected_index = selected.indexes()[0].row()
         if len(deselected.indexes()) > 0:
@@ -102,10 +101,9 @@ class LayerSelector:
         self.tree_view.setModel(self.model)
 
         self.toolbar = QToolBar()
-        # Button to hide all layers
-        hide_all = self.toolbar.addAction("Hide All", self.hide_all)
-        # Button to show all layers
-        show_all = self.toolbar.addAction("Show All", self.show_all)
+
+        self.toolbar.addAction("Hide All", self.hide_all)
+        self.toolbar.addAction("Show All", self.show_all)
 
         # Eye icons:
         self.eye_open_icon = QIcon("data/images/supertux/stock-eye-12.png")

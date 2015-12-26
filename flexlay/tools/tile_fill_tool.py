@@ -31,7 +31,7 @@ class TileFillTool(Tool):
     def on_mouse_down(self, event):
         tilemap = ToolContext.current.tilemap_layer
 
-        if tilemap:
+        if tilemap and not tilemap.hidden:
             parent = EditorMapComponent.current
             pos = tilemap.world2tile(parent.screen2world(event.mouse_pos))
             tilemap.flood_fill_at(pos, ToolContext.current.tile_brush)

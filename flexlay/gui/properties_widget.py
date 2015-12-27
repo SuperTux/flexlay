@@ -30,7 +30,8 @@ class Item:
     KIND_FLOAT = 3
     KIND_STRING = 4
     KIND_ENUM = 5
-    KIND_COLOR = 6
+    KIND_RADIO = 6
+    KIND_COLOR = 7
 
     def __init__(self, kind, label, body, callback=None, group=None):
         self.kind = kind
@@ -43,15 +44,18 @@ class Item:
         if self.kind == Item.KIND_LABEL:
             return None
 
-        elif self.kind == Item.KIND_ENUM:
+        elif self.kind == Item.KIND_RADIO:
             idx = 0
             for button in self.group.buttons():
                 if button == self.group.checkedButton():
                     return idx
                 idx += 1
 
+        elif self.kind == Item.KIND_ENUM:
+            return self.body.currentText()
+
         elif self.kind == Item.KIND_BOOL:
-            return (self.body.checkState() == Qt.Checked)
+            return self.body.checkState() == Qt.Checked
 
         elif self.kind == Item.KIND_INT:
             return int(self.body.text())
@@ -221,6 +225,7 @@ class PropertiesWidget(QWidget):
         drop_down = QComboBox()
         for value in values:
             drop_down.addItem(value)
+        drop_down.setCurrentIndex(current_value)
         self.layout.addRow(label, drop_down)
 
         def button_clicked(i):
@@ -228,7 +233,7 @@ class PropertiesWidget(QWidget):
                 callback(values[i])
 
         drop_down.currentIndexChanged.connect(button_clicked)
-        self.items.append(Item(Item.KIND_ENUM, label, None, callback=callback, group=None))
+        self.items.append(Item(Item.KIND_ENUM, label, drop_down, callback=callback, group=None))
 
     def add_radio(self, name, values, current_value=0, callback=None):
         label = QLabel(name)

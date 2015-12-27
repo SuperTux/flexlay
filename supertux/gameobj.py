@@ -94,7 +94,12 @@ class GameObj:
             prop.property_dialog(dialog)
 
         def on_callback(*args):
-            print("Property Dialog callback:", *args)
+            print(args)
+            i = 0
+            for property in self.properties:
+                if property.editable:
+                    property.value = args[i]
+                    i += 1
 
         dialog.set_callback(on_callback)
 

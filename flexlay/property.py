@@ -20,12 +20,14 @@ from flexlay.math import Point
 
 
 class Property:
-    '''
+    """
     A property is just that: a property
     What these classes do is allow properties to easily be written to files,
     and displayed in dialogs.
     @see: flexlay/gui/generic_dialog.py, supertux/properties_widget.py 
-    '''
+    """
+    # Editable means appears in GenericDialog
+    editable = False
 
     def __init__(self, label, identifier, default, optional=False):
         self.label = label
@@ -49,11 +51,14 @@ class Property:
 
 
 class BoolProperty(Property):
+    editable = True
     def property_dialog(self, dialog):
         dialog.add_bool(self.label, self.value, self.on_value_change)
 
 
 class IntProperty(Property):
+    editable = True
+
     def __init__(self, label, identifier, default=0, optional=False):
         super().__init__(label, identifier, default, optional)
 
@@ -62,6 +67,8 @@ class IntProperty(Property):
 
 
 class FloatProperty(Property):
+    editable = True
+
     def __init__(self, label, identifier, default=0.0, optional=False):
         super().__init__(label, identifier, default, optional)
 
@@ -70,6 +77,8 @@ class FloatProperty(Property):
 
 
 class StringProperty(Property):
+    editable = True
+
     def __init__(self, label, identifier, default="", optional=False, translatable=False):
         super().__init__(label, identifier, default, optional)
         self.translatable = translatable
@@ -86,6 +95,8 @@ class StringProperty(Property):
 
 
 class FileProperty(StringProperty):
+    editable = True
+
     def __init__(self, label, identifier, default="", relative_to="", open_in=""):
         """
         :param relative_to: The prefix text not displayed in the input box
@@ -106,6 +117,8 @@ class FileProperty(StringProperty):
 
 
 class EnumProperty(StringProperty):
+    editable = True
+
     def __init__(self, label, identifier, default, optional=False, values=None):
         """
         :param default: Is an index from values!!!
@@ -120,15 +133,19 @@ class EnumProperty(StringProperty):
         self.values = values
 
     def property_dialog(self, dialog):
-        dialog.add_enum(self.label, self.values, self.default_index, self.on_value_change)
+        dialog.add_enum(self.label, self.values, self.values.index(self.value), self.on_value_change)
 
 
 class DirectionProperty(EnumProperty):
+    editable = True
+
     def __init__(self, label, identifier, default):
         super().__init__(label, identifier, default, optional=True, values=["auto", "left", "right"])
 
 
 class InlinePosProperty:
+    editable = False
+
     def __init__(self):
         self.identifier = ""  # To stop errors
 
@@ -145,6 +162,8 @@ class InlinePosProperty:
 
 class InlineTilePosProperty(InlinePosProperty):
     """Written to file as coords on tilemap, but displays correctly."""
+    editable = False
+
     def read(self, sexpr, obj):
         obj.pos.x = get_value_from_tree(["x", "_"], sexpr, 0.0) * 32
         obj.pos.y = get_value_from_tree(["y", "_"], sexpr, 0.0) * 32
@@ -155,6 +174,8 @@ class InlineTilePosProperty(InlinePosProperty):
 
 
 class InlineRectProperty:
+    editable = False
+
     def __init__(self):
         pass
 
@@ -173,21 +194,28 @@ class InlineRectProperty:
 
 
 class SpriteProperty(StringProperty):
+    editable = False
+
     def write(self, writer, obj):
         if self.value:
             super().write(writer, obj)
 
 
 class BadGuyProperty(EnumProperty):
+    editable = True
+
     def __init__(self, label, identifier, supertux_gameobj_factory):
         super().__init__(label, identifier, 0, values=[badguy[0] for badguy in supertux_gameobj_factory.badguys])
 
 
 class ImageProperty(StringProperty):
+    editable = False
     pass
 
 
 class SoundProperty(StringProperty):
+    editable = False
+
     def __init__(self, label, identifier, default=""):
         super().__init__(label, identifier, default=default)
 
@@ -196,6 +224,8 @@ class SoundProperty(StringProperty):
 
 
 class ColorProperty(StringProperty):
+    editable = True
+
     def __init__(self, label, identifier):
         super().__init__(label, identifier, Colorf())
 
@@ -218,6 +248,8 @@ class PathProperty:
             self.x = x
             self.y = y
             self.time = time
+
+    editable = False
 
     def __init__(self, label, identifier):
         self.label = label
@@ -262,16 +294,22 @@ class PathProperty:
 
 
 class SampleProperty(StringProperty):
+    editable = False
+
     def __init__(self, label, identifier, default):
         super().__init__(label, identifier, default, optional=True)
 
 
 class TilemapProperty(StringProperty):
+    editable = False
+
     def __init__(self, label, identifier):
         super().__init__(label, identifier, "", optional=True)
 
 
 class SectorProperty(StringProperty):
+    editable = False
+
     def __init__(self, label, identifier, default, optional):
         super().__init__(label, identifier, default, optional=optional)
 

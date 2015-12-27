@@ -84,11 +84,11 @@ class TilePaintTool(Tool):
 
     def on_mouse_move(self, event):
         tilemap = ToolContext.current.tilemap_layer
-        if tilemap and not tilemap.hidden:
+        if tilemap:
             parent = EditorMapComponent.current
             self.current_tile = tilemap.world2tile(parent.screen2world(event.mouse_pos))
 
-            if self.is_active:
+            if self.is_active and not tilemap.hidden:
                 brush = ToolContext.current.tile_brush
                 if ((event.mod & InputEvent.MOD_SHIFT) or
                         ((self.current_tile.x % brush.width) == (self.last_draw.x % brush.width) and

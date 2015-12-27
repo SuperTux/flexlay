@@ -36,7 +36,7 @@ from .sprite import Sprite
 
 from .workspace import Workspace
 from .object_layer import ObjectLayer
-from .command_group import CommandGroup
+from flexlay.commands.command_group import CommandGroup
 from .commands.object_add_command import ObjectAddCommand
 from .object_brush import ObjectBrush
 # from .stroke_drawer import StrokeDrawer

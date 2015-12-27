@@ -58,7 +58,11 @@ class EditorMap:
                 if isinstance(layer, TilemapLayer):
                     if layer is tilemap_layer:
                         del self.layers[0].objects[index]
+                        return object
             index += 1
+
+    def add_tilemap_layer(self, tilemap_layer):
+        self.layers[0].objects.append(ObjMapTilemapObject(tilemap_layer))
 
     def draw_background(self, gc):
         bounding_rect = self.get_bounding_rect()

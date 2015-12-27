@@ -15,13 +15,27 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from .command import Command
-from .object_add_command import ObjectAddCommand
 from .object_delete_command import ObjectDeleteCommand
-from .object_move_command import  ObjectMoveCommand
-from .object_transform_command import ObjectTransformCommand
-from .paint_command import PaintCommand
-from .layer_delete_command import LayerDeleteCommand
 
-__all__ = ["Command", "ObjectAddCommand", "ObjectDeleteCommand",
-           "ObjectTransformCommand", "ObjectMoveCommand", "PaintCommand",
-           "LayerDeleteCommand"]
+
+class LayerDeleteCommand(Command):
+    def __init__(self, layer_selector, layer):
+        """Deletes a Layer
+
+        :param layer: Either a TilemapLayer, an ObjMapTilemapObject or an int (the layer to remove)
+        """
+        self.layer = layer
+        self.layer_selector = layer_selector
+        self.removed_object = None
+
+    def execute(self):
+        self.removed_object = self.layer_selector.unsafe_remove_layer(self.layer)
+
+    def undo(self):
+        if self.removed_object is not None:
+            self.layer_selector.add_layer(self.removed_object)
+        else:
+            raise RuntimeError("Could not undo layer removal.")
+
+    def redo(self):
+        self.layer_selector.unsafe_remove_layer(self.removed_object)

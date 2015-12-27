@@ -18,7 +18,10 @@
 from PyQt4.QtGui import (QStandardItemModel, QStandardItem, QIcon,
                          QWidget, QToolBar, QTreeView, QVBoxLayout)
 from flexlay.tool_context import ToolContext
+from flexlay.commands import LayerDeleteCommand
 from .editor_map_component import EditorMapComponent
+from ..objmap_tilemap_object import ObjMapTilemapObject
+from ..tilemap_layer import TilemapLayer
 from ..util.signal import Signal
 
 
@@ -82,9 +85,16 @@ class LayerSelector:
     one selected, but don't rely on that.
 
     **NOTE** When hiding layers, use set_hidden or toggle_hidden here
-             When getting (a) layer(s) use get_layers and get_layer
+             When getting (a) layer(s) use get_layers and get_layer to
+             return a TilemapLayer
     """
-    def __init__(self):
+    def __init__(self, generate_tilemap_obj):
+        """A way to view layers
+
+        :param metadata_from_size: A method/function which returns metadata
+                                   for an ObjMapTilemapObject with arguments
+                                   width, height
+        """
         self.model = QStandardItemModel()
         # QStandardItems in the model (to set font etc.)
         # items are added to list by self.set_map()
@@ -121,25 +131,27 @@ class LayerSelector:
                                self.add_layer)
         self.toolbar.addAction(QIcon("data/images/supertux/minus.png"),
                                "Delete This Layer",
-                               self.remove_layer)
+                               self.remove_current_layer)
 
         self.layout = QVBoxLayout(self.vbox)
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.layout.addWidget(self.tree_view)
         self.layout.addWidget(self.toolbar)
 
-        # Currently selected index, None if nothing selected
-        self.selected_index = None
+        # Currently selected index, -1 if nothing selected
+        self.selected_index = -1
 
         # Show only selected layer if true
         self.show_only_selected = False
+
+        self.generate_tilemap_obj = generate_tilemap_obj
 
         # To get the tilemap_layers
         self.editormap = None
 
     def toggle_hidden(self, index):
         """Run set hidden on selected tilemap to toggle visibility"""
-        if self.selected_index is not None:
+        if self.selected_index >= 0:
             self.set_hidden(self.selected_index, not self.is_hidden(self.selected_index))
 
     def set_hidden(self, index, hidden, repaint=True):
@@ -178,15 +190,6 @@ class LayerSelector:
 
         self.model.clear()
         self.items = []
-
-        # Previous Code:
-        #        for layer in editormap.layers:
-        #            if isinstance(layer, TilemapLayer):
-        #                self.model.appendRow([QStandardItem("Tile: %s %dx%d" % (layer.m
-        #                                                                        layer.w
-        #            elif isinstance(layer, ObjectLayer):
-        #                self.model.appendRow([QStandardItem("Objects")])
-
 
         # When done this way, we can expect that the position in the
         # TreeView corresponds to poistion in list.
@@ -236,7 +239,10 @@ class LayerSelector:
         :return: TilemapLayer from tilemaps. None if invalid index
         """
         if index is not None:
-            return self.get_layers()[index]
+            try:
+                return self.get_layers()[index]
+            except IndexError:
+                pass
         return None
 
     def toggle_current(self):
@@ -262,30 +268,80 @@ class LayerSelector:
         """Connected to LayerTreeView selectionChanged"""
         self.selected_index = selected
         tilemap_layer = self.get_selected()
-        ToolContext.current.tilemap_layer = tilemap_layer
-        if self.show_only_selected and selected:
-            self.hide_all()
-            self.set_hidden(selected, True)
+        if tilemap_layer:
+            ToolContext.current.tilemap_layer = tilemap_layer
+            if self.show_only_selected and selected:
+                self.hide_all()
+                self.set_hidden(selected, True)
 
-        # Set toggle button
-        self.current_hidden.setChecked(tilemap_layer.hidden)
-        if tilemap_layer.hidden:
-            self.current_hidden.setIcon(self.eye_closed_icon)
+            # Set toggle button
+            self.current_hidden.setChecked(tilemap_layer.hidden)
+            if tilemap_layer.hidden:
+                self.current_hidden.setIcon(self.eye_closed_icon)
+            else:
+                self.current_hidden.setIcon(self.eye_open_icon)
+
+    def add_layer(self, tilemap_object=None):
+        """Creates a new layer"""
+        if tilemap_object is None:
+            if self.generate_tilemap_obj is None:
+                raise RuntimeError("Layer Selector cannot create tilemaps without metadata")
+
+            tilemap_object = self.generate_tilemap_obj()
+
+        # Add object to editormap
+        self.editormap.layers[0].add_object(tilemap_object)
+
+        # Create item
+        item = QStandardItem(tilemap_object.tilemap_layer.name)
+
+        # Set bold if required
+        font = item.font()
+        font.setBold(not tilemap_object.tilemap_layer.hidden)
+        item.setFont(font)
+
+        self.items.append(item)
+
+        self.model.appendRow(item)
+
+    def remove_current_layer(self):
+        self.remove_layer(self.selected_index)
+
+    def remove_layer(self, layer):
+        """Deletes this layer safely, adding to the editormap's undo stack
+
+        :param layer: Either a TilemapLayer, an ObjMapTilemapObject or an int (the layer to remove)
+        """
+        command = LayerDeleteCommand(self, layer)
+        self.editormap.execute(command)
+
+    def unsafe_remove_layer(self, layer):
+        """Remove a layer without adding to undo_stack
+
+        :param layer: Either a TilemapLayer, an ObjMapTilemapObject or an int (the layer to remove)
+        """
+        if isinstance(layer, int):
+            tilemap_layer = self.get_layer(layer)
+            index = layer
+        elif isinstance(layer, TilemapLayer):
+            tilemap_layer = layer
+            index = self.get_layers().find(tilemap_layer)
+        elif isinstance(layer, ObjMapTilemapObject):
+            tilemap_layer = layer.tilemap_layer
+            index = self.get_layers().index(tilemap_layer)
         else:
-            self.current_hidden.setIcon(self.eye_open_icon)
+            raise RuntimeError("Layer Selector: Cannot pass " + str(type(layer)) + " to _remove_layer\n" +
+                               "Try instead: ObjMapTilemapObject, TilemapLayer or int")
 
-    def add_layer(self):
-        """Unimplemented: Creates a new layer"""
-        pass
-
-    def remove_layer(self):
-        """Destroys this layer."""
-        self.editormap.remove_tilemap_layer(self.get_selected())
-        # Remove from TreeView
-        self.model.removeRow(self.selected_index)
+        tilemap_object = self.editormap.remove_tilemap_layer(tilemap_layer)
+        self.model.removeRow(index)
         # Stop errors
-        self.selected_index = None
+        if self.selected_index == index:
+            self.selected_index = -1
+            self.tree_view.clearSelection()
         # Update EditorMap
         EditorMapComponent.current.editormap_widget.repaint()
+
+        return tilemap_object
 
 # EOF #

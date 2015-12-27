@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from .commands import Command
+from flexlay.commands import Command
 
 
 class CommandGroup(Command):

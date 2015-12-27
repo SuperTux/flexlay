@@ -20,9 +20,9 @@ import subprocess
 
 from PyQt4.QtGui import (QIcon, QMessageBox)
 
-from flexlay import (Color, InputEvent, ObjMapRectObject,
+from flexlay import (Color, InputEvent, ObjMapRectObject, ObjMapTilemapObject,
                      ObjMapPathNode, Config, ToolContext, ObjectAddCommand,
-                     Workspace)
+                     Workspace, TilemapLayer)
 from flexlay.gui.file_dialog import OpenFileDialog, SaveFileDialog
 from flexlay.math import Point, Rect, Size
 from flexlay.tools import (TilePaintTool, TileBrushCreateTool,
@@ -37,6 +37,7 @@ from .menubar import SuperTuxMenuBar
 from .new_level import NewLevelWizard
 from .sector import Sector
 from .tileset import SuperTuxTileset
+from .tilemap import SuperTuxTileMap
 from .toolbox import SuperTuxToolbox
 from .supertux_arguments import SuperTuxArguments
 from .level_file_dialog import OpenLevelFileDialog, SaveLevelFileDialog
@@ -85,7 +86,7 @@ class SuperTuxGUI:
         self.tileselector = self.gui.create_tile_selector()
         self.gui_set_tileset(SuperTuxTileset.current)
 
-        self.layer_selector = self.gui.create_layer_selector()
+        self.layer_selector = self.gui.create_layer_selector(self.generate_tilemap_obj)
 
         # self.worldmapobjectselector = self.gui.create_object_selector(42, 42)
         # if False:
@@ -698,5 +699,19 @@ class SuperTuxGUI:
         ToolContext.current.object_layer = self.sector.object_layer
 
         self.sector.editormap.sig_change.connect(SuperTuxGUI.current.on_map_change)
+
+    def generate_tilemap_obj(self):
+        """Generate a basic ObjMapTilemapObject with basic parameters
+
+        May later open a dialog.
+
+        :return: ObjMapTilemapObject
+        """
+        tilemap = SuperTuxTileMap.from_size(self.sector.width,
+                                            self.sector.height,
+                                            "<no name>",
+                                            0, True)
+        tilemap_object = ObjMapTilemapObject(tilemap.tilemap_layer, tilemap)
+        return tilemap_object
 
 # EOF #

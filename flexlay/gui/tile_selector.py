@@ -51,6 +51,9 @@ class TileSelector:
     def set_tileset(self, tileset):
         self.widget.set_tileset(tileset)
 
+    def get_tileset(self):
+        return self.widget.tileset
+
     def set_tiles_noname(self, tiles):
         self.widget.set_tiles(tiles)
         self.combobox.clear()

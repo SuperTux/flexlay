@@ -156,10 +156,10 @@ class GUIManager:
         self.window.addDockWidget(Qt.RightDockWidgetArea, dockwidget)
         return tile_brush_selector
 
-    def create_layer_selector(self):
+    def create_layer_selector(self, generate_tilemap_obj):
         dockwidget = QDockWidget("Layer Selector")
         dockwidget.setObjectName("layer_selector_dock")
-        self.layer_selector = LayerSelector()
+        self.layer_selector = LayerSelector(generate_tilemap_obj)
         dockwidget.setWidget(self.layer_selector.get_widget())
 
         self.window.addDockWidget(Qt.RightDockWidgetArea, dockwidget)

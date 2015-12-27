@@ -714,4 +714,8 @@ class SuperTuxGUI:
         tilemap_object = ObjMapTilemapObject(tilemap.tilemap_layer, tilemap)
         return tilemap_object
 
+    def camera_properties(self):
+        self.sector.camera.property_dialog(self.gui.window)
+
+
 # EOF #

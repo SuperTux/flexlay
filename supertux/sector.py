@@ -35,6 +35,7 @@ class Sector:
         self.height = None
 
         self.tilemaps = []
+        self.camera = None
 
         self.object_layer = None
         # self.sketch = None
@@ -88,8 +89,8 @@ class Sector:
         spawn.objmap_object.pos = Point(spawn_x * 32, spawn_y * 32)
         self.object_layer.add_object(spawn.objmap_object)
 
-        camera = Camera()
-        self.object_layer.add_object(camera.objmap_object)
+        self.camera = Camera()
+        self.object_layer.add_object(self.camera.objmap_object)
 
         self.editormap.add_layer(self.object_layer)
         # self.editormap.add_layer(self.sketch)
@@ -141,6 +142,8 @@ class Sector:
                     print("Error: Couldn't resolve object type: ", name)
                     print("Sector: Unhandled tag: ", name)
                 else:
+                    if name == "camera":
+                        self.camera = obj
                     self.objects.append(obj)
 
         # Sort tilemaps according to z-pos before adding them:

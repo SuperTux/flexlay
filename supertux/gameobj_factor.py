@@ -77,9 +77,13 @@ class SuperTuxGameObjFactory:
     def create_object_brushes(self):
         """Creates Object Brushes for each sprite"""
         # print("Creating object brushes...")
-        return [ObjectBrush(SuperTuxSprite.from_file(os.path.join(Config.current.datadir, sprite)).get_sprite(),
-                            identifier)
-                for identifier, (sprite, constructor) in self.objects.items()]
+        brushes = []
+        for identifier, (sprite, constructor) in self.objects.items():
+            if sprite is not None:
+                brush = ObjectBrush(SuperTuxSprite.from_file(os.path.join(Config.current.datadir, sprite)).get_sprite(),
+                                    identifier)
+                brushes.append(brush)
+        return brushes
 
     def add_object(self, gameobj_class):
         self.objects[gameobj_class.identifier] = (gameobj_class.sprite, gameobj_class)

@@ -14,6 +14,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from flexlay.util import Config
 
 class SuperTuxButtonPanel:
     def __init__(self, gui_manager, editor):
@@ -73,5 +74,10 @@ class SuperTuxButtonPanel:
         self.button_panel.add_separator()
         self.run_icon = self.button_panel.add_icon("data/images/icons24/run.png", editor.gui_run_level,
                                                    hover="Run Level")
+
+        self.button_panel.add_separator()
+        self.button_panel.add_icon(Config.current.datadir + "/images/engine/editor/camera.png",
+                                   editor.camera_properties,
+                                   hover="Camera Properties")
 
 # EOF #

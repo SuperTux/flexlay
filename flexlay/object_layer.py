@@ -29,7 +29,7 @@ class ObjectLayer(Layer):
 
     def draw(self, gc):
         for obj in self.objects:
-            if gc.get_clip_rect().is_overlapped(obj.get_bound_rect()):
+            if obj.to_draw and gc.get_clip_rect().is_overlapped(obj.get_bound_rect()):
                 obj.draw(gc)
 
         for cp in self.control_points:

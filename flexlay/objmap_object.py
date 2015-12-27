@@ -20,6 +20,7 @@ from flexlay.util import Signal
 
 class ObjMapObject:
     def __init__(self, pos, metadata):
+        self.to_draw = True
         self.pos = pos
         self.metadata = metadata
         self.sig_select = Signal()
@@ -31,6 +32,8 @@ class ObjMapObject:
 
     def is_inside(self, click_pos):
         rect = self.get_bound_rect()
+        if rect is None:
+            return False
         return rect.is_inside(click_pos)
 
     def get_bound_rect(self):

@@ -17,9 +17,9 @@
 
 import os
 
-from flexlay import (Color, Config, ObjMapSpriteObject, ObjMapRectObject)
+from flexlay import (Color, Config, ObjMapSpriteObject, ObjMapRectObject, ObjMapObject)
 from flexlay.gui import GenericDialog
-from flexlay.math import Rect, Size
+from flexlay.math import Rect, Size, Point
 from flexlay.property import *
 from .sprite import SuperTuxSprite
 
@@ -150,13 +150,14 @@ class LevelTime(GameObj):
 class Camera(GameObj):
     label = "Camera"
     identifier = "camera"
-    sprite = "images/engine/editor/camera.png"
+    sprite = None
     values = ["normal", "autoscroll"]
 
     def __init__(self):
         super().__init__()
 
-        self.objmap_object = make_sprite_object(self, self.sprite)
+        self.objmap_object = ObjMapObject(Point(), self)
+        self.objmap_object.to_draw = False
         self.signal_connect()
 
         self.properties = [

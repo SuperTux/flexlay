@@ -37,9 +37,9 @@ class NewLevelWizard(GenericWizard):
         self.level.music = ""
         self.level.background = ""
         self.level.license = "GPL 2+ / CC-by-sa 3.0"
-        self.level.width = 100
-        self.level.height = 50
-        self.level.spawn = (5, 25)
+        self.level.width = 300
+        self.level.height = 35
+        # self.level.spawn = (5, 25)
 
         # Each function returns a QWizardPage, which is then added
         self.add_page("Create A New Level", self.create_intro_page())
@@ -61,7 +61,7 @@ class NewLevelWizard(GenericWizard):
         self.level.author = main_page_data[1]
         Config.current.name = self.level.author
         self.level.current_sector.music = main_page_data[4]
-        self.level.spawn = ceil(main_page_data[2] / 10), int(main_page_data[3] / 2)
+        # self.level.spawn = ceil(main_page_data[2] / 10), int(main_page_data[3] / 2)
         self.level.tileset_path = os.path.join("images", "tiles.strf")
 
     # Not Implemented

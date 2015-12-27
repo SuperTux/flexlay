@@ -16,9 +16,9 @@
 
 
 from flexlay import ObjectLayer, ObjMapTilemapObject, EditorMap
-from flexlay.math import Rect
+from flexlay.math import Rect, Point
 from .gameobj_factor import supertux_gameobj_factory
-from .gameobj import Camera
+from .gameobj import Camera, SpawnPoint
 from .tilemap import SuperTuxTileMap
 
 
@@ -80,8 +80,17 @@ class Sector:
         for tilemap in self.tilemaps:
             # self.editormap.add_layer(tilemap.tilemap_layer)
             self.object_layer.add_object(ObjMapTilemapObject(tilemap.tilemap_layer, tilemap))
+
+        spawn = SpawnPoint()
+        spawn.properties[0].value = "main"
+        spawn_x = 5 if self.width > 5 else 0
+        spawn_y = self.height * 3 / 4
+        spawn.objmap_object.pos = Point(spawn_x * 32, spawn_y * 32)
+        self.object_layer.add_object(spawn.objmap_object)
+
         camera = Camera()
         self.object_layer.add_object(camera.objmap_object)
+
         self.editormap.add_layer(self.object_layer)
         # self.editormap.add_layer(self.sketch)
         self.editormap.metadata = self

@@ -36,10 +36,11 @@ class SuperTuxArguments:
         run_level = [self.run_level]
         play_demo = ["--play-demo", self.play_demo_file] if self.record_demo_file is not None else []
         record_demo = ["--record-demo", self.record_demo_file] if self.record_demo_file is not None else []
+        developer_mode = ["--developer"]
         # Not implemented in SuperTux!
         # spawn_at = ["--spawn-pos",
         #             str(self.spawn_at.x), ",",
         #             str(self.spawn_at.y)] \
         #     if self.spawn_at is not None \
         #     else []
-        return [Config.current.binary] + run_level + play_demo + record_demo #+ spawn_at
+        return [Config.current.binary] + run_level + play_demo + record_demo + developer_mode  # + spawn_at

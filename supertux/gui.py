@@ -17,6 +17,8 @@
 
 import os
 import subprocess
+import tempfile
+import threading
 
 from PyQt4.QtGui import (QIcon, QMessageBox)
 
@@ -285,21 +287,25 @@ class SuperTuxGUI:
 
         level = self.workspace.get_map().metadata.get_level()
         if level.is_worldmap:
-            # FIXME: use real tmpfile
-            tmpfile = "/tmp/tmpflexlay-supertux.stwm"
-            self.save_level(tmpfile, False)
+            suffix = ".stwm"
         else:
-            tmpfile = "/tmp/tmpflexlay-supertux.stl"
-            self.save_level(tmpfile, False)
+            suffix = ".stl"
 
-        self.arguments.run_level = tmpfile
+        tmpfile = tempfile.mkstemp(suffix=suffix, prefix="flexlay-")
+        self.save_level(tmpfile[1], False, True)
+
+        self.arguments.run_level = tmpfile[1]
 
         # for obj in self.sector.object_layer.get_objects():
         #     if isinstance(obj.metadata, Tux):
         #         self.arguments.spawn_at = obj.pos
 
         try:
-            subprocess.Popen(self.arguments.get_popen_arg())
+            thread = threading.Thread(target=self.gui_run_level_thread,
+                                      args=(self.gui_run_level_cleanup,
+                                            self.arguments.get_popen_arg(),
+                                            tmpfile))
+            thread.start()
         except FileNotFoundError:
             QMessageBox.warning(None, "No Supertux Binary Found",
                                 "Press OK to select your Supertux binary")
@@ -308,6 +314,17 @@ class SuperTuxGUI:
                 raise RuntimeError("binary path missing, use --binary BIN")
 
         # self.arguments.spawn_at = None
+
+    def gui_run_level_thread(self, postexit_fn, popen_args, tmpfile):
+        subproc = subprocess.Popen(popen_args)
+        subproc.wait()
+        postexit_fn(tmpfile)
+        return
+
+    def gui_run_level_cleanup(self, tmpfile):
+        # Safely get rid of temporary file
+        os.close(tmpfile[0]) # Close file descriptor
+        os.remove(tmpfile[1]) # Remove the file
 
     def gui_record_level(self):
         self.arguments.record_demo_file = SaveFileDialog("Choose Record Target File")
@@ -612,7 +629,7 @@ class SuperTuxGUI:
         # TODO: We don't yet support multiple sectors, so we set the first sector's name.
         self.editor_map.set_sector_tab_label(0, level.sectors[0].name)
 
-    def save_level(self, filename, set_title=True):
+    def save_level(self, filename, set_title=True, is_tmp=False):
         if set_title:
             self.gui.window.setWindowTitle("SuperTux Editor: [" + filename + "]")
 
@@ -624,8 +641,8 @@ class SuperTuxGUI:
         Config.current.add_recent_file(filename)
         self.menubar.update_recent_files()
 
-        # Do backup save
-        if os.path.isfile(filename):
+        # Do backup save if the file exists and is going to be saved permanently.
+        if os.path.isfile(filename) and not is_tmp:
             os.rename(filename, filename + "~")
         level.save(filename)
         level.filename = filename

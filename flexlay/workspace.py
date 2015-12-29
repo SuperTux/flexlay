@@ -23,6 +23,7 @@ class Workspace:
 
         self.tools = {}
         self.editor_map = None
+        self.current_sector = None
 
     def draw(self, gc):
         if self.editor_map:

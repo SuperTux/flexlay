@@ -689,6 +689,7 @@ class SuperTuxGUI:
 
     def set_sector(self, sector):
         self.sector = sector
+        self.workspace.current_sector = sector
 
         self.workspace.set_map(self.sector.editormap)
         self.layer_selector.set_map(self.sector.editormap)

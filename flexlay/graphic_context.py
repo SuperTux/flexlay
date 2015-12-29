@@ -29,11 +29,12 @@ class GraphicContext:
     def clear(self, color):
         pass  # GRUMBEL gc.clear(color)
 
-    def draw_rect(self, rect, color):
-        self.painter.setPen(color.to_qt())
-        self.painter.drawRect(rect.to_qt())
+    def draw_rect(self, rect, color, radius = 0):
+        if radius == 0:
+            self.painter.setPen(color.to_qt())
+            self.painter.drawRect(rect.to_qt())
+            return
 
-    def draw_rounded_rect(self, rect, color, radius):
         self.painter.setPen(color.to_qt())
         self.painter.drawRoundedRect(rect.to_qt(), radius, radius)
 

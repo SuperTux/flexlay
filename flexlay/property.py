@@ -310,8 +310,8 @@ class TilemapProperty(EnumProperty):
     def get_tilemaps(self):
         sector = Workspace.current.current_sector
         if sector == None:
-            return []
-        return [tilemap.name for tilemap in sector.tilemaps]
+            return [""]
+        return [""] + [tilemap.name for tilemap in sector.tilemaps]
 
     def __init__(self, label, identifier, placeholder=None):
         super().__init__(label, identifier, 0, values=self.get_tilemaps())

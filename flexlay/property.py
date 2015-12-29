@@ -80,9 +80,12 @@ class StringProperty(Property):
     editable = True
     placeholder = None
 
-    def __init__(self, label, identifier, default="", optional=False, translatable=False):
+    def __init__(self, label, identifier, default="", optional=False, translatable=False, placeholder=None):
         super().__init__(label, identifier, default, optional)
         self.translatable = translatable
+
+        if placeholder != None:
+            self.placeholder = placeholder
 
     def read(self, sexpr, obj):
         self.value = get_value_from_tree([self.identifier, "_"], sexpr, self.default)
@@ -305,8 +308,8 @@ class SampleProperty(StringProperty):
 class TilemapProperty(StringProperty):
     editable = False
 
-    def __init__(self, label, identifier):
-        super().__init__(label, identifier, "", optional=True)
+    def __init__(self, label, identifier, placeholder=None):
+        super().__init__(label, identifier, "", optional=True, placeholder=placeholder)
 
 
 class SectorProperty(StringProperty):

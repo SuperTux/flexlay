@@ -260,9 +260,9 @@ class SecretArea(GameObj):
         self.signal_connect()
 
         self.properties = [
-            TilemapProperty("FadeTilemap", "fade-tilemap"),
-            StringProperty("Script", "script", "", optional=False),
-            StringProperty("Message", "message", "", optional=False, translatable=False),
+            TilemapProperty("FadeTilemap", "fade-tilemap", placeholder="No tilemap"),
+            StringProperty("Script", "script", "", optional=False, placeholder="Empty script"),
+            StringProperty("Message", "message", "", optional=False, translatable=False, placeholder="Empty message"),
             InlineRectProperty(),
         ]
 

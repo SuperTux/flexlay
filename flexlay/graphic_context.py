@@ -16,6 +16,7 @@
 
 
 from PyQt4.QtCore import QLineF
+from PyQt4.QtGui import QPainterPath
 
 from flexlay.math import Rectf
 
@@ -32,8 +33,18 @@ class GraphicContext:
         self.painter.setPen(color.to_qt())
         self.painter.drawRect(rect.to_qt())
 
-    def fill_rect(self, rect, color):
-        self.painter.fillRect(rect.to_qt(), color.to_qt())
+    def draw_rounded_rect(self, rect, color, radius):
+        self.painter.setPen(color.to_qt())
+        self.painter.drawRoundedRect(rect.to_qt(), radius, radius)
+
+    def fill_rect(self, rect, color, radius = 0):
+        if radius == 0:
+            self.painter.fillRect(rect.to_qt(), color.to_qt())
+            return
+
+        path = QPainterPath()
+        path.addRoundedRect(rect.to_qt_f(), radius, radius)
+        self.painter.fillPath(path, color.to_qt())
 
     def draw_line(self, x1, y1, x2, y2, color):
         self.painter.setPen(color.to_qt())

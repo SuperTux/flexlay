@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from PyQt4.QtCore import QRect
+from PyQt4.QtCore import QRect, QRectF
 
 from .size import Size
 
@@ -89,6 +89,10 @@ class Rect:
     def to_qt(self):
         return QRect(self.left, self.top,
                      self.width, self.height)
+
+    def to_qt_f(self):
+        return QRectF(self.left, self.top,
+                      self.width, self.height)
 
     def __str__(self):
         return "Rect({}, {}, {}, {})".format(self.left, self.top, self.right, self.bottom)

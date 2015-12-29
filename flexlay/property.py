@@ -24,7 +24,7 @@ class Property:
     A property is just that: a property
     What these classes do is allow properties to easily be written to files,
     and displayed in dialogs.
-    @see: flexlay/gui/generic_dialog.py, supertux/properties_widget.py 
+    @see: flexlay/gui/generic_dialog.py, supertux/properties_widget.py
     """
     # Editable means appears in GenericDialog
     editable = False
@@ -78,6 +78,7 @@ class FloatProperty(Property):
 
 class StringProperty(Property):
     editable = True
+    placeholder = None
 
     def __init__(self, label, identifier, default="", optional=False, translatable=False):
         super().__init__(label, identifier, default, optional)
@@ -91,7 +92,7 @@ class StringProperty(Property):
             writer.write_string(self.identifier, self.value, translatable=self.translatable)
 
     def property_dialog(self, dialog):
-        dialog.add_string(self.label, self.value, self.on_value_change)
+        dialog.add_string(self.label, self.value, self.on_value_change, self.placeholder)
 
 
 class FileProperty(StringProperty):
@@ -195,6 +196,7 @@ class InlineRectProperty:
 
 class SpriteProperty(StringProperty):
     editable = False
+    placeholder = "default"
 
     def write(self, writer, obj):
         if self.value:

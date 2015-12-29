@@ -77,7 +77,7 @@ class Item:
 class PropertiesWidget(QWidget):
     """
     A widget for displaying & editing properties of objects etc.
-    
+
     Also see the properties this likes to display:
     also see: supertux/property.py
     """
@@ -160,7 +160,7 @@ class PropertiesWidget(QWidget):
 
         self.items.append(Item(Item.KIND_FLOAT, label, inputbox, callback=callback))
 
-    def add_string(self, name, value, callback=None):
+    def add_string(self, name, value, callback=None, placeholder=None):
         label = QLabel(name)
         inputbox = QLineEdit()
         if callback:
@@ -168,6 +168,8 @@ class PropertiesWidget(QWidget):
         self.layout.addRow(label, inputbox)
 
         inputbox.setText(value)
+        if placeholder != None:
+            inputbox.setPlaceholderText(placeholder)
 
         self.items.append(Item(Item.KIND_STRING, label, inputbox, callback=callback))
 

@@ -67,6 +67,7 @@ class ObjMapSelectTool(Tool):
         self.deselected = self.context.object_selection
         for obj in self.context.object_selection:
             gc.draw_rect(Rect(obj.get_bound_rect()), Color(255, 0, 0))
+            gc.fill_rect(Rect(obj.get_bound_rect()), Color(0, 0, 0, 64))
 
         if self.state == ObjMapSelectTool.STATE_DRAG:
             pass

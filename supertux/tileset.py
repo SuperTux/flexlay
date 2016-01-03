@@ -16,6 +16,7 @@
 
 
 import os
+import logging
 
 from flexlay import Tile, Tileset, PixelBuffer, Config
 from flexlay.util import get_value_from_tree
@@ -56,7 +57,7 @@ class SuperTuxTileset(Tileset):
         return ungrouped_tiles
 
     def load(self, filename):
-        print("Loading Tileset: %s" % filename)
+        logging.info("Loading Tileset: %s" % filename)
         self.filename = filename
         tree = load_lisp(filename, "supertux-tiles")
 

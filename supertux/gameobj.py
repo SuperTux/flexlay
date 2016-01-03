@@ -16,6 +16,7 @@
 
 
 import os
+import logging
 
 from flexlay import (Color, Config, ObjMapSpriteObject, ObjMapRectObject, ObjMapObject)
 from flexlay.gui import GenericDialog
@@ -94,7 +95,6 @@ class GameObj:
             prop.property_dialog(dialog)
 
         def on_callback(*args):
-            print(args)
             i = 0
             for property in self.properties:
                 if property.editable:
@@ -712,7 +712,7 @@ class UnimplementedObject(GameObj):
         self.sexpr = sexpr
 
     def write(self, writer, obj):
-        print("Unimplemented:", self.sexpr)
+        logging.debug("Unimplemented:", self.sexpr)
 
     def property_dialog(self, gui):
         pass

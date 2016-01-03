@@ -16,7 +16,7 @@
 
 
 import csv
-import os.path
+import logging
 from collections import OrderedDict
 
 from flexlay import ObjectBrush, Config
@@ -56,7 +56,7 @@ class SuperTuxGameObjFactory:
     def create_gameobj_at(self, identifier, pos):
         data = self.objects.get(identifier)
         if data is None:
-            print("couldn't create: %r at %s" % (identifier, pos))
+            logging.warning("couldn't create: %r at %s" % (identifier, pos))
         else:
             _, constructor = data
             obj = constructor()
@@ -66,7 +66,7 @@ class SuperTuxGameObjFactory:
     def create_gameobj(self, identifier, sexpr):
         data = self.objects.get(identifier)
         if data is None:
-            print("couldn't create: %r" % identifier)
+            logging.warning("couldn't create: %r" % identifier)
         else:
             _, constructor = data
             obj = constructor()

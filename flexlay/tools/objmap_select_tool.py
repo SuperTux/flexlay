@@ -124,7 +124,7 @@ class ObjMapSelectTool(Tool):
                 obj = objmap.find_object(pos)
                 if obj is not None:
                     if event.mod & InputEvent.MOD_SHIFT:
-                        print("ObjMapSelectTool: Shift presses")
+                        # print("ObjMapSelectTool: Shift presses")
                         if obj not in self.context.object_selection:
                             self.context.object_selection.append(obj)
                         else:

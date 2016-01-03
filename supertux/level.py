@@ -15,6 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import os
+import logging
 
 from flexlay import Config
 from flexlay.util import get_value_from_tree, sexpr_filter, SExprWriter
@@ -39,7 +40,7 @@ class Level:
 
         level.version = get_value_from_tree(["version", "_"], data, 0)
 
-        print("VERSION:", level.filename, " ", level.version)
+        # print("VERSION:", level.filename, " ", level.version)
 
         if level.version == 1:
             raise Exception("version 1 levels not supported at the moment")
@@ -100,7 +101,7 @@ class Level:
                 self.current_sector = sector
 
         if self.current_sector is None:
-            print("Error: No main sector defined:", self.sectors)
+            logging.error("Error: No main sector defined: " + str(self.sectors))
             self.current_sector = self.sectors[0]
 
     def save(self, filename):
@@ -141,7 +142,7 @@ class Level:
         if len(self.sectors) > 1:
             self.sectors = [sec for sec in self.sectors if sec.name != name]
         else:
-            print("Only one sector left, can't delete it")
+            logging.warning("Only one sector left, can't delete it")
 
     def get_sectors(self):
         return [sec.name for sec in self.sectors]

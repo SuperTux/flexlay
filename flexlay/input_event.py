@@ -14,6 +14,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import logging
 
 from PyQt4.QtCore import Qt
 
@@ -52,7 +53,7 @@ class InputEvent:
         elif event.button() == Qt.RightButton:
             result.kind = InputEvent.MOUSE_RIGHT
         else:
-            print("unknown mouse button:", event.button())
+            logging.debug("unknown mouse button:", event.button())
 
         if event.modifiers() & Qt.ControlModifier:
             result.mod |= InputEvent.MOD_CTRL

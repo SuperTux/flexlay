@@ -16,6 +16,7 @@
 
 
 import os
+import logging
 
 from flexlay import Sprite
 from flexlay.util import get_value_from_tree, sexpr_read_from_file
@@ -70,7 +71,7 @@ class SuperTuxSprite:
                 if sprite.actions_default is None or action.name == "default":
                     sprite.actions_default = action
             else:
-                print("Unknown symbol '%s' in sprite '%s'" % (i[0], filename))
+                logging.warning("Unknown symbol '%s' in sprite '%s'" % (i[0], filename))
 
         return sprite
 
@@ -86,7 +87,7 @@ class SuperTuxSprite:
     def get_sprite(self, action_name="default"):
         action = self.actions.get(action_name, self.actions_default)
         if action is None:
-            print("Kaputt:", self.actions)
+            logging.info("Kaputt:" + str(self.actions))
         else:
             sprite = Sprite.from_file(os.path.join(self.basedir, action.image))
             # FIXME:

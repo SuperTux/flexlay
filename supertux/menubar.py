@@ -54,7 +54,7 @@ class SuperTuxMenuBar:
         layer_menu = self.menubar.add_menu("&Layer")
         layer_menu.add_item("Show All", editor.layer_selector.show_all)
         layer_menu.add_item("Hide All", editor.layer_selector.show_all)
-        layer_menu.add_item("Show Only Selected", (lambda: print("\"Show Only Selected\" is not implemented")))
+        # layer_menu.add_item("Show Only Selected", (lambda: print("\"Show Only Selected\" is not implemented")))
 
         sector_menu = self.menubar.add_menu("&Sector")
         # sector = editor.workspace.get_map().metadata

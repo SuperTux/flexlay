@@ -17,6 +17,7 @@
 
 import configparser
 import os
+import logging
 
 
 class Config:
@@ -68,7 +69,7 @@ class Config:
                     recent_file = parser['supertux-editor']['recent_files%d' % i]
                     self.recent_files.append(recent_file)
         else:
-            print("%s: [supertux-editor] section missing" % filename)
+            logging.warning("%s: [supertux-editor] section missing" % filename)
 
     def save(self, filename=None):
         if filename is None:

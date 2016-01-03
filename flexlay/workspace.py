@@ -14,6 +14,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import logging
+
 
 class Workspace:
     current = None
@@ -57,7 +59,7 @@ class Workspace:
         if tool is not None:
             tool.on_mouse_down(event)
         else:
-            print("Workspace:", event.kind)
+            logging.info("Workspace:", event.kind)
 
     def get_map(self):
         return self.editor_map

@@ -14,6 +14,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import logging
 
 from flexlay.math import Pointf, Sizef, Rect, Rectf
 from .objmap_control_point import ObjMapControlPoint
@@ -160,7 +161,7 @@ class ObjMapRectObject(ObjMapObject):
 
     def add_control_points(self):
         self.update_control_points()
-        print("Adding control points...")
+        logging.info("Adding control points...")
 
         from .tool_context import ToolContext
         objmap = ToolContext.current.object_layer

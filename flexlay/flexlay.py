@@ -16,6 +16,7 @@
 
 
 import sys
+import logging
 
 from PyQt4.QtGui import QApplication
 
@@ -23,11 +24,17 @@ from .gui_manager import GUIManager
 
 
 class Flexlay:
-    def __init__(self):
+    def __init__(self, app_name):
+        self.name = app_name
+
         self.application = QApplication(sys.argv)
         self.gui_manager = None
 
-    def create_gui_manager(self, title):
+        logging.basicConfig(format="[%(levelname)s] "+ self.name + " %(pathname)s:%(lineno)s: %(message)s")
+
+    def create_gui_manager(self, title=""):
+        if title == "":
+            title = self.name
         self.gui_manager = GUIManager(title)
         return self.gui_manager
 

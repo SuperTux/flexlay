@@ -17,7 +17,7 @@
 
 import argparse
 import os
-import os.path
+import logging
 
 from PyQt4.QtCore import QByteArray
 from PyQt4.QtGui import QMessageBox, QFileDialog
@@ -40,7 +40,7 @@ def main():
     args = parser.parse_args()
 
     # Create flexlay instance
-    flexlay = Flexlay()
+    flexlay = Flexlay("SuperTux")
 
     # Load data directory path from config file, --datadir argument or open directory dialog
     config = Config.create("supertux-editor")
@@ -53,7 +53,7 @@ def main():
         if not config.datadir:
             raise RuntimeError("datadir missing, use --datadir DIR")
 
-    print("Datadir:", config.datadir)
+    logging.info("Datadir:" + config.datadir)
 
     # Load supertux binary path from config file, --binary argument or open file dialog
     if not config.binary:
@@ -68,7 +68,7 @@ def main():
             if not config.binary:
                 raise RuntimeError("binary path missing, use --binary BIN")
 
-    print("Binary path:", config.binary)
+    logging.info("Binary path:" + config.binary)
 
     # Load tileset
     tileset = SuperTuxTileset(32)
@@ -91,7 +91,7 @@ def main():
                 any_valid = True
                 break
         if not any_valid:
-            print("All recent files broken. Creating a new level...")
+            logging.info("All recent files broken. Creating a new level...")
             gui.gui_level_new()
     else:
         gui.gui_level_new()
@@ -103,10 +103,10 @@ def main():
 
     if config.geometry:
         if not gui.gui.window.restoreGeometry(QByteArray.fromBase64(config.geometry)):
-            print("error: failed to restore window geometry")
+            logging.error("error: failed to restore window geometry")
     if config.window_state:
         if not gui.gui.window.restoreState(QByteArray.fromBase64(config.window_state)):
-            print("error: failed to restore window state")
+            logging.error("error: failed to restore window state")
 
     gui.run()
 

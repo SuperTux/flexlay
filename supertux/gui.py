@@ -17,6 +17,7 @@
 
 import os
 import subprocess
+import logging
 import tempfile
 import threading
 
@@ -205,16 +206,10 @@ class SuperTuxGUI:
             elif choice == 2:
                 return True
 
-    def on_worldmap_object_drop(self, brush, pos):
-        pos = self.editor_map.screen2world(pos)
-        object_type = brush.metadata
-        create_worldmapobject_at_pos(
-            self.workspace.get_map().metadata.objects, object_type, pos)
-
     def on_object_drop(self, brush, pos):
         obj = supertux_gameobj_factory.create_gameobj_at(brush.metadata, pos)
         if obj is None:
-            print("Error: Unknown object type dropped: %r" % brush.metadata)
+            logging.error("Unknown object type dropped: %r" % brush.metadata)
         else:
             cmd = ObjectAddCommand(self.workspace.get_map().metadata.object_layer)
             cmd.add_object(obj.objmap_object)
@@ -283,7 +278,7 @@ class SuperTuxGUI:
         self.gui_set_tileset(tileset)
 
     def gui_run_level(self):
-        print("Run this level...")
+        logging.info("Run this level...")
 
         level = self.workspace.get_map().metadata.get_level()
         if level.is_worldmap:
@@ -361,13 +356,13 @@ class SuperTuxGUI:
         dialog.add_int("Y: ", 0)
 
         def on_callback(w, h, x, y):
-            print("Resize Callback")
+            logging.info("Resize Callback")
             level.resize(Size(w, h), Point(x, y))
 
         dialog.set_callback(on_callback)
 
     def gui_smooth_level_struct(self):
-        print("Smoothing level structure")
+        logging.info("Smoothing level structure")
         tilemap = self.tool_context.tilemap_layer
         data = tilemap.get_data()
         # width = tilemap.width
@@ -416,8 +411,6 @@ class SuperTuxGUI:
 
     def gui_edit_level(self):
         level = self.workspace.get_map().metadata.get_level()
-        print(self.workspace.get_map())
-        print(self.workspace.get_map().metadata)
         dialog = self.gui.create_generic_dialog("Edit Level")
 
         dialog.add_string("Name:", level.name)
@@ -500,12 +493,12 @@ class SuperTuxGUI:
         if self.tool_context.object_selection:
             selection = self.tool_context.object_selection
             if len(selection) > 1:
-                print("Warning: Selection to large")
+                logging.warning("Selection too large")
             elif len(selection) == 1:
                 obj = selection[0].metadata
                 obj.property_dialog(self.gui)
             else:
-                print("Warning: Selection is empty")
+                logging.warning("Selection is empty")
 
     def undo(self):
         self.workspace.get_map().undo()
@@ -539,7 +532,7 @@ class SuperTuxGUI:
         else:
             filename = self.workspace.get_map().metadata.parent.filename
 
-        print("Filename:", filename)
+        logging.info("Save Filename: " + filename)
         if filename:
             self.save_level(filename)
         else:
@@ -569,7 +562,7 @@ class SuperTuxGUI:
         self.load_dialog.run(self.load_level)
 
     def insert_path_node(self, x, y):
-        print("Insert path Node")
+        logging.info("Insert path Node")
         m = self.workspace.get_map().metadata
         pathnode = ObjMapPathNode(self.editor_map.screen2world(Point(x, y)),
                                   "PathNode")
@@ -577,7 +570,7 @@ class SuperTuxGUI:
         m.objects.add_object(pathnode)
 
     def connect_path_nodes(self):
-        print("Connecting path nodes")
+        logging.info("Connecting path nodes")
         pathnodes = []
         for i in self.tool_context.object_selection:
             obj = i.get_data()
@@ -605,7 +598,7 @@ class SuperTuxGUI:
         pass
 
     def load_level(self, filename, set_title=True):
-        print("Loading: ", filename)
+        logging.info("Loading: ", filename)
 
         if set_title:
             self.gui.window.setWindowTitle("SuperTux Editor: [" + filename + "]")

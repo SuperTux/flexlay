@@ -29,21 +29,24 @@ class Config:
         if not os.path.isdir(path):
             os.mkdir(path)
 
-        return Config(os.path.join(path, projectname + ".cfg"))
+        return Config(projectname, os.path.join(path, projectname + ".cfg"))
 
-    def __init__(self, filename):
+    def __init__(self, project_name, filename):
         Config.current = self
+
+        # Equivalent to self.__dict__
+        # We can't use self.attributes = {} as __setattr__ asks for self.attributes!
+        self.__dict__["attributes"] = {}
+
+        self.project_name = project_name
         self.filename = filename
 
-        self.datadir = ""
-        self.binary = ""
-        self.recent_files = []
-        self.geometry = ""
-        self.window_state = ""
-        self.name = "Anonymous"
+        # Should be relevant to all editors.
+        self.create_attribute("geometry", "")
+        self.create_attribute("window_state", "")
 
-        if os.path.isfile(filename):
-            self.load()
+        # Recent files is organised separately.
+        self.recent_files = []
 
     def load(self, filename=None):
         if filename is None:
@@ -51,49 +54,63 @@ class Config:
 
         parser = configparser.ConfigParser()
         parser.read(filename)
-        if "supertux-editor" in parser:
-            if "datadir" in parser["supertux-editor"]:
-                self.datadir = parser["supertux-editor"]["datadir"]
-            if "binary" in parser["supertux-editor"]:
-                self.binary = parser["supertux-editor"]["binary"]
-            if "geometry" in parser["supertux-editor"]:
-                self.geometry = parser['supertux-editor']['geometry']
-            if "name" in parser["supertux-editor"]:
-                self.name = parser["supertux-editor"]["name"]
-            if "window_state" in parser["supertux-editor"]:
-                self.window_state = parser['supertux-editor']['window_state']
+        if self.project_name in parser:
+            # Run through attributes, checking if they're in the parser's loaded variables.
+            for key in self.attributes:
+                if key in parser[self.project_name]:
+                    self.attributes[key] = parser[self.project_name][key]
 
+            # Load recent files, listed in order as recent_file# = filename
             self.recent_files = []
             for i in range(0, 10):
-                if ('recent_files%d' % i) in parser['supertux-editor']:
-                    recent_file = parser['supertux-editor']['recent_files%d' % i]
+                if ('recent_files%d' % i) in parser[self.project_name]:
+                    recent_file = parser[self.project_name]['recent_files%d' % i]
                     self.recent_files.append(recent_file)
         else:
-            logging.warning("%s: [supertux-editor] section missing" % filename)
+            logging.info("No " + self.project_name + " section found in " + filename)
 
     def save(self, filename=None):
         if filename is None:
             filename = self.filename
 
         parser = configparser.ConfigParser()
-        parser['supertux-editor'] = {}
-        parser['supertux-editor']['datadir'] = self.datadir
-        parser['supertux-editor']['binary'] = self.binary
-        parser['supertux-editor']['geometry'] = self.geometry
-        parser['supertux-editor']['window_state'] = self.window_state
-        parser['supertux-editor']['name'] = self.name
+        parser[self.project_name] = {}
+        for key in self.attributes:
+            parser[self.project_name][key] = self.attributes[key]
+
         for i, recent_file in enumerate(self.recent_files):
-            parser['supertux-editor']['recent_files%d' % i] = recent_file
+            parser[self.project_name]['recent_files%d' % i] = recent_file
 
         with open(filename, "w") as fout:
             parser.write(fout)
 
+    def create_attribute(self, name, default_value):
+        if name not in self.attributes and name not in self.__dict__:
+            self.attributes[name] = default_value
+        else:
+            raise Exception("Cannot create attribute '" + name + "', it already exists!")
+
+    def __setattr__(self, key, value):
+        if key in self.attributes:
+            self.attributes[key] = value
+        else:
+            super().__setattr__(key, value)
+
+    def __getattr__(self, name):
+        if name in self.__dict__:
+            return self.__dict__[name]
+        elif name in self.attributes:
+            return self.attributes[name]
+        else:
+            raise AttributeError("Config instance has no such attribute '" + name + "'")
+
     def add_recent_file(self, filename):
-        '''
-        Add/move to top of recent files list.
+        """Add/move filename to top of recent files list.
+
         Max in list is 10, so remove first filename
         if necessary
-        '''
+        :param filename: file to add to list
+        """
         if filename in self.recent_files:
             # Remove from list, to be appended at the end
             self.recent_files.pop(self.recent_files.index(filename))

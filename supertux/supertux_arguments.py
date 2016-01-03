@@ -19,7 +19,7 @@ from flexlay.util import Config
 
 
 class SuperTuxArguments:
-    """A container for the various command line arguments"""
+    """A container for the various command line arguments of the SuperTux binary (not supertux-editor!)"""
     def __init__(self):
         self.run_level = None
         # Not the same as a spawn point

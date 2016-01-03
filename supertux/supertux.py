@@ -44,6 +44,11 @@ def main():
 
     # Load data directory path from config file, --datadir argument or open directory dialog
     config = Config.create("supertux-editor")
+    config.create_attribute("datadir", None)
+    config.create_attribute("binary", None)
+    config.create_attribute("name", "Anonymous")
+    # config.create_attribute()
+    config.load()
     if args.datadir is not None:
         config.datadir = args.datadir
     elif not config.datadir:

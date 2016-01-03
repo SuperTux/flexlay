@@ -27,8 +27,8 @@ from flexlay.tools import WorkspaceMoveTool, ObjMapSelectTool, TilePaintTool
 
 
 def main():
-    flexlay = Flexlay()
-    gui_manager = flexlay.create_gui_manager("Simple Editor")
+    flexlay = Flexlay("Simple Editor")
+    gui_manager = flexlay.create_gui_manager()
 
     button_panel = gui_manager.create_button_panel(horizontal=True)
 

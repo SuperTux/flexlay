@@ -24,11 +24,14 @@ from flexlay import (Flexlay, PixelBuffer, Sprite, Tile, Tileset, EditorMap,
                      ToolContext)
 from flexlay.math import Size, Point, Rect
 from flexlay.tools import WorkspaceMoveTool, ObjMapSelectTool, TilePaintTool
+from flexlay.util import Config
 
 
 def main():
     flexlay = Flexlay("Simple Editor")
     gui_manager = flexlay.create_gui_manager()
+
+    config = Config.create("simple-editor")
 
     button_panel = gui_manager.create_button_panel(horizontal=True)
 
@@ -94,12 +97,14 @@ def main():
     workspace = editor_map_component.get_workspace()
     workspace.set_map(editormap)
 
+    ToolContext()
+    ToolContext.current.tile_brush.put(0, 0, 1)
+
     workspace_move_tool = WorkspaceMoveTool()
     objtool = ObjMapSelectTool(gui_manager)
     tilemap_paint_tool = TilePaintTool()
-    ToolContext()
-    ToolContext.current.tile_brush.put(0, 0, 1)
     # tilemap_paint_tool.set_brush(ToolContext.current.tile_brush)
+
     workspace.set_tool(1, objtool)
     workspace.set_tool(2, workspace_move_tool)
     # workspace.set_tool(1, tilemap_paint_tool)

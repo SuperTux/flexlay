@@ -45,7 +45,7 @@ class TilemapLayer(Layer):
             for x in range(0, self.field.width):
                 self.field.put(x, y, 0)
 
-    def draw(self, pos, gc):
+    def draw(self, gc, pos=Point()):
         if self.hidden:
             return
         tile_size = self.tileset.get_tile_size()

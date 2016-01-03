@@ -18,25 +18,59 @@
 import configparser
 import os
 import logging
+import re
 
 
 class Config:
+    """
+    This class is used to store attributes which are
+    needed again whenever the editor is run in a file
+
+    Usage:
+    from config import Config
+
+    config = Config.create("config-test")
+    # No spaces in attribute names!
+    config.create_attribute("test_attribute", "")
+
+    config.load()
+
+    c
+    """
     current = None
+    attribute_pattern = "[a-zA-Z_][a-zA-Z0-9_]*"
 
     @staticmethod
     def create(projectname):
+        """Create a Config instance
+
+        :param projectname: A dash-seperated, lower case name (will be saved in ~/.flexlay/projectname.cfg)
+        :return: A Config instance
+        """
         path = os.path.expanduser("~/.flexlay/")
         if not os.path.isdir(path):
             os.mkdir(path)
 
         return Config(projectname, os.path.join(path, projectname + ".cfg"))
 
+    @staticmethod
+    def check_valid(name):
+        """Check that a name for an attribute is valid
+
+        :param name: Name to be checked
+        :return: boolean, True if valid
+        """
+        match = re.match(Config.attribute_pattern, name)
+        if match is not None and match.span()[1] == len(name):
+            return True
+        return False
+
     def __init__(self, project_name, filename):
+        """Use Config.create() instead"""
         Config.current = self
 
-        # Equivalent to self.__dict__
         # We can't use self.attributes = {} as __setattr__ asks for self.attributes!
-        self.__dict__["attributes"] = {}
+        self.__dict__["attributes"] = {}  # The same as self.attributes = {}
 
         self.project_name = project_name
         self.filename = filename
@@ -48,7 +82,25 @@ class Config:
         # Recent files is organised separately.
         self.recent_files = []
 
+    def __setattr__(self, key, value):
+        if key in self.attributes:
+            self.attributes[key] = value
+        else:
+            super().__setattr__(key, value)
+
+    def __getattr__(self, name):
+        if name in self.__dict__:
+            return self.__dict__[name]
+        elif name in self.attributes:
+            return self.attributes[name]
+        else:
+            raise AttributeError("Config instance has no such attribute '" + name + "'")
+
     def load(self, filename=None):
+        """Load the configs from file
+
+        You should run this function just after creating all the attributes you want.
+        """
         if filename is None:
             filename = self.filename
 
@@ -70,6 +122,7 @@ class Config:
             logging.info("No " + self.project_name + " section found in " + filename)
 
     def save(self, filename=None):
+        """Save configs to file"""
         if filename is None:
             filename = self.filename
 
@@ -84,25 +137,22 @@ class Config:
         with open(filename, "w") as fout:
             parser.write(fout)
 
-    def create_attribute(self, name, default_value):
+    def create_attribute(self, name, default_value=""):
+        """Create new attribute
+
+        Can then be accessed like a member.
+        e.g.
+        config.create_attribute("jeff", "value")
+        config.jeff = "second value"
+        print(config.jeff)
+        """
         if name not in self.attributes and name not in self.__dict__:
-            self.attributes[name] = default_value
+            if Config.check_valid(name):
+                self.attributes[name] = default_value
+            else:
+                raise Exception("Attribute name \"" + name + "\" as it's not valid (must be a valid variable name)")
         else:
-            raise Exception("Cannot create attribute '" + name + "', it already exists!")
-
-    def __setattr__(self, key, value):
-        if key in self.attributes:
-            self.attributes[key] = value
-        else:
-            super().__setattr__(key, value)
-
-    def __getattr__(self, name):
-        if name in self.__dict__:
-            return self.__dict__[name]
-        elif name in self.attributes:
-            return self.attributes[name]
-        else:
-            raise AttributeError("Config instance has no such attribute '" + name + "'")
+            raise Exception("Cannot create attribute \"" + name + "\", it already exists!")
 
     def add_recent_file(self, filename):
         """Add/move filename to top of recent files list.

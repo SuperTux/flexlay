@@ -14,6 +14,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import logging
 
 from PyQt4.QtCore import QPoint
 
@@ -42,7 +43,7 @@ class Sprite:
         painter = gc.get_qt_painter()
         img = self.pixelbuffer.get_qimage()
         if not img:
-            print("Error: Sprite: Empty PixelBuffer:", self.filename)
+            logging.error("Error: Sprite: Empty PixelBuffer:", self.filename)
         else:
             scaled_width = self.width * self.scale[0]
             scaled_height = self.height * self.scale[1]

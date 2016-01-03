@@ -14,6 +14,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import logging
 
 from flexlay import Color, PixelBuffer, Sprite
 
@@ -61,7 +62,7 @@ class Tile:
                 return self.pixelbuffer
 
     def calc_color(self):
-        print("Tile::calc_color not implemented")
+        logging.info("Tile::calc_color not implemented")
         return Color(255, 255, 255, 255)
 
     def get_filename(self):

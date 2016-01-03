@@ -14,6 +14,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import logging
 
 from flexlay.math import Rect
 from ..color import Color
@@ -66,7 +67,7 @@ class TileSelection:
                     sel.bottom <= 0):
 
             # Selection is empty
-            print("Error: Invalid selection")
+            logging.error("Error: Invalid selection")
             brush = TileBrush(1, 1)
             brush.put(0, 0, 0)
             brush.set_opaque()

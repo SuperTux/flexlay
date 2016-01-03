@@ -14,6 +14,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import logging
 
 from flexlay import ObjectLayer, ObjMapTilemapObject, EditorMap
 from flexlay.math import Rect, Point
@@ -139,8 +140,8 @@ class Sector:
             else:
                 obj = supertux_gameobj_factory.create_gameobj(name, data)
                 if obj is None:
-                    print("Error: Couldn't resolve object type: ", name)
-                    print("Sector: Unhandled tag: ", name)
+                    logging.error("Couldn't resolve object type: " + name)
+                    logging.warning("Sector: Unhandled tag: " + name)
                 else:
                     if name == "camera":
                         self.camera = obj

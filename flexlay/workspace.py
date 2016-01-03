@@ -59,7 +59,7 @@ class Workspace:
         if tool is not None:
             tool.on_mouse_down(event)
         else:
-            logging.info("Workspace:", event.kind)
+            logging.info("Workspace: " + str(event.kind))
 
     def get_map(self):
         return self.editor_map

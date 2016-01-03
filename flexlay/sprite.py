@@ -43,7 +43,7 @@ class Sprite:
         painter = gc.get_qt_painter()
         img = self.pixelbuffer.get_qimage()
         if not img:
-            logging.error("Error: Sprite: Empty PixelBuffer:", self.filename)
+            logging.error("Error: Sprite: Empty PixelBuffer: " + self.filename)
         else:
             scaled_width = self.width * self.scale[0]
             scaled_height = self.height * self.scale[1]

@@ -598,7 +598,7 @@ class SuperTuxGUI:
         pass
 
     def load_level(self, filename, set_title=True):
-        logging.info("Loading: ", filename)
+        logging.info("Loading: " + filename)
 
         if set_title:
             self.gui.window.setWindowTitle("SuperTux Editor: [" + filename + "]")

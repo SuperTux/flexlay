@@ -53,7 +53,7 @@ class InputEvent:
         elif event.button() == Qt.RightButton:
             result.kind = InputEvent.MOUSE_RIGHT
         else:
-            logging.debug("unknown mouse button:", event.button())
+            logging.debug("unknown mouse button: " + str(event.button()))
 
         if event.modifiers() & Qt.ControlModifier:
             result.mod |= InputEvent.MOD_CTRL

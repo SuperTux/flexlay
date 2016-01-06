@@ -17,7 +17,7 @@
 from PyQt4.QtGui import (QVBoxLayout, QLabel, QLineEdit, QFormLayout,
                          QIcon, QCheckBox, QPixmap, QButtonGroup,
                          QRadioButton, QColorDialog, QWidget, QFileDialog,
-                         QComboBox, QPushButton)
+                         QComboBox, QPushButton, QSpinBox)
 
 from flexlay.gui import OpenFileDialog
 from flexlay.util import Config
@@ -138,11 +138,11 @@ class PropertiesWidget(QWidget):
                 callback(int(text))
 
         label = QLabel(name)
-        inputbox = QLineEdit()
-        inputbox.textChanged.connect(text_change)
+        inputbox = QSpinBox()
+        inputbox.valueChanged.connect(text_change)
         self.layout.addRow(label, inputbox)
 
-        inputbox.setText(str(value))
+        inputbox.setValue(value)
 
         self.items.append(Item(Item.KIND_INT, label, inputbox, callback=callback))
 

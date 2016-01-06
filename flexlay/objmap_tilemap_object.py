@@ -28,7 +28,7 @@ class ObjMapTilemapObject(ObjMapObject):
         self.tilemap_layer = tilemap_layer
 
     def draw(self, gc):
-        self.tilemap_layer.draw(self.metadata.pos, gc)
+        self.tilemap_layer.draw(gc, self.metadata.pos)
 
     def get_pos(self):
         return self.pos

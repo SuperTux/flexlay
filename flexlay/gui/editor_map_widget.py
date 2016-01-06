@@ -31,6 +31,8 @@ class EditorMapWidget(QWidget):
         self.comp = comp
         self.workspace = comp.get_workspace()
         self.gc_state = comp.get_gc_state()
+        self.painter = QPainter()
+        self.gc = GraphicContext(self.painter, self.gc_state)
 
         pal = self.palette()
         pal.setColor(self.backgroundRole(), QColor(100, 0, 100))
@@ -102,16 +104,14 @@ class EditorMapWidget(QWidget):
         self.repaint()
 
     def paintEvent(self, event):
-        painter = QPainter()
-        painter.begin(self)
+        self.painter.begin(self)
 
-        # painter.setRenderHint(QPainter::Antialiasing)
-        gc = GraphicContext(painter, self.gc_state)
-        self.gc_state.push(gc)
-        self.workspace.draw(gc)
-        self.gc_state.pop(gc)
+        # self.painter.setRenderHint(QPainter::Antialiasing)
+        self.gc_state.push(self.gc)
+        self.workspace.draw(self.gc)
+        self.gc_state.pop(self.gc)
 
-        painter.end()
+        self.painter.end()
 
     def resizeEvent(self, event):
         self.comp.get_gc_state().set_size(event.size().width(), event.size().height())

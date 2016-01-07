@@ -50,22 +50,13 @@ class GenericWizard(QWizard):
 
         self.addPage(page)
 
-    def set_callback(self, finish_callback):
-        """Sets callback of "Finish"
-
-        Called with get_values as parameters. See that method for
-        more details
-
-        :param finish_callback: Callback to be called when "Finished" pressed
-        """
         def on_finish():
-            self.finish_callback(*self.get_values())
+            self.call()
             self.hide()
 
         def on_cancel():
             self.hide()
 
-        self.finish_callback = finish_callback
         self.finished.connect(on_finish)
         self.rejected.connect(on_cancel)
 

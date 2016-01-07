@@ -27,6 +27,8 @@ class GenericDialog(PropertiesWidget):
     def __init__(self, title, parent):
         super().__init__(parent)
 
+        self.ok_callback = None
+
         self.dialog = QDialog(parent)
 
         self.dialog.setModal(True)
@@ -43,15 +45,15 @@ class GenericDialog(PropertiesWidget):
         self.dialog.setMinimumWidth(300)
         self.dialog.show()
 
-    def set_callback(self, callback):
+        # "Ok" and "Cancel" signals
+
         def on_accept():
-            self.ok_callback(*self.get_values())
+            self.call()
             self.dialog.hide()
 
         def on_rejected():
             self.dialog.hide()
 
-        self.ok_callback = callback
         self.buttonbox.accepted.connect(on_accept)
         self.buttonbox.rejected.connect(on_rejected)
 

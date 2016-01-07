@@ -68,12 +68,13 @@ class GameObj:
 
     def on_select(self, manager):
         if manager:
-            props_widget = manager.properties_dock.widget()
+            props_widget = manager.properties_widget
             props_widget.set_properties(self.properties)
+            props_widget.add_callback(self.on_callback)
 
     def on_deselect(self, manager):
         if manager:
-            props_widget = manager.properties_dock.widget()
+            props_widget = manager.properties_widget
             props_widget.clear_properties()
 
     def add_property(self, prop):
@@ -94,19 +95,20 @@ class GameObj:
         for prop in self.properties:
             prop.property_dialog(dialog)
 
-        def on_callback(*args):
-            i = 0
-            for property in self.properties:
-                if property.editable:
-                    property.value = args[i]
-                    i += 1
-
-        dialog.set_callback(on_callback)
+        dialog.add_callback(self.on_callback)
 
     def find_property(self, identifier):
         for prop in self.properties:
             if prop.identifier == identifier:
                 return prop
+
+    def on_callback(self, *args):
+        """Called when "Apply" or "Okay" hit"""
+        i = 0
+        for property in self.properties:
+            if property.editable:
+                property.value = args[i]
+                i += 1
 
     def update(self):
         """Called after properties read, and optionally at any other time"""

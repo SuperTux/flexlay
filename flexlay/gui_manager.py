@@ -17,7 +17,8 @@
 
 from PyQt4.QtCore import (QCoreApplication, Qt)
 from PyQt4.QtGui import (QApplication, QMainWindow, QToolBar,
-                         QDockWidget, QVBoxLayout, QWidget)
+                         QDockWidget, QVBoxLayout, QWidget,
+                         QPushButton)
 
 from flexlay.gui.properties_widget import PropertiesWidget
 from .util.config import Config
@@ -134,7 +135,19 @@ class GUIManager:
     def create_properties_view(self):
         self.properties_dock = QDockWidget("Properties")
         self.properties_dock.setObjectName("properties_dock")
-        self.properties_dock.setWidget(PropertiesWidget(self.window))
+
+        self.properties_widget = PropertiesWidget(self.window)
+
+        layout = QVBoxLayout()
+
+        layout.addWidget(self.properties_widget)
+        apply = QPushButton("Apply")
+        layout.addWidget(apply)
+        apply.clicked.connect(self.properties_widget.call)
+
+        widget = QWidget()
+        widget.setLayout(layout)
+        self.properties_dock.setWidget(widget)
 
         self.window.addDockWidget(Qt.RightDockWidgetArea, self.properties_dock)
         return self.properties_dock

@@ -437,12 +437,12 @@ class SuperTuxGUI:
                         open_in=os.path.join(Config.current.datadir, "music"))
         dialog.add_float("Gravity: ", level.current_sector.gravity)
 
-        def on_callback(name, music, gravity):
-            level.current_sector.name = name
-            level.current_sector.music = music
-            level.current_sector.gravity = gravity
+        def on_callback(*args):
+            level.current_sector.name = args[0]
+            level.current_sector.music = args[1]
+            level.current_sector.gravity = args[2]
 
-        dialog.set_callback(on_callback)
+        dialog.add_callback(on_callback)
 
     def gui_zoom_in(self):
         factor = 2.0
@@ -496,7 +496,7 @@ class SuperTuxGUI:
                 logging.warning("Selection too large")
             elif len(selection) == 1:
                 obj = selection[0].metadata
-                obj.property_dialog(self.gui)
+                obj.property_dialog(self.gui.window)
             else:
                 logging.warning("Selection is empty")
 
@@ -600,6 +600,12 @@ class SuperTuxGUI:
     def load_level(self, filename, set_title=True):
         logging.info("Loading: " + filename)
 
+        # Clear object selection, it's a new level!
+        self.tool_context.object_selection.clear()
+
+        self.gui.properties_widget.clear_properties()
+
+        # Set title if desired
         if set_title:
             self.gui.window.setWindowTitle("SuperTux Editor: [" + filename + "]")
 

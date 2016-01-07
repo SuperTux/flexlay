@@ -20,7 +20,7 @@ from PyQt4.QtGui import (QVBoxLayout, QLabel, QLineEdit, QFormLayout,
                          QComboBox, QPushButton, QSpinBox)
 
 from flexlay.gui import OpenFileDialog
-from flexlay.util import Config
+from flexlay.util import Config, Signal
 
 
 class Item:
@@ -85,7 +85,6 @@ class PropertiesWidget(QWidget):
     def __init__(self, parent):
         super().__init__(parent)
         self.items = []
-        self.ok_callback = None
 
         self.vbox = QVBoxLayout()
         self.layout = QFormLayout()
@@ -93,6 +92,13 @@ class PropertiesWidget(QWidget):
 
         self.setLayout(self.vbox)
         self.setMinimumWidth(300)
+
+        # Called in many cases. This should have functions connected
+        # which cause the changes in the widget to be applied
+        # Called by hitting "Apply", "Ok" or "Finish"
+        self.call_signal = Signal()
+
+        self.call_signal.connect(self.call_callbacks)
 
     def clear_properties(self):
         # Clear Items
@@ -155,7 +161,6 @@ class PropertiesWidget(QWidget):
         inputbox = QLineEdit()
         inputbox.textChanged.connect(text_change)
         self.layout.addRow(label, inputbox)
-
         inputbox.setText(str(value))
 
         self.items.append(Item(Item.KIND_FLOAT, label, inputbox, callback=callback))
@@ -284,7 +289,7 @@ class PropertiesWidget(QWidget):
 
         self.items.append(Item(Item.KIND_COLOR, label, colorbutton, callback=callback))
 
-    def call_callbacks(self):
+    def call_callbacks(self, *args):
         for item in self.items:
             if item.callback is not None:
                 item.callback(item.get_value())
@@ -298,3 +303,10 @@ class PropertiesWidget(QWidget):
                 result.append(value)
 
         return result
+
+    def add_callback(self, callback):
+        """Adds a callback to the callback signal"""
+        self.call_signal.connect(callback)
+
+    def call(self):
+        self.call_signal(*self.get_values())

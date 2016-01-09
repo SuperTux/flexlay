@@ -18,11 +18,13 @@
 import os
 import logging
 
-from flexlay import (Color, Config, ObjMapSpriteObject, ObjMapRectObject, ObjMapObject)
+from flexlay import (Color, Config, ObjMapSpriteObject, ObjMapRectObject, ObjMapObject,
+                     Workspace)
 from flexlay.gui import GenericDialog
 from flexlay.math import Rect, Size, Point
 from flexlay.property import *
 from .sprite import SuperTuxSprite
+from .gameobj_props_change_command import GameObjPropsChangeCommand
 
 
 def make_sprite_object(metadata, filename, pos=None):
@@ -76,6 +78,7 @@ class GameObj:
         if manager:
             props_widget = manager.properties_widget
             props_widget.clear_properties()
+            props_widget.call_signal.clear()
 
     def add_property(self, prop):
         self.properties.append(prop)
@@ -104,11 +107,17 @@ class GameObj:
 
     def on_callback(self, *args):
         """Called when "Apply" or "Okay" hit"""
+        print(args)
+        prop_diff = []
         i = 0
         for property in self.properties:
             if property.editable:
-                property.value = args[i]
-                i += 1
+                if args[i] == property.value:
+                    continue
+                prop_diff.append((i, args[i], property.value))
+            i += 1
+        command = GameObjPropsChangeCommand(self, prop_diff)
+        Workspace.current.get_map().execute(command)
 
     def update(self):
         """Called after properties read, and optionally at any other time"""

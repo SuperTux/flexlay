@@ -16,16 +16,35 @@
 
 
 class Command:
+    """
+    Commands allow undoable actions. This means,
+    actions which can be undone by pressing the
+    undo button. Create a new Command for each
+    undoable action that may happen. They are
+    then added to the undo stack. When undone,
+    they are added to the redo stack
+    """
     def __init__(self):
+        """Here, the values involved in the
+        Command should be initialised or
+        passed as parameters"""
         pass
 
     def execute(self):
+        """This method is run once - when the
+        action happens."""
         pass
 
     def redo(self):
+        """This method is run when this command
+        is top of the undo stack and the undo
+        button is clicked"""
         pass
 
     def undo(self):
+        """This method is run when this command
+        is top of the redo stack and the redo
+        button is clicked"""
         pass
 
 # EOF #

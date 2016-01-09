@@ -115,22 +115,14 @@ class PropertiesWidget(QWidget):
         for prop in props:
             prop.property_dialog(self)
 
-    # See generic_dialog.py for more about these:
-
     def add_label(self, text):
         label = QLabel(text)
         self.layout.addRow(label)
         self.items.append(Item(Item.KIND_LABEL, label, None, None))
 
     def add_bool(self, name, value, callback):
-        # FIXME: Qt.Checked doesn't exist!
-        def state_change(self, state):
-            if callback:
-                callback(state == Qt.QChecked)
-
         label = QLabel(name)
         checkbox = QCheckBox()
-        checkbox.stateChanged.connect(state_change)
         self.layout.addRow(label, checkbox)
 
         if value:
@@ -139,13 +131,8 @@ class PropertiesWidget(QWidget):
         self.items.append(Item(Item.KIND_BOOL, label, checkbox, callback=callback))
 
     def add_int(self, name, value, callback=None):
-        def text_change(text):
-            if callback:
-                callback(int(text))
-
         label = QLabel(name)
         inputbox = QSpinBox()
-        inputbox.valueChanged.connect(text_change)
         self.layout.addRow(label, inputbox)
 
         inputbox.setValue(value)
@@ -153,13 +140,8 @@ class PropertiesWidget(QWidget):
         self.items.append(Item(Item.KIND_INT, label, inputbox, callback=callback))
 
     def add_float(self, name, value, callback=None):
-        def text_change(text):
-            if callback:
-                callback(float(text))
-
         label = QLabel(name)
         inputbox = QLineEdit()
-        inputbox.textChanged.connect(text_change)
         self.layout.addRow(label, inputbox)
         inputbox.setText(str(value))
 
@@ -168,12 +150,10 @@ class PropertiesWidget(QWidget):
     def add_string(self, name, value, callback=None, placeholder=None):
         label = QLabel(name)
         inputbox = QLineEdit()
-        if callback:
-            inputbox.textChanged.connect(callback)
         self.layout.addRow(label, inputbox)
 
         inputbox.setText(value)
-        if placeholder != None:
+        if placeholder is not None:
             inputbox.setPlaceholderText(placeholder)
 
         self.items.append(Item(Item.KIND_STRING, label, inputbox, callback=callback))
@@ -196,8 +176,6 @@ class PropertiesWidget(QWidget):
         """
         label = QLabel(label)
         inputbox = QLineEdit(default)
-        if callback:
-            inputbox.textChanged.connect(callback)
         browse = QPushButton("Browse...")
 
         def file_selected(path):
@@ -207,12 +185,6 @@ class PropertiesWidget(QWidget):
                 inputbox.setText(path[len(show_rel_to):])
             else:
                 inputbox.setText(path)
-
-            if callback:
-                if ret_rel_to and path[:len(ret_rel_to)] == ret_rel_to:
-                    callback(path[len(ret_rel_to):])
-                else:
-                    callback(path)
 
         def browse_files():
             """Called when Browse... button clicked"""
@@ -235,11 +207,6 @@ class PropertiesWidget(QWidget):
         drop_down.setCurrentIndex(current_value)
         self.layout.addRow(label, drop_down)
 
-        def button_clicked(i):
-            if callback:
-                callback(values[i])
-
-        drop_down.currentIndexChanged.connect(button_clicked)
         self.items.append(Item(Item.KIND_ENUM, label, drop_down, callback=callback, group=None))
 
     def add_radio(self, name, values, current_value=0, callback=None):
@@ -254,11 +221,6 @@ class PropertiesWidget(QWidget):
                 self.layout.addRow(None, radio)
             group.addButton(radio)
 
-        def button_clicked(button):
-            if callback:
-                callback(button.text())
-
-        group.buttonClicked.connect(button_clicked)
         self.items.append(Item(Item.KIND_ENUM, label, None, callback=callback, group=group))
 
     def add_color(self, name, color, callback=None):
@@ -274,16 +236,6 @@ class PropertiesWidget(QWidget):
             icon.addPixmap(pixmap)
             colorbutton.setIcon(icon)
             colorbutton.setText(qcolor.name())
-
-            if callback:
-                callback(Color(qcolor.r, qcolor.g, qcolor.b))
-
-        def on_click():
-            color_dialog = QColorDialog(self.dialog)
-            color_dialog.colorSelected.connect(on_color)
-            color_dialog.show()
-
-        colorbutton.clicked.connect(on_click)
 
         self.layout.addRow(label, colorbutton)
 

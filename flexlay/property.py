@@ -62,7 +62,7 @@ class IntProperty(Property):
         super().__init__(label, identifier, default, optional)
 
     def property_dialog(self, dialog):
-        dialog.add_int(self.label, self.value, self.on_value_change)
+        dialog.add_int(self.label, self.value, callback=self.on_value_change)
 
 
 class FloatProperty(Property):
@@ -72,7 +72,7 @@ class FloatProperty(Property):
         super().__init__(label, identifier, default, optional)
 
     def property_dialog(self, dialog):
-        dialog.add_int(self.label, self.value, self.on_value_change)
+        dialog.add_int(self.label, self.value, callback=self.on_value_change)
 
 
 class StringProperty(Property):

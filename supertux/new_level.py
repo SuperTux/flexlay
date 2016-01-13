@@ -47,7 +47,7 @@ class NewLevelWizard(GenericWizard):
         self.addPage(self.create_license_page())
 
         # When 'Finish' pressed run finish()
-        self.set_callback(self.finish)
+        self.finish_callback.connect(self.finish)
         # When 'Cancel' pressed run cancel()
         self.rejected.connect(self.cancel)
 

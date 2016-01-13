@@ -17,6 +17,7 @@
 from PyQt4.QtGui import QWizardPage, QWizard, QVBoxLayout, QFormLayout, QTextEdit
 
 from flexlay.gui.properties_widget import PropertiesWidget
+from flexlay.util import Signal
 
 
 class GenericWizard(QWizard):
@@ -33,7 +34,19 @@ class GenericWizard(QWizard):
         self.setWindowTitle(title)
         self.pages = []
 
-        self.finish_callback = (lambda: None)
+        self.finish_callback = Signal()
+
+        def on_finish():
+            self.finish_callback(*self.get_values())
+            for page in self.pages:
+                page.call()
+            self.hide()
+
+        def on_cancel():
+            self.hide()
+
+        self.finished.connect(on_finish)
+        self.rejected.connect(on_cancel)
 
     def add_page(self, title, widget):
         """Adds a page to this GenericWizard
@@ -49,16 +62,6 @@ class GenericWizard(QWizard):
         page.setLayout(layout)
 
         self.addPage(page)
-
-        def on_finish():
-            self.call()
-            self.hide()
-
-        def on_cancel():
-            self.hide()
-
-        self.finished.connect(on_finish)
-        self.rejected.connect(on_cancel)
 
     def get_values(self):
         """ Returns a list of lists of all values put into this Wizard

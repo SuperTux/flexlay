@@ -68,7 +68,7 @@ class Level:
 
         self.current_sector = None
         self.sectors = []
-        self.tileset_path = None
+        self.tileset_path = os.path.join("images", "tiles.strf")
 
         self.is_worldmap = False
 

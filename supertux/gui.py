@@ -45,6 +45,7 @@ from .tilemap import SuperTuxTileMap
 from .toolbox import SuperTuxToolbox
 from .supertux_arguments import SuperTuxArguments
 from .level_file_dialog import OpenLevelFileDialog, SaveLevelFileDialog
+from .addon_dialog import SaveAddonDialog
 
 BACKGROUND_LAYER = 1
 INTERACTIVE_LAYER = 2
@@ -104,6 +105,8 @@ class SuperTuxGUI:
         self.load_dialog.set_directory(Config.current.datadir, "levels")
         self.save_dialog = SaveLevelFileDialog("Save SuperTux Level As...")
         self.save_dialog.set_directory(Config.current.datadir, "levels")
+        self.addon_save_dialog = SaveAddonDialog("Save SuperTux Add-on As...")
+        self.addon_save_dialog.set_directory(Config.current.datadir, "addons")
 
         self.register_keyboard_shortcuts()
 

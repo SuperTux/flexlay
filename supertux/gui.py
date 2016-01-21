@@ -662,6 +662,7 @@ class SuperTuxGUI:
 
     def load_addon(self, dirname):
         print("Add-on dirname is: " + dirname)
+        self.gui.project_widget.set_project_directory(dirname)
         pass
 
     def load_addon_zip(self, filename):

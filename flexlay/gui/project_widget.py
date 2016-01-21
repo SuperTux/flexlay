@@ -17,7 +17,8 @@
 from PyQt4.QtGui import (QVBoxLayout, QLabel, QLineEdit, QFormLayout,
                          QIcon, QCheckBox, QPixmap, QButtonGroup,
                          QRadioButton, QColorDialog, QWidget, QFileDialog,
-                         QComboBox, QPushButton, QSpinBox, QTreeView)
+                         QComboBox, QPushButton, QSpinBox, QTreeView,
+                         QStandardItem, QFileSystemModel)
 
 from flexlay.gui import OpenFileDialog
 from flexlay.util import Config, Signal
@@ -36,23 +37,19 @@ class ProjectWidget(QWidget):
 
         self.tree_view = QTreeView()
         self.vbox = QVBoxLayout()
-        self.data = [
-            ("Alice", [
-                ("Keys", []),
-                ("Purse", [
-                    ("Cellphone", [])
-                    ])
-                ]),
-            ("Bob", [
-                ("Wallet", [
-                    ("Credit card", []),
-                    ("Money", [])
-                    ])
-                ])
-            ]
-        self.model = QStandardItemModel()
-        self.addItems(self.model, self.data)
-        self.treeView.setModel(self.model)
+        self.model = QFileSystemModel()
+        # self.data = [
+        #      ("SuperTux addon", [
+        #          ("levels", []),
+        #          ("images", []),
+        #          ("sounds", []),
+        #          ("music", []),
+        #          ("scripts", []),
+        #          ("metadata", [])
+        #      ])]
+        # self.model = QStandardItemModel()
+        #self.add_items(self.model, self.data)
+        self.tree_view.setModel(self.model)
         self.vbox.addWidget(self.tree_view)
         self.layout = QFormLayout()
         self.vbox.addLayout(self.layout)
@@ -76,12 +73,15 @@ class ProjectWidget(QWidget):
         """Adds a callback to the callback signal"""
         self.call_signal.connect(callback)
 
-    def addItems(self, parent, elements):
+    def add_items(self, parent, elements):
         for text, children in elements:
             item = QStandardItem(text)
             parent.appendRow(item)
             if children:
-                self.addItems(item, children)
+                self.add_items(item, children)
 
     def call(self):
         self.call_signal(*self.get_values())
+
+    def set_project_directory(self, project_dir):
+        self.tree_view.setRootIndex(self.model.setRootPath(project_dir))

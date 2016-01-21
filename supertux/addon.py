@@ -64,6 +64,7 @@ class Addon:
         self.license = "GPL 2+ / CC-by-sa 3.0"
         self.filename = None
         self.levels = []
+        self.subdirs = ["images", "levels", "music", "scripts", "sounds"]
 
     def parse_v2(self, data):
         self.id = get_value_from_tree(["id", "_"], data, "")
@@ -79,6 +80,12 @@ class Addon:
             os.makedirs(dirname)
         with open(os.path.join(dirname, self.id + ".nfo"), "w") as f:
             self.save_io(f)
+
+        # Create directory structure:
+        for subdir in self.subdirs:
+            path = os.path.join(dirname, subdir)
+            if not os.path.exists(path):
+                os.makedirs(path)
 
         # TODO: Save levels and other things (assets) here:
         print("TODO: Save levels in add-on directory")

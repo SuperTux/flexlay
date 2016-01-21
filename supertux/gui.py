@@ -569,7 +569,7 @@ class SuperTuxGUI:
             def save_path_chosen(save_path):
                 dialog.addon.save(save_path)
                 #self.load_addon(save_path)
-            self.save_dialog.run(save_path_chosen)
+            self.addon_save_dialog.run(save_path_chosen)
         pass
 
     def gui_level_load(self):

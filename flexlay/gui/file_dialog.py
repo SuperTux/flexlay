@@ -74,8 +74,8 @@ class OpenDirectoryDialog(OpenFileDialog):
         self.file_dialog.setFileMode(QFileDialog.Directory)
 
 class SaveDirectoryDialog(SaveFileDialog):
-    def __init__(self, title, default_suffix=""):
-        super().__init__(title, default_suffix)
+    def __init__(self, title):
+        super().__init__(title)
         self.file_dialog.setFileMode(QFileDialog.Directory)
 
 # EOF #

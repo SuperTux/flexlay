@@ -64,15 +64,18 @@ class Addon:
         self.filename = None
 
     def parse_v2(self, data):
-        self.name = get_value_from_tree(["id", "_"], data, "")
+        self.id = get_value_from_tree(["id", "_"], data, "")
         self.version = get_value_from_tree(["version", "_"], data, "")
         self.type = get_value_from_tree(["type", "_"], data, "")
         self.title = get_value_from_tree(["title", "_"], data, "")
         self.author = get_value_from_tree(["author", "_"], data, "")
         self.license = get_value_from_tree(["license", "_"], data, "")
 
-    def save(self, filename):
-        with open(filename, "w") as f:
+    def save(self, dirname):
+        # Create directory, if it doesn't exist:
+        if not os.path.exists(dirname):
+            os.makedirs(dirname)
+        with open(os.path.join(dirname, self.id + ".nfo"), "w") as f:
             self.save_io(f)
 
     def save_io(self, f):

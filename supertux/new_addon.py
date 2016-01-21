@@ -121,7 +121,7 @@ class NewAddonWizard(GenericWizard):
         """
         page = QtGui.QWizardPage()
 
-        page.setTitle("Level License")
+        page.setTitle("Addon License")
         page.setSubTitle("You must set a license for your level, which " +
                          "defines how others may use and share your level. " +
                          "In the spirit of 'free and open source' " +

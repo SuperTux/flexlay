@@ -70,7 +70,6 @@ class Addon:
         self.music = []
         self.scripts = []
         self.sounds = []
-        self.subdirs = ["images", "levels", "music", "scripts", "sounds"]
 
     def parse_v2(self, data):
         self.id = get_value_from_tree(["id", "_"], data, "")
@@ -88,6 +87,12 @@ class Addon:
             self.save_io(f)
 
         # Create directory structure:
+        self.subdirs = ["images",
+                        os.path.join("levels", self.id),
+                        "music",
+                        "scripts",
+                        "sounds"]
+
         for subdir in self.subdirs:
             path = os.path.join(dirname, subdir)
             if not os.path.exists(path):

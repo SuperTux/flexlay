@@ -23,6 +23,6 @@ class OpenAddonDialog(OpenFileDialog):
                                  "All Files (*)"))
 
 
-class SaveAddonDialog(SaveFileDialog):
+class SaveAddonDialog(SaveDirectoryDialog):
     def __init__(self, title, is_worldmap=False):
         super().__init__(title, ".stwm" if is_worldmap else ".stl")

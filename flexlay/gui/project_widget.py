@@ -36,6 +36,23 @@ class ProjectWidget(QWidget):
 
         self.tree_view = QTreeView()
         self.vbox = QVBoxLayout()
+        self.data = [
+            ("Alice", [
+                ("Keys", []),
+                ("Purse", [
+                    ("Cellphone", [])
+                    ])
+                ]),
+            ("Bob", [
+                ("Wallet", [
+                    ("Credit card", []),
+                    ("Money", [])
+                    ])
+                ])
+            ]
+        self.model = QStandardItemModel()
+        self.addItems(self.model, self.data)
+        self.treeView.setModel(self.model)
         self.vbox.addWidget(self.tree_view)
         self.layout = QFormLayout()
         self.vbox.addLayout(self.layout)
@@ -58,6 +75,13 @@ class ProjectWidget(QWidget):
     def add_callback(self, callback):
         """Adds a callback to the callback signal"""
         self.call_signal.connect(callback)
+
+    def addItems(self, parent, elements):
+        for text, children in elements:
+            item = QStandardItem(text)
+            parent.appendRow(item)
+            if children:
+                self.addItems(item, children)
 
     def call(self):
         self.call_signal(*self.get_values())

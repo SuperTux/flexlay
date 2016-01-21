@@ -63,7 +63,13 @@ class Addon:
         self.author = "No Author"
         self.license = "GPL 2+ / CC-by-sa 3.0"
         self.filename = None
+
+        # Arrays containing data that we can use in a SuperTux level:
+        self.images = []
         self.levels = []
+        self.music = []
+        self.scripts = []
+        self.sounds = []
         self.subdirs = ["images", "levels", "music", "scripts", "sounds"]
 
     def parse_v2(self, data):
@@ -91,6 +97,18 @@ class Addon:
         print("TODO: Save levels in add-on directory")
         for level in self.levels:
             print(level.name)
+
+        for image in self.images:
+            pass # TODO: Save images
+
+        for music_file in self.music:
+            pass # TODO: Save music
+
+        for script in self.scripts:
+            pass # TODO: Save scripts
+
+        for sound in self.sounds:
+            pass # TODO: Save sounds
 
     def save_io(self, f):
         writer = SExprWriter(f)

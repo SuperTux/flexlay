@@ -21,6 +21,7 @@ from flexlay import Config
 from flexlay.util import get_value_from_tree, sexpr_filter, SExprWriter
 from .sector import Sector
 from .util import load_lisp
+from .level import Level
 
 
 class Addon:
@@ -62,6 +63,7 @@ class Addon:
         self.author = "No Author"
         self.license = "GPL 2+ / CC-by-sa 3.0"
         self.filename = None
+        self.levels = []
 
     def parse_v2(self, data):
         self.id = get_value_from_tree(["id", "_"], data, "")
@@ -77,6 +79,11 @@ class Addon:
             os.makedirs(dirname)
         with open(os.path.join(dirname, self.id + ".nfo"), "w") as f:
             self.save_io(f)
+
+        # TODO: Save levels and other things (assets) here:
+        print("TODO: Save levels in add-on directory")
+        for level in self.levels:
+            print(level.name)
 
     def save_io(self, f):
         writer = SExprWriter(f)

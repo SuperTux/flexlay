@@ -568,7 +568,7 @@ class SuperTuxGUI:
         if dialog.addon is not None:
             def save_path_chosen(save_path):
                 dialog.addon.save(save_path)
-                #self.load_addon(save_path)
+                self.load_addon(save_path)
             self.addon_save_dialog.run(save_path_chosen)
         pass
 
@@ -659,6 +659,14 @@ class SuperTuxGUI:
             os.rename(filename, filename + "~")
         level.save(filename)
         level.filename = filename
+
+    def load_addon(self, dirname):
+        print("Add-on dirname is: " + dirname)
+        pass
+
+    def load_addon_zip(self, filename):
+        print("Add-on zip path is: " + zip_path)
+        pass
 
     def raise_selection(self):
         for obj in self.tool_context.object_selection:

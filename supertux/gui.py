@@ -558,6 +558,9 @@ class SuperTuxGUI:
         # Does nothing:
         self.new_level()
 
+    def gui_addon_new(self):
+        pass
+
     def gui_level_load(self):
         self.load_dialog.run(self.load_level)
 

@@ -38,6 +38,7 @@ from .gameobj_factor import supertux_gameobj_factory
 from .level import Level
 from .menubar import SuperTuxMenuBar
 from .new_level import NewLevelWizard
+from .new_addon import NewAddonWizard
 from .sector import Sector
 from .tileset import SuperTuxTileset
 from .tilemap import SuperTuxTileMap
@@ -559,6 +560,13 @@ class SuperTuxGUI:
         self.new_level()
 
     def gui_addon_new(self):
+        dialog = NewAddonWizard(self.gui.window)
+        dialog.exec_()
+        if dialog.addon is not None:
+            def save_path_chosen(save_path):
+                dialog.addon.save(save_path)
+                #self.load_addon(save_path)
+            self.save_dialog.run(save_path_chosen)
         pass
 
     def gui_level_load(self):

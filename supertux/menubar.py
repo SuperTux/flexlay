@@ -26,7 +26,7 @@ class SuperTuxMenuBar:
         self.menubar = self.gui_manager.create_menubar()
 
         file_menu = self.menubar.add_menu("&File")
-        submenu_new = file_menu.add_menu("New...")
+        submenu_new = file_menu.add_menu("New")
         submenu_new.add_item("Level...", editor.gui_level_new)
         submenu_new.add_item("Add-on...", editor.gui_addon_new)
         file_menu.add_item("Open...", editor.gui_level_load)

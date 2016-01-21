@@ -84,8 +84,6 @@ class Addon:
         writer.write_string("type", self.type)
         writer.write_string("title", self.title)
         writer.write_string("author", self.author)
-        if self.contact:
-            writer.write_string("contact", self.contact)
         if self.license:
             writer.write_string("license", self.license)
         writer.end_list()

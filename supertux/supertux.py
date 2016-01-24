@@ -51,7 +51,7 @@ def main():
     config.load()
     if args.datadir is not None:
         config.datadir = args.datadir
-    elif not config.datadir:
+    if not config.datadir or not os.path.isdir(config.datadir):
         QMessageBox.warning(None, "No Data Directory Found",
                             "Press OK to select your Supertux directory")
         config.datadir = QFileDialog.getExistingDirectory(None, "Open Data Directory")
@@ -61,24 +61,19 @@ def main():
     logging.info("Datadir:" + config.datadir)
 
     # Load supertux binary path from config file, --binary argument or open file dialog
-    if not config.binary:
-        if args.binary and os.path.isfile(args.binary):
-            config.binary = args.binary
-        elif os.path.isfile(config.datadir + "../supertux"):
-            config.binary = config.datadir + "../supertux"
-        else:
-            QMessageBox.warning(None, "No Supertux Binary Found",
-                                "Press OK to select your Supertux binary")
-            config.binary = QFileDialog.getOpenFileName(None, "Open Supertux Binary")
-            if not config.binary:
-                raise RuntimeError("binary path missing, use --binary BIN")
+    if args.binary and os.path.isfile(args.binary):
+        config.binary = args.binary
+    if not os.path.isfile(config.binary):
+        QMessageBox.warning(None, "No Supertux Binary Found",
+                            "Press OK to select your Supertux binary")
+        config.binary = QFileDialog.getOpenFileName(None, "Open Supertux Binary")
+        if not config.binary:
+            raise RuntimeError("binary path missing, use --binary BIN")
 
     logging.info("Binary path:" + config.binary)
 
     # Load tileset
     tileset = SuperTuxTileset(32)
-    tileset.load(os.path.join(config.datadir, "images", "tiles.strf"))
-    tileset.create_ungrouped_tiles_group()
 
     gui = SuperTuxGUI(flexlay)
     if args.LEVELFILE is not None:

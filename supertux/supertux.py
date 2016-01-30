@@ -63,7 +63,7 @@ def main():
     # Load supertux binary path from config file, --binary argument or open file dialog
     if args.binary and os.path.isfile(args.binary):
         config.binary = args.binary
-    if not os.path.isfile(config.binary):
+    if not config.binary or not os.path.isfile(config.binary):
         QMessageBox.warning(None, "No Supertux Binary Found",
                             "Press OK to select your Supertux binary")
         config.binary = QFileDialog.getOpenFileName(None, "Open Supertux Binary")

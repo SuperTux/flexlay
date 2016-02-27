@@ -662,7 +662,7 @@ class SuperTuxGUI:
 
     def load_addon(self, addon, dirname):
         print("Add-on dirname is: " + dirname)
-        self.gui.project_widget.set_addon()
+        self.gui.project_widget.set_addon(addon)
         self.gui.project_widget.set_project_directory(dirname)
         pass
 

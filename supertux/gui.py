@@ -568,7 +568,7 @@ class SuperTuxGUI:
         if dialog.addon is not None:
             def save_path_chosen(save_path):
                 dialog.addon.save(save_path)
-                self.load_addon(save_path)
+                self.load_addon(dialog.addon, save_path)
             self.addon_save_dialog.run(save_path_chosen)
         pass
 
@@ -660,8 +660,9 @@ class SuperTuxGUI:
         level.save(filename)
         level.filename = filename
 
-    def load_addon(self, dirname):
+    def load_addon(self, addon, dirname):
         print("Add-on dirname is: " + dirname)
+        self.gui.project_widget.set_addon()
         self.gui.project_widget.set_project_directory(dirname)
         pass
 

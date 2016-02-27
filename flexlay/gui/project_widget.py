@@ -36,6 +36,7 @@ class ProjectWidget(QWidget):
     def __init__(self, parent):
         super().__init__(parent)
         self.items = []
+        self.addon = None
 
         self.toolbar = QToolBar()
         self.toolbar.setStyleSheet('QToolBar{spacing:0px;}')
@@ -114,6 +115,9 @@ class ProjectWidget(QWidget):
 
     def set_project_directory(self, project_dir):
         self.tree_view.setRootIndex(self.model.setRootPath(project_dir))
+
+    def set_addon(self, addon):
+        self.addon = addon
 
     def package_addon(self):
         print("Package add-on!")

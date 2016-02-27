@@ -71,6 +71,9 @@ class Addon:
         self.scripts = []
         self.sounds = []
 
+        # Directory path of add-on:
+        self.project_dir = None
+
     def parse_v2(self, data):
         self.id = get_value_from_tree(["id", "_"], data, "")
         self.version = get_value_from_tree(["version", "_"], data, "")
@@ -80,6 +83,9 @@ class Addon:
         self.license = get_value_from_tree(["license", "_"], data, "")
 
     def save(self, dirname):
+        # Save project dir
+        self.project_dir = dirname
+
         # Create directory, if it doesn't exist:
         if not os.path.exists(dirname):
             os.makedirs(dirname)
@@ -142,5 +148,11 @@ class Addon:
         writer.write_bool("hide-from-contribs", False)
         writer.write_bool("levelset", False)
         writer.end_list()
+
+    def get_project_dir(self):
+        return self.project_dir
+
+    def set_project_dir(self, project_dir):
+        self.project_dir = project_dir
 
 # EOF #

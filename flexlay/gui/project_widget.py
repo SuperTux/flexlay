@@ -14,11 +14,13 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from PyQt4.QtCore import Qt
+
 from PyQt4.QtGui import (QVBoxLayout, QLabel, QLineEdit, QFormLayout,
                          QIcon, QCheckBox, QPixmap, QButtonGroup,
                          QRadioButton, QColorDialog, QWidget, QFileDialog,
                          QComboBox, QPushButton, QSpinBox, QTreeView,
-                         QStandardItem, QFileSystemModel)
+                         QStandardItem, QFileSystemModel, QMenu, QToolBar)
 
 from flexlay.gui import OpenFileDialog
 from flexlay.util import Config, Signal
@@ -35,8 +37,18 @@ class ProjectWidget(QWidget):
         super().__init__(parent)
         self.items = []
 
+        self.toolbar = QToolBar()
+        self.toolbar.setStyleSheet('QToolBar{spacing:0px;}')
+        package_icon = QIcon("data/images/icons16/addon_package-16.png")
+        add_icon = QIcon("data/images/supertux/plus.png")
+        self.toolbar.addAction(package_icon, 'Package add-on...', self.package_addon)
+        self.toolbar.addAction(add_icon, "Add content...", self.add_content)
+
         self.tree_view = QTreeView()
         self.vbox = QVBoxLayout()
+        self.vbox.setSpacing(0)
+        self.vbox.setContentsMargins(0, 0, 0, 0)
+        self.vbox.addWidget(self.toolbar)
         self.model = QFileSystemModel()
         # self.data = [
         #      ("SuperTux addon", [
@@ -50,7 +62,11 @@ class ProjectWidget(QWidget):
         # self.model = QStandardItemModel()
         #self.add_items(self.model, self.data)
         self.tree_view.setModel(self.model)
+        self.tree_view.doubleClicked.connect(self.on_tree_view_double_click)
+        self.tree_view.setContextMenuPolicy(Qt.CustomContextMenu)
+        self.tree_view.customContextMenuRequested.connect(self.on_context_menu)
         self.vbox.addWidget(self.tree_view)
+
         self.layout = QFormLayout()
         self.vbox.addLayout(self.layout)
 
@@ -83,5 +99,24 @@ class ProjectWidget(QWidget):
     def call(self):
         self.call_signal(*self.get_values())
 
+    def on_tree_view_double_click(self, item):
+        print("double-clicked!")
+
+    def on_context_menu(self, position):
+
+        menu = QMenu()
+        menu.addAction(self.tr("Add image..."))
+        menu.addAction(self.tr("Add sound..."))
+        menu.addAction(self.tr("Add level..."))
+        menu.addAction(self.tr("Add script..."))
+
+        menu.exec_(self.tree_view.viewport().mapToGlobal(position))
+
     def set_project_directory(self, project_dir):
         self.tree_view.setRootIndex(self.model.setRootPath(project_dir))
+
+    def package_addon(self):
+        print("Package add-on!")
+
+    def add_content(self):
+        print("Add content to add-on!")

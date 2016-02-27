@@ -38,6 +38,22 @@ class ProjectWidget(QWidget):
         self.items = []
         self.addon = None
 
+        self.vbox = QVBoxLayout()
+        self.vbox.setSpacing(0)
+        self.vbox.setContentsMargins(0, 0, 0, 0)
+
+        self.heading_label = QLabel("No project")
+        self.label = QLabel("Create a project by selecting File > New > Project...")
+        self.vbox.addWidget(self.heading_label)
+        self.vbox.addWidget(self.label)
+        self.setLayout(self.vbox)
+
+
+    def init_gui(self):
+        # Clear from previous:
+        self.heading_label.setVisible(False)
+        self.label.setVisible(False)
+
         self.toolbar = QToolBar()
         self.toolbar.setStyleSheet('QToolBar{spacing:0px;}')
         package_icon = QIcon("data/images/icons16/addon_package-16.png")
@@ -46,9 +62,6 @@ class ProjectWidget(QWidget):
         self.toolbar.addAction(add_icon, "Add content...", self.add_content)
 
         self.tree_view = QTreeView()
-        self.vbox = QVBoxLayout()
-        self.vbox.setSpacing(0)
-        self.vbox.setContentsMargins(0, 0, 0, 0)
         self.vbox.addWidget(self.toolbar)
         self.model = QFileSystemModel()
         # self.data = [
@@ -118,6 +131,8 @@ class ProjectWidget(QWidget):
 
     def set_addon(self, addon):
         self.addon = addon
+        # We now have an add-on set, initialize the GUI
+        self.init_gui()
 
     def package_addon(self):
         print("Package add-on!")

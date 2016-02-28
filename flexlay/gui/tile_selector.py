@@ -16,7 +16,7 @@
 
 
 from PyQt4.QtCore import Qt
-from PyQt4.QtGui import (QComboBox, QScrollArea, QWidget, QVBoxLayout)
+from PyQt4.QtGui import (QComboBox, QScrollArea, QTabWidget, QWidget, QVBoxLayout)
 
 from .tile_selector_widget import TileSelectorWidget
 
@@ -33,11 +33,22 @@ class TileSelector:
         self.scroll_area.setWidget(self.widget)
         self.scroll_area.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
 
-        self.box = QWidget()
+        self.box = QTabWidget()
         self.layout = QVBoxLayout(self.box)
         self.layout.setContentsMargins(0, 0, 0, 0)
-        self.layout.addWidget(self.combobox)
-        self.layout.addWidget(self.scroll_area)
+
+        self.first_tab = QWidget()
+        self.first_tab.layout = QVBoxLayout(self.first_tab)
+        self.first_tab.layout.setContentsMargins(0, 0, 0, 0)
+        self.first_tab.layout.addWidget(self.combobox)
+        self.first_tab.layout.addWidget(self.scroll_area)
+
+        self.second_tab = QWidget()
+        self.second_tab.layout = QVBoxLayout(self.second_tab)
+        self.second_tab.layout.setContentsMargins(0, 0, 0, 0)
+
+        self.box.addTab(self.first_tab, "Tile Selection")
+        self.box.addTab(self.second_tab, "Smart Tiles")
 
         self.combobox.activated.connect(self.on_combobox_activated)
 

@@ -19,6 +19,7 @@ from PyQt4.QtCore import Qt
 from PyQt4.QtGui import (QComboBox, QScrollArea, QTabWidget, QWidget, QVBoxLayout)
 
 from .tile_selector_widget import TileSelectorWidget
+from .smart_tile_selector_widget import SmartTileSelectorWidget
 
 
 class TileSelector:
@@ -33,6 +34,12 @@ class TileSelector:
         self.scroll_area.setWidget(self.widget)
         self.scroll_area.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
 
+        #self.second_tab_scroll_area = QScrollArea()
+        self.smart_widget = SmartTileSelectorWidget(self.scroll_area.viewport())
+        #self.second_tab_scroll_area.setWidgetResizable(True)
+        #self.second_tab_scroll_area.setWidget(self.smart_widget)
+        #self.second_tab_scroll_area.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
+
         self.box = QTabWidget()
         self.layout = QVBoxLayout(self.box)
         self.layout.setContentsMargins(0, 0, 0, 0)
@@ -46,9 +53,13 @@ class TileSelector:
         self.second_tab = QWidget()
         self.second_tab.layout = QVBoxLayout(self.second_tab)
         self.second_tab.layout.setContentsMargins(0, 0, 0, 0)
+        self.second_tab.layout.addWidget(self.smart_widget)
 
         self.box.addTab(self.first_tab, "Tile Selection")
-        self.box.addTab(self.second_tab, "Smart Tiles")
+
+        # SmartTiles is a working title, feel free to change.
+        # TM symbol clearly meant as a joke
+        self.box.addTab(self.second_tab, "SmartTiles™")
 
         self.combobox.activated.connect(self.on_combobox_activated)
 
@@ -58,6 +69,11 @@ class TileSelector:
         self.widget.set_tiles(tiles)
         self.widget.repaint()
         self.scroll_area.update()
+
+        #self.smart_widget.set_tiles(tiles)
+        #self.smart_widget.repaint()
+        #self.smart_widget.update()
+        #self.second_tab_scroll_area.update()
 
     def set_tileset(self, tileset):
         self.widget.set_tileset(tileset)

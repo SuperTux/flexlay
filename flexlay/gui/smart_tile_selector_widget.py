@@ -34,6 +34,11 @@ class SmartTileSelectorWidget(QWidget):
         self.list_widget = QListWidget(self)
         self.list_widget.addItem("Green pipe (vertical)")
         self.list_widget.addItem("Green pipe (horizontal)")
+        self.list_widget.addItem("Small tree")
+        self.list_widget.addItem("Medium tree")
+        self.list_widget.addItem("Big tree")
+        self.list_widget.addItem("Horizontal block")
+        self.list_widget.addItem("Vertical block")
         self.list_widget.currentItemChanged.connect(self.item_changed)
         self.viewport = viewport
 
@@ -42,19 +47,47 @@ class SmartTileSelectorWidget(QWidget):
 
     def item_changed(self, curr, prev):
         item_index = self.list_widget.indexFromItem(curr).row()
-        brush = TileBrush(2, 2)
-        brush.set_transparent()
+        brush = None
+
         if item_index == 0:
-            brush.put(0, 0, 57)
-            brush.put(1, 0, 58)
-            brush.put(0, 1, 59)
-            brush.put(1, 1, 60)
+            brush = self.brush_from_range(2, 2, 57)
+
         if item_index == 1:
-            brush.put(0, 0, 53)
-            brush.put(0, 1, 54)
-            brush.put(1, 0, 55)
-            brush.put(1, 1, 56)
-        ToolContext.current.tile_brush = brush
+            brush = self.brush_from_range(2, 2, 53, reverse=True)
+
+        if item_index == 2:
+            brush = self.brush_from_range(2, 12, 1287)
+
+        if item_index == 3:
+            brush = self.brush_from_range(4, 12, 1239)
+
+        if item_index == 4: # or something like this
+            brush = self.brush_from_range(6, 12, 1167)
+
+        if item_index == 5:
+            brush = self.brush_from_range(3, 1, 27)
+
+        if item_index == 6:
+            brush = self.brush_from_range(1, 3, 211)
+
+        if brush != None:
+            ToolContext.current.tile_brush = brush
+
+    def brush_from_range(self, width, height, start, reverse=False):
+        brush = TileBrush(width, height)
+        brush.set_transparent()
+        i = start
+        if reverse:
+            for x in range(0, width):
+                for y in range(0, height):
+                    brush.put(x, y, i)
+                    i += 1
+        else:
+            for y in range(0, height):
+                for x in range(0, width):
+                    brush.put(x, y, i)
+                    i += 1
+        return brush
 
     #     self.index = 0
     #

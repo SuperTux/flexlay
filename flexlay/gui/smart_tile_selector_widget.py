@@ -31,13 +31,15 @@ from .tile_selector_widget import TileSelectorWidget
 
 class SmartTile:
 
+    id = 0
     name = "Undefined smart tile"
     width = 0
     height = 0
     start = 0
     reverse = False
 
-    def __init__(self, name, width, height, start, reverse):
+    def __init__(self, id, name, width, height, start, reverse):
+        self.id = id
         self.name = name
         self.width = width
         self.height = height
@@ -90,12 +92,13 @@ class SmartTileSelectorWidget(QWidget):
         with open('data/supertux/smarttiles.csv', 'r') as csvfile:
             reader = csv.reader(csvfile)
             for row in reader:
-                name = row[0]
-                width = int(row[1])
-                height = int(row[2])
-                start = int(row[3])
-                reverse = row[4] if len(row) >= 5 else False
-                self.smart_tiles.append(SmartTile(name, width, height, start, reverse))
+                id = row[0]
+                name = row[1]
+                width = int(row[2])
+                height = int(row[3])
+                start = int(row[4])
+                reverse = row[5] if len(row) >= 6 else False
+                self.smart_tiles.append(SmartTile(id, name, width, height, start, reverse))
 
     #     self.index = 0
     #

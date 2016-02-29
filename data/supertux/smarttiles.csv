@@ -1,23 +1,24 @@
-"Green pipe (vertical)",2,2,57
-"Green pipe (horizontal)",2,2,53,true
-"Small tree",2,12,1287
-"Medium tree",4,12,1239
-"Big tree",6,12,1167
-"Horizontal block",3,1,27
-"Vertical block",1,3,211
-"Cloud",4,2,85
-"Run sign",2,2,136
-"Right sign",2,2,141
-"Rightup sign",2,2,1600
-"Rightdown sign",2,2,1604
-"Left sign",2,2,1608
-"Leftup sign",2,2,1612
-"Leftdown sign",2,2,1616
-"Up sign",2,2,1620
-"Down sign",2,2,1624
-"Danger sign",2,2,1628
-"Cyan color sign",2,2,1727
-"Yellow color sign",2,2,1731
-"Rock sign",2,2,1822
-"Trampoline sign",2,2,2400
-"Ice cube holding sign",2,2,3163
+0, Green pipe (vertical),2,2,57
+1, Green pipe (horizontal),2,2,53,true
+2, Small tree,2,12,1287
+3, Medium tree,4,12,1239
+4, Big tree,6,12,1167
+5, Gigantic tree,8,12,1071
+6, Horizontal block,3,1,27
+7, Vertical block,1,3,211
+8, Cloud,4,2,85
+9, Run sign,2,2,136
+10, Right sign,2,2,141
+11, Rightup sign,2,2,1600
+12, Rightdown sign,2,2,1604
+13, Left sign,2,2,1608
+14, Leftup sign,2,2,1612
+15, Leftdown sign,2,2,1616
+16, Up sign,2,2,1620
+17, Down sign,2,2,1624
+18, Danger sign,2,2,1628
+19, Cyan color sign,2,2,1727
+20, Yellow color sign,2,2,1731
+21, Rock sign,2,2,1822
+22, Trampoline sign,2,2,2400
+23, Ice cube holding sign,2,2,3163

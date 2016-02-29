@@ -14,6 +14,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import csv
 
 from PyQt4.QtCore import QSize, Qt
 from PyQt4.QtGui import QPainter
@@ -28,17 +29,33 @@ from flexlay.tool_context import ToolContext
 
 from .tile_selector_widget import TileSelectorWidget
 
+class SmartTile:
+
+    name = "Undefined smart tile"
+    width = 0
+    height = 0
+    start = 0
+    reverse = False
+
+    def __init__(self, name, width, height, start, reverse):
+        self.name = name
+        self.width = width
+        self.height = height
+        self.start = start
+        self.reverse = reverse
+
+
 class SmartTileSelectorWidget(QWidget):
     def __init__(self, viewport):
         super().__init__()
+
+        self.smart_tiles = []
+        self.load_tiles()
+
         self.list_widget = QListWidget(self)
-        self.list_widget.addItem("Green pipe (vertical)")
-        self.list_widget.addItem("Green pipe (horizontal)")
-        self.list_widget.addItem("Small tree")
-        self.list_widget.addItem("Medium tree")
-        self.list_widget.addItem("Big tree")
-        self.list_widget.addItem("Horizontal block")
-        self.list_widget.addItem("Vertical block")
+        for tile in self.smart_tiles:
+            self.list_widget.addItem(tile.name)
+
         self.list_widget.currentItemChanged.connect(self.item_changed)
         self.viewport = viewport
 
@@ -47,28 +64,8 @@ class SmartTileSelectorWidget(QWidget):
 
     def item_changed(self, curr, prev):
         item_index = self.list_widget.indexFromItem(curr).row()
-        brush = None
-
-        if item_index == 0:
-            brush = self.brush_from_range(2, 2, 57)
-
-        if item_index == 1:
-            brush = self.brush_from_range(2, 2, 53, reverse=True)
-
-        if item_index == 2:
-            brush = self.brush_from_range(2, 12, 1287)
-
-        if item_index == 3:
-            brush = self.brush_from_range(4, 12, 1239)
-
-        if item_index == 4: # or something like this
-            brush = self.brush_from_range(6, 12, 1167)
-
-        if item_index == 5:
-            brush = self.brush_from_range(3, 1, 27)
-
-        if item_index == 6:
-            brush = self.brush_from_range(1, 3, 211)
+        current = self.smart_tiles[item_index]
+        brush = self.brush_from_range(current.width, current.height, current.start, current.reverse)
 
         if brush != None:
             ToolContext.current.tile_brush = brush
@@ -88,6 +85,17 @@ class SmartTileSelectorWidget(QWidget):
                     brush.put(x, y, i)
                     i += 1
         return brush
+
+    def load_tiles(self):
+        with open('data/supertux/smarttiles.csv', 'r') as csvfile:
+            reader = csv.reader(csvfile)
+            for row in reader:
+                name = row[0]
+                width = int(row[1])
+                height = int(row[2])
+                start = int(row[3])
+                reverse = row[4] if len(row) >= 5 else False
+                self.smart_tiles.append(SmartTile(name, width, height, start, reverse))
 
     #     self.index = 0
     #

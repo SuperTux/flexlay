@@ -73,8 +73,8 @@ class EditorMapWidget(QWidget):
                 self.repaint()
 
     def wheelEvent(self, event):
-        num_degrees = event.delta() / 8
-        num_steps = int(abs(num_degrees) / 15)
+        num_degrees = event.angleDelta() / 8
+        num_steps = int(num_degrees.manhattanLength() / 15)
 
         for _ in range(num_steps):
             if num_degrees > 0:

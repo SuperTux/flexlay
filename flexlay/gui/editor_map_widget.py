@@ -77,7 +77,7 @@ class EditorMapWidget(QWidget):
         num_steps = int(num_degrees.manhattanLength() / 15)
 
         for _ in range(num_steps):
-            if num_degrees > 0:
+            if num_degrees.x() > 0 or num_degrees.y() > 0:
                 self.comp.zoom_in(Point.from_qt(event.pos()))
             else:
                 self.comp.zoom_out(Point.from_qt(event.pos()))

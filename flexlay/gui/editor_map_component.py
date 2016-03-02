@@ -17,9 +17,10 @@
 
 import pickle
 
-from PyQt4.QtCore import Qt
-from PyQt4.QtGui import (QWidget, QGridLayout, QScrollBar, QTabWidget,
-                         QKeySequence, QShortcut, QCursor)
+from PyQt5.QtCore import Qt
+from PyQt5.QtGui import (QKeySequence, QCursor)
+from PyQt5.QtWidgets import (QWidget, QGridLayout, QScrollBar, QTabWidget,
+                             QShortcut)
 
 from flexlay.graphic_context_state import GraphicContextState
 from flexlay.math import Pointf

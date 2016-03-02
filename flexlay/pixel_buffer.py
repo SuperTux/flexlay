@@ -15,8 +15,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from PyQt4.QtCore import QSize
-from PyQt4.QtGui import QImage
+from PyQt5.QtCore import QSize
+from PyQt5.QtGui import QImage
 
 from .blitter import blit_clear, blit_opaque
 

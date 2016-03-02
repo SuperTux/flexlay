@@ -15,8 +15,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from PyQt4.QtGui import (QStandardItemModel, QStandardItem, QIcon,
-                         QWidget, QToolBar, QTreeView, QVBoxLayout)
+from PyQt5.QtGui import (QStandardItemModel, QStandardItem, QIcon)
+from PyQt5.QtWidgets import (QWidget, QToolBar, QTreeView, QVBoxLayout)
 from flexlay.tool_context import ToolContext
 from flexlay.commands import LayerDeleteCommand
 from .editor_map_component import EditorMapComponent
@@ -68,9 +68,9 @@ class LayerTreeView(QTreeView):
 
         self.selection_signal(selected_index, deselected_index)
 
-    def dataChanged(self, top_left, bottom_right):
+    def dataChanged(self, top_left, bottom_right, roles=[]):
         """Overrides in QTreeView. Ensures name of actual tilemap is set"""
-        super().dataChanged(top_left, bottom_right)
+        super().dataChanged(top_left, bottom_right, roles)
         if top_left == bottom_right:
             index = top_left.row()
             data = str(top_left.data())

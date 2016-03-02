@@ -15,8 +15,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from PyQt4.QtGui import (QDialog, QDialogButtonBox, QVBoxLayout,
-                         QFormLayout)
+from PyQt5.QtWidgets import (QDialog, QDialogButtonBox, QVBoxLayout,
+                             QFormLayout)
 
 from .properties_widget import PropertiesWidget
 

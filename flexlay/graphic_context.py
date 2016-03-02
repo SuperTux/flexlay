@@ -15,8 +15,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from PyQt4.QtCore import QLineF
-from PyQt4.QtGui import QPainterPath
+from PyQt5.QtCore import QLineF
+from PyQt5.QtGui import QPainterPath
 
 from flexlay.math import Rectf
 

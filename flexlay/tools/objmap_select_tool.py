@@ -15,7 +15,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from PyQt4.QtGui import QIcon, QMenu, QCursor
+from PyQt5.QtGui import QIcon, QCursor
+from PyQt5.QtWidgets import QMenu
 
 from flexlay import Color, InputEvent, Workspace, ToolContext
 from ..commands import ObjectMoveCommand, ObjectDeleteCommand

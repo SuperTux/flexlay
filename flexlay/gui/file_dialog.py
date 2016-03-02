@@ -16,8 +16,8 @@
 
 import os
 
-from PyQt4.QtCore import Qt
-from PyQt4.QtGui import QFileDialog, QSortFilterProxyModel
+from PyQt5.QtCore import Qt, QSortFilterProxyModel
+from PyQt5.QtWidgets import QFileDialog
 
 
 class FileDialog:

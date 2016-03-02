@@ -19,8 +19,8 @@ import argparse
 import os
 import logging
 
-from PyQt4.QtCore import QByteArray
-from PyQt4.QtGui import QMessageBox, QFileDialog
+from PyQt5.QtCore import QByteArray
+from PyQt5.QtWidgets import QMessageBox, QFileDialog
 
 from flexlay import Flexlay, Config
 from flexlay.util.sexpr import SExprParseError
@@ -102,10 +102,10 @@ def main():
     gui.set_tilemap_paint_tool()
 
     if config.geometry:
-        if not gui.gui.window.restoreGeometry(QByteArray.fromBase64(config.geometry)):
+        if not gui.gui.window.restoreGeometry(QByteArray.fromBase64(config.geometry.encode("ascii"))):
             logging.error("error: failed to restore window geometry")
     if config.window_state:
-        if not gui.gui.window.restoreState(QByteArray.fromBase64(config.window_state)):
+        if not gui.gui.window.restoreState(QByteArray.fromBase64(config.window_state.encode("ascii"))):
             logging.error("error: failed to restore window state")
 
     gui.run()

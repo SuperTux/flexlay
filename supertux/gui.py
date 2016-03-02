@@ -21,7 +21,8 @@ import logging
 import tempfile
 import threading
 
-from PyQt4.QtGui import (QIcon, QMessageBox)
+from PyQt5.QtGui import QIcon
+from PyQt5.QtWidgets import QMessageBox
 
 from flexlay import (Color, InputEvent, ObjMapRectObject, ObjMapTilemapObject,
                      ObjMapPathNode, Config, ToolContext, ObjectAddCommand,

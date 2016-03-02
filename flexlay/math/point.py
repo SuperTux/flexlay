@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from PyQt4.QtCore import QPoint
+from PyQt5.QtCore import QPoint
 
 
 class Point:

@@ -359,7 +359,7 @@ class SuperTuxGUI:
             logging.info("Resize Callback")
             level.resize(Size(w, h), Point(x, y))
 
-        dialog.set_callback(on_callback)
+        dialog.add_callback(on_callback)
 
     def gui_smooth_level_struct(self):
         logging.info("Smoothing level structure")
@@ -424,7 +424,7 @@ class SuperTuxGUI:
             level.contact = contact
             level.target_time = target_time
 
-        dialog.set_callback(on_callback)
+        dialog.add_callback(on_callback)
 
     def gui_edit_sector(self):
         level = self.workspace.get_map().metadata.get_level()
@@ -592,7 +592,7 @@ class SuperTuxGUI:
             def on_callback(datadir):
                 Config.current.datadir = datadir
 
-            dialog.set_callback(on_callback)
+            dialog.add_callback(on_callback)
 
     def new_level(self):
         pass

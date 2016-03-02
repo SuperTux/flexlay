@@ -26,7 +26,7 @@ class GenericWizard(QWizard):
     You must use new_property_page to create pages which
     are made up of a PropertyWidget.
 
-    Use set_callback to add a function which will be called
+    Use add_callback to add a function which will be called
     when "Finish" is pressed. See that function for more details
     """
     def __init__(self, parent, title):

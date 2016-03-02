@@ -27,7 +27,7 @@ class FlexlayGenericWizardTestCase(unittest.TestCase):
         test_app = QApplication(sys.argv)
 
         test_wizard = GenericWizard(None, "Generic Wizard Test")
-        
+
         page1 = PropertiesWidget(test_wizard)
         page1.add_label("Hello World!")
         page1.add_string("Type:", "Initial Value", (lambda val: print(val)))
@@ -37,7 +37,7 @@ class FlexlayGenericWizardTestCase(unittest.TestCase):
         page2.add_label("Hello World Again!")
         test_wizard.add_page("Page 2", page2)
 
-        test_wizard.set_callback(print)
+        test_wizard.add_callback(print)
 
         test_wizard.show()
 

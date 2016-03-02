@@ -187,9 +187,9 @@ class SuperTuxGUI:
             choice = QMessageBox.warning(self.gui.window, "Unsaved Changes to Level",
                                          "The level has been changed since "
                                          "the last save.",
-                                         "Save Now", "Cancel", "Leave Anyway",
-                                         0, 1)
-            if choice == 0:
+                                         QMessageBox.Save | QMessageBox.Cancel | QMessageBox.Discard,
+                                         QMessageBox.Save)
+            if choice == QMessageBox.Save:
                 dialog_is_cancelled = False
 
                 def after_save(i):
@@ -202,9 +202,9 @@ class SuperTuxGUI:
                     QMessageBox.information(self.gui.window, "Saved Successfully", "Editor will now quit")
                 # If dialog is cancelled, don't quit, as that would lose changes
                 return not dialog_is_cancelled
-            elif choice == 1:
+            elif choice == QMessageBox.Cancel:
                 return False
-            elif choice == 2:
+            elif choice == QMessageBox.Discard:
                 return True
 
     def on_object_drop(self, brush, pos):

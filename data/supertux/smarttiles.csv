@@ -1,25 +1,25 @@
-0, Green pipe (vertical),2,2,57
+0, Green pipe (vertical),2,2,57,false
 1, Green pipe (horizontal),2,2,53,true
-2, Small tree,2,12,1287
-3, Medium tree,4,12,1239
-4, Big tree,6,12,1167
-5, Gigantic tree,8,12,1071
-6, Horizontal block,3,1,27
-7, Vertical block,1,3,211
-8, Cloud,4,2,85
-9, Run sign,2,2,136
-10, Right sign,2,2,141
-11, Rightup sign,2,2,1600
-12, Rightdown sign,2,2,1604
-13, Left sign,2,2,1608
-14, Leftup sign,2,2,1612
-15, Leftdown sign,2,2,1616
-16, Up sign,2,2,1620
-17, Down sign,2,2,1624
-18, Danger sign,2,2,1628
-19, Cyan color sign,2,2,1727
-20, Yellow color sign,2,2,1731
-21, Rock sign,2,2,1822
-22, Trampoline sign,2,2,2400
-23, Ice cube holding sign,2,2,3163
-24, Blue pipe (vertical),2,2,2085
+2, Small tree,2,12,1287,false
+3, Medium tree,4,12,1239,false
+4, Big tree,6,12,1167,false
+5, Gigantic tree,8,12,1071,false
+6, Horizontal block,3,1,27,false
+7, Vertical block,1,3,211,false
+8, Cloud,4,2,85,false
+9, Run sign,2,2,136,false
+10, Right sign,2,2,141,false
+11, Rightup sign,2,2,1600,false
+12, Rightdown sign,2,2,1604,false
+13, Left sign,2,2,1608,false
+14, Leftup sign,2,2,1612,false
+15, Leftdown sign,2,2,1616,false
+16, Up sign,2,2,1620,false
+17, Down sign,2,2,1624,false
+18, Danger sign,2,2,1628,false
+19, Cyan color sign,2,2,1727,false
+20, Yellow color sign,2,2,1731,false
+21, Rock sign,2,2,1822,false
+22, Trampoline sign,2,2,2400,false
+23, Ice cube holding sign,2,2,3163,false
+24, Blue pipe (vertical),2,2,2085,false

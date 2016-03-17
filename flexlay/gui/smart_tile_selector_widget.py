@@ -46,6 +46,22 @@ class SmartTile:
         self.start = start
         self.reverse = reverse
 
+    def as_brush(self):
+        brush = TileBrush(self.width, self.height)
+        brush.set_transparent()
+        i = self.start
+        if self.reverse:
+            for x in range(0, self.width):
+                for y in range(0, self.height):
+                    brush.put(x, y, i)
+                    i += 1
+        else:
+            for y in range(0, self.height):
+                for x in range(0, self.width):
+                    brush.put(x, y, i)
+                    i += 1
+        return brush
+
 
 class SmartTileSelectorWidget(QWidget):
     def __init__(self, viewport):
@@ -67,26 +83,10 @@ class SmartTileSelectorWidget(QWidget):
     def item_changed(self, curr, prev):
         item_index = self.list_widget.indexFromItem(curr).row()
         current = self.smart_tiles[item_index]
-        brush = self.brush_from_range(current.width, current.height, current.start, current.reverse)
+        brush = current.as_brush()
 
         if brush != None:
             ToolContext.current.tile_brush = brush
-
-    def brush_from_range(self, width, height, start, reverse=False):
-        brush = TileBrush(width, height)
-        brush.set_transparent()
-        i = start
-        if reverse:
-            for x in range(0, width):
-                for y in range(0, height):
-                    brush.put(x, y, i)
-                    i += 1
-        else:
-            for y in range(0, height):
-                for x in range(0, width):
-                    brush.put(x, y, i)
-                    i += 1
-        return brush
 
     def load_tiles(self):
         with open('data/supertux/smarttiles.csv', 'r') as csvfile:

@@ -18,7 +18,7 @@ import csv
 
 from PyQt4.QtCore import QSize, Qt
 from PyQt4.QtGui import QPainter
-from PyQt4.QtGui import QListWidget, QVBoxLayout, QFormLayout, QWidget, QPushButton
+from PyQt4.QtGui import QLabel, QListWidget, QHBoxLayout, QVBoxLayout, QFormLayout, QSpinBox, QWidget, QPushButton
 
 from flexlay.color import Color
 from flexlay.graphic_context import GraphicContext
@@ -61,6 +61,7 @@ class SmartTile:
         self.other_ids = []
 
         self.has_mappings = False
+        self.brush = None
 
     def as_brush(self):
         brush = TileBrush(self.width, self.height)
@@ -147,14 +148,42 @@ class SmartTileSelectorWidget(QWidget):
 
         self.smart_tiles = []
         self.load_tiles()
+        self.layout = QVBoxLayout()
 
         self.list_widget = QListWidget(self)
         for tile in self.smart_tiles:
             self.list_widget.addItem(tile.name)
 
+        self.width_label = QLabel("Width: ")
+        self.width_input = QSpinBox(self)
+        self.height_label = QLabel("Height: ")
+        self.height_input = QSpinBox(self)
+        self.width_box = QHBoxLayout()
+        self.width_box.addWidget(self.width_label)
+        self.width_box.addWidget(self.width_input)
+        self.height_box = QHBoxLayout()
+        self.height_box.addWidget(self.height_label)
+        self.height_box.addWidget(self.height_input)
+        self.layout.addWidget(self.list_widget)
+        self.layout.addLayout(self.width_box)
+        self.layout.addLayout(self.height_box)
+        self.setLayout(self.layout)
+
         self.current = None
         self.list_widget.currentItemChanged.connect(self.item_changed)
+        self.width_input.valueChanged.connect(self.set_brush)
+        self.height_input.valueChanged.connect(self.set_brush)
         self.viewport = viewport
+
+    def set_brush(self):
+        current = self.get_current()
+        if current.has_mappings:
+            self.brush = current.as_smart_brush(self.width_input.value(), self.height_input.value())
+        else:
+            self.brush = current.as_brush()
+
+        if self.brush != None:
+            ToolContext.current.tile_brush = self.brush
 
     def set_tiles(self, tiles):
         pass
@@ -164,19 +193,13 @@ class SmartTileSelectorWidget(QWidget):
 
     def set_current(self, index):
         self.current = index
-        current = self.smart_tiles[index]
-        brush = None
-        if current.has_mappings:
-            brush = current.as_smart_brush(10, None)
-        else:
-            brush = current.as_brush()
-
-        if brush != None:
-            ToolContext.current.tile_brush = brush
+        self.set_brush()
 
     def item_changed(self, curr, prev):
         item_index = self.list_widget.indexFromItem(curr).row()
         self.set_current(item_index)
+        self.height_input.setValue(self.get_current().height)
+        self.width_input.setValue(self.get_current().width)
 
 
     def load_tiles(self):

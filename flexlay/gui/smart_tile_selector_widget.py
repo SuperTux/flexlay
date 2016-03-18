@@ -38,13 +38,29 @@ class SmartTile:
     start = 0
     reverse = False
 
-    def __init__(self, id, name, width, height, start, reverse):
+    def __init__(self, id, name, width, height, max_width, max_height, start, reverse):
         self.id = id
         self.name = name
         self.width = width
         self.height = height
+        self.max_width = max_width
+        self.max_height = max_height
+        self.min_width = width
+        self.min_height = height
         self.start = start
         self.reverse = reverse
+
+        self.top_left_ids = []
+        self.top_ids = []
+        self.top_right_ids = []
+        self.right_ids = []
+        self.bottom_right_ids = []
+        self.bottom_ids = []
+        self.bottom_left_ids = []
+        self.left_ids = []
+        self.other_ids = []
+
+        self.has_mappings = False
 
     def as_brush(self):
         brush = TileBrush(self.width, self.height)
@@ -62,6 +78,68 @@ class SmartTile:
                     i += 1
         return brush
 
+    def get_fitting_tile(self, left, top, width, height):
+        if left == 0 and top == 0: # top left corner
+            return self.top_left_ids[0]
+        if left == width - 1 and top == 0: # top right corner
+            return self.top_right_ids[0]
+        if left == 0 and top == height - 1: # bottom left corner
+            return self.bottom_left_ids[0]
+        if left == width - 1 and top == height - 1: # bottom right corner
+            return self.bottom_right_ids[0]
+        elif top == 0: # top edge
+            return self.top_ids[0]
+        elif left == 0: # left edge
+            return self.left_ids[0]
+        elif top == height - 1: # bottom edge
+            return self.bottom_ids[0]
+        elif left == width - 1: # right edge
+            return self.right_ids[0]
+        else:
+            return self.other_ids[0]
+
+    def as_smart_brush(self, width = None, height = None):
+        brush = self.as_brush()
+        if width == None and height == None:
+            return brush
+
+        if width and width < self.min_width:
+            return brush
+        if height and height < self.min_height:
+            return brush
+
+        if width == None:
+            width = brush.width
+        if height == None:
+            height = brush.height
+
+        if width > self.max_width and self.max_width != -1:
+            width = self.max_width
+        if height > self.max_height and self.max_height != -1:
+            height = self.max_height
+
+        brush.resize(width, height)
+        for x in range(0, width):
+            for y in range(0, height):
+                brush.put(x, y, self.get_fitting_tile(x, y, width, height))
+
+        return brush
+
+    def set_mappings(self, mappings_string):
+        mappings = mappings_string.split("|")
+        if len(mappings) != 9:
+            return
+
+        self.has_mappings = True
+        self.top_left_ids = [int(mappings[0])]
+        self.top_ids = [int(mappings[1])]
+        self.top_right_ids = [int(mappings[2])]
+        self.right_ids = [int(mappings[3])]
+        self.bottom_right_ids = [int(mappings[4])]
+        self.bottom_ids = [int(mappings[5])]
+        self.bottom_left_ids = [int(mappings[6])]
+        self.left_ids = [int(mappings[7])]
+        self.other_ids = [int(mappings[8])]
 
 class SmartTileSelectorWidget(QWidget):
     def __init__(self, viewport):
@@ -87,7 +165,11 @@ class SmartTileSelectorWidget(QWidget):
     def set_current(self, index):
         self.current = index
         current = self.smart_tiles[index]
-        brush = current.as_brush()
+        brush = None
+        if current.has_mappings:
+            brush = current.as_smart_brush(10, None)
+        else:
+            brush = current.as_brush()
 
         if brush != None:
             ToolContext.current.tile_brush = brush
@@ -100,14 +182,26 @@ class SmartTileSelectorWidget(QWidget):
     def load_tiles(self):
         with open('data/supertux/smarttiles.csv', 'r') as csvfile:
             reader = csv.reader(csvfile)
+            first_row = True
             for row in reader:
+                if first_row: # Ignore first heading row
+                    first_row = False
+                    continue
+
                 id = row[0]
                 name = row[1]
                 width = int(row[2])
                 height = int(row[3])
                 start = int(row[4])
-                reverse = row[5] if len(row) >= 6 else False
-                self.smart_tiles.append(SmartTile(id, name, width, height, start, reverse))
+                reverse = row[5] if len(row) >= 6 and row[5] == "true" else False
+                max_width = int(row[6]) if len(row) >= 7 else width
+                max_height = int(row[7]) if len(row) >= 8 else height
+                tile = SmartTile(id, name, width, height, max_width, max_height, start, reverse)
+                mappings = row[8] if len(row) >=9 else None
+                if mappings != None:
+                    tile.set_mappings(mappings)
+
+                self.smart_tiles.append(tile)
 
     #     self.index = 0
     #

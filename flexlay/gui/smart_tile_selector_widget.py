@@ -88,20 +88,22 @@ class SmartTile:
         return brush
 
     def is_valid_id(self, id):
-        if id < self.start:
-            return False
-        if id > self.start + (self.width * self.height):
-            return False
-        return True
+        return id >= self.start and id <= self.start + (self.width * self.height)
 
-    def get_fitting_tile(self, width, height, left, top, mappings=None):
+    """
+    Return a tile that fits in the currently referenced gap.
+    @param width: width of tile brush
+    @param height: height of tile brush
+    @param left: Tile ID at X - 1
+    @param top: Tile ID at Y - 1
+    """
+    def get_fitting_tile(self, width, height, left, top, x, y, mappings=None):
         # Check mappings:
         if mappings != None:
             matching_tiles = []
-            right = -1
-            bottom = -1
-            for i in range(0, len(mappings)):
-                mapping = mappings[i]
+            right = 0 if x == width - 1 else - 1
+            bottom = 0 if y == height - 1 else - 1
+            for mapping in mappings:
                 if left in mapping.left:
                     if right in mapping.right or right == -1:
                         if bottom in mapping.bottom or bottom == -1:
@@ -153,6 +155,7 @@ class SmartTile:
             height = self.max_height
 
         brush.resize(width, height)
+
         for x in range(0, width):
             for y in range(0, height):
                 if x > 0:
@@ -163,7 +166,7 @@ class SmartTile:
                     prev_y = brush.at(x, y - 1) or 0
                 else:
                     prev_y = 0
-                tile = self.get_fitting_tile(width, height, prev_x, prev_y, mappings)
+                tile = self.get_fitting_tile(width, height, prev_x, prev_y, x, y, mappings)
                 brush.put(x, y, tile)
 
         return brush

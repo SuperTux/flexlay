@@ -16,8 +16,8 @@
 
 
 class Signal:
-    def __init__(self):
-        self.subscribers = []
+    def __init__(self, *subscribers):
+        self.subscribers = list(subscribers)
 
     def connect(self, callback, ignore_repeats=True):
         if not ignore_repeats and callback in self.subscribers:

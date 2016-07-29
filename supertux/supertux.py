@@ -85,7 +85,7 @@ def main():
             try:
                 gui.load_level(recent_file_path)
             except: # TODO: Except only reasonable errors.
-                config.recent_files.remove(recent_file_path)
+                config.recent_files.removed(recent_file_path)
                 continue
             else:
                 any_valid = True

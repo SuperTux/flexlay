@@ -17,5 +17,5 @@ For a more detailed guide to run the SuperTux version of Flexlay, see
 
 Flexlay is covered under the GNU GPL, which means that you can copy
 and even modify it pretty much as you like, as long as you keep the
-copyright headers in place and distribute the source too if you
-distribute binaries, see the file `COPYING` for details.
+copyright headers in place and distribute the source along with any
+distributed binaries, see the file `COPYING` for details.

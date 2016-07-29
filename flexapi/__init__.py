@@ -1,7 +1,5 @@
-#!/usr/bin/env python3
-
 # Flexlay - A Generic 2D Game Editor
-# Copyright (C) 2014 Ingo Ruhnke <grumbel@gmail.com>
+# Copyright (C) 2015 Karkus476 <karkus476@yahoo.com>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -16,15 +14,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from flexapi.backends.flexlay_backend import FlexlayBackend
+from flexapi.elements.flexlay_element import FlexlayElement
+from .flexlay_editor import FlexlayEditor
 
-import sys
-
-import supertux_reflex.supertux as supertux
-#import supertux.supertux as supertux
-
-if __name__ == "__main__":
-    sys.path.append(".")
-    supertux.main()
-
-
-# EOF #
+__all__ = ["FlexlayBackend", "FlexlayElement", "FlexlayEditor"]

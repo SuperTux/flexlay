@@ -1,7 +1,5 @@
-#!/usr/bin/env python3
-
 # Flexlay - A Generic 2D Game Editor
-# Copyright (C) 2014 Ingo Ruhnke <grumbel@gmail.com>
+# Copyright (C) 2016 Karkus476 <karkus476@yahoo.com>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,14 +15,19 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-import sys
+from .file_resource import FileResource
 
-import supertux_reflex.supertux as supertux
-#import supertux.supertux as supertux
+class TextFileResource(FileResource):
+    """"""
+    def write(self, text):
+        _file = open(str(self), "w")
+        _file.write(text)
+        _file.close()
 
-if __name__ == "__main__":
-    sys.path.append(".")
-    supertux.main()
+    def read(self):
+        _file = open(str(self), "r")
+        text = _file.read()
+        _file.close()
+        return text
 
 
-# EOF #

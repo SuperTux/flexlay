@@ -1,5 +1,5 @@
 # Flexlay - A Generic 2D Game Editor
-# Copyright (C) 2016 Karkus476 <karkus476@yahoo.com>
+# Copyright (C) 2014 Ingo Ruhnke <grumbel@gmail.com>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -7,13 +7,33 @@
 # (at your option) any later version.
 #
 # This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY without even the implied warranty of
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from flexlay.util import Config
 
-# Should copy over the Config to FlexAPI
+class Size:
+    def __init__(self, w, h):
+        self.width = w
+        self.height = h
+
+    def copy(self):
+        return Size(self.width, self.height)
+
+    def __eq__(self, rhs):
+        return (self.width == rhs.width and
+                self.height == rhs.height)
+
+    def __ne__(self, rhs):
+        return not self.__eq__(rhs)
+
+    def __str__(self):
+        return "Size({}, {})".format(self.width, self.height)
+
+
+Sizef = Size
+
+# EOF #

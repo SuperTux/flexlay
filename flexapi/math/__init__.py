@@ -1,5 +1,5 @@
 # Flexlay - A Generic 2D Game Editor
-# Copyright (C) 2016 Karkus476 <karkus476@yahoo.com>
+# Copyright (C) 2014 Ingo Ruhnke <grumbel@gmail.com>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -7,13 +7,19 @@
 # (at your option) any later version.
 #
 # This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY without even the implied warranty of
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from flexlay.util import Config
+from .point import Point, Pointf
+from .origin import Origin
+from .rect import Rect, Rectf
+from .size import Size, Sizef
 
-# Should copy over the Config to FlexAPI
+__all__ = ["Origin", "Point", "Pointf", "Size", "Sizef", "Rect", "Rectf"]
+
+
+# EOF #

@@ -14,3 +14,10 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from ..math import Point, Size
+
+
+class LevelObject:
+    def __init__(self):
+        self.position = Point()
+        self.size = Size()

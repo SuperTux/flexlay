@@ -20,7 +20,8 @@ import flexlay.util as util
 class FlexlayBackend:
     """The base class for all backends
 
-    A backend is what Flexlay uses to save the levels your users will create. There are many different formats which
+    A backend is what Flexlay uses to save the levels your users will create.
+    There are many different formats which
     have already been created, or you can make your own by using this base class.
     """
     def __init__(self, backend_name, backend_version=None):

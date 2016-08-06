@@ -16,4 +16,13 @@
 
 
 class JsonBackend:
+    """Unimplemented backend which will read JSON files.
+
+    Note to anyone intending to implement this:
+    This class should not read levels! It should read any JSON file.
+    The implementation of the editor should use this backend to produce a FlexlayLevel,
+    or to write one into a file.
+
+    See Sexpr backend (if it's completed) for details.
+    """
     pass

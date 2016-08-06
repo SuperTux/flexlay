@@ -14,6 +14,13 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from flexlay.util import Config
+class LevelTilemap:
+    """Simple 2D array of integers which define a tilemap."""
+    def __init__(self):
+        self._values = []
+        self.offset = [0, 0]
 
-# Should copy over the Config to FlexAPI
+    @staticmethod
+    def empty(width, height):
+        tilemap = LevelTilemap()
+        tilemap._values = [[0 for i in width] for i in height]

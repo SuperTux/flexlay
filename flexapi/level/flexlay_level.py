@@ -14,6 +14,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from flexlay.util import Config
-
-# Should copy over the Config to FlexAPI
+class FlexlayLevel:
+    """A collection of LevelTilemaps and LevelObjects, which compose a level."""
+    def __init__(self):
+        self.level_tilemaps = []
+        self.level_objects = []

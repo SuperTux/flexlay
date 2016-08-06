@@ -14,6 +14,20 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from flexlay.util import Config
+from .editor_tab import EditorTab
+from ..resources import TextFileResource
+from ..flexlay_error import FlexlayError
 
-# Should copy over the Config to FlexAPI
+class LevelEditorTab(EditorTab):
+    """The tab which contains the actual level being edited."""
+    def __init__(self, item):
+        super().__init__(item)
+        if not isinstance(item, TextFileResource):
+            raise FlexlayError("'item' to be edited in the LevelEditorTab must be TextFileResource")
+
+    @classmethod
+    def can_edit(Tab, item):
+        if isinstance(item, TextFileResource):
+            return 3
+        else:
+            return 0

@@ -1,23 +1,24 @@
 # Flexlay - A Generic 2D Game Editor
+#
+# ISC License
 # Copyright (C) 2016 Karkus476 <karkus476@yahoo.com>
 #
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
+# Permission to use, copy, modify, and/or distribute this software for
+# any purpose with or without fee is hereby granted, provided that the
+# above copyright notice and this permission notice appear in all
+# copies.
 #
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.#
+# THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL
+# WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED
+# WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE
+# AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR ON SEQUENTIAL
+# DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR
+# PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER
+# TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+# PERFORMANCE OF THIS SOFTWARE.
 
-from PyQt4.QtGui import QToolBar
+from PyQt4.QtGui import QToolBar, QIcon
 from PyQt4.QtCore import Qt
-
-from flexlay.gui import ButtonPanel
 
 from flexapi.util import Signal
 from .flexlay_element import FlexlayElement
@@ -32,14 +33,12 @@ class ButtonPanelElement(FlexlayElement):
     you can either create a Button instance or an instance of the other *Button classes provided in this module.
     """
     _buttons = {}
-
-    button_panel = None
+    toolbar = None
 
     def added_to(self, editor):
-        toolbar = QToolBar()
-        toolbar.setObjectName("button_panel")
-        editor.window.addToolBar(Qt.TopToolBarArea, toolbar)
-        self.button_panel = ButtonPanel(toolbar)
+        self.toolbar = QToolBar()
+        self.toolbar.setObjectName("button_panel")
+        editor.window.addToolBar(Qt.TopToolBarArea, self.toolbar)
 
     def add_button(self, key, button):
         """Add a Button object to this button panel
@@ -51,9 +50,14 @@ class ButtonPanelElement(FlexlayElement):
         """
         assert isinstance(button, Button), "Cannot add button if not instance of [subclass of] Button"
         assert key not in self._buttons, "Key already used by another button, try another."
-        assert self.button_panel is not None, "Cannot add button unless ButtonPanelElement has been added to an editor."
+        assert self.toolbar is not None, "Cannot add button unless ButtonPanelElement has been added to an editor."
         self._buttons[key] = button
-        self.button_panel.add_icon(button.icon, button.signal, button.hover, button.shortcut)
+
+        action = self.toolbar.addAction(QIcon(button.icon), button.hover)
+        if button.shortcut:
+            action.setShortcut(button.shortcut)
+        if button.signal:
+            action.triggered.connect(button.signal)
 
     def __getitem__(self, item):
         if type(item) != str:

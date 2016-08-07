@@ -17,14 +17,9 @@
 # TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 # PERFORMANCE OF THIS SOFTWARE.
 
-class FlexlayResourceManager:
-    """The resource manager allows you to keep track of files, binaries and data directories
+from ..flexlay_error import FlexlayError
 
-    Check their versions, and give the user the opportunity to change them at will.
-    """
-    def __init__(self, editor):
-        self.editor = editor
 
-    def add_resource(self):
-        """Add a resource to keep track of"""
-        pass
+class BackendError(FlexlayError):
+    """For all errors backends might raise"""
+    pass

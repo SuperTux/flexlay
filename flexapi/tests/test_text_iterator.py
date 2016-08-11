@@ -1,0 +1,101 @@
+# Flexlay - A Generic 2D Game Editor
+#
+# ISC License
+# Copyright (C) 2016 Karkus476 <karkus476@yahoo.com>
+#
+# Permission to use, copy, modify, and/or distribute this software for
+# any purpose with or without fee is hereby granted, provided that the
+# above copyright notice and this permission notice appear in all
+# copies.
+#
+# THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL
+# WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED
+# WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE
+# AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR ON SEQUENTIAL
+# DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR
+# PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER
+# TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+# PERFORMANCE OF THIS SOFTWARE.
+
+import unittest
+
+from flexapi.backends.text_iterator import TextIterator
+
+class TestTextIterator(unittest.TestCase):
+    def setUp(self):
+        self.it = TextIterator("0123456789")
+
+    def test_set_index(self):
+        self.it.set_index(3)
+        self.assertEqual(self.it.index, 3)
+        self.assertEqual(self.it.char, "3")
+
+
+        self.it.set_index(9)
+        self.assertEqual(self.it.index, 9)
+        self.assertEqual(self.it.char, "9")
+
+
+        self.it.set_index(0)
+        self.assertEqual(self.it.index, 0)
+        self.assertEqual(self.it.char, "0")
+
+
+        self.assertRaises(IndexError, self.it.set_index, -1)
+        self.assertRaises(IndexError, self.it.set_index, 11)
+
+        self.it.set_index(10)
+        self.assertEqual(self.it.index, -1)
+        self.assertEqual(self.it.char, "")
+        self.assertTrue(self.it.done)
+
+    def test_ignore_regex(self):
+        import re
+        self.it.ignore_regex(re.compile(r"[0-3]+"))
+        self.assertEqual(self.it.index, 4)
+        self.assertEqual(self.it.char, "4")
+
+        self.it.ignore_regex(re.compile(r"[7-9]"))
+        self.assertEqual(self.it.index, 4)
+        self.assertEqual(self.it.char, "4")
+
+        self.it.ignore_regex(re.compile(r"[0-9]+"))
+        self.assertEqual(self.it.index, -1)
+        self.assertEqual(self.it.char, "")
+        self.assertTrue(self.it.done)
+
+    def test_accept_string(self):
+        self.it.accept_string("0123")
+        self.assertEqual(self.it.index, 4)
+        self.assertEqual(self.it.char, "4")
+
+        self.it.accept_string("abc")
+        self.assertEqual(self.it.index, 4)
+        self.assertEqual(self.it.char, "4")
+
+        self.it.accept_string("45678910")
+        self.assertEqual(self.it.index, 4)
+        self.assertEqual(self.it.char, "4")
+
+        self.it.accept_string("456789")
+        self.assertEqual(self.it.index, -1)
+        self.assertEqual(self.it.char, "")
+        self.assertTrue(self.it.done)
+
+    def test_accept_regex(self):
+        import re
+        self.it.accept_regex(re.compile(r"[0-3]+"))
+        self.assertEqual(self.it.index, 4)
+        self.assertEqual(self.it.char, "4")
+        self.assertEqual(self.it.accepted, "0123")
+
+        self.it.accept_regex(re.compile(r"[7-9]"))
+        self.assertEqual(self.it.index, 4)
+        self.assertEqual(self.it.char, "4")
+        self.assertEqual(self.it.accepted, "0123")
+
+        self.it.accept_regex(re.compile(r"[0-9]+"))
+        self.assertEqual(self.it.index, -1)
+        self.assertEqual(self.it.char, "")
+        self.assertTrue(self.it.done)
+        self.assertEqual(self.it.accepted, "456789")

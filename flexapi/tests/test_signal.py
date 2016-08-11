@@ -22,12 +22,6 @@ from flexapi.util import Signal
 
 
 class SignalTestCase(unittest.TestCase):
-    def setUp(self):
-        pass
-
-    def tearDown(self):
-        pass
-
     def test_signal_args(self):
         signal = Signal()
         mock1 = unittest.mock.Mock()

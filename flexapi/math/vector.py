@@ -17,37 +17,37 @@
 # TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 # PERFORMANCE OF THIS SOFTWARE.
 
-class Vector2:
+class Vector:
     def __init__(self, x, y):
         self.x = x
         self.y = y
 
     def __add__(self, other):
-        if isinstance(other, Vector2):
-            return Vector2(self.x + other.x, self.y + other.y)
+        if isinstance(other, Vector):
+            return Vector(self.x + other.x, self.y + other.y)
         else:
             raise TypeError("unsupported operand type(s) for +: 'Vector2' and"
                             + " '" + str(type(other)) + "'")
 
     def __sub__(self, other):
-        if isinstance(other, Vector2):
-            return Vector2(self.x - other.x, self.y - other.y)
+        if isinstance(other, Vector):
+            return Vector(self.x - other.x, self.y - other.y)
         else:
             raise TypeError("unsupported operand type(s) for -: 'Vector2' and"
                             + " '" + str(type(other)) + "'")
 
     def __mul__(self, other):
         if type(other) == int or type(other) == float:
-            return Vector2(self.x * other, self.y*other)
-        elif isinstance(other, Vector2):
-            return Vector2(self.x * other.x, self.y * other.y)
+            return Vector(self.x * other, self.y*other)
+        elif isinstance(other, Vector):
+            return Vector(self.x * other.x, self.y * other.y)
         else:
             raise TypeError("unsupported operand type(s) for *: 'Vector2' and"
                             + " '" + str(type(other)) + "'")
 
     def __truediv__(self, other):
         if type(other) == int or type(other) == float:
-            return Vector2(self.x / other, self.y / other)
+            return Vector(self.x / other, self.y / other)
         else:
             raise TypeError("unsupported operand type(s) for /: 'Vector2' and"
                             + " '" + str(type(other)) + "'")

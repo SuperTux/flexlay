@@ -31,6 +31,9 @@ class TextIterator:
             TextIterator.text[TextIterator.index] = TextIterator.char
     accepted - The most recently accepted string.
     done - Whether the iterator has finished.
+    line_no - The current line number, starts at 1
+    char_no - The current number of characters passed on this line, 
+              starting at 1 the newline at the start of the line is 0.
     """
     def __init__(self, text):
         """Create a new TextIterator instance"""
@@ -39,6 +42,12 @@ class TextIterator:
         self.index = 0
         self.accepted = ""
         self.done = False
+        # Line number, starting at 1
+        # Number of newlines passed + 1
+        self.line_no = 1
+        # Number of chars since last newline + 1
+        # Character number on this line, starting at 1
+        self.char_no = 1
         self.set_index(0)
 
     def set_index(self, index):
@@ -52,12 +61,30 @@ class TextIterator:
         """
         if not self.done:
             if len(self.text) > index and index >= 0:
+                # Set line_no
+                index_diff = index - self.index
+                if index_diff > 0:
+                    self.line_no += self.text[self.index:index].count("\n")
+                elif index_diff < 0:
+                    self.line_no -= self.text[index:self.index].count("\n")
+                
+                # Set char_no
+                newline_index = self.text[:index].find("\n")
+                
+                if newline_index == -1:
+                    self.char_no = self.index + 1
+                else:
+                    self.char_no = newline_index
+                
+                # Set index and char
                 self.index = index
                 self.char = self.text[index]
             elif index == len(self.text):
                 self.done = True
                 self.char = ""
                 self.index = -1
+                self.line_no = -1
+                self.char_no = -1
             else:
                 raise IndexError("TextIterator reached index outside of text"\
                                  " passed to it")

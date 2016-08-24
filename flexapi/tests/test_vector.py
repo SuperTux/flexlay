@@ -19,13 +19,13 @@
 
 import unittest
 
-from flexapi.math.vector2 import Vector2
+from flexapi.math.vector import Vector
 
 
-class TestVector2(unittest.TestCase):
+class VectorTestCase(unittest.TestCase):
     def test_add(self):
-        a = Vector2(3, 4)
-        b = Vector2(5, 6)
+        a = Vector(3, 4)
+        b = Vector(5, 6)
         c = a + b
         self.assertEqual(c.x, 8)
         self.assertEqual(c.y, 10)
@@ -37,8 +37,8 @@ class TestVector2(unittest.TestCase):
         self.assertRaises(TypeError, lambda v: v + "5", a)
 
     def test_sub(self):
-        a = Vector2(3, 4)
-        b = Vector2(5, 6)
+        a = Vector(3, 4)
+        b = Vector(5, 6)
         c = a - b
         self.assertEqual(c.x, -2)
         self.assertEqual(c.y, -2)
@@ -50,8 +50,8 @@ class TestVector2(unittest.TestCase):
         self.assertRaises(TypeError, lambda v: v + "5", a)
 
     def test_mul(self):
-        a = Vector2(3, 4)
-        b = Vector2(5, 6)
+        a = Vector(3, 4)
+        b = Vector(5, 6)
         i = 5
         c = a * b
         self.assertEqual(c.x, 15)
@@ -66,10 +66,10 @@ class TestVector2(unittest.TestCase):
         self.assertRaises(TypeError, lambda v: v * "5", a)
 
     def test_div(self):
-        a = Vector2(5, 25)
+        a = Vector(5, 25)
         i = 5
         self.assertEqual((a / i).x, 1)
         self.assertEqual((a / i).y, 5)
 
         self.assertRaises(TypeError, lambda v: v / "5", a)
-        self.assertRaises(TypeError, lambda v: v / Vector2(3, 4), a)
+        self.assertRaises(TypeError, lambda v: v / Vector(3, 4), a)

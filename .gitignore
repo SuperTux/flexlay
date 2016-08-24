@@ -94,3 +94,5 @@ flexapi/doc/
 
 # PyCharm
 .idea/
+flexlay.kdev4
+.kdev4

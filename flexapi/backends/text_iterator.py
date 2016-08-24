@@ -113,15 +113,19 @@ class TextIterator:
 
         regex must be compiled using re.compile(string_pattern)
         "accepted" will not be updated. Use accept_regex() to store skipped text
+        True will be returned if some match is found to ignore, otherwise False
         """
         match = regex.match(self.text[self.index:])
         if match is not None:
             self.set_index(match.end() + self.index)
+            return True
+        return False
 
     def accept_string(self, string):
         """Jump the index over and beyond a string, if next in the text
 
         If a match is found, string will be stored in "accepted".
+        True will be returned if a match is found, otherwise False
         """
         does_match = True
         check_index = self.index
@@ -138,15 +142,20 @@ class TextIterator:
         if does_match:
             self.accepted = string
             self.set_index(check_index)
+            return True
+        return False
 
     def accept_regex(self, regex):
         """Jump the index over and beyond a regex match, if next in the text
 
         If a match is found, string will be stored in "accepted".
+        True will be returned if a match is found, otherwise False
         """
         match = regex.match(self.text[self.index:])
         if match is not None:
             self.accepted = self.text[match.start() + self.index:
                                       match.end() + self.index]
             self.set_index(match.end() + self.index)
+            return True
+        return False
     

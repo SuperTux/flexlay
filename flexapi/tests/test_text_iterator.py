@@ -47,22 +47,22 @@ class TextIteratorTestCase(unittest.TestCase):
     def test_ignore_regex(self):
         self.it = TextIterator("0123456789\n0123456789")
         import re
-        self.it.ignore_regex(re.compile(r"[0-3]+"))
+        self.assertTrue(self.it.ignore_regex(re.compile(r"[0-3]+")))
         self.assertEqual(self.it.index, 4)
         self.assertEqual(self.it.char, "4")
         self.assertEqual(self.it.line_no, 1)
 
-        self.it.ignore_regex(re.compile(r"[7-9]"))
+        self.assertFalse(self.it.ignore_regex(re.compile(r"[7-9]")))
         self.assertEqual(self.it.index, 4)
         self.assertEqual(self.it.char, "4")
 
-        self.it.ignore_regex(re.compile(r"[0-9]+\n0"))
+        self.assertTrue(self.it.ignore_regex(re.compile(r"[0-9]+\n0")))
         self.assertEqual(self.it.index, 12)
         self.assertEqual(self.it.char, "1")
         self.assertEqual(self.it.line_no, 2)
         self.assertFalse(self.it.done)
         
-        self.it.ignore_regex(re.compile("[1-9]+"))
+        self.assertTrue(self.it.ignore_regex(re.compile("[1-9]+")))
         self.assertEqual(self.it.index, -1)
         self.assertEqual(self.it.char, "")
         self.assertEqual(self.it.line_no, -1)
@@ -70,28 +70,28 @@ class TextIteratorTestCase(unittest.TestCase):
 
     def test_accept_string(self):
         self.it = TextIterator("0123456789\n0123456789")
-        self.it.accept_string("0123")
+        self.assertTrue(self.it.accept_string("0123"))
         self.assertEqual(self.it.index, 4)
         self.assertEqual(self.it.char, "4")
         self.assertEqual(self.it.accepted, "0123")
 
-        self.it.accept_string("abc")
+        self.assertFalse(self.it.accept_string("abc"))
         self.assertEqual(self.it.index, 4)
         self.assertEqual(self.it.char, "4")
         self.assertEqual(self.it.accepted, "0123")
 
-        self.it.accept_string("45678910")
+        self.assertFalse(self.it.accept_string("45678910"))
         self.assertEqual(self.it.index, 4)
         self.assertEqual(self.it.char, "4")
         self.assertEqual(self.it.accepted, "0123")
 
-        self.it.accept_string("456789\n0")
+        self.assertTrue(self.it.accept_string("456789\n0"))
         self.assertEqual(self.it.index, 12)
         self.assertEqual(self.it.char, "1")
         self.assertEqual(self.it.accepted, "456789\n0")
         self.assertEqual(self.it.line_no, 2)
         
-        self.it.accept_string("123456789")
+        self.assertTrue(self.it.accept_string("123456789"))
         self.assertEqual(self.it.index, -1)
         self.assertEqual(self.it.char, "")
         self.assertTrue(self.it.done)
@@ -99,17 +99,17 @@ class TextIteratorTestCase(unittest.TestCase):
     def test_accept_regex(self):
         self.it = TextIterator("0123456789")
         import re
-        self.it.accept_regex(re.compile(r"[0-3]+"))
+        self.assertTrue(self.it.accept_regex(re.compile(r"[0-3]+")))
         self.assertEqual(self.it.index, 4)
         self.assertEqual(self.it.char, "4")
         self.assertEqual(self.it.accepted, "0123")
 
-        self.it.accept_regex(re.compile(r"[7-9]"))
+        self.assertFalse(self.it.accept_regex(re.compile(r"[7-9]")))
         self.assertEqual(self.it.index, 4)
         self.assertEqual(self.it.char, "4")
         self.assertEqual(self.it.accepted, "0123")
 
-        self.it.accept_regex(re.compile(r"[0-9]+"))
+        self.assertTrue(self.it.accept_regex(re.compile(r"[0-9]+")))
         self.assertEqual(self.it.index, -1)
         self.assertEqual(self.it.char, "")
         self.assertTrue(self.it.done)

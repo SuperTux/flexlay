@@ -33,15 +33,13 @@ class Signal:
         if len(subscribers) != 0:
             self.connect(*subscribers, ignore_repeats=False)
 
-    def connect(self, *callbacks, ignore_repeats=True):
+    def connect(self, *callbacks):
         """Add any number of callbacks to be triggered by the event
 
         Parameters:
             ignore_repeats - If False, any entries already connected to the Signal will be ignored.
         """
         for callback in callbacks:
-            if not ignore_repeats and callback in self.subscribers:
-                return
             self.subscribers.append(callback)
 
     def disconnect(self, callback):

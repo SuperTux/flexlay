@@ -22,4 +22,9 @@ from ..flexlay_error import FlexlayError
 
 class BackendError(FlexlayError):
     """For all errors backends might raise"""
-    pass
+    def __init__(self, message, filename=None, line_no=None):
+        super().__init__("Problem reading " + 
+                         ("line " + str(line_no)+ " of ") if line_no is not None else "" + 
+                         "file" + 
+                         (" '"+ filename + "' ") if filename is not None else "" +
+                         ": " + message)

@@ -27,14 +27,29 @@ class TextIteratorTestCase(unittest.TestCase):
         self.it.set_index(3)
         self.assertEqual(self.it.index, 3)
         self.assertEqual(self.it.char, "3")
+        self.assertEqual(self.it.char_no, 4)
 
         self.it.set_index(9)
         self.assertEqual(self.it.index, 9)
         self.assertEqual(self.it.char, "9")
+        self.assertEqual(self.it.char_no, 10)
 
         self.it.set_index(0)
         self.assertEqual(self.it.index, 0)
         self.assertEqual(self.it.char, "0")
+        self.assertEqual(self.it.line_no, 1)
+        self.assertEqual(self.it.char_no, 1)
+        
+        self.it.set_index(11)
+        self.assertEqual(self.it.index, 11)
+        self.assertEqual(self.it.char, "0")
+        self.assertEqual(self.it.line_no, 2)
+        self.assertEqual(self.it.char_no, 1)
+        
+        self.it.set_index(6)
+        self.assertEqual(self.it.index, 6)
+        self.assertEqual(self.it.char, "6")
+        self.assertEqual(self.it.line_no, 1)
 
         self.assertRaises(IndexError, self.it.set_index, -1)
         self.assertRaises(IndexError, self.it.set_index, 22)

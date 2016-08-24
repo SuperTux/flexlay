@@ -34,7 +34,6 @@ class FlexlayMainWindow(QMainWindow):
         self.close_signal()
         event.accept()
 
-
 class FlexlayEditor():
     """The base class for all Flexlay editors
 
@@ -49,6 +48,7 @@ class FlexlayEditor():
         window - Qt QMainWindow instance
         name - The name this wediotr will use for config files and projects. It's not recommended that this is changed
     """
+    current_editor_name = "unnamed-editor"
     def __init__(self, editor_name, version):
         """Create a new editor
 
@@ -60,6 +60,7 @@ class FlexlayEditor():
         """
         self.window = FlexlayMainWindow()
         self.name = editor_name
+        FlexlayEditor.current_editor_name = self.name
         # Simply converts "simple-editor" or "simple_editor" to "Simple Editor"
         self.set_title("".join([" " if  c == "-" or c == "_" else c for c in self.name]).title())
         self.version = version

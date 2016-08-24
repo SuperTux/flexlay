@@ -69,10 +69,10 @@ class TextIterator:
                     self.line_no -= self.text[index:self.index].count("\n")
                 
                 # Set char_no
-                newline_index = self.text[:index].find("\n")
+                newline_index = self.text[index::-1].find("\n")
                 
                 if newline_index == -1:
-                    self.char_no = self.index + 1
+                    self.char_no = index + 1
                 else:
                     self.char_no = newline_index
                 

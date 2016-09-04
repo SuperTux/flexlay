@@ -17,14 +17,17 @@
 # TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 # PERFORMANCE OF THIS SOFTWARE.
 
-class FlexlayResourceManager:
-    """The resource manager allows you to keep track of files, binaries and data directories
+from PyQt4.QtGui import (QVBoxLayout, QGraphicsView, QGraphicsScene, QWidget,
+                         QGraphicsPixmapItem)
 
-    Check their versions, and give the user the opportunity to change them at will.
-    """
-    def __init__(self, editor):
-        self.editor = editor
 
-    def add_resource(self):
-        """Add a resource to keep track of"""
+class FlexlayTileSelector(QWidget):
+    def __init__(self, tileset):
         pass
+    
+    def set_max_columns(self, i):
+        pass
+    
+    def set_max_rows(self, i):
+        pass
+    

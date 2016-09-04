@@ -36,12 +36,12 @@ class FileResource(PathResource):
 
     def __getattr__(self, item):
         if item == "filename":
-            return self.path[-1]
+            return self._path[-1]
         elif item == "extension":
-            split = self.path[-1].split(".")
+            split = self._path[-1].split(".")
             if len(split) > 1:
                 return split[-1]
             else:
                 return ""
         else:
-            return super().__getattr__(item)
+            return super().__getattribute__(item)

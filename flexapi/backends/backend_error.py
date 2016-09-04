@@ -36,6 +36,6 @@ class BackendError(FlexlayError):
             formatted += " of "
         formatted += "file"
         if filename is not None:
-            formatted += " '" + filename + "'"
+            formatted += " '" + str(filename) + "'"
         formatted += ".\n" + message
         return formatted

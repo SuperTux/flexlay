@@ -31,7 +31,7 @@ class Signal:
         """
         self.subscribers = []
         if len(subscribers) != 0:
-            self.connect(*subscribers, ignore_repeats=False)
+            self.connect(*subscribers)
 
     def connect(self, *callbacks):
         """Add any number of callbacks to be triggered by the event

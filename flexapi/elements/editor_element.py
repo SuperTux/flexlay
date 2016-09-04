@@ -58,7 +58,7 @@ class EditorElement(FlexlayElement):
         else:
             raise FlexlayError("No tabs capable of editing item: " + str(item) + " of type " + type(item))
         # Create a new tab of this type.
-        self.add_tab(tab_label, Tab(item))
+        self.add_tab(tab_label, Tab(item, self.tab_widget))
 
     def write(self, index):
         """Write the specified tab's current status, presumably to a file. Doesn't apply to all tabs."""

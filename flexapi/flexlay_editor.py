@@ -22,7 +22,6 @@ from PyQt4.QtGui import QMainWindow, QApplication
 
 import flexlay.util as util
 from flexapi.elements.flexlay_element import FlexlayElement
-from flexapi.flexlay_resource_manager import FlexlayResourceManager
 
 
 class FlexlayMainWindow(QMainWindow):
@@ -49,6 +48,7 @@ class FlexlayEditor():
         name - The name this wediotr will use for config files and projects. It's not recommended that this is changed
     """
     current_editor_name = "unnamed-editor"
+
     def __init__(self, editor_name, version):
         """Create a new editor
 
@@ -64,7 +64,6 @@ class FlexlayEditor():
         # Simply converts "simple-editor" or "simple_editor" to "Simple Editor"
         self.set_title("".join([" " if  c == "-" or c == "_" else c for c in self.name]).title())
         self.version = version
-        self.resource_manager = FlexlayResourceManager(self)
         self._elements = {}
 
     def add_element(self, key, element):

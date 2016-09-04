@@ -18,5 +18,6 @@
 # PERFORMANCE OF THIS SOFTWARE.
 
 from .text_edit_tab import  TextEditTab
+from .editor_tab import EditorTab
 
-__all__ = ["TextEditTab"]
+__all__ = ["TextEditTab", "EditorTab"]

@@ -17,7 +17,7 @@
 # TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 # PERFORMANCE OF THIS SOFTWARE.
 
-from PyQt4.QtGui import QPixmap
+from PyQt4.QtGui import QPixmap, QImage
 
 from .flexlay_resource import FlexlayResource
 from ..flexlay_error import ResourceError
@@ -25,11 +25,22 @@ from ..flexlay_error import ResourceError
 
 class ImageResource(FlexlayResource):
     def __init__(self, qimage):
+        if not isinstance(qimage, QImage):
+            raise ResourceError("qimage must be instance of QImage")
         self.qimage = qimage
+        self.pixmap = None
+        
+    def get_subregion(self, x, y, w, h):
+        """Returns an ImageResource from the specified subregion"""
+        return ImageResource(self.qimage.copy(x, y, w, h))
 
     def get_pixmap(self):
-        pixmap = QPixmap()
-        pixmap.convertFromImage(self.qimage)
-        if pixmap.isNull():
-            raise ResourceError("Could not convert ImageResource to pixmap.")
-        return pixmap
+        if self.pixmap is None:
+            self.pixmap = QPixmap()
+            self.pixmap.convertFromImage(self.qimage)
+            if self.pixmap.isNull():
+                self.pixmap = None
+                raise ResourceError("Could not convert ImageResource to pixmap.")
+            return self.pixmap
+        else:
+            return self.pixmap

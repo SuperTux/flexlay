@@ -20,21 +20,7 @@ from flexlay.property import (BoolProperty, IntProperty, FloatProperty,
                               InlinePosProperty, InlineRectProperty,
                               TilemapProperty, ColorProperty, ImageProperty,
                               SectorProperty)
-from .button_panel import SuperTuxButtonPanel
-from .gameobj import GameObj
-from .gameobj_factor import supertux_gameobj_factory
-from .gui import SuperTuxGUI
-from .level import Level
-from .level_file_dialog import OpenLevelFileDialog
-from .menubar import SuperTuxMenuBar
-from .sector import Sector
-from .sprite import SuperTuxSprite
-from .supertux import main
-from .supertux_arguments import SuperTuxArguments
-from .tilemap import SuperTuxTileMap
-from .tileset import SuperTuxTileset
-from .toolbox import SuperTuxToolbox
-from .util import load_lisp
+from supertux.old.gameobj import GameObj
 
 __all__ = ["GameObj", "SuperTuxGUI", "Level", "Sector",
            "SuperTuxSprite", "SuperTuxTileMap", "SuperTuxTileset",

@@ -17,8 +17,8 @@
 # TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 # PERFORMANCE OF THIS SOFTWARE.
 
+from flexapi import FlexlayError
 from flexapi.resources import ImageResource
-from flexapi.flexlay_error import FlexlayError
 
 
 class LevelTileset:

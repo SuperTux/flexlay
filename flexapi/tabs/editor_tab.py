@@ -17,7 +17,6 @@
 # TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 # PERFORMANCE OF THIS SOFTWARE.
 
-from ..resources.file_resource import FileResource
 
 class EditorTab:
     """Subclass this to create your own tab types."""

@@ -17,6 +17,7 @@
 # TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 # PERFORMANCE OF THIS SOFTWARE.
 
+
 class LevelTilemap:
     """Simple 2D array of integers which define a tilemap."""
     def __init__(self):

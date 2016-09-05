@@ -17,7 +17,8 @@
 # TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 # PERFORMANCE OF THIS SOFTWARE.
 
-from .text_edit_tab import  TextEditTab
+from .text_edit_tab import TextEditTab
 from .editor_tab import EditorTab
+from .level_editor_tab import LevelEditorTab
 
-__all__ = ["TextEditTab", "EditorTab"]
+__all__ = ["TextEditTab", "EditorTab", "LevelEditorTab"]

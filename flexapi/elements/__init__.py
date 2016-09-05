@@ -20,6 +20,7 @@
 from .editor_element import EditorElement
 from .button_panel_element import ButtonPanelElement
 from .menubar_element import MenubarElement, Menu
+from .flexlay_element import FlexlayElement
 
-
-__all__ = ["EditorElement", "ButtonPanelElement", "Menu", "MenubarElement"]
+__all__ = ["EditorElement", "ButtonPanelElement", "Menu", "MenubarElement",
+           "FlexlayElement"]

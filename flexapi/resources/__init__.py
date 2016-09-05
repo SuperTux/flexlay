@@ -22,8 +22,12 @@ from .text_file_resource import TextFileResource
 from .path_resource import PathResource
 from .image_resource import ImageResource
 from .image_file_resource import ImageFileResource
-
+from .flexlay_resource import FlexlayResource
+from .text_resource import TextResource
+from .translatable_text_resource import TranslatableTextResource
 
 # We assume that the flexlay data dir is at ../../data
 FLEXLAY_DATA_DIR = PathResource(PathResource.split(__file__)[:-3] + ["data"])
-__all__ = ["FileResource", "TextFileResource", "PathResource", "ImageResource", "ImageFileResource"]
+__all__ = ["FileResource", "TextFileResource", "PathResource", "ImageResource",
+           "ImageFileResource", "FlexlayResource", "TextResource",
+           "TranslatableTextResource"]

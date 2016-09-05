@@ -19,7 +19,7 @@
 
 import sys
 
-import supertux.supertux as supertux
+from supertux import supertux
 
 if __name__ == "__main__":
     sys.path.append(".")

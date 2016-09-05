@@ -17,19 +17,6 @@
 # TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 # PERFORMANCE OF THIS SOFTWARE.
 
-from .text_resource import TextResource
+from .vector import Vector
 
-
-class TranslatableTextResource(TextResource):
-    def __init__(self, text, project_name):
-        """project_name refers to the project which owns the translations
-        
-        For example: supertux-editor, flexapi
-        """
-        super().__init__(text)
-        self.project_name = project_name
-        
-    def get_translation(self, language):
-        return "Translation is currently a work in progress, and does "\
-               "not work"
-
+__all__ = ["Vector"]

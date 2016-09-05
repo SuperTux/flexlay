@@ -20,18 +20,19 @@
 from PyQt4.QtCore import QCoreApplication
 from PyQt4.QtGui import QMainWindow, QApplication
 
-import flexlay.util as util
-from flexapi.elements.flexlay_element import FlexlayElement
+from flexlay.util import Signal
+from flexapi.elements import FlexlayElement
 
 
 class FlexlayMainWindow(QMainWindow):
     """The Qt instance of the editor window. Used by FlexlayEditor, no need to create your own"""
-    close_signal = util.Signal()
+    close_signal = Signal()
 
     def closeEvent(self, event):
         """Qt callback"""
         self.close_signal()
         event.accept()
+
 
 class FlexlayEditor():
     """The base class for all Flexlay editors

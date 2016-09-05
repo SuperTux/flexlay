@@ -17,10 +17,10 @@
 # TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 # PERFORMANCE OF THIS SOFTWARE.
 
-from ..math import Point, Size
+from flexapi.math import Vector
 
 
 class LevelObject:
     def __init__(self):
-        self.position = Point()
-        self.size = Size()
+        self.position = Vector()
+        self.size = Vector()

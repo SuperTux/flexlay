@@ -17,9 +17,10 @@
 # TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 # PERFORMANCE OF THIS SOFTWARE.
 
+from flexapi import FlexlayError
+from flexapi.resources import TextFileResource
 from .editor_tab import EditorTab
-from ..resources import TextFileResource
-from ..flexlay_error import FlexlayError
+
 
 class LevelEditorTab(EditorTab):
     """The tab which contains the actual level being edited."""

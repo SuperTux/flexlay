@@ -19,8 +19,8 @@
 
 from PyQt4.QtGui import QTextEdit
 
+from flexapi.resources import TextFileResource
 from .editor_tab import EditorTab
-from ..resources.text_file_resource import TextFileResource
 
 
 class TextEditTab(EditorTab):

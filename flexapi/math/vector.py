@@ -17,6 +17,7 @@
 # TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 # PERFORMANCE OF THIS SOFTWARE.
 
+
 class Vector:
     def __init__(self, x, y):
         self.x = x

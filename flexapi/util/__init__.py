@@ -15,5 +15,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from .signal import Signal
+from .semver import SemVer
 
-__all__ = ["Signal"]
+__all__ = ["Signal", "SemVer"]

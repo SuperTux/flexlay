@@ -17,12 +17,12 @@
 # TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 # PERFORMANCE OF THIS SOFTWARE.
 
-from PyQt4.QtGui import QWidget, QVBoxLayout, QTabWidget
+from PyQt4.QtGui import QTabWidget
+
+from flexapi import FlexlayError
+from flexapi.tabs import EditorTab
 
 from .flexlay_element import FlexlayElement
-from ..flexlay_error import FlexlayError
-from ..tabs.editor_tab import EditorTab
-from ..resources.path_resource import PathResource
 
 
 class EditorElement(FlexlayElement):

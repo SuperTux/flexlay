@@ -17,10 +17,11 @@
 # TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 # PERFORMANCE OF THIS SOFTWARE.
 
-import os, re
+import os
+import re
 
+from flexapi import ResourceError
 from .flexlay_resource import FlexlayResource
-from ..flexlay_error import ResourceError
 
 
 class PathResource(FlexlayResource):

@@ -19,9 +19,9 @@
 
 from PyQt4.QtGui import QImage
 
+from flexapi import ResourceError
 from .file_resource import FileResource
 from .image_resource import ImageResource
-from ..flexlay_error import ResourceError
 
 
 class ImageFileResource(FileResource):

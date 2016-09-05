@@ -17,7 +17,7 @@
 # TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 # PERFORMANCE OF THIS SOFTWARE.
 
-from ..flexlay_error import FlexlayError
+from flexapi import FlexlayError
 
 
 class BackendError(FlexlayError):

@@ -17,10 +17,11 @@
 # TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 # PERFORMANCE OF THIS SOFTWARE.
 
+
 from .file_resource import FileResource
 
+
 class TextFileResource(FileResource):
-    """"""
     def write(self, text):
         _file = open(str(self), "w")
         _file.write(text)

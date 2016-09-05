@@ -19,7 +19,8 @@
 
 import unittest
 
-from flexapi.backends.text_iterator import TextIterator
+from flexapi.backends import TextIterator
+
 
 class TextIteratorTestCase(unittest.TestCase):
     def test_set_index(self):

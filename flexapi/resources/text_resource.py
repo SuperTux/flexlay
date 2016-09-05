@@ -17,8 +17,9 @@
 # TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 # PERFORMANCE OF THIS SOFTWARE.
 
+from flexapi.backends import TextIterator
 from .flexlay_resource import FlexlayResource
-from ..backends.text_iterator import TextIterator
+
 
 class TextResource(FlexlayResource, str):
     def __init__(self, text):

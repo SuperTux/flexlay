@@ -17,7 +17,7 @@
 # TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 # PERFORMANCE OF THIS SOFTWARE.
 
-from ..util.semver import SemVer
+from flexapi.util import SemVer
 
 
 class FlexlayBackend:

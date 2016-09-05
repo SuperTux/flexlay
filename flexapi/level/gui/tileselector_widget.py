@@ -41,6 +41,8 @@ class TileSelectorWidget(QWidget):
         super().__init__(parent)
         self.graphics_scene = QGraphicsScene(parent)
 
+        self.current_scale = 1
+
         if not isinstance(tileset, LevelTileset):
             raise FlexlayError("tileset argument must be a LevelTileset object.")
         self.tileset = tileset
@@ -60,6 +62,7 @@ class TileSelectorWidget(QWidget):
         self.combobox.activated.connect(self.on_combobox_activated)
 
         self.tile_view.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.tile_view.setAlignment(Qt.AlignLeft | Qt.AlignTop)
         self.tile_view.show()
 
         if tileset is not None:
@@ -72,6 +75,9 @@ class TileSelectorWidget(QWidget):
         if tilegroup_name not in self.tileset.groups:
             raise FlexlayError("No such tilegroup named " + str(tilegroup_name))
         self.current_group_name = tilegroup_name
+        tilegroup_combobox_index = self.combobox.findText(tilegroup_name)
+        if self.combobox.currentIndex() != tilegroup_combobox_index:
+            self.combobox.setCurrentIndex(tilegroup_combobox_index)
         self.repopulate_scene()
 
     def repopulate_scene(self):
@@ -91,16 +97,22 @@ class TileSelectorWidget(QWidget):
             image_resource = self.tileset.get_tile_image(tile_id)
             if image_resource is not None:
                 graphics_item = QGraphicsPixmapItem(image_resource.get_pixmap())
-                graphics_item.setPos(self.tileset.tile_size * column - self.tileset.tile_size / 2,
-                                     self.tileset.tile_size * row - self.tileset.tile_size / 2)
+                graphics_item.setPos(self.tileset.tile_size * column,
+                                     self.tileset.tile_size * row)
                 item_group.addToGroup(graphics_item)
             if column == columns:
                 row += 1
                 column = 0
             else:
                 column += 1
+
+        tiles_bounding_rect = item_group.boundingRect()
         self.graphics_scene.addItem(item_group)
-        self.tile_view.fitInView(item_group, Qt.KeepAspectRatio)
+        scale_factor = self.tile_view.width() / tiles_bounding_rect.width()
+        self.tile_view.scale(1/self.current_scale, 1/self.current_scale)
+        self.tile_view.scale(scale_factor, scale_factor)
+        self.current_scale = scale_factor
+        self.graphics_scene.setSceneRect(tiles_bounding_rect)
 
     def set_tileset(self, tileset):
         """Choose the tileset to display"""

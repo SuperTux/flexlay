@@ -44,3 +44,9 @@ class ImageResource(FlexlayResource):
             return self.pixmap
         else:
             return self.pixmap
+
+    def get_width(self):
+        return self.qimage.width()
+
+    def get_height(self):
+        return self.qimage.height()

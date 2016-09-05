@@ -19,13 +19,12 @@
 
 import io
 import os
-import unittest
 import unittest.mock
 
 from flexlay import Config
 from flexlay.math import Point, Size
-from supertux.gameobj_factor import supertux_gameobj_factory
-from supertux.level import Level
+from supertux.old import Level
+from supertux.old import supertux_gameobj_factory
 
 test_levelfile = os.path.join(os.path.dirname(__file__), "test.stl")
 

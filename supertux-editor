@@ -19,8 +19,7 @@
 
 import sys
 
-import supertux_reflex.supertux as supertux
-#import supertux.supertux as supertux
+import supertux.supertux as supertux
 
 if __name__ == "__main__":
     sys.path.append(".")

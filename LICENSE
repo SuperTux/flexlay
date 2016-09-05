@@ -2,10 +2,6 @@ Currently, the situation is a bit messy.
 
 Here is an overview of the licenses the code is covered by:
 
-All files in supertux/ except COPYING, TODO.md and the files
-in supertux/wip are under the GNU GPL. See supertux/COPYING
-for the license.
-
 All files in flexlay/ are under the GNU GPL. See
 flexlay/COPYING.
 
@@ -28,6 +24,11 @@ WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
 ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 "
+
+All files in supertux/old are under the GNU GPL. See supertux/COPYING
+for the license.
+
+The files in supertux/sexpr are under the zlib license, which is included in the same folder.
 
 For any other files see the header comment and see the appropriate
 license.

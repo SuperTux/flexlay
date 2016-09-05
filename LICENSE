@@ -1,0 +1,33 @@
+Currently, the situation is a bit messy.
+
+Here is an overview of the licenses the code is covered by:
+
+All files in supertux/ except COPYING, TODO.md and the files
+in supertux/wip are under the GNU GPL. See supertux/COPYING
+for the license.
+
+All files in flexlay/ are under the GNU GPL. See
+flexlay/COPYING.
+
+All the files in flexapi/ and supertux/wip are under the ISC
+license, included below, and in the header comment of each
+file:
+
+"
+Copyright (c) 2016 Karkus476
+
+Permission to use, copy, modify, and distribute this software for any
+purpose with or without fee is hereby granted, provided that the above
+copyright notice and this permission notice appear in all copies.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+"
+
+For any other files see the header comment and see the appropriate
+license.

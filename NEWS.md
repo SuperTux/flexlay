@@ -7,7 +7,8 @@
 - Flexlay will follow [SemVer](http://semver.org/) (just as SuperTux does)
 - Removed C++ and Ruby support altogether, Flexlay now uses only Python 3 with
   PyQt 4. Many features from old C++ editor are lost
-- Added SuperTux level creation wizard
+- Flexlay is being rewritten from scratch, using the same tools, except under
+  the ISC license.
 
 ## Flexlay 0.1.0
 

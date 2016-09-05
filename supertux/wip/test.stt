@@ -1,0 +1,18 @@
+(supertux-test
+ (test-list
+  (test-int 6) ; This is a comment
+  (test-bool #t)
+  (test-string "simple")
+  (test-escape "string with\n \"escaped chars\"\"")
+  (test-float 7.23)
+  (test-translatable (_"this is a test"))
+  (test-int-list 4 5 6 7)
+ )
+ (another-int 5)
+ (test-comment ;) < that is a bracket
+  (test
+   (negi -343)
+   (negf -23.09)
+  )
+ )
+)

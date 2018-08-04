@@ -21,8 +21,48 @@ import logging
 from collections import OrderedDict
 
 from flexlay import ObjectBrush, Config
-from supertux.gameobj import *
-from supertux.worldmap_object import *
+from supertux.gameobj import (
+    AmbientSound,
+    Background,
+    BadGuy,
+    BonusBlock,
+    Camera,
+    Candle,
+    DartTrap,
+    Decal,
+    Dispenser,
+    Door,
+    GameObj,
+    GhostFlame,
+    Gradient,
+    InfoBlock,
+    InvisibleWall,
+    LevelTime,
+    ParticleSystem,
+    Platform,
+    Powerup,
+    Pushbutton,
+    ResetPoint,
+    ScriptTrigger,
+    ScriptedObject,
+    SecretArea,
+    SequenceTrigger,
+    SimpleObject,
+    SimpleTileObject,
+    SpawnPoint,
+    Switch,
+    Torch,
+    Trampoline,
+    Tux,
+    WeakBlock,
+    WilloWisp,
+    Wind,
+)
+from supertux.worldmap_object import (
+    SpecialTile,
+    WorldmapLevel,
+    WorldmapSpawnpoint,
+)
 from supertux.sprite import SuperTuxSprite
 
 
@@ -165,7 +205,7 @@ class SuperTuxGameObjFactory:
             for row in reader:
                 identifier = row[0]
                 path = row[1]
-                name = format_sprite_name(identifier) if len(row) < 3 else row[2]
+                # name = format_sprite_name(identifier) if len(row) < 3 else row[2]
                 self.add_badguy(identifier, path)
 
 

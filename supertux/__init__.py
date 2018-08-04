@@ -25,8 +25,6 @@ from .gameobj import GameObj
 from .gameobj_factor import supertux_gameobj_factory
 from .gui import SuperTuxGUI
 from .level import Level
-from .level_file_dialog import OpenLevelFileDialog
-from .menubar import SuperTuxMenuBar
 from .sector import Sector
 from .sprite import SuperTuxSprite
 from .supertux import main

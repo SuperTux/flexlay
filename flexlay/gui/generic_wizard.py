@@ -17,7 +17,6 @@
 
 from PyQt5.QtWidgets import QWizardPage, QWizard, QVBoxLayout
 
-from flexlay.gui.properties_widget import PropertiesWidget
 from flexlay.util import Signal
 
 

@@ -204,7 +204,7 @@ class ObjMapSelectTool(Tool):
                 obj.sig_select(None)
         else:
             self.context.object_selection[0].sig_select(self.manager)
-        selected = self.context.object_selection
+        # selected = self.context.object_selection
 
         objmap = ToolContext.current.object_layer
         objmap.delete_control_points()

@@ -23,9 +23,8 @@ from PyQt5.QtCore import QByteArray
 from PyQt5.QtWidgets import QMessageBox, QFileDialog
 
 from flexlay import Flexlay, Config
-from flexlay.util.sexpr import SExprParseError
-from .gui import SuperTuxGUI
-from .tileset import SuperTuxTileset
+from supertux.gui import SuperTuxGUI
+from supertux.tileset import SuperTuxTileset
 
 
 def main():
@@ -86,7 +85,7 @@ def main():
         for recent_file_path in reversed(config.recent_files):
             try:
                 gui.load_level(recent_file_path)
-            except: # TODO: Except only reasonable errors.
+            except Exception:  # TODO: Except only reasonable errors.
                 config.recent_files.remove(recent_file_path)
                 continue
             else:

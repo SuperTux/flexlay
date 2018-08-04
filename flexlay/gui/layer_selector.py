@@ -197,7 +197,7 @@ class LayerSelector:
         for layer in self.get_layers():
             if layer.metadata.name == "":
                 standard_item = QStandardItem("No name (" + str(unnamed_count) + ")")
-                unnamed_count+=1
+                unnamed_count += 1
             else:
                 standard_item = QStandardItem(layer.metadata.name)
             self.model.appendRow([standard_item])

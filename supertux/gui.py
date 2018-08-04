@@ -22,7 +22,7 @@ import tempfile
 import threading
 
 from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import QMessageBox
+from PyQt5.QtWidgets import QMessageBox, QFileDialog
 
 from flexlay import (Color, InputEvent, ObjMapRectObject, ObjMapTilemapObject,
                      ObjMapPathNode, Config, ToolContext, ObjectAddCommand,
@@ -197,7 +197,7 @@ class SuperTuxGUI:
                 dialog_is_cancelled = False
 
                 def after_save(i):
-                    dialog_is_cancelled = (i == 0)
+                    dialog_is_cancelled = (i == 0)  # noqa: F841
 
                 self.save_dialog.file_dialog.finished.connect(after_save)
                 self.gui_level_save()
@@ -269,11 +269,6 @@ class SuperTuxGUI:
         if self.level is not None:
             self.level.tileset_path = tileset.filename
 
-    def gui_change_tileset(self):
-        tileset_dialog = OpenFileDialog("Select Tileset To Open", ("SuperTux Tilesets (*.strf)", "All Files (*)"))
-        tileset_dialog.set_directory(Config.current.datadir, "images")
-        tileset_dialog.run(self.set_tileset)
-
     def set_tileset(self, filename):
         """Set tileset from (.strf) filename"""
         if not filename:
@@ -282,11 +277,10 @@ class SuperTuxGUI:
         tileset.load(filename)
         self.gui_set_tileset(tileset)
 
-    def gui_set_tileset(self, tileset):
-        self.tileselector.set_tileset(tileset)
-        self.tileselector.add_tilegroup("All Tiles", tileset.get_tiles())
-        for tilegroup in tileset.tilegroups:
-            self.tileselector.add_tilegroup(tilegroup.name, tilegroup.tiles)
+    # def gui_change_tileset(self):
+    #     tileset_dialog = OpenFileDialog("Select Tileset To Open", ("SuperTux Tilesets (*.strf)", "All Files (*)"))
+    #     tileset_dialog.set_directory(Config.current.datadir, "images")
+    #     tileset_dialog.run(self.set_tileset)
 
     def gui_change_tileset(self):
         filename = QFileDialog.getOpenFileName(None, "Select Tileset To Open", Config.current.datadir)
@@ -339,8 +333,8 @@ class SuperTuxGUI:
 
     def gui_run_level_cleanup(self, tmpfile):
         # Safely get rid of temporary file
-        os.close(tmpfile[0]) # Close file descriptor
-        os.remove(tmpfile[1]) # Remove the file
+        os.close(tmpfile[0])  # Close file descriptor
+        os.remove(tmpfile[1])  # Remove the file
 
     def gui_record_level(self):
         self.arguments.record_demo_file = SaveFileDialog("Choose Record Target File")
@@ -351,7 +345,7 @@ class SuperTuxGUI:
         QMessageBox.information(None,
                                 "Select a level file",
                                 "You must now select a level file - the level of the demo")
-        level = OpenLevelFileDialog("Select The Level")
+        # level = OpenLevelFileDialog("Select The Level")
         QMessageBox.information(None,
                                 "Select a demo file",
                                 "You must now select a demo file to play")
@@ -673,12 +667,9 @@ class SuperTuxGUI:
         self.editor_map.set_sector_tab_label(0, level.sectors[0].name)
 
     def load_worldmap(self, filename):
-        '''
-        Unused.
-        '''
-        print("Loading: ", filename)
-        worldmap = WorldMap(filename)
-        worldmap.activate(self.workspace)
+        print("Loading Worldmap: {}".format(filename))
+        # worldmap = WorldMap(filename)
+        # worldmap.activate(self.workspace)
 
     def save_level(self, filename, set_title=True, is_tmp=False):
         if set_title:
@@ -705,7 +696,7 @@ class SuperTuxGUI:
         pass
 
     def load_addon_zip(self, filename):
-        print("Add-on zip path is: " + zip_path)
+        print("Add-on zip path is: {}".format(filename))
         pass
 
     def raise_selection(self):

@@ -14,8 +14,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from .command import Command
-from .object_delete_command import ObjectDeleteCommand
+
+from flexlay.commands import Command
 
 
 class LayerDeleteCommand(Command):

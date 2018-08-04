@@ -14,13 +14,24 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtWidgets import (
-    QVBoxLayout, QLabel, QLineEdit, QFormLayout,
-    QCheckBox, QButtonGroup, QRadioButton, QColorDialog,
-    QWidget, QFileDialog, QComboBox, QPushButton, QSpinBox)
+    QButtonGroup,
+    QCheckBox,
+    QComboBox,
+    QFormLayout,
+    QLabel,
+    QLineEdit,
+    QPushButton,
+    QRadioButton,
+    QSpinBox,
+    QVBoxLayout,
+    QWidget,
+)
 
+from flexlay.color import Color
 from flexlay.gui import OpenFileDialog
 from flexlay.util import Config, Signal
 
@@ -182,7 +193,7 @@ class PropertiesWidget(QWidget):
 
         def file_selected(path):
             """Called whenever file is selected"""
-            actual_path = path
+            # actual_path = path
             if show_rel_to and path[:len(show_rel_to)] == show_rel_to:
                 inputbox.setText(path[len(show_rel_to):])
             else:

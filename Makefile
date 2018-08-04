@@ -16,7 +16,7 @@
 
 SOURCES := $(wildcard flexlay/*.py flexlay/*/*.py supertux/*.py tests/*.py)
 
-default: flake mypy test
+default: flake mypy # test
 
 all: autopep flake test pylint
 

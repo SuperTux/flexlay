@@ -15,7 +15,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-import os, random
+import os
+import random
 
 from PyQt5 import QtWidgets
 

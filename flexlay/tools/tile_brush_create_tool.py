@@ -85,7 +85,7 @@ class TileBrushCreateTool(Tool):
                 ToolContext.current.tile_brush = self.selection.get_brush(tilemap.field)
 
                 if ToolContext.current.tile_brush.width > 1 or \
-                                ToolContext.current.tile_brush.height > 1:
+                   ToolContext.current.tile_brush.height > 1:
                     if self.shift_pressed:
                         ToolContext.current.tile_brush.set_opaque()
                     else:

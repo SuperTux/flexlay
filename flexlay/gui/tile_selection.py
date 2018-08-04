@@ -61,10 +61,10 @@ class TileSelection:
 
         sel.normalize()
 
-        if (sel.left > field.width - 1 or
-            sel.top > field.height - 1 or
-            sel.right <= 0 or
-            sel.bottom <= 0):
+        if sel.left > field.width - 1 or \
+           sel.top > field.height - 1 or \
+           sel.right <= 0 or \
+           sel.bottom <= 0:
 
             # Selection is empty
             logging.error("Error: Invalid selection")

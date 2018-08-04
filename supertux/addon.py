@@ -14,14 +14,11 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import os
-import logging
 
-from flexlay import Config
-from flexlay.util import get_value_from_tree, sexpr_filter, SExprWriter
-from .sector import Sector
+import os
+
+from flexlay.util import get_value_from_tree, SExprWriter
 from .util import load_lisp
-from .level import Level
 
 
 class Addon:

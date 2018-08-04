@@ -14,8 +14,13 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from flexlay.property import *
-from .gameobj import GameObj, make_sprite_object
+
+from flexlay.property import (
+    StringProperty,
+    SpriteProperty,
+    InlineTilePosProperty,
+)
+from supertux.gameobj import GameObj, make_sprite_object
 
 
 class WorldmapLevel(GameObj):
@@ -68,3 +73,5 @@ class WorldmapSpawnpoint(GameObj):
             StringProperty("Name", "name", "main"),
             InlineTilePosProperty()
         ]
+
+# EOF #

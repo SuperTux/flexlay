@@ -72,11 +72,11 @@ class ObjectSelectorWidget(QWidget):
 
                 if self.drag_obj != -1:
                     drag = QDrag(self)
-                    mimeData = QMimeData()
+                    mime_data = QMimeData()
                     # GRUMBEL obj = SuperTuxBadGuyData()
                     data = QByteArray(pickle.dumps(self.drag_obj))
-                    mimeData.setData("application/x-supertux-badguy", data)
-                    drag.setMimeData(mimeData)
+                    mime_data.setData("application/x-supertux-badguy", data)
+                    drag.setMimeData(mime_data)
 
                     pixmap = QPixmap.fromImage(self.brushes[self.drag_obj].get_sprite().get_pixelbuffer().get_qimage())
                     drag.setPixmap(pixmap)

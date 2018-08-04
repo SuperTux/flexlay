@@ -24,9 +24,26 @@ from flexlay import (Color, Config, ObjMapSpriteObject, ObjMapRectObject, ObjMap
                      Workspace)
 from flexlay.gui import GenericDialog
 from flexlay.math import Rect, Size, Point
-from flexlay.property import *
-from .sprite import SuperTuxSprite
-from .gameobj_props_change_command import GameObjPropsChangeCommand
+from flexlay.property import (
+    BadGuyProperty,
+    BoolProperty,
+    ColorProperty,
+    DirectionProperty,
+    EnumProperty,
+    FloatProperty,
+    ImageProperty,
+    InlinePosProperty,
+    InlineRectProperty,
+    IntProperty,
+    PathProperty,
+    SampleProperty,
+    SectorProperty,
+    SpriteProperty,
+    StringProperty,
+    TilemapProperty,
+)
+from supertux.sprite import SuperTuxSprite
+from supertux.gameobj_props_change_command import GameObjPropsChangeCommand
 
 
 def make_sprite_object(metadata, filename, pos=None):

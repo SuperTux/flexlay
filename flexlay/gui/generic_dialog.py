@@ -24,7 +24,7 @@ from .properties_widget import PropertiesWidget
 class GenericDialog(PropertiesWidget):
     """A PropertiesWidget in a QDialog."""
 
-    def __init__(self, title, parent):
+    def __init__(self, title, parent=None):
         super().__init__(parent)
 
         self.ok_callback = None

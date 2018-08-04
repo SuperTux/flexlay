@@ -32,6 +32,7 @@ class TileGroup:
 # Load game tiles from filename into tileset
 class SuperTuxTileset(Tileset):
     current = None
+    filename = ""
 
     def __init__(self, *params):
         super().__init__(*params)

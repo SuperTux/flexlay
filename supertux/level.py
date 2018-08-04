@@ -79,6 +79,8 @@ class Level:
         self.license = get_value_from_tree(["license", "_"], data, "")
         self.target_time = get_value_from_tree(["target-time", "_"], data, 0)
         self.tileset_path = get_value_from_tree(["tileset", "_"], data, os.path.join("images", "tiles.strf"))
+        # self.tileset_path = get_value_from_tree(["tileset", "_"], data, "images/tiles.strf")
+        # self.tileset_path = os.path.join(Config.current.datadir, self.tileset_path)
 
         # Check tileset path is somewhat valid
         if len(self.tileset_path) < 1:

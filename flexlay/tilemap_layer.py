@@ -39,6 +39,7 @@ class TilemapLayer(Layer):
         self.metadata = None
 
         # Do not touch! Use LayerSelector to hide/show layers.
+
         self.hidden = False
 
         for y in range(0, self.field.height):

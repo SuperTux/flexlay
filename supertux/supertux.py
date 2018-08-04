@@ -74,6 +74,8 @@ def main():
 
     # Load tileset
     tileset = SuperTuxTileset(32)
+    tileset.load(os.path.join(config.datadir, "images/tiles.strf"))
+    tileset.create_ungrouped_tiles_group()
 
     gui = SuperTuxGUI(flexlay)
     if args.LEVELFILE is not None:

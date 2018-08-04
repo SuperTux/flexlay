@@ -226,6 +226,30 @@ class LayerSelector:
         # Repaint so that changes are visible
         EditorMapComponent.current.editormap_widget.repaint()
 
+    def hide_all_layers(self):
+        if not self.editormap:
+            return
+        #Get TilemapLayer, and set hidden
+        for object in self.editormap.layers[0].objects:
+            if isinstance(object, ObjMapTilemapObject):
+                layer = object.tilemap_layer
+                if isinstance(layer, TilemapLayer):
+                    layer.hidden = True
+        #Repaint so that changes are visible
+        EditorMapComponent.current.editormap_widget.repaint()
+
+    def show_all_layers(self):
+        if not self.editormap:
+            return
+        #Get TilemapLayer, and set hidden
+        for object in self.editormap.layers[0].objects:
+            if isinstance(object, ObjMapTilemapObject):
+                layer = object.tilemap_layer
+                if isinstance(layer, TilemapLayer):
+                    layer.hidden = False
+        #Repaint so that changes are visible
+        EditorMapComponent.current.editormap_widget.repaint()
+
     def get_widget(self):
         return self.vbox
 

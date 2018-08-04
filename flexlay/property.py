@@ -95,6 +95,7 @@ class StringProperty(Property):
 
     def property_dialog(self, dialog):
         dialog.add_string(self.label, self.value, self.on_value_change, self.placeholder)
+        # dialog.add_string(self.label, self.value, self.on_value_change)
 
 
 class FileProperty(StringProperty):
@@ -203,6 +204,7 @@ class SpriteProperty(StringProperty):
     def write(self, writer, obj):
         if self.value:
             super().write(writer, obj)
+
 
 
 class BadGuyProperty(EnumProperty):

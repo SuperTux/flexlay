@@ -15,6 +15,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from typing import Optional
+
 import os
 import logging
 
@@ -49,8 +51,8 @@ class GridConstrain:
 
 
 class GameObj:
-    label = None
-    identifier = None
+    label: Optional[str] = None
+    identifier: Optional[str] = None
     properties = []
     constraints = []
     factory = None

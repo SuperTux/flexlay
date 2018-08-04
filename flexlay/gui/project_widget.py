@@ -14,17 +14,21 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QIcon, QPixmap, QStandardItem
-from PyQt5.QtWidgets import (
-    QVBoxLayout, QLabel, QLineEdit, QFormLayout,
-    QCheckBox, QButtonGroup,
-    QRadioButton, QColorDialog, QWidget, QFileDialog,
-    QComboBox, QPushButton, QSpinBox, QTreeView,
-    QFileSystemModel, QMenu, QToolBar)
 
-from flexlay.gui import OpenFileDialog
-from flexlay.util import Config, Signal
+from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QIcon, QStandardItem
+from PyQt5.QtWidgets import (
+    QFileSystemModel,
+    QFormLayout,
+    QLabel,
+    QMenu,
+    QToolBar,
+    QTreeView,
+    QVBoxLayout,
+    QWidget,
+)
+
+from flexlay.util import Signal
 
 
 class ProjectWidget(QWidget):
@@ -49,7 +53,6 @@ class ProjectWidget(QWidget):
         self.vbox.addWidget(self.heading_label)
         self.vbox.addWidget(self.label)
         self.setLayout(self.vbox)
-
 
     def init_gui(self):
         # Clear from previous:
@@ -76,7 +79,7 @@ class ProjectWidget(QWidget):
         #          ("metadata", [])
         #      ])]
         # self.model = QStandardItemModel()
-        #self.add_items(self.model, self.data)
+        # self.add_items(self.model, self.data)
         self.tree_view.setModel(self.model)
         self.tree_view.doubleClicked.connect(self.on_tree_view_double_click)
         self.tree_view.setContextMenuPolicy(Qt.CustomContextMenu)

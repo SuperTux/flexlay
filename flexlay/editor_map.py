@@ -16,7 +16,6 @@
 
 
 from flexlay import Color, Layer, TilemapLayer, ObjMapTilemapObject
-from flexlay.gui import EditorMapComponent
 from flexlay.math import Rect
 from flexlay.util import Signal
 

@@ -29,12 +29,12 @@ class Addon:
     def from_file(filename):
         addon = Addon()
 
-        #if filename.endswith(".stwm"):
+        # if filename.endswith(".stwm"):
         #    level.is_worldmap = True
-        #else:
+        # else:
         #    level.is_worldmap = False
 
-        #level.filename = filename
+        # level.filename = filename
 
         tree = load_lisp(addon.filename, "supertux-addoninfo")
         data = tree[1:]
@@ -48,9 +48,9 @@ class Addon:
 
         # print("VERSION:", level.filename, " ", level.version)
 
-        #if level.version == 1:
+        # if level.version == 1:
         #    raise Exception("version 1 levels not supported at the moment")
-        #else:
+        # else:
         #    level.parse_v2(data)
 
         return addon
@@ -115,16 +115,16 @@ class Addon:
             print(level.name)
 
         for image in self.images:
-            pass # TODO: Save images
+            pass  # TODO: Save images
 
         for music_file in self.music:
-            pass # TODO: Save music
+            pass  # TODO: Save music
 
         for script in self.scripts:
-            pass # TODO: Save scripts
+            pass  # TODO: Save scripts
 
         for sound in self.sounds:
-            pass # TODO: Save sounds
+            pass  # TODO: Save sounds
 
     def save_io(self, f):
         writer = SExprWriter(f)

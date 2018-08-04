@@ -14,10 +14,12 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from PyQt5.QtGui import (QIcon, QPixmap)
-from PyQt5.QtWidgets import (QVBoxLayout, QLabel, QLineEdit, QFormLayout,
-                             QCheckBox, QButtonGroup, QRadioButton, QColorDialog,
-                             QWidget, QFileDialog, QComboBox, QPushButton, QSpinBox)
+from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QIcon, QPixmap
+from PyQt5.QtWidgets import (
+    QVBoxLayout, QLabel, QLineEdit, QFormLayout,
+    QCheckBox, QButtonGroup, QRadioButton, QColorDialog,
+    QWidget, QFileDialog, QComboBox, QPushButton, QSpinBox)
 
 from flexlay.gui import OpenFileDialog
 from flexlay.util import Config, Signal

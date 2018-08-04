@@ -55,8 +55,8 @@ class SketchLayer(Layer):
         else:
             # Draw to canvas
             if self.last_zoom != gc.state.get_zoom() or \
-                            self.last_pos != gc.state.get_pos() or \
-                            self.last_rot != gc.state.get_rotation():
+               self.last_pos != gc.state.get_pos() or \
+               self.last_rot != gc.state.get_rotation():
 
                 # Rerender the image
                 self.last_zoom = gc.state.get_zoom()

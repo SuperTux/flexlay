@@ -14,14 +14,14 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import os, random
-from math import ceil
+
+import random
 
 from PyQt5 import QtGui
 
 from flexlay import Config
 from flexlay.gui import PropertiesWidget, GenericWizard
-from .addon import Addon
+from supertux.addon import Addon
 
 
 class NewAddonWizard(GenericWizard):
@@ -62,12 +62,12 @@ class NewAddonWizard(GenericWizard):
 
         # self.level.current_sector.music = self.level.music
         # self.level.current_sector.background = self.level.image
-        #self.level.name = main_page_data[0]
-        #self.level.author = main_page_data[1]
+        # self.level.name = main_page_data[0]
+        # self.level.author = main_page_data[1]
         Config.current.name = self.addon.author
-        #self.level.current_sector.music = main_page_data[4]
+        # self.level.current_sector.music = main_page_data[4]
         # self.level.spawn = ceil(main_page_data[2] / 10), int(main_page_data[3] / 2)
-        #self.level.tileset_path = os.path.join("images", "tiles.strf")
+        # self.level.tileset_path = os.path.join("images", "tiles.strf")
 
     # Not Implemented
     def cancel(self):
@@ -81,9 +81,9 @@ class NewAddonWizard(GenericWizard):
         page_widget = PropertiesWidget(self)
 
         page_widget.add_label("Click 'Next' to continue.\n" +
-                                  "In the future, this page will show some " +
-                                  "checkboxes to allow experienced users " +
-                                  "to view extra pages in this wizard.")
+                              "In the future, this page will show some " +
+                              "checkboxes to allow experienced users " +
+                              "to view extra pages in this wizard.")
 
         return page_widget
 

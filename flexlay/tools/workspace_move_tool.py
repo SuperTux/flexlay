@@ -55,9 +55,7 @@ class WorkspaceMoveTool:
         dx = ca * (self.click_pos.x - event.mouse_pos.x) - sa * (self.click_pos.y - event.mouse_pos.y)
         dy = sa * (self.click_pos.x - event.mouse_pos.x) + ca * (self.click_pos.y - event.mouse_pos.y)
 
-        gc_state.set_pos(Pointf(self.old_trans_offset.x
-                                + dx / EditorMapComponent.current.get_gc_state().get_zoom(),
-                                self.old_trans_offset.y
-                                + dy / EditorMapComponent.current.get_gc_state().get_zoom()))
+        gc_state.set_pos(Pointf(self.old_trans_offset.x + dx / EditorMapComponent.current.get_gc_state().get_zoom(),
+                                self.old_trans_offset.y + dy / EditorMapComponent.current.get_gc_state().get_zoom()))
 
 # EOF #

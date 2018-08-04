@@ -30,7 +30,7 @@ class Flexlay:
         self.application = QApplication(sys.argv)
         self.gui_manager = None
 
-        logging.basicConfig(format="[%(levelname)s] "+ self.name + " %(pathname)s:%(lineno)s: %(message)s")
+        logging.basicConfig(format="[%(levelname)s] " + self.name + " %(pathname)s:%(lineno)s: %(message)s")
         logging.getLogger().setLevel(logging.DEBUG)
 
     def create_gui_manager(self, title=""):

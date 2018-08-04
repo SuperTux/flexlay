@@ -16,17 +16,18 @@
 
 
 from PyQt5.QtCore import (QCoreApplication, Qt)
-from PyQt5.QtWidgets import (QApplication, QMainWindow, QToolBar,
-                             QDockWidget, QVBoxLayout, QWidget,
-                             QPushButton, QTabWidget)
+from PyQt5.QtWidgets import (
+    QApplication, QMainWindow, QToolBar,
+    QDockWidget, QVBoxLayout, QWidget,
+    QPushButton, QTabWidget)
 
 from flexlay.gui.project_widget import ProjectWidget
 from flexlay.gui.properties_widget import PropertiesWidget
-from .util.config import Config
-from .gui import (ButtonPanel, EditorMapComponent, OpenFileDialog,
-                  SaveFileDialog, GenericDialog, LayerSelector,
-                  Menubar, Minimap, ObjectSelector, TileBrushSelector,
-                  TileSelector, StatusBar)
+from flexlay.util.config import Config
+from flexlay.gui import (
+    ButtonPanel, EditorMapComponent, GenericDialog, LayerSelector,
+    Menubar, Minimap, ObjectSelector, TileBrushSelector,
+    TileSelector, StatusBar)
 
 
 class FlexlayMainWindow(QMainWindow):
@@ -37,7 +38,7 @@ class FlexlayMainWindow(QMainWindow):
 
     def closeEvent(self, event):
         if self.on_close:
-            if not self.on_close(event) == False:
+            if self.on_close(event):
                 Config.current.geometry = self.saveGeometry().toBase64().data().decode()
                 Config.current.window_state = self.saveState().toBase64().data().decode()
                 event.accept()

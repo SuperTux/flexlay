@@ -26,27 +26,27 @@ from PyQt5.QtWidgets import QMessageBox
 
 from flexlay import (Color, InputEvent, ObjMapRectObject, ObjMapTilemapObject,
                      ObjMapPathNode, Config, ToolContext, ObjectAddCommand,
-                     Workspace, TilemapLayer)
+                     Workspace)
 from flexlay.gui.file_dialog import OpenFileDialog, SaveFileDialog
 from flexlay.math import Point, Rect, Size
 from flexlay.tools import (TilePaintTool, TileBrushCreateTool,
                            TileMapSelectTool, TileFillTool,
                            TileReplaceTool, ObjMapSelectTool,
                            ZoomTool, ZoomOutTool, WorkspaceMoveTool)
-from .button_panel import SuperTuxButtonPanel
-from .gameobj import PathNode, Tux
-from .gameobj_factor import supertux_gameobj_factory
-from .level import Level
-from .menubar import SuperTuxMenuBar
-from .new_level import NewLevelWizard
-from .new_addon import NewAddonWizard
-from .sector import Sector
-from .tileset import SuperTuxTileset
-from .tilemap import SuperTuxTileMap
-from .toolbox import SuperTuxToolbox
-from .supertux_arguments import SuperTuxArguments
-from .level_file_dialog import OpenLevelFileDialog, SaveLevelFileDialog
-from .addon_dialog import SaveAddonDialog
+from supertux.button_panel import SuperTuxButtonPanel
+from supertux.gameobj import PathNode
+from supertux.gameobj_factor import supertux_gameobj_factory
+from supertux.level import Level
+from supertux.menubar import SuperTuxMenuBar
+from supertux.new_level import NewLevelWizard
+from supertux.new_addon import NewAddonWizard
+from supertux.sector import Sector
+from supertux.tileset import SuperTuxTileset
+from supertux.tilemap import SuperTuxTileMap
+from supertux.toolbox import SuperTuxToolbox
+from supertux.supertux_arguments import SuperTuxArguments
+from supertux.level_file_dialog import OpenLevelFileDialog, SaveLevelFileDialog
+from supertux.addon_dialog import SaveAddonDialog
 
 BACKGROUND_LAYER = 1
 INTERACTIVE_LAYER = 2
@@ -642,13 +642,13 @@ class SuperTuxGUI:
         if set_title:
             self.gui.window.setWindowTitle("SuperTux Editor: [" + filename + "]")
 
-        #if filename[-5:] == ".stwm":
-            #QMessageBox.warning(None, "Opening Worldmap File",
-            #                    "[WARNING] Opening supertux worldmap file:\n'"+filename+"'\n" +
-            #                    "Worldmaps usually use different tilesets to levels.\n"+
-            #                    "Please select a different tileset to use (look for .strf files).")
-            #if not self.gui_change_tileset():
-            #    return
+        # if filename[-5:] == ".stwm":
+        #     QMessageBox.warning(None, "Opening Worldmap File",
+        #                    "[WARNING] Opening supertux worldmap file:\n'"+filename+"'\n" +
+        #                    "Worldmaps usually use different tilesets to levels.\n"+
+        #                    "Please select a different tileset to use (look for .strf files).")
+        # if not self.gui_change_tileset():
+        #    return
         #    print("Loading worldmap")
 
         level = Level.from_file(filename)

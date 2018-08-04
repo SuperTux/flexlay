@@ -14,21 +14,15 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+
 import csv
 import random
 
-from PyQt5.QtCore import QSize, Qt
-from PyQt5.QtGui import QPainter
-from PyQt5.QtWidgets import QLabel, QListWidget, QHBoxLayout, QVBoxLayout, QFormLayout, QSpinBox, QWidget, QPushButton
+from PyQt5.QtWidgets import QLabel, QListWidget, QHBoxLayout, QVBoxLayout, QSpinBox, QWidget
 
-from flexlay.color import Color
-from flexlay.graphic_context import GraphicContext
-from flexlay.math import Point, Rect, Size
 from flexlay.tile_brush import TileBrush
-from flexlay.tileset import Tileset
 from flexlay.tool_context import ToolContext
 
-from .tile_selector_widget import TileSelectorWidget
 
 class SmartTileMapping:
     id = -1
@@ -36,6 +30,7 @@ class SmartTileMapping:
     right = []
     bottom = []
     left = []
+
 
 class SmartTile:
 
@@ -99,7 +94,7 @@ class SmartTile:
     """
     def get_fitting_tile(self, width, height, left, top, x, y, mappings=None):
         # Check mappings:
-        if mappings != None:
+        if mappings is not None:
             matching_tiles = []
             right = 0 if x == width - 1 else - 1
             bottom = 0 if y == height - 1 else - 1
@@ -115,28 +110,28 @@ class SmartTile:
             if len(matching_tiles) > 0:
                 return matching_tiles[random.randint(0, len(matching_tiles) - 1)]
 
-        if left == 0 and top == 0: # top left corner
+        if left == 0 and top == 0:  # top left corner
             return self.top_left_ids[0]
-        if left == width - 1 and top == 0: # top right corner
+        if left == width - 1 and top == 0:  # top right corner
             return self.top_right_ids[0]
-        if left == 0 and top == height - 1: # bottom left corner
+        if left == 0 and top == height - 1:  # bottom left corner
             return self.bottom_left_ids[0]
-        if left == width - 1 and top == height - 1: # bottom right corner
+        if left == width - 1 and top == height - 1:  # bottom right corner
             return self.bottom_right_ids[0]
-        elif top == 0: # top edge
+        elif top == 0:  # top edge
             return self.top_ids[0]
-        elif left == 0: # left edge
+        elif left == 0:  # left edge
             return self.left_ids[0]
-        elif top == height - 1: # bottom edge
+        elif top == height - 1:  # bottom edge
             return self.bottom_ids[0]
-        elif left == width - 1: # right edge
+        elif left == width - 1:  # right edge
             return self.right_ids[0]
         else:
             return self.other_ids[0]
 
-    def as_smart_brush(self, width = None, height = None, mappings=None):
+    def as_smart_brush(self, width=None, height=None, mappings=None):
         brush = self.as_brush()
-        if width == None and height == None:
+        if width is None and height is None:
             return brush
 
         if width and width < self.min_width:
@@ -144,9 +139,9 @@ class SmartTile:
         if height and height < self.min_height:
             return brush
 
-        if width == None:
+        if width is None:
             width = brush.width
-        if height == None:
+        if height is None:
             height = brush.height
 
         if width > self.max_width and self.max_width != -1:
@@ -187,6 +182,7 @@ class SmartTile:
         self.left_ids = [int(mappings[7])]
         self.other_ids = [int(mappings[8])]
 
+
 class SmartTileSelectorWidget(QWidget):
     def __init__(self, viewport):
         super().__init__()
@@ -223,12 +219,12 @@ class SmartTileSelectorWidget(QWidget):
 
     def set_brush(self):
         current = self.get_current()
-        #if current.has_mappings:
+        # if current.has_mappings:
         self.brush = current.as_smart_brush(self.width_input.value(), self.height_input.value(), self.mappings)
-        #else:
+        # else:
         #    self.brush = current.as_brush()
 
-        if self.brush != None:
+        if self.brush is not None:
             ToolContext.current.tile_brush = self.brush
 
     def set_tiles(self, tiles):
@@ -254,13 +250,12 @@ class SmartTileSelectorWidget(QWidget):
             self.height_input.setReadOnly(True)
             self.width_input.setReadOnly(True)
 
-
     def load_tiles(self):
         with open('data/supertux/smarttiles_mapping.csv', 'r') as mappings:
             reader = csv.reader(mappings)
             first_row = True
             for row in reader:
-                if first_row: # Ignore first heading row
+                if first_row:  # Ignore first heading row
                     first_row = False
                     continue
                 mapping = SmartTileMapping()
@@ -275,7 +270,7 @@ class SmartTileSelectorWidget(QWidget):
             reader = csv.reader(csvfile)
             first_row = True
             for row in reader:
-                if first_row: # Ignore first heading row
+                if first_row:  # Ignore first heading row
                     first_row = False
                     continue
 
@@ -288,13 +283,11 @@ class SmartTileSelectorWidget(QWidget):
                 max_width = int(row[6]) if len(row) >= 7 else width
                 max_height = int(row[7]) if len(row) >= 8 else height
                 tile = SmartTile(id, name, width, height, max_width, max_height, start, reverse)
-                mappings = row[8] if len(row) >=9 else None
-                if mappings != None:
+                mappings = row[8] if len(row) >= 9 else None
+                if mappings is not None:
                     tile.set_mappings(mappings)
 
                 self.smart_tiles.append(tile)
-
-
 
     #     self.index = 0
     #

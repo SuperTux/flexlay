@@ -15,14 +15,15 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+import os
 import csv
 import logging
 from collections import OrderedDict
 
 from flexlay import ObjectBrush, Config
-from .gameobj import *
-from .worldmap_object import *
-from .sprite import SuperTuxSprite
+from supertux.gameobj import *
+from supertux.worldmap_object import *
+from supertux.sprite import SuperTuxSprite
 
 
 def format_sprite_name(name):

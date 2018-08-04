@@ -14,9 +14,11 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+
 from flexlay import Colorf, Workspace
 from flexlay.util import get_value_from_tree
 from flexlay.math import Point
+
 
 class Property:
     """
@@ -51,6 +53,7 @@ class Property:
 
 class BoolProperty(Property):
     editable = True
+
     def property_dialog(self, dialog):
         dialog.add_bool(self.label, self.value, self.on_value_change)
 
@@ -83,7 +86,7 @@ class StringProperty(Property):
         super().__init__(label, identifier, default, optional)
         self.translatable = translatable
 
-        if placeholder != None:
+        if placeholder is not None:
             self.placeholder = placeholder
 
     def read(self, sexpr, obj):
@@ -206,7 +209,6 @@ class SpriteProperty(StringProperty):
             super().write(writer, obj)
 
 
-
 class BadGuyProperty(EnumProperty):
     editable = True
 
@@ -311,13 +313,13 @@ class TilemapProperty(EnumProperty):
 
     def get_tilemaps(self):
         sector = Workspace.current.current_sector
-        if sector == None:
+        if sector is None:
             return [""]
         return [""] + [tilemap.name for tilemap in sector.tilemaps]
 
     def __init__(self, label, identifier, placeholder=None):
         super().__init__(label, identifier, 0, values=self.get_tilemaps())
-        #super().__init__(label, identifier, "", optional=True, placeholder=placeholder)
+        # super().__init__(label, identifier, "", optional=True, placeholder=placeholder)
 
     def property_dialog(self, dialog):
         self.values = self.get_tilemaps()

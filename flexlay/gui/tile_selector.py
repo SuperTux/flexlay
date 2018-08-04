@@ -34,11 +34,11 @@ class TileSelector:
         self.scroll_area.setWidget(self.widget)
         self.scroll_area.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
 
-        #self.second_tab_scroll_area = QScrollArea()
+        # self.second_tab_scroll_area = QScrollArea()
         self.smart_widget = SmartTileSelectorWidget(self.scroll_area.viewport())
-        #self.second_tab_scroll_area.setWidgetResizable(True)
-        #self.second_tab_scroll_area.setWidget(self.smart_widget)
-        #self.second_tab_scroll_area.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
+        # self.second_tab_scroll_area.setWidgetResizable(True)
+        # self.second_tab_scroll_area.setWidget(self.smart_widget)
+        # self.second_tab_scroll_area.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
 
         self.box = QTabWidget()
         self.layout = QVBoxLayout(self.box)
@@ -70,10 +70,10 @@ class TileSelector:
         self.widget.repaint()
         self.scroll_area.update()
 
-        #self.smart_widget.set_tiles(tiles)
-        #self.smart_widget.repaint()
-        #self.smart_widget.update()
-        #self.second_tab_scroll_area.update()
+        # self.smart_widget.set_tiles(tiles)
+        # self.smart_widget.repaint()
+        # self.smart_widget.update()
+        # self.second_tab_scroll_area.update()
 
     def set_tileset(self, tileset):
         self.widget.set_tileset(tileset)

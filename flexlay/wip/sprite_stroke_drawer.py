@@ -28,10 +28,10 @@ class SpriteStrokeDrawer:
         if DrawerProperties.current.get_brush().is_null() or stroke.get_dab_count() == 0:
             return
 
-        dabs = stroke.get_interpolated_dabs(DrawerProperties.current.get_spacing()
-                                            * DrawerProperties.current.get_size(),
-                                            DrawerProperties.current.get_spacing()
-                                            * DrawerProperties.current.get_size())
+        dabs = stroke.get_interpolated_dabs(DrawerProperties.current.get_spacing() *
+                                            DrawerProperties.current.get_size(),
+                                            DrawerProperties.current.get_spacing() *
+                                            DrawerProperties.current.get_size())
 
         for i, dab in enumerate(self.dabs):
             sprite = DrawerProperties.current.get_brush().get_sprite()

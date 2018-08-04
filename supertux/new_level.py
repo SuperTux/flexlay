@@ -14,8 +14,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+
 import os, random
-from math import ceil
 
 from PyQt5 import QtWidgets
 
@@ -76,9 +76,9 @@ class NewLevelWizard(GenericWizard):
         page_widget = PropertiesWidget(self)
 
         page_widget.add_label("Click 'Next' to continue.\n" +
-                                  "In the future, this page will show some " +
-                                  "checkboxes to allow experienced users " +
-                                  "to view extra pages in this wizard.")
+                              "In the future, this page will show some " +
+                              "checkboxes to allow experienced users " +
+                              "to view extra pages in this wizard.")
 
         return page_widget
 

@@ -5,7 +5,9 @@
 *.so
 *.so.*
 *~
+.idea/
 .sconsign.dblite
+/.mypy_cache/
 /.pylint/
 /TODO
 /libflexlay/flexlay_wrap_wrap.cc
@@ -16,4 +18,3 @@
 /ruby/flexlay_wrap.so
 /simple/simple
 moc_*.cpp
-.idea/

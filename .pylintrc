@@ -1,0 +1,29 @@
+[MESSAGES CONTROL]
+disable=
+   invalid-name
+#   missing-docstring,
+#   too-many-instance-attributes,
+#   too-few-public-methods,
+#   no-self-use,
+#   fixme,
+#   unused-argument,
+#   locally-disabled,
+#   no-else-return,
+#   too-many-locals,
+#   protected-access,
+#   broad-except,
+#   wrong-import-position,
+#   too-many-arguments,
+#   unused-variable,
+#   too-many-branches,
+#   len-as-condition,
+#   wrong-import-order,
+#   too-many-nested-blocks,
+#   too-many-return-statements
+# generated-members=sys.stdout.buffer,sys.stderr.buffer
+
+
+# W0108: unneccesary lambda
+# W0511: FIXME
+# W0613: unused arguments
+# disable=W0511,W0613,W0108

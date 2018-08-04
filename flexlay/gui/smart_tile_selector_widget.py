@@ -17,9 +17,9 @@
 import csv
 import random
 
-from PyQt4.QtCore import QSize, Qt
-from PyQt4.QtGui import QPainter
-from PyQt4.QtGui import QLabel, QListWidget, QHBoxLayout, QVBoxLayout, QFormLayout, QSpinBox, QWidget, QPushButton
+from PyQt5.QtCore import QSize, Qt
+from PyQt5.QtGui import QPainter
+from PyQt5.QtWidgets import QLabel, QListWidget, QHBoxLayout, QVBoxLayout, QFormLayout, QSpinBox, QWidget, QPushButton
 
 from flexlay.color import Color
 from flexlay.graphic_context import GraphicContext

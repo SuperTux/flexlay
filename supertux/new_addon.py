@@ -17,7 +17,7 @@
 import os, random
 from math import ceil
 
-from PyQt4 import QtGui
+from PyQt5 import QtGui
 
 from flexlay import Config
 from flexlay.gui import PropertiesWidget, GenericWizard

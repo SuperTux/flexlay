@@ -39,12 +39,14 @@ from .gameobj_factor import supertux_gameobj_factory
 from .level import Level
 from .menubar import SuperTuxMenuBar
 from .new_level import NewLevelWizard
+from .new_addon import NewAddonWizard
 from .sector import Sector
 from .tileset import SuperTuxTileset
 from .tilemap import SuperTuxTileMap
 from .toolbox import SuperTuxToolbox
 from .supertux_arguments import SuperTuxArguments
 from .level_file_dialog import OpenLevelFileDialog, SaveLevelFileDialog
+from .addon_dialog import SaveAddonDialog
 
 BACKGROUND_LAYER = 1
 INTERACTIVE_LAYER = 2
@@ -104,6 +106,8 @@ class SuperTuxGUI:
         self.load_dialog.set_directory(Config.current.datadir, "levels")
         self.save_dialog = SaveLevelFileDialog("Save SuperTux Level As...")
         self.save_dialog.set_directory(Config.current.datadir, "levels")
+        self.addon_save_dialog = SaveAddonDialog("Save SuperTux Add-on As...")
+        self.addon_save_dialog.set_directory(Config.current.datadir, "addons")
 
         self.register_keyboard_shortcuts()
 
@@ -559,6 +563,16 @@ class SuperTuxGUI:
         # Does nothing:
         self.new_level()
 
+    def gui_addon_new(self):
+        dialog = NewAddonWizard(self.gui.window)
+        dialog.exec_()
+        if dialog.addon is not None:
+            def save_path_chosen(save_path):
+                dialog.addon.save(save_path)
+                self.load_addon(dialog.addon, save_path)
+            self.addon_save_dialog.run(save_path_chosen)
+        pass
+
     def gui_level_load(self):
         self.load_dialog.run(self.load_level)
 
@@ -646,6 +660,16 @@ class SuperTuxGUI:
             os.rename(filename, filename + "~")
         level.save(filename)
         level.filename = filename
+
+    def load_addon(self, addon, dirname):
+        print("Add-on dirname is: " + dirname)
+        self.gui.project_widget.set_addon(addon)
+        self.gui.project_widget.set_project_directory(dirname)
+        pass
+
+    def load_addon_zip(self, filename):
+        print("Add-on zip path is: " + zip_path)
+        pass
 
     def raise_selection(self):
         for obj in self.tool_context.object_selection:

@@ -18,8 +18,9 @@
 from PyQt5.QtCore import (QCoreApplication, Qt)
 from PyQt5.QtWidgets import (QApplication, QMainWindow, QToolBar,
                              QDockWidget, QVBoxLayout, QWidget,
-                             QPushButton)
+                             QPushButton, QTabWidget)
 
+from flexlay.gui.project_widget import ProjectWidget
 from flexlay.gui.properties_widget import PropertiesWidget
 from .util.config import Config
 from .gui import (ButtonPanel, EditorMapComponent, OpenFileDialog,
@@ -137,6 +138,7 @@ class GUIManager:
         self.properties_dock.setObjectName("properties_dock")
 
         self.properties_widget = PropertiesWidget(self.window)
+        self.project_widget = ProjectWidget(self.window)
 
         layout = QVBoxLayout()
 
@@ -145,8 +147,10 @@ class GUIManager:
         layout.addWidget(apply)
         apply.clicked.connect(self.properties_widget.call)
 
-        widget = QWidget()
-        widget.setLayout(layout)
+        widget = QTabWidget()
+        widget.addTab(self.properties_widget, "Properties")
+        widget.addTab(self.project_widget, "Project View")
+        widget.TabPosition = QTabWidget.South
         self.properties_dock.setWidget(widget)
 
         self.window.addDockWidget(Qt.RightDockWidgetArea, self.properties_dock)

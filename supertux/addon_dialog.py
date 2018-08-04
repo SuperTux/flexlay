@@ -14,17 +14,15 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from flexlay.gui.file_dialog import OpenFileDialog, SaveFileDialog
+from flexlay.gui.file_dialog import OpenFileDialog, SaveDirectoryDialog
 
 
-class OpenLevelFileDialog(OpenFileDialog):
+class OpenAddonDialog(OpenFileDialog):
     def __init__(self, title):
-        super().__init__(title, ("SuperTux Files (*.stl *.stwm)",
-                                 "SuperTux Levels (*.stl)",
-                                 "SuperTux Worldmaps (*.stwm)",
+        super().__init__(title, ("SuperTux Add-ons (*.zip)",
                                  "All Files (*)"))
 
 
-class SaveLevelFileDialog(SaveFileDialog):
+class SaveAddonDialog(SaveDirectoryDialog):
     def __init__(self, title, is_worldmap=False):
-        super().__init__(title, ".stwm" if is_worldmap else ".stl")
+        super().__init__(title)

@@ -15,8 +15,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from PyQt4.QtCore import Qt
-from PyQt4.QtGui import QScrollArea
+from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QScrollArea
 
 from .object_selector_widget import ObjectSelectorWidget
 

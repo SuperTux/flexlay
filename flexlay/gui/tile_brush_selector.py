@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from PyQt4.QtGui import QListWidget
+from PyQt5.QtWidgets import QListWidget
 
 
 class TileBrushSelector:

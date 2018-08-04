@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from PyQt4.QtGui import QLabel
+from PyQt5.QtWidgets import QLabel
 
 
 class StatusBar:

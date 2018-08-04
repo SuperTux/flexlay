@@ -15,9 +15,9 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from PyQt4.QtCore import QSize
-from PyQt4.QtGui import QPainter
-from PyQt4.QtGui import QWidget
+from PyQt5.QtCore import QSize
+from PyQt5.QtGui import QPainter
+from PyQt5.QtWidgets import QWidget
 
 from flexlay.color import Color
 from flexlay.graphic_context import GraphicContext

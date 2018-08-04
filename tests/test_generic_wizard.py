@@ -16,7 +16,7 @@
 
 import unittest, sys
 
-from PyQt4.QtGui import QApplication
+from PyQt5.QtGui import QApplication
 
 from flexlay.gui.generic_wizard import GenericWizard
 from flexlay.gui.properties_widget import PropertiesWidget

@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-from PyQt4.QtGui import QWizardPage, QWizard, QVBoxLayout, QFormLayout, QTextEdit
+from PyQt5.QtWidgets import QWizardPage, QWizard, QVBoxLayout, QFormLayout, QTextEdit
 
 from flexlay.gui.properties_widget import PropertiesWidget
 from flexlay.util import Signal

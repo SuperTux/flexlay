@@ -16,7 +16,7 @@
 
 import logging
 
-from PyQt4.QtCore import QPoint
+from PyQt5.QtCore import QPoint
 
 from flexlay.math import Origin, Point, Size
 from .pixel_buffer import PixelBuffer

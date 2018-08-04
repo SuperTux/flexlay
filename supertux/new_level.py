@@ -17,7 +17,7 @@
 import os, random
 from math import ceil
 
-from PyQt4 import QtGui
+from PyQt5 import QtWidgets
 
 from flexlay import Config
 from flexlay.gui import PropertiesWidget, GenericWizard
@@ -121,7 +121,7 @@ class NewLevelWizard(GenericWizard):
 
         @return QWizardPage The License Page of the wizard
         """
-        page = QtGui.QWizardPage()
+        page = QtWidgets.QWizardPage()
 
         page.setTitle("Level License")
         page.setSubTitle("You must set a license for your level, which " +
@@ -130,11 +130,11 @@ class NewLevelWizard(GenericWizard):
                          "we ask that you make your level free " +
                          "(as in 'free speech' not 'free WiFi')")
 
-        self.license_input = QtGui.QTextEdit("GPL 2+ / CC-by-sa 3.0")
+        self.license_input = QtWidgets.QTextEdit("GPL 2+ / CC-by-sa 3.0")
         self.set_license()
         self.license_input.textChanged.connect(self.set_license)
 
-        vbox = QtGui.QVBoxLayout()
+        vbox = QtWidgets.QVBoxLayout()
         vbox.addWidget(self.license_input)
 
         page.setLayout(vbox)

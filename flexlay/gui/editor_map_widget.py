@@ -14,9 +14,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from PyQt4.QtCore import QSize
-from PyQt4.QtGui import QColor, QPainter
-from PyQt4.QtGui import QSizePolicy, QWidget
+from PyQt5.QtCore import QSize
+from PyQt5.QtGui import QColor, QPainter
+from PyQt5.QtWidgets import QSizePolicy, QWidget
 
 from flexlay import InputEvent, GraphicContext
 from flexlay.math import Point
@@ -73,11 +73,11 @@ class EditorMapWidget(QWidget):
                 self.repaint()
 
     def wheelEvent(self, event):
-        num_degrees = event.delta() / 8
-        num_steps = int(abs(num_degrees) / 15)
+        num_degrees = event.angleDelta() / 8
+        num_steps = int(num_degrees.manhattanLength() / 15)
 
         for _ in range(num_steps):
-            if num_degrees > 0:
+            if num_degrees.x() > 0 or num_degrees.y() > 0:
                 self.comp.zoom_in(Point.from_qt(event.pos()))
             else:
                 self.comp.zoom_out(Point.from_qt(event.pos()))

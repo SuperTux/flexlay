@@ -16,7 +16,7 @@
 
 import unittest, sys
 
-from PyQt4.QtGui import QApplication
+from PyQt5.QtGui import QApplication
 
 from flexlay.gui.generic_dialog import GenericDialog
 

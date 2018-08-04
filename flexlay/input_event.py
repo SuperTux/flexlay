@@ -16,7 +16,7 @@
 
 import logging
 
-from PyQt4.QtCore import Qt
+from PyQt5.QtCore import Qt
 
 from flexlay.math import Point
 

@@ -19,6 +19,7 @@ from flexlay.layer import Layer
 
 
 class ObjectLayer(Layer):
+
     def __init__(self):
         super().__init__()
 
@@ -103,5 +104,6 @@ class ObjectLayer(Layer):
         i = self.get_object_index(obj)
         if i != -1 and i > 0:
             self.objects[i], self.objects[i - 1] = self.objects[i - 1], self.objects[i]
+
 
 # EOF #

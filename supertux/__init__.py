@@ -20,19 +20,20 @@ from flexlay.property import (BoolProperty, IntProperty, FloatProperty,
                               InlinePosProperty, InlineRectProperty,
                               TilemapProperty, ColorProperty, ImageProperty,
                               SectorProperty)
-from .button_panel import SuperTuxButtonPanel
-from .gameobj import GameObj
-from .gameobj_factor import supertux_gameobj_factory
-from .gui import SuperTuxGUI
-from .level import Level
-from .sector import Sector
-from .sprite import SuperTuxSprite
-from .supertux import main
-from .supertux_arguments import SuperTuxArguments
-from .tilemap import SuperTuxTileMap
-from .tileset import SuperTuxTileset
-from .toolbox import SuperTuxToolbox
-from .util import load_lisp
+from supertux.button_panel import SuperTuxButtonPanel
+from supertux.gameobj import GameObj
+from supertux.gameobj_factor import supertux_gameobj_factory
+from supertux.gui import SuperTuxGUI
+from supertux.level import Level
+from supertux.sector import Sector
+from supertux.sprite import SuperTuxSprite
+from supertux.supertux import main
+from supertux.supertux_arguments import SuperTuxArguments
+from supertux.tilemap import SuperTuxTileMap
+from supertux.tileset import SuperTuxTileset
+from supertux.toolbox import SuperTuxToolbox
+from supertux.util import load_lisp
+
 
 __all__ = ["GameObj", "SuperTuxGUI", "Level", "Sector",
            "SuperTuxSprite", "SuperTuxTileMap", "SuperTuxTileset",

@@ -15,11 +15,12 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from .gui.tile_selection import TileSelection
-from .tile_brush import TileBrush
+from flexlay.gui.tile_selection import TileSelection
+from flexlay.tile_brush import TileBrush
 
 
 class ToolContext:
+
     current = None
 
     def __init__(self):
@@ -34,5 +35,6 @@ class ToolContext:
 
         self.tilemap_layer = None
         self.object_layer = None
+
 
 # EOF #

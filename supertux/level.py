@@ -19,8 +19,8 @@ import logging
 
 from flexlay import Config
 from flexlay.util import get_value_from_tree, sexpr_filter, SExprWriter
-from .sector import Sector
-from .util import load_lisp
+from supertux.sector import Sector
+from supertux.util import load_lisp
 
 
 class Level:

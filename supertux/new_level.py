@@ -22,7 +22,7 @@ from PyQt5 import QtWidgets
 
 from flexlay import Config
 from flexlay.gui import PropertiesWidget, GenericWizard
-from .level import Level
+from supertux.level import Level
 
 
 class NewLevelWizard(GenericWizard):

@@ -18,7 +18,7 @@
 from flexlay import TilemapLayer
 from flexlay.math import Point
 from flexlay.util import get_value_from_tree
-from .tileset import SuperTuxTileset
+from supertux.tileset import SuperTuxTileset
 
 
 class SuperTuxTileMap:

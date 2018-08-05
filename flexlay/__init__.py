@@ -15,50 +15,51 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from .util.config import Config
-# from .stroke import Dab, Stroke
-from .drawer_properties import DrawerProperties
-from .blend_func import BlendFunc
-from .field import Field
-from .pixel_buffer import PixelBuffer
-from .blitter import blit_opaque, blit, blit_clear
-from .tile_brush import TileBrush
-from .color import Color, Colorf
-from .tileset import Tileset
-from .layer import Layer
+from flexlay.util.config import Config
+# from flexlay.stroke import Dab, Stroke
+from flexlay.drawer_properties import DrawerProperties
+from flexlay.blend_func import BlendFunc
+from flexlay.field import Field
+from flexlay.pixel_buffer import PixelBuffer
+from flexlay.blitter import blit_opaque, blit, blit_clear
+from flexlay.tile_brush import TileBrush
+from flexlay.color import Color, Colorf
+from flexlay.tileset import Tileset
+from flexlay.layer import Layer
 
-from .input_event import InputEvent
-from .graphic_context import GraphicContext
-from .tilemap_layer import TilemapLayer
-from .sprite import Sprite
+from flexlay.input_event import InputEvent
+from flexlay.graphic_context import GraphicContext
+from flexlay.tilemap_layer import TilemapLayer
+from flexlay.sprite import Sprite
 
-# from .bitmap_layer import BitmapLayer
+# from flexlay.bitmap_layer import BitmapLayer
 
-from .workspace import Workspace
-from .object_layer import ObjectLayer
+from flexlay.workspace import Workspace
+from flexlay.object_layer import ObjectLayer
 from flexlay.commands import CommandGroup
-from .commands.object_add_command import ObjectAddCommand
-from .object_brush import ObjectBrush
-# from .stroke_drawer import StrokeDrawer
-# from .sprite_stroke_drawer import SpriteStrokeDrawer
+from flexlay.commands.object_add_command import ObjectAddCommand
+from flexlay.object_brush import ObjectBrush
+# from flexlay.stroke_drawer import StrokeDrawer
+# from flexlay.sprite_stroke_drawer import SpriteStrokeDrawer
 
-from .objmap_control_point import ObjMapControlPoint
-from .objmap_object import ObjMapObject
-from .objmap_path_node import ObjMapPathNode
-from .objmap_rect_object import ObjMapRectObject
-from .objmap_sprite_object import ObjMapSpriteObject
-from .objmap_tilemap_object import ObjMapTilemapObject
+from flexlay.objmap_control_point import ObjMapControlPoint
+from flexlay.objmap_object import ObjMapObject
+from flexlay.objmap_path_node import ObjMapPathNode
+from flexlay.objmap_rect_object import ObjMapRectObject
+from flexlay.objmap_sprite_object import ObjMapSpriteObject
+from flexlay.objmap_tilemap_object import ObjMapTilemapObject
 
-from .editor_map import EditorMap
-from .flexlay import Flexlay
-from .graphic_context_state import GraphicContextState
-from .gui_manager import GUIManager
+from flexlay.editor_map import EditorMap
+from flexlay.flexlay import Flexlay
+from flexlay.graphic_context_state import GraphicContextState
+from flexlay.gui_manager import GUIManager
 
-# from .onion_skin_layer import OnionSkinLayer
-# from .sketch_layer import SketchLayer
-from .sprite_brush import SpriteBrush
-from .tile import Tile
-from .tool_context import ToolContext
+# from flexlay.onion_skin_layer import OnionSkinLayer
+# from flexlay.sketch_layer import SketchLayer
+from flexlay.sprite_brush import SpriteBrush
+from flexlay.tile import Tile
+from flexlay.tool_context import ToolContext
+
 
 __all__ = [
     # "BitmapLayer", "OnionSkinLayer", "SketchLayer",

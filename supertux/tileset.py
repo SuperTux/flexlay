@@ -20,7 +20,7 @@ import logging
 
 from flexlay import Tile, Tileset, PixelBuffer, Config
 from flexlay.util import get_value_from_tree
-from .util import load_lisp
+from supertux.util import load_lisp
 
 
 class TileGroup:

@@ -14,11 +14,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+
 from flexlay.math import Pointf, Rectf, Sizef
-from .objmap_object import ObjMapObject
-
-
-# from .objmap_control_point import ObjMapControlPoint
+from flexlay.objmap_object import ObjMapObject
 
 
 class ObjMapTilemapObject(ObjMapObject):
@@ -49,5 +47,6 @@ class ObjMapTilemapObject(ObjMapObject):
 
     def update_control_points(self):
         pass
+
 
 # EOF #

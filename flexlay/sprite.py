@@ -14,12 +14,13 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+
 import logging
 
 from PyQt5.QtCore import QPoint
 
 from flexlay.math import Origin, Point, Size
-from .pixel_buffer import PixelBuffer
+from flexlay.pixel_buffer import PixelBuffer
 
 
 class Sprite:
@@ -103,5 +104,6 @@ class Sprite:
 
     def get_pixelbuffer(self):
         return self.pixelbuffer
+
 
 # EOF #

@@ -16,6 +16,7 @@
 
 
 class ObjectBrush:
+
     def __init__(self, sprite, metadata, variable=False):
         self.sprite = sprite
         self.metadata = metadata
@@ -29,5 +30,6 @@ class ObjectBrush:
 
     def get_data(self):
         return self.metadata
+
 
 # EOF #

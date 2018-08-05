@@ -22,6 +22,7 @@ from flexlay.math import Rect
 
 
 class TileBrush:
+
     @staticmethod
     def from_field(field, w, h, pos_x, pos_y):
         return TileBrush(w, h, field.copy_region(pos_x, pos_y, w, h))
@@ -100,5 +101,6 @@ class TileBrush:
             self.field = Field(1, 1)
             self.field.put(0, 0, 0)
             self.set_opaque()
+
 
 # EOF #

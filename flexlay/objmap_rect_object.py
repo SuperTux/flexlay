@@ -14,15 +14,17 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+
 import logging
 
 from flexlay.math import Pointf, Sizef, Rect, Rectf
-from .objmap_control_point import ObjMapControlPoint
-from .objmap_object import ObjMapObject
-from .sprite import Sprite
+from flexlay.objmap_control_point import ObjMapControlPoint
+from flexlay.objmap_object import ObjMapObject
+from flexlay.sprite import Sprite
 
 
 class ObjMapRectObject(ObjMapObject):
+
     def __init__(self, rect, color, metadata):
         super().__init__(Pointf(rect.left, rect.top), metadata)
 
@@ -163,7 +165,7 @@ class ObjMapRectObject(ObjMapObject):
         self.update_control_points()
         logging.info("Adding control points...")
 
-        from .tool_context import ToolContext
+        from flexlay.tool_context import ToolContext
         objmap = ToolContext.current.object_layer
         objmap.add_control_point(self.cp_top_left)
         objmap.add_control_point(self.cp_top_right)
@@ -173,5 +175,6 @@ class ObjMapRectObject(ObjMapObject):
         objmap.add_control_point(self.cp_bottom_middle)
         objmap.add_control_point(self.cp_middle_left)
         objmap.add_control_point(self.cp_middle_right)
+
 
 # EOF #

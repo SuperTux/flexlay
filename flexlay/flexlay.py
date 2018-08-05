@@ -20,7 +20,7 @@ import logging
 
 from PyQt5.QtWidgets import QApplication
 
-from .gui_manager import GUIManager
+from flexlay.gui_manager import GUIManager
 
 
 class Flexlay:
@@ -38,5 +38,6 @@ class Flexlay:
             title = self.name
         self.gui_manager = GUIManager(title)
         return self.gui_manager
+
 
 # EOF #

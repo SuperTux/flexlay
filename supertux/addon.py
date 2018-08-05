@@ -18,7 +18,7 @@
 import os
 
 from flexlay.util import get_value_from_tree, SExprWriter
-from .util import load_lisp
+from supertux.util import load_lisp
 
 
 class Addon:

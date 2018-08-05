@@ -18,9 +18,9 @@ import logging
 
 from flexlay import ObjectLayer, ObjMapTilemapObject, EditorMap
 from flexlay.math import Rect, Point
-from .gameobj_factor import supertux_gameobj_factory
-from .gameobj import Camera, SpawnPoint
-from .tilemap import SuperTuxTileMap
+from supertux.gameobj_factor import supertux_gameobj_factory
+from supertux.gameobj import Camera, SpawnPoint
+from supertux.tilemap import SuperTuxTileMap
 
 
 class Sector:

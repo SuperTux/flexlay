@@ -14,13 +14,17 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from flexlay import Field, PixelBuffer, blit
+
+from flexlay.blitter import blit
+from flexlay.color import Color
+from flexlay.field import Field
+from flexlay.layer import Layer
 from flexlay.math import Point, Size, Rect
-from .color import Color
-from .layer import Layer
+from flexlay.pixel_buffer import PixelBuffer
 
 
 class TilemapLayer(Layer):
+
     def __init__(self, tileset, w, h):
         super().__init__()
 
@@ -256,5 +260,6 @@ class TilemapLayer(Layer):
 
     def has_bounding_rect(self):
         return True
+
 
 # EOF #

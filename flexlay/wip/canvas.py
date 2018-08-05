@@ -16,6 +16,7 @@
 
 
 class Canvas:
+
     def __init__(self, surface):
         pass
 
@@ -27,5 +28,6 @@ class Canvas:
 
     def get_pixeldata(self):
         pass
+
 
 # EOF #

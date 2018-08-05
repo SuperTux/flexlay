@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from typing import Optional
+from typing import List, Optional
 
 import os
 import logging
@@ -25,6 +25,7 @@ from flexlay import (Color, Config, ObjMapSpriteObject, ObjMapRectObject, ObjMap
 from flexlay.gui import GenericDialog
 from flexlay.math import Rect, Size, Point
 from flexlay.property import (
+    Property,
     BadGuyProperty,
     BoolProperty,
     ColorProperty,
@@ -62,16 +63,24 @@ def make_rect_object(metadata, color=None):
     return obj
 
 
-class GridConstrain:
+class Constraint:
+
+    def __init(self):
+        pass
+
+
+class GridConstraint(Constraint):
+
     def __init__(self, width, height, offset_x, offset_y):
         pass
 
 
 class GameObj:
+
     label: Optional[str] = None
     identifier: Optional[str] = None
-    properties = []
-    constraints = []
+    properties: List[Property] = []
+    constraints: List[Constraint] = []
     factory = None
 
     def __init__(self):
@@ -149,6 +158,7 @@ class Tux(GameObj):
     To be dragged to where you want tux to spawn when you run the level, but *is not*
     the spawnpoint.
     """
+
     label = "Tux"
     identifier = "tux"
     sprite = "images/creatures/tux/big/jump-0.png"
@@ -167,6 +177,7 @@ class Tux(GameObj):
 
 
 class LevelTime(GameObj):
+
     label = "LevelTime"
     identifier = "leveltime"
     sprite = "images/engine/editor/clock.png"
@@ -183,6 +194,7 @@ class LevelTime(GameObj):
 
 
 class Camera(GameObj):
+
     label = "Camera"
     identifier = "camera"
     sprite = None
@@ -202,6 +214,7 @@ class Camera(GameObj):
 
 
 class ResetPoint(GameObj):
+
     label = "ResetPoint"
     identifier = "firefly"
     sprite = "images/objects/resetpoints/default-resetpoint.sprite"
@@ -221,6 +234,7 @@ class ResetPoint(GameObj):
 
 
 class GhostFlame(GameObj):
+
     label = "GhostFlame"
     identifier = "ghostflame"
     sprite = "images/creatures/flame/ghostflame.sprite"
@@ -239,6 +253,7 @@ class GhostFlame(GameObj):
 
 
 class Decal(GameObj):
+
     label = "Decal"
     identifier = "decal"
     sprite = "images/engine/editor/decal.png"
@@ -262,6 +277,7 @@ class Decal(GameObj):
 
 
 class Trampoline(GameObj):
+
     label = "Trampoline"
     identifier = "trampoline"
     sprite = "images/objects/trampoline/trampoline.sprite"
@@ -279,6 +295,7 @@ class Trampoline(GameObj):
 
 
 class SecretArea(GameObj):
+
     label = "SecretArea"
     identifier = "secretarea"
     sprite = "images/engine/editor/secretarea.png"
@@ -298,6 +315,7 @@ class SecretArea(GameObj):
 
 
 class InvisibleWall(GameObj):
+
     label = "InvisibleWall"
     identifier = "invisible_wall"
     sprite = "images/engine/editor/invisible_wall.png"
@@ -314,6 +332,7 @@ class InvisibleWall(GameObj):
 
 
 class AmbientSound(GameObj):
+
     label = "AmbientSound"
     identifier = "ambient_sound"
     sprite = "images/engine/editor/ambientsound.png"
@@ -334,6 +353,7 @@ class AmbientSound(GameObj):
 
 
 class ScriptTrigger(GameObj):
+
     label = "ScriptTrigger"
     identifier = "scripttrigger"
     sprite = "images/engine/editor/scripttrigger.png"
@@ -352,6 +372,7 @@ class ScriptTrigger(GameObj):
 
 
 class SequenceTrigger(GameObj):
+
     label = "SequenceTrigger"
     identifier = "sequencetrigger"
     sprite = "images/engine/editor/sequencetrigger.png"
@@ -369,6 +390,7 @@ class SequenceTrigger(GameObj):
 
 
 class BadGuy(GameObj):
+
     def __init__(self, kind, sprite_filename):
         super().__init__()
 
@@ -386,6 +408,7 @@ class BadGuy(GameObj):
 
 
 class Candle(GameObj):
+
     label = "Candle"
     identifier = "candle"
     sprite = "images/objects/candle/candle.sprite"
@@ -407,6 +430,7 @@ class Candle(GameObj):
 
 
 class Torch(GameObj):
+
     label = "Torch"
     identifier = "torch"
     sprite = "images/objects/torch/torch1.sprite"
@@ -424,6 +448,7 @@ class Torch(GameObj):
 
 
 class DartTrap(GameObj):
+
     label = "DartTrap"
     identifier = "darttrap"
     sprite = "images/creatures/darttrap/darttrap.sprite"
@@ -444,6 +469,7 @@ class DartTrap(GameObj):
 
 
 class WilloWisp(GameObj):
+
     label = "WillowIsp"
     identifier = "willowisp"
     sprite = "images/creatures/willowisp/willowisp.sprite"
@@ -467,6 +493,7 @@ class WilloWisp(GameObj):
 
 
 class Dispenser(GameObj):
+
     label = "Dispenser"
     identifier = "dispenser"
     sprite = "images/creatures/dispenser/canon.png"
@@ -487,6 +514,7 @@ class Dispenser(GameObj):
 
 
 class Switch(GameObj):
+
     label = "Switch"
     identifier = "switch"
     sprite = "images/objects/switch/switch.sprite"
@@ -542,6 +570,7 @@ class SpawnPoint(GameObj):
 
 
 class SimpleObject(GameObj):
+
     def __init__(self, kind, sprite):
         super().__init__()
 
@@ -558,6 +587,7 @@ class SimpleObject(GameObj):
 
 
 class SimpleTileObject(GameObj):
+
     def __init__(self, kind, sprite):
         super().__init__()
 
@@ -573,11 +603,12 @@ class SimpleTileObject(GameObj):
             InlinePosProperty()
         ]
         self.constraints = [
-            GridConstrain(32, 32, 16, 16)
+            GridConstraint(32, 32, 16, 16)
         ]
 
 
 class WeakBlock(GameObj):
+
     label = "WeakBlock"
     identifier = "weak_block"
     sprite = "images/objects/weak_block/meltbox.sprite"
@@ -596,6 +627,7 @@ class WeakBlock(GameObj):
 
 
 class BonusBlock(GameObj):
+
     label = "BonusBlock"
     identifier = "bonusblock"
     sprite = "images/objects/bonus_block/bonusblock.sprite"
@@ -628,11 +660,12 @@ class BonusBlock(GameObj):
             InlinePosProperty()
         ]
         self.constraints = [
-            GridConstrain(32, 32, 16, 16)
+            GridConstraint(32, 32, 16, 16)
         ]
 
 
 class InfoBlock(GameObj):
+
     label = "InfoBlock"
     identifier = "infoblock"
     sprite = "images/objects/bonus_block/infoblock.sprite"
@@ -648,7 +681,7 @@ class InfoBlock(GameObj):
             InlinePosProperty()
         ]
         self.constraints = [
-            GridConstrain(32, 32, 16, 16)
+            GridConstraint(32, 32, 16, 16)
         ]
 
 
@@ -670,11 +703,12 @@ class Powerup(GameObj):
             InlinePosProperty(),
         ]
         self.constraints = [
-            GridConstrain(32, 32, 16, 16)
+            GridConstraint(32, 32, 16, 16)
         ]
 
 
 class ParticleSystem(GameObj):
+
     def __init__(self, kind, sprite):
         super().__init__()
 
@@ -691,6 +725,7 @@ class ParticleSystem(GameObj):
 
 
 class Gradient(GameObj):
+
     label = "Gradient"
     identifier = "gradient"
     sprite = "images/engine/editor/gradient.png"
@@ -709,6 +744,7 @@ class Gradient(GameObj):
 
 
 class Background(GameObj):
+
     label = "Background"
     identifier = "background"
     sprite = "images/engine/editor/background.png"
@@ -734,6 +770,7 @@ class Background(GameObj):
 
 
 class UnimplementedObject(GameObj):
+
     def __init__(self):
         super().__init__()
         self.sexpr = None
@@ -749,6 +786,7 @@ class UnimplementedObject(GameObj):
 
 
 class Door(GameObj):
+
     label = "Door"
     identifier = "door"
     sprite = "images/objects/door/door.sprite"
@@ -765,17 +803,19 @@ class Door(GameObj):
             InlinePosProperty(),
         ]
         self.constraints = [
-            GridConstrain(32, 32, 16, 16)
+            GridConstraint(32, 32, 16, 16)
         ]
 
 
 class PathNode(GameObj):
+
     def __init__(self, node):
         super().__init__()
         self.node = node
 
 
 class ScriptedObject(GameObj):
+
     label = "Scripted Object"
     identifier = "scriptedobject"
     sprite = "images/engine/editor/scriptedobject.png"
@@ -798,6 +838,7 @@ class ScriptedObject(GameObj):
 
 
 class Wind(GameObj):
+
     label = "Wind"
     identifier = "wind"
     sprite = "images/engine/editor/wind.png"
@@ -819,6 +860,7 @@ class Wind(GameObj):
 
 
 class Pushbutton(GameObj):
+
     label = "Pushbutton"
     identifier = "pushbutton"
     sprite = "images/objects/pushbutton/pushbutton.sprite"
@@ -835,5 +877,6 @@ class Pushbutton(GameObj):
             DirectionProperty("Direction", "direction", 0),
             InlinePosProperty(),
         ]
+
 
 # EOF #

@@ -15,6 +15,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from typing import List
+
 import csv
 import random
 
@@ -25,11 +27,13 @@ from flexlay.tool_context import ToolContext
 
 
 class SmartTileMapping:
+
     id = -1
-    top = []
-    right = []
-    bottom = []
-    left = []
+
+    top: List[int] = []
+    right: List[int] = []
+    bottom: List[int] = []
+    left: List[int] = []
 
 
 class SmartTile:

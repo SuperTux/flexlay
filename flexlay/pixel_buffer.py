@@ -15,14 +15,17 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from typing import Dict
+
 from PyQt5.QtCore import QSize
 from PyQt5.QtGui import QImage
 
-from .blitter import blit_clear, blit_opaque
+from flexlay.blitter import blit_clear, blit_opaque
 
 
 class PixelBuffer:
-    cache = {}
+
+    cache: Dict[str, QImage] = {}
 
     @staticmethod
     def subregion_from_file(filename, x, y, w, h):
@@ -81,5 +84,6 @@ class PixelBuffer:
 
     def get_data(self):
         return self.image.bits()
+
 
 # EOF #

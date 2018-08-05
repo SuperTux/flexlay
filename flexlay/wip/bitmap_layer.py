@@ -17,6 +17,7 @@
 
 from flexlay import PixelBuffer, Canvas, Color, BlendFunc, Surface, Layer
 from flexlay.math import Rectf, Pointf, Point, Sizef, Rect, Size
+from flexlay.wip.canvas import Canvas
 
 
 class BitmapLayer(Layer):

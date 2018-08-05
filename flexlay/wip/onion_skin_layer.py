@@ -15,7 +15,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from flexlay import PixelBuffer, Surface, Canvas, Color, BlendFunc
+from flexlay import Surface, Canvas, Color, BlendFunc
+from flexlay.pixel_buffer import PixelBuffer
 from flexlay.gui import EditorMapComponent
 
 

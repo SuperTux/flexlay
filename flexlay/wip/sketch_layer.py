@@ -15,14 +15,19 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from .blend_func import BlendFunc
+from PyQt5.QtGui import QColor
 
-from flexlay import Display, Canvas, PixelBuffer, Color, Layer
+from flexlay.blend_func import BlendFunc
 from flexlay.gui import EditorMapComponent
+from flexlay.layer import Layer
 from flexlay.math import Point
+from flexlay.wip.canvas import Canvas
+from flexlay.wip.display import Display
+from flexlay.wip.pixel_buffer import PixelBuffer
 
 
 class SketchLayer(Layer):
+
     def __init__(self):
         self.strokes = []
 
@@ -64,7 +69,7 @@ class SketchLayer(Layer):
                 self.last_rot = gc.state.get_rotation()
 
                 gc.state.push(self.canvas.get_gc())
-                self.canvas.get_gc().clear(Color(0, 0, 0, 0))
+                self.canvas.get_gc().clear(QColor(0, 0, 0, 0))
                 # canvas.get_gc().clear(Color.white)
 
                 visible_area = self.state.get_clip_rect()
@@ -97,5 +102,6 @@ class SketchLayer(Layer):
 
     def get_background_surface(self):
         return self.surface
+
 
 # EOF #

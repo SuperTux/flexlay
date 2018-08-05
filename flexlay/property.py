@@ -15,6 +15,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from typing import Optional
+
 from flexlay import Colorf, Workspace
 from flexlay.util import get_value_from_tree
 from flexlay.math import Point
@@ -27,6 +29,7 @@ class Property:
     and displayed in dialogs.
     @see: flexlay/gui/generic_dialog.py, supertux/properties_widget.py
     """
+
     # Editable means appears in GenericDialog
     editable = False
 
@@ -52,6 +55,7 @@ class Property:
 
 
 class BoolProperty(Property):
+
     editable = True
 
     def property_dialog(self, dialog):
@@ -59,6 +63,7 @@ class BoolProperty(Property):
 
 
 class IntProperty(Property):
+
     editable = True
 
     def __init__(self, label, identifier, default=0, optional=False):
@@ -69,6 +74,7 @@ class IntProperty(Property):
 
 
 class FloatProperty(Property):
+
     editable = True
 
     def __init__(self, label, identifier, default=0.0, optional=False):
@@ -79,8 +85,9 @@ class FloatProperty(Property):
 
 
 class StringProperty(Property):
+
     editable = True
-    placeholder = None
+    placeholder: Optional[str] = None
 
     def __init__(self, label, identifier, default="", optional=False, translatable=False, placeholder=None):
         super().__init__(label, identifier, default, optional)
@@ -102,6 +109,7 @@ class StringProperty(Property):
 
 
 class FileProperty(StringProperty):
+
     editable = True
 
     def __init__(self, label, identifier, default="", relative_to="", open_in=""):
@@ -124,6 +132,7 @@ class FileProperty(StringProperty):
 
 
 class EnumProperty(StringProperty):
+
     editable = True
 
     def __init__(self, label, identifier, default, optional=False, values=None):
@@ -144,6 +153,7 @@ class EnumProperty(StringProperty):
 
 
 class DirectionProperty(EnumProperty):
+
     editable = True
 
     def __init__(self, label, identifier, default):
@@ -151,6 +161,7 @@ class DirectionProperty(EnumProperty):
 
 
 class InlinePosProperty:
+
     editable = False
 
     def __init__(self):
@@ -169,6 +180,7 @@ class InlinePosProperty:
 
 class InlineTilePosProperty(InlinePosProperty):
     """Written to file as coords on tilemap, but displays correctly."""
+
     editable = False
 
     def read(self, sexpr, obj):
@@ -181,6 +193,7 @@ class InlineTilePosProperty(InlinePosProperty):
 
 
 class InlineRectProperty:
+
     editable = False
 
     def __init__(self):
@@ -201,6 +214,7 @@ class InlineRectProperty:
 
 
 class SpriteProperty(StringProperty):
+
     editable = False
     placeholder = "default"
 
@@ -210,6 +224,7 @@ class SpriteProperty(StringProperty):
 
 
 class BadGuyProperty(EnumProperty):
+
     editable = True
 
     def __init__(self, label, identifier, supertux_gameobj_factory):
@@ -217,11 +232,15 @@ class BadGuyProperty(EnumProperty):
 
 
 class ImageProperty(StringProperty):
+
     editable = False
-    pass
+
+    def __init__(self):
+        pass
 
 
 class SoundProperty(StringProperty):
+
     editable = False
 
     def __init__(self, label, identifier, default=""):
@@ -232,6 +251,7 @@ class SoundProperty(StringProperty):
 
 
 class ColorProperty(StringProperty):
+
     editable = True
 
     def __init__(self, label, identifier):
@@ -302,6 +322,7 @@ class PathProperty:
 
 
 class SampleProperty(StringProperty):
+
     editable = False
 
     def __init__(self, label, identifier, default):
@@ -309,6 +330,7 @@ class SampleProperty(StringProperty):
 
 
 class TilemapProperty(EnumProperty):
+
     editable = False
 
     def get_tilemaps(self):
@@ -327,9 +349,11 @@ class TilemapProperty(EnumProperty):
 
 
 class SectorProperty(StringProperty):
+
     editable = False
 
     def __init__(self, label, identifier, default, optional):
         super().__init__(label, identifier, default, optional=optional)
+
 
 # EOF #

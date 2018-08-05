@@ -15,8 +15,9 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from flexlay import (Stroke, SpriteStrokeDrawer, BitmapLayer,
-                     DrawerProperties, InputEvent, Dab)
+from flexlay import (Stroke, DrawerProperties, InputEvent, Dab)
+from flexlay.wip.sprite_stroke_drawer import SpriteStrokeDrawer
+from flexlay.wip.bitmap_layer import BitmapLayer
 from flexlay.gui.editor_map_component import EditorMapComponent
 from flexlay.math import Point
 

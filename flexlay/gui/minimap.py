@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from .minimap_widget import MinimapWidget
+from flexlay.gui.minimap_widget import MinimapWidget
 
 
 class Minimap:
@@ -27,5 +27,6 @@ class Minimap:
 
     def get_widget(self):
         return self.widget
+
 
 # EOF #

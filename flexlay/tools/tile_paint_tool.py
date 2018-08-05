@@ -16,11 +16,11 @@
 
 
 from flexlay import Color, InputEvent, Workspace
+from flexlay.commands import PaintCommand
 from flexlay.gui.editor_map_component import EditorMapComponent
 from flexlay.math import Point, Size, Rect
 from flexlay.tool_context import ToolContext
-from flexlay.commands import PaintCommand
-from .tool import Tool
+from flexlay.tools.tool import Tool
 
 
 class TilePaintTool(Tool):

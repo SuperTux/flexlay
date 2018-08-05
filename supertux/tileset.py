@@ -123,4 +123,5 @@ class SuperTuxTileset(Tileset):
                     self.tilegroups = []
                 self.tilegroups.append(TileGroup(name, tiles))
 
+
 # EOF #

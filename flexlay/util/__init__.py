@@ -15,11 +15,11 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from .sexpr import sexpr_read_from_file, SExprParseError  # noqa: F401
-from .sexpr_reader import SExprReader, get_value_from_tree, sexpr_filter  # noqa: F401
-from .sexpr_writer import SExprWriter, write_sexpr  # noqa: F401
-from .signal import Signal  # noqa: F401
-from .config import Config  # noqa: F401
+from flexlay.util.sexpr import sexpr_read_from_file, SExprParseError  # noqa: F401
+from flexlay.util.sexpr_reader import SExprReader, get_value_from_tree, sexpr_filter  # noqa: F401
+from flexlay.util.sexpr_writer import SExprWriter, write_sexpr  # noqa: F401
+from flexlay.util.signal import Signal  # noqa: F401
+from flexlay.util.config import Config  # noqa: F401
 
 
 __all__ = [

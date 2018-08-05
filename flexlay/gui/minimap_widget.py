@@ -26,6 +26,7 @@ from flexlay.tool_context import ToolContext
 
 
 class MinimapWidget(QWidget):
+
     def __init__(self, editormap_component):
         super().__init__()
 
@@ -167,5 +168,6 @@ class MinimapWidget(QWidget):
             self.drag_active = False
             self.releaseMouse()
         self.repaint()
+
 
 # EOF #

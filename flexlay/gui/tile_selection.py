@@ -14,14 +14,16 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+
 import logging
 
+from flexlay.color import Color
 from flexlay.math import Rect
-from ..color import Color
-from ..tile_brush import TileBrush
+from flexlay.tile_brush import TileBrush
 
 
 class TileSelection:
+
     def __init__(self):
         self.tilemap = None
         self.start_pos = None
@@ -94,5 +96,6 @@ class TileSelection:
         sel = self.selection.copy()
         sel.normalize()
         return sel
+
 
 # EOF #

@@ -16,7 +16,7 @@
 
 
 from flexlay import TileBrush, TilemapLayer
-from .command import Command
+from flexlay.commands.command import Command
 from flexlay.math import Point, Rect
 
 

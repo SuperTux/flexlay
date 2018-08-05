@@ -18,7 +18,7 @@
 from PyQt5.QtWidgets import (QDialog, QDialogButtonBox, QVBoxLayout,
                              QFormLayout)
 
-from .properties_widget import PropertiesWidget
+from flexlay.gui.properties_widget import PropertiesWidget
 
 
 class GenericDialog(PropertiesWidget):

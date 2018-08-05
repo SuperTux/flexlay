@@ -20,7 +20,7 @@ from flexlay.color import Color
 from flexlay.gui.editor_map_component import EditorMapComponent
 from flexlay.gui.tile_selection import TileSelection
 from flexlay.tool_context import ToolContext
-from .tool import Tool
+from flexlay.tools.tool import Tool
 
 
 class TileBrushCreateTool(Tool):

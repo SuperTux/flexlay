@@ -14,10 +14,12 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from .point import Point, Pointf
-from .origin import Origin
-from .rect import Rect, Rectf
-from .size import Size, Sizef
+
+from flexlay.math.point import Point, Pointf
+from flexlay.math.origin import Origin
+from flexlay.math.rect import Rect, Rectf
+from flexlay.math.size import Size, Sizef
+
 
 __all__ = ["Origin", "Point", "Pointf", "Size", "Sizef", "Rect", "Rectf"]
 

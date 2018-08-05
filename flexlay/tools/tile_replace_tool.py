@@ -17,7 +17,7 @@
 
 from flexlay.gui.editor_map_component import EditorMapComponent
 from flexlay.tool_context import ToolContext
-from .tool import Tool
+from flexlay.tools.tool import Tool
 
 
 class TileReplaceTool(Tool):

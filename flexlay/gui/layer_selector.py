@@ -17,12 +17,13 @@
 
 from PyQt5.QtGui import (QStandardItemModel, QStandardItem, QIcon)
 from PyQt5.QtWidgets import (QWidget, QToolBar, QTreeView, QVBoxLayout)
-from flexlay.tool_context import ToolContext
+
 from flexlay.commands import LayerDeleteCommand
-from .editor_map_component import EditorMapComponent
-from ..objmap_tilemap_object import ObjMapTilemapObject
-from ..tilemap_layer import TilemapLayer
-from ..util.signal import Signal
+from flexlay.gui.editor_map_component import EditorMapComponent
+from flexlay.objmap_tilemap_object import ObjMapTilemapObject
+from flexlay.tilemap_layer import TilemapLayer
+from flexlay.tool_context import ToolContext
+from flexlay.util.signal import Signal
 
 
 class LayerTreeView(QTreeView):
@@ -369,5 +370,6 @@ class LayerSelector:
         EditorMapComponent.current.editormap_widget.repaint()
 
         return tilemap_object
+
 
 # EOF #

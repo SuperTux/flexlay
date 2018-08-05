@@ -17,7 +17,7 @@
 
 from PyQt5.QtCore import QRect, QRectF
 
-from .size import Size
+from flexlay.math.size import Size
 
 
 class Rect:

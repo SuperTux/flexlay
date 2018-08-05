@@ -17,7 +17,7 @@
 
 from flexlay import InputEvent
 from flexlay.gui.editor_map_component import EditorMapComponent
-from flexlay.tools import Tool
+from flexlay.tools.tool import Tool
 
 
 class ZoomOutTool(Tool):

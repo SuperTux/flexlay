@@ -15,26 +15,27 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from .button_panel import ButtonPanel
-from .colorpicker import ColorPicker
-from .editor_map_component import EditorMapComponent
-from .editor_map_widget import EditorMapWidget
-from .file_dialog import OpenFileDialog, SaveFileDialog
-from .generic_dialog import GenericDialog
-from .icon import Icon
-from .layer_selector import LayerSelector
-from .menubar import Menubar
-from .minimap import Minimap
-from .minimap_widget import MinimapWidget
-from .object_selector import ObjectSelector
-from .object_selector_widget import ObjectSelectorWidget
-from .statusbar import StatusBar
-from .tile_brush_selector import TileBrushSelector
-from .tile_selection import TileSelection
-from .tile_selector import TileSelector
-from .tile_selector_widget import TileSelectorWidget
-from .properties_widget import PropertiesWidget
-from .generic_wizard import GenericWizard
+from flexlay.gui.button_panel import ButtonPanel
+from flexlay.gui.colorpicker import ColorPicker
+from flexlay.gui.editor_map_component import EditorMapComponent
+from flexlay.gui.editor_map_widget import EditorMapWidget
+from flexlay.gui.file_dialog import OpenFileDialog, SaveFileDialog
+from flexlay.gui.generic_dialog import GenericDialog
+from flexlay.gui.generic_wizard import GenericWizard
+from flexlay.gui.icon import Icon
+from flexlay.gui.layer_selector import LayerSelector
+from flexlay.gui.menubar import Menubar
+from flexlay.gui.minimap import Minimap
+from flexlay.gui.minimap_widget import MinimapWidget
+from flexlay.gui.object_selector import ObjectSelector
+from flexlay.gui.object_selector_widget import ObjectSelectorWidget
+from flexlay.gui.properties_widget import PropertiesWidget
+from flexlay.gui.statusbar import StatusBar
+from flexlay.gui.tile_brush_selector import TileBrushSelector
+from flexlay.gui.tile_selection import TileSelection
+from flexlay.gui.tile_selector import TileSelector
+from flexlay.gui.tile_selector_widget import TileSelectorWidget
+
 
 __all__ = ["ButtonPanel", "ColorPicker", "EditorMapComponent",
            "EditorMapWidget", "OpenFileDialog", "SaveFileDialog",

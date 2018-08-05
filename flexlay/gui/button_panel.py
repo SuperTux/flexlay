@@ -17,7 +17,7 @@
 
 from PyQt5.QtGui import QIcon
 
-from .icon import Icon
+from flexlay.gui.icon import Icon
 
 
 class ButtonPanel:

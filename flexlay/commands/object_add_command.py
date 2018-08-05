@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from .command import Command
+from flexlay.commands.command import Command
 
 
 class ObjectAddCommand(Command):

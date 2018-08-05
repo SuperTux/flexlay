@@ -18,7 +18,7 @@
 from flexlay import Color
 from flexlay.gui.editor_map_component import EditorMapComponent
 from flexlay.math import Rect, Rectf
-from flexlay.tools import Tool
+from flexlay.tools.tool import Tool
 
 
 class ZoomTool(Tool):

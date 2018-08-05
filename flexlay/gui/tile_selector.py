@@ -18,11 +18,12 @@
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import (QComboBox, QScrollArea, QTabWidget, QWidget, QVBoxLayout)
 
-from .tile_selector_widget import TileSelectorWidget
-from .smart_tile_selector_widget import SmartTileSelectorWidget
+from flexlay.gui.smart_tile_selector_widget import SmartTileSelectorWidget
+from flexlay.gui.tile_selector_widget import TileSelectorWidget
 
 
 class TileSelector:
+
     def __init__(self):
         self.tiles = {}
 
@@ -107,5 +108,6 @@ class TileSelector:
 
     def get_widget(self):
         return self.box
+
 
 # EOF #

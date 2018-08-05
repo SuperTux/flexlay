@@ -19,10 +19,11 @@ import json, re
 from PyQt4.QtGui import (QSyntaxHighlighter, QTextCharFormat, QFont)
 from PyQt4.QtCore import Qt
 
-from .highlighter import SuperTuxHighlighter, HighlightingRule
+from supertux.highlighter import SuperTuxHighlighter, HighlightingRule
 
 
 class SuperTuxLispHighlighter(SuperTuxHighlighter):
+
     @staticmethod
     def clean_text(text):
         state = 0
@@ -102,7 +103,7 @@ class SuperTuxLispHighlighter(SuperTuxHighlighter):
         string_format.setForeground(Qt.darkRed)
         string_pattern = '"'
         self.string = HighlightingRule(string_pattern, string_format, "string")
-        
+
         # comment_format = QTextCharFormat()
         # comment_format.setForeground(Qt.darkRed)
         # comment_pattern = r';.*'
@@ -123,3 +124,6 @@ class SuperTuxLispHighlighter(SuperTuxHighlighter):
                 search = re.search(rule.pattern, text[span[1]:])
                 span = None if not search else search.span()
         self.setCurrentBlockState(0)
+
+
+# EOF #

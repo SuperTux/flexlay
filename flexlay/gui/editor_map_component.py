@@ -23,11 +23,11 @@ from PyQt5.QtWidgets import (QWidget, QGridLayout, QScrollBar, QTabWidget,
                              QShortcut)
 
 from flexlay.graphic_context_state import GraphicContextState
+from flexlay.gui.editor_map_widget import EditorMapWidget
+from flexlay.gui.object_selector import ObjectSelector
 from flexlay.math import Pointf
 from flexlay.util import Signal
 from flexlay.workspace import Workspace
-from .editor_map_widget import EditorMapWidget
-from .object_selector import ObjectSelector
 
 
 class EditorMapComponent:

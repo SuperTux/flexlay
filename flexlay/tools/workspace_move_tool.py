@@ -17,8 +17,8 @@
 
 import math
 
+from flexlay.gui.editor_map_component import EditorMapComponent
 from flexlay.math import Point, Pointf
-from ..gui.editor_map_component import EditorMapComponent
 
 
 class WorkspaceMoveTool:

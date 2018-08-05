@@ -19,10 +19,10 @@ from PyQt5.QtGui import QIcon, QCursor
 from PyQt5.QtWidgets import QMenu
 
 from flexlay import Color, InputEvent, Workspace, ToolContext
-from ..commands import ObjectMoveCommand, ObjectDeleteCommand
+from flexlay.commands import ObjectMoveCommand, ObjectDeleteCommand
 from flexlay.gui.editor_map_component import EditorMapComponent
 from flexlay.math import Pointf, Rectf, Rect
-from flexlay.tools import Tool
+from flexlay.tools.tool import Tool
 from flexlay.util import Signal
 
 

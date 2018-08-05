@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from ..gui.editor_map_component import EditorMapComponent
+from flexlay.gui.editor_map_component import EditorMapComponent
 
 
 class Tool:

@@ -15,9 +15,17 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from flexlay import Surface, Canvas, Color, BlendFunc
-from flexlay.pixel_buffer import PixelBuffer
+from PyQt5.QtGui import QColor
+
+from flexlay.blend_func import BlendFunc
 from flexlay.gui import EditorMapComponent
+from flexlay.pixel_buffer import PixelBuffer
+from flexlay.wip.canvas import Canvas
+
+
+class Surface:
+
+    pass
 
 
 class OnionSkinLayer:
@@ -31,12 +39,12 @@ class OnionSkinLayer:
         self.color = []
 
         self.canvas = Canvas(self.surface)
-        self.canvas.get_gc().clear(Color(0, 0, 0, 0))
+        self.canvas.get_gc().clear(QColor(0, 0, 0, 0))
         self.canvas.get_gc().flush()
         self.canvas.sync_surface()
 
         self.canvas2 = Canvas(self.surface2)
-        self.canvas2.get_gc().clear(Color(0, 0, 0, 0))
+        self.canvas2.get_gc().clear(QColor(0, 0, 0, 0))
         self.canvas2.get_gc().flush()
         self.canvas2.sync_surface()
 
@@ -50,7 +58,7 @@ class OnionSkinLayer:
         return False
 
     def clear(self):
-        self.canvas.get_gc().clear(Color(0, 0, 0, 0))
+        self.canvas.get_gc().clear(QColor(0, 0, 0, 0))
         self.canvas.sync_surface()
 
     def add_map(self, editor_map, color):
@@ -58,9 +66,9 @@ class OnionSkinLayer:
         self.color.append(color)
 
     def update(self):
-        self.canvas.get_gc().clear(Color(0, 0, 0, 0))
+        self.canvas.get_gc().clear(QColor(0, 0, 0, 0))
         for i, e in enumerate(self, self.editormaps):
-            self.canvas2.get_gc().clear(Color(0, 0, 0, 0))
+            self.canvas2.get_gc().clear(QColor(0, 0, 0, 0))
             self.canvas2.get_gc().push_modelview()
             self.canvas2.get_gc().add_scale(1.0 / self.SCALE, 1.0 / self.SCALE)
 

@@ -15,18 +15,24 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from flexlay import PixelBuffer, Canvas, Color, BlendFunc, Surface, Layer
+from PyQt5.QtGui import QColor
+
+from flexlay.blend_func import BlendFunc
+from flexlay.layer import Layer
 from flexlay.math import Rectf, Pointf, Point, Sizef, Rect, Size
 from flexlay.wip.canvas import Canvas
+from flexlay.wip.pixel_buffer import PixelBuffer
+
+
+class Surface:
+
+    pass
 
 
 class BitmapLayer(Layer):
-    current = None
 
     def __init__(self, width, height):
         super().__init__()
-
-        BitmapLayer.current = self
 
         self.strokes = []
         self.pixelbuffer = PixelBuffer(width, height)
@@ -41,7 +47,7 @@ class BitmapLayer(Layer):
             self.surface.set_blend_func(BlendFunc.one, BlendFunc.one_minus_src_alpha)
             self.surface.draw(self.pos.x, self.pos.y)
 
-        gc.draw_rect(self.get_bounding_rect(), Color(155, 155, 155, 100))
+        gc.draw_rect(self.get_bounding_rect(), QColor(155, 155, 155, 100))
 
     def get_bound_rect(self):
         return Rectf(Pointf(self.pos),

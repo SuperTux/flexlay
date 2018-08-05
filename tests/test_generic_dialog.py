@@ -29,6 +29,7 @@ class FlexlayGenericDialogTestCase(unittest.TestCase):
     In all cases, press okay to have the values entered printed
     Please note some of these features are still WIP.
     """
+
     def simple_test(self):
         test_app = QApplication(sys.argv)  # noqa: F841
         GenericDialog("Generic Dialog Test")

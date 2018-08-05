@@ -24,6 +24,7 @@ class Command:
     then added to the undo stack. When undone,
     they are added to the redo stack
     """
+
     def __init__(self):
         """Here, the values involved in the
         Command should be initialised or

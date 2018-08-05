@@ -16,14 +16,14 @@
 
 from PyQt5.QtCore import QSize
 from PyQt5.QtGui import QColor, QPainter
-from PyQt5.QtWidgets import QSizePolicy, QWidget
+from PyQt5.QtWidgets import QSizePolicy, QWidget  # QOpenGLWidget
 
 from flexlay import InputEvent, GraphicContext
 from flexlay.math import Point
 from flexlay.util import Signal
 
 
-class EditorMapWidget(QWidget):
+class EditorMapWidget(QWidget):  # QOpenGLWidget
     def __init__(self, comp, parent):
         super().__init__(parent)
         self.setMouseTracking(True)

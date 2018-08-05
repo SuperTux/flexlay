@@ -21,6 +21,7 @@ from flexlay.util import Signal
 
 
 class EditorMap:
+
     def __init__(self):
         self.background_color = Color(100, 80, 100)
         self.foreground_color = Color(255, 80, 255)
@@ -202,5 +203,6 @@ class EditorMap:
 
     def redo_stack_size(self):
         return len(self.redo_stack)
+
 
 # EOF #

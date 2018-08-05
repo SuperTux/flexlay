@@ -22,6 +22,7 @@ class GameObjPropsChangeCommand(Command):
     This Command is run when a set of properties of an object are
     changed.
     """
+
     def __init__(self, gameobj, prop_diff):
         """It's probably not a good idea to use this for non-directly
         editable properties.

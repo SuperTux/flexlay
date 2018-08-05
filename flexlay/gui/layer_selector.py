@@ -27,6 +27,7 @@ from ..util.signal import Signal
 
 class LayerTreeView(QTreeView):
     """A QTreeView for layers"""
+
     def __init__(self, layer_selector, parent=None, selection_callback=None):
         """Initialises a LayerTreeView
 
@@ -88,6 +89,7 @@ class LayerSelector:
              When getting (a) layer(s) use get_layers and get_layer to
              return a TilemapLayer
     """
+
     def __init__(self, generate_tilemap_obj):
         """A way to view layers
 

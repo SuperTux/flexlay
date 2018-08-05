@@ -92,6 +92,7 @@ class SmartTile:
     @param left: Tile ID at X - 1
     @param top: Tile ID at Y - 1
     """
+
     def get_fitting_tile(self, width, height, left, top, x, y, mappings=None):
         # Check mappings:
         if mappings is not None:

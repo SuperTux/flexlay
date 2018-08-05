@@ -29,6 +29,7 @@ class GenericWizard(QWizard):
     Use add_callback to add a function which will be called
     when "Finish" is pressed. See that function for more details
     """
+
     def __init__(self, parent, title):
         super().__init__(parent)
         self.setWindowTitle(title)

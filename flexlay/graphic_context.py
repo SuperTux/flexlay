@@ -22,6 +22,7 @@ from flexlay.math import Rectf
 
 
 class GraphicContext:
+
     def __init__(self, painter, state=None):
         self.painter = painter
         self.state = state
@@ -81,5 +82,6 @@ class GraphicContext:
 
     def get_qt_painter(self):
         return self.painter
+
 
 # EOF #

@@ -183,4 +183,5 @@ class GUIManager:
         self.window.addDockWidget(Qt.RightDockWidgetArea, dockwidget)
         return self.layer_selector
 
+
 # EOF #

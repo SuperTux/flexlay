@@ -49,15 +49,15 @@ class SExprWriter:
         self.fout.write(")\n")
 
     def write(self, name, value):
-        if type(value) == bool:
+        if isinstance(value, bool):
             self.write_bool(name, value)
-        elif type(value) == int:
+        elif isinstance(value, int):
             self.write_int(name, value)
-        elif type(value) == float:
+        elif isinstance(value, float):
             self.write_float(name, value)
-        elif type(value) == str:
+        elif isinstance(value, str):
             self.write_string(name, value)
-        elif type(value) == list:
+        elif isinstance(value, list):
             self.write_vector(name, value)
         else:
             raise RuntimeError("unknown requested in generic write(): %r" % type(value))

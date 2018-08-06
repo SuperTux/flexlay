@@ -134,7 +134,8 @@ class Level:
             tileset_path = tileset_path.replace(os.path.join(Config.current.datadir, "/"), "", 1)
 
         if tileset_path is not None:
-            writer.write_string("tileset", tileset_path)
+            if tileset_path != "images/tiles.strf":
+                writer.write_string("tileset", tileset_path)
 
         writer.end_list()
 

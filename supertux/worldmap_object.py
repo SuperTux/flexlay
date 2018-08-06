@@ -15,6 +15,9 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from flexlay.property import (
+    BoolProperty,
+)
 from supertux.property import (
     StringProperty,
     SpriteProperty,
@@ -36,7 +39,9 @@ class WorldmapLevel(GameObj):
         self.signal_connect()
 
         self.properties = [
-            StringProperty("Level File:", "name", ""),
+            StringProperty("Level File", "name", ""),
+            StringProperty("Extro Script", "extro-script", "", optional=True),
+            BoolProperty("auto-play", "auto-play", False, optional=True),
             SpriteProperty("Sprite", "sprite"),
             InlineTilePosProperty()
         ]

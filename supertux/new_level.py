@@ -26,6 +26,7 @@ from supertux.level import Level
 
 
 class NewLevelWizard(GenericWizard):
+
     def __init__(self, parent):
         super().__init__(parent, "New Level Wizard")
         # Modal means you cannot touch the parent until this
@@ -143,3 +144,6 @@ class NewLevelWizard(GenericWizard):
 
     def set_license(self):  # Connected to signal
         self.level.license = self.license_input.toPlainText()
+
+
+# EOF #

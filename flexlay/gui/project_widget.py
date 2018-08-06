@@ -144,3 +144,6 @@ class ProjectWidget(QWidget):
 
     def add_content(self):
         print("Add content to add-on!")
+
+
+# EOF #

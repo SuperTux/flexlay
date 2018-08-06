@@ -14,6 +14,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+
 from flexlay.commands import Command
 
 
@@ -49,3 +50,6 @@ class GameObjPropsChangeCommand(Command):
     def undo(self):
         for diff in self.prop_diff:
             self.gameobj.properties[diff[0]].value = diff[2]
+
+
+# EOF #

@@ -275,3 +275,6 @@ class PropertiesWidget(QWidget):
 
     def call(self):
         self.call_signal(*self.get_values())
+
+
+# EOF #

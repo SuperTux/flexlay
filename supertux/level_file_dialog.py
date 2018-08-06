@@ -14,6 +14,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+
 from flexlay.gui.file_dialog import OpenFileDialog, SaveFileDialog
 
 
@@ -28,3 +29,6 @@ class OpenLevelFileDialog(OpenFileDialog):
 class SaveLevelFileDialog(SaveFileDialog):
     def __init__(self, title, is_worldmap=False):
         super().__init__(title, ".stwm" if is_worldmap else ".stl")
+
+
+# EOF #

@@ -80,3 +80,6 @@ class GenericWizard(QWizard):
                 result.append(value)
 
         return result
+
+
+# EOF #

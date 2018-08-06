@@ -44,3 +44,6 @@ class FlexlayGenericWizardTestCase(unittest.TestCase):
         test_wizard.show()
 
         test_app.exec()
+
+
+# EOF #

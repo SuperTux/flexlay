@@ -39,3 +39,6 @@ class LayerDeleteCommand(Command):
 
     def redo(self):
         self.layer_selector.unsafe_remove_layer(self.removed_object)
+
+
+# EOF #

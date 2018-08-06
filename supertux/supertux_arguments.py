@@ -45,3 +45,6 @@ class SuperTuxArguments:
         #     if self.spawn_at is not None \
         #     else []
         return [Config.current.binary] + run_level + play_demo + record_demo + developer_mode  # + spawn_at
+
+
+# EOF #

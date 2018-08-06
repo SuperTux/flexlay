@@ -14,6 +14,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+
 from flexlay.gui.file_dialog import OpenFileDialog, SaveDirectoryDialog
 
 
@@ -26,3 +27,6 @@ class OpenAddonDialog(OpenFileDialog):
 class SaveAddonDialog(SaveDirectoryDialog):
     def __init__(self, title, is_worldmap=False):
         super().__init__(title)
+
+
+# EOF #

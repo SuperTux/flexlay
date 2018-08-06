@@ -140,3 +140,6 @@ class NewAddonWizard(GenericWizard):
 
     def set_license(self):  # Connected to signal
         self.addon.license = self.license_input.toPlainText()
+
+
+# EOF #

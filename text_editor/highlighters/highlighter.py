@@ -14,6 +14,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+
 import json, re
 
 from PyQt4.QtGui import QSyntaxHighlighter, QTextCharFormat, QFont
@@ -84,3 +85,6 @@ class HighlightingRule:
         self.pattern = pattern
         self.format = format
         self.id = id
+
+
+# EOF #

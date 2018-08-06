@@ -15,11 +15,21 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from flexlay.property import (BoolProperty, IntProperty, FloatProperty,
-                              StringProperty, DirectionProperty,
-                              InlinePosProperty, InlineRectProperty,
-                              TilemapProperty, ColorProperty, ImageProperty,
-                              SectorProperty)
+from flexlay.property import (
+    BoolProperty,
+    ColorProperty,
+    FloatProperty,
+    IntProperty,
+    StringProperty,
+)
+from supertux.property import (
+    DirectionProperty,
+    ImageProperty,
+    InlinePosProperty,
+    InlineRectProperty,
+    SectorProperty,
+    TilemapProperty,
+)
 from supertux.button_panel import SuperTuxButtonPanel
 from supertux.gameobj import GameObj
 from supertux.gameobj_factor import supertux_gameobj_factory

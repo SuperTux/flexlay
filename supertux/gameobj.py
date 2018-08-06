@@ -26,16 +26,18 @@ from flexlay.gui import GenericDialog
 from flexlay.math import Rect, Size, Point
 from flexlay.property import (
     Property,
-    BadGuyProperty,
     BoolProperty,
     ColorProperty,
-    DirectionProperty,
     EnumProperty,
     FloatProperty,
+    IntProperty,
+)
+from supertux.property import (
+    BadGuyProperty,
+    DirectionProperty,
     ImageProperty,
     InlinePosProperty,
     InlineRectProperty,
-    IntProperty,
     PathProperty,
     SampleProperty,
     SectorProperty,

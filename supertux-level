@@ -48,7 +48,7 @@ def main():
         try:
             level = Level.from_file(levelfile)
             if args.output:
-                level.save_v2(args.output)
+                level.save(args.output)
         except Exception as err:
             logging.exception("ERROR: {}", err)
             has_error = True

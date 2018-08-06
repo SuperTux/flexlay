@@ -45,7 +45,10 @@ class InlinePosProperty:
         obj.pos.y = get_value_from_tree(["y", "_"], sexpr, 0.0)
 
     def write(self, writer, obj):
-        writer.write_inline_pointf(obj.pos)
+        if obj.pos.x != 0:
+            writer.write_float("x", obj.pos.x)
+        if obj.pos.y != 0:
+            writer.write_float("y", obj.pos.y)
 
     def property_dialog(self, dialog):
         pass

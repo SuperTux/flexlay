@@ -235,8 +235,8 @@ class ImageProperty(StringProperty):
 
     editable = False
 
-    def __init__(self):
-        pass
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
 
 class SoundProperty(StringProperty):

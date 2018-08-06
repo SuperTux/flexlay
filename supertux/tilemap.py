@@ -22,6 +22,7 @@ from supertux.tileset import SuperTuxTileset
 
 
 class SuperTuxTileMap:
+
     @staticmethod
     def from_sexpr(data):
         # Load position from path, node and then x, ys

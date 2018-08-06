@@ -21,8 +21,8 @@ import argparse
 import logging
 import sys
 
+from flexlay.util.config import Config
 from supertux.level import Level
-from util.config import Config
 
 
 def main():
@@ -48,8 +48,8 @@ def main():
             level = Level.from_file(levelfile)
             if args.output:
                 level.save_v2(args.output)
-        except Exception as e:
-            logging.exception("ERROR")
+        except Exception as err:
+            logging.exception("ERROR: {}", err)
             has_error = True
 
     return 1 if has_error else 0

@@ -46,7 +46,6 @@ def main():
     config.create_attribute("datadir", None)
     config.create_attribute("binary", None)
     config.create_attribute("name", "Anonymous")
-    # config.create_attribute()
     config.load()
     if args.datadir is not None:
         config.datadir = args.datadir

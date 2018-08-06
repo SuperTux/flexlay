@@ -56,4 +56,5 @@ class SuperTuxToolbox:
     def icon_path(tool_name, size=22):
         return "data/images/tools/stock-tool-%s-%s.png" % (tool_name, size)
 
+
 # EOF #

@@ -22,6 +22,7 @@ from PyQt5.QtWidgets import QFileDialog
 
 
 class FileDialog:
+
     def __init__(self, title):
         self.callback = None
         self.file_dialog = QFileDialog()
@@ -50,6 +51,7 @@ class FileDialog:
 
 
 class OpenFileDialog(FileDialog):
+
     def __init__(self, title, filters=("All Files (*)",)):
         super().__init__(title)
 
@@ -60,6 +62,7 @@ class OpenFileDialog(FileDialog):
 
 
 class SaveFileDialog(FileDialog):
+
     def __init__(self, title, default_suffix=""):
         super().__init__(title)
 
@@ -71,12 +74,14 @@ class SaveFileDialog(FileDialog):
 
 
 class OpenDirectoryDialog(OpenFileDialog):
+
     def __init__(self, title, filters=("All Files (*)",)):
         super().__init__(title, filters)
         self.file_dialog.setFileMode(QFileDialog.Directory)
 
 
 class SaveDirectoryDialog(SaveFileDialog):
+
     def __init__(self, title):
         super().__init__(title)
         self.file_dialog.setFileMode(QFileDialog.Directory)

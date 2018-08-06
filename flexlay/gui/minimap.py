@@ -19,6 +19,7 @@ from flexlay.gui.minimap_widget import MinimapWidget
 
 
 class Minimap:
+
     def __init__(self, editormap_component):
         self.widget = MinimapWidget(editormap_component)
 

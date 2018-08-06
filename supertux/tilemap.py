@@ -140,4 +140,5 @@ class SuperTuxTileMap:
     def height(self):
         return self.tilemap_layer.height
 
+
 # EOF #

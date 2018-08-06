@@ -24,6 +24,7 @@ from flexlay.tools.tool import Tool
 
 
 class TilePaintTool(Tool):
+
     current = None
 
     def __init__(self):
@@ -120,5 +121,6 @@ class TilePaintTool(Tool):
 
                 tilemap.draw_tile_brush(ToolContext.current.tile_brush, self.current_tile)
                 self.last_draw = Point(-1, -1)
+
 
 # EOF #

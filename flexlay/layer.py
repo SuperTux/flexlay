@@ -19,6 +19,7 @@ from flexlay.math import Pointf
 
 
 class Layer:
+
     def __init__(self):
         self.data = None
         self.pos = Pointf(0, 0)
@@ -49,5 +50,6 @@ class Layer:
 
     def get_pos(self):
         return self.pos
+
 
 # EOF #

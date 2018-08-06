@@ -16,6 +16,7 @@
 
 
 class Field:
+
     def __init__(self, w, h, data=None):
         self.width = w
         self.height = h
@@ -78,5 +79,6 @@ class Field:
                 result += "%04s " % self.at(x, y)
             result += "\n"
         return result
+
 
 # EOF #

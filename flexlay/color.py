@@ -75,4 +75,5 @@ class Colorf:
                      int(255 * self.b),
                      int(255 * self.a))
 
+
 # EOF #

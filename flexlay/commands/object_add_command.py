@@ -19,6 +19,7 @@ from flexlay.commands.command import Command
 
 
 class ObjectAddCommand(Command):
+
     def __init__(self, objmap):
         super().__init__()
 
@@ -38,5 +39,6 @@ class ObjectAddCommand(Command):
 
     def redo(self):
         self.execute()
+
 
 # EOF #

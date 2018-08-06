@@ -23,6 +23,7 @@ from flexlay.math import Point
 
 
 class FlexlayMathTestCase(unittest.TestCase):
+
     def test_point(self):
         p = Point(11, 17)
         self.assertEqual(p.x, 11)
@@ -47,5 +48,6 @@ class FlexlayMathTestCase(unittest.TestCase):
         p2.x += 2
         p2.y += 3
         self.assertNotEqual(p, p2)
+
 
 # EOF #

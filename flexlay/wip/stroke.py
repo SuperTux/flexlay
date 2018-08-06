@@ -21,6 +21,7 @@ from flexlay.math import Rectf
 
 
 class Dab:
+
     def __init__(self):
         self.time = None
         self.pos = None
@@ -29,6 +30,7 @@ class Dab:
 
 
 class Stroke:
+
     def __init__(self):
         self.dabs = []
         self.drawer = None
@@ -120,5 +122,6 @@ class Stroke:
 
     def empty(self):
         return self.dabs.size() == 0
+
 
 # EOF #

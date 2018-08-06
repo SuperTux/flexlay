@@ -21,6 +21,7 @@ from flexlay.tools.tool import Tool
 
 
 class ZoomOutTool(Tool):
+
     def __init__(self):
         super().__init__()
 
@@ -28,5 +29,6 @@ class ZoomOutTool(Tool):
         parent = EditorMapComponent.current
         if event.kind == InputEvent.MOUSE_RIGHT:
             parent.zoom_out(event.mouse_pos)
+
 
 # EOF #

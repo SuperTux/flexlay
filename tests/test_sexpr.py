@@ -24,6 +24,7 @@ from flexlay.util.sexpr_reader import get_value_from_tree, assoc_ref
 
 
 class SExprTestCase(unittest.TestCase):
+
     def setUp(self):
         pass
 

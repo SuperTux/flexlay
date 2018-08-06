@@ -14,6 +14,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+
 from PyQt5.QtCore import QSize
 from PyQt5.QtGui import QColor, QPainter
 from PyQt5.QtWidgets import QSizePolicy, QWidget  # QOpenGLWidget
@@ -24,6 +25,7 @@ from flexlay.util import Signal
 
 
 class EditorMapWidget(QWidget):  # QOpenGLWidget
+
     def __init__(self, comp, parent):
         super().__init__(parent)
         self.setMouseTracking(True)
@@ -115,5 +117,6 @@ class EditorMapWidget(QWidget):  # QOpenGLWidget
 
     def resizeEvent(self, event):
         self.comp.get_gc_state().set_size(event.size().width(), event.size().height())
+
 
 # EOF #

@@ -57,4 +57,5 @@ class GenericDialog(PropertiesWidget):
         self.buttonbox.accepted.connect(on_accept)
         self.buttonbox.rejected.connect(on_rejected)
 
+
 # EOF #

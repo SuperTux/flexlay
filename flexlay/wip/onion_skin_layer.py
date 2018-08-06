@@ -29,6 +29,7 @@ class Surface:
 
 
 class OnionSkinLayer:
+
     def __init__(self, width, height):
         self.SCALE = 1
 
@@ -81,5 +82,6 @@ class OnionSkinLayer:
             self.surface2.set_color(self.color[i])
             self.surface2.draw(0, 0, self.canvas.get_gc())
             self.canvas.sync_surface()
+
 
 # EOF #

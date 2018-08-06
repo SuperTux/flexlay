@@ -16,6 +16,7 @@
 
 
 class Surface:
+
     def __init__(self, pixelbuffer):
         pass
 
@@ -44,5 +45,6 @@ class Surface:
     @property
     def height(self):
         return 0
+
 
 # EOF #

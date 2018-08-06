@@ -24,6 +24,7 @@ from flexlay.pixel_buffer import PixelBuffer
 
 
 class Sprite:
+
     @staticmethod
     def from_pixelbuffer(pixelbuffer):
         return Sprite(pixelbuffer)

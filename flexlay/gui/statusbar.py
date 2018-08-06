@@ -19,6 +19,7 @@ from PyQt5.QtWidgets import QLabel
 
 
 class StatusBar:
+
     def __init__(self, widget):
         self.widget = widget
         self.mouse_coordinate_label = QLabel()
@@ -33,5 +34,6 @@ class StatusBar:
 
     def set_mouse_coordinates(self, pos):
         self.mouse_coordinate_label.setText("(%d, %d)" % (pos.x, pos.y))
+
 
 # EOF #

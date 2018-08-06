@@ -43,6 +43,7 @@ class Dab:
 
 
 class SketchStrokeTool:
+
     def __init__(self):
         self.drawing = False
         self.stroke = Stroke()
@@ -119,5 +120,6 @@ class SketchStrokeTool:
 
     def get_drawer(self):
         return self.drawer
+
 
 # EOF #

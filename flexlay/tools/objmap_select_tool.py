@@ -27,6 +27,7 @@ from flexlay.util import Signal
 
 
 class ObjMapSelectTool(Tool):
+
     STATE_NONE = 0
     STATE_DRAG = 1
     STATE_SELECT = 2
@@ -211,5 +212,6 @@ class ObjMapSelectTool(Tool):
 
         if len(self.context.object_selection) == 1:
             self.context.object_selection[0].add_control_points()
+
 
 # EOF #

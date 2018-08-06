@@ -92,4 +92,5 @@ class FlexlayGenericDialogTestCase(unittest.TestCase):
         test_dialog.add_callback(print)
         # test_app.exec()
 
+
 # EOF #

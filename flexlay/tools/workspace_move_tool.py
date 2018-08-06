@@ -22,6 +22,7 @@ from flexlay.math import Point, Pointf
 
 
 class WorkspaceMoveTool:
+
     def __init__(self):
         self.scrolling = False
         self.click_pos = Point(0, 0)
@@ -57,5 +58,6 @@ class WorkspaceMoveTool:
 
         gc_state.set_pos(Pointf(self.old_trans_offset.x + dx / EditorMapComponent.current.get_gc_state().get_zoom(),
                                 self.old_trans_offset.y + dy / EditorMapComponent.current.get_gc_state().get_zoom()))
+
 
 # EOF #

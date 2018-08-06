@@ -19,6 +19,7 @@ from flexlay.util import Config
 
 
 class SuperTuxButtonPanel:
+
     def __init__(self, gui_manager, editor):
         # Create Buttonpanel
         self.button_panel = gui_manager.create_button_panel(True)
@@ -81,5 +82,6 @@ class SuperTuxButtonPanel:
         self.button_panel.add_icon(Config.current.datadir + "/images/engine/editor/camera.png",
                                    editor.camera_properties,
                                    hover="Camera Properties")
+
 
 # EOF #

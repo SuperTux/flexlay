@@ -19,6 +19,7 @@ from flexlay import Config
 
 
 class SuperTuxMenuBar:
+
     def __init__(self, gui_manager, editor):
         self.gui_manager = gui_manager
 
@@ -86,5 +87,6 @@ class SuperTuxMenuBar:
         self.recent_files_menu.menu.clear()
         for filename in Config.current.recent_files:
             self.recent_files_menu.add_item(filename, lambda filename=filename: self.editor.load_level(filename))
+
 
 # EOF #

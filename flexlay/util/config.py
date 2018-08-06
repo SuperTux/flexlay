@@ -37,6 +37,7 @@ class Config:
 
     c
     """
+
     current = None
     attribute_pattern = "[a-zA-Z_][a-zA-Z0-9_]*"
 
@@ -170,5 +171,6 @@ class Config:
                 self.recent_files.pop(0)
 
         self.recent_files.append(filename)
+
 
 # EOF #

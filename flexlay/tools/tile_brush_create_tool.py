@@ -24,6 +24,7 @@ from flexlay.tools.tool import Tool
 
 
 class TileBrushCreateTool(Tool):
+
     def __init__(self):
         super().__init__()
         self.is_active = False
@@ -95,5 +96,6 @@ class TileBrushCreateTool(Tool):
                     ToolContext.current.tile_brush.set_opaque()
 
                 self.selection.clear()
+
 
 # EOF #

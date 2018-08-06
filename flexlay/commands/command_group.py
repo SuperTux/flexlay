@@ -19,6 +19,7 @@ from flexlay.commands import Command
 
 
 class CommandGroup(Command):
+
     def __init__(self):
         super().__init__()
 
@@ -38,5 +39,6 @@ class CommandGroup(Command):
     def redo(self):
         for command in self.commands:
             command.redo()
+
 
 # EOF #

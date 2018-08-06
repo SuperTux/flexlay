@@ -16,6 +16,7 @@
 
 
 class Obj:
+
     def __init__(self):
         self.obj = None
         self.old_pos = None
@@ -23,6 +24,7 @@ class Obj:
 
 
 class ObjectMoveCommand:
+
     def __init__(self, object_layer):
         self.objmap = object_layer
         self.objects = []
@@ -49,5 +51,6 @@ class ObjectMoveCommand:
     def undo(self):
         for obj in self.objects:
             obj.obj.set_pos(obj.old_pos)
+
 
 # EOF #

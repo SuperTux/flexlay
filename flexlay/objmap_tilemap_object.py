@@ -20,6 +20,7 @@ from flexlay.objmap_object import ObjMapObject
 
 
 class ObjMapTilemapObject(ObjMapObject):
+
     def __init__(self, tilemap_layer, metadata):
         super().__init__(Pointf(0, 0), metadata)
 

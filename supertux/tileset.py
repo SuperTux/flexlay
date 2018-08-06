@@ -31,6 +31,7 @@ class TileGroup:
 
 # Load game tiles from filename into tileset
 class SuperTuxTileset(Tileset):
+
     current = None
     filename = ""
 

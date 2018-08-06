@@ -31,6 +31,7 @@ from flexlay.gui import (
 
 
 class FlexlayMainWindow(QMainWindow):
+
     on_close = None
 
     def set_on_close(self, on_close):
@@ -51,6 +52,7 @@ class FlexlayMainWindow(QMainWindow):
 
 
 class GUIManager:
+
     def __init__(self, title):
         self.window = FlexlayMainWindow()
         self.window.setWindowTitle(title)

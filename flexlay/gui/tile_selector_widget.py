@@ -28,6 +28,7 @@ from flexlay.tool_context import ToolContext
 
 
 class TileSelectorWidget(QWidget):
+
     def __init__(self, viewport):
         super().__init__()
 
@@ -207,5 +208,6 @@ class TileSelectorWidget(QWidget):
     @property
     def cell_size(self):
         return int(self.tileset.get_tile_size() * self.scale)
+
 
 # EOF #

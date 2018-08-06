@@ -25,4 +25,5 @@ class Brush:
     def copy(self):
         pass
 
+
 # EOF #

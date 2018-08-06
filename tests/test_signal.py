@@ -24,6 +24,7 @@ from flexlay.util import Signal
 
 
 class SignalTestCase(unittest.TestCase):
+
     def setUp(self):
         pass
 

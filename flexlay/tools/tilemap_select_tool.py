@@ -20,6 +20,7 @@ from flexlay.gui.editor_map_component import EditorMapComponent
 
 
 class TileMapSelectTool:
+
     def __init__(self):
         self.selection = ToolContext.current.tile_selection
         self.creating_selection = False
@@ -62,5 +63,6 @@ class TileMapSelectTool:
 
     def get_selection_rect(self):
         return self.selection.get_rect()
+
 
 # EOF #

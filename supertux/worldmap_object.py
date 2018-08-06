@@ -24,6 +24,7 @@ from supertux.gameobj import GameObj, make_sprite_object
 
 
 class WorldmapLevel(GameObj):
+
     label = "WorldmapLevel"
     identifier = "level"
     sprite = "images/worldmap/common/leveldot_green.png"
@@ -42,6 +43,7 @@ class WorldmapLevel(GameObj):
 
 
 class SpecialTile(GameObj):
+
     label = "SpecialTile"
     identifier = "special-tile"
     sprite = "images/worldmap/common/leveldot.sprite"
@@ -59,6 +61,7 @@ class SpecialTile(GameObj):
 
 
 class WorldmapSpawnpoint(GameObj):
+
     label = "WorldmapSpawnpoint"
     identifier = "worldmap-spawnpoint"
     sprite = "images/worldmap/common/tux.sprite"
@@ -73,5 +76,6 @@ class WorldmapSpawnpoint(GameObj):
             StringProperty("Name", "name", "main"),
             InlineTilePosProperty()
         ]
+
 
 # EOF #

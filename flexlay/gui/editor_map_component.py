@@ -31,6 +31,7 @@ from flexlay.workspace import Workspace
 
 
 class EditorMapComponent:
+
     current = None
 
     def __init__(self, tabbed=True, parent=None):
@@ -233,5 +234,6 @@ class EditorMapComponent:
 
     def set_sector_tab_label(self, index, text):
         self.tab_widget.setTabText(index, "Sector \"%s\"" % text)
+
 
 # EOF #

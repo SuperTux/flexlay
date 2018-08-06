@@ -22,6 +22,7 @@ from flexlay.tools.tool import Tool
 
 
 class LayerMoveTool(Tool):
+
     def __init__(self):
         super().__init__()
 
@@ -75,5 +76,6 @@ class LayerMoveTool(Tool):
             parent = EditorMapComponent.current
             pos = parent.screen2world(event.mouse_pos)
             self.layer.set_pos(self.old_trans_offset + (pos - self.click_pos))
+
 
 # EOF #

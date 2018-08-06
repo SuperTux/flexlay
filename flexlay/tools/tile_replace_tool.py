@@ -21,6 +21,7 @@ from flexlay.tools.tool import Tool
 
 
 class TileReplaceTool(Tool):
+
     current = None
 
     def __init__(self):
@@ -36,5 +37,6 @@ class TileReplaceTool(Tool):
             tilemap.replace_tile(tilemap.field.at(pos.x, pos.y),
                                  ToolContext.current.tile_brush.at(0, 0))
             # GRUMBEL: undo missing
+
 
 # EOF #

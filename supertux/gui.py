@@ -54,6 +54,7 @@ FOREGROUND_LAYER = 3
 
 
 class SuperTuxGUI:
+
     current = None
 
     def __init__(self, flexlay):

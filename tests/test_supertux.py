@@ -31,6 +31,7 @@ test_levelfile = os.path.join(os.path.dirname(__file__), "test.stl")
 
 
 class SuperTuxTestCase(unittest.TestCase):
+
     def setUp(self):
         Config.create("supertux-editor")
 

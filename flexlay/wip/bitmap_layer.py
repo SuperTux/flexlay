@@ -86,4 +86,5 @@ class BitmapLayer(Layer):
     def get_pixeldata(self):
         return self.canvas.get_pixeldata()
 
+
 # EOF #

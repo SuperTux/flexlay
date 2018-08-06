@@ -22,6 +22,7 @@ from flexlay.tools.tool import Tool
 
 
 class ZoomTool(Tool):
+
     def __init__(self):
         super().__init__()
 
@@ -65,5 +66,6 @@ class ZoomTool(Tool):
             pos = parent.screen2world(event.mouse_pos)
             self.zoom_rect.right = pos.x
             self.zoom_rect.bottom = pos.y
+
 
 # EOF #

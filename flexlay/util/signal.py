@@ -34,4 +34,5 @@ class Signal:
         for sub in self.subscribers:
             sub(*args)
 
+
 # EOF #

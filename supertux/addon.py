@@ -22,6 +22,7 @@ from supertux.util import load_lisp
 
 
 class Addon:
+
     @staticmethod
     def from_file(filename):
         addon = Addon()
@@ -151,5 +152,6 @@ class Addon:
 
     def set_project_dir(self, project_dir):
         self.project_dir = project_dir
+
 
 # EOF #

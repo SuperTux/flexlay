@@ -24,6 +24,7 @@ from supertux.util import load_lisp
 
 
 class Level:
+
     @staticmethod
     def from_file(filename):
         level = Level()
@@ -148,5 +149,6 @@ class Level:
 
     def get_sectors(self):
         return [sec.name for sec in self.sectors]
+
 
 # EOF #

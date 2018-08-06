@@ -16,6 +16,7 @@
 
 
 class ObjectTransformCommand:
+
     def __init__(self):
         pass
 
@@ -27,5 +28,6 @@ class ObjectTransformCommand:
 
     def undo(self):
         pass
+
 
 # EOF #

@@ -19,6 +19,7 @@ from flexlay.gui.editor_map_component import EditorMapComponent
 
 
 class Tool:
+
     def __init__(self):
         pass
 
@@ -39,5 +40,6 @@ class Tool:
 
     def release_mouse(self):
         EditorMapComponent.current.release_mouse()
+
 
 # EOF #

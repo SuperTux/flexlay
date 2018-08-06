@@ -470,4 +470,5 @@ class SmartTileSelectorWidget(QWidget):
     # def cell_size(self):
     #     return int(self.tileset.get_tile_size() * self.scale)
 
+
 # EOF #

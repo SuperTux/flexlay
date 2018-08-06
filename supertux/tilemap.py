@@ -86,7 +86,7 @@ class SuperTuxTileMap:
         if self.speed != 1.0:
             writer.write_float("speed", self.speed)
         if self.speed_y != 1.0:
-            writer.write_float("speed-y", self.speed)
+            writer.write_float("speed-y", self.speed_y)
         writer.write_int("z-pos", self.z_pos)
         if self.alpha != 1.0:
             writer.write_float("alpha", self.alpha)

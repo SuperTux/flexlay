@@ -92,7 +92,7 @@ class SuperTuxTileMap:
             writer.write_float("alpha", self.alpha)
         if self.tilemap_layer.name:
             writer.write_string("name", self.tilemap_layer.name)
-        if self.pos:
+        if self.pos and (self.pos.x != 0 or self.pos.y != 0):
             writer.begin_list("path")
             writer.begin_list("node")
             writer.write_int("x", self.pos.x)

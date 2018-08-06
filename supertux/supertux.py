@@ -22,9 +22,10 @@ import logging
 from PyQt5.QtCore import QByteArray
 from PyQt5.QtWidgets import QMessageBox, QFileDialog
 
-from flexlay import Flexlay, Config
+from flexlay.flexlay import Flexlay
 from supertux.gui import SuperTuxGUI
 from supertux.tileset import SuperTuxTileset
+from supertux.config import make_config
 
 
 def main():
@@ -42,11 +43,8 @@ def main():
     flexlay = Flexlay("SuperTux")
 
     # Load data directory path from config file, --datadir argument or open directory dialog
-    config = Config.create("supertux-editor")
-    config.create_attribute("datadir", None)
-    config.create_attribute("binary", None)
-    config.create_attribute("name", "Anonymous")
-    config.load()
+    config = make_config()
+
     if args.datadir is not None:
         config.datadir = args.datadir
     if not config.datadir or not os.path.isdir(config.datadir):

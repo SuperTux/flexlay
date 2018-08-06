@@ -23,6 +23,7 @@ import sys
 
 from flexlay.util.config import Config
 from supertux.level import Level
+from supertux.config import make_config
 
 
 def main():
@@ -36,7 +37,7 @@ def main():
                         help="Load and resave the level to FILE")
     args = parser.parse_args()
 
-    config = Config.create("supertux-editor")
+    config = make_config()
     if args.datadir is not None:
         config.datadir = args.datadir
     elif not config.datadir:

@@ -268,7 +268,7 @@ class Decal(GameObj):
 
         self.properties = [
             InlinePosProperty(),
-            IntProperty("Layer", "layer"),
+            IntProperty("Layer", "layer", optional=True),
             SpriteProperty("Sprite", "sprite")
         ]
 

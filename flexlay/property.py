@@ -333,19 +333,19 @@ class TilemapProperty(EnumProperty):
 
     editable = False
 
-    def get_tilemaps(self):
+    def __init__(self, label, identifier, placeholder=None):
+        super().__init__(label, identifier, 0, values=None)
+        # super().__init__(label, identifier, "", optional=True, placeholder=placeholder)
+
+    def property_dialog(self, dialog):
+        self.values = self._get_tilemaps()
+        super().property_dialog(dialog)
+
+    def _get_tilemaps(self):
         sector = Workspace.current.current_sector
         if sector is None:
             return [""]
         return [""] + [tilemap.name for tilemap in sector.tilemaps]
-
-    def __init__(self, label, identifier, placeholder=None):
-        super().__init__(label, identifier, 0, values=self.get_tilemaps())
-        # super().__init__(label, identifier, "", optional=True, placeholder=placeholder)
-
-    def property_dialog(self, dialog):
-        self.values = self.get_tilemaps()
-        super().property_dialog(dialog)
 
 
 class SectorProperty(StringProperty):

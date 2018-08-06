@@ -24,6 +24,7 @@ from supertux.tilemap import SuperTuxTileMap
 
 
 class Sector:
+
     def __init__(self, parent):
         self.parent = parent
         self.name = None
@@ -137,6 +138,8 @@ class Sector:
                     self.height = max(self.height, tilemap.tilemap_layer.height)
 
                 self.editormap.set_bounding_rect(Rect(0, 0, self.width * 32, self.height * 32))
+
+                self.object_layer.add_object(ObjMapTilemapObject(tilemap.tilemap_layer, tilemap))
             else:
                 obj = supertux_gameobj_factory.create_gameobj(name, data)
                 if obj is None:
@@ -146,14 +149,7 @@ class Sector:
                     if name == "camera":
                         self.camera = obj
                     self.objects.append(obj)
-
-        # Sort tilemaps according to z-pos before adding them:
-        self.tilemaps = sorted(self.tilemaps, key=lambda tilemap: tilemap.z_pos)
-        for tilemap in self.tilemaps:
-            self.object_layer.add_object(ObjMapTilemapObject(tilemap.tilemap_layer, tilemap))
-
-        for obj in self.objects:
-            self.object_layer.add_object(obj.objmap_object)
+                    self.object_layer.add_object(obj.objmap_object)
 
         self.editormap.metadata = self
 
@@ -170,5 +166,6 @@ class Sector:
 
             # for tilemap in self.tilemaps:
             #   tilemap.write(writer)
+
 
 # EOF #

@@ -192,8 +192,8 @@ class TilemapProperty(EnumProperty):
 
     editable = False
 
-    def __init__(self, label, identifier, placeholder=None):
-        super().__init__(label, identifier, 0, values=None)
+    def __init__(self, label, identifier, optional, placeholder=None):
+        super().__init__(label, identifier, 0, optional=optional, values=None)
         # super().__init__(label, identifier, "", optional=True, placeholder=placeholder)
 
     def property_dialog(self, dialog):

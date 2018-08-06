@@ -309,7 +309,7 @@ class SecretArea(GameObj):
         self.signal_connect()
 
         self.properties = [
-            TilemapProperty("FadeTilemap", "fade-tilemap", placeholder="No tilemap"),
+            TilemapProperty("FadeTilemap", "fade-tilemap", optional=True, placeholder="No tilemap"),
             StringProperty("Script", "script", "", optional=False, placeholder="Empty script"),
             StringProperty("Message", "message", "", optional=False, translatable=False, placeholder="Empty message"),
             InlineRectProperty(),
@@ -403,6 +403,7 @@ class BadGuy(GameObj):
         self.signal_connect()
 
         self.properties = [
+            StringProperty("Dead Script", "dead-script", default="", optional=True),
             DirectionProperty("Direction", "direction", 0),
             SpriteProperty("Sprite", "sprite", default="", optional=True),
             InlinePosProperty(),

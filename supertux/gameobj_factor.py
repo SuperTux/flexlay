@@ -16,11 +16,11 @@
 
 
 import os
-import csv
 import logging
 from collections import OrderedDict
 
 from flexlay import ObjectBrush, Config
+from supertux.badguys import badguy_sprites
 from supertux.gameobj import (
     AmbientSound,
     Background,
@@ -132,6 +132,7 @@ class SuperTuxGameObjFactory:
         self.objects[gameobj_class.identifier] = (gameobj_class.sprite, gameobj_class)
 
     def add_badguy(self, identifier, sprite, tag=None):
+        assert identifier not in self.objects, f"identifier already present: '{identifier}'"
         self.objects[identifier] = (sprite, lambda: BadGuy(identifier, sprite))
         if tag:
             self.badguys.append((identifier, sprite, tag))
@@ -192,25 +193,12 @@ class SuperTuxGameObjFactory:
         self.add_object(WorldmapSpawnpoint)
         self.add_object(SpecialTile)
 
-        self.add_badguy("pneumatic-platform", "images/engine/editor/pneumaticplatform.png")
-        self.add_badguy("bicycle-platform", "images/engine/editor/bicycleplatform.png")
-        self.add_badguy("flying-platform", "images/objects/flying_platform/flying_platform.sprite")
-        self.add_badguy("hurting_platform", "images/objects/sawblade/sawblade.sprite")
+        for identifier, sprite_path in badguy_sprites:
+            self.add_badguy(identifier, sprite_path)
 
         self.add_particle_system("particles-clouds", "images/engine/editor/clouds.png", "clouds")
         self.add_particle_system("particles-rain", "images/engine/editor/rain.png", "rain")
         self.add_particle_system("particles-snow", "images/engine/editor/snow.png", "snow")
-
-        self.load_CSV()
-
-    def load_CSV(self):
-        with open('data/supertux/objects.csv', 'r') as csvfile:
-            reader = csv.reader(csvfile)
-            for row in reader:
-                identifier = row[0]
-                path = row[1]
-                # name = format_sprite_name(identifier) if len(row) < 3 else row[2]
-                self.add_badguy(identifier, path)
 
 
 supertux_gameobj_factory = SuperTuxGameObjFactory()

@@ -23,7 +23,6 @@ badguy_sprites = [
     ["angrystone", "images/creatures/angrystone/angrystone.sprite"],
     ["bouncingsnowball", "images/creatures/bouncing_snowball/left-0.png"],
     ["captainsnowball", "images/creatures/snowball/cpt-left-0.png"],
-    ["climbable", "images/engine/editor/climbable.png"],
     ["crystallo", "images/creatures/crystallo/crystallo.sprite"],
     ["fish", "images/creatures/fish/left-0.png"],
     ["flyingsnowball", "images/creatures/flying_snowball/left-0.png"],

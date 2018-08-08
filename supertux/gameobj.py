@@ -232,6 +232,7 @@ class ResetPoint(GameObj):
         self.signal_connect()
 
         self.properties = [
+            SpriteProperty("Sprite", "sprite"),
             InlinePosProperty()
         ]
 
@@ -330,6 +331,23 @@ class Coin(GameObj):
 
         self.properties = [
             PathProperty("Path", "path")
+        ]
+
+
+class Climbable(GameObj):
+
+    label = "Climbable"
+    identifier = "climbable"
+    sprite = "images/engine/editor/climbable.png"
+
+    def __init__(self):
+        super().__init__()
+
+        self.objmap_object = make_rect_object(self, Color(255, 255, 0))
+        self.signal_connect()
+
+        self.properties = [
+            InlineRectProperty(),
         ]
 
 
@@ -869,13 +887,13 @@ class ScriptedObject(GameObj):
         self.signal_connect()
 
         self.properties = [
-            InlinePosProperty(),
             StringProperty("Name", "name"),
-            SpriteProperty("Sprite", "sprite"),
-            IntProperty("Layer", "layer"),
+            IntProperty("Layer", "layer", default=0, optional=True),
             BoolProperty("Visible", "visible", True),
             BoolProperty("Physics", "physic-enabled", False),
             BoolProperty("Solid", "solid", False),
+            SpriteProperty("Sprite", "sprite"),
+            InlinePosProperty(),
         ]
 
 

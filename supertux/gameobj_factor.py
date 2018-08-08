@@ -27,8 +27,9 @@ from supertux.gameobj import (
     BadGuy,
     BonusBlock,
     Camera,
-    Coin,
     Candle,
+    Climbable,
+    Coin,
     DartTrap,
     Decal,
     Dispenser,
@@ -179,6 +180,7 @@ class SuperTuxGameObjFactory:
         self.add_object(Pushbutton)
         self.add_object(ResetPoint)
         self.add_object(ScriptedObject)
+        self.add_object(Climbable)
         self.add_object(SecretArea)
         self.add_object(SpawnPoint)
         self.add_object(Switch)

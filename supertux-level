@@ -35,8 +35,8 @@ def main():
                         help="SuperTux data directory directory")
     parser.add_argument("-o", "--output", metavar="FILE", action="store", type=str,
                         help="Load and resave the level to FILE")
-    parser.add_argument("--resave", metavar="FILE", action="store", type=str,
-                        help="Load and resave the level to FILE")
+    parser.add_argument("--resave", action="store_true", default=False,
+                        help="Load and resave level in place")
     args = parser.parse_args()
 
     config = make_config()
@@ -52,6 +52,7 @@ def main():
             if args.output:
                 level.save(args.output)
             elif args.resave:
+                print("resaving {}".format(levelfile))
                 level.save(levelfile)
         except Exception as err:
             logging.exception("ERROR: {}", err)

@@ -162,7 +162,10 @@ class ColorProperty(StringProperty):
         self.value = Colorf(*get_value_from_tree([self.identifier], sexpr, [1.0, 1.0, 1.0]))
 
     def write(self, writer, obj):
-        writer.write_color(self.identifier, self.value.to_list()[0:3])
+        if self.value.a == 1.0:
+            writer.write_color(self.identifier, self.value.to_list()[0:3])
+        else:
+            writer.write_color(self.identifier, self.value.to_list())
 
     def property_dialog(self, dialog):
         dialog.add_color(self.label, self.value)

@@ -127,6 +127,7 @@ class SoundProperty(StringProperty):
 
 
 class PathProperty:
+
     class Node:
 
         mode_values = ['oneshot', 'pingpong', 'circular']

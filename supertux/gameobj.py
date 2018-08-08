@@ -211,6 +211,7 @@ class Camera(GameObj):
 
         self.properties = [
             EnumProperty("Mode", "mode", default=0, optional=False, values=self.values),
+            BoolProperty("Backscrollling", "backscrolling", optional=True, default=True),
             PathProperty("Path", "path")
         ]
 
@@ -240,6 +241,25 @@ class GhostFlame(GameObj):
     label = "GhostFlame"
     identifier = "ghostflame"
     sprite = "images/creatures/flame/ghostflame.sprite"
+
+    def __init__(self):
+        super().__init__()
+
+        self.objmap_object = make_sprite_object(self, self.sprite)
+        self.signal_connect()
+
+        self.properties = [
+            FloatProperty("Radius", "radius", default=100.0, optional=True),
+            FloatProperty("Speed", "speed", default=2.0, optional=True),
+            InlinePosProperty(),
+        ]
+
+
+class Flame(GameObj):
+
+    label = "Flame"
+    identifier = "flame"
+    sprite = "images/creatures/flame/flame.sprite"
 
     def __init__(self):
         super().__init__()
@@ -296,6 +316,23 @@ class Trampoline(GameObj):
         ]
 
 
+class Coin(GameObj):
+
+    label = "Coin"
+    identifier = "coin"
+    sprite = "images/objects/coin/coin.sprite"
+
+    def __init__(self):
+        super().__init__()
+
+        self.objmap_object = make_sprite_object(self, self.sprite)
+        self.signal_connect()
+
+        self.properties = [
+            PathProperty("Path", "path")
+        ]
+
+
 class SecretArea(GameObj):
 
     label = "SecretArea"
@@ -310,8 +347,8 @@ class SecretArea(GameObj):
 
         self.properties = [
             TilemapProperty("FadeTilemap", "fade-tilemap", optional=True, placeholder="No tilemap"),
-            StringProperty("Script", "script", "", optional=False, placeholder="Empty script"),
-            StringProperty("Message", "message", "", optional=False, translatable=False, placeholder="Empty message"),
+            StringProperty("Script", "script", "", optional=True, placeholder="Empty script"),
+            StringProperty("Message", "message", "", optional=True, translatable=False, placeholder="Empty message"),
             InlineRectProperty(),
         ]
 
@@ -424,7 +461,7 @@ class Candle(GameObj):
 
         self.properties = [
             StringProperty("Name", "name", "", optional=True),
-            BoolProperty("Burning", "burning", optional=True, default=True),
+            BoolProperty("Burning", "burning", optional=False, default=True),
             BoolProperty("Flicker", "flicker", optional=True, default=True),
             SpriteProperty("Sprite", "sprite", default=self.sprite, optional=True),
             ColorProperty("Color", "color"),
@@ -512,6 +549,7 @@ class Dispenser(GameObj):
             EnumProperty("Type", "type", default=0, optional=False, values=["rocketlauncher", "cannon"]),
             BoolProperty("Random", "random", default=False, optional=True),
             BadGuyProperty("Badguy", "badguy", GameObj.factory),
+            DirectionProperty("Direction", "direction", 0),
             InlinePosProperty(),
         ]
 
@@ -656,8 +694,8 @@ class BonusBlock(GameObj):
 
         self.properties = [
             StringProperty("Message", "message", default="", optional=True, translatable=True),
-            IntProperty("Count", "count", default=1, optional=True),
             StringProperty("Script", "script", default="", optional=False),
+            IntProperty("Count", "count", default=1, optional=True),
             EnumProperty("Contents", "contents", default=0, optional=True, values=self.values),
             SpriteProperty("Sprite", "sprite", optional=True),
             InlinePosProperty()
@@ -689,6 +727,7 @@ class InfoBlock(GameObj):
 
 
 class Powerup(GameObj):
+
     label = "Powerup"
     identifier = "powerup"
     sprite = "images/engine/editor/powerup.png"

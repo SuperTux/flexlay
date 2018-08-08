@@ -122,7 +122,8 @@ class Level:
             writer.write_string("contact", self.contact)
         if self.license:
             writer.write_string("license", self.license)
-        writer.write_int("target-time", self.target_time)
+        if self.target_time != 0:
+            writer.write_int("target-time", self.target_time)
 
         for sector in self.sectors:
             writer.begin_list("sector")

@@ -157,6 +157,8 @@ class Sector:
         writer.write_string("name", self.name)
         if self.music:
             writer.write_string("music", self.music)
+        if self.gravity != 10.0:
+            writer.write_float("gravity", self.gravity)
         if self.init_script:
             writer.write_string("init-script", self.init_script)
         writer.write_rgb("ambient-light", self.ambient_light)

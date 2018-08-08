@@ -87,9 +87,9 @@ class SuperTuxTileMap:
             writer.write_float("speed", self.speed)
         if self.speed_y != 1.0:
             writer.write_float("speed-y", self.speed_y)
-        writer.write_int("z-pos", self.z_pos)
         if self.alpha != 1.0:
             writer.write_float("alpha", self.alpha)
+        writer.write_int("z-pos", self.z_pos)
         if self.tilemap_layer.name:
             writer.write_string("name", self.tilemap_layer.name)
         if self.pos and (self.pos.x != 0 or self.pos.y != 0):

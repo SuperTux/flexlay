@@ -27,11 +27,13 @@ from supertux.gameobj import (
     BadGuy,
     BonusBlock,
     Camera,
+    Coin,
     Candle,
     DartTrap,
     Decal,
     Dispenser,
     Door,
+    Flame,
     GameObj,
     GhostFlame,
     Gradient,
@@ -155,6 +157,7 @@ class SuperTuxGameObjFactory:
         self.add_object(AmbientSound)
         self.add_object(Background)
         self.add_object(Camera)
+        self.add_object(Coin)
         self.add_object(Decal)
         self.add_object(Dispenser)
         self.add_object(SequenceTrigger)
@@ -165,6 +168,7 @@ class SuperTuxGameObjFactory:
         self.add_object(DartTrap)
         self.add_object(Door)
         self.add_object(GhostFlame)
+        self.add_object(Flame)
         self.add_object(Gradient)
         self.add_object(InfoBlock)
         self.add_object(InvisibleWall)

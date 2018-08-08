@@ -26,7 +26,6 @@ badguy_sprites = [
     ["climbable", "images/engine/editor/climbable.png"],
     ["crystallo", "images/creatures/crystallo/crystallo.sprite"],
     ["fish", "images/creatures/fish/left-0.png"],
-    ["flame", "images/creatures/flame/flame-0.png"],
     ["flyingsnowball", "images/creatures/flying_snowball/left-0.png"],
     ["ghosttree", "images/creatures/flame/ghostflame.sprite"],
     ["goldbomb", "images/creatures/gold_bomb/gold_bomb.sprite"],

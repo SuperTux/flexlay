@@ -15,9 +15,12 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from typing import List, Optional
+
+
 class Field:
 
-    def __init__(self, w, h, data=None):
+    def __init__(self, w: int, h: int, data: Optional[List[int]]=None) -> None:
         self.width = w
         self.height = h
         if data is None:
@@ -25,7 +28,7 @@ class Field:
         else:
             self.data = data
 
-    def copy_region(self, x, y, w, h):
+    def copy_region(self, x: int, y: int, w: int, h: int) -> 'Field':
         start_x = max(0, -x)
         start_y = max(0, -y)
 
@@ -38,41 +41,41 @@ class Field:
                 field.put(x + ix, y + iy, self.at(ix, iy))
         return field
 
-    def copy(self):
+    def copy(self) -> 'Field':
         return Field(self.width, self.height, self.data[:])
 
-    def put(self, x, y, value):
+    def put(self, x: int, y: int, value: int) -> None:
         assert isinstance(value, int)
         self.data[self.width * y + x] = value
 
-    def at(self, x, y):
+    def at(self, x: int, y: int) -> int:
         assert (x >= 0 or x < self.width or y >= 0 or y < self.height)
         return self.data[self.width * y + x]
 
-    def resize(self, w, h, x=0, y=0):
+    def resize(self, w: int, h: int, x: int=0, y: int=0) -> None:
         field = self.copy_region(x, y, w, h)
         self.width = field.width
         self.height = field.height
         self.data = field.data
 
-    def clear(self):
+    def clear(self) -> None:
         self.width = 0
         self.height = 0
         self.data = []
 
-    def get_data(self):
+    def get_data(self) -> List[int]:
         return self.data
 
-    def set_data(self, data):
+    def set_data(self, data: List[int]) -> None:
         self.data = data[:]
 
-    def size(self):
+    def size(self) -> int:
         return len(self.data)
 
-    def __contains__(self, key):
+    def __contains__(self, key: int) -> bool:
         return key in self.data
 
-    def __str__(self):
+    def __str__(self) -> str:
         result = "\n"
         for y in range(self.height):
             for x in range(self.width):

@@ -14,12 +14,13 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+
 import logging
 
 from flexlay import ObjectLayer, ObjMapTilemapObject, EditorMap
 from flexlay.math import Rect, Point
 from supertux.gameobj_factor import supertux_gameobj_factory
-from supertux.gameobj import Camera, SpawnPoint
+from supertux.gameobjs import Camera, SpawnPoint
 from supertux.tilemap import SuperTuxTileMap
 
 

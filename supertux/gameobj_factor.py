@@ -21,7 +21,7 @@ from collections import OrderedDict
 
 from flexlay import ObjectBrush, Config
 from supertux.badguys import badguy_sprites
-from supertux.gameobj import (
+from supertux.gameobjs import (
     AmbientSound,
     Background,
     BadGuy,

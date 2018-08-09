@@ -34,7 +34,7 @@ from flexlay.tools import (TilePaintTool, TileBrushCreateTool,
                            TileReplaceTool, ObjMapSelectTool,
                            ZoomTool, ZoomOutTool, WorkspaceMoveTool)
 from supertux.button_panel import SuperTuxButtonPanel
-from supertux.gameobj import PathNode
+from supertux.gameobjs import PathNode
 from supertux.gameobj_factor import supertux_gameobj_factory
 from supertux.level import Level
 from supertux.menubar import SuperTuxMenuBar
@@ -47,10 +47,6 @@ from supertux.toolbox import SuperTuxToolbox
 from supertux.supertux_arguments import SuperTuxArguments
 from supertux.level_file_dialog import OpenLevelFileDialog, SaveLevelFileDialog
 from supertux.addon_dialog import SaveAddonDialog
-
-BACKGROUND_LAYER = 1
-INTERACTIVE_LAYER = 2
-FOREGROUND_LAYER = 3
 
 
 class SuperTuxGUI:

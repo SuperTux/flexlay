@@ -15,6 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+import signal
 import argparse
 import os
 import logging
@@ -29,6 +30,8 @@ from supertux.config import make_config
 
 
 def main():
+    signal.signal(signal.SIGINT, signal.SIG_DFL)
+
     # Parse Arguments
     parser = argparse.ArgumentParser(description="Flexlay - SuperTux Editor")
     parser.add_argument("LEVELFILE", action="store", type=str, nargs="?",

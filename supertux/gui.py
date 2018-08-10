@@ -557,17 +557,21 @@ class SuperTuxGUI:
             self.save_dialog.run(self.save_level)
 
     def gui_level_new(self):
-        dialog = NewLevelWizard(self.gui.window)
-        dialog.exec_()
-        if dialog.level:
-            self.set_level(dialog.level, "main")
+        if False:
+            dialog = NewLevelWizard(self.gui.window)
+            dialog.exec_()
+            if dialog.level:
+                self.set_level(dialog.level, "main")
 
-        if dialog.level is not None:
-            def save_path_chosen(save_path):
-                dialog.level.save(save_path)
-                self.load_level(save_path)
+            if dialog.level is not None:
+                def save_path_chosen(save_path):
+                    dialog.level.save(save_path)
+                    self.load_level(save_path)
 
-            self.save_dialog.run(save_path_chosen)
+                self.save_dialog.run(save_path_chosen)
+        else:
+            level = Level.from_size(100, 25)
+            self.set_level(level, "main")
 
         # Does nothing:
         self.new_level()

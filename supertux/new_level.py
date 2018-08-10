@@ -56,6 +56,8 @@ class NewLevelWizard(GenericWizard):
     def finish(self, *pages):
         """Executed when "Finish" button clicked"""
         main_page_data = pages[1]
+
+        # FIXME: Don't create game data in GUI code
         self.level = Level.from_size(main_page_data[2], main_page_data[3])
         # self.level.current_sector.music = self.level.music
         # self.level.current_sector.background = self.level.image

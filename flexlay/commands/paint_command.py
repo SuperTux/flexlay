@@ -72,7 +72,7 @@ class PaintCommand(Command):
         self.redo_brush.set_opaque()
         self.undo_brush.set_opaque()
 
-        self.undo_field.clear()
+        self.undo_field = None
 
     def redo(self):
         TilemapLayer.draw_tiles(self.tilemap.field, self.redo_brush, self.pos)

@@ -30,7 +30,7 @@ class TileBrush:
     def __init__(self, w, h, field=None):
         self.opaque = False
         if field is None:
-            self.field = Field(w, h)
+            self.field = Field.from_size(w, h)
         else:
             self.field = field
 
@@ -98,7 +98,7 @@ class TileBrush:
             self.resize(rect.width, rect.height,
                         -rect.left, -rect.top)
         else:
-            self.field = Field(1, 1)
+            self.field = Field.from_size(1, 1)
             self.field.put(0, 0, 0)
             self.set_opaque()
 

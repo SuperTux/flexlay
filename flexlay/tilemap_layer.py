@@ -15,6 +15,9 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from typing import List
+
+
 from flexlay.blitter import blit
 from flexlay.color import Color
 from flexlay.field import Field
@@ -31,7 +34,7 @@ class TilemapLayer(Layer):
         self.name = "<no name>"
 
         self.tileset = tileset
-        self.field = Field(w, h)
+        self.field = Field.from_size(w, h)
 
         self.background_color = Color(0, 0, 0, 0)
         self.foreground_color = Color(255, 255, 255, 255)
@@ -239,10 +242,10 @@ class TilemapLayer(Layer):
         return self.tileset
 
     def get_data(self):
-        return self.field.get_data()
+        return list(self.field._data.flatten())
 
-    def set_data(self, data):
-        self.field.set_data(data)
+    def set_data(self, data: List[int]):
+        self.field = Field.from_list(self.field.width, self.field.height, data)
 
     def set_background_color(self, color):
         self.background_color = color

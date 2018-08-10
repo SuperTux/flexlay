@@ -15,18 +15,24 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from typing import List, Optional
+from typing import List
+
+import numpy as np
 
 
 class Field:
 
-    def __init__(self, w: int, h: int, data: Optional[List[int]]=None) -> None:
-        self.width = w
-        self.height = h
-        if data is None:
-            self.data = [0] * w * h
-        else:
-            self.data = data
+    @staticmethod
+    def from_size(width: int, height: int) -> 'Field':
+        return Field(np.zeros((height, width), dtype=np.uint32))
+
+    @staticmethod
+    def from_list(width: int, height: int, data: List[int]) -> 'Field':
+        return Field(np.array(data, dtype=np.uint32).reshape(height, width))
+
+    def __init__(self, data: np.ndarray) -> None:
+        assert data.dtype == np.uint32
+        self._data = data
 
     def copy_region(self, x: int, y: int, w: int, h: int) -> 'Field':
         start_x = max(0, -x)
@@ -35,45 +41,40 @@ class Field:
         end_x = min(self.width, w - x)
         end_y = min(self.height, h - y)
 
-        field = Field(w, h)
+        field = Field.from_size(w, h)
         for iy in range(start_y, end_y):
             for ix in range(start_x, end_x):
                 field.put(x + ix, y + iy, self.at(ix, iy))
         return field
 
     def copy(self) -> 'Field':
-        return Field(self.width, self.height, self.data[:])
+        return Field(np.copy(self._data))
 
     def put(self, x: int, y: int, value: int) -> None:
-        assert isinstance(value, int)
-        self.data[self.width * y + x] = value
+        assert 0 <= value < np.iinfo(np.uint32).max, "{}: not in range".format(value)
+        self._data[y][x] = value
 
     def at(self, x: int, y: int) -> int:
         assert (x >= 0 or x < self.width or y >= 0 or y < self.height)
-        return self.data[self.width * y + x]
+        return int(self._data[y][x])
 
     def resize(self, w: int, h: int, x: int=0, y: int=0) -> None:
         field = self.copy_region(x, y, w, h)
-        self.width = field.width
-        self.height = field.height
-        self.data = field.data
+        self._data = field._data
 
-    def clear(self) -> None:
-        self.width = 0
-        self.height = 0
-        self.data = []
+    @property
+    def width(self):
+        return self._data.shape[1]
 
-    def get_data(self) -> List[int]:
-        return self.data
-
-    def set_data(self, data: List[int]) -> None:
-        self.data = data[:]
+    @property
+    def height(self):
+        return self._data.shape[0]
 
     def size(self) -> int:
-        return len(self.data)
+        return int(self._data.size)
 
     def __contains__(self, key: int) -> bool:
-        return key in self.data
+        return bool(key in self._data)
 
     def __str__(self) -> str:
         result = "\n"

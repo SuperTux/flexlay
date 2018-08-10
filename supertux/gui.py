@@ -573,9 +573,6 @@ class SuperTuxGUI:
             level = Level.from_size(100, 25)
             self.set_level(level, "main")
 
-        # Does nothing:
-        self.new_level()
-
     def gui_addon_new(self):
         dialog = NewAddonWizard(self.gui.window)
         dialog.exec_()
@@ -621,9 +618,6 @@ class SuperTuxGUI:
                 Config.current.datadir = datadir
 
             dialog.add_callback(on_callback)
-
-    def new_level(self):
-        pass
 
     def load_level(self, filename, set_title=True):
         logging.info("Loading: " + filename)

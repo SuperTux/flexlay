@@ -102,8 +102,11 @@ class SExprWriter:
         self.write_int("y", pos.y)
 
     def write_inline_pointf(self, pos):
-        self.write_float("x", pos.x)
-        self.write_float("y", pos.y)
+        if pos.x != 0.0:
+            self.write_float("x", pos.x)
+
+        if pos.y != 0.0:
+            self.write_float("y", pos.y)
 
     def write_inline_size(self, size):
         self.write_int("width", size.width)

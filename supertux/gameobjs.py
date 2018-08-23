@@ -249,7 +249,7 @@ class Climbable(GameObj):
     def __init__(self):
         super().__init__()
 
-        self.objmap_object = make_rect_object(self, Color(255, 255, 0))
+        self.objmap_object = make_rect_object(self, Colorf(1.0, 1.0, 0))
         self.signal_connect()
 
         self.properties = [
@@ -266,7 +266,7 @@ class SecretArea(GameObj):
     def __init__(self):
         super().__init__()
 
-        self.objmap_object = make_rect_object(self, Color(0, 255, 0))
+        self.objmap_object = make_rect_object(self, Colorf(0, 1.0, 0))
         self.signal_connect()
 
         self.properties = [
@@ -286,7 +286,7 @@ class InvisibleWall(GameObj):
     def __init__(self):
         super().__init__()
 
-        self.objmap_object = make_rect_object(self, Color(0, 0, 0, 255 * 0.8))
+        self.objmap_object = make_rect_object(self, Colorf(0, 0, 0, 0.8))
         self.signal_connect()
 
         self.properties = [
@@ -303,7 +303,7 @@ class AmbientSound(GameObj):
     def __init__(self):
         super().__init__()
 
-        self.objmap_object = make_rect_object(self, Color(255, 0, 0))
+        self.objmap_object = make_rect_object(self, Colorf(1.0, 0, 0))
         self.signal_connect()
 
         self.properties = [
@@ -324,7 +324,7 @@ class ScriptTrigger(GameObj):
     def __init__(self):
         super().__init__()
 
-        self.objmap_object = make_rect_object(self, Color(255, 0, 255))
+        self.objmap_object = make_rect_object(self, Colorf(1.0, 0, 1.0))
         self.signal_connect()
 
         self.properties = [
@@ -343,7 +343,7 @@ class SequenceTrigger(GameObj):
     def __init__(self):
         super().__init__()
 
-        self.objmap_object = make_rect_object(self, Color(255, 0, 0))
+        self.objmap_object = make_rect_object(self, Colorf(1.0, 0, 0))
         self.signal_connect()
 
         self.properties = [
@@ -388,7 +388,7 @@ class Candle(GameObj):
             BoolProperty("Burning", "burning", optional=False, default=True),
             BoolProperty("Flicker", "flicker", optional=True, default=True),
             SpriteProperty("Sprite", "sprite", default=self.sprite, optional=True),
-            ColorProperty("Color", "color"),
+            ColorProperty("Color", "color", default=Colorf(1.0, 1.0, 1.0), optional=True),
             InlinePosProperty(),
         ]
 
@@ -812,7 +812,7 @@ class Wind(GameObj):
     def __init__(self):
         super().__init__()
 
-        self.objmap_object = make_rect_object(self, Color(0, 200, 200, 200))
+        self.objmap_object = make_rect_object(self, Colorf(0, 0.75, 0.75, 0.75))
         self.signal_connect()
 
         self.properties = [

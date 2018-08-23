@@ -19,7 +19,7 @@ from typing import List, Optional
 
 import os
 
-from flexlay import (Color, Config, ObjMapSpriteObject,
+from flexlay import (Colorf, Config, ObjMapSpriteObject,
                      ObjMapRectObject, Workspace)
 from flexlay.property import Property
 from flexlay.gui import GenericDialog
@@ -38,7 +38,7 @@ def make_sprite_object(metadata, filename, pos=None):
 
 def make_rect_object(metadata, color=None):
     if color is None:
-        color = Color(0, 0, 255, 128)
+        color = Colorf(0, 0, 1.0, 0.5)
     pos = Point(0, 0)
     size = Size(64, 64)
     obj = ObjMapRectObject(Rect(pos, size), color, metadata)

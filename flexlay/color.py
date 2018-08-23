@@ -19,6 +19,7 @@ from PyQt5.QtGui import QColor
 
 
 class Color:
+
     def __init__(self, r=255, g=255, b=255, a=255):
         self.r = r
         self.g = g
@@ -60,6 +61,7 @@ class Color:
 
 
 class Colorf:
+
     def __init__(self, r=1.0, g=1.0, b=1.0, a=1.0):
         self.r = r
         self.g = g
@@ -75,5 +77,10 @@ class Colorf:
                      int(255 * self.b),
                      int(255 * self.a))
 
+    def __eq__(self, other: 'Colorf') -> bool:
+        return (self.r == other.r and
+                self.b == other.b and
+                self.g == other.g and
+                self.a == other.a)
 
 # EOF #

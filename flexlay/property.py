@@ -151,21 +151,22 @@ class EnumProperty(StringProperty):
         dialog.add_enum(self.label, self.values, self.values.index(self.value), self.on_value_change)
 
 
-class ColorProperty(StringProperty):
+class ColorProperty(Property):
 
     editable = True
 
-    def __init__(self, label, identifier):
-        super().__init__(label, identifier, Colorf())
+    def __init__(self, label, identifier, default: Colorf = Colorf(1.0, 1.0, 1.0), optional: bool = False) -> None:
+        super().__init__(label, identifier, default=default, optional=optional)
 
     def read(self, sexpr, obj):
         self.value = Colorf(*get_value_from_tree([self.identifier], sexpr, [1.0, 1.0, 1.0]))
 
     def write(self, writer, obj):
-        if self.value.a == 1.0:
-            writer.write_color(self.identifier, self.value.to_list()[0:3])
-        else:
-            writer.write_color(self.identifier, self.value.to_list())
+        if not self.optional or self.value != self.default:
+            if self.value.a == 1.0:
+                writer.write_color(self.identifier, self.value.to_list()[0:3])
+            else:
+                writer.write_color(self.identifier, self.value.to_list())
 
     def property_dialog(self, dialog):
         dialog.add_color(self.label, self.value)

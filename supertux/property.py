@@ -21,7 +21,7 @@ from flexlay.util import get_value_from_tree
 from flexlay.property import (
     EnumProperty,
     StringProperty,
-
+    IntProperty,
 )
 
 
@@ -214,6 +214,14 @@ class SectorProperty(StringProperty):
 
     def __init__(self, label, identifier, default, optional):
         super().__init__(label, identifier, default, optional=optional)
+
+
+class ZPosProperty(IntProperty):
+
+    editable = True
+
+    def __init__(self, default=0):
+        super().__init__("Z-Pos", "z-pos", default=default, optional=True)
 
 
 # EOF #

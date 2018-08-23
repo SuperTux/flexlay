@@ -16,6 +16,7 @@
 
 
 import logging
+from enum import Enum
 
 from flexlay import (Color, ObjMapObject)
 from flexlay.math import Point
@@ -38,9 +39,25 @@ from supertux.property import (
     SpriteProperty,
     StringProperty,
     TilemapProperty,
+    ZPosProperty,
 )
 from supertux.gameobj import GameObj, make_sprite_object, make_rect_object
 from supertux.constraint import GridConstraint
+
+
+class Layer(Enum):
+    BACKGROUND0 = -300
+    BACKGROUND1 = -200
+    BACKGROUNDTILES = -100
+    TILES = 0
+    OBJECTS = 50
+    FLOATINGOBJECTS = 150
+    FOREGROUNDTILES = 200
+    FOREGROUND0 = 300
+    FOREGROUND1 = 400
+    LIGHTMAP = 450
+    HUD = 500,
+    GUI = 600
 
 
 class Tux(GameObj):
@@ -178,7 +195,7 @@ class Decal(GameObj):
 
         self.properties = [
             InlinePosProperty(),
-            IntProperty("Layer", "layer", optional=True),
+            ZPosProperty(),
             SpriteProperty("Sprite", "sprite")
         ]
 
@@ -669,7 +686,7 @@ class ParticleSystem(GameObj):
         self.signal_connect()
 
         self.properties = [
-            IntProperty("Layer", "layer", 0, optional=True)
+            ZPosProperty(),
         ]
 
 
@@ -686,9 +703,9 @@ class Gradient(GameObj):
         self.signal_connect()
 
         self.properties = [
+            ZPosProperty(default=Layer.BACKGROUND0),
             ColorProperty("Top Color", "top_color"),
             ColorProperty("Bottom Color", "bottom_color"),
-            IntProperty("Layer", "layer", 0, optional=True)
         ]
 
 
@@ -714,7 +731,7 @@ class Background(GameObj):
             ImageProperty("Image (top)", "image-top", optional=True),
             ImageProperty("Image (middle)", "image"),
             ImageProperty("Image (bottom)", "image-bottom", optional=True),
-            IntProperty("Layer", "layer", optional=True)
+            ZPosProperty(default=Layer.BACKGROUND0),
         ]
 
 
@@ -777,7 +794,7 @@ class ScriptedObject(GameObj):
 
         self.properties = [
             StringProperty("Name", "name"),
-            IntProperty("Layer", "layer", default=0, optional=True),
+            ZPosProperty(),
             BoolProperty("Visible", "visible", True),
             BoolProperty("Physics", "physic-enabled", False),
             BoolProperty("Solid", "solid", False),

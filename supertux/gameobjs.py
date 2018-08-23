@@ -18,7 +18,7 @@
 import logging
 from enum import Enum
 
-from flexlay import (Color, ObjMapObject)
+from flexlay import (Colorf, ObjMapObject)
 from flexlay.math import Point
 from flexlay.property import (
     BoolProperty,
@@ -194,9 +194,9 @@ class Decal(GameObj):
         self.signal_connect()
 
         self.properties = [
-            InlinePosProperty(),
             ZPosProperty(),
-            SpriteProperty("Sprite", "sprite")
+            SpriteProperty("Sprite", "sprite"),
+            InlinePosProperty(),
         ]
 
     def update(self):
@@ -385,7 +385,7 @@ class Candle(GameObj):
 
         self.properties = [
             StringProperty("Name", "name", "", optional=True),
-            BoolProperty("Burning", "burning", optional=False, default=True),
+            BoolProperty("Burning", "burning", optional=True, default=True),
             BoolProperty("Flicker", "flicker", optional=True, default=True),
             SpriteProperty("Sprite", "sprite", default=self.sprite, optional=True),
             ColorProperty("Color", "color", default=Colorf(1.0, 1.0, 1.0), optional=True),
@@ -406,7 +406,7 @@ class Torch(GameObj):
         self.signal_connect()
 
         self.properties = [
-            SpriteProperty("Sprite", "sprite", default=self.sprite, optional=False),
+            SpriteProperty("Sprite", "sprite", default=self.sprite, optional=True),
             InlinePosProperty(),
         ]
 

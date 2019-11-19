@@ -1,8 +1,10 @@
 # -*- python -*-
 
+import os
+
 # Set to False to use local ClanLib instead of global one
 if True:
-    clanLib_env = Environment(LIBPATH=[])
+    clanLib_env = Environment(ENV=os.environ)
     clanLib_env.ParseConfig("pkg-config --cflags --libs " +
                             "clanCore-1.0 clanDisplay-1.0 clanGL-1.0 clanSignals-1.0 clanGUI-1.0 clanGUIStyleSilver-1.0")
 else:

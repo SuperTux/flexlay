@@ -52,7 +52,7 @@ install-netpanzer-editor-exec: build-stamp
 	install -D netpanzer/netpanzer_wrap.so ${DESTDIR}${LIBDIR}/netpanzer_wrap.so
 
 	install -d ${DESTDIR}${BINDIR}
-	echo \
+	echo -e \
 	'#!/bin/sh\n'\
 	'\n'\
 	'FLEXLAY_DATADIR="'${FLEXLAY_DATADIR}'"\n'\
@@ -83,7 +83,7 @@ install-netpanzer-editor-data:
 
 install-flexlay-paint-exec:
 	install -d ${DESTDIR}${BINDIR}
-	echo \
+	echo -e \
 	'#!/bin/sh\n'\
 	'\n'\
 	'FLEXLAY_DATADIR="'${FLEXLAY_DATADIR}'"\n'\

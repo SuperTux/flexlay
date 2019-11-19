@@ -54,7 +54,7 @@ def gen_i_depends(path, filename):
 #env.Command('flexlay_ruby_wrap.cpp', '../lib/flexlay_wrap.i',
 #            "swig -c++ -ruby -o $TARGET $SOURCE")
 
-env.ParseConfig("pkg-config --cflags --libs ruby-2.2")
+env.ParseConfig("pkg-config --cflags --libs ruby-2.5")
 libflexlay_ruby_env = env.Clone()
 libflexlay_ruby_env.Append(CXXFLAGS=["-std=c++11", "-Wno-uninitialized", "-Wno-unused-variable", "-Wno-unused-but-set-variable"])
 flexlay_ruby_lib = libflexlay_ruby_env.SharedLibrary(

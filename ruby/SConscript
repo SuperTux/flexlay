@@ -39,7 +39,7 @@ env = Environment(SHLIBPREFIX='',
 Help(opts.GenerateHelpText(env))
 
 def gen_i_depends(path, filename):
-    print os.getcwd()
+    print(os.getcwd())
     lst = []
     regex = re.compile("^%include +\"(.*)\".*")
     f = file(filename)
@@ -48,7 +48,7 @@ def gen_i_depends(path, filename):
         if regex.match(i):
             lst.append(path + "/" + regex.sub("\\1", i))
     f.close()
-    return lst            
+    return lst
 
 #Depends('../lib/flexlay_wrap.i', gen_i_depends(Dir("../lib").abspath, File("../lib/flexlay_wrap.i").abspath))
 #env.Command('flexlay_ruby_wrap.cpp', '../lib/flexlay_wrap.i',
@@ -77,4 +77,3 @@ flexlay_ruby_lib = libflexlay_ruby_env.SharedLibrary(
 # env.Alias('install', [install_ruby])
 
 # EOF #
-

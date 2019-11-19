@@ -57,7 +57,7 @@ def main():
         if not config.datadir:
             raise RuntimeError("datadir missing, use --datadir DIR")
 
-    logging.info("Datadir:" + config.datadir)
+    logging.info("Datadir: %s", config.datadir)
 
     # Load supertux binary path from config file, --binary argument or open file dialog
     if args.binary and os.path.isfile(args.binary):
@@ -65,11 +65,11 @@ def main():
     if not config.binary or not os.path.isfile(config.binary):
         QMessageBox.warning(None, "No Supertux Binary Found",
                             "Press OK to select your Supertux binary")
-        config.binary = QFileDialog.getOpenFileName(None, "Open Supertux Binary")
+        config.binary = QFileDialog.getOpenFileName(None, "Open Supertux Binary")[0]
         if not config.binary:
             raise RuntimeError("binary path missing, use --binary BIN")
 
-    logging.info("Binary path:" + config.binary)
+    logging.info("Binary path: %s", config.binary)
 
     # Load tileset
     tileset = SuperTuxTileset(32)

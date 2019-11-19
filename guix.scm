@@ -15,7 +15,7 @@
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 (set! %load-path
-      (cons "/ipfs/QmQvHz9YYhuXcN3NdRKXTjowsdctMJBgMwxrfHCZVJRLuz/guix-cocfree_v0.0.0-41-gad0ad41"
+      (cons "/ipfs/QmXu4FXpCvsSs853mdtxv6HUBGvZXArMruLveTZExvtdKr/guix-cocfree_v0.0.0-42-gf296b6f"
             %load-path))
 
 (use-modules (guix build utils)
@@ -34,9 +34,9 @@
 
 (define %source-dir (dirname (current-filename)))
 
-(define-public flexlay
+(define-public flexlay-classic
   (package
-   (name "flexlay")
+   (name "flexlay-classic")
    (version (version-from-source %source-dir))
    (source (local-file %source-dir
                        #:recursive? #t
@@ -64,10 +64,13 @@
 currently supports multi layered tile-, object- and bitmaps, full
 undo/redo, support for tile-brushes, easy copy/paste, multiple
 buffers, minimap support, a metadata editor and some other stuff
-usefull for creating levels for 2d games.")
+usefull for creating levels for 2d games.
+
+flexlay-classic is an older version based on ClanLib that has support
+for netPanzer, which is currently missing in the latest version.")
    (home-page "https://gitlab.com/Flexlay/flexlay")
    (license license:gpl3+)))
 
-flexlay
+flexlay-classic
 
 ;; EOF ;;

@@ -10,6 +10,8 @@
 /.mypy_cache/
 /.pylint/
 /TODO
+/build/
+/flexlay.egg-info/
 /libflexlay/flexlay_wrap_wrap.cc
 /libflexlay/libflexlay.so
 /netpanzer/netpanzer_wrap.cc

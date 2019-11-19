@@ -26,7 +26,7 @@ require "flexlay_wrap"
 include Flexlay_wrap
 
 require "flexlay.rb"
-require_relative "netpanzer_wrap"
+require "netpanzer_wrap"
 include Netpanzer_wrap
 
 require_relative "netpanzerbrushes.rb"

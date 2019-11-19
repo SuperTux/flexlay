@@ -13,11 +13,11 @@ else:
     clanLib_env = Environment(CPPPATH=['../external/clanlib/'],
                               LIBPATH=['/usr/X11R6/lib/',
                                        '../external/clanlib/'],
-                              LIBS=['clanGUIStyleSilver', 
-                                    'clanGUI',      
+                              LIBS=['clanGUIStyleSilver',
+                                    'clanGUI',
                                     'clanGL',
                                     'clanDisplay',
-                                    'clanSignals', 
+                                    'clanSignals',
                                     'clanCore',
                                     'X11', 'Xmu', 'GL', 'GLU', 'png', 'jpeg', 'Xxf86vm', 'Xi'])
 

@@ -1,4 +1,4 @@
-DESTDIR = 
+DESTDIR =
 PREFIX  = "/usr/local"
 DATADIR = "${PREFIX}/share"
 MANDIR  = "${PREFIX}/share/man"
@@ -49,7 +49,7 @@ install-flexlay-data:
 	-exec install -m 644 -D {} ${DESTDIR}${FLEXLAY_DATADIR}/{} \;
 
 install-netpanzer-editor-exec: build-stamp
-	install -D netpanzer/netpanzer_wrap.so ${DESTDIR}${LIBDIR}/netpanzer_wrap.so 
+	install -D netpanzer/netpanzer_wrap.so ${DESTDIR}${LIBDIR}/netpanzer_wrap.so
 
 	install -d ${DESTDIR}${BINDIR}
 	echo \

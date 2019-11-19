@@ -2,10 +2,9 @@
 
 class CL_Component
 {
-private:
-	~CL_Component();
 public:
 	CL_Component(CL_Component* parent, CL_StyleManager* style = NULL);
+	~CL_Component();
         void show(bool show = true);
        	bool is_visible(bool check_parents = true);
         void set_focus();

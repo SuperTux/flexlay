@@ -16,7 +16,7 @@
 
 (set! %load-path
       (cons "/ipfs/QmQvHz9YYhuXcN3NdRKXTjowsdctMJBgMwxrfHCZVJRLuz/guix-cocfree_v0.0.0-41-gad0ad41"
-             %load-path))
+            %load-path))
 
 (use-modules (guix build utils)
              (guix build-system scons)
@@ -24,18 +24,10 @@
              (guix gexp)
              ((guix licenses) #:prefix license:)
              (guix packages)
-             (gnu packages guile)
-             (gnu packages linux)
-             (gnu packages autotools)
              (gnu packages compression)
              (gnu packages gl)
              (gnu packages pkg-config)
-             (gnu packages image)
-             (gnu packages sdl)
-             (gnu packages bdw-gc)
              (gnu packages swig)
-             (gnu packages xiph)
-             (gnu packages xorg)
              (gnu packages ruby)
              (guix-cocfree utils)
              (guix-cocfree packages clanlib))
@@ -51,9 +43,7 @@
                        #:select? (source-select-function %source-dir)))
    (build-system scons-build-system)
    (arguments
-    `(#:tests? #f  ; some swig dependency issue
-      ;;#:parallel-build? #f)
-      #:phases
+    `(#:phases
       (modify-phases
        %standard-phases
        (replace 'install
@@ -63,15 +53,12 @@
    (native-inputs
     `(("pkg-config" ,pkg-config)))
    (inputs
-    `(("mesa" ,mesa)
+    `(("clanlib-1.0" ,clanlib-1.0)
+      ("mesa" ,mesa)
       ("glu" ,glu)
       ("swig" ,swig)
-      ("guile-2.2" ,guile-2.2)
-      ("libatomic-ops" ,libatomic-ops)
-      ("clanlib-1.0" ,clanlib-1.0)
       ("ruby" ,ruby)
-      ("zlib" ,zlib)
-      ))
+      ("zlib" ,zlib)))
    (synopsis "Generic 2d editor for games")
    (description "Flexlay is a generic 2d editor with special focus on games. It
 currently supports multi layered tile-, object- and bitmaps, full

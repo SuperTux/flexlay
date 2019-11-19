@@ -1,0 +1,86 @@
+;; Feuerkraft - A Tank Battle Game
+;; Copyright (C) 2019 Ingo Ruhnke <grumbel@gmail.com>
+;;
+;; This program is free software: you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation, either version 3 of the License, or
+;; (at your option) any later version.
+;;
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+;;
+;; You should have received a copy of the GNU General Public License
+;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+(set! %load-path
+      (cons "/ipfs/QmQvHz9YYhuXcN3NdRKXTjowsdctMJBgMwxrfHCZVJRLuz/guix-cocfree_v0.0.0-41-gad0ad41"
+             %load-path))
+
+(use-modules (guix build utils)
+             (guix build-system scons)
+             (guix git-download)
+             (guix gexp)
+             ((guix licenses) #:prefix license:)
+             (guix packages)
+             (gnu packages guile)
+             (gnu packages linux)
+             (gnu packages autotools)
+             (gnu packages compression)
+             (gnu packages gl)
+             (gnu packages pkg-config)
+             (gnu packages image)
+             (gnu packages sdl)
+             (gnu packages bdw-gc)
+             (gnu packages swig)
+             (gnu packages xiph)
+             (gnu packages xorg)
+             (gnu packages ruby)
+             (guix-cocfree utils)
+             (guix-cocfree packages clanlib))
+
+(define %source-dir (dirname (current-filename)))
+
+(define-public flexlay
+  (package
+   (name "flexlay")
+   (version (version-from-source %source-dir))
+   (source (local-file %source-dir
+                       #:recursive? #t
+                       #:select? (source-select-function %source-dir)))
+   (build-system scons-build-system)
+   (arguments
+    `(#:tests? #f  ; some swig dependency issue
+      ;;#:parallel-build? #f)
+      #:phases
+      (modify-phases
+       %standard-phases
+       (replace 'install
+                (lambda* (#:key outputs #:allow-other-keys)
+                         (let* ((out (assoc-ref outputs "out")))
+                           (invoke "make" "install" (string-append "PREFIX=" out))))))))
+   (native-inputs
+    `(("pkg-config" ,pkg-config)))
+   (inputs
+    `(("mesa" ,mesa)
+      ("glu" ,glu)
+      ("swig" ,swig)
+      ("guile-2.2" ,guile-2.2)
+      ("libatomic-ops" ,libatomic-ops)
+      ("clanlib-1.0" ,clanlib-1.0)
+      ("ruby" ,ruby)
+      ("zlib" ,zlib)
+      ))
+   (synopsis "Generic 2d editor for games")
+   (description "Flexlay is a generic 2d editor with special focus on games. It
+currently supports multi layered tile-, object- and bitmaps, full
+undo/redo, support for tile-brushes, easy copy/paste, multiple
+buffers, minimap support, a metadata editor and some other stuff
+usefull for creating levels for 2d games.")
+   (home-page "https://gitlab.com/Flexlay/flexlay")
+   (license license:gpl3+)))
+
+flexlay
+
+;; EOF ;;

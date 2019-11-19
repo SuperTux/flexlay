@@ -10,7 +10,7 @@ class PaintGUI
     @workspace.set_tool(0, $sketch_stroke_tool.to_tool());
     @workspace.set_tool(1, $sketch_stroke_tool.to_tool());
     @workspace.set_tool(2, $workspace_move_tool.to_tool())
-    # @workspace.set_tool($layer_move_tool.to_tool());
+    # @workspace.set_tool(2, $layer_move_tool.to_tool());
 
     @selector_window_main = Window.new(CL_Rect.new(CL_Point.new($screen_rect.get_width()-160, 5), 
                                                    CL_Size.new(128 + 6 + 10, 658)),
@@ -164,17 +164,17 @@ class PaintGUI
 
     button_panel = ButtonPanel.new(0, 0, 33, 33*4, false, @gui.get_component)
     button_panel.add_icon($flexlay_datadir + "/images/tools/stock-tool-pencil-22.png", proc{ 
-                            @workspace.set_tool($sketch_stroke_tool.to_tool())
+                            @workspace.set_tool(0, $sketch_stroke_tool.to_tool())
                           })
     button_panel.add_icon($flexlay_datadir + "/images/tools/stock-tool-zoom-22.png", proc{ 
-                            @workspace.set_tool($zoom_tool.to_tool())
+                            @workspace.set_tool(0, $zoom_tool.to_tool())
                           })
     button_panel.add_icon($flexlay_datadir + "/images/tools/stock-tool-move-22.png", proc{ 
-                            @workspace.set_tool($layer_move_tool.to_tool())
+                            @workspace.set_tool(0, $layer_move_tool.to_tool())
                           })
 
     button_panel.add_icon($flexlay_datadir + "/images/tools/stock-tool-clone-22.png", proc{ 
-                            @workspace.set_tool($objmap_select_tool.to_tool())
+                            @workspace.set_tool(0, $objmap_select_tool.to_tool())
                           })
 
     anim_panel = ButtonPanel.new($screen_rect.get_width()/2 - (32*3)/2-16-32, 0, 32*3+1+16, 33,

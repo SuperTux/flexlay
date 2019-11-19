@@ -58,7 +58,7 @@ mypyverbose:
 #	--disallow-any unimported,expr,unannotated,decorated,explicit,generics \
 
 flake:
-	flake8 --max-line-length=120 --ignore=N802 $(SOURCES)
+	flake8 --max-line-length=120 --ignore=N802,W504 $(SOURCES)
 
 PYLINT_TARGETS := $(addprefix .pylint/, $(SOURCES))
 

@@ -58,7 +58,7 @@ class Field:
         assert (x >= 0 or x < self.width or y >= 0 or y < self.height)
         return int(self._data[y][x])
 
-    def resize(self, w: int, h: int, x: int=0, y: int=0) -> None:
+    def resize(self, w: int, h: int, x: int = 0, y: int = 0) -> None:
         field = self.copy_region(x, y, w, h)
         self._data = field._data
 

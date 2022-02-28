@@ -25,8 +25,6 @@
 #include "../lib/tileset.hpp"
 #include "../lib/tilemap_layer.hpp"
 
-void load_netpanzer_tileset(Tileset tileset, const char* filename);
-
 class NetPanzerFileStructImpl;
 
 struct NetPanzerTileHeader

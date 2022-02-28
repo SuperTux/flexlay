@@ -15,7 +15,7 @@
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 (set! %load-path
-      (cons "/ipfs/QmXu4FXpCvsSs853mdtxv6HUBGvZXArMruLveTZExvtdKr/guix-cocfree_v0.0.0-42-gf296b6f"
+      (cons "/ipfs/QmcQaosGtaQ6dsb4iykNihZ2ZTie8om2i7pgHucZ9Ranyq/guix-cocfree_0.0.0-64-gd618440"
             %load-path))
 
 (use-modules (guix build utils)
@@ -57,7 +57,7 @@
       ("mesa" ,mesa)
       ("glu" ,glu)
       ("swig" ,swig)
-      ("ruby" ,ruby)
+      ("ruby" ,ruby-2.5)
       ("zlib" ,zlib)))
    (synopsis "Generic 2d editor for games")
    (description "Flexlay is a generic 2d editor with special focus on games. It

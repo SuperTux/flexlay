@@ -52,8 +52,7 @@ install-netpanzer-editor-exec: build-stamp
 	install -D netpanzer/netpanzer_wrap.so ${DESTDIR}${LIBDIR}/netpanzer_wrap.so
 
 	install -d ${DESTDIR}${BINDIR}
-	echo -e \
-	'#!/bin/sh\n'\
+	printf '#!/bin/sh\n'\
 	'\n'\
 	'FLEXLAY_DATADIR="'${FLEXLAY_DATADIR}'"\n'\
 	'export FLEXLAY_DATADIR\n'\
@@ -64,13 +63,13 @@ install-netpanzer-editor-exec: build-stamp
 	'NETPANZER_EDITOR_DATADIR="'${NETPANZER_EDITOR_DATADIR}'"\n'\
 	'export NETPANZER_EDITOR_DATADIR\n'\
 	'\n'\
-	'LD_LIBRARY_PATH=$LD_LIBRARY_PATH:'${LIBDIR}'\n'\
+	'LD_LIBRARY_PATH=$$LD_LIBRARY_PATH:'${LIBDIR}'\n'\
 	'export LD_LIBRARY_PATH\n'\
 	'\n'\
 	'RUBYLIB="$$RUBYLIB:'${FLEXLAY_DATADIR}':'${LIBDIR}':'${NETPANZER_EDITOR_DATADIR}'"\nexport RUBYLIB\n'\
 	'\n'\
 	'exec ruby -w '${NETPANZER_EDITOR_DATADIR}/netpanzer.rb' "$$@"\n\n'\
-	'# EOF #' > ${DESTDIR}${BINDIR}/netpanzer-editor
+	'# EOF #\n' > ${DESTDIR}${BINDIR}/netpanzer-editor
 	chmod 755 ${DESTDIR}${BINDIR}/netpanzer-editor
 
 install-netpanzer-editor-data:
@@ -83,8 +82,7 @@ install-netpanzer-editor-data:
 
 install-flexlay-paint-exec:
 	install -d ${DESTDIR}${BINDIR}
-	echo -e \
-	'#!/bin/sh\n'\
+	printf '#!/bin/sh\n'\
 	'\n'\
 	'FLEXLAY_DATADIR="'${FLEXLAY_DATADIR}'"\n'\
 	'export FLEXLAY_DATADIR\n'\
@@ -92,13 +90,13 @@ install-flexlay-paint-exec:
 	'FLEXLAY_PAINT_DATADIR="'${FLEXLAY_PAINT_DATADIR}'"\n'\
 	'export FLEXLAY_PAINT_DATADIR\n'\
 	'\n'\
-	'LD_LIBRARY_PATH=$LD_LIBRARY_PATH:'${LIBDIR}'\n'\
+	'LD_LIBRARY_PATH=$$LD_LIBRARY_PATH:'${LIBDIR}'\n'\
 	'export LD_LIBRARY_PATH\n'\
 	'\n'\
 	'RUBYLIB="$$RUBYLIB:'${FLEXLAY_DATADIR}':'${LIBDIR}':'${FLEXLAY_PAINT_DATADIR}'"\nexport RUBYLIB\n'\
 	'\n'\
 	'exec ruby -w '${FLEXLAY_PAINT_DATADIR}/paint.rb' "$$@"\n\n'\
-	'# EOF #' > ${DESTDIR}${BINDIR}/flexlay-paint
+	'# EOF #\n' > ${DESTDIR}${BINDIR}/flexlay-paint
 	chmod 755 ${DESTDIR}${BINDIR}/flexlay-paint
 
 install-flexlay-paint-data:

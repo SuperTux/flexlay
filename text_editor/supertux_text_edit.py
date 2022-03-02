@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from PyQt4.QtGui import QTextEdit
+from PyQt5.QtWidgets import QTextEdit
 
 
 class SupertuxTextEdit(QTextEdit):

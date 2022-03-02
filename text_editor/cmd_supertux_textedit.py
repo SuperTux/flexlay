@@ -18,12 +18,12 @@
 
 import sys
 
-from PyQt4.QtGui import (QMainWindow, QApplication, QVBoxLayout,
+from PyQt5.QtWidgets import (QMainWindow, QApplication, QVBoxLayout,
                          QWidget)
-from PyQt4.QtCore import Qt
+from PyQt5.QtCore import Qt
 
-from supertux_text_edit import SupertuxTextEdit
-from highlighters.lisp_highlighter import SuperTuxLispHighlighter
+from text_editor.supertux_text_edit import SupertuxTextEdit
+from text_editor.highlighters.lisp_highlighter import SuperTuxLispHighlighter
 
 
 class SupertuxTextEditMainWindow(QMainWindow):
@@ -43,7 +43,8 @@ class SupertuxTextEditMainWindow(QMainWindow):
         highlighter = SuperTuxLispHighlighter(self.ide_widget, text_file)
         highlighter.rehighlight()
 
-if __name__ == "__main__":
+
+def main():
     sys.path.append(".")
 
     #file_path = input("Type the path to the file you'd like to open:")
@@ -57,3 +58,6 @@ if __name__ == "__main__":
     app.exec_()
 
     #text_file.close()
+
+
+# EOF #

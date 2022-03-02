@@ -17,8 +17,8 @@
 
 import json, re
 
-from PyQt4.QtGui import QSyntaxHighlighter, QTextCharFormat, QFont
-from PyQt4.QtCore import Qt
+from PyQt5.QtGui import QSyntaxHighlighter, QTextCharFormat, QFont
+from PyQt5.QtCore import Qt
 
 
 class SuperTuxHighlighter(QSyntaxHighlighter):

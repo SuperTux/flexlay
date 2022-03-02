@@ -16,10 +16,10 @@
 
 import json, re
 
-from PyQt4.QtGui import (QSyntaxHighlighter, QTextCharFormat, QFont)
-from PyQt4.QtCore import Qt
+from PyQt5.QtGui import (QSyntaxHighlighter, QTextCharFormat, QFont)
+from PyQt5.QtCore import Qt
 
-from supertux.highlighter import SuperTuxHighlighter, HighlightingRule
+from .highlighter import SuperTuxHighlighter, HighlightingRule
 
 
 class SuperTuxLispHighlighter(SuperTuxHighlighter):
@@ -40,7 +40,7 @@ class SuperTuxLispHighlighter(SuperTuxHighlighter):
 
     @staticmethod
     def load_tree_json(filename=None):
-        if not filename or filename[-5:] is not ".json":
+        if not filename or filename[-5:] != ".json":
             filename = "highlighters/patterns2.json"
         patterns_file = open(filename, "r")
         pattern_tree = json.loads(patterns_file.read())

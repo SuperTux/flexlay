@@ -26,7 +26,7 @@ setup(name='flexlay',
       entry_points={
           'console_scripts': [
               'supertux-editor = supertux.supertux:main',
-              'supertux-texteditor = text_editor.cmd_supertux_textedit:main',
+              'supertux-texteditor = supertux.text_editor.cmd_supertux_textedit:main',
           ]
       },
       packages=find_packages()

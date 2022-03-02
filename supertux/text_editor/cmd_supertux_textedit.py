@@ -22,8 +22,8 @@ from PyQt5.QtWidgets import (QMainWindow, QApplication, QVBoxLayout,
                          QWidget)
 from PyQt5.QtCore import Qt
 
-from text_editor.supertux_text_edit import SupertuxTextEdit
-from text_editor.highlighters.lisp_highlighter import SuperTuxLispHighlighter
+from supertux.text_editor.supertux_text_edit import SupertuxTextEdit
+from supertux.text_editor.highlighters.lisp_highlighter import SuperTuxLispHighlighter
 
 
 class SupertuxTextEditMainWindow(QMainWindow):

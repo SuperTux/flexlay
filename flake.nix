@@ -2,7 +2,7 @@
   description = "SuperTux 0.4.0 level editor";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-21.11";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-22.05";
     flake-utils.url = "github:numtide/flake-utils";
   };
 
@@ -10,11 +10,13 @@
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = nixpkgs.legacyPackages.${system};
+        pythonPackages = pkgs.python310Packages;
       in rec {
         packages = flake-utils.lib.flattenTree rec {
-          flexlay = pkgs.python3Packages.buildPythonPackage rec {
-            name = "flexlay";
-            src = self;
+          flexlay = pythonPackages.buildPythonPackage rec {
+            pname = "flexlay";
+            version = "0.2.0";
+            src = ./.;
             nativeBuildInputs = [ pkgs.qt5.wrapQtAppsHook ];
             makeWrapperArgs = [
               "\${qtWrapperArgs[@]}"
@@ -26,14 +28,22 @@
             '';
             propagatedBuildInputs = [
               pkgs.xorg.libxcb
-              pkgs.p7zip
-              pkgs.python3Packages.setuptools
-              pkgs.python3Packages.numpy
-              pkgs.python3Packages.pyqt5
-              pkgs.python3Packages.pyxdg
+              pythonPackages.setuptools
+              pythonPackages.numpy
+              pythonPackages.pyqt5
+              pythonPackages.pyxdg
             ];
+            checkInputs = (with pkgs; [
+              pyright
+            ]) ++ (with pythonPackages; [
+              flake8
+              mypy
+              pylint
+              types-setuptools
+            ]);
           };
+          default = flexlay;
         };
-        defaultPackage = packages.flexlay;
-      });
+      }
+    );
 }

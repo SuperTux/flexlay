@@ -14,9 +14,10 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import json, re
+import json
+import re
 
-from PyQt5.QtGui import (QSyntaxHighlighter, QTextCharFormat, QFont)
+from PyQt5.QtGui import (QTextCharFormat, QFont)
 from PyQt5.QtCore import Qt
 
 from .highlighter import SuperTuxHighlighter, HighlightingRule
@@ -26,14 +27,13 @@ class SuperTuxLispHighlighter(SuperTuxHighlighter):
 
     @staticmethod
     def clean_text(text):
-        state = 0
         tiles = text.find("(tiles")
         while tiles != -1:
             close_bracket = text.find(")", tiles)
             assert close_bracket >= 0
-            before_length  = len(text)
-            text = text[:tiles] + "(tiles"+ text[close_bracket:]
-            after_length =  len(text)
+            before_length = len(text)
+            text = text[:tiles] + "(tiles" + text[close_bracket:]
+            after_length = len(text)
             delta_length = before_length - after_length
             tiles = text.find("(tiles", close_bracket - delta_length)
         return text
@@ -56,7 +56,7 @@ class SuperTuxLispHighlighter(SuperTuxHighlighter):
         if tag_list[0] != "supertux-level":
             print("lisp_highlighter.py Line 53, tag_list is not from a supertux-level")
             return None
-        tree=tree[tag_list.pop(0)]
+        tree = tree[tag_list.pop(0)]
         try:
             while len(tag_list) > 0:
                 tree = tree["branches"][tag_list.pop(0)]
@@ -111,8 +111,8 @@ class SuperTuxLispHighlighter(SuperTuxHighlighter):
         #
         # self.highlighting_rules.append(comment)
 
-        #tree_json = SuperTuxLispHighlighter.load_tree_json()
-        #SuperTuxLispHighlighter.search_tree(tree_json,["supertux-level", "sector", "name"])
+        # tree_json = SuperTuxLispHighlighter.load_tree_json()
+        # SuperTuxLispHighlighter.search_tree(tree_json,["supertux-level", "sector", "name"])
 
     def highlightBlock(self, text):
         for rule in self.highlighting_rules:

@@ -15,7 +15,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-import json, re
+import json
+import re
 
 from PyQt5.QtGui import QSyntaxHighlighter, QTextCharFormat, QFont
 from PyQt5.QtCore import Qt
@@ -77,7 +78,6 @@ class SuperTuxHighlighter(QSyntaxHighlighter):
                 search = re.search(rule.pattern, text[span[1]:])
                 span = None if not search else search.span()
         self.setCurrentBlockState(0)
-
 
 
 class HighlightingRule:

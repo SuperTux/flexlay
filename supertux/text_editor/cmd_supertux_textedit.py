@@ -19,8 +19,7 @@
 import sys
 
 from PyQt5.QtWidgets import (QMainWindow, QApplication, QVBoxLayout,
-                         QWidget)
-from PyQt5.QtCore import Qt
+                             QWidget)
 
 from supertux.text_editor.supertux_text_edit import SupertuxTextEdit
 from supertux.text_editor.highlighters.lisp_highlighter import SuperTuxLispHighlighter
@@ -47,8 +46,8 @@ class SupertuxTextEditMainWindow(QMainWindow):
 def main():
     sys.path.append(".")
 
-    #file_path = input("Type the path to the file you'd like to open:")
-    text_file = open("example.stl") #open(file_path, "r")
+    # file_path = input("Type the path to the file you'd like to open:")
+    text_file = open("example.stl")  # open(file_path, "r")
 
     app = QApplication(sys.argv)
 
@@ -57,7 +56,7 @@ def main():
 
     app.exec_()
 
-    #text_file.close()
+    # text_file.close()
 
 
 # EOF #

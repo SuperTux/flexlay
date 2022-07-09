@@ -26,6 +26,15 @@
             preCheck = ''
               export QT_QPA_PLATFORM_PLUGIN_PATH="${pkgs.qt5.qtbase.bin}/lib/qt-${pkgs.qt5.qtbase.version}/plugins";
             '';
+            checkPhase = ''
+              runHook preCheck
+              flake8 flexlay supertux tests
+              # pyright flexlay supertux tests
+              # mypy -p flexlay -p supertux -p tests
+              # pylint flexlay supertux tests
+              # python3 -m unittest discover -v -s tests/
+              runHook postCheck
+            '';
             propagatedBuildInputs = [
               pkgs.xorg.libxcb
               pythonPackages.setuptools

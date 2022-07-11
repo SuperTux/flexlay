@@ -25,13 +25,13 @@ from flexlay.util import Signal
 
 class SignalTestCase(unittest.TestCase):
 
-    def setUp(self):
+    def setUp(self) -> None:
         pass
 
-    def tearDown(self):
+    def tearDown(self) -> None:
         pass
 
-    def test_signal_args(self):
+    def test_signal_args(self) -> None:
         signal = Signal()
         mock1 = unittest.mock.Mock()
         mock2 = unittest.mock.Mock()
@@ -43,7 +43,7 @@ class SignalTestCase(unittest.TestCase):
         self.assertEqual(mock1.call_count, 1)
         self.assertEqual(mock2.call_count, 1)
 
-    def test_signal_connect(self):
+    def test_signal_connect(self) -> None:
         signal = Signal()
         mock1 = unittest.mock.Mock()
         mock2 = unittest.mock.Mock()
@@ -55,7 +55,7 @@ class SignalTestCase(unittest.TestCase):
         self.assertEqual(mock1.call_count, 1)
         self.assertEqual(mock2.call_count, 1)
 
-    def test_signal_disconnect(self):
+    def test_signal_disconnect(self) -> None:
         signal = Signal()
         mock1 = unittest.mock.Mock()
         mock2 = unittest.mock.Mock()

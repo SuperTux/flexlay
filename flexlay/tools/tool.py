@@ -20,10 +20,10 @@ from flexlay.gui.editor_map_component import EditorMapComponent
 
 class Tool:
 
-    def __init__(self):
+    def __init__(self) -> None:
         pass
 
-    def draw(self, gc):
+    def draw(self, gc: GraphicContext) -> None:
         pass
 
     def on_mouse_down(self, event):
@@ -35,10 +35,10 @@ class Tool:
     def on_mouse_move(self, event):
         pass
 
-    def grab_mouse(self):
+    def grab_mouse(self) -> None:
         EditorMapComponent.current.grab_mouse()
 
-    def release_mouse(self):
+    def release_mouse(self) -> None:
         EditorMapComponent.current.release_mouse()
 
 

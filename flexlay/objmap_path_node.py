@@ -21,7 +21,7 @@ from flexlay.math import Point, Size, Rect, Pointf, Sizef, Rectf
 
 class ObjMapPathNode(ObjMapObject):
 
-    def __init__(self, pos, data):
+    def __init__(self, pos, data) -> None:
         super().__init__(pos, data)
 
         self.pos = pos
@@ -47,7 +47,7 @@ class ObjMapPathNode(ObjMapObject):
     def get_bound_rect(self):
         return Rectf(self.pos - Pointf(16, 16), Sizef(32, 32))
 
-    def disconnect(self):
+    def disconnect(self) -> None:
         if self.next_node.prev_node is not None:
             self.next_node.prev_node = None
 

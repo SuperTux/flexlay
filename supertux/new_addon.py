@@ -25,7 +25,7 @@ from supertux.addon import Addon
 
 
 class NewAddonWizard(GenericWizard):
-    def __init__(self, parent):
+    def __init__(self, parent) -> None:
         super().__init__(parent, "New Addon Wizard")
         # Modal means you cannot touch the parent until this
         # closes
@@ -70,7 +70,7 @@ class NewAddonWizard(GenericWizard):
         # self.level.tileset_path = os.path.join("images", "tiles.strf")
 
     # Not Implemented
-    def cancel(self):
+    def cancel(self) -> None:
         self.addon = None
 
     def create_intro_page(self):
@@ -138,7 +138,7 @@ class NewAddonWizard(GenericWizard):
         page.setLayout(vbox)
         return page
 
-    def set_license(self):  # Connected to signal
+    def set_license(self) -> None:  # Connected to signal
         self.addon.license = self.license_input.toPlainText()
 
 

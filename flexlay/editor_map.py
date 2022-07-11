@@ -22,7 +22,7 @@ from flexlay.util import Signal
 
 class EditorMap:
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.background_color = Color(100, 80, 100)
         self.foreground_color = Color(255, 80, 255)
         self.modified = False
@@ -107,10 +107,10 @@ class EditorMap:
     def is_modified(self):
         return self.modified
 
-    def set_unmodified(self):
+    def set_unmodified(self) -> None:
         self.modified = False
 
-    def modify(self):
+    def modify(self) -> None:
         self.modified = True
         self.serial += 1
 
@@ -182,7 +182,7 @@ class EditorMap:
         self.undo_stack.append(command)
         self.sig_change()
 
-    def undo(self):
+    def undo(self) -> None:
         if self.undo_stack:
             command = self.undo_stack[-1]
             self.undo_stack.pop()
@@ -190,7 +190,7 @@ class EditorMap:
             self.redo_stack.append(command)
             self.sig_change()
 
-    def redo(self):
+    def redo(self) -> None:
         if self.redo_stack:
             command = self.redo_stack[-1]
             self.redo_stack.pop()

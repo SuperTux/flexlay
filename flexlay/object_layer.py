@@ -15,21 +15,27 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from typing import Optional
+
+from flexlay.graphic_context import GraphicContext
 from flexlay.layer import Layer
+from flexlay.math import Point
+from flexlay.objmap_control_point import ObjMapControlPoint
+from flexlay.objmap_object import ObjMapObject
 
 
 class ObjectLayer(Layer):
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
-        self.objects = []
-        self.control_points = []
+        self.objects: list[ObjMapObject] = []
+        self.control_points: list[ObjMapControlPoint] = []
 
-    def has_bounding_rect(self):
+    def has_bounding_rect(self) -> bool:
         return False
 
-    def draw(self, gc):
+    def draw(self, gc: GraphicContext) -> None:
         for obj in self.objects:
             if obj.to_draw and gc.get_clip_rect().is_overlapped(obj.get_bound_rect()):
                 obj.draw(gc)
@@ -37,27 +43,27 @@ class ObjectLayer(Layer):
         for cp in self.control_points:
             cp.draw(gc)
 
-    def find_control_point(self, click_pos):
+    def find_control_point(self, click_pos: Point) -> Optional[ObjMapControlPoint]:
         for cp in reversed(self.control_points):
             rect = cp.get_bound_rect()
             if rect.is_inside(click_pos):
                 return cp
         return None
 
-    def find_object(self, click_pos):
+    def find_object(self, click_pos: Point) -> None:
         for obj in reversed(self.objects):
             if obj.is_inside(click_pos):
                 return obj
         return None
 
-    def delete_object(self, obj):
+    def delete_object(self, obj: ObjMapObject) -> None:
         self.objects.remove(obj)
 
-    def delete_objects(self, objs):
+    def delete_objects(self, objs: list[ObjMapObject]) -> None:
         for obj in objs:
             self.objects.remove(obj)
 
-    def get_selection(self, rect):
+    def get_selection(self, rect) -> list[ObjMapObject]:
         selection = []
         for obj in self.objects:
             if rect.is_inside(obj.get_pos()):
@@ -65,42 +71,38 @@ class ObjectLayer(Layer):
 
         return selection
 
-    def get_objects(self):
+    def get_objects(self) -> list[ObjMapObject]:
         return self.objects
 
-    def add_object(self, obj):
+    def add_object(self, obj: ObjMapObject) -> None:
         self.objects.append(obj)
 
-    def add_control_point(self, obj):
+    def add_control_point(self, obj: ObjMapControlPoint) -> None:
         self.control_points.append(obj)
 
-    def delete_control_points(self):
+    def delete_control_points(self) -> None:
         self.control_points.clear()
 
-    def get_object_index(self, needle):
+    def get_object_index(self, needle: ObjMapObject) -> int:
         for idx, obj in enumerate(self.objects):
             if obj == needle:
                 return idx
         return -1
 
-    def move_to(self, obj, height):
-        # FIXME: Implement me
-        pass
-
-    def raise_objects_to_top(self, objs):
+    def raise_objects_to_top(self, objs: list[ObjMapObject]) -> None:
         self.delete_objects(objs)
         self.objects.extend(objs)
 
-    def lower_objects_to_bottom(self, objs):
+    def lower_objects_to_bottom(self, objs: list[ObjMapObject]) -> None:
         self.delete_objects(objs)
         self.objects = objs + self.objects
 
-    def raise_object(self, obj):
+    def raise_object(self, obj: ObjMapObject) -> None:
         i = self.get_object_index(obj)
         if i != -1 and len(self.objects) > 1 and i < len(self.objects) - 1:
             self.objects[i], self.objects[i + 1] = self.objects[i + 1], self.objects[i]
 
-    def lower_object(self, obj):
+    def lower_object(self, obj: ObjMapObject) -> None:
         i = self.get_object_index(obj)
         if i != -1 and i > 0:
             self.objects[i], self.objects[i - 1] = self.objects[i - 1], self.objects[i]

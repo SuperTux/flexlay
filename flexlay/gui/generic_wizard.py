@@ -15,7 +15,9 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 
-from PyQt5.QtWidgets import QWizardPage, QWizard, QVBoxLayout
+from typing import Any
+
+from PyQt5.QtWidgets import QWidget, QWizardPage, QWizard, QVBoxLayout
 
 from flexlay.util import Signal
 
@@ -30,26 +32,26 @@ class GenericWizard(QWizard):
     when "Finish" is pressed. See that function for more details
     """
 
-    def __init__(self, parent, title):
+    def __init__(self, parent: QWidget, title: str) -> None:
         super().__init__(parent)
         self.setWindowTitle(title)
         self.pages = []
 
         self.finish_callback = Signal()
 
-        def on_finish():
+        def on_finish() -> None:
             self.finish_callback(*self.get_values())
             for page in self.pages:
                 page.call()
             self.hide()
 
-        def on_cancel():
+        def on_cancel() -> None:
             self.hide()
 
         self.finished.connect(on_finish)
         self.rejected.connect(on_cancel)
 
-    def add_page(self, title, widget):
+    def add_page(self, title: str, widget: QWidget):
         """Adds a page to this GenericWizard
 
         :param page: PropertyWidget to add
@@ -64,7 +66,7 @@ class GenericWizard(QWizard):
 
         self.addPage(page)
 
-    def get_values(self):
+    def get_values(self) -> list[Any]:
         """ Returns a list of lists of all values put into this Wizard
 
         Best explained by example:

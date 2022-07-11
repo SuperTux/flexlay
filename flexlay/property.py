@@ -32,12 +32,12 @@ class Property:
     # Editable means appears in GenericDialog
     editable = False
 
-    def __init__(self, label, identifier, default, optional=False):
-        self.label = label
-        self.identifier = identifier
-        self.value = default
-        self.default = default
-        self.optional = optional
+    def __init__(self, label: str, identifier: str, default: Any, optional: bool = False) -> None:
+        self.label: str = label
+        self.identifier: str = identifier
+        self.value: Any = default
+        self.default: Any = default
+        self.optional: bool = optional
 
     def read(self, sexpr, obj):
         self.value = get_value_from_tree([self.identifier, "_"], sexpr, self.default)
@@ -65,7 +65,7 @@ class IntProperty(Property):
 
     editable = True
 
-    def __init__(self, label, identifier, default=0, optional=False):
+    def __init__(self, label, identifier, default=0, optional=False) -> None:
         super().__init__(label, identifier, default, optional)
 
     def property_dialog(self, dialog):
@@ -76,7 +76,7 @@ class FloatProperty(Property):
 
     editable = True
 
-    def __init__(self, label, identifier, default=0.0, optional=False):
+    def __init__(self, label, identifier, default=0.0, optional=False) -> None:
         super().__init__(label, identifier, default, optional)
 
     def property_dialog(self, dialog):
@@ -88,7 +88,7 @@ class StringProperty(Property):
     editable = True
     placeholder: Optional[str] = None
 
-    def __init__(self, label, identifier, default="", optional=False, translatable=False, placeholder=None):
+    def __init__(self, label, identifier, default="", optional=False, translatable=False, placeholder=None) -> None:
         super().__init__(label, identifier, default, optional)
         self.translatable = translatable
 
@@ -111,7 +111,7 @@ class FileProperty(StringProperty):
 
     editable = True
 
-    def __init__(self, label, identifier, default="", relative_to="", open_in=""):
+    def __init__(self, label: str, identifier: str, default: str = "", relative_to: str = "", open_in: str = "") -> None:
         """
         :param relative_to: The prefix text not displayed in the input box
         :param open_in: Where the browse dialog opens
@@ -134,7 +134,7 @@ class EnumProperty(StringProperty):
 
     editable = True
 
-    def __init__(self, label, identifier, default, optional=False, values=None):
+    def __init__(self, label: str, identifier: str, default, optional: bool = False, values: Optional[list[Any]] = list[Any]) -> None:
         """
         :param default: Is an index from values!!!
         """

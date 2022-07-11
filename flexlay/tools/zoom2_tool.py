@@ -22,7 +22,7 @@ from flexlay.tools.tool import Tool
 
 class Zoom2Tool(Tool):
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.active = False

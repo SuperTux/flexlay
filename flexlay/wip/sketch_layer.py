@@ -28,7 +28,7 @@ from flexlay.wip.pixel_buffer import PixelBuffer
 
 class SketchLayer(Layer):
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.strokes = []
 
         self.surface = PixelBuffer(Display.width, Display.height)

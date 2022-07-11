@@ -25,9 +25,9 @@ from flexlay.tools.tool import Tool
 
 class TilePaintTool(Tool):
 
-    current = None
+    current: Optional[TilePaintTool] = None
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         TilePaintTool.current = self
@@ -39,6 +39,7 @@ class TilePaintTool(Tool):
         self.is_active = False
 
     def draw(self, gc):
+        assert ToolContext.current is not None
         tilemap = ToolContext.current.tilemap_layer
         if not tilemap:
             return

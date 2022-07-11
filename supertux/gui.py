@@ -15,6 +15,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from typing import Any, Optional
+
 import os
 import subprocess
 import logging
@@ -47,21 +49,22 @@ from supertux.toolbox import SuperTuxToolbox
 from supertux.supertux_arguments import SuperTuxArguments
 from supertux.level_file_dialog import OpenLevelFileDialog, SaveLevelFileDialog
 from supertux.addon_dialog import SaveAddonDialog
+from supertux.addon import Addon
 
 
 class SuperTuxGUI:
 
-    current = None
+    current: Optional['SuperTuxGUI'] = None
 
-    def __init__(self, flexlay):
+    def __init__(self, flexlay) -> None:
         SuperTuxGUI.current = self
         supertux_gameobj_factory.supertux_gui = self
 
-        self.use_worldmap = False
+        self.use_worldmap: bool = False
 
         self.tool_context = ToolContext()
-        self.level = None
-        self.sector = None
+        self.level: Optional[Level] = None
+        self.sector: Optional[Sector] = None
 
         self.gui = flexlay.create_gui_manager("SuperTux Editor")
         self.gui.window.setWindowIcon(QIcon("data/images/supertux/supertux-editor.png"))
@@ -163,7 +166,7 @@ class SuperTuxGUI:
 
         self.editor_map.sig_on_key("p").connect(lambda x, y: self.gui_show_object_properties())
 
-        def on_a_key(x, y):
+        def on_a_key(x: int, y: int) -> None:
             pos = self.editor_map.screen2world(Point(x, y))
             rectobj = ObjMapRectObject(Rect(pos,
                                             Size(128, 64)),
@@ -173,7 +176,7 @@ class SuperTuxGUI:
 
         self.editor_map.sig_on_key("a").connect(on_a_key)
 
-    def on_window_close(self, *args):
+    def on_window_close(self, *args) -> bool:
         """Called when window x button is clicked
 
         Ask whether to save, continue, or just quit.
@@ -208,7 +211,7 @@ class SuperTuxGUI:
             elif choice == QMessageBox.Discard:
                 return True
 
-    def on_object_drop(self, brush, pos):
+    def on_object_drop(self, brush: ObjectBrush, pos: Point) -> None:
         obj = supertux_gameobj_factory.create_gameobj_at(brush.metadata, pos)
         if obj is None:
             logging.error("Unknown object type dropped: %r" % brush.metadata)
@@ -217,10 +220,10 @@ class SuperTuxGUI:
             cmd.add_object(obj.objmap_object)
             self.workspace.get_map().execute(cmd)
 
-    def run(self):
+    def run(self) -> None:
         self.gui.run()
 
-    def show_objects(self):
+    def show_objects(self) -> None:
         if False:  # GRUMBEL
             self.tileselector.show(False)
             if self.use_worldmap:
@@ -228,12 +231,12 @@ class SuperTuxGUI:
             else:
                 self.objectselector.show(True)
 
-    def show_tiles(self):
+    def show_tiles(self) -> None:
         if False:  # GRUMBEL
             self.tileselector.show(True)
             self.objectselector.show(False)
 
-    def gui_toggle_minimap(self):
+    def gui_toggle_minimap(self) -> None:
         if self.minimap.get_widget().isVisible():
             self.minimap.get_widget().hide()
             self.button_panel.minimap_icon.set_up()
@@ -241,7 +244,7 @@ class SuperTuxGUI:
             self.minimap.get_widget().show()
             self.button_panel.minimap_icon.set_down()
 
-    def gui_toggle_grid(self):
+    def gui_toggle_grid(self) -> None:
         self.workspace.get_map().draw_grid = not self.workspace.get_map().draw_grid
 
         if not self.workspace.get_map().draw_grid:
@@ -250,7 +253,7 @@ class SuperTuxGUI:
             self.button_panel.grid_icon.set_up()
         self.editor_map.editormap_widget.repaint()
 
-    def gui_set_tileset(self, tileset):
+    def gui_set_tileset(self, tileset: SuperTuxTileset) -> None:
         self.tileselector.set_tileset(tileset)
         self.tileselector.clear_tilegroups()
         self.tileselector.add_tilegroup("All Tiles", tileset.get_tiles())
@@ -266,7 +269,7 @@ class SuperTuxGUI:
         if self.level is not None:
             self.level.tileset_path = tileset.filename
 
-    def set_tileset(self, filename):
+    def set_tileset(self, filename: str) -> None:
         """Set tileset from (.strf) filename"""
         if not filename:
             QMessageBox.warning(None, "No Tileset Selected", "No tileset was selected, aborting...")
@@ -279,7 +282,7 @@ class SuperTuxGUI:
     #     tileset_dialog.set_directory(Config.current.datadir, "images")
     #     tileset_dialog.run(self.set_tileset)
 
-    def gui_change_tileset(self):
+    def gui_change_tileset(self) -> bool:
         filename = QFileDialog.getOpenFileName(None, "Select Tileset To Open", Config.current.datadir)
         if not filename:
             QMessageBox.warning(None, "No Tileset Selected", "No tileset was selected, aborting...")
@@ -289,7 +292,7 @@ class SuperTuxGUI:
         self.gui_set_tileset(tileset)
         return True
 
-    def gui_run_level(self):
+    def gui_run_level(self) -> None:
         logging.info("Run this level...")
 
         level = self.workspace.get_map().metadata.get_level()
@@ -322,23 +325,22 @@ class SuperTuxGUI:
 
         # self.arguments.spawn_at = None
 
-    def gui_run_level_thread(self, postexit_fn, popen_args, tmpfile):
+    def gui_run_level_thread(self, postexit_fn: Callable[[str], None], popen_args: list[str], tmpfile: str) -> None:
         subproc = subprocess.Popen(popen_args)
         subproc.wait()
         postexit_fn(tmpfile)
-        return
 
-    def gui_run_level_cleanup(self, tmpfile):
+    def gui_run_level_cleanup(self, tmpfile: str) -> None:
         # Safely get rid of temporary file
         os.close(tmpfile[0])  # Close file descriptor
         os.remove(tmpfile[1])  # Remove the file
 
-    def gui_record_level(self):
+    def gui_record_level(self) -> None:
         self.arguments.record_demo_file = SaveFileDialog("Choose Record Target File")
         self.gui_run_level()
         self.arguments.record_demo_file = None
 
-    def gui_play_demo(self):
+    def gui_play_demo(self) -> None:
         QMessageBox.information(None,
                                 "Select a level file",
                                 "You must now select a level file - the level of the demo")
@@ -354,12 +356,12 @@ class SuperTuxGUI:
 
         self.arguments.play_demo_file = None
 
-    def gui_watch_example(self):
+    def gui_watch_example(self) -> None:
         level = os.path.join(Config.current.datadir, "levels", "world1", "01 - Welcome to Antarctica.stl")
         demo = os.path.join("data", "supertux", "demos", "karkus476_plays_level_1")
         subprocess.Popen([Config.current.binary, level, "--play-demo", demo])
 
-    def gui_resize_sector(self):
+    def gui_resize_sector(self) -> None:
         level = self.workspace.get_map().metadata
         dialog = self.gui.create_generic_dialog("Resize Sector")
         dialog.add_int("Width: ", level.width)
@@ -373,9 +375,10 @@ class SuperTuxGUI:
 
         dialog.add_callback(on_callback)
 
-    def gui_smooth_level_struct(self):
+    def gui_smooth_level_struct(self) -> None:
         logging.info("Smoothing level structure")
         tilemap = self.tool_context.tilemap_layer
+        assert tilemap is not None
         data = tilemap.get_data()
         # width = tilemap.width
         #
@@ -414,14 +417,14 @@ class SuperTuxGUI:
 
         tilemap.set_data(data)
 
-    def gui_resize_sector_to_selection(self):
+    def gui_resize_sector_to_selection(self) -> None:
         if self.tool_context.tile_selection is not None:
             level = self.workspace.get_map().metadata
             rect = self.tool_context.tile_selection.get_rect()
             if (rect.width > 2 and rect.height > 2):
                 level.resize(rect.size, Point(-rect.left, -rect.top))
 
-    def gui_edit_level(self):
+    def gui_edit_level(self) -> None:
         level = self.workspace.get_map().metadata.get_level()
         dialog = self.gui.create_generic_dialog("Edit Level")
 
@@ -438,54 +441,56 @@ class SuperTuxGUI:
 
         dialog.add_callback(on_callback)
 
-    def gui_edit_sector(self):
+    def gui_edit_sector(self) -> None:
         level = self.workspace.get_map().metadata.get_level()
         dialog = self.gui.create_generic_dialog("Edit Sector")
 
+        assert Config.current is not None
         dialog.add_string("Name: ", level.current_sector.name)
-        dialog.add_file("Music: ", level.current_sector.music,
+        dialog.add_file("Music: ",
+                        level.current_sector.music,
                         ret_rel_to=Config.current.datadir,
                         show_rel_to=os.path.join(Config.current.datadir, "music"),
                         open_in=os.path.join(Config.current.datadir, "music"))
         dialog.add_float("Gravity: ", level.current_sector.gravity)
 
-        def on_callback(*args):
+        def on_callback(*args: Any) -> None:
             level.current_sector.name = args[0]
             level.current_sector.music = args[1]
             level.current_sector.gravity = args[2]
 
         dialog.add_callback(on_callback)
 
-    def gui_zoom_in(self):
+    def gui_zoom_in(self) -> None:
         factor = 2.0
         gc = self.editor_map.get_gc_state()
         zoom = gc.get_zoom()
         self.gui_set_zoom(zoom / pow(1.25, -factor))
 
-    def gui_zoom_out(self):
+    def gui_zoom_out(self) -> None:
         factor = 2.0
         gc = self.editor_map.get_gc_state()
         zoom = gc.get_zoom()
         self.gui_set_zoom(zoom * pow(1.25, -factor))
 
-    def gui_zoom_fit(self):
+    def gui_zoom_fit(self) -> None:
         rect = self.workspace.get_map().get_bounding_rect()
         zoom = min(self.editor_map.editormap_widget.width() / rect.width,
                    self.editor_map.editormap_widget.height() / rect.height)
         self.gui_set_zoom(zoom, Point(rect.width / 2, rect.height / 2))
 
-    def gui_set_zoom(self, zoom, pos=None):
+    def gui_set_zoom(self, zoom: float, pos: Point = None):
         gc = self.editor_map.get_gc_state()
         pos = pos or gc.get_pos()
         gc.set_zoom(zoom)
         gc.set_pos(pos)
         self.editor_map.editormap_widget.repaint()
 
-    def gui_remove_sector(self):
+    def gui_remove_sector(self) -> None:
         sector = self.workspace.get_map().metadata
         sector.get_level().remove_sector(sector.name)
 
-    def gui_add_sector(self):
+    def gui_add_sector(self) -> None:
         level = self.workspace.get_map().metadata.get_level()
 
         name = "sector"
@@ -501,7 +506,7 @@ class SuperTuxGUI:
         self.set_level(level, uniq_name)
         self.gui_edit_sector()
 
-    def gui_show_object_properties(self):
+    def gui_show_object_properties(self) -> None:
         if self.tool_context.object_selection:
             selection = self.tool_context.object_selection
             if len(selection) > 1:
@@ -512,13 +517,13 @@ class SuperTuxGUI:
             else:
                 logging.warning("Selection is empty")
 
-    def undo(self):
+    def undo(self) -> None:
         self.workspace.get_map().undo()
 
-    def redo(self):
+    def redo(self) -> None:
         self.workspace.get_map().redo()
 
-    def on_map_change(self):
+    def on_map_change(self) -> None:
         self.editor_map.editormap_widget.repaint()
         if self.workspace.get_map().undo_stack_size() > 0:
             self.button_panel.undo_icon.enable()
@@ -530,7 +535,7 @@ class SuperTuxGUI:
         else:
             self.button_panel.redo_icon.disable()
 
-    def gui_level_save_as(self):
+    def gui_level_save_as(self) -> None:
         path = self.save_dialog.get_filename()
         if os.path.isdir(path):
             self.save_dialog.set_directory(path)
@@ -538,7 +543,7 @@ class SuperTuxGUI:
             self.save_dialog.set_directory(os.path.dirname(path) + "/")
         self.save_dialog.run(self.save_level)
 
-    def gui_level_save(self):
+    def gui_level_save(self) -> None:
         if self.use_worldmap:
             filename = self.workspace.get_map().metadata.filename
         else:
@@ -556,7 +561,7 @@ class SuperTuxGUI:
 
             self.save_dialog.run(self.save_level)
 
-    def gui_level_new(self):
+    def gui_level_new(self) -> None:
         if False:
             dialog = NewLevelWizard(self.gui.window)
             dialog.exec_()
@@ -573,20 +578,20 @@ class SuperTuxGUI:
             level = Level.from_size(100, 25)
             self.set_level(level, "main")
 
-    def gui_addon_new(self):
+    def gui_addon_new(self) -> None:
         dialog = NewAddonWizard(self.gui.window)
         dialog.exec_()
         if dialog.addon is not None:
-            def save_path_chosen(save_path):
+            def save_path_chosen(save_path: str) -> None:
                 dialog.addon.save(save_path)
                 self.load_addon(dialog.addon, save_path)
             self.addon_save_dialog.run(save_path_chosen)
         pass
 
-    def gui_level_load(self):
+    def gui_level_load(self) -> None:
         self.load_dialog.run(self.load_level)
 
-    def insert_path_node(self, x, y):
+    def insert_path_node(self, x: int, y: int) -> None:
         logging.info("Insert path Node")
         m = self.workspace.get_map().metadata
         pathnode = ObjMapPathNode(self.editor_map.screen2world(Point(x, y)),
@@ -594,7 +599,7 @@ class SuperTuxGUI:
         pathnode.metadata = PathNode(pathnode)
         m.objects.add_object(pathnode)
 
-    def connect_path_nodes(self):
+    def connect_path_nodes(self) -> None:
         logging.info("Connecting path nodes")
         pathnodes = []
         for i in self.tool_context.object_selection:
@@ -608,18 +613,21 @@ class SuperTuxGUI:
                 last.connect(i)
             last = i
 
-    def gui_set_datadir(self):
+    def gui_set_datadir(self) -> None:
+        assert Config.current is not None
+
         if os.path.isdir(Config.current.datadir):
             dialog = self.gui.create_generic_dialog("Specify the SuperTux data directory and restart")
             dialog.add_label("You need to specify the datadir where SuperTux is located")
             dialog.add_string("SuperTux datadir:", Config.current.datadir)
 
-            def on_callback(datadir):
+            def on_callback(datadir: str) -> None:
+                assert Config.current is not None
                 Config.current.datadir = datadir
 
             dialog.add_callback(on_callback)
 
-    def load_level(self, filename, set_title=True):
+    def load_level(self, filename: str, set_title: str = True):
         logging.info("Loading: " + filename)
 
         # Clear object selection, it's a new level!
@@ -642,6 +650,8 @@ class SuperTuxGUI:
 
         level = Level.from_file(filename)
 
+        assert SuperTuxTileset.current is not None
+        assert Config.current is not None
         if level.tileset_path != SuperTuxTileset.current.filename:
             tileset = SuperTuxTileset(32)
             tileset.load(os.path.join(Config.current.datadir, level.tileset_path))
@@ -661,15 +671,16 @@ class SuperTuxGUI:
         # TODO: We don't yet support multiple sectors, so we set the first sector's name.
         self.editor_map.set_sector_tab_label(0, level.sectors[0].name)
 
-    def load_worldmap(self, filename):
+    def load_worldmap(self, filename: str) -> None:
         print("Loading Worldmap: {}".format(filename))
         # worldmap = WorldMap(filename)
         # worldmap.activate(self.workspace)
 
-    def save_level(self, filename, set_title=True, is_tmp=False):
+    def save_level(self, filename: str, set_title: bool = True, is_tmp: bool = False) -> None:
         if set_title:
             self.gui.window.setWindowTitle("SuperTux Editor: [" + filename + "]")
 
+        assert Workspace.current is not None
         editor_map = Workspace.current.get_map()
         editor_map.save_pointer = len(editor_map.undo_stack)
 
@@ -684,74 +695,74 @@ class SuperTuxGUI:
         level.save(filename)
         level.filename = filename
 
-    def load_addon(self, addon, dirname):
+    def load_addon(self, addon: Addon, dirname: str) -> None:
         print("Add-on dirname is: " + dirname)
         self.gui.project_widget.set_addon(addon)
         self.gui.project_widget.set_project_directory(dirname)
-        pass
 
-    def load_addon_zip(self, filename):
+    def load_addon_zip(self, filename: str) -> None:
         print("Add-on zip path is: {}".format(filename))
-        pass
 
-    def raise_selection(self):
+    def raise_selection(self) -> None:
         for obj in self.tool_context.object_selection:
             self.workspace.get_map().metadata.objects.raise_object(obj)
         self.editor_map.editormap_widget.repaint()
 
-    def lower_selection(self):
+    def lower_selection(self) -> None:
         for obj in self.tool_context.object_selection:
             self.workspace.get_map().metadata.objects.lower_object(obj)
         self.editor_map.editormap_widget.repaint()
 
-    def raise_selection_to_top(self):
+    def raise_selection_to_top(self) -> None:
         selection = self.tool_context.object_selection
         self.workspace.get_map().metadata.objects.raise_objects_to_top(selection)
         self.editor_map.editormap_widget.repaint()
 
-    def lower_selection_to_bottom(self):
+    def lower_selection_to_bottom(self) -> None:
         selection = self.tool_context.object_selection
         self.workspace.get_map().metadata.objects.lower_objects_to_bottom(selection)
         self.editor_map.editormap_widget.repaint()
 
-    def set_tilemap_paint_tool(self):
+    def set_tilemap_paint_tool(self) -> None:
         self.workspace.set_tool(InputEvent.MOUSE_LEFT, TilePaintTool())
         self.workspace.set_tool(InputEvent.MOUSE_RIGHT, TileBrushCreateTool())
         self.toolbox.set_down(self.toolbox.paint_icon)
 
-    def set_tilemap_replace_tool(self):
+    def set_tilemap_replace_tool(self) -> None:
         self.workspace.set_tool(InputEvent.MOUSE_LEFT, TileReplaceTool())
         self.workspace.set_tool(InputEvent.MOUSE_RIGHT, TileBrushCreateTool())
         self.toolbox.set_down(self.toolbox.replace_icon)
 
-    def set_tilemap_fill_tool(self):
+    def set_tilemap_fill_tool(self) -> None:
         self.workspace.set_tool(InputEvent.MOUSE_LEFT, TileFillTool())
         self.workspace.set_tool(InputEvent.MOUSE_RIGHT, TileBrushCreateTool())
         self.toolbox.set_down(self.toolbox.fill_icon)
 
-    def set_tilemap_select_tool(self):
+    def set_tilemap_select_tool(self) -> None:
         self.workspace.set_tool(InputEvent.MOUSE_LEFT, TileMapSelectTool())
         self.workspace.set_tool(InputEvent.MOUSE_RIGHT, None)
         self.toolbox.set_down(self.toolbox.select_icon)
 
-    def set_zoom_tool(self):
+    def set_zoom_tool(self) -> None:
         self.workspace.set_tool(InputEvent.MOUSE_LEFT, ZoomTool())
         self.workspace.set_tool(InputEvent.MOUSE_RIGHT, ZoomOutTool())
         self.toolbox.set_down(self.toolbox.zoom_icon)
 
-    def set_objmap_select_tool(self):
+    def set_objmap_select_tool(self) -> None:
         self.workspace.set_tool(InputEvent.MOUSE_LEFT, ObjMapSelectTool(self.gui))
         self.workspace.set_tool(InputEvent.MOUSE_RIGHT, ObjMapSelectTool(self.gui))
         self.toolbox.set_down(self.toolbox.object_icon)
 
-    def set_level(self, level, sectorname):
+    def set_level(self, level: Level, sectorname: str) -> None:
         self.level = level
         for sec in self.level.sectors:
             if sec.name == sectorname:
                 self.set_sector(sec)
                 break
 
-    def set_sector(self, sector):
+    def set_sector(self, sector: Sector) -> None:
+        assert sector is not None
+
         self.sector = sector
         self.workspace.current_sector = sector
 
@@ -760,18 +771,22 @@ class SuperTuxGUI:
         # TODO: We don't yet support multiple sectors, so we set the first sector's name.
         self.editor_map.set_sector_tab_label(0, sector.name)
 
+        assert ToolContext.current is not None
         ToolContext.current.tilemap_layer = self.sector.get_some_solid_tilemap().tilemap_layer
         ToolContext.current.object_layer = self.sector.object_layer
 
+        assert SuperTuxGUI.current is not None
         self.sector.editormap.sig_change.connect(SuperTuxGUI.current.on_map_change)
 
-    def generate_tilemap_obj(self):
+    def generate_tilemap_obj(self) -> ObjMapTilemapObject:
         """Generate a basic ObjMapTilemapObject with basic parameters
 
         May later open a dialog.
 
         :return: ObjMapTilemapObject
         """
+        assert self.sector is not None
+
         tilemap = SuperTuxTileMap.from_size(self.sector.width,
                                             self.sector.height,
                                             "<no name>",
@@ -779,7 +794,8 @@ class SuperTuxGUI:
         tilemap_object = ObjMapTilemapObject(tilemap.tilemap_layer, tilemap)
         return tilemap_object
 
-    def camera_properties(self):
+    def camera_properties(self) -> None:
+        assert self.sector is not None
         self.sector.camera.property_dialog(self.gui.window)
 
 

@@ -21,7 +21,7 @@ from flexlay.gui.editor_map_component import EditorMapComponent
 
 class TileMapSelectTool:
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.selection = ToolContext.current.tile_selection
         self.creating_selection = False
 

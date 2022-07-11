@@ -20,7 +20,7 @@ from flexlay import Config
 
 class SuperTuxMenuBar:
 
-    def __init__(self, gui_manager, editor):
+    def __init__(self, gui_manager, editor) -> None:
         self.gui_manager = gui_manager
 
         # Create Menu

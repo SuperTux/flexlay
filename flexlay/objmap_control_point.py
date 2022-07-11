@@ -17,11 +17,12 @@
 
 from flexlay.math import Point, Size, Rect, Origin
 from flexlay.util import Signal
+from flexlay.sprite import Sprite
 
 
 class ObjMapControlPoint:
 
-    def __init__(self, sprite, pos, metadata=None):
+    def __init__(self, sprite: Sprite, pos: Point, metadata=None) -> None:
         self.sprite = sprite
         self.pos = pos
         self.metadata = metadata
@@ -30,16 +31,16 @@ class ObjMapControlPoint:
     def draw(self, gc):
         self.sprite.draw(int(self.pos.x), int(self.pos.y), gc)
 
-    def set_pos_raw(self, p):
+    def set_pos_raw(self, p: Point):
         self.pos = p
 
-    def set_pos(self, p):
+    def set_pos(self, p: Point):
         self.sig_set_pos(p)
 
-    def get_pos(self):
+    def get_pos(self) -> Point:
         return self.pos
 
-    def get_bound_rect(self):
+    def get_bound_rect(self) -> Rect:
         origin_enum, align_x, align_y = self.sprite.get_alignment()
         align_x = -align_x
         origin = Origin.calc_origin(origin_enum,

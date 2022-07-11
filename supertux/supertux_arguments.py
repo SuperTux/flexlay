@@ -15,21 +15,23 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from flexlay.util import Config
+from typing import Optional
+
+from flexlay.util.config import Config
 
 
 class SuperTuxArguments:
     """A container for the various command line arguments of the SuperTux binary (not supertux-editor!)"""
 
-    def __init__(self):
-        self.run_level = None
+    def __init__(self) -> None:
+        self.run_level: Optional[str] = None
         # Not the same as a spawn point
         # Currently does nothing.
-        self.spawn_at = None
-        self.record_demo_file = None
-        self.play_demo_file = None
+        self.spawn_at: Optional[str] = None
+        self.record_demo_file: Optional[str] = None
+        self.play_demo_file: Optional[str] = None
 
-    def get_popen_arg(self):
+    def get_popen_arg(self) -> list[str]:
         """Returns a list to be passed straight into subprocess.Popen
 
         :return: A list to be passed as an argument for Popen
@@ -44,6 +46,7 @@ class SuperTuxArguments:
         #             str(self.spawn_at.y)] \
         #     if self.spawn_at is not None \
         #     else []
+        assert current.binary is not None
         return [Config.current.binary] + run_level + play_demo + record_demo + developer_mode  # + spawn_at
 
 

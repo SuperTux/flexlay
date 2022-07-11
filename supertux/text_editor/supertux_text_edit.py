@@ -15,11 +15,12 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from PyQt5.QtWidgets import QTextEdit
+from PyQt5.QtWidgets import QWidget, QTextEdit
 
 
 class SupertuxTextEdit(QTextEdit):
-    def __init__(self, parent):
+
+    def __init__(self, parent: QWidget) -> None:
         super().__init__(parent)
 
 

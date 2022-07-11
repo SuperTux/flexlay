@@ -15,35 +15,39 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from flexlay.pixel_buffer import PixelBuffer
+from flexlay.math import Rect, Origin
+
+
 class Surface:
 
-    def __init__(self, pixelbuffer):
+    def __init__(self, pixelbuffer: PixelBuffer) -> None:
         pass
 
-    def draw_stretched(self, rect):
+    def draw_stretched(self, rect: Rect) -> None:
         pass
 
-    def draw(self, x, y):
+    def draw(self, x: int, y: int) -> None:
         pass
 
-    def set_alignment(self, origin, x=0, y=0):
+    def set_alignment(self, origin: int, x: int = 0, y: int = 0) -> None:
         pass
 
-    def set_alpha(self, alpha):
+    def set_alpha(self, alpha: int) -> None:
         pass
 
-    def set_scale(self, x, y):
+    def set_scale(self, x: float, y: float) -> None:
         pass
 
-    def set_blend_func(self, src, dest):
+    def set_blend_func(self, src, dest) -> None:
         pass
 
     @property
-    def width(self):
+    def width(self) -> int:
         return 0
 
     @property
-    def height(self):
+    def height(self) -> int:
         return 0
 
 

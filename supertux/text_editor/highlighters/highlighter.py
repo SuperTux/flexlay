@@ -15,17 +15,28 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from typing import Optional
+
 import json
 import re
 
 from PyQt5.QtGui import QSyntaxHighlighter, QTextCharFormat, QFont
+from PyQt5.QtWidget import QTextEdit
 from PyQt5.QtCore import Qt
+
+
+class HighlightingRule:
+
+    def __init__(self, pattern: str, fmt: QTextCharFormat, id: str = "null"):
+        self.pattern = pattern
+        self.format: QTextCharFormat = fmt
+        self.id = id
 
 
 class SuperTuxHighlighter(QSyntaxHighlighter):
 
     @staticmethod
-    def load_patterns(filename=None, root="supertux-level"):
+    def load_patterns(filename: Optional[str] = None, root: str = "supertux-level") -> list[HighlightingRule]:
         if not filename or filename[-5:] != ".json":
             filename = "highlighters/patterns.json"
         rules = []
@@ -36,39 +47,39 @@ class SuperTuxHighlighter(QSyntaxHighlighter):
             colour = pattern_json["color"]
             id = pattern_json["id"]
 
-            format = QTextCharFormat()
+            fmt = QTextCharFormat()
             if colour == "black":
-                format.setForeground(Qt.black)
+                fmt.setForeground(Qt.black)
             elif colour == "blue":
-                format.setForeground(Qt.blue)
+                fmt.setForeground(Qt.blue)
             elif colour == "red":
-                format.setForeground(Qt.red)
+                fmt.setForeground(Qt.red)
             elif colour == "green":
-                format.setForeground(Qt.green)
+                fmt.setForeground(Qt.green)
             elif colour == "darkGreen":
-                format.setForeground(Qt.darkGreen)
+                fmt.setForeground(Qt.darkGreen)
             elif colour == "darkBlue":
-                format.setForeground(Qt.darkBlue)
+                fmt.setForeground(Qt.darkBlue)
             elif colour == "darkRed":
-                format.setForeground(Qt.darkRed)
+                fmt.setForeground(Qt.darkRed)
             elif colour == "magenta":
-                format.setForeground(Qt.magenta)
+                fmt.setForeground(Qt.magenta)
 
             if pattern_json["bold"]:
-                format.setFontWeight(QFont.Bold)
+                fmt.setFontWeight(QFont.Bold)
             if pattern_json["italic"]:
-                format.setFontItalic(True)
+                fmt.setFontItalic(True)
 
-            rule = HighlightingRule(pattern, format, id=id)
+            rule = HighlightingRule(pattern, fmt, id=id)
             rules.append(rule)
         print("Done:", len(rules))
         return rules
 
-    def __init__(self, text_edit):
+    def __init__(self, text_edit: QTextEdit) -> None:
         super().__init__(text_edit)
-        self.highlighting_rules = []
+        self.highlighting_rules: list[HighlightingRule] = []
 
-    def highlightBlock(self, text):
+    def highlightBlock(self, text: str) -> None:
         for rule in self.highlighting_rules:
             search = re.search(rule.pattern, text)
             span = None if not search else search.span()
@@ -78,13 +89,6 @@ class SuperTuxHighlighter(QSyntaxHighlighter):
                 search = re.search(rule.pattern, text[span[1]:])
                 span = None if not search else search.span()
         self.setCurrentBlockState(0)
-
-
-class HighlightingRule:
-    def __init__(self, pattern, format, id="null"):
-        self.pattern = pattern
-        self.format = format
-        self.id = id
 
 
 # EOF #

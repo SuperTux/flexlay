@@ -24,7 +24,7 @@ from flexlay.util import get_value_from_tree, sexpr_read_from_file
 
 class SuperTuxSpriteAction:
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.name = None
         self.image = None
         self.x_offset = 0
@@ -40,7 +40,8 @@ class SuperTuxSpriteAction:
 
 
 class SuperTuxSprite:
-    def __init__(self):
+
+    def __init__(self) -> None:
         self.actions = {}
         self.actions_default = None
         self.basedir = ""

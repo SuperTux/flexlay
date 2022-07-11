@@ -16,18 +16,19 @@
 
 
 class Display:
-    def __init__(self):
+
+    def __init__(self) -> None:
         pass
 
     @property
-    def width(self):
+    def width(self) -> int:
         return 0
 
     @property
-    def height(self):
+    def height(self) -> int:
         return 0
 
-    def get_modelview(self):
+    def get_modelview(self) -> None:
         pass
 
 

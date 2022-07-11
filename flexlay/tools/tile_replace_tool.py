@@ -24,7 +24,7 @@ class TileReplaceTool(Tool):
 
     current = None
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         TileReplaceTool.current = self

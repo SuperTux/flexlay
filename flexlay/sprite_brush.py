@@ -16,15 +16,16 @@
 
 
 from flexlay.math import Origin
+from flexlay.sprite import Sprite
 
 
 class SpriteBrush:
 
-    def __init__(self, sprite):
+    def __init__(self, sprite: Sprite) -> None:
         self.sprite = sprite
         self.sprite.set_alignment(Origin.center, 0, 0)
 
-    def get_sprite(self):
+    def get_sprite(self) -> Sprite:
         return self.sprite
 
 

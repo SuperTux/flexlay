@@ -19,21 +19,13 @@
 # 3. This notice may not be removed or altered from any source distribution.
 
 
-def sexpr_read_from_file(filename):
-    with open(filename, "rt") as fin:
-        content = fin.read()
-        return parse(content, filename)
+from typing import Any, Optional, Union
 
 
-def parse(string, context=None):
-    parser = SExprParser(string)
-    try:
-        return parser.parse()
-    except Exception as e:
-        raise SExprParseError(context, parser.line, parser.column, str(e))
+SExprValue = Union[bool, int, float, str, list]
 
 
-def num(s):
+def num(s: str) -> Union[int, float]:
     try:
         return int(s)
     except ValueError:
@@ -41,18 +33,23 @@ def num(s):
 
 
 class SExprParseError(Exception):
-    def __init__(self, context, line, column, message):
+
+    def __init__(self, context: Optional[str], line: int, column: int, message: str) -> None:
         super().__init__("%s:%d:%d: error: %s" % (context, line, column, message))
-        self.context = context
-        self.line = line
-        self.column = column
+
+        self.context: Optional[str] = context
+        self.line: int = line
+        self.column: int = column
 
 
 class SExprParser:
-    def __init__(self, text):
-        self.text = text
 
-    def state_list(self, c):
+    def __init__(self, text: str) -> None:
+        self.text: str = text
+        self.index: int = 0
+        self.atom: Optional[str]
+
+    def state_list(self, c: Optional[str]) -> None:
         if c is None:
             pass  # handled in parse()
         elif c == '(':
@@ -79,13 +76,15 @@ class SExprParser:
         else:
             raise Exception("unexpected character: '%s'" % c)
 
-    def state_comment(self, c):
+    def state_comment(self, c: str) -> None:
         if c == '\n':
             self.state = self.state_list
         else:
             pass
 
-    def state_string(self, c):
+    def state_string(self, c: str) -> None:
+        assert self.atom is not None
+
         if c is None:
             raise Exception("string not closed at end of file")
         elif c == "\\":
@@ -109,7 +108,9 @@ class SExprParser:
         else:
             self.atom += c
 
-    def state_bool(self, c):
+    def state_bool(self, c: str) -> None:
+        assert self.atom is not None
+
         if len(self.atom) == 2:
             if self.atom == "#f":
                 self.stack[-1].append(False)
@@ -126,7 +127,9 @@ class SExprParser:
         else:
             self.atom += c
 
-    def state_number(self, c):
+    def state_number(self, c: str) -> None:
+        assert self.atom is not None
+
         if c is None or (not c.isdigit() and c != "."):
             self.stack[-1].append(num(self.atom))
             self.atom = None
@@ -135,7 +138,9 @@ class SExprParser:
         else:
             self.atom += c
 
-    def state_symbol(self, c):
+    def state_symbol(self, c: str) -> None:
+        assert self.atom is not None
+
         if c is None or c.isspace() or c == '(' or c == ')':
             self.stack[-1].append(self.atom)
             self.atom = None
@@ -144,14 +149,15 @@ class SExprParser:
         else:
             self.atom += c
 
-    def parse(self):
+    def parse(self) -> SExprValue:
         self.atom = None
-        self.stack = [[]]
+        self.stack: list[list[Any]] = [[]]
         self.state = self.state_list
-        self.line = 1
-        self.column = 0
+        self.line: int = 1
+        self.column: int = 0
 
         self.index = 0
+
         while self.index < len(self.text):
             c = self.text[self.index]
             if c == '\n':
@@ -167,6 +173,20 @@ class SExprParser:
             return self.stack[0]
         else:
             raise Exception("list not closed")
+
+
+def sexpr_read_from_file(filename: str) -> SExprValue:
+    with open(filename, "rt") as fin:
+        content = fin.read()
+        return parse(content, filename)
+
+
+def parse(string: str, context: Optional[str] = None) -> SExprValue:
+    parser = SExprParser(string)
+    try:
+        return parser.parse()
+    except Exception as e:
+        raise SExprParseError(context, parser.line, parser.column, str(e))
 
 
 # EOF #

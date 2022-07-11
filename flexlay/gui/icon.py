@@ -15,22 +15,25 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from PyQt5.QGui import QAction
+
+
 class Icon:
 
-    def __init__(self, action):
+    def __init__(self, action: QAction) -> None:
         self.action = action
 
-    def disable(self):
+    def disable(self) -> None:
         self.action.setEnabled(False)
 
-    def enable(self):
+    def enable(self) -> None:
         self.action.setEnabled(True)
 
-    def set_up(self):
+    def set_up(self) -> None:
         self.action.setCheckable(True)
         self.action.setChecked(False)
 
-    def set_down(self):
+    def set_down(self) -> None:
         self.action.setCheckable(True)
         self.action.setChecked(True)
 

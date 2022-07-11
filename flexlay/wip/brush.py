@@ -16,13 +16,14 @@
 
 
 class Brush:
-    def __init__(self):
+
+    def __init__(self) -> None:
         pass
 
-    def get_sprite(self):
+    def get_sprite(self) -> None:
         pass
 
-    def copy(self):
+    def copy(self) -> None:
         pass
 
 

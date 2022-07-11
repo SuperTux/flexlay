@@ -24,7 +24,7 @@ from supertux.tileset import SuperTuxTileset
 class SuperTuxTileMap:
 
     @staticmethod
-    def from_sexpr(data):
+    def from_sexpr(data) -> 'SuperTuxTileMap':
         # Load position from path, node and then x, ys
         x = 0
         y = 0
@@ -57,28 +57,28 @@ class SuperTuxTileMap:
         return result
 
     @staticmethod
-    def from_size(width, height, name, z_pos=0, solid=False):
+    def from_size(width, height, name, z_pos=0, solid=False) -> 'SuperTuxTileMap':
         result = SuperTuxTileMap(z_pos, solid)
         result.tilemap_layer = TilemapLayer(SuperTuxTileset.current, width, height)
         result.tilemap_layer.metadata = result
         result.tilemap_layer.name = name
         return result
 
-    def __init__(self, z_pos=0, solid=False):
-        self.solid = solid
-        self.draw_target = ""
-        self.z_pos = z_pos
-        self.speed = 1.0
-        self.speed_y = 1.0
+    def __init__(self, z_pos: int = 0, solid: bool = False) -> None:
+        self.solid: bool = solid
+        self.draw_target: str = ""
+        self.z_pos: float = z_pos
+        self.speed: float = 1.0
+        self.speed_y: float = 1.0
         self.alpha = 1.0
-        self.pos = Point(0, 0)
-        self.tilemap_layer = None
+        self.pos: Point = Point(0, 0)
+        self.tilemap_layer: Optional[TilemapLayer] = None
 
     @property
-    def name(self):
+    def name(self) -> str:
         return self.tilemap_layer.name
 
-    def write(self, writer, objmap_tilemap_object):
+    def write(self, writer, objmap_tilemap_object) -> None:
         writer.begin_list("tilemap")
         writer.write_bool("solid", self.solid)
         if self.draw_target:
@@ -104,19 +104,19 @@ class SuperTuxTileMap:
         writer.write_field("tiles", self.tilemap_layer.field)
         writer.end_list()
 
-    def get_bounding_rect(self):
+    def get_bounding_rect(self) -> Rect:
         return self.tilemap_layer.get_bounding_rect()
 
-    def has_bounding_rect(self):
+    def has_bounding_rect(self) -> boo:
         return self.tilemap_layer.has_bounding_rect()
 
-    def draw(self, gc):
+    def draw(self, gc) -> None:
         self.tilemap_layer.draw(self.pos, gc)
 
     def world2tile(self, p):
         return self.tilemap_layer.world2tile(p)
 
-    def get_tileset(self):
+    def get_tileset(self) -> SuperTuxTileset:
         return self.tilemap_layer.get_tileset()
 
     def get_data(self):
@@ -129,15 +129,15 @@ class SuperTuxTileMap:
         self.tilemap_layer.resize(size, pos)
 
     @property
-    def field(self):
+    def field(self) -> Field:
         return self.tilemap_layer.field
 
     @property
-    def width(self):
+    def width(self) -> int:
         return self.tilemap_layer.width
 
     @property
-    def height(self):
+    def height(self) -> int:
         return self.tilemap_layer.height
 
 

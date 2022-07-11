@@ -71,7 +71,7 @@ class Tux(GameObj):
     identifier = "tux"
     sprite = "images/creatures/tux/big/jump-0.png"
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.objmap_object = make_sprite_object(self, self.sprite)
@@ -90,7 +90,7 @@ class LevelTime(GameObj):
     identifier = "leveltime"
     sprite = "images/engine/editor/clock.png"
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.objmap_object = make_sprite_object(self, self.sprite)
@@ -108,7 +108,7 @@ class Camera(GameObj):
     sprite = None
     values = ["normal", "autoscroll"]
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.objmap_object = ObjMapObject(Point(), self)
@@ -131,7 +131,7 @@ class ResetPoint(GameObj):
     # ["bell", "images/objects/bell/bell.sprite", "sprite",
     #  lambda data, sexpr: SimpleObject("bell")],
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.objmap_object = make_sprite_object(self, self.sprite)
@@ -149,7 +149,7 @@ class GhostFlame(GameObj):
     identifier = "ghostflame"
     sprite = "images/creatures/flame/ghostflame.sprite"
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.objmap_object = make_sprite_object(self, self.sprite)
@@ -168,7 +168,7 @@ class Flame(GameObj):
     identifier = "flame"
     sprite = "images/creatures/flame/flame.sprite"
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.objmap_object = make_sprite_object(self, self.sprite)
@@ -187,7 +187,7 @@ class Decal(GameObj):
     identifier = "decal"
     sprite = "images/engine/editor/decal.png"
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.objmap_object = make_sprite_object(self, self.sprite)
@@ -199,7 +199,7 @@ class Decal(GameObj):
             InlinePosProperty(),
         ]
 
-    def update(self):
+    def update(self) -> None:
         self.sprite = self.find_property("sprite").value
         self.objmap_object = make_sprite_object(self, self.sprite,
                                                 Point(self.objmap_object.pos.x, self.objmap_object.pos.y))
@@ -211,7 +211,7 @@ class Trampoline(GameObj):
     identifier = "trampoline"
     sprite = "images/objects/trampoline/trampoline.sprite"
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.objmap_object = make_sprite_object(self, self.sprite)
@@ -229,7 +229,7 @@ class Coin(GameObj):
     identifier = "coin"
     sprite = "images/objects/coin/coin.sprite"
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.objmap_object = make_sprite_object(self, self.sprite)
@@ -246,7 +246,7 @@ class Climbable(GameObj):
     identifier = "climbable"
     sprite = "images/engine/editor/climbable.png"
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.objmap_object = make_rect_object(self, Colorf(1.0, 1.0, 0))
@@ -263,7 +263,7 @@ class SecretArea(GameObj):
     identifier = "secretarea"
     sprite = "images/engine/editor/secretarea.png"
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.objmap_object = make_rect_object(self, Colorf(0, 1.0, 0))
@@ -283,7 +283,7 @@ class InvisibleWall(GameObj):
     identifier = "invisible_wall"
     sprite = "images/engine/editor/invisible_wall.png"
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.objmap_object = make_rect_object(self, Colorf(0, 0, 0, 0.8))
@@ -300,7 +300,7 @@ class AmbientSound(GameObj):
     identifier = "ambient_sound"
     sprite = "images/engine/editor/ambientsound.png"
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.objmap_object = make_rect_object(self, Colorf(1.0, 0, 0))
@@ -321,7 +321,7 @@ class ScriptTrigger(GameObj):
     identifier = "scripttrigger"
     sprite = "images/engine/editor/scripttrigger.png"
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.objmap_object = make_rect_object(self, Colorf(1.0, 0, 1.0))
@@ -340,7 +340,7 @@ class SequenceTrigger(GameObj):
     identifier = "sequencetrigger"
     sprite = "images/engine/editor/sequencetrigger.png"
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.objmap_object = make_rect_object(self, Colorf(1.0, 0, 0))
@@ -354,7 +354,7 @@ class SequenceTrigger(GameObj):
 
 class BadGuy(GameObj):
 
-    def __init__(self, kind, sprite_filename):
+    def __init__(self, kind, sprite_filename) -> None:
         super().__init__()
 
         self.label = kind
@@ -377,7 +377,7 @@ class Candle(GameObj):
     identifier = "candle"
     sprite = "images/objects/candle/candle.sprite"
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.objmap_object = make_sprite_object(self, self.sprite)
@@ -399,7 +399,7 @@ class Torch(GameObj):
     identifier = "torch"
     sprite = "images/objects/torch/torch1.sprite"
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.objmap_object = make_sprite_object(self, self.sprite)
@@ -417,7 +417,7 @@ class DartTrap(GameObj):
     identifier = "darttrap"
     sprite = "images/creatures/darttrap/darttrap.sprite"
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.objmap_object = make_sprite_object(self, self.sprite)
@@ -438,7 +438,7 @@ class WilloWisp(GameObj):
     identifier = "willowisp"
     sprite = "images/creatures/willowisp/willowisp.sprite"
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.objmap_object = make_sprite_object(self, self.sprite)
@@ -462,7 +462,7 @@ class Dispenser(GameObj):
     identifier = "dispenser"
     sprite = "images/creatures/dispenser/canon.png"
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.objmap_object = make_sprite_object(self, self.sprite)
@@ -484,7 +484,7 @@ class Switch(GameObj):
     identifier = "switch"
     sprite = "images/objects/switch/switch.sprite"
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.objmap_object = make_sprite_object(self, self.sprite)
@@ -503,7 +503,7 @@ class Platform(GameObj):
     identifier = "platform"
     sprite = "images/objects/flying_platform/flying_platform-0.png"
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.objmap_object = make_sprite_object(self, self.sprite)
@@ -522,7 +522,7 @@ class SpawnPoint(GameObj):
     identifier = "spawnpoint"
     sprite = "images/engine/editor/spawnpoint.png"
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.objmap_object = make_sprite_object(self, self.sprite)
@@ -536,7 +536,7 @@ class SpawnPoint(GameObj):
 
 class SimpleObject(GameObj):
 
-    def __init__(self, kind, sprite):
+    def __init__(self, kind, sprite) -> None:
         super().__init__()
 
         self.label = kind
@@ -553,7 +553,7 @@ class SimpleObject(GameObj):
 
 class SimpleTileObject(GameObj):
 
-    def __init__(self, kind, sprite):
+    def __init__(self, kind, sprite) -> None:
         super().__init__()
 
         self.label = kind
@@ -579,7 +579,7 @@ class WeakBlock(GameObj):
     sprite = "images/objects/weak_block/meltbox.sprite"
     sprite_linked = "images/objects/weak_block/strawbox.sprite"
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.objmap_object = make_sprite_object(self, self.sprite)
@@ -610,7 +610,7 @@ class BonusBlock(GameObj):
         "trampoline",
     ]
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.objmap_object = make_sprite_object(self, self.sprite)
@@ -635,7 +635,7 @@ class InfoBlock(GameObj):
     identifier = "infoblock"
     sprite = "images/objects/bonus_block/infoblock.sprite"
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.objmap_object = make_sprite_object(self, self.sprite)
@@ -656,7 +656,7 @@ class Powerup(GameObj):
     identifier = "powerup"
     sprite = "images/engine/editor/powerup.png"
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.objmap_object = make_sprite_object(self, self.sprite)
@@ -675,7 +675,7 @@ class Powerup(GameObj):
 
 class ParticleSystem(GameObj):
 
-    def __init__(self, kind, sprite):
+    def __init__(self, kind, sprite) -> None:
         super().__init__()
 
         self.label = "ParticleSystem (%s)" % kind
@@ -696,7 +696,7 @@ class Gradient(GameObj):
     identifier = "gradient"
     sprite = "images/engine/editor/gradient.png"
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.objmap_object = make_sprite_object(self, self.sprite)
@@ -715,7 +715,7 @@ class Background(GameObj):
     identifier = "background"
     sprite = "images/engine/editor/background.png"
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.objmap_object = make_sprite_object(self, self.sprite)
@@ -737,7 +737,7 @@ class Background(GameObj):
 
 class UnimplementedObject(GameObj):
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         self.sexpr = None
 
@@ -757,7 +757,7 @@ class Door(GameObj):
     identifier = "door"
     sprite = "images/objects/door/door.sprite"
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.objmap_object = make_sprite_object(self, self.sprite)
@@ -775,7 +775,7 @@ class Door(GameObj):
 
 class PathNode(GameObj):
 
-    def __init__(self, node):
+    def __init__(self, node) -> None:
         super().__init__()
         self.node = node
 
@@ -786,7 +786,7 @@ class ScriptedObject(GameObj):
     identifier = "scriptedobject"
     sprite = "images/engine/editor/scriptedobject.png"
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.objmap_object = make_sprite_object(self, self.sprite)
@@ -809,7 +809,7 @@ class Wind(GameObj):
     identifier = "wind"
     sprite = "images/engine/editor/wind.png"
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.objmap_object = make_rect_object(self, Colorf(0, 0.75, 0.75, 0.75))
@@ -831,7 +831,7 @@ class Pushbutton(GameObj):
     identifier = "pushbutton"
     sprite = "images/objects/pushbutton/pushbutton.sprite"
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.objmap_object = make_sprite_object(self, self.sprite)

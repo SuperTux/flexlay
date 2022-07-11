@@ -29,7 +29,7 @@ from flexlay.util.signal import Signal
 class LayerTreeView(QTreeView):
     """A QTreeView for layers"""
 
-    def __init__(self, layer_selector, parent=None, selection_callback=None):
+    def __init__(self, layer_selector, parent=None, selection_callback=None) -> None:
         """Initialises a LayerTreeView
 
         Only difference from QTreeView is that a Signal is created
@@ -91,7 +91,7 @@ class LayerSelector:
              return a TilemapLayer
     """
 
-    def __init__(self, generate_tilemap_obj):
+    def __init__(self, generate_tilemap_obj) -> None:
         """A way to view layers
 
         :param metadata_from_size: A method/function which returns metadata
@@ -209,7 +209,7 @@ class LayerSelector:
         # Ensure all are visible and set to bold.
         self.show_all()
 
-    def hide_all(self):
+    def hide_all(self) -> None:
         """Hide all layers in this editormap"""
         if not self.editormap:
             return
@@ -219,7 +219,7 @@ class LayerSelector:
         # Repaint so that changes are visible
         EditorMapComponent.current.editormap_widget.repaint()
 
-    def show_all(self):
+    def show_all(self) -> None:
         """Unhide all layers in this editormap"""
         if not self.editormap:
             return
@@ -229,7 +229,7 @@ class LayerSelector:
         # Repaint so that changes are visible
         EditorMapComponent.current.editormap_widget.repaint()
 
-    def hide_all_layers(self):
+    def hide_all_layers(self) -> None:
         if not self.editormap:
             return
         # Get TilemapLayer, and set hidden
@@ -241,7 +241,7 @@ class LayerSelector:
         # Repaint so that changes are visible
         EditorMapComponent.current.editormap_widget.repaint()
 
-    def show_all_layers(self):
+    def show_all_layers(self) -> None:
         if not self.editormap:
             return
         # Get TilemapLayer, and set hidden
@@ -272,14 +272,14 @@ class LayerSelector:
                 pass
         return None
 
-    def toggle_current(self):
+    def toggle_current(self) -> None:
         """Toggle the currently selected layer visibility"""
         self.toggle_hidden(self.selected_index)
 
-    def toggle_show_only_selected(self):
+    def toggle_show_only_selected(self) -> None:
         self.show_only_selected = not self.show_only_selected
 
-    def toggle_action(self):
+    def toggle_action(self) -> None:
         """Toggle current layer and change eye icon to open/close"""
         self.toggle_current()
         if self.is_hidden(self.selected_index):
@@ -331,7 +331,7 @@ class LayerSelector:
 
         self.model.appendRow(item)
 
-    def remove_current_layer(self):
+    def remove_current_layer(self) -> None:
         self.remove_layer(self.selected_index)
 
     def remove_layer(self, layer):

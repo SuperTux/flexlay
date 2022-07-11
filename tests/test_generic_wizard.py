@@ -25,7 +25,8 @@ from flexlay.gui.properties_widget import PropertiesWidget
 
 
 class FlexlayGenericWizardTestCase(unittest.TestCase):
-    def simple_test(self):
+
+    def simple_test(self) -> None:
         test_app = QApplication(sys.argv)
 
         test_wizard = GenericWizard(None, "Generic Wizard Test")

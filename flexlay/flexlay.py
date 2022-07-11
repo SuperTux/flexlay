@@ -24,7 +24,8 @@ from flexlay.gui_manager import GUIManager
 
 
 class Flexlay:
-    def __init__(self, app_name):
+
+    def __init__(self, app_name) -> None:
         self.name = app_name
 
         self.application = QApplication(sys.argv)

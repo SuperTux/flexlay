@@ -15,12 +15,16 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from flexlay.graphic_context import GraphicContext
+from flexlay.wip.stroke import Stroke
+
+
 class StrokeDrawer:
 
-    def __init__(self):
+    def __init__(self) -> None:
         pass
 
-    def draw(self, stroke, gc):
+    def draw(self, stroke: Stroke, gc: GraphicContext) -> None:
         pass
 
 

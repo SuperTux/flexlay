@@ -19,7 +19,8 @@ from flexlay.gui.file_dialog import OpenFileDialog, SaveFileDialog
 
 
 class OpenLevelFileDialog(OpenFileDialog):
-    def __init__(self, title):
+
+    def __init__(self, title: str) -> None:
         super().__init__(title, ("SuperTux Files (*.stl *.stwm)",
                                  "SuperTux Levels (*.stl)",
                                  "SuperTux Worldmaps (*.stwm)",
@@ -27,7 +28,8 @@ class OpenLevelFileDialog(OpenFileDialog):
 
 
 class SaveLevelFileDialog(SaveFileDialog):
-    def __init__(self, title, is_worldmap=False):
+
+    def __init__(self, title: str, is_worldmap: bool = False) -> None:
         super().__init__(title, ".stwm" if is_worldmap else ".stl")
 
 

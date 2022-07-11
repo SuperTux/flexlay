@@ -15,7 +15,13 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-def sexpr_filter(name, tree):
+from typing import Any, Union, Optional
+
+
+SExprValue = Any  # Union[bool, int, float, str, list]
+
+
+def sexpr_filter(name: str, tree: list[SExprValue]) -> SExprValue:
     ret = []
     for i in tree:
         if i[0] == name:
@@ -23,7 +29,7 @@ def sexpr_filter(name, tree):
     return ret
 
 
-def assoc_ref(lst, key):
+def assoc_ref(lst: list[SExprValue], key: str) -> Optional[SExprValue]:
     if lst == []:
         return None
     elif lst[0][0] == key:
@@ -32,7 +38,7 @@ def assoc_ref(lst, key):
         return assoc_ref(lst[1:], key)
 
 
-def get_value_from_tree(spec, tree, default):
+def get_value_from_tree(spec: list[Any], tree: list[Any], default: Any) -> Any:
     if spec == []:
         return tree
     elif spec == ['_']:
@@ -52,7 +58,8 @@ def get_value_from_tree(spec, tree, default):
 
 
 class SExprReader:
-    def __init__(self):
+
+    def __init__(self) -> None:
         pass
 
 

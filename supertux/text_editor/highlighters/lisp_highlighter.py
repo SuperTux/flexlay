@@ -14,6 +14,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+
+from typing import Any, Optional
+
 import json
 import re
 
@@ -26,7 +29,7 @@ from .highlighter import SuperTuxHighlighter, HighlightingRule
 class SuperTuxLispHighlighter(SuperTuxHighlighter):
 
     @staticmethod
-    def clean_text(text):
+    def clean_text(text: str) -> str:
         tiles = text.find("(tiles")
         while tiles != -1:
             close_bracket = text.find(")", tiles)
@@ -39,7 +42,7 @@ class SuperTuxLispHighlighter(SuperTuxHighlighter):
         return text
 
     @staticmethod
-    def load_tree_json(filename=None):
+    def load_tree_json(filename: Optional[str] = None) -> Any:
         if not filename or filename[-5:] != ".json":
             filename = "highlighters/patterns2.json"
         patterns_file = open(filename, "r")
@@ -47,7 +50,7 @@ class SuperTuxLispHighlighter(SuperTuxHighlighter):
         return pattern_tree
 
     @staticmethod
-    def search_tree(tree, tag_list):
+    def search_tree(tree: dict[str, list[Any]], tag_list: list[str]) -> Optional[QTextCharFormat]:
         '''
         Searches a tree to find a tag
         :param tag_list: ["supertux-level", "sector", "name"]

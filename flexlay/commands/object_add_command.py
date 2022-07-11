@@ -16,28 +16,29 @@
 
 
 from flexlay.commands.command import Command
+from flexlay.object_layer import ObjectLayer
 
 
 class ObjectAddCommand(Command):
 
-    def __init__(self, objmap):
+    def __init__(self, objmap: ObjectLayer) -> None:
         super().__init__()
 
         self.objmap = objmap
         self.objs = []
 
-    def add_object(self, obj):
+    def add_object(self, obj) -> None:
         self.objs.append(obj)
 
-    def execute(self):
+    def execute(self) -> None:
         for obj in self.objs:
             self.objmap.add_object(obj)
 
-    def undo(self):
+    def undo(self) -> None:
         for obj in self.objs:
             self.objmap.delete_object(obj)
 
-    def redo(self):
+    def redo(self) -> None:
         self.execute()
 
 

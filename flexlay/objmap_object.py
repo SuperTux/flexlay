@@ -15,41 +15,45 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from typing import Any
+
 from flexlay.util import Signal
+from flexlay.math import Point, Rect, Size
+from flexlay.graphic_context import GraphicContext
 
 
 class ObjMapObject:
 
-    def __init__(self, pos, metadata):
-        self.to_draw = True
-        self.pos = pos
-        self.metadata = metadata
+    def __init__(self, pos: Point, metadata: Any) -> None:
+        self.to_draw: bool = True
+        self.pos: Point = pos
+        self.metadata: Any = metadata
         self.sig_select = Signal()
         self.sig_deselect = Signal()
         self.sig_move = Signal()
 
-    def draw(self, gc):
+    def draw(self, gc: GraphicContext) -> None:
         pass
 
-    def is_inside(self, click_pos):
+    def is_inside(self, click_pos: Point) -> bool:
         rect = self.get_bound_rect()
         if rect is None:
             return False
         return rect.is_inside(click_pos)
 
-    def get_bound_rect(self):
+    def get_bound_rect(self) -> Rect:
         pass
 
-    def get_pos(self):
+    def get_pos(self) -> Point:
         return self.pos
 
-    def set_pos(self, pos):
+    def set_pos(self, pos: Point):
         self.pos = pos
 
-    def add_control_points(self):
+    def add_control_points(self) -> None:
         pass
 
-    def update_control_points(self):
+    def update_control_points(self) -> None:
         pass
 
 

@@ -15,22 +15,32 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from PyQt5.QCore import QSize
+
+
 class Size:
-    def __init__(self, w, h):
+
+    def __init__(self, w: int, h: int) -> None:
         self.width = w
         self.height = h
 
-    def copy(self):
+    def copy(self) -> 'Size':
         return Size(self.width, self.height)
 
-    def __eq__(self, rhs):
+    def to_qt(self) -> QSize:
+        return QSize(self.width, self.height)
+
+    def __eq__(self, rhs: object) -> bool:
+        if not isinstance(rhs, Size):
+            return False
+
         return (self.width == rhs.width and
                 self.height == rhs.height)
 
-    def __ne__(self, rhs):
+    def __ne__(self, rhs: object) -> bool:
         return not self.__eq__(rhs)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return "Size({}, {})".format(self.width, self.height)
 
 

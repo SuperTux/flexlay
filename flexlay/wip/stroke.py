@@ -22,7 +22,7 @@ from flexlay.math import Rectf
 
 class Dab:
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.time = None
         self.pos = None
         self.pressure = None
@@ -31,12 +31,12 @@ class Dab:
 
 class Stroke:
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.dabs = []
         self.drawer = None
         self.bounding_rect_needs_recalc = True
 
-    def calc_bounding_rect(self):
+    def calc_bounding_rect(self) -> Rectf:
         rect = Rectf()
 
         # FIXME: Keep the drawer into account (ie. brushsize)
@@ -53,10 +53,10 @@ class Stroke:
 
         return rect
 
-    def set_drawer(self, drawer):
+    def set_drawer(self, drawer) -> None:
         self.drawer = drawer
 
-    def get_drawer(self):
+    def get_drawer(self) -> Drawer:
         return self.drawer
 
     def get_interpolated_dabs(self, x_spacing, y_spacing):

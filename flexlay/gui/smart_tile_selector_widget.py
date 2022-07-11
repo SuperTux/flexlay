@@ -45,7 +45,7 @@ class SmartTile:
     start = 0
     reverse = False
 
-    def __init__(self, id, name, width, height, max_width, max_height, start, reverse):
+    def __init__(self, id, name, width, height, max_width, max_height, start, reverse) -> None:
         self.id = id
         self.name = name
         self.width = width
@@ -70,7 +70,7 @@ class SmartTile:
         self.has_mappings = False
         self.brush = None
 
-    def as_brush(self):
+    def as_brush(self) -> TileBrush:
         brush = TileBrush(self.width, self.height)
         brush.set_transparent()
         i = self.start
@@ -86,7 +86,7 @@ class SmartTile:
                     i += 1
         return brush
 
-    def is_valid_id(self, id):
+    def is_valid_id(self, id: int) -> int:
         return id >= self.start and id <= self.start + (self.width * self.height)
 
     """
@@ -97,7 +97,9 @@ class SmartTile:
     @param top: Tile ID at Y - 1
     """
 
-    def get_fitting_tile(self, width, height, left, top, x, y, mappings=None):
+    def get_fitting_tile(self,
+                         width: int, height: int, left: int, top: int, x: int, y: int,
+                         mappings: list[Any] = None):
         # Check mappings:
         if mappings is not None:
             matching_tiles = []
@@ -134,7 +136,10 @@ class SmartTile:
         else:
             return self.other_ids[0]
 
-    def as_smart_brush(self, width=None, height=None, mappings=None):
+    def as_smart_brush(self,
+                       width: Optional[int] = None,
+                       height: Optional[int] = None,
+                       mappings: list[Any] = None):
         brush = self.as_brush()
         if width is None and height is None:
             return brush
@@ -189,13 +194,14 @@ class SmartTile:
 
 
 class SmartTileSelectorWidget(QWidget):
-    def __init__(self, viewport):
+
+    def __init__(self, viewport) -> None:
         super().__init__()
 
         self.smart_tiles = []
         self.mappings = []
         self.load_tiles()
-        self.layout = QVBoxLayout()
+        self._layout = QVBoxLayout()
 
         self.list_widget = QListWidget(self)
         for tile in self.smart_tiles:
@@ -211,10 +217,10 @@ class SmartTileSelectorWidget(QWidget):
         self.height_box = QHBoxLayout()
         self.height_box.addWidget(self.height_label)
         self.height_box.addWidget(self.height_input)
-        self.layout.addWidget(self.list_widget)
-        self.layout.addLayout(self.width_box)
-        self.layout.addLayout(self.height_box)
-        self.setLayout(self.layout)
+        self._layout.addWidget(self.list_widget)
+        self._layout.addLayout(self.width_box)
+        self._layout.addLayout(self.height_box)
+        self.setLayout(self._layout)
 
         self.current = None
         self.list_widget.currentItemChanged.connect(self.item_changed)
@@ -222,7 +228,7 @@ class SmartTileSelectorWidget(QWidget):
         self.height_input.valueChanged.connect(self.set_brush)
         self.viewport = viewport
 
-    def set_brush(self):
+    def set_brush(self) -> None:
         current = self.get_current()
         # if current.has_mappings:
         self.brush = current.as_smart_brush(self.width_input.value(), self.height_input.value(), self.mappings)
@@ -255,7 +261,7 @@ class SmartTileSelectorWidget(QWidget):
             self.height_input.setReadOnly(True)
             self.width_input.setReadOnly(True)
 
-    def load_tiles(self):
+    def load_tiles(self) -> None:
         with open('data/supertux/smarttiles_mapping.csv', 'r') as mappings:
             reader = csv.reader(mappings)
             first_row = True

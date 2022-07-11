@@ -23,7 +23,7 @@ from flexlay.tools.tool import Tool
 
 class LayerMoveTool(Tool):
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.scrolling = False

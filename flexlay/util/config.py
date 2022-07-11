@@ -15,6 +15,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from typing import Any, Optional
+
 import configparser
 import os
 import logging
@@ -42,7 +44,7 @@ class Config:
     attribute_pattern = "[a-zA-Z_][a-zA-Z0-9_]*"
 
     @staticmethod
-    def create(projectname):
+    def create(projectname: str) -> Config:
         """Create a Config instance
 
         :param projectname: A dash-seperated, lower case name (will be saved in ~/.flexlay/projectname.cfg)
@@ -55,7 +57,7 @@ class Config:
         return Config(projectname, os.path.join(path, projectname + ".cfg"))
 
     @staticmethod
-    def check_valid(name):
+    def check_valid(name: str) -> bool:
         """Check that a name for an attribute is valid
 
         :param name: Name to be checked
@@ -66,7 +68,7 @@ class Config:
             return True
         return False
 
-    def __init__(self, project_name, filename):
+    def __init__(self, project_name: str, filename: str) -> None:
         """Use Config.create() instead"""
         Config.current = self
 
@@ -81,15 +83,15 @@ class Config:
         self.create_attribute("window_state", "")
 
         # Recent files is organised separately.
-        self.recent_files = []
+        self.recent_files: list[str] = []
 
-    def __setattr__(self, key, value):
+    def __setattr__(self, key: str, value: Any) -> None:
         if key in self.attributes:
             self.attributes[key] = value
         else:
             super().__setattr__(key, value)
 
-    def __getattr__(self, name):
+    def __getattr__(self, name: str) -> Any:
         if name in self.__dict__:
             return self.__dict__[name]
         elif name in self.attributes:
@@ -97,7 +99,7 @@ class Config:
         else:
             raise AttributeError("Config instance has no such attribute '" + name + "'")
 
-    def load(self, filename=None):
+    def load(self, filename: Optional[str] = None) -> None:
         """Load the configs from file
 
         You should run this function just after creating all the attributes you want.
@@ -122,7 +124,7 @@ class Config:
         else:
             logging.info("No " + self.project_name + " section found in " + filename)
 
-    def save(self, filename=None):
+    def save(self, filename: Optional[str] = None) -> None:
         """Save configs to file"""
         if filename is None:
             filename = self.filename
@@ -138,7 +140,7 @@ class Config:
         with open(filename, "w") as fout:
             parser.write(fout)
 
-    def create_attribute(self, name, default_value=""):
+    def create_attribute(self, name: str, default_value: str = "") -> None:
         """Create new attribute
 
         Can then be accessed like a member.
@@ -155,7 +157,7 @@ class Config:
         else:
             raise Exception("Cannot create attribute \"" + name + "\", it already exists!")
 
-    def add_recent_file(self, filename):
+    def add_recent_file(self, filename: str) -> None:
         """Add/move filename to top of recent files list.
 
         Max in list is 10, so remove first filename

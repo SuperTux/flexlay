@@ -22,7 +22,7 @@ from flexlay.math import Point, Rect
 
 class PaintCommand(Command):
 
-    def __init__(self, tilemap_layer, brush):
+    def __init__(self, tilemap_layer, brush) -> None:
         super().__init__()
 
         self.points = []
@@ -42,7 +42,7 @@ class PaintCommand(Command):
         self.points.append(pos)
         self.tilemap.draw_tile_brush(self.brush, pos)
 
-    def execute(self):
+    def execute(self) -> None:
         assert self.points != []
 
         # Calc bounding rect
@@ -74,10 +74,10 @@ class PaintCommand(Command):
 
         self.undo_field = None
 
-    def redo(self):
+    def redo(self) -> None:
         TilemapLayer.draw_tiles(self.tilemap.field, self.redo_brush, self.pos)
 
-    def undo(self):
+    def undo(self) -> None:
         TilemapLayer.draw_tiles(self.tilemap.field, self.undo_brush, self.pos)
 
 

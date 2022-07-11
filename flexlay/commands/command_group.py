@@ -20,23 +20,23 @@ from flexlay.commands import Command
 
 class CommandGroup(Command):
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.commands = []
 
-    def add_command(self, command):
+    def add_command(self, command) -> None:
         self.commands.append(command)
 
-    def execute(self):
+    def execute(self) -> None:
         for command in self.commands:
             command.execute()
 
-    def undo(self):
+    def undo(self) -> None:
         for command in reversed(self.commands):
             command.undo()
 
-    def redo(self):
+    def redo(self) -> None:
         for command in self.commands:
             command.redo()
 

@@ -15,6 +15,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from typing import Callable, Optional
+
 import os
 
 from PyQt5.QtCore import Qt
@@ -23,28 +25,28 @@ from PyQt5.QtWidgets import QFileDialog
 
 class FileDialog:
 
-    def __init__(self, title):
-        self.callback = None
+    def __init__(self, title: str) -> None:
+        self.callback: Optional[Callable[[str], None]] = None
         self.file_dialog = QFileDialog()
         self.file_dialog.setWindowModality(Qt.ApplicationModal)
         self.filename = ""
 
-        def on_selected(path):
+        def on_selected(path: str) -> None:
             self.filename = path
 
         self.file_dialog.fileSelected.connect(on_selected)
 
-    def run(self, callback):
+    def run(self, callback: Callable[[str], None]) -> None:
         self.callback = callback
         if self.callback:
             self.file_dialog.fileSelected.connect(self.callback)
 
         self.file_dialog.exec_()
 
-    def get_filename(self):
+    def get_filename(self) -> str:
         return self.filename
 
-    def set_directory(self, *dirs):
+    def set_directory(self, *dirs: str) -> None:
         path = os.path.join(*dirs)
         self.filename = path
         self.file_dialog.setDirectory(path)
@@ -52,7 +54,7 @@ class FileDialog:
 
 class OpenFileDialog(FileDialog):
 
-    def __init__(self, title, filters=("All Files (*)",)):
+    def __init__(self, title: str, filters: tuple[str, ...] = ("All Files (*)",)) -> None:
         super().__init__(title)
 
         self.file_dialog.setNameFilters(filters)
@@ -63,7 +65,7 @@ class OpenFileDialog(FileDialog):
 
 class SaveFileDialog(FileDialog):
 
-    def __init__(self, title, default_suffix=""):
+    def __init__(self, title: str, default_suffix: str = "") -> None:
         super().__init__(title)
 
         # FIXME: Not working!?
@@ -75,14 +77,14 @@ class SaveFileDialog(FileDialog):
 
 class OpenDirectoryDialog(OpenFileDialog):
 
-    def __init__(self, title, filters=("All Files (*)",)):
+    def __init__(self, title: str, filters: tuple[str, ...] = ("All Files (*)",)):
         super().__init__(title, filters)
         self.file_dialog.setFileMode(QFileDialog.Directory)
 
 
 class SaveDirectoryDialog(SaveFileDialog):
 
-    def __init__(self, title):
+    def __init__(self, title: str) -> None:
         super().__init__(title)
         self.file_dialog.setFileMode(QFileDialog.Directory)
 

@@ -20,10 +20,10 @@ from flexlay.gui.minimap_widget import MinimapWidget
 
 class Minimap:
 
-    def __init__(self, editormap_component):
+    def __init__(self, editormap_component) -> None:
         self.widget = MinimapWidget(editormap_component)
 
-    def update_minimap(self):
+    def update_minimap(self) -> None:
         self.widget.update_minimap()
 
     def get_widget(self):

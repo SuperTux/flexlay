@@ -17,13 +17,13 @@
 
 class Constraint:
 
-    def __init(self):
+    def __init(self) -> None:
         pass
 
 
 class GridConstraint(Constraint):
 
-    def __init__(self, width, height, offset_x, offset_y):
+    def __init__(self, width: int, height: int, offset_x: int, offset_y: int) -> None:
         pass
 
 

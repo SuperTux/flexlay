@@ -22,7 +22,7 @@ from flexlay.tools.tool import Tool
 
 class ZoomOutTool(Tool):
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
     def on_mouse_down(self, event):

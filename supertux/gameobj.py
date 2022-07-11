@@ -53,10 +53,10 @@ class GameObj:
     constraints: List[Constraint] = []
     factory = None
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.objmap_object = None
 
-    def signal_connect(self):
+    def signal_connect(self) -> None:
         """Connect the objmap_object signals to the on_select and on_deselect
 
         Used, for example, to display properties in PropertiesWidget.
@@ -117,7 +117,7 @@ class GameObj:
         command = GameObjPropsChangeCommand(self, prop_diff)
         Workspace.current.get_map().execute(command)
 
-    def update(self):
+    def update(self) -> None:
         """Called after properties read, and optionally at any other time"""
         pass
 

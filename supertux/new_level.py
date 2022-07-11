@@ -27,7 +27,7 @@ from supertux.level import Level
 
 class NewLevelWizard(GenericWizard):
 
-    def __init__(self, parent):
+    def __init__(self, parent) -> None:
         super().__init__(parent, "New Level Wizard")
         # Modal means you cannot touch the parent until this
         # closes
@@ -69,7 +69,7 @@ class NewLevelWizard(GenericWizard):
         self.level.tileset_path = os.path.join("images", "tiles.strf")
 
     # Not Implemented
-    def cancel(self):
+    def cancel(self) -> None:
         self.level = None
 
     def create_intro_page(self):
@@ -144,7 +144,7 @@ class NewLevelWizard(GenericWizard):
         page.setLayout(vbox)
         return page
 
-    def set_license(self):  # Connected to signal
+    def set_license(self) -> None:  # Connected to signal
         self.level.license = self.license_input.toPlainText()
 
 

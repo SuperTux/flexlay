@@ -18,20 +18,22 @@
 from PyQt5.QtCore import QPoint
 from PyQt5.QtGui import QPainter
 
+from flexlay.pixel_buffer import PixelBuffer
 
-def blit_opaque(target, brush, x, y):
+
+def blit_opaque(target: PixelBuffer, brush: PixelBuffer, x: int, y: int) -> None:
     painter = QPainter(target.get_qimage())
     painter.setCompositionMode(QPainter.CompositionMode_Source)
     painter.drawImage(QPoint(x, y), brush.get_qimage())
 
 
-def blit(target, brush, x, y):
+def blit(target: PixelBuffer, brush: PixelBuffer, x: int, y: int) -> None:
     painter = QPainter(target.get_qimage())
     painter.setCompositionMode(QPainter.CompositionMode_SourceOver)
     painter.drawImage(QPoint(x, y), brush.get_qimage())
 
 
-def blit_clear(canvas):
+def blit_clear(canvas: PixelBuffer) -> None:
     pass
     # print("clear(PixelBuffer canvas) not implemented", canvas)
     # canvas.lock()

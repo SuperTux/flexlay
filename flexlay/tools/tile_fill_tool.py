@@ -23,7 +23,7 @@ from flexlay.tools.tool import Tool
 class TileFillTool(Tool):
     current = None
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         TileFillTool.current = self

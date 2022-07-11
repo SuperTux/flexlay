@@ -15,14 +15,17 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from typing import Optional
+
 import logging
 
-from flexlay import Color, PixelBuffer, Sprite
+from flexlay import Color, PixelBuffer
+from flexlay.sprite import Sprite
 
 
 class Tile:
 
-    def __init__(self, pixelbuffer=None, sprite=None):
+    def __init__(self, pixelbuffer: Optional[PixelBuffer] = None, sprite: Optional[Sprite] = None) -> None:
         self.provider = None
         self.sprite = sprite
         self.pixelbuffer = pixelbuffer
@@ -31,7 +34,7 @@ class Tile:
         self.attribute_color = Color(255, 255, 255)
         self.filename = None
 
-    def get_color(self):
+    def get_color(self) -> Color:
         if self.color is not None:
             return self.color
         else:
@@ -52,7 +55,7 @@ class Tile:
 
             return self.sprite
 
-    def get_pixelbuffer(self):
+    def get_pixelbuffer(self) -> PixelBuffer:
         if self.pixelbuffer is not None:
             return self.pixelbuffer
         else:
@@ -63,11 +66,11 @@ class Tile:
                 self.pixelbuffer = PixelBuffer.from_file(self.filename)
                 return self.pixelbuffer
 
-    def calc_color(self):
+    def calc_color(self) -> Color:
         logging.info("Tile::calc_color not implemented")
         return Color(255, 255, 255, 255)
 
-    def get_filename(self):
+    def get_filename(self) -> str:
         return self.filename
 
 

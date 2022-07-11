@@ -44,7 +44,7 @@ class Dab:
 
 class SketchStrokeTool:
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.drawing = False
         self.stroke = Stroke()
         self.drawer = SpriteStrokeDrawer()

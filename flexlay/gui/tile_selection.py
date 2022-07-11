@@ -24,7 +24,7 @@ from flexlay.tile_brush import TileBrush
 
 class TileSelection:
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.tilemap = None
         self.start_pos = None
         self.selection = None
@@ -45,7 +45,7 @@ class TileSelection:
     def is_active(self):
         return self.active
 
-    def clear(self):
+    def clear(self) -> None:
         self.selection = Rect()
         self.active = False
 

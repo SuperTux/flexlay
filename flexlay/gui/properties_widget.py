@@ -46,7 +46,7 @@ class Item:
     KIND_RADIO = 6
     KIND_COLOR = 7
 
-    def __init__(self, kind, label, body, callback=None, group=None):
+    def __init__(self, kind, label, body, callback=None, group=None) -> None:
         self.kind = kind
         self.label = label
         self.body = body
@@ -95,7 +95,7 @@ class PropertiesWidget(QWidget):
     also see: supertux/property.py
     """
 
-    def __init__(self, parent):
+    def __init__(self, parent) -> None:
         super().__init__(parent)
         self.items = []
 
@@ -113,7 +113,7 @@ class PropertiesWidget(QWidget):
 
         self.call_signal.connect(self.call_callbacks)
 
-    def clear_properties(self):
+    def clear_properties(self) -> None:
         # Clear Items
         self.items = []
         # Remove all widgets
@@ -199,7 +199,7 @@ class PropertiesWidget(QWidget):
             else:
                 inputbox.setText(path)
 
-        def browse_files():
+        def browse_files() -> None:
             """Called when Browse... button clicked"""
             dialog = OpenFileDialog("Open File")
             dialog.set_directory(open_in if open_in else Config.current.datadir)
@@ -273,7 +273,7 @@ class PropertiesWidget(QWidget):
         """Adds a callback to the callback signal"""
         self.call_signal.connect(callback)
 
-    def call(self):
+    def call(self) -> None:
         self.call_signal(*self.get_values())
 
 

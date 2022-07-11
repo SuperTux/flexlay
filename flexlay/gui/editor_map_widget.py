@@ -26,7 +26,7 @@ from flexlay.util import Signal
 
 class EditorMapWidget(QWidget):  # QOpenGLWidget
 
-    def __init__(self, comp, parent):
+    def __init__(self, comp, parent) -> None:
         super().__init__(parent)
         self.setMouseTracking(True)
 
@@ -61,7 +61,7 @@ class EditorMapWidget(QWidget):  # QOpenGLWidget
     def sizeHint(self):
         return QSize(1280, 800)
 
-    def on_map_change(self):
+    def on_map_change(self) -> None:
         workspace = self.comp.get_workspace()
         if workspace and workspace.get_map():
             if workspace.get_map().has_bounding_rect():

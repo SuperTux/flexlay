@@ -15,6 +15,9 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from typing import Callable, Optional
+
+from PyQt5.QWidgets import QToolBar
 from PyQt5.QtGui import QIcon
 
 from flexlay.gui.icon import Icon
@@ -22,27 +25,30 @@ from flexlay.gui.icon import Icon
 
 class ButtonPanel:
 
-    def __init__(self, toolbar):
+    def __init__(self, toolbar: QToolBar) -> None:
         self.toolbar = toolbar
 
-    def add_icon(self, filename, callback, hover="Hover Text", shortcut=None):
+    def add_icon(self,
+                 filename: str, callback: Callable[[], None],
+                 hover: str = "Hover Text",
+                 shortcut: Optional[str] = None) -> Icon:
         action = self.toolbar.addAction(QIcon(filename), hover)
-        if shortcut:
+        if shortcut is not None:
             action.setShortcut(shortcut)
         if callback:
-            action.triggered.connect(callback)
+            action.triggered.connect(lambda checked: callback())
         return Icon(action)
 
-    def add_text(self, name, callback):
+    def add_text(self, name: str, callback: Callable[[], None]) -> Icon:
         action = self.toolbar.addAction(name)
         if callback:
-            action.triggered.connect(callback)
+            action.triggered.connect(lambda checked: callback())
         return Icon(action)
 
-    def add_separator(self):
+    def add_separator(self) -> None:
         self.toolbar.addSeparator()
 
-    def show(self, visible):
+    def show(self, visible: bool) -> None:
         pass
 
 

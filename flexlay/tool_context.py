@@ -23,7 +23,7 @@ class ToolContext:
 
     current = None
 
-    def __init__(self):
+    def __init__(self) -> None:
         ToolContext.current = self
         self.tile_brush = TileBrush(1, 1)
         self.tile_brush.put(0, 0, 0)

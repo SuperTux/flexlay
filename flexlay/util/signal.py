@@ -15,22 +15,29 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-class Signal:
-    def __init__(self):
-        self.subscribers = []
+from typing import Any, Callable
 
-    def connect(self, callback, ignore_repeats=True):
+
+SignalCallback = Callable[[Any], None]
+
+
+class Signal:
+
+    def __init__(self) -> None:
+        self.subscribers: list[SignalCallback] = []
+
+    def connect(self, callback: SignalCallback, ignore_repeats: bool = True) -> None:
         if not ignore_repeats and callback in self.subscribers:
             return
         self.subscribers.append(callback)
 
-    def disconnect(self, callback):
+    def disconnect(self, callback: SignalCallback) -> None:
         self.subscribers.remove(callback)
 
-    def clear(self):
+    def clear(self) -> None:
         self.subscribers = []
 
-    def __call__(self, *args):
+    def __call__(self, *args: Any) -> None:
         for sub in self.subscribers:
             sub(*args)
 

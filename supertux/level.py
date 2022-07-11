@@ -58,7 +58,7 @@ class Level:
         result.sectors.append(result.current_sector)
         return result
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.version = 2
         self.filename = None
         self.name = "No Name"
@@ -72,6 +72,11 @@ class Level:
         self.tileset_path = os.path.join("images", "tiles.strf")
 
         self.is_worldmap = False
+
+        self.music: str
+        self.background: str
+        self.width: int
+        self.height: int
 
     def parse_v2(self, data):
         self.name = get_value_from_tree(["name", "_"], data, "")

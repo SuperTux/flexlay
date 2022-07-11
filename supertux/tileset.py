@@ -24,7 +24,8 @@ from supertux.util import load_lisp
 
 
 class TileGroup:
-    def __init__(self, name, tiles):
+
+    def __init__(self, name, tiles) -> None:
         self.name = name
         self.tiles = tiles
 
@@ -35,13 +36,13 @@ class SuperTuxTileset(Tileset):
     current = None
     filename = ""
 
-    def __init__(self, *params):
+    def __init__(self, *params) -> None:
         super().__init__(*params)
         SuperTuxTileset.current = self
         self.tilegroups = []
         self.filename = ""
 
-    def create_ungrouped_tiles_group(self):
+    def create_ungrouped_tiles_group(self) -> None:
         self.tilegroups.append(TileGroup("Ungrouped Tiles", self.get_ungrouped_tiles()))
 
     def get_ungrouped_tiles(self):

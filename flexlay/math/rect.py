@@ -17,12 +17,13 @@
 
 from PyQt5.QtCore import QRect, QRectF
 
+from flexlay.math.point import Point
 from flexlay.math.size import Size
 
 
 class Rect:
 
-    def __init__(self, arg1=None, arg2=None, arg3=None, arg4=None):
+    def __init__(self, arg1=None, arg2=None, arg3=None, arg4=None) -> None:
         if arg1 is None and arg2 is None and arg3 is None and arg4 is None:
             self.left = 0
             self.top = 0
@@ -44,64 +45,67 @@ class Rect:
             self.right = arg3
             self.bottom = arg4
 
-    def copy(self):
+    def copy(self) -> 'Rect':
         return Rect(self.left, self.top,
                     self.right, self.bottom)
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: object) -> bool:
+        if not isinstance(rhs, Rect):
+            return False
+
         return (self.left == rhs.left and
                 self.top == rhs.top and
                 self.right == rhs.right and
                 self.bottom == rhs.bottom)
 
-    def __ne__(self, rhs):
+    def __ne__(self, rhs: object) -> bool:
         return not self.__eq__(rhs)
 
     @property
-    def width(self):
+    def width(self) -> int:
         return self.right - self.left
 
     @property
-    def height(self):
+    def height(self) -> int:
         return self.bottom - self.top
 
     @property
-    def size(self):
+    def size(self) -> Size:
         return Size(self.right - self.left, self.bottom - self.top)
 
-    def is_inside(self, point):
+    def is_inside(self, point: Point) -> bool:
         return (self.left <= point.x and point.x <= self.right and
                 self.top <= point.y and point.y <= self.bottom)
 
-    def is_overlapped(self, rect):
+    def is_overlapped(self, rect: 'Rect') -> bool:
         return (rect.left < self.right and rect.right > self.left and
                 rect.top < self.bottom and rect.bottom > self.top)
 
-    def set_size(self, size):
+    def set_size(self, size: Size) -> None:
         self.right = self.left + size.width
         self.bottom = self.top + size.height
 
-    def normalize(self):
+    def normalize(self) -> None:
         if self.left > self.right:
             self.left, self.right = self.right, self.left
         if self.top > self.bottom:
             self.top, self.bottom = self.bottom, self.top
 
-    def to_qt(self):
-        return QRect(self.left, self.top,
-                     self.width, self.height)
+    def to_qt(self) -> QRect:
+        return QRect(int(self.left), int(self.top),
+                     int(self.width), int(self.height))
 
-    def to_qt_f(self):
+    def to_qt_f(self) -> QRectF:
         return QRectF(self.left, self.top,
                       self.width, self.height)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return "Rect({}, {}, {}, {})".format(self.left, self.top, self.right, self.bottom)
 
 
 class Rectf(Rect):
 
-    def __init__(self, arg1=None, arg2=None, arg3=None, arg4=None):
+    def __init__(self, arg1=None, arg2=None, arg3=None, arg4=None) -> None:
         super().__init__()
 
         if arg1 is None and arg2 is None and arg3 is None and arg4 is None:

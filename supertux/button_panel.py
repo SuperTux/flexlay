@@ -15,12 +15,15 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from flexlay.util import Config
+from flexlay.gui_manager import GUIManager
+from flexlay.util.config import Config
+
+from supertux.gui import SuperTuxGUI
 
 
 class SuperTuxButtonPanel:
 
-    def __init__(self, gui_manager, editor):
+    def __init__(self, gui_manager: GUIManager, editor: SuperTuxGUI) -> None:
         # Create Buttonpanel
         self.button_panel = gui_manager.create_button_panel(True)
 
@@ -79,6 +82,7 @@ class SuperTuxButtonPanel:
                                                    hover="Run Level")
 
         self.button_panel.add_separator()
+        assert Config.current is not None
         self.button_panel.add_icon(Config.current.datadir + "/images/engine/editor/camera.png",
                                    editor.camera_properties,
                                    hover="Camera Properties")

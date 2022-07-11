@@ -34,7 +34,7 @@ class EditorMapComponent:
 
     current = None
 
-    def __init__(self, tabbed=True, parent=None):
+    def __init__(self, tabbed=True, parent=None) -> None:
         EditorMapComponent.current = self
 
         self.workspace = Workspace()
@@ -76,10 +76,10 @@ class EditorMapComponent:
     def get_workspace(self):
         return self.workspace
 
-    def grab_mouse(self):
+    def grab_mouse(self) -> None:
         self.editormap_widget.grabMouse()
 
-    def release_mouse(self):
+    def release_mouse(self) -> None:
         self.editormap_widget.releaseMouse()
 
     # ifdef GRUMBEL
@@ -218,7 +218,7 @@ class EditorMapComponent:
     def get_widget(self):
         return self.tab_widget or self.widget
 
-    def update_scrollbars(self):
+    def update_scrollbars(self) -> None:
         rect = self.workspace.get_map().get_bounding_rect()
         border = 128
 

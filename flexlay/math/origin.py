@@ -51,7 +51,7 @@ class Origin:
         elif origin == Origin.bottom_right:
             return Point(size.width, size.height)
 
-    def __init__(self):
+    def __init__(self) -> None:
         pass
 
 

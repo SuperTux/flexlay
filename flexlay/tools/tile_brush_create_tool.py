@@ -25,7 +25,7 @@ from flexlay.tools.tool import Tool
 
 class TileBrushCreateTool(Tool):
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         self.is_active = False
 

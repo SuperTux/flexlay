@@ -15,9 +15,12 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from flexlay.object_layer import ObjectLayer
+
+
 class Obj:
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.obj = None
         self.old_pos = None
         self.new_pos = None
@@ -25,30 +28,30 @@ class Obj:
 
 class ObjectMoveCommand:
 
-    def __init__(self, object_layer):
+    def __init__(self, object_layer: ObjectLayer) -> None:
         self.objmap = object_layer
         self.objects = []
 
-    def execute(self):
+    def execute(self) -> None:
         pass
 
-    def add_obj(self, obj):
+    def add_obj(self, obj) -> None:
         o = Obj()
         o.obj = obj
         o.old_pos = obj.get_pos()
         self.objects.append(o)
 
-    def move_by(self, delta):
+    def move_by(self, delta) -> None:
         for obj in self.objects:
             obj.new_pos = obj.old_pos + delta
             obj.obj.set_pos(obj.new_pos)
             obj.obj.sig_move(obj.obj)
 
-    def redo(self):
+    def redo(self) -> None:
         for obj in self.objects:
             obj.obj.set_pos(obj.new_pos)
 
-    def undo(self):
+    def undo(self) -> None:
         for obj in self.objects:
             obj.obj.set_pos(obj.old_pos)
 

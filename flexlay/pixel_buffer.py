@@ -15,11 +15,12 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from typing import Dict
+from typing import cast, Dict, Optional
 
 from PyQt5.QtCore import QSize
 from PyQt5.QtGui import QImage
 
+from flexlay.math import Size
 from flexlay.blitter import blit_clear, blit_opaque
 
 
@@ -28,7 +29,7 @@ class PixelBuffer:
     cache: Dict[str, QImage] = {}
 
     @staticmethod
-    def subregion_from_file(filename, x, y, w, h):
+    def subregion_from_file(filename: str, x: int, y: int, w: int, h: int) -> PixelBuffer:
         source = PixelBuffer.from_file(filename)
         target = PixelBuffer(w, h)
         blit_clear(target)
@@ -36,53 +37,47 @@ class PixelBuffer:
         return target
 
     @staticmethod
-    def from_file(filename):
-        pixelbuffer = PixelBuffer()
+    def from_file(filename: str) -> 'PixelBuffer':
+        cached_image = PixelBuffer.cache.get(filename)
+        if cached_image is None:
+            cached_image = QImage(filename)
+            if cached_image.isNull():
+                raise RuntimeError(f"Failed to load image: {filename}")
+            PixelBuffer.cache[filename] = cached_image
 
-        qimg = PixelBuffer.cache.get(filename)
-        if qimg is not None:
-            pixelbuffer.image = qimg
-        else:
-            qimg = QImage(filename)
-            PixelBuffer.cache[filename] = qimg
-            pixelbuffer.image = qimg
-            # print("loading:", filename, " -> ", pixelbuffer.image.width(), pixelbuffer.image.height())
+        return PixelBuffer(cached_image)
 
-        if pixelbuffer.image.isNull():
-            assert False, "Failed to load image: {}".format(filename)
+    @staticmethod
+    def from_size(size: Size) -> 'PixelBuffer':
+        return PixelBuffer(QImage(QSize(size.to_qt()), QImage.Format_ARGB32))
 
-        return pixelbuffer
+    def __init__(self, image: QImage) -> None:
+        self.image = image
 
-    def __init__(self, width=0, height=0):
-        if width != 0 and height != 0:
-            self.image = QImage(QSize(width, height), QImage.Format_ARGB32)
-        else:
-            self.image = None
-
-    def get_qimage(self):
+    def get_qimage(self) -> QImage:
         return self.image
 
-    def lock(self):
+    def lock(self) -> None:
         pass
 
-    def unlock(self):
+    def unlock(self) -> None:
         pass
 
     @property
-    def width(self):
+    def width(self) -> int:
         return self.image.width()
 
     @property
-    def height(self):
+    def height(self) -> int:
         return self.image.height()
 
-    def get_pitch(self):
+    def get_pitch(self) -> int:
         return self.image.bytesPerLine()
 
-    def get_depth(self):
+    def get_depth(self) -> int:
         return self.image.depth()
 
-    def get_data(self):
+    def get_data(self) -> bytearray:
         return self.image.bits()
 
 

@@ -32,31 +32,31 @@ test_levelfile = os.path.join(os.path.dirname(__file__), "test.stl")
 
 class SuperTuxTestCase(unittest.TestCase):
 
-    def setUp(self):
+    def setUp(self) -> None:
         Config.create("supertux-editor")
 
-    def tearDown(self):
+    def tearDown(self) -> None:
         Config.current = None
 
-    def test_level_load(self):
+    def test_level_load(self) -> None:
         level = Level.from_file(test_levelfile)
         self.assertEqual(level.name, "Welcome to Antarctica")
 
-    def test_level_save(self):
+    def test_level_save(self) -> None:
         level = Level.from_file(test_levelfile)
         # with open("/tmp/test.stl", "w") as out:
         with io.StringIO() as out:
             level.save_io(out)
             # print(out.getvalue())
 
-    def test_level_new(self):
+    def test_level_new(self) -> None:
         level = Level.from_size(400, 300)
         self.assertEqual(level.name, "No Name")
 
-    def test_gameobj_factory_create_object_brushes(self):
+    def test_gameobj_factory_create_object_brushes(self) -> None:
         supertux_gameobj_factory.create_object_brushes()
 
-    def test_gameobj_factory_create_gameobj_at(self):
+    def test_gameobj_factory_create_gameobj_at(self) -> None:
         for identifier, (_, _) in supertux_gameobj_factory.objects.items():
             try:
                 obj = supertux_gameobj_factory.create_gameobj_at(identifier, Point(0, 0))
@@ -64,7 +64,7 @@ class SuperTuxTestCase(unittest.TestCase):
                 print("Exception received: %r %r" % (identifier, obj))
                 raise
 
-    def test_level_resize(self):
+    def test_level_resize(self) -> None:
         level = Level.from_file(test_levelfile)
         level.sectors[0].resize(Size(10, 10), Point(10, 10))
 

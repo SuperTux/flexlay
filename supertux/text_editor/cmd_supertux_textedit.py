@@ -16,6 +16,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+
+from typing import IO, Optional
+
 import sys
 
 from PyQt5.QtWidgets import (QMainWindow, QApplication, QVBoxLayout,
@@ -27,7 +30,7 @@ from supertux.text_editor.highlighters.lisp_highlighter import SuperTuxLispHighl
 
 class SupertuxTextEditMainWindow(QMainWindow):
 
-    def __init__(self, text_file=None):
+    def __init__(self, text_file: Optional[IO[str]] = None) -> None:
         super().__init__()
 
         self.setWindowTitle("Supertux Text Editor")
@@ -43,7 +46,7 @@ class SupertuxTextEditMainWindow(QMainWindow):
         highlighter.rehighlight()
 
 
-def main():
+def main() -> None:
     sys.path.append(".")
 
     # file_path = input("Type the path to the file you'd like to open:")

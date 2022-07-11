@@ -23,12 +23,13 @@ from flexlay.math import Point, Pointf
 
 class WorkspaceMoveTool:
 
-    def __init__(self):
-        self.scrolling = False
-        self.click_pos = Point(0, 0)
-        self.old_trans_offset = Pointf(0, 0)
+    def __init__(self) -> None:
+        self.scrolling: bool = False
+        self.click_pos: Point = Point(0, 0)
+        self.old_trans_offset: Pointf = Pointf(0, 0)
 
     def on_mouse_down(self, event):
+        assert EditorMapComponent.current is not None
         self.scrolling = True
         self.old_trans_offset = EditorMapComponent.current.get_gc_state().get_pos()
         self.click_pos = event.mouse_pos

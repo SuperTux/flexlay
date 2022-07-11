@@ -17,18 +17,19 @@
 
 from typing import List
 
-
 from flexlay.blitter import blit
 from flexlay.color import Color
 from flexlay.field import Field
 from flexlay.layer import Layer
 from flexlay.math import Point, Size, Rect
 from flexlay.pixel_buffer import PixelBuffer
+from flexlay.tile_brush import TileBrush
+from flexlay.tileset import Tileset
 
 
 class TilemapLayer(Layer):
 
-    def __init__(self, tileset, w, h):
+    def __init__(self, tileset: Tileset, w: int, h: int) -> None:
         super().__init__()
 
         self.name = "<no name>"
@@ -58,7 +59,7 @@ class TilemapLayer(Layer):
             return
         tile_size = self.tileset.get_tile_size()
 
-        if False and self.background_color.get_alpha() != 0:
+        if False and self.background_color.get_alpha() != 0:  # type: ignore
             gc.fill_rect(Rect(pos,
                               Size(self.field.width * tile_size,
                                    self.field.height * tile_size)),
@@ -120,30 +121,30 @@ class TilemapLayer(Layer):
                              end_y * tile_size,
                              Color(150, 150, 150))
 
-    def get_tile(self, x, y):
+    def get_tile(self, x: int, y: int) -> None:
         if 0 <= x < self.field.width and 0 <= y < self.field.height:
             return self.field.at(x, y)
         else:
             return 0
 
-    def resize(self, size, point):
+    def resize(self, size: Size, point: Point) -> None:
         self.field.resize(size.width, size.height, point.x, point.y)
 
-    def replace_tile(self, source_id, replacement_id):
+    def replace_tile(self, source_id: int, replacement_id: int) -> None:
         for y in range(self.field.height):
             for x in range(self.field.width):
                 if self.field.at(x, y) == source_id:
                     self.field.put(x, y, replacement_id)
 
-    def flood_fill_at(self, pos, brush):
+    def flood_fill_at(self, pos: Point, brush: TileBrush) -> None:
         replace_id = self.field.at(pos.x, pos.y)
         if replace_id not in brush.field:
             self._flood_fill_at(pos.x, pos.y, brush, replace_id)
 
-    def _flood_fill_at(self, orig_x, orig_y, brush, replace_id):
+    def _flood_fill_at(self, orig_x: int, orig_y, brush: TileBrush, replace_id: int) -> None:
         stack = [(orig_x, orig_y)]
 
-        def add(x, y):
+        def add(x, y) -> None:
             if 0 <= x < self.field.width and 0 <= y < self.field.height:
                 stack.append((x, y))
 
@@ -159,17 +160,17 @@ class TilemapLayer(Layer):
                 add(x, y + 1)
                 add(x, y - 1)
 
-    def draw_tile(self, tile_id, pos):
+    def draw_tile(self, tile_id: int, pos: Point) -> None:
         assert isinstance(tile_id, int)
         if 0 <= pos.x < self.field.width and 0 <= pos.y < self.field.height:
             self.field.put(pos.x, pos.y, tile_id)
 
     # formerly draw_tile()
-    def draw_tile_brush(self, brush, pos):
+    def draw_tile_brush(self, brush: TileBrush, pos: Point) -> None:
         self.draw_tiles(self.field, brush, pos)
 
     @staticmethod
-    def draw_tiles(field, brush, pos):
+    def draw_tiles(field: Field, brush: TileBrush, pos: Point) -> None:
         start_x = max(0, -pos.x)
         start_y = max(0, -pos.y)
 
@@ -181,19 +182,19 @@ class TilemapLayer(Layer):
                 if brush.is_opaque() or brush.at(x, y) != 0:
                     field.put(pos.x + x, pos.y + y, brush.at(x, y))
 
-    def set_draw_attribute(self, t):
+    def set_draw_attribute(self, t: int) -> None:
         self.draw_attribute = t
 
-    def get_draw_attribute(self):
+    def get_draw_attribute(self) -> None:
         return self.draw_attribute
 
-    def set_draw_grid(self, t):
+    def set_draw_grid(self, t: bool) -> None:
         self.draw_grid = t
 
-    def get_draw_grid(self):
+    def get_draw_grid(self) -> bool:
         return self.draw_grid
 
-    def create_pixelbuffer(self):
+    def create_pixelbuffer(self) -> PixelBuffer:
         tile_size = self.tileset.get_tile_size()
 
         pixelbuffer = PixelBuffer(self.width * tile_size,
@@ -226,42 +227,42 @@ class TilemapLayer(Layer):
 
         return pixelbuffer
 
-    def get_bounding_rect(self):
+    def get_bounding_rect(self) -> Rect:
         return Rect(Point(0, 0),
                     Size(self.field.width * self.tileset.get_tile_size(),
                          self.field.height * self.tileset.get_tile_size()))
 
-    def world2tile(self, pos):
+    def world2tile(self, pos: Point) -> Point:
         x = int(pos.x / self.tileset.get_tile_size())
         y = int(pos.y / self.tileset.get_tile_size())
 
         return Point(x - 1 if (pos.x < 0) else x,
                      y - 1 if (pos.y < 0) else y)
 
-    def get_tileset(self):
+    def get_tileset(self) -> Tileset:
         return self.tileset
 
-    def get_data(self):
+    def get_data(self) -> list[int]:
         return list(self.field._data.flatten())
 
-    def set_data(self, data: List[int]):
+    def set_data(self, data: List[int]) -> None:
         self.field = Field.from_list(self.field.width, self.field.height, data)
 
-    def set_background_color(self, color):
+    def set_background_color(self, color: Color) -> None:
         self.background_color = color
 
-    def set_foreground_color(self, color):
+    def set_foreground_color(self, color: Color) -> None:
         self.foreground_color = color
 
     @property
-    def width(self):
+    def width(self) -> int:
         return self.field.width
 
     @property
-    def height(self):
+    def height(self) -> int:
         return self.field.height
 
-    def has_bounding_rect(self):
+    def has_bounding_rect(self) -> bool:
         return True
 
 

@@ -15,23 +15,26 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from flexlay.object_layer import ObjectLayer
+from flexlay.objmap_object import ObjMapObject
+
 class ObjectDeleteCommand:
 
-    def __init__(self, object_layer):
+    def __init__(self, object_layer: ObjectLayer) -> None:
         self.object_layer = object_layer
-        self.objects = []
+        self.objects: list[ObjMapObject] = []
 
-    def add_object(self, obj):
+    def add_object(self, obj: ObjMapObject) -> None:
         self.objects.append(obj)
 
-    def execute(self):
+    def execute(self) -> None:
         for obj in self.objects:
             self.object_layer.delete_object(obj)
 
-    def redo(self):
+    def redo(self) -> None:
         self.execute()
 
-    def undo(self):
+    def undo(self) -> None:
         for obj in self.objects:
             self.object_layer.add_object(obj)
 

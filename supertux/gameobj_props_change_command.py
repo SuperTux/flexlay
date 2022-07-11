@@ -24,7 +24,7 @@ class GameObjPropsChangeCommand(Command):
     changed.
     """
 
-    def __init__(self, gameobj, prop_diff):
+    def __init__(self, gameobj, prop_diff) -> None:
         """It's probably not a good idea to use this for non-directly
         editable properties.
         Warning: This will accept any value
@@ -38,16 +38,16 @@ class GameObjPropsChangeCommand(Command):
         self.gameobj = gameobj
         self.prop_diff = prop_diff
 
-    def execute(self):
+    def execute(self) -> None:
         for diff in self.prop_diff:
             print(self.gameobj.properties[diff[0]].value, "=", diff[1])
             self.gameobj.properties[diff[0]].value = diff[1]
 
-    def redo(self):
+    def redo(self) -> None:
         for diff in self.prop_diff:
             self.gameobj.properties[diff[0]].value = diff[1]
 
-    def undo(self):
+    def undo(self) -> None:
         for diff in self.prop_diff:
             self.gameobj.properties[diff[0]].value = diff[2]
 

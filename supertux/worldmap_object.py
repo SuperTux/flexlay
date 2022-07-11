@@ -32,7 +32,7 @@ class WorldmapLevel(GameObj):
     identifier = "level"
     sprite = "images/worldmap/common/leveldot_green.png"
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.objmap_object = make_sprite_object(self, self.sprite)
@@ -53,7 +53,7 @@ class SpecialTile(GameObj):
     identifier = "special-tile"
     sprite = "images/worldmap/common/leveldot.sprite"
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.objmap_object = make_sprite_object(self, self.sprite)
@@ -71,7 +71,7 @@ class WorldmapSpawnpoint(GameObj):
     identifier = "worldmap-spawnpoint"
     sprite = "images/worldmap/common/tux.sprite"
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.objmap_object = make_sprite_object(self, self.sprite)

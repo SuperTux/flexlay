@@ -15,19 +15,24 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from typing import Optional
+
 import logging
+
+from flexlay.editor_map import EditorMap
+from supertux.sector import Sector
 
 
 class Workspace:
 
     current = None
 
-    def __init__(self):
+    def __init__(self) -> None:
         Workspace.current = self
 
-        self.tools = {}
-        self.editor_map = None
-        self.current_sector = None
+        self.tools: dict[int, 'Tool'] = {}
+        self.editor_map: Optional[EditorMap] = None
+        self.current_sector: Optional[Sector] = None
 
     def draw(self, gc):
         if self.editor_map:
@@ -69,7 +74,7 @@ class Workspace:
     def set_map(self, editor_map):
         self.editor_map = editor_map
 
-    def set_tool(self, button, tool):
+    def set_tool(self, button: int, tool: Tool):
         from flexlay.tools import Tool
         if tool is None:
             tool = Tool()

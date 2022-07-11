@@ -29,7 +29,7 @@ from supertux.tileset import SuperTuxTileset
 from supertux.config import make_config
 
 
-def main():
+def main() -> None:
     signal.signal(signal.SIGINT, signal.SIG_DFL)
 
     # Parse Arguments

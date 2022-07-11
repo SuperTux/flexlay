@@ -27,7 +27,7 @@ from flexlay.tool_context import ToolContext
 
 class MinimapWidget(QWidget):
 
-    def __init__(self, editormap_component):
+    def __init__(self, editormap_component) -> None:
         super().__init__()
 
         self.drag_active = False
@@ -104,7 +104,7 @@ class MinimapWidget(QWidget):
 
         gc.pop_modelview()
 
-    def update_minimap(self):
+    def update_minimap(self) -> None:
         # FIXME: This doesn't work all that well
         # tilemap = TilemapLayer.current
         pass

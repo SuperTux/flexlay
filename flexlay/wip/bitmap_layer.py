@@ -31,7 +31,7 @@ class Surface:
 
 class BitmapLayer(Layer):
 
-    def __init__(self, width, height):
+    def __init__(self, width, height) -> None:
         super().__init__()
 
         self.strokes = []

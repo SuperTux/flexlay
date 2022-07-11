@@ -17,18 +17,20 @@
 
 from PyQt5.QtWidgets import QListWidget
 
+from flexlay.tile_brush import TileBrush
+
 
 class TileBrushSelector:
 
-    def __init__(self):
-        self.brushes = []
+    def __init__(self) -> None:
+        self.brushes: list[TileBrush] = []
         self.list_widget = QListWidget()
 
-    def add_brush(self, name, brush):
+    def add_brush(self, name: str, brush: TileBrush) -> None:
         self.list_widget.addItem(name)
         self.brushes.append(brush)
 
-    def get_widget(self):
+    def get_widget(self) -> QListWidget:
         return self.list_widget
 
 

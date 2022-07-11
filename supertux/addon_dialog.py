@@ -19,13 +19,15 @@ from flexlay.gui.file_dialog import OpenFileDialog, SaveDirectoryDialog
 
 
 class OpenAddonDialog(OpenFileDialog):
-    def __init__(self, title):
+
+    def __init__(self, title: str) -> None:
         super().__init__(title, ("SuperTux Add-ons (*.zip)",
                                  "All Files (*)"))
 
 
 class SaveAddonDialog(SaveDirectoryDialog):
-    def __init__(self, title, is_worldmap=False):
+
+    def __init__(self, title: str, is_worldmap: bool = False) -> None:
         super().__init__(title)
 
 

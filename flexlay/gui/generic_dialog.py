@@ -24,7 +24,7 @@ from flexlay.gui.properties_widget import PropertiesWidget
 class GenericDialog(PropertiesWidget):
     """A PropertiesWidget in a QDialog."""
 
-    def __init__(self, title, parent=None):
+    def __init__(self, title, parent=None) -> None:
         super().__init__(parent)
 
         self.ok_callback = None
@@ -47,11 +47,11 @@ class GenericDialog(PropertiesWidget):
 
         # "Ok" and "Cancel" signals
 
-        def on_accept():
+        def on_accept() -> None:
             self.call()
             self.dialog.hide()
 
-        def on_rejected():
+        def on_rejected() -> None:
             self.dialog.hide()
 
         self.buttonbox.accepted.connect(on_accept)

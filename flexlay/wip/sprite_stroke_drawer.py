@@ -28,7 +28,7 @@ class Surface:
 
 class SpriteStrokeDrawer:
 
-    def __init__(self, drawer):
+    def __init__(self, drawer) -> None:
         self.mode = SpriteStrokeDrawer.DM_NORMAL
         self.drawer = drawer
 

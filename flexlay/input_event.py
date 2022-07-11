@@ -16,6 +16,7 @@
 
 import logging
 
+from PyQt5.QtGui import QMouseEvent
 from PyQt5.QtCore import Qt
 
 from flexlay.math import Point
@@ -34,13 +35,13 @@ class InputEvent:
     MOD_CTRL = (1 << 1)
     MOD_ALT = (1 << 2)
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.kind = InputEvent.MOUSE_NO_BUTTON
         self.mouse_pos = None
         self.mod = 0
 
     @staticmethod
-    def from_qt(event):
+    def from_qt(event: QMouseEvent):
         result = InputEvent()
 
         result.mouse_pos = Point(event.x(), event.y())

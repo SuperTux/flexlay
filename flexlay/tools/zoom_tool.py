@@ -23,7 +23,7 @@ from flexlay.tools.tool import Tool
 
 class ZoomTool(Tool):
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.zoom_rect = None

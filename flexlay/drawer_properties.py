@@ -15,11 +15,14 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from typing import Optional
+
+
 class DrawerProperties:
 
-    current = None
+    current: Optional['DrawerProperties'] = None
 
-    def __init__(self):
+    def __init__(self) -> None:
         DrawerProperties.current = self
 
 

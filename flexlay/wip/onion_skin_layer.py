@@ -30,7 +30,7 @@ class Surface:
 
 class OnionSkinLayer:
 
-    def __init__(self, width, height):
+    def __init__(self, width, height) -> None:
         self.SCALE = 1
 
         self.surface = Surface(PixelBuffer(width / self.SCALE, height / self.SCALE))

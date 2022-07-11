@@ -15,22 +15,24 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from flexlay.tile import Tile
+
 class Tileset:
 
-    def __init__(self, tile_size):
-        self.tiles = {}
+    def __init__(self, tile_size: int) -> None:
+        self.tiles: dict[int, Tile] = {}
         self.tile_size = tile_size
 
-    def add_tile(self, tile_id, tile):
+    def add_tile(self, tile_id: int, tile: Tile) -> None:
         self.tiles[tile_id] = tile
 
-    def create(self, tile_id):
+    def create(self, tile_id: int) -> Tile:
         return self.tiles.get(tile_id)
 
-    def get_tile_size(self):
+    def get_tile_size(self) -> int:
         return self.tile_size
 
-    def get_tiles(self):
+    def get_tiles(self) -> list[int]:
         return list(self.tiles.keys())
 
 

@@ -90,7 +90,7 @@ class SuperTuxGameObjFactory:
     """
     supertux_gui = None
 
-    def __init__(self):
+    def __init__(self) -> None:
         GameObj.factory = self
         self.objects = OrderedDict()
         # List of (identifier, image, tag)
@@ -149,7 +149,7 @@ class SuperTuxGameObjFactory:
     def add_particle_system(self, identifier, sprite, kind):
         self.objects[identifier] = (sprite, lambda: ParticleSystem(kind, sprite))
 
-    def init_factories(self):
+    def init_factories(self) -> None:
         self.add_simple_object("point", "images/engine/editor/point.png")
         self.add_simple_object("rock", "images/tiles/blocks/block11.png")
         self.add_simple_object("heavycoin", "images/objects/coin/heavy_coin.png")

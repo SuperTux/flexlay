@@ -24,7 +24,7 @@ from flexlay.gui.tile_selector_widget import TileSelectorWidget
 
 class TileSelector:
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.tiles = {}
 
         self.combobox = QComboBox()
@@ -96,7 +96,7 @@ class TileSelector:
         if len(self.tiles) == 1:
             self.on_combobox_activated(0)
 
-    def clear_tilegroups(self):
+    def clear_tilegroups(self) -> None:
         self.tiles = {}
         self.combobox.clear()
 

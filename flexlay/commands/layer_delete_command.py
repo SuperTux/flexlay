@@ -19,7 +19,7 @@ from flexlay.commands import Command
 
 
 class LayerDeleteCommand(Command):
-    def __init__(self, layer_selector, layer):
+    def __init__(self, layer_selector, layer) -> None:
         """Deletes a Layer
 
         :param layer: Either a TilemapLayer, an ObjMapTilemapObject or an int (the layer to remove)
@@ -28,16 +28,16 @@ class LayerDeleteCommand(Command):
         self.layer_selector = layer_selector
         self.removed_object = None
 
-    def execute(self):
+    def execute(self) -> None:
         self.removed_object = self.layer_selector.unsafe_remove_layer(self.layer)
 
-    def undo(self):
+    def undo(self) -> None:
         if self.removed_object is not None:
             self.layer_selector.add_layer(self.removed_object)
         else:
             raise RuntimeError("Could not undo layer removal.")
 
-    def redo(self):
+    def redo(self) -> None:
         self.layer_selector.unsafe_remove_layer(self.removed_object)
 
 

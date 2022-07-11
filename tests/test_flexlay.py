@@ -26,7 +26,7 @@ import flexlay.util
 
 class FlexlayTestCase(unittest.TestCase):
 
-    def test_imports(self):
+    def test_imports(self) -> None:
         id(flexlay)
         id(flexlay.math)
         id(flexlay.util)

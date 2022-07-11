@@ -27,7 +27,7 @@ class TileBrush:
     def from_field(field, w, h, pos_x, pos_y):
         return TileBrush(w, h, field.copy_region(pos_x, pos_y, w, h))
 
-    def __init__(self, w, h, field=None):
+    def __init__(self, w, h, field=None) -> None:
         self.opaque = False
         if field is None:
             self.field = Field.from_size(w, h)
@@ -58,16 +58,16 @@ class TileBrush:
     def resize(self, w, h, pos_x=0, pos_y=0):
         self.field.resize(w, h, pos_x, pos_y)
 
-    def set_opaque(self):
+    def set_opaque(self) -> None:
         self.opaque = True
 
-    def set_transparent(self):
+    def set_transparent(self) -> None:
         self.opaque = False
 
     def is_opaque(self):
         return self.opaque
 
-    def auto_crop(self):
+    def auto_crop(self) -> None:
         rect = Rect(0, 0, 0, 0)
 
         for y, x in itertools.product(range(0, self.field.height),

@@ -25,13 +25,13 @@ from flexlay.util.sexpr_reader import get_value_from_tree, assoc_ref
 
 class SExprTestCase(unittest.TestCase):
 
-    def setUp(self):
+    def setUp(self) -> None:
         pass
 
-    def tearDown(self):
+    def tearDown(self) -> None:
         pass
 
-    def test_assoc_ref(self):
+    def test_assoc_ref(self) -> None:
         lst = [["one", 1],
                ["two", 2],
                ["three", 3]]
@@ -39,7 +39,7 @@ class SExprTestCase(unittest.TestCase):
         self.assertEqual(assoc_ref(lst, "two"), [2])
         self.assertEqual(assoc_ref(lst, "three"), [3])
 
-    def test_get_value_from_tree(self):
+    def test_get_value_from_tree(self) -> None:
         sexpr = [["supertux-level",
                   ["bool", False],
                   ["sublist",
@@ -55,7 +55,7 @@ class SExprTestCase(unittest.TestCase):
         result = get_value_from_tree(["supertux-level", "sublist", "int", "_"], sexpr, None)
         self.assertEqual(result, 20)
 
-    def test_sexpr_parser(self):
+    def test_sexpr_parser(self) -> None:
         result = sexpr_parse("")
         self.assertEqual(result, [])
 
@@ -105,7 +105,7 @@ class SExprTestCase(unittest.TestCase):
         with self.assertRaises(SExprParseError):
             sexpr_parse("\"unterminated string")
 
-    def test_sexpr_writer(self):
+    def test_sexpr_writer(self) -> None:
         with io.StringIO() as out:
             writer = SExprWriter(out)
             writer.write_comment("This is a comment")

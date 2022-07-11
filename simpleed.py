@@ -27,7 +27,7 @@ from flexlay.tools import WorkspaceMoveTool, ObjMapSelectTool, TilePaintTool
 from flexlay.util import Config
 
 
-def main():
+def main() -> None:
     flexlay = Flexlay("Simple Editor")
     gui_manager = flexlay.create_gui_manager()
 
@@ -35,21 +35,21 @@ def main():
 
     button_panel = gui_manager.create_button_panel(horizontal=True)
 
-    def on_object_tool():
+    def on_object_tool() -> None:
         workspace.set_tool(1, objtool)
         workspace.set_tool(2, workspace_move_tool)
         workspace.set_tool(3, TilePaintTool())
 
     button_panel.add_text("ObjectTool", on_object_tool)
 
-    def on_tile_tool():
+    def on_tile_tool() -> None:
         workspace.set_tool(1, tilemap_paint_tool)
         workspace.set_tool(2, workspace_move_tool)
         workspace.set_tool(3, tilemap_paint_tool)
 
     button_panel.add_text("TileTool", on_tile_tool)
 
-    def on_generic_dialog():
+    def on_generic_dialog() -> None:
         dialog = gui_manager.create_generic_dialog("Generic Dialog")
         dialog.add_bool("An Bool:", True)
         dialog.add_int("An Int:", 5)

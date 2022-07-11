@@ -25,24 +25,24 @@ class Command:
     they are added to the redo stack
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Here, the values involved in the
         Command should be initialised or
         passed as parameters"""
         pass
 
-    def execute(self):
+    def execute(self) -> None:
         """This method is run once - when the
         action happens."""
         pass
 
-    def redo(self):
+    def redo(self) -> None:
         """This method is run when this command
         is top of the undo stack and the undo
         button is clicked"""
         pass
 
-    def undo(self):
+    def undo(self) -> None:
         """This method is run when this command
         is top of the redo stack and the redo
         button is clicked"""

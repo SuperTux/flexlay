@@ -26,37 +26,40 @@ class Color:
         self.b = b
         self.a = a
 
-    def copy(self):
+    def copy(self) -> 'Color':
         return Color(self.r, self.g, self.b, self.a)
 
-    def get_red(self):
+    def get_red(self) -> int:
         return self.r
 
-    def get_green(self):
+    def get_green(self) -> int:
         return self.g
 
-    def get_blue(self):
+    def get_blue(self) -> int:
         return self.b
 
-    def get_alpha(self):
+    def get_alpha(self) -> int:
         return self.a
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: object) -> bool:
+        if not isinstance(rhs, Color):
+            return False
+
         return (self.r == rhs.r and
                 self.g == rhs.g and
                 self.b == rhs.b and
                 self.a == rhs.a)
 
-    def __ne__(self, rhs):
+    def __ne__(self, rhs: object) -> bool:
         return not self.__eq__(rhs)
 
-    def to_qt(self):
+    def to_qt(self) -> QColor:
         return QColor(self.r, self.g, self.b, self.a)
 
-    def to_list(self):
+    def to_list(self) -> list[int]:
         return [self.r, self.g, self.b, self.a]
 
-    def to_hex(self):
+    def to_hex(self) -> str:
         return "#%02x%02x%02x" % (self.r, self.g, self.b)
 
 
@@ -68,23 +71,26 @@ class Colorf:
         self.b = b
         self.a = a
 
-    def to_list(self):
+    def to_list(self) -> list[float]:
         return [self.r, self.g, self.b, self.a]
 
-    def to_color(self):
+    def to_color(self) -> 'Color':
         return Color(int(255 * self.r),
                      int(255 * self.g),
                      int(255 * self.b),
                      int(255 * self.a))
 
     def __eq__(self, other: object) -> bool:
-        if isinstance(other, Colorf):
-            return (self.r == other.r and
-                    self.b == other.b and
-                    self.g == other.g and
-                    self.a == other.a)
-        else:
+        if not isinstance(other, Colorf):
             return False
+
+        return (self.r == other.r and
+                self.b == other.b and
+                self.g == other.g and
+                self.a == other.a)
+
+    def to_qt(self) -> QColor:
+        return QColor.fromRgbF(self.r, self.g, self.b, self.a)
 
 
 # EOF #

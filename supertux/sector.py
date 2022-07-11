@@ -26,7 +26,7 @@ from supertux.tilemap import SuperTuxTileMap
 
 class Sector:
 
-    def __init__(self, parent):
+    def __init__(self, parent) -> None:
         self.parent = parent
         self.name = None
         self.music = None
@@ -100,7 +100,7 @@ class Sector:
         self.editormap.metadata = self
         return self
 
-    def load_v2(self, data):
+    def load_v2(self, data: list[Any]) -> None:
         self.name = "<No Name>"
         self.music = ""
         self.init_script = ""

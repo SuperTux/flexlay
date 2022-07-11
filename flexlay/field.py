@@ -63,11 +63,11 @@ class Field:
         self._data = field._data
 
     @property
-    def width(self):
+    def width(self) -> int:
         return self._data.shape[1]
 
     @property
-    def height(self):
+    def height(self) -> int:
         return self._data.shape[0]
 
     def size(self) -> int:

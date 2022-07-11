@@ -18,10 +18,10 @@
 from flexlay.util.config import Config
 
 
-def make_config():
+def make_config() -> Config:
     config = Config.create("supertux-editor")
-    config.create_attribute("datadir", None)
-    config.create_attribute("binary", None)
+    config.create_attribute("datadir")
+    config.create_attribute("binary")
     config.create_attribute("name", "Anonymous")
     config.load()
     return config

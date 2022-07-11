@@ -39,7 +39,7 @@ class ProjectWidget(QWidget):
     also see: supertux/property.py
     """
 
-    def __init__(self, parent):
+    def __init__(self, parent) -> None:
         super().__init__(parent)
         self.items = []
         self.addon = None
@@ -54,7 +54,7 @@ class ProjectWidget(QWidget):
         self.vbox.addWidget(self.label)
         self.setLayout(self.vbox)
 
-    def init_gui(self):
+    def init_gui(self) -> None:
         # Clear from previous:
         self.heading_label.setVisible(False)
         self.label.setVisible(False)
@@ -115,10 +115,10 @@ class ProjectWidget(QWidget):
             if children:
                 self.add_items(item, children)
 
-    def call(self):
+    def call(self) -> None:
         self.call_signal(*self.get_values())
 
-    def on_tree_view_double_click(self, item):
+    def on_tree_view_double_click(self, item) -> None:
         print("double-clicked!")
 
     def on_context_menu(self, position):
@@ -139,10 +139,10 @@ class ProjectWidget(QWidget):
         # We now have an add-on set, initialize the GUI
         self.init_gui()
 
-    def package_addon(self):
+    def package_addon(self) -> None:
         print("Package add-on!")
 
-    def add_content(self):
+    def add_content(self) -> None:
         print("Add content to add-on!")
 
 

@@ -15,38 +15,41 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from typing import Optional
+
 import pickle
 
-from PyQt5.QtCore import Qt, QSize, QPoint, QByteArray, QMimeData
-from PyQt5.QtGui import QDrag, QPainter, QPixmap
+from PyQt5.QtCore import Qt, QSize, QPoint, QByteArray, QMimeData, QEvent
+from PyQt5.QtGui import QDrag, QPainter, QPixmap, QMouseEvent, QResizeEvent, QPaintEvent
 from PyQt5.QtWidgets import QSizePolicy, QWidget
 
 from flexlay.color import Color
 from flexlay.graphic_context import GraphicContext
-from flexlay.math import Rectf, Point, Origin
+from flexlay.math import Size, Rectf, Point, Origin
+from flexlay.object_brush import ObjectBrush
 
 
 class SuperTuxBadGuyData:
 
-    def __init__(self):
+    def __init__(self) -> None:
         pass
 
 
 class ObjectSelectorWidget(QWidget):
 
-    def __init__(self, cell_w, cell_h, viewport, parent=None):
+    def __init__(self, cell_w: int, cell_h: int, viewport: Size, parent: Optional[QWidget] = None) -> None:
         super().__init__(parent)
 
-        self.viewport = viewport
-        self.cell_width = cell_w
-        self.cell_height = cell_h
-        self.brushes = []
+        self.viewport: Size = viewport
+        self.cell_width: int = cell_w
+        self.cell_height: int = cell_h
+        self.brushes: list[ObjectBrush] = []
         self.has_focus = False
 
         self.index = 0
 
-        self.mouse_pos = None
-        self.click_pos = None
+        self.mouse_pos: Optional[Point] = None
+        self.click_pos: Optional[Point] = None
 
         self.mouse_over_tile = -1
         self.scale = 1.0
@@ -55,19 +58,19 @@ class ObjectSelectorWidget(QWidget):
         self.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
         self.setMouseTracking(True)
 
-    def minimumSizeHint(self):
+    def minimumSizeHint(self) -> QSize:
         columns = self.get_columns()
-        min_rows = (len(self.brushes) + columns - 1) / columns
+        min_rows = (len(self.brushes) + columns - 1) // columns
         return QSize(self.cell_width * self.get_columns(),
                      self.cell_height * min_rows)
 
-    def resizeEvent(self, event):
+    def resizeEvent(self, event: QResizeEvent) -> None:
         pass
 
-    def get_columns(self):
+    def get_columns(self) -> int:
         return int(self.viewport.width() // self.cell_width)
 
-    def mousePressEvent(self, event):
+    def mousePressEvent(self, event: QMouseEvent) -> None:
         if event.button() == Qt.LeftButton:
             if self.mouse_over_tile != -1:
                 self.drag_obj = self.mouse_over_tile
@@ -82,18 +85,18 @@ class ObjectSelectorWidget(QWidget):
 
                     pixmap = QPixmap.fromImage(self.brushes[self.drag_obj].get_sprite().get_pixelbuffer().get_qimage())
                     drag.setPixmap(pixmap)
-                    drag.setHotSpot(QPoint(self.brushes[self.drag_obj].get_sprite().width / 2,
-                                           self.brushes[self.drag_obj].get_sprite().height / 2))
+                    drag.setHotSpot(QPoint(self.brushes[self.drag_obj].get_sprite().width // 2,
+                                           self.brushes[self.drag_obj].get_sprite().height // 2))
                     drag.exec()
                     self.drag_obj = -1
 
-    def mouseReleaseEvent(self, event):
+    def mouseReleaseEvent(self, event: QMouseEvent) -> None:
         if event.button() == Qt.LeftButton:
             if self.drag_obj != -1:
                 # releaseMouse()
                 self.drag_obj = -1
 
-    def mouseMoveEvent(self, event):
+    def mouseMoveEvent(self, event: QMouseEvent) -> None:
         self.mouse_pos = Point.from_qt(event.pos())
 
         cell_w = self.width() / self.get_columns()
@@ -110,7 +113,7 @@ class ObjectSelectorWidget(QWidget):
 
         self.repaint()
 
-    def paintEvent(self, event):
+    def paintEvent(self, event: QPaintEvent) -> None:
         painter = QPainter(self)
         gc = GraphicContext(painter)
 
@@ -139,14 +142,14 @@ class ObjectSelectorWidget(QWidget):
             if self.mouse_over_tile == i and self.has_focus:
                 gc.fill_rect(rect, Color(0, 0, 255, 20))
 
-    def enterEvent(self, event):
+    def enterEvent(self, event: QEvent):
         self.has_focus = True
 
-    def leaveEvent(self, event):
+    def leaveEvent(self, event: QEvent):
         self.has_focus = False
         self.repaint()
 
-    def add_brush(self, brush):
+    def add_brush(self, brush: ObjectBrush) -> None:
         self.brushes.append(brush)
 
 

@@ -53,7 +53,7 @@ class FlexlayMainWindow(QMainWindow):
 
 class GUIManager:
 
-    def __init__(self, title):
+    def __init__(self, title) -> None:
         self.window = FlexlayMainWindow()
         self.window.setWindowTitle(title)
 
@@ -66,7 +66,7 @@ class GUIManager:
         self.object_selector_dock = None
         self.layer_selector = None
 
-    def run(self):
+    def run(self) -> None:
         if self.statusbar and self.editormap_component:
             (self.editormap_component.editormap_widget
              .sig_mouse_move.connect(self.statusbar.set_mouse_coordinates))
@@ -78,7 +78,7 @@ class GUIManager:
         self.window.show()
         QApplication.instance().exec_()
 
-    def quit(self):
+    def quit(self) -> None:
         QCoreApplication.quit()
 
     def create_statusbar(self):

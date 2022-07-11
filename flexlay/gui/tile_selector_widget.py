@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from PyQt5.QtCore import QSize, Qt
+from PyQt5.QtCore import QSize, Qt, QEvent
 from PyQt5.QtGui import QPainter
 from PyQt5.QtWidgets import QWidget
 
@@ -29,7 +29,7 @@ from flexlay.tool_context import ToolContext
 
 class TileSelectorWidget(QWidget):
 
-    def __init__(self, viewport):
+    def __init__(self, viewport) -> None:
         super().__init__()
 
         self.viewport = viewport
@@ -43,7 +43,7 @@ class TileSelectorWidget(QWidget):
         self.mouse_pos = Point()
         self.scale = 1.0
         self.tileset = Tileset(32)
-        self.tiles = []
+        self.tiles: list[int] = []
 
         self.setMouseTracking(True)
 
@@ -102,6 +102,7 @@ class TileSelectorWidget(QWidget):
                     else:
                         brush.put(x, y, 0)
 
+            assert ToolContext.current is not None
             ToolContext.current.tile_brush = brush
 
         self.repaint()
@@ -125,6 +126,7 @@ class TileSelectorWidget(QWidget):
         painter = QPainter(self)
         gc = GraphicContext(painter)
 
+        assert ToolContext.current is not None
         brush = ToolContext.current.tile_brush
 
         start_row = event.rect().top() // self.cell_size
@@ -169,44 +171,44 @@ class TileSelectorWidget(QWidget):
 
             gc.fill_rect(rect, Color(0, 0, 255, 100))
 
-    def enterEvent(self, event):
+    def enterEvent(self, event: QEvent) -> None:
         self.has_focus = True
         self.repaint()
 
-    def leaveEvent(self, event):
+    def leaveEvent(self, event: QEvent) -> None:
         self.has_focus = False
         self.repaint()
 
-    def resizeEvent(self, event):
+    def resizeEvent(self, event: QEvent) -> None:
         self.update_minimum_size()
 
-    def update_minimum_size(self):
-        min_rows = (len(self.tiles) + self.columns - 1) / self.columns
+    def update_minimum_size(self) -> None:
+        min_rows = (len(self.tiles) + self.columns - 1) // self.columns
         size = QSize(self.tileset.get_tile_size() * self.columns,
                      self.tileset.get_tile_size() * min_rows)
         self.setMinimumSize(size)
 
     @property
-    def columns(self):
+    def columns(self) -> int:
         return int(self.viewport.width() / self.cell_size)
 
-    def set_scale(self, s):
+    def set_scale(self, s: float) -> None:
         self.scale = s
         self.repaint()
 
-    def get_tiles(self):
-        return self.tiles
-
-    def set_tileset(self, tileset):
-        self.tileset = tileset
-        self.update_minimum_size()
-
-    def set_tiles(self, tiles):
+    def set_tiles(self, tiles: list[int]) -> None:
         self.tiles = tiles
         self.update_minimum_size()
 
+    def get_tiles(self) -> list[int]:
+        return self.tiles
+
+    def set_tileset(self, tileset: Tileset) -> None:
+        self.tileset = tileset
+        self.update_minimum_size()
+
     @property
-    def cell_size(self):
+    def cell_size(self) -> int:
         return int(self.tileset.get_tile_size() * self.scale)
 
 

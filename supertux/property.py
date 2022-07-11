@@ -29,7 +29,7 @@ class DirectionProperty(EnumProperty):
 
     editable = True
 
-    def __init__(self, label, identifier, default):
+    def __init__(self, label: str, identifier: str, default: Any) -> None:
         super().__init__(label, identifier, default, optional=True, values=["auto", "left", "right"])
 
 
@@ -37,20 +37,20 @@ class InlinePosProperty:
 
     editable = False
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.identifier = ""  # To stop errors
 
-    def read(self, sexpr, obj):
+    def read(self, sexpr, obj) -> None:
         obj.pos.x = get_value_from_tree(["x", "_"], sexpr, 0.0)
         obj.pos.y = get_value_from_tree(["y", "_"], sexpr, 0.0)
 
-    def write(self, writer, obj):
+    def write(self, writer, obj) -> None:
         if obj.pos.x != 0:
             writer.write_float("x", obj.pos.x)
         if obj.pos.y != 0:
             writer.write_float("y", obj.pos.y)
 
-    def property_dialog(self, dialog):
+    def property_dialog(self, dialog) -> None:
         pass
 
 
@@ -59,11 +59,11 @@ class InlineTilePosProperty(InlinePosProperty):
 
     editable = False
 
-    def read(self, sexpr, obj):
+    def read(self, sexpr, obj) -> None:
         obj.pos.x = get_value_from_tree(["x", "_"], sexpr, 0.0) * 32
         obj.pos.y = get_value_from_tree(["y", "_"], sexpr, 0.0) * 32
 
-    def write(self, writer, obj):
+    def write(self, writer, obj) -> None:
         tilemap_position = Point(obj.pos.x // 32, obj.pos.y // 32)
         writer.write_inline_point(tilemap_position)
 
@@ -72,20 +72,20 @@ class InlineRectProperty:
 
     editable = False
 
-    def __init__(self):
+    def __init__(self) -> None:
         pass
 
-    def read(self, sexpr, obj):
+    def read(self, sexpr, obj) -> None:
         obj.pos.x = get_value_from_tree(["x", "_"], sexpr, 0.0)
         obj.pos.y = get_value_from_tree(["y", "_"], sexpr, 0.0)
         obj.size.width = get_value_from_tree(["width", "_"], sexpr, 0.0)
         obj.size.height = get_value_from_tree(["height", "_"], sexpr, 0.0)
 
-    def write(self, writer, obj):
+    def write(self, writer, obj) -> None:
         writer.write_inline_sizef(obj.size)
         writer.write_inline_pointf(obj.pos)
 
-    def property_dialog(self, dialog):
+    def property_dialog(self, dialog) -> None:
         pass
 
 
@@ -94,7 +94,7 @@ class SpriteProperty(StringProperty):
     editable = False
     placeholder = "default"
 
-    def write(self, writer, obj):
+    def write(self, writer, obj) -> None:
         if self.value:
             super().write(writer, obj)
 
@@ -103,7 +103,7 @@ class BadGuyProperty(EnumProperty):
 
     editable = True
 
-    def __init__(self, label, identifier, supertux_gameobj_factory):
+    def __init__(self, label, identifier, supertux_gameobj_factory) -> None:
         super().__init__(label, identifier, 0, values=[badguy[0] for badguy in supertux_gameobj_factory.badguys])
 
 
@@ -111,7 +111,7 @@ class ImageProperty(StringProperty):
 
     editable = False
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
 
 
@@ -119,7 +119,7 @@ class SoundProperty(StringProperty):
 
     editable = False
 
-    def __init__(self, label, identifier, default=""):
+    def __init__(self, label, identifier, default="") -> None:
         super().__init__(label, identifier, default=default)
 
     def property_dialog(self, dialog):
@@ -132,14 +132,14 @@ class PathProperty:
 
         mode_values = ['oneshot', 'pingpong', 'circular']
 
-        def __init__(self, x, y, time):
+        def __init__(self, x, y, time) -> None:
             self.x = x
             self.y = y
             self.time = time
 
     editable = False
 
-    def __init__(self, label, identifier):
+    def __init__(self, label, identifier) -> None:
         self.label = label
         self.identifier = identifier
         self.mode = 2
@@ -185,7 +185,7 @@ class SampleProperty(StringProperty):
 
     editable = False
 
-    def __init__(self, label, identifier, default):
+    def __init__(self, label: str, identifier: str, default) -> None:
         super().__init__(label, identifier, default, optional=True)
 
 
@@ -193,7 +193,7 @@ class TilemapProperty(EnumProperty):
 
     editable = False
 
-    def __init__(self, label, identifier, optional, placeholder=None):
+    def __init__(self, label: str, identifier: str, optional: bool, placeholder: Any = None) -> None:
         super().__init__(label, identifier, 0, optional=optional, values=None)
         # super().__init__(label, identifier, "", optional=True, placeholder=placeholder)
 
@@ -212,7 +212,7 @@ class SectorProperty(StringProperty):
 
     editable = False
 
-    def __init__(self, label, identifier, default, optional):
+    def __init__(self, label: str, identifier: str, default: Any, optional: bool) -> None:
         super().__init__(label, identifier, default, optional=optional)
 
 
@@ -220,7 +220,7 @@ class ZPosProperty(IntProperty):
 
     editable = True
 
-    def __init__(self, default=0):
+    def __init__(self, default=0) -> None:
         super().__init__("Z-Pos", "z-pos", default=default, optional=True)
 
 

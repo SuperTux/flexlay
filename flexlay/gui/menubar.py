@@ -15,28 +15,34 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from typing import Callable
+
+from PyQt5.QWidgets import QMenu, QMenuBar
+from PyQt5.QGui import QAction
+
+
 class Menu:
 
-    def __init__(self, menu):
+    def __init__(self, menu: QMenu) -> None:
         self.menu = menu
 
-    def add_menu(self, label):
+    def add_menu(self, label: str) -> Menu:
         menu = self.menu.addMenu(label)
         return Menu(menu)
 
-    def add_item(self, label, callback):
+    def add_item(self, label: str, callback: Callable[[], None]) -> QAction:
         action = self.menu.addAction(label)
         if callback:
-            action.triggered.connect(lambda *args: callback())
+            action.triggered.connect(lambda checked: callback())
         return action
 
 
 class Menubar:
 
-    def __init__(self, qmenubar):
+    def __init__(self, qmenubar: QMenuBar) -> None:
         self.qmenubar = qmenubar
 
-    def add_menu(self, label):
+    def add_menu(self, label: str) -> Menu:
         menu = self.qmenubar.addMenu(label)
         return Menu(menu)
 

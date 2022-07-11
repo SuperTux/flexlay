@@ -17,16 +17,16 @@
 
 class ObjectTransformCommand:
 
-    def __init__(self):
+    def __init__(self) -> None:
         pass
 
-    def execute(self):
+    def execute(self) -> None:
         pass
 
-    def redo(self):
+    def redo(self) -> None:
         pass
 
-    def undo(self):
+    def undo(self) -> None:
         pass
 
 

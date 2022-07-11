@@ -15,18 +15,21 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from flexlay.wip.surface import Surface
+
+
 class Canvas:
 
-    def __init__(self, surface):
+    def __init__(self, surface: Surface) -> None:
         pass
 
-    def get_gc(self):
+    def get_gc(self) -> None:
         pass
 
-    def sync_surface(self):
+    def sync_surface(self) -> None:
         pass
 
-    def get_pixeldata(self):
+    def get_pixeldata(self) -> None:
         pass
 
 

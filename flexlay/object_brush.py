@@ -15,20 +15,25 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from typing import Any
+
+from flexlay.sprite import Sprite
+
+
 class ObjectBrush:
 
-    def __init__(self, sprite, metadata, variable=False):
-        self.sprite = sprite
-        self.metadata = metadata
-        self.variable = variable
+    def __init__(self, sprite: Sprite, metadata: Any, variable: bool = False) -> None:
+        self.sprite: Sprite = sprite
+        self.metadata: Any = metadata
+        self.variable: bool = variable
 
-    def check_sprite(self):
+    def check_sprite(self) -> None:
         pass
 
-    def get_sprite(self):
+    def get_sprite(self) -> Sprite:
         return self.sprite
 
-    def get_data(self):
+    def get_data(self) -> Any:
         return self.metadata
 
 

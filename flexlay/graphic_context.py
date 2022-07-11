@@ -15,22 +15,26 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from PyQt5.QtCore import QLineF
-from PyQt5.QtGui import QPainterPath
+from typing import Optional
 
-from flexlay.math import Rectf
+from PyQt5.QtCore import QLineF
+from PyQt5.QtGui import QPainter, QPainterPath
+
+from flexlay.color import Color
+from flexlay.graphic_context_state import GraphicContextState
+from flexlay.math.rect import Rect, Rectf
 
 
 class GraphicContext:
 
-    def __init__(self, painter, state=None):
+    def __init__(self, painter: QPainter, state: Optional[GraphicContextState] = None) -> None:
         self.painter = painter
         self.state = state
 
     def clear(self, color):
         pass  # GRUMBEL gc.clear(color)
 
-    def draw_rect(self, rect, color, radius=0):
+    def draw_rect(self, rect: Rect, color: Color, radius=0) -> None:
         if radius == 0:
             self.painter.setPen(color.to_qt())
             self.painter.drawRect(rect.to_qt())
@@ -39,7 +43,7 @@ class GraphicContext:
         self.painter.setPen(color.to_qt())
         self.painter.drawRoundedRect(rect.to_qt(), radius, radius)
 
-    def fill_rect(self, rect, color, radius=0):
+    def fill_rect(self, rect: Rect, color: Color, radius: int = 0) -> None:
         if radius == 0:
             self.painter.fillRect(rect.to_qt(), color.to_qt())
             return
@@ -48,29 +52,29 @@ class GraphicContext:
         path.addRoundedRect(rect.to_qt_f(), radius, radius)
         self.painter.fillPath(path, color.to_qt())
 
-    def draw_line(self, x1, y1, x2, y2, color):
+    def draw_line(self, x1: int, y1: int, x2: int, y2: int, color: Color) -> None:
         self.painter.setPen(color.to_qt())
         self.painter.drawLine(QLineF(x1, y1, x2, y2))
 
-    def push_modelview(self):
+    def push_modelview(self) -> None:
         self.painter.save()
 
-    def pop_modelview(self):
+    def pop_modelview(self) -> None:
         self.painter.restore()
 
-    def translate(self, x, y):
+    def translate(self, x: float, y: float) -> None:
         self.painter.setViewTransformEnabled(True)
         self.painter.translate(x, y)
 
-    def scale(self, x, y):
+    def scale(self, x: float, y: float) -> None:
         self.painter.setViewTransformEnabled(True)
         self.painter.scale(x, y)
 
-    def rotate(self, angle):
+    def rotate(self, angle: float) -> None:
         self.painter.setViewTransformEnabled(True)
         self.painter.rotate(angle)
 
-    def get_clip_rect(self):
+    def get_clip_rect(self) -> Rectf:
         """
         If it's not obvious, this is rect containing all
         which is visible
@@ -80,7 +84,7 @@ class GraphicContext:
         else:
             return Rectf()
 
-    def get_qt_painter(self):
+    def get_qt_painter(self) -> QPainter:
         return self.painter
 
 

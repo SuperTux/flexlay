@@ -32,7 +32,7 @@ class ObjMapSelectTool(Tool):
     STATE_DRAG = 1
     STATE_SELECT = 2
 
-    def __init__(self, gui_manager):
+    def __init__(self, gui_manager) -> None:
         super().__init__()
 
         self.manager = gui_manager
@@ -55,7 +55,7 @@ class ObjMapSelectTool(Tool):
         # self.sig_popup_menu_display = Signal()
         self.sig_right_click = Signal()
 
-    def clear_selection(self):
+    def clear_selection(self) -> None:
         self.context.object_selection.clear()
         self.on_selection_change()
 
@@ -161,13 +161,13 @@ class ObjMapSelectTool(Tool):
             # Is there an object under cursor?
             if len(self.context.object_selection) > 0 and obj:
                 # Add object actions to menu
-                def delete_obj():
+                def delete_obj() -> None:
                     delete_command = ObjectDeleteCommand(self.context.object_layer)
                     delete_command.objects = self.context.object_selection
                     self.context.object_selection = []
                     Workspace.current.get_map().execute(delete_command)
 
-                def show_obj_properties():
+                def show_obj_properties() -> None:
                     for i in self.get_selection():
                         i.metadata.property_dialog()
 
@@ -197,7 +197,7 @@ class ObjMapSelectTool(Tool):
             self.selection_rect.right = pos.x
             self.selection_rect.bottom = pos.y
 
-    def on_selection_change(self):
+    def on_selection_change(self) -> None:
         for obj in self.deselected:
             obj.sig_deselect(self.manager)
         if len(self.context.object_selection) != 1:

@@ -15,10 +15,16 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from flexlay.gui.icon import Icon
+from flexlay.gui_manager import GUIManager
+
+from supertux.gui import SuperTuxGUI
+
+
 class SuperTuxToolbox:
     """A for selecting tools."""
 
-    def __init__(self, gui_manager, editor):
+    def __init__(self, gui_manager: GUIManager, editor: SuperTuxGUI) -> None:
         """
         :param gui_manager: a flexlay.GuiManager
         :param editor: a SuperTuxGui
@@ -45,7 +51,7 @@ class SuperTuxToolbox:
         self.icons = [self.paint_icon, self.fill_icon, self.replace_icon,
                       self.select_icon, self.object_icon, self.zoom_icon]
 
-    def set_down(self, rhs):
+    def set_down(self, rhs: Icon) -> None:
         for icon in self.icons:
             if icon == rhs:
                 icon.set_down()
@@ -53,7 +59,7 @@ class SuperTuxToolbox:
                 icon.set_up()
 
     @staticmethod
-    def icon_path(tool_name, size=22):
+    def icon_path(tool_name: str, size: int = 22) -> str:
         return "data/images/tools/stock-tool-%s-%s.png" % (tool_name, size)
 
 

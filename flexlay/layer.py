@@ -15,17 +15,18 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from flexlay.math import Pointf
+from flexlay.graphic_context import GraphicContext
+from flexlay.math import Pointf, Rect
 
 
 class Layer:
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.data = None
         self.pos = Pointf(0, 0)
         self.metadata = None
 
-    def draw(self, gc):
+    def draw(self, gc: GraphicContext) -> None:
         if self.pos.x != 0 or self.pos.y != 0:
             gc.push_modelview()
             gc.translate(self.pos.x, self.pos.y)
@@ -34,10 +35,10 @@ class Layer:
         else:
             self.draw(gc)
 
-    def has_bounding_rect(self):
+    def has_bounding_rect(self) -> bool:
         return self.has_bounding_rect()
 
-    def get_bounding_rect(self):
+    def get_bounding_rect(self) -> Rect:
         rect = self.get_bounding_rect()
         rect.left += self.pos.x
         rect.top += self.pos.y
@@ -45,10 +46,10 @@ class Layer:
         rect.bottom += self.pos.y
         return rect
 
-    def set_pos(self, pos):
+    def set_pos(self, pos) -> None:
         self.pos = pos
 
-    def get_pos(self):
+    def get_pos(self) -> Pointf:
         return self.pos
 
 

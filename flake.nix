@@ -13,6 +13,16 @@
         pythonPackages = pkgs.python310Packages;
       in rec {
         packages = flake-utils.lib.flattenTree rec {
+
+          PyQt5-stubs = pythonPackages.buildPythonPackage rec {
+            pname = "PyQt5-stubs";
+            version = "5.15.6.0";
+            src = pythonPackages.fetchPypi {
+              inherit pname version;
+              sha256 = "sha256-kScKwj6/OKHcBM2XqoUs0Ir4Lcg5EA5Tla8UR+Pplwc=";
+            };
+          };
+
           flexlay = pythonPackages.buildPythonPackage rec {
             pname = "flexlay";
             version = "0.2.0";
@@ -26,11 +36,14 @@
             preCheck = ''
               export QT_QPA_PLATFORM_PLUGIN_PATH="${pkgs.qt5.qtbase.bin}/lib/qt-${pkgs.qt5.qtbase.version}/plugins";
             '';
+            shellHook = ''
+              export QT_QPA_PLATFORM_PLUGIN_PATH="${pkgs.qt5.qtbase.bin}/lib/qt-${pkgs.qt5.qtbase.version}/plugins";
+            '';
             checkPhase = ''
               runHook preCheck
               flake8 flexlay supertux tests
               # pyright flexlay supertux tests
-              # mypy -p flexlay -p supertux -p tests
+              # mypy flexlay supertux tests
               # pylint flexlay supertux tests
               # python3 -m unittest discover -v -s tests/
               runHook postCheck
@@ -49,7 +62,10 @@
               mypy
               pylint
               types-setuptools
-            ]);
+              pyannotate
+            ]) ++ [
+              PyQt5-stubs
+            ];
           };
           default = flexlay;
         };

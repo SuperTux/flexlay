@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from PyQt5.QCore import QSize
+from PyQt5.QCore import QSize, QSizeF
 
 
 class Size:
@@ -44,7 +44,30 @@ class Size:
         return "Size({}, {})".format(self.width, self.height)
 
 
-Sizef = Size
+class Sizef:
+
+    def __init__(self, w: float, h: float) -> None:
+        self.width: float = w
+        self.height: float = h
+
+    def copy(self) -> 'Sizef':
+        return Sizef(self.width, self.height)
+
+    def to_qt(self) -> QSize:
+        return QSizeF(self.width, self.height)
+
+    def __eq__(self, rhs: object) -> bool:
+        if not isinstance(rhs, Sizef):
+            return False
+
+        return (self.width == rhs.width and
+                self.height == rhs.height)
+
+    def __ne__(self, rhs: object) -> bool:
+        return not self.__eq__(rhs)
+
+    def __str__(self) -> str:
+        return "Size({}, {})".format(self.width, self.height)
 
 
 # EOF #

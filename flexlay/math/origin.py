@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from flexlay.math import Point
+from flexlay.math import Point, Pointf, Size, Sizef
 
 
 class Origin:
@@ -31,25 +31,50 @@ class Origin:
     bottom_right = 8
 
     @staticmethod
-    def calc_origin(origin, size):
+    def calc_originf(origin: int, size: Sizef) -> Pointf:
+        if origin == Origin.top_left:
+            return Pointf(0, 0)
+        elif origin == Origin.top_center:
+            return Pointf(size.width / 2, 0)
+        elif origin == Origin.top_right:
+            return Pointf(size.width, 0)
+        elif origin == Origin.center_left:
+            return Pointf(0, size.height / 2)
+        elif origin == Origin.center:
+            return Pointf(size.width / 2, size.height / 2)
+        elif origin == Origin.center_right:
+            return Pointf(size.width, size.height / 2)
+        elif origin == Origin.bottom_left:
+            return Pointf(0, size.height)
+        elif origin == Origin.bottom_center:
+            return Pointf(size.width / 2, size.height)
+        elif origin == Origin.bottom_right:
+            return Pointf(size.width, size.height)
+
+        raise ValueError(f"invalid origin value: {origin}")
+
+    @staticmethod
+    def calc_origin(origin: int, size: Size) -> Point:
         if origin == Origin.top_left:
             return Point(0, 0)
         elif origin == Origin.top_center:
-            return Point(size.width / 2, 0)
+            return Point(size.width // 2, 0)
         elif origin == Origin.top_right:
             return Point(size.width, 0)
         elif origin == Origin.center_left:
-            return Point(0, size.height / 2)
+            return Point(0, size.height // 2)
         elif origin == Origin.center:
-            return Point(size.width / 2, size.height / 2)
+            return Point(size.width // 2, size.height // 2)
         elif origin == Origin.center_right:
-            return Point(size.width, size.height / 2)
+            return Point(size.width, size.height // 2)
         elif origin == Origin.bottom_left:
             return Point(0, size.height)
         elif origin == Origin.bottom_center:
-            return Point(size.width / 2, size.height)
+            return Point(size.width // 2, size.height)
         elif origin == Origin.bottom_right:
             return Point(size.width, size.height)
+
+        raise ValueError(f"invalid origin value: {origin}")
 
     def __init__(self) -> None:
         pass

@@ -15,9 +15,12 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from typing import Optional, Union, overload
+from typing import overload, Optional, Union, Generic, TypeVar, TypeAlias
 
-from PyQt5.QtCore import QPoint
+from PyQt5.QtCore import QPoint, QPointF
+
+
+T = TypeVar('T')
 
 
 class Point:
@@ -26,30 +29,12 @@ class Point:
     def from_qt(qpoint: QPoint) -> 'Point':
         return Point(qpoint.x(), qpoint.y())
 
-    @overload
-    def __init__(self) -> None:
-        ...
+    def to_qt(self) -> QPoint:
+        return QPoint(self.x, self.y)
 
-    @overload
-    def __init__(self, arg1: int, arg2: int) -> None:
-        ...
-
-    @overload
-    def __init__(self, arg1: Point) -> None:
-        ...
-
-    def __init__(self, arg1: Optional[Union['Point', int]] = None, arg2: Optional[int] = None) -> None:
-        if arg1 is None and arg2 is None:
-            self.x: int = 0
-            self.y: int = 0
-        elif isinstance(arg1, Point) and arg2 is None:
-            self.x = arg1.x
-            self.y = arg1.y
-        elif isinstance(arg1, int) and isinstance(arg2, int):
-            self.x = arg1
-            self.y = arg2
-        else:
-            raise ValueError("invalid types for Point.__init__()")
+    def __init__(self, x: int, y: int) -> None:
+        self.x: int = x
+        self.y: int = y
 
     def copy(self) -> 'Point':
         return Point(self.x, self.y)
@@ -75,14 +60,49 @@ class Point:
     def __ne__(self, rhs: object) -> bool:
         return not self.__eq__(rhs)
 
-    def to_qt(self) -> QPoint:
-        return QPoint(self.x, self.y)
-
     def __str__(self) -> str:
         return "Point({}, {})".format(self.x, self.y)
 
 
-Pointf = Point
+class Pointf:
+
+    @staticmethod
+    def from_qt(qpoint: QPointF) -> 'Pointf':
+        return Pointf(qpoint.x(), qpoint.y())
+
+    def to_qt(self) -> QPointF:
+        return QPointF(self.x, self.y)
+
+    def __init__(self, x: float, y: float) -> None:
+        self.x: float = x
+        self.y: float = y
+
+    def copy(self) -> 'Pointf':
+        return Pointf(self.x, self.y)
+
+    def __add__(self, rhs: 'Pointf') -> 'Pointf':
+        return Pointf(self.x + rhs.x, self.y + rhs.y)
+
+    def __sub__(self, rhs: 'Pointf') -> 'Pointf':
+        return Pointf(self.x - rhs.x, self.y - rhs.y)
+
+    def __mul__(self, rhs: float) -> 'Pointf':
+        return Pointf(self.x * rhs, self.y * rhs)
+
+    def __rmul__(self, rhs: float) -> 'Pointf':
+        return Pointf(self.x * rhs, self.y * rhs)
+
+    def __eq__(self, rhs: object) -> bool:
+        if not isinstance(rhs, Pointf):
+            return False
+
+        return self.x == rhs.x and self.y == rhs.y
+
+    def __ne__(self, rhs: object) -> bool:
+        return not self.__eq__(rhs)
+
+    def __str__(self) -> str:
+        return "Pointf({}, {})".format(self.x, self.y)
 
 
 # EOF #

@@ -46,7 +46,7 @@ class SuperTuxArguments:
         #             str(self.spawn_at.y)] \
         #     if self.spawn_at is not None \
         #     else []
-        assert current.binary is not None
+        assert Config.current is not None
         return [Config.current.binary] + run_level + play_demo + record_demo + developer_mode  # + spawn_at
 
 

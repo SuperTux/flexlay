@@ -17,9 +17,9 @@
 
 from flexlay.property import (
     BoolProperty,
+    StringProperty,
 )
 from supertux.property import (
-    StringProperty,
     SpriteProperty,
     InlineTilePosProperty,
 )

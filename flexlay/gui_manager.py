@@ -15,12 +15,16 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from typing import Callable, Optional
+
+from PyQt5.QtGui import QCloseEvent
 from PyQt5.QtCore import (QCoreApplication, Qt)
 from PyQt5.QtWidgets import (
     QApplication, QMainWindow, QToolBar,
     QDockWidget, QVBoxLayout, QWidget,
     QPushButton, QTabWidget)
 
+from flexlay.objmap_tilemap_object import ObjMapTilemapObject
 from flexlay.gui.project_widget import ProjectWidget
 from flexlay.gui.properties_widget import PropertiesWidget
 from flexlay.util.config import Config
@@ -34,10 +38,12 @@ class FlexlayMainWindow(QMainWindow):
 
     on_close = None
 
-    def set_on_close(self, on_close):
+    def set_on_close(self, on_close: Callable[[QCloseEvent], bool]) -> None:
         self.on_close = on_close
 
-    def closeEvent(self, event):
+    def closeEvent(self, event: QCloseEvent) -> None:
+        assert Config.current is not None
+
         if self.on_close:
             if self.on_close(event):
                 Config.current.geometry = self.saveGeometry().toBase64().data().decode()
@@ -53,43 +59,44 @@ class FlexlayMainWindow(QMainWindow):
 
 class GUIManager:
 
-    def __init__(self, title) -> None:
+    def __init__(self, title: str) -> None:
         self.window = FlexlayMainWindow()
         self.window.setWindowTitle(title)
 
-        self.editormap_component = None
-        self.statusbar = None
+        self.editormap_component: Optional[EditorMapComponent] = None
+        self.statusbar: Optional[StatusBar] = None
 
-        self.tile_selector = None
-        self.object_selector = None
-        self.tile_selector_dock = None
-        self.object_selector_dock = None
-        self.layer_selector = None
+        self.tile_selector: Optional[TileSelector] = None
+        self.object_selector: Optional[ObjectSelector] = None
+        self.tile_selector_dock: Optional[QDockWidget] = None
+        self.object_selector_dock: Optional[QDockWidget] = None
+        self.layer_selector: Optional[LayerSelector] = None
 
     def run(self) -> None:
         if self.statusbar and self.editormap_component:
-            (self.editormap_component.editormap_widget
-             .sig_mouse_move.connect(self.statusbar.set_mouse_coordinates))
+            self.editormap_component.editormap_widget.sig_mouse_move.connect(self.statusbar.set_mouse_coordinates)
 
         if self.tile_selector_dock and self.object_selector_dock:
             self.window.tabifyDockWidget(self.tile_selector_dock,
                                          self.object_selector_dock)
 
         self.window.show()
-        QApplication.instance().exec_()
+        app = QApplication.instance()
+        assert app is not None
+        app.exec()
 
     def quit(self) -> None:
         QCoreApplication.quit()
 
-    def create_statusbar(self):
+    def create_statusbar(self) -> StatusBar:
         self.statusbar = StatusBar(self.window.statusBar())
         return self.statusbar
 
-    def create_menubar(self):
+    def create_menubar(self) -> Menubar:
         menubar = self.window.menuBar()
         return Menubar(menubar)
 
-    def create_button_panel(self, horizontal):
+    def create_button_panel(self, horizontal: bool) -> ButtonPanel:
         toolbar = QToolBar()
         if horizontal:
             toolbar.setObjectName("button_panel")
@@ -101,10 +108,10 @@ class GUIManager:
             self.window.addToolBar(Qt.LeftToolBarArea, toolbar)
         return ButtonPanel(toolbar)
 
-    def create_generic_dialog(self, title):
+    def create_generic_dialog(self, title: str) -> GenericDialog:
         return GenericDialog(title, self.window)
 
-    def create_editor_map_component(self, tabbed=True):
+    def create_editor_map_component(self, tabbed: bool = True) -> EditorMapComponent:
         central = QWidget()
         self.editormap_component = EditorMapComponent(tabbed)
         layout = QVBoxLayout()
@@ -117,7 +124,7 @@ class GUIManager:
 
         return self.editormap_component
 
-    def create_minimap(self, parent):
+    def create_minimap(self, parent) -> Minimap:
         dockwidget = QDockWidget("Minimap")
         dockwidget.setObjectName("minimap")
         minimap = Minimap(parent)
@@ -126,7 +133,7 @@ class GUIManager:
         self.window.addDockWidget(Qt.BottomDockWidgetArea, dockwidget)
         return minimap
 
-    def create_object_selector(self, w, h):
+    def create_object_selector(self, w: int, h: int) -> ObjectSelector:
         self.object_selector_dock = QDockWidget("Object Selector")
         self.object_selector_dock.setObjectName("object_selector_dock")
         self.object_selector = ObjectSelector(w, h, None)
@@ -136,7 +143,7 @@ class GUIManager:
         self.window.addDockWidget(Qt.RightDockWidgetArea, self.object_selector_dock)
         return self.object_selector
 
-    def create_properties_view(self):
+    def create_properties_view(self) -> QDockWidget:
         self.properties_dock = QDockWidget("Properties")
         self.properties_dock.setObjectName("properties_dock")
 
@@ -159,7 +166,7 @@ class GUIManager:
         self.window.addDockWidget(Qt.RightDockWidgetArea, self.properties_dock)
         return self.properties_dock
 
-    def create_tile_selector(self):
+    def create_tile_selector(self) -> TileSelector:
         self.tile_selector_dock = QDockWidget("Tile Selector")
         self.tile_selector_dock.setObjectName("tile_selector_dock")
         self.tile_selector = TileSelector()
@@ -168,7 +175,7 @@ class GUIManager:
         self.window.addDockWidget(Qt.RightDockWidgetArea, self.tile_selector_dock)
         return self.tile_selector
 
-    def create_tile_brush_selector(self):
+    def create_tile_brush_selector(self) -> TileBrushSelector:
         dockwidget = QDockWidget("Tile Brush")
         tile_brush_selector = TileBrushSelector()
         dockwidget.setWidget(tile_brush_selector.get_widget())
@@ -176,7 +183,7 @@ class GUIManager:
         self.window.addDockWidget(Qt.RightDockWidgetArea, dockwidget)
         return tile_brush_selector
 
-    def create_layer_selector(self, generate_tilemap_obj):
+    def create_layer_selector(self, generate_tilemap_obj: Callable[[], ObjMapTilemapObject]) -> LayerSelector:
         dockwidget = QDockWidget("Layer Selector")
         dockwidget.setObjectName("layer_selector_dock")
         self.layer_selector = LayerSelector(generate_tilemap_obj)

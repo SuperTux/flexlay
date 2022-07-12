@@ -20,6 +20,7 @@ from typing import Any
 from PyQt5.QtWidgets import QWidget, QWizardPage, QWizard, QVBoxLayout
 
 from flexlay.util import Signal
+from flexlay.gui.properties_widget import PropertiesWidget
 
 
 class GenericWizard(QWizard):
@@ -35,7 +36,7 @@ class GenericWizard(QWizard):
     def __init__(self, parent: QWidget, title: str) -> None:
         super().__init__(parent)
         self.setWindowTitle(title)
-        self.pages = []
+        self.pages: list[PropertiesWidget] = []
 
         self.finish_callback = Signal()
 
@@ -51,7 +52,7 @@ class GenericWizard(QWizard):
         self.finished.connect(on_finish)
         self.rejected.connect(on_cancel)
 
-    def add_page(self, title: str, widget: QWidget):
+    def add_page(self, title: str, widget: PropertiesWidget) -> None:
         """Adds a page to this GenericWizard
 
         :param page: PropertyWidget to add
@@ -74,7 +75,7 @@ class GenericWizard(QWizard):
 
         :return: A list of lists ^
         """
-        result = []
+        result: list[Any] = []
 
         for page in self.pages:
             value = page.get_values()

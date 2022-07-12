@@ -23,9 +23,9 @@ class CommandGroup(Command):
     def __init__(self) -> None:
         super().__init__()
 
-        self.commands = []
+        self.commands: list[Command] = []
 
-    def add_command(self, command) -> None:
+    def add_command(self, command: Command) -> None:
         self.commands.append(command)
 
     def execute(self) -> None:

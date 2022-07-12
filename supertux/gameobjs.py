@@ -15,17 +15,24 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-import logging
-from enum import Enum
+from typing import Any, Optional
 
+import logging
+from enum import IntEnum
+
+from PyQt5.QtWidgets import QWidget
+
+from flexlay.objmap_path_node import ObjMapPathNode
+from flexlay.util.sexpr_writer import SExprWriter
 from flexlay import (Colorf, ObjMapObject)
-from flexlay.math import Point
+from flexlay.math import Pointf
 from flexlay.property import (
     BoolProperty,
     ColorProperty,
     EnumProperty,
     FloatProperty,
     IntProperty,
+    StringProperty,
 )
 from supertux.property import (
     BadGuyProperty,
@@ -37,7 +44,6 @@ from supertux.property import (
     SampleProperty,
     SectorProperty,
     SpriteProperty,
-    StringProperty,
     TilemapProperty,
     ZPosProperty,
 )
@@ -45,7 +51,8 @@ from supertux.gameobj import GameObj, make_sprite_object, make_rect_object
 from supertux.constraint import GridConstraint
 
 
-class Layer(Enum):
+class Layer(IntEnum):
+
     BACKGROUND0 = -300
     BACKGROUND1 = -200
     BACKGROUNDTILES = -100
@@ -77,10 +84,10 @@ class Tux(GameObj):
         self.objmap_object = make_sprite_object(self, self.sprite)
         self.signal_connect()
 
-    def read(self, sexpr):
+    def read(self, sexpr: Any) -> None:
         pass
 
-    def write(self, writer, obj):
+    def write(self, writer: SExprWriter, obj: Any) -> None:
         pass
 
 
@@ -111,7 +118,7 @@ class Camera(GameObj):
     def __init__(self) -> None:
         super().__init__()
 
-        self.objmap_object = ObjMapObject(Point(), self)
+        self.objmap_object = ObjMapObject(Pointf(0, 0), self)
         self.objmap_object.to_draw = False
         self.signal_connect()
 
@@ -200,9 +207,11 @@ class Decal(GameObj):
         ]
 
     def update(self) -> None:
-        self.sprite = self.find_property("sprite").value
+        prop = self.find_property("sprite")
+        assert prop is not None
+        self.sprite = prop.value
         self.objmap_object = make_sprite_object(self, self.sprite,
-                                                Point(self.objmap_object.pos.x, self.objmap_object.pos.y))
+                                                Pointf(self.objmap_object.pos.x, self.objmap_object.pos.y))
 
 
 class Trampoline(GameObj):
@@ -354,7 +363,7 @@ class SequenceTrigger(GameObj):
 
 class BadGuy(GameObj):
 
-    def __init__(self, kind, sprite_filename) -> None:
+    def __init__(self, kind: str, sprite_filename: str) -> None:
         super().__init__()
 
         self.label = kind
@@ -536,7 +545,7 @@ class SpawnPoint(GameObj):
 
 class SimpleObject(GameObj):
 
-    def __init__(self, kind, sprite) -> None:
+    def __init__(self, kind: str, sprite: str) -> None:
         super().__init__()
 
         self.label = kind
@@ -553,7 +562,7 @@ class SimpleObject(GameObj):
 
 class SimpleTileObject(GameObj):
 
-    def __init__(self, kind, sprite) -> None:
+    def __init__(self, kind: str, sprite: str) -> None:
         super().__init__()
 
         self.label = kind
@@ -675,7 +684,7 @@ class Powerup(GameObj):
 
 class ParticleSystem(GameObj):
 
-    def __init__(self, kind, sprite) -> None:
+    def __init__(self, kind: str, sprite: str) -> None:
         super().__init__()
 
         self.label = "ParticleSystem (%s)" % kind
@@ -703,7 +712,7 @@ class Gradient(GameObj):
         self.signal_connect()
 
         self.properties = [
-            ZPosProperty(default=Layer.BACKGROUND0),
+            ZPosProperty(default=Layer.BACKGROUND0.value),
             ColorProperty("Top Color", "top_color"),
             ColorProperty("Bottom Color", "bottom_color"),
         ]
@@ -741,13 +750,13 @@ class UnimplementedObject(GameObj):
         super().__init__()
         self.sexpr = None
 
-    def read(self, sexpr):
+    def read(self, sexpr: Any) -> None:
         self.sexpr = sexpr
 
-    def write(self, writer, obj):
+    def write(self, writer: SExprWriter, obj: Any) -> None:
         logging.debug("Unimplemented: " + str(self.sexpr))
 
-    def property_dialog(self, gui):
+    def property_dialog(self, dialog: Optional[QWidget]) -> None:
         pass
 
 
@@ -775,7 +784,7 @@ class Door(GameObj):
 
 class PathNode(GameObj):
 
-    def __init__(self, node) -> None:
+    def __init__(self, node: ObjMapPathNode) -> None:
         super().__init__()
         self.node = node
 

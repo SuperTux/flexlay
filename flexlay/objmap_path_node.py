@@ -15,39 +15,45 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from typing import Optional
+
 from flexlay import ObjMapObject, Color
-from flexlay.math import Point, Size, Rect, Pointf, Sizef, Rectf
+from flexlay.math import Pointf, Sizef, Rectf
 
 
 class ObjMapPathNode(ObjMapObject):
 
-    def __init__(self, pos, data) -> None:
+    def __init__(self, pos: Pointf, data) -> None:
         super().__init__(pos, data)
 
-        self.pos = pos
+        self.pos: Pointf = pos
         self.data = data
-        self.prev_node = None
-        self.next_node = None
+        self.prev_node: Optional['ObjMapPathNode'] = None
+        self.next_node: Optional['ObjMapPathNode'] = None
 
     def draw(self, gc):
-        gc.fill_rect(Rect(Point(self.pos) - Point(16, 16), Size(32, 32)),
+        gc.fill_rect(Rectf.from_ps(self.pos - Pointf(16, 16),
+                                   Sizef(32, 32)),
                      Color(200, 255, 200))
         if self.next_node:
-            gc.draw_line(int(self.pos.x), int(self.pos.y),
-                         int((self.pos.x + self.next_node.pos.x) / 2),
-                         int((self.pos.y + self.next_node.pos.y) / 2),
+            gc.draw_line(self.pos.x, self.pos.y,
+                         (self.pos.x + self.next_node.pos.x) / 2,
+                         (self.pos.y + self.next_node.pos.y) / 2,
                          Color(255, 255, 0))
 
-            gc.draw_line(int((self.pos.x + self.next_node.pos.x) / 2),
-                         int((self.pos.y + self.next_node.pos.y) / 2),
-                         int(self.next_node.pos.x),
-                         int(self.next_node.pos.y),
+            gc.draw_line((self.pos.x + self.next_node.pos.x) / 2,
+                         (self.pos.y + self.next_node.pos.y) / 2,
+                         self.next_node.pos.x,
+                         self.next_node.pos.y,
                          Color(255, 0, 0))
 
-    def get_bound_rect(self):
-        return Rectf(self.pos - Pointf(16, 16), Sizef(32, 32))
+    def get_bound_rect(self) -> Rectf:
+        return Rectf.from_ps(self.pos - Pointf(16, 16), Sizef(32, 32))
 
     def disconnect(self) -> None:
+        assert self.next_node is not None
+        assert self.prev_node is not None
+
         if self.next_node.prev_node is not None:
             self.next_node.prev_node = None
 
@@ -57,7 +63,7 @@ class ObjMapPathNode(ObjMapObject):
         self.next_node = None
         self.prev_node = None
 
-    def connect(self, node):
+    def connect(self, node: 'ObjMapPathNode') -> None:
         assert node != self
 
         # ensure that each node links exactly to one prev and one next node

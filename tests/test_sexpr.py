@@ -18,9 +18,9 @@
 import io
 import unittest
 
-from flexlay.util import SExprWriter
 from flexlay.util.sexpr import parse as sexpr_parse, SExprParseError
 from flexlay.util.sexpr_reader import get_value_from_tree, assoc_ref
+from flexlay.util.sexpr_writer import SExprWriter
 
 
 class SExprTestCase(unittest.TestCase):

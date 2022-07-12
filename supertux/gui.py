@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from typing import Any, Optional
+from typing import Any, Optional, Callable
 
 import os
 import subprocess
@@ -26,15 +26,21 @@ import threading
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QMessageBox, QFileDialog
 
-from flexlay import (Color, InputEvent, ObjMapRectObject, ObjMapTilemapObject,
+from flexlay import (Color, InputEvent, ObjMapRectObject,
                      ObjMapPathNode, Config, ToolContext, ObjectAddCommand,
                      Workspace)
 from flexlay.gui.file_dialog import OpenFileDialog, SaveFileDialog
-from flexlay.math import Point, Rect, Size
+from flexlay.math import Point, Size, Rectf, Pointf, Sizef
 from flexlay.tools import (TilePaintTool, TileBrushCreateTool,
                            TileMapSelectTool, TileFillTool,
                            TileReplaceTool, ObjMapSelectTool,
                            ZoomTool, ZoomOutTool, WorkspaceMoveTool)
+from flexlay.object_brush import ObjectBrush
+from flexlay.objmap_tilemap_object import ObjMapTilemapObject
+from flexlay.flexlay import Flexlay
+from flexlay.gui_manager import GUIManager
+from flexlay.gui.layer_selector import LayerSelector
+
 from supertux.button_panel import SuperTuxButtonPanel
 from supertux.gameobjs import PathNode
 from supertux.gameobj_factor import supertux_gameobj_factory
@@ -56,7 +62,7 @@ class SuperTuxGUI:
 
     current: Optional['SuperTuxGUI'] = None
 
-    def __init__(self, flexlay) -> None:
+    def __init__(self, flexlay: Flexlay) -> None:
         SuperTuxGUI.current = self
         supertux_gameobj_factory.supertux_gui = self
 
@@ -66,7 +72,7 @@ class SuperTuxGUI:
         self.level: Optional[Level] = None
         self.sector: Optional[Sector] = None
 
-        self.gui = flexlay.create_gui_manager("SuperTux Editor")
+        self.gui: GUIManager = flexlay.create_gui_manager("SuperTux Editor")
         self.gui.window.setWindowIcon(QIcon("data/images/supertux/supertux-editor.png"))
         self.gui.window.set_on_close(self.on_window_close)
 
@@ -92,7 +98,7 @@ class SuperTuxGUI:
         self.tileselector = self.gui.create_tile_selector()
         self.gui_set_tileset(SuperTuxTileset.current)
 
-        self.layer_selector = self.gui.create_layer_selector(self.generate_tilemap_obj)
+        self.layer_selector: LayerSelector = self.gui.create_layer_selector(self.generate_tilemap_obj)
 
         # self.worldmapobjectselector = self.gui.create_object_selector(42, 42)
         # if False:
@@ -102,6 +108,7 @@ class SuperTuxGUI:
         #                                                       obj[0]))
 
         # Loading Dialogs
+        assert Config.current is not None
         self.load_dialog = OpenLevelFileDialog("Load SuperTux Level")
         self.load_dialog.set_directory(Config.current.datadir, "levels")
         self.save_dialog = SaveLevelFileDialog("Save SuperTux Level As...")
@@ -145,13 +152,13 @@ class SuperTuxGUI:
         # Command line arguments, when game is run
         self.arguments = SuperTuxArguments()
 
-    def register_keyboard_shortcuts(self):
+    def register_keyboard_shortcuts(self) -> None:
         self.editor_map.sig_on_key("f1").connect(lambda x, y: self.gui_toggle_minimap())
         self.editor_map.sig_on_key("m").connect(lambda x, y: self.gui_toggle_minimap())
         self.editor_map.sig_on_key("g").connect(lambda x, y: self.gui_toggle_grid())
 
-        self.editor_map.sig_on_key("+").connect(lambda x, y: self.editor_map.zoom_in(Point(x, y)))
-        self.editor_map.sig_on_key("-").connect(lambda x, y: self.editor_map.zoom_out(Point(x, y)))
+        self.editor_map.sig_on_key("+").connect(lambda x, y: self.editor_map.zoom_in(Pointf(x, y)))
+        self.editor_map.sig_on_key("-").connect(lambda x, y: self.editor_map.zoom_out(Pointf(x, y)))
         self.editor_map.sig_on_key("Enter").connect(lambda x, y: self.gui_set_zoom(1.0))
 
         self.editor_map.sig_on_key("i").connect(lambda x, y: self.insert_path_node(x, y))
@@ -167,21 +174,23 @@ class SuperTuxGUI:
         self.editor_map.sig_on_key("p").connect(lambda x, y: self.gui_show_object_properties())
 
         def on_a_key(x: int, y: int) -> None:
-            pos = self.editor_map.screen2world(Point(x, y))
-            rectobj = ObjMapRectObject(Rect(pos,
-                                            Size(128, 64)),
+            pos = self.editor_map.screen2world(Pointf(x, y))
+            rectobj = ObjMapRectObject(Rectf.from_ps(pos,
+                                                     Sizef(128, 64)),
                                        Color(0, 255, 255, 155),
                                        None)
             self.workspace.get_map().metadata.objects.add_object(rectobj)
 
         self.editor_map.sig_on_key("a").connect(on_a_key)
 
-    def on_window_close(self, *args) -> bool:
+    def on_window_close(self, *args: Any) -> bool:
         """Called when window x button is clicked
 
         Ask whether to save, continue, or just quit.
         :return: boolean whether to close or not. If not boolean, will close.
         """
+        assert Workspace.current is not None
+
         editor_map = Workspace.current.get_map()
         # If the most recent save was the same as the save_pointer index,
         # we can safely quit
@@ -196,7 +205,7 @@ class SuperTuxGUI:
             if choice == QMessageBox.Save:
                 dialog_is_cancelled = False
 
-                def after_save(i):
+                def after_save(i: int) -> None:
                     dialog_is_cancelled = (i == 0)  # noqa: F841
 
                 self.save_dialog.file_dialog.finished.connect(after_save)
@@ -210,13 +219,16 @@ class SuperTuxGUI:
                 return False
             elif choice == QMessageBox.Discard:
                 return True
+            else:
+                assert False, f"unhandled QMessageBox choice value: {choice}"
 
-    def on_object_drop(self, brush: ObjectBrush, pos: Point) -> None:
+    def on_object_drop(self, brush: ObjectBrush, pos: Pointf) -> None:
         obj = supertux_gameobj_factory.create_gameobj_at(brush.metadata, pos)
         if obj is None:
             logging.error("Unknown object type dropped: %r" % brush.metadata)
         else:
             cmd = ObjectAddCommand(self.workspace.get_map().metadata.object_layer)
+            assert obj.objmap_object is not None
             cmd.add_object(obj.objmap_object)
             self.workspace.get_map().execute(cmd)
 
@@ -225,7 +237,7 @@ class SuperTuxGUI:
 
     def show_objects(self) -> None:
         if False:  # GRUMBEL
-            self.tileselector.show(False)
+            self.tileselector.show(False)  # type: ignore[unreachable]
             if self.use_worldmap:
                 self.objectselector.show(False)
             else:
@@ -233,7 +245,7 @@ class SuperTuxGUI:
 
     def show_tiles(self) -> None:
         if False:  # GRUMBEL
-            self.tileselector.show(True)
+            self.tileselector.show(True)  # type: ignore[unreachable]
             self.objectselector.show(False)
 
     def gui_toggle_minimap(self) -> None:
@@ -262,6 +274,7 @@ class SuperTuxGUI:
 
         if self.sector is not None:
             for tilemap_layer in [tilemap.tilemap_layer for tilemap in self.sector.tilemaps]:
+                assert tilemap_layer is not None
                 tilemap_layer.tileset = tileset
 
             self.editor_map.editormap_widget.repaint()
@@ -283,7 +296,9 @@ class SuperTuxGUI:
     #     tileset_dialog.run(self.set_tileset)
 
     def gui_change_tileset(self) -> bool:
-        filename = QFileDialog.getOpenFileName(None, "Select Tileset To Open", Config.current.datadir)
+        assert Config.current is not None
+
+        filename: str = QFileDialog.getOpenFileName(None, "Select Tileset To Open", Config.current.datadir)
         if not filename:
             QMessageBox.warning(None, "No Tileset Selected", "No tileset was selected, aborting...")
             return False
@@ -319,6 +334,7 @@ class SuperTuxGUI:
         except FileNotFoundError:
             QMessageBox.warning(None, "No Supertux Binary Found",
                                 "Press OK to select your Supertux binary")
+            assert Config.current is not None
             Config.current.binary = OpenFileDialog("Open Supertux Binary").filename
             if not Config.current.binary:
                 raise RuntimeError("binary path missing, use --binary BIN")
@@ -357,19 +373,21 @@ class SuperTuxGUI:
         self.arguments.play_demo_file = None
 
     def gui_watch_example(self) -> None:
+        assert Config.current is not None
         level = os.path.join(Config.current.datadir, "levels", "world1", "01 - Welcome to Antarctica.stl")
         demo = os.path.join("data", "supertux", "demos", "karkus476_plays_level_1")
         subprocess.Popen([Config.current.binary, level, "--play-demo", demo])
 
     def gui_resize_sector(self) -> None:
         level = self.workspace.get_map().metadata
+        assert isinstance(level, Level)
         dialog = self.gui.create_generic_dialog("Resize Sector")
         dialog.add_int("Width: ", level.width)
         dialog.add_int("Height: ", level.height)
         dialog.add_int("X: ", 0)
         dialog.add_int("Y: ", 0)
 
-        def on_callback(w, h, x, y):
+        def on_callback(w: int, h: int, x: int, y: int) -> None:
             logging.info("Resize Callback")
             level.resize(Size(w, h), Point(x, y))
 
@@ -433,7 +451,7 @@ class SuperTuxGUI:
         dialog.add_string("Contact:", level.contact)
         dialog.add_int("Target Time:", level.target_time)
 
-        def on_callback(name, author, contact, target_time):
+        def on_callback(name: str, author: str, contact: str, target_time: float) -> None:
             level.name = name
             level.author = author
             level.contact = contact
@@ -477,9 +495,9 @@ class SuperTuxGUI:
         rect = self.workspace.get_map().get_bounding_rect()
         zoom = min(self.editor_map.editormap_widget.width() / rect.width,
                    self.editor_map.editormap_widget.height() / rect.height)
-        self.gui_set_zoom(zoom, Point(rect.width / 2, rect.height / 2))
+        self.gui_set_zoom(zoom, Pointf(rect.width / 2, rect.height / 2))
 
-    def gui_set_zoom(self, zoom: float, pos: Point = None):
+    def gui_set_zoom(self, zoom: float, pos: Optional[Pointf] = None) -> None:
         gc = self.editor_map.get_gc_state()
         pos = pos or gc.get_pos()
         gc.set_zoom(zoom)
@@ -563,7 +581,7 @@ class SuperTuxGUI:
 
     def gui_level_new(self) -> None:
         if False:
-            dialog = NewLevelWizard(self.gui.window)
+            dialog = NewLevelWizard(self.gui.window)  # type: ignore[unreachable]
             dialog.exec_()
             if dialog.level:
                 self.set_level(dialog.level, "main")
@@ -583,6 +601,7 @@ class SuperTuxGUI:
         dialog.exec_()
         if dialog.addon is not None:
             def save_path_chosen(save_path: str) -> None:
+                assert dialog.addon is not None
                 dialog.addon.save(save_path)
                 self.load_addon(dialog.addon, save_path)
             self.addon_save_dialog.run(save_path_chosen)
@@ -594,20 +613,20 @@ class SuperTuxGUI:
     def insert_path_node(self, x: int, y: int) -> None:
         logging.info("Insert path Node")
         m = self.workspace.get_map().metadata
-        pathnode = ObjMapPathNode(self.editor_map.screen2world(Point(x, y)),
+        pathnode = ObjMapPathNode(self.editor_map.screen2world(Pointf(x, y)),
                                   "PathNode")
         pathnode.metadata = PathNode(pathnode)
         m.objects.add_object(pathnode)
 
     def connect_path_nodes(self) -> None:
         logging.info("Connecting path nodes")
-        pathnodes = []
+        pathnodes: list[ObjMapPathNode] = []
         for i in self.tool_context.object_selection:
             obj = i.get_data()
             if isinstance(obj, PathNode):
                 pathnodes.append(obj.node)
 
-        last = None
+        last: Optional[ObjMapPathNode] = None
         for i in pathnodes:
             if last is not None:
                 last.connect(i)
@@ -627,7 +646,7 @@ class SuperTuxGUI:
 
             dialog.add_callback(on_callback)
 
-    def load_level(self, filename: str, set_title: str = True):
+    def load_level(self, filename: str, set_title: str = True) -> None:
         logging.info("Loading: " + filename)
 
         # Clear object selection, it's a new level!
@@ -686,6 +705,7 @@ class SuperTuxGUI:
 
         level = self.workspace.get_map().metadata.parent
 
+        assert Config.current is not None
         Config.current.add_recent_file(filename)
         self.menubar.update_recent_files()
 
@@ -776,6 +796,7 @@ class SuperTuxGUI:
         ToolContext.current.object_layer = self.sector.object_layer
 
         assert SuperTuxGUI.current is not None
+        assert self.sector.editormap is not None
         self.sector.editormap.sig_change.connect(SuperTuxGUI.current.on_map_change)
 
     def generate_tilemap_obj(self) -> ObjMapTilemapObject:
@@ -791,11 +812,13 @@ class SuperTuxGUI:
                                             self.sector.height,
                                             "<no name>",
                                             0, True)
+        assert tilemap.tilemap_layer is not None
         tilemap_object = ObjMapTilemapObject(tilemap.tilemap_layer, tilemap)
         return tilemap_object
 
     def camera_properties(self) -> None:
         assert self.sector is not None
+        assert self.sector.camera is not None
         self.sector.camera.property_dialog(self.gui.window)
 
 

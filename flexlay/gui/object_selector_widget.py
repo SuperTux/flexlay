@@ -25,7 +25,7 @@ from PyQt5.QtWidgets import QSizePolicy, QWidget
 
 from flexlay.color import Color
 from flexlay.graphic_context import GraphicContext
-from flexlay.math import Size, Rectf, Point, Origin
+from flexlay.math import Rectf, Point, Origin
 from flexlay.object_brush import ObjectBrush
 
 
@@ -37,10 +37,10 @@ class SuperTuxBadGuyData:
 
 class ObjectSelectorWidget(QWidget):
 
-    def __init__(self, cell_w: int, cell_h: int, viewport: Size, parent: Optional[QWidget] = None) -> None:
+    def __init__(self, cell_w: int, cell_h: int, viewport: QWidget, parent: Optional[QWidget] = None) -> None:
         super().__init__(parent)
 
-        self.viewport: Size = viewport
+        self.viewport: QWidget = viewport
         self.cell_width: int = cell_w
         self.cell_height: int = cell_h
         self.brushes: list[ObjectBrush] = []
@@ -68,7 +68,7 @@ class ObjectSelectorWidget(QWidget):
         pass
 
     def get_columns(self) -> int:
-        return int(self.viewport.width() // self.cell_width)
+        return self.viewport.width() // self.cell_width
 
     def mousePressEvent(self, event: QMouseEvent) -> None:
         if event.button() == Qt.LeftButton:
@@ -142,10 +142,10 @@ class ObjectSelectorWidget(QWidget):
             if self.mouse_over_tile == i and self.has_focus:
                 gc.fill_rect(rect, Color(0, 0, 255, 20))
 
-    def enterEvent(self, event: QEvent):
+    def enterEvent(self, event: QEvent) -> None:
         self.has_focus = True
 
-    def leaveEvent(self, event: QEvent):
+    def leaveEvent(self, event: QEvent) -> None:
         self.has_focus = False
         self.repaint()
 

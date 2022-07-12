@@ -16,17 +16,18 @@
 
 
 from flexlay.gui.minimap_widget import MinimapWidget
+from flexlay.gui.editor_map_component import EditorMapComponent
 
 
 class Minimap:
 
-    def __init__(self, editormap_component) -> None:
+    def __init__(self, editormap_component: EditorMapComponent) -> None:
         self.widget = MinimapWidget(editormap_component)
 
     def update_minimap(self) -> None:
         self.widget.update_minimap()
 
-    def get_widget(self):
+    def get_widget(self) -> MinimapWidget:
         return self.widget
 
 

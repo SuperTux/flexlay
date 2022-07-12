@@ -15,29 +15,32 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from typing import Optional
+
 from flexlay import TileBrush, TilemapLayer
 from flexlay.commands.command import Command
 from flexlay.math import Point, Rect
+from flexlay.field import Field
 
 
 class PaintCommand(Command):
 
-    def __init__(self, tilemap_layer, brush) -> None:
+    def __init__(self, tilemap_layer: TilemapLayer, brush: TileBrush) -> None:
         super().__init__()
 
-        self.points = []
+        self.points: list[Point] = []
 
         self.tilemap = tilemap_layer
         self.brush = brush
 
         # Copy of the field used to generate undo informations */
-        self.undo_field = self.tilemap.field.copy()
+        self.undo_field: Optional[Field] = self.tilemap.field.copy()
 
-        self.pos = Point(0, 0)
-        self.redo_brush = None
-        self.undo_brush = None
+        self.pos: Point = Point(0, 0)
+        self.redo_brush: Optional[TileBrush] = None
+        self.undo_brush: Optional[TileBrush] = None
 
-    def add_point(self, pos):
+    def add_point(self, pos: Point) -> None:
         # FIXME: undo_field is unneeded, should just record the overwritten color
         self.points.append(pos)
         self.tilemap.draw_tile_brush(self.brush, pos)
@@ -65,6 +68,7 @@ class PaintCommand(Command):
                                                -self.pos.x, -self.pos.y)
 
         # FIXME: undo_field is unneeded, should just record the overwritten color
+        assert self.undo_field is not None
         self.undo_brush = TileBrush.from_field(self.undo_field,
                                                rect.width, rect.height,
                                                -self.pos.x, -self.pos.y)
@@ -75,9 +79,11 @@ class PaintCommand(Command):
         self.undo_field = None
 
     def redo(self) -> None:
+        assert self.redo_brush is not None
         TilemapLayer.draw_tiles(self.tilemap.field, self.redo_brush, self.pos)
 
     def undo(self) -> None:
+        assert self.undo_brush is not None
         TilemapLayer.draw_tiles(self.tilemap.field, self.undo_brush, self.pos)
 
 

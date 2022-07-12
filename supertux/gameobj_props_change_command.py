@@ -15,7 +15,11 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from typing import Any
+
 from flexlay.commands import Command
+
+from supertux.gameobj import GameObj
 
 
 class GameObjPropsChangeCommand(Command):
@@ -24,7 +28,7 @@ class GameObjPropsChangeCommand(Command):
     changed.
     """
 
-    def __init__(self, gameobj, prop_diff) -> None:
+    def __init__(self, gameobj: GameObj, prop_diff: list[tuple[Any, Any, Any]]) -> None:
         """It's probably not a good idea to use this for non-directly
         editable properties.
         Warning: This will accept any value

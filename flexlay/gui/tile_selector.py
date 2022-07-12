@@ -20,12 +20,13 @@ from PyQt5.QtWidgets import (QComboBox, QScrollArea, QTabWidget, QWidget, QVBoxL
 
 from flexlay.gui.smart_tile_selector_widget import SmartTileSelectorWidget
 from flexlay.gui.tile_selector_widget import TileSelectorWidget
+from flexlay.tileset import Tileset
 
 
 class TileSelector:
 
     def __init__(self) -> None:
-        self.tiles = {}
+        self.tiles: dict[str, list[int]] = {}
 
         self.combobox = QComboBox()
 
@@ -46,15 +47,15 @@ class TileSelector:
         self.layout.setContentsMargins(0, 0, 0, 0)
 
         self.first_tab = QWidget()
-        self.first_tab.layout = QVBoxLayout(self.first_tab)
-        self.first_tab.layout.setContentsMargins(0, 0, 0, 0)
-        self.first_tab.layout.addWidget(self.combobox)
-        self.first_tab.layout.addWidget(self.scroll_area)
+        self.first_tab.setLayout(QVBoxLayout(self.first_tab))
+        self.first_tab.layout().setContentsMargins(0, 0, 0, 0)
+        self.first_tab.layout().addWidget(self.combobox)
+        self.first_tab.layout().addWidget(self.scroll_area)
 
         self.second_tab = QWidget()
-        self.second_tab.layout = QVBoxLayout(self.second_tab)
-        self.second_tab.layout.setContentsMargins(0, 0, 0, 0)
-        self.second_tab.layout.addWidget(self.smart_widget)
+        self.second_tab.setLayout(QVBoxLayout(self.second_tab))
+        self.second_tab.layout().setContentsMargins(0, 0, 0, 0)
+        self.second_tab.layout().addWidget(self.smart_widget)
 
         self.box.addTab(self.first_tab, "Tile Selection")
 
@@ -64,7 +65,7 @@ class TileSelector:
 
         self.combobox.activated.connect(self.on_combobox_activated)
 
-    def on_combobox_activated(self, idx):
+    def on_combobox_activated(self, idx: int) -> None:
         text = self.combobox.itemData(idx)
         tiles = self.tiles[text]
         self.widget.set_tiles(tiles)
@@ -76,18 +77,18 @@ class TileSelector:
         # self.smart_widget.update()
         # self.second_tab_scroll_area.update()
 
-    def set_tileset(self, tileset):
+    def set_tileset(self, tileset: Tileset) -> None:
         self.widget.set_tileset(tileset)
 
-    def get_tileset(self):
+    def get_tileset(self) -> Tileset:
         return self.widget.tileset
 
-    def set_tiles_noname(self, tiles):
+    def set_tiles_noname(self, tiles: list[int]) -> None:
         self.widget.set_tiles(tiles)
         self.combobox.clear()
         self.combobox.hide()
 
-    def add_tilegroup(self, name, tiles):
+    def add_tilegroup(self, name: str, tiles: list[int]) -> None:
         self.tiles[name] = tiles
         self.combobox.addItem(name, name)
         self.combobox.show()
@@ -100,13 +101,13 @@ class TileSelector:
         self.tiles = {}
         self.combobox.clear()
 
-    def get_tiles(self):
+    def get_tiles(self) -> list[int]:
         return self.widget.get_tiles()
 
-    def set_scale(self, scale):
+    def set_scale(self, scale: float) -> None:
         self.widget.set_scale(scale)
 
-    def get_widget(self):
+    def get_widget(self) -> QTabWidget:
         return self.box
 
 

@@ -18,6 +18,7 @@
 from flexlay.gui.editor_map_component import EditorMapComponent
 from flexlay.tool_context import ToolContext
 from flexlay.tools.tool import Tool
+from flexlay.input_event import InputEvent
 
 
 class TileFillTool(Tool):
@@ -28,12 +29,16 @@ class TileFillTool(Tool):
 
         TileFillTool.current = self
 
-    def on_mouse_down(self, event):
+    def on_mouse_down(self, event: InputEvent) -> None:
+        assert EditorMapComponent.current is not None
+        assert ToolContext.current is not None
+        assert event.mouse_pos is not None
+
         tilemap = ToolContext.current.tilemap_layer
 
         if tilemap and not tilemap.hidden:
             parent = EditorMapComponent.current
-            pos = tilemap.world2tile(parent.screen2world(event.mouse_pos))
+            pos = tilemap.world2tile(parent.screen2world(event.mouse_pos.to_f()))
             tilemap.flood_fill_at(pos, ToolContext.current.tile_brush)
             # GRUMBEL: undo missing
 

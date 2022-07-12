@@ -16,32 +16,32 @@
 
 
 from flexlay.object_layer import ObjectLayer
+from flexlay.objmap_object import ObjMapObject
+from flexlay.math import Pointf
+from flexlay.commands import Command
 
 
 class Obj:
 
-    def __init__(self) -> None:
-        self.obj = None
-        self.old_pos = None
-        self.new_pos = None
+    def __init__(self, objmap_object: ObjMapObject, old_pos: Pointf, new_pos: Pointf) -> None:
+        self.obj: ObjMapObject = objmap_object
+        self.old_pos: Pointf = old_pos
+        self.new_pos: Pointf = new_pos
 
 
-class ObjectMoveCommand:
+class ObjectMoveCommand(Command):
 
     def __init__(self, object_layer: ObjectLayer) -> None:
         self.objmap = object_layer
-        self.objects = []
+        self.objects: list[Obj] = []
 
     def execute(self) -> None:
         pass
 
-    def add_obj(self, obj) -> None:
-        o = Obj()
-        o.obj = obj
-        o.old_pos = obj.get_pos()
-        self.objects.append(o)
+    def add_obj(self, obj: ObjMapObject) -> None:
+        self.objects.append(Obj(obj, obj.get_pos(), obj.get_pos()))
 
-    def move_by(self, delta) -> None:
+    def move_by(self, delta: Pointf) -> None:
         for obj in self.objects:
             obj.new_pos = obj.old_pos + delta
             obj.obj.set_pos(obj.new_pos)

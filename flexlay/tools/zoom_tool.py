@@ -15,10 +15,14 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from typing import Optional
+
 from flexlay import Color
 from flexlay.gui.editor_map_component import EditorMapComponent
-from flexlay.math import Rect, Rectf
+from flexlay.math import Rectf
 from flexlay.tools.tool import Tool
+from flexlay.input_event import InputEvent
+from flexlay.graphic_context import GraphicContext
 
 
 class ZoomTool(Tool):
@@ -26,22 +30,26 @@ class ZoomTool(Tool):
     def __init__(self) -> None:
         super().__init__()
 
-        self.zoom_rect = None
+        self.zoom_rect: Optional[Rectf] = None
 
-    def draw(self, gc):
+    def draw(self, gc: GraphicContext) -> None:
         if self.zoom_rect is not None:
-            tmp = Rectf(self.zoom_rect)
+            tmp = self.zoom_rect.copy()
             tmp.normalize()
             gc.fill_rect(tmp, Color(255, 255, 0, 50))
             gc.draw_rect(tmp, Color(255, 255, 0, 200))
 
-    def on_mouse_up(self, event):
+    def on_mouse_up(self, event: InputEvent) -> None:
+        assert EditorMapComponent.current is not None
+        assert event.mouse_pos is not None
+
         parent = EditorMapComponent.current
 
         if self.zoom_rect is not None:
             parent.release_mouse()
 
-            pos = parent.screen2world(event.mouse_pos)
+            assert event.mouse_pos is not None
+            pos = parent.screen2world(event.mouse_pos.to_f())
             self.zoom_rect.right = pos.x
             self.zoom_rect.bottom = pos.y
             self.zoom_rect.normalize()
@@ -50,20 +58,26 @@ class ZoomTool(Tool):
 
             self.zoom_rect = None
 
-    def on_mouse_down(self, event):
+    def on_mouse_down(self, event: InputEvent) -> None:
+        assert EditorMapComponent.current is not None
+        assert event.mouse_pos is not None
+
         parent = EditorMapComponent.current
 
         if self.zoom_rect is None:
             parent.grab_mouse()
-            pos = parent.screen2world(event.mouse_pos)
-            self.zoom_rect = Rect(pos.x, pos.y,
-                                  pos.x, pos.y)
+            pos = parent.screen2world(event.mouse_pos.to_f())
+            self.zoom_rect = Rectf(pos.x, pos.y,
+                                   pos.x, pos.y)
 
-    def on_mouse_move(self, event):
+    def on_mouse_move(self, event: InputEvent) -> None:
+        assert EditorMapComponent.current is not None
+        assert event.mouse_pos is not None
+
         parent = EditorMapComponent.current
 
         if self.zoom_rect is not None:
-            pos = parent.screen2world(event.mouse_pos)
+            pos = parent.screen2world(event.mouse_pos.to_f())
             self.zoom_rect.right = pos.x
             self.zoom_rect.bottom = pos.y
 

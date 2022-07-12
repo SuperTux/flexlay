@@ -16,8 +16,9 @@
 
 
 from flexlay.gui.editor_map_component import EditorMapComponent
-from flexlay.math import Point
+from flexlay.math import Pointf
 from flexlay.tools.tool import Tool
+from flexlay.input_event import InputEvent
 
 
 class Zoom2Tool(Tool):
@@ -25,24 +26,30 @@ class Zoom2Tool(Tool):
     def __init__(self) -> None:
         super().__init__()
 
-        self.active = False
-        self.click_pos = Point(0, 0)
-        self.old_zoom = 0.0
+        self.active: bool = False
+        self.click_pos = Pointf(0, 0)
+        self.old_zoom: float = 0.0
 
-    def on_mouse_up(self, event):
+    def on_mouse_up(self, event: InputEvent) -> None:
         self.active = False
 
-    def on_mouse_down(self, event):
+    def on_mouse_down(self, event: InputEvent) -> None:
+        assert EditorMapComponent.current is not None
+        assert event.mouse_pos is not None
+
         self.active = True
-        self.click_pos = event.mouse_pos
+        self.click_pos = event.mouse_pos.to_f()
 
         gc = EditorMapComponent.current.get_gc_state()
         self.old_zoom = gc.get_zoom()
 
-    def on_mouse_move(self, event):
+    def on_mouse_move(self, event: InputEvent) -> None:
+        assert EditorMapComponent.current is not None
+        assert event.mouse_pos is not None
+
         if self.active:
             gc = EditorMapComponent.current.get_gc_state()
-            zoom_pos = Point(gc.width / 2, gc.height / 2)
+            zoom_pos = Pointf(gc.width / 2, gc.height / 2)
 
             factor = (event.mouse_pos.y - self.click_pos.y) / 20.0
             if factor > 0:

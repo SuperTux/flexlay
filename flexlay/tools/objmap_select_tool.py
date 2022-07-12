@@ -15,15 +15,21 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from typing import Optional
+
 from PyQt5.QtGui import QIcon, QCursor
 from PyQt5.QtWidgets import QMenu
 
 from flexlay import Color, InputEvent, Workspace, ToolContext
 from flexlay.commands import ObjectMoveCommand, ObjectDeleteCommand
 from flexlay.gui.editor_map_component import EditorMapComponent
-from flexlay.math import Pointf, Rectf, Rect
+from flexlay.math import Pointf, Rectf
 from flexlay.tools.tool import Tool
 from flexlay.util import Signal
+from flexlay.gui_manager import GUIManager
+from flexlay.objmap_object import ObjMapObject
+from flexlay.objmap_control_point import ObjMapControlPoint
+from flexlay.graphic_context import GraphicContext
 
 
 class ObjMapSelectTool(Tool):
@@ -32,7 +38,9 @@ class ObjMapSelectTool(Tool):
     STATE_DRAG = 1
     STATE_SELECT = 2
 
-    def __init__(self, gui_manager) -> None:
+    def __init__(self, gui_manager: GUIManager) -> None:
+        assert ToolContext.current is not None
+
         super().__init__()
 
         self.manager = gui_manager
@@ -43,50 +51,62 @@ class ObjMapSelectTool(Tool):
         self.selection_rect = Rectf(0, 0, 0, 0)
 
         # For selected objects do: self.context.object_selection
-        self.deselected = []  # Objects that were selected before
+        self.deselected: list[ObjMapObject] = []  # Objects that were selected before
 
         self.offset = Pointf(0, 0)
-        self.move_command = None
+        self.move_command: Optional[ObjectMoveCommand] = None
 
-        self.control_point = None
-        self.context = ToolContext.current
+        self.control_point: Optional[ObjMapControlPoint] = None
+        self.context: ToolContext = ToolContext.current
 
         # Never used:
         # self.sig_popup_menu_display = Signal()
         self.sig_right_click = Signal()
 
     def clear_selection(self) -> None:
+        assert self.context is not None
         self.context.object_selection.clear()
         self.on_selection_change()
 
-    def get_selection(self):
+    def get_selection(self) -> list[ObjMapObject]:
+        assert self.context is not None
         return self.context.object_selection
 
-    def set_selection(self, selection):
+    def set_selection(self, selection: list[ObjMapObject]) -> None:
+        assert self.context is not None
         self.context.object_selection = selection
 
-    def draw(self, gc):
+    def draw(self, gc: GraphicContext) -> None:
+        assert self.context is not None
+
         self.deselected = self.context.object_selection
+
         for obj in self.context.object_selection:
-            gc.draw_rect(Rect(obj.get_bound_rect()), Color(0, 0, 192), 3)
-            gc.fill_rect(Rect(obj.get_bound_rect()), Color(0, 0, 128, 64), 3)
+            bound_rect = obj.get_bound_rect()
+
+            if bound_rect is not None:
+                gc.draw_rect(bound_rect, Color(0, 0, 192), 3)
+                gc.fill_rect(bound_rect, Color(0, 0, 128, 64), 3)
 
         if self.state == ObjMapSelectTool.STATE_DRAG:
             pass
         elif self.state == ObjMapSelectTool.STATE_SELECT:
-            gc.draw_rect(Rect(self.selection_rect),
-                         Color(255, 255, 255))
+            gc.draw_rect(self.selection_rect, Color(255, 255, 255))
 
-    def on_mouse_up(self, event):
+    def on_mouse_up(self, event: InputEvent) -> None:
         # print("ObjMapSelectToolImpl.on_mouse_up ", event.kind, event.mouse_pos.x, event.mouse_pos.y)
+        assert EditorMapComponent.current is not None
+        assert ToolContext.current is not None
+        assert event.mouse_pos is not None
 
         objmap = ToolContext.current.object_layer
         parent = EditorMapComponent.current
-        pos = parent.screen2world(event.mouse_pos)
+        pos = parent.screen2world(event.mouse_pos.to_f())
 
         if event.kind == InputEvent.MOUSE_LEFT:
             if self.state == ObjMapSelectTool.STATE_DRAG:
                 if self.move_command:
+                    assert Workspace.current is not None
                     Workspace.current.get_map().execute(self.move_command)
                     self.move_command = None
                 self.state = ObjMapSelectTool.STATE_NONE
@@ -99,6 +119,8 @@ class ObjMapSelectTool(Tool):
                 self.selection_rect.bottom = pos.y
                 self.selection_rect.normalize()
 
+                assert self.context is not None
+                assert objmap is not None
                 self.context.object_selection = objmap.get_selection(self.selection_rect)
 
                 self.on_selection_change()
@@ -109,11 +131,18 @@ class ObjMapSelectTool(Tool):
             #               event.mouse_pos.y + parent.get_screen_rect().top)
             pass
 
-    def on_mouse_down(self, event):
+    def on_mouse_down(self, event: InputEvent) -> None:
         # print("ObjMapSelectToolImpl.on_mouse_down ", event.kind, event.mouse_pos.x, event.mouse_pos.y)
+        assert EditorMapComponent.current is not None
+        assert ToolContext.current is not None
+        assert event.mouse_pos is not None
+        assert self.context is not None
+        assert Workspace.current is not None
+
         objmap = ToolContext.current.object_layer
+        assert objmap is not None
         parent = EditorMapComponent.current
-        pos = parent.screen2world(event.mouse_pos)
+        pos = parent.screen2world(event.mouse_pos.to_f())
 
         if event.kind == InputEvent.MOUSE_LEFT:
             self.control_point = objmap.find_control_point(pos)
@@ -162,9 +191,11 @@ class ObjMapSelectTool(Tool):
             if len(self.context.object_selection) > 0 and obj:
                 # Add object actions to menu
                 def delete_obj() -> None:
+                    assert self.context.object_layer is not None
                     delete_command = ObjectDeleteCommand(self.context.object_layer)
                     delete_command.objects = self.context.object_selection
                     self.context.object_selection = []
+                    assert Workspace.current is not None
                     Workspace.current.get_map().execute(delete_command)
 
                 def show_obj_properties() -> None:
@@ -179,11 +210,16 @@ class ObjMapSelectTool(Tool):
             menu.move(QCursor.pos())
             menu.exec_()
 
-    def on_mouse_move(self, event):
+    def on_mouse_move(self, event: InputEvent) -> None:
         # print("ObjMapSelectToolImpl.on_mouse_move ", event.kind, event.mouse_pos.x, event.mouse_pos.y)
+        assert EditorMapComponent.current is not None
+        assert ToolContext.current is not None
+        assert event.mouse_pos is not None
+        assert self.context is not None
+        assert self.move_command is not None
 
         parent = EditorMapComponent.current
-        pos = parent.screen2world(event.mouse_pos)
+        pos = parent.screen2world(event.mouse_pos.to_f())
 
         if self.state == ObjMapSelectTool.STATE_DRAG:
             if self.control_point:
@@ -198,6 +234,8 @@ class ObjMapSelectTool(Tool):
             self.selection_rect.bottom = pos.y
 
     def on_selection_change(self) -> None:
+        assert self.context is not None
+
         for obj in self.deselected:
             obj.sig_deselect(self.manager)
         if len(self.context.object_selection) != 1:
@@ -207,6 +245,8 @@ class ObjMapSelectTool(Tool):
             self.context.object_selection[0].sig_select(self.manager)
         # selected = self.context.object_selection
 
+        assert ToolContext.current is not None
+        assert ToolContext.current.object_layer is not None
         objmap = ToolContext.current.object_layer
         objmap.delete_control_points()
 

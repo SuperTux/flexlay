@@ -15,17 +15,20 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from typing import Optional
+
 from flexlay import Color, InputEvent, Workspace
 from flexlay.commands import PaintCommand
 from flexlay.gui.editor_map_component import EditorMapComponent
-from flexlay.math import Point, Size, Rect
+from flexlay.math import Point, Pointf, Rectf, Sizef
 from flexlay.tool_context import ToolContext
 from flexlay.tools.tool import Tool
+from flexlay.graphic_context import GraphicContext
 
 
 class TilePaintTool(Tool):
 
-    current: Optional[TilePaintTool] = None
+    current: Optional['TilePaintTool'] = None
 
     def __init__(self) -> None:
         super().__init__()
@@ -35,10 +38,10 @@ class TilePaintTool(Tool):
         self.last_draw = Point(-1, -1)
 
         self.current_tile = Point(0, 0)
-        self.command = None
+        self.command: Optional[PaintCommand] = None
         self.is_active = False
 
-    def draw(self, gc):
+    def draw(self, gc: GraphicContext) -> None:
         assert ToolContext.current is not None
         tilemap = ToolContext.current.tilemap_layer
         if not tilemap:
@@ -57,26 +60,31 @@ class TilePaintTool(Tool):
                     sprite.draw((self.current_tile.x + x) * tile_size,
                                 (self.current_tile.y + y) * tile_size, gc)
 
-                    gc.fill_rect(Rect(Point((self.current_tile.x + x) * tile_size,
-                                            (self.current_tile.y + y) * tile_size),
-                                      Size(tile_size, tile_size)),
+                    gc.fill_rect(Rectf.from_ps(Pointf((self.current_tile.x + x) * tile_size,
+                                                      (self.current_tile.y + y) * tile_size),
+                                               Sizef(tile_size, tile_size)),
                                  Color(255, 255, 255, 100))
                 elif ToolContext.current.tile_brush.is_opaque():
-                    gc.fill_rect(Rect(Point((self.current_tile.x + x) * tile_size,
-                                            (self.current_tile.y + y) * tile_size),
-                                      Size(tile_size, tile_size)),
+                    gc.fill_rect(Rectf.from_ps(Pointf((self.current_tile.x + x) * tile_size,
+                                                      (self.current_tile.y + y) * tile_size),
+                                               Sizef(tile_size, tile_size)),
                                  Color(255, 255, 255, 100))
                 else:
-                    gc.fill_rect(Rect(Point((self.current_tile.x + x) * tile_size,
-                                            (self.current_tile.y + y) * tile_size),
-                                      Size(tile_size, tile_size)),
+                    gc.fill_rect(Rectf.from_ps(Pointf((self.current_tile.x + x) * tile_size,
+                                                      (self.current_tile.y + y) * tile_size),
+                                               Sizef(tile_size, tile_size)),
                                  Color(255, 255, 255, 50))
 
-    def on_mouse_down(self, event):
+    def on_mouse_down(self, event: InputEvent) -> None:
+        assert EditorMapComponent.current is not None
+        assert ToolContext.current is not None
+        assert ToolContext.current.tilemap_layer is not None
+        assert event.mouse_pos is not None
+
         tilemap = ToolContext.current.tilemap_layer
         if tilemap and not tilemap.hidden:
             parent = EditorMapComponent.current
-            pos = tilemap.world2tile(parent.screen2world(event.mouse_pos))
+            pos = tilemap.world2tile(parent.screen2world(event.mouse_pos.to_f()))
 
             self.is_active = True
             self.grab_mouse()
@@ -84,11 +92,16 @@ class TilePaintTool(Tool):
             self.command.add_point(pos)
             self.last_draw = pos
 
-    def on_mouse_move(self, event):
+    def on_mouse_move(self, event: InputEvent) -> None:
+        assert EditorMapComponent.current is not None
+        assert ToolContext.current is not None
+        assert event.mouse_pos is not None
+        assert self.command is not None
+
         tilemap = ToolContext.current.tilemap_layer
         if tilemap:
             parent = EditorMapComponent.current
-            self.current_tile = tilemap.world2tile(parent.screen2world(event.mouse_pos))
+            self.current_tile = tilemap.world2tile(parent.screen2world(event.mouse_pos.to_f()))
 
             if self.is_active and not tilemap.hidden:
                 brush = ToolContext.current.tile_brush
@@ -98,13 +111,19 @@ class TilePaintTool(Tool):
                     self.command.add_point(self.current_tile)
                     self.last_draw = self.current_tile
 
-    def on_mouse_up(self, event):
+    def on_mouse_up(self, event: InputEvent) -> None:
+        assert EditorMapComponent.current is not None
+        assert ToolContext.current is not None
+        assert event.mouse_pos is not None
+        assert self.command is not None
+        assert Workspace.current is not None
+
         tilemap = ToolContext.current.tilemap_layer
         if tilemap and not tilemap.hidden:
             EditorMapComponent.current.get_workspace().get_map().modify()
 
             parent = EditorMapComponent.current
-            self.current_tile = tilemap.world2tile(parent.screen2world(event.mouse_pos))
+            self.current_tile = tilemap.world2tile(parent.screen2world(event.mouse_pos.to_f()))
 
             if self.is_active:
                 self.release_mouse()

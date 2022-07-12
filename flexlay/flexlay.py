@@ -15,6 +15,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from typing import Optional
+
 import sys
 import logging
 
@@ -25,16 +27,16 @@ from flexlay.gui_manager import GUIManager
 
 class Flexlay:
 
-    def __init__(self, app_name) -> None:
-        self.name = app_name
+    def __init__(self, app_name: str) -> None:
+        self.name: str = app_name
 
-        self.application = QApplication(sys.argv)
-        self.gui_manager = None
+        self.application: QApplication = QApplication(sys.argv)
+        self.gui_manager: Optional[GUIManager] = None
 
         logging.basicConfig(format="[%(levelname)s] " + self.name + " %(pathname)s:%(lineno)s: %(message)s")
         logging.getLogger().setLevel(logging.DEBUG)
 
-    def create_gui_manager(self, title=""):
+    def create_gui_manager(self, title: str = "") -> GUIManager:
         if title == "":
             title = self.name
         self.gui_manager = GUIManager(title)

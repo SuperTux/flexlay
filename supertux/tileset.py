@@ -15,6 +15,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from typing import Optional, Any
+
 import os
 import logging
 
@@ -25,27 +27,26 @@ from supertux.util import load_lisp
 
 class TileGroup:
 
-    def __init__(self, name, tiles) -> None:
-        self.name = name
-        self.tiles = tiles
+    def __init__(self, name: str, tiles: list[int]) -> None:
+        self.name: str = name
+        self.tiles: list[int] = tiles
 
 
 # Load game tiles from filename into tileset
 class SuperTuxTileset(Tileset):
 
-    current = None
-    filename = ""
+    current: Optional['SuperTuxTileset'] = None
 
-    def __init__(self, *params) -> None:
+    def __init__(self, *params: Any) -> None:
         super().__init__(*params)
         SuperTuxTileset.current = self
-        self.tilegroups = []
-        self.filename = ""
+        self.tilegroups: list[TileGroup] = []
+        self.filename: str = ""
 
     def create_ungrouped_tiles_group(self) -> None:
         self.tilegroups.append(TileGroup("Ungrouped Tiles", self.get_ungrouped_tiles()))
 
-    def get_ungrouped_tiles(self):
+    def get_ungrouped_tiles(self) -> list[int]:
         # Searches for tiles which are not yet grouped and creates a group
         # for them
         ungrouped_tiles = []
@@ -59,10 +60,10 @@ class SuperTuxTileset(Tileset):
                 ungrouped_tiles.append(tile)
         return ungrouped_tiles
 
-    def load(self, filename):
+    def load(self, filename: str) -> None:
         logging.info("Loading Tileset: %s" % filename)
         self.filename = filename
-        tree = load_lisp(filename, "supertux-tiles")
+        tree: Any = load_lisp(filename, "supertux-tiles")
 
         tree = tree[1:]
 
@@ -80,6 +81,8 @@ class SuperTuxTileset(Tileset):
 
                 if not image:
                     image = get_value_from_tree(['editor-images', '_'], data, "tiles/auxiliary/notile.png")
+
+                assert Config.current is not None
 
                 x = 0
                 y = 0
@@ -100,6 +103,8 @@ class SuperTuxTileset(Tileset):
 
                 if not image:
                     image = get_value_from_tree(['images', '_'], data, "tiles/auxiliary/notile.png")
+
+                assert Config.current is not None
 
                 if isinstance(image, str):
                     pixelbuffer = PixelBuffer.from_file(

@@ -15,8 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from typing import cast, Dict, Optional
-
+from sip import voidptr
 from PyQt5.QtCore import QSize
 from PyQt5.QtGui import QImage
 
@@ -26,12 +25,12 @@ from flexlay.blitter import blit_clear, blit_opaque
 
 class PixelBuffer:
 
-    cache: Dict[str, QImage] = {}
+    cache: dict[str, QImage] = {}
 
     @staticmethod
-    def subregion_from_file(filename: str, x: int, y: int, w: int, h: int) -> PixelBuffer:
+    def subregion_from_file(filename: str, x: int, y: int, w: int, h: int) -> 'PixelBuffer':
         source = PixelBuffer.from_file(filename)
-        target = PixelBuffer(w, h)
+        target = PixelBuffer.from_size(Size(w, h))
         blit_clear(target)
         blit_opaque(target, source, -x, -y)
         return target
@@ -77,7 +76,7 @@ class PixelBuffer:
     def get_depth(self) -> int:
         return self.image.depth()
 
-    def get_data(self) -> bytearray:
+    def get_data(self) -> voidptr:
         return self.image.bits()
 
 

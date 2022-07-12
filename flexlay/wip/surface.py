@@ -15,8 +15,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from flexlay.math import Rect
 from flexlay.pixel_buffer import PixelBuffer
-from flexlay.math import Rect, Origin
 
 
 class Surface:

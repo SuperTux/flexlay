@@ -15,16 +15,17 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from typing import List
+from typing import Any
 
 from flexlay.blitter import blit
 from flexlay.color import Color
 from flexlay.field import Field
 from flexlay.layer import Layer
-from flexlay.math import Point, Size, Rect
+from flexlay.math import Point, Pointf, Size, Sizef, Rectf
 from flexlay.pixel_buffer import PixelBuffer
 from flexlay.tile_brush import TileBrush
 from flexlay.tileset import Tileset
+from flexlay.graphic_context import GraphicContext
 
 
 class TilemapLayer(Layer):
@@ -42,9 +43,9 @@ class TilemapLayer(Layer):
 
         # FIXME: Move this to the widget or to some more generic map-properties thingy
         self.draw_grid = False
-        self.draw_attribute = False
+        self.draw_attribute: bool = False
 
-        self.metadata = None
+        self.metadata: Any = None
 
         # Do not touch! Use LayerSelector to hide/show layers.
 
@@ -54,19 +55,19 @@ class TilemapLayer(Layer):
             for x in range(0, self.field.width):
                 self.field.put(x, y, 0)
 
-    def draw(self, gc, pos=Point()):
+    def draw(self, gc: GraphicContext, pos: Point = Point(0, 0)) -> None:
         if self.hidden:
             return
         tile_size = self.tileset.get_tile_size()
 
-        if False and self.background_color.get_alpha() != 0:  # type: ignore
-            gc.fill_rect(Rect(pos,
-                              Size(self.field.width * tile_size,
-                                   self.field.height * tile_size)),
+        if False and self.background_color.get_alpha() != 0:
+            gc.fill_rect(Rectf.from_ps(pos,  # type: ignore[unreachable]
+                                       Sizef(self.field.width * tile_size,
+                                             self.field.height * tile_size)),
                          self.background_color)
 
         # The visible rectangle
-        rect = Rect(gc.get_clip_rect())
+        rect = gc.get_clip_rect().to_i()
 
         # max() here stops tiles off screen (below 0) from being drawn
         start_x = max(0, pos.x // tile_size)
@@ -89,8 +90,9 @@ class TilemapLayer(Layer):
                             sprite.draw(x * tile_size, y * tile_size, gc)
 
                             if self.draw_attribute:
-                                gc.fill_rect(Rect(Point(x, y), Size(self.tileset.get_tile_size(),
-                                                                    self.tileset.get_tile_size())),
+                                gc.fill_rect(Rectf.from_ps(Pointf(x, y),
+                                                           Sizef(self.tileset.get_tile_size(),
+                                                                 self.tileset.get_tile_size())),
                                              tile.get_attribute_color())
         else:
             for y in range(start_y, end_y):
@@ -102,8 +104,9 @@ class TilemapLayer(Layer):
                             tile.get_sprite().draw(x * tile_size, y * tile_size, gc)
 
                             if self.draw_attribute:
-                                gc.fill_rect(Rect(Point(x, y), Size(self.tileset.get_tile_size(),
-                                                                    self.tileset.get_tile_size())),
+                                gc.fill_rect(Rectf.from_ps(Pointf(x, y),
+                                                           Sizef(self.tileset.get_tile_size(),
+                                                                 self.tileset.get_tile_size())),
                                              tile.get_attribute_color())
 
         if self.draw_grid:
@@ -121,7 +124,7 @@ class TilemapLayer(Layer):
                              end_y * tile_size,
                              Color(150, 150, 150))
 
-    def get_tile(self, x: int, y: int) -> None:
+    def get_tile(self, x: int, y: int) -> int:
         if 0 <= x < self.field.width and 0 <= y < self.field.height:
             return self.field.at(x, y)
         else:
@@ -141,10 +144,10 @@ class TilemapLayer(Layer):
         if replace_id not in brush.field:
             self._flood_fill_at(pos.x, pos.y, brush, replace_id)
 
-    def _flood_fill_at(self, orig_x: int, orig_y, brush: TileBrush, replace_id: int) -> None:
+    def _flood_fill_at(self, orig_x: int, orig_y: int, brush: TileBrush, replace_id: int) -> None:
         stack = [(orig_x, orig_y)]
 
-        def add(x, y) -> None:
+        def add(x: int, y: int) -> None:
             if 0 <= x < self.field.width and 0 <= y < self.field.height:
                 stack.append((x, y))
 
@@ -182,10 +185,10 @@ class TilemapLayer(Layer):
                 if brush.is_opaque() or brush.at(x, y) != 0:
                     field.put(pos.x + x, pos.y + y, brush.at(x, y))
 
-    def set_draw_attribute(self, t: int) -> None:
-        self.draw_attribute = t
+    def set_draw_attribute(self, draw_attribute: int) -> None:
+        self.draw_attribute = draw_attribute
 
-    def get_draw_attribute(self) -> None:
+    def get_draw_attribute(self) -> bool:
         return self.draw_attribute
 
     def set_draw_grid(self, t: bool) -> None:
@@ -197,8 +200,8 @@ class TilemapLayer(Layer):
     def create_pixelbuffer(self) -> PixelBuffer:
         tile_size = self.tileset.get_tile_size()
 
-        pixelbuffer = PixelBuffer(self.width * tile_size,
-                                  self.height * tile_size)
+        pixelbuffer = PixelBuffer.from_size(Size(self.width * tile_size,
+                                                 self.height * tile_size))
 
         pixelbuffer.lock()
         buf = pixelbuffer.get_data()
@@ -227,12 +230,12 @@ class TilemapLayer(Layer):
 
         return pixelbuffer
 
-    def get_bounding_rect(self) -> Rect:
-        return Rect(Point(0, 0),
-                    Size(self.field.width * self.tileset.get_tile_size(),
-                         self.field.height * self.tileset.get_tile_size()))
+    def get_bounding_rect(self) -> Rectf:
+        return Rectf(0, 0,
+                     self.field.width * self.tileset.get_tile_size(),
+                     self.field.height * self.tileset.get_tile_size())
 
-    def world2tile(self, pos: Point) -> Point:
+    def world2tile(self, pos: Pointf) -> Point:
         x = int(pos.x / self.tileset.get_tile_size())
         y = int(pos.y / self.tileset.get_tile_size())
 
@@ -245,7 +248,7 @@ class TilemapLayer(Layer):
     def get_data(self) -> list[int]:
         return list(self.field._data.flatten())
 
-    def set_data(self, data: List[int]) -> None:
+    def set_data(self, data: list[int]) -> None:
         self.field = Field.from_list(self.field.width, self.field.height, data)
 
     def set_background_color(self, color: Color) -> None:

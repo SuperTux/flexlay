@@ -20,7 +20,7 @@ from typing import Optional
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QWidget, QScrollArea
 
-from flexlay.gui.object_selector_widget import ObjectSelectorWidget
+from flexlay.gui.object_selector_widget import ObjectSelectorWidget, ObjectSelector
 from flexlay.object_brush import ObjectBrush
 
 

@@ -15,6 +15,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from typing import Any, Optional
+
 import pickle
 
 from PyQt5.QtCore import Qt
@@ -25,7 +27,7 @@ from PyQt5.QtWidgets import (QWidget, QGridLayout, QScrollBar, QTabWidget,
 from flexlay.graphic_context_state import GraphicContextState
 from flexlay.gui.editor_map_widget import EditorMapWidget
 from flexlay.gui.object_selector import ObjectSelector
-from flexlay.math import Pointf
+from flexlay.math import Pointf, Rectf
 from flexlay.util import Signal
 from flexlay.workspace import Workspace
 
@@ -34,12 +36,13 @@ class EditorMapComponent:
 
     current = None
 
-    def __init__(self, tabbed=True, parent=None) -> None:
+    def __init__(self, tabbed: bool = True, parent: Optional[QWidget] = None) -> None:
         EditorMapComponent.current = self
 
         self.workspace = Workspace()
         self.gc_state = GraphicContextState()
 
+        self.tab_widget: Optional[QTabWidget]
         if tabbed:
             self.tab_widget = QTabWidget(parent)
             self.widget = QWidget(self.tab_widget)
@@ -67,13 +70,14 @@ class EditorMapComponent:
         self.sig_drop = Signal()
         self.editormap_widget.sig_drop.connect(self.on_drop)
 
-    def on_drop(self, data, pos):
+    def on_drop(self, data: Any, pos: Pointf) -> None:
         """sends (brush, pos)"""
         brush_id = pickle.loads(data)
+        assert ObjectSelector.current is not None
         brush = ObjectSelector.current.get_brush(brush_id)
         return self.sig_drop(brush, pos)
 
-    def get_workspace(self):
+    def get_workspace(self) -> Workspace:
         return self.workspace
 
     def grab_mouse(self) -> None:
@@ -144,58 +148,57 @@ class EditorMapComponent:
     # }
     # endif
 
-    def screen2world(self, pos):
+    def screen2world(self, pos: Pointf) -> Pointf:
         return self.gc_state.screen2world(pos)
 
-    def set_zoom(self, z):
+    def set_zoom(self, z: float) -> None:
         self.gc_state.set_zoom(z)
 
         self.editormap_widget.repaint()
         self.update_scrollbars()
 
-    def zoom_out(self, pos):
+    def zoom_out(self, pos: Pointf) -> None:
         self.gc_state.set_zoom(self.gc_state.get_zoom() / 1.25,
                                Pointf(pos.x, pos.y))
 
         self.editormap_widget.repaint()
         self.update_scrollbars()
 
-    def zoom_in(self, pos):
+    def zoom_in(self, pos: Pointf) -> None:
         self.gc_state.set_zoom(self.gc_state.get_zoom() * 1.25,
                                Pointf(pos.x, pos.y))
 
         self.editormap_widget.repaint()
         self.update_scrollbars()
 
-    def zoom_to(self, rect):
+    def zoom_to(self, rect: Rectf) -> None:
         self.gc_state.zoom_to(rect)
 
         self.editormap_widget.repaint()
         self.update_scrollbars()
 
-    def get_clip_rect(self):
+    def get_clip_rect(self) -> Rectf:
         return self.gc_state.get_clip_rect()
 
-    def move_to(self, x, y):
+    def move_to(self, x: float, y: float) -> None:
         self.gc_state.set_pos(Pointf(x, y))
 
         self.editormap_widget.repaint()
         self.update_scrollbars()
 
-    def move_to_x(self, x):
-
+    def move_to_x(self, x: float) -> None:
         self.gc_state.set_pos(Pointf(x, self.gc_state.get_pos().y))
 
         self.editormap_widget.repaint()
         self.update_scrollbars()
 
-    def move_to_y(self, y):
+    def move_to_y(self, y: float) -> None:
         self.gc_state.set_pos(Pointf(self.gc_state.get_pos().x, y))
 
         self.editormap_widget.repaint()
         self.update_scrollbars()
 
-    def sig_on_key(self, keyseq_str):
+    def sig_on_key(self, keyseq_str: str) -> Signal:
         key_sequence = QKeySequence(keyseq_str)
         if key_sequence.isEmpty():
             raise RuntimeError("invalid key binding: '%s'" % keyseq_str)
@@ -203,7 +206,7 @@ class EditorMapComponent:
         shortcut = QShortcut(key_sequence, self.editormap_widget)
         signal = Signal()
 
-        def on_key(*args):
+        def on_key(*args: Any) -> None:
             pos = self.editormap_widget.mapFromGlobal(QCursor.pos())
             # pos = self.gc_state.screen2world(Point.from_qt(pos))
             signal(pos.x(), pos.y())
@@ -212,27 +215,28 @@ class EditorMapComponent:
 
         return signal
 
-    def get_gc_state(self):
+    def get_gc_state(self) -> GraphicContextState:
         return self.gc_state
 
-    def get_widget(self):
+    def get_widget(self) -> QWidget:
         return self.tab_widget or self.widget
 
     def update_scrollbars(self) -> None:
         rect = self.workspace.get_map().get_bounding_rect()
         border = 128
 
-        self.scroll_horz.setMinimum(rect.left - border)
-        self.scroll_horz.setMaximum(rect.right + border)
+        self.scroll_horz.setMinimum(int(rect.left) - border)
+        self.scroll_horz.setMaximum(int(rect.right) + border)
         self.scroll_horz.setPageStep(self.editormap_widget.width())
         self.scroll_horz.setSliderPosition(int(self.gc_state.get_pos().x))
 
-        self.scroll_vert.setMinimum(rect.top - border)
-        self.scroll_vert.setMaximum(rect.bottom + border)
+        self.scroll_vert.setMinimum(int(rect.top) - border)
+        self.scroll_vert.setMaximum(int(rect.bottom) + border)
         self.scroll_vert.setPageStep(self.editormap_widget.height())
         self.scroll_vert.setSliderPosition(int(self.gc_state.get_pos().y))
 
-    def set_sector_tab_label(self, index, text):
+    def set_sector_tab_label(self, index: int, text: str) -> None:
+        assert self.tab_widget is not None
         self.tab_widget.setTabText(index, "Sector \"%s\"" % text)
 
 

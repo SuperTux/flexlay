@@ -23,6 +23,17 @@ from flexlay.math.size import Size, Sizef
 
 class Rect:
 
+    @staticmethod
+    def from_ps(point: Point, size: Size) -> 'Rect':
+        return Rect(point.x,
+                    point.y,
+                    point.x + size.width,
+                    point.y + size.height)
+
+    @staticmethod
+    def zero() -> 'Rect':
+        return Rect(0, 0, 0, 0)
+
     def __init__(self, left: int, top: int, right: int, bottom: int) -> None:
         self.left = left
         self.top = top
@@ -79,9 +90,9 @@ class Rect:
         return QRect(int(self.left), int(self.top),
                      int(self.width), int(self.height))
 
-    def to_qt_f(self) -> QRectF:
-        return QRectF(self.left, self.top,
-                      self.width, self.height)
+    def to_f(self) -> 'Rectf':
+        return Rectf(self.left, self.top,
+                     self.right, self.bottom)
 
     def __str__(self) -> str:
         return "Rect({}, {}, {}, {})".format(self.left, self.top, self.right, self.bottom)
@@ -90,11 +101,15 @@ class Rect:
 class Rectf:
 
     @staticmethod
-    def from_ps(point: Pointf, size: Sizef) -> Rectf:
+    def from_ps(point: Pointf, size: Sizef) -> 'Rectf':
         return Rectf(point.x,
                      point.y,
                      point.x + size.width,
                      point.y + size.height)
+
+    @staticmethod
+    def zero() -> 'Rectf':
+        return Rectf(0, 0, 0, 0)
 
     def __init__(self, left: float, top: float, right: float, bottom: float) -> None:
         self.left: float = left
@@ -152,9 +167,9 @@ class Rectf:
         return QRectF(self.left, self.top,
                       self.width, self.height)
 
-    def to_qt_f(self) -> QRectF:
-        return QRectF(self.left, self.top,
-                      self.width, self.height)
+    def to_i(self) -> Rect:
+        return Rect(int(self.left), int(self.top),
+                    int(self.width), int(self.height))
 
     def __str__(self) -> str:
         return "Rectf({}, {}, {}, {})".format(self.left, self.top, self.right, self.bottom)

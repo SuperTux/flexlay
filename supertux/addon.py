@@ -15,13 +15,15 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from typing import IO
+from typing import Any, IO, Optional
 
 import os
 
 from flexlay.util import get_value_from_tree
 from flexlay.util.sexpr_writer import SExprWriter
+
 from supertux.util import load_lisp
+from supertux.level import Level
 
 
 class Addon:
@@ -37,7 +39,8 @@ class Addon:
 
         # level.filename = filename
 
-        tree = load_lisp(addon.filename, "supertux-addoninfo")
+        assert addon.filename is not None
+        tree: Any = load_lisp(addon.filename, "supertux-addoninfo")
         data = tree[1:]
 
         addon.id = get_value_from_tree(["id", "_"], data, "")
@@ -58,16 +61,16 @@ class Addon:
 
     def __init__(self) -> None:
         self.id = "no-id"
-        self.version = 1
-        self.type = "levelset"
-        self.title = "No Title"
-        self.author = "No Author"
-        self.license = "GPL 2+ / CC-by-sa 3.0"
-        self.filename = None
+        self.version: int = 1
+        self.type: str = "levelset"
+        self.title: str = "No Title"
+        self.author: str = "No Author"
+        self.license: str = "GPL 2+ / CC-by-sa 3.0"
+        self.filename: Optional[str] = None
 
         # Arrays containing data that we can use in a SuperTux level:
         self.images: list[str] = []
-        self.levels: list[str] = []
+        self.levels: list[Level] = []
         self.music: list[str] = []
         self.scripts: list[str] = []
         self.sounds: list[str] = []

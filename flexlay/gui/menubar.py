@@ -26,7 +26,7 @@ class Menu:
     def __init__(self, menu: QMenu) -> None:
         self.menu = menu
 
-    def add_menu(self, label: str) -> Menu:
+    def add_menu(self, label: str) -> 'Menu':
         menu = self.menu.addMenu(label)
         return Menu(menu)
 

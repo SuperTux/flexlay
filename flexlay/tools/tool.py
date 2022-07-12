@@ -16,6 +16,8 @@
 
 
 from flexlay.gui.editor_map_component import EditorMapComponent
+from flexlay.graphic_context import GraphicContext
+from flexlay.input_event import InputEvent
 
 
 class Tool:
@@ -26,19 +28,21 @@ class Tool:
     def draw(self, gc: GraphicContext) -> None:
         pass
 
-    def on_mouse_down(self, event):
+    def on_mouse_down(self, event: InputEvent) -> None:
         pass
 
-    def on_mouse_up(self, event):
+    def on_mouse_up(self, event: InputEvent) -> None:
         pass
 
-    def on_mouse_move(self, event):
+    def on_mouse_move(self, event: InputEvent) -> None:
         pass
 
     def grab_mouse(self) -> None:
+        assert EditorMapComponent.current is not None
         EditorMapComponent.current.grab_mouse()
 
     def release_mouse(self) -> None:
+        assert EditorMapComponent.current is not None
         EditorMapComponent.current.release_mouse()
 
 

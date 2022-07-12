@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from PyQt5.QtWidgets import (QDialog, QDialogButtonBox, QVBoxLayout,
+from PyQt5.QtWidgets import (QWidget, QDialog, QDialogButtonBox, QVBoxLayout,
                              QFormLayout)
 
 from flexlay.gui.properties_widget import PropertiesWidget
@@ -24,7 +24,7 @@ from flexlay.gui.properties_widget import PropertiesWidget
 class GenericDialog(PropertiesWidget):
     """A PropertiesWidget in a QDialog."""
 
-    def __init__(self, title, parent=None) -> None:
+    def __init__(self, title: str, parent: QWidget) -> None:
         super().__init__(parent)
 
         self.ok_callback = None
@@ -36,8 +36,8 @@ class GenericDialog(PropertiesWidget):
         self.buttonbox = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
 
         vbox = QVBoxLayout()
-        self.layout = QFormLayout()
-        vbox.addLayout(self.layout)
+        self._layout = QFormLayout()
+        vbox.addLayout(self._layout)
         vbox.addWidget(self)
         vbox.addWidget(self.buttonbox)
 

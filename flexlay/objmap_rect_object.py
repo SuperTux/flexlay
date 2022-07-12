@@ -20,41 +20,42 @@ from typing import Any
 import logging
 
 from flexlay.color import Color
-from flexlay.math import Point, Pointf, Sizef, Rect, Rectf
+from flexlay.math import Pointf, Sizef, Rect, Rectf
 from flexlay.objmap_control_point import ObjMapControlPoint
 from flexlay.objmap_object import ObjMapObject
 from flexlay.sprite import Sprite
+from flexlay.graphic_context import GraphicContext
 
 
 class ObjMapRectObject(ObjMapObject):
 
-    def __init__(self, rect: Rect, color: Color, metadata: Any) -> None:
+    def __init__(self, rect: Rectf, color: Color, metadata: Any) -> None:
         super().__init__(Pointf(rect.left, rect.top), metadata)
 
         self.size = Sizef(rect.width, rect.height)
         self.color = color
 
         self.cp_top_left = ObjMapControlPoint(Sprite.from_file("data/images/icons16/resize1.png"),
-                                              Pointf())
+                                              Pointf(0, 0))
 
         self.cp_bottom_right = ObjMapControlPoint(Sprite.from_file("data/images/icons16/resize1.png"),
-                                                  Pointf())
+                                                  Pointf(0, 0))
 
         self.cp_top_right = ObjMapControlPoint(Sprite.from_file("data/images/icons16/resize2.png"),
-                                               Pointf())
+                                               Pointf(0, 0))
 
         self.cp_bottom_left = ObjMapControlPoint(Sprite.from_file("data/images/icons16/resize2.png"),
-                                                 Pointf())
+                                                 Pointf(0, 0))
 
         self.cp_middle_left = ObjMapControlPoint(Sprite.from_file("data/images/icons16/resize_horz.png"),
-                                                 Pointf())
+                                                 Pointf(0, 0))
         self.cp_middle_right = ObjMapControlPoint(Sprite.from_file("data/images/icons16/resize_horz.png"),
-                                                  Pointf())
+                                                  Pointf(0, 0))
         self.cp_top_middle = ObjMapControlPoint(Sprite.from_file("data/images/icons16/resize_vert.png"),
-                                                Pointf())
+                                                Pointf(0, 0))
 
         self.cp_bottom_middle = ObjMapControlPoint(Sprite.from_file("data/images/icons16/resize_vert.png"),
-                                                   Pointf())
+                                                   Pointf(0, 0))
 
         self.cp_top_right.sig_set_pos.connect(self.cp_top_right_move)
         self.cp_bottom_right.sig_set_pos.connect(self.cp_bottom_right_move)
@@ -72,7 +73,7 @@ class ObjMapRectObject(ObjMapObject):
         self.pos = Pointf(rect.left, rect.top)
         self.size = Sizef(rect.width, rect.height)
 
-    def cp_top_left_move(self, pos_: Point) -> None:
+    def cp_top_left_move(self, pos_: Pointf) -> None:
         self.size.width += self.pos.x - pos_.x
         self.size.height += self.pos.y - pos_.y
         self.pos = pos_
@@ -80,7 +81,7 @@ class ObjMapRectObject(ObjMapObject):
         self.normalize_rect()
         self.update_control_points()
 
-    def cp_top_right_move(self, pos_: Point) -> None:
+    def cp_top_right_move(self, pos_: Pointf) -> None:
         self.size.width += pos_.x - (self.pos.x + self.size.width)
         self.size.height += self.pos.y - pos_.y
 
@@ -89,7 +90,7 @@ class ObjMapRectObject(ObjMapObject):
         self.normalize_rect()
         self.update_control_points()
 
-    def cp_bottom_left_move(self, pos_: Point) -> None:
+    def cp_bottom_left_move(self, pos_: Pointf) -> None:
         self.size.width += self.pos.x - pos_.x
         self.size.height += pos_.y - (self.pos.y + self.size.height)
         self.pos.x = pos_.x
@@ -97,34 +98,34 @@ class ObjMapRectObject(ObjMapObject):
         self.normalize_rect()
         self.update_control_points()
 
-    def cp_bottom_right_move(self, pos_: Point) -> None:
+    def cp_bottom_right_move(self, pos_: Pointf) -> None:
         self.size.width += pos_.x - (self.pos.x + self.size.width)
         self.size.height += pos_.y - (self.pos.y + self.size.height)
 
         self.normalize_rect()
         self.update_control_points()
 
-    def cp_top_middle_move(self, pos_: Point) -> None:
+    def cp_top_middle_move(self, pos_: Pointf) -> None:
         self.size.height += self.pos.y - pos_.y
         self.pos.y = pos_.y
 
         self.normalize_rect()
         self.update_control_points()
 
-    def cp_bottom_middle_move(self, pos_: Point) -> None:
+    def cp_bottom_middle_move(self, pos_: Pointf) -> None:
         self.size.height += pos_.y - (self.pos.y + self.size.height)
 
         self.normalize_rect()
         self.update_control_points()
 
-    def cp_middle_left_move(self, pos_: Point) -> None:
+    def cp_middle_left_move(self, pos_: Pointf) -> None:
         self.size.width += self.pos.x - pos_.x
         self.pos.x = pos_.x
 
         self.normalize_rect()
         self.update_control_points()
 
-    def cp_middle_right_move(self, pos_: Point) -> None:
+    def cp_middle_right_move(self, pos_: Pointf) -> None:
         self.size.width += pos_.x - (self.pos.x + self.size.width)
 
         self.normalize_rect()
@@ -139,7 +140,7 @@ class ObjMapRectObject(ObjMapObject):
             self.pos.y += self.size.height
             self.size.height = -self.size.height
 
-    def get_rect(self) -> Rect:
+    def get_rect(self) -> Rectf:
         return self.get_bound_rect()
 
     def set_color(self, color: Color) -> None:
@@ -158,18 +159,20 @@ class ObjMapRectObject(ObjMapObject):
         self.cp_middle_left.set_pos_raw(pos + Pointf(0, self.size.height / 2))
         self.cp_middle_right.set_pos_raw(pos + Pointf(self.size.width, self.size.height / 2))
 
-    def draw(self, gc):
-        gc.fill_rect(Rect(self.get_bound_rect()), self.color)
+    def draw(self, gc: GraphicContext) -> None:
+        gc.fill_rect(self.get_bound_rect(), self.color)
 
     def get_bound_rect(self) -> Rectf:
-        return Rectf(self.pos, self.size)
+        return Rectf.from_ps(self.pos, self.size)
 
     def add_control_points(self) -> None:
         self.update_control_points()
         logging.info("Adding control points...")
 
         from flexlay.tool_context import ToolContext
+        assert ToolContext.current is not None
         objmap = ToolContext.current.object_layer
+        assert objmap is not None
         objmap.add_control_point(self.cp_top_left)
         objmap.add_control_point(self.cp_top_right)
         objmap.add_control_point(self.cp_bottom_left)

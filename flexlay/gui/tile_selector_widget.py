@@ -16,12 +16,12 @@
 
 
 from PyQt5.QtCore import QSize, Qt, QEvent
-from PyQt5.QtGui import QPainter
+from PyQt5.QtGui import QPainter, QMouseEvent, QPaintEvent
 from PyQt5.QtWidgets import QWidget
 
 from flexlay.color import Color
 from flexlay.graphic_context import GraphicContext
-from flexlay.math import Point, Rect, Size
+from flexlay.math import Point, Pointf, Rect, Rectf, Sizef
 from flexlay.tile_brush import TileBrush
 from flexlay.tileset import Tileset
 from flexlay.tool_context import ToolContext
@@ -29,7 +29,7 @@ from flexlay.tool_context import ToolContext
 
 class TileSelectorWidget(QWidget):
 
-    def __init__(self, viewport) -> None:
+    def __init__(self, viewport: QWidget) -> None:
         super().__init__()
 
         self.viewport = viewport
@@ -38,16 +38,16 @@ class TileSelectorWidget(QWidget):
         self.has_focus = False
         self.mouse_over_tile = -1
         self.region_select = False
-        self.current_pos = Point()
-        self.region_select_start = Point()
-        self.mouse_pos = Point()
+        self.current_pos = Point(0, 0)
+        self.region_select_start = Point(0, 0)
+        self.mouse_pos = Point(0, 0)
         self.scale = 1.0
         self.tileset = Tileset(32)
         self.tiles: list[int] = []
 
         self.setMouseTracking(True)
 
-    def get_selection(self):
+    def get_selection(self) -> Rect:
         selection = Rect(self.current_pos.x, self.current_pos.y,
                          self.region_select_start.x, self.region_select_start.y)
 
@@ -62,7 +62,9 @@ class TileSelectorWidget(QWidget):
 
         return selection
 
-    def mousePressEvent(self, event):
+    def mousePressEvent(self, event: QMouseEvent) -> None:
+        assert ToolContext.current is not None
+
         if event.button() == Qt.LeftButton:
             brush = TileBrush(1, 1)
 
@@ -81,7 +83,7 @@ class TileSelectorWidget(QWidget):
 
         self.repaint()
 
-    def mouseReleaseEvent(self, event):
+    def mouseReleaseEvent(self, event: QMouseEvent) -> None:
 
         if event.button() == Qt.RightButton:
             self.releaseMouse()
@@ -107,13 +109,13 @@ class TileSelectorWidget(QWidget):
 
         self.repaint()
 
-    def mouseMoveEvent(self, event):
-        pos = self.get_mouse_tile_pos(Point.from_qt(event.pos()))
+    def mouseMoveEvent(self, event: QMouseEvent) -> None:
+        pos = self.get_mouse_tile_pos(Pointf.from_qt(event.pos()))
         self.current_pos = pos
         self.mouse_over_tile = pos.y * self.columns + pos.x
         self.repaint()
 
-    def get_mouse_tile_pos(self, mouse_pos):
+    def get_mouse_tile_pos(self, mouse_pos: Pointf) -> Point:
         x = int(mouse_pos.x / self.cell_size)
         y = int(mouse_pos.y / self.cell_size)
 
@@ -122,7 +124,7 @@ class TileSelectorWidget(QWidget):
 
         return Point(x, y)
 
-    def paintEvent(self, event):
+    def paintEvent(self, event: QPaintEvent) -> None:
         painter = QPainter(self)
         gc = GraphicContext(painter)
 
@@ -140,10 +142,10 @@ class TileSelectorWidget(QWidget):
 
             tile = self.tileset.create(self.tiles[i])
 
-            rect = Rect(Point(int(x * self.cell_size),
-                              int(y * self.cell_size)),
-                        Size(self.cell_size,
-                             self.cell_size))
+            rect = Rectf.from_ps(Pointf(x * self.cell_size,
+                                        y * self.cell_size),
+                                 Sizef(self.cell_size,
+                                       self.cell_size))
 
             if tile:
                 sprite = tile.get_sprite()

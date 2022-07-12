@@ -15,8 +15,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QIcon, QStandardItem
+from typing import Any, Callable, Optional
+
+from PyQt5.QtCore import Qt, QPoint
+from PyQt5.QtGui import QIcon, QStandardItem, QStandardItemModel
 from PyQt5.QtWidgets import (
     QFileSystemModel,
     QFormLayout,
@@ -28,7 +30,9 @@ from PyQt5.QtWidgets import (
     QWidget,
 )
 
+from flexlay.gui.properties_widget import Item
 from flexlay.util import Signal
+from supertux.addon import Addon
 
 
 class ProjectWidget(QWidget):
@@ -39,10 +43,10 @@ class ProjectWidget(QWidget):
     also see: supertux/property.py
     """
 
-    def __init__(self, parent) -> None:
+    def __init__(self, parent: QWidget) -> None:
         super().__init__(parent)
-        self.items = []
-        self.addon = None
+        self.items: list[Item] = []
+        self.addon: Optional[Addon] = None
 
         self.vbox = QVBoxLayout()
         self.vbox.setSpacing(0)
@@ -86,8 +90,8 @@ class ProjectWidget(QWidget):
         self.tree_view.customContextMenuRequested.connect(self.on_context_menu)
         self.vbox.addWidget(self.tree_view)
 
-        self.layout = QFormLayout()
-        self.vbox.addLayout(self.layout)
+        self._layout = QFormLayout()
+        self.vbox.addLayout(self._layout)
 
         self.setLayout(self.vbox)
         self.setMinimumWidth(300)
@@ -99,16 +103,16 @@ class ProjectWidget(QWidget):
 
         self.call_signal.connect(self.call_callbacks)
 
-    def call_callbacks(self, *args):
+    def call_callbacks(self, *args: Any) -> None:
         for item in self.items:
             if item.callback is not None:
                 item.callback(item.get_value())
 
-    def add_callback(self, callback):
+    def add_callback(self, callback: Callable[[Any], None]) -> None:
         """Adds a callback to the callback signal"""
         self.call_signal.connect(callback)
 
-    def add_items(self, parent, elements):
+    def add_items(self, parent: QStandardItemModel, elements: list[tuple[str, Any]]) -> None:
         for text, children in elements:
             item = QStandardItem(text)
             parent.appendRow(item)
@@ -118,11 +122,10 @@ class ProjectWidget(QWidget):
     def call(self) -> None:
         self.call_signal(*self.get_values())
 
-    def on_tree_view_double_click(self, item) -> None:
+    def on_tree_view_double_click(self, item: Any) -> None:
         print("double-clicked!")
 
-    def on_context_menu(self, position):
-
+    def on_context_menu(self, position: QPoint) -> None:
         menu = QMenu()
         menu.addAction(self.tr("Add image..."))
         menu.addAction(self.tr("Add sound..."))
@@ -131,10 +134,10 @@ class ProjectWidget(QWidget):
 
         menu.exec_(self.tree_view.viewport().mapToGlobal(position))
 
-    def set_project_directory(self, project_dir):
+    def set_project_directory(self, project_dir: str) -> None:
         self.tree_view.setRootIndex(self.model.setRootPath(project_dir))
 
-    def set_addon(self, addon):
+    def set_addon(self, addon: Addon) -> None:
         self.addon = addon
         # We now have an add-on set, initialize the GUI
         self.init_gui()

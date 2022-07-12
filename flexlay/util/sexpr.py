@@ -22,7 +22,7 @@
 from typing import Any, Optional, Union
 
 
-SExprValue = Union[bool, int, float, str, list]
+SExprValue = Union[bool, int, float, str, list[Any]]
 
 
 def num(s: str) -> Union[int, float]:
@@ -149,7 +149,7 @@ class SExprParser:
         else:
             self.atom += c
 
-    def parse(self) -> SExprValue:
+    def parse(self) -> list[SExprValue]:
         self.atom = None
         self.stack: list[list[Any]] = [[]]
         self.state = self.state_list
@@ -175,13 +175,13 @@ class SExprParser:
             raise Exception("list not closed")
 
 
-def sexpr_read_from_file(filename: str) -> SExprValue:
+def sexpr_read_from_file(filename: str) -> list[SExprValue]:
     with open(filename, "rt") as fin:
         content = fin.read()
         return parse(content, filename)
 
 
-def parse(string: str, context: Optional[str] = None) -> SExprValue:
+def parse(string: str, context: Optional[str] = None) -> list[SExprValue]:
     parser = SExprParser(string)
     try:
         return parser.parse()

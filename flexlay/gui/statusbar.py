@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from PyQt5.QtWidgets import QWidget, QLabel, QStatusBar
+from PyQt5.QtWidgets import QLabel, QStatusBar
 
 from flexlay.math.point import Point
 

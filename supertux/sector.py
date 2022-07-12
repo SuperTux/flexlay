@@ -15,57 +15,62 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from typing import Any, Optional
+
 import logging
 
 from flexlay import ObjectLayer, ObjMapTilemapObject, EditorMap
-from flexlay.math import Rect, Point
+from flexlay.math import Point, Pointf, Size, Rectf
+from flexlay.util.sexpr_writer import SExprWriter
+
 from supertux.gameobj_factor import supertux_gameobj_factory
 from supertux.gameobjs import Camera, SpawnPoint
 from supertux.tilemap import SuperTuxTileMap
+from supertux.level import Level
 
 
 class Sector:
 
-    def __init__(self, parent) -> None:
-        self.parent = parent
-        self.name = None
-        self.music = None
-        self.gravity = 10.0
-        self.init_script = ""
-        self.ambient_light = [1, 1, 1]
+    def __init__(self, parent: Level) -> None:
+        self.parent: Level = parent
+        self.name: str = ""
+        self.music: str = ""
+        self.gravity: float = 10.0
+        self.init_script: str = ""
+        self.ambient_light: list[float] = [1, 1, 1]
 
-        self.width = None
-        self.height = None
+        self.width: int = 0
+        self.height: int = 0
 
-        self.tilemaps = []
-        self.camera = None
+        self.tilemaps: list[SuperTuxTileMap] = []
+        self.camera: Optional[Camera] = None
 
-        self.object_layer = None
+        self.object_layer: Optional[ObjectLayer] = None
         # self.sketch = None
-        self.editormap = None
+        self.editormap: Optional[EditorMap] = None
 
-    def get_some_solid_tilemap(self):
+    def get_some_solid_tilemap(self) -> SuperTuxTileMap:
         for tilemap in self.tilemaps:
             if tilemap.solid:
                 return tilemap
         return self.tilemaps[0]
 
-    def get_level(self):
+    def get_level(self) -> Level:
         return self.parent
 
-    def resize(self, size, pos):
+    def resize(self, size: Size, pos: Point) -> None:
         self.width = size.width
         self.height = size.height
 
         for tilemap in self.tilemaps:
             tilemap.resize(size, pos)
 
+        assert self.object_layer is not None
         for obj in self.object_layer.objects:
-            p = obj.get_pos()
-            p += 32 * pos
+            p = obj.get_pos() + 32 * pos.to_f()
             obj.set_pos(p)
 
-    def new_from_size(self, name, width, height):
+    def new_from_size(self, name: str, width: int, height: int) -> 'Sector':
         self.name = name
         self.music = ""
         self.gravity = 10.0
@@ -83,13 +88,15 @@ class Sector:
         # self.editormap.set_background_color(Color(255, 255, 255))
         for tilemap in self.tilemaps:
             # self.editormap.add_layer(tilemap.tilemap_layer)
+            assert self.object_layer is not None
+            assert tilemap.tilemap_layer is not None
             self.object_layer.add_object(ObjMapTilemapObject(tilemap.tilemap_layer, tilemap))
 
         spawn = SpawnPoint()
         spawn.properties[0].value = "main"
         spawn_x = 5 if self.width > 5 else 0
         spawn_y = self.height * 3 / 4
-        spawn.objmap_object.pos = Point(spawn_x * 32, spawn_y * 32)
+        spawn.objmap_object.pos = Pointf(spawn_x * 32, spawn_y * 32)
         self.object_layer.add_object(spawn.objmap_object)
 
         self.camera = Camera()
@@ -135,11 +142,13 @@ class Sector:
 
                 # GRUMBEL: incorrect
                 if tilemap.solid:
+                    assert tilemap.tilemap_layer is not None
                     self.width = max(self.width, tilemap.tilemap_layer.width)
                     self.height = max(self.height, tilemap.tilemap_layer.height)
 
-                self.editormap.set_bounding_rect(Rect(0, 0, self.width * 32, self.height * 32))
+                self.editormap.set_bounding_rect(Rectf(0, 0, self.width * 32, self.height * 32))
 
+                assert tilemap.tilemap_layer is not None
                 self.object_layer.add_object(ObjMapTilemapObject(tilemap.tilemap_layer, tilemap))
             else:
                 obj = supertux_gameobj_factory.create_gameobj(name, data)
@@ -147,14 +156,15 @@ class Sector:
                     logging.error("Couldn't resolve object type: " + name)
                     logging.warning("Sector: Unhandled tag: " + name)
                 else:
-                    if name == "camera":
+                    if isinstance(obj, Camera):
                         self.camera = obj
                     self.objects.append(obj)
+                    assert obj.objmap_object is not None
                     self.object_layer.add_object(obj.objmap_object)
 
         self.editormap.metadata = self
 
-    def write(self, writer):
+    def write(self, writer: SExprWriter) -> None:
         writer.write_string("name", self.name)
         if self.music:
             writer.write_string("music", self.music)
@@ -164,6 +174,7 @@ class Sector:
             writer.write_string("init-script", self.init_script)
         writer.write_rgb("ambient-light", self.ambient_light)
 
+        assert self.object_layer is not None
         for obj in self.object_layer.get_objects():
             obj.metadata.write(writer, obj)
 

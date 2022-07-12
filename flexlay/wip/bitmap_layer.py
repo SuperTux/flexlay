@@ -55,8 +55,8 @@ class BitmapLayer(Layer):
 
     def get_bounding_rect(self):
         # FIXME: Do we need to handle its position here or does the Layer keep care of that?
-        return Rect(Point(0, 0),
-                    Size(self.surface.width, self.surface.height))
+        return Rect.from_ps(Point(0, 0),
+                            Size(self.surface.width, self.surface.height))
 
     def has_bounding_rect(self):
         return True

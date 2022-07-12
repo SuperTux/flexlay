@@ -18,7 +18,7 @@
 from typing import Any, Callable
 
 
-SignalCallback = Callable[[Any], None]
+SignalCallback = Callable[..., None]
 
 
 class Signal:

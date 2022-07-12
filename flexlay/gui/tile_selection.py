@@ -15,50 +15,64 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from typing import Optional
+
 import logging
 
 from flexlay.color import Color
-from flexlay.math import Rect
+from flexlay.math import Point, Rect, Rectf
 from flexlay.tile_brush import TileBrush
+from flexlay.graphic_context import GraphicContext
+from flexlay.field import Field
+from flexlay.tilemap_layer import TilemapLayer
 
 
 class TileSelection:
 
     def __init__(self) -> None:
-        self.tilemap = None
-        self.start_pos = None
-        self.selection = None
-        self.active = False
+        self.tilemap: Optional[TilemapLayer] = None
+        self.start_pos: Optional[Point] = None
+        self.selection: Optional[Rect] = None
+        self.active: bool = False
 
-    def start(self, tilemap, pos):
+    def start(self, tilemap: TilemapLayer, pos: Point) -> None:
         self.tilemap = tilemap
         self.active = True
         self.start_pos = pos
         self.update(self.start_pos)
 
-    def update(self, pos):
+    def update(self, pos: Point) -> None:
+        if self.start_pos is None:
+            return
+
         self.selection = Rect(min(self.start_pos.x, pos.x),
                               min(self.start_pos.y, pos.y),
                               max(self.start_pos.x, pos.x) + 1,
                               max(self.start_pos.y, pos.y) + 1)
 
-    def is_active(self):
+    def is_active(self) -> bool:
         return self.active
 
     def clear(self) -> None:
-        self.selection = Rect()
+        self.selection = Rect.zero()
         self.active = False
 
-    def draw(self, gc, color=Color(255, 255, 255, 100)):
+    def draw(self, gc: GraphicContext, color: Color = Color(255, 255, 255, 100)) -> None:
+        if self.selection is None:
+            return
+
+        assert self.tilemap is not None
         tile_size = self.tilemap.get_tileset().get_tile_size()
 
-        gc.fill_rect(Rect(self.selection.left * tile_size,
-                          self.selection.top * tile_size,
-                          self.selection.right * tile_size,
-                          self.selection.bottom * tile_size),
+        gc.fill_rect(Rectf(self.selection.left * tile_size,
+                           self.selection.top * tile_size,
+                           self.selection.right * tile_size,
+                           self.selection.bottom * tile_size),
                      color)
 
-    def get_brush(self, field):
+    def get_brush(self, field: Field) -> TileBrush:
+        assert self.selection is not None
+
         sel = self.selection.copy()
 
         sel.normalize()
@@ -92,7 +106,8 @@ class TileSelection:
 
             return brush
 
-    def get_rect(self):
+    def get_rect(self) -> Rect:
+        assert self.selection is not None
         sel = self.selection.copy()
         sel.normalize()
         return sel

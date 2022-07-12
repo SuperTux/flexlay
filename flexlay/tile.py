@@ -21,18 +21,19 @@ import logging
 
 from flexlay import Color, PixelBuffer
 from flexlay.sprite import Sprite
+from flexlay.sprite_brush import SpriteBrush
 
 
 class Tile:
 
     def __init__(self, pixelbuffer: Optional[PixelBuffer] = None, sprite: Optional[Sprite] = None) -> None:
-        self.provider = None
-        self.sprite = sprite
-        self.pixelbuffer = pixelbuffer
-        self.transparent = False
-        self.color = None
-        self.attribute_color = Color(255, 255, 255)
-        self.filename = None
+        self.provider: Optional[SpriteBrush] = None
+        self.sprite: Optional[Sprite] = sprite
+        self.pixelbuffer: Optional[PixelBuffer] = pixelbuffer
+        self.transparent: bool = False
+        self.color: Optional[Color] = None
+        self.attribute_color: Color = Color(255, 255, 255)
+        self.filename: Optional[str] = None
 
     def get_color(self) -> Color:
         if self.color is not None:
@@ -41,10 +42,10 @@ class Tile:
             self.color = self.calc_color()
             return self.color
 
-    def get_attribute_color(self):
+    def get_attribute_color(self) -> Color:
         return self.attribute_color
 
-    def get_sprite(self):
+    def get_sprite(self) -> Sprite:
         if self.sprite is not None:
             return self.sprite
         else:
@@ -63,6 +64,7 @@ class Tile:
                 self.pixelbuffer = self.provider.get_pixelbuffer()
                 return self.pixelbuffer
             else:
+                assert self.filename is not None
                 self.pixelbuffer = PixelBuffer.from_file(self.filename)
                 return self.pixelbuffer
 
@@ -70,7 +72,7 @@ class Tile:
         logging.info("Tile::calc_color not implemented")
         return Color(255, 255, 255, 255)
 
-    def get_filename(self) -> str:
+    def get_filename(self) -> Optional[str]:
         return self.filename
 
 

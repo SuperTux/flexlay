@@ -14,6 +14,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+
+from typing import Optional
+
 import logging
 
 from PyQt5.QtGui import QMouseEvent
@@ -36,12 +39,12 @@ class InputEvent:
     MOD_ALT = (1 << 2)
 
     def __init__(self) -> None:
-        self.kind = InputEvent.MOUSE_NO_BUTTON
-        self.mouse_pos = None
-        self.mod = 0
+        self.kind: int = InputEvent.MOUSE_NO_BUTTON
+        self.mouse_pos: Optional[Point] = None
+        self.mod: int = 0
 
     @staticmethod
-    def from_qt(event: QMouseEvent):
+    def from_qt(event: QMouseEvent) -> 'InputEvent':
         result = InputEvent()
 
         result.mouse_pos = Point(event.x(), event.y())

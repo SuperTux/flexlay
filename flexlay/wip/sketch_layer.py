@@ -23,7 +23,7 @@ from flexlay.layer import Layer
 from flexlay.math import Point
 from flexlay.wip.canvas import Canvas
 from flexlay.wip.display import Display
-from flexlay.wip.pixel_buffer import PixelBuffer
+from flexlay.pixel_buffer import PixelBuffer
 
 
 class SketchLayer(Layer):

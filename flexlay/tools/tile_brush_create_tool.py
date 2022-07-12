@@ -21,6 +21,7 @@ from flexlay.gui.editor_map_component import EditorMapComponent
 from flexlay.gui.tile_selection import TileSelection
 from flexlay.tool_context import ToolContext
 from flexlay.tools.tool import Tool
+from flexlay.graphic_context import GraphicContext
 
 
 class TileBrushCreateTool(Tool):
@@ -32,7 +33,9 @@ class TileBrushCreateTool(Tool):
         self.selection = TileSelection()
         self.shift_pressed = False
 
-    def draw(self, gc):
+    def draw(self, gc: GraphicContext) -> None:
+        assert ToolContext.current is not None
+
         if self.is_active:
             tilemap = ToolContext.current.tilemap_layer
             if not tilemap:
@@ -43,40 +46,54 @@ class TileBrushCreateTool(Tool):
             else:
                 self.selection.draw(gc)
 
-    def on_mouse_down(self, event):
-        self.shift_pressed = event.mod & InputEvent.MOD_SHIFT
+    def on_mouse_down(self, event: InputEvent) -> None:
+        assert EditorMapComponent.current is not None
+        assert ToolContext.current is not None
+        assert event.mouse_pos is not None
+
+        self.shift_pressed = bool(event.mod & InputEvent.MOD_SHIFT)
 
         tilemap = ToolContext.current.tilemap_layer
 
         if tilemap:
             parent = EditorMapComponent.current
-            pos = tilemap.world2tile(parent.screen2world(event.mouse_pos))
+            pos = tilemap.world2tile(parent.screen2world(event.mouse_pos.to_f()))
 
             self.is_active = True
             self.grab_mouse()
             self.selection.start(tilemap, pos)
 
-    def on_mouse_move(self, event):
-        self.shift_pressed = event.mod & InputEvent.MOD_SHIFT
+    def on_mouse_move(self, event: InputEvent) -> None:
+        assert EditorMapComponent.current is not None
+        assert ToolContext.current is not None
+        assert event.mouse_pos is not None
+
+        self.shift_pressed = bool(event.mod & InputEvent.MOD_SHIFT)
 
         tilemap = ToolContext.current.tilemap_layer
         if tilemap:
             parent = EditorMapComponent.current
-            current_tile = tilemap.world2tile(parent.screen2world(event.mouse_pos))
+            current_tile = tilemap.world2tile(parent.screen2world(event.mouse_pos.to_f()))
 
             if self.is_active:
                 self.selection.update(current_tile)
 
-    def on_mouse_up(self, event):
-        self.shift_pressed = event.mod & InputEvent.MOD_SHIFT
+    def on_mouse_up(self, event: InputEvent) -> None:
+        assert EditorMapComponent.current is not None
+        assert ToolContext.current is not None
+        assert event.mouse_pos is not None
 
+        self.shift_pressed = bool(event.mod & InputEvent.MOD_SHIFT)
+
+        assert ToolContext.current is not None
         tilemap = ToolContext.current.tilemap_layer
 
         if tilemap:
+            assert EditorMapComponent.current is not None
             EditorMapComponent.current.get_workspace().get_map().modify()
 
             parent = EditorMapComponent.current
-            current_tile = tilemap.world2tile(parent.screen2world(event.mouse_pos))
+            current_tile = tilemap.world2tile(parent.screen2world(event.mouse_pos.to_f()))
 
             if self.is_active:
                 self.release_mouse()

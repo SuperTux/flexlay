@@ -15,12 +15,17 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from typing import cast, Callable
+
 from flexlay import Config
+from flexlay.gui_manager import GUIManager
+
+from supertux.gui import SuperTuxGUI
 
 
 class SuperTuxMenuBar:
 
-    def __init__(self, gui_manager, editor) -> None:
+    def __init__(self, gui_manager: GUIManager, editor: SuperTuxGUI) -> None:
         self.gui_manager = gui_manager
 
         # Create Menu
@@ -32,8 +37,11 @@ class SuperTuxMenuBar:
         submenu_new.add_item("Add-on...", editor.gui_addon_new)
         file_menu.add_item("Open...", editor.gui_level_load)
         self.recent_files_menu = file_menu.add_menu("Open Recent")
+        assert Config.current is not None
         for filename in Config.current.recent_files:
-            self.recent_files_menu.add_item(filename, lambda filename=filename: editor.load_level(filename))
+            self.recent_files_menu.add_item(filename,
+                                            cast(Callable[[], None],
+                                                 lambda filename=filename: editor.load_level(filename)))
 
         file_menu.add_item("Save...", editor.gui_level_save)
         # file_menu.add_item("Save Commands...", menu_file_save_commands)
@@ -45,7 +53,7 @@ class SuperTuxMenuBar:
         edit_menu.add_item("Smooth Selection", editor.gui_smooth_level_struct)
         edit_menu.add_item("Resize", editor.gui_resize_sector)
         edit_menu.add_item("Resize to selection", editor.gui_resize_sector_to_selection)
-        edit_menu.add_item("Change Tileset", editor.gui_change_tileset)
+        edit_menu.add_item("Change Tileset", cast(Callable[[], None], editor.gui_change_tileset))
 
         zoom_menu = self.menubar.add_menu("&Zoom")
         zoom_menu.add_item("1:4 (25%) ", lambda: editor.gui_set_zoom(0.25))
@@ -83,10 +91,13 @@ class SuperTuxMenuBar:
         run_menu.add_item("Play Example Demo", editor.gui_watch_example)
         self.editor = editor
 
-    def update_recent_files(self):
+    def update_recent_files(self) -> None:
         self.recent_files_menu.menu.clear()
+        assert Config.current is not None
         for filename in Config.current.recent_files:
-            self.recent_files_menu.add_item(filename, lambda filename=filename: self.editor.load_level(filename))
+            self.recent_files_menu.add_item(filename,
+                                            cast(Callable[[], None],
+                                                 lambda filename=filename: self.editor.load_level(filename)))
 
 
 # EOF #

@@ -17,6 +17,7 @@
 
 from flexlay.commands.command import Command
 from flexlay.object_layer import ObjectLayer
+from flexlay.objmap_object import ObjMapObject
 
 
 class ObjectAddCommand(Command):
@@ -24,10 +25,10 @@ class ObjectAddCommand(Command):
     def __init__(self, objmap: ObjectLayer) -> None:
         super().__init__()
 
-        self.objmap = objmap
-        self.objs = []
+        self.objmap: ObjectLayer = objmap
+        self.objs: list[ObjMapObject] = []
 
-    def add_object(self, obj) -> None:
+    def add_object(self, obj: ObjMapObject) -> None:
         self.objs.append(obj)
 
     def execute(self) -> None:

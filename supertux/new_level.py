@@ -15,10 +15,12 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from typing import Any, Optional
+
 import os
 import random
 
-from PyQt5 import QtWidgets
+from PyQt5.QtWidgets import QWidget, QWizardPage, QTextEdit, QVBoxLayout
 
 from flexlay import Config
 from flexlay.gui import PropertiesWidget, GenericWizard
@@ -27,13 +29,15 @@ from supertux.level import Level
 
 class NewLevelWizard(GenericWizard):
 
-    def __init__(self, parent) -> None:
+    def __init__(self, parent: QWidget) -> None:
         super().__init__(parent, "New Level Wizard")
         # Modal means you cannot touch the parent until this
         # closes
         self.setModal(True)
 
-        self.level = Level()
+        assert Config.current is not None
+
+        self.level: Optional[Level] = Level()
         self.level.name = "Unnamed Level"
         self.level.author = Config.current.name
         self.level.music = ""
@@ -53,9 +57,11 @@ class NewLevelWizard(GenericWizard):
         # When 'Cancel' pressed run cancel()
         self.rejected.connect(self.cancel)
 
-    def finish(self, *pages):
+    def finish(self, *pages: Any) -> None:
         """Executed when "Finish" button clicked"""
         main_page_data = pages[1]
+
+        assert Config.current is not None
 
         # FIXME: Don't create game data in GUI code
         self.level = Level.from_size(main_page_data[2], main_page_data[3])
@@ -64,6 +70,7 @@ class NewLevelWizard(GenericWizard):
         self.level.name = main_page_data[0]
         self.level.author = main_page_data[1]
         Config.current.name = self.level.author
+        assert self.level.current_sector is not None
         self.level.current_sector.music = main_page_data[4]
         # self.level.spawn = ceil(main_page_data[2] / 10), int(main_page_data[3] / 2)
         self.level.tileset_path = os.path.join("images", "tiles.strf")
@@ -72,7 +79,7 @@ class NewLevelWizard(GenericWizard):
     def cancel(self) -> None:
         self.level = None
 
-    def create_intro_page(self):
+    def create_intro_page(self) -> PropertiesWidget:
         """Creates the intro page containing a bit of text
 
         :return: PropertiesWidget Introduction Page
@@ -86,7 +93,7 @@ class NewLevelWizard(GenericWizard):
 
         return page_widget
 
-    def create_main_page(self):
+    def create_main_page(self) -> PropertiesWidget:
         """Creates the main wizard page
 
         :return: PropertiesWidget to add to GenericWidget
@@ -103,8 +110,10 @@ class NewLevelWizard(GenericWizard):
                      "Unknown Flying Penguin")
 
         # choice is random.choice
+        assert self.level is not None
         self.level.name = "Example: " + random.choice(fun_names)
 
+        assert Config.current is not None
         page_widget.add_string("Level Name:", self.level.name, None)
         page_widget.add_string("Level Author:", self.level.author, None)
         page_widget.add_int("Level Width:", self.level.width, None)
@@ -120,12 +129,12 @@ class NewLevelWizard(GenericWizard):
 
         return page_widget
 
-    def create_license_page(self):
+    def create_license_page(self) -> QWizardPage:
         """Creates the license page
 
         @return QWizardPage The License Page of the wizard
         """
-        page = QtWidgets.QWizardPage()
+        page = QWizardPage()
 
         page.setTitle("Level License")
         page.setSubTitle("You must set a license for your level, which " +
@@ -134,17 +143,18 @@ class NewLevelWizard(GenericWizard):
                          "we ask that you make your level free " +
                          "(as in 'free speech' not 'free WiFi')")
 
-        self.license_input = QtWidgets.QTextEdit("GPL 2+ / CC-by-sa 3.0")
+        self.license_input = QTextEdit("GPL 2+ / CC-by-sa 3.0")
         self.set_license()
         self.license_input.textChanged.connect(self.set_license)
 
-        vbox = QtWidgets.QVBoxLayout()
+        vbox = QVBoxLayout()
         vbox.addWidget(self.license_input)
 
         page.setLayout(vbox)
         return page
 
     def set_license(self) -> None:  # Connected to signal
+        assert self.level is not None
         self.level.license = self.license_input.toPlainText()
 
 

@@ -17,8 +17,10 @@
 
 from flexlay.object_layer import ObjectLayer
 from flexlay.objmap_object import ObjMapObject
+from flexlay.commands import Command
 
-class ObjectDeleteCommand:
+
+class ObjectDeleteCommand(Command):
 
     def __init__(self, object_layer: ObjectLayer) -> None:
         self.object_layer = object_layer

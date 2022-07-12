@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from typing import Any, Union, Optional
+from typing import Any, Optional
 
 
 SExprValue = Any  # Union[bool, int, float, str, list]
@@ -38,7 +38,7 @@ def assoc_ref(lst: list[SExprValue], key: str) -> Optional[SExprValue]:
         return assoc_ref(lst[1:], key)
 
 
-def get_value_from_tree(spec: list[Any], tree: list[Any], default: Any) -> Any:
+def get_value_from_tree(spec: list[str], tree: SExprValue, default: Any) -> Any:
     if spec == []:
         return tree
     elif spec == ['_']:

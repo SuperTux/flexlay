@@ -15,13 +15,14 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from typing import Any, Optional
+from typing import Any, IO, Optional
 
 import json
 import re
 
 from PyQt5.QtGui import (QTextCharFormat, QFont)
 from PyQt5.QtCore import Qt
+from PyQt5.QtWidget import QTextEdit
 
 from .highlighter import SuperTuxHighlighter, HighlightingRule
 
@@ -50,7 +51,7 @@ class SuperTuxLispHighlighter(SuperTuxHighlighter):
         return pattern_tree
 
     @staticmethod
-    def search_tree(tree: dict[str, list[Any]], tag_list: list[str]) -> Optional[QTextCharFormat]:
+    def search_tree(tree: Any, tag_list: list[str]) -> Optional[QTextCharFormat]:
         '''
         Searches a tree to find a tag
         :param tag_list: ["supertux-level", "sector", "name"]
@@ -93,7 +94,7 @@ class SuperTuxLispHighlighter(SuperTuxHighlighter):
 
         return format
 
-    def __init__(self, text_edit, level_file):
+    def __init__(self, text_edit: QTextEdit, level_file: IO[str]):
         super().__init__(text_edit)
 
         text = level_file.read()
@@ -117,7 +118,7 @@ class SuperTuxLispHighlighter(SuperTuxHighlighter):
         # tree_json = SuperTuxLispHighlighter.load_tree_json()
         # SuperTuxLispHighlighter.search_tree(tree_json,["supertux-level", "sector", "name"])
 
-    def highlightBlock(self, text):
+    def highlightBlock(self, text: str) -> None:
         for rule in self.highlighting_rules:
             search = re.search(rule.pattern, text)
             span = None if not search else search.span()

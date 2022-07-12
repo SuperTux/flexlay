@@ -15,12 +15,12 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from typing import List
+from typing import Optional
 
 import csv
 import random
 
-from PyQt5.QtWidgets import QLabel, QListWidget, QHBoxLayout, QVBoxLayout, QSpinBox, QWidget
+from PyQt5.QtWidgets import (QLabel, QListWidget, QHBoxLayout, QVBoxLayout, QSpinBox, QWidget, QListWidgetItem)
 
 from flexlay.tile_brush import TileBrush
 from flexlay.tool_context import ToolContext
@@ -28,47 +28,48 @@ from flexlay.tool_context import ToolContext
 
 class SmartTileMapping:
 
-    id = -1
-
-    top: List[int] = []
-    right: List[int] = []
-    bottom: List[int] = []
-    left: List[int] = []
+    def __init__(self) -> None:
+        self.id = -1
+        self.top: list[int] = []
+        self.right: list[int] = []
+        self.bottom: list[int] = []
+        self.left: list[int] = []
 
 
 class SmartTile:
 
-    id = 0
-    name = "Undefined smart tile"
-    width = 0
-    height = 0
-    start = 0
-    reverse = False
+    # id = 0
+    # name = "Undefined smart tile"
+    # width = 0
+    # height = 0
+    # start = 0
+    # reverse = False
 
-    def __init__(self, id, name, width, height, max_width, max_height, start, reverse) -> None:
-        self.id = id
-        self.name = name
-        self.width = width
-        self.height = height
-        self.max_width = max_width
-        self.max_height = max_height
-        self.min_width = width
-        self.min_height = height
-        self.start = start
-        self.reverse = reverse
+    def __init__(self, id: int, name: str, width: int, height: int, max_width: int, max_height: int,
+                 start: int, reverse: bool) -> None:
+        self.id: int = id
+        self.name: str = name
+        self.width: int = width
+        self.height: int = height
+        self.max_width: int = max_width
+        self.max_height: int = max_height
+        self.min_width: int = width
+        self.min_height: int = height
+        self.start: int = start
+        self.reverse: bool = reverse
 
-        self.top_left_ids = []
-        self.top_ids = []
-        self.top_right_ids = []
-        self.right_ids = []
-        self.bottom_right_ids = []
-        self.bottom_ids = []
-        self.bottom_left_ids = []
-        self.left_ids = []
-        self.other_ids = []
+        self.top_left_ids: list[int] = []
+        self.top_ids: list[int] = []
+        self.top_right_ids: list[int] = []
+        self.right_ids: list[int] = []
+        self.bottom_right_ids: list[int] = []
+        self.bottom_ids: list[int] = []
+        self.bottom_left_ids: list[int] = []
+        self.left_ids: list[int] = []
+        self.other_ids: list[int] = []
 
-        self.has_mappings = False
-        self.brush = None
+        self.has_mappings: bool = False
+        self.brush: Optional[TileBrush] = None
 
     def as_brush(self) -> TileBrush:
         brush = TileBrush(self.width, self.height)
@@ -98,8 +99,12 @@ class SmartTile:
     """
 
     def get_fitting_tile(self,
-                         width: int, height: int, left: int, top: int, x: int, y: int,
-                         mappings: list[Any] = None):
+                         width: int,
+                         height: int,
+                         left: int,
+                         top: int, x:
+                         int, y: int,
+                         mappings: Optional[list[SmartTileMapping]] = None) -> int:
         # Check mappings:
         if mappings is not None:
             matching_tiles = []
@@ -139,7 +144,7 @@ class SmartTile:
     def as_smart_brush(self,
                        width: Optional[int] = None,
                        height: Optional[int] = None,
-                       mappings: list[Any] = None):
+                       mappings: Optional[list[SmartTileMapping]] = None) -> TileBrush:
         brush = self.as_brush()
         if width is None and height is None:
             return brush
@@ -176,7 +181,7 @@ class SmartTile:
 
         return brush
 
-    def set_mappings(self, mappings_string):
+    def set_mappings(self, mappings_string: str) -> None:
         mappings = mappings_string.split("|")
         if len(mappings) != 9:
             return
@@ -195,11 +200,11 @@ class SmartTile:
 
 class SmartTileSelectorWidget(QWidget):
 
-    def __init__(self, viewport) -> None:
+    def __init__(self, viewport: QWidget) -> None:
         super().__init__()
 
-        self.smart_tiles = []
-        self.mappings = []
+        self.smart_tiles: list[SmartTile] = []
+        self.mappings: list[SmartTileMapping] = []
         self.load_tiles()
         self._layout = QVBoxLayout()
 
@@ -222,7 +227,7 @@ class SmartTileSelectorWidget(QWidget):
         self._layout.addLayout(self.height_box)
         self.setLayout(self._layout)
 
-        self.current = None
+        self.current: Optional[int] = None
         self.list_widget.currentItemChanged.connect(self.item_changed)
         self.width_input.valueChanged.connect(self.set_brush)
         self.height_input.valueChanged.connect(self.set_brush)
@@ -236,19 +241,21 @@ class SmartTileSelectorWidget(QWidget):
         #    self.brush = current.as_brush()
 
         if self.brush is not None:
+            assert ToolContext.current is not None
             ToolContext.current.tile_brush = self.brush
 
-    def set_tiles(self, tiles):
+    def set_tiles(self, tiles: list[SmartTile]) -> None:
         pass
 
-    def get_current(self):
+    def get_current(self) -> SmartTile:
+        assert self.current is not None
         return self.smart_tiles[self.current]
 
-    def set_current(self, index):
+    def set_current(self, index: int) -> None:
         self.current = index
         self.set_brush()
 
-    def item_changed(self, curr, prev):
+    def item_changed(self, curr: QListWidgetItem, prev: QListWidgetItem) -> None:
         item_index = self.list_widget.indexFromItem(curr).row()
         self.set_current(item_index)
         self.height_input.setValue(self.get_current().height)
@@ -405,7 +412,7 @@ class SmartTileSelectorWidget(QWidget):
     #
     #         tile = self.tileset.create(self.tiles[i])
     #
-    #         rect = Rect(Point(int(x * self.cell_size),
+    #         rect = Rect.from_ps(Point(int(x * self.cell_size),
     #                           int(y * self.cell_size)),
     #                     Size(self.cell_size,
     #                          self.cell_size))

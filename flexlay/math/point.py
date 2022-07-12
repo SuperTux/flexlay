@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from typing import overload, Optional, Union, Generic, TypeVar, TypeAlias
+from typing import Union, TypeVar
 
 from PyQt5.QtCore import QPoint, QPointF
 
@@ -31,6 +31,9 @@ class Point:
 
     def to_qt(self) -> QPoint:
         return QPoint(self.x, self.y)
+
+    def to_f(self) -> 'Pointf':
+        return Pointf(self.x, self.y)
 
     def __init__(self, x: int, y: int) -> None:
         self.x: int = x
@@ -67,11 +70,14 @@ class Point:
 class Pointf:
 
     @staticmethod
-    def from_qt(qpoint: QPointF) -> 'Pointf':
+    def from_qt(qpoint: Union[QPoint, QPointF]) -> 'Pointf':
         return Pointf(qpoint.x(), qpoint.y())
 
     def to_qt(self) -> QPointF:
         return QPointF(self.x, self.y)
+
+    def to_i(self) -> 'Point':
+        return Point(int(self.x), int(self.y))
 
     def __init__(self, x: float, y: float) -> None:
         self.x: float = x

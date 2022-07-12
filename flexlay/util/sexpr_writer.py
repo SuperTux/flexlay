@@ -17,8 +17,6 @@
 
 from typing import Any, IO, Optional, Union
 
-
-from flexlay.color import Color
 from flexlay.math.point import Point, Pointf
 from flexlay.math.rect import Rect, Rectf
 from flexlay.math.size import Size, Sizef
@@ -151,7 +149,7 @@ class SExprWriter:
             self.fout.write(" %r" % i)
         self.fout.write(")\n")
 
-    def write_color(self, name: str, values: 'Color') -> None:
+    def write_color(self, name: str, values: list[float]) -> None:
         self.indent()
         self.fout.write("(" + name)
         for i in values:

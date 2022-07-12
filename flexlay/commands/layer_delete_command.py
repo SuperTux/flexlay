@@ -15,18 +15,23 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from typing import Optional
+
+from flexlay.tilemap_layer import TilemapLayer
+from flexlay.gui.layer_selector import LayerSelector
 from flexlay.commands import Command
+from flexlay.objmap_tilemap_object import ObjMapTilemapObject
 
 
 class LayerDeleteCommand(Command):
-    def __init__(self, layer_selector, layer) -> None:
+    def __init__(self, layer_selector: LayerSelector, layer: TilemapLayer) -> None:
         """Deletes a Layer
 
         :param layer: Either a TilemapLayer, an ObjMapTilemapObject or an int (the layer to remove)
         """
-        self.layer = layer
-        self.layer_selector = layer_selector
-        self.removed_object = None
+        self.layer: TilemapLayer = layer
+        self.layer_selector: LayerSelector = layer_selector
+        self.removed_object: Optional[ObjMapTilemapObject] = None
 
     def execute(self) -> None:
         self.removed_object = self.layer_selector.unsafe_remove_layer(self.layer)
@@ -38,6 +43,7 @@ class LayerDeleteCommand(Command):
             raise RuntimeError("Could not undo layer removal.")
 
     def redo(self) -> None:
+        assert self.removed_object is not None
         self.layer_selector.unsafe_remove_layer(self.removed_object)
 
 

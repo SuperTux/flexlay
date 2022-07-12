@@ -18,14 +18,14 @@
 from typing import Any
 
 from flexlay.graphic_context import GraphicContext
-from flexlay.math import Point, Pointf, Rectf, Sizef
+from flexlay.math import Pointf, Rectf, Sizef
 from flexlay.objmap_object import ObjMapObject
-from flexlay.tilemap_layer import TileMapLayer
+from flexlay.tilemap_layer import TilemapLayer
 
 
 class ObjMapTilemapObject(ObjMapObject):
 
-    def __init__(self, tilemap_layer: TileMapLayer, metadata: Any) -> None:
+    def __init__(self, tilemap_layer: TilemapLayer, metadata: Any) -> None:
         super().__init__(Pointf(0, 0), metadata)
 
         self.tilemap_layer = tilemap_layer
@@ -36,13 +36,13 @@ class ObjMapTilemapObject(ObjMapObject):
     def get_pos(self) -> Pointf:
         return self.pos
 
-    def is_inside(self, click_pos: Point) -> bool:
+    def is_inside(self, click_pos: Pointf) -> bool:
         return False
 
     def get_bound_rect(self) -> Rectf:
-        return Rectf(self.tilemap_layer.metadata.pos,
-                     Sizef(self.tilemap_layer.width * 32,
-                           self.tilemap_layer.height * 32))
+        return Rectf.from_ps(self.tilemap_layer.metadata.pos,
+                             Sizef(self.tilemap_layer.width * 32,
+                                   self.tilemap_layer.height * 32))
 
     def set_pos(self, pos: Pointf) -> None:
         self.pos = pos

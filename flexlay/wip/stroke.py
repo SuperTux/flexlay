@@ -15,9 +15,12 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from typing import Optional
+
 import math
 
 from flexlay.math import Rectf
+from flexlay.wip.stroke_drawer import Drawer
 
 
 class Dab:
@@ -32,9 +35,9 @@ class Dab:
 class Stroke:
 
     def __init__(self) -> None:
-        self.dabs = []
-        self.drawer = None
-        self.bounding_rect_needs_recalc = True
+        self.dabs: list[Dab] = []
+        self.drawer: Optional[Drawer] = None
+        self.bounding_rect_needs_recalc: bool = True
 
     def calc_bounding_rect(self) -> Rectf:
         rect = Rectf()
@@ -59,7 +62,7 @@ class Stroke:
     def get_drawer(self) -> Drawer:
         return self.drawer
 
-    def get_interpolated_dabs(self, x_spacing, y_spacing):
+    def get_interpolated_dabs(self, x_spacing: float, y_spacing: float):
         if len(self.dabs) > 0:
             interpolated_dabs = []
 

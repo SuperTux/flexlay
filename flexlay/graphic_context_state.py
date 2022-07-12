@@ -20,17 +20,17 @@ from typing import Optional
 import math
 
 from flexlay.graphic_context import GraphicContext
-from flexlay.math import Point, Pointf, Rect, Rectf, Sizef
+from flexlay.math import Pointf, Rectf, Sizef
 
 
 class GraphicContextState:
 
     def __init__(self, w: int = 1, h: int = 1) -> None:
-        self.width = w
-        self.height = h
-        self.offset = Pointf(0, 0)
-        self.zoom = 1.0
-        self.rotation = 0
+        self.width: int = w
+        self.height: int = h
+        self.offset: Pointf = Pointf(0, 0)
+        self.zoom: float = 1.0
+        self.rotation: float = 0
 
     def set_size(self, w: int, h: int) -> None:
         self.width = w
@@ -50,10 +50,10 @@ class GraphicContextState:
         gc.pop_modelview()
 
     def get_clip_rect(self) -> Rectf:
-        return Rectf(Pointf(-self.offset.x,
-                            -self.offset.y),
-                     Sizef(self.width / self.zoom,
-                           self.height / self.zoom))
+        return Rectf.from_ps(Pointf(-self.offset.x,
+                                    -self.offset.y),
+                             Sizef(self.width / self.zoom,
+                                   self.height / self.zoom))
 
     def set_pos(self, pos: Pointf) -> None:
         self.offset.x = -pos.x + (self.width / 2 / self.zoom)
@@ -63,7 +63,7 @@ class GraphicContextState:
         return Pointf(-self.offset.x + (self.width / 2 / self.zoom),
                       -self.offset.y + (self.height / 2 / self.zoom))
 
-    def set_zoom(self, z: float, pos: Optional[Point] = None) -> None:
+    def set_zoom(self, z: float, pos: Optional[Pointf] = None) -> None:
         if pos is None:
             self.zoom = z
         else:
@@ -75,7 +75,7 @@ class GraphicContextState:
     def get_zoom(self) -> float:
         return self.zoom
 
-    def zoom_to(self, rect: Rect) -> None:
+    def zoom_to(self, rect: Rectf) -> None:
         center_x = (rect.left + rect.right) / 2.0
         center_y = (rect.top + rect.bottom) / 2.0
 
@@ -93,7 +93,7 @@ class GraphicContextState:
         self.offset.y = (self.height / (2 * self.zoom)) - center_y
 
     def screen2world(self, pos: Pointf) -> Pointf:
-        pos = Pointf(pos)
+        pos = pos.copy()
         sa = math.sin(-self.rotation / 180.0 * math.pi)
         ca = math.cos(-self.rotation / 180.0 * math.pi)
 

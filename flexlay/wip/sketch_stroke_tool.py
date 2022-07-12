@@ -87,7 +87,7 @@ class SketchStrokeTool:
 
     def add_dab(self, event):
         parent = EditorMapComponent.current
-        p = parent.screen2world(event.mouse_pos)
+        p = parent.screen2world(event.mouse_pos.to_f())
 
         # FIXME: This is ugly, events relative to the layer should be handled somewhat differently
         dab = Dab(p.x - BitmapLayer.current.get_pos().x,

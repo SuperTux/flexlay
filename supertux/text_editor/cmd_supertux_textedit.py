@@ -42,6 +42,7 @@ class SupertuxTextEditMainWindow(QMainWindow):
         layout.addWidget(self.ide_widget)
         self.central_widget.setLayout(layout)
 
+        assert text_file is not None
         highlighter = SuperTuxLispHighlighter(self.ide_widget, text_file)
         highlighter.rehighlight()
 

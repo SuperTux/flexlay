@@ -15,22 +15,18 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from typing import Any
-
 from flexlay.util import sexpr_read_from_file, SExprParseError
+from flexlay.util.sexpr import SExprValue
 
 
-def load_lisp(filename: str, root_symbol: str) -> list[Any]:
+def load_lisp(filename: str, root_symbol: str) -> SExprValue:
     """Convenience function that loads a lisp file from disk and checks for a root symbol"""
 
     tree = sexpr_read_from_file(filename)[0]
-    if tree is None:
-        raise Exception("Error: Couldn't load '%s'" % filename)
-    else:
-        if tree[0] != root_symbol:
-            raise SExprParseError("Error: '%s' is not a '%s' file" % (filename, root_symbol))
-        else:
-            return tree
+    if not isinstance(tree, list) or tree[0] != root_symbol:
+        raise SExprParseError(filename, 0, 0, "Error: '{filename}' is not a '{root_symbol}' file")
+
+    return tree
 
 
 # EOF #

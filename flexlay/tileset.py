@@ -15,15 +15,18 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from typing import Optional
+
 from flexlay.tile import Tile
+
 
 class Tileset:
 
     def __init__(self, tile_size: int) -> None:
-        self.tiles: dict[int, Tile] = {}
+        self.tiles: dict[int, Optional[Tile]] = {}
         self.tile_size = tile_size
 
-    def add_tile(self, tile_id: int, tile: Tile) -> None:
+    def add_tile(self, tile_id: int, tile: Optional[Tile]) -> None:
         self.tiles[tile_id] = tile
 
     def create(self, tile_id: int) -> Tile:

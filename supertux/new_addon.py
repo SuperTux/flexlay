@@ -15,9 +15,11 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from typing import Any, Optional
+
 import random
 
-from PyQt5 import QtGui
+from PyQt5.QtWidget import QWidget, QWizardPage, QTextEdit, QVBoxLayout
 
 from flexlay import Config
 from flexlay.gui import PropertiesWidget, GenericWizard
@@ -25,13 +27,15 @@ from supertux.addon import Addon
 
 
 class NewAddonWizard(GenericWizard):
-    def __init__(self, parent) -> None:
+
+    def __init__(self, parent: QWidget) -> None:
         super().__init__(parent, "New Addon Wizard")
         # Modal means you cannot touch the parent until this
         # closes
         self.setModal(True)
 
-        self.addon = Addon()
+        assert Config.current is not None
+        self.addon: Optional[Addon] = Addon()
         self.addon.id = "unnamed-addon"
         self.addon.version = 1
         self.addon.type = "worldmap"
@@ -50,7 +54,7 @@ class NewAddonWizard(GenericWizard):
         # When 'Cancel' pressed run cancel()
         self.rejected.connect(self.cancel)
 
-    def finish(self, *pages):
+    def finish(self, *pages: Any) -> None:
         """Executed when "Finish" button clicked"""
         main_page_data = pages[1]
         self.addon = Addon()
@@ -64,6 +68,7 @@ class NewAddonWizard(GenericWizard):
         # self.level.current_sector.background = self.level.image
         # self.level.name = main_page_data[0]
         # self.level.author = main_page_data[1]
+        assert Config.current is not None
         Config.current.name = self.addon.author
         # self.level.current_sector.music = main_page_data[4]
         # self.level.spawn = ceil(main_page_data[2] / 10), int(main_page_data[3] / 2)
@@ -73,7 +78,7 @@ class NewAddonWizard(GenericWizard):
     def cancel(self) -> None:
         self.addon = None
 
-    def create_intro_page(self):
+    def create_intro_page(self) -> PropertiesWidget:
         """Creates the intro page containing a bit of text
 
         :return: PropertiesWidget Introduction Page
@@ -87,7 +92,7 @@ class NewAddonWizard(GenericWizard):
 
         return page_widget
 
-    def create_main_page(self):
+    def create_main_page(self) -> PropertiesWidget:
         """Creates the main wizard page
 
         :return: PropertiesWidget to add to GenericWidget
@@ -104,6 +109,7 @@ class NewAddonWizard(GenericWizard):
                      "Unknown Flying Penguin")
 
         # choice is random.choice
+        assert self.addon is not None
         self.addon.title = "Example: " + random.choice(fun_names)
 
         page_widget.add_string("Title:", self.addon.title, None)
@@ -114,12 +120,12 @@ class NewAddonWizard(GenericWizard):
 
         return page_widget
 
-    def create_license_page(self):
+    def create_license_page(self) -> QWizardPage:
         """Creates the license page
 
         @return QWizardPage The License Page of the wizard
         """
-        page = QtGui.QWizardPage()
+        page = QWizardPage()
 
         page.setTitle("Addon License")
         page.setSubTitle("You must set a license for your level, which " +
@@ -128,17 +134,18 @@ class NewAddonWizard(GenericWizard):
                          "we ask that you make your level free " +
                          "(as in 'free speech' not 'free WiFi')")
 
-        self.license_input = QtGui.QTextEdit("GPL 2+ / CC-by-sa 3.0")
+        self.license_input = QTextEdit("GPL 2+ / CC-by-sa 3.0")
         self.set_license()
         self.license_input.textChanged.connect(self.set_license)
 
-        vbox = QtGui.QVBoxLayout()
+        vbox = QVBoxLayout()
         vbox.addWidget(self.license_input)
 
         page.setLayout(vbox)
         return page
 
     def set_license(self) -> None:  # Connected to signal
+        assert self.addon is not None
         self.addon.license = self.license_input.toPlainText()
 
 

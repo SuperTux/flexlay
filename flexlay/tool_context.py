@@ -15,8 +15,13 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from typing import Optional
+
 from flexlay.gui.tile_selection import TileSelection
 from flexlay.tile_brush import TileBrush
+from flexlay.object_layer import ObjectLayer
+from flexlay.tilemap_layer import TilemapLayer
+from flexlay.objmap_object import ObjMapObject
 
 
 class ToolContext:
@@ -31,10 +36,10 @@ class ToolContext:
 
         self.tile_selection = TileSelection()
 
-        self.object_selection = []
+        self.object_selection: list[ObjMapObject] = []
 
-        self.tilemap_layer = None
-        self.object_layer = None
+        self.tilemap_layer: Optional[TilemapLayer] = None
+        self.object_layer: Optional[ObjectLayer] = None
 
 
 # EOF #

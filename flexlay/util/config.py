@@ -44,7 +44,7 @@ class Config:
     attribute_pattern = "[a-zA-Z_][a-zA-Z0-9_]*"
 
     @staticmethod
-    def create(projectname: str) -> Config:
+    def create(projectname: str) -> 'Config':
         """Create a Config instance
 
         :param projectname: A dash-seperated, lower case name (will be saved in ~/.flexlay/projectname.cfg)

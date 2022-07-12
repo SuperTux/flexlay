@@ -15,10 +15,12 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from typing import Optional
+from typing import Any, Optional
 
 from flexlay import Colorf
 from flexlay.util import get_value_from_tree
+from flexlay.gui.generic_dialog import GenericDialog
+from flexlay.util.sexpr_writer import SExprWriter
 
 
 class Property:
@@ -39,17 +41,17 @@ class Property:
         self.default: Any = default
         self.optional: bool = optional
 
-    def read(self, sexpr, obj):
+    def read(self, sexpr: Any, obj: Any) -> None:
         self.value = get_value_from_tree([self.identifier, "_"], sexpr, self.default)
 
-    def write(self, writer, obj):
+    def write(self, writer: SExprWriter, obj: Any) -> None:
         if not self.optional or self.value != self.default:
             writer.write(self.identifier, self.value)
 
-    def property_dialog(self, dialog):
+    def property_dialog(self, dialog: GenericDialog) -> None:
         pass
 
-    def on_value_change(self, value):
+    def on_value_change(self, value: Any) -> None:
         self.value = value
 
 
@@ -57,7 +59,7 @@ class BoolProperty(Property):
 
     editable = True
 
-    def property_dialog(self, dialog):
+    def property_dialog(self, dialog: GenericDialog) -> None:
         dialog.add_bool(self.label, self.value, self.on_value_change)
 
 
@@ -65,10 +67,10 @@ class IntProperty(Property):
 
     editable = True
 
-    def __init__(self, label, identifier, default=0, optional=False) -> None:
+    def __init__(self, label: str, identifier: str, default: int = 0, optional: bool = False) -> None:
         super().__init__(label, identifier, default, optional)
 
-    def property_dialog(self, dialog):
+    def property_dialog(self, dialog: GenericDialog) -> None:
         dialog.add_int(self.label, self.value, callback=self.on_value_change)
 
 
@@ -76,10 +78,10 @@ class FloatProperty(Property):
 
     editable = True
 
-    def __init__(self, label, identifier, default=0.0, optional=False) -> None:
+    def __init__(self, label: str, identifier: str, default: float = 0.0, optional: bool = False) -> None:
         super().__init__(label, identifier, default, optional)
 
-    def property_dialog(self, dialog):
+    def property_dialog(self, dialog: GenericDialog) -> None:
         dialog.add_float(self.label, self.value, callback=self.on_value_change)
 
 
@@ -88,21 +90,25 @@ class StringProperty(Property):
     editable = True
     placeholder: Optional[str] = None
 
-    def __init__(self, label, identifier, default="", optional=False, translatable=False, placeholder=None) -> None:
+    def __init__(self, label: str, identifier: str,
+                 default: str = "",
+                 optional: bool = False,
+                 translatable: bool = False,
+                 placeholder: Optional[str] = None) -> None:
         super().__init__(label, identifier, default, optional)
         self.translatable = translatable
 
         if placeholder is not None:
             self.placeholder = placeholder
 
-    def read(self, sexpr, obj):
+    def read(self, sexpr: Any, obj: Any) -> None:
         self.value = get_value_from_tree([self.identifier, "_"], sexpr, self.default)
 
-    def write(self, writer, obj):
+    def write(self, writer: SExprWriter, obj: Any) -> None:
         if not self.optional or self.value != self.default:
             writer.write_string(self.identifier, self.value, translatable=self.translatable)
 
-    def property_dialog(self, dialog):
+    def property_dialog(self, dialog: GenericDialog) -> None:
         dialog.add_string(self.label, self.value, self.on_value_change, self.placeholder)
         # dialog.add_string(self.label, self.value, self.on_value_change)
 
@@ -111,7 +117,8 @@ class FileProperty(StringProperty):
 
     editable = True
 
-    def __init__(self, label: str, identifier: str, default: str = "", relative_to: str = "", open_in: str = "") -> None:
+    def __init__(self, label: str, identifier: str, default: str = "",
+                 relative_to: str = "", open_in: str = "") -> None:
         """
         :param relative_to: The prefix text not displayed in the input box
         :param open_in: Where the browse dialog opens
@@ -126,7 +133,7 @@ class FileProperty(StringProperty):
         # The actual path stored, so that the relative path can be displayed.
         self.actual_path = ""
 
-    def property_dialog(self, dialog):
+    def property_dialog(self, dialog: GenericDialog) -> None:
         dialog.add_file(self.label, self.default, self.relative_to, self.open_in, self.on_value_change)
 
 
@@ -134,7 +141,12 @@ class EnumProperty(StringProperty):
 
     editable = True
 
-    def __init__(self, label: str, identifier: str, default, optional: bool = False, values: Optional[list[Any]] = list[Any]) -> None:
+    def __init__(self,
+                 label: str,
+                 identifier: str,
+                 default: int,
+                 optional: bool = False,
+                 values: Optional[list[Any]] = list[Any]) -> None:
         """
         :param default: Is an index from values!!!
         """
@@ -147,7 +159,7 @@ class EnumProperty(StringProperty):
 
         self.values = values
 
-    def property_dialog(self, dialog):
+    def property_dialog(self, dialog: GenericDialog) -> None:
         dialog.add_enum(self.label, self.values, self.values.index(self.value), self.on_value_change)
 
 
@@ -155,20 +167,24 @@ class ColorProperty(Property):
 
     editable = True
 
-    def __init__(self, label, identifier, default: Colorf = Colorf(1.0, 1.0, 1.0), optional: bool = False) -> None:
+    def __init__(self,
+                 label: str,
+                 identifier: str,
+                 default: Colorf = Colorf(1.0, 1.0, 1.0),
+                 optional: bool = False) -> None:
         super().__init__(label, identifier, default=default, optional=optional)
 
-    def read(self, sexpr, obj):
+    def read(self, sexpr: Any, obj: Any) -> None:
         self.value = Colorf(*get_value_from_tree([self.identifier], sexpr, [1.0, 1.0, 1.0]))
 
-    def write(self, writer, obj):
+    def write(self, writer: SExprWriter, obj: Any) -> None:
         if not self.optional or self.value != self.default:
             if self.value.a == 1.0:
                 writer.write_color(self.identifier, self.value.to_list()[0:3])
             else:
                 writer.write_color(self.identifier, self.value.to_list())
 
-    def property_dialog(self, dialog):
+    def property_dialog(self, dialog: GenericDialog) -> None:
         dialog.add_color(self.label, self.value)
 
 

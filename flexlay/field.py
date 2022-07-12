@@ -16,6 +16,7 @@
 
 
 from typing import List
+import numpy.typing as npt
 
 import numpy as np
 
@@ -30,8 +31,7 @@ class Field:
     def from_list(width: int, height: int, data: List[int]) -> 'Field':
         return Field(np.array(data, dtype=np.uint32).reshape(height, width))
 
-    def __init__(self, data: np.ndarray) -> None:
-        assert data.dtype == np.uint32
+    def __init__(self, data: npt.NDArray[np.uint32]) -> None:
         self._data = data
 
     def copy_region(self, x: int, y: int, w: int, h: int) -> 'Field':
@@ -64,11 +64,11 @@ class Field:
 
     @property
     def width(self) -> int:
-        return self._data.shape[1]
+        return int(self._data.shape[1])
 
     @property
     def height(self) -> int:
-        return self._data.shape[0]
+        return int(self._data.shape[0])
 
     def size(self) -> int:
         return int(self._data.size)

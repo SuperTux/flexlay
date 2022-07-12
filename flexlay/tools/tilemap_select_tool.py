@@ -17,52 +17,82 @@
 
 from flexlay import InputEvent, ToolContext
 from flexlay.gui.editor_map_component import EditorMapComponent
+from flexlay.tile_brush import TileBrush
+from flexlay.graphic_context import GraphicContext
+from flexlay.math import Rectf
+from flexlay.tools.tool import Tool
 
 
-class TileMapSelectTool:
+class TileMapSelectTool(Tool):
 
     def __init__(self) -> None:
+        super().__init__()
+        assert ToolContext.current is not None
         self.selection = ToolContext.current.tile_selection
         self.creating_selection = False
 
-    def draw(self, gc):
+    def draw(self, gc: GraphicContext) -> None:
         if self.selection.is_active():
             self.selection.draw(gc)
 
-    def on_mouse_up(self, event):
+    def on_mouse_up(self, event: InputEvent) -> None:
+        assert EditorMapComponent.current is not None
+        assert ToolContext.current is not None
+        assert ToolContext.current.tilemap_layer is not None
+        assert event.mouse_pos is not None
+
         parent = EditorMapComponent.current
 
         if event.kind == InputEvent.MOUSE_LEFT:
             self.creating_selection = False
             parent.release_mouse()
 
-            self.selection.update(ToolContext.current.tilemap_layer.world2tile(parent.screen2world(event.mouse_pos)))
+            assert event.mouse_pos is not None
+            assert ToolContext.current is not None
+            self.selection.update(
+                ToolContext.current.tilemap_layer.world2tile(parent.screen2world(event.mouse_pos.to_f())))
 
-    def on_mouse_down(self, event):
+    def on_mouse_down(self, event: InputEvent) -> None:
+        assert EditorMapComponent.current is not None
+        assert ToolContext.current is not None
+        assert ToolContext.current.tilemap_layer is not None
+        assert event.mouse_pos is not None
+
         parent = EditorMapComponent.current
 
         if event.kind == InputEvent.MOUSE_LEFT:
             self.creating_selection = True
             parent.grab_mouse()
             tilemap = ToolContext.current.tilemap_layer
-            self.selection.start(tilemap, tilemap.world2tile(parent.screen2world(event.mouse_pos)))
+            assert event.mouse_pos is not None
+            self.selection.start(tilemap, tilemap.world2tile(parent.screen2world(event.mouse_pos.to_f())))
 
         elif event.kind == InputEvent.MOUSE_RIGHT:
             if not self.creating_selection:
                 self.selection.clear()
 
-    def on_mouse_move(self, event):
+    def on_mouse_move(self, event: InputEvent) -> None:
+        assert EditorMapComponent.current is not None
+        assert ToolContext.current is not None
+        assert ToolContext.current.tilemap_layer is not None
+        assert event.mouse_pos is not None
+
         parent = EditorMapComponent.current
 
         if self.creating_selection:
-            self.selection.update(ToolContext.current.tilemap_layer.world2tile(parent.screen2world(event.mouse_pos)))
+            assert event.mouse_pos is not None
+            self.selection.update(
+                ToolContext.current.tilemap_layer.world2tile(parent.screen2world(event.mouse_pos.to_f())))
 
-    def get_selection(self):
+    def get_selection(self) -> TileBrush:
+        assert ToolContext.current is not None
+        assert ToolContext.current.tilemap_layer is not None
         tilemap = ToolContext.current.tilemap_layer
         return self.selection.get_brush(tilemap.field)
 
-    def get_selection_rect(self):
-        return self.selection.get_rect()
+    def get_selection_rect(self) -> Rectf:
+        assert self.selection is not None
+        return self.selection.get_rect().to_f()
 
 
 # EOF #

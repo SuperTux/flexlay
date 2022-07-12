@@ -22,7 +22,7 @@ from PyQt5.QtGui import QPainter, QPainterPath
 
 from flexlay.color import Color
 from flexlay.graphic_context_state import GraphicContextState
-from flexlay.math.rect import Rect, Rectf
+from flexlay.math.rect import Rectf
 
 
 class GraphicContext:
@@ -31,10 +31,10 @@ class GraphicContext:
         self.painter = painter
         self.state = state
 
-    def clear(self, color):
+    def clear(self, color: Color) -> None:
         pass  # GRUMBEL gc.clear(color)
 
-    def draw_rect(self, rect: Rect, color: Color, radius=0) -> None:
+    def draw_rect(self, rect: Rectf, color: Color, radius: int = 0) -> None:
         if radius == 0:
             self.painter.setPen(color.to_qt())
             self.painter.drawRect(rect.to_qt())
@@ -43,16 +43,16 @@ class GraphicContext:
         self.painter.setPen(color.to_qt())
         self.painter.drawRoundedRect(rect.to_qt(), radius, radius)
 
-    def fill_rect(self, rect: Rect, color: Color, radius: int = 0) -> None:
+    def fill_rect(self, rect: Rectf, color: Color, radius: int = 0) -> None:
         if radius == 0:
             self.painter.fillRect(rect.to_qt(), color.to_qt())
             return
 
         path = QPainterPath()
-        path.addRoundedRect(rect.to_qt_f(), radius, radius)
+        path.addRoundedRect(rect.to_qt(), radius, radius)
         self.painter.fillPath(path, color.to_qt())
 
-    def draw_line(self, x1: int, y1: int, x2: int, y2: int, color: Color) -> None:
+    def draw_line(self, x1: float, y1: float, x2: float, y2: float, color: Color) -> None:
         self.painter.setPen(color.to_qt())
         self.painter.drawLine(QLineF(x1, y1, x2, y2))
 
@@ -82,7 +82,7 @@ class GraphicContext:
         if self.state:
             return self.state.get_clip_rect()
         else:
-            return Rectf()
+            return Rectf.zero()
 
     def get_qt_painter(self) -> QPainter:
         return self.painter

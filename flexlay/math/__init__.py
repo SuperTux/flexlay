@@ -21,7 +21,12 @@ from flexlay.math.rect import Rect, Rectf
 from flexlay.math.size import Size, Sizef
 
 
-__all__ = ["Origin", "Point", "Pointf", "Size", "Sizef", "Rect", "Rectf"]
+__all__ = [
+    "Origin",
+    "Point", "Pointf",
+    "Size", "Sizef",
+    "Rect", "Rectf",
+]
 
 
 # EOF #

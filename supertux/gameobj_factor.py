@@ -15,11 +15,17 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from typing import Any, Callable, Optional, Type
+
 import os
 import logging
 from collections import OrderedDict
 
 from flexlay import ObjectBrush, Config
+from flexlay.math import Pointf
+
+from supertux.gui import SuperTuxGUI
+from supertux.gameobj import GameObj
 from supertux.badguys import badguy_sprites
 from supertux.gameobjs import (
     AmbientSound,
@@ -35,7 +41,6 @@ from supertux.gameobjs import (
     Dispenser,
     Door,
     Flame,
-    GameObj,
     GhostFlame,
     Gradient,
     InfoBlock,
@@ -69,7 +74,7 @@ from supertux.worldmap_object import (
 from supertux.sprite import SuperTuxSprite
 
 
-def format_sprite_name(name):
+def format_sprite_name(name: str) -> str:
     """
     sprite_name -> Sprite Name
     """
@@ -88,29 +93,32 @@ class SuperTuxGameObjFactory:
 
     See editor/supertux-editor/LevelObjects/Objects.cs
     """
-    supertux_gui = None
+    supertux_gui: Optional['SuperTuxGUI'] = None
 
     def __init__(self) -> None:
         GameObj.factory = self
-        self.objects = OrderedDict()
+        self.objects: OrderedDict[str, tuple[str, Callable[[], GameObj]]] = OrderedDict()
         # List of (identifier, image, tag)
-        self.badguys = []
+        self.badguys: list[tuple[str, str, Optional[str]]] = []
         self.init_factories()
 
-    def create_gameobj_at(self, identifier, pos):
+    def create_gameobj_at(self, identifier: str, pos: Pointf) -> Optional[GameObj]:
         data = self.objects.get(identifier)
         if data is None:
             logging.warning("couldn't create: %r at %s" % (identifier, pos))
+            return None
         else:
             _, constructor = data
-            obj = constructor()
+            obj: GameObj = constructor()
+            assert obj.objmap_object is not None
             obj.objmap_object.pos = pos
             return obj
 
-    def create_gameobj(self, identifier, sexpr):
+    def create_gameobj(self, identifier: str, sexpr: Any) -> Optional[GameObj]:
         data = self.objects.get(identifier)
         if data is None:
             logging.warning("couldn't create: %r" % identifier)
+            return None
         else:
             _, constructor = data
             obj = constructor()
@@ -118,35 +126,41 @@ class SuperTuxGameObjFactory:
             obj.update()
             return obj
 
-    def create_object_brushes(self):
+    def create_object_brushes(self) -> list[ObjectBrush]:
         """Creates Object Brushes for each sprite"""
+
+        assert Config.current is not None
+
         # print("Creating object brushes...")
         brushes = []
         for identifier, (sprite, constructor) in self.objects.items():
             if sprite is not None:
-                brush = ObjectBrush(SuperTuxSprite.from_file(os.path.join(Config.current.datadir, sprite)).get_sprite(),
+                supertux_sprite = SuperTuxSprite.from_file(os.path.join(Config.current.datadir, sprite))
+                assert supertux_sprite is not None
+                assert supertux_sprite.get_sprite() is not None
+                brush = ObjectBrush(supertux_sprite.get_sprite(),
                                     identifier)
                 brushes.append(brush)
         return brushes
 
-    def add_object(self, gameobj_class):
+    def add_object(self, gameobj_class: Type[GameObj]) -> None:
         self.objects[gameobj_class.identifier] = (gameobj_class.sprite, gameobj_class)
 
-    def add_badguy(self, identifier, sprite, tag=None):
+    def add_badguy(self, identifier: str, sprite_path: str, tag: Optional[str] = None) -> None:
         assert identifier not in self.objects, f"identifier already present: '{identifier}'"
-        self.objects[identifier] = (sprite, lambda: BadGuy(identifier, sprite))
+        self.objects[identifier] = (sprite_path, lambda: BadGuy(identifier, sprite_path))
         if tag:
-            self.badguys.append((identifier, sprite, tag))
+            self.badguys.append((identifier, sprite_path, tag))
         else:
-            self.badguys.append((identifier, sprite))
+            self.badguys.append((identifier, sprite_path))
 
-    def add_simple_object(self, identifier, sprite):
+    def add_simple_object(self, identifier: str, sprite: str) -> None:
         self.objects[identifier] = (sprite, lambda: SimpleObject(identifier, sprite))
 
-    def add_simple_tile(self, identifier, sprite):
+    def add_simple_tile(self, identifier: str, sprite: str) -> None:
         self.objects[identifier] = (sprite, lambda: SimpleTileObject(identifier, sprite))
 
-    def add_particle_system(self, identifier, sprite, kind):
+    def add_particle_system(self, identifier: str, sprite: str, kind: str) -> None:
         self.objects[identifier] = (sprite, lambda: ParticleSystem(kind, sprite))
 
     def init_factories(self) -> None:

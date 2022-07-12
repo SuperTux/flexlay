@@ -19,7 +19,7 @@ from typing import Optional
 
 from flexlay.graphic_context import GraphicContext
 from flexlay.layer import Layer
-from flexlay.math import Point
+from flexlay.math import Pointf, Rectf
 from flexlay.objmap_control_point import ObjMapControlPoint
 from flexlay.objmap_object import ObjMapObject
 
@@ -37,20 +37,21 @@ class ObjectLayer(Layer):
 
     def draw(self, gc: GraphicContext) -> None:
         for obj in self.objects:
-            if obj.to_draw and gc.get_clip_rect().is_overlapped(obj.get_bound_rect()):
+            rect = obj.get_bound_rect()
+            if obj.to_draw and (rect is None or gc.get_clip_rect().is_overlapped(rect)):
                 obj.draw(gc)
 
         for cp in self.control_points:
             cp.draw(gc)
 
-    def find_control_point(self, click_pos: Point) -> Optional[ObjMapControlPoint]:
+    def find_control_point(self, click_pos: Pointf) -> Optional[ObjMapControlPoint]:
         for cp in reversed(self.control_points):
             rect = cp.get_bound_rect()
-            if rect.is_inside(click_pos):
+            if rect is not None and rect.is_inside(click_pos):
                 return cp
         return None
 
-    def find_object(self, click_pos: Point) -> None:
+    def find_object(self, click_pos: Pointf) -> Optional[ObjMapObject]:
         for obj in reversed(self.objects):
             if obj.is_inside(click_pos):
                 return obj
@@ -63,7 +64,7 @@ class ObjectLayer(Layer):
         for obj in objs:
             self.objects.remove(obj)
 
-    def get_selection(self, rect) -> list[ObjMapObject]:
+    def get_selection(self, rect: Rectf) -> list[ObjMapObject]:
         selection = []
         for obj in self.objects:
             if rect.is_inside(obj.get_pos()):

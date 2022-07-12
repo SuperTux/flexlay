@@ -21,8 +21,8 @@ from PyQt5.QCore import QSize, QSizeF
 class Size:
 
     def __init__(self, w: int, h: int) -> None:
-        self.width = w
-        self.height = h
+        self.width: int = w
+        self.height: int = h
 
     def copy(self) -> 'Size':
         return Size(self.width, self.height)

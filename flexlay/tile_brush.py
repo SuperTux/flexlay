@@ -15,19 +15,22 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from typing import Optional
+
 import itertools
 
 from flexlay import Field
 from flexlay.math import Rect
+from flexlay.tile_brush import TileBrush
 
 
 class TileBrush:
 
     @staticmethod
-    def from_field(field, w, h, pos_x, pos_y):
+    def from_field(field: Field, w: int, h: int, pos_x: int, pos_y: int) -> TileBrush:
         return TileBrush(w, h, field.copy_region(pos_x, pos_y, w, h))
 
-    def __init__(self, w, h, field=None) -> None:
+    def __init__(self, w: int, h: int, field: Optional[Field] = None) -> None:
         self.opaque = False
         if field is None:
             self.field = Field.from_size(w, h)
@@ -35,27 +38,21 @@ class TileBrush:
             self.field = field
 
     @property
-    def width(self):
+    def width(self) -> int:
         return self.field.width
 
     @property
-    def height(self):
+    def height(self) -> int:
         return self.field.height
 
-    def set_data(self, data):
-        self.field.set_data(data)
-
-    def get_data(self, data):
-        return self.field.get_data(data)
-
-    def at(self, x, y):
+    def at(self, x, y) -> int:
         return self.field.at(x, y)
 
-    def put(self, x, y, value):
+    def put(self, x: int, y: int, value: int) -> None:
         assert isinstance(value, int)
-        return self.field.put(x, y, value)
+        self.field.put(x, y, value)
 
-    def resize(self, w, h, pos_x=0, pos_y=0):
+    def resize(self, w: int, h: int, pos_x: int = 0, pos_y: int = 0) -> None:
         self.field.resize(w, h, pos_x, pos_y)
 
     def set_opaque(self) -> None:
@@ -64,7 +61,7 @@ class TileBrush:
     def set_transparent(self) -> None:
         self.opaque = False
 
-    def is_opaque(self):
+    def is_opaque(self) -> bool:
         return self.opaque
 
     def auto_crop(self) -> None:

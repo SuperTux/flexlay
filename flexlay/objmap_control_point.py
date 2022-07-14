@@ -20,7 +20,7 @@ from typing import Any, Optional
 from flexlay.graphic_context import GraphicContext
 from flexlay.math import Pointf, Rectf, Origin, Sizef
 from flexlay.sprite import Sprite
-from flexlay.util import Signal
+from flexlay.util.signal import Signal
 
 
 class ObjMapControlPoint:

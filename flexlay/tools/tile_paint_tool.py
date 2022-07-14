@@ -98,7 +98,6 @@ class TilePaintTool(Tool):
         assert EditorMapComponent.current is not None
         assert ToolContext.current is not None
         assert event.mouse_pos is not None
-        assert self.command is not None
 
         tilemap = ToolContext.current.tilemap_layer
         if tilemap:
@@ -106,6 +105,8 @@ class TilePaintTool(Tool):
             self.current_tile = tilemap.world2tile(parent.screen2world(event.mouse_pos.to_f()))
 
             if self.is_active and not tilemap.hidden:
+                assert self.command is not None
+
                 brush = ToolContext.current.tile_brush
                 if ((event.mod & InputEvent.MOD_SHIFT) or
                     ((self.current_tile.x % brush.width) == (self.last_draw.x % brush.width) and

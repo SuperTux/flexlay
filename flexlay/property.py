@@ -18,12 +18,12 @@
 from typing import Any, Optional, TYPE_CHECKING
 
 from flexlay.color import Colorf
-from flexlay.util import get_value_from_tree
+from flexlay.util.sexpr_reader import get_value_from_tree
 from flexlay.util.sexpr_writer import SExprWriter
 
 
 if TYPE_CHECKING:
-    from flexlay.gui.generic_dialog import GenericDialog
+    from flexlay.gui.properties_widget import PropertiesWidget
 
 
 class Property:
@@ -51,7 +51,7 @@ class Property:
         if not self.optional or self.value != self.default:
             writer.write(self.identifier, self.value)
 
-    def property_dialog(self, dialog: 'GenericDialog') -> None:
+    def property_dialog(self, dialog: 'PropertiesWidget') -> None:
         pass
 
     def on_value_change(self, value: Any) -> None:
@@ -62,7 +62,7 @@ class BoolProperty(Property):
 
     editable = True
 
-    def property_dialog(self, dialog: 'GenericDialog') -> None:
+    def property_dialog(self, dialog: 'PropertiesWidget') -> None:
         dialog.add_bool(self.label, self.value, self.on_value_change)
 
 
@@ -73,7 +73,7 @@ class IntProperty(Property):
     def __init__(self, label: str, identifier: str, default: int = 0, optional: bool = False) -> None:
         super().__init__(label, identifier, default, optional)
 
-    def property_dialog(self, dialog: 'GenericDialog') -> None:
+    def property_dialog(self, dialog: 'PropertiesWidget') -> None:
         dialog.add_int(self.label, self.value, callback=self.on_value_change)
 
 
@@ -84,7 +84,7 @@ class FloatProperty(Property):
     def __init__(self, label: str, identifier: str, default: float = 0.0, optional: bool = False) -> None:
         super().__init__(label, identifier, default, optional)
 
-    def property_dialog(self, dialog: 'GenericDialog') -> None:
+    def property_dialog(self, dialog: 'PropertiesWidget') -> None:
         dialog.add_float(self.label, self.value, callback=self.on_value_change)
 
 
@@ -111,7 +111,7 @@ class StringProperty(Property):
         if not self.optional or self.value != self.default:
             writer.write_string(self.identifier, self.value, translatable=self.translatable)
 
-    def property_dialog(self, dialog: 'GenericDialog') -> None:
+    def property_dialog(self, dialog: 'PropertiesWidget') -> None:
         dialog.add_string(self.label, self.value, self.on_value_change, self.placeholder)
         # dialog.add_string(self.label, self.value, self.on_value_change)
 
@@ -136,8 +136,8 @@ class FileProperty(StringProperty):
         # The actual path stored, so that the relative path can be displayed.
         self.actual_path = ""
 
-    def property_dialog(self, dialog: 'GenericDialog') -> None:
-        dialog.add_file(self.label, self.default, self.relative_to, self.open_in, self.on_value_change)
+    def property_dialog(self, dialog: 'PropertiesWidget') -> None:
+        dialog.add_file(self.label, self.default, self.relative_to, self.open_in, callback=self.on_value_change)
 
 
 class EnumProperty(StringProperty):
@@ -149,20 +149,16 @@ class EnumProperty(StringProperty):
                  identifier: str,
                  default: int,
                  optional: bool = False,
-                 values: Optional[list[Any]] = list[Any]) -> None:
+                 values: Optional[list[str]] = None) -> None:
         """
         :param default: Is an index from values!!!
         """
         super().__init__(label, identifier, values[default] if values else "", optional=optional)
 
-        self.default_index = default
+        self.default_index: int = default
+        self.values: list[str] = [] if values is None else values
 
-        if values is None:
-            values = []
-
-        self.values = values
-
-    def property_dialog(self, dialog: 'GenericDialog') -> None:
+    def property_dialog(self, dialog: 'PropertiesWidget') -> None:
         dialog.add_enum(self.label, self.values, self.values.index(self.value), self.on_value_change)
 
 
@@ -187,7 +183,7 @@ class ColorProperty(Property):
             else:
                 writer.write_color(self.identifier, self.value.to_list())
 
-    def property_dialog(self, dialog: 'GenericDialog') -> None:
+    def property_dialog(self, dialog: 'PropertiesWidget') -> None:
         dialog.add_color(self.label, self.value)
 
 

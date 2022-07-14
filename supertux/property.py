@@ -20,8 +20,8 @@ from typing import Any
 from flexlay.util.sexpr_writer import SExprWriter
 from flexlay.workspace import Workspace
 from flexlay.math import Point
-from flexlay.util import get_value_from_tree
-from flexlay.gui.generic_dialog import GenericDialog
+from flexlay.util.sexpr_reader import get_value_from_tree
+from flexlay.gui.properties_widget import PropertiesWidget
 from flexlay.property import (
     Property,
     EnumProperty,
@@ -55,9 +55,6 @@ class InlinePosProperty(Property):
         if obj.pos.y != 0:
             writer.write_float("y", obj.pos.y)
 
-    def property_dialog(self, dialog: GenericDialog) -> None:
-        pass
-
 
 class InlineTilePosProperty(InlinePosProperty):
     """Written to file as coords on tilemap, but displays correctly."""
@@ -89,9 +86,6 @@ class InlineRectProperty(Property):
     def write(self, writer: SExprWriter, obj: Any) -> None:
         writer.write_inline_sizef(obj.size)
         writer.write_inline_pointf(obj.pos)
-
-    def property_dialog(self, dialog: GenericDialog) -> None:
-        pass
 
 
 class SpriteProperty(StringProperty):
@@ -127,9 +121,6 @@ class SoundProperty(StringProperty):
 
     def __init__(self, label: str, identifier: str, default: str = "") -> None:
         super().__init__(label, identifier, default=default)
-
-    def property_dialog(self, dialog: GenericDialog) -> None:
-        pass
 
 
 class PathProperty(Property):
@@ -183,9 +174,6 @@ class PathProperty(Property):
                 writer.end_list()
             writer.end_list()
 
-    def property_dialog(self, dialog: GenericDialog) -> None:
-        pass
-
 
 class SampleProperty(StringProperty):
 
@@ -203,7 +191,7 @@ class TilemapProperty(EnumProperty):
         super().__init__(label, identifier, 0, optional=optional, values=None)
         # super().__init__(label, identifier, "", optional=True, placeholder=placeholder)
 
-    def property_dialog(self, dialog: GenericDialog) -> None:
+    def property_dialog(self, dialog: PropertiesWidget) -> None:
         self.values = self._get_tilemaps()
         super().property_dialog(dialog)
 

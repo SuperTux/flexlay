@@ -19,16 +19,18 @@ from typing import Any, List, Optional, TYPE_CHECKING
 
 import os
 
+from PyQt5.QtWidgets import QWidget
+
 from flexlay.color import Colorf
-from flexlay.util.config import Config
-from flexlay.objmap_sprite_object import ObjMapSpriteObject
-from flexlay.objmap_rect_object import ObjMapRectObject
-from flexlay.workspace import Workspace
-from flexlay.property import Property
 from flexlay.gui.generic_dialog import GenericDialog
 from flexlay.math import Rectf, Pointf, Sizef
-from flexlay.util.sexpr_writer import SExprWriter
 from flexlay.objmap_object import ObjMapObject
+from flexlay.objmap_rect_object import ObjMapRectObject
+from flexlay.objmap_sprite_object import ObjMapSpriteObject
+from flexlay.property import Property
+from flexlay.util.config import Config
+from flexlay.util.sexpr_writer import SExprWriter
+from flexlay.workspace import Workspace
 
 from supertux.constraint import Constraint
 from supertux.sprite import SuperTuxSprite
@@ -41,24 +43,27 @@ if TYPE_CHECKING:
 def make_sprite_object(metadata: Any, filename: str, pos: Optional[Pointf] = None) -> ObjMapSpriteObject:
     pos = Pointf(0, 0) if pos is None else pos
     assert Config.current is not None
-    sprite = SuperTuxSprite.from_file(os.path.join(Config.current.datadir, filename))
-    obj = ObjMapSpriteObject(sprite.get_sprite(), pos, metadata)
+    st_sprite = SuperTuxSprite.from_file(os.path.join(Config.current.datadir, filename))
+    sprite = st_sprite.get_sprite()
+    assert sprite is not None
+    obj = ObjMapSpriteObject(sprite, pos, metadata)
     return obj
 
 
 def make_rect_object(metadata: Any, color: Optional[Colorf] = None) -> ObjMapRectObject:
     if color is None:
-        color = Colorf(0, 0, 1.0, 0.5)
+        color = Colorf(0, 0, 1, 0.5)
     pos = Pointf(0, 0)
     size = Sizef(64, 64)
-    obj = ObjMapRectObject(Rectf.from_ps(pos, size), color, metadata)
+    obj = ObjMapRectObject(Rectf.from_ps(pos, size), color.to_i(), metadata)
     return obj
 
 
 class GameObj:
 
-    label: Optional[str] = None
-    identifier: Optional[str] = None
+    label: str
+    identifier: str
+    sprite: str
     properties: list[Property] = []
     constraints: List[Constraint] = []
 
@@ -77,15 +82,13 @@ class GameObj:
 
     def on_select(self, manager: 'SuperTuxGUI') -> None:
         if manager:
-            props_widget = manager.properties_widget
-            props_widget.set_properties(self.properties)
-            props_widget.add_callback(self.on_callback)
+            manager.properties_widget.set_properties(self.properties)
+            manager.properties_widget.add_callback(self.on_callback)
 
     def on_deselect(self, manager: 'SuperTuxGUI') -> None:
         if manager:
-            props_widget = manager.properties_widget
-            props_widget.clear_properties()
-            props_widget.call_signal.clear()
+            manager.properties_widget.clear_properties()
+            manager.properties_widget.call_signal.clear()
 
     def add_property(self, prop: Property) -> None:
         self.properties.append(prop)
@@ -100,9 +103,9 @@ class GameObj:
             prop.write(writer, obj)
         writer.end_list()
 
-    def property_dialog(self, gui: GenericDialog) -> None:
+    def property_dialog(self, parent: QWidget) -> None:
         assert self.label is not None
-        dialog = GenericDialog(self.label + " Property Dialog", gui)
+        dialog = GenericDialog(self.label + " Property Dialog", parent)
         for prop in self.properties:
             prop.property_dialog(dialog)
 

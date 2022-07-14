@@ -100,10 +100,14 @@ class Sector:
         spawn.properties[0].value = "main"
         spawn_x = 5 if self.width > 5 else 0
         spawn_y = self.height * 3 / 4
+        assert spawn.objmap_object is not None
         spawn.objmap_object.pos = Pointf(spawn_x * 32, spawn_y * 32)
+        assert self.object_layer is not None
+        assert spawn.objmap_object is not None
         self.object_layer.add_object(spawn.objmap_object)
 
         self.camera = Camera()
+        assert self.camera.objmap_object is not None
         self.object_layer.add_object(self.camera.objmap_object)
 
         self.editormap.add_layer(self.object_layer)

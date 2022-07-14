@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from PyQt5.QCore import QSize, QSizeF
+from PyQt5.QtCore import QSize, QSizeF
 
 
 class Size:
@@ -53,7 +53,7 @@ class Sizef:
     def copy(self) -> 'Sizef':
         return Sizef(self.width, self.height)
 
-    def to_qt(self) -> QSize:
+    def to_qt(self) -> QSizeF:
         return QSizeF(self.width, self.height)
 
     def __eq__(self, rhs: object) -> bool:

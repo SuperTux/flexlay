@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from typing import Any, Callable, Optional, Type, TYPE_CHECKING
+from typing import Any, Callable, Optional, Type
 
 import os
 import logging
@@ -73,9 +73,6 @@ from supertux.worldmap_object import (
 )
 from supertux.sprite import SuperTuxSprite
 
-if TYPE_CHECKING:
-    from supertux.gui import SuperTuxGUI
-
 
 def format_sprite_name(name: str) -> str:
     """
@@ -96,7 +93,6 @@ class SuperTuxGameObjFactory:
 
     See editor/supertux-editor/LevelObjects/Objects.cs
     """
-    supertux_gui: Optional['SuperTuxGUI'] = None
 
     def __init__(self) -> None:
         self.objects: OrderedDict[str, tuple[str, Callable[[], GameObj]]] = OrderedDict()
@@ -135,17 +131,18 @@ class SuperTuxGameObjFactory:
 
         # print("Creating object brushes...")
         brushes = []
-        for identifier, (sprite, constructor) in self.objects.items():
-            if sprite is not None:
-                supertux_sprite = SuperTuxSprite.from_file(os.path.join(Config.current.datadir, sprite))
+        for identifier, (sprite_path, constructor) in self.objects.items():
+            if sprite_path is not None:
+                supertux_sprite = SuperTuxSprite.from_file(os.path.join(Config.current.datadir, sprite_path))
                 assert supertux_sprite is not None
-                assert supertux_sprite.get_sprite() is not None
-                brush = ObjectBrush(supertux_sprite.get_sprite(),
-                                    identifier)
+                sprite = supertux_sprite.get_sprite()
+                assert sprite is not None
+                brush = ObjectBrush(sprite, identifier)
                 brushes.append(brush)
         return brushes
 
     def add_object(self, gameobj_class: Type[GameObj]) -> None:
+        assert gameobj_class.identifier is not None
         self.objects[gameobj_class.identifier] = (gameobj_class.sprite, gameobj_class)
 
     def add_badguy(self, identifier: str, sprite_path: str, tag: Optional[str] = None) -> None:
@@ -154,7 +151,7 @@ class SuperTuxGameObjFactory:
         if tag:
             self.badguys.append((identifier, sprite_path, tag))
         else:
-            self.badguys.append((identifier, sprite_path))
+            self.badguys.append((identifier, sprite_path, None))
 
     def add_simple_object(self, identifier: str, sprite: str) -> None:
         self.objects[identifier] = (sprite, lambda: SimpleObject(identifier, sprite))

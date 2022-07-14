@@ -15,10 +15,12 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from typing import cast
+
 import sys
 import unittest
 
-from PyQt5.QtWidgets import QApplication
+from PyQt5.QtWidgets import QApplication, QWidget
 
 from flexlay.gui.generic_wizard import GenericWizard
 from flexlay.gui.properties_widget import PropertiesWidget
@@ -29,7 +31,7 @@ class FlexlayGenericWizardTestCase(unittest.TestCase):
     def simple_test(self) -> None:
         test_app = QApplication(sys.argv)
 
-        test_wizard = GenericWizard(None, "Generic Wizard Test")
+        test_wizard = GenericWizard(cast(QWidget, None), "Generic Wizard Test")
 
         page1 = PropertiesWidget(test_wizard)
         page1.add_label("Hello World!")
@@ -40,7 +42,7 @@ class FlexlayGenericWizardTestCase(unittest.TestCase):
         page2.add_label("Hello World Again!")
         test_wizard.add_page("Page 2", page2)
 
-        test_wizard.add_callback(print)
+        test_wizard.finish_callback.connect(lambda x: print(x))
 
         test_wizard.show()
 

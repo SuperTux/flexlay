@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from typing import Any, Optional
+from typing import Any
 
 import logging
 from enum import IntEnum
@@ -105,7 +105,7 @@ class LevelTime(GameObj):
         self.signal_connect()
 
         self.properties = [
-            IntProperty("Time", "time", None)
+            IntProperty("Time", "time", optional=True)
         ]
 
 
@@ -113,7 +113,7 @@ class Camera(GameObj):
 
     label = "Camera"
     identifier = "camera"
-    sprite = None
+    sprite = "images/engine/editor/camera.png"
     values = ["normal", "autoscroll"]
 
     def __init__(self) -> None:
@@ -211,6 +211,7 @@ class Decal(GameObj):
         prop = self.find_property("sprite")
         assert prop is not None
         self.sprite = prop.value
+        assert self.objmap_object is not None
         self.objmap_object = make_sprite_object(self, self.sprite,
                                                 Pointf(self.objmap_object.pos.x, self.objmap_object.pos.y))
 
@@ -478,13 +479,11 @@ class Dispenser(GameObj):
         self.objmap_object = make_sprite_object(self, self.sprite)
         self.signal_connect()
 
-        from supertux.gameobj_factory import supertux_gameobj_factory
-
         self.properties = [
             IntProperty("Cycle", "cycle", 2),
             EnumProperty("Type", "type", default=0, optional=False, values=["rocketlauncher", "cannon"]),
             BoolProperty("Random", "random", default=False, optional=True),
-            BadGuyProperty("Badguy", "badguy", supertux_gameobj_factory),
+            BadGuyProperty("Badguy", "badguy"),
             DirectionProperty("Direction", "direction", 0),
             InlinePosProperty(),
         ]
@@ -759,7 +758,7 @@ class UnimplementedObject(GameObj):
     def write(self, writer: SExprWriter, obj: Any) -> None:
         logging.debug("Unimplemented: " + str(self.sexpr))
 
-    def property_dialog(self, dialog: Optional[QWidget]) -> None:
+    def property_dialog(self, parent: QWidget) -> None:
         pass
 
 

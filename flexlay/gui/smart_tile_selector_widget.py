@@ -270,7 +270,7 @@ class SmartTileSelectorWidget(QWidget):
 
     def load_tiles(self) -> None:
         with open('data/supertux/smarttiles_mapping.csv', 'r') as mappings:
-            reader: list[list[str]] = csv.reader(mappings)
+            reader = csv.reader(mappings)
             first_row = True
             for row in reader:
                 if first_row:  # Ignore first heading row
@@ -292,18 +292,18 @@ class SmartTileSelectorWidget(QWidget):
                     first_row = False
                     continue
 
-                id = int(row[0])
-                name = row[1]
-                width = int(row[2])
-                height = int(row[3])
-                start = int(row[4])
-                reverse = row[5] if len(row) >= 6 and row[5] == "true" else False
-                max_width = int(row[6]) if len(row) >= 7 else width
-                max_height = int(row[7]) if len(row) >= 8 else height
-                tile = SmartTile(id, name, width, height, max_width, max_height, start, reverse)
-                mappings = row[8] if len(row) >= 9 else None
-                if mappings is not None:
-                    tile.set_mappings(mappings)
+                id: int = int(row[0])
+                name: str = row[1]
+                width: int = int(row[2])
+                height: int = int(row[3])
+                start: int = int(row[4])
+                reverse: bool = (len(row) >= 6 and row[5] == "true")
+                max_width: int = int(row[6]) if len(row) >= 7 else width
+                max_height: int = int(row[7]) if len(row) >= 8 else height
+                tile: SmartTile = SmartTile(id, name, width, height, max_width, max_height, start, reverse)
+                mmappings: Optional[str] = row[8] if len(row) >= 9 else None
+                if mmappings is not None:
+                    tile.set_mappings(mmappings)
 
                 self.smart_tiles.append(tile)
 

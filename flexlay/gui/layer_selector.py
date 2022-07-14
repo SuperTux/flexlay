@@ -37,7 +37,7 @@ class LayerTreeView(QTreeView):
     """A QTreeView for layers"""
 
     def __init__(self, layer_selector: 'LayerSelector', parent: Optional[QWidget] = None,
-                 selection_callback: Optional[Callable[[QItemSelection, QItemSelection], None]] = None) -> None:
+                 selection_callback: Optional[Callable[[int, int], None]] = None) -> None:
         """Initialises a LayerTreeView
 
         Only difference from QTreeView is that a Signal is created
@@ -316,7 +316,7 @@ class LayerSelector:
         """Returns TilemapLayer which is currently selected, if any"""
         return self.get_layer(self.selected_index)
 
-    def selection_changed(self, selected: QItemSelection, deselected: QItemSelection) -> None:
+    def selection_changed(self, selected: int, deselected: int) -> None:
         """Connected to LayerTreeView selectionChanged"""
         self.selected_index = selected
         layer = self.get_selected()
@@ -365,7 +365,7 @@ class LayerSelector:
     def remove_current_layer(self) -> None:
         self.remove_layer(self.selected_index)
 
-    def remove_layer(self, layer: TilemapLayer) -> None:
+    def remove_layer(self, layer: int) -> None:
         """Deletes this layer safely, adding to the editormap's undo stack
 
         :param layer: Either a TilemapLayer, an ObjMapTilemapObject or an int (the layer to remove)

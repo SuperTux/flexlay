@@ -27,7 +27,7 @@ from PyQt5.QtWidgets import QSizePolicy, QWidget  # QOpenGLWidget
 from flexlay.input_event import InputEvent
 from flexlay.graphic_context import GraphicContext
 from flexlay.math import Pointf
-from flexlay.util import Signal
+from flexlay.util.signal import Signal
 
 if TYPE_CHECKING:
     from flexlay.gui.editor_map_component import EditorMapComponent

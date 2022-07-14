@@ -15,10 +15,12 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from typing import cast
+
 import sys
 import unittest
 
-from PyQt5.QtWidgets import QApplication
+from PyQt5.QtWidgets import QApplication, QWidget
 
 from flexlay.gui.generic_dialog import GenericDialog
 
@@ -32,32 +34,32 @@ class FlexlayGenericDialogTestCase(unittest.TestCase):
 
     def simple_test(self) -> None:
         test_app = QApplication(sys.argv)  # noqa: F841
-        GenericDialog("Generic Dialog Test")
+        GenericDialog("Generic Dialog Test", cast(QWidget, None))
         # test_app.exec()
 
     def test_label(self) -> None:
         test_app = QApplication(sys.argv)  # noqa: F841
-        test_dialog = GenericDialog("Generic Dialog Label Test")
+        test_dialog = GenericDialog("Generic Dialog Label Test", cast(QWidget, None))
         test_dialog.add_label("This is a test label")
         # test_app.exec()
 
     def test_string(self) -> None:
         test_app = QApplication(sys.argv)  # noqa: F841
-        test_dialog = GenericDialog("Generic Dialog String Test")
+        test_dialog = GenericDialog("Generic Dialog String Test", cast(QWidget, None))
         test_dialog.add_string("String Label", "Initial Value")
         test_dialog.add_callback(print)
         # test_app.exec()
 
     def test_int(self) -> None:
         test_app = QApplication(sys.argv)  # noqa: F841
-        test_dialog = GenericDialog("Generic Dialog Test")
+        test_dialog = GenericDialog("Generic Dialog Test", cast(QWidget, None))
         test_dialog.add_int("Integer Label", 0)
         test_dialog.add_callback(print)
         # test_app.exec()
 
     def test_float(self) -> None:
         test_app = QApplication(sys.argv)  # noqa: F841
-        test_dialog = GenericDialog("Generic Dialog Float Test")
+        test_dialog = GenericDialog("Generic Dialog Float Test", cast(QWidget, None))
         test_dialog.add_float("Float Label", 1.0)
         test_dialog.add_float("Limit Test",
                               9.9999999999999999)
@@ -66,29 +68,29 @@ class FlexlayGenericDialogTestCase(unittest.TestCase):
 
     def test_enum(self) -> None:
         test_app = QApplication(sys.argv)  # noqa: F841
-        test_dialog = GenericDialog("Generic Dialog Enum Test")
-        test_dialog.add_enum("Enum Label", ("Value 1", "Value 2", "Value 3"), 0)
+        test_dialog = GenericDialog("Generic Dialog Enum Test", cast(QWidget, None))
+        test_dialog.add_enum("Enum Label", ["Value 1", "Value 2", "Value 3"], 0)
         test_dialog.add_callback(print)
         # test_app.exec()
 
     def test_bool(self) -> None:
         test_app = QApplication(sys.argv)  # noqa: F841
-        test_dialog = GenericDialog("Generic Dialog Boolean Test")
+        test_dialog = GenericDialog("Generic Dialog Boolean Test", cast(QWidget, None))
         test_dialog.add_bool("Bool Label", True)
         test_dialog.add_callback(print)
         # test_app.exec()
 
     def test_file(self) -> None:
         test_app = QApplication(sys.argv)  # noqa: F841
-        test_dialog = GenericDialog("Generic Dialog File Path Test")
+        test_dialog = GenericDialog("Generic Dialog File Path Test", cast(QWidget, None))
         test_dialog.add_file("File Path", "")
         test_dialog.add_callback(print)
         # test_app.exec()
 
     def test_radio(self) -> None:
         test_app = QApplication(sys.argv)  # noqa: F841
-        test_dialog = GenericDialog("Generic Dialog Radio Buttons Test")
-        test_dialog.add_radio("Radio Label", ("Value 1", "Value 2", "Value 3"), 0)
+        test_dialog = GenericDialog("Generic Dialog Radio Buttons Test", cast(QWidget, None))
+        test_dialog.add_radio("Radio Label", ["Value 1", "Value 2", "Value 3"], 0)
         test_dialog.add_callback(print)
         # test_app.exec()
 

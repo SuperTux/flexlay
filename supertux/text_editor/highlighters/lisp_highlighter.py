@@ -22,7 +22,7 @@ import re
 
 from PyQt5.QtGui import (QTextCharFormat, QFont)
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidget import QTextEdit
+from PyQt5.QtWidgets import QTextEdit
 
 from .highlighter import SuperTuxHighlighter, HighlightingRule
 

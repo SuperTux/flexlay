@@ -21,7 +21,8 @@ import os
 import logging
 
 from flexlay.sprite import Sprite
-from flexlay.util import get_value_from_tree, sexpr_read_from_file
+from flexlay.util.sexpr import sexpr_read_from_file
+from flexlay.util.sexpr_reader import get_value_from_tree
 
 
 class SuperTuxSpriteAction:

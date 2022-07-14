@@ -22,7 +22,7 @@ from flexlay.layer import Layer
 from flexlay.tilemap_layer import TilemapLayer
 from flexlay.objmap_tilemap_object import ObjMapTilemapObject
 from flexlay.math import Rect, Rectf
-from flexlay.util import Signal
+from flexlay.util.signal import Signal
 from flexlay.commands.command import Command
 from flexlay.graphic_context import GraphicContext
 from flexlay.object_layer import ObjectLayer

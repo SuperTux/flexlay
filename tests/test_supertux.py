@@ -23,7 +23,7 @@ import unittest
 import unittest.mock
 
 from flexlay.util.config import Config
-from flexlay.math import Point, Size
+from flexlay.math import Point, Pointf, Size
 from supertux.gameobj_factor import supertux_gameobj_factory
 from supertux.level import Level
 
@@ -59,9 +59,9 @@ class SuperTuxTestCase(unittest.TestCase):
     def test_gameobj_factory_create_gameobj_at(self) -> None:
         for identifier, (_, _) in supertux_gameobj_factory.objects.items():
             try:
-                obj = supertux_gameobj_factory.create_gameobj_at(identifier, Point(0, 0))
+                _ = supertux_gameobj_factory.create_gameobj_at(identifier, Pointf(0, 0))
             except Exception:
-                print("Exception received: %r %r" % (identifier, obj))
+                print(f"Exception received: {identifier}")
                 raise
 
     def test_level_resize(self) -> None:

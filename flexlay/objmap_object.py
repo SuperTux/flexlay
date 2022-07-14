@@ -17,7 +17,7 @@
 
 from typing import Any, Optional
 
-from flexlay.util import Signal
+from flexlay.util.signal import Signal
 from flexlay.math import Pointf, Rectf
 from flexlay.graphic_context import GraphicContext
 

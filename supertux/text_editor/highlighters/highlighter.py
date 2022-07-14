@@ -21,7 +21,7 @@ import json
 import re
 
 from PyQt5.QtGui import QSyntaxHighlighter, QTextCharFormat, QFont
-from PyQt5.QtWidget import QTextEdit
+from PyQt5.QtWidgets import QTextEdit
 from PyQt5.QtCore import Qt
 
 

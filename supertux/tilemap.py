@@ -21,7 +21,7 @@ from flexlay.tilemap_layer import TilemapLayer
 from flexlay.field import Field
 from flexlay.math import Point, Pointf, Size, Rectf
 from flexlay.graphic_context import GraphicContext
-from flexlay.util import get_value_from_tree
+from flexlay.util.sexpr_reader import get_value_from_tree
 from flexlay.util.sexpr_writer import SExprWriter
 from flexlay.objmap_tilemap_object import ObjMapTilemapObject
 

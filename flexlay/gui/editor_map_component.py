@@ -28,7 +28,7 @@ from flexlay.graphic_context_state import GraphicContextState
 from flexlay.gui.editor_map_widget import EditorMapWidget
 from flexlay.gui.object_selector import ObjectSelector
 from flexlay.math import Pointf, Rectf
-from flexlay.util import Signal
+from flexlay.util.signal import Signal
 from flexlay.workspace import Workspace
 
 

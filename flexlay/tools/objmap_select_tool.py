@@ -29,7 +29,7 @@ from flexlay.commands.object_delete_command import ObjectDeleteCommand
 from flexlay.gui.editor_map_component import EditorMapComponent
 from flexlay.math import Pointf, Rectf
 from flexlay.tools.tool import Tool
-from flexlay.util import Signal
+from flexlay.util.signal import Signal
 from flexlay.objmap_object import ObjMapObject
 from flexlay.objmap_control_point import ObjMapControlPoint
 from flexlay.graphic_context import GraphicContext
@@ -223,7 +223,6 @@ class ObjMapSelectTool(Tool):
         assert ToolContext.current is not None
         assert event.mouse_pos is not None
         assert self.context is not None
-        assert self.move_command is not None
 
         parent = EditorMapComponent.current
         pos = parent.screen2world(event.mouse_pos.to_f())
@@ -232,7 +231,9 @@ class ObjMapSelectTool(Tool):
             if self.control_point:
                 self.control_point.set_pos(pos - self.offset)
             else:
+                assert self.move_command is not None
                 self.move_command.move_by(pos - self.drag_start)
+
                 if len(self.context.object_selection) == 1:
                     self.context.object_selection[0].update_control_points()
 

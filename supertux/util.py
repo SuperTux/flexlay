@@ -15,8 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from flexlay.util import sexpr_read_from_file, SExprParseError
-from flexlay.util.sexpr import SExprValue
+from flexlay.util.sexpr import SExprValue, sexpr_read_from_file, SExprParseError
 
 
 def load_lisp(filename: str, root_symbol: str) -> SExprValue:

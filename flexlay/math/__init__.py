@@ -16,9 +16,9 @@
 
 
 from flexlay.math.point import Point, Pointf
-from flexlay.math.origin import Origin
 from flexlay.math.rect import Rect, Rectf
 from flexlay.math.size import Size, Sizef
+from flexlay.math.origin import Origin
 
 
 __all__ = [

@@ -24,7 +24,7 @@ from flexlay.tile import Tile
 from flexlay.tileset import Tileset
 from flexlay.pixel_buffer import PixelBuffer
 from flexlay.util.config import Config
-from flexlay.util import get_value_from_tree
+from flexlay.util.sexpr_reader import get_value_from_tree
 from supertux.util import load_lisp
 
 
@@ -70,6 +70,7 @@ class SuperTuxTileset(Tileset):
 
         tree = tree[1:]
 
+        pixelbuffer: Optional[PixelBuffer] = None
         for i in tree:
             if i[0] == "tiles":
                 data = i[1:]

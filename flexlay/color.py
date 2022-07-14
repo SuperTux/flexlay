@@ -89,6 +89,12 @@ class Colorf:
                 self.g == other.g and
                 self.a == other.a)
 
+    def to_i(self) -> Color:
+        return Color(int(255 * self.r),
+                     int(255 * self.g),
+                     int(255 * self.b),
+                     int(255 * self.a))
+
     def to_qt(self) -> QColor:
         return QColor.fromRgbF(self.r, self.g, self.b, self.a)
 

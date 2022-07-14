@@ -24,10 +24,6 @@ from PyQt5.QtWidgets import (
     QDockWidget, QVBoxLayout, QWidget,
     QPushButton, QTabWidget)
 
-from flexlay.objmap_tilemap_object import ObjMapTilemapObject
-from flexlay.gui.project_widget import ProjectWidget
-from flexlay.gui.properties_widget import PropertiesWidget
-from flexlay.util.config import Config
 from flexlay.gui.button_panel import ButtonPanel
 from flexlay.gui.editor_map_component import EditorMapComponent
 from flexlay.gui.generic_dialog import GenericDialog
@@ -35,9 +31,13 @@ from flexlay.gui.layer_selector import LayerSelector
 from flexlay.gui.menubar import Menubar
 from flexlay.gui.minimap import Minimap
 from flexlay.gui.object_selector import ObjectSelector
+from flexlay.gui.project_widget import ProjectWidget
+from flexlay.gui.properties_widget import PropertiesWidget
+from flexlay.gui.statusbar import StatusBar
 from flexlay.gui.tile_brush_selector import TileBrushSelector
 from flexlay.gui.tile_selector import TileSelector
-from flexlay.gui.statusbar import StatusBar
+from flexlay.objmap_tilemap_object import ObjMapTilemapObject
+from flexlay.util.config import Config
 
 
 class FlexlayMainWindow(QMainWindow):
@@ -77,6 +77,7 @@ class GUIManager:
         self.tile_selector_dock: Optional[QDockWidget] = None
         self.object_selector_dock: Optional[QDockWidget] = None
         self.layer_selector: Optional[LayerSelector] = None
+        self.properties_widget: Optional[PropertiesWidget] = None
 
     def run(self) -> None:
         if self.statusbar and self.editormap_component:
@@ -149,7 +150,7 @@ class GUIManager:
         self.window.addDockWidget(Qt.RightDockWidgetArea, self.object_selector_dock)
         return self.object_selector
 
-    def create_properties_view(self) -> QDockWidget:
+    def create_properties_view(self) -> PropertiesWidget:
         self.properties_dock = QDockWidget("Properties")
         self.properties_dock.setObjectName("properties_dock")
 
@@ -166,11 +167,12 @@ class GUIManager:
         widget = QTabWidget()
         widget.addTab(self.properties_widget, "Properties")
         widget.addTab(self.project_widget, "Project View")
-        widget.TabPosition = QTabWidget.South
+        widget.setTabPosition(QTabWidget.South)
         self.properties_dock.setWidget(widget)
 
         self.window.addDockWidget(Qt.RightDockWidgetArea, self.properties_dock)
-        return self.properties_dock
+
+        return self.properties_widget
 
     def create_tile_selector(self) -> TileSelector:
         self.tile_selector_dock = QDockWidget("Tile Selector")

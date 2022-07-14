@@ -15,15 +15,17 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from typing import Any, IO, Optional
+from typing import Any, IO, Optional, TYPE_CHECKING
 
 import os
 
-from flexlay.util import get_value_from_tree
+from flexlay.util.sexpr_reader import get_value_from_tree
 from flexlay.util.sexpr_writer import SExprWriter
 
 from supertux.util import load_lisp
-from supertux.level import Level
+
+if TYPE_CHECKING:
+    from supertux.level import Level
 
 
 class Addon:
@@ -76,9 +78,9 @@ class Addon:
         self.sounds: list[str] = []
 
         # Directory path of add-on:
-        self.project_dir = None
+        self.project_dir: Optional[str] = None
 
-    def parse_v2(self, data) -> None:
+    def parse_v2(self, data: Any) -> None:
         self.id = get_value_from_tree(["id", "_"], data, "")
         self.version = get_value_from_tree(["version", "_"], data, "")
         self.type = get_value_from_tree(["type", "_"], data, "")
@@ -153,10 +155,10 @@ class Addon:
         writer.write_bool("levelset", False)
         writer.end_list()
 
-    def get_project_dir(self) -> str:
+    def get_project_dir(self) -> Optional[str]:
         return self.project_dir
 
-    def set_project_dir(self, project_dir) -> None:
+    def set_project_dir(self, project_dir: str) -> None:
         self.project_dir = project_dir
 
 

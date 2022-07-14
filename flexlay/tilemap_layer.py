@@ -17,6 +17,8 @@
 
 from typing import Any
 
+from PyQt5.sip import voidptr  # type: ignore
+
 from flexlay.blitter import blit
 from flexlay.color import Color
 from flexlay.field import Field
@@ -185,7 +187,7 @@ class TilemapLayer(Layer):
                 if brush.is_opaque() or brush.at(x, y) != 0:
                     field.put(pos.x + x, pos.y + y, brush.at(x, y))
 
-    def set_draw_attribute(self, draw_attribute: int) -> None:
+    def set_draw_attribute(self, draw_attribute: bool) -> None:
         self.draw_attribute = draw_attribute
 
     def get_draw_attribute(self) -> bool:
@@ -204,7 +206,7 @@ class TilemapLayer(Layer):
                                                  self.height * tile_size))
 
         pixelbuffer.lock()
-        buf = pixelbuffer.get_data()
+        buf: voidptr = pixelbuffer.get_data()
 
         width = pixelbuffer.width
         height = pixelbuffer.height
@@ -212,10 +214,10 @@ class TilemapLayer(Layer):
         # Draw a nice gradient
         for y in range(height):
             for x in range(width):
-                buf[4 * (y * width + x) + 0] = 255
-                buf[4 * (y * width + x) + 1] = 255
-                buf[4 * (y * width + x) + 2] = 255 * y // height
-                buf[4 * (y * width + x) + 3] = 255 * y // height
+                buf[4 * (y * width + x) + 0] = 255  # type: ignore
+                buf[4 * (y * width + x) + 1] = 255  # type: ignore
+                buf[4 * (y * width + x) + 2] = 255 * y // height  # type: ignore
+                buf[4 * (y * width + x) + 3] = 255 * y // height  # type: ignore
 
         pixelbuffer.unlock()
 
@@ -224,9 +226,9 @@ class TilemapLayer(Layer):
                 tile = self.tileset.create(self.field.at(x, y))
 
                 if tile:
-                    buf = tile.get_pixelbuffer()
-                    if buf:
-                        blit(pixelbuffer, buf, x * tile_size, y * tile_size)
+                    pbuf = tile.get_pixelbuffer()
+                    if pbuf:
+                        blit(pixelbuffer, pbuf, x * tile_size, y * tile_size)
 
         return pixelbuffer
 

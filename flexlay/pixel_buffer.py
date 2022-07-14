@@ -15,12 +15,11 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from sip import voidptr
+from PyQt5.sip import voidptr  # type: ignore
 from PyQt5.QtCore import QSize
 from PyQt5.QtGui import QImage
 
 from flexlay.math import Size
-from flexlay.blitter import blit_clear, blit_opaque
 
 
 class PixelBuffer:
@@ -29,6 +28,8 @@ class PixelBuffer:
 
     @staticmethod
     def subregion_from_file(filename: str, x: int, y: int, w: int, h: int) -> 'PixelBuffer':
+        from flexlay.blitter import blit_clear, blit_opaque
+
         source = PixelBuffer.from_file(filename)
         target = PixelBuffer.from_size(Size(w, h))
         blit_clear(target)

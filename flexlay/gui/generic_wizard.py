@@ -19,7 +19,7 @@ from typing import Any
 
 from PyQt5.QtWidgets import QWidget, QWizardPage, QWizard, QVBoxLayout
 
-from flexlay.util import Signal
+from flexlay.util.signal import Signal
 from flexlay.gui.properties_widget import PropertiesWidget
 
 

@@ -37,28 +37,25 @@ class ObjMapSpriteObject(ObjMapObject):
         self.sprite.draw(self.pos.x, self.pos.y, gc)
 
     def get_bound_rect(self) -> Rectf:
-        align = Pointf(0, 0)
-        origin_e = Origin()
-
-        origin_e, align.x, align.y = self.sprite.get_alignment()
+        origin_e, align_x, align_y = self.sprite.get_alignment()
         origin = Origin.calc_originf(origin_e, Sizef(self.sprite.width,
                                                      self.sprite.height))
-        align.x = -align.x
+        align_x = -align_x
 
         # FIXME: This looks a bit hacky
         scale_x, scale_y = self.sprite.get_scale()
 
         if scale_x < 0:
-            align.x += self.sprite.width
+            align_x += self.sprite.width
 
         if scale_y < 0:
-            align.y += self.sprite.height
+            align_y += self.sprite.height
 
         # if (scale_x > 1.0f && scale_y > 1.0f)
         #    return Rectf(pos - origin - align,
         #                   Sizef(sprite.width * scale_x, sprite.height * scale_y))
         #  else
-        return Rectf.from_ps(self.pos - origin - align,
+        return Rectf.from_ps(self.pos - origin - Pointf(align_x, align_y),
                              Sizef(self.sprite.width, self.sprite.height))
 
     def flip_vertical(self) -> None:

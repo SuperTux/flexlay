@@ -30,7 +30,9 @@ class Tileset:
         self.tiles[tile_id] = tile
 
     def create(self, tile_id: int) -> Tile:
-        return self.tiles.get(tile_id)
+        tile = self.tiles.get(tile_id)
+        assert tile is not None
+        return tile
 
     def get_tile_size(self) -> int:
         return self.tile_size

@@ -164,7 +164,7 @@ class TileSelectorWidget(QWidget):
 
         # draw rectangle selection
         if self.region_select:
-            rect = self.get_selection()
+            rect = self.get_selection().to_f()
 
             rect.top *= self.cell_size
             rect.bottom *= self.cell_size

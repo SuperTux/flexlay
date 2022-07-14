@@ -20,13 +20,13 @@ from typing import Optional
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QWidget, QScrollArea
 
-from flexlay.gui.object_selector_widget import ObjectSelectorWidget, ObjectSelector
+from flexlay.gui.object_selector_widget import ObjectSelectorWidget
 from flexlay.object_brush import ObjectBrush
 
 
 class ObjectSelector:
 
-    current: Optional[ObjectSelector] = None
+    current: Optional['ObjectSelector'] = None
 
     def __init__(self, obj_w: int, obj_h: int, parent: Optional[QWidget]) -> None:
         ObjectSelector.current = self

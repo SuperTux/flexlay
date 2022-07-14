@@ -20,19 +20,18 @@ from typing import Any, Optional
 from flexlay.objmap_object import ObjMapObject
 from flexlay.color import Color
 from flexlay.math import Pointf, Sizef, Rectf
+from flexlay.graphic_context import GraphicContext
 
 
 class ObjMapPathNode(ObjMapObject):
 
-    def __init__(self, pos: Pointf, data) -> None:
-        super().__init__(pos, data)
+    def __init__(self, pos: Pointf, metadata: Any) -> None:
+        super().__init__(pos, metadata)
 
-        self.pos: Pointf = pos
-        self.data = data
         self.prev_node: Optional['ObjMapPathNode'] = None
         self.next_node: Optional['ObjMapPathNode'] = None
 
-    def draw(self, gc):
+    def draw(self, gc: GraphicContext) -> None:
         gc.fill_rect(Rectf.from_ps(self.pos - Pointf(16, 16),
                                    Sizef(32, 32)),
                      Color(200, 255, 200))

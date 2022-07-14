@@ -20,7 +20,7 @@
 import unittest
 import unittest.mock
 
-from flexlay.util import Signal
+from flexlay.util.signal import Signal
 
 
 class SignalTestCase(unittest.TestCase):

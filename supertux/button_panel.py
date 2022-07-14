@@ -42,8 +42,8 @@ class SuperTuxButtonPanel:
 
         # Copy&Paste
         self.button_panel.add_separator()
-        self.button_panel.add_icon("data/images/icons24/stock_copy.png", None, hover="Copy")
-        self.button_panel.add_icon("data/images/icons24/stock_paste.png", None, hover="Paste")
+        self.button_panel.add_icon("data/images/icons24/stock_copy.png", lambda: None, hover="Copy")
+        self.button_panel.add_icon("data/images/icons24/stock_paste.png", lambda: None, hover="Paste")
         # Undo Redo
         self.button_panel.add_separator()
         self.undo_icon = self.button_panel.add_icon("data/images/icons24/stock_undo.png", editor.undo,

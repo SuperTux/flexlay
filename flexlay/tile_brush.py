@@ -26,7 +26,7 @@ from flexlay.math import Rect
 class TileBrush:
 
     @staticmethod
-    def from_field(field: Field, w: int, h: int, pos_x: int, pos_y: int) -> TileBrush:
+    def from_field(field: Field, w: int, h: int, pos_x: int, pos_y: int) -> 'TileBrush':
         return TileBrush(w, h, field.copy_region(pos_x, pos_y, w, h))
 
     def __init__(self, w: int, h: int, field: Optional[Field] = None) -> None:

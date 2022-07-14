@@ -17,9 +17,9 @@
 
 from typing import cast, Any, Optional, Callable, TYPE_CHECKING
 
+import logging
 import os
 import subprocess
-import logging
 import tempfile
 import threading
 
@@ -27,44 +27,43 @@ from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QMessageBox, QFileDialog
 
 from flexlay.color import Color
-from flexlay.input_event import InputEvent
-from flexlay.objmap_rect_object import ObjMapRectObject
-from flexlay.objmap_path_node import ObjMapPathNode
-from flexlay.util.config import Config
-from flexlay.tool_context import ToolContext
 from flexlay.commands.object_add_command import ObjectAddCommand
-from flexlay.workspace import Workspace
 from flexlay.gui.file_dialog import OpenFileDialog, SaveFileDialog
+from flexlay.input_event import InputEvent
 from flexlay.math import Point, Size, Rectf, Pointf, Sizef
-from flexlay.tools.tile_paint_tool import TilePaintTool
-from flexlay.tools.tile_brush_create_tool import TileBrushCreateTool
-from flexlay.tools.tilemap_select_tool import TileMapSelectTool
-from flexlay.tools.tile_fill_tool import TileFillTool
-from flexlay.tools.tile_replace_tool import TileReplaceTool
+from flexlay.objmap_path_node import ObjMapPathNode
+from flexlay.objmap_rect_object import ObjMapRectObject
+from flexlay.tool_context import ToolContext
 from flexlay.tools.objmap_select_tool import ObjMapSelectTool
-from flexlay.tools.zoom_tool import ZoomTool
-from flexlay.tools.zoom_out_tool import ZoomOutTool
+from flexlay.tools.tile_brush_create_tool import TileBrushCreateTool
+from flexlay.tools.tile_fill_tool import TileFillTool
+from flexlay.tools.tile_paint_tool import TilePaintTool
+from flexlay.tools.tile_replace_tool import TileReplaceTool
+from flexlay.tools.tilemap_select_tool import TileMapSelectTool
 from flexlay.tools.workspace_move_tool import WorkspaceMoveTool
-
+from flexlay.tools.zoom_out_tool import ZoomOutTool
+from flexlay.tools.zoom_tool import ZoomTool
+from flexlay.util.config import Config
+from flexlay.workspace import Workspace
+from flexlay.gui.layer_selector import LayerSelector
 from flexlay.object_brush import ObjectBrush
 from flexlay.objmap_tilemap_object import ObjMapTilemapObject
-from flexlay.gui.layer_selector import LayerSelector
 
-from supertux.button_panel import SuperTuxButtonPanel
-from supertux.gameobjs import PathNode
-from supertux.gameobj_factor import supertux_gameobj_factory
-from supertux.level import Level
-from supertux.menubar import SuperTuxMenuBar
-from supertux.new_level import NewLevelWizard
-from supertux.new_addon import NewAddonWizard
-from supertux.sector import Sector
-from supertux.tileset import SuperTuxTileset
-from supertux.tilemap import SuperTuxTileMap
-from supertux.toolbox import SuperTuxToolbox
-from supertux.supertux_arguments import SuperTuxArguments
-from supertux.level_file_dialog import OpenLevelFileDialog, SaveLevelFileDialog
-from supertux.addon_dialog import SaveAddonDialog
 from supertux.addon import Addon
+from supertux.addon_dialog import SaveAddonDialog
+from supertux.button_panel import SuperTuxButtonPanel
+from supertux.gameobj_factor import supertux_gameobj_factory
+from supertux.gameobjs import PathNode
+from supertux.level import Level
+from supertux.level_file_dialog import OpenLevelFileDialog, SaveLevelFileDialog
+from supertux.menubar import SuperTuxMenuBar
+from supertux.new_addon import NewAddonWizard
+from supertux.new_level import NewLevelWizard
+from supertux.sector import Sector
+from supertux.supertux_arguments import SuperTuxArguments
+from supertux.tilemap import SuperTuxTileMap
+from supertux.tileset import SuperTuxTileset
+from supertux.toolbox import SuperTuxToolbox
 
 if TYPE_CHECKING:
     from flexlay.flexlay import Flexlay
@@ -77,7 +76,6 @@ class SuperTuxGUI:
 
     def __init__(self, flexlay: 'Flexlay') -> None:
         SuperTuxGUI.current = self
-        supertux_gameobj_factory.supertux_gui = self
 
         self.use_worldmap: bool = False
 
@@ -109,6 +107,7 @@ class SuperTuxGUI:
             self.objectselector.add_brush(object_brush)
 
         self.tileselector = self.gui.create_tile_selector()
+        assert SuperTuxTileset.current is not None
         self.gui_set_tileset(SuperTuxTileset.current)
 
         self.layer_selector: LayerSelector = self.gui.create_layer_selector(self.generate_tilemap_obj)
@@ -179,12 +178,12 @@ class SuperTuxGUI:
 
         self.editor_map.sig_on_key("7").connect(
             cast(Callable[[int, int], None],
-                lambda x, y: self.workspace.get_map().metadata.parent.activate_sector("main",
-                                                                                      self.workspace)))
+                 lambda x, y: self.workspace.get_map().metadata.parent.activate_sector("main",
+                                                                                       self.workspace)))
         self.editor_map.sig_on_key("8").connect(
             cast(Callable[[int, int], None],
-                lambda x, y: self.workspace.get_map().metadata.parent.activate_sector("another_world",
-                                                                                      self.workspace)))
+                 lambda x, y: self.workspace.get_map().metadata.parent.activate_sector("another_world",
+                                                                                       self.workspace)))
 
         self.editor_map.sig_on_key("p").connect(lambda x, y: self.gui_show_object_properties())
 
@@ -313,7 +312,7 @@ class SuperTuxGUI:
     def gui_change_tileset(self) -> bool:
         assert Config.current is not None
 
-        filename: str = QFileDialog.getOpenFileName(None, "Select Tileset To Open", Config.current.datadir)
+        filename, _filter = QFileDialog.getOpenFileName(None, "Select Tileset To Open", Config.current.datadir)
         if not filename:
             QMessageBox.warning(None, "No Tileset Selected", "No tileset was selected, aborting...")
             return False
@@ -361,13 +360,15 @@ class SuperTuxGUI:
         subproc.wait()
         postexit_fn(tmpfile)
 
-    def gui_run_level_cleanup(self, tmpfile: str) -> None:
+    def gui_run_level_cleanup(self, tmpfile: tuple[int, str]) -> None:
         # Safely get rid of temporary file
-        os.close(tmpfile[0])  # Close file descriptor
-        os.remove(tmpfile[1])  # Remove the file
+        os.close(tmpfile[0])
+        os.remove(tmpfile[1])
 
     def gui_record_level(self) -> None:
-        self.arguments.record_demo_file = SaveFileDialog("Choose Record Target File")
+        dialog = SaveFileDialog("Choose Record Target File")
+        dialog.run(lambda _: None)
+        self.arguments.record_demo_file = dialog.get_filename()
         self.gui_run_level()
         self.arguments.record_demo_file = None
 
@@ -394,17 +395,17 @@ class SuperTuxGUI:
         subprocess.Popen([Config.current.binary, level, "--play-demo", demo])
 
     def gui_resize_sector(self) -> None:
-        level = self.workspace.get_map().metadata
-        assert isinstance(level, Level)
+        sector = self.workspace.get_map().metadata
+        assert isinstance(sector, Sector)
         dialog = self.gui.create_generic_dialog("Resize Sector")
-        dialog.add_int("Width: ", level.width)
-        dialog.add_int("Height: ", level.height)
+        dialog.add_int("Width: ", sector.width)
+        dialog.add_int("Height: ", sector.height)
         dialog.add_int("X: ", 0)
         dialog.add_int("Y: ", 0)
 
         def on_callback(w: int, h: int, x: int, y: int) -> None:
             logging.info("Resize Callback")
-            level.resize(Size(w, h), Point(x, y))
+            sector.resize(Size(w, h), Point(x, y))
 
         dialog.add_callback(on_callback)
 
@@ -637,7 +638,7 @@ class SuperTuxGUI:
         logging.info("Connecting path nodes")
         pathnodes: list[ObjMapPathNode] = []
         for i in self.tool_context.object_selection:
-            obj = i.get_data()
+            obj = i.metadata
             if isinstance(obj, PathNode):
                 pathnodes.append(obj.node)
 
@@ -661,12 +662,13 @@ class SuperTuxGUI:
 
             dialog.add_callback(on_callback)
 
-    def load_level(self, filename: str, set_title: str = True) -> None:
+    def load_level(self, filename: str, set_title: bool = True) -> None:
         logging.info("Loading: " + filename)
 
         # Clear object selection, it's a new level!
         self.tool_context.object_selection.clear()
 
+        assert self.gui.properties_widget is not None
         self.gui.properties_widget.clear_properties()
 
         # Set title if desired

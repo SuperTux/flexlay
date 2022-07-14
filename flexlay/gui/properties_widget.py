@@ -54,7 +54,7 @@ class Item:
     def __init__(self, kind: int,
                  label: QLabel,
                  body: Any,  # FIXME: turn this whole class into proper OOP
-                 callback: Optional[Callable[[Any], None]] = None,
+                 callback: Optional[Callable[..., None]] = None,
                  group: Optional[QButtonGroup] = None) -> None:
         self.kind: int = kind
         self.label: QLabel = label
@@ -149,7 +149,7 @@ class PropertiesWidget(QWidget):
         self._layout.addRow(label)
         self.items.append(Item(Item.KIND_LABEL, label, None, None))
 
-    def add_bool(self, name: str, value: bool, callback: Callable[[bool], None]) -> None:
+    def add_bool(self, name: str, value: bool, callback: Optional[Callable[[bool], None]] = None) -> None:
         label = QLabel(name)
         checkbox = QCheckBox()
         self._layout.addRow(label, checkbox)
@@ -209,7 +209,7 @@ class PropertiesWidget(QWidget):
                         All Files (*)
                         C++ Files (*.cpp *.h *.hpp *.cxx)
         """
-        label = QLabel(label)
+        qlabel = QLabel(label)
         inputbox = QLineEdit(default)
         browse = QPushButton("Browse...")
 
@@ -230,10 +230,10 @@ class PropertiesWidget(QWidget):
 
         browse.clicked.connect(browse_files)  # Connect the above to click signal
 
-        self._layout.addRow(label, inputbox)
+        self._layout.addRow(qlabel, inputbox)
         self._layout.addRow(browse)
 
-        self.items.append(Item(Item.KIND_STRING, label, inputbox, callback=callback))
+        self.items.append(Item(Item.KIND_STRING, qlabel, inputbox, callback=callback))
 
     def add_enum(self, name: str, values: list[str],
                  current_value: int = 0,
@@ -263,7 +263,7 @@ class PropertiesWidget(QWidget):
 
         self.items.append(Item(Item.KIND_ENUM, label, None, callback=callback, group=group))
 
-    def add_color(self, name: str, color: Color, callback: Callable[[str], None] = None) -> None:
+    def add_color(self, name: str, color: Color, callback: Optional[Callable[[str], None]] = None) -> None:
         """Not fully implemented according to Item class at the top."""
         label = QLabel(name)
         pixmap = QPixmap(32, 32)
@@ -296,7 +296,7 @@ class PropertiesWidget(QWidget):
 
         return result
 
-    def add_callback(self, callback: Callable[[Any], None]) -> None:
+    def add_callback(self, callback: Callable[..., None]) -> None:
         """Adds a callback to the callback signal"""
         self.call_signal.connect(callback)
 

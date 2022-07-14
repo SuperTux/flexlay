@@ -15,12 +15,15 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from typing import Any, Optional
+from typing import Any, Optional, TYPE_CHECKING
 
-from flexlay import Colorf
+from flexlay.color import Colorf
 from flexlay.util import get_value_from_tree
-from flexlay.gui.generic_dialog import GenericDialog
 from flexlay.util.sexpr_writer import SExprWriter
+
+
+if TYPE_CHECKING:
+    from flexlay.gui.generic_dialog import GenericDialog
 
 
 class Property:
@@ -48,7 +51,7 @@ class Property:
         if not self.optional or self.value != self.default:
             writer.write(self.identifier, self.value)
 
-    def property_dialog(self, dialog: GenericDialog) -> None:
+    def property_dialog(self, dialog: 'GenericDialog') -> None:
         pass
 
     def on_value_change(self, value: Any) -> None:
@@ -59,7 +62,7 @@ class BoolProperty(Property):
 
     editable = True
 
-    def property_dialog(self, dialog: GenericDialog) -> None:
+    def property_dialog(self, dialog: 'GenericDialog') -> None:
         dialog.add_bool(self.label, self.value, self.on_value_change)
 
 
@@ -70,7 +73,7 @@ class IntProperty(Property):
     def __init__(self, label: str, identifier: str, default: int = 0, optional: bool = False) -> None:
         super().__init__(label, identifier, default, optional)
 
-    def property_dialog(self, dialog: GenericDialog) -> None:
+    def property_dialog(self, dialog: 'GenericDialog') -> None:
         dialog.add_int(self.label, self.value, callback=self.on_value_change)
 
 
@@ -81,7 +84,7 @@ class FloatProperty(Property):
     def __init__(self, label: str, identifier: str, default: float = 0.0, optional: bool = False) -> None:
         super().__init__(label, identifier, default, optional)
 
-    def property_dialog(self, dialog: GenericDialog) -> None:
+    def property_dialog(self, dialog: 'GenericDialog') -> None:
         dialog.add_float(self.label, self.value, callback=self.on_value_change)
 
 
@@ -108,7 +111,7 @@ class StringProperty(Property):
         if not self.optional or self.value != self.default:
             writer.write_string(self.identifier, self.value, translatable=self.translatable)
 
-    def property_dialog(self, dialog: GenericDialog) -> None:
+    def property_dialog(self, dialog: 'GenericDialog') -> None:
         dialog.add_string(self.label, self.value, self.on_value_change, self.placeholder)
         # dialog.add_string(self.label, self.value, self.on_value_change)
 
@@ -133,7 +136,7 @@ class FileProperty(StringProperty):
         # The actual path stored, so that the relative path can be displayed.
         self.actual_path = ""
 
-    def property_dialog(self, dialog: GenericDialog) -> None:
+    def property_dialog(self, dialog: 'GenericDialog') -> None:
         dialog.add_file(self.label, self.default, self.relative_to, self.open_in, self.on_value_change)
 
 
@@ -159,7 +162,7 @@ class EnumProperty(StringProperty):
 
         self.values = values
 
-    def property_dialog(self, dialog: GenericDialog) -> None:
+    def property_dialog(self, dialog: 'GenericDialog') -> None:
         dialog.add_enum(self.label, self.values, self.values.index(self.value), self.on_value_change)
 
 
@@ -184,7 +187,7 @@ class ColorProperty(Property):
             else:
                 writer.write_color(self.identifier, self.value.to_list())
 
-    def property_dialog(self, dialog: GenericDialog) -> None:
+    def property_dialog(self, dialog: 'GenericDialog') -> None:
         dialog.add_color(self.label, self.value)
 
 

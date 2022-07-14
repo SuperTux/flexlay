@@ -17,7 +17,7 @@
 
 from typing import Callable, Optional
 
-from PyQt5.QWidgets import QToolBar
+from PyQt5.QtWidgets import QToolBar
 from PyQt5.QtGui import QIcon
 
 from flexlay.gui.icon import Icon

@@ -15,19 +15,19 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from flexlay.commands.command import Command
-from flexlay.commands.command_group import CommandGroup
-from flexlay.commands.layer_delete_command import LayerDeleteCommand
-from flexlay.commands.object_add_command import ObjectAddCommand
-from flexlay.commands.object_delete_command import ObjectDeleteCommand
-from flexlay.commands.object_move_command import ObjectMoveCommand
-from flexlay.commands.object_transform_command import ObjectTransformCommand
-from flexlay.commands.paint_command import PaintCommand
+# from flexlay.commands.command import Command
+# from flexlay.commands.command_group import CommandGroup
+# from flexlay.commands.layer_delete_command import LayerDeleteCommand
+# from flexlay.commands.object_add_command import ObjectAddCommand
+# from flexlay.commands.object_delete_command import ObjectDeleteCommand
+# from flexlay.commands.object_move_command import ObjectMoveCommand
+# from flexlay.commands.object_transform_command import ObjectTransformCommand
+# from flexlay.commands.paint_command import PaintCommand
 
 
-__all__ = ["Command", "ObjectAddCommand", "ObjectDeleteCommand",
-           "ObjectTransformCommand", "ObjectMoveCommand", "PaintCommand",
-           "LayerDeleteCommand", "CommandGroup"]
+# __all__ = ["Command", "ObjectAddCommand", "ObjectDeleteCommand",
+#            "ObjectTransformCommand", "ObjectMoveCommand", "PaintCommand",
+#            "LayerDeleteCommand", "CommandGroup"]
 
 
 # EOF #

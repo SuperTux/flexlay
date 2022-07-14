@@ -15,45 +15,45 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from flexlay.property import (
-    BoolProperty,
-    ColorProperty,
-    FloatProperty,
-    IntProperty,
-    StringProperty,
-)
-from supertux.property import (
-    DirectionProperty,
-    ImageProperty,
-    InlinePosProperty,
-    InlineRectProperty,
-    SectorProperty,
-    TilemapProperty,
-)
-from supertux.button_panel import SuperTuxButtonPanel
-from supertux.gameobj import GameObj
-from supertux.gameobj_factor import supertux_gameobj_factory
-from supertux.gui import SuperTuxGUI
-from supertux.level import Level
-from supertux.sector import Sector
-from supertux.sprite import SuperTuxSprite
-from supertux.supertux import main
-from supertux.supertux_arguments import SuperTuxArguments
-from supertux.tilemap import SuperTuxTileMap
-from supertux.tileset import SuperTuxTileset
-from supertux.toolbox import SuperTuxToolbox
-from supertux.util import load_lisp
+# from flexlay.property import (
+#     BoolProperty,
+#     ColorProperty,
+#     FloatProperty,
+#     IntProperty,
+#     StringProperty,
+# )
+# from supertux.property import (
+#     DirectionProperty,
+#     ImageProperty,
+#     InlinePosProperty,
+#     InlineRectProperty,
+#     SectorProperty,
+#     TilemapProperty,
+# )
+# from supertux.button_panel import SuperTuxButtonPanel
+# from supertux.gameobj import GameObj
+# from supertux.gameobj_factor import supertux_gameobj_factory
+# from supertux.gui import SuperTuxGUI
+# from supertux.level import Level
+# from supertux.sector import Sector
+# from supertux.sprite import SuperTuxSprite
+# from supertux.supertux import main
+# from supertux.supertux_arguments import SuperTuxArguments
+# from supertux.tilemap import SuperTuxTileMap
+# from supertux.tileset import SuperTuxTileset
+# from supertux.toolbox import SuperTuxToolbox
+# from supertux.util import load_lisp
 
 
-__all__ = ["GameObj", "SuperTuxGUI", "Level", "Sector",
-           "SuperTuxSprite", "SuperTuxTileMap", "SuperTuxTileset",
-           "load_lisp", "main", "OpenLevelFileDialog"
-           "SuperTuxMenuBar", "SuperTuxToolbox",
-           "SuperTuxButtonPanel", "supertux_gameobj_factory",
-           "BoolProperty", "IntProperty", "FloatProperty",
-           "StringProperty", "DirectionProperty", "InlinePosProperty",
-           "InlineRectProperty", "TilemapProperty", "ColorProperty",
-           "ImageProperty", "SectorProperty", "SuperTuxArguments"]
+# __all__ = ["GameObj", "SuperTuxGUI", "Level", "Sector",
+#            "SuperTuxSprite", "SuperTuxTileMap", "SuperTuxTileset",
+#            "load_lisp", "main", "OpenLevelFileDialog"
+#            "SuperTuxMenuBar", "SuperTuxToolbox",
+#            "SuperTuxButtonPanel", "supertux_gameobj_factory",
+#            "BoolProperty", "IntProperty", "FloatProperty",
+#            "StringProperty", "DirectionProperty", "InlinePosProperty",
+#            "InlineRectProperty", "TilemapProperty", "ColorProperty",
+#            "ImageProperty", "SectorProperty", "SuperTuxArguments"]
 
 
 # EOF #

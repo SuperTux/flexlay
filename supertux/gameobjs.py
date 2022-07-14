@@ -24,7 +24,8 @@ from PyQt5.QtWidgets import QWidget
 
 from flexlay.objmap_path_node import ObjMapPathNode
 from flexlay.util.sexpr_writer import SExprWriter
-from flexlay import (Colorf, ObjMapObject)
+from flexlay.color import Colorf
+from flexlay.objmap_object import ObjMapObject
 from flexlay.math import Pointf
 from flexlay.property import (
     BoolProperty,
@@ -477,11 +478,13 @@ class Dispenser(GameObj):
         self.objmap_object = make_sprite_object(self, self.sprite)
         self.signal_connect()
 
+        from supertux.gameobj_factory import supertux_gameobj_factory
+
         self.properties = [
             IntProperty("Cycle", "cycle", 2),
             EnumProperty("Type", "type", default=0, optional=False, values=["rocketlauncher", "cannon"]),
             BoolProperty("Random", "random", default=False, optional=True),
-            BadGuyProperty("Badguy", "badguy", GameObj.factory),
+            BadGuyProperty("Badguy", "badguy", supertux_gameobj_factory),
             DirectionProperty("Direction", "direction", 0),
             InlinePosProperty(),
         ]

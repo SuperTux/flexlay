@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from typing import Optional
+from typing import Optional, TYPE_CHECKING
 
 from PyQt5.QtCore import QSize
 from PyQt5.QtGui import (QColor, QPainter, QDragEnterEvent,
@@ -24,15 +24,18 @@ from PyQt5.QtGui import (QColor, QPainter, QDragEnterEvent,
                          QWheelEvent)
 from PyQt5.QtWidgets import QSizePolicy, QWidget  # QOpenGLWidget
 
-from flexlay import InputEvent, GraphicContext
+from flexlay.input_event import InputEvent
+from flexlay.graphic_context import GraphicContext
 from flexlay.math import Pointf
 from flexlay.util import Signal
-from flexlay.gui.editor_map_component import EditorMapComponent
+
+if TYPE_CHECKING:
+    from flexlay.gui.editor_map_component import EditorMapComponent
 
 
 class EditorMapWidget(QWidget):  # QOpenGLWidget
 
-    def __init__(self, comp: EditorMapComponent, parent: Optional[QWidget]) -> None:
+    def __init__(self, comp: 'EditorMapComponent', parent: Optional[QWidget]) -> None:
         super().__init__(parent)
         self.setMouseTracking(True)
 

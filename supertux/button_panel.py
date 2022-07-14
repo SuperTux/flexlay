@@ -15,15 +15,18 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from flexlay.gui_manager import GUIManager
+from typing import TYPE_CHECKING
+
 from flexlay.util.config import Config
 
-from supertux.gui import SuperTuxGUI
+if TYPE_CHECKING:
+    from supertux.gui import SuperTuxGUI
+    from flexlay.gui_manager import GUIManager
 
 
 class SuperTuxButtonPanel:
 
-    def __init__(self, gui_manager: GUIManager, editor: SuperTuxGUI) -> None:
+    def __init__(self, gui_manager: 'GUIManager', editor: 'SuperTuxGUI') -> None:
         # Create Buttonpanel
         self.button_panel = gui_manager.create_button_panel(True)
 

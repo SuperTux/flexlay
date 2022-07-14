@@ -17,7 +17,7 @@
 
 from flexlay.wip.bitmap_layer import BitmapLayer
 from flexlay.blend_func import BlendFunc
-from flexlay import DrawerProperties
+from flexlay.drawer_properties import DrawerProperties
 from flexlay.math import Rect, Point, Size, Origin
 
 

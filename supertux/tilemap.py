@@ -17,7 +17,7 @@
 
 from typing import cast, Any, Optional
 
-from flexlay import TilemapLayer
+from flexlay.tilemap_layer import TilemapLayer
 from flexlay.field import Field
 from flexlay.math import Point, Pointf, Size, Rectf
 from flexlay.graphic_context import GraphicContext

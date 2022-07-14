@@ -15,16 +15,19 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from flexlay.gui.icon import Icon
-from flexlay.gui_manager import GUIManager
+from typing import TYPE_CHECKING
 
-from supertux.gui import SuperTuxGUI
+from flexlay.gui.icon import Icon
+
+if TYPE_CHECKING:
+    from flexlay.gui_manager import GUIManager
+    from supertux.gui import SuperTuxGUI
 
 
 class SuperTuxToolbox:
     """A for selecting tools."""
 
-    def __init__(self, gui_manager: GUIManager, editor: SuperTuxGUI) -> None:
+    def __init__(self, gui_manager: 'GUIManager', editor: 'SuperTuxGUI') -> None:
         """
         :param gui_manager: a flexlay.GuiManager
         :param editor: a SuperTuxGui

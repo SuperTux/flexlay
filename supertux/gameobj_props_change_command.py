@@ -15,11 +15,12 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from typing import Any
+from typing import Any, TYPE_CHECKING
 
-from flexlay.commands import Command
+from flexlay.commands.command import Command
 
-from supertux.gameobj import GameObj
+if TYPE_CHECKING:
+    from supertux.gameobj import GameObj
 
 
 class GameObjPropsChangeCommand(Command):
@@ -28,7 +29,7 @@ class GameObjPropsChangeCommand(Command):
     changed.
     """
 
-    def __init__(self, gameobj: GameObj, prop_diff: list[tuple[Any, Any, Any]]) -> None:
+    def __init__(self, gameobj: 'GameObj', prop_diff: list[tuple[Any, Any, Any]]) -> None:
         """It's probably not a good idea to use this for non-directly
         editable properties.
         Warning: This will accept any value

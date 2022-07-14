@@ -19,9 +19,8 @@ from typing import Optional
 
 import itertools
 
-from flexlay import Field
+from flexlay.field import Field
 from flexlay.math import Rect
-from flexlay.tile_brush import TileBrush
 
 
 class TileBrush:
@@ -45,7 +44,7 @@ class TileBrush:
     def height(self) -> int:
         return self.field.height
 
-    def at(self, x, y) -> int:
+    def at(self, x: int, y: int) -> int:
         return self.field.at(x, y)
 
     def put(self, x: int, y: int, value: int) -> None:

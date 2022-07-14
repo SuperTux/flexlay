@@ -17,7 +17,9 @@
 
 from typing import Optional
 
-from flexlay import Workspace, Color, Layer
+from flexlay.workspace import Workspace
+from flexlay.color import Color
+from flexlay.layer import Layer
 from flexlay.gui.editor_map_component import EditorMapComponent
 from flexlay.math import Pointf
 from flexlay.tools.tool import Tool

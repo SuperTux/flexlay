@@ -15,23 +15,27 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from typing import Any, Optional
+from typing import Any, Optional, TYPE_CHECKING
 
 import logging
 
-from flexlay import ObjectLayer, ObjMapTilemapObject, EditorMap
+from flexlay.object_layer import ObjectLayer
+from flexlay.objmap_tilemap_object import ObjMapTilemapObject
+from flexlay.editor_map import EditorMap
 from flexlay.math import Point, Pointf, Size, Rectf
 from flexlay.util.sexpr_writer import SExprWriter
 
-from supertux.gameobj_factor import supertux_gameobj_factory
 from supertux.gameobjs import Camera, SpawnPoint
 from supertux.tilemap import SuperTuxTileMap
-from supertux.level import Level
+from supertux.gameobj_factor import supertux_gameobj_factory
+
+if TYPE_CHECKING:
+    from supertux.level import Level
 
 
 class Sector:
 
-    def __init__(self, parent: Level) -> None:
+    def __init__(self, parent: 'Level') -> None:
         self.parent: Level = parent
         self.name: str = ""
         self.music: str = ""
@@ -55,7 +59,7 @@ class Sector:
                 return tilemap
         return self.tilemaps[0]
 
-    def get_level(self) -> Level:
+    def get_level(self) -> 'Level':
         return self.parent
 
     def resize(self, size: Size, pos: Point) -> None:

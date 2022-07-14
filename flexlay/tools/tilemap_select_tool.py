@@ -15,7 +15,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from flexlay import InputEvent, ToolContext
+from flexlay.input_event import InputEvent
+from flexlay.tool_context import ToolContext
 from flexlay.gui.editor_map_component import EditorMapComponent
 from flexlay.tile_brush import TileBrush
 from flexlay.graphic_context import GraphicContext

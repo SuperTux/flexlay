@@ -17,7 +17,8 @@
 
 from typing import Optional
 
-from flexlay import TileBrush, TilemapLayer
+from flexlay.tile_brush import TileBrush
+from flexlay.tilemap_layer import TilemapLayer
 from flexlay.commands.command import Command
 from flexlay.math import Point, Rect
 from flexlay.field import Field

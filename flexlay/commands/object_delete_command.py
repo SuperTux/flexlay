@@ -17,7 +17,7 @@
 
 from flexlay.object_layer import ObjectLayer
 from flexlay.objmap_object import ObjMapObject
-from flexlay.commands import Command
+from flexlay.commands.command import Command
 
 
 class ObjectDeleteCommand(Command):

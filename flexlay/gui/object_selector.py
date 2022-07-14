@@ -28,7 +28,7 @@ class ObjectSelector:
 
     current: Optional[ObjectSelector] = None
 
-    def __init__(self, obj_w: int, obj_h: int, parent: QWidget) -> None:
+    def __init__(self, obj_w: int, obj_h: int, parent: Optional[QWidget]) -> None:
         ObjectSelector.current = self
 
         self.scroll_area = QScrollArea(parent)

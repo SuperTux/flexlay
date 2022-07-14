@@ -18,7 +18,7 @@
 from typing import Any
 
 from flexlay.util.sexpr_writer import SExprWriter
-from flexlay import Workspace
+from flexlay.workspace import Workspace
 from flexlay.math import Point
 from flexlay.util import get_value_from_tree
 from flexlay.gui.generic_dialog import GenericDialog
@@ -28,8 +28,6 @@ from flexlay.property import (
     StringProperty,
     IntProperty,
 )
-
-from supertux.gameobj_factor import SuperTuxGameObjFactory
 
 
 class DirectionProperty(EnumProperty):
@@ -110,7 +108,8 @@ class BadGuyProperty(EnumProperty):
 
     editable = True
 
-    def __init__(self, label: str, identifier: str, supertux_gameobj_factory: SuperTuxGameObjFactory) -> None:
+    def __init__(self, label: str, identifier: str) -> None:
+        from supertux.gameobj_factor import supertux_gameobj_factory
         super().__init__(label, identifier, 0, values=[badguy[0] for badguy in supertux_gameobj_factory.badguys])
 
 

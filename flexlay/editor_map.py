@@ -17,7 +17,10 @@
 
 from typing import cast, Any, Optional
 
-from flexlay import Color, Layer, TilemapLayer, ObjMapTilemapObject
+from flexlay.color import Color
+from flexlay.layer import Layer
+from flexlay.tilemap_layer import TilemapLayer
+from flexlay.objmap_tilemap_object import ObjMapTilemapObject
 from flexlay.math import Rect, Rectf
 from flexlay.util import Signal
 from flexlay.commands.command import Command

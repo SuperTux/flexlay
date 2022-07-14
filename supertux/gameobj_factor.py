@@ -15,16 +15,16 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from typing import Any, Callable, Optional, Type
+from typing import Any, Callable, Optional, Type, TYPE_CHECKING
 
 import os
 import logging
 from collections import OrderedDict
 
-from flexlay import ObjectBrush, Config
+from flexlay.object_brush import ObjectBrush
+from flexlay.util.config import Config
 from flexlay.math import Pointf
 
-from supertux.gui import SuperTuxGUI
 from supertux.gameobj import GameObj
 from supertux.badguys import badguy_sprites
 from supertux.gameobjs import (
@@ -73,6 +73,9 @@ from supertux.worldmap_object import (
 )
 from supertux.sprite import SuperTuxSprite
 
+if TYPE_CHECKING:
+    from supertux.gui import SuperTuxGUI
+
 
 def format_sprite_name(name: str) -> str:
     """
@@ -96,7 +99,6 @@ class SuperTuxGameObjFactory:
     supertux_gui: Optional['SuperTuxGUI'] = None
 
     def __init__(self) -> None:
-        GameObj.factory = self
         self.objects: OrderedDict[str, tuple[str, Callable[[], GameObj]]] = OrderedDict()
         # List of (identifier, image, tag)
         self.badguys: list[tuple[str, str, Optional[str]]] = []

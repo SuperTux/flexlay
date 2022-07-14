@@ -60,7 +60,7 @@ class TilemapLayer(Layer):
             return
         tile_size = self.tileset.get_tile_size()
 
-        if False and self.background_color.get_alpha() != 0:
+        if False and self.background_color.get_alpha() != 0:  # type: ignore[unreachable]
             gc.fill_rect(Rectf.from_ps(pos,  # type: ignore[unreachable]
                                        Sizef(self.field.width * tile_size,
                                              self.field.height * tile_size)),

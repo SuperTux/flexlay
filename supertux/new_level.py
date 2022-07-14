@@ -22,8 +22,9 @@ import random
 
 from PyQt5.QtWidgets import QWidget, QWizardPage, QTextEdit, QVBoxLayout
 
-from flexlay import Config
-from flexlay.gui import PropertiesWidget, GenericWizard
+from flexlay.util.config import Config
+from flexlay.gui.properties_widget import PropertiesWidget
+from flexlay.gui.generic_wizard import GenericWizard
 from supertux.level import Level
 
 

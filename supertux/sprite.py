@@ -20,7 +20,7 @@ from typing import Any, Optional
 import os
 import logging
 
-from flexlay import Sprite
+from flexlay.sprite import Sprite
 from flexlay.util import get_value_from_tree, sexpr_read_from_file
 
 

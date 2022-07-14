@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from typing import Any, Optional, Callable
+from typing import cast, Any, Optional, Callable, TYPE_CHECKING
 
 import os
 import subprocess
@@ -26,19 +26,28 @@ import threading
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QMessageBox, QFileDialog
 
-from flexlay import (Color, InputEvent, ObjMapRectObject,
-                     ObjMapPathNode, Config, ToolContext, ObjectAddCommand,
-                     Workspace)
+from flexlay.color import Color
+from flexlay.input_event import InputEvent
+from flexlay.objmap_rect_object import ObjMapRectObject
+from flexlay.objmap_path_node import ObjMapPathNode
+from flexlay.util.config import Config
+from flexlay.tool_context import ToolContext
+from flexlay.commands.object_add_command import ObjectAddCommand
+from flexlay.workspace import Workspace
 from flexlay.gui.file_dialog import OpenFileDialog, SaveFileDialog
 from flexlay.math import Point, Size, Rectf, Pointf, Sizef
-from flexlay.tools import (TilePaintTool, TileBrushCreateTool,
-                           TileMapSelectTool, TileFillTool,
-                           TileReplaceTool, ObjMapSelectTool,
-                           ZoomTool, ZoomOutTool, WorkspaceMoveTool)
+from flexlay.tools.tile_paint_tool import TilePaintTool
+from flexlay.tools.tile_brush_create_tool import TileBrushCreateTool
+from flexlay.tools.tilemap_select_tool import TileMapSelectTool
+from flexlay.tools.tile_fill_tool import TileFillTool
+from flexlay.tools.tile_replace_tool import TileReplaceTool
+from flexlay.tools.objmap_select_tool import ObjMapSelectTool
+from flexlay.tools.zoom_tool import ZoomTool
+from flexlay.tools.zoom_out_tool import ZoomOutTool
+from flexlay.tools.workspace_move_tool import WorkspaceMoveTool
+
 from flexlay.object_brush import ObjectBrush
 from flexlay.objmap_tilemap_object import ObjMapTilemapObject
-from flexlay.flexlay import Flexlay
-from flexlay.gui_manager import GUIManager
 from flexlay.gui.layer_selector import LayerSelector
 
 from supertux.button_panel import SuperTuxButtonPanel
@@ -57,12 +66,16 @@ from supertux.level_file_dialog import OpenLevelFileDialog, SaveLevelFileDialog
 from supertux.addon_dialog import SaveAddonDialog
 from supertux.addon import Addon
 
+if TYPE_CHECKING:
+    from flexlay.flexlay import Flexlay
+    from flexlay.gui_manager import GUIManager
+
 
 class SuperTuxGUI:
 
     current: Optional['SuperTuxGUI'] = None
 
-    def __init__(self, flexlay: Flexlay) -> None:
+    def __init__(self, flexlay: 'Flexlay') -> None:
         SuperTuxGUI.current = self
         supertux_gameobj_factory.supertux_gui = self
 
@@ -165,11 +178,13 @@ class SuperTuxGUI:
         self.editor_map.sig_on_key("c").connect(lambda x, y: self.connect_path_nodes())
 
         self.editor_map.sig_on_key("7").connect(
-            lambda x, y: self.workspace.get_map().metadata.parent.activate_sector("main",
-                                                                                  self.workspace))
+            cast(Callable[[int, int], None],
+                lambda x, y: self.workspace.get_map().metadata.parent.activate_sector("main",
+                                                                                      self.workspace)))
         self.editor_map.sig_on_key("8").connect(
-            lambda x, y: self.workspace.get_map().metadata.parent.activate_sector("another_world",
-                                                                                  self.workspace))
+            cast(Callable[[int, int], None],
+                lambda x, y: self.workspace.get_map().metadata.parent.activate_sector("another_world",
+                                                                                      self.workspace)))
 
         self.editor_map.sig_on_key("p").connect(lambda x, y: self.gui_show_object_properties())
 
@@ -786,6 +801,7 @@ class SuperTuxGUI:
         self.sector = sector
         self.workspace.current_sector = sector
 
+        assert self.sector.editormap is not None
         self.workspace.set_map(self.sector.editormap)
         self.layer_selector.set_map(self.sector.editormap)
         # TODO: We don't yet support multiple sectors, so we set the first sector's name.

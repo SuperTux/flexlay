@@ -28,10 +28,16 @@ from flexlay.objmap_tilemap_object import ObjMapTilemapObject
 from flexlay.gui.project_widget import ProjectWidget
 from flexlay.gui.properties_widget import PropertiesWidget
 from flexlay.util.config import Config
-from flexlay.gui import (
-    ButtonPanel, EditorMapComponent, GenericDialog, LayerSelector,
-    Menubar, Minimap, ObjectSelector, TileBrushSelector,
-    TileSelector, StatusBar)
+from flexlay.gui.button_panel import ButtonPanel
+from flexlay.gui.editor_map_component import EditorMapComponent
+from flexlay.gui.generic_dialog import GenericDialog
+from flexlay.gui.layer_selector import LayerSelector
+from flexlay.gui.menubar import Menubar
+from flexlay.gui.minimap import Minimap
+from flexlay.gui.object_selector import ObjectSelector
+from flexlay.gui.tile_brush_selector import TileBrushSelector
+from flexlay.gui.tile_selector import TileSelector
+from flexlay.gui.statusbar import StatusBar
 
 
 class FlexlayMainWindow(QMainWindow):
@@ -124,7 +130,7 @@ class GUIManager:
 
         return self.editormap_component
 
-    def create_minimap(self, parent) -> Minimap:
+    def create_minimap(self, parent: EditorMapComponent) -> Minimap:
         dockwidget = QDockWidget("Minimap")
         dockwidget.setObjectName("minimap")
         minimap = Minimap(parent)

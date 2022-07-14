@@ -17,7 +17,7 @@
 
 from typing import Any
 
-from flexlay import ObjMapObject
+from flexlay.objmap_object import ObjMapObject
 from flexlay.math import Origin, Sizef, Rectf
 from flexlay.graphic_context import GraphicContext
 from flexlay.sprite import Sprite

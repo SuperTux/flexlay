@@ -19,7 +19,8 @@ from typing import Optional
 
 import logging
 
-from flexlay import Color, PixelBuffer
+from flexlay.color import Color
+from flexlay.pixel_buffer import PixelBuffer
 from flexlay.sprite import Sprite
 from flexlay.sprite_brush import SpriteBrush
 

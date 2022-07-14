@@ -15,19 +15,21 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from typing import Optional
+from typing import Optional, TYPE_CHECKING
 
 from PyQt5.QtCore import QLineF
 from PyQt5.QtGui import QPainter, QPainterPath
 
 from flexlay.color import Color
-from flexlay.graphic_context_state import GraphicContextState
 from flexlay.math.rect import Rectf
+
+if TYPE_CHECKING:
+    from flexlay.graphic_context_state import GraphicContextState
 
 
 class GraphicContext:
 
-    def __init__(self, painter: QPainter, state: Optional[GraphicContextState] = None) -> None:
+    def __init__(self, painter: QPainter, state: Optional['GraphicContextState'] = None) -> None:
         self.painter = painter
         self.state = state
 

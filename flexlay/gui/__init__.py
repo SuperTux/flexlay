@@ -15,36 +15,36 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from flexlay.gui.button_panel import ButtonPanel
-from flexlay.gui.colorpicker import ColorPicker
-from flexlay.gui.editor_map_component import EditorMapComponent
-from flexlay.gui.editor_map_widget import EditorMapWidget
-from flexlay.gui.file_dialog import OpenFileDialog, SaveFileDialog
-from flexlay.gui.generic_dialog import GenericDialog
-from flexlay.gui.generic_wizard import GenericWizard
-from flexlay.gui.icon import Icon
-from flexlay.gui.layer_selector import LayerSelector
-from flexlay.gui.menubar import Menubar
-from flexlay.gui.minimap import Minimap
-from flexlay.gui.minimap_widget import MinimapWidget
-from flexlay.gui.object_selector import ObjectSelector
-from flexlay.gui.object_selector_widget import ObjectSelectorWidget
-from flexlay.gui.properties_widget import PropertiesWidget
-from flexlay.gui.statusbar import StatusBar
-from flexlay.gui.tile_brush_selector import TileBrushSelector
-from flexlay.gui.tile_selection import TileSelection
-from flexlay.gui.tile_selector import TileSelector
-from flexlay.gui.tile_selector_widget import TileSelectorWidget
+# from flexlay.gui.editor_map_component import EditorMapComponent
+# from flexlay.gui.button_panel import ButtonPanel
+# from flexlay.gui.colorpicker import ColorPicker
+# from flexlay.gui.editor_map_widget import EditorMapWidget
+# from flexlay.gui.file_dialog import OpenFileDialog, SaveFileDialog
+# from flexlay.gui.generic_dialog import GenericDialog
+# from flexlay.gui.generic_wizard import GenericWizard
+# from flexlay.gui.icon import Icon
+# from flexlay.gui.layer_selector import LayerSelector
+# from flexlay.gui.menubar import Menubar
+# from flexlay.gui.minimap import Minimap
+# from flexlay.gui.minimap_widget import MinimapWidget
+# from flexlay.gui.object_selector import ObjectSelector
+# from flexlay.gui.object_selector_widget import ObjectSelectorWidget
+# from flexlay.gui.properties_widget import PropertiesWidget
+# from flexlay.gui.statusbar import StatusBar
+# from flexlay.gui.tile_brush_selector import TileBrushSelector
+# from flexlay.gui.tile_selection import TileSelection
+# from flexlay.gui.tile_selector import TileSelector
+# from flexlay.gui.tile_selector_widget import TileSelectorWidget
 
 
-__all__ = ["ButtonPanel", "ColorPicker", "EditorMapComponent",
-           "EditorMapWidget", "OpenFileDialog", "SaveFileDialog",
-           "GenericDialog", "Icon", "LayerSelector", "Menubar",
-           "Minimap", "MinimapWidget", "ObjectSelector",
-           "ObjectSelectorWidget", "TileBrushSelector",
-           "TileSelector", "TileSelection", "TileSelector",
-           "TileSelectorWidget", "StatusBar", "PropertiesWidget",
-           "GenericWizard"]
+# __all__ = ["ButtonPanel", "ColorPicker", "EditorMapComponent",
+#            "EditorMapWidget", "OpenFileDialog", "SaveFileDialog",
+#            "GenericDialog", "Icon", "LayerSelector", "Menubar",
+#            "Minimap", "MinimapWidget", "ObjectSelector",
+#            "ObjectSelectorWidget", "TileBrushSelector",
+#            "TileSelector", "TileSelection", "TileSelector",
+#            "TileSelectorWidget", "StatusBar", "PropertiesWidget",
+#            "GenericWizard"]
 
 
 # EOF #

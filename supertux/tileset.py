@@ -20,7 +20,10 @@ from typing import Optional, Any
 import os
 import logging
 
-from flexlay import Tile, Tileset, PixelBuffer, Config
+from flexlay.tile import Tile
+from flexlay.tileset import Tileset
+from flexlay.pixel_buffer import PixelBuffer
+from flexlay.util.config import Config
 from flexlay.util import get_value_from_tree
 from supertux.util import load_lisp
 

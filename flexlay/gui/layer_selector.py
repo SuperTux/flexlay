@@ -22,7 +22,7 @@ from PyQt5.QtGui import (QStandardItemModel, QStandardItem, QIcon)
 from PyQt5.QtWidgets import (QWidget, QToolBar, QTreeView,
                              QVBoxLayout)
 
-from flexlay.commands import LayerDeleteCommand
+from flexlay.commands.layer_delete_command import LayerDeleteCommand
 from flexlay.gui.editor_map_component import EditorMapComponent
 from flexlay.objmap_tilemap_object import ObjMapTilemapObject
 from flexlay.tilemap_layer import TilemapLayer

@@ -15,7 +15,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from flexlay.gui.editor_map_component import EditorMapComponent
 from flexlay.graphic_context import GraphicContext
 from flexlay.input_event import InputEvent
 
@@ -38,10 +37,14 @@ class Tool:
         pass
 
     def grab_mouse(self) -> None:
+        from flexlay.gui.editor_map_component import EditorMapComponent
+
         assert EditorMapComponent.current is not None
         EditorMapComponent.current.grab_mouse()
 
     def release_mouse(self) -> None:
+        from flexlay.gui.editor_map_component import EditorMapComponent
+
         assert EditorMapComponent.current is not None
         EditorMapComponent.current.release_mouse()
 

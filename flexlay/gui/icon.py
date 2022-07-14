@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from PyQt5.QGui import QAction
+from PyQt5.QtWidgets import QAction
 
 
 class Icon:

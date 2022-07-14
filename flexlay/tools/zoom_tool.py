@@ -17,7 +17,7 @@
 
 from typing import Optional
 
-from flexlay import Color
+from flexlay.color import Color
 from flexlay.gui.editor_map_component import EditorMapComponent
 from flexlay.math import Rectf
 from flexlay.tools.tool import Tool

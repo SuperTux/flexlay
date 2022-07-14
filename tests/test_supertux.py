@@ -22,7 +22,7 @@ import os
 import unittest
 import unittest.mock
 
-from flexlay import Config
+from flexlay.util.config import Config
 from flexlay.math import Point, Size
 from supertux.gameobj_factor import supertux_gameobj_factory
 from supertux.level import Level

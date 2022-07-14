@@ -20,7 +20,7 @@ from typing import Any, IO, Optional
 import os
 import logging
 
-from flexlay import Config
+from flexlay.util.config import Config
 from flexlay.util.sexpr_reader import get_value_from_tree, sexpr_filter
 from flexlay.util.sexpr_writer import SExprWriter
 from supertux.sector import Sector

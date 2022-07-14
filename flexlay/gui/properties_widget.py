@@ -34,7 +34,7 @@ from PyQt5.QtWidgets import (
 )
 
 from flexlay.color import Color
-from flexlay.gui import OpenFileDialog
+from flexlay.gui.file_dialog import OpenFileDialog
 from flexlay.util.config import Config
 from flexlay.util.signal import Signal
 from flexlay.property import Property

@@ -19,10 +19,20 @@
 
 import random
 
-from flexlay import (Flexlay, PixelBuffer, Sprite, Tile, Tileset, EditorMap,
-                     TilemapLayer, ObjectLayer, ObjMapRectObject, Color, TileBrush, ObjectBrush,
-                     ToolContext)
+from flexlay.color import Color
+from flexlay.editor_map import EditorMap
+from flexlay.flexlay import Flexlay
 from flexlay.math import Size, Point, Rect
+from flexlay.object_brush import ObjectBrush
+from flexlay.object_layer import ObjectLayer
+from flexlay.objmap_rect_object import ObjMapRectObject
+from flexlay.pixel_buffer import PixelBuffer
+from flexlay.sprite import Sprite
+from flexlay.tile import Tile
+from flexlay.tile_brush import TileBrush
+from flexlay.tilemap_layer import TilemapLayer
+from flexlay.tileset import Tileset
+from flexlay.tool_context import ToolContext
 from flexlay.tools import WorkspaceMoveTool, ObjMapSelectTool, TilePaintTool
 from flexlay.util import Config
 

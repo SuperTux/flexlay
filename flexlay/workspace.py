@@ -80,7 +80,7 @@ class Workspace:
         self.editor_map = editor_map
 
     def set_tool(self, button: int, tool: Optional[Tool]) -> None:
-        from flexlay.tools import Tool
+        from flexlay.tools.tool import Tool
         if tool is None:
             tool = Tool()
         self.tools[button] = tool

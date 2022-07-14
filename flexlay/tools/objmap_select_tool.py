@@ -15,21 +15,28 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from typing import Optional
+from typing import Optional, TYPE_CHECKING
 
 from PyQt5.QtGui import QIcon, QCursor
 from PyQt5.QtWidgets import QMenu
 
-from flexlay import Color, InputEvent, Workspace, ToolContext
-from flexlay.commands import ObjectMoveCommand, ObjectDeleteCommand
+from flexlay.color import Color
+from flexlay.input_event import InputEvent
+from flexlay.workspace import Workspace
+from flexlay.tool_context import ToolContext
+from flexlay.commands.object_move_command import ObjectMoveCommand
+from flexlay.commands.object_delete_command import ObjectDeleteCommand
 from flexlay.gui.editor_map_component import EditorMapComponent
 from flexlay.math import Pointf, Rectf
 from flexlay.tools.tool import Tool
 from flexlay.util import Signal
-from flexlay.gui_manager import GUIManager
 from flexlay.objmap_object import ObjMapObject
 from flexlay.objmap_control_point import ObjMapControlPoint
 from flexlay.graphic_context import GraphicContext
+
+
+if TYPE_CHECKING:
+    from flexlay.gui_manager import GUIManager
 
 
 class ObjMapSelectTool(Tool):
@@ -38,7 +45,7 @@ class ObjMapSelectTool(Tool):
     STATE_DRAG = 1
     STATE_SELECT = 2
 
-    def __init__(self, gui_manager: GUIManager) -> None:
+    def __init__(self, gui_manager: 'GUIManager') -> None:
         assert ToolContext.current is not None
 
         super().__init__()

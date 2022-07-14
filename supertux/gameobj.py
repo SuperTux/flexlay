@@ -15,14 +15,17 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from typing import Any, List, Optional
+from typing import Any, List, Optional, TYPE_CHECKING
 
 import os
 
-from flexlay import (Colorf, Config, ObjMapSpriteObject,
-                     ObjMapRectObject, Workspace)
+from flexlay.color import Colorf
+from flexlay.util.config import Config
+from flexlay.objmap_sprite_object import ObjMapSpriteObject
+from flexlay.objmap_rect_object import ObjMapRectObject
+from flexlay.workspace import Workspace
 from flexlay.property import Property
-from flexlay.gui import GenericDialog
+from flexlay.gui.generic_dialog import GenericDialog
 from flexlay.math import Rectf, Pointf, Sizef
 from flexlay.util.sexpr_writer import SExprWriter
 from flexlay.objmap_object import ObjMapObject
@@ -30,8 +33,9 @@ from flexlay.objmap_object import ObjMapObject
 from supertux.constraint import Constraint
 from supertux.sprite import SuperTuxSprite
 from supertux.gameobj_props_change_command import GameObjPropsChangeCommand
-from supertux.gui import SuperTuxGUI
-from supertux.gameobj_factory import SuperTuxGameObjFactory
+
+if TYPE_CHECKING:
+    from supertux.gui import SuperTuxGUI
 
 
 def make_sprite_object(metadata: Any, filename: str, pos: Optional[Pointf] = None) -> ObjMapSpriteObject:
@@ -57,7 +61,6 @@ class GameObj:
     identifier: Optional[str] = None
     properties: list[Property] = []
     constraints: List[Constraint] = []
-    factory: Optional[SuperTuxGameObjFactory] = None
 
     def __init__(self) -> None:
         self.objmap_object: Optional[ObjMapObject] = None
@@ -72,13 +75,13 @@ class GameObj:
         self.objmap_object.sig_select.connect(self.on_select)
         self.objmap_object.sig_deselect.connect(self.on_deselect)
 
-    def on_select(self, manager: SuperTuxGUI) -> None:
+    def on_select(self, manager: 'SuperTuxGUI') -> None:
         if manager:
             props_widget = manager.properties_widget
             props_widget.set_properties(self.properties)
             props_widget.add_callback(self.on_callback)
 
-    def on_deselect(self, manager: SuperTuxGUI) -> None:
+    def on_deselect(self, manager: 'SuperTuxGUI') -> None:
         if manager:
             props_widget = manager.properties_widget
             props_widget.clear_properties()

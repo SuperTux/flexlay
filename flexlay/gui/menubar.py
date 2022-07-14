@@ -17,8 +17,7 @@
 
 from typing import Callable
 
-from PyQt5.QWidgets import QMenu, QMenuBar
-from PyQt5.QGui import QAction
+from PyQt5.QtWidgets import QMenu, QMenuBar, QAction
 
 
 class Menu:

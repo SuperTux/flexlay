@@ -15,9 +15,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from typing import Optional
+from typing import Any, Optional
 
-from flexlay import ObjMapObject, Color
+from flexlay.objmap_object import ObjMapObject
+from flexlay.color import Color
 from flexlay.math import Pointf, Sizef, Rectf
 
 

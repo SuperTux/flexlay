@@ -15,17 +15,18 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from typing import cast, Callable
+from typing import cast, Callable, TYPE_CHECKING
 
-from flexlay import Config
-from flexlay.gui_manager import GUIManager
+from flexlay.util.config import Config
 
-from supertux.gui import SuperTuxGUI
+if TYPE_CHECKING:
+    from flexlay.gui_manager import GUIManager
+    from supertux.gui import SuperTuxGUI
 
 
 class SuperTuxMenuBar:
 
-    def __init__(self, gui_manager: GUIManager, editor: SuperTuxGUI) -> None:
+    def __init__(self, gui_manager: 'GUIManager', editor: 'SuperTuxGUI') -> None:
         self.gui_manager = gui_manager
 
         # Create Menu

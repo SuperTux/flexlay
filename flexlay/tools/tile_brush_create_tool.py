@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from flexlay import InputEvent
+from flexlay.input_event import InputEvent
 from flexlay.color import Color
 from flexlay.gui.editor_map_component import EditorMapComponent
 from flexlay.gui.tile_selection import TileSelection

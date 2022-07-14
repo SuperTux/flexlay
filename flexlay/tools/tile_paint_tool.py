@@ -17,8 +17,10 @@
 
 from typing import Optional
 
-from flexlay import Color, InputEvent, Workspace
-from flexlay.commands import PaintCommand
+from flexlay.color import Color
+from flexlay.input_event import InputEvent
+from flexlay.workspace import Workspace
+from flexlay.commands.paint_command import PaintCommand
 from flexlay.gui.editor_map_component import EditorMapComponent
 from flexlay.math import Point, Pointf, Rectf, Sizef
 from flexlay.tool_context import ToolContext

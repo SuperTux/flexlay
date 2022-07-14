@@ -270,14 +270,14 @@ class SmartTileSelectorWidget(QWidget):
 
     def load_tiles(self) -> None:
         with open('data/supertux/smarttiles_mapping.csv', 'r') as mappings:
-            reader = csv.reader(mappings)
+            reader: list[list[str]] = csv.reader(mappings)
             first_row = True
             for row in reader:
                 if first_row:  # Ignore first heading row
                     first_row = False
                     continue
                 mapping = SmartTileMapping()
-                mapping.id = row[0]
+                mapping.id = int(row[0])
                 mapping.top = [int(val) for val in row[1].split("|")]
                 mapping.right = [int(val) for val in row[2].split("|")]
                 mapping.bottom = [int(val) for val in row[3].split("|")]
@@ -292,7 +292,7 @@ class SmartTileSelectorWidget(QWidget):
                     first_row = False
                     continue
 
-                id = row[0]
+                id = int(row[0])
                 name = row[1]
                 width = int(row[2])
                 height = int(row[3])

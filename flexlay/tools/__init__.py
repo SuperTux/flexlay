@@ -16,25 +16,25 @@
 
 
 # from flexlay.tools.sketch_stroke_tool import SketchStrokeTool
-from flexlay.tools.layer_move_tool import LayerMoveTool
-from flexlay.tools.objmap_select_tool import ObjMapSelectTool
-from flexlay.tools.tile_brush_create_tool import TileBrushCreateTool
-from flexlay.tools.tile_fill_tool import TileFillTool
-from flexlay.tools.tile_paint_tool import TilePaintTool
-from flexlay.tools.tile_replace_tool import TileReplaceTool
-from flexlay.tools.tilemap_select_tool import TileMapSelectTool
-from flexlay.tools.tool import Tool
-from flexlay.tools.workspace_move_tool import WorkspaceMoveTool
-from flexlay.tools.zoom2_tool import Zoom2Tool
-from flexlay.tools.zoom_out_tool import ZoomOutTool
-from flexlay.tools.zoom_tool import ZoomTool
+# from flexlay.tools.tool import Tool
+# from flexlay.tools.layer_move_tool import LayerMoveTool
+# from flexlay.tools.objmap_select_tool import ObjMapSelectTool
+# from flexlay.tools.tile_brush_create_tool import TileBrushCreateTool
+# from flexlay.tools.tile_fill_tool import TileFillTool
+# from flexlay.tools.tile_paint_tool import TilePaintTool
+# from flexlay.tools.tile_replace_tool import TileReplaceTool
+# from flexlay.tools.tilemap_select_tool import TileMapSelectTool
+# from flexlay.tools.workspace_move_tool import WorkspaceMoveTool
+# from flexlay.tools.zoom2_tool import Zoom2Tool
+# from flexlay.tools.zoom_out_tool import ZoomOutTool
+# from flexlay.tools.zoom_tool import ZoomTool
 
 
-__all__ = ["Tool", "LayerMoveTool", "ObjMapSelectTool",
-           "TileFillTool", "TileReplaceTool", "TileMapSelectTool",
-           "TilePaintTool", "TileBrushCreateTool",
-           "WorkspaceMoveTool", "ZoomTool", "ZoomOutTool",
-           "Zoom2Tool"]
+# __all__ = ["Tool", "LayerMoveTool", "ObjMapSelectTool",
+#            "TileFillTool", "TileReplaceTool", "TileMapSelectTool",
+#            "TilePaintTool", "TileBrushCreateTool",
+#            "WorkspaceMoveTool", "ZoomTool", "ZoomOutTool",
+#            "Zoom2Tool"]
 
 
 # EOF #

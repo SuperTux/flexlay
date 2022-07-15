@@ -35,9 +35,7 @@
             ];
             preCheck = ''
               export QT_QPA_PLATFORM_PLUGIN_PATH="${pkgs.qt5.qtbase.bin}/lib/qt-${pkgs.qt5.qtbase.version}/plugins";
-            '';
-            shellHook = ''
-              export QT_QPA_PLATFORM_PLUGIN_PATH="${pkgs.qt5.qtbase.bin}/lib/qt-${pkgs.qt5.qtbase.version}/plugins";
+              # export QT_QPA_PLATFORM=offscreen
             '';
             checkPhase = ''
               runHook preCheck
@@ -45,7 +43,7 @@
               # pyright flexlay supertux tests
               # mypy flexlay supertux tests
               # pylint flexlay supertux tests
-              # python3 -m unittest discover -v -s tests/
+              # HOME=$TMP python3 -m unittest discover -v -s tests/
               runHook postCheck
             '';
             propagatedBuildInputs = [
@@ -53,6 +51,7 @@
               pythonPackages.setuptools
               pythonPackages.numpy
               pythonPackages.pyqt5
+              pythonPackages.pyqt5_sip
               pythonPackages.pyxdg
             ];
             checkInputs = (with pkgs; [

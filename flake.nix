@@ -66,7 +66,12 @@
               PyQt5-stubs
             ];
           };
-          default = flexlay;
+
+          flexlay-nocheck = flexlay.override {
+            doCheck = false;
+          };
+
+          default = flexlay-nocheck;
         };
       }
     );

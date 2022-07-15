@@ -71,7 +71,17 @@
             doCheck = false;
           };
 
-          default = flexlay-nocheck;
+          default = flexlay;
+        };
+
+        devShells = rec {
+          flexlay-dev = pkgs.mkShell {
+            inputsFrom = [ packages.flexlay ];
+            shellHook = packages.flexlay.preCheck + ''
+              # runHook setuptoolsShellHook
+            '';
+          };
+          default = flexlay-dev;
         };
       }
     );

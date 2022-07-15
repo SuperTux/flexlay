@@ -1,0 +1,5 @@
+[tool.pyright]
+include = ["flexlay", "supertux", "tests"]
+exclude = ["flexlay/wip"]
+
+# EOF #

@@ -5,7 +5,7 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-20.09";
     flake-utils.url = "github:numtide/flake-utils";
 
-    clanlib.url = "gitlab:grumbel/clanlib-1.0";
+    clanlib.url = "github:grumbel/clanlib-1.0";
     # clanlib.inputs.nixpkgs.follows = "nixpkgs";
     clanlib.inputs.flake-utils.follows = "flake-utils";
   };
@@ -14,21 +14,27 @@
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = nixpkgs.legacyPackages.${system};
-      in rec {
-        packages = flake-utils.lib.flattenTree {
+      in {
+        packages = rec {
+          default = flexlay-classic;
+
           flexlay-classic = pkgs.stdenv.mkDerivation {
             pname = "flexlay-classic";
             version = "0.0.0";
+
             src = nixpkgs.lib.cleanSource ./.;
+
             installPhase = ''
               make install PREFIX=$out
             '';
+
             nativeBuildInputs = [
               pkgs.scons
               pkgs.pkgconfig
             ];
+
             buildInputs = [
-              clanlib.defaultPackage.${system}
+              clanlib.packages.${system}.default
 
               pkgs.libGL
               pkgs.libGLU
@@ -39,6 +45,6 @@
             ];
            };
         };
-        defaultPackage = packages.flexlay-classic;
-      });
+      }
+    );
 }

@@ -2,11 +2,11 @@
   description = "Generic 2d editor for games";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-20.09";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-22.05";
     flake-utils.url = "github:numtide/flake-utils";
 
     clanlib.url = "github:grumbel/clanlib-1.0";
-    # clanlib.inputs.nixpkgs.follows = "nixpkgs";
+    clanlib.inputs.nixpkgs.follows = "nixpkgs";
     clanlib.inputs.flake-utils.follows = "flake-utils";
   };
 
@@ -39,9 +39,8 @@
               pkgs.libGL
               pkgs.libGLU
               pkgs.swig2
-              pkgs.ruby_2_5
+              pkgs.ruby_2_7
               pkgs.zlib
-              pkgs.x11
             ];
            };
         };

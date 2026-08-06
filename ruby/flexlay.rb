@@ -93,7 +93,7 @@ module MenuAddItem
 end
 Menu.prepend(MenuAddItem)
 
-class CL_Menu
+class Flexlay_wrap::CL_Menu
   def add_item(name, func)
     item = create_item(name)
     connect(item.sig_clicked(), func)
@@ -127,6 +127,7 @@ class CL_Menu
     menu
   end
 end
+CL_Menu = Flexlay_wrap::CL_Menu unless defined?(CL_Menu) && CL_Menu.equal?(Flexlay_wrap::CL_Menu)
 
 class ButtonPanel
   attr_reader :panel, :items

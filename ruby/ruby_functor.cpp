@@ -19,17 +19,22 @@
 #include "ruby_functor.hpp"
 
 void
-RubyFunctor::print_error() 
+RubyFunctor::print_error()
 {
-  // FIXME: Potential memory leak
   std::cout << "######################################################" << std::endl;
-  std::cout << "RubyException: " 
-            << RSTRING(rb_inspect(rb_errinfo()))->as.heap.ptr
-            << std::endl;
+  VALUE msg = rb_inspect(rb_errinfo());
+  std::cout << "RubyException: " << StringValueCStr(msg) << std::endl;
 
   VALUE trace = rb_funcall(rb_errinfo(), rb_intern("backtrace"), 0);
-  for (int i = 0; i < RARRAY(trace)->as.heap.len; ++i)
-    std::cout << RSTRING(rb_ary_entry(trace, i))->as.heap.ptr << std::endl;
+  if (RB_TYPE_P(trace, T_ARRAY))
+  {
+    const long len = RARRAY_LEN(trace);
+    for (long i = 0; i < len; ++i)
+    {
+      VALUE line = rb_ary_entry(trace, i);
+      std::cout << StringValueCStr(line) << std::endl;
+    }
+  }
   std::cout << "######################################################" << std::endl;
 }
 

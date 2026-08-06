@@ -87,6 +87,8 @@ TilemapLayer::~TilemapLayer()
 void
 TilemapLayer::draw(const GraphicContextState& state, CL_GraphicContext* gc)
 {
+  if (!impl.get())
+    return;
   impl->draw(state, gc);
 }
 
@@ -177,6 +179,8 @@ TilemapLayerImpl::draw(const GraphicContextState& state, CL_GraphicContext* gc)
 int
 TilemapLayer::get_tile (int x, int y)
 {
+  if (!impl.get())
+    return 0;
   if (x >= 0 && x < (int)impl->field.get_width() &&
       y >= 0 && y < (int)impl->field.get_height())
     return impl->field.at(x, y);
@@ -187,12 +191,16 @@ TilemapLayer::get_tile (int x, int y)
 void
 TilemapLayer::resize(const CL_Size& size, const CL_Point& point)
 {
+  if (!impl.get())
+    return;
   impl->field.resize(size.width, size.height, point.x, point.y);
 }
 
 void
 TilemapLayer::draw_tile(int id, const CL_Point& pos)
 {
+  if (!impl.get())
+    return;
   if (pos.x >= 0 && pos.x < impl->field.get_width()
       && pos.y >= 0 && pos.y < impl->field.get_height())
   {
@@ -203,12 +211,17 @@ TilemapLayer::draw_tile(int id, const CL_Point& pos)
 void
 TilemapLayer::draw_tile(const TileBrush& brush, const CL_Point& pos)
 {
+  if (!impl.get())
+    return;
   draw_tiles(&impl->field, brush, pos);
 }
 
 void
 TilemapLayer::draw_tiles(Field<int>* field, const TileBrush& brush, const CL_Point& pos)
 {
+  if (!field)
+    return;
+
   int start_x = std::max(0, -pos.x);
   int start_y = std::max(0, -pos.y);
 
@@ -252,11 +265,22 @@ TilemapLayer::get_draw_grid() const
 CL_PixelBuffer
 TilemapLayer::create_pixelbuffer()
 {
-  int tile_size = impl->tileset.get_tile_size();
+  if (!impl.get())
+    return CL_PixelBuffer();
 
-  CL_PixelBuffer pixelbuffer(get_width()  * tile_size,
-                             get_height() * tile_size,
-                             get_width()  * tile_size * 4,
+  int tile_size = impl->tileset.get_tile_size();
+  if (tile_size <= 0)
+    return CL_PixelBuffer();
+
+  const int w = get_width();
+  const int h = get_height();
+  // Reject absurd allocations (corrupt or extreme maps).
+  if (w <= 0 || h <= 0 || w > 4096 || h > 4096)
+    return CL_PixelBuffer();
+
+  CL_PixelBuffer pixelbuffer(w * tile_size,
+                             h * tile_size,
+                             w * tile_size * 4,
                              CL_PixelFormat::rgba8888);
 
   {
@@ -315,8 +339,15 @@ TilemapLayerImpl::get_bounding_rect()
 CL_Point
 TilemapLayer::world2tile(const CL_Pointf& pos) const
 {
-  int x = static_cast<int>(pos.x / impl->tileset.get_tile_size());
-  int y = static_cast<int>(pos.y / impl->tileset.get_tile_size());
+  if (!impl.get())
+    return CL_Point(0, 0);
+
+  int tile_size = impl->tileset.get_tile_size();
+  if (tile_size <= 0)
+    return CL_Point(0, 0);
+
+  int x = static_cast<int>(pos.x / tile_size);
+  int y = static_cast<int>(pos.y / tile_size);
 
   return CL_Point(pos.x < 0 ? x-1 : x,
                   pos.y < 0 ? y-1 : y);
@@ -325,6 +356,8 @@ TilemapLayer::world2tile(const CL_Pointf& pos) const
 Field<int>*
 TilemapLayer::get_field()
 {
+  if (!impl.get())
+    return 0;
   return &impl->field;
 }
 
@@ -343,18 +376,25 @@ TilemapLayer::set_current(TilemapLayer t)
 Tileset
 TilemapLayer::get_tileset()
 {
+  if (!impl.get())
+    return Tileset();
   return impl->tileset;
 }
 
 const std::vector<int>&
 TilemapLayer::get_data()
 {
+  static const std::vector<int> empty;
+  if (!impl.get())
+    return empty;
   return impl->field.get_data();
 }
 
 void
 TilemapLayer::set_data(std::vector<int> d)
 {
+  if (!impl.get())
+    return;
   impl->field.set_data(d);
 }
 
@@ -373,12 +413,16 @@ TilemapLayer::set_foreground_color(const CL_Color& color)
 int
 TilemapLayer::get_width()  const
 {
+  if (!impl.get())
+    return 0;
   return impl->field.get_width();
 }
 
 int
 TilemapLayer::get_height() const
 {
+  if (!impl.get())
+    return 0;
   return impl->field.get_height();
 }
 

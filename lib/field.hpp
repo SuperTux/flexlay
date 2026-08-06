@@ -18,7 +18,9 @@
 #define HEADER_FLEXLAY_FIELD_HPP
 
 #include <vector>
-#include <assert.h>
+#include <algorithm>
+#include <stdexcept>
+#include <sstream>
 
 template<class T>
 class Field
@@ -28,6 +30,38 @@ private:
   int height;
   std::vector<T> vec;
 
+  static int checked_dim(int v, const char* name)
+  {
+    if (v < 0)
+    {
+      std::ostringstream msg;
+      msg << "Field: " << name << " must be >= 0 (got " << v << ")";
+      throw std::invalid_argument(msg.str());
+    }
+    return v;
+  }
+
+  void check_xy(int x, int y) const
+  {
+    if (!in_bounds(x, y))
+    {
+      std::ostringstream msg;
+      msg << "Field: index (" << x << ", " << y << ") out of range for "
+          << width << "x" << height;
+      throw std::out_of_range(msg.str());
+    }
+  }
+
+  void check_index(int i) const
+  {
+    if (i < 0 || i >= size())
+    {
+      std::ostringstream msg;
+      msg << "Field: linear index " << i << " out of range for size " << size();
+      throw std::out_of_range(msg.str());
+    }
+  }
+
 public:
   typedef typename std::vector<T>::iterator iterator;
 
@@ -36,8 +70,11 @@ public:
   {
   }
 
-  Field (int w, int h)
-    : width (w), height (h), vec (width * height)
+  Field(int w, int h)
+    : width(checked_dim(w, "width")),
+      height(checked_dim(h, "height")),
+      vec(static_cast<typename std::vector<T>::size_type>(width) *
+          static_cast<typename std::vector<T>::size_type>(height))
   {
   }
 
@@ -46,11 +83,14 @@ public:
   {
   }
 
-  /** Creates a new field out of a subsection from an already excisting one
+  /** Creates a new field out of a subsection from an already existing one.
    *  @param pos_x The position of the old field in the new resized one
    *  @param pos_y The position of the old field in the new resized one */
   Field(const Field<T>& arg_field, int w, int h, int pos_x, int pos_y)
-    : width (w), height (h), vec (width * height)
+    : width(checked_dim(w, "width")),
+      height(checked_dim(h, "height")),
+      vec(static_cast<typename std::vector<T>::size_type>(width) *
+          static_cast<typename std::vector<T>::size_type>(height))
   {
     int start_x = std::max(0, -pos_x);
     int start_y = std::max(0, -pos_y);
@@ -58,8 +98,8 @@ public:
     int end_x = std::min(arg_field.get_width(),  get_width()  - pos_x);
     int end_y = std::min(arg_field.get_height(), get_height() - pos_y);
 
-    for(int y = start_y; y < end_y; ++y)
-      for(int x = start_x; x < end_x; ++x)
+    for (int y = start_y; y < end_y; ++y)
+      for (int x = start_x; x < end_x; ++x)
         at(pos_x + x, pos_y + y) = arg_field.at(x, y);
   }
 
@@ -74,32 +114,54 @@ public:
     return *this;
   }
 
-  const T& operator[] (int i) const {
-    return vec[i];
-  }
-
-  T& operator[] (int i) {
-    return vec[i];
-  }
-
-  T& operator() (int x, int y)
+  bool in_bounds(int x, int y) const
   {
-    assert (x >= 0 || x < (int) width || y >= 0 || y < (int) height);
-    return vec [width*y + x];
+    return x >= 0 && x < width && y >= 0 && y < height;
   }
 
-  const T& operator() (int x, int y) const
+  const T& operator[](int i) const
   {
-    assert (x >= 0 || x < (int) width || y >= 0 || y < (int) height);
-    return vec [width*y + x];
+    check_index(i);
+    return vec[static_cast<typename std::vector<T>::size_type>(i)];
   }
 
-  inline const T& at (int x, int y) const {
-    return vec [width*y + x];
+  T& operator[](int i)
+  {
+    check_index(i);
+    return vec[static_cast<typename std::vector<T>::size_type>(i)];
   }
 
-  inline T& at (int x, int y) {
-    return (*this) (x, y);
+  T& operator()(int x, int y)
+  {
+    check_xy(x, y);
+    return vec[static_cast<typename std::vector<T>::size_type>(width * y + x)];
+  }
+
+  const T& operator()(int x, int y) const
+  {
+    check_xy(x, y);
+    return vec[static_cast<typename std::vector<T>::size_type>(width * y + x)];
+  }
+
+  /** Unchecked access for hot paths after the caller has proven bounds. */
+  T& at_unchecked(int x, int y)
+  {
+    return vec[static_cast<typename std::vector<T>::size_type>(width * y + x)];
+  }
+
+  const T& at_unchecked(int x, int y) const
+  {
+    return vec[static_cast<typename std::vector<T>::size_type>(width * y + x)];
+  }
+
+  inline const T& at(int x, int y) const
+  {
+    return (*this)(x, y);
+  }
+
+  inline T& at(int x, int y)
+  {
+    return (*this)(x, y);
   }
 
   /** Resize a field to a new size
@@ -119,17 +181,25 @@ public:
   }
 
   std::vector<T>& get_data() { return vec; }
-  void set_data(const std::vector<T>& d) {
-    for(typename std::vector<T>::size_type i = 0; i < vec.size() && i < d.size(); ++i)
+  const std::vector<T>& get_data() const { return vec; }
+
+  /** Copy elements from d.  If sizes differ, copies
+      min(size(), d.size()) elements; remaining cells are unchanged.
+      Callers that require an exact match should compare sizes first. */
+  void set_data(const std::vector<T>& d)
+  {
+    const typename std::vector<T>::size_type n =
+      std::min(vec.size(), d.size());
+    for (typename std::vector<T>::size_type i = 0; i < n; ++i)
       vec[i] = d[i];
   }
 
-  iterator begin () { return vec.begin (); }
-  iterator end () { return vec.end (); }
+  iterator begin() { return vec.begin(); }
+  iterator end()   { return vec.end(); }
 
-  int size() const { return vec.size(); }
-  int get_width () const { return width; }
-  int get_height () const { return height; }
+  int size() const { return static_cast<int>(vec.size()); }
+  int get_width()  const { return width; }
+  int get_height() const { return height; }
 };
 
 #endif

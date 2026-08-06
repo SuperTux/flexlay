@@ -96,13 +96,16 @@ Layer::set_metadata(MetaData data_)
 void
 Layer::set_pos(const CL_Pointf& pos)
 {
-  impl->pos = pos;
+  if (impl.get())
+    impl->pos = pos;
 }
 
 CL_Pointf
 Layer::get_pos() const
 {
-  return impl->pos;
+  if (impl.get())
+    return impl->pos;
+  return CL_Pointf(0, 0);
 }
 
 bool

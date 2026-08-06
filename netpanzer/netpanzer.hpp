@@ -71,6 +71,7 @@ private:
   std::vector<NetPanzerTileHeader> tile_headers;
 public:
   NetPanzerData();
+  ~NetPanzerData();
 
   /** Register a tilegroup, ie. a section of tiles that belong
       together and form an building, lake, a section of trees, etc.
@@ -82,6 +83,7 @@ public:
   void register_tilegroup(int start, int width, int height);
 
   void load_data(const std::string& datadir_);
+  bool has_data() const { return tiledata != 0; }
   const CL_Palette& get_palette() const;
   const Tileset&    get_tileset() const;
   const std::vector<NetPanzerTileHeader>& get_tile_headers() const;
@@ -95,7 +97,8 @@ public:
   NetPanzerTileGroup& find_tilegroup(int tileindex);
 
 private:
-  void       load_tileset(const std::string& filename);
+  void clear_tiledata();
+  void load_tileset(const std::string& filename);
 };
 
 class NetPanzerFileStruct

@@ -21,6 +21,7 @@
 #include <iostream>
 
 #include "meta_data.hpp"
+#include <ClanLib/Signals/signal_v0.h>
 
 class EditorMapImpl
 {
@@ -71,6 +72,8 @@ EditorMap::EditorMap(bool create) :
 void
 EditorMap::add_layer(const Layer& layer, int pos)
 {
+  if (!impl.get())
+    return;
   std::cout << impl << " EditorMap::add_layer" << std::endl;
 
   assert(pos == -1 || (pos >= 0 && pos < int(impl->layers.size())));
@@ -86,6 +89,8 @@ EditorMap::add_layer(const Layer& layer, int pos)
 void
 EditorMap::draw_gui(CL_GraphicContext* gc)
 {
+  if (!impl.get())
+    return;
   CL_Rect rect = get_bounding_rect();
 
   if (rect != CL_Rect(0,0,0,0))
@@ -102,6 +107,8 @@ EditorMap::draw_gui(CL_GraphicContext* gc)
 void
 EditorMap::draw(const GraphicContextState& state, CL_GraphicContext* gc)
 {
+  if (!impl.get())
+    return;
   for(EditorMapImpl::Layers::iterator i = impl->layers.begin(); i != impl->layers.end(); ++i)
     (*i).draw(state, gc);
 
@@ -111,18 +118,24 @@ EditorMap::draw(const GraphicContextState& state, CL_GraphicContext* gc)
 bool
 EditorMap::is_modified() const
 {
+  if (!impl.get())
+    return false;
   return impl->modified;
 }
 
 void
 EditorMap::set_unmodified()
 {
+  if (!impl.get())
+    return;
   impl->modified = false;
 }
 
 void
 EditorMap::modify()
 {
+  if (!impl.get())
+    return;
   impl->modified = true;
   impl->serial += 1;
 }
@@ -130,18 +143,24 @@ EditorMap::modify()
 int
 EditorMap::get_serial() const
 {
+  if (!impl.get())
+    return 0;
   return impl->serial;
 }
 
 int
 EditorMap::get_layer_count() const
 {
+  if (!impl.get())
+    return 0;
   return static_cast<int>(impl->layers.size());
 }
 
 Layer
 EditorMap::get_layer(int i)
 {
+  if (!impl.get())
+    return Layer();
   if (i >= 0 && i < static_cast<int>(impl->layers.size()))
     return impl->layers[i];
   else
@@ -151,24 +170,32 @@ EditorMap::get_layer(int i)
 void
 EditorMap::set_metadata(const MetaData& obj)
 {
+  if (!impl.get())
+    return;
   impl->metadata = obj;
 }
 
 MetaData
 EditorMap::get_metadata() const
 {
+  if (!impl.get())
+    return MetaData();
   return impl->metadata;
 }
 
 bool
 EditorMap::has_bounding_rect() const
 {
+  if (!impl.get())
+    return false;
   return impl->has_bounding_rect;
 }
 
 void
 EditorMap::set_bounding_rect(const CL_Rect& rect)
 {
+  if (!impl.get())
+    return;
   if (rect != CL_Rect(0,0,0,0))
   {
     impl->has_bounding_rect = true;
@@ -184,6 +211,8 @@ EditorMap::set_bounding_rect(const CL_Rect& rect)
 CL_Rect
 EditorMap::get_bounding_rect()
 {
+  if (!impl.get())
+    return CL_Rect(0,0,0,0);
   if (impl->has_bounding_rect)
   {
     return impl->bounding_rect;
@@ -219,27 +248,41 @@ EditorMap::get_bounding_rect()
 void
 EditorMap::set_background_color(const CL_Color& color)
 {
+  if (!impl.get())
+    return;
   impl-> background_color = color;
 }
 
 void
 EditorMap::execute(Command command)
 {
+  if (!impl.get())
+    return;
   impl->redo_stack.clear();
   command.execute();
   impl->undo_stack.push_back(command);
+  // Cap undo history to avoid unbounded memory growth.
+  const std::size_t kMaxUndo = 100;
+  while (impl->undo_stack.size() > kMaxUndo)
+    impl->undo_stack.erase(impl->undo_stack.begin());
+  impl->modified = true;
+  impl->serial += 1;
   impl->on_change();
 }
 
 void
 EditorMap::undo()
 {
+  if (!impl.get())
+    return;
   if (!impl->undo_stack.empty())
   {
     Command command = impl->undo_stack.back();
     impl->undo_stack.pop_back();
     command.undo();
     impl->redo_stack.push_back(command);
+    impl->modified = true;
+    impl->serial += 1;
     impl->on_change();
   }
 }
@@ -247,12 +290,16 @@ EditorMap::undo()
 void
 EditorMap::redo()
 {
+  if (!impl.get())
+    return;
   if (!impl->redo_stack.empty())
   {
     Command command = impl->redo_stack.back();
     impl->redo_stack.pop_back();
     command.redo();
     impl->undo_stack.push_back(command);
+    impl->modified = true;
+    impl->serial += 1;
     impl->on_change();
   }
 }
@@ -260,18 +307,27 @@ EditorMap::redo()
 int
 EditorMap::undo_stack_size()
 {
+  if (!impl.get())
+    return 0;
   return impl->undo_stack.size();
 }
 
 int
 EditorMap::redo_stack_size()
 {
+  if (!impl.get())
+    return 0;
   return impl->redo_stack.size();
 }
 
 CL_Signal_v0&
 EditorMap::sig_change()
 {
+  if (!impl.get())
+  {
+    static CL_Signal_v0 dummy;
+    return dummy;
+  }
   return impl->on_change;
 }
 

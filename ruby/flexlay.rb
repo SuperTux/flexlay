@@ -306,7 +306,7 @@ class GenericDialog
     if @callback
       vals = []
       @items.each{|item|
-        (type, label, comp) = item
+        (type, _label, comp) = item
         if type == "int"
           vals.push(comp.get_text().to_i)
         elsif type == "float"

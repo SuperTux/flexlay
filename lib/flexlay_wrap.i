@@ -64,6 +64,7 @@ std::cout << "CL_Error: " << err.message << std::endl;
 #include "gui/scrollbar.hpp"
 #include "graphic_context_state.hpp"
  
+#include "tools/tool.hpp"
 #include "tools/workspace_move_tool.hpp"
 #include "tools/layer_move_tool.hpp"
 #include "tools/sketch_stroke_tool.hpp"
@@ -229,6 +230,7 @@ Panel* Panel_create(const CL_Rect& rect, CL_Component* parent) {
 %include "gui/menubar.hpp"
 %include "gui/scrollbar.hpp"
 
+%include "tools/tool.hpp"
 %include "tools/workspace_move_tool.hpp"
 %include "tools/layer_move_tool.hpp"
 %include "tools/sketch_stroke_tool.hpp"

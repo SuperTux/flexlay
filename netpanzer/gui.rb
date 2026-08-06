@@ -136,7 +136,7 @@ class GUI
                                 method(:set_objmap_select_tool))
 
     $brushes.each {|i|
-      (index, width, height, name) = i
+      (_index, width, height, _name) = i
       @brushbox.insert_item("%s - %sx%s" % [name, width, height])
     }
 
@@ -211,7 +211,7 @@ class GUI
   end
 
   def brushbox_change(index)
-    (start, width,  height, name) = $brushes[index]
+    (start, width, height, _name) = $brushes[index]
     brush = TileBrush.new(width, height)
     brush.set_data(Range.new(start, start + width*height).to_a)
     $tilemap_paint_tool.set_brush(brush)
@@ -336,7 +336,7 @@ class GUI
                        make_sprite($flexlay_datadir + "/images/icons24/grid.png"), "Some tooltip", button_panel);
       grid_icon.set_callback(proc{gui_toggle_grid})
 
-      layer_menu = Menu(CL_Point(32*11+2, 54), $gui.get_component())
+      _layer_menu = Menu(CL_Point(32*11+2, 54), $gui.get_component())
     end
   end
 

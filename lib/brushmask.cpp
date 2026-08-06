@@ -39,7 +39,10 @@ struct TempBuf {
 void
 temp_buf_free (TempBuf *temp_buf)
 {
-  // FIXME:
+  if (!temp_buf)
+    return;
+  delete[] temp_buf->data;
+  temp_buf->data = 0;
   delete temp_buf;
 }
 

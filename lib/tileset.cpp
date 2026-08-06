@@ -67,15 +67,22 @@ Tileset::~Tileset()
 void
 Tileset::add_tile(int id, Tile* tile)
 {
-  // FIXME: Check for tile-id dups
+  if (id < 0)
+    return;
+
   if (id >= int(impl->tiles.size()))
-    impl->tiles.resize(id+1, 0);
+    impl->tiles.resize(id + 1, 0);
 
-  if (tile)
-    impl->tiles[id] = new Tile(*tile);
-  else
-    impl->tiles[id] = 0;
+  // Replace: free previous tile at this id (if any).
+  delete impl->tiles[id];
+  impl->tiles[id] = tile ? new Tile(*tile) : 0;
 
+  // Keep tile_ids free of duplicates.
+  for (TileIds::iterator i = impl->tile_ids.begin(); i != impl->tile_ids.end(); ++i)
+  {
+    if (*i == id)
+      return;
+  }
   impl->tile_ids.push_back(id);
 }
 

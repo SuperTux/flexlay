@@ -17,6 +17,9 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <iostream>
+#include <cstring>
+#include <cstdint>
+#include <vector>
 #include <sstream>
 #include <fstream>
 #include <ClanLib/core.h>
@@ -35,6 +38,41 @@
 #include "tilemap_layer.hpp"
 #include "editor_map.hpp"
 #include "netpanzer.hpp"
+
+
+// netPanzer binary formats are little-endian.
+
+// netPanzer binary formats are little-endian.
+static uint16_t
+read_le16(std::istream& in)
+{
+  unsigned char b[2] = {0, 0};
+  in.read(reinterpret_cast<char*>(b), 2);
+  return static_cast<uint16_t>(b[0] | (static_cast<uint16_t>(b[1]) << 8));
+}
+
+static void
+write_le16(std::ostream& out, uint16_t v)
+{
+  unsigned char b[2];
+  b[0] = static_cast<unsigned char>(v & 0xff);
+  b[1] = static_cast<unsigned char>((v >> 8) & 0xff);
+  out.write(reinterpret_cast<char*>(b), 2);
+}
+
+static void
+read_le16_array(std::istream& in, std::vector<uint16_t>& data)
+{
+  for (std::size_t i = 0; i < data.size(); ++i)
+    data[i] = read_le16(in);
+}
+
+static void
+write_le16_array(std::ostream& out, const std::vector<uint16_t>& data)
+{
+  for (std::size_t i = 0; i < data.size(); ++i)
+    write_le16(out, data[i]);
+}
 
 NetPanzerData* NetPanzerData::instance_ = 0;
 
@@ -104,9 +142,22 @@ public:
   }
 };
 
-NetPanzerData::NetPanzerData() 
+NetPanzerData::NetPanzerData()
   : tiledata(0)
 {
+}
+
+NetPanzerData::~NetPanzerData()
+{
+  clear_tiledata();
+}
+
+void
+NetPanzerData::clear_tiledata()
+{
+  delete[] tiledata;
+  tiledata = 0;
+  tile_headers.clear();
 }
 
 void
@@ -320,46 +371,65 @@ NetPanzerData::load_tileset(const std::string& filename)
   unsigned short	tile_count;
   unsigned char	raw_palette[768];
 
-  std::ifstream file(filename.c_str());  
-
+  std::ifstream file(filename.c_str(), std::ios::binary);
   if (!file)
     {
       std::cout << "Couldn't load " << filename << std::endl;
+      return;
     }
-  else
+
+  file.read(reinterpret_cast<char*>(netp_id_header), sizeof(netp_id_header));
+  version    = read_le16(file);
+  width      = read_le16(file);
+  height     = read_le16(file);
+  tile_count = read_le16(file);
+  file.read(reinterpret_cast<char*>(raw_palette), sizeof(raw_palette));
+
+  if (!file)
     {
-      file.read(reinterpret_cast<char*>(netp_id_header), sizeof(netp_id_header));
-      file.read(reinterpret_cast<char*>(&version), sizeof(version));
-      file.read(reinterpret_cast<char*>(&width), sizeof(width));
-      file.read(reinterpret_cast<char*>(&height), sizeof(height));
-      file.read(reinterpret_cast<char*>(&tile_count), sizeof(tile_count));
-      file.read(reinterpret_cast<char*>(raw_palette), sizeof(raw_palette));
+      std::cout << "NetPanzerData: truncated header in " << filename << std::endl;
+      return;
+    }
 
-      tile_headers.resize(tile_count);
+  // File format is little-endian; hosts that are not LE will need conversion.
+  if (width == 0 || height == 0 || tile_count == 0)
+    {
+      std::cout << "NetPanzerData: invalid tileset dimensions in " << filename << std::endl;
+      return;
+    }
 
-      file.read(reinterpret_cast<char*>(&*tile_headers.begin()), 
-                sizeof(NetPanzerTileHeader)*tile_count);
+  std::vector<NetPanzerTileHeader> headers(tile_count);
+  file.read(reinterpret_cast<char*>(&headers[0]),
+            static_cast<std::streamsize>(sizeof(NetPanzerTileHeader) * tile_count));
+  if (!file)
+    {
+      std::cout << "NetPanzerData: truncated tile headers in " << filename << std::endl;
+      return;
+    }
 
-      cl_uint32 tilesize = width * height;
-      // FIXME: Delete this somewhere!
-      unsigned char* tiledata = new unsigned char[tilesize*tile_count];
-      file.read(reinterpret_cast<char*>(tiledata), tilesize*tile_count);
-      file.close();
+  const cl_uint32 tilesize = static_cast<cl_uint32>(width) * static_cast<cl_uint32>(height);
+  const std::size_t data_bytes = static_cast<std::size_t>(tilesize) * static_cast<std::size_t>(tile_count);
+  unsigned char* data = new unsigned char[data_bytes];
+  file.read(reinterpret_cast<char*>(data), static_cast<std::streamsize>(data_bytes));
+  if (!file)
+    {
+      std::cout << "NetPanzerData: truncated tile pixel data in " << filename << std::endl;
+      delete[] data;
+      return;
+    }
+  file.close();
 
-      // FIXME: The palette in the netpanzer 'summer12mb.tls' file
-      // is either broken or otherwise corrupt, so we ignore it
-      // and use the seperate palette file 'netp.act' which works
-      // fine.
-      
-      NetPanzerData::instance()->tiledata = tiledata;
-      
-      tileset = Tileset(width);
+  // The palette in summer12mb.tls is ignored; netp.act is used instead.
 
-      for(int i = 0; i < tile_count; ++i)
-        {
-          Tile tile(TileProvider(new NetPanzerTileProviderImpl(i)));
-          tileset.add_tile(i, &tile);
-        }
+  clear_tiledata();
+  tiledata = data;
+  tile_headers.swap(headers);
+
+  tileset = Tileset(width);
+  for (int i = 0; i < tile_count; ++i)
+    {
+      Tile tile(TileProvider(new NetPanzerTileProviderImpl(i)));
+      tileset.add_tile(i, &tile);
     }
 }
 
@@ -454,62 +524,80 @@ NetPanzerFileStruct::set_tilemap(TilemapLayer l)
 void
 NetPanzerFileStruct::save(const std::string& filename)
 {
-  if (impl->tilemap.is_null())
+  if (!impl.get() || impl->tilemap.is_null())
     return;
-    
-  unsigned char   netp_id_header[64];
-  strcpy(reinterpret_cast<char*>(netp_id_header), impl->id_header.c_str());
-  unsigned short  id       = 0; // ?
-  char   name[256];
-  strcpy(name, impl->name.c_str());
-  char   description[1024];
-  strcpy(description, impl->description.c_str());
-  unsigned short  x_size   = impl->tilemap.get_width();
-  unsigned short  y_size   = impl->tilemap.get_height();
-  char            tile_set[256] = "summer12mb.tls";
- 
-  unsigned short  thumbnail_x_pix = impl->tilemap.get_width();
-  unsigned short  thumbnail_y_pix = impl->tilemap.get_height();
-    
-  std::ofstream out(filename.c_str());
 
-  // FIXME: Not endian clean
-  out.write(reinterpret_cast<char*>(&netp_id_header), sizeof(netp_id_header));
-  out.write(reinterpret_cast<char*>(&id), sizeof(short));
-  out.write(reinterpret_cast<char*>(&name), sizeof(name));
-  out.write(reinterpret_cast<char*>(&description), sizeof(description));
-  out.write(reinterpret_cast<char*>(&x_size), sizeof(short));
-  out.write(reinterpret_cast<char*>(&y_size), sizeof(short));
-  out.write(reinterpret_cast<char*>(&tile_set), sizeof(tile_set));
-  out.write(reinterpret_cast<char*>(&thumbnail_x_pix), sizeof(short));
-  out.write(reinterpret_cast<char*>(&thumbnail_y_pix), sizeof(short));
+  unsigned char netp_id_header[64];
+  std::memset(netp_id_header, 0, sizeof(netp_id_header));
+  std::strncpy(reinterpret_cast<char*>(netp_id_header), impl->id_header.c_str(),
+               sizeof(netp_id_header) - 1);
 
-  std::vector<unsigned short> vec(x_size * y_size);
+  uint16_t id = 0;
+  char name[256];
+  char description[1024];
+  std::memset(name, 0, sizeof(name));
+  std::memset(description, 0, sizeof(description));
+  std::strncpy(name, impl->name.c_str(), sizeof(name) - 1);
+  std::strncpy(description, impl->description.c_str(), sizeof(description) - 1);
 
-  int tile_count = impl->tilemap.get_tileset().get_tiles().size();
+  const int width  = impl->tilemap.get_width();
+  const int height = impl->tilemap.get_height();
+  if (width <= 0 || height <= 0 || width > 65535 || height > 65535)
+    {
+      std::cout << "NetPanzerFileStruct::save: invalid dimensions" << std::endl;
+      return;
+    }
+
+  uint16_t x_size = static_cast<uint16_t>(width);
+  uint16_t y_size = static_cast<uint16_t>(height);
+  char tile_set[256];
+  std::memset(tile_set, 0, sizeof(tile_set));
+  std::strncpy(tile_set, "summer12mb.tls", sizeof(tile_set) - 1);
+
+  uint16_t thumbnail_x_pix = x_size;
+  uint16_t thumbnail_y_pix = y_size;
+
+  std::ofstream out(filename.c_str(), std::ios::binary);
+  if (!out)
+    {
+      std::cout << "NetPanzerFileStruct::save: cannot open " << filename << std::endl;
+      return;
+    }
+
+  out.write(reinterpret_cast<char*>(netp_id_header), sizeof(netp_id_header));
+  write_le16(out, id);
+  out.write(name, sizeof(name));
+  out.write(description, sizeof(description));
+  write_le16(out, x_size);
+  write_le16(out, y_size);
+  out.write(tile_set, sizeof(tile_set));
+  write_le16(out, thumbnail_x_pix);
+  write_le16(out, thumbnail_y_pix);
+
   Field<int>* field = impl->tilemap.get_field();
-  for(int i = 0; i < x_size * y_size; ++i)
+  const int cells = width * height;
+  std::vector<uint16_t> vec(static_cast<std::size_t>(cells), 0);
+  if (field)
     {
-      // Fill everything that isn't a valid tile with grass
-      if ((*field)[i] >= 0 && (*field)[i] < tile_count)
-        vec[i] = (*field)[i];
-      else
-        vec[i] = 8097 + rand()%16;
+      for (int i = 0; i < cells; ++i)
+        vec[static_cast<std::size_t>(i)] = static_cast<uint16_t>((*field)[i] & 0xffff);
     }
-  out.write(reinterpret_cast<char*>(&(*vec.begin())), 
-            sizeof(unsigned short)*vec.size());
+  write_le16_array(out, vec);
 
-  // Generate thumbnail
-  std::vector<unsigned char> thumbnail(x_size * y_size);
-  for(int i = 0; i < int(thumbnail.size()); ++i)
+  std::vector<unsigned char> thumbnail(static_cast<std::size_t>(cells), 0);
+  if (field && NetPanzerData::instance()->has_data())
     {
-      Tile* tile = impl->tileset.create((*field)[i]);
-      if (tile)
-        thumbnail[i] = find_nearest_color(NetPanzerData::instance()->get_palette(), tile->get_color());
+      for (int i = 0; i < cells; ++i)
+        {
+          Tile* tile = impl->tileset.create((*field)[i]);
+          if (tile)
+            thumbnail[static_cast<std::size_t>(i)] =
+              find_nearest_color(NetPanzerData::instance()->get_palette(),
+                                 tile->get_color());
+        }
     }
-
-  out.write(reinterpret_cast<char*>(&(*thumbnail.begin())), 
-            sizeof(unsigned char)*thumbnail.size());
+  out.write(reinterpret_cast<char*>(&thumbnail[0]),
+            static_cast<std::streamsize>(thumbnail.size()));
 }
 
 NetPanzerFileStruct::NetPanzerFileStruct(Tileset tileset, int w, int h)
@@ -526,51 +614,83 @@ NetPanzerFileStruct::NetPanzerFileStruct(Tileset tileset, const std::string& fil
   : impl(new NetPanzerFileStructImpl())
 {
   impl->tileset = tileset;
-  
-  // FIXME: endian issues
-  unsigned char   netp_id_header[64]; // Copyright PyroSoft Inc.  ...
-  unsigned short  id; // What is this?
-  char            name[256];
-  char            description[1024];
-  unsigned short  x_size; // width
-  unsigned short  y_size; // height
-  char            tile_set[256]; // name of the tileset: "summer12mb.tls"
- 
-  unsigned short  thumbnail_x_pix;
-  unsigned short  thumbnail_y_pix;
 
-  std::ifstream file(filename.c_str());
+  unsigned char netp_id_header[64];
+  uint16_t id = 0;
+  char name[256];
+  char description[1024];
+  uint16_t x_size = 0;
+  uint16_t y_size = 0;
+  char tile_set[256];
+  uint16_t thumbnail_x_pix = 0;
+  uint16_t thumbnail_y_pix = 0;
 
+  std::memset(name, 0, sizeof(name));
+  std::memset(description, 0, sizeof(description));
+  std::memset(tile_set, 0, sizeof(tile_set));
+  std::memset(netp_id_header, 0, sizeof(netp_id_header));
+
+  std::ifstream file(filename.c_str(), std::ios::binary);
   if (!file)
     {
-      std::cout << "NetPanzerFileStructImpl: Error: " << filename << std::endl;
+      std::cout << "NetPanzerFileStruct: Error opening " << filename << std::endl;
+      impl->tilemap = TilemapLayer(tileset, 1, 1);
+      return;
     }
 
-  file.read(reinterpret_cast<char*>(&netp_id_header), sizeof(netp_id_header));
-  file.read(reinterpret_cast<char*>(&id), sizeof(short));
-  file.read(reinterpret_cast<char*>(&name), sizeof(name));
-  file.read(reinterpret_cast<char*>(&description), sizeof(description));
-  file.read(reinterpret_cast<char*>(&x_size), sizeof(short));
-  file.read(reinterpret_cast<char*>(&y_size), sizeof(short));
-  file.read(reinterpret_cast<char*>(&tile_set), sizeof(tile_set));
-  file.read(reinterpret_cast<char*>(&thumbnail_x_pix), sizeof(short));
-  file.read(reinterpret_cast<char*>(&thumbnail_y_pix), sizeof(short));
+  file.read(reinterpret_cast<char*>(netp_id_header), sizeof(netp_id_header));
+  id = read_le16(file);
+  file.read(name, sizeof(name));
+  file.read(description, sizeof(description));
+  x_size = read_le16(file);
+  y_size = read_le16(file);
+  file.read(tile_set, sizeof(tile_set));
+  thumbnail_x_pix = read_le16(file);
+  thumbnail_y_pix = read_le16(file);
 
-  TilemapLayer tilemap(tileset, x_size, y_size);
-  Field<int>* field      = tilemap.get_field();
+  if (!file || x_size == 0 || y_size == 0)
+    {
+      std::cout << "NetPanzerFileStruct: truncated or invalid map " << filename << std::endl;
+      impl->tilemap = TilemapLayer(tileset, 1, 1);
+      return;
+    }
 
-  std::vector<unsigned short> vec;
-  vec.resize(x_size * y_size);
-  file.read(reinterpret_cast<char*>(&(*vec.begin())), sizeof(unsigned short)*vec.size());
+  const uint32_t cells = static_cast<uint32_t>(x_size) * static_cast<uint32_t>(y_size);
+  if (cells > 4096u * 4096u)
+    {
+      std::cout << "NetPanzerFileStruct: map too large (" << x_size << "x" << y_size << ")" << std::endl;
+      impl->tilemap = TilemapLayer(tileset, 1, 1);
+      return;
+    }
 
-  for(int i = 0; i < x_size*y_size; ++i)
-    (*field)[i] = vec[i];
+  TilemapLayer tilemap(tileset, static_cast<int>(x_size), static_cast<int>(y_size));
+  Field<int>* field = tilemap.get_field();
+  if (!field)
+    {
+      impl->tilemap = tilemap;
+      return;
+    }
+
+  std::vector<uint16_t> vec(cells);
+  read_le16_array(file, vec);
+  if (!file)
+    {
+      std::cout << "NetPanzerFileStruct: truncated tile data in " << filename << std::endl;
+    }
+  else
+    {
+      for (uint32_t i = 0; i < cells; ++i)
+        (*field)[static_cast<int>(i)] = static_cast<int>(vec[i]);
+    }
 
   std::cout << "Thumbnail: " << thumbnail_x_pix << " " << thumbnail_y_pix << std::endl;
 
-  impl->tilemap     = tilemap;
-  impl->id_header   = reinterpret_cast<char*>(netp_id_header);
-  impl->name        = name;
+  impl->tilemap = tilemap;
+  impl->id_header.assign(reinterpret_cast<char*>(netp_id_header),
+                         strnlen(reinterpret_cast<char*>(netp_id_header), sizeof(netp_id_header)));
+  name[sizeof(name) - 1] = '\0';
+  description[sizeof(description) - 1] = '\0';
+  impl->name = name;
   impl->description = description;
 }
 

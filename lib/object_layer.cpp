@@ -106,13 +106,16 @@ ObjectLayer::get_selection(const CL_Rectf& rect)
 {
   Objects selection;
 
-  for(Objects::iterator i = impl->objects.begin(); i != impl->objects.end(); ++i)
+  for (Objects::iterator i = impl->objects.begin(); i != impl->objects.end(); ++i)
   {
-    // FIXME:
-    if (rect.is_inside((*i).get_pos()))
-    {
+    CL_Rectf bounds = i->get_bound_rect();
+    bool hit = false;
+    if (bounds.get_width() > 0.0f && bounds.get_height() > 0.0f)
+      hit = rect.is_overlapped(bounds);
+    else
+      hit = rect.is_inside(i->get_pos());
+    if (hit)
       selection.push_back(*i);
-    }
   }
 
   return selection;
@@ -165,7 +168,36 @@ ObjectLayer::get_object_index(const ObjMapObject& obj)
 void
 ObjectLayer::move_to(const ObjMapObject& obj, int height)
 {
-  // FIXME: Implement me
+  int from = get_object_index(obj);
+  if (from < 0)
+    return;
+
+  const int n = static_cast<int>(impl->objects.size());
+  if (n == 0)
+    return;
+
+  // Clamp target stack index to [0, n-1] (0 = bottom / lowest).
+  int to = height;
+  if (to < 0)
+    to = 0;
+  if (to >= n)
+    to = n - 1;
+
+  if (from == to)
+    return;
+
+  ObjMapObject tmp = impl->objects[from];
+  if (from < to)
+  {
+    for (int i = from; i < to; ++i)
+      impl->objects[i] = impl->objects[i + 1];
+  }
+  else
+  {
+    for (int i = from; i > to; --i)
+      impl->objects[i] = impl->objects[i - 1];
+  }
+  impl->objects[to] = tmp;
 }
 
 void

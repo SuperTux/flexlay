@@ -15,6 +15,7 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <sstream>
+#include <memory>
 #include "paint_command.hpp"
 
 class PaintCommandImpl : public CommandImpl
@@ -30,8 +31,8 @@ public:
   Field<int>   undo_field;
 
   CL_Point     pos;
-  TileBrush*   redo_brush;
-  TileBrush*   undo_brush;
+  std::unique_ptr<TileBrush> redo_brush;
+  std::unique_ptr<TileBrush> undo_brush;
 
   PaintCommandImpl() {}
   virtual ~PaintCommandImpl() {}
@@ -50,22 +51,20 @@ PaintCommand::PaintCommand(TilemapLayer t, const TileBrush& b)
   impl->tilemap = t;
   impl->brush   = b;
 
-  impl->undo_field = *(impl->tilemap.get_field());
-
-  impl->redo_brush = 0;
-  impl->undo_brush = 0;
+  Field<int>* field = impl->tilemap.get_field();
+  if (field)
+    impl->undo_field = *field;
 }
 
 PaintCommand::~PaintCommand()
 {
-  delete impl->redo_brush;
-  delete impl->undo_brush;
 }
 
 void
 PaintCommand::add_point(const CL_Point& pos)
 {
-  // FIXME: undo_field is unneeded, should just record the overwritten color
+  if (!impl.get())
+    return;
   impl->points.push_back(pos);
   impl->tilemap.draw_tile(impl->brush, pos);
 }
@@ -73,7 +72,8 @@ PaintCommand::add_point(const CL_Point& pos)
 void
 PaintCommandImpl::execute()
 {
-  assert(!points.empty());
+  if (points.empty())
+    return;
 
   // Calc bounding rect
   CL_Rect rect(points.front().x,
@@ -92,11 +92,15 @@ PaintCommandImpl::execute()
   pos.x = rect.left;
   pos.y = rect.top;
 
-  redo_brush = new TileBrush(*(tilemap.get_field()), rect.get_width(), rect.get_height(),
-                             -pos.x, -pos.y);
-  // FIXME: undo_field is unneeded, should just record the overwritten color
-  undo_brush = new TileBrush(undo_field, rect.get_width(), rect.get_height(),
-                             -pos.x, -pos.y);
+  Field<int>* field = tilemap.get_field();
+  if (!field)
+    return;
+
+  redo_brush.reset(new TileBrush(*field, rect.get_width(), rect.get_height(),
+                                 -pos.x, -pos.y));
+  // Full-field snapshot is heavy; differential undo would be better later.
+  undo_brush.reset(new TileBrush(undo_field, rect.get_width(), rect.get_height(),
+                                 -pos.x, -pos.y));
 
   redo_brush->set_opaque();
   undo_brush->set_opaque();
@@ -107,12 +111,16 @@ PaintCommandImpl::execute()
 void
 PaintCommandImpl::redo()
 {
+  if (!redo_brush.get())
+    return;
   TilemapLayer::draw_tiles(tilemap.get_field(), *redo_brush, pos);
 }
 
 void
 PaintCommandImpl::undo()
 {
+  if (!undo_brush.get())
+    return;
   TilemapLayer::draw_tiles(tilemap.get_field(), *undo_brush, pos);
 }
 

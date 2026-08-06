@@ -54,7 +54,7 @@ Workspace::Workspace(bool create) :
 void
 Workspace::draw(const GraphicContextState& state, CL_GraphicContext* gc)
 {
-  assert(impl.get());
+  if (!impl.get()) return;
 
   CL_Display::clear(CL_Color(100, 0, 100));
 
@@ -72,7 +72,7 @@ Workspace::draw(const GraphicContextState& state, CL_GraphicContext* gc)
 void
 Workspace::mouse_up(const CL_InputEvent& event)
 {
-  assert(impl.get());
+  if (!impl.get()) return;
 
   WorkspaceImpl::Tools::iterator it = impl->tools.find(event.id);
   if (it != impl->tools.end())
@@ -82,7 +82,7 @@ Workspace::mouse_up(const CL_InputEvent& event)
 void
 Workspace::mouse_move(const CL_InputEvent& event)
 {
-  assert(impl.get());
+  if (!impl.get()) return;
 
   for(WorkspaceImpl::Tools::iterator it = impl->tools.begin();
       it != impl->tools.end(); ++it)
@@ -94,7 +94,7 @@ Workspace::mouse_move(const CL_InputEvent& event)
 void
 Workspace::mouse_down(const CL_InputEvent& event)
 {
-  assert(impl.get());
+  if (!impl.get()) return;
 
   WorkspaceImpl::Tools::iterator it = impl->tools.find(event.id);
   if (it != impl->tools.end())
@@ -115,7 +115,7 @@ Workspace::mouse_down(const CL_InputEvent& event)
 void
 Workspace::key_up(const CL_InputEvent& event)
 {
-  assert(impl.get());
+  if (!impl.get()) return;
 
   WorkspaceImpl::Tools::iterator it = impl->tools.find(event.id);
   if (it != impl->tools.end())
@@ -125,7 +125,7 @@ Workspace::key_up(const CL_InputEvent& event)
 void
 Workspace::key_down(const CL_InputEvent& event)
 {
-  assert(impl.get());
+  if (!impl.get()) return;
 
   WorkspaceImpl::Tools::iterator it = impl->tools.find(event.id);
   if (it != impl->tools.end())
@@ -137,15 +137,15 @@ Workspace::key_down(const CL_InputEvent& event)
 EditorMap
 Workspace::get_map()
 {
-  assert(impl.get());
-
+  if (!impl.get())
+    return EditorMap();
   return impl->editor_map;
 }
 
 void
 Workspace::set_map(const EditorMap& m)
 {
-  assert(impl.get());
+  if (!impl.get()) return;
 
   impl->editor_map = m;
   std::cout << "Workspace:set_map" << std::endl;
@@ -154,7 +154,7 @@ Workspace::set_map(const EditorMap& m)
 void
 Workspace::set_tool(int button, const Tool& tool)
 {
-  assert(impl.get());
+  if (!impl.get()) return;
 
   impl->tools[button] = tool;
 }

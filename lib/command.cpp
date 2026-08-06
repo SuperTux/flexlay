@@ -28,25 +28,30 @@ Command::Command(const std::shared_ptr<CommandImpl>& impl_)
 void
 Command::execute()
 {
-  impl->execute();
+  if (impl.get())
+    impl->execute();
 }
 
 void
 Command::redo()
 {
-  impl->redo();
+  if (impl.get())
+    impl->redo();
 }
 
 void
 Command::undo()
 {
-  impl->undo();
+  if (impl.get())
+    impl->undo();
 }
 
 std::string
 Command::serialize()
 {
-  return impl->serialize();
+  if (impl.get())
+    return impl->serialize();
+  return std::string();
 }
 
 /* EOF */

@@ -287,6 +287,16 @@ CL_PixelBuffer generate_brushmask(BrushShape shape,
                                   float  aspect_ratio,  /* y/x        */
                                   float  angle)         /* in degrees */
 {
+  // Cap radius to avoid multi-gigabyte temporary buffers.
+  if (radius > 512.0f)
+    radius = 512.0f;
+  if (radius < 0.0f)
+    radius = 0.0f;
+  if (spikes < 2)
+    spikes = 2;
+  if (spikes > 20)
+    spikes = 20;
+
   GimpBrushGenerated brush;
 
   brush.mask         = 0;

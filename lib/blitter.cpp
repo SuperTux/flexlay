@@ -106,9 +106,17 @@ blit_opaque(CL_PixelBuffer target, CL_PixelBuffer brush, int x_pos, int y_pos)
   target.unlock();
 }
 
+
 void
 blit(CL_PixelBuffer target, CL_PixelBuffer brush, int x_pos, int y_pos)
 {
+  if (target.get_format().get_type() != pixelformat_rgba
+      || target.get_format().get_depth() != 32)
+  {
+    std::cout << "blit: target must be RGBA32" << std::endl;
+    return;
+  }
+
   target.lock();
   brush.lock();
 
@@ -121,9 +129,8 @@ blit(CL_PixelBuffer target, CL_PixelBuffer brush, int x_pos, int y_pos)
   unsigned char* target_buf = static_cast<unsigned char*>(target.get_data());
   unsigned char* brush_buf  = static_cast<unsigned char*>(brush.get_data());
 
-  // FIXME: This doesn't take pitch into account
-  int target_width = target.get_width();
-  int brush_width  = brush.get_width();
+  const int target_pitch = target.get_pitch();
+  const int brush_pitch  = brush.get_pitch();
 
   if (brush.get_format().get_type() == pixelformat_rgba)
   {
@@ -132,25 +139,25 @@ blit(CL_PixelBuffer target, CL_PixelBuffer brush, int x_pos, int y_pos)
       for (int y = start_y; y < end_y; ++y)
         for (int x = start_x; x < end_x; ++x)
         {
-          int target_pos = (y + y_pos) * target_width + x + x_pos;
-          int brush_pos  = y * brush_width + x;
+          int target_pos = (y + y_pos) * target_pitch + 4 * (x + x_pos);
+          int brush_pos  = y * brush_pitch + 4 * x;
 
-          unsigned char a  = brush_buf[4*brush_pos + 0];
-          unsigned char r  = brush_buf[4*brush_pos + 1];
-          unsigned char g  = brush_buf[4*brush_pos + 2];
-          unsigned char b  = brush_buf[4*brush_pos + 3];
+          unsigned char a  = brush_buf[brush_pos + 0];
+          unsigned char r  = brush_buf[brush_pos + 1];
+          unsigned char g  = brush_buf[brush_pos + 2];
+          unsigned char b  = brush_buf[brush_pos + 3];
 
-          unsigned char ta = target_buf[4*target_pos + 0];
-          unsigned char tr = target_buf[4*target_pos + 1];
-          unsigned char tg = target_buf[4*target_pos + 2];
-          unsigned char tb = target_buf[4*target_pos + 3];
+          unsigned char ta = target_buf[target_pos + 0];
+          unsigned char tr = target_buf[target_pos + 1];
+          unsigned char tg = target_buf[target_pos + 2];
+          unsigned char tb = target_buf[target_pos + 3];
 
-          float alpha  = a/255.0f;
+          float alpha  = a / 255.0f;
 
-          target_buf[4*target_pos + 0] = std::min(255, ta + a);
-          target_buf[4*target_pos + 1] = std::min(255, int((1-alpha)*tr + alpha*r));
-          target_buf[4*target_pos + 2] = std::min(255, int((1-alpha)*tg + alpha*g));
-          target_buf[4*target_pos + 3] = std::min(255, int((1-alpha)*tb + alpha*b));
+          target_buf[target_pos + 0] = std::min(255, ta + a);
+          target_buf[target_pos + 1] = std::min(255, int((1 - alpha) * tr + alpha * r));
+          target_buf[target_pos + 2] = std::min(255, int((1 - alpha) * tg + alpha * g));
+          target_buf[target_pos + 3] = std::min(255, int((1 - alpha) * tb + alpha * b));
         }
     }
     else if (brush.get_format().get_depth() == 24)
@@ -158,18 +165,18 @@ blit(CL_PixelBuffer target, CL_PixelBuffer brush, int x_pos, int y_pos)
       for (int y = start_y; y < end_y; ++y)
         for (int x = start_x; x < end_x; ++x)
         {
-          int target_pos = (y + y_pos) * target_width + x + x_pos;
-          int brush_pos  = y * brush_width + x;
+          int target_pos = (y + y_pos) * target_pitch + 4 * (x + x_pos);
+          int brush_pos  = y * brush_pitch + 3 * x;
 
-          target_buf[4*target_pos + 0] = 255;
-          target_buf[4*target_pos + 1] = brush_buf[3*brush_pos + 0];
-          target_buf[4*target_pos + 2] = brush_buf[3*brush_pos + 1];
-          target_buf[4*target_pos + 3] = brush_buf[3*brush_pos + 2];
+          target_buf[target_pos + 0] = 255;
+          target_buf[target_pos + 1] = brush_buf[brush_pos + 0];
+          target_buf[target_pos + 2] = brush_buf[brush_pos + 1];
+          target_buf[target_pos + 3] = brush_buf[brush_pos + 2];
         }
     }
     else
     {
-      std::cout << "Unsupported bpp: " << brush.get_format().get_depth() << std::endl;
+      std::cout << "blit: unsupported brush bpp: " << brush.get_format().get_depth() << std::endl;
     }
   }
   else if (brush.get_format().get_type() == pixelformat_index)
@@ -178,21 +185,19 @@ blit(CL_PixelBuffer target, CL_PixelBuffer brush, int x_pos, int y_pos)
     for (int y = start_y; y < end_y; ++y)
       for (int x = start_x; x < end_x; ++x)
       {
-        int target_pos = (y + y_pos) * target_width + x + x_pos;
-        int brush_pos  = y * brush_width + x;
-
-        target_buf[4*target_pos + 0] = 255;
-        target_buf[4*target_pos + 1] = palette.colors[brush_buf[brush_pos]].get_blue();
-        target_buf[4*target_pos + 2] = palette.colors[brush_buf[brush_pos]].get_green();
-        target_buf[4*target_pos + 3] = palette.colors[brush_buf[brush_pos]].get_red();
+        int target_pos = (y + y_pos) * target_pitch + 4 * (x + x_pos);
+        int brush_pos  = y * brush_pitch + x;
+        unsigned char idx = brush_buf[brush_pos];
+        target_buf[target_pos + 0] = 255;
+        target_buf[target_pos + 1] = palette.colors[idx].get_red();
+        target_buf[target_pos + 2] = palette.colors[idx].get_green();
+        target_buf[target_pos + 3] = palette.colors[idx].get_blue();
       }
   }
   else
   {
     std::cout << "blit: unknown pixelformat type" << std::endl;
   }
-
-
 
   brush.unlock();
   target.unlock();

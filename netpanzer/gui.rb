@@ -137,7 +137,7 @@ class GUI
 
     $brushes.each {|i|
       (_index, width, height, _name) = i
-      @brushbox.insert_item("%s - %sx%s" % [name, width, height])
+      @brushbox.insert_item("%s - %sx%s" % [_name, width, height])
     }
 
     @menu = components.get('menubar').component

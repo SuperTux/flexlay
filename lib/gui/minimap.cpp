@@ -65,9 +65,10 @@ Minimap::Minimap(EditorMapComponent* p, const CL_Rect& rect,
 void
 Minimap::draw()
 {
-  if (impl->parent->get_workspace().get_map().is_null()) return;
-
-  if (!impl->parent || impl->parent->get_workspace().is_null())
+  if (!impl.get() || !impl->parent)
+    return;
+  if (impl->parent->get_workspace().is_null()
+      || impl->parent->get_workspace().get_map().is_null())
     return;
 
   CL_Display::push_cliprect(get_screen_rect());
@@ -184,6 +185,8 @@ MinimapImpl::update_minimap_surface()
 void
 Minimap::mouse_move(const CL_InputEvent& event)
 {
+  if (!impl.get() || !impl->parent)
+    return;
   // FIXME: This doesn't work all that well
   TilemapLayer tilemap = TilemapLayer::current();
   if (!tilemap.is_null())
@@ -201,6 +204,8 @@ Minimap::mouse_move(const CL_InputEvent& event)
 void
 Minimap::mouse_down(const CL_InputEvent& event)
 {
+  if (!impl.get() || !impl->parent)
+    return;
   // FIXME: This doesn't work all that well
   TilemapLayer tilemap = TilemapLayer::current();
   if (!tilemap.is_null())
@@ -219,6 +224,8 @@ Minimap::mouse_down(const CL_InputEvent& event)
 void
 Minimap::mouse_up  (const CL_InputEvent& event)
 {
+  if (!impl.get())
+    return;
   TilemapLayer tilemap = TilemapLayer::current();
   if (!tilemap.is_null())
   {

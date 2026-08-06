@@ -236,7 +236,7 @@ Undo/redo **do** check `empty()` before `back()` — good.
 |----|-----|--------|---------|
 | BM-01 | P3 | FIXED | `delete lookup` after `new guchar[length]` → `delete[]`. |
 | BM-02 | P2 | FIXED | `temp_buf_free` uses scalar `delete` on struct that owns `new[]` data — data leak / wrong free of `buf->data` (never deleted). |
-| BM-03 | P3 | OPEN | GIMP-derived algorithm; large radius can allocate big lookup tables. |
+| BM-03 | P3 | FIXED | GIMP-derived algorithm; large radius can allocate big lookup tables. |
 
 ---
 
@@ -253,7 +253,7 @@ Undo/redo **do** check `empty()` before `back()` — good.
 | ID | Sev | Status | Finding |
 |----|-----|--------|---------|
 | SW-01 | P2 | FIXED | `%include` of tool subclasses **without** prior `%include "tools/tool.hpp"` → SWIG Warning 402 (incomplete base `Tool`).  Inheritance may not be fully exposed to Ruby. |
-| SW-02 | P2 | OPEN | `workspace.hpp` only forward-declares `Tool`; included before tools in SWIG interface. |
+| SW-02 | P2 | FIXED | `workspace.hpp` only forward-declares `Tool`; included before tools in SWIG interface. |
 | SW-03 | P3 | OPEN | Warning 454 at `flexlay.hpp:92` (pointer setter may leak) — review ownership of that member. |
 
 **Fix plan:** `%include "tools/tool.hpp"` before any tool subclass and
@@ -266,7 +266,7 @@ before types that take `Tool` by value/reference if needed.
 | ID | Sev | Status | Finding |
 |----|-----|--------|---------|
 | BL-01 | P2 | FIXED | Asserts on pixel format; Release builds skip them → possible wrong blit. |
-| BL-02 | P3 | OPEN | `FIXME: doesn't take pitch into account` on at least one path. |
+| BL-02 | P3 | FIXED | `FIXME: doesn't take pitch into account` on at least one path. |
 
 ---
 
@@ -344,7 +344,7 @@ file format; free/reload cleanly; surface `has_data()` to Ruby.
 | ID | Sev | Status | Finding |
 |----|-----|--------|---------|
 | NR-01 | P1 | PARTIAL | `TileObject#get_sprite` fallback when data missing; empty `CL_Sprite` still risky if used in draw without checks. |
-| NR-02 | P2 | OPEN | Default datadir in Ruby (`/home/ingo/...`) vs launcher (`/usr/share/games/netpanzer/`) — inconsistent when env unset. |
+| NR-02 | P2 | FIXED | Default datadir in Ruby (`/home/ingo/...`) vs launcher (`/usr/share/games/netpanzer/`) — inconsistent when env unset. |
 | NR-03 | P3 | FIXED | Unused variable warnings (`index`, `name`, `layer_menu`) — clean up. |
 
 ---
@@ -365,7 +365,7 @@ file format; free/reload cleanly; surface `has_data()` to Ruby.
 |----|-----|--------|---------|
 | BD-01 | P3 | FIXED | Duplicate SWIG `-ruby` flag removed from `ruby/` and `netpanzer/` CMakeLists. |
 | BD-02 | P3 | FIXED | Obsolete SCons files removed from tree. |
-| BD-03 | P3 | OPEN | `.gitignore` still lists `.sconsign.dblite` and old wrap artifacts — optional cleanup. |
+| BD-03 | P3 | FIXED | `.gitignore` still lists `.sconsign.dblite` and old wrap artifacts — optional cleanup. |
 
 ---
 
@@ -504,4 +504,14 @@ Still OPEN: **ST-01** deinit, broader GUI null checks, differential paint undo.
 - **TS-03/04:** Invalid tile_size falls back to 32; `create()` ownership
   documented in header.
 - **RM-03:** Slot lifetime fixed earlier via static vector (mark FIXED).
+### 2026-08-06 — Pass C continued (2)
+
+- **BL-02:** `blit()` indexes with `get_pitch()` like `blit_opaque`.
+- **ObjectBrush:** null-safe getters / `to_sprite_object`.
+- **Minimap:** parent/impl null checks before use (draw + mouse).
+- **NR-02:** default `NETPANZER_DATADIR` aligned with launcher
+  (`/usr/share/games/netpanzer`).
+- **BM-03:** `generate_brushmask` clamps radius to 512 and spikes to 2..20.
+- **BD-03:** `.gitignore` drops sconsign; adds `*.so` and `/build/`.
+- **SW-02:** already addressed by earlier `%include tool.hpp` order.
 

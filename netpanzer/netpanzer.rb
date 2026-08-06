@@ -61,7 +61,8 @@ $config = NetPanzerConfig.new()
 if ENV["NETPANZER_DATADIR"] then
   $netpanzer_datadir = ENV["NETPANZER_DATADIR"]
 else
-  $netpanzer_datadir = "/home/ingo/projects/netpanzer/netpanzer"
+  # Match the CMake launcher default when the env var is unset.
+  $netpanzer_datadir = "/usr/share/games/netpanzer"
 end
 
 $brushes.each_with_index{|(start, width, height, name), index|

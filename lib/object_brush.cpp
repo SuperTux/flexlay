@@ -25,7 +25,6 @@ public:
 
 ObjectBrush::ObjectBrush()
 {
-
 }
 
 ObjectBrush::ObjectBrush(const CL_Sprite& sprite_,
@@ -39,18 +38,24 @@ ObjectBrush::ObjectBrush(const CL_Sprite& sprite_,
 CL_Sprite
 ObjectBrush::get_sprite()
 {
+  if (!impl.get())
+    return CL_Sprite();
   return impl->sprite;
 }
 
 MetaData
 ObjectBrush::get_data()
 {
+  if (!impl.get())
+    return MetaData();
   return impl->data;
 }
 
 ObjMapSpriteObject
 ObjectBrush::to_sprite_object(const CL_Pointf& pos)
 {
+  if (!impl.get())
+    return ObjMapSpriteObject();
   ObjMapSpriteObject obj(impl->sprite, pos, impl->data);
   return obj;
 }

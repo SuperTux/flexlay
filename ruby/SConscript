@@ -42,19 +42,43 @@ def gen_i_depends(path, filename):
     print(os.getcwd())
     lst = []
     regex = re.compile("^%include +\"(.*)\".*")
-    f = file(filename)
-    for i in f.readlines():
-        i = i[:-1]
-        if regex.match(i):
-            lst.append(path + "/" + regex.sub("\\1", i))
-    f.close()
+    with open(filename) as f:
+        for i in f.readlines():
+            i = i[:-1]
+            if regex.match(i):
+                lst.append(path + "/" + regex.sub("\\1", i))
     return lst
 
 #Depends('../lib/flexlay_wrap.i', gen_i_depends(Dir("../lib").abspath, File("../lib/flexlay_wrap.i").abspath))
 #env.Command('flexlay_ruby_wrap.cpp', '../lib/flexlay_wrap.i',
 #            "swig -c++ -ruby -o $TARGET $SOURCE")
 
-env.ParseConfig("pkg-config --cflags --libs ruby-2.7")
+def configure_ruby(env):
+    """Find a usable Ruby via pkg-config.
+
+    Tries an explicit RUBY_PKG override, then common package names.
+    """
+    candidates = []
+    if 'RUBY_PKG' in os.environ:
+        candidates.append(os.environ['RUBY_PKG'])
+    # Prefer newer first; fall back to older names still seen in the wild.
+    candidates += [
+        'ruby',
+        'ruby-3.4', 'ruby-3.3', 'ruby-3.2', 'ruby-3.1', 'ruby-3.0',
+        'ruby-2.7', 'ruby-2.6', 'ruby-2.5',
+    ]
+    last_err = None
+    for pkg in candidates:
+        try:
+            env.ParseConfig("pkg-config --cflags --libs %s" % pkg)
+            print("Using pkg-config package: %s" % pkg)
+            return
+        except Exception as e:
+            last_err = e
+    raise OSError("No usable Ruby pkg-config package found (tried %s): %s"
+                  % (candidates, last_err))
+
+configure_ruby(env)
 libflexlay_ruby_env = env.Clone()
 libflexlay_ruby_env.Append(CXXFLAGS=["-std=c++11", "-Wno-uninitialized", "-Wno-unused-variable", "-Wno-unused-but-set-variable"])
 flexlay_ruby_lib = libflexlay_ruby_env.SharedLibrary(

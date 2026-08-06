@@ -41,7 +41,28 @@ Depends('netpanzer.i', ['netpanzer.hpp'])
 env.Command('netpanzer_wrap.cpp', 'netpanzer.i',
             "swig -c++ -ruby -o $TARGET $SOURCE")
 
-env.ParseConfig("pkg-config --cflags --libs ruby-2.7")
+def configure_ruby(env):
+    """Find a usable Ruby via pkg-config (see ruby/SConscript)."""
+    candidates = []
+    if 'RUBY_PKG' in os.environ:
+        candidates.append(os.environ['RUBY_PKG'])
+    candidates += [
+        'ruby',
+        'ruby-3.4', 'ruby-3.3', 'ruby-3.2', 'ruby-3.1', 'ruby-3.0',
+        'ruby-2.7', 'ruby-2.6', 'ruby-2.5',
+    ]
+    last_err = None
+    for pkg in candidates:
+        try:
+            env.ParseConfig("pkg-config --cflags --libs %s" % pkg)
+            print("Using pkg-config package: %s" % pkg)
+            return
+        except Exception as e:
+            last_err = e
+    raise OSError("No usable Ruby pkg-config package found (tried %s): %s"
+                  % (candidates, last_err))
+
+configure_ruby(env)
 libflexlay_ruby_env = env.Clone()
 flexlay_ruby_lib = libflexlay_ruby_env.SharedLibrary(
     target = 'netpanzer_wrap.so',

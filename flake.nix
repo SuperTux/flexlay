@@ -8,7 +8,10 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
 
-    clanlib.url = "github:grumbel/clanlib-1.0";
+    # Patched ClanLib 1.0 that builds against current nixpkgs
+    # (pkg-config, libxi, libxmu, …).  Override locally if needed:
+    #   nix build . --override-input clanlib path:/path/to/clanlib-1.0
+    clanlib.url = "github:grumbel/clanlib-1.0/0088ab39846c83838c7e4ebf42b5d89816c5c29d";
     clanlib.inputs.nixpkgs.follows = "nixpkgs";
     clanlib.inputs.flake-utils.follows = "flake-utils";
   };

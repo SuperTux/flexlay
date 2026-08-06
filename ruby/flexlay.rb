@@ -458,18 +458,28 @@ def flexlay_shutdown(flexlay_obj, *roots)
     warn "flexlay_shutdown: GUIManager.shutdown: #{e}"
   end
 
-  # 3) Collect SWIG proxies while ClanLib is still up.
+  # 3) Drop retained signal slots (hold RubyObject GC registrations)
+  #    while the Ruby VM is still fully alive.
+  begin
+    ruby_slots_release() if respond_to?(:ruby_slots_release, true) ||
+                            (defined?(Flexlay_wrap) && Flexlay_wrap.respond_to?(:ruby_slots_release))
+    Flexlay_wrap.ruby_slots_release if defined?(Flexlay_wrap) && Flexlay_wrap.respond_to?(:ruby_slots_release)
+  rescue StandardError => e
+    warn "flexlay_shutdown: ruby_slots_release: #{e}"
+  end
+
+  # 4) Collect SWIG proxies while ClanLib is still up.
   3.times { GC.start }
 
-  # 4) Tear down display / GL / GUI subsystems.
+  # 5) Tear down display / GL / GUI subsystems.
   begin
     flexlay_obj.deinit() if flexlay_obj && flexlay_obj.respond_to?(:deinit)
   rescue StandardError => e
     warn "flexlay_shutdown: deinit raised: #{e}"
   end
 
-  # 5) Any remaining finalizers must not call into ClanLib (GUIManager
-  #    dtor abandons pointers when Flexlay is no longer initialized).
+  # 6) Remaining finalizers must not touch ClanLib or Ruby GC
+  #    (GUIManager abandons pointers; RubyObject skips unregister).
   2.times { GC.start }
 end
 

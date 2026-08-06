@@ -28,19 +28,27 @@
 typedef MetaDataGeneric<RubyObject> RubyMetaData;
 
 /** Retain CL_Slot instances for the process lifetime.
- *  Older code did `new CL_Slot(...)` and leaked the pointer; the Slot
- *  must stay alive or the connection is destroyed. */
+ *  Heap-allocated and never destroyed: a function-local static vector
+ *  would run ~CL_Slot after Ruby VM teardown and crash in
+ *  rb_gc_unregister_address via RubyObject. */
 static std::vector<CL_Slot>&
 ruby_slot_store()
 {
-  static std::vector<CL_Slot> slots;
-  return slots;
+  static std::vector<CL_Slot>* slots = new std::vector<CL_Slot>();
+  return *slots;
 }
 
 static void
 keep_slot(const CL_Slot& slot)
 {
   ruby_slot_store().push_back(slot);
+}
+
+/** Drop all retained slots while the Ruby VM is still alive. */
+void
+ruby_slots_release()
+{
+  ruby_slot_store().clear();
 }
 
 MetaData

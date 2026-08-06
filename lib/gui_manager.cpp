@@ -67,51 +67,46 @@ GUIManager::shutdown()
   if (current_ == this)
     current_ = 0;
 
-  while (!impl->components.empty())
-    pop_component();
-
-  // Destroy GUI tree (menus, windows, …) while ClanLib is still up.
-  // Parent-owned CL_Components are deleted with the manager.
+  // Leave the run loop if it is still active.
   if (impl->manager)
   {
-    delete impl->manager;
-    impl->manager = 0;
+    try {
+      impl->manager->quit();
+    } catch (...) {
+    }
   }
 
-  if (impl->slot_container)
-  {
-    delete impl->slot_container;
-    impl->slot_container = 0;
-  }
+  // Do NOT delete CL_GUIManager / slot_container / style / resources.
+  // ClanLib 1.0 menu node teardown is unsafe once Ruby/SWIG has held
+  // parent-owned CL_Menu / CL_Component proxies — ~CL_MenuNode_Generic
+  // segfaults on double-free or half-destroyed trees.  The process is
+  // exiting; the OS reclaims the memory.
+  while (!impl->components.empty())
+    impl->components.pop();
 
-  // style / resources left allocated — process is exiting.
+  impl->manager = 0;
+  impl->slot_container = 0;
+  impl->style = 0;
+  impl->resources = 0;
 }
 
 GUIManager::~GUIManager()
 {
+  // Always abandon; never call into ClanLib GUI destructors from here.
+  // See shutdown() for rationale.
   if (current_ == this)
     current_ = 0;
 
   if (!impl.get())
     return;
 
-  // If shutdown() already ran, nothing left to free.
-  if (!impl->manager && !impl->slot_container)
-    return;
+  while (!impl->components.empty())
+    impl->components.pop();
 
-  // Ruby may finalize this after Flexlay::deinit.  Deleting CL_GUIManager
-  // then crashes inside CL_MenuNode_Generic.  Prefer leak over segfault.
-  Flexlay* fl = Flexlay::current();
-  if (fl && fl->is_initialized())
-  {
-    shutdown();
-  }
-  else
-  {
-    // ClanLib already torn down — abandon pointers without calling dtors.
-    impl->manager = 0;
-    impl->slot_container = 0;
-  }
+  impl->manager = 0;
+  impl->slot_container = 0;
+  impl->style = 0;
+  impl->resources = 0;
 }
 
 void

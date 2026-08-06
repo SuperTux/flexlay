@@ -32,9 +32,10 @@ public:
   GUIManager();
   ~GUIManager();
 
-  /** Destroy the ClanLib GUI tree while the display is still alive.
-      Safe to call multiple times.  Must be invoked before Flexlay#deinit;
-      otherwise process-exit finalizers can crash in CL_MenuNode. */
+  /** Detach from the ClanLib GUI tree without destroying it.
+      ClanLib 1.0 menu teardown is unsafe under Ruby/SWIG ownership;
+      abandon the tree and let process exit reclaim memory.
+      Safe to call multiple times; call before Flexlay#deinit. */
   void shutdown();
 
   void draw();

@@ -594,3 +594,21 @@ Still OPEN: **ST-01** deinit, broader GUI null checks, differential paint undo.
 - **flexlay_shutdown**: call root/`GUIManager.current` shutdown before deinit.
 - **netpanzer GUI#shutdown**: nils widget refs and calls `@gui.shutdown`.
 
+### 2026-08-06 — Pass I (abandon GUI tree on exit)
+
+- Deleting `CL_GUIManager` in `shutdown()` still crashed in
+  `CL_MenuNode_Generic` (menu nodes double-owned / half-destroyed under
+  Ruby+SWIG).
+- **GUIManager::shutdown / dtor:** no longer `delete` the ClanLib GUI
+  manager, menus, or slots — abandon pointers. Process exit reclaims
+  memory; avoids unreliable ClanLib 1.0 menu teardown.
+
+### 2026-08-06 — Pass J (Ruby GC unregister after exit)
+
+- Exit crash: static `std::vector<CL_Slot>` dtor ran after Ruby VM
+  teardown → `RubyObject::~RubyObject` → `rb_gc_unregister_address` SEGV.
+- **ruby_slot_store:** heap-allocated vector, never destroyed; 
+  `ruby_slots_release()` clears while VM is alive.
+- **RubyObject:** skip GC register/unregister once VM is marked dead.
+- **flexlay_shutdown:** call `ruby_slots_release` before deinit.
+

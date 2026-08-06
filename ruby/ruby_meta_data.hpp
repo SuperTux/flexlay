@@ -47,6 +47,9 @@ void disconnect_v1_Color(CL_Signal_v1<CL_Color>& sig);
 void disconnect_v1_ObjMapObject(CL_Signal_v1<ObjMapObject>& sig);
 void disconnect_v2_ObjectBrush_Point(CL_Signal_v2<ObjectBrush, CL_Point>& sig);
 
+/** Clear retained signal slots while Ruby VM is still alive. */
+void ruby_slots_release();
+
 #endif
 
 /* EOF */

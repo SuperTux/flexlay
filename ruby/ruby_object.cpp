@@ -5,27 +5,39 @@
 //  it under the terms of the GNU General Public License as published by
 //  the Free Software Foundation, either version 3 of the License, or
 //  (at your option) any later version.
-//  
+//
 //  This program is distributed in the hope that it will be useful,
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
-//  
+//
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "ruby_object.hpp"
 
+// C++ static destructors (e.g. CL_Slot store) can run after Ruby has
+// already torn down the VM.  Skip GC register/unregister in that case.
+static bool ruby_vm_alive = true;
+
+void
+ruby_object_mark_vm_dead()
+{
+  ruby_vm_alive = false;
+}
+
 RubyObject::RubyObject(VALUE val_)
   : val(val_)
 {
-  rb_gc_register_address(&val);
+  if (ruby_vm_alive)
+    rb_gc_register_address(&val);
 }
 
 RubyObject::RubyObject(const RubyObject& copy)
   : val(copy.val)
 {
-  rb_gc_register_address(&val);
+  if (ruby_vm_alive)
+    rb_gc_register_address(&val);
 }
 
 RubyObject&
@@ -33,22 +45,25 @@ RubyObject::operator= (const RubyObject& copy)
 {
   if (this != &copy)
     {
-      rb_gc_unregister_address(&val);
+      if (ruby_vm_alive)
+        rb_gc_unregister_address(&val);
       val = copy.val;
-      rb_gc_register_address(&val);
+      if (ruby_vm_alive)
+        rb_gc_register_address(&val);
     }
   return *this;
 }
 
 RubyObject::~RubyObject()
 {
-  rb_gc_unregister_address(&val);
+  if (ruby_vm_alive)
+    rb_gc_unregister_address(&val);
 }
 
 VALUE
-RubyObject::ptr() 
+RubyObject::ptr()
 {
-  return val; 
+  return val;
 }
 
 /* EOF */

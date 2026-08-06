@@ -19,6 +19,9 @@
 
 #include "ruby.h"
 
+/** Call before process exit once Ruby VM teardown has begun. */
+void ruby_object_mark_vm_dead();
+
 /** */
 class RubyObject
 {

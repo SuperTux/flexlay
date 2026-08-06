@@ -23,8 +23,12 @@
 void
 blit_opaque(CL_PixelBuffer target, CL_PixelBuffer brush, int x_pos, int y_pos)
 {
-  assert(target.get_format().get_type() == pixelformat_rgba);
-  assert(target.get_format().get_depth() == 32);
+  if (target.get_format().get_type() != pixelformat_rgba
+      || target.get_format().get_depth() != 32)
+  {
+    std::cout << "blit_opaque: target must be RGBA32" << std::endl;
+    return;
+  }
 
   target.lock();
   brush.lock();
@@ -93,7 +97,7 @@ blit_opaque(CL_PixelBuffer target, CL_PixelBuffer brush, int x_pos, int y_pos)
   }
   else
   {
-    assert(!"Unknown pixelformat type");
+    std::cout << "blit: unknown pixelformat type" << std::endl;
   }
 
 
@@ -185,7 +189,7 @@ blit(CL_PixelBuffer target, CL_PixelBuffer brush, int x_pos, int y_pos)
   }
   else
   {
-    assert(!"Unknown pixelformat type");
+    std::cout << "blit: unknown pixelformat type" << std::endl;
   }
 
 

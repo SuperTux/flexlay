@@ -141,8 +141,8 @@ optional `at_unchecked` for hot loops after proven bounds; validate
 |----|-----|--------|---------|
 | TS-01 | P1 | FIXED | `add_tile(id, tile)` does `new Tile(*tile)` into `tiles[id]` **without deleting** any previous pointer at that index → **leak on replace**.  Destructor only deletes current vector contents. |
 | TS-02 | P2 | FIXED | Duplicate IDs: same `id` can be `push_back`’d to `tile_ids` multiple times (`FIXME: Check for tile-id dups`). |
-| TS-03 | P2 | OPEN | Default `Tileset()` sets `tile_size = 1`; easy to use uninitialized tileset and divide / stride incorrectly. |
-| TS-04 | P3 | OPEN | `create(id)` returns raw `Tile*` owned by Tileset — callers must not delete; not documented in header. |
+| TS-03 | P2 | FIXED | Default `Tileset()` sets `tile_size = 1`; easy to use uninitialized tileset and divide / stride incorrectly. |
+| TS-04 | P3 | FIXED | `create(id)` returns raw `Tile*` owned by Tileset — callers must not delete; not documented in header. |
 
 **Fix plan:** On replace, `delete` old tile or use `unique_ptr<Tile>`;
 dedupe `tile_ids`; consider `optional`/null object instead of raw
@@ -179,9 +179,9 @@ pointer return.
 | ID | Sev | Status | Finding |
 |----|-----|--------|---------|
 | PC-01 | P1 | FIXED | `execute()` does `assert(!points.empty())` then uses `points.front()`.  In Release, empty points → UB. |
-| PC-02 | P2 | OPEN | Constructor snapshots **entire** `undo_field` for every stroke — memory heavy; comments admit it should record only overwritten tiles. |
+| PC-02 | P2 | FIXED | Constructor snapshots **entire** `undo_field` for every stroke — memory heavy; comments admit it should record only overwritten tiles. |
 | PC-03 | P2 | FIXED | `redo_brush` / `undo_brush` are raw `new`/`delete`; fine if destructor always runs, but exception safety is weak. Prefer `unique_ptr`. |
-| PC-04 | P3 | OPEN | `serialize()` is debug-oriented and not a real undo format. |
+| PC-04 | P3 | PARTIAL | `serialize()` is debug-oriented and not a real undo format. |
 
 **Fix plan:** Reject empty `points` with early return or exception;
 optionally implement differential undo later.
@@ -265,7 +265,7 @@ before types that take `Tool` by value/reference if needed.
 
 | ID | Sev | Status | Finding |
 |----|-----|--------|---------|
-| BL-01 | P2 | OPEN | Asserts on pixel format; Release builds skip them → possible wrong blit. |
+| BL-01 | P2 | FIXED | Asserts on pixel format; Release builds skip them → possible wrong blit. |
 | BL-02 | P3 | OPEN | `FIXME: doesn't take pitch into account` on at least one path. |
 
 ---
@@ -274,7 +274,7 @@ before types that take `Tool` by value/reference if needed.
 
 | ID | Sev | Status | Finding |
 |----|-----|--------|---------|
-| BI-01 | P2 | OPEN | Manual `delete canvas`; ensure no double-free paths. |
+| BI-01 | P2 | FIXED | Manual `delete canvas`; ensure no double-free paths. |
 | BI-02 | P3 | OPEN | FIXMEs on position handling and canvas sync. |
 
 ---
@@ -293,7 +293,7 @@ before types that take `Tool` by value/reference if needed.
 |----|-----|--------|---------|
 | RM-01 | P1 | FIXED | `new CL_Slot(sig.connect_functor(...))` — **heap Slot leaked**; never stored in a `CL_SlotContainer`.  Connection lifetime is unclear once Slot is leaked/orphaned. |
 | RM-02 | P1 | PARTIAL | Most `connect*` do `sig = CL_Signal_vN()` first, **wiping all previous listeners**. |
-| RM-03 | P2 | OPEN | `connect_v2_graceful` does not reset the signal (better) but still leaks Slot. |
+| RM-03 | P2 | FIXED | `connect_v2_graceful` does not reset the signal (better) but still leaks Slot. |
 | RM-04 | P2 | OPEN | No disconnection API for Ruby side. |
 
 **Fix plan:** Store slots on a long-lived `CL_SlotContainer` owned by the
@@ -493,4 +493,15 @@ Still OPEN: **ST-01** deinit, broader GUI null checks, differential paint undo.
   Remaining risk: parent-owned widget finalizers if scripts keep proxies
   alive past deinit.
 - **EditorMapComponent:** null-safe get/set_workspace.
+### 2026-08-06 — Pass C continued
+
+- **PC-02:** `PaintCommand` uses sparse per-cell change map (old/new id)
+  instead of full-field snapshot + region brushes. Much lower memory for
+  typical strokes.
+- **BL-01:** `blit_opaque` validates RGBA32 at runtime (no assert-only).
+- **BI-01:** BitmapLayer draw/add_stroke no-op if canvas is null; dtor still
+  deletes canvas once.
+- **TS-03/04:** Invalid tile_size falls back to 32; `create()` ownership
+  documented in header.
+- **RM-03:** Slot lifetime fixed earlier via static vector (mark FIXED).
 

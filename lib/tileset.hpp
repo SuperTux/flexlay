@@ -39,12 +39,8 @@ public:
 
   ~Tileset();
 
-  /** Check if the tile is already loaded and return it. If it is not
-   *  already loaded, load it
-   *
-   *  @param id The id of the tile to create as defined in the def. file
-   *
-   *  @return on success the tile is returned, on failure 0 */
+  /** Return the tile for \a id, or 0 if missing.
+   *  Ownership stays with the Tileset — do not delete the pointer. */
   Tile* create(int id);
 
   int get_tile_size() const;

@@ -56,7 +56,12 @@ Tileset::Tileset()
 Tileset::Tileset(int tile_size_)
   : impl(new TilesetImpl())
 {
-  assert(tile_size_ > 0);
+  if (tile_size_ <= 0)
+  {
+    std::cout << "Tileset: tile_size must be > 0 (got " << tile_size_
+              << "), using 32" << std::endl;
+    tile_size_ = 32;
+  }
   impl->tile_size = tile_size_;
 }
 

@@ -15,8 +15,16 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <sstream>
-#include <memory>
+#include <map>
 #include "paint_command.hpp"
+
+struct CellChange
+{
+  int x;
+  int y;
+  int old_id;
+  int new_id;
+};
 
 class PaintCommandImpl : public CommandImpl
 {
@@ -27,22 +35,18 @@ public:
   TilemapLayer tilemap;
   TileBrush    brush;
 
-  /** Copy of the field used to generate undo informations */
-  Field<int>   undo_field;
-
-  CL_Point     pos;
-  std::unique_ptr<TileBrush> redo_brush;
-  std::unique_ptr<TileBrush> undo_brush;
+  /** Sparse per-cell undo/redo data (key = y * width + x). */
+  std::map<int, CellChange> changes;
 
   PaintCommandImpl() {}
   virtual ~PaintCommandImpl() {}
 
   void execute();
-
   void redo();
   void undo();
-
   std::string serialize();
+
+  void apply_brush_at(const CL_Point& pos);
 };
 
 PaintCommand::PaintCommand(TilemapLayer t, const TileBrush& b)
@@ -50,14 +54,55 @@ PaintCommand::PaintCommand(TilemapLayer t, const TileBrush& b)
 {
   impl->tilemap = t;
   impl->brush   = b;
-
-  Field<int>* field = impl->tilemap.get_field();
-  if (field)
-    impl->undo_field = *field;
 }
 
 PaintCommand::~PaintCommand()
 {
+}
+
+void
+PaintCommandImpl::apply_brush_at(const CL_Point& pos)
+{
+  Field<int>* field = tilemap.get_field();
+  if (!field)
+    return;
+
+  const int map_w = field->get_width();
+  const int map_h = field->get_height();
+  if (map_w <= 0 || map_h <= 0)
+    return;
+
+  for (int y = 0; y < brush.get_height(); ++y)
+  {
+    for (int x = 0; x < brush.get_width(); ++x)
+    {
+      const int tile_id = brush.at(x, y);
+      if (!brush.is_opaque() && tile_id == 0)
+        continue;
+
+      const int tx = pos.x + x;
+      const int ty = pos.y + y;
+      if (tx < 0 || ty < 0 || tx >= map_w || ty >= map_h)
+        continue;
+
+      const int key = ty * map_w + tx;
+      std::map<int, CellChange>::iterator it = changes.find(key);
+      if (it == changes.end())
+      {
+        CellChange c;
+        c.x = tx;
+        c.y = ty;
+        c.old_id = field->at(tx, ty);
+        c.new_id = tile_id;
+        changes.insert(std::make_pair(key, c));
+      }
+      else
+      {
+        it->second.new_id = tile_id;
+      }
+      field->at(tx, ty) = tile_id;
+    }
+  }
 }
 
 void
@@ -66,76 +111,43 @@ PaintCommand::add_point(const CL_Point& pos)
   if (!impl.get())
     return;
   impl->points.push_back(pos);
-  impl->tilemap.draw_tile(impl->brush, pos);
+  impl->apply_brush_at(pos);
 }
 
 void
 PaintCommandImpl::execute()
 {
-  if (points.empty())
+  // Painting already applied in add_point(); changes holds undo/redo data.
+  if (points.empty() && changes.empty())
     return;
-
-  // Calc bounding rect
-  CL_Rect rect(points.front().x,
-               points.front().y,
-               points.front().x + brush.get_width(),
-               points.front().y + brush.get_height());
-
-  for(PaintCommandImpl::Points::iterator i = points.begin(); i != points.end(); ++i)
-  {
-    rect.left   = std::min(rect.left,   (*i).x);
-    rect.top    = std::min(rect.top,    (*i).y);
-    rect.right  = std::max(rect.right,  (*i).x + brush.get_width());
-    rect.bottom = std::max(rect.bottom, (*i).y + brush.get_height());
-  }
-
-  pos.x = rect.left;
-  pos.y = rect.top;
-
-  Field<int>* field = tilemap.get_field();
-  if (!field)
-    return;
-
-  redo_brush.reset(new TileBrush(*field, rect.get_width(), rect.get_height(),
-                                 -pos.x, -pos.y));
-  // Full-field snapshot is heavy; differential undo would be better later.
-  undo_brush.reset(new TileBrush(undo_field, rect.get_width(), rect.get_height(),
-                                 -pos.x, -pos.y));
-
-  redo_brush->set_opaque();
-  undo_brush->set_opaque();
-
-  undo_field.clear();
 }
 
 void
 PaintCommandImpl::redo()
 {
-  if (!redo_brush.get())
+  Field<int>* field = tilemap.get_field();
+  if (!field)
     return;
-  TilemapLayer::draw_tiles(tilemap.get_field(), *redo_brush, pos);
+  for (std::map<int, CellChange>::iterator i = changes.begin(); i != changes.end(); ++i)
+    field->at(i->second.x, i->second.y) = i->second.new_id;
 }
 
 void
 PaintCommandImpl::undo()
 {
-  if (!undo_brush.get())
+  Field<int>* field = tilemap.get_field();
+  if (!field)
     return;
-  TilemapLayer::draw_tiles(tilemap.get_field(), *undo_brush, pos);
+  for (std::map<int, CellChange>::iterator i = changes.begin(); i != changes.end(); ++i)
+    field->at(i->second.x, i->second.y) = i->second.old_id;
 }
 
 std::string
 PaintCommandImpl::serialize()
 {
-  std::stringstream s;
-
-  s << "_ = PaintCommand(" << &tilemap << ", " << &brush << ")" << std::endl;
-  for(PaintCommandImpl::Points::iterator i = points.begin(); i != points.end(); ++i)
-  {
-    s << "_.add_paint(" << i->x << ", " << i->y << ")"  << std::endl;
-  }
-  s << "_ = None" << std::endl;
-
+  std::ostringstream s;
+  s << "PaintCommand cells=" << changes.size()
+    << " points=" << points.size() << std::endl;
   return s.str();
 }
 

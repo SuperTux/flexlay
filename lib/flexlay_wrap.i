@@ -170,15 +170,31 @@ VALUE CL_Point2Value(const CL_Point& arg)
 %include "object_brush.hpp"
 %include "gui/object_selector.hpp"
 
-// Icon: protected dtor / private copy ops confused older SWIG into
-// emitting only a zero-arg constructor.  Ignore the non-public special
-// members so the real 4-arg constructor is wrapped.
-%ignore Icon::Icon(const Icon&);
-%ignore Icon::operator=;
-%include "gui/icon.hpp"
+// Icon / Panel are parent-owned.  Present a SWIG-friendly view so the
+// real constructors are emitted (including the headers left modern SWIG
+// with only a zero-arg initialize).
+%feature("ref")   Icon "";
+%feature("unref") Icon "";
+class Icon : public CL_Component
+{
+public:
+  Icon(const CL_Rect& rect, const CL_Sprite& sprite, const std::string& tooltip, CL_Component* parent);
+  void disable();
+  void enable();
+  void set_up();
+  void set_down();
+  CL_Signal_v0& sig_clicked();
+};
+
+%feature("ref")   Panel "";
+%feature("unref") Panel "";
+class Panel : public CL_Component
+{
+public:
+  Panel(const CL_Rect& rect, CL_Component* parent);
+};
 
 %include "gui/window.hpp"
-%include "gui/panel.hpp"
 %include "gui/minimap.hpp"
 %include "gui/directory_view.hpp"
 %include "gui/menu.hpp"

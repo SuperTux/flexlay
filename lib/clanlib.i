@@ -126,10 +126,14 @@ CL_Sprite(
         void set_frame_offset(int frame, CL_Point offset);
 };
 
+// ClanLib GUI widgets are owned by their parent component.  Declaring
+// a private destructor (as the real headers do) makes modern SWIG drop
+// every constructor and leave only a zero-arg initialize().  Hide the
+// dtor from SWIG and disable automatic delete via empty ref/unref.
+%feature("ref")   CL_Window "";
+%feature("unref") CL_Window "";
 class CL_Window : public CL_Component
 {
-private:
-	~CL_Window();
 public:
 	CL_Window(
 		const CL_Rect &pos,
@@ -139,11 +143,11 @@ public:
 	CL_Component* get_client_area();
 };
 
+%feature("ref")   CL_Button "";
+%feature("unref") CL_Button "";
 class CL_Button : public CL_Component
 {
-private:
-	~CL_Button();
-public:	
+public:
 	CL_Button(
 		const CL_Rect &pos,
 		const std::string &text,
@@ -154,15 +158,10 @@ public:
 	const std::string &get_text() const;
 };
 
-// compactdefaultargs: generate one-arg CL_Menu.new(parent) instead of
-// only the zero-arg form that modern SWIG tends to leave us with when
-// overloaded constructors use default arguments.
-%feature("compactdefaultargs") CL_Menu::CL_Menu;
-
+%feature("ref")   CL_Menu "";
+%feature("unref") CL_Menu "";
 class CL_Menu : public CL_Component
 {
-private:
-	~CL_Menu();
 public:
 	CL_Menu(
 		const CL_Rect &rect,
@@ -178,13 +177,11 @@ public:
 	CL_MenuNode *create_item( const std::string &path, const std::string &labels=std::string());
 };
 
+%feature("ref")   CL_MenuNode "";
+%feature("unref") CL_MenuNode "";
 class CL_MenuNode : public CL_Component
 {
-private:
-	~CL_MenuNode();
-//! Construction:
 public:
-	//: CL_MenuNode Constructor
 	CL_MenuNode(
 		CL_Menu *parent_menu,
 		CL_StyleManager *style = NULL);

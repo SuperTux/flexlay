@@ -115,21 +115,19 @@ $gui.gui_level_new()
 # generate_sprites()
 $gui.run()
 
-# Drop GUI/tools before ClanLib teardown (ST-01).
-$gui = nil
+# Drop GUI/tools before ClanLib teardown (ST-01 / flexlay_shutdown).
 $config = nil
 $tilemap_paint_tool = nil
 $tilemap_select_tool = nil
 $zoom_tool = nil
 $workspace_move_tool = nil
 $objmap_select_tool = nil
-GC.start
-GC.start
 begin
   NetPanzerData.destroy if defined?(NetPanzerData) && NetPanzerData.respond_to?(:destroy)
 rescue StandardError
 end
-$flexlay.deinit() if defined?($flexlay) && $flexlay
+flexlay_shutdown($flexlay, $gui)
+$gui = nil
 
 # EOF #
 

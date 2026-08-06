@@ -41,12 +41,13 @@ over root causes with silent catches or broad try/rescue.
 | `lib/` tools / GUI | 0 | 0 | 0 | 0 | Asserts → runtime checks |
 | `lib/brushmask.cpp` | 0 | 0 | 0 | 0 | `delete[]` FIXED |
 | `netpanzer/` | 0 | 0 | 0 | 0 | Data lifecycle + LE16 FIXED |
-| SWIG / `ruby/` | 0 | 0 | 1 | 0 | Slots retained; RM-04 no disconnect |
-| Front-end Ruby | 0 | 0 | 1 | 0 | Deinit mitigated; ST-02 cycles |
+| SWIG / `ruby/` | 0 | 0 | 0 | 0 | Slots retained; disconnect API |
+| Front-end Ruby | 0 | 0 | 0 | 0 | Deinit + dispose on load/remove |
 | Build / CMake | 0 | 0 | 0 | 0 | SCons removed; gitignore clean |
 
-**Suggested remaining work:** RM-04 (disconnect API, optional); ST-02
-callers must invoke `Sector#dispose`; runtime-test SuperTux front-ends.
+**Suggested remaining work:** Runtime-test SuperTux / portable front-ends
+on a machine with OpenGL + ClanLib; broader SWIG coverage for any remaining
+`Foo.new` “expected 0” cases.
 
 ---
 
@@ -293,7 +294,7 @@ before types that take `Tool` by value/reference if needed.
 | RM-01 | P1 | FIXED | `new CL_Slot(sig.connect_functor(...))` — **heap Slot leaked**; never stored in a `CL_SlotContainer`.  Connection lifetime is unclear once Slot is leaked/orphaned. |
 | RM-02 | P1 | WONTFIX | Most `connect*` do `sig = CL_Signal_vN()` first, **wiping all previous listeners** — intentional single-listener policy. |
 | RM-03 | P2 | FIXED | `connect_v2_graceful` does not reset the signal (better) but still leaks Slot. |
-| RM-04 | P2 | OPEN | No disconnection API for Ruby side. |
+| RM-04 | P2 | FIXED | `disconnect*` helpers clear signals (single-listener policy). |
 
 **Fix plan:** Store slots on a long-lived `CL_SlotContainer` owned by the
 widget/map; do not reassign signal unless intentionally clearing;
@@ -353,7 +354,7 @@ file format; free/reload cleanly; surface `has_data()` to Ruby.
 | ID | Sev | Status | Finding |
 |----|-----|--------|---------|
 | ST-01 | P1 | FIXED | `Flexlay::deinit` idempotent; `flexlay_shutdown` nils roots + GC before deinit. |
-| ST-02 | P2 | PARTIAL | `Sector#dispose` breaks cycles; callers must invoke when discarding. |
+| ST-02 | P2 | FIXED | `Sector#dispose` / `WorldMap#dispose`; load/remove paths call dispose. |
 | ST-03 | P3 | FIXED | `gui_run_level` uses Tempfile; other FIXMEs are cosmetic. |
 
 ---
@@ -552,4 +553,14 @@ Still OPEN: **ST-01** deinit, broader GUI null checks, differential paint undo.
 - Status cleanup: F-05/F-06/TB-02/NR-01/RO-01/FR-02 → FIXED;
   BI-02/RF-02 → WONTFIX; checklist Pass B–D marked complete except
   AGENTS.md ownership note.
+
+### 2026-08-06 — Pass E (RM-04 / ST-02 / front-end shutdown)
+
+- **RM-04:** Added `disconnect` / `disconnect_v1` / `disconnect_v2` / …
+  in `ruby/ruby_meta_data.{hpp,cpp}` — reset signal to clear listeners.
+- **ST-02:** `Level#remove_sector` calls `Sector#dispose`; load paths call
+  `supertux_dispose_current_map` before replace; `WorldMap#dispose` added.
+- **Shutdown:** SuperTux / paint / netPanzer / portable use `flexlay_shutdown`.
+- **Portable:** dropped hardcoded `/home/ingo/...` datadir; use env or
+  relative `data/`.
 

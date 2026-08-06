@@ -82,11 +82,25 @@ class WorldMap
     f.close()
   end
   
+  # Break WorldMap <-> EditorMap metadata cycle for GC.
+  def dispose
+    if @editormap && @editormap.respond_to?(:is_null) && !@editormap.is_null()
+      begin
+        @editormap.set_metadata(MetaData.new) if @editormap.respond_to?(:set_metadata)
+      rescue StandardError
+      end
+    end
+    @editormap = nil
+    @tilemap = nil
+    @objects = nil
+  end
+
   def activate(workspace)
     # FIXME: All wrong and obsolote
     @editormap = EditorMap.new(true)
     @editormap.add_layer(@tilemap.tilemaplayer.to_layer())
     @editormap.add_layer(@objects.to_layer())
+    # Metadata holds a Ruby reference to this WorldMap; call dispose() when done.
     @editormap.set_metadata(self)
 
     workspace.set_map(@editormap)

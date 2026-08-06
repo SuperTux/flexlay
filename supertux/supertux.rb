@@ -156,9 +156,13 @@ $gui.run()
 
 $config.save($config_file)
 
-# Try to cleanup
+# Safe teardown: dispose map cycles, drop GUI roots, then deinit.
 puts "Cleanup"
-$gui = nil 
+begin
+  supertux_dispose_current_map() if defined?(supertux_dispose_current_map)
+rescue StandardError => e
+  warn "dispose map: #{e}"
+end
 $config = nil
 $tilemap_paint_tool  = nil
 $tilemap_select_tool = nil
@@ -167,22 +171,8 @@ $zoom2_tool          = nil
 $workspace_move_tool = nil
 $objmap_select_tool  = nil
 $game_objects = nil
-GC.start
-GC.start
-GC.start
-GC.start
+flexlay_shutdown(flexlay, $gui)
+$gui = nil
 puts "Cleanup done"
-
-# FIXME: Can't deinit flexlay, since we would crash then
-# Prefer explicit shutdown after nil-ing GUI roots (see flexlay_shutdown).
-# at_exit deinit races Ruby finalizers on parent-owned widgets.
-begin
-  $gui = nil if defined?($gui)
-  GC.start
-  flexlay.deinit() if defined?(flexlay) && flexlay
-rescue StandardError => e
-  warn "shutdown: #{e}"
-end
-# puts "And now we crash"
 
 # EOF #

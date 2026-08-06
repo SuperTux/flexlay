@@ -81,11 +81,9 @@ $image.layers_count.times {|i|
 $gui.run()
 
 
-# Drop GUI before ClanLib teardown (ST-01).
-$gui = nil
+# Drop GUI before ClanLib teardown (ST-01 / flexlay_shutdown).
 $image = nil
-GC.start
-GC.start
-flexlay.deinit() if defined?(flexlay) && flexlay
+flexlay_shutdown(flexlay, $gui)
+$gui = nil
 
 # EOF #

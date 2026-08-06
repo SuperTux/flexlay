@@ -37,6 +37,16 @@ void connect_v1_Color(CL_Signal_v1<CL_Color>& sig, VALUE func);
 void connect_v1_ObjMapObject(CL_Signal_v1<ObjMapObject>& sig, VALUE func);
 void connect_v2_ObjectBrush_Point(CL_Signal_v2<ObjectBrush, CL_Point>& sig, VALUE func);
 
+/** Clear all listeners on a signal (matches single-listener connect policy).
+ *  Slot objects may still be retained in the process-lifetime store. */
+void disconnect(CL_Signal_v0& sig);
+void disconnect_v1(CL_Signal_v1<int>& sig);
+void disconnect_v1_float(CL_Signal_v1<float>& sig);
+void disconnect_v2(CL_Signal_v2<int, int>& sig);
+void disconnect_v1_Color(CL_Signal_v1<CL_Color>& sig);
+void disconnect_v1_ObjMapObject(CL_Signal_v1<ObjMapObject>& sig);
+void disconnect_v2_ObjectBrush_Point(CL_Signal_v2<ObjectBrush, CL_Point>& sig);
+
 #endif
 
 /* EOF */

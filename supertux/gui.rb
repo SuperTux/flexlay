@@ -729,6 +729,23 @@ class DisplayProperties
 end
 
 
+def supertux_dispose_current_map()
+  # Break Sector/WorldMap <-> EditorMap metadata cycles before replace.
+  begin
+    map = $gui && $gui.workspace && $gui.workspace.get_map()
+    return unless map && !map.is_null()
+    meta = map.get_metadata()
+    return if meta.nil?
+    if meta.respond_to?(:sectors) && meta.sectors
+      meta.sectors.each { |sec| sec.dispose if sec.respond_to?(:dispose) }
+    elsif meta.respond_to?(:dispose)
+      meta.dispose
+    end
+  rescue StandardError => e
+    warn "supertux_dispose_current_map: #{e}"
+  end
+end
+
 def supertux_load_level(filename)
   if filename.scan(/.stwm$/) != []
     supertux_load_worldmap(filename)
@@ -736,6 +753,7 @@ def supertux_load_level(filename)
   end
 
   print "Loading: ", filename, "\n"
+  supertux_dispose_current_map()
   level = Level.new(filename)
   level.activate($gui.workspace)
   
@@ -750,6 +768,7 @@ end
 
 def supertux_load_worldmap(filename)
   print "Loading: ", filename, "\n"
+  supertux_dispose_current_map()
   worldmap = WorldMap.new(filename)
   worldmap.activate($gui.workspace)
 

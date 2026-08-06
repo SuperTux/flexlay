@@ -192,7 +192,19 @@ class Level
 
   def remove_sector(name)
     if @sectors.length() > 1
-      @sectors.delete_if{|sec| sec.name == name}
+      removed = []
+      @sectors.delete_if do |sec|
+        if sec.name == name
+          removed << sec
+          true
+        else
+          false
+        end
+      end
+      removed.each do |sec|
+        sec.dispose if sec.respond_to?(:dispose)
+        @current_sector = @sectors[0] if @current_sector.equal?(sec)
+      end
     else
       print "Only one sector left, can't delete it\n"
     end

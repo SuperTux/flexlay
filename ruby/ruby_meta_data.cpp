@@ -124,4 +124,49 @@ connect_v2_ObjectBrush_Point(CL_Signal_v2<ObjectBrush, CL_Point>& sig, VALUE fun
   keep_slot(sig.connect_functor(RubyFunctor(func)));
 }
 
+/* Disconnect helpers: reset the signal so no Ruby listeners fire.
+ * Matches the single-listener connect* policy (RM-04). */
+
+void
+disconnect(CL_Signal_v0& sig)
+{
+  sig = CL_Signal_v0();
+}
+
+void
+disconnect_v1(CL_Signal_v1<int>& sig)
+{
+  sig = CL_Signal_v1<int>();
+}
+
+void
+disconnect_v1_float(CL_Signal_v1<float>& sig)
+{
+  sig = CL_Signal_v1<float>();
+}
+
+void
+disconnect_v2(CL_Signal_v2<int, int>& sig)
+{
+  sig = CL_Signal_v2<int, int>();
+}
+
+void
+disconnect_v1_Color(CL_Signal_v1<CL_Color>& sig)
+{
+  sig = CL_Signal_v1<CL_Color>();
+}
+
+void
+disconnect_v1_ObjMapObject(CL_Signal_v1<ObjMapObject>& sig)
+{
+  sig = CL_Signal_v1<ObjMapObject>();
+}
+
+void
+disconnect_v2_ObjectBrush_Point(CL_Signal_v2<ObjectBrush, CL_Point>& sig)
+{
+  sig = CL_Signal_v2<ObjectBrush, CL_Point>();
+}
+
 /* EOF */

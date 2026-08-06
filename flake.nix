@@ -24,8 +24,13 @@
 
             src = nixpkgs.lib.cleanSource ./.;
 
+            # Force the installed launcher scripts to invoke the same
+            # Ruby that the SWIG extension was compiled against.  Using
+            # a bare "ruby" picks up whatever is on $PATH (often a much
+            # newer version) and produces:
+            #   wrong argument type nil (expected Data) (TypeError)
             installPhase = ''
-              make install PREFIX=$out
+              make install PREFIX=$out RUBY=${pkgs.ruby_2_7}/bin/ruby
             '';
 
             nativeBuildInputs = [

@@ -5,6 +5,12 @@ MANDIR  = "${PREFIX}/share/man"
 LIBDIR  = "${PREFIX}/lib/flexlay"
 BINDIR  = "${PREFIX}/bin"
 
+# Interpreter used by the generated launcher scripts.  Override this
+# (e.g. RUBY=/path/to/ruby-2.7) when the C extension was built against
+# a specific Ruby version so that the scripts do not pick up an
+# incompatible system ruby.
+RUBY    = ruby
+
 FLEXLAY_DATADIR          = ${DATADIR}/flexlay
 NETPANZER_EDITOR_DATADIR = ${DATADIR}/netpanzer-editor
 FLEXLAY_PAINT_DATADIR    = ${DATADIR}/flexlay-paint
@@ -68,7 +74,7 @@ install-netpanzer-editor-exec: build-stamp
 	'\n'\
 	'RUBYLIB="$$RUBYLIB:'${FLEXLAY_DATADIR}':'${LIBDIR}':'${NETPANZER_EDITOR_DATADIR}'"\nexport RUBYLIB\n'\
 	'\n'\
-	'exec ruby -w '${NETPANZER_EDITOR_DATADIR}/netpanzer.rb' "$$@"\n\n'\
+	'exec '${RUBY}' -w '${NETPANZER_EDITOR_DATADIR}/netpanzer.rb' "$$@"\n\n'\
 	'# EOF #\n' > ${DESTDIR}${BINDIR}/netpanzer-editor
 	chmod 755 ${DESTDIR}${BINDIR}/netpanzer-editor
 
@@ -95,7 +101,7 @@ install-flexlay-paint-exec:
 	'\n'\
 	'RUBYLIB="$$RUBYLIB:'${FLEXLAY_DATADIR}':'${LIBDIR}':'${FLEXLAY_PAINT_DATADIR}'"\nexport RUBYLIB\n'\
 	'\n'\
-	'exec ruby -w '${FLEXLAY_PAINT_DATADIR}/paint.rb' "$$@"\n\n'\
+	'exec '${RUBY}' -w '${FLEXLAY_PAINT_DATADIR}/paint.rb' "$$@"\n\n'\
 	'# EOF #\n' > ${DESTDIR}${BINDIR}/flexlay-paint
 	chmod 755 ${DESTDIR}${BINDIR}/flexlay-paint
 

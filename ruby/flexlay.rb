@@ -15,6 +15,27 @@ def flexlay_factory(name)
   nil
 end
 
+# Fallback for statics SWIG may omit (set_current / current).
+# Ruby 3.4 rejects `def Foo::Bar.baz`; use define_singleton_method.
+if defined?(Flexlay_wrap::TilemapLayer) && !Flexlay_wrap::TilemapLayer.respond_to?(:set_current)
+  Flexlay_wrap::TilemapLayer.define_singleton_method(:set_current) do |t|
+    if (f = flexlay_factory(:TilemapLayer_set_current))
+      f.call(t)
+    else
+      raise NoMethodError, "TilemapLayer.set_current not wrapped by SWIG"
+    end
+  end
+end
+if defined?(Flexlay_wrap::ObjectLayer) && !Flexlay_wrap::ObjectLayer.respond_to?(:set_current)
+  Flexlay_wrap::ObjectLayer.define_singleton_method(:set_current) do |c|
+    if (f = flexlay_factory(:ObjectLayer_set_current))
+      f.call(c)
+    else
+      raise NoMethodError, "ObjectLayer.set_current not wrapped by SWIG"
+    end
+  end
+end
+
 module TilemapLayerMetadata
   def set_metadata(data)
     super(make_metadata(data))

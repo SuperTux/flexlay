@@ -274,7 +274,7 @@ gimp_brush_generated_dirty (GimpBrushGenerated *brush)
     }
   }
 
-  delete lookup;
+  delete[] lookup;
 }
 
 CL_PixelBuffer generate_brushmask(BrushShape shape,

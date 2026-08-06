@@ -251,7 +251,10 @@ NetPanzerData::find_tilegroup(int index)
   // Avoid undefined behaviour when tilegroups is empty.
   if (tilegroups.empty())
     {
-      static NetPanzerTileGroup dummy = {0, 1, 1};
+      static NetPanzerTileGroup dummy;
+      dummy.start  = 0;
+      dummy.width  = 1;
+      dummy.height = 1;
       return dummy;
     }
   return tilegroups.front();

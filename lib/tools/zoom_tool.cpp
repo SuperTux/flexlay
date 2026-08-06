@@ -84,7 +84,10 @@ ZoomToolImpl::on_mouse_up  (const CL_InputEvent& event)
         {
           parent->zoom_to(zoom_rect);
         }
+        break;
       }
+      case NONE:
+        break;
     }
   }
 }

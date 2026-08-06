@@ -430,22 +430,30 @@ end
 # EOF #
 
 # Safe process shutdown: drop Ruby references to ClanLib parent-owned
-# widgets, force GC, then tear down Flexlay.  Calling deinit while Ruby
-# still holds component proxies is a common exit-time crash.
+# widgets, force GC *before* Flexlay#deinit.  Calling deinit while Ruby
+# still holds component proxies is a common exit-time segfault.
+#
+# Callers must nil their own globals ($gui, tools, …) before or when
+# invoking this — assigning nil inside only clears the local *roots array.
 def flexlay_shutdown(flexlay_obj, *roots)
   roots.each do |r|
+    begin
+      r.shutdown if r.respond_to?(:shutdown)
+    rescue StandardError
+    end
     begin
       r.clear if r.respond_to?(:clear)
     rescue StandardError
     end
   end
   roots.each_index { |i| roots[i] = nil }
-  GC.start
-  GC.start
+  # Collect while ClanLib display is still alive.
+  2.times { GC.start }
   begin
     flexlay_obj.deinit() if flexlay_obj && flexlay_obj.respond_to?(:deinit)
   rescue StandardError => e
     warn "flexlay_shutdown: deinit raised: #{e}"
   end
+  2.times { GC.start }
 end
 

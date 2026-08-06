@@ -176,12 +176,22 @@ VALUE CL_Point2Value(const CL_Point& arg)
 Tileset* Tileset_new(int tile_size) { return new Tileset(tile_size); }
 %}
 
+// Parent-owned GUI widgets: ClanLib deletes them with their parent.
+// Empty ref/unref stops SWIG/Ruby finalizers from double-freeing.
+%feature("ref")   EditorMapComponent "";
+%feature("unref") EditorMapComponent "";
 %include "gui/editor_map_component.hpp"
 %include "flexlay.hpp"
 %include "globals.hpp"
 %include "gui_manager.hpp"
+
+%feature("ref")   TileSelector "";
+%feature("unref") TileSelector "";
 %include "gui/tile_selector.hpp"
 %include "object_brush.hpp"
+
+%feature("ref")   ObjectSelector "";
+%feature("unref") ObjectSelector "";
 %include "gui/object_selector.hpp"
 
 // Icon / Panel are parent-owned.  Present a SWIG-friendly view so the
@@ -223,11 +233,25 @@ Panel* Panel_create(const CL_Rect& rect, CL_Component* parent) {
 }
 %}
 
+%feature("ref")   Window "";
+%feature("unref") Window "";
 %include "gui/window.hpp"
+
+%feature("ref")   Minimap "";
+%feature("unref") Minimap "";
 %include "gui/minimap.hpp"
 %include "gui/directory_view.hpp"
+
+%feature("ref")   Menu "";
+%feature("unref") Menu "";
 %include "gui/menu.hpp"
+
+%feature("ref")   Menubar "";
+%feature("unref") Menubar "";
 %include "gui/menubar.hpp"
+
+%feature("ref")   Scrollbar "";
+%feature("unref") Scrollbar "";
 %include "gui/scrollbar.hpp"
 
 %include "tools/tool.hpp"

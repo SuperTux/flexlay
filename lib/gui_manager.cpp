@@ -17,6 +17,8 @@
 #include <ClanLib/gui.h>
 #include <ClanLib/guistylesilver.h>
 #include <ClanLib/core.h>
+#include <ClanLib/Display/display.h>
+#include <ClanLib/Display/display_window.h>
 
 #include "globals.hpp"
 #include "gui_manager.hpp"
@@ -44,18 +46,37 @@ GUIManager::GUIManager()
   impl->manager   = new CL_GUIManager(impl->style);
   current_  = this;
 
+  // OS window chrome close → leave the GUI run loop (File→Quit path).
+  CL_DisplayWindow* win = CL_Display::get_current_window();
+  if (win && impl->slot_container)
+  {
+    impl->slot_container->connect(win->sig_window_close(), this, &GUIManager::quit);
+  }
+
   // Make the manager the first component on the stack
   push_component(impl->manager);
 }
 
 GUIManager::~GUIManager()
 {
-  pop_component();
+  if (current_ == this)
+    current_ = 0;
 
+  if (!impl.get())
+    return;
+
+  if (!impl->components.empty())
+    pop_component();
+
+  // Destroy GUI tree while the display is still alive.  Parent-owned
+  // CL_Components are deleted with the manager; Ruby must not delete them
+  // again (empty %feature("unref") on those types).
   delete impl->manager;
+  impl->manager = 0;
   //delete style; FIXME: Memory hole?!
   //delete resources;  FIXME: Memory hole?!
   delete impl->slot_container;
+  impl->slot_container = 0;
 }
 
 void

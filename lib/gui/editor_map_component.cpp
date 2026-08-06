@@ -84,6 +84,12 @@ EditorMapComponent::EditorMapComponent(const CL_Rect& rect, CL_Component* parent
 EditorMapComponent::~EditorMapComponent()
 {
   std::cout << "~EditorMapComponent()" << std::endl;
+  if (current_ == this)
+    current_ = 0;
+  // Disconnect slots before base CL_Component teardown so callbacks
+  // cannot fire against a half-destroyed tree.
+  if (impl.get())
+    impl->slots = CL_SlotContainer();
 }
 
 Workspace

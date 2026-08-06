@@ -573,3 +573,14 @@ Still OPEN: **ST-01** deinit, broader GUI null checks, differential paint undo.
   `SUPERTUX2_DATA_DIR` and common install paths; initialize globals early.
 - Quieted unused-variable warnings in `gui.rb`, `data.rb`, `WorldMapObject.rb`.
 
+### 2026-08-06 — Pass G (netPanzer quit / window close)
+
+- **Window close:** `GUIManager` connects `CL_DisplayWindow::sig_window_close`
+  to `quit()` so the OS close button ends the run loop.
+- **Quit segfault:** empty SWIG `ref`/`unref` for parent-owned widgets
+  (`EditorMapComponent`, `Window`, `Minimap`, `Menu`, `Menubar`, `Scrollbar`,
+  `TileSelector`, `ObjectSelector`); clear `EditorMapComponent::current_` and
+  slots in dtor; nil `$gui` before GC in netpanzer shutdown; harden
+  `flexlay_shutdown`.
+- **File→Quit:** menu uses `@gui.quit`; `GUI#quit` helper added.
+

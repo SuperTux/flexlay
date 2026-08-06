@@ -116,18 +116,22 @@ $gui.gui_level_new()
 $gui.run()
 
 # Drop GUI/tools before ClanLib teardown (ST-01 / flexlay_shutdown).
+# Nil globals *before* GC so parent-owned widgets finalize while the
+# display is still alive — avoids File→Quit segfaults.
 $config = nil
 $tilemap_paint_tool = nil
 $tilemap_select_tool = nil
 $zoom_tool = nil
 $workspace_move_tool = nil
 $objmap_select_tool = nil
+gui = $gui
+$gui = nil
 begin
   NetPanzerData.destroy if defined?(NetPanzerData) && NetPanzerData.respond_to?(:destroy)
 rescue StandardError
 end
-flexlay_shutdown($flexlay, $gui)
-$gui = nil
+flexlay_shutdown($flexlay, gui)
+gui = nil
 
 # EOF #
 

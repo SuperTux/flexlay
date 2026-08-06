@@ -145,7 +145,7 @@ class GUI
     @menu.add_item("File/Open...", proc{gui_level_load})
     @menu.add_item("File/Save...", proc{gui_level_save})
     @menu.add_item("File/Save As...", proc{gui_level_save_as})
-    @menu.add_item("File/Quit",  proc{@gui.quit})
+    @menu.add_item("File/Quit",  proc { @gui.quit })
 
     @menu.add_item("Zoom/1:4 (25%) ",  proc{ gui_set_zoom(0.25) })
     @menu.add_item("Zoom/1:2 (50%) ",  proc{ gui_set_zoom(0.5) })
@@ -377,7 +377,11 @@ class GUI
 
   def run()
     @gui.run()
-  end  
+  end
+
+  def quit()
+    @gui.quit() if @gui
+  end
 end
 
 # EOF #

@@ -1,56 +1,58 @@
-class TilemapLayer
-  alias orig_get_metadata get_metadata
-  alias orig_set_metadata set_metadata
+# Ruby 3.x + modern SWIG: bare `alias foo bar` on C-extension methods
+# raises NameError ("undefined method ... for class").  Use prepend so
+# the original SWIG method remains reachable via super().
 
+module TilemapLayerMetadata
   def set_metadata(data)
-    orig_set_metadata(make_metadata(data))
+    super(make_metadata(data))
   end
 
-  def get_metadata()
-    return get_ruby_object(orig_get_metadata())
+  def get_metadata
+    get_ruby_object(super())
   end
+end
+TilemapLayer.prepend(TilemapLayerMetadata)
 
+class TilemapLayer
   def each(x, y, width, height)
     data = get_data()
-    (y..height-1).each{
-      (x..width-1).each{
-        yield(data[y*get_width() + x])
-      }
-    }
+    (y...height).each do |iy|
+      (x...width).each do |ix|
+        yield(data[iy * get_width() + ix])
+      end
+    end
   end
 end
 
-class EditorMap
-  alias orig_get_metadata get_metadata
-  alias orig_set_metadata set_metadata
-
+module EditorMapMetadata
   def set_data(data)
-    orig_set_metadata(make_metadata(data))
+    set_metadata(data)
   end
 
-  def get_data()
-    return get_ruby_object(orig_get_metadata())
+  def get_data
+    get_metadata
   end
 
   def set_metadata(data)
-    orig_set_metadata(make_metadata(data))
+    super(make_metadata(data))
   end
 
-  def get_metadata()
-    return get_ruby_object(orig_get_metadata())
+  def get_metadata
+    get_ruby_object(super())
   end
 end
+EditorMap.prepend(EditorMapMetadata)
 
-class ObjMapObject
-  def get_data()
-    return get_ruby_object(get_metadata())
+module ObjMapObjectMetadata
+  def get_data
+    get_ruby_object(get_metadata())
   end
 
   def set_data(data)
     set_metadata(make_metadata(data))
   end
 end
-
+ObjMapObject.prepend(ObjMapObjectMetadata)
 
 class Icon
   def set_callback(func)
@@ -58,23 +60,21 @@ class Icon
   end
 end
 
-class Menu
-  alias_method :orig_add_item, :add_item
-
+module MenuAddItem
   def add_item(*params)
-    if params.length == 2 then
-      (text, func) = params
-      i = orig_add_item(text)
+    if params.length == 2
+      text, func = params
+      i = super(text)
     else
-      (sprite, text, func) = params
-      i = orig_add_item(sprite, text)
+      sprite, text, func = params
+      i = super(sprite, text)
     end
 
-    if func != nil
-      connect(sig_clicked(i), func)
-    end
+    connect(sig_clicked(i), func) unless func.nil?
+    i
   end
 end
+Menu.prepend(MenuAddItem)
 
 class CL_Menu
   def add_item(name, func)

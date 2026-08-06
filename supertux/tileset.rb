@@ -8,16 +8,16 @@ class TileGroup
 end
 
 # Load game tiles from filename into tileset
-class Tileset
-  alias old_initialize initialize
-
-  attr_accessor :tilegroups
-
+module TilesetInit
   def initialize(*params)
-    old_initialize(*params)
-
+    super(*params)
     @tilegroups = []
   end
+end
+Tileset.prepend(TilesetInit)
+
+class Tileset
+  attr_accessor :tilegroups
 
   def load(filename)
     puts "Loading Tileset: #{filename}"

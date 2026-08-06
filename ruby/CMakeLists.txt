@@ -1,7 +1,9 @@
 # SWIG Ruby extension: flexlay_wrap
 
 set_property(SOURCE ${CMAKE_SOURCE_DIR}/lib/flexlay_wrap.i PROPERTY CPLUSPLUS ON)
-set_property(SOURCE ${CMAKE_SOURCE_DIR}/lib/flexlay_wrap.i PROPERTY SWIG_FLAGS "-ruby")
+# Do NOT set SWIG_FLAGS "-ruby": swig_add_library(... LANGUAGE ruby) already
+# passes -ruby. Specifying it again triggers:
+#   Only one target language can be supported at a time (both -ruby and -ruby were specified).
 
 swig_add_library(flexlay_wrap
   TYPE MODULE

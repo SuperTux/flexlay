@@ -159,16 +159,15 @@ VALUE CL_Point2Value(const CL_Point& arg)
 %include "object_layer.hpp"
 %include "onion_skin_layer.hpp"
 
-// Ensure static current()/set_current() show up as class methods in Ruby.
-// Modern SWIG sometimes omits statics that take the class by value.
-%extend TilemapLayer {
-  static void set_current(TilemapLayer t) { TilemapLayer::set_current(t); }
-  static TilemapLayer current() { return TilemapLayer::current(); }
-};
-%extend ObjectLayer {
-  static void set_current(ObjectLayer c) { ObjectLayer::set_current(c); }
-  static ObjectLayer current() { return ObjectLayer::current(); }
-};
+// Free-function entry points for static current()/set_current().
+// SWIG often fails to expose statics that take the class by value as
+// Ruby class methods; flexlay.rb wires these onto the classes.
+%inline %{
+void TilemapLayer_set_current(TilemapLayer t) { TilemapLayer::set_current(t); }
+TilemapLayer TilemapLayer_get_current() { return TilemapLayer::current(); }
+void ObjectLayer_set_current(ObjectLayer c) { ObjectLayer::set_current(c); }
+ObjectLayer ObjectLayer_get_current() { return ObjectLayer::current(); }
+%}
 
 %include "editor_map.hpp"
 %include "workspace.hpp"

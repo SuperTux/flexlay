@@ -64,10 +64,7 @@
           };
         };
 
-        # Runnable front-ends (nix run .#<name>).
-        # paint and netpanzer are currently installable; supertux /
-        # supertux-portable still need Ruby/SWIG porting + Makefile
-        # install targets before apps can point at real binaries.
+        # Runnable front-ends: nix run .#<name>
         apps = let
           pkg = self.packages.${system}.default;
           mkApp = name: {
@@ -78,9 +75,8 @@
           default = mkApp "flexlay-paint";
           flexlay-paint = mkApp "flexlay-paint";
           netpanzer-editor = mkApp "netpanzer-editor";
-          # TODO: enable once front-ends are ported and installed:
-          # supertux-editor = mkApp "supertux-editor";
-          # supertux-portable = mkApp "supertux-portable";
+          supertux-editor = mkApp "supertux-editor";
+          supertux-portable = mkApp "supertux-portable";
         };
       }
     );

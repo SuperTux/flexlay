@@ -11,9 +11,11 @@ BINDIR  = "${PREFIX}/bin"
 # incompatible system ruby.
 RUBY    = ruby
 
-FLEXLAY_DATADIR          = ${DATADIR}/flexlay
-NETPANZER_EDITOR_DATADIR = ${DATADIR}/netpanzer-editor
-FLEXLAY_PAINT_DATADIR    = ${DATADIR}/flexlay-paint
+FLEXLAY_DATADIR            = ${DATADIR}/flexlay
+NETPANZER_EDITOR_DATADIR   = ${DATADIR}/netpanzer-editor
+FLEXLAY_PAINT_DATADIR      = ${DATADIR}/flexlay-paint
+SUPERTUX_EDITOR_DATADIR    = ${DATADIR}/supertux-editor
+SUPERTUX_PORTABLE_DATADIR  = ${DATADIR}/supertux-portable
 
 build-stamp:
 	scons
@@ -28,12 +30,16 @@ clean:
 
 install: build install-exec install-data
 
-install-exec: install-flexlay-exec install-flexlay-paint-exec install-netpanzer-editor-exec
-install-data: install-flexlay-data install-flexlay-paint-data install-netpanzer-editor-data
+install-exec: install-flexlay-exec install-flexlay-paint-exec install-netpanzer-editor-exec \
+	install-supertux-editor-exec install-supertux-portable-exec
+install-data: install-flexlay-data install-flexlay-paint-data install-netpanzer-editor-data \
+	install-supertux-editor-data install-supertux-portable-data
 
 install-flexlay: install-flexlay-exec install-flexlay-data
 install-flexlay-paint: install-flexlay-paint-exec install-flexlay-paint-data
 install-netpanzer-editor: install-netpanzer-editor-exec install-netpanzer-editor-data
+install-supertux-editor: install-supertux-editor-exec install-supertux-editor-data
+install-supertux-portable: install-supertux-portable-exec install-supertux-portable-data
 
 install-flexlay-exec: build-stamp
 	install -D ruby/flexlay_wrap.so ${DESTDIR}${LIBDIR}/flexlay_wrap.so
@@ -111,13 +117,71 @@ install-flexlay-paint-data:
 	-name "*.rb" \) \
 	-exec install -m 644 -D {} ${DESTDIR}${FLEXLAY_PAINT_DATADIR}/{} \;
 
+install-supertux-editor-exec:
+	install -d ${DESTDIR}${BINDIR}
+	printf '#!/bin/sh\n'\
+	'\n'\
+	'FLEXLAY_DATADIR="'${FLEXLAY_DATADIR}'"\n'\
+	'export FLEXLAY_DATADIR\n'\
+	'\n'\
+	'SUPERTUX_EDITOR_DATADIR="'${SUPERTUX_EDITOR_DATADIR}'"\n'\
+	'export SUPERTUX_EDITOR_DATADIR\n'\
+	'\n'\
+	'LD_LIBRARY_PATH=$$LD_LIBRARY_PATH:'${LIBDIR}'\n'\
+	'export LD_LIBRARY_PATH\n'\
+	'\n'\
+	'RUBYLIB="$$RUBYLIB:'${FLEXLAY_DATADIR}':'${LIBDIR}':'${SUPERTUX_EDITOR_DATADIR}'"\nexport RUBYLIB\n'\
+	'\n'\
+	'exec '${RUBY}' -w '${SUPERTUX_EDITOR_DATADIR}/supertux.rb' "$$@"\n\n'\
+	'# EOF #\n' > ${DESTDIR}${BINDIR}/supertux-editor
+	chmod 755 ${DESTDIR}${BINDIR}/supertux-editor
+
+install-supertux-editor-data:
+	cd supertux/; \
+	find -type f \( \
+	-name "*.rb" -o \
+	-name "*.png" -o \
+	-name "*.xml" \) \
+	-exec install -m 644 -D {} ${DESTDIR}${SUPERTUX_EDITOR_DATADIR}/{} \;
+
+install-supertux-portable-exec:
+	install -d ${DESTDIR}${BINDIR}
+	printf '#!/bin/sh\n'\
+	'\n'\
+	'FLEXLAY_DATADIR="'${FLEXLAY_DATADIR}'"\n'\
+	'export FLEXLAY_DATADIR\n'\
+	'\n'\
+	'SUPERTUX_PORTABLE_DATADIR="'${SUPERTUX_PORTABLE_DATADIR}'"\n'\
+	'export SUPERTUX_PORTABLE_DATADIR\n'\
+	'\n'\
+	'LD_LIBRARY_PATH=$$LD_LIBRARY_PATH:'${LIBDIR}'\n'\
+	'export LD_LIBRARY_PATH\n'\
+	'\n'\
+	'RUBYLIB="$$RUBYLIB:'${FLEXLAY_DATADIR}':'${LIBDIR}':'${SUPERTUX_PORTABLE_DATADIR}'"\nexport RUBYLIB\n'\
+	'\n'\
+	'exec '${RUBY}' -w '${SUPERTUX_PORTABLE_DATADIR}/supertux-portable.rb' "$$@"\n\n'\
+	'# EOF #\n' > ${DESTDIR}${BINDIR}/supertux-portable
+	chmod 755 ${DESTDIR}${BINDIR}/supertux-portable
+
+install-supertux-portable-data:
+	cd supertux-portable/; \
+	find -type f \( \
+	-name "*.rb" -o \
+	-name "*.png" -o \
+	-name "*.xml" \) \
+	-exec install -m 644 -D {} ${DESTDIR}${SUPERTUX_PORTABLE_DATADIR}/{} \;
+
 .PHONY : build clean \
  install install-exec install-data \
  install-flexlay \
  install-flexlay-paint \
  install-netpanzer-editor \
+ install-supertux-editor \
+ install-supertux-portable \
  install-flexlay-exec          install-flexlay-data \
  install-netpanzer-editor-exec install-netpanzer-editor-data \
- install-flexlay-paint-exec    install-flexlay-paint-data
+ install-flexlay-paint-exec    install-flexlay-paint-data \
+ install-supertux-editor-exec  install-supertux-editor-data \
+ install-supertux-portable-exec install-supertux-portable-data
 
 # EOF #

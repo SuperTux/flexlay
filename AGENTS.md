@@ -14,10 +14,10 @@ Flexlay itself is a reusable C++ library + scripting layer. Game-specific editor
 
 | Directory            | Binary (Nix app)      | Status (nixos-unstable / Ruby 3.4 / modern SWIG) |
 |----------------------|-----------------------|--------------------------------------------------|
-| `paint/`             | `flexlay-paint`       | **Works** — window opens, basic GUI runs         |
-| `netpanzer/`         | `netpanzer-editor`    | **Mostly works** — GUI starts; needs game data; more Ruby fixes possible |
-| `supertux/`          | *(not yet installed)* | **Not updated yet** — needs same Ruby/SWIG treatment |
-| `supertux-portable/` | *(not yet installed)* | **Not updated yet** — needs same Ruby/SWIG treatment |
+| `paint/`             | `flexlay-paint`       | **Works** — window opens, basic GUI runs |
+| `netpanzer/`         | `netpanzer-editor`    | **In progress** — GUI starts; layer set_current + data path fixes ongoing |
+| `supertux/`          | `supertux-editor`     | **Installed** — shares core Ruby/SWIG fixes; needs runtime testing |
+| `supertux-portable/` | `supertux-portable`   | **Installed** — shares core Ruby/SWIG fixes; needs runtime testing |
 
 Older experimental support for Pingus and Windstille is mentioned in history but not present as first-class front-ends in this tree.
 
@@ -163,11 +163,11 @@ Same for `Flexlay_wrap::CL_Menu#add_item`, etc.
 
 ## Still TODO
 
-- **supertux** and **supertux-portable**: apply the same Ruby 3 / SWIG patterns (prepend, factories, `Flexlay_wrap::` reopenings, launcher `RUBY=`, Makefile install targets + flake apps).
-- Wire SuperTux install targets into the Makefile if missing.
-- Quiet unused-variable warnings in `flexlay.rb` / front-end GUIs.
+- Runtime-test **supertux-editor** and **supertux-portable**; fix any remaining front-end-specific Ruby 3 issues.
+- Quiet unused-variable warnings in front-end GUIs (`gui.rb` locals).
 - netPanzer game data path (`/usr/share/games/netpanzer/`) is often absent; make it configurable.
 - Broader SWIG coverage audit: any remaining `Foo.new(...)` that still hits “expected 0” needs a factory or interface fix.
+- Exit-time segfaults from parent-owned widget finalizers (mitigated by empty `unref`, may still need work).
 
 ## Data & Assets
 

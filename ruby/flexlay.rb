@@ -15,24 +15,22 @@ def flexlay_factory(name)
   nil
 end
 
-# Fallback for statics SWIG may omit (set_current / current).
-# Ruby 3.4 rejects `def Foo::Bar.baz`; use define_singleton_method.
-if defined?(Flexlay_wrap::TilemapLayer) && !Flexlay_wrap::TilemapLayer.respond_to?(:set_current)
+# Always install class methods for layer "current" statics via the
+# %inline free functions (reliable under modern SWIG + Ruby 3.4).
+if defined?(Flexlay_wrap::TilemapLayer)
   Flexlay_wrap::TilemapLayer.define_singleton_method(:set_current) do |t|
-    if (f = flexlay_factory(:TilemapLayer_set_current))
-      f.call(t)
-    else
-      raise NoMethodError, "TilemapLayer.set_current not wrapped by SWIG"
-    end
+    Flexlay_wrap.TilemapLayer_set_current(t)
+  end
+  Flexlay_wrap::TilemapLayer.define_singleton_method(:current) do
+    Flexlay_wrap.TilemapLayer_get_current()
   end
 end
-if defined?(Flexlay_wrap::ObjectLayer) && !Flexlay_wrap::ObjectLayer.respond_to?(:set_current)
+if defined?(Flexlay_wrap::ObjectLayer)
   Flexlay_wrap::ObjectLayer.define_singleton_method(:set_current) do |c|
-    if (f = flexlay_factory(:ObjectLayer_set_current))
-      f.call(c)
-    else
-      raise NoMethodError, "ObjectLayer.set_current not wrapped by SWIG"
-    end
+    Flexlay_wrap.ObjectLayer_set_current(c)
+  end
+  Flexlay_wrap::ObjectLayer.define_singleton_method(:current) do
+    Flexlay_wrap.ObjectLayer_get_current()
   end
 end
 
@@ -45,9 +43,9 @@ module TilemapLayerMetadata
     get_ruby_object(super())
   end
 end
-TilemapLayer.prepend(TilemapLayerMetadata)
+Flexlay_wrap::TilemapLayer.prepend(TilemapLayerMetadata) if defined?(Flexlay_wrap::TilemapLayer)
 
-class TilemapLayer
+class Flexlay_wrap::TilemapLayer
   def each(x, y, width, height)
     data = get_data()
     (y...height).each do |iy|
@@ -75,7 +73,7 @@ module EditorMapMetadata
     get_ruby_object(super())
   end
 end
-EditorMap.prepend(EditorMapMetadata)
+Flexlay_wrap::EditorMap.prepend(EditorMapMetadata) if defined?(Flexlay_wrap::EditorMap)
 
 module ObjMapObjectMetadata
   def get_data
@@ -86,7 +84,7 @@ module ObjMapObjectMetadata
     set_metadata(make_metadata(data))
   end
 end
-ObjMapObject.prepend(ObjMapObjectMetadata)
+Flexlay_wrap::ObjMapObject.prepend(ObjMapObjectMetadata) if defined?(Flexlay_wrap::ObjMapObject)
 
 # Open the SWIG class explicitly — after include Flexlay_wrap, a bare
 # `class Icon` can sometimes bind to a different constant.
@@ -98,21 +96,24 @@ end
 # Alias for code that still refers to Icon without the module prefix.
 Icon = Flexlay_wrap::Icon unless defined?(Icon) && Icon.equal?(Flexlay_wrap::Icon)
 
-module MenuAddItem
-  def add_item(*params)
-    if params.length == 2
-      text, func = params
-      i = super(text)
-    else
-      sprite, text, func = params
-      i = super(sprite, text)
-    end
+# Flexlay Menu widget (lib/gui/menu.hpp), not ClanLib CL_Menu.
+if defined?(Flexlay_wrap::Menu)
+  module MenuAddItem
+    def add_item(*params)
+      if params.length == 2
+        text, func = params
+        i = super(text)
+      else
+        sprite, text, func = params
+        i = super(sprite, text)
+      end
 
-    connect(sig_clicked(i), func) unless func.nil?
-    i
+      connect(sig_clicked(i), func) unless func.nil?
+      i
+    end
   end
+  Flexlay_wrap::Menu.prepend(MenuAddItem)
 end
-Menu.prepend(MenuAddItem)
 
 class Flexlay_wrap::CL_Menu
   def add_item(name, func)
@@ -300,12 +301,6 @@ class SimpleFileDialog
 end
 
 class GenericDialog
-  window = nil
-  items  = nil
-  ok     = nil
-  cancel = nil
-  callback = nil
-  
   def initialize(title, gui)
     @items = []
     @window = Window.new(CL_Rect.new(CL_Point.new(100, 100), CL_Size.new(400, 100)), title, gui)

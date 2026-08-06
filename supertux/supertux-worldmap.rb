@@ -148,8 +148,13 @@ $gui.run()
 
 $config.save($config_file)
 
-# FIXME: Can't deinit flexlay, since we would crash then
-# flexlay.deinit()
+begin
+  $gui = nil if defined?($gui)
+  GC.start
+  flexlay.deinit() if defined?(flexlay) && flexlay
+rescue StandardError => e
+  warn "shutdown: #{e}"
+end
 # puts "And now we crash"
 
 # EOF #

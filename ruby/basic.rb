@@ -103,6 +103,9 @@ startlevel.activate($workspace)
 
 $gui.run()
 
-flexlay.deinit()
+$gui = nil
+$controller = nil
+GC.start
+flexlay.deinit() if flexlay
 
 # EOF #

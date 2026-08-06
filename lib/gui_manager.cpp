@@ -112,7 +112,8 @@ GUIManager::is_visible()
 void
 GUIManager::quit()
 {
-  impl->manager->quit();
+  if (impl.get() && impl->manager)
+    impl->manager->quit();
 }
 
 void

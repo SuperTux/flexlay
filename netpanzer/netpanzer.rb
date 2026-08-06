@@ -114,7 +114,17 @@ $gui.gui_level_new()
 # generate_sprites()
 $gui.run()
 
-# flexlay.deinit()
-# print "deinit done"
+# Drop GUI/tools before ClanLib teardown (ST-01).
+$gui = nil
+$config = nil
+$tilemap_paint_tool = nil
+$tilemap_select_tool = nil
+$zoom_tool = nil
+$workspace_move_tool = nil
+$objmap_select_tool = nil
+GC.start
+GC.start
+$flexlay.deinit() if defined?($flexlay) && $flexlay
 
 # EOF #
+

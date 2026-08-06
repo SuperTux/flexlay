@@ -353,7 +353,7 @@ file format; free/reload cleanly; surface `has_data()` to Ruby.
 
 | ID | Sev | Status | Finding |
 |----|-----|--------|---------|
-| ST-01 | P1 | OPEN | Comments: cannot call Flexlay deinit or process crashes — same ownership issue as ClanLib widgets. |
+| ST-01 | P1 | PARTIAL | Comments: cannot call Flexlay deinit or process crashes — same ownership issue as ClanLib widgets. |
 | ST-02 | P2 | OPEN | Sector/map comments about recursive refcount / data not freed. |
 | ST-03 | P3 | OPEN | Various FIXMEs (tmp files, ButtonPanel, etc.). |
 
@@ -483,4 +483,14 @@ null), broader TilemapLayer method coverage.
 - **NR-03:** Unused Ruby locals renamed with leading underscore.
 
 Still OPEN: **ST-01** deinit, broader GUI null checks, differential paint undo.
+### 2026-08-06 — Pass C / ST-01 (partial)
+
+- **ST-01:** `Flexlay::deinit` is idempotent; deletes `CL_DisplayWindow`
+  before subsystem teardown; calls `CL_SetupGUI::deinit`; fixed
+  `CL_SetupSDL::init()` typo that ran on the deinit path; guards against
+  double-deinit. Front-ends nil GUI/tool roots and `GC.start` before
+  `deinit`. Helper `flexlay_shutdown` added in `ruby/flexlay.rb`.
+  Remaining risk: parent-owned widget finalizers if scripts keep proxies
+  alive past deinit.
+- **EditorMapComponent:** null-safe get/set_workspace.
 

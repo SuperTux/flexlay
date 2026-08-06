@@ -77,6 +77,7 @@ class Flexlay
 {
 private:
   CL_DisplayWindow* window;
+  bool initialized;
 
 public:
   int  screen_width;
@@ -99,7 +100,11 @@ public:
 
   void init(const std::string& title = "Flexlay", int width = 800, int height = 600,
             bool fullscreen = false, bool allow_resize = false);
+  /** Tear down display/GUI subsystems.  Safe to call multiple times.
+      Call after dropping Ruby references to parent-owned widgets and
+      running GC, otherwise finalizers may touch a dead ClanLib context. */
   void deinit();
+  bool is_initialized() const { return initialized; }
 };
 
 #endif

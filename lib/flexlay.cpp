@@ -26,6 +26,8 @@
 Flexlay* Flexlay::current_ = 0;
 
 Flexlay::Flexlay()
+  : window(0),
+    initialized(false)
 {
   screen_width  = 800;
   screen_height = 600;
@@ -39,12 +41,18 @@ Flexlay::Flexlay()
 CL_Signal_v2<int, int>&
 Flexlay::sig_resize()
 {
+  static CL_Signal_v2<int, int> dummy;
+  if (!window)
+    return dummy;
   return window->sig_resize();
 }
 
 void
 Flexlay::init(const std::string& title, int width, int height, bool fullscreen_, bool allow_resize_)
 {
+  if (initialized)
+    return;
+
   screen_width  = width;
   screen_height = height;
   fullscreen    = fullscreen_;
@@ -73,6 +81,7 @@ Flexlay::init(const std::string& title, int width, int height, bool fullscreen_,
     resources = CL_ResourceManager(datadir + "/flexlay.xml");
     Fonts::verdana11        = CL_Font("verdana11_black", &resources);
     Fonts::verdana11_yellow = CL_Font("verdana11_yellow", &resources);
+    initialized = true;
   } catch (CL_Error& err) {
     std::cout << "CL_Error: " << err.message << std::endl;
   }
@@ -81,20 +90,52 @@ Flexlay::init(const std::string& title, int width, int height, bool fullscreen_,
 void
 Flexlay::deinit()
 {
+  if (!initialized)
+    return;
+
   std::cout << "Flexlay::deinit()" << std::endl;
 
-  CL_SetupDisplay::deinit();
+  // Destroy the display window before tearing down subsystems so
+  // ClanLib GUI/GL do not run finalizers against a dead display.
+  delete window;
+  window = 0;
+
+  try {
+    CL_SetupGUI::deinit();
+  } catch (...) {
+    std::cout << "Flexlay::deinit: CL_SetupGUI::deinit failed" << std::endl;
+  }
+
+  try {
+    CL_SetupDisplay::deinit();
+  } catch (...) {
+    std::cout << "Flexlay::deinit: CL_SetupDisplay::deinit failed" << std::endl;
+  }
 
 #ifdef HAVE_LIBSDL
-  if (use_opengl)
-    CL_SetupGL::deinit();
-  else
-    CL_SetupSDL::init();
+  try {
+    if (use_opengl)
+      CL_SetupGL::deinit();
+    else
+      CL_SetupSDL::deinit();
+  } catch (...) {
+    std::cout << "Flexlay::deinit: GL/SDL deinit failed" << std::endl;
+  }
 #else
-  CL_SetupGL::deinit();
+  try {
+    CL_SetupGL::deinit();
+  } catch (...) {
+    std::cout << "Flexlay::deinit: CL_SetupGL::deinit failed" << std::endl;
+  }
 #endif
 
-  CL_SetupCore::deinit();
+  try {
+    CL_SetupCore::deinit();
+  } catch (...) {
+    std::cout << "Flexlay::deinit: CL_SetupCore::deinit failed" << std::endl;
+  }
+
+  initialized = false;
 }
 
 void

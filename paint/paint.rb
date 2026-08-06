@@ -80,8 +80,12 @@ $image.layers_count.times {|i|
 
 $gui.run()
 
-# FIXME: Can't deinit flexlay, since we would crash then, refcouting throuble...
-# flexlay.deinit()
-# puts "And now we crash"
+
+# Drop GUI before ClanLib teardown (ST-01).
+$gui = nil
+$image = nil
+GC.start
+GC.start
+flexlay.deinit() if defined?(flexlay) && flexlay
 
 # EOF #

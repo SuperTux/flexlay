@@ -174,7 +174,15 @@ GC.start
 puts "Cleanup done"
 
 # FIXME: Can't deinit flexlay, since we would crash then
-at_exit{flexlay.deinit()}
+# Prefer explicit shutdown after nil-ing GUI roots (see flexlay_shutdown).
+# at_exit deinit races Ruby finalizers on parent-owned widgets.
+begin
+  $gui = nil if defined?($gui)
+  GC.start
+  flexlay.deinit() if defined?(flexlay) && flexlay
+rescue StandardError => e
+  warn "shutdown: #{e}"
+end
 # puts "And now we crash"
 
 # EOF #

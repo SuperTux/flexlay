@@ -428,3 +428,24 @@ class GenericDialog
 end
 
 # EOF #
+
+# Safe process shutdown: drop Ruby references to ClanLib parent-owned
+# widgets, force GC, then tear down Flexlay.  Calling deinit while Ruby
+# still holds component proxies is a common exit-time crash.
+def flexlay_shutdown(flexlay_obj, *roots)
+  roots.each do |r|
+    begin
+      r.clear if r.respond_to?(:clear)
+    rescue StandardError
+    end
+  end
+  roots.each_index { |i| roots[i] = nil }
+  GC.start
+  GC.start
+  begin
+    flexlay_obj.deinit() if flexlay_obj && flexlay_obj.respond_to?(:deinit)
+  rescue StandardError => e
+    warn "flexlay_shutdown: deinit raised: #{e}"
+  end
+end
+

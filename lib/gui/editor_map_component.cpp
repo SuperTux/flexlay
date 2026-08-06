@@ -89,12 +89,16 @@ EditorMapComponent::~EditorMapComponent()
 Workspace
 EditorMapComponent::get_workspace() const
 {
+  if (!impl.get())
+    return Workspace();
   return impl->workspace;
 }
 
 void
 EditorMapComponent::set_workspace(Workspace m)
 {
+  if (!impl.get())
+    return;
   impl->workspace = m;
 }
 

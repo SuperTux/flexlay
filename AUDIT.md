@@ -564,3 +564,12 @@ Still OPEN: **ST-01** deinit, broader GUI null checks, differential paint undo.
 - **Portable:** dropped hardcoded `/home/ingo/...` datadir; use env or
   relative `data/`.
 
+### 2026-08-06 — Pass F (SuperTux tileset runtime crash)
+
+- **tileset.rb:** `:tiles` form crashed when `images`/`editor-images` was a
+  `(:region …)` list (`String + Array`). Added `tile_image_region` helper
+  handling String, region lists, and multi-path image lists.
+- **supertux.rb:** `$datadir` discovery via `SUPERTUX_DATADIR` /
+  `SUPERTUX2_DATA_DIR` and common install paths; initialize globals early.
+- Quieted unused-variable warnings in `gui.rb`, `data.rb`, `WorldMapObject.rb`.
+

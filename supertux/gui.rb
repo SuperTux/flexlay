@@ -2,13 +2,6 @@ require "flexlay.rb"
 require 'tempfile'
 
 class SuperTuxGUI
-  quit_button = nil
-  menu        = nil
-  
-  selector_window = nil
-  tileselector    = nil
-  objectselector  = nil
-
   attr_reader :tileselector, :editor_map, :workspace, :minimap, :recent_files_menu, :gui
 
   def get_component()
@@ -450,7 +443,7 @@ class SuperTuxGUI
     tilemap = TilemapLayer.current()
     data    = tilemap.get_data()
     width   = tilemap.get_width()
-    height  = tilemap.get_height()
+    _height = tilemap.get_height()
 
     get = proc { |x, y| return data[y*width + x] }
     set = proc { |x, y, val| data[y*width + x] = val }

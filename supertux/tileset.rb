@@ -7,6 +7,27 @@ class TileGroup
   end 
 end
 
+# Resolve a tiles.strf image / region spec to a 32x32 pixel buffer.
+# +image+ may be a String path or a (:region file x y w h) list.
+# +col+/+row+ index into a multi-tile sheet (used by the :tiles form).
+def tile_image_region(image, col = 0, row = 0)
+  base = ($datadir || "") + "images/"
+  if image.is_a?(String)
+    make_region_pixelbuffer_from_resource(base + image, col * 32, row * 32, 32, 32)
+  elsif image.is_a?(Array) && image[0] == :region
+    file = image[1]
+    rx, ry = image[2].to_i, image[3].to_i
+    # Sheet cells are still 32x32 relative to the region origin.
+    make_region_pixelbuffer_from_resource(base + file, rx + col * 32, ry + row * 32, 32, 32)
+  elsif image.is_a?(Array) && image[0].is_a?(String)
+    # (images "a.png" "b.png" ...) — use first path as sheet
+    make_region_pixelbuffer_from_resource(base + image[0], col * 32, row * 32, 32, 32)
+  else
+    warn "tileset: unsupported image form: #{image.inspect}"
+    nil
+  end
+end
+
 # Load game tiles from filename into tileset.
 # Open Flexlay_wrap::Tileset explicitly so methods apply to factory-
 # created instances (Tileset_new), not a parallel constant.
@@ -33,7 +54,7 @@ class Flexlay_wrap::Tileset
       when :tiles
         data   = i[1..-1]
         width  = get_value_from_tree(['width', '_'], data, 1)
-        height = get_value_from_tree(['height', '_'], data, 1)
+        _height = get_value_from_tree(['height', '_'], data, 1)
         ids    = get_value_from_tree(['ids'], data, [])
         # attributes = get_value_from_tree(['attributes'], data, [])
         image  = get_value_from_tree(['image', '_'], data, nil)
@@ -46,12 +67,15 @@ class Flexlay_wrap::Tileset
           image  = get_value_from_tree(['editor-images', '_'], data, "tiles/auxiliary/notile.png")
         end
 
+        # Prefer editor-images when present (may be region form).
+        editor_image = get_value_from_tree(['editor-images', '_'], data, nil)
+        image = editor_image if editor_image
+
         x = 0
         y = 0
         ids.each{|id|
-          pixelbuffer = make_region_pixelbuffer_from_resource($datadir + 'images/' + image,
-                                                              x * 32, y * 32, 32, 32)
-          add_tile(id, Tile.new(pixelbuffer))
+          pixelbuffer = tile_image_region(image, x, y)
+          add_tile(id, pixelbuffer ? Tile.new(pixelbuffer) : nil)
           x += 1
           if (x == width) then
             x = 0
@@ -68,14 +92,17 @@ class Flexlay_wrap::Tileset
         if not(image) then
           image = get_value_from_tree(['images', '_'], data, "tiles/auxiliary/notile.png")
         end
-        
+
+        pixelbuffer = nil
         if image.is_a?(String) then
-          pixelbuffer = make_pixelbuffer($datadir + 'images/' + image)
-        elsif image.is_a?(Array) then
-          if image[0] == :region then
-            pixelbuffer = make_region_pixelbuffer_from_resource($datadir + 'images/' + image[1],
-                                                                image[2], image[3], image[4], image[5])
-          end
+          pixelbuffer = make_pixelbuffer(($datadir || "") + 'images/' + image)
+        elsif image.is_a?(Array) && image[0] == :region then
+          pixelbuffer = make_region_pixelbuffer_from_resource(
+            ($datadir || "") + 'images/' + image[1],
+            image[2].to_i, image[3].to_i, image[4].to_i, image[5].to_i)
+        elsif image.is_a?(Array)
+          # Fall back to sheet-style helper (first frame / region)
+          pixelbuffer = tile_image_region(image, 0, 0)
         end
         
         if not hidden then

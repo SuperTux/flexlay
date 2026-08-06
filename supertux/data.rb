@@ -84,8 +84,6 @@ def create_gameobject_from_data(editormap, objmap, name, sexpr)
   
   object = $game_objects.find {|x| x[0].to_sym == name}
   if object != nil then
-    (name, image, type, func) = object
-    
     x = get_value_from_tree(["x", "_"], sexpr, 0)
     y = get_value_from_tree(["y", "_"], sexpr, 0)
     
@@ -97,7 +95,7 @@ def create_gameobject_from_data(editormap, objmap, name, sexpr)
 end
 
 def create_gameobject(editormap, objmap, data, pos, sexpr = [])
-  (name, spritefile, type, func) = data
+  (_name, spritefile, type, func) = data
   
   # Creates a gameobject the given position, data is the entry in the $game_objects table
   case type

@@ -205,8 +205,8 @@ def create_worldmapobject_at_pos(objmap, name, pos)
     return
   end
 
-  (name, image, _class) = objectclass
-  object = _class.new()
+  (_name, _image, klass) = objectclass
+  object = klass.new()
   object.obj.to_object.set_pos(pos)
   cmd = ObjectAddCommand.new(objmap)
   cmd.add_object(object.obj.to_object);
@@ -221,8 +221,8 @@ def create_worldmapobject_from_data(objmap, name, sexpr)
     return
   end
 
-  (name, image, _class) = objectclass
-  object = _class.new()
+  (_name, _image, klass) = objectclass
+  object = klass.new()
   object.parse(sexpr)
   cmd = ObjectAddCommand.new(objmap)
   cmd.add_object(object.obj.to_object);

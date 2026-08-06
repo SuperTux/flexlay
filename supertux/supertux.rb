@@ -18,19 +18,31 @@
 ##  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 $config_file = File.expand_path("~/.flexlay/supertux.rb")
+# Avoid "global variable not initialized" warnings on first read.
+$datadir = nil
+$recent_files = nil
 
 def find_supertux_datadir()
-  # try to automatically detect the supertux datadir
+  # Env overrides, then common install / source locations.
+  env = ENV["SUPERTUX_DATADIR"] || ENV["SUPERTUX2_DATA_DIR"]
+  return File.expand_path(env) + "/" if env && !env.empty?
+
   possible_locations = [
-    "~/cvs/supertux/supertux/data/",
-    "~/cvs/supertux/data/",
+    "/usr/share/games/supertux2/",
     "/usr/share/games/supertux/",
+    "/usr/local/share/games/supertux2/",
     "/usr/local/share/games/supertux/",
     "/opt/supertux/data/",
-    "~/projects/supertux/data/",
-    "~/projects/supertux/svn/trunk/supertux/data/",
+    File.expand_path("~/projects/supertux/data/"),
+    File.expand_path("~/projects/supertux/trunk/supertux/data/"),
+    File.expand_path("~/cvs/supertux/supertux/data/"),
+    File.expand_path("~/cvs/supertux/data/"),
   ]
-  # `which supertux`
+  possible_locations.each do |dir|
+    tiles = File.join(dir, "images", "tiles.strf")
+    return (dir.end_with?("/") ? dir : dir + "/") if File.exist?(tiles)
+  end
+  nil
 end
 
 # Config file loading hack
@@ -100,9 +112,15 @@ class SuperTuxConfig
 end
 
 $config  = SuperTuxConfig.new()
-if !$datadir then
-  $datadir = File.expand_path("~/projects/supertux/trunk/supertux/data/")+"/"
+if !defined?($datadir) || !$datadir || $datadir.empty?
+  $datadir = find_supertux_datadir()
+  if !$datadir
+    warn "supertux-editor: could not find SuperTux data dir " \
+         "(set SUPERTUX_DATADIR). Falling back to relative guess."
+    $datadir = File.expand_path("~/projects/supertux/trunk/supertux/data/") + "/"
+  end
 end
+$datadir = $datadir + "/" unless $datadir.end_with?("/")
 
 require_relative "data.rb"
 require_relative "WorldMap.rb"

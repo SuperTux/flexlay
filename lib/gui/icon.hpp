@@ -25,10 +25,9 @@ class IconImpl;
 
 class Icon : public CL_Component
 {
-protected:
-  virtual ~Icon() {}
 public:
   Icon(const CL_Rect& rect, const CL_Sprite& sprite, const std::string& tooltip, CL_Component* parent);
+  virtual ~Icon() {}
 
   void disable();
   void enable();
@@ -39,6 +38,7 @@ public:
   CL_Signal_v0& sig_clicked();
 
 private:
+  // Not copyable — ignored by SWIG via the private section.
   Icon (const Icon&);
   Icon& operator= (const Icon&);
 

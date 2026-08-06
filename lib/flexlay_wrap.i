@@ -1,5 +1,11 @@
 %module flexlay_wrap
- 
+
+// Generate one-arg / partial-arg overloads for C++ constructors that
+// use default arguments.  Without this, modern SWIG often only emits a
+// zero-arg initialize() and Ruby calls like Foo.new(parent) fail with
+// "wrong number of arguments (given N, expected 0)".
+%feature("compactdefaultargs");
+
 %exception {
   try {
     $action
@@ -163,7 +169,14 @@ VALUE CL_Point2Value(const CL_Point& arg)
 %include "gui/tile_selector.hpp"
 %include "object_brush.hpp"
 %include "gui/object_selector.hpp"
+
+// Icon: protected dtor / private copy ops confused older SWIG into
+// emitting only a zero-arg constructor.  Ignore the non-public special
+// members so the real 4-arg constructor is wrapped.
+%ignore Icon::Icon(const Icon&);
+%ignore Icon::operator=;
 %include "gui/icon.hpp"
+
 %include "gui/window.hpp"
 %include "gui/panel.hpp"
 %include "gui/minimap.hpp"

@@ -24,8 +24,6 @@
         # Use the default Ruby from nixpkgs.  The SWIG extension must be
         # loaded with the same interpreter that compiled it (launcher
         # scripts hard-code this path at install time).
-        # Note: do not probe removed attrs like ruby_2_7/swig4 — on
-        # nixos-unstable they exist as rename stubs that throw on eval.
         ruby = pkgs.ruby;
         swig = pkgs.swig;
       in {
@@ -38,28 +36,22 @@
 
             src = nixpkgs.lib.cleanSource ./.;
 
-            # Force the installed launcher scripts to invoke the same
-            # Ruby that the SWIG extension was compiled against.  Using
-            # a bare "ruby" picks up whatever is on $PATH (often a much
-            # newer version) and produces:
-            #   wrong argument type nil (expected Data) (TypeError)
-            installPhase = ''
-              make install PREFIX=$out RUBY=${ruby}/bin/ruby
-            '';
-
             nativeBuildInputs = [
-              pkgs.scons
+              pkgs.cmake
               pkgs.pkg-config
+              swig
             ];
 
             buildInputs = [
               clanlib.packages.${system}.default
-
               pkgs.libGL
               pkgs.libGLU
-              swig
               ruby
               pkgs.zlib
+            ];
+
+            cmakeFlags = [
+              "-DRUBY_EXECUTABLE=${ruby}/bin/ruby"
             ];
           };
         };

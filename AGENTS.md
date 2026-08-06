@@ -62,9 +62,10 @@ Older experimental support for Pingus and Windstille is mentioned in history but
 
 ## Build System
 
-- **Primary:** SCons (`SConstruct` + per-directory `SConscript`)
+- **Primary:** CMake (`CMakeLists.txt`, `lib/`, `ruby/`, `netpanzer/`)
 - **Nix flake** (`flake.nix`) on **nixos-unstable** with patched ClanLib 1.0
 - Requires working OpenGL / hardware 3D acceleration (or `LIBGL_ALWAYS_SOFTWARE=1`)
+- Legacy SCons files (`SConstruct`, `*/SConscript`) are obsolete
 
 ```bash
 nix build
@@ -72,10 +73,12 @@ nix run .#flexlay-paint
 nix run .#netpanzer-editor
 ```
 
-Or via SCons / Makefile with an explicit Ruby:
+Or via CMake:
 
 ```bash
-make install PREFIX=… RUBY=$(which ruby)
+cmake -B build -DCMAKE_INSTALL_PREFIX=$PWD/result -DRUBY_EXECUTABLE=$(command -v ruby)
+cmake --build build -j$(nproc)
+cmake --install build
 ```
 
 ## Lessons learned: porting to modern Ruby + SWIG
@@ -86,9 +89,8 @@ The tree was written for **Ruby 2.x** and **SWIG 1.3/2.x**. On current nixos-uns
 
 Bare `exec ruby …` picks up whatever is on `$PATH`. The SWIG extension ABI must match the interpreter that compiled it.
 
-- Makefile: `RUBY` variable, default `ruby`
-- `flake.nix` `installPhase`: `make install … RUBY=${ruby}/bin/ruby`
-- In-tree launcher scripts: `RUBY="${RUBY:-ruby}"`
+- CMake: `-DRUBY_EXECUTABLE=/path/to/ruby` (baked into installed launchers)
+- `flake.nix`: `-DRUBY_EXECUTABLE=${ruby}/bin/ruby`
 
 Symptom otherwise: `wrong argument type nil (expected Data) (TypeError)`.
 
@@ -98,7 +100,7 @@ On unstable, attrs like `swig4` / `ruby_2_7` still *exist* as rename stubs that 
 
 ### 3. pkg-config for Ruby is versioned
 
-`ruby/SConscript` and `netpanzer/SConscript` used to hardcode `ruby-2.7`. They now probe `ruby`, `ruby-3.x`, `ruby-2.7`, … (override with `RUBY_PKG`).
+CMake probes `ruby`, `ruby-3.x`, … via pkg-config (override with `RUBY_PKG`).
 
 ### 4. Bare `alias` on SWIG methods fails under Ruby 3.4
 

@@ -216,7 +216,7 @@ Undo/redo **do** check `empty()` before `back()` — good.
 | OL-01 | P2 | FIXED | `move_to()` is **stub** (`FIXME: Implement me`) — scripting may assume z-order changes work. |
 | OL-02 | P2 | FIXED | `get_selection` only tests whether rect contains object **position**, not bounds (`FIXME`). |
 | OL-03 | P2 | FIXED | No null check on `impl` (default ctor allocates — OK). |
-| OL-04 | P3 | OPEN | `find_object` returns default `ObjMapObject()` on miss; callers must test null. |
+| OL-04 | P3 | FIXED | `find_object` returns default `ObjMapObject()` on miss; callers must test null. |
 
 `raise` / `lower` index checks look correct.
 
@@ -254,7 +254,7 @@ Undo/redo **do** check `empty()` before `back()` — good.
 |----|-----|--------|---------|
 | SW-01 | P2 | FIXED | `%include` of tool subclasses **without** prior `%include "tools/tool.hpp"` → SWIG Warning 402 (incomplete base `Tool`).  Inheritance may not be fully exposed to Ruby. |
 | SW-02 | P2 | FIXED | `workspace.hpp` only forward-declares `Tool`; included before tools in SWIG interface. |
-| SW-03 | P3 | OPEN | Warning 454 at `flexlay.hpp:92` (pointer setter may leak) — review ownership of that member. |
+| SW-03 | P3 | FIXED | Warning 454 at `flexlay.hpp:92` (pointer setter may leak) — review ownership of that member. |
 
 **Fix plan:** `%include "tools/tool.hpp"` before any tool subclass and
 before types that take `Tool` by value/reference if needed.
@@ -328,7 +328,7 @@ document single-listener policy if intentional.
 | NP-02 | P1 | FIXED | `tiledata` is raw `new[]` with comment `FIXME: Delete this somewhere!` — **leak** on reload / process lifetime; no destructor frees it. |
 | NP-03 | P1 | FIXED | Binary reads ignore `gcount()`; truncated files → **uninitialized** tile headers / tiledata. |
 | NP-04 | P1 | FIXED | No endian conversion for `unsigned short` fields. |
-| NP-05 | P2 | OPEN | `find_tilegroup` dummy group when empty — safe return but callers may still draw garbage if other paths skip null checks. |
+| NP-05 | P2 | FIXED | `find_tilegroup` dummy group when empty — safe return but callers may still draw garbage if other paths skip null checks. |
 | NP-06 | P2 | FIXED | Singleton `NetPanzerData::instance_` never destroyed. |
 | NP-07 | P2 | FIXED | `load_tileset` does not clear previous `tiledata` / tileset on failure mid-way. |
 | NP-08 | P3 | FIXED | Dummy `NetPanzerTileGroup` uses field assignment (not illegal brace-init). |
@@ -355,7 +355,7 @@ file format; free/reload cleanly; surface `has_data()` to Ruby.
 |----|-----|--------|---------|
 | ST-01 | P1 | PARTIAL | Comments: cannot call Flexlay deinit or process crashes — same ownership issue as ClanLib widgets. |
 | ST-02 | P2 | PARTIAL | Sector/map comments about recursive refcount / data not freed. |
-| ST-03 | P3 | OPEN | Various FIXMEs (tmp files, ButtonPanel, etc.). |
+| ST-03 | P3 | PARTIAL | Various FIXMEs (tmp files, ButtonPanel, etc.). |
 
 ---
 
@@ -530,4 +530,13 @@ Still OPEN: **ST-01** deinit, broader GUI null checks, differential paint undo.
 - **LY-02 / OL-03:** Layer already null-safe; ObjectLayer default ctor allocates.
 - **ST-02:** `Sector#dispose` clears editormap metadata and child refs to
   break Ruby cycles; callers should invoke dispose when discarding a sector.
+### 2026-08-06 - Pass C continued (5)
+
+- **NP-05:** `find_tilegroup` returns a zero-size dummy; provider
+  `get_sprite` checks `has_data()` and group dimensions; `get_surface`
+  bounds-checks tile indices against header count.
+- **SW-03:** `Flexlay::current_` is private (only `current()` accessor) to
+  avoid SWIG treating a public static pointer as an assignable setter.
+- **ST-03:** `gui_run_level` uses `Tempfile` instead of fixed `/tmp/...` paths.
+- **OL-04:** `find_object` documents null return (`is_null()`).
 

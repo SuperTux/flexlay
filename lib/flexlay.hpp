@@ -88,9 +88,10 @@ public:
 
   CL_ResourceManager resources;
 
-  static Flexlay* current() { return current_; }
-public:
   static Flexlay* current_;
+
+public:
+  static Flexlay* current() { return current_; }
 
   Flexlay();
 

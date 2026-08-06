@@ -99,17 +99,32 @@ public:
       {
         return sprite;
       }
-    else
+    if (!NetPanzerData::instance()->has_data())
       {
-        NetPanzerTileGroup& tilegroup = NetPanzerData::instance()->find_tilegroup(id);
-        int dist = id - tilegroup.start;
-
-        CL_Rect rect(CL_Point((dist % tilegroup.width) * 32,
-                              (dist / tilegroup.width) * 32),
-                     CL_Size(32, 32));
-        sprite.add_frame(tilegroup.get_surface(), rect);
-        return sprite;
+        return CL_Sprite();
       }
+    NetPanzerTileGroup& tilegroup = NetPanzerData::instance()->find_tilegroup(id);
+    if (tilegroup.width <= 0 || tilegroup.height <= 0)
+      {
+        return CL_Sprite();
+      }
+    int dist = id - tilegroup.start;
+    if (dist < 0)
+      {
+        return CL_Sprite();
+      }
+
+    CL_Rect rect(CL_Point((dist % tilegroup.width) * 32,
+                          (dist / tilegroup.width) * 32),
+                 CL_Size(32, 32));
+    CL_Surface surf = tilegroup.get_surface();
+    // Empty surface (no tiledata) - skip adding a frame.
+    if (surf.get_width() <= 0 || surf.get_height() <= 0)
+      {
+        return CL_Sprite();
+      }
+    sprite.add_frame(surf, rect);
+    return sprite;
   }
 
   CL_PixelBuffer get_pixelbuffer() const
@@ -184,7 +199,8 @@ NetPanzerData::load_data(const std::string& datadir_)
 CL_Surface
 NetPanzerTileGroup::get_surface()
 {
-  if (!NetPanzerData::instance()->get_tiledata())
+  NetPanzerData* np = NetPanzerData::instance();
+  if (!np || !np->get_tiledata() || width <= 0 || height <= 0)
     {
       // Missing tileset data - return an empty surface rather than segfault.
       return CL_Surface();
@@ -192,15 +208,20 @@ NetPanzerTileGroup::get_surface()
 
   if (!surface)
     {
+      const int tile_count = static_cast<int>(np->get_tile_headers().size());
       CL_PixelBuffer buffer(width*32, height*32, width*32*4, CL_PixelFormat::rgba8888);
 
       for(int y = 0; y < height; ++y)
         for(int x = 0; x < width; ++x)
           {
-            const CL_Palette& palette = NetPanzerData::instance()->get_palette();
-            unsigned char* data = NetPanzerData::instance()->get_tiledata() + (32*32) * (start + width*y + x);
+            const int tile_index = start + width*y + x;
+            if (tile_index < 0 || tile_index >= tile_count)
+              continue;
 
-            NetPanzerTileHeader header = NetPanzerData::instance()->get_tile_headers()[start + width*y + x]; 
+            const CL_Palette& palette = np->get_palette();
+            unsigned char* data = np->get_tiledata() + (32*32) * tile_index;
+
+            NetPanzerTileHeader header = np->get_tile_headers()[static_cast<std::size_t>(tile_index)]; 
            
             CL_PixelBuffer tile(32, 32, 32*3, CL_PixelFormat::rgb888);
 
@@ -299,16 +320,12 @@ NetPanzerData::find_tilegroup(int index)
     }
 
   std::cout << "NetPanzerData: Couldn't find tilegroup for '" << index << "'" << std::endl;
-  // Avoid undefined behaviour when tilegroups is empty.
-  if (tilegroups.empty())
-    {
-      static NetPanzerTileGroup dummy;
-      dummy.start  = 0;
-      dummy.width  = 1;
-      dummy.height = 1;
-      return dummy;
-    }
-  return tilegroups.front();
+  // Stable empty dummy: get_surface() returns empty when no tiledata.
+  static NetPanzerTileGroup dummy;
+  dummy.start  = 0;
+  dummy.width  = 0;
+  dummy.height = 0;
+  return dummy;
 }
 
 const Tileset&

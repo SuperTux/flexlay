@@ -1,4 +1,5 @@
 require "flexlay.rb"
+require 'tempfile'
 
 class SuperTuxGUI
   quit_button = nil
@@ -425,14 +426,11 @@ class SuperTuxGUI
 
   def gui_run_level()
     puts "Run this level..."
-    if $use_worldmap
-      tmpfile = "/tmp/tmpflexlay-worldmap.stwm"
-      supertux_save_level(tmpfile)
-    else
-      # FIXME: use real tmpfile
-      tmpfile = "/tmp/tmpflexlay-supertux.stl"
-      supertux_save_level(tmpfile)
-    end
+    suffix = $use_worldmap ? ".stwm" : ".stl"
+    tmp = Tempfile.new(["flexlay-supertux", suffix])
+    tmp.close
+    tmpfile = tmp.path
+    supertux_save_level(tmpfile)
     fork { exec("#{$datadir}/../supertux", tmpfile) }
   end
 

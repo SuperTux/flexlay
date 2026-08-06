@@ -16,8 +16,6 @@
 
 #include "bitmap_layer.hpp"
 
-#include <assert.h>
-
 #include <ClanLib/gl.h>
 #include <ClanLib/Core/System/error.h>
 #include <ClanLib/Display/canvas.h>

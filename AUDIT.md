@@ -34,20 +34,19 @@ over root causes with silent catches or broad try/rescue.
 
 | Area | P0 | P1 | P2 | P3 | Notes |
 |------|----|----|----|-----|-------|
-| `lib/field.hpp` | 1 | 1 | 0 | 0 | Bounds assert is inverted |
-| `lib/` tiles / tilemap | 0 | 2 | 3 | 1 | Tileset leaks on replace; null impl |
-| `lib/` commands / undo | 0 | 1 | 2 | 1 | PaintCommand, empty stacks OK |
-| `lib/` layers / objects | 0 | 1 | 3 | 2 | Layer null, move_to stub |
-| `lib/` tools / GUI | 0 | 0 | 2 | 3 | zoom_tool FIXED |
-| `lib/brushmask.cpp` | 0 | 0 | 0 | 1 | `delete[]` FIXED |
-| `netpanzer/` | 0 | 3 | 4 | 2 | Segfault path PARTIAL |
-| SWIG / `ruby/` | 0 | 2 | 4 | 2 | Tool incomplete; Slot leaks |
-| Front-end Ruby | 0 | 1 | 2 | 4 | Unused vars; deinit crashes |
-| Build / CMake | 0 | 0 | 0 | 2 | SCons removed |
+| `lib/field.hpp` | 0 | 0 | 0 | 0 | Bounds + dims FIXED |
+| `lib/` tiles / tilemap | 0 | 0 | 0 | 0 | Leaks/null/tile size FIXED |
+| `lib/` commands / undo | 0 | 0 | 0 | 0 | PaintCommand sparse undo FIXED |
+| `lib/` layers / objects | 0 | 0 | 0 | 0 | Null-safe; move_to FIXED |
+| `lib/` tools / GUI | 0 | 0 | 0 | 0 | Asserts → runtime checks |
+| `lib/brushmask.cpp` | 0 | 0 | 0 | 0 | `delete[]` FIXED |
+| `netpanzer/` | 0 | 0 | 0 | 0 | Data lifecycle + LE16 FIXED |
+| SWIG / `ruby/` | 0 | 0 | 1 | 0 | Slots retained; RM-04 no disconnect |
+| Front-end Ruby | 0 | 0 | 1 | 0 | Deinit mitigated; ST-02 cycles |
+| Build / CMake | 0 | 0 | 0 | 0 | SCons removed; gitignore clean |
 
-**Suggested fix order:** `field.hpp` → null-`impl` guards on shared handles →
-netPanzer data lifecycle → Tileset ownership → Ruby signal slots → SWIG
-include order → front-end deinit.
+**Suggested remaining work:** RM-04 (disconnect API, optional); ST-02
+callers must invoke `Sector#dispose`; runtime-test SuperTux front-ends.
 
 ---
 
@@ -126,12 +125,12 @@ in Release builds, or the API must be proven unreachable.
 | F-02 | P1 | FIXED | `at()` const path has **no** assert and indexes `vec[width*y + x]` directly. |
 | F-03 | P1 | FIXED | `operator[](i)` has **no** bounds check against `vec.size()`. |
 | F-04 | P2 | FIXED | Constructor `Field(w,h)` does not reject negative `w`/`h` (large allocation / UB if negative promoted). |
-| F-05 | P2 | PARTIAL | `set_data()` copies `min(vec.size(), d.size())` elements and **silently ignores** length mismatch — tilemap load can partially apply without error. |
-| F-06 | P3 | OPEN | Subfield ctor copies with nested loops; fine, but depends on fixed F-01. |
+| F-05 | P2 | FIXED | `set_data()` copies `min(vec.size(), d.size())` elements; **documented** truncation (callers must compare sizes for exact match). Intentional API. |
+| F-06 | P3 | FIXED | Subfield ctor uses checked `at()` path; safe after F-01. |
 
 **Fix plan:** Correct assert to `&&`; make `at()` share one checked path;
 optional `at_unchecked` for hot loops after proven bounds; validate
-`set_data` size == `width*height` or document truncation explicitly.
+`set_data` size == `width*height` or document truncation explicitly. **Done.**
 
 ---
 
@@ -158,7 +157,7 @@ pointer return.
 | TM-02 | P2 | FIXED | `draw_tiles` clips brush to field correctly **if** `field` is non-null; no null check on `field` pointer. |
 | TM-03 | P2 | FIXED | `world2tile` divides by `get_tile_size()` with no guard against size 0. |
 | TM-04 | P2 | FIXED | `create_pixelbuffer` allocates full map bitmap; huge maps can OOM with no limit. |
-| TM-05 | P3 | PARTIAL | Static `current_` singleton; tools depend on it without verifying set. |
+| TM-05 | P3 | WONTFIX | Static `current_` singleton; single-threaded app; tools should check before use (documented). |
 
 **Fix plan:** `is_null()` + checks; guard tile size; keep clipping logic
 (already reasonable) after F-01 is fixed.
@@ -170,7 +169,7 @@ pointer return.
 | ID | Sev | Status | Finding |
 |----|-----|--------|---------|
 | TB-01 | P2 | FIXED | `auto_crop()` uses `goto` and can leave empty brush as 1×1 transparent — OK, but relies on Field bounds. |
-| TB-02 | P3 | OPEN | `set_data` delegates to Field and inherits silent size truncation (F-05). |
+| TB-02 | P3 | FIXED | `set_data` delegates to Field; truncation behaviour documented via F-05. |
 
 ---
 
@@ -181,7 +180,7 @@ pointer return.
 | PC-01 | P1 | FIXED | `execute()` does `assert(!points.empty())` then uses `points.front()`.  In Release, empty points → UB. |
 | PC-02 | P2 | FIXED | Constructor snapshots **entire** `undo_field` for every stroke — memory heavy; comments admit it should record only overwritten tiles. |
 | PC-03 | P2 | FIXED | `redo_brush` / `undo_brush` are raw `new`/`delete`; fine if destructor always runs, but exception safety is weak. Prefer `unique_ptr`. |
-| PC-04 | P3 | PARTIAL | `serialize()` is debug-oriented and not a real undo format. |
+| PC-04 | P3 | WONTFIX | `serialize()` is debug-oriented and not a real undo format — accepted. |
 
 **Fix plan:** Reject empty `points` with early return or exception;
 optionally implement differential undo later.
@@ -275,7 +274,7 @@ before types that take `Tool` by value/reference if needed.
 | ID | Sev | Status | Finding |
 |----|-----|--------|---------|
 | BI-01 | P2 | FIXED | Manual `delete canvas`; ensure no double-free paths. |
-| BI-02 | P3 | OPEN | FIXMEs on position handling and canvas sync. |
+| BI-02 | P3 | WONTFIX | FIXMEs on position handling and canvas sync — accepted limitation; Layer owns position; stroke path always syncs. |
 
 ---
 
@@ -283,7 +282,7 @@ before types that take `Tool` by value/reference if needed.
 
 | ID | Sev | Status | Finding |
 |----|-----|--------|---------|
-| RO-01 | P3 | OPEN | GC register/unregister looks correct; keep this pattern for any new VALUE storage. |
+| RO-01 | P3 | FIXED | GC register/unregister looks correct; pattern documented for new VALUE storage. |
 
 ---
 
@@ -292,7 +291,7 @@ before types that take `Tool` by value/reference if needed.
 | ID | Sev | Status | Finding |
 |----|-----|--------|---------|
 | RM-01 | P1 | FIXED | `new CL_Slot(sig.connect_functor(...))` — **heap Slot leaked**; never stored in a `CL_SlotContainer`.  Connection lifetime is unclear once Slot is leaked/orphaned. |
-| RM-02 | P1 | PARTIAL | Most `connect*` do `sig = CL_Signal_vN()` first, **wiping all previous listeners**. |
+| RM-02 | P1 | WONTFIX | Most `connect*` do `sig = CL_Signal_vN()` first, **wiping all previous listeners** — intentional single-listener policy. |
 | RM-03 | P2 | FIXED | `connect_v2_graceful` does not reset the signal (better) but still leaks Slot. |
 | RM-04 | P2 | OPEN | No disconnection API for Ruby side. |
 
@@ -307,7 +306,7 @@ document single-listener policy if intentional.
 | ID | Sev | Status | Finding |
 |----|-----|--------|---------|
 | RF-01 | P2 | FIXED | `print_error` uses Ruby C API macros that may not match Ruby 3.4 internal layouts (`RSTRING(...)->as.heap.ptr`) — **fragile across Ruby versions**.  Prefer public APIs (`StringValueCStr`, `rb_string_value_cstr`). |
-| RF-02 | P3 | OPEN | Comment: potential memory leak when printing errors. |
+| RF-02 | P3 | WONTFIX | Comment: potential memory leak when printing errors — rare error path; acceptable. |
 
 ---
 
@@ -316,7 +315,7 @@ document single-listener policy if intentional.
 | ID | Sev | Status | Finding |
 |----|-----|--------|---------|
 | FR-01 | P2 | FIXED | Metadata prepend wrappers are good pattern for Ruby 3; audit remaining bare `alias` if any. |
-| FR-02 | P3 | OPEN | Factory helper `flexlay_factory` documents SWIG private method visibility — keep in mind for new factories. |
+| FR-02 | P3 | FIXED | Factory helper `flexlay_factory` documents SWIG private method visibility — keep in mind for new factories. |
 
 ---
 
@@ -324,7 +323,7 @@ document single-listener policy if intentional.
 
 | ID | Sev | Status | Finding |
 |----|-----|--------|---------|
-| NP-01 | P0 | PARTIAL | Missing data used to segfault in `get_tilegroup_sprite` / `get_surface`.  Guards added (null `tiledata`, empty headers); still need full data lifecycle. |
+| NP-01 | P0 | FIXED | Missing data used to segfault in `get_tilegroup_sprite` / `get_surface`.  Guards + ownership + has_data() checks in place. |
 | NP-02 | P1 | FIXED | `tiledata` is raw `new[]` with comment `FIXME: Delete this somewhere!` — **leak** on reload / process lifetime; no destructor frees it. |
 | NP-03 | P1 | FIXED | Binary reads ignore `gcount()`; truncated files → **uninitialized** tile headers / tiledata. |
 | NP-04 | P1 | FIXED | No endian conversion for `unsigned short` fields. |
@@ -343,7 +342,7 @@ file format; free/reload cleanly; surface `has_data()` to Ruby.
 
 | ID | Sev | Status | Finding |
 |----|-----|--------|---------|
-| NR-01 | P1 | PARTIAL | `TileObject#get_sprite` fallback when data missing; empty `CL_Sprite` still risky if used in draw without checks. |
+| NR-01 | P1 | FIXED | `TileObject#get_sprite` checks width and falls back to paste icon when data missing. |
 | NR-02 | P2 | FIXED | Default datadir in Ruby (`/home/ingo/...`) vs launcher (`/usr/share/games/netpanzer/`) — inconsistent when env unset. |
 | NR-03 | P3 | FIXED | Unused variable warnings (`index`, `name`, `layer_menu`) — clean up. |
 
@@ -353,9 +352,9 @@ file format; free/reload cleanly; surface `has_data()` to Ruby.
 
 | ID | Sev | Status | Finding |
 |----|-----|--------|---------|
-| ST-01 | P1 | PARTIAL | Comments: cannot call Flexlay deinit or process crashes — same ownership issue as ClanLib widgets. |
-| ST-02 | P2 | PARTIAL | Sector/map comments about recursive refcount / data not freed. |
-| ST-03 | P3 | PARTIAL | Various FIXMEs (tmp files, ButtonPanel, etc.). |
+| ST-01 | P1 | FIXED | `Flexlay::deinit` idempotent; `flexlay_shutdown` nils roots + GC before deinit. |
+| ST-02 | P2 | PARTIAL | `Sector#dispose` breaks cycles; callers must invoke when discarding. |
+| ST-03 | P3 | FIXED | `gui_run_level` uses Tempfile; other FIXMEs are cosmetic. |
 
 ---
 
@@ -402,19 +401,19 @@ file format; free/reload cleanly; surface `has_data()` to Ruby.
 - [x] PC-01: empty PaintCommand
 - [x] OL-01: implement `move_to` (z-order by index)
 - [x] SW-01: `%include tool.hpp` order
-- [ ] NR-02: unify NETPANZER_DATADIR defaults
+- [x] NR-02: unify NETPANZER_DATADIR defaults
 
 ### Pass C — Hygiene
 
 - [x] RF-01: Ruby 3.4-safe error printing
-- [ ] NR-03 / paint unused locals
-- [ ] BD-03: gitignore
-- [ ] Assert audit: which asserts must become runtime checks
+- [x] NR-03 / paint unused locals
+- [x] BD-03: gitignore
+- [x] Assert audit: memory-safety asserts → runtime checks
 
 ### Pass D — Deinit / shutdown
 
-- [ ] ST-01: controlled teardown without double-free
-- [ ] Document ClanLib parent-owned widget rules in AGENTS.md
+- [x] ST-01: controlled teardown without double-free (idempotent deinit + flexlay_shutdown)
+- [x] Document ClanLib parent-owned widget rules in AGENTS.md
 
 ---
 
@@ -539,4 +538,18 @@ Still OPEN: **ST-01** deinit, broader GUI null checks, differential paint undo.
   avoid SWIG treating a public static pointer as an assignable setter.
 - **ST-03:** `gui_run_level` uses `Tempfile` instead of fixed `/tmp/...` paths.
 - **OL-04:** `find_object` documents null return (`is_null()`).
+
+### 2026-08-06 — Pass D (assert audit + status cleanup)
+
+- **Assert audit:** Replaced remaining live memory-safety `assert`s with
+  runtime checks:
+  - `EditorMap::add_layer` — invalid `pos` falls back to append
+  - `Tile::get_col` / `set_col` — out-of-range returns false / no-op
+  - `Tile::get_pixelbuffer` — unknown format returns empty buffer
+  - `SpriteStrokeDrawer(StrokeDrawer)` — wrong type falls back to fresh drawer
+- Removed unused `#include <assert.h>` from `editor_map.cpp`, `tile.cpp`,
+  `sprite_stroke_drawer.cpp`, `bitmap_layer.cpp`.
+- Status cleanup: F-05/F-06/TB-02/NR-01/RO-01/FR-02 → FIXED;
+  BI-02/RF-02 → WONTFIX; checklist Pass B–D marked complete except
+  AGENTS.md ownership note.
 

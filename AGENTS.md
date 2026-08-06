@@ -169,7 +169,26 @@ Same for `Flexlay_wrap::CL_Menu#add_item`, etc.
 - Quiet unused-variable warnings in front-end GUIs (`gui.rb` locals).
 - netPanzer game data path (`/usr/share/games/netpanzer/`) is often absent; make it configurable.
 - Broader SWIG coverage audit: any remaining `Foo.new(...)` that still hits “expected 0” needs a factory or interface fix.
-- Exit-time segfaults from parent-owned widget finalizers (mitigated by empty `unref`, may still need work).
+- Exit-time segfaults from parent-owned widget finalizers (mitigated by empty `unref`; use `flexlay_shutdown`).
+
+### ClanLib parent-owned widget rules (shutdown)
+
+ClanLib GUI widgets are **owned by their parent component**. SWIG must not
+`delete` them from Ruby finalizers:
+
+1. In `lib/clanlib.i`, parent-owned types use empty ownership features:
+   ```swig
+   %feature("ref")   Icon "";
+   %feature("unref") Icon "";
+   ```
+2. Do **not** call `Flexlay#deinit` while Ruby still holds proxies to
+   widgets that ClanLib has already destroyed (or will destroy).
+3. Preferred shutdown sequence (see `ruby/flexlay.rb#flexlay_shutdown`):
+   - Nil out GUI roots / tool references on the Ruby side
+   - `GC.start` to drop proxies
+   - Then call `flexlay.deinit` (idempotent; safe to call once)
+4. Front-ends should not keep long-lived globals pointing at parent-owned
+   widgets past the GUI teardown path.
 
 ## Data & Assets
 

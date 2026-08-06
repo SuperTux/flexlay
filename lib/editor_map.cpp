@@ -17,7 +17,7 @@
 #include "editor_map.hpp"
 
 #include <ClanLib/Display/graphic_context.h>
-#include <assert.h>
+// (assert removed — runtime checks used instead)
 #include <iostream>
 
 #include "meta_data.hpp"
@@ -76,7 +76,13 @@ EditorMap::add_layer(const Layer& layer, int pos)
     return;
   std::cout << impl << " EditorMap::add_layer" << std::endl;
 
-  assert(pos == -1 || (pos >= 0 && pos < int(impl->layers.size())));
+  // pos == -1 appends; otherwise must be a valid insert index.
+  if (pos != -1 && (pos < 0 || pos > int(impl->layers.size())))
+  {
+    std::cout << "EditorMap::add_layer: invalid pos " << pos
+              << " (size=" << impl->layers.size() << "), appending" << std::endl;
+    pos = -1;
+  }
 
   if (pos == -1) // insert at last pos
     impl->layers.push_back(layer);

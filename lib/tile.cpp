@@ -22,7 +22,6 @@
 #include <ClanLib/Display/pixel_format.h>
 #include <ClanLib/Display/sprite.h>
 #include <ClanLib/Display/sprite_description.h>
-#include <assert.h>
 #include <iostream>
 
 #include "string_converter.hpp"
@@ -161,7 +160,7 @@ Tile::get_pixelbuffer()
           //CL_SpriteDescription descr(impl->filename, resources);
           //impl->pixelbuffer = CL_PixelBuffer(*(descr.get_frames().begin()->first));
           std::cout << "Error: not a png or jpg file: " << impl->filename << std::endl;
-          assert(0);
+          return CL_PixelBuffer();
         }
         return impl->pixelbuffer;
 
@@ -233,16 +232,16 @@ Tile::calc_color()
 bool
 Tile::get_col(unsigned char x, unsigned char  y)
 {
-  assert(x < 8);
-  assert(y < 8);
-  return (impl->colmap[y] & (1 << (7-x)));
+  if (x >= 8 || y >= 8)
+    return false;
+  return (impl->colmap[y] & (1 << (7-x))) != 0;
 }
 
 void
 Tile::set_col(unsigned char x, unsigned char  y, bool val)
 {
-  assert(x < 8);
-  assert(y < 8);
+  if (x >= 8 || y >= 8)
+    return;
   if (val)
     impl->colmap[y] |= (1 << (7-x));
   else

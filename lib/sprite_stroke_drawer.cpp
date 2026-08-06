@@ -18,7 +18,6 @@
 
 #include <ClanLib/Display/canvas.h>
 #include <ClanLib/gl.h>
-#include <assert.h>
 
 #include "stroke_drawer_impl.hpp"
 #include "drawer_properties.hpp"
@@ -41,7 +40,12 @@ public:
 SpriteStrokeDrawer::SpriteStrokeDrawer(StrokeDrawer drawer)
 {
   impl = std::dynamic_pointer_cast<SpriteStrokeDrawerImpl>(drawer.impl);
-  assert(impl.get());
+  if (!impl.get())
+  {
+    // Wrong drawer type or null — fall back to a fresh normal-mode drawer.
+    impl.reset(new SpriteStrokeDrawerImpl());
+    impl->mode = SpriteStrokeDrawer::DM_NORMAL;
+  }
 }
 
 SpriteStrokeDrawer::SpriteStrokeDrawer()

@@ -82,16 +82,30 @@ class CL_Menu
     connect(item.sig_clicked(), func)
   end
 
-  def CL_Menu.new_from_spec(menubarspec, parent)
-    menu = CL_Menu.new(parent)
-    
-    menubarspec.each { |(title, *menu_spec)|
-      menu_spec.each{ |(name, callback)|
+  # Factory used by the layout loader.  Modern SWIG often drops or
+  # mishandles overloaded C++ constructors with default arguments, so
+  # try the forms that the ClanLib API actually provides.
+  def self.new_from_spec(menubarspec, parent)
+    menu =
+      begin
+        # CL_Menu(CL_Component *parent, CL_StyleManager *style=NULL, bool vertical=false)
+        CL_Menu.new(parent, nil, false)
+      rescue ArgumentError
+        begin
+          CL_Menu.new(parent)
+        rescue ArgumentError
+          # CL_Menu(const CL_Rect &, CL_Component *parent, ...)
+          CL_Menu.new(CL_Rect.new(CL_Point.new(0, 0), CL_Size.new(100, 20)), parent)
+        end
+      end
+
+    menubarspec.each do |(title, *menu_spec)|
+      menu_spec.each do |(name, callback)|
         menu.add_item("#{title}/#{name}", callback)
-      }
-    }
-    
-    return menu
+      end
+    end
+
+    menu
   end
 end
 

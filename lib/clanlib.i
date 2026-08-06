@@ -154,6 +154,11 @@ public:
 	const std::string &get_text() const;
 };
 
+// compactdefaultargs: generate one-arg CL_Menu.new(parent) instead of
+// only the zero-arg form that modern SWIG tends to leave us with when
+// overloaded constructors use default arguments.
+%feature("compactdefaultargs") CL_Menu::CL_Menu;
+
 class CL_Menu : public CL_Component
 {
 private:

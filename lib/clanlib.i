@@ -194,15 +194,18 @@ public:
 	CL_MenuNode *create_item( const std::string &path, const std::string &labels=std::string());
 };
 
-// Explicit factories — reliable even when SWIG drops overloaded ctors.
-%extend CL_Menu {
-	static CL_Menu* create(CL_Component* parent) {
-		return new CL_Menu(parent);
-	}
-	static CL_Menu* create_rect(const CL_Rect& rect, CL_Component* parent) {
-		return new CL_Menu(rect, parent);
-	}
-};
+// Free-function factories (module-level in Ruby).  %extend static
+// methods were not reliably exposed as class methods under modern SWIG.
+%newobject CL_Menu_create;
+%newobject CL_Menu_create_rect;
+%inline %{
+CL_Menu* CL_Menu_create(CL_Component* parent) {
+	return new CL_Menu(parent);
+}
+CL_Menu* CL_Menu_create_rect(const CL_Rect& rect, CL_Component* parent) {
+	return new CL_Menu(rect, parent);
+}
+%}
 
 %feature("ref")   CL_MenuNode "";
 %feature("unref") CL_MenuNode "";

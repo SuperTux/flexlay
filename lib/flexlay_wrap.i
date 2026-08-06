@@ -186,12 +186,13 @@ public:
   CL_Signal_v0& sig_clicked();
 };
 
-%extend Icon {
-  static Icon* create(const CL_Rect& rect, const CL_Sprite& sprite,
-                      const std::string& tooltip, CL_Component* parent) {
-    return new Icon(rect, sprite, tooltip, parent);
-  }
-};
+%newobject Icon_create;
+%inline %{
+Icon* Icon_create(const CL_Rect& rect, const CL_Sprite& sprite,
+                  const std::string& tooltip, CL_Component* parent) {
+  return new Icon(rect, sprite, tooltip, parent);
+}
+%}
 
 %feature("ref")   Panel "";
 %feature("unref") Panel "";
@@ -201,11 +202,12 @@ public:
   Panel(const CL_Rect& rect, CL_Component* parent);
 };
 
-%extend Panel {
-  static Panel* create(const CL_Rect& rect, CL_Component* parent) {
-    return new Panel(rect, parent);
-  }
-};
+%newobject Panel_create;
+%inline %{
+Panel* Panel_create(const CL_Rect& rect, CL_Component* parent) {
+  return new Panel(rect, parent);
+}
+%}
 
 %include "gui/window.hpp"
 %include "gui/minimap.hpp"

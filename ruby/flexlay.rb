@@ -82,11 +82,14 @@ class CL_Menu
     connect(item.sig_clicked(), func)
   end
 
-  # Factory used by the layout loader.  Prefer SWIG %extend factories.
+  # Factory used by the layout loader.  Prefer SWIG %inline factories
+  # (CL_Menu_create) which are module-level functions after include.
   def self.new_from_spec(menubarspec, parent)
     menu =
-      if CL_Menu.respond_to?(:create)
-        CL_Menu.create(parent)
+      if defined?(CL_Menu_create)
+        CL_Menu_create(parent)
+      elsif defined?(CL_Menu_create_rect)
+        CL_Menu_create_rect(CL_Rect.new(CL_Point.new(0, 0), CL_Size.new(100, 20)), parent)
       else
         begin
           CL_Menu.new(parent, nil, false)
@@ -114,7 +117,7 @@ class ButtonPanel
 
   def initialize(x, y, width, height, horizontal, parent, &block)
     rect = CL_Rect.new(CL_Point.new(x, y), CL_Size.new(width, height))
-    @panel = Panel.respond_to?(:create) ? Panel.create(rect, parent) : Panel.new(rect, parent)
+    @panel = defined?(Panel_create) ? Panel_create(rect, parent) : Panel.new(rect, parent)
     @pos   = 2
     @horizontal = horizontal
     @items = {}
@@ -155,8 +158,8 @@ class ButtonPanel
 
   def make_icon(rect, image, tooltip)
     sprite = make_sprite(image)
-    if Icon.respond_to?(:create)
-      Icon.create(rect, sprite, tooltip, @panel)
+    if defined?(Icon_create)
+      Icon_create(rect, sprite, tooltip, @panel)
     else
       Icon.new(rect, sprite, tooltip, @panel)
     end

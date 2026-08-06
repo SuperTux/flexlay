@@ -10,16 +10,17 @@
         ]
       },
       "locked": {
-        "lastModified": 1658510617,
-        "narHash": "sha256-ByQ8DFXS01r5kxeogAehrJzSkBMWTVd+MPO6Mi9VZdY=",
+        "lastModified": 1786019981,
+        "narHash": "sha256-58XF+YLvL46w2D5iPPs+orTvzTfKw4hT16GP1xqnq5c=",
         "owner": "grumbel",
         "repo": "clanlib-1.0",
-        "rev": "19ec861d67a2ca3de35de9bdcda8ceebed9411a6",
+        "rev": "0088ab39846c83838c7e4ebf42b5d89816c5c29d",
         "type": "github"
       },
       "original": {
         "owner": "grumbel",
         "repo": "clanlib-1.0",
+        "rev": "0088ab39846c83838c7e4ebf42b5d89816c5c29d",
         "type": "github"
       }
     },

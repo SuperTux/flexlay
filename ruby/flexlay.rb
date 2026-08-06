@@ -2,6 +2,19 @@
 # raises NameError ("undefined method ... for class").  Use prepend so
 # the original SWIG method remains reachable via super().
 
+# Resolve a SWIG %inline factory.  After `include Flexlay_wrap` the
+# functions are private instance methods of Object; `defined?` does not
+# see them.  Prefer the module singleton, then a private respond_to?
+def flexlay_factory(name)
+  if defined?(Flexlay_wrap) && Flexlay_wrap.respond_to?(name)
+    return Flexlay_wrap.method(name)
+  end
+  if respond_to?(name, true)
+    return method(name)
+  end
+  nil
+end
+
 module TilemapLayerMetadata
   def set_metadata(data)
     super(make_metadata(data))
@@ -54,11 +67,15 @@ module ObjMapObjectMetadata
 end
 ObjMapObject.prepend(ObjMapObjectMetadata)
 
-class Icon
+# Open the SWIG class explicitly — after include Flexlay_wrap, a bare
+# `class Icon` can sometimes bind to a different constant.
+class Flexlay_wrap::Icon
   def set_callback(func)
     connect(sig_clicked(), func)
   end
 end
+# Alias for code that still refers to Icon without the module prefix.
+Icon = Flexlay_wrap::Icon unless defined?(Icon) && Icon.equal?(Flexlay_wrap::Icon)
 
 module MenuAddItem
   def add_item(*params)
@@ -82,25 +99,24 @@ class CL_Menu
     connect(item.sig_clicked(), func)
   end
 
-  # Factory used by the layout loader.  Prefer SWIG %inline factories
-  # (CL_Menu_create) which are module-level functions after include.
+  # Factory used by the layout loader.
   def self.new_from_spec(menubarspec, parent)
-    menu =
-      if defined?(CL_Menu_create)
-        CL_Menu_create(parent)
-      elsif defined?(CL_Menu_create_rect)
-        CL_Menu_create_rect(CL_Rect.new(CL_Point.new(0, 0), CL_Size.new(100, 20)), parent)
-      else
+    # Prefer the 1-arg factory; Method#arity is unreliable for SWIG C funcs.
+    if (factory = flexlay_factory(:CL_Menu_create))
+      menu = factory.call(parent)
+    elsif (factory = flexlay_factory(:CL_Menu_create_rect))
+      menu = factory.call(CL_Rect.new(CL_Point.new(0, 0), CL_Size.new(100, 20)), parent)
+    else
+      begin
+        menu = CL_Menu.new(parent, nil, false)
+      rescue ArgumentError
         begin
-          CL_Menu.new(parent, nil, false)
+          menu = CL_Menu.new(parent)
         rescue ArgumentError
-          begin
-            CL_Menu.new(parent)
-          rescue ArgumentError
-            CL_Menu.new(CL_Rect.new(CL_Point.new(0, 0), CL_Size.new(100, 20)), parent)
-          end
+          menu = CL_Menu.new(CL_Rect.new(CL_Point.new(0, 0), CL_Size.new(100, 20)), parent)
         end
       end
+    end
 
     menubarspec.each do |(title, *menu_spec)|
       menu_spec.each do |(name, callback)|
@@ -117,7 +133,8 @@ class ButtonPanel
 
   def initialize(x, y, width, height, horizontal, parent, &block)
     rect = CL_Rect.new(CL_Point.new(x, y), CL_Size.new(width, height))
-    @panel = defined?(Panel_create) ? Panel_create(rect, parent) : Panel.new(rect, parent)
+    factory = flexlay_factory(:Panel_create)
+    @panel = factory ? factory.call(rect, parent) : Panel.new(rect, parent)
     @pos   = 2
     @horizontal = horizontal
     @items = {}
@@ -158,8 +175,9 @@ class ButtonPanel
 
   def make_icon(rect, image, tooltip)
     sprite = make_sprite(image)
-    if defined?(Icon_create)
-      Icon_create(rect, sprite, tooltip, @panel)
+    factory = flexlay_factory(:Icon_create)
+    if factory
+      factory.call(rect, sprite, tooltip, @panel)
     else
       Icon.new(rect, sprite, tooltip, @panel)
     end

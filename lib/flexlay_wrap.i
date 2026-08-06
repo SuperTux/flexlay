@@ -186,12 +186,25 @@ public:
   CL_Signal_v0& sig_clicked();
 };
 
+%extend Icon {
+  static Icon* create(const CL_Rect& rect, const CL_Sprite& sprite,
+                      const std::string& tooltip, CL_Component* parent) {
+    return new Icon(rect, sprite, tooltip, parent);
+  }
+};
+
 %feature("ref")   Panel "";
 %feature("unref") Panel "";
 class Panel : public CL_Component
 {
 public:
   Panel(const CL_Rect& rect, CL_Component* parent);
+};
+
+%extend Panel {
+  static Panel* create(const CL_Rect& rect, CL_Component* parent) {
+    return new Panel(rect, parent);
+  }
 };
 
 %include "gui/window.hpp"

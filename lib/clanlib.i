@@ -1,5 +1,21 @@
 %include "std_string.i"
 
+// Incomplete types referenced by ClanLib constructors / signals.
+// Without these, modern SWIG silently drops any method whose signature
+// mentions them, which is why CL_Menu.new / Icon.new only had a
+// zero-arg initialize.
+class CL_StyleManager;
+class CL_ResourceManager;
+class CL_Signal_v0
+{
+public:
+	// Opaque to Ruby — only passed through connect() helpers.
+};
+class CL_Signal_v1
+{
+public:
+};
+
 class CL_Component
 {
 public:
@@ -175,6 +191,16 @@ public:
 		bool vertical=false);
 	
 	CL_MenuNode *create_item( const std::string &path, const std::string &labels=std::string());
+};
+
+// Explicit factories — reliable even when SWIG drops overloaded ctors.
+%extend CL_Menu {
+	static CL_Menu* create(CL_Component* parent) {
+		return new CL_Menu(parent);
+	}
+	static CL_Menu* create_rect(const CL_Rect& rect, CL_Component* parent) {
+		return new CL_Menu(rect, parent);
+	}
 };
 
 %feature("ref")   CL_MenuNode "";

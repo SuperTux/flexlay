@@ -82,20 +82,20 @@ class CL_Menu
     connect(item.sig_clicked(), func)
   end
 
-  # Factory used by the layout loader.  Modern SWIG often drops or
-  # mishandles overloaded C++ constructors with default arguments, so
-  # try the forms that the ClanLib API actually provides.
+  # Factory used by the layout loader.  Prefer SWIG %extend factories.
   def self.new_from_spec(menubarspec, parent)
     menu =
-      begin
-        # CL_Menu(CL_Component *parent, CL_StyleManager *style=NULL, bool vertical=false)
-        CL_Menu.new(parent, nil, false)
-      rescue ArgumentError
+      if CL_Menu.respond_to?(:create)
+        CL_Menu.create(parent)
+      else
         begin
-          CL_Menu.new(parent)
+          CL_Menu.new(parent, nil, false)
         rescue ArgumentError
-          # CL_Menu(const CL_Rect &, CL_Component *parent, ...)
-          CL_Menu.new(CL_Rect.new(CL_Point.new(0, 0), CL_Size.new(100, 20)), parent)
+          begin
+            CL_Menu.new(parent)
+          rescue ArgumentError
+            CL_Menu.new(CL_Rect.new(CL_Point.new(0, 0), CL_Size.new(100, 20)), parent)
+          end
         end
       end
 
@@ -113,7 +113,8 @@ class ButtonPanel
   attr_reader :panel, :items
 
   def initialize(x, y, width, height, horizontal, parent, &block)
-    @panel = Panel.new(CL_Rect.new(CL_Point.new(x, y), CL_Size.new(width, height)), parent)
+    rect = CL_Rect.new(CL_Point.new(x, y), CL_Size.new(width, height))
+    @panel = Panel.respond_to?(:create) ? Panel.create(rect, parent) : Panel.new(rect, parent)
     @pos   = 2
     @horizontal = horizontal
     @items = {}
@@ -152,13 +153,22 @@ class ButtonPanel
     return buttonpanel
   end
 
+  def make_icon(rect, image, tooltip)
+    sprite = make_sprite(image)
+    if Icon.respond_to?(:create)
+      Icon.create(rect, sprite, tooltip, @panel)
+    else
+      Icon.new(rect, sprite, tooltip, @panel)
+    end
+  end
+
   def add_small_icon(image = nil, callback = nil, tooltip = "")
     if (@horizontal)
-      icon = Icon.new(CL_Rect.new(CL_Point.new(@pos,  2), CL_Size.new(16, 32)),
-                      make_sprite(image), tooltip, @panel);
+      icon = make_icon(CL_Rect.new(CL_Point.new(@pos,  2), CL_Size.new(16, 32)),
+                       image, tooltip)
     else
-      icon = Icon.new(CL_Rect.new(CL_Point.new(2, @pos), CL_Size.new(16, 32)),
-                      make_sprite(image), tooltip, @panel);
+      icon = make_icon(CL_Rect.new(CL_Point.new(2, @pos), CL_Size.new(16, 32)),
+                       image, tooltip)
     end
     
     @pos += 16
@@ -175,11 +185,11 @@ class ButtonPanel
     end
 
     if (@horizontal)
-      icon = Icon.new(CL_Rect.new(CL_Point.new(@pos,  2), CL_Size.new(32, 32)),
-                      make_sprite(image), tooltip, @panel);
+      icon = make_icon(CL_Rect.new(CL_Point.new(@pos,  2), CL_Size.new(32, 32)),
+                       image, tooltip)
     else
-      icon = Icon.new(CL_Rect.new(CL_Point.new(2, @pos), CL_Size.new(32, 32)),
-                      make_sprite(image), tooltip, @panel);
+      icon = make_icon(CL_Rect.new(CL_Point.new(2, @pos), CL_Size.new(32, 32)),
+                       image, tooltip)
     end
     
     @pos += 32

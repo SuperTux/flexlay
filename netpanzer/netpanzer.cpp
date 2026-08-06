@@ -105,6 +105,7 @@ public:
 };
 
 NetPanzerData::NetPanzerData() 
+  : tiledata(0)
 {
 }
 
@@ -132,6 +133,12 @@ NetPanzerData::load_data(const std::string& datadir_)
 CL_Surface
 NetPanzerTileGroup::get_surface()
 {
+  if (!NetPanzerData::instance()->get_tiledata())
+    {
+      // Missing tileset data - return an empty surface rather than segfault.
+      return CL_Surface();
+    }
+
   if (!surface)
     {
       CL_PixelBuffer buffer(width*32, height*32, width*32*4, CL_PixelFormat::rgba8888);
@@ -204,6 +211,15 @@ NetPanzerTileGroup::get_surface()
 CL_Sprite
 NetPanzerData::get_tilegroup_sprite(int index)
 {
+  // No game data loaded (missing NETPANZER_DATADIR / .tls / palette).
+  // Return an empty sprite instead of dereferencing null tiledata.
+  if (!tiledata || tile_headers.empty())
+    {
+      std::cout << "NetPanzerData: get_tilegroup_sprite(" << index
+                << "): tile data not loaded (set NETPANZER_DATADIR)" << std::endl;
+      return CL_Sprite();
+    }
+
   for(TileGroups::iterator i = tilegroups.begin(); i != tilegroups.end(); ++i)
     {
       if (index == i->start)
@@ -232,7 +248,12 @@ NetPanzerData::find_tilegroup(int index)
     }
 
   std::cout << "NetPanzerData: Couldn't find tilegroup for '" << index << "'" << std::endl;
-  // return some junk just to keep it running
+  // Avoid undefined behaviour when tilegroups is empty.
+  if (tilegroups.empty())
+    {
+      static NetPanzerTileGroup dummy = {0, 1, 1};
+      return dummy;
+    }
   return tilegroups.front();
 }
 

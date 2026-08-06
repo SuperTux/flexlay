@@ -134,18 +134,27 @@ module GameObjects
       tilemap.draw_tile(brush, CL_Point.new(x(), y()))
     end
 
+    def self.fallback_sprite()
+      make_sprite((ENV["FLEXLAY_DATADIR"] || "../data") + "/images/icons16/stock_paste-16.png")
+    end
+
     def get_sprite()
       begin
-        return NetPanzerData::instance().get_tilegroup_sprite($brushes[@brushindex][0])
+        sprite = NetPanzerData::instance().get_tilegroup_sprite($brushes[@brushindex][0])
+        # Empty CL_Sprite (missing game data) is truthy in Ruby; check size.
+        if sprite.nil? || (sprite.respond_to?(:get_width) && sprite.get_width() <= 0)
+          return TileObject.fallback_sprite()
+        end
+        return sprite
       rescue
         # Missing netPanzer game data (palette / .tls) yields a null sprite.
-        return make_sprite((ENV["FLEXLAY_DATADIR"] || "../data") + "/images/icons16/stock_paste-16.png")
+        return TileObject.fallback_sprite()
       end
     end
 
     def TileObject.create(objmap, brushindex, x, y)
       obj = TileObject.new(brushindex)
-      sprite_obj = ObjMapSpriteObject.new(NetPanzerData::instance().get_tilegroup_sprite($brushes[brushindex][0]),
+      sprite_obj = ObjMapSpriteObject.new(obj.get_sprite(),
                                           CL_Pointf.new(x*32, y*32),
                                           make_metadata(obj))
       obj.data = sprite_obj

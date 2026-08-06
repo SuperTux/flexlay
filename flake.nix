@@ -2,7 +2,10 @@
   description = "Generic 2d editor for games";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-22.05";
+    # ClanLib 1.0 (patched) targets nixos-unstable; keep Flexlay on the
+    # same channel so package attributes (libxi, libxmu, …) resolve and
+    # we do not mix ABIs between the two flakes.
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
 
     clanlib.url = "github:grumbel/clanlib-1.0";
@@ -14,6 +17,14 @@
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = nixpkgs.legacyPackages.${system};
+
+        # Use the default Ruby from nixpkgs.  The SWIG extension must be
+        # loaded with the same interpreter that compiled it (launcher
+        # scripts hard-code this path at install time).
+        # Note: do not probe removed attrs like ruby_2_7/swig4 — on
+        # nixos-unstable they exist as rename stubs that throw on eval.
+        ruby = pkgs.ruby;
+        swig = pkgs.swig;
       in {
         packages = rec {
           default = flexlay-classic;
@@ -30,12 +41,12 @@
             # newer version) and produces:
             #   wrong argument type nil (expected Data) (TypeError)
             installPhase = ''
-              make install PREFIX=$out RUBY=${pkgs.ruby_2_7}/bin/ruby
+              make install PREFIX=$out RUBY=${ruby}/bin/ruby
             '';
 
             nativeBuildInputs = [
               pkgs.scons
-              pkgs.pkgconfig
+              pkgs.pkg-config
             ];
 
             buildInputs = [
@@ -43,11 +54,11 @@
 
               pkgs.libGL
               pkgs.libGLU
-              pkgs.swig2
-              pkgs.ruby_2_7
+              swig
+              ruby
               pkgs.zlib
             ];
-           };
+          };
         };
       }
     );

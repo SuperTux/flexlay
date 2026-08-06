@@ -6,12 +6,13 @@
 // zero-arg initialize.
 class CL_StyleManager;
 class CL_ResourceManager;
+
+// Opaque signal handle — only passed through connect() helpers.
+// Do NOT declare CL_Signal_v1 here: it is a template in ClanLib and a
+// non-template stub makes SWIG emit invalid `new CL_Signal_v1()`.
+%nodefaultctor CL_Signal_v0;
+%nodefaultdtor CL_Signal_v0;
 class CL_Signal_v0
-{
-public:
-	// Opaque to Ruby — only passed through connect() helpers.
-};
-class CL_Signal_v1
 {
 public:
 };

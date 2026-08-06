@@ -125,6 +125,10 @@ $workspace_move_tool = nil
 $objmap_select_tool = nil
 GC.start
 GC.start
+begin
+  NetPanzerData.destroy if defined?(NetPanzerData) && NetPanzerData.respond_to?(:destroy)
+rescue StandardError
+end
 $flexlay.deinit() if defined?($flexlay) && $flexlay
 
 # EOF #

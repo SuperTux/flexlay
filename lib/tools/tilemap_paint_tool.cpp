@@ -29,6 +29,7 @@
 #include "tile.hpp"
 #include "paint_command.hpp"
 #include "gui/tile_selection.hpp"
+#include <memory>
 #include "tool_impl.hpp"
 
 TileMapPaintTool TileMapPaintTool::current_;
@@ -43,7 +44,7 @@ public:
   CL_Point last_draw;
   CL_Point current_tile;
 
-  PaintCommand* command;
+  std::unique_ptr<PaintCommand> command;
 
   void draw();
 
@@ -64,7 +65,6 @@ TileMapPaintTool::TileMapPaintTool()
   impl->brush.set_opaque();
   impl->current_tile = CL_Point(0,0);
 
-  impl->command = 0;
 
   impl->mode = TileMapPaintToolImpl::NONE;
 }
@@ -130,11 +130,7 @@ TileMapPaintToolImpl::draw()
   }
 }
 
-const TileBrush&
-TileMapPaintTool::get_brush()
-{
-  return impl->brush;
-}
+
 
 void
 TileMapPaintToolImpl::on_mouse_down(const CL_InputEvent& event)
@@ -144,6 +140,8 @@ TileMapPaintToolImpl::on_mouse_down(const CL_InputEvent& event)
   if (!tilemap.is_null())
   {
     EditorMapComponent* parent = EditorMapComponent::current();
+    if (!parent)
+      return;
     CL_Point pos = tilemap.world2tile(parent->screen2world(event.mouse_pos));
 
     switch (mode)
@@ -154,7 +152,7 @@ TileMapPaintToolImpl::on_mouse_down(const CL_InputEvent& event)
           case CL_MOUSE_LEFT:
             mode = TileMapPaintToolImpl::PAINTING;
             parent->capture_mouse();
-            command = new PaintCommand(tilemap, brush);
+            command.reset(new PaintCommand(tilemap, brush));
             command->add_point(pos);
             last_draw = pos;
             break;
@@ -182,11 +180,15 @@ TileMapPaintToolImpl::on_mouse_move(const CL_InputEvent& event)
   if (!tilemap.is_null())
   {
     EditorMapComponent* parent = EditorMapComponent::current();
+    if (!parent)
+      return;
     current_tile = tilemap.world2tile(parent->screen2world(event.mouse_pos));
 
     switch (mode)
     {
       case PAINTING:
+        if (!command.get())
+          break;
         if (CL_Keyboard::get_keycode(CL_KEY_LSHIFT) ||
             ((current_tile.x % brush.get_width()) == (last_draw.x % brush.get_width()) &&
              (current_tile.y % brush.get_height() == (last_draw.y % brush.get_height()))))
@@ -210,22 +212,29 @@ void
 TileMapPaintToolImpl::on_mouse_up  (const CL_InputEvent& event)
 {
   TilemapLayer tilemap = TilemapLayer::current();
+  if (tilemap.is_null())
+    return;
 
-  if (!tilemap.is_null())
+  EditorMapComponent* parent = EditorMapComponent::current();
+  if (!parent)
+    return;
+
+  EditorMap map = parent->get_workspace().get_map();
+  if (!map.is_null())
+    map.modify();
+
+  current_tile = tilemap.world2tile(parent->screen2world(event.mouse_pos));
+
+  switch (event.id)
   {
-    EditorMapComponent::current()->get_workspace().get_map().modify();
+    case CL_MOUSE_LEFT:
+      if (mode == PAINTING)
+      {
+        parent->release_mouse();
+        mode = NONE;
 
-    EditorMapComponent* parent = EditorMapComponent::current();
-    current_tile = tilemap.world2tile(parent->screen2world(event.mouse_pos));
-
-    switch (event.id)
-    {
-      case CL_MOUSE_LEFT:
-        if (mode == PAINTING)
+        if (command.get())
         {
-          parent->release_mouse();
-          mode = NONE;
-
           if (CL_Keyboard::get_keycode(CL_KEY_LSHIFT) ||
               ((current_tile.x % brush.get_width()) == (last_draw.x % brush.get_width()) &&
                (current_tile.y % brush.get_height() == (last_draw.y % brush.get_height()))))
@@ -233,50 +242,65 @@ TileMapPaintToolImpl::on_mouse_up  (const CL_InputEvent& event)
             command->add_point(current_tile);
           }
 
-          Workspace::current().get_map().execute(command->to_command());
-          command = 0;
-
-          tilemap.draw_tile(brush, current_tile);
-          last_draw = CL_Point(-1, -1);
+          if (!parent->get_workspace().is_null())
+            parent->get_workspace().get_map().execute(command->to_command());
+          command.reset();
         }
-        break;
 
-      case CL_MOUSE_RIGHT:
-        if (mode == SELECTING)
+        last_draw = CL_Point(-1, -1);
+      }
+      break;
+
+    case CL_MOUSE_RIGHT:
+      if (mode == SELECTING)
+      {
+        parent->release_mouse();
+        mode = NONE;
+
+        selection.update(current_tile);
+        Field<int>* field = tilemap.get_field();
+        if (field)
+          brush = selection.get_brush(*field);
+
+        if ((brush.get_width() > 1 || brush.get_height() > 1)
+            && !CL_Keyboard::get_keycode(CL_KEY_LSHIFT))
         {
-          parent->release_mouse();
-          mode = NONE;
-
-          selection.update(current_tile);
-          brush = selection.get_brush(*tilemap.get_field());
-
-          if ((brush.get_width() > 1 || brush.get_height() > 1)
-              && !CL_Keyboard::get_keycode(CL_KEY_LSHIFT))
-          {
-            brush.set_transparent();
-            brush.auto_crop();
-          }
-          else
-          {
-            brush.set_opaque();
-          }
-
-          selection.clear();
+          brush.set_transparent();
+          brush.auto_crop();
         }
-        break;
-    }
+        else
+        {
+          brush.set_opaque();
+        }
+
+        selection.clear();
+      }
+      break;
   }
 }
 
 void
 TileMapPaintTool::set_brush(const TileBrush& b)
 {
+  if (!impl.get())
+    return;
   impl->brush = b;
+}
+
+const TileBrush&
+TileMapPaintTool::get_brush()
+{
+  static TileBrush empty(1, 1);
+  if (!impl.get())
+    return empty;
+  return impl->brush;
 }
 
 Tool
 TileMapPaintTool::to_tool()
 {
+  if (!impl.get())
+    return Tool();
   return Tool(impl);
 }
 

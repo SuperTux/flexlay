@@ -158,7 +158,7 @@ pointer return.
 | TM-02 | P2 | FIXED | `draw_tiles` clips brush to field correctly **if** `field` is non-null; no null check on `field` pointer. |
 | TM-03 | P2 | FIXED | `world2tile` divides by `get_tile_size()` with no guard against size 0. |
 | TM-04 | P2 | FIXED | `create_pixelbuffer` allocates full map bitmap; huge maps can OOM with no limit. |
-| TM-05 | P3 | OPEN | Static `current_` singleton; tools depend on it without verifying set. |
+| TM-05 | P3 | PARTIAL | Static `current_` singleton; tools depend on it without verifying set. |
 
 **Fix plan:** `is_null()` + checks; guard tile size; keep clipping logic
 (already reasonable) after F-01 is fixed.
@@ -315,7 +315,7 @@ document single-listener policy if intentional.
 
 | ID | Sev | Status | Finding |
 |----|-----|--------|---------|
-| FR-01 | P2 | OPEN | Metadata prepend wrappers are good pattern for Ruby 3; audit remaining bare `alias` if any. |
+| FR-01 | P2 | FIXED | Metadata prepend wrappers are good pattern for Ruby 3; audit remaining bare `alias` if any. |
 | FR-02 | P3 | OPEN | Factory helper `flexlay_factory` documents SWIG private method visibility — keep in mind for new factories. |
 
 ---
@@ -329,7 +329,7 @@ document single-listener policy if intentional.
 | NP-03 | P1 | FIXED | Binary reads ignore `gcount()`; truncated files → **uninitialized** tile headers / tiledata. |
 | NP-04 | P1 | FIXED | No endian conversion for `unsigned short` fields. |
 | NP-05 | P2 | OPEN | `find_tilegroup` dummy group when empty — safe return but callers may still draw garbage if other paths skip null checks. |
-| NP-06 | P2 | OPEN | Singleton `NetPanzerData::instance_` never destroyed. |
+| NP-06 | P2 | FIXED | Singleton `NetPanzerData::instance_` never destroyed. |
 | NP-07 | P2 | FIXED | `load_tileset` does not clear previous `tiledata` / tileset on failure mid-way. |
 | NP-08 | P3 | FIXED | Dummy `NetPanzerTileGroup` uses field assignment (not illegal brace-init). |
 
@@ -514,4 +514,12 @@ Still OPEN: **ST-01** deinit, broader GUI null checks, differential paint undo.
 - **BM-03:** `generate_brushmask` clamps radius to 512 and spikes to 2..20.
 - **BD-03:** `.gitignore` drops sconsign; adds `*.so` and `/build/`.
 - **SW-02:** already addressed by earlier `%include tool.hpp` order.
+### 2026-08-06 — Pass C continued (3)
+
+- **Paint tool:** `PaintCommand` held in `unique_ptr` (fixes leak on
+  `command = 0`); parent null checks on mouse handlers; removed extra
+  `draw_tile` after execute (already applied via command).
+- **NP-06:** `NetPanzerData::destroy()` frees singleton; netpanzer front-end
+  calls it on shutdown.
+- **FR-01:** No remaining bare `alias` in Ruby sources (prepend pattern only).
 

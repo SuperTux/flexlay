@@ -53,12 +53,18 @@ class NetPanzerData
 private:
   static NetPanzerData* instance_;
 public:
-  static NetPanzerData* instance() 
+  static NetPanzerData* instance()
   {
-    if (instance_)
-      return (instance_);
-    else
-      return (instance_ = new NetPanzerData());
+    if (!instance_)
+      instance_ = new NetPanzerData();
+    return instance_;
+  }
+
+  /** Free the singleton (e.g. on process shutdown). Safe to call repeatedly. */
+  static void destroy()
+  {
+    delete instance_;
+    instance_ = 0;
   }
 
 private:

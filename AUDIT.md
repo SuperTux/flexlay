@@ -584,3 +584,13 @@ Still OPEN: **ST-01** deinit, broader GUI null checks, differential paint undo.
   `flexlay_shutdown`.
 - **File→Quit:** menu uses `@gui.quit`; `GUI#quit` helper added.
 
+### 2026-08-06 — Pass H (exit finalizer CL_MenuNode crash)
+
+- Backtrace: `free_GUIManager` → `CL_GUIManager` dtor → `CL_MenuNode_Generic`
+  during Ruby process-exit finalizers *after* `Flexlay::deinit`.
+- **GUIManager::shutdown()**: deletes CL_GUIManager tree while display is live.
+- **~GUIManager**: if Flexlay already deinitialized, abandon pointers (leak)
+  instead of calling into dead ClanLib.
+- **flexlay_shutdown**: call root/`GUIManager.current` shutdown before deinit.
+- **netpanzer GUI#shutdown**: nils widget refs and calls `@gui.shutdown`.
+

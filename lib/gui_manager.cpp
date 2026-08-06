@@ -21,6 +21,7 @@
 #include <ClanLib/Display/display_window.h>
 
 #include "globals.hpp"
+#include "flexlay.hpp"
 #include "gui_manager.hpp"
 
 GUIManager* GUIManager::current_ = 0;
@@ -57,6 +58,35 @@ GUIManager::GUIManager()
   push_component(impl->manager);
 }
 
+void
+GUIManager::shutdown()
+{
+  if (!impl.get())
+    return;
+
+  if (current_ == this)
+    current_ = 0;
+
+  while (!impl->components.empty())
+    pop_component();
+
+  // Destroy GUI tree (menus, windows, …) while ClanLib is still up.
+  // Parent-owned CL_Components are deleted with the manager.
+  if (impl->manager)
+  {
+    delete impl->manager;
+    impl->manager = 0;
+  }
+
+  if (impl->slot_container)
+  {
+    delete impl->slot_container;
+    impl->slot_container = 0;
+  }
+
+  // style / resources left allocated — process is exiting.
+}
+
 GUIManager::~GUIManager()
 {
   if (current_ == this)
@@ -65,24 +95,29 @@ GUIManager::~GUIManager()
   if (!impl.get())
     return;
 
-  if (!impl->components.empty())
-    pop_component();
+  // If shutdown() already ran, nothing left to free.
+  if (!impl->manager && !impl->slot_container)
+    return;
 
-  // Destroy GUI tree while the display is still alive.  Parent-owned
-  // CL_Components are deleted with the manager; Ruby must not delete them
-  // again (empty %feature("unref") on those types).
-  delete impl->manager;
-  impl->manager = 0;
-  //delete style; FIXME: Memory hole?!
-  //delete resources;  FIXME: Memory hole?!
-  delete impl->slot_container;
-  impl->slot_container = 0;
+  // Ruby may finalize this after Flexlay::deinit.  Deleting CL_GUIManager
+  // then crashes inside CL_MenuNode_Generic.  Prefer leak over segfault.
+  Flexlay* fl = Flexlay::current();
+  if (fl && fl->is_initialized())
+  {
+    shutdown();
+  }
+  else
+  {
+    // ClanLib already torn down — abandon pointers without calling dtors.
+    impl->manager = 0;
+    impl->slot_container = 0;
+  }
 }
 
 void
 GUIManager::draw()
 {
-  if (impl->manager->is_input_enabled())
+  if (impl.get() && impl->manager && impl->manager->is_input_enabled())
     impl->manager->show();
 }
 
@@ -95,38 +130,45 @@ GUIManager::update()
 void
 GUIManager::run()
 {
-  impl->manager->run();
+  if (impl.get() && impl->manager)
+    impl->manager->run();
 }
 
 CL_Component*
 GUIManager::get_component()
 {
+  if (!impl.get() || impl->components.empty())
+    return 0;
   return impl->components.top();
 }
 
 CL_SlotContainer*
 GUIManager::get_slot_container()
 {
+  if (!impl.get())
+    return 0;
   return impl->slot_container;
 }
 
 void
 GUIManager::hide()
 {
-  if (impl->manager->is_input_enabled())
+  if (impl.get() && impl->manager && impl->manager->is_input_enabled())
     impl->manager->disable_input();
 }
 
 void
 GUIManager::show()
 {
-  if (!impl->manager->is_input_enabled())
+  if (impl.get() && impl->manager && !impl->manager->is_input_enabled())
     impl->manager->enable_input();
 }
 
 bool
 GUIManager::is_visible()
 {
+  if (!impl.get() || !impl->manager)
+    return false;
   return impl->manager->is_input_enabled();
 }
 

@@ -382,6 +382,31 @@ class GUI
   def quit()
     @gui.quit() if @gui
   end
+
+  # Tear down ClanLib GUI while the display is still alive (before
+  # Flexlay#deinit).  Prevents exit-time crash in CL_MenuNode_Generic.
+  def shutdown()
+    begin
+      @editor_map = nil
+      @workspace = nil
+      @minimap = nil
+      @menu = nil
+      @objectselector = nil
+      @brushbox = nil
+      @toolbar = nil
+      @button_panel = nil
+      @tool_button_panel = nil
+      @load_dialog = nil
+      @save_dialog = nil
+    rescue StandardError
+    end
+    begin
+      @gui.shutdown() if @gui && @gui.respond_to?(:shutdown)
+    rescue StandardError => e
+      warn "GUI#shutdown: #{e}"
+    end
+    @gui = nil
+  end
 end
 
 # EOF #

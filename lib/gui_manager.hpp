@@ -32,6 +32,11 @@ public:
   GUIManager();
   ~GUIManager();
 
+  /** Destroy the ClanLib GUI tree while the display is still alive.
+      Safe to call multiple times.  Must be invoked before Flexlay#deinit;
+      otherwise process-exit finalizers can crash in CL_MenuNode. */
+  void shutdown();
+
   void draw();
   void update();
 

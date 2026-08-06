@@ -436,24 +436,40 @@ end
 # Callers must nil their own globals ($gui, tools, …) before or when
 # invoking this — assigning nil inside only clears the local *roots array.
 def flexlay_shutdown(flexlay_obj, *roots)
+  # 1) Explicit ClanLib GUI teardown while display is still alive.
   roots.each do |r|
     begin
-      r.shutdown if r.respond_to?(:shutdown)
-    rescue StandardError
+      r.shutdown if r && r.respond_to?(:shutdown)
+    rescue StandardError => e
+      warn "flexlay_shutdown: root.shutdown: #{e}"
     end
     begin
-      r.clear if r.respond_to?(:clear)
+      r.clear if r && r.respond_to?(:clear)
     rescue StandardError
     end
   end
   roots.each_index { |i| roots[i] = nil }
-  # Collect while ClanLib display is still alive.
-  2.times { GC.start }
+
+  # 2) Also shut down the process-wide GUIManager if still current.
+  begin
+    gm = GUIManager.current() if defined?(GUIManager)
+    gm.shutdown() if gm && gm.respond_to?(:shutdown)
+  rescue StandardError => e
+    warn "flexlay_shutdown: GUIManager.shutdown: #{e}"
+  end
+
+  # 3) Collect SWIG proxies while ClanLib is still up.
+  3.times { GC.start }
+
+  # 4) Tear down display / GL / GUI subsystems.
   begin
     flexlay_obj.deinit() if flexlay_obj && flexlay_obj.respond_to?(:deinit)
   rescue StandardError => e
     warn "flexlay_shutdown: deinit raised: #{e}"
   end
+
+  # 5) Any remaining finalizers must not call into ClanLib (GUIManager
+  #    dtor abandons pointers when Flexlay is no longer initialized).
   2.times { GC.start }
 end
 

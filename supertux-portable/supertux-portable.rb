@@ -44,7 +44,7 @@ class SuperTuxPortableEditor
     $controller = Controller.new()
 
     $datadir = "/home/ingo/projects/supertux/trunk/supertux-portable/data/"
-    $tileset = Tileset.new(8)
+    $tileset = ((defined?(Flexlay_wrap) && Flexlay_wrap.respond_to?(:Tileset_new)) ? Flexlay_wrap.Tileset_new(8) : Tileset.new(8))
     $tileset.load($datadir + "antarctica.stpts")
 
     $gui = GUI.new()

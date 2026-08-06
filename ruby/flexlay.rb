@@ -15,24 +15,9 @@ def flexlay_factory(name)
   nil
 end
 
-# Always install class methods for layer "current" statics via the
-# %inline free functions (reliable under modern SWIG + Ruby 3.4).
-if defined?(Flexlay_wrap::TilemapLayer)
-  Flexlay_wrap::TilemapLayer.define_singleton_method(:set_current) do |t|
-    Flexlay_wrap.TilemapLayer_set_current(t)
-  end
-  Flexlay_wrap::TilemapLayer.define_singleton_method(:current) do
-    Flexlay_wrap.TilemapLayer_get_current()
-  end
-end
-if defined?(Flexlay_wrap::ObjectLayer)
-  Flexlay_wrap::ObjectLayer.define_singleton_method(:set_current) do |c|
-    Flexlay_wrap.ObjectLayer_set_current(c)
-  end
-  Flexlay_wrap::ObjectLayer.define_singleton_method(:current) do
-    Flexlay_wrap.ObjectLayer_get_current()
-  end
-end
+# TilemapLayer.set_current / ObjectLayer.set_current come from SWIG as
+# class methods (C++ statics).  Do not re-wrap them — overrides broke
+# the working SWIG bindings.
 
 module TilemapLayerMetadata
   def set_metadata(data)

@@ -135,8 +135,12 @@ module GameObjects
     end
 
     def get_sprite()
-      sprite = NetPanzerData::instance().get_tilegroup_sprite($brushes[@brushindex][0])
-      return sprite
+      begin
+        return NetPanzerData::instance().get_tilegroup_sprite($brushes[@brushindex][0])
+      rescue
+        # Missing netPanzer game data (palette / .tls) yields a null sprite.
+        return make_sprite((ENV["FLEXLAY_DATADIR"] || "../data") + "/images/icons16/stock_paste-16.png")
+      end
     end
 
     def TileObject.create(objmap, brushindex, x, y)

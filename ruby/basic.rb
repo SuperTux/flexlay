@@ -85,7 +85,7 @@ $mysprite = make_sprite("../data/images/icons16/stock_paste-16.png")
              
 $resources = CL_ResourceManager.new("../data/flexlay.xml")
 
-$tileset = Tileset.new(32)
+$tileset = ((defined?(Flexlay_wrap) && Flexlay_wrap.respond_to?(:Tileset_new)) ? Flexlay_wrap.Tileset_new(32) : Tileset.new(32))
 $tileset.add_tile(1, Tile.new(make_pixelbuffer("../data/images/icons16/stock_paste-16.png")))
 $tileset.add_tile(2, Tile.new(make_pixelbuffer("../data/images/icons24/stock_jump-to.png")))
 $tileset.add_tile(3, Tile.new(make_pixelbuffer_from_resource("tile1", $resources),

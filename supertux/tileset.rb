@@ -7,16 +7,18 @@ class TileGroup
   end 
 end
 
-# Load game tiles from filename into tileset
+# Load game tiles from filename into tileset.
+# Open Flexlay_wrap::Tileset explicitly so methods apply to factory-
+# created instances (Tileset_new), not a parallel constant.
 module TilesetInit
   def initialize(*params)
     super(*params)
     @tilegroups = []
   end
 end
-Tileset.prepend(TilesetInit)
+Flexlay_wrap::Tileset.prepend(TilesetInit) if defined?(Flexlay_wrap::Tileset)
 
-class Tileset
+class Flexlay_wrap::Tileset
   attr_accessor :tilegroups
 
   def load(filename)

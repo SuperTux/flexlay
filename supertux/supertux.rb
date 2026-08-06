@@ -51,6 +51,9 @@ require "sexpr.rb"
 require_relative "gameobj.rb"
 
 flexlay = Flexlay.new()
+if ENV["FLEXLAY_DATADIR"]
+  flexlay.set_datadir(ENV["FLEXLAY_DATADIR"])
+end
 width  = 1024
 height = 768
 fullscreen = false
@@ -66,7 +69,7 @@ $workspace_move_tool = WorkspaceMoveTool.new()
 $objmap_select_tool  = ObjMapSelectTool.new()
 # $sketch_stroke_tool = SketchStrokeTool.new()
 
-$mysprite = make_sprite("../data/images/icons16/stock_paste-16.png")
+$mysprite = make_sprite((ENV["FLEXLAY_DATADIR"] || "../data") + "/images/icons16/stock_paste-16.png")
 
 # $console = Console.new(CL_Rect.new(CL_Point.new(50, 100), CL_Size.new(400, 200)),
 #                        $gui.get_component())
@@ -112,7 +115,7 @@ require_relative "sector.rb"
 require_relative "sprite.rb"
 require_relative "util.rb"
 
-$tileset = Tileset.new(32)
+$tileset = ((defined?(Flexlay_wrap) && Flexlay_wrap.respond_to?(:Tileset_new)) ? Flexlay_wrap.Tileset_new(32) : Tileset.new(32))
 $tileset.load($datadir + "images/tiles.strf")
 $tileset.create_ungrouped_tiles_group()
 

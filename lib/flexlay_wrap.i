@@ -159,19 +159,22 @@ VALUE CL_Point2Value(const CL_Point& arg)
 %include "object_layer.hpp"
 %include "onion_skin_layer.hpp"
 
-// Free-function entry points for static current()/set_current().
-// SWIG often fails to expose statics that take the class by value as
-// Ruby class methods; flexlay.rb wires these onto the classes.
-%inline %{
-void TilemapLayer_set_current(TilemapLayer t) { TilemapLayer::set_current(t); }
-TilemapLayer TilemapLayer_get_current() { return TilemapLayer::current(); }
-void ObjectLayer_set_current(ObjectLayer c) { ObjectLayer::set_current(c); }
-ObjectLayer ObjectLayer_get_current() { return ObjectLayer::current(); }
-%}
+// Static TilemapLayer::set_current / ObjectLayer::set_current come from
+// the headers.  SWIG emits module-level TilemapLayer_set_current etc.
+// flexlay.rb installs those as Ruby class methods (modern SWIG/Ruby
+// does not always expose statics as Class.method).
 
 %include "editor_map.hpp"
 %include "workspace.hpp"
 %include "tileset.hpp"
+
+// Tileset(int) is often dropped by modern SWIG (only zero-arg remains).
+// Name must not collide with Tileset::create → Tileset_create.
+%newobject Tileset_new;
+%inline %{
+Tileset* Tileset_new(int tile_size) { return new Tileset(tile_size); }
+%}
+
 %include "gui/editor_map_component.hpp"
 %include "flexlay.hpp"
 %include "globals.hpp"

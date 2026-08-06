@@ -105,7 +105,7 @@ require "tileset.rb"
 require "level.rb"
 require "sector.rb"
 
-$tileset = Tileset.new(32)
+$tileset = ((defined?(Flexlay_wrap) && Flexlay_wrap.respond_to?(:Tileset_new)) ? Flexlay_wrap.Tileset_new(32) : Tileset.new(32))
 $tileset.load($datadir + "images/worldmap.strf")
 $tileset.create_ungrouped_tiles_group()
 

@@ -53,7 +53,12 @@ class PaintGUI
     @brush_spikes.set_range(2, 20)
     @brush_spikes.set_value(2)
     connect_v1_float(@brush_spikes.sig_on_change, proc{|value|
-                       GeneratedBrush.new(DrawerProperties.current().get_brush()).set_spikes(value.to_i)
+                       brush = DrawerProperties.current().get_brush()
+                       next if brush.nil?
+                       begin
+                         GeneratedBrush.new(brush).set_spikes(value.to_i)
+                       rescue
+                       end
                      })
 
     @brush_aspects = Slider.new(CL_Rect.new(CL_Point.new(3, 210), CL_Size.new(128, 16)),
@@ -61,7 +66,12 @@ class PaintGUI
     @brush_aspects.set_range(0.1, 10)
     @brush_aspects.set_value(1)
     connect_v1_float(@brush_aspects.sig_on_change, proc{|value|
-                       GeneratedBrush.new(DrawerProperties.current().get_brush()).set_aspect_ratio(value)
+                       brush = DrawerProperties.current().get_brush()
+                       next if brush.nil?
+                       begin
+                         GeneratedBrush.new(brush).set_aspect_ratio(value)
+                       rescue
+                       end
                      })
 
     @brush_angles = Slider.new(CL_Rect.new(CL_Point.new(3, 230), CL_Size.new(128, 16)),
@@ -69,7 +79,13 @@ class PaintGUI
     @brush_angles.set_range(0, 360)
     @brush_angles.set_value(0)
     connect_v1_float(@brush_angles.sig_on_change, proc{|value|
-                       GeneratedBrush.new(DrawerProperties.current().get_brush()).set_angle(value)
+                       brush = DrawerProperties.current().get_brush()
+                       next if brush.nil?
+                       begin
+                         GeneratedBrush.new(brush).set_angle(value)
+                       rescue
+                         # GeneratedBrush may not wrap an empty brush
+                       end
                      })
 
     @spacing_slider = Slider.new(CL_Rect.new(CL_Point.new(3, 600), CL_Size.new(128, 16)),

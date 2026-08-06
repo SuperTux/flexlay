@@ -58,12 +58,20 @@ Workspace::draw(const GraphicContextState& state, CL_GraphicContext* gc)
 
   CL_Display::clear(CL_Color(100, 0, 100));
 
-  impl->editor_map.draw_gui(CL_Display::get_current_window()->get_gc());
-  impl->editor_map.draw(EditorMapComponent::current()->get_gc_state(), CL_Display::get_current_window()->get_gc());
+  CL_DisplayWindow* window = CL_Display::get_current_window();
+  CL_GraphicContext* window_gc = window ? window->get_gc() : gc;
 
-  // FIXME: Only draw active tool?!
-  for(WorkspaceImpl::Tools::iterator it = impl->tools.begin();
-      it != impl->tools.end(); ++it)
+  if (window_gc)
+    impl->editor_map.draw_gui(window_gc);
+
+  EditorMapComponent* emc = EditorMapComponent::current();
+  if (emc && window_gc)
+    impl->editor_map.draw(emc->get_gc_state(), window_gc);
+  else if (window_gc)
+    impl->editor_map.draw(state, window_gc);
+
+  for (WorkspaceImpl::Tools::iterator it = impl->tools.begin();
+       it != impl->tools.end(); ++it)
     it->second.draw();
 
   CL_Display::flush();
@@ -103,11 +111,19 @@ Workspace::mouse_down(const CL_InputEvent& event)
   switch (event.id)
   {
     case CL_MOUSE_WHEEL_UP:
-      EditorMapComponent::current()->zoom_in(event.mouse_pos);
+      {
+        EditorMapComponent* emc = EditorMapComponent::current();
+        if (emc)
+          emc->zoom_in(event.mouse_pos);
+      }
       break;
 
     case CL_MOUSE_WHEEL_DOWN:
-      EditorMapComponent::current()->zoom_out(event.mouse_pos);
+      {
+        EditorMapComponent* emc = EditorMapComponent::current();
+        if (emc)
+          emc->zoom_out(event.mouse_pos);
+      }
       break;
   }
 }

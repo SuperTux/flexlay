@@ -37,47 +37,97 @@ TileBrush::TileBrush(int w, int h)
 void
 TileBrush::auto_crop()
 {
-  CL_Rect rect(CL_Point(0, 0), CL_Size(0, 0));
+  const int w = get_width();
+  const int h = get_height();
+  if (w <= 0 || h <= 0)
+  {
+    (*this) = TileBrush(1, 1);
+    at(0, 0) = 0;
+    set_opaque();
+    return;
+  }
 
-  for(int y = 0; y < get_height(); ++y)
-    for(int x = 0; x < get_width(); ++x)
+  int top = 0;
+  int bottom = h;
+  int left = 0;
+  int right = w;
+  bool found = false;
+
+  for (int y = 0; y < h; ++y)
+  {
+    for (int x = 0; x < w; ++x)
+    {
       if (at(x, y) != 0)
       {
-        rect.top = y;
-        goto bottom;
+        top = y;
+        found = true;
+        break;
       }
+    }
+    if (found)
+      break;
+  }
 
-bottom:
-  for(int y = get_height()-1; y >= 0; --y)
-    for(int x = 0; x < get_width(); ++x)
+  if (!found)
+  {
+    (*this) = TileBrush(1, 1);
+    at(0, 0) = 0;
+    set_opaque();
+    return;
+  }
+
+  found = false;
+  for (int y = h - 1; y >= 0; --y)
+  {
+    for (int x = 0; x < w; ++x)
+    {
       if (at(x, y) != 0)
       {
-        rect.bottom = y + 1;
-        goto left;
+        bottom = y + 1;
+        found = true;
+        break;
       }
+    }
+    if (found)
+      break;
+  }
 
-left:
-  for(int x = 0; x < get_width(); ++x)
-    for(int y = 0; y < get_height(); ++y)
+  found = false;
+  for (int x = 0; x < w; ++x)
+  {
+    for (int y = 0; y < h; ++y)
+    {
       if (at(x, y) != 0)
       {
-        rect.left = x;
-        goto right;
+        left = x;
+        found = true;
+        break;
       }
+    }
+    if (found)
+      break;
+  }
 
-right:
-  for(int x = get_width() - 1; x >= 0; --x)
-    for(int y = 0; y < get_height(); ++y)
+  found = false;
+  for (int x = w - 1; x >= 0; --x)
+  {
+    for (int y = 0; y < h; ++y)
+    {
       if (at(x, y) != 0)
       {
-        rect.right = x + 1;
-        goto end;
+        right = x + 1;
+        found = true;
+        break;
       }
+    }
+    if (found)
+      break;
+  }
 
-end:
-  if (rect.get_width() != 0)
-    resize(rect.get_width(), rect.get_height(),
-           -rect.left, -rect.top);
+  const int nw = right - left;
+  const int nh = bottom - top;
+  if (nw > 0 && nh > 0)
+    resize(nw, nh, -left, -top);
   else
   {
     (*this) = TileBrush(1, 1);
@@ -89,7 +139,7 @@ end:
 void
 TileBrush::set_data(const std::vector<int>& data_)
 {
-  return data.set_data(data_);
+  data.set_data(data_);
 }
 
 std::vector<int>

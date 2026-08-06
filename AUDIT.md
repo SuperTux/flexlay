@@ -169,7 +169,7 @@ pointer return.
 
 | ID | Sev | Status | Finding |
 |----|-----|--------|---------|
-| TB-01 | P2 | OPEN | `auto_crop()` uses `goto` and can leave empty brush as 1×1 transparent — OK, but relies on Field bounds. |
+| TB-01 | P2 | FIXED | `auto_crop()` uses `goto` and can leave empty brush as 1×1 transparent — OK, but relies on Field bounds. |
 | TB-02 | P3 | OPEN | `set_data` delegates to Field and inherits silent size truncation (F-05). |
 
 ---
@@ -205,7 +205,7 @@ Undo/redo **do** check `empty()` before `back()` — good.
 | ID | Sev | Status | Finding |
 |----|-----|--------|---------|
 | LY-01 | P0 | FIXED | `set_pos` / `get_pos` dereference `impl` without null check (unlike `draw`). |
-| LY-02 | P3 | OPEN | Inconsistent null policy across methods. |
+| LY-02 | P3 | FIXED | Inconsistent null policy across methods. |
 
 ---
 
@@ -215,7 +215,7 @@ Undo/redo **do** check `empty()` before `back()` — good.
 |----|-----|--------|---------|
 | OL-01 | P2 | FIXED | `move_to()` is **stub** (`FIXME: Implement me`) — scripting may assume z-order changes work. |
 | OL-02 | P2 | FIXED | `get_selection` only tests whether rect contains object **position**, not bounds (`FIXME`). |
-| OL-03 | P2 | OPEN | No null check on `impl` (default ctor allocates — OK). |
+| OL-03 | P2 | FIXED | No null check on `impl` (default ctor allocates — OK). |
 | OL-04 | P3 | OPEN | `find_object` returns default `ObjMapObject()` on miss; callers must test null. |
 
 `raise` / `lower` index checks look correct.
@@ -354,7 +354,7 @@ file format; free/reload cleanly; surface `has_data()` to Ruby.
 | ID | Sev | Status | Finding |
 |----|-----|--------|---------|
 | ST-01 | P1 | PARTIAL | Comments: cannot call Flexlay deinit or process crashes — same ownership issue as ClanLib widgets. |
-| ST-02 | P2 | OPEN | Sector/map comments about recursive refcount / data not freed. |
+| ST-02 | P2 | PARTIAL | Sector/map comments about recursive refcount / data not freed. |
 | ST-03 | P3 | OPEN | Various FIXMEs (tmp files, ButtonPanel, etc.). |
 
 ---
@@ -522,4 +522,12 @@ Still OPEN: **ST-01** deinit, broader GUI null checks, differential paint undo.
 - **NP-06:** `NetPanzerData::destroy()` frees singleton; netpanzer front-end
   calls it on shutdown.
 - **FR-01:** No remaining bare `alias` in Ruby sources (prepend pattern only).
+### 2026-08-06 — Pass C continued (4)
+
+- **Workspace::draw / wheel:** null-check `EditorMapComponent::current()` and
+  display window before use; C++ switch cases braced.
+- **TB-01:** `TileBrush::auto_crop` rewritten without `goto`.
+- **LY-02 / OL-03:** Layer already null-safe; ObjectLayer default ctor allocates.
+- **ST-02:** `Sector#dispose` clears editormap metadata and child refs to
+  break Ruby cycles; callers should invoke dispose when discarding a sector.
 

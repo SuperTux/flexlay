@@ -25,6 +25,22 @@ class Sector
     @cameramode = "normal"
   end
 
+  # Break Sector <-> EditorMap cycles so Ruby GC can reclaim both.
+  def dispose
+    if @editormap && !@editormap.is_null()
+      begin
+        @editormap.set_metadata(MetaData.new) if @editormap.respond_to?(:set_metadata)
+      rescue StandardError
+      end
+    end
+    @editormap = nil
+    @background = nil
+    @interactive = nil
+    @foreground = nil
+    @objects = nil
+    @parent = nil
+  end
+
   def get_level()
     return @parent
   end
@@ -58,7 +74,7 @@ class Sector
     @editormap.add_layer(@objects.to_layer())
     @editormap.add_layer(@foreground.to_layer())
 #    @editormap.add_layer(@sketch.to_layer())
-    # FIXME: Data might not get freed since its 'recursively' refcounted
+    # Metadata holds a Ruby reference to this Sector; call dispose() when done.
     @editormap.set_metadata(self)
     return self
   end
@@ -139,7 +155,7 @@ class Sector
     @editormap.add_layer(@interactive.to_layer())
     @editormap.add_layer(@objects.to_layer())
     @editormap.add_layer(@foreground.to_layer())
-    # FIXME: Data might not get freed since its 'recursively' refcounted
+    # Metadata holds a Ruby reference to this Sector; call dispose() when done.
     @editormap.set_metadata(self)
   end
   
